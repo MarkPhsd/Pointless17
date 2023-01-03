@@ -18,5 +18,5 @@ export interface IUser {
     loginAttempts: number;
     message: string;
     errorMessage: string;
-    sortMenu: string;
+    sortMenu: string;x
 }

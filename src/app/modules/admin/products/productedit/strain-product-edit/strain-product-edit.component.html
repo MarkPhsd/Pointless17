@@ -145,8 +145,6 @@
                   </div>
                 </div>
 
-
-
                 <div class="header">
                   <h4><mat-icon>image</mat-icon>Images</h4>
                 </div>
@@ -227,6 +225,19 @@
               </div>
 
             </div>
+            <div *ngIf="itemType && itemType.name && ( itemType.type?.toLowerCase() === 'store credit' )">
+                  <app-value-fields
+                        [inputForm]="productForm"
+                        [fieldName]="'style'">
+                        Value
+                  </app-value-fields>
+                  <app-value-fields
+                      [inputForm]="productForm"
+                      [fieldName]="'productCount'">
+                    Count
+                  </app-value-fields>
+            </div>
+
 
             <div *ngIf="itemType && itemType.name && ( itemType.type?.toLowerCase() === 'discounts' ||
                                                        itemType.type?.toLowerCase() === 'service fee' )">

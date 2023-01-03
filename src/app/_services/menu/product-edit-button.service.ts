@@ -47,6 +47,8 @@ import { EmailEntryComponent } from 'src/app/shared/widgets/email-entry/email-en
 import { AdminDisplayMenuComponent } from 'src/app/modules/admin/products/display-menu/display-menu/display-menu.component';
 import { PayPalTransactionComponent } from 'src/app/modules/payment-processing/payPal/pay-pal-transaction/pay-pal-transaction.component';
 import { BlogPostEditComponent } from 'src/app/modules/admin/blogEditor/blog-post-edit/blog-post-edit.component';
+import { JobTypesEditComponent } from 'src/app/modules/admin/clients/jobs/job-types-edit/job-types-edit.component';
+import { EmployeeClockEditComponent } from 'src/app/modules/admin/employeeClockAdmin/employee-clock-edit/employee-clock-edit.component';
 
 @Injectable({
   providedIn: 'root'
@@ -125,6 +127,20 @@ export class ProductEditButtonService {
     }
 
     this.openProductEditor(product.id,  product.prodModifierType)
+  }
+
+  
+  openClockEditor(id: any) {
+    let dialogRef: any;
+    dialogRef = this.dialog.open(EmployeeClockEditComponent,
+      { width:        '500px',
+        minWidth:     '500px',
+        height:       '650px',
+        minHeight:    '650px',
+        data : id
+      },
+    )
+    return dialogRef
   }
 
   openPromptEditor(id: any) {
@@ -422,6 +438,22 @@ export class ProductEditButtonService {
       },
     )
   }
+
+  openJobTypeEditor(id: number) {
+    let dialogRef: any;
+    dialogRef = this.dialog.open(JobTypesEditComponent,
+      { width:        '75vw',
+        minWidth:     '650px',
+        maxWidth:     '650px',
+        height:       '400px',
+        minHeight:    '400px',
+        data : id
+      },
+    )
+
+    return dialogRef
+  }
+
 
   openServiceTypeEditor(id: number) {
     let dialogRef: any;

@@ -23,10 +23,8 @@
         </div>
       </div>
 
-      <div *ngIf="value"
-            class="loader">
-        <mat-progress-bar mode="determinate"
-                          [value]="value"></mat-progress-bar>
+      <div *ngIf="value" class="loader">
+        <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
       </div>
     </mat-card-subtitle>
 
@@ -40,23 +38,37 @@
                   (scrolled)              ="onScrollDown()"
                   (scrolledUp)            ="onScrollUp()"
                   [scrollWindow]          ="false">
+
                 <div  class="grid-flow">
                   <div *ngFor="let item of categories; let i = index">
-                      <div >
+
+                      <div  *ngIf="item.id != -1">
                         <div class="text">{{item.name  | truncateText: 15  }}</div>
-                          <div class="grid-item">
-                            <img
-                                loading   = "lazy"
-                                draggable = "false"
-                                [src]     = "getItemSrc(item?.urlImageMain)"
-                                err-SRC   = "getPlaceHolder()"
-                                onerror   = "this.src='assets/images/placeholderimage.png'"
-                                (click)   = "listItems(item.id)"
-                                class     = "grid-item shine"
-                                [alt]     = "item?.description">
-                          </div>
+                        <div class="grid-item">
+                          <img
+                              loading   = "lazy"
+                              draggable = "false"
+                              [src]     = "getItemSrc(item?.urlImageMain)"
+                              err-SRC   = "getPlaceHolder()"
+                              onerror   = "this.src='assets/images/placeholderimage.png'"
+                              (click)   = "listItems(item.id)"
+                              class     = "grid-item shine"
+                              [alt]     = "item?.description">
+                        </div>
                       </div>
-                    </div>
+
+                      <div *ngIf="item.id == -1">
+                        <div class="text">{{item.name  | truncateText: 15  }}</div>
+                        <div class="grid-item-button">
+                          <button mat-raised-button
+                                color="warn"
+                              (click)  ="nextPage()">
+                            <div class="text">Load More...</div>
+                          </button>
+                        </div>
+                      </div>
+
+                  </div>
                 </div>
             </div>
       </div>

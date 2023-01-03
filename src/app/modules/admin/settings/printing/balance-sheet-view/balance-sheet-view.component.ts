@@ -1,6 +1,6 @@
 
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, switchMap,of } from 'rxjs';
 import { IPaymentSearchModel, IPOSPaymentsOptimzed } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
@@ -30,10 +30,17 @@ export class BalanceSheetViewComponent implements OnInit {
         this.sheetType = this.sheetService.getSheetType(this.sheet);
 
         const site  = this.siteService.getAssignedSite();
-        const search = {reportRunID:data.id} as IPaymentSearchModel;
+        const search = {} as IPaymentSearchModel;
         search.pageSize = 500;
-        search.isCreditCard = true;
-        this.list$ = this.paymentService.searchPayments(site, search)
+
+        // search.isCreditCard = true;
+        search.reportRunID = this.sheet.id
+        this.list$ = this.paymentService.searchPayments(site, search).pipe(
+          switchMap(data => {
+            // data = data.results.sort()
+            return of(data)
+          }
+        ))
 
         try {
           const balance  = this.sheet.cashDeposit - this.sheet.cashIn - this.sheet.cashDropTotal

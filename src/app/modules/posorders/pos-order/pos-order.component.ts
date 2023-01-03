@@ -552,23 +552,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   suspendOrder() {
     if (this.order) {
-
-     if (this.order.clientID == 0) {
-       this.notifyEvent('Assign this order a customer for reference', 'Alert')
-       return
-     }
-
-      const site = this.siteService.getAssignedSite();
-      this.order.suspendedOrder = true;
-      this.order.orderLocked = null;
-      const suspend$ =  this.orderService.putOrder(site, this.order)
-
-      suspend$.subscribe(data =>{
-        this.clearOrder(null)
-        this.notifyEvent('This order has been suspended', 'Success')
-        this.router.navigateByUrl('/pos-orders')
-      })
-
+      this.action$ = this.orderMethodService.suspendOrder(this.order)
     };
   }
 

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { switchMap,   } from 'rxjs/operators';
-import { IUser, IUserProfile } from 'src/app/_interfaces';
+import { clientType, IUser, IUserProfile } from 'src/app/_interfaces';
 import { EmployeeService } from '../people/employee-service.service';
 import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switch/fast-user-switch.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,17 +18,24 @@ import { BalanceSheetMethodsService } from '../transactions/balance-sheet-method
 import { ElectronService } from 'ngx-electron';
 import { ToolBarUIService } from './tool-bar-ui.service';
 import { UISettingsService } from './settings/uisettings.service';
+import { ClientTypeService, IUserAuth_Properties } from '../people/client-type.service';
 
 export interface ElectronDimensions {
   height: string;
   width : string;
   depth : string;
 }
-
+export interface userLogin {
+  userName: string;
+  password: string;
+}
 @Injectable({
   providedIn: 'root'
 })
 export class UserSwitchingService implements  OnDestroy {
+
+  loginData  : any;
+  clientType : clientType
 
   user  : IUser;
   _user : Subscription
@@ -71,7 +78,8 @@ export class UserSwitchingService implements  OnDestroy {
     private encryptionService: EncryptionService,
     private toolbarUIService : ToolBarUIService,
     private uiSettingService: UISettingsService,
-    private electronService  : ElectronService
+    private electronService  : ElectronService,
+    private clientTypeService: ClientTypeService,
   ) {
     this.initSubscriptions();
     this.initializeAppUser();
@@ -102,6 +110,19 @@ export class UserSwitchingService implements  OnDestroy {
   getCurrentUser() {
 
   }
+  
+  getUserTypeAuthorizations(id: number) {
+    const site = this.siteService.getAssignedSite()
+    return this.clientTypeService.getClientType(site, id).pipe(
+      switchMap( data => {
+        if (data) {
+          this.authenticationService.updateUserAuths(JSON.parse(data.jsonObject))
+          return of(data)
+        }
+      }
+    ))
+  }
+ 
 
   setAppUser() {
     //then we can set the user to the secret user
@@ -166,24 +187,28 @@ export class UserSwitchingService implements  OnDestroy {
     // )
   }
 
-  login(username: string, password: string): Observable<any> {
+  authenticate(userLogin: userLogin): Observable<any> {
+
     const apiUrl =  this.appInitService.apiBaseUrl()
 
-    let url = `${apiUrl}/users/authenticate`
+    const url = `${apiUrl}/users/authenticate`
+    // console.log('userLogin', userLogin)
+    return this.http.post<any>(url, userLogin )
 
+  }
+
+
+  login(userName: string, password: string): Observable<any> {
     this.clearSubscriptions();
-
     this.authenticationService.clearUserSettings();
-
-    const userLogin = { username, password };
+    const site = this.siteService.getAssignedSite()
+    const userLogin = { userName, password } as userLogin;
     const timeOut   = 3 * 1000;
 
-    return  this.http.post<any>(url, userLogin)
+    return  this.authenticate(userLogin)
       .pipe(
         switchMap(
            user => {
-
-            // console.log(user)
             if (user && user.errorMessage) {
               const message = user?.errorMessage;
               this.snackBar.open(message, 'Failed Login', {duration: 1500})
@@ -192,25 +217,39 @@ export class UserSwitchingService implements  OnDestroy {
             }
 
             if (user) {
-
               if (user?.message.toLowerCase() === 'failed') {
                 const user = {message: 'failed'}
                 return of(user)
               }
-
               user.message = 'success'
               const currentUser = this.setUserInfo(user, password)
               this.uiSettingService.initSecureSettings();
 
-              if ( this.platformService.isApp()  )  { return this.changeUser(user) }
-              if ( !this.platformService.isApp() )  { return of(user)              }
-
+              console.log('user', user)
+              return of(user) 
             } else {
-              const user = {message: 'failed'}
+              const user = {message: 'failed'} as IUser;
               return of(user)
             }
-      })
-    )
+      })).pipe(switchMap(data => { 
+       
+        if (data?.message === 'failed') { return of(null)}
+        return this.contactsService.getContact(site, data?.id)
+        
+      })).pipe(switchMap(data => { 
+        
+        if ( !data ) { return of( {message: 'failed'} ) }
+        
+        const item = localStorage.getItem('user')
+        const user = JSON.parse(item) as IUser;
+
+        console.log('data result', user)
+        this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
+        if ( this.platformService.isApp()  )  { return this.changeUser(user) }
+        if ( !this.platformService.isApp() )  { return of(user)              }
+      
+      }
+     ))
   }
 
   // getAuthorization()
@@ -235,8 +274,11 @@ export class UserSwitchingService implements  OnDestroy {
     currentUser.authdata     = user.authdata
     localStorage.setItem('user', JSON.stringify(currentUser))
     this.authenticationService.updateUser(currentUser)
-
     return currentUser
+  }
+
+  setUserAuth(userAuth: string) { 
+    localStorage.setItem('userAuth', userAuth)
   }
 
   clearSubscriptions() {
@@ -254,7 +296,7 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   openPIN(request: any) {
-    if (this.platformService.webMode) {return}
+    if (!this.platformService.isApp) {return}
 
     let dialogRef: any;
     dialogRef = this.dialog.open(FastUserSwitchComponent,
@@ -321,6 +363,24 @@ export class UserSwitchingService implements  OnDestroy {
         this.orderService.updateOrderSubscription(data)
       })
     }
+  }
+
+  loginApp(user) {
+
+    const currentUser   = user.user
+    const sheet         = user.sheet
+    this.processLogin(currentUser, null)
+    if (sheet) {
+      if (sheet.message) {
+        this.siteService.notify(`Message ${sheet.message}`, `Error`, 20000)
+        return false
+      }
+      if (sheet.shiftStarted == 0) {
+        this.router.navigate(['/balance-sheet-edit', {id:sheet.id}]);
+        return true
+      }
+    }
+
   }
 
   initUserFeatures() {

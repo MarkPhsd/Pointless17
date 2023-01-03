@@ -1,26 +1,20 @@
-<div *ngIf="sheet" class="header-grid">
-
-  <div class="grid-buttons">
-    <div>
-      <button mat-raised-button color="primary" (click)="view()"><mat-icon>expand</mat-icon></button>
-    </div>
-    <div>
-      <button mat-raised-button color="primary" (click)="dismiss()"><mat-icon>minimize</mat-icon></button>
-    </div>
+<div class="grid-buttons">
+  <div>
+    <button mat-raised-button color="primary" (click)="view()"><mat-icon>expand</mat-icon></button>
   </div>
+  <div>
+    <button mat-raised-button color="primary" (click)="dismiss()"><mat-icon>minimize</mat-icon></button>
+  </div>
+</div>
 
+<div *ngIf="sheet" class="header-grid">
   <div>
     <balance-sheet-header-view
       [sheetType]="sheetType"
       [sheet]="sheet">
     </balance-sheet-header-view>
-  </div>
-
-  <div>
     <balance-sheet-calculations-view
       [sheet]="sheet">
     </balance-sheet-calculations-view>
   </div>
-
-
 </div>

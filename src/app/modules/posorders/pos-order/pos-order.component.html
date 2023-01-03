@@ -22,8 +22,7 @@
             [userName]     ="order?.clients_POSOrders?.userName"
           ></store-credit-info>
         </div>
-
-        <!-- enableLimitsView: {{enableLimitsView}} -->
+        
         <div  class="grid-header-item"
               *ngIf="enableLimitsView  && (wideBar || mainPanel)"
               (resized)="onResizedorderLimitsPanel($event)">
@@ -63,14 +62,14 @@
         <!-- purchasOrderEnabled{{purchasOrderEnabled}} -->
         <div *ngIf="mainPanel">
           <pos-order-function-buttons
-                (outPutSendToPrep)  ="sendToPrep()"
-                (outPutPrintLabel)  ="printLabels()"
-                (outPutRePrintLabel)="rePrintLabels()"
-                (outPutPrintReceipt)="printReceipt()"
-                (outPutMakePayment) ="makePayment()"
-                (outPutShowItems)   ="showItems()"
-                (outPutVoidOrder)   ="voidOrder()"
-                (outPutSuspendOrder)="suspendOrder()"
+                (outPutSendToPrep)    ="sendToPrep()"
+                (outPutPrintLabel)    ="printLabels()"
+                (outPutRePrintLabel)  ="rePrintLabels()"
+                (outPutPrintReceipt)  ="printReceipt()"
+                (outPutMakePayment)   ="makePayment()"
+                (outPutShowItems)     ="showItems()"
+                (outPutVoidOrder)     ="voidOrder()"
+                (outPutSuspendOrder)  ="suspendOrder()"
                 (outPutRemoveSuspension)="removeSuspension()"
                 (outPutClearOrder)    ="clearOrder($event)"
                 (outPutDeleteOrder)   ="deleteOrder($event)"
@@ -80,7 +79,7 @@
                 (outPutRefundOrder)   ='refundOrder($event)'
                 (outPutPurchaseOrder) ="makeManifest($event)"
                 (outPutchangeTransactionType)="changeTransactionType($event)"
-                (outPutListView)="toggleListView($event)"
+                (outPutListView)      ="toggleListView($event)"
                 [itemsPrinted]        ="itemsPrinted"
                 [paymentsMade]        ="paymentsMade"
                 [isAuthorized]        ="isAuthorized"

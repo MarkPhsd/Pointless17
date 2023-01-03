@@ -25,12 +25,14 @@
           <input matStartDate
                  formControlName="start"
                  placeholder="Start date"
-                 (click)="emitDatePickerData()">
-          <input matEndDate formControlName="end"
+                 #dateRangeStart
+                 >
+          <input matEndDate
+                 formControlName="end"
                  placeholder="End date"
-                 (click)="emitDatePickerData()">
-
-                </mat-date-range-input>
+                 #dateRangeEnd
+                 (dateChange)="emitDatePickerData(dateRangeStart, dateRangeEnd)">
+        </mat-date-range-input>
 
         <mat-datepicker-toggle matSuffix [for]="reportRangePicker"
                                ></mat-datepicker-toggle>
@@ -61,24 +63,18 @@
        >
       <mat-button-toggle class="toggle-min"
                          value="3"
-                         #tooltip="matTooltip"
-                         matTooltip="Filter by Employee"
                          matTooltipPosition="above"
                          matTooltipHideDelay="1000"
                          > Employee
       </mat-button-toggle>
       <mat-button-toggle class="toggle-min"
                          value="4"
-                         #tooltip="matTooltip"
-                         matTooltip="Filter by Device"
                          matTooltipPosition="above"
                          matTooltipHideDelay="1000"
                          > Device
       </mat-button-toggle>
       <mat-button-toggle class="toggle-min"
                          value="0"
-                         #tooltip="matTooltip"
-                         matTooltip="Show All"
                          matTooltipPosition="above"
                          matTooltipHideDelay="1000"
                          > All

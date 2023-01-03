@@ -49,9 +49,9 @@ export class PrintingService {
   private _printReady       = new BehaviorSubject<any>(null);
   public printReady$        = this._printReady.asObservable();
 
-  public _printView          = new BehaviorSubject<number>(null);
-  public printView$           = this._printView.asObservable();
-  public __printView         : number;
+  public _printView         = new BehaviorSubject<number>(null);
+  public printView$         = this._printView.asObservable();
+  public __printView        : number;
 
   image: string;
   get printView() {
@@ -87,9 +87,7 @@ export class PrintingService {
   }
 
   updatePrintReady(data) {
-
     this._printReady.next(data)
-    // this.output.emit(true)
   }
 
   async initDefaultLayouts() {
@@ -639,7 +637,8 @@ export class PrintingService {
       if (this.platFormService.androidApp) {
         // console.log(this.uiSettingsService.posDeviceInfo)
         const device = this.uiSettingsService.posDeviceInfo;
-        this.printingAndroidService.printAndroidPOSReceipt( this.orderService.currentOrder, null, device.btPrinter );
+        this.printingAndroidService.printAndroidPOSReceipt( this.orderService.currentOrder,
+                                                            null, device.btPrinter );
         return;
       }
     }

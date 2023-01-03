@@ -1,6 +1,6 @@
 import { Component,  Inject,  OnInit, } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { InventoryLocationsService, IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { InventoryAssignmentService, IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ISite } from 'src/app/_interfaces/site';
@@ -29,7 +29,8 @@ export class NewInventoryItemComponent implements OnInit {
   inventoryAssignment$:      Observable<IInventoryAssignment>;
   searchForm:                FormGroup;
   quantityMoving:            number;
-  metrcLocations$:           Observable<IInventoryLocation[]>;
+  locations$ :           Observable<IInventoryLocation[]>;
+  locations:             IInventoryLocation[];
   inventoryLocation:         IInventoryLocation;
   inventoryLocationID:       number;
   menuItem                   :IMenuItem;
@@ -53,8 +54,13 @@ export class NewInventoryItemComponent implements OnInit {
     }
   }
 
+
+
   ngOnInit() {
-    this.metrcLocations$ = this.inventoryLocationsService.getLocations();
+    this.locations$ = this.inventoryLocationsService.getLocations().pipe(switchMap(data => {
+      this.locations = data;
+      return of(data)
+    }))
     this.site =  this.siteService.getAssignedSite();
     this.inventoryAssignment$ = this.inventoryAssignmentService.getInventoryAssignment(this.site, this.id)
     this.inventoryAssignment$.pipe(
@@ -67,6 +73,17 @@ export class NewInventoryItemComponent implements OnInit {
     )).subscribe(data => {
       this.menuItem = data;
     })
+  }
+
+  setLocation(selection) {
+    //locations.filter
+    if (this.locations){
+      const item = this.locations.filter( data => { return data.id === selection?.value } )
+      console.log(item[0], item)
+      if (item && item[0]) {
+        this.inputForm.patchValue({location: item[0].name })
+      }
+    }
   }
 
   getItem(event) {
@@ -117,8 +134,13 @@ export class NewInventoryItemComponent implements OnInit {
     delete$.subscribe(
       {
         next: data => {
-          this.notifyEvent('Item Deleted. ', 'Success')
+          if (data.id) {
+            this.notifyEvent('Item Deleted. ', 'Success')
+            return
+          }
+          this.notifyEvent(JSON.stringify(data), 'Result')
           return
+
         },
         error: catchError => {
           this.notifyEvent('Item did not delete. ', 'Failed')

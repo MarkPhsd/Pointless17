@@ -17,7 +17,6 @@ import { ICanCloseOrder } from 'src/app/_interfaces/transactions/transferData';
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { ThisReceiver } from '@angular/compiler';
 import { OrdersService } from 'src/app/_services';
 
 @Component({
@@ -27,6 +26,7 @@ import { OrdersService } from 'src/app/_services';
 })
 export class PosOperationsComponent implements OnInit {
 
+  closingProcedure$: Observable<any>
   @ViewChild('printsection') printsection: ElementRef;
   @Input() site    : ISite;
   @Input() notifier: Subject<boolean>
@@ -108,12 +108,9 @@ export class PosOperationsComponent implements OnInit {
 
   refreshClosingCheck() {
     const site = this.siteService.getAssignedSite();
-
-
     this.closingCheck$ = this.transferDataService.canCloseDay(site).pipe(
       switchMap( data => {
-        console.log('closingCheck', data)
-        // return this.transferDataService.canCloseDay(site)
+        
         return of(data)
       }
     ))
@@ -227,16 +224,15 @@ export class PosOperationsComponent implements OnInit {
 
     const item$ = this._email()
     const  closingCheck$ = item$.pipe(switchMap(
-        data => {
-          return  this.transferDataService.canCloseDay(site)
-        }
+      data => {
+        return  this.transferDataService.canCloseDay(site)
+      }
     ))
     // const closingCheck$ = this.transferDataService.canCloseDay(site)
     this.orderService.clearOrderSubscription();
-
     this.balanceSheetsClosed = ''
 
-    closingCheck$.pipe(
+    this.closingProcedure$ =closingCheck$.pipe(
       switchMap( data => {
         //determine if the day can be closed.
         //if it can't then return what is told from the webapi
@@ -245,7 +241,7 @@ export class PosOperationsComponent implements OnInit {
             this.closeResult = `Day not closed.  Open Printed Orders ${data?.openPrintedOrders?.length}.
                                 Open Paid Orders ${data?.openPaidOrders?.length}.
                                 Open Balance Sheets ${data?.openBalanceSheets?.length}`
-            const result = this.orderMethodsService.notifyEvent(`Date not closed. ${data}`, 'Alert');
+            const result = this.orderMethodsService.notifyEvent(`Date not closed. ${JSON.stringify(data)}`, 'Alert');
             this.canCloseOrderResults = data
             this.runningClose = false
             return
@@ -257,20 +253,19 @@ export class PosOperationsComponent implements OnInit {
         switchMap(
            data => {
             this.closeResult = 'Day closed. Closing balance Sheets.'
-            this.runningClose = false;
             return this.balanceSheetService.closeAllSheets(site)
         }
-      )).subscribe(data => {
-        // if (data === 'Error Occured') {
-        //   this.balanceSheetsClosed = 'Balance sheet not closed.'
-        //   this.runningClose = false;
-        //   return
-        // }
-        this.closeResult = 'Day closed. All balance sheets closed.'
-        this.balanceSheetsClosed = ''
-        this.runningClose = false;
-    })
+      )).pipe(
+        switchMap(data => {
+          this.closeResult = 'Day closed. All balance sheets closed.'
+          this.balanceSheetsClosed = ''
+          this.runningClose = false;
+          return of(data)
+        } 
+      )
+    )
   }
+
 
   ordersWindow() {
     this.router.navigateByUrl('/pos-orders')

@@ -119,6 +119,15 @@
         </mat-slide-toggle>
       </div>
 
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="updateInventoryOnScan"
+                  >
+          <mat-label>Update Inventory On Scan</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+
       <mat-divider></mat-divider>
       <h4>Barcode Options</h4>
 
@@ -184,14 +193,16 @@
       <h3>Operation Settings:</h3>
 
       <div class="grid-small">
-        <div>
-          <mat-label>Max Orders allowed open by user.</mat-label>
+
+         <div>
+          <mat-label>Gift card character length.</mat-label>
           <app-value-fields
               [inputForm]="inputForm"
-              [fieldName]="'mAXOrdersOpen'">
+              [fieldName]="'giftCardLength'">
             Max Orders
           </app-value-fields>
         </div>
+   
 
         <div>
           <mat-label>Prefix for Order Prep Labels.</mat-label>

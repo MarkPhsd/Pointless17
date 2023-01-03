@@ -81,6 +81,7 @@ export interface IMenuItemsResultsPaged {
 export interface IItemBasic{
   name: string;
   id  : number;
+
 }
 
 export interface IItemBasicB{

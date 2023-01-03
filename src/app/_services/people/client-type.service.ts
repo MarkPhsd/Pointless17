@@ -10,6 +10,8 @@ export interface IUserAuth_Properties {
   voidItem             : boolean;
   voidPayment          : boolean;
 
+  //payments
+  houseAccountPayment  : boolean;
   changeItemPrice      : boolean;
   changeInventoryValue : boolean;
   blindBalanceSheet    : boolean;

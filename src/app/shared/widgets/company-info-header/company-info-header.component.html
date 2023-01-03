@@ -1,10 +1,9 @@
 
 <div *ngIf="isUser && company$ | async as company">
   <div class="company-text">
-    {{company.phone}} | {{company.compAddress2}}  {{company.compAddress1}}, {{company.compCity}}  {{company.compState}}  {{company.compBillingZip}}
+    {{company.name}} |  {{company.phone}} | {{company.compAddress2}}  {{company.compAddress1}}, {{company.compCity}}  {{company.compState}}  {{company.compBillingZip}}
   </div>
   <div>
-    <!-- <app-store-hours-display></app-store-hours-display> -->
   </div>
 </div>
 

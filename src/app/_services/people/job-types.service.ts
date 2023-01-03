@@ -43,17 +43,17 @@ export class JobTypesService {
 
   }
 
-  putjobTypes(site: ISite, id: any, type: jobTypes):  Observable<jobTypes> {
+  putjobTypes(site: ISite, type: jobTypes):  Observable<jobTypes> {
 
     const controller = '/jobType/'
 
     const endPoint = 'PutJobType';
 
-    const parameters = `?id=${id}`
+    const parameters = ``
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.put<any>(url, status)
+    return this.http.put<any>(url, type)
 
   }
 
@@ -67,15 +67,22 @@ export class JobTypesService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.put<any>(url, status)
+    return this.http.put<any>(url, type)
 
   }
 
-  delete(site: ISite,   id: any, type: jobTypes):  Observable<jobTypes> {
+  saveType(site: ISite, type: jobTypes) :  Observable<jobTypes> {
+    if (!type.id || type.id == 0) {
+      return this.postJobType(site, type)
+    }
+    return this.putjobTypes(site, type)
+  }
+
+  delete(site: ISite,   id: any):  Observable<jobTypes> {
 
     const controller = '/jobType/'
 
-    const endPoint = 'delete'
+    const endPoint = 'DeleteJobType'
 
     const parameters = `?id=${id}`
 

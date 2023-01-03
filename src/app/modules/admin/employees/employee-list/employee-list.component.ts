@@ -130,8 +130,9 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
   }
 
   ngOnDestroy(): void {
-      if (this._searchModel) {this._searchModel.unsubscribe()}
+    if (this._searchModel) {this._searchModel.unsubscribe()}
   }
+
   async ngOnInit() {
     this.initClasses()
     this.urlPath            = await this.awsService.awsBucketURL();
@@ -151,7 +152,7 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
   }
 
-  async initForm() {
+  initForm() {
     this.searchForm = this.fb.group({
       itemName : ['']
     })
@@ -221,8 +222,7 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
       flex: 2,
     };
 
-
-     let item  =   {
+    let item  =   {
       field: 'id',
       cellRenderer: "btnCellRenderer",
                     cellRendererParams: {
@@ -241,7 +241,6 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
       this.columnDefs.push(item);
 
       const site = this.siteService.getAssignedSite();
-      console.log('site', site)
 
       if (site.metrcURL ) {
 
@@ -264,7 +263,6 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
 
           this.columnDefs.push(item);
       }
-
 
 
       item =   {headerName: 'Last Name',     field: 'lastName', sortable: true,
@@ -551,8 +549,6 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     this.gridApi.exportDataAsCsv();
   }
 
-
-
   getLabel(rowData)
   {
     if(rowData && rowData.hasIndicator)
@@ -567,7 +563,6 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
       else return this.metrcButtonName
   }
 
-
   onBtnClick1(e) {
     this.rowDataClicked1 = e.rowData;
   }
@@ -576,15 +571,13 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     this.rowDataClicked2 = e.rowData;
   }
 
-  async editItemWithId(item:any) {
+  editItemWithId(item:any) {
     if(!item) {
       console.log(item)
       return
     }
     const id   = item.rowData.id;
     const site = this.siteService.getAssignedSite()
-    // const sheet = await this.balanceSheetService.getSheet(site, id).pipe().toPromise();
-    // this.balanceSheetService.updateBalanceSheet(sheet)
     this.router.navigate(['/employee-edit', {id:item.rowData.id}]);
   }
 

@@ -19,6 +19,9 @@ export class SitesService {
   site: ISite;
   apiUrl: any;
 
+  public _user               = new BehaviorSubject<IUser>(null);
+  public  user$               = this._user.asObservable();
+
   private _sites    = new BehaviorSubject<ISite[]>(null);
   public  sites$    = this._sites.asObservable();
 
@@ -37,7 +40,7 @@ export class SitesService {
   }
 
   constructor( private http            : HttpClient,
-               private auth            : AuthenticationService,
+               private authentication  : AuthenticationService,
                private appInitService  : AppInitService,
                private platformSevice  : PlatformService,
                private httpClient      : HttpClient,
@@ -51,7 +54,7 @@ export class SitesService {
 
   getSites():  Observable<ISite[]> {
     this.apiUrl   = this.appInitService.apiBaseUrl()
-    console.log('apiUrl', this.apiUrl)
+    // console.log('apiUrl', this.apiUrl)
     const endPoint = `/CCSSites/getsites`
 
     if (!this.apiUrl) {
@@ -124,7 +127,6 @@ export class SitesService {
     }
 
     const url = `${this.apiUrl}${endPoint}${params}`
-
     return  this.http.delete<any>(url)
 
   }
@@ -133,7 +135,7 @@ export class SitesService {
     const username = localStorage.getItem("username")
     const password = localStorage.getItem("password")
     const user = {} as IUser
-    this.auth.updateUserX(user);
+    this.authentication.updateUserX(user);
     return new HttpHeaders().set(InterceptorSkipHeader, '');
   }
 
@@ -247,12 +249,14 @@ export class SitesService {
 
   getCurrentCache(): number {
 
-    if (this.auth.userValue) {
-      if (this.auth.userValue.roles === 'user' || this.auth.userValue.roles === '') {
+    // console.log('auth user authentication', this.userValue)
+
+    if (this.userValue) {
+      if (this?.userValue?.roles === 'user' || this?.userValue?.roles === '') {
         return 10
       }
     }
-    if (!this.auth.userValue) {
+    if (!this.userValue) {
       return 10
     }
 
@@ -260,7 +264,7 @@ export class SitesService {
       const appCache = JSON.parse(localStorage.getItem('appCache'));
 
       if (!appCache || appCache == 0) {
-        if (this.auth.userValue.roles  === 'user')  {
+        if (this?.userValue?.roles  === 'user')  {
           return 10
         }
       }
@@ -279,10 +283,28 @@ export class SitesService {
 
     const  cache = this.getCurrentCache();
 
-    console.log('cache info', cache)
+    // console.log('cache info', cache)
+
     if (cache == null) {  return  { url: url, cacheMins: 0 }   }
 
     return { url: url, cacheMins: cache }
+
+  }
+
+  get userValue(): IUser {
+    if (!this._user.value) {
+      const item = localStorage.getItem('user');
+      // console.log('get item', item)
+      if (item) {
+        const nextUser =  JSON.parse(item)
+        this._user.next(nextUser)
+        return nextUser
+      }
+      if (!item) {
+        return null
+      }
+    }
+    return this._user.value;
 
   }
 

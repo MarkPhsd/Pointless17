@@ -82,7 +82,8 @@ export interface IInventoryAssignment {
   destinationSiteName : string;
   rejected:             string;
   priceCategoryID     : number;
-
+  productCountUpdated : boolean;
+  poDetailID          : number;
   caseQuantity        : number;
   itemSku             : string;
   casePrice           : number;
@@ -348,10 +349,44 @@ export class InventoryAssignmentService {
 
   }
 
+  reconcileInventory(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment): Observable<IInventoryAssignment> {
+
+    const controller =  `/InventoryAssignments/`
+
+    const endPoint = `reconcileInventory`
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.put<IInventoryAssignment>(url, iInventoryAssignment)
+
+  }
+
+  postUpdateInventoryLocations(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment[]): Observable<IInventoryAssignment[]> {
+
+    if (id == null) { return null}
+
+    if (iInventoryAssignment == null) { return null}
+
+    if (site == null) { return null}
+
+    const controller =  `/InventoryAssignments/`
+
+    const endPoint = `postUpdateInventoryLocations`
+
+    const parameters = `?manifestID=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<IInventoryAssignment[]>(url, iInventoryAssignment)
+
+  }
+
   postInventoryAssignmentList(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment[]): Observable<IInventoryAssignment[]> {
 
     if (id == null) { return null}
-    
+
     if (iInventoryAssignment == null) { return null}
 
     if (site == null) { return null}
@@ -410,7 +445,7 @@ export class InventoryAssignmentService {
 
   }
 
-  deleteInventory(site: ISite, id: number): Observable<IInventoryAssignment[]> {
+  deleteInventory(site: ISite, id: number): Observable<IInventoryAssignment> {
 
     const controller =  `/InventoryAssignments/`
 
@@ -420,7 +455,7 @@ export class InventoryAssignmentService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.delete<IInventoryAssignment[]>(url)
+    return  this.http.delete<IInventoryAssignment>(url)
 
   }
 

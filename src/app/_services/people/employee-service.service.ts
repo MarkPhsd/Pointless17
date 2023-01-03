@@ -251,6 +251,7 @@ export class EmployeeService {
       emergencyPhone:            [''],
       positionID:                [''],
       dob:                       [''],
+      jobTypeID:                 [''],
       courtesyTitle:             [''],
       notes:                     [''],
       reportsTo:                 [''],

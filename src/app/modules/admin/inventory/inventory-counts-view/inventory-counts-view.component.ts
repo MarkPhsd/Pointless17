@@ -69,7 +69,7 @@ export class InventoryCountsViewComponent implements OnInit, OnDestroy {
   }
 
   refreshValues() {
-    console.log('refresh', this.productID)
+    // console.log('refresh', this.productID)
     const site = this.siteService.getAssignedSite();
     this.refresh = true
 

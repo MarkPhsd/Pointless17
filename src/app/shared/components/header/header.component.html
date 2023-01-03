@@ -41,7 +41,9 @@
 
         <div *ngIf="!smallDevice" >
           <div class="site-name" *ngIf="site && site.name && site.name != undefined">
-            <h2 > {{ site?.name.toUpperCase() | truncateText : 8 }} </h2>
+            <div *ngIf="site?.name.toLowerCase() != 'local'">
+              <h2 > {{ site?.name.toUpperCase() | truncateText : 8 }} </h2>
+            </div>
           </div>
         </div>
 
@@ -118,7 +120,7 @@
               </div>
             </li>
 
-            <li *ngIf="platFormService && !platFormService.webMode">
+            <li *ngIf="platFormService.isApp()">
               <div class='search-input'>
                 <button mat-button
                         aria-label="transfer_within_a_station"
@@ -142,6 +144,8 @@
       <div [class]="gridlayout">
 
         <div *ngIf="!smallDevice && isAdmin">
+        
+          <clock-in-out [displayOnly]="true"></clock-in-out>
           <wizard-progress-button></wizard-progress-button>
         </div>
 
@@ -257,7 +261,7 @@
         </div>
 
         <div class="mat-item"  >
-            <app-toggle-theme></app-toggle-theme>
+          <app-toggle-theme></app-toggle-theme>
         </div>
 
         <div  mat-menu-item
@@ -292,6 +296,10 @@
             </button>
         </div>
 
+        <div>
+          <ng-container [ngTemplateOutlet]="isClockInOutOn"></ng-container>
+        </div>
+
         <span  *ngIf="posDevice$ | async as device">
           <li *ngIf="device  && (isAdmin || isManager) && !smallDevice">
             <div class='search-input'>
@@ -309,3 +317,7 @@
 
 <span *ngIf="(uiTransactionSetting$ | async) as item"></span>
 <span *ngIf="(uiHomePageSetting$ | async) as item"></span>
+
+<ng-template #clockInOut>
+  <clock-in-out></clock-in-out>
+</ng-template>

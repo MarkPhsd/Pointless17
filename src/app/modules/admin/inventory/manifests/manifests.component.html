@@ -26,8 +26,7 @@
           <mat-select
                     type="text"
                     (selectionChange)="getAssignedSiteSelection($event)"
-                    formControlName="selectedSiteID"
-                  >
+                    formControlName="selectedSiteID">
           <div *ngIf="(sites$ | async) as list">
             <mat-option *ngFor="let item of list" [value]="item.id">
               {{ item.name }}
@@ -43,8 +42,7 @@
           <mat-select
                     type="text"
                     (selectionChange)="getInventoryStatus($event)"
-                    formControlName="activeStatus"
-                  >
+                    formControlName="activeStatus">
           <div *ngIf="inventoryActiveList">
             <mat-option *ngFor="let item of inventoryActiveList" [value]="item.name">
               {{ item.name }}
@@ -56,19 +54,19 @@
 
     <div>
         <button mat-button
-          (click)="refreshSearch()"><mat-icon>refresh</mat-icon>Refresh
+                (click)="refreshSearch()"><mat-icon>refresh</mat-icon>Refresh
         </button>
     </div>
 
     <div>
         <button mat-button
-              (click)="listAll()"><mat-icon>list</mat-icon>List All
+                (click)="listAll()"><mat-icon>list</mat-icon>List All
       </button>
     </div>
 
     <div>
-      <button class="info-buttons"
-              mat-button
+      <button  class="info-buttons"
+               mat-button
               (click)="addManifest()"><mat-icon>add</mat-icon> Add
       </button>
     </div>

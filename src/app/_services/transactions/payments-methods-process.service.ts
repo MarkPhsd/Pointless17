@@ -12,6 +12,7 @@ import { OrdersService } from './orders.service';
 import { DSIEMVSettings, TransactionUISettings } from '../system/settings/uisettings.service';
 import { PrintingService } from '../system/printing.service';
 import { BalanceSheetService } from './balance-sheet.service';
+import { PrepPrintingServiceService } from '../system/prep-printing-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,16 +26,20 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   private _dialog     = new BehaviorSubject<any>(null);
   public  dialog$      = this._dialog.asObservable();
 
-
   _initTransactionComplete = new BehaviorSubject<any>(null);
 
   initSubscriptions() {
-     this.dialogSubject = this.dialogRef.afterClosed().subscribe(result => {
-      console.log('dialog ref result (payment-methods.process.service)', result)
-      if (result) {
 
-      }
-    });
+    this.dialogSubject = this.dialogRef.afterClosed().pipe(
+      switchMap( result => {
+        console.log('dialog ref result (payment-methods.process.service)', result)
+        if (result) {
+          return this.processSendOrder(this.orderService.currentOrder)
+        }
+    })).subscribe(data => {
+      return of(data)
+    })
+
   }
 
   ngOnDestroy(): void {
@@ -50,6 +55,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     public  printingService     : PrintingService,
     private dialogOptions       : ProductEditButtonService,
     private balanceSheetService : BalanceSheetService,
+    private prepPrintingService : PrepPrintingServiceService,
     private matSnackBar         : MatSnackBar) {
   }
 
@@ -94,14 +100,17 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   processCreditPayment(site: ISite, posPayment: IPOSPayment,
                        order: IPOSOrder, amount: number,
                        paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
+
     if (this.DSIEmvSettings.enabled) {
       this.processSubDSIEMVCreditPayment(order, amount, true)
       return
     }
+
     return this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
+
   }
 
-  processPayPalCreditPayment(order: IPOSOrder, amount: number, manualPrompt: boolean, settings: TransactionUISettings) {
+  processPayPalCreditPayment(order: IPOSOrder, amount: number, manualPrompt: boolean, settings: TransactionUISettings): Observable<IPOSPayment> {
       //once we get back the method 'Card Type'
       //lookup the payment method.
       //we can't get the type of payment before we get the PaymentID.
@@ -119,8 +128,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       // this.amount   = this.payment.amountPaid.toString();
       // this.clientID = this.settings.payPalClientID;
       // this.currencyCode = this.settings.payPalCurrency;
-
-      console.log('processPayPalCreditPayment settings', settings)
+      // console.log('processPayPalCreditPayment settings', settings)
       const payment$  = this.paymentService.postPOSPayment(site, posPayment)
       payment$.subscribe(data =>
         {
@@ -155,7 +163,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         if (amount < 0) {
           action = 3;
         }
-
         this.dialogRef = this.dialogOptions.openDSIEMVTransaction({data, amount, action: action,
                                                                    manualPrompt: manualPrompt});
         this._dialog.next(this.dialogRef)
@@ -255,16 +262,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   processCardPointResponse(trans: any, payment: IPOSPayment, order: IPOSOrder) {
-    console.log('processCardPointResponse', trans)
+    // console.log('processCardPointResponse', trans)
     const site = this.sitesService.getAssignedSite();
     //validate response
     if (this.isCardPointApproved(trans)) {
-
       payment   = this.applyCardPointResponseToPayment(trans, payment)
       payment.textResponse =  trans?.resptext.toLowerCase();
       let paymentMethod    = {} as IPaymentMethod;
-      console.log('processCardPointResponse', trans);
-
+      // console.log('processCardPointResponse', trans);
       this.paymentMethodService.getPaymentMethodByName(site, 'credit').pipe(
         switchMap( data => {
           payment.paymentMethodID = data.id;
@@ -272,7 +277,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
           return this.paymentService.makePayment(site, payment, order, payment.amountPaid, data)
         }
       )).subscribe(data => {
-        console.log('data. completed response', data.orderCompleted)
+        // console.log('data. completed response', data.orderCompleted)
         this.orderService.updateOrderSubscription(data.order);
         this.orderMethodsService.finalizeOrder(data, paymentMethod, data.order);
         // this.printingService.previewReceipt();
@@ -316,7 +321,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
         return  payment$.pipe(
           switchMap(data => {
-            console.log('processCreditCardResponse makePayment data', data)
+            // console.log('processCreditCardResponse makePayment data', data)
             this.orderService.updateOrderSubscription(data.order);
             this.orderMethodsService.finalizeOrder(data,  paymentMethod, data.order);
             this.printingService.previewReceipt();
@@ -329,6 +334,10 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     }
     return of(null)
+  }
+
+  processSendOrder(order: IPOSOrder) {
+    return this.prepPrintingService.sendToPrep(order)
   }
 
   applyCardPointResponseToPayment(response: any, payment: IPOSPayment) {
@@ -505,11 +514,13 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   validatePaymentAmount(amount, paymentMethod: IPaymentMethod, balanceRemaining: number, creditBalanceRemaining): boolean {
-    if (  +amount > + balanceRemaining ) {
-      if (!paymentMethod.isCreditCard) {
-        this.notify(`Enter amount smaller than ${balanceRemaining}.`, 'Try Again', 3000)
-        return false
-      }
+
+    if (  +amount > +balanceRemaining ) {
+      // if (!paymentMethod.isCreditCard) {
+      //   this.notify(`Enter amount smaller than ${balanceRemaining}.`, 'Try Again', 3000)
+      //   return false
+      // }
+      console.log('creditBalanceRemaining', creditBalanceRemaining)
       if (paymentMethod.isCreditCard) {
         this.notify(`Enter amount smaller than ${creditBalanceRemaining}.`, 'Try Again', 3000)
         return false

@@ -123,6 +123,11 @@ categories: IMenuItem[];
 subCategories: IMenuItem[];
 subCategories$ : Observable<IMenuItem[]>;
 
+subCategoriesList: IMenuItem[];
+categoriesList: IMenuItem[];
+departmentsList: IMenuItem[];
+
+
 @Output() outputPromptItem = new EventEmitter();
 _promptSubGroup : Subscription;
 promptSubGroup  : PromptSubGroups;
@@ -161,19 +166,9 @@ constructor(  private _snackBar              : MatSnackBar,
     this.urlPath        = await this.awsService.awsBucketURL();
     const site          = this.siteService.getAssignedSite()
 
-    this.categories$    = this.menuService.getListOfCategoriesAll(site).pipe(
-      switchMap(data => {
-        return of(data)
-      })
-    )
-
-    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(
-      switchMap(data => {
-        return of(data)
-      })
-    )
-
-    this.departments$   = this.menuService.getListOfDepartmentsAll(site)
+    this.refreshSubCategories()
+    this.refreshDepartments()
+    this.refreshCategories()
     this.productTypes$  = this.itemTypeService.getBasicTypes(site)
     const brandResults$       = this.contactsService.getBrands(site, clientSearchModel)
 
@@ -191,6 +186,54 @@ constructor(  private _snackBar              : MatSnackBar,
     }
   };
 
+  refreshSubCategories() {
+    const site          = this.siteService.getAssignedSite()
+    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(
+      switchMap(data => {
+        if (this.categoryID != 0  && this.categoryID != undefined) {
+          this.categoriesList = data.filter(data => {return data.categoryID == this.categoryID});
+          return of(data)
+        }
+        this.subCategoriesList = data;
+        return of(data)
+      })
+    )
+  }
+
+  refreshCategories() {
+    const site          = this.siteService.getAssignedSite()
+    this.categories$    = this.menuService.getListOfCategoriesAll(site).pipe(
+      switchMap(data => {
+
+        console.log('this.departmentID', this.departmentID)
+
+        if (this.departmentID == undefined)  {
+          this.categoriesList = data;
+          return of(data)
+        }
+
+        if (this.departmentID != 0 && this.departmentID != undefined) {
+          this.categoriesList = data.filter(data => {return data.departmentID == this.departmentID});
+          console.log('filtered categories')
+          return of(data)
+        }
+
+        console.log('unfiltered categories',  data)
+        this.categoriesList = data;
+        return of(data)
+      })
+    )
+  }
+
+  refreshDepartments() {
+    const site          = this.siteService.getAssignedSite()
+    this.departments$   = this.menuService.getListOfDepartmentsAll(site).pipe(
+      switchMap(data => {
+        this.departmentsList = data;
+        return of(data)
+      })
+    )
+  }
   setBrandID(event) {
     if (event && event.id) {
       this.brandID = event.id
@@ -261,6 +304,7 @@ constructor(  private _snackBar              : MatSnackBar,
     this.categoryID        = 0;
     this.productTypeSearch = 0;
     this.brandID           = 0
+    this.subCategoryID     = 0;
     this.initForm()
     this.refreshSearch(1);
   }
@@ -492,11 +536,14 @@ constructor(  private _snackBar              : MatSnackBar,
   refreshCategoryChange(event) {
     this.categoryID = event;
     this.refreshSearch(1);
+    this.refreshSubCategories();
   }
 
   refreshDepartmentChange(event) {
     this.departmentID = event;
     this.refreshSearch(1);
+    this.refreshCategories();
+    this.refreshSubCategories()
   }
 
   refreshProductTypeChange(event) {

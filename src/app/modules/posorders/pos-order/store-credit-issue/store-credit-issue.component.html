@@ -3,7 +3,6 @@
     <h3>Issue Credit</h3>
   </mat-card-title>
   <mat-card-subtitle>
-
     <div *ngIf="posIssueItem">
       Adding Value:  {{+posIssueItem.unitPrice | currency}}
     </div>
@@ -14,18 +13,16 @@
     <store-credit-search
       (outPutResults)="setResults($event)">
     </store-credit-search>
-
+  
   </mat-card-subtitle>
 
   <mat-card-content>
-
-    <store-credit-info>
+    <store-credit-info
       [showPayment]="false"
       [showIssueMoney]="true"
       [order]="order"
-      (issueToStoreCredit)="issueToStoreCredit($event)
-      (closeDialog)="onCancel($event)"
+     
+      (closeDialog)="onCancel($event)">
     </store-credit-info>
-
   </mat-card-content>
 </mat-card>

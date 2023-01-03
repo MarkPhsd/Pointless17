@@ -165,7 +165,7 @@ export interface employee {
   commissionPercentageLevel: number;
   commissionGroupID:         number;
   apiPassword:               string;
-  jobType:                   jobTypes;
+  activeJob:                   jobTypes;
   metrcLicenseNumber:        string;
   metrcStatus:               string;
   metrcType:                 string;
@@ -177,6 +177,16 @@ export interface employee {
   stateIDNumber:             string;
   stateIDExpiration:         string;
   clientID        :          number;
+  jobTypeID       :          number;
+  employeeJobs:              employeeJobs;
+}
+
+export interface employeeJobs { 
+  employeeID : number;
+  position: number;
+  hours: number;
+  payRate: number;
+  id: number;
 }
 
 export interface jobTypes {
@@ -186,8 +196,8 @@ export interface jobTypes {
   shortDesc:     string;
   positionOrder: number;
   revenueCenter: number;
-  upsize_ts:     string;
 }
+
 export interface FlowVendor {
   name	:     string;
   organization	:     string;

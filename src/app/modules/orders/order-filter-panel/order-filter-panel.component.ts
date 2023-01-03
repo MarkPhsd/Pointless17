@@ -405,7 +405,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   setEmployee(event) {
-    if (!event) { return }
+  if (!event) { return }
     this.searchModel.employeeID = event.id
     this.refreshSearch()
   }

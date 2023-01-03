@@ -7,15 +7,14 @@ import { Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
 import { IPOSOrder, IPOSPayment, IServiceType, ServiceType } from 'src/app/_interfaces';
-import { OrderPayload, OrdersService } from 'src/app/_services';
+import { OrdersService } from 'src/app/_services';
 import { IBalanceDuePayload } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
-import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
+import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { TransactionUISettings,  UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
-import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 
@@ -27,6 +26,8 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 export class ChangeDueComponent implements OnInit  {
   uiTransactions: TransactionUISettings
   uiTransactions$ : Observable<TransactionUISettings>;
+
+  printing$ : Observable<any>;
 
   inputForm             : FormGroup;
   @Input() paymentMethod: IPaymentMethod;
@@ -48,6 +49,7 @@ export class ChangeDueComponent implements OnInit  {
                private uISettingsService: UISettingsService,
               private printingService: PrintingService,
               private methodsService: CardPointMethodsService,
+              private prepPrintingService: PrepPrintingServiceService ,
               private dialogRef: MatDialogRef<ChangeDueComponent>,
               @Inject(MAT_DIALOG_DATA) public data: IBalanceDuePayload
             )
@@ -61,9 +63,16 @@ export class ChangeDueComponent implements OnInit  {
       if (!this.paymentMethod?.isCreditCard && !this.payment.account) {
         this.step = 2
       }
+      this.printing$ = this.processSendOrder(data.order)
     }
     this.initForm();
+
   }
+
+  processSendOrder(order: IPOSOrder) {
+    return this.prepPrintingService.sendToPrep(order)
+  }
+
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.

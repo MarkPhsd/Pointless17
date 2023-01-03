@@ -1,0 +1,69 @@
+<div *ngIf="(break$ | async) as break"></div>
+<div class="container">
+  <ng-container [ngTemplateOutlet]="displayResults"></ng-container>
+</div>  
+
+
+<ng-template #onDisplayOnly>
+  <div *ngIf="(clock$ | async) as result">
+    <div *ngIf="clock">
+      <div *ngIf="isOnBreak">
+        <mat-label color="warn">
+          On Break
+        </mat-label>
+      </div>
+      <div *ngIf="!isOnBreak">
+        <mat-label >
+  
+        </mat-label>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="label" *ngIf="displayOnly && !isOnClock">
+    <mat-label color="warn">
+      Off Clock
+    </mat-label> -->
+  <!-- </div> -->
+  
+</ng-template>
+
+
+<ng-template #clockInOutEditor>
+  <div *ngIf="(clock$ | async) as result; else clockInButton">
+    
+    <div *ngIf="result">
+      <div>
+        <button mat-raised-button (click)="clockOut()">
+          <mat-icon>timer</mat-icon>
+          Clock Out
+        </button>
+      </div>
+
+      <div *ngIf="isOnBreak">
+        <button mat-raised-button (click)="endBreak()">
+          <mat-icon>timer_off</mat-icon>
+          End Break
+        </button>
+      </div>
+
+      <div *ngIf="!isOnBreak">
+        <div *ngIf="(breaksList$ | async) as list">
+          <div *ngFor="let item of list">
+            <button mat-raised-button (click)="startBreak(item)">
+              <mat-icon>timer_off</mat-icon>
+              {{item.name}}
+            </button>
+          </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #clockInButton>
+  <button mat-raised-button (click)="clockIn()">
+    <mat-icon>more_time</mat-icon>
+    Clock In
+  </button>
+</ng-template>

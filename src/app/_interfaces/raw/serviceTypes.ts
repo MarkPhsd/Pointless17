@@ -19,7 +19,7 @@ export interface IServiceType {
   onlineOrder       :    boolean;
   promptScheduleTime  :  boolean;
   deliveryService     : boolean;
-  orderMinimumTotal  :  number;
+  orderMinimum        :  number;
   instructions:          string;
   shippingInstructions : string;
   scheduleInstructions : string;
@@ -32,6 +32,44 @@ export interface IServiceType {
   promptForOrderName  : number;
   filterType          : number;
 
+  assignOrderToCloser : boolean;
+  assignCloserToOrder : boolean;
+
+  onOrderClose: number;
+  actionOne   : number;
+  actionTwo   : number;
   menuItem1:  IMenuItem;
   menuItem2:  IMenuItem;
+}
+
+
+export interface IServiceTypePOSPut {
+  id:                    number;
+  name:                  string;
+  description           :string;
+  positiveNegative:      number;
+  isRegisterTransaction: boolean;
+  taxItems:              boolean;
+  showOrderType:         boolean;
+  retailServiceType:     number;
+  managerRequired:       number;
+  showTipOption:         number;
+  printerName:           string;
+  icon       :           string;
+  apiOrder          :    boolean;
+  onlineOrder       :    boolean;
+  promptScheduleTime  :  boolean;
+  deliveryService     : boolean;
+  orderMinimumTotal  :  number;
+  instructions:          string;
+  shippingInstructions : string;
+  scheduleInstructions : string;
+  defaultProductID1    : number;
+  defaultProductID2    : number;
+  functionChoice      : number;
+  functionChoice2     : number;
+  functionChoice3     : number;
+  requireNumOfGuests  : number;
+  promptForOrderName  : number;
+  filterType          : number;
 }

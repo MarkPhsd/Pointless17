@@ -5,14 +5,13 @@
   <div *ngIf="summary.results as sales">
     <mat-card >
       <mat-card-title>
+        <h4> <ng-content></ng-content> </h4>
         <div class="grid">
           <div  class="totals_label">
-            <h4> <ng-content></ng-content>
-                 <span>
-                  <button mat-raised (click)="togglesShowAll()">
-                  <mat-icon>expand</mat-icon></button>
-                </span>
-              </h4>
+            <span>
+              <button mat-raised (click)="togglesShowAll()">
+              <mat-icon>expand</mat-icon></button>
+            </span>
             <div *ngIf="summary.resultMessage">
               <mat-icon>alert</mat-icon>
               {{summary.resultMessage}}

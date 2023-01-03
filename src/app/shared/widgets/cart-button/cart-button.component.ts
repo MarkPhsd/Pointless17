@@ -1,8 +1,8 @@
 import { Component, OnInit, Output,OnDestroy, EventEmitter, HostListener, Input  } from '@angular/core';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import { AuthenticationService, OrdersService} from 'src/app/_services';
-import { catchError, delay, delayWhen, finalize,  repeatWhen, retryWhen, tap } from 'rxjs/operators';
-import { Observable, Subject , Subscription, throwError, timer } from 'rxjs';
+import { catchError, delay, delayWhen, finalize,  repeatWhen, retryWhen, switchMap, tap } from 'rxjs/operators';
+import { Observable, of, Subject , Subscription, throwError, timer } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { IUser } from 'src/app/_interfaces';
@@ -28,6 +28,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   _order              : Subscription;
   order               : IPOSOrder;
 
+  actionOrder$        : Observable<any>;
   _order$             : Observable<IPOSOrder>;
   order$              : Subject<Observable<IPOSOrder>> = new Subject();
 
@@ -51,10 +52,8 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     })
 
     this._user = this.authenticationService.user$.subscribe(user => {
-      // console.log('user', user)
       this.user = user;
       this.isUserStaff = false;
-      // console.log('user subscription', user?.roles)
       if (user) {
         if (user.roles == 'admin' || user.roles == 'manager' || user.roles == 'employee') {
           this.isUserStaff      = true
@@ -67,9 +66,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     public orderService:            OrdersService,
     private authenticationService : AuthenticationService,
     private toolbarServiceUI:       ToolBarUIService,
-
     ) {
-
    }
 
   ngOnInit(): void {
@@ -95,7 +92,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     if (this.id) {
       clearInterval(this.id);
     }
-
   }
 
   @HostListener("window:resize", [])
@@ -120,9 +116,14 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     }
   }
 
- async addNewOrder() {
+  addNewOrder() {
     const site = this.siteService.getAssignedSite();
-    this.orderService.newDefaultOrder(site);
+     this.actionOrder$ = this.orderService.newOrderWithPayloadMethod(site, null).pipe(
+      switchMap(data => {
+        this.orderService.processOrderResult(data, site)
+        return of(data)
+      })
+    )
   }
 
   initOrderBarSubscription() {
@@ -159,7 +160,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
     if (this.isPosNameDefined()) {
       if ( this.openOrderBar) {
-        // this.toggleOpenOrderBar();
       }
     }
   }

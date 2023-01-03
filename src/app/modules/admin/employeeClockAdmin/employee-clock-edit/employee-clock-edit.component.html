@@ -1,0 +1,72 @@
+
+<div *ngIf="inputForm">
+  <div class="container"
+      [formGroup]="inputForm"
+      *ngIf="(clock$ | async) as item; else loading">
+
+    <mat-card>
+      <mat-card-title>
+        <div class="header-container" >
+          <div >
+            <h4>
+              {{clock?.employeeName}}
+            </h4>
+          </div>
+
+          <div>
+            <div>
+              <app-edit-buttons-standard
+                    [enableCopy]            ="false"
+                    (outputeupdateItem)     ="updateSave($event)"
+                    (outputupdateItemExit)  ="updateItemExit($event)"
+                    (outputupdatedeleteItem)="deleteItem($event)"
+                    (outputupdateonCancel)  ="onCancel($event)"
+              ></app-edit-buttons-standard>
+            </div>
+          </div>
+        </div>
+      </mat-card-title>
+
+      <mat-card-content>
+        <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'logInTime'">
+          Log In
+        </app-value-fields>
+      </mat-card-content>
+
+      <mat-card-content>
+        <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'logOutTime'">
+          Log Out
+        </app-value-fields>
+      </mat-card-content>
+
+      <mat-card-content>
+        <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'payRate'">
+          Pay Rate
+        </app-value-fields>
+      </mat-card-content>
+
+      <div class="info">
+        <div *ngIf="clock?.regHours">Hours</div>
+        <div *ngIf="clock?.regHours">{{clock?.regHours.toFixed(2)}}</div>
+        <div *ngIf="clock?.regPay">Pay</div>
+        <div *ngIf="clock?.regPay">{{clock?.regPay.toFixed(2) | currency }}</div>
+        <div *ngIf="clock?.otHours">OT Hours</div>
+        <div *ngIf="clock?.otHours">{{clock?.otHours.toFixed(2)}}</div>
+        <div *ngIf="clock?.otPay">OT Pay</div>
+        <div *ngIf="clock?.otPay">{{clock?.otPay.toFixed(2) | currency }}</div>
+      </div>
+    </mat-card>
+  </div>
+</div>
+
+<ng-template #loading>
+  <mat-spinner [diameter]="70"></mat-spinner>
+</ng-template>
+
+<div *ngIf="(action$ | async) as action"></div>

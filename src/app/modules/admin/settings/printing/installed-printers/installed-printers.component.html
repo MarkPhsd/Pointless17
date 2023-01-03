@@ -192,7 +192,7 @@
           </div>
         </mat-select>
       </mat-form-field>
-      
+
     </div>
 
     <ng-template #loadingReceiptTemplates>
@@ -209,12 +209,22 @@
       Loading...
     </div>
 
-     <div *ngIf="receiptLayoutSetting
-                && orderService.currentOrder
-                && headerText
-                && itemsText
+    <!-- layout {{receiptLayoutSetting | json }}
+    <br>
+    order  {{ orderService.currentOrder | json}}
+    <br>
+    header {{ headerText  | json }}
+    <br>
+    items  {{ itemsText | json }}
+    <br>
+    -->
+
+    <!-- <div *ngIf="orderService.currentOrder
+                && receiptLayoutSetting
                 && receiptStyles
-                && receiptLayoutSetting.option9" >
+                && receiptLayoutSetting.option9
+                && headerText
+                && itemsText" >
       <mat-card>
         <div class="border-section">
             <app-receipt-layout
@@ -235,9 +245,9 @@
             </app-receipt-layout>
         </div>
       </mat-card>
-    </div>
+    </div> -->
 
-     <h3 class="header-description">Label Templates</h3>
+    <h3 class="header-description">Label Templates</h3>
     <app-label-view-selector
         [labelList$]="labelList$"
         [labelImageHeight]="200"

@@ -16,39 +16,40 @@
       </search-debounce-input>
     </div>
 
-    <span *ngIf="(subCategories$ | async) as lists">
-      <div class="grid-item">
+    <div class="grid-item"
+          *ngIf="(departments$ | async) as list">
         <form-select-list [searchForm]      = "searchForm"
-                          [formFieldName]   ="'subCategoryID'"
-                          [list]            = "lists"
+                          [formFieldName]   ="'departmentID'"
+                          [list]           = "departmentsList"
                           [showActiveInactive]="true"
-                          (selectionChange) = "refreshSubCategoryChange($event)">
-        <div fieldSearchDescription>Sub Category</div>
+                          (selectionChange) = "refreshDepartmentChange($event)">
+        <div fieldSearchDescription>Department</div>
         </form-select-list>
-      </div>
-    </span>
+    </div>
+
     <span *ngIf="(categories$ | async) as lists">
       <div class="grid-item">
         <form-select-list [searchForm]      = "searchForm"
-                          [formFieldName]   ="'categoryID'"
-                          [list]           = "lists"
+                          [formFieldName]   = "'categoryID'"
+                          [list]            = "lists"
                           [showActiveInactive]="true"
                           (selectionChange) = "refreshCategoryChange($event)">
         <div fieldSearchDescription>Category</div>
         </form-select-list>
       </div>
     </span>
-    <div class="grid-item"
-          *ngIf="departments$">
+
+    <span *ngIf="(subCategories$ | async) as lists">
+      <div class="grid-item">
         <form-select-list [searchForm]      = "searchForm"
-                          [formFieldName]   ="'departmentID'"
-                          [list$]           = "departments$"
+                          [formFieldName]   ="'subCategoryID'"
+                          [list]            = "subCategoriesList"
                           [showActiveInactive]="true"
-                          (selectionChange) = "refreshDepartmentChange($event)">
-        <div fieldSearchDescription>Department</div>
+                          (selectionChange) = "refreshSubCategoryChange($event)">
+        <div fieldSearchDescription>Sub Category</div>
         </form-select-list>
       </div>
-
+    </span>
     <div class="grid-item">
       <app-brand-type-select
                         [inputForm]      = "searchForm"

@@ -15,8 +15,7 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-
-    <div *ngIf="clientID != 0">
+    <div>
       <store-credit-search
         (outPutResults)="setResults($event)">
       </store-credit-search>
@@ -35,12 +34,28 @@
 </mat-card>
 
 <ng-template #storeCreditItems>
-  <store-credit-info>
-    [clientID]   = "clientID"
-    [showPayment]= "true"
-    [order]      = "order"
-    (closeDialog)= "onCancel($event)"
-  </store-credit-info>
+  <div *ngIf="clientID">
+    <store-credit-info
+      [showBalance]= "true"
+      [clientID]   = "clientID"
+      [order]      = "order"
+      [showIssueMoney]="false"
+      (closeDialog)= "onCancel($event)">
+    </store-credit-info>
+  </div>
+</ng-template>
+
+
+<ng-template #giftCardScan>
+  <div *ngIf="searchModel && order">
+    <store-credit-info
+      [search]      = "search"
+      [showPayment] = "true"
+      [showBalance] = "true"
+      [order]       = "order"
+      (closeDialog) = "onCancel($event)">
+    </store-credit-info>
+  </div>
 </ng-template>
 
 <ng-template #noItems>

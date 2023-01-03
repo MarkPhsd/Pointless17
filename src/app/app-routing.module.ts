@@ -126,6 +126,11 @@ import { PriceScheduleMenuItemsComponent } from './modules/priceSchedule/price-s
 import { PayPalTransactionComponent } from './modules/payment-processing/payPal/pay-pal-transaction/pay-pal-transaction.component';
 import { BlogListEditComponent } from './modules/admin/blogEditor/blog-list-edit/blog-list-edit.component';
 import { BlogPostListComponent } from './shared/widgets/blog-post-list/blog-post-list.component';
+import { DevxReportDesignerComponent } from './modules/admin/devx-reporting/devx-report-designer/devx-report-designer.component';
+import { ReportViewerComponent } from './modules/admin/devx-reporting/report-viewer/report-viewer.component';
+import { JobTypesListComponent } from './modules/admin/clients/jobs/job-types-list/job-types-list.component';
+import { EmployeeClockListComponent } from './modules/admin/employeeClockAdmin/employee-clock-list/employee-clock-list.component';
+import { ClockBreaksTypesComponent } from './modules/admin/employeeClockAdmin/clock-breaks-types/clock-breaks-types.component';
 
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
@@ -158,6 +163,11 @@ const routes: Routes = [
         //       { path: 'menu-board/grid-menu-layout', component: GridMenuLayoutComponent, data: {animation: 'isLeft'} },
         //     ]
         // },
+        //
+
+        { path: 'report-designer', component: DevxReportDesignerComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+        { path: 'report-viewer'  , component: ReportViewerComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+
 
         { path: '', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
         { path: 'swipedelete', component: IonicSwipeToDeleteComponent,   data: { animation: 'isLeft'} },
@@ -187,6 +197,9 @@ const routes: Routes = [
         //content
         { path: 'content',  component: BlogListEditComponent, canActivate: [AuthGuard], data: { title: 'Content List', animation: 'isLeft'} },
 
+        //employee-clock
+        { path: 'employee-clock',  component: EmployeeClockListComponent, canActivate: [AuthGuard], data: { title: 'Employee Time Clock', animation: 'isLeft'} },
+        { path: 'break-types',  component: ClockBreaksTypesComponent, canActivate: [AuthGuard], data: { title: 'Employee Time Clock', animation: 'isLeft'} },
 
         //PosOperationsComponent
         { path: 'operations', component: PosOperationsComponent, canActivate: [AuthGuard], data: {title: 'Operations', animation: 'isLeft'} },
@@ -285,6 +298,8 @@ const routes: Routes = [
         { path: 'client-type-list', component: ClientTypeListComponent, canActivate: [AuthGuard], data: {  title: 'Client Types',  animation: 'isLeft'} },
         { path: 'client-type-edit', component: ClientTypeEditComponent, canActivate: [AuthGuard], data: {  title: 'Client Type Edit',  animation: 'isLeft'} },
 
+        { path: 'job-type-list', component: JobTypesListComponent, canActivate: [AuthGuard], data: {  title: 'Job Types',  animation: 'isLeft'} },
+
         //transaction settings
         { path: 'service-type-list', component: ServiceTypeListComponent, canActivate: [AuthGuard], data: { title: 'Service Type List',  animation: 'isLeft'} },
         { path: 'service-type-edit', component: ServiceTypeEditComponent, canActivate: [AuthGuard], data: {  title: 'Service Type Edit', animation: 'isLeft'} },
@@ -318,7 +333,7 @@ const routes: Routes = [
 
         { path: 'view-tier-menu', component: TierMenuComponent, canActivate: [AuthGuard],data: {  title: 'Tier Menu',  animation: 'isLeft'}},
 
-        {path: 'pos-order-schedule', component: POSOrderScheduleComponent, canActivate: [AuthGuard], data: {title: 'Schedule Order', animation: 'isLeft'}},
+        { path: 'pos-order-schedule', component: POSOrderScheduleComponent, canActivate: [AuthGuard], data: {title: 'Schedule Order', animation: 'isLeft'}},
 
       ]
     },

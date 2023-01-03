@@ -93,7 +93,10 @@ mat-icon {
 }
 
 .more-button {
-  width: 40px;
+  width: 75px;
+  height: 50px;
+  top: -15px;
+
 }
 
 .notes {
@@ -189,7 +192,7 @@ font-style: italic;
 .grid-items-main-panel {
   display: grid;
   gap: 10px;
-  grid-template-columns: 1fr 65px auto;
+  grid-template-columns: .9fr 65px auto;
 }
 
 .menu-buttons {

@@ -3,7 +3,7 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSOrder,  IPOSPayment,  ISetting, PosPayment } from 'src/app/_interfaces';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
-import { Observable, of, Subscription, switchMap } from 'rxjs';
+import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { OrdersService } from 'src/app/_services';
@@ -29,7 +29,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   @Input() options           : printOptions;
 
   _printView: Subscription;
-  printView               = 1;
+  // printView               = 1;
 
   receiptLayoutSetting      : ISetting;
   receiptStyles             : ISetting;
@@ -96,51 +96,44 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   tempPayments: PosPayment[];
 
-  intSubscriptions() {
-    if (this.printView == 1 ) {
+  printView: number;
 
-      this.order$ = this.orderService.currentOrder$.pipe(
-        switchMap(data => {
-            this.order      = data;
-            this.orders     = [];
-            if (!data)       {return}
-            this.orders.push(data)
-            if (data.posPayments) {
-              this.tempPayments   = data.posPayments
-            }
-            if (data.posOrderItems) {
-              this.items      = data.posOrderItems
-            }
-            return  this.orderService.getSelectedPayment()
-          }
-        )
-      ).pipe(switchMap(payment => {
-          // console.log('this.order', this.order)
-          // console.log( 'payment', payment)
-          if (payment) {
-            // this.tempPayments.filter((data) => {
-            //   return data.id == payment.id;
-            // });
-            this.payments = [];
-            this.payments.push(payment)
-          } else {
-            this.payments = this.tempPayments;
-          }
-          return of(payment)
-        })
-      )
-    }
+  intSubscriptions() {
+
+    this.printingService.printView$.subscribe(data => {
+        if (!data) {
+          this.printingService._printView.next(1);
+        }
+
+        this.printView = data;
+        if (!this.printView) { 
+          this.printView = 1;
+        }
+        if (this.printView == 1) {
+          this.setOrderPrintView()
+        }
+        if (this.printView == 2) {
+          // this.setOrderPrintView()
+        }
+
+        console.log('refresh view', this.printView)
+        this.refreshView$ =  this.refreshViewObservable()
+      }
+    )
 
     this._printReady = this.printingService.printReady$.subscribe(status => {
       if (status) {
           if ((this.options && this.options.silent) || this.autoPrint) {
             this.print();
             this.autoPrinted = true;
+
+
           }
         }
       }
     )
   }
+
 
   constructor(
     public orderService          : OrdersService,
@@ -159,9 +152,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   ngOnInit() {
     this.isElectronApp = this.platFormService.isAppElectron
     this.initPrintView() //done
-
     this.intSubscriptions();
-    this.refreshView$ =  this.refreshViewObservable()
+    // this.refreshView$ =  this.refreshViewObservable()
   }
 
   ngOnDestroy(): void {
@@ -170,19 +162,45 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   refreshViewObservable(){
-    const defaultReceipt$ = this.getDefaultReceipt()
-    const receipt$    =  this.getDefaultPrinterOb();
-    const styles$     =  this.getStylesForPrintOut()
-    const deviceInfo$ = this.getDeviceInfo()
+    const defaultReceipt$ =  this.getDefaultReceipt()
+    const receipt$        =  this.getDefaultPrinterOb();
+    const styles$         =  this.getStylesForPrintOut()
+    const deviceInfo$     =  this.getDeviceInfo()
 
     return receipt$.pipe(
-      switchMap(data => {  return defaultReceipt$ })).pipe(
-      switchMap(data => {  return styles$ })).pipe(
-      switchMap(data => { return deviceInfo$})).pipe(
+      switchMap(data => { return defaultReceipt$ })
+          ,catchError(e => { 
+                    console.log('e 1', e)
+            this.siteService.notify('Error defaultReceipt receipt view' + e, 'Alert', 2000)
+            return of(null)
+          })).pipe(
+      switchMap(data => { return styles$ })
+          ,catchError(e => { 
+            console.log('e 2', e)
+            this.siteService.notify('Error  stylesreceipt view' + e, 'Alert', 2000)
+            return of(null)
+          })).pipe(
+      switchMap(data => { return deviceInfo$}
+          ),catchError(e => { 
+            console.log('e 3', e)
+            this.siteService.notify('Error deviceInfo receipt view' + e, 'Alert', 2000)
+            return of(null)
+          })).pipe(
       switchMap(data => {
-        this.printingService.updatePrintView(1)
+        console.log('data' , data)
+        // if (this.printingService.__printView == 1) {
+        //   this.printingService._printView.next(1)
+        // }
+        // if (this.printingService.__printView == 2) {
+        //   this.printingService._printView.next(2)
+        // }
         return of(data)
-      }))
+          }),catchError(e => { 
+            console.log('e4' , e)
+            this.siteService.notify('Error receipt view' + e, 'Alert', 2000)
+            return of(null)
+        }))
+
   }
 
   getDefaultPrinterOb(): Observable<any> {
@@ -202,7 +220,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     if (this.printingService.printView  == 2) {
       ob$ = this.initBalanceSheetDefaultLayoutsObservable()
     }
-    if (this.printingService.printView  == 1) {
+    if (this.printingService.printView  == 1 || !this.printingService.printView) {
       ob$ = this.applyStylesObservable()
     }
     return ob$
@@ -235,11 +253,10 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   initPrintView() {
-    this.printView = this.printingService.printView;
-    if (!this.printingService.printView) {
-      this.printingService.updatePrintView(1);
-      this.printView = 1;
-    }
+    // // this.printView = this.printingService.printView;
+    // if (!this.printingService.printView) {
+    //   this.printingService.updatePrintView(1);
+    // }
   }
 
   email() {
@@ -270,10 +287,14 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   get currentView() {
-    if (this.printingService.printView == 2) {
+    if (this.printView == 2) {
       return this.balanceSheetTemplate
     }
-    if (this.printingService.printView == 1) {
+    if (this.printView == 1) {
+      return this.receiptTemplate
+    }
+    if (!this.printView) { 
+      this.printView = 1; 
       return this.receiptTemplate
     }
   }
@@ -468,6 +489,45 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     )
   }
 
+  setOrderPrintView() {
+    if (this.printView == 1 ) {
+      console.log('receipt view updating ')
+      this.order$ = this.getOrder();
+    }
+  }
+
+  getOrder() { 
+    return  this.orderService.currentOrder$.pipe(
+      switchMap(data => {
+          console.log('order  id:', data.id)
+          this.order      = data;
+          this.orders     = [];
+          if (!data)       {return}
+          this.orders.push(data)
+          if (data.posPayments) {
+            this.tempPayments   = data.posPayments
+          }
+          if (data.posOrderItems) {
+            this.items      = data.posOrderItems
+          }
+          return  this.orderService.getSelectedPayment()
+        }
+        )
+      ).pipe(switchMap(payment => {
+          if (payment) {
+            this.payments = [];
+            this.payments.push(payment)
+          } else {
+            this.payments = this.tempPayments;
+          }
+          return of(this.order)
+        }
+      ),catchError(e => { 
+        console.log('error', e) 
+        return of(null)
+      })
+    )
+  }
 }
 
   // async printAndroid() {

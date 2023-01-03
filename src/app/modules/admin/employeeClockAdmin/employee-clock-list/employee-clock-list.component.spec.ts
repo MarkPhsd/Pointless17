@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BalanceSheetEditComponent } from './balance-sheet-edit.component';
+import { EmployeeClockListComponent } from './employee-clock-list.component';
 
-describe('BalanceSheetEditComponent', () => {
-  let component: BalanceSheetEditComponent;
-  let fixture: ComponentFixture<BalanceSheetEditComponent>;
+describe('EmployeeClockListComponent', () => {
+  let component: EmployeeClockListComponent;
+  let fixture: ComponentFixture<EmployeeClockListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BalanceSheetEditComponent ]
+      declarations: [ EmployeeClockListComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BalanceSheetEditComponent);
+    fixture = TestBed.createComponent(EmployeeClockListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

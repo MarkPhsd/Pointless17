@@ -30,9 +30,9 @@ import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { CardPointMethodsService } from '../../payment-processing/services';
 import { Capacitor } from '@capacitor/core';
-import { TouchBarOtherItemsProxy } from 'electron';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
+import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 
 @Component({
   selector: 'app-pos-payment',
@@ -46,11 +46,16 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   @Input() order  :   IPOSOrder;
 
-  loginAction     : any;
+  userAuths       :   IUserAuth_Properties;
+  _userAuths      : Subscription;
+
+  loginAction     :   any;
   id              :   number;
   _currentPayment :   Subscription; //    = new BehaviorSubject<IPOSPayment>(null);
   currentPayment$ :   Observable<IPOSPayment>;//     = this._currentPayment.asObservable();
   posPayment      =   {} as IPOSPayment;
+
+  action$        :   Observable<any>;
   employees$      :   Observable<IItemBasic[]>;
   paymentMethods$ :   Observable<IPaymentMethod[]>;
   paymentMethod   =   {} as IPaymentMethod;
@@ -93,6 +98,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   _creditPaymentAmount = 0;
 
+
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
   uiTransactions: TransactionUISettings
   uiTransactions$ : Observable<TransactionUISettings>;
@@ -118,13 +124,19 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
     )).subscribe(data => {
       this.serviceType = data
-      if (data.scheduleInstructions || this.order.preferredScheduleDate || data.shippingInstructions ) {
+      if (data && data.scheduleInstructions || (this.order && this.order.preferredScheduleDate) || ( data && data.shippingInstructions) ) {
         this.serviceIsScheduled = true
       }
     })
 
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
       this.posPayment = data
+    })
+
+    this._userAuths = this.authenticationService.userAuths$.subscribe(data => { 
+      if (data) {
+        this.userAuths = data;
+      }
     })
   }
 
@@ -199,6 +211,11 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
+  houseAccountPayment() { 
+    this.action$ =  this.orderMethodsService.suspendOrder(this.order)
+  }
+
+
   initTransactionUISettings() {
       this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
       switchMap(data => {
@@ -219,6 +236,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (this._order) { this._order.unsubscribe()}
     if (this._searchModel) { this._searchModel.unsubscribe()}
     if (this._currentPayment) { this._currentPayment.unsubscribe()}
+    if (this._userAuths) { this._userAuths.unsubscribe()}
   }
 
   initStripe() {
@@ -373,9 +391,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         return
       }
 
-      if (serviceType.orderMinimumTotal > 0 && this.order.subTotal < serviceType.orderMinimumTotal) {
+      if (serviceType.orderMinimum > 0 && this.order.subTotal < serviceType.orderMinimum) {
         this.paymentIsReady = false;
-        this.message = `Minumun purchase amount of $ ${serviceType.orderMinimumTotal} required.`
+        this.message = `Minumun purchase amount of $ ${serviceType.orderMinimum} required.`
         return
       }
 
@@ -417,6 +435,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       this.openStripePayment(data)
     }
   }
+
 
   applyBoltPayment(manual: boolean) {
     const order = this.order;
@@ -525,7 +544,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
         let processResults$
         processResults$ = this.processGetResults(amount, this.posPayment)
-
 
         if (!processResults$) {
           this.notify('Error getting values for payment.', 'Alert', 2000);
@@ -708,6 +726,12 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   storeCredit() {
     if (this.order && this.order.clientID) {
       this.storeCreditMethodsService.openStoreCreditPopUp(0, this.order?.clientID)
+    }
+  }
+
+  giftCard() {
+    if (this.order) {
+      this.storeCreditMethodsService.openStoreCreditPopUp(0, 0)
     }
   }
 

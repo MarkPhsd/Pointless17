@@ -1,5 +1,6 @@
-  <div [class]="gridflow"
-        >
+  <div *ngIf="(actionOrder$ | async) as actionOrder"></div>
+
+  <div [class]="gridflow">
 
     <div  *ngIf="(order && order.history == true || (order && order.completionDate))
                 || isUserStaff " >
@@ -19,7 +20,7 @@
               mat-raised-button
               color="primary"
               (click)="toggleOpenOrderBar()" >
-          
+
           <mat-icon
             *ngIf="!openOrderBar"
             matBadge="{{ order.itemCount }}"

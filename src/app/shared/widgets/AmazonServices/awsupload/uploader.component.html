@@ -1,3 +1,12 @@
+<div *ngIf="(upload$ | async) as action;else  loading"></div>
+<ng-template #loading>
+  <div *ngIf="uploading">
+    ...uploading
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+</ng-template>
+<div *ngIf="errorMessage"><mat-icon>warning</mat-icon><mat-label>{{errorMessage}}</mat-label></div>
+
 <div class="container"
      appDnd
     (fileDropped)="onFileDropped($event)" >
@@ -16,14 +25,7 @@
 
 </div>
 
-<div *ngIf="errorMessage"><mat-icon>warning</mat-icon><mat-label>{{errorMessage}}</mat-label></div>
-<div *ngIf="(upload$ | async) as action;else  loading"></div>
-<ng-template #loading>
-  <div *ngIf="uploading">
-    ...uploading
-    <mat-spinner [diameter]="50"></mat-spinner>
-  </div>
-</ng-template>
+
 
 <div>
     <div *ngIf="fileNames">

@@ -22,7 +22,7 @@ export class FbClientTypesService {
       voidOrder            : [],
       voidItem             : [],
       voidPayment          : [],
-
+      houseAccountPayment  : [],
       changeItemPrice      : [],
       changeInventoryValue : [],
       blindBalanceSheet    : [],

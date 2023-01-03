@@ -19,15 +19,18 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class StoreCreditPopUpComponent implements OnInit,OnDestroy {
 
+  
+  @ViewChild('giftCardScan')     giftCardScan: TemplateRef<any>;
   @ViewChild('storeCreditItems') storeCreditItems: TemplateRef<any>;
 	@ViewChild('noItems')          noItems         : TemplateRef<any>;
   currentTemplate     : TemplateRef<any>;
   _order              : Subscription;
   order               : IPOSOrder;
-
+  _search             : Subscription;
   storeCreditSearch$  : Observable<StoreCreditResultsPaged>
   storeCreditSearch   : StoreCreditResultsPaged;
-  searchModel
+  searchModel         : IStoreCreditSearchModel
+  search              : IStoreCreditSearchModel
   clientID: number;
 
   initSubscriptions() {
@@ -38,6 +41,7 @@ export class StoreCreditPopUpComponent implements OnInit,OnDestroy {
 
   constructor(
     private orderService             : OrdersService,
+    private storeCreditMethodsService: StoreCreditMethodsService,
     private dialogRef                : MatDialogRef<StoreCreditPopUpComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
   {
@@ -60,14 +64,17 @@ export class StoreCreditPopUpComponent implements OnInit,OnDestroy {
   }
 
   setResults(event) {
-    console.log('set events', event)
     if (!event) {
       this.currentTemplate    = this.noItems
       return
     }
     const search              = event;
     this.searchModel          = search;
-    this.currentTemplate      = this.storeCreditItems
+    this.search               = search;
+    this.storeCreditMethodsService.updateSearchModel(search)
+    this.currentTemplate      = null;
+    this.currentTemplate      = this.giftCardScan
+    this.templateOption;
   }
 
   initClientStoreCredit(clientID: number) {
@@ -75,11 +82,13 @@ export class StoreCreditPopUpComponent implements OnInit,OnDestroy {
     const search              = {} as IStoreCreditSearchModel;
     search.clientID           = clientID;
     this.searchModel          = search;
+
+    if (!clientID) { return }
     this.currentTemplate      = this.storeCreditItems
   }
 
   get templateOption(): TemplateRef<any> {
-    if (this.clientID != 0) {
+    if (this.clientID && this.clientID != 0)  {
       this.currentTemplate      = this.storeCreditItems
       return  this.currentTemplate
     }
@@ -88,6 +97,10 @@ export class StoreCreditPopUpComponent implements OnInit,OnDestroy {
      }
     if (!this.currentTemplate) {
       this.currentTemplate = this.noItems
+    }
+
+    if (this.searchModel) { 
+      console.log('returning current template, gifcard scan')
     }
     return this.currentTemplate
   }

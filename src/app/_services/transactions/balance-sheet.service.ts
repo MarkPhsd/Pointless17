@@ -8,6 +8,13 @@ import { ElectronService } from 'ngx-electron';
 import { SitesService } from '../reporting/sites.service';
 import { PlatformService } from '../system/platform.service';
 
+
+export interface  IBalanceEmployeeSummary {
+  employeeName : string;
+  totalSale : number;
+  count : number;
+  message: string;
+}
 export interface IBalanceSheetPagedResults {
   results:      BalanceSheetOptimized[];
   paging:       Paging;
@@ -206,27 +213,27 @@ export class BalanceSheetService {
   {
   }
 
-  openDrawerFromBalanceSheet(): Observable<IBalanceSheet> { 
+  openDrawerFromBalanceSheet(): Observable<IBalanceSheet> {
     let deviceName = localStorage.getItem('devicename');
-    if (!deviceName) { 
+    if (!deviceName) {
        deviceName = localStorage.getItem('deviceName');
     }
     const site = this.siteService.getAssignedSite()
-    const item$ =  this.getCurrentUserBalanceSheet(site, deviceName).pipe(switchMap(data => { 
-      if (data.drawerAB == 2) { 
-        if (this.platFormService.isAppElectron){ 
+    const item$ =  this.getCurrentUserBalanceSheet(site, deviceName).pipe(switchMap(data => {
+      if (data.drawerAB == 2) {
+        if (this.platFormService.isAppElectron){
           this.openDrawerTwo()
         }
         return of(data)
       }
-      if (data.drawerAB == 1 || data.drawerAB == 0) { 
-        if (this.platFormService.isAppElectron){ 
+      if (data.drawerAB == 1 || data.drawerAB == 0) {
+        if (this.platFormService.isAppElectron){
           this.openDrawerOne()
         }
         return of(data)
       }
-      if (!data) { 
-        if (this.platFormService.isAppElectron){ 
+      if (!data) {
+        if (this.platFormService.isAppElectron){
           this.openDrawerOne()
         }
         return of(data)
@@ -235,22 +242,23 @@ export class BalanceSheetService {
     return item$
   }
 
-  async  openDrawerOne() { 
+  async  openDrawerOne() {
     const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
     const response        = await emvTransactions.openCashDrawerOne()
   }
-  async  openDrawerTwo() { 
+  async  openDrawerTwo() {
     const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
     const response        = await emvTransactions.openCashDraweTwo()
   }
 
   getSheetType(sheet: IBalanceSheet) {
+
     if (sheet && sheet.type) {
       if (sheet.type == 3) {
-        return "Cashier"
+        return "Server"
       }
       if (sheet.type == 4) {
-        return "Server"
+        return "Cashier"
       }
       if (sheet.type != 4 && sheet.type != 3) {
         return "other"
@@ -297,6 +305,18 @@ export class BalanceSheetService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<IBalanceSheet>(url);
+  }
+
+  getUsersOfBalanceSheet(site: ISite, id: number)  : Observable<IBalanceEmployeeSummary> {
+    const controller = '/BalanceSheets/'
+
+    const endPoint  = "getUsersOfBalanceSheet"
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IBalanceEmployeeSummary>(url);
   }
 
   getCurrentUserBalanceSheet(site: ISite, deviceName: string)  : Observable<IBalanceSheet> {

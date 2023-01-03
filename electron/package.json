@@ -1,9 +1,9 @@
 {
-  "name": "pointless",
-  "version": "1.53.6",
+  "name": "pointlesspos",
+  "version": "1.54.6",
   "description": "Point of Sale Ecommerce Kiosk",
   "main": "index.js",
-  "CompanyName": "Pointless",
+  "CompanyName": "Pointless POS",
   "author": "Coast to Coast Business Solutions",
   "license": "ISC",
   "scripts": {
@@ -45,6 +45,9 @@
         "provider": "generic",
         "url": "https://pointlesspos.com/download"
       }
-    ]
+    ],
+    "win": {
+      "icon": "app/assets/images/logosm.png"
+    }
   }
 }

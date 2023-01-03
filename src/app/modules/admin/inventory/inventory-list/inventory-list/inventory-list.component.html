@@ -1,14 +1,28 @@
-<div fxLayout="column"
-     fx-flex
-     fx-layout-align="space-between"
-     class="grid-container"
-     *ngIf="searchForm"   >
+<div *ngIf="(action$ | async) as action"></div>
+<ng-template #action>
+  ...processing
+  <mat-spinner [diameter]="50"></mat-spinner>
+</ng-template>
+<mat-label *ngIf="resultMessage"><mat-icon>alert</mat-icon>al{{resultMessage}}</mat-label>
 
-  <mat-label *ngIf="resultMessage"><mat-icon>alert</mat-icon>al{{resultMessage}}</mat-label>
+<div class="grid-container-selectors" *ngIf="searchForm">
 
-  <div  *ngIf="searchForm"  [formGroup]="searchForm"
-        (ngSubmit)="refreshSearch()"
-        class="grid-container-selectors">
+    <div *ngIf="listOnly">
+      <div *ngIf="(locations$ | async) as list">
+        <mat-form-field appearance="outline">
+        <mat-label>Assign Locations</mat-label>
+          <mat-select
+                    type="text"
+                    (selectionChange)="setLocation($event)"
+                    [(ngModel)]="inventorLocationID">
+          <mat-option [value]=0>All</mat-option>
+          <mat-option *ngFor="let item of list" [value]="item.id">
+            {{ item.name }}
+          </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
 
     <div class="grid-item margin-2" *ngIf="searchForm"  >
       <search-debounce-input
@@ -21,6 +35,7 @@
         </div>
       </search-debounce-input>
     </div>
+
     <div class="grid-item"  *ngIf="!listOnly">
       <mat-form-field appearance="outline">
         <mat-label>Sites</mat-label>
@@ -59,24 +74,6 @@
       </div>
     </div>
 
-    <div class="grid-item" *ngIf="!listOnly">
-      <div *ngIf="(locations$ | async) as list">
-        <mat-form-field appearance="outline">
-          <mat-label>Locations</mat-label>
-            <mat-select
-                      type="text"
-                      (selectionChange)="getLocation($event)"
-                      formControlName="inventoryLocations">
-            <mat-option [value]=0>All</mat-option>
-            <mat-option *ngFor="let item of list" [value]="item.id">
-              {{ item.name }}
-            </mat-option>
-
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-
     <div class="grid-item"  *ngIf="searchForm" [formGroup]="searchForm">
       <mat-form-field appearance="outline">
         <mat-label>Status</mat-label>
@@ -95,7 +92,9 @@
     </div>
 
     <div class="grid-item"
-         *ngIf="!listOnly && searchForm && manifestAssignedList"
+         *ngIf="!listOnly &&
+               searchForm &&
+               manifestAssignedList"
          [formGroup]="searchForm">
       <mat-form-field appearance="outline">
         <mat-label>Manifest Assigned</mat-label>
@@ -111,7 +110,28 @@
           </div>
         </mat-select>
       </mat-form-field>
+   </div>
+
+    <div *ngIf="!listOnly"
+          [formGroup]="searchForm"
+          (ngSubmit)="refreshSearch()">
+      <div *ngIf="(locations$ | async) as list"  >
+        <mat-form-field appearance="outline">
+        <mat-label>Locations</mat-label>
+          <mat-select
+                    type="text"
+                    (selectionChange)="getLocation($event)"
+                    formControlName  ="inventoryLocations"
+                    >
+          <mat-option [value]=0>All</mat-option>
+          <mat-option *ngFor="let item of list" [value]="item.id">
+            {{ item.name }}
+          </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
+
 
     <div  *ngIf="!listOnly">
         <button mat-button
@@ -186,17 +206,15 @@
 
     <div *ngIf="listOnly && isSiteSatellite">
       <button mat-button color="primary"
-        (click)="setAcceptedAll()"><mat-icon>thumb_up</mat-icon>Set all Active
+        (click)="setAcceptedAll()"><mat-icon>thumb_up</mat-icon>Receive All
       </button>
     </div>
 
     <div *ngIf="listOnly && isSiteSatellite">
       <button mat-button color="primary"
-        (click)="setAcceptedSelected()"><mat-icon>thumb_up</mat-icon>Set Selected Active
+        (click)="setAcceptedSelected()"><mat-icon>thumb_up</mat-icon>Receive Selected
       </button>
     </div>
-
-  </div>
 </div>
 
 <mat-divider></mat-divider>

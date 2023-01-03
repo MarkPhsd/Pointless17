@@ -3,11 +3,12 @@ import { Component,  Inject, OnInit } from '@angular/core';
 import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FormGroup } from '@angular/forms';
-import { IServiceType } from 'src/app/_interfaces';
+import { IServiceType, IServiceTypePOSPut } from 'src/app/_interfaces';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { FbServiceTypeService } from 'src/app/_form-builder/fb-service-type.service';
+import { catchError, of, switchMap, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-service-type-edit',
@@ -22,6 +23,7 @@ export class ServiceTypeEditComponent implements OnInit {
   awsBucketURL           :string;
   inputForm              :FormGroup;
   description            : string;
+  action$                : Observable<any>;
 
   constructor(
     private serviceTypeService      : ServiceTypeService,
@@ -75,20 +77,30 @@ export class ServiceTypeEditComponent implements OnInit {
 
       if (!this.inputForm.valid) { return }
       const site = this.siteService.getAssignedSite()
-      const serviceType = this.inputForm.value as IServiceType;
-      const product$ = this.serviceTypeService.saveServiceType(site, serviceType)
+      let serviceType = this.inputForm.value ;
 
-      product$.subscribe(
-        {next: data => {
-          this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'top'})
-            if (event) {
-              this.onCancel(event);
-            }
-          }, error: error => {
-            this.snack.open(`Update failed. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
+      const item$ = this.serviceTypeService.saveServiceType(site, serviceType)
+      if (serviceType.retailServiceType) {
+        serviceType.retailServiceType = 1;
+      } else {
+        serviceType.retailServiceType = 0
+      }
+
+      this.action$ = item$.pipe(
+        switchMap(
+         data => {
+            this.serviceType = data;
+            this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'top'})
+            if (event) { this.onCancel(event) }
+            return of(data)
           }
-        }
-      )
+        ), catchError(
+          error => {
+            this.snack.open(`Update failed. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
+            return of(error)
+          }
+        ))
+
     };
 
     updateItemExit(event) {

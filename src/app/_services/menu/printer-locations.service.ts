@@ -14,6 +14,16 @@ export interface IPrinterLocation {
   address: string;
 }
 
+export interface IPrinterLocationRO {
+  id: number;
+  name: string;
+  activeLocation: boolean;
+  printer: string;
+  templateID: number;
+  address: string;
+  templateName: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })

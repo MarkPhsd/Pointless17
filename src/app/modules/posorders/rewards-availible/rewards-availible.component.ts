@@ -138,11 +138,11 @@ export class RewardsAvailibleComponent implements OnInit, OnDestroy {
     return  this.menuService.getMenuItemByID(site, item.productID).pipe( switchMap(item => {
         if (!item) {  return of(item)   }
         let passAlongItem;
-        if (item.itemType.name.toLowerCase() === 'Discount % One Item'.toLowerCase() ||
-            item.itemType.name.toLowerCase() === 'Free Item Off'.toLowerCase() ||
-            item.itemType.name.toLowerCase() === 'Cash Discount on Item'.toLowerCase()) {
-          if (!this.orderMethodsService.assignedPOSItem) {
-            passAlongItem = this.order.posOrderItems[this.order.posOrderItems.length-1];
+        if (item.itemType?.name.toLowerCase() === 'Discount % One Item'.toLowerCase() ||
+            item.itemType?.name.toLowerCase() === 'Free Item Off'.toLowerCase() ||
+            item.itemType?.name.toLowerCase() === 'Cash Discount on Item'.toLowerCase()) {
+          if (!this.orderMethodsService?.assignedPOSItem) {
+            passAlongItem = this.order.posOrderItems[this.order?.posOrderItems.length-1];
             this.orderMethodsService.addAssignedItem(passAlongItem)
           }
 

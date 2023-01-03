@@ -90,6 +90,11 @@ img {
 }
 .category-view {
   // max-width: 600px;
+
+}
+
+.category {
+  margin-left: 10px;
 }
 .item-container {
   margin-top: 5px;
@@ -103,7 +108,7 @@ img {
 .grid-container {
   margin-top: 5px;
   padding-top: 5px;
-
+  margin-left: 10px;
   --gap: 15px;
   display: grid;
   gap: var(--gap);

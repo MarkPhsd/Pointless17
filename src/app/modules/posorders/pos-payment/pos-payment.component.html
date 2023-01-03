@@ -1,3 +1,4 @@
+<div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(orderAction$ | async)"></div>
 
 <div *ngIf="order  && (uiTransactions$ | async) as uiTransactions">
@@ -60,7 +61,7 @@
           <button class="splitbutton"
                 mat-raised-button
                 color="primary"
-                (click)="storeCredit()">
+                (click)="giftCard()">
             <div *ngIf="!paymentsEqualTotal">
               <mat-icon>credit_card</mat-icon>Gift Card
             </div>
@@ -69,6 +70,20 @@
             </div>
           </button>
         </div>
+      
+        <div *ngIf="(userAuths && userAuths.houseAccountPayment) && order.clientID != 0 && 
+                    order?.clients_POSOrders?.client_Type?.name.toLowerCase() === 'house account'">
+          <button class="splitbutton"
+                  mat-raised-button
+                  color="primary"
+                  (click)="houseAccountPayment()">
+              <div *ngIf="!paymentsEqualTotal">
+                House Account
+              </div>
+          </button>
+        </div> 
+     
+
 
         <div  *ngIf="!paymentsEqualTotal">
           <button class="splitbutton"
@@ -290,30 +305,6 @@
                   </h5>
                 </div>
               </div>
-
-              <!-- <div class="item-container item-buttons-container">
-                <div>
-                  <button  mat-raised-button  class="payment-buttons" (click)="goToPaymentMethod()" >
-                    Start Over
-                    <mat-icon>back</mat-icon>
-                  </button>
-                </div>
-                <div>
-                  <button  mat-raised-button  class="payment-buttons" (click)="initCheckForm()">
-                    Clear <mat-icon>refresh</mat-icon></button>
-                </div>
-                <div >
-                  <button  mat-raised-button  class="payment-buttons" (click)="applyPointBalance()">
-                    Apply Balance
-                    <mat-icon>credit_card</mat-icon>
-                  </button>
-                </div>
-              </div> -->
-              <!-- <div class="grid-tip-buttons">
-                <div><button class="payment-buttons" mat-raised-button (click)="addStripeTipPercent(15)">15 % Tip</button></div>
-                <div><button class="payment-buttons" mat-raised-button (click)="addStripeTipPercent(18)">18 % Tip</button></div>
-                <div><button class="payment-buttons" mat-raised-button (click)="addStripeTipPercent(20)">20 % Tip</button></div>
-              </div> -->
 
               <div class="item-container keypad">
                 <app-key-pad

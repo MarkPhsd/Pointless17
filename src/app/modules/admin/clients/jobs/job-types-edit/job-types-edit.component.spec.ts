@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BalanceSheetFilterComponent } from './balance-sheet-filter.component';
+import { JobTypesEditComponent } from './job-types-edit.component';
 
-describe('BalanceSheetFilterComponent', () => {
-  let component: BalanceSheetFilterComponent;
-  let fixture: ComponentFixture<BalanceSheetFilterComponent>;
+describe('JobTypesEditComponent', () => {
+  let component: JobTypesEditComponent;
+  let fixture: ComponentFixture<JobTypesEditComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BalanceSheetFilterComponent ]
+      declarations: [ JobTypesEditComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BalanceSheetFilterComponent);
+    fixture = TestBed.createComponent(JobTypesEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

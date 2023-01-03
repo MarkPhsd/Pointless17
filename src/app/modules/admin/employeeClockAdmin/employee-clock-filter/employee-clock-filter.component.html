@@ -1,0 +1,69 @@
+<div>
+  <button mat-button (click)="refreshSearch()"><mat-icon>refresh</mat-icon></button> 
+
+  <button mat-button (click)="breakListEdit()"><mat-icon>settings</mat-icon>Breaks</button> 
+
+  <button mat-button (click)="getSummary()"><mat-icon>report</mat-icon>Summary</button> 
+  <button mat-button (click)="listResults()"><mat-icon>list</mat-icon>List</button> 
+
+</div>
+
+<div class="fields">
+  <mat-form-field appearance="outline" *ngIf="dateRangeForm">
+    <mat-label>Date Range (Start Time)</mat-label>
+
+    <mat-date-range-input [formGroup]="dateRangeForm"
+                          [rangePicker]="reportRangePicker"
+                         >
+      <input matStartDate
+             formControlName="start"
+             placeholder="Start date"
+             #dateRangeStart
+             >
+      <input matEndDate
+             formControlName="end"
+             placeholder="End date"
+             #dateRangeEnd
+             (dateChange)="emitDatePickerData(dateRangeStart, dateRangeEnd)">
+    </mat-date-range-input>
+
+    <mat-datepicker-toggle matSuffix [for]="reportRangePicker"
+                           ></mat-datepicker-toggle>
+    <mat-date-range-picker touchUi #reportRangePicker
+                           ></mat-date-range-picker>
+
+    <mat-error *ngIf="dateRangeForm.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+    <mat-error *ngIf="dateRangeForm.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+  </mat-form-field>
+</div>
+
+<div *ngIf="(employees$ | async) as list"
+      class="toggle-selector">
+  <app-mat-toggle-selector
+      [list]   ="list"
+      (outPutID)="setEmployee($event)">
+      Employee
+  </app-mat-toggle-selector>
+</div>
+
+<!-- <div>
+  <mat-form-field   appearance="outline">
+    <mat-label>Page Size</mat-label>
+     <input 
+       type="number" 
+       [(ngModel)]="pageSize"
+       >
+  </mat-form-field>
+</div> -->
+
+<div class="field">
+  <mat-form-field appearance="outline">
+    <input matInput
+      [(ngModel)]="pageSize"
+      ngDefaultControl
+      type="number">
+   <mat-label>
+    Page Size
+   </mat-label>
+  </mat-form-field>
+</div>

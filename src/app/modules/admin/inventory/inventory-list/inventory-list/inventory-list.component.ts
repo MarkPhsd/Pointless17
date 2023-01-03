@@ -51,6 +51,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   @Input()  siteID : ISite;
 
   resultMessage: string;
+  inventorLocationID: number;
   InventorySearchResultsPaged: InventorySearchResultsPaged;
   inventoryAssignment        : IInventoryAssignment;
   inventoryAssignmentHistory : IInventoryAssignment[];
@@ -63,6 +64,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   searchPhrase:         Subject<any> = new Subject();
   public searchForm: FormGroup;
   inventoryAssignment$             : Subject<IInventoryAssignment[]> = new Subject();
+  action$ : Observable<any>;
 
   currentManifest: InventoryManifest;
 
@@ -150,6 +152,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   metrcCategoryID:      number;
 
   locations$:           Observable<IInventoryLocation[]>;
+  locations         :   IInventoryLocation[];
   inventoryLocation:    IInventoryLocation;
   inventoryLocationID:  number;
 
@@ -206,7 +209,10 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     this.initSubscriptions();
     this.initClasses();
     this.sites$         = this.siteService.getSites();
-    this.locations$     = this.locationService.getLocations();
+   this.locations$ = this.locationService.getLocations().pipe(switchMap(data => {
+      this.locations = data;
+      return of(data)
+    }))
 
     const clientSearchModel       = {} as ClientSearchModel;
     clientSearchModel.pageNumber  = 1
@@ -237,6 +243,9 @@ export class InventoryListComponent implements OnInit, OnDestroy {
       }
     )
     if (!this.search) { this.search = ''}
+
+
+
   };
 
   setRefreshAgGrid(value: number) {
@@ -301,7 +310,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
       inventoryStatusID:  [''],
       manifestAssigned  : [''],
       metrcCategory     : [''],
-
     })
   }
 
@@ -442,8 +450,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
                             width   : 150,
                             minWidth: 150,
                             maxWidth: 275,
-                            flex    : 1,
-              }
+                            flex    : 1, }
     if (this.listOnly) {
       this.columnDefs.push(item)
     }
@@ -641,10 +648,15 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   }
 
   assignLocation(id: number){
-    this.locationService.getLocation(id).subscribe( data => {
-      this.inventoryLocation = data
-      this.refreshSearch();
+    this.locations.filter(data => {
+      if (data.id == id) {
+        this.inventoryLocation = data
+        this.refreshSearch();
+      }
     })
+    // this.locationService.getLocation(id).subscribe( data => {
+    //   this.inventoryLocation = data
+    // })
   }
 
   getInventoryStatus(event) {
@@ -718,6 +730,9 @@ export class InventoryListComponent implements OnInit, OnDestroy {
               this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
             }
 
+            if (this.currentManifest) {
+              this.currentManifest.inventoryAssignments = data.results;
+            }
             params.successCallback(data.results)
           }
         );
@@ -734,7 +749,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
     //mutli select method for selection change.
   onSelectionChanged(event) {
-
     let selectedRows       = this.gridApi.getSelectedRows();
     let selectedRowsString = '';
     let maxToShow          = this.pageSize;
@@ -744,7 +758,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     selectedRows.forEach(function (selectedRow, index) {
     if (index >= maxToShow) { return; }
     if (index > 0) {  selectedRowsString += ', ';  }
-      selected.push(selectedRow.id)
+      console.log('selected Row', selectedRow)
+      selected.push(selectedRow)
       selectedRowsString += selectedRow.name;
     });
 
@@ -776,7 +791,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   getLabel(rowData)
   {
-
     // if(rowData && rowData.hasIndicator) {
       return 'edit';
     // }
@@ -818,7 +832,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   ///move to inventoryAssignemtnService
   openInventoryDialog(id: number) {
-
     const dialogRef = this.dialog.open(NewInventoryItemComponent,
       { width:        '800px',
         minWidth:     '800px',
@@ -830,18 +843,14 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
     if (dialogRef) {
     dialogRef.afterClosed().subscribe(result => {
-
       if (result && result != 'false') {
         // this.outputRefresh.emit('true')
         this.id = 0;
         this.inventoryAssignment = null;
       }
-
       });
     }
-
   }
-
 
   onDeselectAll() {
   }
@@ -863,7 +872,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   selectItem(search){
     if (search) {
-      // this.searchPaging = true
       this.searchPhrase.next(search)
     }
   }
@@ -928,9 +936,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   }
 
   addItemsToManifest() {
-
     if (!this.validateItemsSelectedForManifest()) { return }
-
     const items = this.gridAPI.getSelectedRows();
 
     if (!this.currentManifest) {
@@ -961,10 +967,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
         )
       }
     })
-
   }
-
-
 
   rejectFromManifest(){
     let selectedRows = this.gridApi.getSelectedRows();
@@ -981,10 +984,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   setAcceptedSelected() {
     if (!this.currentManifest) { return  }
-
     let  selectedRows = this.gridApi.getSelectedRows();
     let  selected     = selectedRows as IInventoryAssignment[];
-
     this.acceptItemsFromManifest(selected);
   }
 
@@ -1120,6 +1121,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     const assignMent$ =    this.inventoryAssignmentService.postInventoryAssignmentList(destination, originatorID, selected);
       assignMent$.subscribe(
           {next: data => {
+            this.selected = data;
             this.notifyEvent('Items Accepted', 'Completed')
             this.refreshGrid();
           },
@@ -1130,6 +1132,27 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   }
 
+  setLocation(selection) {
+    //locations.filter
+    const site = this.siteService.getAssignedSite();
+    if (this.locations){
+      console.log('selection', selection.value);
+      console.log('selection', this.selected);
+      const item = this.locations.filter( data => { return data.id === selection?.value } )
+      this.selected.forEach(data => {
+        data.location = item[0].name;
+        data.locationID = item[0].id;
+      })
+      this.action$ = this.inventoryAssignmentService.postUpdateInventoryLocations(site, this.manifestID, this.selected).pipe(switchMap(
+          data => {
+            this.selected = data;
+            this.refreshSearch()
+            return of(data)
+          }
+        )
+      )
+    }
+  }
 
   openRejection(manifest: InventoryManifest ) {
     let dialogRef: any;

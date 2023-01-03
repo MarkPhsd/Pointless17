@@ -18,6 +18,7 @@ import { isDevMode } from '@angular/core';
 import { SitesService } from '../_services/reporting/sites.service';
 import { SplashScreenStateService } from 'src/app/_services/system/splash-screen-state.service';
 import { PlatformService } from '../_services/system/platform.service';
+import { UserAuthorizationService } from '../_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-default',
@@ -193,7 +194,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   get appSiteFooterOn() {
     if ( !this.platFormService.isApp() ) {
-      return this.appSiteFooter
+      if (this.userAuthorizationService.isStaff) { 
+        return this.appSiteFooter
+      }
     }
     return null;
   }
@@ -271,6 +274,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private siteService             : SitesService,
                private splashLoader            : SplashScreenStateService,
                private platFormService         : PlatformService, 
+               private userAuthorizationService: UserAuthorizationService,
               //  private themesService           : ThemesService,
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()

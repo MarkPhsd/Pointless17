@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EMPTY, Observable } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { switchMap, } from 'rxjs/operators';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
 import { clientType, employee, IClientTable } from 'src/app/_interfaces';
@@ -11,8 +11,10 @@ import { AWSBucketService} from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { EmployeeService, IEmployeeClient } from 'src/app/_services/people/employee-service.service';
+import { JobTypesService } from 'src/app/_services/people/job-types.service';
 import { IStatuses } from 'src/app/_services/people/status-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { jobTypes } from 'src/app/_interfaces';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 @Component({
   selector: 'employee-edit',
@@ -29,10 +31,12 @@ export class EmployeeEditComponent implements OnInit {
 
   statuses$   : Observable<IStatuses[]>;
   employee$   : Observable<employee>;
+  action$     : Observable<any>;
   @Input() id : any;
 
   client      : IClientTable;
   employee    : employee;
+
 
   //for swipping
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
@@ -44,9 +48,10 @@ export class EmployeeEditComponent implements OnInit {
 
   minumumAllowedDateForPurchases: Date
   clientTypes$: Observable<clientType[]>;
-
+  jobTypes$: Observable<jobTypes[]>;
   password1
   password2
+
   constructor(
               private router: Router,
               public  route: ActivatedRoute,
@@ -55,6 +60,7 @@ export class EmployeeEditComponent implements OnInit {
               private awsBucket: AWSBucketService,
               private _snackBar: MatSnackBar,
               private employeeService   : EmployeeService,
+              private jobTypeService: JobTypesService,
               private siteService: SitesService,
               private clientTableService      : ClientTableService,
               private fbContactsService       : FbContactsService,
@@ -71,17 +77,18 @@ export class EmployeeEditComponent implements OnInit {
     this.isAuthorized =  this.userAuthorization.isManagement //('admin, manager')
     this.isStaff      =  this.userAuthorization.isStaff //('admin,manager, employee')
     this.initConfirmPassword()
-    
+
   }
 
-  async initializeClient() {
+  initializeClient() {
 
     if (!this.employee$) {return}
     let employee    = {} as employee;
     const site      = this.siteService.getAssignedSite();
     const employee$ = this.employeeService.getEmployee(site, this.id)
+    this.jobTypes$  = this.jobTypeService.getTypes(site);
 
-    employee$.pipe(
+    this.action$ = employee$.pipe(
       switchMap( employee => {
         const client      = {} as IClientTable
         client.firstName  = employee.firstName;
@@ -91,12 +98,12 @@ export class EmployeeEditComponent implements OnInit {
         client.employeeID = employee.id;
         client.id         = employee.clientID;
         this.client       = client;
-
+        this.inputForm.patchValue(employee);
         return  this.clientTableService.postClientWithEmployee(site, employee)
       }
 
-    )).subscribe(employeeClient => {
-
+    )).pipe(
+      switchMap(employeeClient => {
         if (!employeeClient.client) {
           if (employeeClient.message) {
             this._snackBar.open(employeeClient.message, 'Error', {verticalPosition: 'bottom', duration:2000})
@@ -116,9 +123,9 @@ export class EmployeeEditComponent implements OnInit {
         this.client.employeeID = employee.id;
         this.employee.clientID = this.client.id;
         this.inputForm.patchValue(employeeClient.employee)
-        return EMPTY
+        return of(employeeClient)
       }
-    )
+    ))
 
   }
 
@@ -140,13 +147,10 @@ export class EmployeeEditComponent implements OnInit {
     this.clientTypes$ = this.clientTypeService.getClientTypes(site);
   }
 
-  async fillForm(id: any) {
+  fillForm(id: any) {
     this.initForm()
     const site     = this.siteService.getAssignedSite();
-    const employee = await this.employeeService.getEmployee(site, this.id).pipe().toPromise();
-    this.employee  = employee;
-    if (!employee) {return}
-    this.inputForm.patchValue(employee)
+
   }
 
   initConfirmPassword()  {

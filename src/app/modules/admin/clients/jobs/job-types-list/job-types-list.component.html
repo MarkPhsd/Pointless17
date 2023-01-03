@@ -1,0 +1,52 @@
+<div class="grid-container">
+
+  <div class="grid-item">
+      <div *ngIf="searchForm"
+          [formGroup]="searchForm" >
+        <mat-form-field appearance="outline" class="form-fields">
+          <mat-label >Search Items</mat-label>
+            <input
+                    #input
+                    matInput
+                    type="text"
+                    id  ="searchItems"
+                    formControlName="searchItems"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete panelWidth="auto"
+                                  #auto="matAutocomplete"
+                                  [displayWith]="displayFn.bind(this)">
+                </mat-autocomplete>
+        </mat-form-field>
+      </div>
+  </div>
+
+  <div>
+    <button mat-button (click)="listAll()"><mat-icon>list</mat-icon>List All</button>
+  </div>
+
+  <div>
+    <button mat-button (click)="addNew()"><mat-icon>add</mat-icon>Add</button>
+  </div>
+</div>
+
+<div class="grid-list">
+  <div *ngIf="gridOptions">
+    <ag-grid-angular
+          #agGrid
+          style                ="width: 100%; height: 100%;"
+          id                   ="myGrid"
+          [class]              ="agtheme"
+          [columnDefs]         ="columnDefs"
+          [defaultColDef]      ="defaultColDef"
+          [gridOptions]        ="gridOptions"
+          [rowSelection]       ="rowSelection"
+          [frameworkComponents]="frameworkComponents"
+          (selectionChanged)   ="onSelectionChanged($event)"
+          (gridReady)          ="onGridReady($event)">
+    </ag-grid-angular>
+  </div>
+</div>
+
+<div style="flex-grow:0">
+  <span id="selectedRows"> </span>
+</div>

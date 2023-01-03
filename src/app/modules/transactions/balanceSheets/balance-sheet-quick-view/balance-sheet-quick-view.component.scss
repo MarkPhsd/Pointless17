@@ -1,9 +1,14 @@
 .grid-buttons {
   display: grid;
-  --gap: 5px;
-  gap: var(--gap);
+  gap: 5px;
   grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
-  margin: 3px;
+  margin: 5p;
   width : 100%;
 }
 
+.header-grid {
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  margin: 5px;
+  width : 100%;
+}

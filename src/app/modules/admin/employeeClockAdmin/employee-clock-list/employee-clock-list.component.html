@@ -1,0 +1,40 @@
+<div class="container">
+  <div *ngIf="smallDevice">
+    <button mat-button (click)="filterBottomSheet()">
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
+
+  <button mat-button (click)="onExportToCsv()"><mat-icon>download</mat-icon>CSV</button>
+  <div *ngIf="smallDevice">
+    <mat-divider></mat-divider>
+  </div>
+
+  <div class="grid-list">
+    <div>
+      <div *ngIf="value" class="loader">
+        <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+      </div>
+      
+      <ag-grid-angular
+            #agGrid
+            [style]              ="gridDimensions"
+            id                   ="myGrid"
+            [class]              ="agtheme"
+            [columnDefs]         ="columnDefs"
+            [defaultColDef]      ="defaultColDef"
+            [gridOptions]        ="gridOptions"
+            [rowSelection]       ="rowSelection"
+            [frameworkComponents]="frameworkComponents"
+            (selectionChanged)   ="onSelectionChanged($event)"
+            (gridReady)          ="onGridReady($event)">
+      </ag-grid-angular>
+    </div>
+
+
+    <div class="filter-panel">
+      <employee-clock-filter
+          (outputRefreshSearch)="refreshSearchAny($event)">
+      </employee-clock-filter>
+    </div>
+</div>

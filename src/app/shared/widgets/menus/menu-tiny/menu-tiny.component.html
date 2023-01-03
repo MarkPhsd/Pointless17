@@ -15,6 +15,7 @@
         *ngFor="let menu of menus; let i = index"
         [class.active]="menu?.active">
 
+
         <div class="menu" *ngIf="isAuthorized(menu?.userType)"
               (click)="toggle(menu, i)">
 
@@ -77,7 +78,7 @@
 
     </div>
 
-  <div 
+  <div
        *ngIf="submenu"></div>
 
     <ul id="accordion"

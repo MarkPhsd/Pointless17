@@ -45,7 +45,6 @@ export class StoreCreditSearchComponent implements OnInit,OnDestroy {
       distinctUntilChanged(),
       switchMap(searchPhrase =>
         {
-          console.log(searchPhrase)
           this.refreshSearch(searchPhrase)
           return null
         }
@@ -94,7 +93,6 @@ export class StoreCreditSearchComponent implements OnInit,OnDestroy {
       distinctUntilChanged(),
       tap((event:KeyboardEvent) => {
         const search  = this.input.nativeElement.value
-        console.log('search', search)
         this.refreshSearch(search);
       })
     ).subscribe();

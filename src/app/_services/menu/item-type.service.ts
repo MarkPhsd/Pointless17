@@ -224,17 +224,22 @@ packageType = ['Not-Specified', 'Marijuana Weighed',
                'Marijuana - Packaged', 'Medicine - Weighed',
                'Medicine Each', 'Seeds', 'Plants', 'Concentrates',
                'Solid', 'Liquid', 'Extract']
+
 type       = [
+   'adjustment',
    'grouping',
    'cannabis',
    'discounts',
    'service fee',
    'med-cannabis',
+   'food',
+   'grouping',
    'grocery',
    'restaurant',
    'retail',
    'retail liquor',
    'service liquor',
+   'service fee',
    'store credit',
    'tobacco'
 ]
@@ -253,7 +258,8 @@ typesList = [
   {name: 'Generic', id: 11},
   {name: 'Food', id: 12},
   {name: 'Restaurant', id: 13},
-  {name: 'Service Fee', id: 14}
+  {name: 'Service Fee', id: 14},
+  {name: 'Store Credit', id: 15}
 ]
 // 1	Product
 // 2	Adjustment
@@ -568,7 +574,7 @@ constructor(private http: HttpClient,
           enabled            : true,
           ageRequirement     : 0,
           sortOrder          : 1,
-          useType            : 'generic',
+          useType            : 'product',
           icon               : 'generic',
           useGroupID         : 11,
           imageName          : '',

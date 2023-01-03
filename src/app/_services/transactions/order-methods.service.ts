@@ -30,6 +30,7 @@ import { UISettingsService } from '../system/settings/uisettings.service';
 import { ProductListByBarcodeComponent } from 'src/app/modules/menu/product-list-by-barcode/product-list-by-barcode.component';
 import { ToolBarUIService } from '../system/tool-bar-ui.service';
 import { FloorPlanService } from '../floor-plan.service';
+import { OrderHeaderComponent } from 'src/app/modules/posorders/pos-order/order-header/order-header.component';
 
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -636,11 +637,32 @@ export class OrderMethodsService implements OnDestroy {
 
           if (item) {
             const deviceName  = localStorage.getItem('devicename')
-            const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem,
+            let newItem     = { orderID: order.id, quantity: quantity, menuItem: item,
+                                  passAlongItem: passAlongItem,
                                   packaging: packaging, portionValue: portionValue, barcode: '',
-                                  weight: 1, itemNote: itemNote, deviceName: deviceName, rewardAvailableID: rewardAvailableID, rewardGroupApplied: rewardGroupApplied } as NewItem
+                                  weight: 1, itemNote: itemNote, deviceName: deviceName,
+                                  rewardAvailableID: rewardAvailableID,
+                                  rewardGroupApplied: rewardGroupApplied } as NewItem
+
+            console.log('neworder', order.id  )
+            if (order.id == 0 || !order.id) {
+              const orderPayload = this.orderService.getPayLoadDefaults(null)
+              return this.orderService.postOrderWithPayload(site, orderPayload).pipe(
+                switchMap(data => {
+                  newItem.orderID = data.id;
+                  return this.posOrderItemService.postItem(site, newItem)
+                })).pipe(
+                  switchMap(data => {
+                    console.log('posOrderItemService results ', data)
+                    this.processItemPostResultsPipe(data)
+                    return of(data);
+                })
+              )
+            }
+
             return  this.posOrderItemService.postItem(site, newItem).pipe(switchMap(
               data=> {
+                console.log('666 posOrderItemService results ', data)
                 this.processItemPostResultsPipe(data)
                 return of(data);
               }
@@ -928,6 +950,34 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
+  suspendOrder(order: IPOSOrder): Observable<IPOSOrder> { 
+    if (order) {
+  
+      if (order.clientID == 0) {
+        this.siteService.notify('Assign this order a customer for reference', 'Alert',1500)
+        return of(null)
+      }
+  
+      const site = this.siteService.getAssignedSite();
+      this.order.suspendedOrder = true;
+      this.order.orderLocked = null;
+      const suspend$ =  this.orderService.putOrder(site, this.order)
+  
+      return  suspend$.pipe(
+        switchMap(data =>{
+          this.clearOrder()
+          this.siteService.notify('This order has been suspended', 'Success', 1000)
+          this.router.navigateByUrl('/pos-orders');
+          return of(data)
+        })
+       )
+  
+     };
+     return of(null)
+  }
+ 
+
+
   clearOrder() {
 
     // localStorage.setItem('orderSubscription', null);
@@ -984,10 +1034,8 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   //, pricing:  priceList[]
-  async addedItemOptions(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem, priceCategoryID : number) {
-
+ addedItemOptions(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem, priceCategoryID : number) {
     console.log('prompt', item?.promptGroupID)
-
     const processItem    = {} as ProcessItem;
     processItem.item     = item;
     processItem.order    = order;
@@ -998,10 +1046,9 @@ export class OrderMethodsService implements OnDestroy {
     this.order           = order;
     this.priceCategoryID = priceCategoryID;
     this.handleProcessItem();
-
   }
 
-  async handleProcessItem() {
+  handleProcessItem() {
     let process = this.itemProcessSection;
 
     if (!this.processItem) {
@@ -1014,8 +1061,7 @@ export class OrderMethodsService implements OnDestroy {
       this.itemProcessSection = 4;
     }
 
-    // console.log('this.processItem.posItem', this.processItem.posItem)
-    // console.log('this.priceCategoryID ', this.priceCategoryID )
+    console.log('process Item', process,  this.processItem?.posItem?.prodModifierType)
 
     switch(process) {
       case  0: {
@@ -1047,11 +1093,17 @@ export class OrderMethodsService implements OnDestroy {
         break;
       }
       case  4: {
-        if ( !this.itemProcessSection && this.processItem?.item?.itemType?.type.toLowerCase() === 'store credit'.toLowerCase()) {
-          this.openGiftCardPrompt(this.order,this.processItem.item,this.processItem.posItem);
-          return
-        }
-        this.updateProcess()
+        
+        if ( 
+              this.processItem?.item?.itemType?.type.toLowerCase() === 'store credit'.toLowerCase() ||
+              this.processItem?.item?.itemType?.type.toLowerCase() === 'gift card'.toLowerCase() 
+            )
+          {
+            console.log('open gift card prompt')
+            this.openGiftCardPrompt(this.order,this.processItem.item,this.processItem.posItem);
+            return
+          }
+          this.updateProcess()
         break;
       }
       case 5: {
@@ -1214,13 +1266,16 @@ export class OrderMethodsService implements OnDestroy {
       return  this.posOrderItemService.setUnPrintedItemsAsPrinted(site, id).pipe(
         switchMap(data => {
           return this.orderService.getOrder(site, id.toString(), false)
-        })).subscribe( order => {
+        })).pipe(
+          switchMap( order => {
           if (order) {
             this.notifyEvent('Item Sent to Prep!', "Success")
             this.orderService.updateOrderSubscription(order)
+            return of(order)
           }
-      })
+      }));
     }
+    return of(null)
   }
 
   prepPrintUnPrintedItem(index: number, orderItem: PosOrderItem) {

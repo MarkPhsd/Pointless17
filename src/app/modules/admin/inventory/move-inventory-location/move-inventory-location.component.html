@@ -1,3 +1,5 @@
+
+<div *ngIf="(action$ | async) as action"></div>
 <!-- <mat-card *ngIf="(inventoryAssignment$ | async) as item; else loading"> -->
 <mat-card *ngIf="(inventoryAssignment$ | async) as item; else loading">
 
@@ -6,7 +8,9 @@
   </mat-card-title>
   <mat-card-subtitle>
     <div class="mat-form-field">
-        {{item?.productName}}
+      {{item?.productName}}
+      <br>
+      qty Moving {{quantityMoving}}
     </div>
     <div>
       {{item?.sku}}
@@ -14,7 +18,7 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-    
+
     <div  *ngIf="inventoryAssignment">
       <h3>Original Values</h3>
       <div class="grid-container">
@@ -48,35 +52,35 @@
 
     </div>
 
-    <form  [formGroup]="searchForm" 
-           id="searchForm" >
-          <mat-form-field appearance="outline">
+    <div *ngIf="searchForm">
+      <div  [formGroup]="searchForm"
+            id="searchForm" >
+        <mat-form-field appearance="outline">
             <mat-label>Locations</mat-label>
             <mat-select
-                      type="text"
-                      (selectionChange)="getLocation($event)"
-                      formControlName="inventoryLocations" >
-            <div *ngIf="(metrcLocations$ | async) as locations">
-              <mat-option [value]=0>All</mat-option>
-              <mat-option *ngFor="let item of locations"
-                          [value]="item.id">
-                {{ item.name }}
-              </mat-option>
-            </div>
-          </mat-select>
-        </mat-form-field>
+                        type="text"
+                        (selectionChange)="getLocation($event)"
+                        formControlName="inventoryLocations" >
+              <div *ngIf="(locations$ | async) as locations">
+                <mat-option [value]=0>All</mat-option>
+                <mat-option *ngFor="let item of locations"
+                            [value]="item.id">
+                  {{ item.name }}
+                </mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label >Quantity</mat-label>
           <input matInput
-                  type="number"s
-                  (change) = "changeIsValid()"
-                  [(ngModel)] = "quantityMoving"
+                  type="number"
                   formControlName="quantityMoving"
                   class="form-control" >
         </mat-form-field>
+      </div>
+    </div>
 
-    </form>
 
   </mat-card-content>
 

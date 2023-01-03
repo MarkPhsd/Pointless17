@@ -1,6 +1,7 @@
 import { Component, ElementRef,AfterViewInit,
          OnInit, EventEmitter,Output,
-        ViewChild} from '@angular/core';
+        ViewChild,
+        Input} from '@angular/core';
 import { ClientSearchModel, ClientSearchResults, IUserProfile }  from 'src/app/_interfaces';
 import { AWSBucketService, ContactsService, MenuService} from 'src/app/_services';
 import { trigger, transition, animate, style, query, stagger } from '@angular/animations';
@@ -106,7 +107,9 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
   @Output() itemSelect  = new EventEmitter();
 
   get platForm() {  return Capacitor.getPlatform(); }
-
+  @Input()         panelHeightValue = 300;
+  panelHeightStyle= ''
+  classcontainer   : string;
   currentPage : number;
   startRow    : number;
   endRow      : number;
@@ -159,7 +162,6 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
   scrollUpDistance = 1.5;
   scrollContainer  :   any;
   isNearBottom     :   any;
-  classcontainer   : string;
 
   constructor(
       private platformService: PlatformService,
@@ -175,15 +177,25 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
 
   initClass(placement) {
     if (this.href === '/brandslist') {
+      // this.singlePage = true
+      // this.classcontainer = 'parent-container-single-page'
+      // this.orderslist = 'orders-list-single-page'
+
       this.singlePage = true
       this.classcontainer = 'parent-container-single-page'
       this.orderslist = 'orders-list-single-page'
+      return;
+
     }
-    if (this.href != '/brandslist') {
-      this.singlePage = false
-      this.classcontainer = 'parent-container'
-      this.orderslist     = 'orders-list'
-    }
+    // if (this.href != '/brandslist') {
+    //   this.singlePage = false
+    //   this.classcontainer = 'parent-container'
+    //   this.orderslist     = 'orders-list'
+    // }
+    this.singlePage = false
+    this.classcontainer = 'parent-container'
+    this.orderslist     = 'orders-list'
+
   }
 
   async ngOnInit()  {
@@ -208,6 +220,9 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
     const data                    = await this.clientSearchResults$.pipe().toPromise();
     if (!data) { return }
     this.brands                   = data.results
+    if (!this.endOfRecords) {
+      this.brands.push(this.loadMore)
+    }
     if (!this.brands) { return }
     if (this.brands.length == 0 ) { this.noBrands = true }
   }
@@ -348,16 +363,30 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
       this.itemsPerPage = this.itemsPerPage + data.results.length;
 
       if (this.brands) {
+
+        if (this.brands[this.brands.length-1]?.id == -1) {
+          this.brands.splice(this.brands.length-1, 1)
+        }
+
         data.results.forEach( item => {
           this.brands.push(item)
         })
+
         this.totalRecords = data.paging.totalRecordCount;
+
         if ( this.brands.length == this.totalRecords ) {
           this.endOfRecords = true;
           this.loading = false;
           this.value = 100;
         }
+
         this.value = ((this.brands.length /  data.paging.totalRecordCount ) * 100).toFixed(0)
+
+        console.log('this.endofRecords', this.endOfRecords)
+        if (!this.endOfRecords) {
+          this.brands.push(this.loadMore)
+        }
+
         this.loading      = false
         return
       }
@@ -371,6 +400,12 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
     )
   };
 
+  get loadMore() {
+    let item = { } as  IUserProfile
+    item.company = 'Load More';
+    item.id = -1;
+    return item
+  }
   //this is called from subject rxjs obversablve above constructor.
   async refreshSearch() {
     this.currentPage                    = 1

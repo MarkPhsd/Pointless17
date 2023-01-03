@@ -1,0 +1,10 @@
+.grid {
+  display: grid;
+  grid-template-columns: 75px 100px 75px;
+  gap: 10px;
+  margin: 5px;
+  width: 275px;
+}
+.calculation {
+  text-align: right;
+}

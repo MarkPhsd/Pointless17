@@ -27,12 +27,15 @@ export class BlogPostComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.platformService.isApp()) { return }
-
     if (this.slug) { 
-      const home$ = this.getHomePageSettings()
+      const home$ = this.getHomePageSettings();
       this.action$ = home$.pipe(switchMap(data => { 
         return this.blogService.getBlogPost(data.wordpressHeadless, this.slug).pipe(switchMap(data => { 
-          data.results.filter(item => { return item.enabled == true});
+          console.log(data.results)
+          if (data.results) { 
+            data.results.filter(item => { return item.enabled == true});
+            console.log(data)
+          }
           return of(data)
         }))
      }))

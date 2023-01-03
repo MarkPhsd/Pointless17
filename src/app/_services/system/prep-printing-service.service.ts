@@ -62,8 +62,13 @@ export class PrepPrintingServiceService {
   sendToPrep(order: IPOSOrder) {
     if (order) {
       const site = this.siteService.getAssignedSite()
-      this.orderMethodsService.prepPrintUnPrintedItems(order.id)
-      return this.printLocations(order)
+      // this.orderMethodsService.prepPrintUnPrintedItems(order.id)
+      const item$ = this.printLocations(order).pipe(
+        switchMap( data => {
+          return  this.orderMethodsService.prepPrintUnPrintedItems(order.id)
+        })
+      )
+      return item$;
     }
   }
 

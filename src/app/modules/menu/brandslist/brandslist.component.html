@@ -54,44 +54,42 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-    <div class="parent-container" >
-      <div fxLayout="row" class="panels">
-        <div  fxLayout="column" fxFlex="99">
+    <div   [style.height]="panelHeightStyle" [class]="classcontainer" >
+      <div  *ngIf="brands"
+            [class]="orderslist"
+            infiniteScroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="50"
+            (scrolled)              ="onScrollDown()"
+            (scrolledUp)            ="onScrollUp()"
+            [scrollWindow]          ="false">
 
-            <div  *ngIf="brands"
-                  [class]="orderslist"
-                  infiniteScroll
-                  [infiniteScrollDistance]="2"
-                  [infiniteScrollThrottle]="50"
-                  (scrolled)              ="onScrollDown()"
-                  (scrolledUp)            ="onScrollUp()"
-                  [scrollWindow]          ="false">
-
-              <div class="grid-flow">
-                <div *ngFor="let item of brands; let i = index"
-                    >
-
-                    <div>
-                      <div class="text">{{item.company  | truncateText: 15  }}</div>
-                        <img
-                            loading  ="lazy"
-                            draggable="false"
-                            [src]    ="getBrandSource(item?.onlineDescriptionImage)"
-                            err-SRC  = "getPlaceHolder()"
-                            onerror  = "this.src='../assets/images/placeholderimage.png'"
-                            (click)  ="listItems(item.id)"
-                            class    = "grid-item shine"
-                            [alt]    ="item?.name">
-                      </div>
-
-                </div>
+        <div class="grid-flow">
+          <div *ngFor="let item of brands; let i = index" >
+              <div *ngIf="item.id != -1">
+                <div class="text">{{item.company  | truncateText: 15  }}</div>
+                  <img
+                      loading  ="lazy"
+                      draggable="false"
+                      [src]    ="getBrandSource(item?.onlineDescriptionImage)"
+                      err-SRC  = "getPlaceHolder()"
+                      onerror  = "this.src='../assets/images/placeholderimage.png'"
+                      (click)  ="listItems(item.id)"
+                      class    = "grid-item shine"
+                      [alt]    ="item?.name">
               </div>
 
-            </div>
+              <div  class="grid-item" *ngIf="item.id == -1">
+                <button mat-raised-button
+                      color="warn"
+                     (click)  ="nextPage()">
+                  <div class="text">Load More...</div>
+                </button>
+              </div>
 
+          </div>
         </div>
       </div>
-
     </div>
 
 

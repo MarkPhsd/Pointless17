@@ -56,9 +56,10 @@
 }
 
 .toggle-buttons-height-size-tall {
-  max-height: 650px;
+  max-height: 65vh;
   overflow-y: auto;
   overflow-x: hidden;
+  height: 65vh;
   max-width: 100%;
   @include for-phone-only  {
     max-width: 350px;
@@ -68,10 +69,11 @@
 }
 
 .toggle-buttons-height-medium {
-  max-height: 450px;
+  max-height: 55vh;
   overflow-y: auto;
   overflow-x: hidden;
   max-width: 100%;
+  height: 55vh;
   @include for-phone-only  {
     max-width: 350px;
     width: 100%;
@@ -83,6 +85,8 @@
   overflow-y: auto;
   overflow-x: hidden;
   max-width: 100%;
+  height: 45vh;
+
   @include for-phone-only  {
     max-width: 350px;
     width: 100%;

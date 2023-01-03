@@ -1,4 +1,5 @@
 ﻿<div *ngIf="(terminalSettings$ | async) as terminal"></div>
+<div *ngIf="(loginAction$ | async) as loginAction"></div>
 
 <div class="bg row-height"
      *ngIf="!platformService.isApp  || (!togglePIN && platformService.isApp)"

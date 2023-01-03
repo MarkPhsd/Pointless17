@@ -1,18 +1,18 @@
+
+<div class="item-container header">
+  <h3>Enter PIN Code to Change User</h3>
+</div>
+
 <div class="item-container">
-
-  <div class="header">
-    <h3>Enter PIN Code to Change User</h3>
-  </div>
-
   <app-key-pad
-      [inputForm]        ="inputForm"
-      [inputTypeValue]   ="'password'"
-      [showInput]        ="true"
-      [alternateClass]   ="'grid-keypad-alternate'"
-      [numberbuttons]    ="'number-buttons button-sized-2'"
-      (outPutReturnEnter)="enterPIN($event)"
-      >
-      Enter PIN
-    </app-key-pad>
-  </div>
-  
+    [inputForm]        ="inputForm"
+    [inputTypeValue]   ="'password'"
+    [showInput]        ="true"
+    [alternateClass]   ="'grid-keypad-alternate'"
+    [numberbuttons]    ="'number-buttons button-sized-2'"
+    (outPutReturnEnter)="enterPIN($event)">
+    Enter PIN
+  </app-key-pad>
+</div>
+
+<div *ngIf="(loginAction$ | async) as loginAction"></div>

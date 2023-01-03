@@ -26,6 +26,8 @@ export interface IPromptResults{
 export interface IItemBasic{
  name: string;
  id  : number;
+ type: string;
+ optionBoolean: boolean;
 }
 
 export interface editWindowState {

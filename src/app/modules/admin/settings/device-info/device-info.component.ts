@@ -28,7 +28,8 @@ export class DeviceInfoComponent implements OnInit {
   }
 
   setAPIToken() {
-    localStorage.setItem('pinToken', this.pinToken)
+    localStorage.setItem('pinToken', this.pinToken);
+    console.log(localStorage.getItem('pinToken'))
   }
 
   getdebugOnThisDevice() {

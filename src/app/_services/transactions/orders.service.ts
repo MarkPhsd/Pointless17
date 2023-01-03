@@ -19,6 +19,7 @@ import { IListBoxItem } from 'src/app/_interfaces/dual-lists';
 import { IPaymentMethod } from './payment-methods.service';
 import { UserAuthorizationService } from '../system/user-authorization.service';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
+import { StoreCreditMethodsService } from '../storecredit/store-credit-methods.service';
 export interface POSOrdersPaged {
   paging : IPagedList
   results: IPOSOrder[]
@@ -146,6 +147,7 @@ export class OrdersService {
   }
 
   updateOrderSubscriptionLoginAction(order: IPOSOrder) {
+    this.storeCreditMethodService.updateSearchModel(null)
     this.getCost(order)
     this._currentOrder.next(order);
     this.currentOrder = order;
@@ -173,6 +175,7 @@ export class OrdersService {
 
 
   updateOrderSubscription(order: IPOSOrder) {
+    this.storeCreditMethodService.updateSearchModel(null);
 
     order = this.getCost(order)
     this._currentOrder.next(order);
@@ -233,6 +236,7 @@ export class OrdersService {
         private toolbarServiceUI: ToolBarUIService,
         private router: Router,
         private siteService: SitesService,
+        private storeCreditMethodService: StoreCreditMethodsService,
         private userAuthorizationService: UserAuthorizationService,
         private authorizationService: AuthenticationService,
     )
@@ -275,6 +279,17 @@ export class OrdersService {
     return this.http.post<any>(url, selectedItems);
   }
 
+  consolidateClientOrders(site: ISite, clientID : number) :  Observable<IPOSOrder>  {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "consolidateClientOrders"
+
+    const parameters = `?clientID=${clientID}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder>(url);
+  }
 
   newOrderFromQR(site: ISite, qr: string): Observable<IPOSOrder> {
     const controller = "/POSOrders/"
@@ -808,12 +823,7 @@ export class OrdersService {
     const order$ = this.newOrderWithPayloadMethod(site, serviceType )
     order$.subscribe( {
         next:  order => {
-          if (order.resultMessage) {
-            this.notificationEvent(`Error submitting Order ${order.resultMessage}`, "Posted")
-            return
-          }
-          this.setActiveOrder(site, order)
-          this.navToMenu();
+          this.processOrderResult(order,site)
         },
         error:  catchError => {
           this.notificationEvent(`Error submitting Order # ${catchError}`, "Posted")
@@ -822,6 +832,14 @@ export class OrdersService {
     )
   }
 
+  processOrderResult(order: IPOSOrder, site: ISite, ) {
+    if (order.resultMessage) {
+      this.notificationEvent(`Error submitting Order ${order.resultMessage}`, "Posted")
+      return
+    }
+    this.setActiveOrder(site, order)
+    this.navToMenu();
+  }
 
   newOrderWithPayloadMethod(site: ISite, serviceType: IServiceType): Observable<IPOSOrder> {
     if (!site) { return }

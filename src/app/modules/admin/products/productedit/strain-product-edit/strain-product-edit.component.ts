@@ -2,10 +2,10 @@ import { Component, Inject,  OnInit,} from '@angular/core';
 import { MenuService } from 'src/app/_services';
 import { FormBuilder, FormControl, FormGroup,} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { MatSnackBar} from '@angular/material/snack-bar';
 import { IProduct } from 'src/app/_interfaces/raw/products';
 import { Observable, of } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { MatSnackBar} from '@angular/material/snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
@@ -105,7 +105,6 @@ export class StrainProductEditComponent implements OnInit {
     this.initFormFields();
     if (this.productForm && this.product) {
       this.productForm.patchValue(this.product)
-      console.log('product', this.product)
       this.urlImageMain = this.product.urlImageMain;
     }
   };

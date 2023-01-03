@@ -332,8 +332,13 @@ constructor(
     this.department        = null;
     this.departments$      = null;
 
-    const site               = this.siteService.getAssignedSite()
+    this.categories$ = null;
+    this.departments$ = null;
+    console.log('get results')
+    const site           = this.siteService.getAssignedSite()
     this.departments$    = this.menuService.getListOfDepartments(site)
+    this.categories$     = this.menuService.getListOfCategories(site);
+
     if (this.platForm.toLowerCase() === 'android') {
       Keyboard.hide();
     }

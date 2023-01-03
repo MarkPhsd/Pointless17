@@ -1,10 +1,9 @@
-<div class="container" *ngIf="(balanceSheet$ | async) as sheet; else loading">
-  <mat-card *ngIf="sheet as item" >
-    <mat-card-title>
-      <div>
-        Balance Sheet
+<div *ngIf="(action$ | async) as action"></div>
 
-      </div>
+<div class="container" *ngIf="(balanceSheet$ | async) as sheet; else loading">
+  <mat-card>
+    <mat-card-title>
+        Balance Sheet
     </mat-card-title>
     <mat-card-subtitle>
       <div *ngIf="sheet.message">
@@ -12,7 +11,7 @@
       </div>
 
       <div class="header-grid">
-        <div *ngIf="sheet">
+        <div>
           <balance-sheet-header-view
             [sheetType]="sheetType"
             [sheet]    ="sheet">
@@ -24,9 +23,12 @@
               [currentBalance]="getCurrentBalance()"
               [sheet]         ="sheet">
           </balance-sheet-calculations-view>
+          <balance-sheet-employee-sales
+            [id]="sheet.id">
+          </balance-sheet-employee-sales>
         </div>
 
-        <div >
+        <div>
           <app-edit-buttons-standard
               (outputeupdateItem)     ="updateItem($event)"
               (outputupdateItemExit)  ="updateItemExit($event)"
@@ -73,7 +75,7 @@
             [formGroup]="inputForm">
 
           <div class="header"
-              *ngIf="!item.shiftStarted || isAuthorized">
+              *ngIf="!sheet.shiftStarted || isAuthorized">
               <h4> Start {{ getSummaryOfCashStart() | currency }}
               </h4>
               <div>
@@ -189,7 +191,7 @@
           </div>
 
           <div class="header"
-               *ngIf="item.shiftStarted || isAuthorized">
+               *ngIf="sheet.shiftStarted || isAuthorized">
             <h4> End {{ getSummaryOfCashEnd() | currency }} </h4>
             <div>
               <mat-label>Enter in quantity of currencies.</mat-label>

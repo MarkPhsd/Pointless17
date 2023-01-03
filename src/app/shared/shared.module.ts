@@ -170,6 +170,7 @@ import { BlogPostComponent } from './widgets/blog-post/blog-post.component';
 import { TagChipsProductsComponent } from '../modules/admin/products/productedit/_product-edit-parts/tag-chips-products/tag-chips-products.component';
 import { CashDrawerSettingsComponent } from '../modules/admin/settings/software/cash-drawer-settings/cash-drawer-settings.component';
 import { PaymentReportDataComponent } from '../modules/admin/reports/payment-report/payment-report-data/payment-report-data.component';
+import { ClockInOutComponent } from './widgets/clock-in-out/clock-in-out.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -221,6 +222,7 @@ import { PaymentReportDataComponent } from '../modules/admin/reports/payment-rep
     ChemicalSpinnersComponent,
     ClientTypesLookupComponent,
     ClientSearchSelectorComponent,
+    ClockInOutComponent,
     DepartmentSelectComponent,
     DeviceInfoComponent,
     DSIEMVElectronComponent,
@@ -405,6 +407,7 @@ import { PaymentReportDataComponent } from '../modules/admin/reports/payment-rep
     ChemicalValuesComponent,
     ChipsDisplayComponent,
     ClientTypesLookupComponent,
+    ClockInOutComponent,
     CompanyInfoHeaderComponent,
     EmailSettingsComponent,
     ElectronZoomControlComponent,

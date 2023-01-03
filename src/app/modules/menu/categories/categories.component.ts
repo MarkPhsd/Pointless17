@@ -383,6 +383,11 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
       this.itemsPerPage = this.itemsPerPage + data.results.length;
 
       if (this.categories) {
+
+        if (this.categories[this.categories.length-1]?.id == -1) {
+          this.categories.splice(this.categories.length-1, 1)
+        }
+
         if (data.results) {
           data.results.forEach( item => {
             this.categories.push(item)
@@ -394,6 +399,10 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
           this.endOfRecords = true;
           this.loading = false;
           this.value = 100;
+        }
+
+        if (!this.endOfRecords) {
+          this.categories.push(this.loadMore)
         }
 
         this.value = ((this.categories.length /  data.paging.totalRecordCount ) * 100).toFixed(0)
@@ -412,6 +421,12 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
   };
 
+  get loadMore() {
+    let item = { } as  IMenuItem;
+    item.name = 'Load More';
+    item.id = -1;
+    return item
+  }
 
     //this is called from subject rxjs obversablve above constructor.
   async refreshSearch() {

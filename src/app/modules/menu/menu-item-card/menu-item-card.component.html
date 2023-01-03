@@ -11,7 +11,8 @@
         </div>
       </mat-card-title>
       <mat-card-content>
-        <div class="gallery"  *ngIf="menuItem.urlImageMain || menuItem.urlImageOther">
+        <div class="gallery"  
+             *ngIf="menuItem.urlImageMain || menuItem.urlImageOther">
           <app-menu-item-gallery [menuItem]="menuItem"></app-menu-item-gallery>
         </div>
       </mat-card-content>

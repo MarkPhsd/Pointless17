@@ -8,22 +8,22 @@
     </div>
 
     <div class="content-position">
+      
       <div *ngIf="item?.slug">
-  
         <app-blog-post [slug]="item?.slug"></app-blog-post>
       </div>
+
       <div *ngIf="!item?.slug">
         <div  class="description">
           <div [innerHtml]="item?.onlineShortDescription"></div>
         </div>
-
         <div class="image-layout">
           <img [src]="getItemSrc(item?.urlImageMain)">
         </div>
       </div>
     </div>
 
-    <mat-card>
+    <mat-card >
       <mat-card-subtitle>
         <div class="title-container">
           <div>
@@ -43,7 +43,7 @@
           <div>
             <div class="categories" *ngFor="let item of item.categories">
 
-              <div >
+              <div>
                 <button class="menu-button"
                         mat-raised-button
                         (mouseover)="categoryListDisplay(item)"

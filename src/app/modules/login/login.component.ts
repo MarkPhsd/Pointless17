@@ -57,6 +57,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   uiHomePageSetting: UIHomePageSettings;
 
   action$: Observable<any>;
+  loginAction$: Observable<any>;
+
   _loginStatus    : Subscription;
   loginStatusvalue: number;
   loginAction: any;
@@ -132,7 +134,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     const item = localStorage.getItem('loginAction')
     this.loginAction = JSON.parse(item)
-    console.log(this.loginAction)
 
     this.bucket = await this.awsBucketService.awsBucketURL()
 
@@ -160,7 +161,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }, 1000);
 
   }
-
 
 
   refreshUIHomePageSettings() {
@@ -385,12 +385,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   pinLogin(event) {
     const pin = event.password;
-    const user = event.user;
-    this.submitLogin(user,pin)
+    const user = event.username;
+    this.submitLogin( user, pin)
   }
 
   onSubmit() {
-    // console.log('login occured -1 ', this.dialogOpen)
     if (!this.validateForm(this.loginForm)) { return }
     this.spinnerLoading = true;
     const userName = this.f.username.value;
@@ -399,114 +398,75 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   submitLogin(userName: string, password: string) {
-    // console.log('login occured 0 ', this.dialogOpen)
-    this.action$ = this.userSwitchingService.login(userName, password).pipe(
-        switchMap(user =>
+    this.loginAction$ = this.userSwitchingService.login(userName, password).pipe(
+      switchMap(user =>
+          {
+          this.initForm();
+          if (user && user.errorMessage) {
+            this.notifyEvent(user.errorMessage, 'Failed Login');
+            return of('failed')
+          }
 
-           {
-            // console.log('login occured 1 ', user, this.dialogOpen)
-            this.initForm();
-
-            if (user && user.errorMessage) {
-              this.notifyEvent(user.errorMessage, 'Failed Login');
+          if (user) {
+            this.spinnerLoading = false;
+            if (user.message === 'failed' ||
+                (user.errorMessage ||
+                (user.user && user.user.errorMessage))) {
+              this.authenticationService.updateUser(null);
               return of('failed')
+           }
+
+          if (this.platformService.isApp()) {
+            if (this.loginApp(user)) {
+              return of('success')
+            }
+          }
+
+            if (user.message && user.message.toLowerCase() === 'success') {
+              if (!this.loginAction) {
+                this.userSwitchingService.assignCurrentOrder(user)
+              }
+
+              let pass = false
+
+              if (this.loginAction) {
+                if (this.loginAction.name === 'setActiveOrder') {
+                  this.userSwitchingService.processLogin(user, '/pos-payment')
+                  pass = true
+                }
+              }
+
+              if (!pass) {
+                this.userSwitchingService.processLogin(user, '')
+              }
+
+              if (this.dialogOpen) {
+                try {
+                  this.dialogRef.close();
+                } catch (error) {
+                  return of('error')
+                }
+              }
+
+              return of('success')
             }
 
-            if (user) {
-
-              this.spinnerLoading = false;
-
-              if (user.message === 'failed' || (user.errorMessage || (user.user && user.user.errorMessage))) {
-                this.authenticationService.updateUser(null);
-                return of('failed')
-              }
-
-              if (this.platformService.isApp()) {
-                if (this.loginApp(user)) {
-                  return of('success')
-                }
-              }
-
-              if (user.message && user.message.toLowerCase() === 'success') {
-
-                if (!this.loginAction) {
-                  this.userSwitchingService.assignCurrentOrder(user)
-                }
-
-                let pass = false
-
-                if (this.loginAction) {
-                  if (this.loginAction.name === 'setActiveOrder') {
-                    this.userSwitchingService.processLogin(user, '/pos-payment')
-                    pass = true
-                  }
-                }
-
-                if (!pass) {
-                  this.userSwitchingService.processLogin(user, '')
-                }
-
-                if (this.dialogOpen) {
-                  try {
-                    this.dialogRef.close();
-                  } catch (error) {
-                    return of('error')
-                  }
-                }
-                return of('success')
-              }
-
-            }
+          }
             return of('error')
           }
-        // ,
-        // error: error => {
-        //     this.updateLoginStatus(6)
-        //     const message = `Login failed. ${error.errorMessage}. Service is not accesible. Check Internet.`
-        //     this.statusMessage = message
-        //     this.notifyEvent(message, 'error')
-        //     this.initForm();
-        //     return
-        // }
       ))
-      // .pipe(
-      //   switchMap( data => {
-      //      console.log('switch to set login action')
-      //      if ( typeof data === "string") {
-      //       if (data === 'success') {
-      //         return  this.setloginAction()
-      //       }
-      //      }
-      //      return of('Login did not occur.')
-      //   }
-      // ))
-
   }
 
   setloginAction(): Observable<IPOSOrder> {
-
     return this.orderMethodsService.getLoginActions()
-
   }
 
   loginApp(user) {
-
     if (this.platformService.isApp()) {
       this.loggedInUser   = user.user
       this.spinnerLoading = false
-      const currentUser   = user.user
-      const sheet         = user.sheet
-      this.userSwitchingService.processLogin(currentUser, null)
-      if (sheet) {
-        if (sheet.message) {
-          this.notifyEvent(`Message ${sheet.message}`, `Error`)
-          return false
-        }
-        if (sheet.shiftStarted == 0) {
-          this.router.navigate(['/balance-sheet-edit', {id:sheet.id}]);
-          return true
-        }
-      }
+      return this.userSwitchingService.loginApp(user)
+      return true;
     }
   }
 

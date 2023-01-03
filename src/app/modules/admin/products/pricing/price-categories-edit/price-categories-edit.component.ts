@@ -377,46 +377,40 @@ export class PriceCategoriesEditComponent implements OnInit {
   assignItem(data) {
     if (data) {
       const unitTypeID = data.unitTypeID
-      let index      = data.index;
+      let index        = data.index;
       const unitName   = data.unitName
       const unitType   = data.unitType;
 
       if (data) {
         let pricing = this.inputForm.controls['productPrices'] as FormArray;
 
-        // console.log('pricing gotten', pricing)
         let lines = pricing.value;
         let line =  pricing.value[index] as ProductPrice;
 
-        index = index -1;
-
-        if (!line) {
-          if(pricing.length >= (index)) {
-            let priceForm        =  this.fbPriceCategory.addPriceArray()
-            pricing.at(index).patchValue(priceForm)
-            line = pricing.controls[index].value;
-          }
-        }
+        console.log(line)
+        console.log(this.priceCategory.productPrices[index+1]);
+        console.log('prices length', this.priceCategory.productPrices.length)
 
         line.unitType        = {} as UnitType;
         line.unitType        = unitType;
         line.unitTypeID      = unitType.id;
         line.partMultiplyer  = unitType.itemMultiplier;
 
-        if (this.priceCategory.productPrices.length >= index) {
+        this.priceCategory.productPrices[index] = line;
+
+        this.itemAction$ = this.updateCategory(this.priceCategory);
+        this.toggleSearchSize[this.toggle] = !this.toggleSearchSize[this.toggle];
+        return;
+
+        if (this.priceCategory.productPrices.length >= index -1) {
           let newIndex = index
           if (!this.priceCategory.productPrices[index]) {
             newIndex =  this.priceCategory.productPrices.push(line)
           }
           if (unitType) {
-            this.priceCategory.productPrices[newIndex + 1].unitType   = unitType;
-            this.priceCategory.productPrices[newIndex + 1].unitTypeID = unitTypeID;
-            // this.toggleSearchSize[newIndex + 1] = !this.toggleSearchSize[index];
-
+            this.priceCategory.productPrices[index].unitTypeID = data.unitTypeID;
           }
         }
-        this.toggleSearchSize[this.toggle] = !this.toggleSearchSize[this.toggle];
-        this.itemAction$ = this.updateCategory(this.priceCategory);
 
         return;
         if (pricing && pricing.length>=index) {

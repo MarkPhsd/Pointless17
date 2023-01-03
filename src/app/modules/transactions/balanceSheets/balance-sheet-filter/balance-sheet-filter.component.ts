@@ -140,20 +140,16 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
 
   initEmployeeList(){
     this.refreshEmployees();
-    console.log('employee list')
     const site           = this.siteService.getAssignedSite()
-    if (!site) { return }
-    setInterval(this.refreshEmployees,  (60*1000) *5);
+    if (site) {
+      setInterval(this.refreshEmployees,  (60*1000) *5);
+    }
    }
 
-  refreshEmployees(){
-    try {
-      const site           = this.siteService.getAssignedSite()
-      console.log('site', site)
-      if (!site) { return }
+  refreshEmployees() {
+    const site           = this.siteService.getAssignedSite()
+    if (site) {
       this.employees$      = this.orderService.getActiveEmployees(site)
-    } catch (error) {
-      console.log('error',error)
     }
   }
 
@@ -172,7 +168,7 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
     if (! this.searchModel) {  this.searchModel = {} as BalanceSheetSearchModel }
     this.assignDateSettings();
     const search = this.searchModel;
-
+    console.log('refresh Search', search)
     this.sheetMethodsService.updateBalanceSearchModel( search )
     this.outputRefreshSearch.emit('true');
   }
@@ -233,7 +229,7 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
     }
   }
 
-  async initDateForm() {
+  initDateForm() {
     this.dateRangeForm = new FormGroup({
       start: new FormControl(),
       end  : new FormControl()
@@ -251,26 +247,31 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
       end  : endDate // new Date()
     })
 
-    this.searchModel.completionDate_From = this.dateRangeForm.get("start").value;
-    this.searchModel.completionDate_To   = this.dateRangeForm.get("end").value;
+    // this.searchModel.completionDate_From = this.dateRangeForm.get("start").value;
+    // this.searchModel.completionDate_To   = this.dateRangeForm.get("end").value;
 
     this.subscribeToDatePicker();
   }
 
-  subscribeToDatePicker()
-  {
+  subscribeToDatePicker()  {
     if (this.dateRangeForm) {
       this.dateRangeForm.get('start').valueChanges.subscribe(res=>{
+        console.log('res dateFrom', res)
         if (!res) {return}
         this.dateFrom = res //this.dateRangeForm.get("start").value
       })
 
       this.dateRangeForm.get('end').valueChanges.subscribe(res=>{
+        console.log('res dateTo', res)
         if (!res) {return}
         this.dateTo = res
       })
 
-      this.dateRangeForm.valueChanges.subscribe(res=>{
+      this.dateRangeForm.valueChanges.subscribe( res => {
+        console.log('res dateTo', res)
+        this.dateFrom = this.dateRangeForm.get("start").value
+        this.dateTo = this.dateRangeForm.get("end").value
+
         if (this.dateRangeForm.get("start").value && this.dateRangeForm.get("end").value) {
           this.refreshDateSearch()
         }
@@ -278,13 +279,17 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
     }
   }
 
-  emitDatePickerData() {
-    if (this.dateRangeForm) {
-      if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("end").value) {
+  emitDatePickerData(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement) {
+    console.log(this.dateRangeForm.value);
+    if (dateRangeStart && dateRangeEnd) {
+      // if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("end").value) {
+        // this.dateFrom = dateRangeStart.value //this.dateRangeForm.get("start").value
+        // this.dateTo   = dateRangeEnd.value //this.dateRangeForm.get("end").value
         this.dateFrom = this.dateRangeForm.get("start").value
         this.dateTo   = this.dateRangeForm.get("end").value
+        console.log('res dateTo', this.dateTo, this.dateFrom)
         this.refreshDateSearch()
-      }
+      // }
     }
   }
 
@@ -299,8 +304,8 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
       this.dateFrom = this.dateRangeForm.get("start").value
       this.dateTo   = this.dateRangeForm.get("end").value
       if (this.dateTo && this.dateFrom) {
-        this.searchModel.completionDate_From = this.dateFrom.toISOString()
-        this.searchModel.completionDate_To = this.dateTo.toISOString()
+        this.searchModel.completionDate_From = this.dateHelper.format(this.dateFrom.toISOString(), 'MM/dd/yyyy');
+        this.searchModel.completionDate_To = this.dateHelper.format(this.dateTo.toISOString(), 'MM/dd/yyyy');
         return
       }
     }

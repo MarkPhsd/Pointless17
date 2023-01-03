@@ -44,9 +44,8 @@
         <button mat-button
                 (click)="clearAll()">
           <span *ngIf="!smallDevice">
-            Reset
           </span>
-          <mat-icon>reset</mat-icon>
+          <mat-icon>refresh</mat-icon>
         </button>
       </div>
       <div>
@@ -61,10 +60,7 @@
       <div>
         <button mat-button
                 (click)="clearAll()">
-            <span *ngIf="!smallDevice">
-              <!-- Reset -->
-            </span>
-             Reset
+          <mat-icon>refresh</mat-icon>
         </button>
       </div>
       <div >
@@ -77,7 +73,7 @@
         </button>
       </div>
     </div>
-  
+
     <div *ngIf="( uiHomePage && ( uiHomePage.sideToolbarEnableCategory) )">
       <mat-accordion multi>
         <mat-expansion-panel
@@ -100,6 +96,7 @@
                   [mouseOver]       = "false"
                   [showIcon]        = "true"
                   [toggleDimensions]= "toggleCatHeight"
+                  [styleHeight]     ="'55hvh'"
                   [textLength]      = "21"
                   (outPutItem)      = "refreshCategorySearch($event)"
                   [textLength]      = "21"
@@ -160,8 +157,8 @@
                   [mouseOver]       = "false"
                   [showIcon]        = "showIcon"
                   [textLength]      = "21"
-                  [toggleDimensions]= "toggleDimensions"
-                  [toggleHeight]    = "toggleDimensions"
+                  [toggleDimensions]= "'toggle-buttons-height-medium'"
+                  [styleHeight]     ="'55hvh'"
                   (outPutItem)      = "refreshCategorySearch($event)"
                   [textLength]      = "21"
                   [id]              = "productTypeID"
@@ -172,7 +169,7 @@
         </mat-expansion-panel>
       </mat-accordion>
     </div>
-   
+
    <div class="grid-item-departments"
          *ngIf="(uiHomePage && uiHomePage.sideToolbarDefaultBrand)">
       <ng-container>

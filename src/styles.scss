@@ -1,3 +1,6 @@
+
+
+
 @import '../node_modules/material-icons/iconfont/material-icons.scss';
 @import '~css-star-rating/css/star-rating.min.css';
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
@@ -7,16 +10,16 @@
 // @import url('https://fonts.googleapis.com/css?family=Muli:300,400,600&display=swap');
 @import '~@mdi/font/css/materialdesignicons.css';
 
-@import 'ag-grid-community/dist/styles/ag-grid.css';
-@import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-@import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
-@import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
-@import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine-dark.css";
+// @import 'ag-grid-community/dist/styles/ag-grid.css';
+// @import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+// @import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
+// @import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine-dark.css";
+// @import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
+// @import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
+// @import "../node_modules/ag-grid-community/dist/styles/ag-theme-balham.css";
 
 @import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
-@import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
 @import "../node_modules/ag-grid-community/dist/styles/ag-theme-material.css";
-@import "../node_modules/ag-grid-community/dist/styles/ag-theme-balham.css";
 //theme switching
 //https://next.material.angular.io/guide/theming
 
@@ -28,14 +31,20 @@
 @import '~@ionic/angular/css/structure.css';
 @import '~@ionic/angular/css/typography.css';
 @import '@angular/cdk/overlay-prebuilt.css';
-// /* Optional CSS utils that can be commented out */
-// import '@ionic/react/css/padding.css';
-// import '@ionic/react/css/float-elements.css';
-// import '@ionic/react/css/text-alignment.css';
-// import '@ionic/react/css/text-transformation.css';
-// import '@ionic/react/css/flex-utils.css';
-// import '@ionic/react/css/display.css';
-// np
+
+@import "../node_modules/jquery-ui/themes/base/all.css";
+@import "../node_modules/devextreme/dist/css/dx.light.css";
+@import "../node_modules/devexpress-richedit/dist/dx.richedit.css";
+@import "../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.common.css";
+@import "../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.light.css";
+@import "../node_modules/@devexpress/analytics-core/dist/css/dx-querybuilder.css";
+@import "../node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css";
+@import "../node_modules/devexpress-reporting/dist/css/dx-reportdesigner.css";
+
+// @import "../node_modules/devextreme/dist/css/dx.light.css";
+// @import "../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.common.css";
+// @import "../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.light.css";
+// @import "../node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css";
 
 // @import './assets/wp/wpstyles.css';
 
@@ -505,15 +514,15 @@ mat-dialog-container {
 
 
 //Wp
-.rte-setting { 
+.rte-setting {
   float: right;
 }
 
-.lft-setting, .alignleft { 
+.lft-setting, .alignleft {
   float: left;
 }
 
-.wp-image-31499 { 
+.wp-image-31499 {
   border-radius: 15px;
   width: 300px;
 

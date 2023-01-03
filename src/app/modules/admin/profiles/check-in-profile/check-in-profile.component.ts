@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EMPTY, Observable, Subscription } from 'rxjs';
+import { EMPTY, Observable, of, Subscription } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
 import { IClientTable, IUserProfile } from 'src/app/_interfaces';
@@ -53,6 +53,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   isStaff                       : boolean;
   minumumAllowedDateForPurchases: Date
 
+  action$: Observable<any>;
   currentOrder  :  IPOSOrder;
   _currentOrder : Subscription;
 
@@ -216,6 +217,23 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     this.searchModel.completionDate_From = start.toISOString()
     this.searchModel.completionDate_To   = now.toISOString()
     this.refreshDateSearch()
+  }
+
+  consolidateClientOrders() { 
+    const site = this.siteService.getAssignedSite()
+    this.action$ =  this.orderService.consolidateClientOrders(site,this.clientTable.id).pipe(
+      switchMap(data => { 
+        if (!data.id) { 
+          this.orderService.notificationEvent('Orders not consolidated.' + data.toString(), 'Alert')
+          console.log(data.toString())
+          return of(null)
+        }
+      return  this.orderService.getOrder(site, data.id.toString(), false)
+    })).pipe(switchMap(data => { 
+      this.orderService.notificationEvent('Orders Consolidated. Primary order unsuspended. Check the current order.', 'Alert')
+      this.orderService.updateOrderSubscriptionLoginAction(data);
+      return of(data)
+    }))
   }
 
   listAllOrders() {

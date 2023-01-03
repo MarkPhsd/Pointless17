@@ -12,6 +12,7 @@ import { FbClientTypesService } from 'src/app/_form-builder/fb-client-types.serv
 import { StoreCredit, StoreCreditMethodsService } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { StoreCreditService } from 'src/app/_services/storecredit/store-credit.service';
 import { Observable } from 'rxjs';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-store-credit-editor',
@@ -36,6 +37,7 @@ export class StoreCreditEditorComponent implements OnInit {
     private awsBucket               : AWSBucketService,
     private fbClientTypesService    : FbClientTypesService,
     private contactsService         : ContactsService,
+
     private dialogRef               : MatDialogRef<StoreCreditEditorComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
   {
@@ -43,6 +45,7 @@ export class StoreCreditEditorComponent implements OnInit {
       this.id = data
     }
     this.initializeForm()
+
   }
 
   async ngOnInit() {
@@ -84,6 +87,8 @@ export class StoreCreditEditorComponent implements OnInit {
         this.storeCredit.accountNumber = user.accountNumber;
         this.client$ = this.contactsService.getContact(site, this.storeCredit.clientID.toString())
         this.storeCreditService.save(site, this.storeCredit).subscribe( data => {
+          data.cardNum = data.cardNum.trim();
+          data.cardData = data.cardData.trim();
           this.inputForm.patchValue(data)
         })
 

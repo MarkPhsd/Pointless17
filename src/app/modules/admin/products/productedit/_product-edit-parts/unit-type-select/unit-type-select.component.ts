@@ -127,6 +127,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
   selectItem(item: any){
     if (!item) { return }
     // this.searchControl.setValue(item.id)
+    const data = {unitTypeID: item.id, index: this.index, unitName: item.name, unitType: item }
     this.itemSelect.emit(item)
   }
 
@@ -134,6 +135,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
     const value =this.searchControl.value
     this.productPrice.unitTypeID = value;
     //emit item to parent.
+
     this.itemSelect.emit({productPrice: this.productPrice, index: this.index })
   }
 
@@ -148,8 +150,9 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
     }
 
     if (this.outputType === 'priceLine') {
-      this.itemSelect.emit({index: this.index , unitType: item,
-                            unitTypeID: item.id, unitName: item.name})
+      const data = {unitTypeID: item.id, index: this.index, unitName: item.name, unitType: item }
+      console.log('output', data)
+      this.itemSelect.emit(data)
       return
     }
 

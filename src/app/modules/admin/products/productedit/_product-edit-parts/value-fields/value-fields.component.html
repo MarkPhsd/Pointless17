@@ -1,7 +1,6 @@
 
 <div *ngIf="inputForm">
   <div [formGroup]="inputForm">
-
     <mat-form-field
           [class]="fieldsClass"
           appearance="outline">
@@ -28,9 +27,7 @@
                 ngDefaultControl
                 [formControlName]="fieldName">
         </div>
-
     </mat-form-field>
-
   </div>
 
   <div [formGroup]="inputForm"

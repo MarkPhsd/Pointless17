@@ -22,6 +22,7 @@ import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { IStoreCreditSearchModel, StoreCredit, StoreCreditMethodsService, StoreCreditResultsPaged } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { StoreCreditService } from 'src/app/_services/storecredit/store-credit.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-store-credit-list',
@@ -92,7 +93,9 @@ export class StoreCreditListComponent implements OnInit {
     private siteService            : SitesService,
     private productEditButtonService: ProductEditButtonService,
     private agGridFormatingService : AgGridFormatingService,
+    public userAuthorization       : UserAuthorizationService,
     private awsService             : AWSBucketService,
+
     private dialog: MatDialog,
   )
 {
@@ -392,6 +395,10 @@ async ngOnInit() {
   editItemWithId(id:any) {
     if(!id) {
       return
+    }
+    if (!this.userAuthorization.isManagement) { 
+      this.siteService.notify('Not Authorized', 'Alert', 2000)
+      return;
     }
     this.storeCreditMethodsService.openStoreCreditEditor(id);
   }

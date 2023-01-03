@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IServiceType, ISetting, ISite }   from 'src/app/_interfaces';
+import { IServiceType, IServiceTypePOSPut, ISetting, ISite }   from 'src/app/_interfaces';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { SitesService } from '../reporting/sites.service';
 
@@ -126,7 +126,7 @@ export class ServiceTypeService {
 
   }
 
-  putServiceType(site: ISite, id: any, serviceType: IServiceType): Observable<IServiceType> {
+  putServiceType(site: ISite, id: any, serviceType: IServiceTypePOSPut): Observable<IServiceType> {
 
     const controller = "/ServiceType/"
 
@@ -154,7 +154,7 @@ export class ServiceTypeService {
 
   }
 
-  postServiceType(site: ISite, serviceType: IServiceType): Observable<IServiceType> {
+  postServiceType(site: ISite, serviceType: IServiceTypePOSPut): Observable<IServiceType> {
 
     const controller = '/ServiceType/'
 
@@ -168,7 +168,7 @@ export class ServiceTypeService {
 
   }
 
-  saveServiceType(site: ISite, serviceType: IServiceType): Observable<IServiceType> {
+  saveServiceType(site: ISite, serviceType: IServiceTypePOSPut): Observable<IServiceType> {
 
     if (!serviceType.id || serviceType.id == 0) {
       return this.postServiceType(site, serviceType)

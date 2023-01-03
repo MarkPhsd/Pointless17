@@ -1,3 +1,4 @@
+<div *ngIf="(closingProcedure$ | async) as closingProcedures"></div>
 <mat-card *ngIf="(uiTransactions$ | async) as uiTransactions">
 
   <mat-card-title></mat-card-title>
@@ -138,12 +139,23 @@
               [dateFrom]="dateFrom"
               [dateTo]="dateTo"
               [zrunID]="zrunID"
+              [removeGiftCard]="true"
               [groupBy]="'items'">
             <mat-icon>menu</mat-icon>  Items
             <mat-divider></mat-divider>
         </item-sales-card>
+        <item-sales-card
+            [site]="localSite"
+            [dateFrom]="dateFrom"
+            [dateTo]="dateTo"
+            [zrunID]="zrunID"
+            [removeGiftCard]="false"
+            [groupBy]="'items'">
+          <mat-icon>menu</mat-icon>  Gift Card / Store Credit Issuances
+          <mat-divider></mat-divider>
+        </item-sales-card>
       </div>
-
+      
       <div>
         <payment-report
               [site]    ="localSite"

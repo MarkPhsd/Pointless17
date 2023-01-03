@@ -141,10 +141,10 @@ getStoreCreditForm(inputForm:FormGroup): FormGroup {
 
     const item = {clientID: clientID}
     dialogRef = this.dialog.open(StoreCreditPopUpComponent,
-      { width:        '100vw',
-        minWidth:     '100vw',
-        height:       '100vh',
-        minHeight:    '100vh',
+      { width:        '655px',
+        minWidth:     '655px',
+        height:       '550px',
+        minHeight:    '550px',
         data     :    item,
       },
     )
@@ -164,7 +164,7 @@ getStoreCreditForm(inputForm:FormGroup): FormGroup {
     if (order && credit) {
       //get payment method of the store credit if
       // payment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod
-      const storeCredit$ = this.storeCreditService.save(site,credit)
+      const storeCredit$ = this.storeCreditService.save(site, credit)
 
       let posItem = {} as IPurchaseOrderItem
       posItem.id = POSItemID;
@@ -173,13 +173,13 @@ getStoreCreditForm(inputForm:FormGroup): FormGroup {
      return storeCredit$.pipe(
           switchMap( data => {
             posItem.gcid = data.id.toString();
+            posItem.modifierNote = `Issued : ${data?.cardNum} `
+            posItem.originalPrice = posItem.unitPrice
             return this.poOrderItemService.setItemStoreCreditInfo(site, posItem);
           })
         )
       }
-
       return null;
-
     }
 
     notifyWithOption(message: string, title: string, notifyEnabled: boolean) {

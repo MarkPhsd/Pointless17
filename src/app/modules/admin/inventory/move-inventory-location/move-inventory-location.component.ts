@@ -1,6 +1,6 @@
 import { Component,  Inject,  Input,  OnInit, Optional, } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of, switchMap } from 'rxjs';
 import { InventoryLocationsService, IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { InventoryAssignmentService, IInventoryAssignment, Serial } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ISite } from 'src/app/_interfaces/site';
@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-move-inventory-location',
@@ -15,7 +16,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./move-inventory-location.component.scss']
 })
 export class MoveInventoryLocationComponent implements OnInit {
-
+  action$ : Observable<any>;
   id: any;
   site: ISite;
   inventoryAssignment:       IInventoryAssignment;
@@ -23,7 +24,7 @@ export class MoveInventoryLocationComponent implements OnInit {
   inventoryAssignment$:      Observable<IInventoryAssignment>;
   searchForm:                FormGroup;
   quantityMoving:            number;
-  metrcLocations$:           Observable<IInventoryLocation[]>;
+  locations$:                Observable<IInventoryLocation[]>;
   inventoryLocation:         IInventoryLocation;
   inventoryLocationID:       number;
 
@@ -39,25 +40,42 @@ export class MoveInventoryLocationComponent implements OnInit {
               private dialogRef: MatDialogRef<MoveInventoryLocationComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any)
   {
-
     if (data) {
       this.id = data.id
     } else {
       this.id = this.route.snapshot.paramMap.get('id');
     }
 
-    this.metrcLocations$ = this.inventoryLocationsService.getLocations();
-    const site =  this.siteService.getAssignedSite();
-    this.inventoryAssignment$ = this.inventoryAssignmentService.getInventoryAssignment(site, this.id)
   }
 
-  ngOnInit() {
-    this.metrcLocations$.subscribe(data => {  this.inventoryLocations = data })
-    if (this.id) {
-      this.inventoryAssignment$.subscribe(data=>{ this.inventoryAssignment = data })
-      this.initForm();
-      this.searchForm.patchValue(this.inventoryAssignment)
-    }
+  ngOnInit(): void {
+    this.initLocations();
+    this.initAssigment()
+    this.initForm()
+  }
+
+  initAssigment() {
+    const site =  this.siteService.getAssignedSite();
+    this.inventoryAssignment$ = this.inventoryAssignmentService.getInventoryAssignment(site, this.id).pipe(
+      switchMap(data=>{
+        this.inventoryAssignment = data
+        return of(data)
+      })
+    )
+  }
+
+  initLocations() {
+    const site =  this.siteService.getAssignedSite();
+    this.locations$ = this.inventoryLocationsService.getLocations().pipe(switchMap(
+      data => {
+          this.inventoryLocations = data
+          if (this.id) {
+            this.initForm();
+            this.searchForm.patchValue(this.inventoryAssignment)
+          }
+          return of(data)
+        }
+    ))
   }
 
   initForm() {
@@ -74,6 +92,13 @@ export class MoveInventoryLocationComponent implements OnInit {
       return
     }
     if (event.value) {
+      if (this.inventoryLocations) {
+        this.inventoryLocations.filter(data => {
+          if (data.id == event.value) {
+            this.inventoryLocation = data
+          }
+        })
+      }
       this.assignLocation(this.inventoryLocationID);
     }
   }
@@ -84,7 +109,10 @@ export class MoveInventoryLocationComponent implements OnInit {
     })
   }
 
-  async  changeIsValid(): Promise<boolean> {
+   changeIsValid(): boolean {
+
+    console.log('this.', this.searchForm.controls['quantityMoving'].value)
+    this.quantityMoving = this.searchForm.controls['quantityMoving'].value;
 
     if (this.quantityMoving  == 0 || this.quantityMoving == null) {
       this.notifyEvent('Quantity required to move item', '')
@@ -93,7 +121,6 @@ export class MoveInventoryLocationComponent implements OnInit {
 
     if ( this.inventoryAssignment.packagedOrBulk == 0 )  {
       if (parseInt(this.quantityMoving.toString()) == this.quantityMoving) {
-        // console.log(parseInt(this.quantityMoving.toString()) , this.quantityMoving)
       } else {
         this.notifyEvent('Only whole values allowed.', '')
         this.quantityMoving = 0
@@ -109,16 +136,14 @@ export class MoveInventoryLocationComponent implements OnInit {
     return true
   }
 
-  async  updateInventory() {
-        //the couunt we use is the packageCountremaining.
+  updateInventory() {
+        //the count we use is the packageCountremaining.
     const result = this.changeIsValid() ;
-    if (!result) {
-      return
-    }
+    if (!result) { return }
 
     if (this.inventoryAssignment.packageCountRemaining != this.quantityMoving) {
       if (this.inventoryAssignment.packageCountRemaining >= this.quantityMoving) {
-        await this.copyToNewPackage()
+        this.copyToNewPackage()
         return
       }
     }
@@ -142,7 +167,6 @@ export class MoveInventoryLocationComponent implements OnInit {
     const  baseQuantityToMove          = baseCalculated;
     const  newPackageQuantity          = this.quantityMoving;
 
-
     this.newItem.baseQuantity          = baseQuantityToMove;
     this.newItem.baseQuantityRemaining = baseQuantityToMove;
     this.newItem.packageQuantity       = newPackageQuantity;
@@ -150,7 +174,7 @@ export class MoveInventoryLocationComponent implements OnInit {
 
     // console.log('newPackageQuantity', newPackageQuantity)
 
-    const item = await this.setLocation(this.newItem);
+    const item =  this.setLocation(this.newItem);
     if (item) {  this.newItem = item; }
 
     this.newItem.id                         = 0;
@@ -173,7 +197,44 @@ export class MoveInventoryLocationComponent implements OnInit {
     return packages
   }
 
-  async setLocation(item: IInventoryAssignment): Promise<IInventoryAssignment> {
+  getMovingPackageCounts_new(): IInventoryAssignment[] {
+
+    //this.newItem                       = await this.inventoryAssignment$.pipe().toPromise() //(data=>{ this.newItem = data })
+    //the new item will start with what the old item currently has
+
+    this.newItem.baseQuantity          = this.newItem.baseQuantityRemaining
+    this.newItem.packageQuantity       = this.newItem.packageCountRemaining
+
+    //to remove the base of the original package.
+    const newBaseQuantity              = this.newItem.baseQuantityRemaining
+    const  baseCalculated              = (this.newItem.unitMulitplier * this.quantityMoving) * this.newItem.jointWeight;
+    const  baseQuantityToMove          = baseCalculated;
+    const  newPackageQuantity          = this.quantityMoving;
+
+    this.newItem.baseQuantity          = baseQuantityToMove;
+    this.newItem.baseQuantityRemaining = baseQuantityToMove;
+    this.newItem.packageQuantity       = newPackageQuantity;
+    this.newItem.packageCountRemaining = newPackageQuantity;
+
+    const item =  this.setLocation(this.newItem);
+    if (item) {  this.newItem = item; }
+
+    this.newItem.id                         = 0;
+    this.existingItem                       = {} as IInventoryAssignment
+    const existingBase                      = this.existingItem.baseQuantity;
+    this.existingItem.baseQuantity          = existingBase;
+    this.existingItem.baseQuantityRemaining = existingBase - baseQuantityToMove;
+    this.existingItem.packageQuantity       = this.existingItem.packageQuantity       - newPackageQuantity;
+    this.existingItem.packageCountRemaining = this.existingItem.packageCountRemaining - newPackageQuantity;
+
+    const packages = [] as IInventoryAssignment[];
+    packages.push(this.existingItem)
+    packages.push(this.newItem)
+
+    return packages
+  }
+
+  setLocation(item: IInventoryAssignment): IInventoryAssignment {
     const location = this.inventoryLocation;
     if (location) {
       item.location = location.name;
@@ -195,13 +256,15 @@ export class MoveInventoryLocationComponent implements OnInit {
 
   async copyToNewPackage(){
     const site     =  this.siteService.getAssignedSite();
-    const packages =  await  this.getMovingPackageCounts()
+    const packages =  await this.getMovingPackageCounts()
     // return
     const new$     =  this.inventoryAssignmentService.moveInventory(site, packages);
-    new$.subscribe( data => {
+    this.action$ = new$.pipe(
+      switchMap(data => {
       this.onCancel(true)
       this.notifyEvent('New . Package moved', 'Success')
-    })
+      return of(data)
+    }))
   }
 
   changeLocation() {
@@ -222,22 +285,23 @@ export class MoveInventoryLocationComponent implements OnInit {
 
       //change
       // return;
-
-      this.inventoryAssignmentService.editInventory(
-        site,
-        this.inventoryAssignment.id,
-        this.inventoryAssignment
-          ).subscribe( 
-            {
-              next: data=> {
-                this.notifyEvent('Inventory location changed.', 'Success')
+      const assignMents = [] as IInventoryAssignment[]
+      assignMents.push( this.inventoryAssignment)
+      this.action$ = this.inventoryAssignmentService.moveInventory(
+          site,
+          assignMents
+          ).pipe(
+            switchMap(data =>
+               {
+                 this.notifyEvent('Inventory location changed.', 'Success')
                 this.onCancel(true)
-              }, 
-              error: error =>{
-                this.notifyEvent(`Inventory location failed to change. ${error}`, 'failed')
-              }
+                return of(data)
+              }),
+            catchError( error =>{
+              this.notifyEvent(`Inventory location failed to change. ${error}`, 'failed')
+              return of(error)
             }
-        ) 
+        ) )
     } else {
       this.notifyEvent('Item not found.', 'failed')
     }

@@ -125,8 +125,8 @@
           <mat-form-field appearance="outline">
             <mat-label>Paid Date</mat-label>
               <input matInput
-                  [matDatepicker]="pickerPaid"
-                  [(ngModel)]= "paidDate">
+                    [matDatepicker]="pickerPaid"
+                    [(ngModel)]= "paidDate">
             <mat-datepicker-toggle matSuffix [for]="pickerPaid"></mat-datepicker-toggle>
             <mat-datepicker #pickerPaid></mat-datepicker>
           </mat-form-field>
@@ -137,7 +137,7 @@
       <mat-divider></mat-divider>
 
       <div class="grid-container"
-          [formGroup]="inputForm"
+           [formGroup]="inputForm"
            *ngIf="inputForm">
         <div>
           <mat-form-field appearance="outline">

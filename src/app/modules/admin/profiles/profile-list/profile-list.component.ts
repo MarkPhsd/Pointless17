@@ -372,8 +372,10 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
               this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
             }
             if (data.results) {
+              console.log('data', data)
               let unique = [...new Set(data.results)];
-              let results  =  this.refreshImages(data.results)
+              console.log('unique', unique)
+              unique  =  this.refreshImages(unique)
               params.successCallback(unique)
             }
 

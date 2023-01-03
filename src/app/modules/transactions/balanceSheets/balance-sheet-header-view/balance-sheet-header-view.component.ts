@@ -65,7 +65,9 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
       this.ordersOpen = (data.count).toString()
       this.balanceSheetMethodsService.updateOpenOrders(data.count)
     })
+
     this.balanceSheetMethodsService.getOrderCount( this.sheet ).subscribe( data => {
+      console.log('get orders closed', data)
       this.ordersCount = (data.count).toString();
       this.balanceSheetMethodsService.updateOrderCount(data.count)
     })

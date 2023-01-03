@@ -29,7 +29,7 @@
     </div>
 
     <div *ngIf="closeDayValidation.openPrintedOrders && closeDayValidation.openPrintedOrders.length">
-      <mat-label>{{closeDayValidation.openPrintedOrders.length}} Remaining Prepared Orders Unpaid </mat-label>
+      <mat-label>{{closeDayValidation.openPrintedOrders.length}} Orders With Items Unpaid </mat-label>
       <div class="grid-buttons">
         <div *ngFor="let item of closeDayValidation.openPrintedOrders">
           <button mat-raised-button color="warn" (click)="setOrder(item.id)">

@@ -55,6 +55,7 @@ export interface TransactionUISettings {
   payPalCurrency        : string;
   creditCardFee         : string;
   updateInventoryOnScan : boolean;
+  giftCardLength        : number;
 }
 
 export interface StripeAPISettings {

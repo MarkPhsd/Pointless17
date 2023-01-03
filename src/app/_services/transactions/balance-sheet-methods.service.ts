@@ -159,34 +159,41 @@ export class BalanceSheetMethodsService {
     return deviceName;
   }
 
-  updateSheet(inputForm: FormGroup, startShiftInt: number) {
+  updateSheet(inputForm: FormGroup, startShiftInt: number): Observable<any> {
     const site = this.sitesService.getAssignedSite();
     if (inputForm.valid) {
+
       const sheet  = inputForm.value
       if (sheet.shiftStarted  != 1) {
         sheet.shiftStarted = startShiftInt;
       }
-      this.sheetService.putSheet(site, sheet).subscribe(
-        {next: data => {
+      console.table (sheet)
+      return this.sheetService.putSheet(site, sheet).pipe(
+        switchMap(
+          data => {
             this.updateBalanceSheet(data)
-            this.notify('Sheet saved.', 'Succes')
-          },
-          error : (err) => {
+            // this.notify('Sheet saved.', 'Succes')
+            return of(data)
+          }),
+          catchError(err => {
             this.notify('Sheet not saved.' + err, 'Failure')
+            return of(err)
           }
-        }
+        )
       )
     }
   }
 
-  closeSheet(sheet: IBalanceSheet) {
-      if (sheet) {
+  closeSheet(sheet: IBalanceSheet): Observable<any> {
+    if (sheet) {
       const site = this.sitesService.getAssignedSite();
-      this.sheetService.closeShift(site, sheet).subscribe(data=> {
-        this.updateBalanceSheet(data)
-        this.router.navigateByUrl('/app-main-menu')
-        this.notify('Sheet is closed.', 'Succes')
-      })
+      return  this.sheetService.closeShift(site, sheet).pipe(
+        switchMap( data => {
+          this.updateBalanceSheet(data)
+          this.router.navigateByUrl('/login')
+          return of(data)
+          // this.notify('Sheet is closed.', 'Succes')
+      }))
     }
   }
 

@@ -18,6 +18,7 @@ export class ItemSalesCardComponent implements OnChanges {
   @Input() zrunID   : string;
   @Input() groupBy  : string;
   @Input() reportName: string;
+  @Input() removeGiftCard= true;
   sales$:  Observable<IReportItemSaleSummary>;
   showAll: boolean;
 
@@ -45,6 +46,10 @@ export class ItemSalesCardComponent implements OnChanges {
     if (this.groupBy === 'type') {
       searchModel.groupByType = true;
     }
+    if (this.removeGiftCard) { 
+
+    }
+    searchModel.removeGiftCards = this.removeGiftCard
     searchModel.startDate = this.dateFrom;
     searchModel.endDate = this.dateTo;
     searchModel.zrunID = this.zrunID;

@@ -27,6 +27,7 @@ export class MatToggleSelectorComponent implements OnChanges {
   @Input()  mouseOver         : boolean;
   @Input()  fieldName         = 'name'
   @Input()  materialIcons     = false;
+  @Input()  toggleStyleHeight = '450px'
   @Input()  toggleHeight      ='toggle-buttons-height-size-medium'
   @Input()  useMatMenu        : boolean;
   @Input()  toggleVertical    = true;
@@ -55,12 +56,16 @@ export class MatToggleSelectorComponent implements OnChanges {
 
     if (this.toggleButtonClass) { this.toggleButtonClass = 'toggle-button'}
 
-    if (this.list$) {
-      this.list$.subscribe(data => {
-        this.subscribed = true
-        this.list = this.sortList(data)
-      })
-      return
+    try {
+      if (this.list$) {
+        this.list$.subscribe(data => {
+          this.subscribed = true
+          this.list = this.sortList(data)
+        })
+        return
+      }
+    } catch (error) {
+
     }
 
     if (this.list && this.list.length>0) {

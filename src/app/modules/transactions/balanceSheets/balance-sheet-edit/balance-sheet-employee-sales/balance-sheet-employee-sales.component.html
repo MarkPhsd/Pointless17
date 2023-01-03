@@ -1,0 +1,18 @@
+
+<div *ngIf="(action$ |async) as sheet">
+
+  <div class="grid">
+    <div>Employee</div>
+    <div class="calculation">Sales</div>
+    <div class="calculation">#</div>
+  </div>
+
+  <div *ngFor="let item of sheet">
+    <div class="grid">
+      <div>{{item?.employeeName}}</div>
+      <div class="calculation">{{item?.totalSale | currency}}</div>
+      <div class="calculation">{{item?.count}}</div>
+    </div>
+  </div>
+
+</div>

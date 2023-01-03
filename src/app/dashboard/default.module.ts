@@ -344,6 +344,16 @@ import { BlogPostSortComponent } from '../modules/admin/blogEditor/blog-post-sor
 import { PosOrderItemListComponent } from '../modules/posorders/pos-order/pos-order-item-list/pos-order-item-list.component';
 import { PrintTemplateComponent } from '../modules/admin/settings/printing/reciept-pop-up/print-template/print-template.component';
 import { PrintTemplatePopUpComponent } from '../modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
+import { DxReportDesignerModule, DxReportViewerModule } from 'devexpress-reporting-angular';
+import { DevxReportDesignerComponent } from '../modules/admin/devx-reporting/devx-report-designer/devx-report-designer.component';
+import { ReportViewerComponent } from '../modules/admin/devx-reporting/report-viewer/report-viewer.component';
+import { JobTypesEditComponent } from '../modules/admin/clients/jobs/job-types-edit/job-types-edit.component';
+import { JobTypesListComponent } from '../modules/admin/clients/jobs/job-types-list/job-types-list.component';
+import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/balanceSheets/balance-sheet-edit/balance-sheet-employee-sales/balance-sheet-employee-sales.component';
+import { EmployeeClockEditComponent } from '../modules/admin/employeeClockAdmin/employee-clock-edit/employee-clock-edit.component';
+import { EmployeeClockFilterComponent } from '../modules/admin/employeeClockAdmin/employee-clock-filter/employee-clock-filter.component';
+import { EmployeeClockListComponent } from '../modules/admin/employeeClockAdmin/employee-clock-list/employee-clock-list.component';
+import { ClockBreaksTypesComponent } from '../modules/admin/employeeClockAdmin/clock-breaks-types/clock-breaks-types.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -397,15 +407,26 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     AdminDisplayMenuComponent,
     AdminDisplayMenuSelctorComponent,
 
+    BalanceSheetEmployeeSalesComponent,
+
     BlogListEditComponent,
     BlogPostEditComponent,
     BlogPostSortComponent,
 
+    EmployeeClockEditComponent,
+    EmployeeClockListComponent,
+    EmployeeClockFilterComponent,
+    
     ClientTypeListComponent,
     ClientTypeEditComponent,
     CompanyEditComponent,
+
+    ClockBreaksTypesComponent,
     CSVImportComponent,
     DatabaseSchemaComponent,
+
+    DevxReportDesignerComponent,
+    ReportViewerComponent,
 
     ManifestEditorHeaderComponent,
     ManifestsComponent,
@@ -451,7 +472,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
     StoreCreditEditorComponent,
     StoreCreditListComponent,
-    
+
     PrintTemplatePopUpComponent,
     PrintTemplateComponent,
     ///end admin
@@ -488,6 +509,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     FunctionGroupEditComponent,
     FunctionGroupButtonEditComponent,
     HTMLEditPrintingComponent,
+
+    JobTypesEditComponent,
+    JobTypesListComponent,
 
     // ItemTypeCategoryAssignmentComponent,
     // ItemTypeDisplayAssignmentComponent,
@@ -721,6 +745,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       BrowserAnimationsModule,
       CommonModule,
       CdkTableModule,
+      DxReportViewerModule,
+      DxReportDesignerModule,
       FlexLayoutModule,
       FormsModule,
       HammerModule,

@@ -42,8 +42,6 @@ export class RequestMessagesComponent implements OnInit {
             delay(seconds * 10)),
         ),
         catchError((err: any) => {
-          // return of(null);
-          // return null
           return throwError(err);
         })
       )
@@ -105,7 +103,6 @@ export class RequestMessagesComponent implements OnInit {
         return of(data)
       })
     )
-
   }
 
   addMenuItem(message) {
@@ -113,7 +110,6 @@ export class RequestMessagesComponent implements OnInit {
     message.archived = !message.archived;
     this.message$ = this.requestMessageService.saveMessage(site, message).pipe(
       switchMap(data => {
-        // this.forceRefreshMessage();
         return of(data)
       })
     )
@@ -124,7 +120,6 @@ export class RequestMessagesComponent implements OnInit {
     message.archived = !message.archived;
     this.message$ = this.requestMessageService.saveMessage(site, message).pipe(
       switchMap(data => {
-        // this.forceRefreshMessage();
         return of(data)
       })
     )

@@ -38,10 +38,10 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   //search with debounce: also requires AfterViewInit()
   // @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
- 
+
   _order: Subscription;
   order: IPOSOrder;
-  
+
   get platForm()         {  return Capacitor.getPlatform(); }
   get PaginationPageSize(): number {return this.pageSize;  }
   // get gridAPI(): GridApi {  return this.gridApi;  }
@@ -194,11 +194,11 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       flex: 2,
       // minWidth: 100,
     };
-    
+
     let  columnDefs =  [];
 
     let column = {
-          headerName: 'ID',     field: 'id',         
+          headerName: 'ID',     field: 'id',
           sortable: true,
           width   : 100,
           minWidth: 100,
@@ -208,7 +208,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     columnDefs.push(column);
 
-    let textColumn = {headerName: 'Name',   field: 'productName', 
+    let textColumn = {headerName: 'Name',   field: 'productName',
               sortable: true,
               width   : 225,
               minWidth: 225,
@@ -216,7 +216,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     columnDefs.push(textColumn);
 
-    let nextColumn =  {headerName: 'Quantity',     field: 'quantity', 
+    let nextColumn =  {headerName: 'Quantity',     field: 'quantity',
           sortable: true,
           width   : 100,
           minWidth: 100,
@@ -315,7 +315,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
 
     // console.log(this.order.posOrderItems);
 
-    if (!this.order || !this.order.posOrderItems)   { 
+    if (!this.order || !this.order.posOrderItems)   {
       console.log('exiting')
       return
     }
@@ -328,7 +328,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
 
     params.api.setDatasource(datasource);
     this.autoSizeAll(true)
-    this.gridApi = params.api 
+    this.gridApi = params.api
     if (!this.gridApi) { return }
 
   }
@@ -350,7 +350,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   cellValueChanged(event) {
     console.log(event.column)
     const colName = event?.column?.colId
-    
+
     console.log(colName)
     console.log(event.data)
     const item = event.data as PosOrderItem
@@ -362,7 +362,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       item.quantity = event.value;
     }
     if (colName === 'wholeSale') {
-      item.wholeSale = event.wholeSale;
+      item.wholeSale = event.value
     }
 
     this.action$ = this.updateValues(item)
@@ -372,7 +372,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     const site = this.siteService.getAssignedSite();
     return this.posOrderItemService.changeItemValues(site, item ).pipe(
       switchMap(data => {
-        if (data) { 
+        if (data) {
           this.orderService.updateOrderSubscription(data)
           return of(data)
         }

@@ -35,8 +35,8 @@ export class ClientTypeEditComponent implements OnInit {
     private siteService             : SitesService,
     private snack                   : MatSnackBar,
     private awsBucket               : AWSBucketService,
-    public fbClientTypesService    : FbClientTypesService,
-    public userAuthService         : UserAuthorizationService,
+    public fbClientTypesService     : FbClientTypesService,
+    public userAuthService          : UserAuthorizationService,
     private dialogRef: MatDialogRef<ClientTypeEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
 

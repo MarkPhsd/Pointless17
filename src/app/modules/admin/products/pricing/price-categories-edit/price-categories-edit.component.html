@@ -180,7 +180,7 @@
                         class="grid-price-time-container">
                     <div  *ngIf="showMore"
                           class=" grid-multiprice-container">
-
+<!--
                       <div   *ngIf="showMore">
                         <mat-form-field appearance="outline" class="prices-fields">
                           <mat-label >price1</mat-label>
@@ -286,7 +286,7 @@
                                 formControlName="price10"
                                 class="form-control" >
                         </mat-form-field>
-                      </div>
+                      </div> -->
 
                     </div>
 
@@ -601,10 +601,11 @@
                     </span>
                   </div>
 
-                  <div *ngIf="(showModifiers || ( priceCategory?.productPrices[i]?.priceType != 0 &&
+                  <div *ngIf="priceCategory?.productPrices != undefined &&
+                              (showModifiers || ( priceCategory?.productPrices[i]?.priceType != 0 &&
                                                   priceCategory?.productPrices[i]?.priceType != undefined )
                                                   ) &&
-                                                 priceModifierOptions as list ">
+                              priceModifierOptions as list ">
                     <mat-form-field class="category-list" appearance="outline">
                       <mat-label>Modiifer Option</mat-label>
                       <mat-select

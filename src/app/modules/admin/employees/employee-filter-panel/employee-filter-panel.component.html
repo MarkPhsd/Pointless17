@@ -4,6 +4,7 @@
     <button mat-button (click)="newEmployee()">New <mat-icon>add</mat-icon></button>
     <button mat-button (click)="resetSearch()">Reset <mat-icon>refresh</mat-icon></button>
     <button mat-button (click)="clientTypesList()">Authorizations <mat-icon>settings</mat-icon></button>
+    <button mat-button (click)="jobTypeList()">Job Types <mat-icon>settings</mat-icon></button>
 
     <div class="grid-item">
       <search-debounce-input
@@ -32,6 +33,7 @@
 
     <div class="toggle-selector-employee">
       <app-mat-toggle-selector
+              [toggleDimensions] = "'toggle-buttons-height-size-tall'"
               [id]      ="searchModel?.jobTypeID"
               [list$]   ="jobTypes$"
               (outPutID)="setJobType($event)">

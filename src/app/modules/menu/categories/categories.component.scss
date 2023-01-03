@@ -107,6 +107,13 @@ mat-card {
   overflow: hidden;
 }
 
+.grid-item-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 75px;
+}
+
 img {
   width: 15vh;
   height: 15vh;

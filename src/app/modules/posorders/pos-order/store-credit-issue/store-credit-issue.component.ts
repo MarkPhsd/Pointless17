@@ -100,12 +100,11 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
   }
 
   setResults(event) {
-
     console.log('setResults', event)
-
     if (event) {
       const cardNum = event?.cardNum
       this.initStoreCreditItem(null, cardNum)
+      this.storeCreditMethodService.updateSearchModel(event)
     }
   }
 

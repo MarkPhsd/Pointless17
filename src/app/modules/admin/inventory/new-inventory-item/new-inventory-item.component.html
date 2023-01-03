@@ -62,7 +62,7 @@
               </mat-slide-toggle>
             </div>
 
-            <div >
+            <div>
               <mat-slide-toggle
                       class="price-values"
                       formGroupName  ="requiresAttention"
@@ -70,7 +70,22 @@
                       <mat-label>Requires Attention</mat-label>
               </mat-slide-toggle>
             </div>
+            <div *ngIf="(locations$ | async) as locations">
+              <mat-form-field appearance="outline">
+                <mat-label>Locations</mat-label>
+                <mat-select
+                            type="text"
+                            (selectionChange)="setLocation($event)"
+                            formControlName="locationID" >
+                    <mat-option [value]=0>All</mat-option>
+                    <mat-option *ngFor="let item of locations"
+                                [value]="item.id">
+                      {{ item.name }}
+                    </mat-option>
 
+                </mat-select>
+              </mat-form-field>
+            </div>
           </div>
         </div>
       </div>

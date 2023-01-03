@@ -5,11 +5,11 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { IUser } from 'src/app/_interfaces';
 import { AppInitService } from './app-init.service';
 import { PlatformService } from './platform.service';
-import { OrdersService } from '..';
 import { ToolBarUIService } from './tool-bar-ui.service';
 import { LoginComponent } from 'src/app/modules/login';
 import { SitesService} from 'src/app/_services/reporting/sites.service';
 import { MatDialog } from '@angular/material/dialog';
+import { IUserAuth_Properties } from '../people/client-type.service';
 
 export interface IUserExists {
   id:           number;
@@ -44,14 +44,27 @@ export class AuthenticationService {
     private _user               = new BehaviorSubject<IUser>(null);
     public  user$               = this._user.asObservable();
 
+
     private _userx              = new BehaviorSubject<IUser>(null);
     public  userx$              = this._userx.asObservable();
 
+    userAuths           : IUserAuth_Properties;  
+    _userAuths           = new BehaviorSubject<IUserAuth_Properties>(null);
+    public  userAuths$   = this._userAuths.asObservable();
+  
+    updateUserAuths(userAuths : IUserAuth_Properties ) {
+      this._userAuths.next(userAuths)
+      if (userAuths) { 
+        localStorage.setItem('userAuth', JSON.stringify(userAuths));
+      }
+    }
+  
     updateUser(user: IUser) {
       this._user.next(user)
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
       }
+      this.siteSerivce._user.next(user)
     }
 
     updateUserX(user: IUser) {
@@ -67,25 +80,29 @@ export class AuthenticationService {
         private toolbarUIService : ToolBarUIService,
         private siteSerivce      : SitesService,
         private dialog           : MatDialog,
+  
     ) {
 
       this.apiUrl = this.appInitService.apiBaseUrl()
       const userx = JSON.parse(JSON.parse(localStorage.getItem('userx'))) as IUser;
       const user  = JSON.parse(localStorage.getItem('user')) as IUser;
+
+      const userAuth = JSON.parse(localStorage.getItem('userAuth'));
+      this.updateUserAuths(userAuth)
       this.updateUser(user);
       this.updateUserX(userx)
     }
 
     public get userValue(): IUser {
-      if (!this._user || !this._user.value) {
+      if (!this._user.value) {
         const item = localStorage.getItem('user');
-        if (!item) {
-          return this._user.value;
-        }
         if (item) {
           const nextUser =  JSON.parse(item)
-          this.updateUser(nextUser);
+          this._user.next(nextUser)
           return nextUser
+        }
+        if (!item) {
+          return null
         }
       }
       return this._user.value;
@@ -102,8 +119,6 @@ export class AuthenticationService {
       } catch (error) {
         console.log('error', error)
       }
-
-      // console.log('this.user no Value', this.userValue)
       return false
     }
 
@@ -176,6 +191,7 @@ export class AuthenticationService {
       localStorage.removeItem("ami21");
       localStorage.removeItem('user');
       localStorage.removeItem('userx');
+      localStorage.removeItem('userAuth')
       // localStorage.removeItem('site')
       localStorage.removeItem('orderSubscription');
       // localStorage.removeItem('loginAction')

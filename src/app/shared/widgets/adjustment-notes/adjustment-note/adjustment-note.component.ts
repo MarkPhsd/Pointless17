@@ -76,17 +76,20 @@ export class InventoryAdjustmentNoteComponent implements OnInit {
       inv.packageCountRemaining =  this.f.get('packageCountRemaining').value
       if (inv.unitMulitplier == 0) { inv.unitMulitplier = 1}
       inv.baseQuantityRemaining = inv.packageCountRemaining * inv.unitMulitplier;
+      inv.packageQuantity = inv.packageCountRemaining;
       const d = new Date();
       inv.adjustmentDate = d.toISOString()
 
       if (this.inventoryAssignment) {
-        this.inventoryAssignmentService.editInventory(site, this.id, inv).subscribe(data => {
+
+        this.inventoryAssignmentService.reconcileInventory(site, this.id, inv).subscribe(data => {
           this.notifyEvent(`updated`, `Success` )
           this.onCancel();
         }, error => {
           this.notifyEvent(`Update failed ${error}`, `Failure` )
           this.inventoryAssignment = inv
         })
+
       }
       this.initForm()
     }

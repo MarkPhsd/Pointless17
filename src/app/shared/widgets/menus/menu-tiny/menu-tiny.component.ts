@@ -54,6 +54,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
           return
         }
         this.user = user;
+        console.log('menu tiny user changed')
         this.refreshMenu(user)
       }
     )
@@ -75,10 +76,10 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     this.site  =  this.siteService.getAssignedSite();
 
     this.refreshToolBarType();
-    if (this.siteService.phoneDevice) { 
+    if (this.siteService.phoneDevice) {
       this.submenuposition = 'submenu-position-tiny'
     }
-    if (!this.siteService.phoneDevice) { 
+    if (!this.siteService.phoneDevice) {
       this.submenuposition = 'submenu-position'
     }
 
@@ -140,12 +141,20 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
   initMenu() {
 
-    this.initMenus()
+    this.initMenus();
+
     const user = this.authenticationService.userValue;
     this.user  = user;
 
-    if (!user || !user.token) {return}
-    if (!user.roles) {return}
+    // console.log('init Menu', user);
+
+    if (!user || !user.token) {
+      // console.log('no user or token', user)
+      return}
+    if (!user.roles) {
+      // console.log('no roles', user)
+      return}
+
     const site       = this.siteService.getAssignedSite();
     const menuCheck$ = this.menusService.mainMenuExists(site);
 
@@ -153,18 +162,20 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
       menuCheck$.pipe(
         switchMap( data => {
             if (user.roles === 'admin' || (!data ||  !data.result)) {
+              // console.log('creating menu')
               return  this.menusService.createMainMenu(user , site)
             }
             if (user) {
+              // console.log('getting menu')
               return  this.menusService.getMainMenu(site)
             }
           }
         )
-
       ).subscribe(
         {next: data => {
+          // console.log('menu data', data)
           if (!user.roles) {return}
-          
+
           if (user.roles === 'admin' ) {
             if (!data) {  return }
             const menuGroup = data as MenuGroup;
@@ -188,26 +199,32 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   }
 
   refreshMenu(user: IUser) {
+    this.initMenu();
 
-    this.initMenus()
-    
-    if (!user || !user.token) {return}
+    if (!user || !user.token) {
+      console.log('user', user)
+      return
+    }
     const site  = this.siteService.getAssignedSite();
     const menu$ = this.menusService.getMainMenu(site)
 
-    menu$.subscribe( data => {
-      if (!data) { return }
-      this.config = this.mergeConfig(this.options);
-      if (data)
-        data.filter( item => {
-          this.addItemToMenu(item, this.menus)
-        })
-        this.menus =  [...new Set(this.menus)]
-      }, err => {
-
+    menu$.subscribe(
+      {
+        next:  data => {
+          if (!data) { return }
+          this.config = this.mergeConfig(this.options);
+          if (data)
+            data.filter( item => {
+              this.addItemToMenu(item, this.menus)
+            })
+            this.menus =  [...new Set(this.menus)]
+          },
+        error: err => {
+          console.log('error', err)
+        }
       }
     )
-    
+
     this._barSize = this.toolbarUIService.barSize$.subscribe( data => {
       this.smallMenu = data;
     })

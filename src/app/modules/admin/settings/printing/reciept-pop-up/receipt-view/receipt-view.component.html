@@ -1,25 +1,28 @@
 <div *ngIf="(email$ | async) as email"></div>
 <div *ngIf="(printAction$ | async) as printAction"></div>
 
-<div *ngIf="(order$ | async) as order"></div>
+<div *ngIf="printView">
   <div *ngIf="(refreshView$ | async) as layout">
-
-    <div>
+    <div *ngIf="(order$ | async) as order">
+    <!-- {{order.id}} -->
       <div class="buttons-grid">
         <button  mat-button (click)="print()">
-          <span *ngIf="printerName"><mat-icon>print</mat-icon>{{printerName}}</span>
+          <span *ngIf="printerName">
+            <mat-icon>print</mat-icon>{{printerName}}
+          </span>
         </button>
-
+  
         <div *ngIf="!hideExit">
           <button mat-button (click)="exit()">
             <mat-icon>close</mat-icon> Exit
           </button>
         </div>
       </div>
+  
       <div class="buttons-grid">
         <button mat-button (click)="email()"><mat-icon>email</mat-icon>Email </button>
         <button mat-button (click)="convertToPDF()"><mat-icon>pdf</mat-icon> PDF </button>
-
+  
         <button mat-button
                 [disabled]="!order?.orderCode"
                 *ngIf="!isElectronApp"
@@ -27,22 +30,20 @@
             <mat-icon>link</mat-icon>Link
         </button>
       </div>
-
+  
       <div>
       </div>
-
+  
       <div class="mat-card-white">
-
         <ng-container>
           <ng-container [ngTemplateOutlet]="currentView"></ng-container>
         </ng-container>
       </div>
     </div>
-
   </div>
+</div>
 
 <ng-template #receipt>
-
   <div *ngIf="receiptLayoutSetting && ((headerText &&  itemsText) || order)"
        class="border-section">
     <app-receipt-layout #printsection
@@ -71,8 +72,6 @@
       [disableAuditButton]="true">
   </balance-sheet-view>
 </ng-template>
-
-
 
 <!-- receiptLayoutSetting   <br>{{ receiptLayoutSetting | json }}
   <br>

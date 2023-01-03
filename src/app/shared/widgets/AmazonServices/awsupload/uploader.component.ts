@@ -86,6 +86,12 @@ export class UploaderComponent implements OnInit {
 
       presign$.pipe(
         switchMap( data => {
+
+          if (data && !data?.preassignedURL) {
+            this.errorMessage = JSON.stringify(data)
+            return of(null)
+          }
+
           if (data.preassignedURL)
             return this.awsBucket.uploadFile(file,  data.preassignedURL)
           }
@@ -108,11 +114,19 @@ export class UploaderComponent implements OnInit {
     const presign$ = this.awsBucket.getPresignedURLObservable(file)
 
     this.upload$ = presign$.pipe(switchMap(data => {
-        if (!data || !data?.preassignedURL) {
+      console.log(data)
+
+      if (data && !data?.preassignedURL) {
+        this.errorMessage = JSON.stringify(data)
+        return of(null)
+      }
+
+      if (!data || !data?.preassignedURL) {
           this.notifyEvent(`Failed to get presigned url.`, 'Error')
           this.uploading = false;
           return of(null)
         }
+
         if (data?.preassignedURL) {
           return this.awsBucket.uploadFile(file,  data?.preassignedURL)
         }
@@ -124,8 +138,9 @@ export class UploaderComponent implements OnInit {
       return of(null)
     })
     ).pipe(switchMap( data => {
-          console.log(data)
+
           if (!data) {
+            console.log()
             this.notifyEvent(`Failed to upload.`, 'Error')
             this.uploading = false;
             return of('not uploaded')

@@ -33,6 +33,7 @@ interface IIsOnline {
 })
 
 export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
+  @ViewChild('clockInOut')      clockInOut: TemplateRef<any>;
   @ViewChild('userActions')       userActions: TemplateRef<any>;
   @ViewChild('floorPlanTemplate') floorPlanTemplate: TemplateRef<any>;
   @Output() outPutToggleSideBar:      EventEmitter<any> = new EventEmitter();
@@ -260,6 +261,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
         return of(data)
       })
     )
+  }
+
+
+  get isClockInOutOn() {
+    if (this.isUserStaff)  {
+      return this.clockInOut
+    }
+    return null;
   }
 
   initUIService() {

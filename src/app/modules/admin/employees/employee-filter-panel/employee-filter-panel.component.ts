@@ -73,7 +73,7 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
     //Add 'implements OnDestroy' to the class.
     if (this._searchModel)     {this._searchModel.unsubscribe()}
     if (this._currentEmployee) {this._currentEmployee.unsubscribe()}
-    
+
   }
 
   constructor(
@@ -101,6 +101,10 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
 
   clientTypesList() {
     this.router.navigate(['client-type-list'])
+  }
+
+  jobTypeList() {
+    this.router.navigate(['job-type-list'])
   }
 
   async initSearchForm() {

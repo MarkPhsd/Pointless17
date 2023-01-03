@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject, TemplateRef} from '@angular/core';
+import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject, TemplateRef, ComponentFactoryResolver} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of, switchMap} from 'rxjs';
 import { FormBuilder,  FormGroup, Validators } from '@angular/forms';
@@ -9,7 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSort } from '@angular/material/sort';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
+import { IPrinterLocation, PrinterLocationsService, IPrinterLocationRO } from 'src/app/_services/menu/printer-locations.service';
 import { IItemBasic } from 'src/app/_services';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 
@@ -41,8 +41,11 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
   imgName: string;
   location = {} as IPrinterLocation;
 
-  columnsToDisplay = ['id', 'name', 'printer', 'templateID', 'address', 'edit'];
+  columnsToDisplay = ['id', 'name', 'printer', 'templateName', 'address', 'edit'];
+
   receiptList$    :  Observable<IItemBasic[]>;
+  receiptList     : IItemBasic[];
+
   constructor(
             private _snackBar: MatSnackBar,
             private fb: FormBuilder,
@@ -53,12 +56,27 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
   {  }
 
   ngOnInit(): void {
-    const site = this.siteService.getAssignedSite()
     this.metrcEnabled = true
     this.pageSize = 10
     this.initForm()
-    this.refreshTable();
-    this.receiptList$     =  this.settingService.getReceipts(site);
+    this.receiptList$ = this.refreshAll();
+  }
+
+  refreshAll() {
+    const receiptList$ = this.getReceiptList();
+    return  receiptList$.pipe(
+      switchMap( data => {
+        return this.getLocations()
+      }
+    ))
+  }
+
+  getReceiptList() {
+    const site         = this.siteService.getAssignedSite()
+    return this.settingService.getReceipts(site).pipe(switchMap(data => {
+      this.receiptList = data;
+      return of(data)
+    }))
   }
 
   ngAfterViewInit(){
@@ -74,20 +92,43 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
     this.ccsSite = {} as ISite;
   };
 
-  getLocations() {
-      return this.printerLocationsService.getLocations().pipe(
+  getLocations(): Observable<IPrinterLocation[]> {
+      const item$ = this.printerLocationsService.getLocations().pipe(
       switchMap(data => {
+          let list = data as IPrinterLocationRO[];
           this.pageSize = 10
           this.length = data.length
           this.pageSizeOptions = [5, 10]
-          this.dataSource = new MatTableDataSource(data)
+
+          list.forEach(item => {
+            item.templateName = this.getTemplateName(item)
+            console.log(item.templateName);
+            return item
+          })
+
+          this.dataSource = new MatTableDataSource(list)
           if (this.dataSource) {
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
           }
-        return of('')
+        return of(data)
         }
       ));
+      return item$
+  }
+
+  getTemplateName(item: IPrinterLocationRO) {
+    let receiptName = ''
+    if (this.receiptList) {
+      this.receiptList.forEach( receipt => {
+        console.log('item', item.templateID, receipt.name,  receipt.id)
+        if (item.templateID === receipt.id) {
+          receiptName = receipt.name
+          return receipt.name;
+        }
+      })
+    }
+    return receiptName
   }
 
   editItem(id:number) {
@@ -97,7 +138,6 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
   get  isElectronPrintingDesignTemplate() {
     return this.electronPrintingDesignTemplate
   }
-
 
   initForm() {
     this.locationForm = this.fb.group({
@@ -150,7 +190,7 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
     this.initForm()
   }
 
- delete() {
+  delete() {
     const result = window.confirm('Are you sure you want to delete this item?')
     if (!result) { return }
     if (this.location) {
@@ -169,13 +209,12 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
     const data = this.locationForm.value
     if (data) {
         if (!data.id) { return }
-        this.notifyEvent(`Data ${data.name}`, `Data` )
+        // this.notifyEvent(`Data ${data.name}`, `Data` )
         data.imgName = this.imgName
         this.action$ = this.printerLocationsService.updateLocation( data.id, data).pipe(
           switchMap(data => {
-          this.notifyEvent(`Updated`, `Success` )
-          this.refreshTable();
-          return this.getLocations()
+            this.receiptList$ = this.refreshAll()
+            return this.refreshAll()
           })
         )
       }
