@@ -54,7 +54,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
           return
         }
         this.user = user;
-        console.log('menu tiny user changed')
+        // console.log('menu tiny user changed')
         this.refreshMenu(user)
       }
     )

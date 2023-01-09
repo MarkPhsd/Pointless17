@@ -1,5 +1,4 @@
 <mat-card *ngIf="order">
-
   <mat-card-subtitle>
     <app-order-header
       [mainPanel]="mainPanel"
@@ -8,15 +7,15 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-    <div class="transaction-data">
-      <div>
-        <app-order-total
-          [mainPanel]="mainPanel"
-          [purchaseOrderEnabled]="purchaseOrderEnabled"
-          [order]="order">
-        </app-order-total>
-      </div>
+    <!-- <div class="transaction-data"> -->
+    <div>
+      <app-order-total
+        [mainPanel]="mainPanel"
+        [purchaseOrderEnabled]="purchaseOrderEnabled"
+        [order]="order">
+      </app-order-total>
     </div>
+    <!-- </div> -->
   </mat-card-content>
 
 </mat-card>

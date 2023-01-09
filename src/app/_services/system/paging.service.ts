@@ -7,10 +7,11 @@ export interface SearchModel {
   pageCount:             number;
   recordCount:           number;
   currentPage:           number;
-  lastPag:               number;
+  lastPage:               number;
   isLastPage:            number;
   isFirstPage:           number;
   loadChildren     :     boolean;
+  id: number;
 }
 
 export interface IPagedList {

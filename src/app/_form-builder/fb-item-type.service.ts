@@ -16,6 +16,7 @@ export class FbItemTypeService {
       type:                 [''],
       useType:              ['', Validators.required],
       useGroupID:           ['', Validators.required],
+      unitName:             [''],
       weightedItem:         [''],
       expirationRequired:   [''],
       labelRequired:        [''],
@@ -40,7 +41,7 @@ export class FbItemTypeService {
       packagingMaterial   : [''],
       portionValue        : [''],
       enableCustomNote    : [''],
-      wicEBT              : [''],
+      wicebt              : [''],
       requireWholeNumber  : [''],
     })
     return inputForm

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input , EventEmitter, Output, ViewChild, ElementRef, AfterViewInit, } from '@angular/core';
-import {  ISite, ProductPrice,  } from 'src/app/_interfaces';
+import {  IProduct, ISite, ProductPrice,  } from 'src/app/_interfaces';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, filter,tap } from 'rxjs/operators';
-import { Observable, Subject ,fromEvent } from 'rxjs';
+import { Observable, Subject ,fromEvent, of } from 'rxjs';
 import { ActivatedRoute,  } from '@angular/router';
 import { SearchModel } from 'src/app/_services/system/paging.service';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
@@ -17,6 +17,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
 
   @Input() productPrice       : ProductPrice;
+  @Input() product            : IProduct;
   unitType$                   : Observable<UnitType[]>;
   unitTypes                   : UnitType[]
   @Input()  index             : number;
@@ -44,7 +45,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
     debounceTime(225),
     distinctUntilChanged(),
     switchMap(searchPhrase =>
-        this.searchList(searchPhrase)
+       this.searchList(searchPhrase)
     )
   )
 
@@ -52,6 +53,27 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
     const site  = this.siteService.getAssignedSite();
     const model = this.initSearchModel(searchPhrase)
     return this.unitTypesService.getUnitTypesSearch(site, model)
+  }
+
+  ngAfterViewInit() {
+    fromEvent(this.input.nativeElement,'keyup')
+      .pipe(
+          filter(Boolean),
+          debounceTime(225),
+          distinctUntilChanged(),
+          tap((event:KeyboardEvent) => {
+            const search  = this.input.nativeElement.value
+            this.refreshSearch(search);
+          })
+      )
+    .subscribe();
+  }
+
+  getField() {
+    let field = ""
+    if (this.product) { field ="searchField"  }
+    if (!this.product) { field ="searchField"  }
+    return field;
   }
 
   constructor(  private unitTypesService : UnitTypesService,
@@ -62,112 +84,103 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
 
     this.site = this.siteService.getAssignedSite();
     this.searchForm = this.fb.group({
-      searchField: [],
+      searchField: []
     })
     this.formfieldValue = this.fb.group({
       unitTypeID: []
     })
   }
 
-  async init() {
-
+  init() {
     if (this.inputForm) {
-      if (this.id) {
-        const model   = this.initModel(this.id)
-        const site    = this.siteService.getAssignedSite();
-        const results$ = this.unitTypesService.getBasicTypes(site, model)
-        results$.subscribe (data => {
-          const items = data.results
-          if (items) {
-            this.searchForm = this.fb.group({
-              searchField   : [items[0]],
-            })
-          }
-        })
+      const field = this.getField()
+
+      if (this.inputForm.controls[field]?.value) {
+        const value = this.inputForm.controls[field].value;
+        this.id = value;
       }
     }
   }
 
-  async ngOnInit() {
-    this.init()
+  initForm() {
+    this.searchForm = this.fb.group({
+      searchField: [],
+    })
   }
 
-  ngAfterViewInit() {
-    this.init()
-    if (this.searchForm && this.input) {
-      try {
-        fromEvent(this.input.nativeElement,'keyup')
-        .pipe(
-            filter(Boolean),
-            debounceTime(250),
-            distinctUntilChanged(),
-            tap((event:KeyboardEvent) => {
-              const search  = this.input.nativeElement.value
-              this.refreshSearch(search);
-            })
-        )
-        .subscribe();
-      } catch (error) {
-        console.log(error)
-      }
-    }
+  ngOnInit() {
+    this.initForm();
+    this.init();
+    if (this.id) { this.getName(this.id)  }
   }
 
   refreshSearch(search: any){
-    if (search) {
-      this.searchPhrase.next( search )
-    }
+    if (search) {this.searchPhrase.next( search ) }
   }
 
   searchItems(name: string) {
-    if (!name) { return }
     this.searchPhrase.next(name);
   }
 
-  selectItem(item: any){
-    if (!item) { return }
-    // this.searchControl.setValue(item.id)
-    const data = {unitTypeID: item.id, index: this.index, unitName: item.name, unitType: item }
-    this.itemSelect.emit(item)
+  onChange(selected: any) {
+    const item = selected.option.value;
+    if (item) {
+      this.selectItem(item)
+      this.item = item
+      if (!item || !item.name){
+        return ''
+      }  else {
+        return item.name
+      }
+    }
   }
 
-  assignItem() {
-    const value =this.searchControl.value
-    this.productPrice.unitTypeID = value;
-    //emit item to parent.
+  selectItem(item){
+    if (!item) {return}
 
-    this.itemSelect.emit({productPrice: this.productPrice, index: this.index })
-  }
+    let unit = {} as any;
 
-
-  displayFn(item) {
-
-    if (!item) { return }
-
-    if (this.productPrice) {
-      this.productPrice.unitTypeID = item.id;
-      this.productPrice.unitType = item.name;
+    if (this.product) {
+      unit = { unitTypeID : item.id }
+      this.inputForm.patchValue(  unit  )
     }
 
-    if (this.outputType === 'priceLine') {
-      const data = {unitTypeID: item.id, index: this.index, unitName: item.name, unitType: item }
-      console.log('output', data)
-      this.itemSelect.emit(data)
-      return
+    if (!this.product) {
+      // const data = {unitTypeID: item.id, index: this.index, unitName: item.name, unitType: item }
+      // this.itemSelect.emit(data)
+      // item = { unitTypeID : item.id }
+      // this.inputForm.patchValue(  unit  )
+      // console.log('select item', item)
+      if (this.productPrice) {
+        this.productPrice.unitTypeID = item.id;
+        this.productPrice.unitType = item.name;
+      }
+
+      if (this.outputType === 'priceLine') {
+        const data = {unitTypeID: item.id, index: this.index, unitName: item.name, unitType: item }
+        this.itemSelect.emit(data)
+
+        const value =  { searchField: item.name  }
+        this.searchForm.patchValue( value )
+        return
+      }
+
+      return;
     }
 
-    this.itemSelect.emit(item)
-
+    const value =  { searchField: item.name  }
+    this.searchForm.patchValue( value )
   }
 
-  async  getName(id: number): Promise<any> {
-    if (!id) {return null}
-    if (id == 0) {return null}
-    if (id == undefined) {return null}
+  getName(id: number) {
+    if (!id)             {return null}
     const site  = this.siteService.getAssignedSite();
     if(site) {
-      const  item =  await this.unitTypesService.get(site, id).pipe().toPromise();
-      return item
+      this.unitTypesService.get(site, id).subscribe(data => {
+        this.item = data;
+        const price =  { searchField: data.name  }
+        this.searchForm.patchValue( price )
+      })
     }
   }
 
@@ -183,8 +196,132 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
     const model = {} as SearchModel
     model.pageSize    = 100;
     model.currentPage = 1;
+    model.id = id;
     return model;
   }
 
 }
 
+  // selectItem(item: any){
+  //   if (!item) { return }
+  //   const data = {unitTypeID: item.id, index: this.index, unitName: item.name, unitType: item }
+  //   this.itemSelect.emit(item)
+  // }
+
+
+// assignItem() {
+//   const value =this.searchControl.value
+//   if (this.productPrice && value) {
+//     this.productPrice.unitTypeID = value;
+//     this.itemSelect.emit({productPrice: this.productPrice, index: this.index })
+//   }
+
+//   if (this.product && value) {
+//     this.product.unitTypeID = value;
+//     this.inputForm.patchValue({unitTypeID: value})
+//     this.itemSelect.emit({unitTypeID: value, index: this.index })
+//   }
+// }
+
+  // async  getName(id: number): Promise<any> {
+  //   if (!id) {return null}
+  //   if (id == 0) {return null}
+  //   if (id == undefined) {return null}
+  //   const site  = this.siteService.getAssignedSite();
+  //   if(site) {
+  //     const  item =  await this.unitTypesService.get(site, id).pipe().toPromise();
+  //     return item
+  //   }
+  // }
+// init() {
+  //   if (this.inputForm && this.id) {
+  //     let model = this.initSearchModel(null)
+  //     if (this.product) {
+  //       model = this.initModel(this.id)
+  //     }
+
+  //     console.log(model)
+
+  //     const site     = this.siteService.getAssignedSite();
+  //     this.results$ = this.unitTypesService.getBasicTypes(site, model).pipe(
+  //       switchMap(data => {
+  //         const items  = data.results
+  //         if (items) {
+
+  //           if (this.product) {
+  //             this.searchForm = this.fb.group({
+  //               searchField   : [items[0].name],
+  //             })
+  //           }
+
+  //           if (!this.product) {
+  //             this.searchForm = this.fb.group({
+  //               searchField   : [items[0].name],
+  //             })
+  //           }
+  //           return of(data)
+  //         }
+  //       })
+  //     )
+  //   }
+  // }
+
+  // ngAfterViewInit() {
+
+  //   if (!this.searchForm || !this.input) {
+  //     console.log('not ready')
+  //   }
+  //   if (this.searchForm && this.input) {
+  //     console.log('ready')
+  //     try {
+  //       fromEvent(this.input.nativeElement, 'keyup')
+  //       .pipe(
+  //           filter(Boolean),
+  //           debounceTime(250),
+  //           distinctUntilChanged(),
+  //           tap((event:KeyboardEvent) => {
+  //             const search  = this.input.nativeElement.value
+  //             console.log('after view init refresh search', search)
+  //             this.refreshSearch(search);
+  //           })
+  //       )
+  //       .subscribe();
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //   }
+  // }
+
+
+  // displayFn(item) {
+  //   if (!item) { return }
+  //   console.log('selection', item)
+  //   // this.searchForm = this.fb.group({
+  //   //   searchField: [item]
+  //   // })
+
+  //   return
+
+  //   this.formfieldValue.patchValue({unitTypeID: item.id})
+
+  //   if (this.productPrice) {
+  //     this.productPrice.unitTypeID = item.id;
+  //     this.productPrice.unitType = item.name;
+  //   }
+
+  //   if (this.outputType === 'priceLine') {
+  //     const data = {unitTypeID: item.id, index: this.index, unitName: item.name, unitType: item }
+  //     this.itemSelect.emit(data)
+  //     return
+  //   }
+
+  //   if (this.product && item) {
+
+  //     this.formfieldValue.patchValue({unitTypeID: item.id})
+  //     this.itemSelect.emit({unitTypeID: item.id})
+  //     return
+  //   }
+
+  //   this.itemSelect.emit(item)
+
+  // }

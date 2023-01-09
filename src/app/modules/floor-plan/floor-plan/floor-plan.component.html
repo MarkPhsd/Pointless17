@@ -1,21 +1,25 @@
+<div *ngIf="(floorPlanRefresh$ | async) as floorPlanRefresh"></div>
 <div class="panel">
-  
+
   <button  class="button" *ngIf="isAdmin" mat-raised-button (click)="toggleUserMode()">Admin</button>
   <button  class="button" *ngIf="isAdmin" mat-raised-button (click)="refreshPlans()"><mat-icon>refresh</mat-icon></button>
-  
+
   <button class="button" *ngIf="isAdmin && !userMode && floorPlan" mat-raised-button (click)="backup()"><mat-icon>backup</mat-icon>Backup</button>
   <button class="button" *ngIf="isAdmin && !userMode && floorPlan" mat-raised-button (click)="restore()"><mat-icon>restore</mat-icon>Restore</button>
-  
+
   <button class="button" *ngIf="isAdmin && !userMode" mat-raised-button (click)="newFloorPlan()"><mat-icon>add</mat-icon></button>
   <button class="button" *ngIf="isAdmin && !userMode  && floorPlan" mat-raised-button (click)="displayImage = !displayImage"><mat-icon>image</mat-icon></button>
   <button class="button" *ngIf="isAdmin && !userMode && floorPlan" mat-raised-button (click)="deleteFloorPlan()"><mat-icon>delete</mat-icon></button>
+
   <span *ngIf="(floorPlans$ | async) as floorPlans">
     <span *ngFor="let item of floorPlans">
       <button class="button" mat-raised-button (click)="_getFloorPlan(item)">{{item?.name}}</button>
     </span>
   </span>
+  <button class="button"  mat-raised-button (click)="refreshPlans()"><mat-icon>refresh</mat-icon></button>
+
   <button class="button" *ngIf="!userMode && isAdmin" mat-raised-button (click)="clearPlan()">Clear</button>
-  <button class="button" *ngIf="!userMode && isAdmin" mat-raised-button (click)="outPutJSONFull()">JSON</button>
+  <!-- <button class="button" *ngIf="!userMode && isAdmin" mat-raised-button (click)="outPutJSONFull()">JSON</button> -->
 
   <span *ngIf="saving">
     <mat-icon>save</mat-icon>
@@ -23,8 +27,8 @@
 
   <span>
     <zoom-floor-plan (zoomChange)="onZoom($event)" [zoom]="zoomDefault"></zoom-floor-plan>
-  </span> 
- 
+  </span>
+
 </div>
 
 <div *ngIf="isAdmin && displayImage && floorPlan">
@@ -37,7 +41,7 @@
 </div>
 
 <div *ngIf="(backupRestore$ | async)">
-  
+
 </div>
 
 <div *ngIf="!displayImage || loading">
@@ -49,14 +53,14 @@
       [_floorPlan]     = "_floorPlan"
       [_zoom]          = "_zoom"
       [_newOrder]      = '_newOrder'
-      
+
       [changeObjectColor] = 'changeObjectColor'
-      [_setTableInfo]  = '_setTableInfo'
+      [_setTableInfo]     = '_setTableInfo'
       [_performOperations]="_performOperations"
-      (setTable)       = 'setTable($event)'
-      (getFloorPlan)   = "getFloorPlan($event)"
-      (setOrder)       = "setOrder($event)"
-      (saveFloorPlan)  = "saveFloorPlanfromOrder($event)"
+      (setTable)          = 'setTable($event)'
+      (getFloorPlan)      = "getFloorPlan($event)"
+      (setOrder)          = "setOrder($event)"
+      (saveFloorPlan)     = "saveFloorPlanfromOrder($event)"
     >
   </pointless-room-layout-designer>
 </div>

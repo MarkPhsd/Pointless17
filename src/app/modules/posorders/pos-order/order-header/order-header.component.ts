@@ -34,6 +34,7 @@ export class OrderHeaderComponent implements OnInit  {
 
   ngOnInit() {
     this.href = this.router.url;
+    this.hidePrint = false;
     if (this.href.substring(0, '/pos-payment'.length ) === '/pos-payment') {
       this.hidePrint = true;
       return;

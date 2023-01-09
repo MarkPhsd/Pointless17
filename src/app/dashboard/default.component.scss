@@ -71,7 +71,6 @@ mat-sidebar {
   background-color:rgb(55, 55, 59);
 }
 
-
 .mat-orderBar {
   min-width: 200px !important;
   max-width: 200px;
@@ -89,9 +88,6 @@ mat-sidebar {
   box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
   overflow: hidden;
   width: 355px;
-  // max-width: 355px;
-  // min-width: 355px;
-  // width    : 355px;
   @include for-phone-only  {
     width: 55px;
     box-shadow: 3px 0 3px rgba(0,0,0,.24);

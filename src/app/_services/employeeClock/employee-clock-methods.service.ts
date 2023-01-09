@@ -22,24 +22,24 @@ export class EmployeeClockMethodsService {
     private userAuthorizationService: UserAuthorizationService,
   ) { }
 
-  getUserOnClock(site: ISite, user: IUser): Observable<any> { 
+  getUserOnClock(site: ISite, user: IUser): Observable<any> {
     return this.employeeClockService.isOnClock(site, user.employeeID).pipe(
-      switchMap(data => { 
-        console.log('get user on clock ')
-        this.clock = data;  
+      switchMap(data => {
+        // console.log('get user on clock ')
+        this.clock = data;
         this.getUserOnBreak(data)
         return of(data)
     }));
   }
 
-  getUserOnBreak(clock: EmployeeClock) { 
+  getUserOnBreak(clock: EmployeeClock) {
 
     const site = this.siteService.getAssignedSite()
     const user = this.userAuthorizationService.user;
-    
+
     this.isOnBreak = false;
     this.break = this.employeeClockService._isOnBreak(site, user, clock)
-    if (this.break) { 
+    if (this.break) {
       this.isOnBreak = true;
     }
     return false;

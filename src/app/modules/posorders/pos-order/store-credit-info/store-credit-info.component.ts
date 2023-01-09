@@ -59,16 +59,20 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
     try {
       this._search       = this.storeCreditMethodService.searchModel$.subscribe(data => {
         this.search      = data;
+        console.log('data store credit', data)
         if (!data) {
           this.search              = null;
           this.storeCreditSearch$  = null;
         }
         this.clientID = this.order?.clientID
-        console.log('set observable 1 from store credit', this.clientID, this.order?.clientID)
-        console.log('this.storeCreditValue', this.storeCreditValue)
-        if ((this.clientID != this.order?.clientID) || !this.storeCreditValue)  { 
+        // console.log('set observable 1 from store credit', this.clientID, this.order?.clientID)
+        // console.log('this.storeCreditValue', this.storeCreditValue)
+        if ((this.clientID != this.order?.clientID) || !this.storeCreditValue)  {
           this.setObservable(data)
+        } else {
+          this.setObservable(null)
         }
+
       })
     } catch (error) {
 
@@ -98,8 +102,8 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
         if (data) {
           this.order = data
           this.clientID = this.order.clientID; //this.order.clientID
-          // if (this.clientID != this.order.clientID) { 
-            console.log('update search model from store credit')
+          // if (this.clientID != this.order.clientID) {
+            // console.log('update search model from store credit')
             this.storeCreditMethodService.updateSearchModel(this.search)
           // }
         }
@@ -123,9 +127,9 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
     private dialogRef: MatDialogRef<StoreCreditInfoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
 
-  ) { 
-    console.log('search Model', this.searchModel)
-    console.log('ngOnInit with search', this.search)
+  ) {
+    // console.log('search Model', this.searchModel)
+    // console.log('ngOnInit with search', this.search)
   }
 
   ngOnInit(): void {
@@ -157,9 +161,9 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
     const i = 0;
   }
 
-  applyStoreCreditObs(site, search) { 
+  applyStoreCreditObs(site, search) {
     return this.storeCreditService.search(site, search).pipe(
-      switchMap(data =>  { 
+      switchMap(data =>  {
           this.storeCreditValue = data;
           return of(data)
         }
@@ -229,7 +233,7 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
             this.orderMethodService.updatePOSIssuePurchaseItem(this.posIssuePurchaseItem);
             return of(data)
           }
-        )).pipe(switchMap(data => { 
+        )).pipe(switchMap(data => {
           return this.orderService.getOrder(site, this.order.id.toString(), false)
         })).pipe(switchMap( data => {
           this.orderService.updateOrderSubscription(data)
@@ -285,7 +289,7 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
               return of(null)
             }
           }
-          ),  
+          ),
             catchError((e) => {
               this.matSnack.open('Make Payment failed: ' + e.toString(), 'Alert')
               return of(null)
@@ -297,7 +301,7 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
             this.orderService.updateOrderSubscriptionLoginAction(this.order);
             this.closeDialog.emit(true)
             return of(data)
-          }),  
+          }),
           catchError((e) => {
             this.matSnack.open('Update store credit failed: ' + e.toString(), 'Alert')
             return of(null)
@@ -307,7 +311,7 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
     }
   }
 
-  initSearches() { 
+  initSearches() {
     this.search = null;
     this.searchModel = null;
     this.clientID = 0;
@@ -330,7 +334,7 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
       this.orderMethodService.cancelItem(item.id, false)
       this.closeDialog.emit(true)
     }
-    if (!item) { 
+    if (!item) {
       this.closeDialog.emit(true)
     }
     this.dialogRef.close()

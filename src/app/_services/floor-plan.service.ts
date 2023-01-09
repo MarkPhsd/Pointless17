@@ -46,9 +46,17 @@ export class FloorPlanService {
 
   }
 
+  replaceJSONText(template: any) {
+    template = JSON.stringify(template) as string
+    template = template.replace(/(^"|"$)/g, '');
+    template = template.replaceAll('\\', '');
+    return template
+  }
+
+
   saveBackup(site: ISite, item: IFloorPlan ) {
-    
-    if (!item.template) { 
+
+    if (!item.template) {
       return of('no template to save');
     }
 
@@ -211,7 +219,7 @@ export class FloorPlanService {
 
     return  this.http.get<any>(url)
   }
-  
+
   alterObjectColor(uuID: string, color: string, view: any) {
     if (view) {
       // console.log(view)
@@ -223,7 +231,7 @@ export class FloorPlanService {
               const itemValue = data?.name.split(";")
               // console.log(data?.name, uuID);
               // console.log('itemValue', itemValue)
-              if (itemValue.length>0){ 
+              if (itemValue.length>0){
                 const itemUUID = itemValue[0];
                 if (uuID === itemUUID ) {
                       // console.log('itemValue', itemValue)

@@ -228,4 +228,55 @@ export interface IUnitTypePaged {
   specialDatePrice: number;
   startDate:        string;
   endDate:          string;
+  gramPrice       : number;
+  halfPrice       : number;
+  quarterPrice    : number;
+  ouncePrice      : number;
+  eightPrice      : number;
+}
+
+export interface ProductPrice {
+  id:               number;
+  priceCategoryID:  number;
+  retail:           number;
+  wholeSale:        number;
+  unitTypeID:       number;
+  unitType:         UnitType;
+  price1:           number;
+  price2:           number;
+  price3:           number;
+  price4:           number;
+  price5:           number;
+  price6:           number;
+  price7:           number;
+  price8:           number;
+  price9:           number;
+  price10:          number;
+  hideFromMenu:     number;
+  useforInventory:  number;
+  pizzaMultiplier:  number;
+  unitPartRatio:    number;
+  partMultiplyer:   number;
+  doNotDelete:      number;
+  pizzaSize:        number;
+  priceType:        number;
+  barcode:          string;
+  itemQuantity:     number;
+  productID:        number;
+  tierPriceGroup:   number;
+  timeBasedPrice:   number;
+  uid:              string;
+  weekDays:         string;
+  endTime:          string;
+  startTime:        string;
+  webEnabled:       number;
+  specialDatePrice: number;
+  startDate:        string;
+  endDate:          string;
+  priceTiers:       PriceTiers;
+  gramPrice       : number;
+  halfPrice       : number;
+  quarterPrice    : number;
+  ouncePrice      : number;
+  eightPrice      : number;
 }

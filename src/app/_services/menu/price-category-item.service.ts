@@ -51,6 +51,7 @@ export class PriceCategoryItemService {
 
   savePriceList(site: ISite,  items: ProductPrice2[]): Observable<any> {
 
+    console.log('savePriceList items', items)
     const controller ="/ProductPrices/"
 
     const endPoint = `POSTProductPriceList`

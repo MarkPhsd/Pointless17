@@ -128,7 +128,7 @@ export class PriceCategoriesEditComponent implements OnInit {
       this.inputForm = this.fbPriceCategory.initForm(this.inputForm);
       this.inputForm.patchValue(this.priceCategory)
       if (!priceCategory.productPrices) { return }
-      this.addItems(this.inputForm, this.priceCategory.productPrices, 'productPrices')
+      this.addItems(this.inputForm, priceCategory.productPrices, 'productPrices')
     }
   }
 
@@ -232,7 +232,6 @@ export class PriceCategoriesEditComponent implements OnInit {
   }
 
   searchSize(i: number) {
-
     if (i > this.toggleSearchSize.length) {
       this.toggleSearchSize = [] as boolean[]
       this.priceCategory.productPrices.forEach( i => {
@@ -245,17 +244,23 @@ export class PriceCategoriesEditComponent implements OnInit {
 
   updateCategory(item): Observable<any> {
     if (!this.inputForm.valid) {
-      console.log('update category')
+      console.log('update category failed')
       return
     }
     const priceCategory = this.inputForm.value;
-    this.updatePriceCategory(priceCategory)
-
+    this.itemAction$ = this.updatePriceCategory(priceCategory)
   };
 
-  updatePriceCategory(priceCategory: PriceCategories) {
+  updateCategoryFromObject(category: PriceCategories) {
+    this.itemAction$ = this.updatePriceCategory(category)
+  }
 
-    if (!priceCategory) {return }
+  updatePriceCategory(priceCategory: PriceCategories): Observable<PriceCategories> {
+
+    if (!priceCategory) {
+      console.log('update category failed')
+      return
+    }
     this.saving = true;
 
     let  price2 = {} as IPriceCategory2
@@ -263,17 +268,18 @@ export class PriceCategoriesEditComponent implements OnInit {
     price2.uid = priceCategory.uid
     price2.name = priceCategory.name
     const site = this.siteService.getAssignedSite()
-    const result$ = this.priceCategoryService.save(site, price2)
 
-    const items$ = result$.pipe(
+    const result$ = this.priceCategoryService.save(site, price2)
+    const prices$ = this.saveAllItems(priceCategory.productPrices)
+
+    return result$.pipe(
       switchMap( data => {
-        this.priceCategory = data;
-        return this.saveAllItems()
+        console.log('priceCategory about to save', priceCategory)
+        return prices$
       })).pipe(
         switchMap(data => {
-          this.refreshData_Sub(this.priceCategory);
           this.saving = false
-          const priceCategory$ = this.priceCategoryService.getPriceCategory(site,this.priceCategory.id)
+          const priceCategory$ = this.priceCategoryService.getPriceCategory(site, this.priceCategory.id)
           return priceCategory$
         }
       )).pipe(
@@ -282,19 +288,17 @@ export class PriceCategoriesEditComponent implements OnInit {
           this.refreshData_Sub(data)
           return of(data)
         })
-      )
-    ;
+      );
 
-    this.itemAction$ = items$
   }
 
-  saveAllItems(): Observable<ProductPrice2> {
-    let pricing = this.inputForm.controls['productPrices'] as FormArray;
-    if (pricing) {
+  saveAllItems(prices :ProductPrice[]): Observable<ProductPrice2[]> {
+    if (prices) {
+      let pricelist = prices as ProductPrice2[];
       const site  = this.siteService.getAssignedSite();
-      const items =  pricing.value  as ProductPrice[];
-      return this.priceCategoryItemService.savePriceList(site, items)
+      return this.priceCategoryItemService.savePriceList(site, pricelist)
     }
+    return of(null)
   }
 
   openAddSize() {
@@ -308,15 +312,15 @@ export class PriceCategoriesEditComponent implements OnInit {
   }
 
   updateCategoryExit(item) {
-    const category  = item.value as PriceCategories;
-    this.itemAction$ = this.updateCategory(category).pipe(
+    const category  = this.inputForm.value
+    this.itemAction$ = this.updatePriceCategory(category).pipe(
       switchMap( data => {
           this.notifyEvent('Items saved', 'Success')
           this.onCancel(null)
           return of(data)
         }
       )
-    );
+    )
   }
 
   onCancel(event) {
@@ -374,53 +378,50 @@ export class PriceCategoriesEditComponent implements OnInit {
     return  this.fbPriceCategory.addPriceArray()
   }
 
-  assignItem(data) {
-    if (data) {
-      const unitTypeID = data.unitTypeID
-      let index        = data.index;
-      const unitName   = data.unitName
-      const unitType   = data.unitType;
+  assignItem(event) {
+    const unitTypeID = event.unitTypeID
+    let index        = event.index;
+    const unitName   = event.unitName
+    const unitType   = event.unitType;
 
-      if (data) {
-        let pricing = this.inputForm.controls['productPrices'] as FormArray;
+    let pricing = this.inputForm.controls['productPrices'] as FormArray;
 
-        let lines = pricing.value;
-        let line =  pricing.value[index] as ProductPrice;
+    let lines = pricing.value;
+    let line =  pricing.value[index] as ProductPrice;
 
-        console.log(line)
-        console.log(this.priceCategory.productPrices[index+1]);
-        console.log('prices length', this.priceCategory.productPrices.length)
+    line.unitType        = {} as UnitType;
+    line.unitType        = unitType;
+    line.unitTypeID      = unitType.id;
+    line.partMultiplyer  = unitType.itemMultiplier;
 
-        line.unitType        = {} as UnitType;
-        line.unitType        = unitType;
-        line.unitTypeID      = unitType.id;
-        line.partMultiplyer  = unitType.itemMultiplier;
+    this.priceCategory.productPrices[index] = line;
+    pricing.value[index] = line;
 
-        this.priceCategory.productPrices[index] = line;
+    // console.table(this.priceCategory.productPrices);
 
-        this.itemAction$ = this.updateCategory(this.priceCategory);
-        this.toggleSearchSize[this.toggle] = !this.toggleSearchSize[this.toggle];
-        return;
+    this.updateCategoryFromObject(this.priceCategory);
 
-        if (this.priceCategory.productPrices.length >= index -1) {
-          let newIndex = index
-          if (!this.priceCategory.productPrices[index]) {
-            newIndex =  this.priceCategory.productPrices.push(line)
-          }
-          if (unitType) {
-            this.priceCategory.productPrices[index].unitTypeID = data.unitTypeID;
-          }
-        }
+    this.toggleSearchSize[this.toggle] = !this.toggleSearchSize[this.toggle];
+    return;
 
-        return;
-        if (pricing && pricing.length>=index) {
-          pricing.at(index).patchValue(line)
-          pricing.at(index).patchValue({unitTypeID: unitTypeID})
-        }
-
-          this.toggleSearchSize[index] = !this.toggleSearchSize[index]
+    if (this.priceCategory.productPrices.length >= index -1) {
+      let newIndex = index
+      if (!this.priceCategory.productPrices[index]) {
+        newIndex =  this.priceCategory.productPrices.push(line)
+      }
+      if (unitType) {
+        this.priceCategory.productPrices[index].unitTypeID = unitTypeID;
       }
     }
+
+    return;
+    if (pricing && pricing.length>=index) {
+      pricing.at(index).patchValue(line)
+      pricing.at(index).patchValue({unitTypeID: unitTypeID})
+    }
+
+    this.toggleSearchSize[index] = !this.toggleSearchSize[index]
+
   }
 
 

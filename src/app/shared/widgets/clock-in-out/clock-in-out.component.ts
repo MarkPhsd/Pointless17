@@ -34,7 +34,7 @@ export class ClockInOutComponent implements OnInit {
   _clockRefresh$             : Observable<EmployeeClock>;
   clockRefresh$              : Subject<Observable<EmployeeClock>> = new Subject();
 
-  constructor(        
+  constructor(
                       private employeeClockMethodsService: EmployeeClockMethodsService,
                       private employeeClockService: EmployeeClockService,
                       private siteService: SitesService,
@@ -46,27 +46,27 @@ export class ClockInOutComponent implements OnInit {
     const i = 0;
     this.refresh();
 
-    if (this.displayOnly) { 
+    if (this.displayOnly) {
       // this.refreshTimer();
     }
   }
 
-  get displayResults() { 
-    if (this.displayOnly) { 
+  get displayResults() {
+    if (this.displayOnly) {
       return this.onDisplayOnly
     }
     return this.clockInOutEditor
   }
 
-  refresh() { 
-    console.log('refresh clock in')
+  refresh() {
+    // console.log('refresh clock in')
     const site = this.siteService.getAssignedSite()
     this.breaksList$ = this.employeeClockService.getBreakList(site)
     const user = this.userAuthorizationService.user;
     this.user = user;
     this.clock$  = this.employeeClockMethodsService.getUserOnClock(site, user).pipe(
-      switchMap(data => { 
-        if (!data) { 
+      switchMap(data => {
+        if (!data) {
           this.isOnBreak = false;
           this.clock = null;
           this.isOnClock = false;
@@ -75,13 +75,13 @@ export class ClockInOutComponent implements OnInit {
         this.isOnClock = true;
         this.clock = data;
         this.getUserOnBreak(data)
-        return of(data) 
+        return of(data)
     }))
   }
 
   // _clockRefresh$             : Observable<EmployeeClock>;
   // clockRefresh$              : Subject<Observable<EmployeeClock>> = new Subject();
-  refreshTimer() { 
+  refreshTimer() {
     // const user = this.userAuthorizationService.user
     // if (!user) { return }
     // if (user.roles === 'user') {return }
@@ -105,14 +105,14 @@ export class ClockInOutComponent implements OnInit {
     // );
   }
 
-  getClockIn(jobID : number) { 
+  getClockIn(jobID : number) {
     const site = this.siteService.getAssignedSite()
     const user = this.userAuthorizationService.user;
     this.user = user;
     this.breaksList$ = this.employeeClockService.getBreakList(site)
     return  this.employeeClockService.clockIn(site, user.employeeID, jobID ).pipe(
-      switchMap(data => { 
-        if (!data) { 
+      switchMap(data => {
+        if (!data) {
           this.isOnClock = false;
           return of(null)
         }
@@ -127,13 +127,13 @@ export class ClockInOutComponent implements OnInit {
     this.clock$ = this.getClockInObs()
   }
 
-  getClockInObs() { 
+  getClockInObs() {
     const site = this.siteService.getAssignedSite()
-    const employee$ = this.getEmployee() 
+    const employee$ = this.getEmployee()
     return employee$.pipe(
-      switchMap(data => { 
-        if (data) { 
-          if (!data?.jobTypeID) { 
+      switchMap(data => {
+        if (data) {
+          if (!data?.jobTypeID) {
             this.siteService.notify('No primary job assigned', 'Error', 2000);
             return of(null)
           }
@@ -141,10 +141,10 @@ export class ClockInOutComponent implements OnInit {
         }
         return of(null)
       })).pipe(
-        switchMap(data => { 
-          if (!data) { 
+        switchMap(data => {
+          if (!data) {
             this.isOnClock = false
-            return of(null) 
+            return of(null)
           }
           this.isOnClock = true;
           this.getUserOnBreak(data)
@@ -154,19 +154,19 @@ export class ClockInOutComponent implements OnInit {
       )
   }
 
-  clockOut() { 
+  clockOut() {
     const site = this.siteService.getAssignedSite()
-    const employee$ = this.getEmployee() 
+    const employee$ = this.getEmployee()
     this.clock$ = employee$.pipe(
-      switchMap(data => { 
-        if (data) { 
+      switchMap(data => {
+        if (data) {
           const clock$ = this.employeeClockService.clockOut(site, data.id)
           return clock$
         }
         return of(null)
       })).pipe(
-        switchMap(data => { 
-          if (!data) { 
+        switchMap(data => {
+          if (!data) {
             console.log('clock out')
             this.isOnClock = false;
             return of(null)
@@ -179,7 +179,7 @@ export class ClockInOutComponent implements OnInit {
     )
   }
 
-  getUserOnBreak(clock: EmployeeClock) { 
+  getUserOnBreak(clock: EmployeeClock) {
     this.isOnBreak = false
     this.employeeClockMethodsService.getUserOnBreak(clock);
     this.isOnBreak = this.employeeClockMethodsService.isOnBreak
@@ -187,20 +187,20 @@ export class ClockInOutComponent implements OnInit {
     return false;
   }
 
-  getEmployee() { 
+  getEmployee() {
     const site = this.siteService.getAssignedSite()
-    let user 
-    if (!this.user) { 
+    let user
+    if (!this.user) {
       this.user =  this.userAuthorizationService.user;
     }
     return this.employeeService.getEmployee(site, this.user?.employeeID)
   }
 
-  startBreak(item: IItemBasic) { 
+  startBreak(item: IItemBasic) {
     const site       = this.siteService.getAssignedSite()
     const employeeID = this.userAuthorizationService.user.employeeID;
     this.break$      = this.employeeClockService.startBreak(site, item.id, employeeID).pipe(
-      switchMap(data =>  { 
+      switchMap(data =>  {
         this.isOnBreak = true;
         this.siteService.notify('Break Started', 'Success', 1000)
         return of(data)
@@ -208,11 +208,11 @@ export class ClockInOutComponent implements OnInit {
     )
   }
 
-  endBreak() { 
+  endBreak() {
     const site       = this.siteService.getAssignedSite()
     const employeeID = this.userAuthorizationService.user.employeeID;
     this.break$      = this.employeeClockService.endBreak(site, employeeID).pipe(
-      switchMap(data => { 
+      switchMap(data => {
         this.isOnBreak = false
         this.siteService.notify('Break Completed', 'Success', 1000)
         return of(data)

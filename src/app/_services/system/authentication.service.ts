@@ -2,7 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient} from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { IUser } from 'src/app/_interfaces';
+import { IUser, UserPreferences } from 'src/app/_interfaces';
 import { AppInitService } from './app-init.service';
 import { PlatformService } from './platform.service';
 import { ToolBarUIService } from './tool-bar-ui.service';
@@ -10,6 +10,7 @@ import { LoginComponent } from 'src/app/modules/login';
 import { SitesService} from 'src/app/_services/reporting/sites.service';
 import { MatDialog } from '@angular/material/dialog';
 import { IUserAuth_Properties } from '../people/client-type.service';
+import { ThemesService } from './themes.service';
 
 export interface IUserExists {
   id:           number;
@@ -48,23 +49,27 @@ export class AuthenticationService {
     private _userx              = new BehaviorSubject<IUser>(null);
     public  userx$              = this._userx.asObservable();
 
-    userAuths           : IUserAuth_Properties;  
+    userAuths           : IUserAuth_Properties;
     _userAuths           = new BehaviorSubject<IUserAuth_Properties>(null);
     public  userAuths$   = this._userAuths.asObservable();
-  
+
     updateUserAuths(userAuths : IUserAuth_Properties ) {
       this._userAuths.next(userAuths)
-      if (userAuths) { 
+      if (userAuths) {
         localStorage.setItem('userAuth', JSON.stringify(userAuths));
       }
     }
-  
+
     updateUser(user: IUser) {
       this._user.next(user)
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
       }
       this.siteSerivce._user.next(user)
+    }
+
+    updatePreferences(preferences: UserPreferences) {
+      // this.themeService.setDarkLight(preferences.darkMode);
     }
 
     updateUserX(user: IUser) {
@@ -80,7 +85,6 @@ export class AuthenticationService {
         private toolbarUIService : ToolBarUIService,
         private siteSerivce      : SitesService,
         private dialog           : MatDialog,
-  
     ) {
 
       this.apiUrl = this.appInitService.apiBaseUrl()

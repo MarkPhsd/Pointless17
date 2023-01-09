@@ -50,12 +50,12 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
     .subscribe();
   }
 
-  get priceCategoryControl()  { 
+  get priceCategoryControl()  {
     const field = this.getField()
     return this.inputForm.get(field) as FormControl
   };
 
-  getField() { 
+  getField() {
     let field = ""
     if (this.isInventory) { field ="priceCategoryID"  }
     if (!this.isInventory) { field ="priceCategory"  }
@@ -72,7 +72,7 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
 
   }
 
-  async init() {
+  init() {
     if (this.inputForm) {
       const field = this.getField()
       this.id = this.inputForm.controls[field].value;
@@ -86,9 +86,7 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
   }
 
   ngOnInit() {
-    this.site = this.siteService.getAssignedSite();
     this.initForm();
-    
     this.init();
     if (this.id) { this.getName(this.id)  }
   }
@@ -99,25 +97,6 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
 
   searchItems(name: string) {
     this.searchPhrase.next(name);
-  }
-
-  selectItem(item){
-    if (!item) {return}
-    this.itemSelect.emit(item)
-
-    let price = {} as any;
-    if (this.isInventory) { 
-       price = { priceCategoryID : item.id }
-    }
-    if (!this.isInventory) { 
-       price = { priceCategory : item.id }
-    }
-
-    this.inputForm.patchValue(  price  )
-
-    const priceCat =  { priceCategoryLookup: item.name  }
-    this.searchForm.patchValue( priceCat )
-
   }
 
   onChange(selected: any) {
@@ -131,6 +110,24 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
         return item.name
       }
     }
+  }
+
+  selectItem(item){
+    if (!item) {return}
+    this.itemSelect.emit(item)
+
+    let price = {} as any;
+    if (this.isInventory) {
+       price = { priceCategoryID : item.id }
+    }
+    if (!this.isInventory) {
+       price = { priceCategory : item.id }
+    }
+
+    this.inputForm.patchValue(  price  )
+
+    const priceCat =  { priceCategoryLookup: item.name  }
+    this.searchForm.patchValue( priceCat )
   }
 
   getName(id: number) {

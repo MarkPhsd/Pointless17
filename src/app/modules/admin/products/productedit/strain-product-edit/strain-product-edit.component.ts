@@ -11,6 +11,7 @@ import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { switchMap } from 'rxjs/operators';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
 @Component({
   selector: 'app-strain-product-edit',
@@ -44,6 +45,7 @@ export class StrainProductEditComponent implements OnInit {
               private priceCategoryService: PriceCategoriesService,
               private siteService: SitesService,
               private fbProductsService: FbProductsService,
+              private productEditButtonService: ProductEditButtonService,
               private dialogRef: MatDialogRef<StrainProductEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any
     )
@@ -141,12 +143,27 @@ export class StrainProductEditComponent implements OnInit {
 
   }
 
+  openAddSize() {
+    this.productEditButtonService.openUnitTypeEditor(null)
+  }
+
+  assignItem(event) {
+    if (!event) { return }
+    if (!event.unitTypeID) {return}
+    const unitTypeID = event.unitTypeID
+    const unitName   = event.unitName
+    const unitType   = event.unitType;
+    this.product.unitTypeID = event.unitTypeID
+    this.productForm.patchValue({unitTypeID: unitTypeID})
+    console.log('this.productForm.value', this.productForm.value)
+    this.action$ = this.updateItem(null)
+  }
+
   updateItem(event) {
     const site = this.siteService.getAssignedSite()
     if (this.setValues())  {
       if (this.product.webProduct) { this.product.webProduct = -1     }
       if (!this.product.webProduct) {  this.product.webProduct = 0    }
-
       this.message = ""
       this.performingAction= true;
       const product$ = this.menuService.saveProduct(site, this.product);

@@ -3,39 +3,27 @@
 </div>
 
 <mat-drawer-container>
+
   <mat-drawer
         *ngIf    ="!menuManager"
         position ="start"
-        [class]  ="barType"
         [mode]   ="sidebarMode"
         [opened] ="leftSideBarToggle">
 
-     
-    <div    [hidden]="searchSideBar">
-      <div  [hidden]="toolbarTiny">
-        <app-menu-minimal>
-        </app-menu-minimal>
-      </div>
-
-      <div  [hidden]="!toolbarTiny" class="menu-tiny" >
-        <app-menu-tiny>
-        </app-menu-tiny>
-      </div>
+    <div [hidden]="searchSideBar" [class]="barType">
+      <ng-container [ngTemplateOutlet]="menuOrOrderBar"></ng-container>
     </div>
 
     <div [hidden]="!searchSideBar">
-      <app-menu-search-bar>
-      </app-menu-search-bar>
+      <ng-container [ngTemplateOutlet]="leftSideBar"></ng-container>
     </div>
 
-    <div *ngIf="chatURL">
-      <button mat-fab-button (click)="getHelp()"><mat-icon>chat</mat-icon></button>
-    </div>
+    <ng-container #chatURL></ng-container>
 
   </mat-drawer>
 
   <mat-drawer-content>
-    
+
     <div *ngIf="departmentID && departmentID !=0"
         class="overlay">
       <app-department-menu
@@ -45,18 +33,18 @@
 
     <div  [@routeAnimations]="prepareRoute(outlet)" >
       <router-outlet #outlet="outlet"></router-outlet>
-    </div>  
+    </div>
 
   </mat-drawer-content>
 
   <mat-drawer
-              position  ="end"
-              [mode]    ="sidebarMode"
-              [opened]  ="orderBarOpen"
-              [class]   ="matorderBar"
+              position  = "end"
+              [mode]    = "sidebarMode"
+              [opened]  = "orderBarOpen"
               >
-    <app-order-bar>
-    </app-order-bar>
+
+    <ng-container [ngTemplateOutlet]="rightSideBar"></ng-container>
+
   </mat-drawer>
 
 </mat-drawer-container>
@@ -74,3 +62,36 @@
     <app-three-cxfab></app-three-cxfab>
   </div>
 </div>
+
+<ng-template #appMenuSearchBar>
+  <div [class]  ="barType">
+    <app-menu-search-bar>
+    </app-menu-search-bar>
+  </div>
+</ng-template>
+
+<ng-template #menuBarView>
+  <div  [hidden]="toolbarTiny">
+    <app-menu-minimal>
+    </app-menu-minimal>
+  </div>
+  <div  [hidden]="!toolbarTiny" class="menu-tiny" >
+    <app-menu-tiny>
+    </app-menu-tiny>
+  </div>
+</ng-template>
+
+<ng-template #appOrderBar>
+  <div  [class]   = "matorderBar">
+    <app-order-bar>
+    </app-order-bar>
+  </div>
+</ng-template>
+
+<ng-template #chatUrl>
+  <div *ngIf="chatURL">
+    <button mat-fab-button (click)="getHelp()">
+      <mat-icon>chat</mat-icon>
+    </button>
+  </div>
+</ng-template>

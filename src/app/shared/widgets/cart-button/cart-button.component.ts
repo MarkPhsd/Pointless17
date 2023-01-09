@@ -6,6 +6,7 @@ import { Observable, of, Subject , Subscription, throwError, timer } from 'rxjs'
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { IUser } from 'src/app/_interfaces';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart-button',
@@ -41,6 +42,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   gridflow            = 'grid-flow';
   @Input() hideAddNewOrder     = false
 
+  href: string;
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -66,10 +68,12 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     public orderService:            OrdersService,
     private authenticationService : AuthenticationService,
     private toolbarServiceUI:       ToolBarUIService,
+    private router                : Router,
     ) {
    }
 
   ngOnInit(): void {
+    this.href = this.router.url
     this.initSubscriptions();
     this.initOrderBarSubscription();
     this.assignCurrentOrder();
@@ -224,7 +228,16 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     if (!this.refreshCurrentOrderCheck) {  this.assignCurrentOrder() }
   }
 
-  async toggleOpenOrderBar() {
+  toggleOpenOrderBar() {
+    //get url.
+    // console.log('this.href', '/currentorder;mainPanel=true'.length)
+    // console.log(this.router.url.length)
+    // console.log('is equal', this.router.url.substring(0, 28 ), '/currentorder;mainPanel=true')
+    if (this.router.url.substring(0, 28 ) === '/currentorder;mainPanel=true') {
+      this.openOrderBar = false // !this.openOrderBar
+      this.toolbarServiceUI.updateOrderBar(this.openOrderBar)
+      return;
+    }
     this.openOrderBar = !this.openOrderBar
     this.toolbarServiceUI.updateOrderBar(this.openOrderBar)
   }

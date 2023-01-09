@@ -17,7 +17,28 @@ h3, .h3 {
 
 .product-name {
   font-weight: 599;
+  font-size: 1.2em;
 }
+
+.index {
+  font-weight: 350;
+  font-size: 1.1em;
+}
+
+.quantity {
+  margin-left: 10px ;
+  font-size: 1.1em;
+  // background-color: bisque;
+  background-blend-mode: lighten;
+  // border: cadetblue;
+  // border-radius: 2px;
+  // border-width: 1px;
+  // border-style: solid;
+  // margin: 5px;
+  padding: 5px 5px 5px 5px;
+  width: 200px;
+}
+
 
 .product-name-alt {
   font-weight: 899;
@@ -151,7 +172,7 @@ font-style: italic;
   grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
 }
 
-.field-grid { 
+.field-grid {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -159,11 +180,11 @@ font-style: italic;
   row-gap: 10px;
 }
 
-.field-values { 
+.field-values {
   width: 100px;
 }
 
-.field-values-long { 
+.field-values-long {
   width: 200px;
 }
 
@@ -298,14 +319,6 @@ img {
   padding: 5px 5px 5px 5px;
 }
 
-.quantity {
-  background-color: bisque;
-  border: cadetblue;
-  border-radius: 2px;
-  border-style: solid;
-  margin: 5px;
-  padding: 5px 5px 5px 5px;
-}
 
 button {
   margin: 5px 5px;

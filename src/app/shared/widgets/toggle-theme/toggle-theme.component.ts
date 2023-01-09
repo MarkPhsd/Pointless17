@@ -1,4 +1,6 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 
 @Component({
   selector: 'app-toggle-theme',
@@ -8,7 +10,10 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 export class ToggleThemeComponent{
   toggleTheme              : string;
 
-  constructor(  private _renderer: Renderer2) {
+  constructor(
+    public userAuthorizationService: UserAuthorizationService,
+    private userSwitchingService : UserSwitchingService,
+    private _renderer: Renderer2) {
     this.renderTheme();
   }
 
@@ -32,5 +37,14 @@ export class ToggleThemeComponent{
     }
   }
 
+  get orderBarPref() {
+    return this.userAuthorizationService?.user?.userPreferences?.swapMenuOrderPlacement;
+  }
 
+  toggleBars() {
+    if (this.userAuthorizationService.user && this.userAuthorizationService.user.userPreferences) {
+      this.userAuthorizationService.user.userPreferences.swapMenuOrderPlacement  = !this.userAuthorizationService?.user?.userPreferences?.swapMenuOrderPlacement;
+      this.userSwitchingService.setUserInfo(this.userAuthorizationService.user, this.userAuthorizationService.user.password)
+    }
+  }
 }

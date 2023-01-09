@@ -1,8 +1,18 @@
-.button { 
+@import "/src/mixins.scss";
+
+.button {
   margin: 5px;
+  height: 75px;
+  width:  100px;
+  @include for-phone-only  {
+    margin: 5px;
+    height: 50px;
+    width:  75px;
+  }
 }
 
-.panel { 
+.panel {
   margin: 5px;
   overflow: auto;
 }
+

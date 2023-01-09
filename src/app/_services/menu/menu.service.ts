@@ -568,7 +568,7 @@ export class MenuService {
     const cacheTime = this.sitesService.getCurrentCache();
 
     let appCache =  JSON.parse(localStorage.getItem('appCache')) as any;
-    console.log('appCache getMenuItemsBySearchPaged', appCache);
+    // console.log('appCache getMenuItemsBySearchPaged', appCache);
 
     if (appCache) {
       if (appCache?.value && appCache?.boolean) {

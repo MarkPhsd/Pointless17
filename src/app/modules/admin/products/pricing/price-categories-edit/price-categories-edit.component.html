@@ -1,4 +1,8 @@
 <div *ngIf="(action$  | async) as action"></div>
+
+<div *ngIf="itemAction$ | async as item">
+</div>
+
 <mat-card>
   <mat-card-title *ngIf="priceCategory">
     <mat-icon>edit</mat-icon> {{priceCategory?.name}}
@@ -9,8 +13,7 @@
       <div *ngIf="priceCategory$ | async"></div>
       <mat-icon *ngIf="saving">save</mat-icon>
 
-      <div *ngIf="itemAction$ | async as item">
-      </div>
+
 
       <div *ngIf="actionMessage">
         {{actionMessage}} <button mat-button (click)="actionMessage = null"><mat-icon>clear</mat-icon></button>

@@ -19,6 +19,8 @@
       </div>
     </div>
 
+    <!-- mainPanel {{mainPanel}}
+    hidePrint {{hidePrint}} -->
     <div *ngIf="!mainPanel && !hidePrint">
       <div class="button-container">
         <button color="primary" mat-raised-button (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>

@@ -126,7 +126,7 @@
       <div *ngIf="!order.completionDate && !splitByItem && !paymentsEqualTotal && paymentIsReady &&  order?.balanceRemaining != 0">
         <div class="grid-header-item" *ngIf="stepSelection == 1">
           <div>
-            <mat-card *ngIf="order.wicTotal !=0 && order.ebtTotal != 0" >
+            <mat-card *ngIf="order.wicTotal !=0 || order.ebtTotal != 0" >
               <mat-card-content>
 
                 <span class="item-buttons-container"

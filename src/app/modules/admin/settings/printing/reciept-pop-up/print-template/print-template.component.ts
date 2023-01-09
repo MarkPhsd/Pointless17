@@ -92,7 +92,9 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
           this.templateID    = data.location.templateID;
           this.printerName   = data.location.printer;
           this.printOrder    = data;
-          // console.log(data)
+          console.log('init subscriptions  template data')
+          console.table(data.location)
+
           if (this.templateID) {
             return this.initStyles()
           }
@@ -159,6 +161,10 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
     const site = this.siteService.getAssignedSite();
     return this.printingService.appyStylesCachedObservable(site).pipe(switchMap(data => {
       this.receiptStyles = data ;
+      console.log('receipt style, data', data)
+      console.log('template ID', this.templateID)
+      //leave notifier
+      this.siteService.notify('no Template ID found for print out.', 'Alert', 1500)
       styles = data
       this.applyStyle(this.receiptStyles)
       return this.settingService.getSetting(site, this.templateID)

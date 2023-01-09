@@ -1,3 +1,6 @@
+import { ProductSearchModel } from "../search-models/product-search";
+import { IPOSOrderSearchModel } from "../transactions/posorder";
+
 export interface IUser {
     id: number;
     username: string;
@@ -18,5 +21,16 @@ export interface IUser {
     loginAttempts: number;
     message: string;
     errorMessage: string;
-    sortMenu: string;x
+    sortMenu: string;
+    prefrences: string;
+    userPreferences: UserPreferences;
 }
+
+export interface UserPreferences {
+  darkMode: boolean;
+  swapMenuOrderPlacement: boolean;
+  orderFilter: IPOSOrderSearchModel
+  product: ProductSearchModel;
+  //
+}
+

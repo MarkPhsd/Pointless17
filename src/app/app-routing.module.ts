@@ -361,6 +361,7 @@ const routes: Routes = [
 
     { path: '**', component: PageNotFoundComponent},
 
+    
     // { path: 'menu-board', component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},
     // { path: 'client-type-list', component: ClientTypeListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
     // { path: 'payments', component: DsiEMVPaymentComponent, data: { animation: 'isLeft'}},
@@ -373,9 +374,9 @@ const routes: Routes = [
 
 @NgModule({
   imports:[
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    // RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
     // RouterModule.forRoot(routes, { preloadingStrategy: QuicklinkStrategy })
-    // RouterModule.forRoot(routes, { enableTracing: true })
+    RouterModule.forRoot(routes, { enableTracing: true })
   ],
   // imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],

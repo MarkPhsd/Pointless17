@@ -112,42 +112,21 @@
                 </div>
                 <div *ngIf="itemType" class="grid-container-small">
                   <div>
-                  <app-price-category-select
-                      [itemType]        ="itemType"
-                      [priceCategoryID] ="product.priceCategory"
-                      [inputForm]       ="productForm" >
-                    </app-price-category-select>
+                    <ng-container [ngTemplateOutlet]="priceCategorySelector"></ng-container>
                   </div>
                </div>
             </div>
 
             <div>
                 <h4><mat-icon>design</mat-icon>Design / Layout</h4>
-                <div class="grid-item">
-                    <mat-label>Use material icons from fonts.google.com</mat-label>
-                    <div>
-                      <app-value-fields
-                        [inputForm]="productForm"
-                        [fieldName]="'icon'">
-                        Material Icon
-                      </app-value-fields>
-                  </div>
-                </div>
 
-                <div class="grid-item">
-                    <mat-label>Enter a negative value to show up at front, a large value to show at the end.</mat-label>
-                    <div>
-                      <app-value-fields
-                        [inputForm]="productForm"
-                        [fieldName]="'menuSort'">
-                        Sort Value
-                      </app-value-fields>
-                  </div>
-                </div>
+                <ng-container [ngTemplateOutlet]="icon"></ng-container>
+                <ng-container [ngTemplateOutlet]="menuSort"></ng-container>
 
                 <div class="header">
                   <h4><mat-icon>image</mat-icon>Images</h4>
                 </div>
+
                 <app-widget-uploader
                     [(fileNames)]="urlImageMain"
                     (messageOut) ="received_URLMainImage($event)"
@@ -167,30 +146,10 @@
                         itemType.type?.toLowerCase() === 'retail liquor' ||
                         itemType.type?.toLowerCase() === 'service liquor'   )">
 
-                <app-value-fields
-                  [inputForm]="productForm"
-                  [fieldName]="'countryOfOrigin'"
-                  >
-                  Country Of Origin
-                </app-value-fields>
-                <app-value-fields
-                  [inputForm]="productForm"
-                  [fieldName]="'proof'"
-                  >
-                  Proof
-                </app-value-fields>
-                <app-value-fields
-                  [inputForm]="productForm"
-                  [fieldName]="'yearsOld'"
-                  >
-                  Year Made
-                </app-value-fields>
-                <app-value-fields
-                  [inputForm]="productForm"
-                  [fieldName]="'abv'"
-                  >
-                  ABV
-                </app-value-fields>
+                <ng-container [ngTemplateOutlet]="countryOfOrigin"></ng-container>
+                <ng-container [ngTemplateOutlet]="proof"></ng-container>
+                <ng-container [ngTemplateOutlet]="yearsOld"></ng-container>
+                <ng-container [ngTemplateOutlet]="abv"></ng-container>
 
             </div>
 
@@ -199,43 +158,22 @@
                                                          itemType.type?.toLowerCase() === 'restaurant' ||
                                                          itemType.type?.toLowerCase() === 'food')">
 
-              <app-value-fields
-                [inputForm]="productForm"
-                [fieldName]="'countryOfOrigin'">
-                Country Of Origin
-              </app-value-fields>
+              <ng-container [ngTemplateOutlet]="countryOfOrigin"></ng-container>
 
               <div *ngIf="itemType && itemType.type">
-                <prompt-group-select
-                  [inputForm]="productForm"
-                ></prompt-group-select>
+                <ng-container [ngTemplateOutlet]="promptGroupSelector"></ng-container>
               </div>
 
             </div>
             <div *ngIf="itemType && itemType.useType && (itemType.type?.toLowerCase() === 'grocery' ||
                           itemType.type?.toLowerCase() === 'restaurant')">
 
-              <div  class="mat-toggle">
-                <mat-slide-toggle
-                    name="glutenFree"
-                    class="mat-label"
-                    formControlName="glutenFree">
-                  <mat-label class="mat-label">Gluten Free</mat-label>
-                </mat-slide-toggle>
-              </div>
+              <ng-container [ngTemplateOutlet]="gluetenFree"></ng-container>
 
             </div>
             <div *ngIf="itemType && itemType.name && ( itemType.type?.toLowerCase() === 'store credit' )">
-                  <app-value-fields
-                        [inputForm]="productForm"
-                        [fieldName]="'style'">
-                        Value
-                  </app-value-fields>
-                  <app-value-fields
-                      [inputForm]="productForm"
-                      [fieldName]="'productCount'">
-                    Count
-                  </app-value-fields>
+              <ng-container [ngTemplateOutlet]="style"></ng-container>
+              <ng-container [ngTemplateOutlet]="productCount"></ng-container>
             </div>
 
 
@@ -244,17 +182,12 @@
               <div class="header">
                 <mat-icon>coupon</mat-icon>
               </div>
-              <app-value-fields
-                    [inputForm]="productForm"
-                    [fieldName]="'style'">
-                    Value
-              </app-value-fields>
-              <app-value-fields
-                  [inputForm]="productForm"
-                  [fieldName]="'productCount'"
-                >
-                  Count
-              </app-value-fields>
+
+              <ng-container [ngTemplateOutlet]="style"></ng-container>
+              <ng-container [ngTemplateOutlet]="productCount"></ng-container>
+              <ng-container [ngTemplateOutlet]="reOrderAmount"></ng-container>
+              <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
+
             </div>
 
             <div *ngIf="itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'retail' )">
@@ -263,17 +196,10 @@
                 [inputForm]="productForm">
               </retail-product-edit>
 
-              <app-value-fields
-                [inputForm]="productForm"
-                [fieldName]="'countryOfOrigin'"
-                >
-                Country Of Origin
-              </app-value-fields>
+              <ng-container [ngTemplateOutlet]="countryOfOrigin"></ng-container>
 
               <div *ngIf="itemType && itemType.type">
-                <prompt-group-select
-                  [inputForm]="productForm"
-                ></prompt-group-select>
+                <ng-container [ngTemplateOutlet]="promptGroupSelector"></ng-container>
               </div>
 
             </div>
@@ -295,41 +221,161 @@
             <div *ngIf="itemType && itemType.useType &&  (
                         itemType.useType?.toLowerCase() == 'product'
                   )">
-
-              <app-value-fields
-                [inputForm]="productForm"
-                [fieldName]="'gramCount'"
-              >
-                Per Unit Quantity
-              </app-value-fields>
-              <app-value-fields
-                [inputForm]="productForm"
-                [fieldName]="'productCount'"
-              >
-                Count
-              </app-value-fields>
-
-              <app-value-fields
-                  [inputForm]="productForm"
-                  [fieldName]="'reOrderAmount'"
-                >
-                  Re-Order Amount
-                </app-value-fields>
-
-              <app-value-fields
-                  [inputForm]="productForm"
-                  [fieldName]="'reOrderLevel'"
-                >
-                  Re Order Level
-              </app-value-fields>
-
-
+              <ng-container [ngTemplateOutlet]="unitSelector"></ng-container>
+              <ng-container [ngTemplateOutlet]="gramCount"></ng-container>
+              <ng-container [ngTemplateOutlet]="productCount"></ng-container>
+              <ng-container [ngTemplateOutlet]="reOrderAmount"></ng-container>
+              <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
             </div>
-
           </div>
-
       </div>
-
     </div>
   </mat-card>
 </div>
+
+<ng-template #priceCategorySelector>
+  <app-price-category-select
+    [itemType]        ="itemType"
+    [priceCategoryID] ="product.priceCategory"
+    [inputForm]       ="productForm" >
+  </app-price-category-select>
+</ng-template>
+
+<ng-template #promptGroupSelector>
+  <prompt-group-select
+    [inputForm]="productForm"
+  ></prompt-group-select>
+</ng-template>
+
+<ng-template #gluetenFree>
+  <div  class="mat-toggle">
+    <mat-slide-toggle
+        name="glutenFree"
+        class="mat-label"
+        formControlName="glutenFree">
+      <mat-label class="mat-label">Gluten Free</mat-label>
+    </mat-slide-toggle>
+  </div>
+</ng-template>
+
+<ng-template #icon>
+    <div class="grid-item">
+      <mat-label>Use material icons from fonts.google.com</mat-label>
+      <div>
+        <app-value-fields
+          [inputForm]="productForm"
+          [fieldName]="'icon'">
+          Material Icon
+        </app-value-fields>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #menuSort>
+  <div class="grid-item">
+    <mat-label>Enter a negative value to show up at front, a large value to show at the end.</mat-label>
+    <div>
+      <app-value-fields
+        [inputForm]="productForm"
+        [fieldName]="'menuSort'">
+        Sort Value
+      </app-value-fields>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #proof>
+  <app-value-fields
+        [inputForm]="productForm"
+        [fieldName]="'proof'"
+        >
+    Proof
+  </app-value-fields>
+</ng-template>
+
+<ng-template #abv>
+  <app-value-fields
+      [inputForm]="productForm"
+      [fieldName]="'abv'"
+      >
+    ABV
+  </app-value-fields>
+</ng-template>
+
+<ng-template #yearsOld>
+  <app-value-fields
+    [inputForm]="productForm"
+    [fieldName]="'yearsOld'"
+    >
+    Year Made
+  </app-value-fields>
+</ng-template>
+
+<ng-template #style>
+  <app-value-fields
+    [inputForm]="productForm"
+    [fieldName]="'style'">
+    Value
+  </app-value-fields>
+</ng-template>
+
+<ng-template #countryOfOrigin>
+  <app-value-fields
+  [inputForm]="productForm"
+  [fieldName]="'countryOfOrigin'"
+  >
+  Country Of Origin
+  </app-value-fields>
+</ng-template>
+
+<ng-template #gramCount>
+  <app-value-fields
+        [inputForm]="productForm"
+        [fieldName]="'gramCount'"
+        >
+        Per Unit Quantity
+  </app-value-fields>
+</ng-template>
+
+<ng-template #productCount>
+  <app-value-fields
+      [inputForm]="productForm"
+      [fieldName]="'productCount'">
+    Count
+</app-value-fields>
+</ng-template>
+
+<ng-template #reOrderAmount>
+  <app-value-fields
+    [inputForm]="productForm"
+    [fieldName]="'reOrderAmount'"
+    >
+    Re-Order Amount
+  </app-value-fields>
+</ng-template>
+
+<ng-template #reOrderLevel>
+  <app-value-fields
+      [inputForm]="productForm"
+      [fieldName]="'reOrderLevel'">
+      Re Order Level
+  </app-value-fields>
+</ng-template>
+
+<ng-template #unitSelector>
+  <div class="grid-container-medium">
+    <div>
+      <unit-type-select
+        [inputForm]     = 'productForm'
+        [product]       = 'productForm.value'
+        [id]            = 'product.unitTypeID'
+        (itemSelect)    = 'assignItem($event)'>
+      </unit-type-select>
+    </div>
+    <div>
+      <button mat-button (click)="openAddSize()">
+        <mat-icon>expand</mat-icon>
+      </button>
+    </div>
+  </div>
+</ng-template>

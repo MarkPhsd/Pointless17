@@ -257,7 +257,7 @@ export class MenusService {
 
       const url = `${site.url}${controller}${endPoint}${parameters}`
 
-      console.log('url', url);
+      // console.log('url', url);
 
       return this.http.get<AccordionMenu[]>(url)
 

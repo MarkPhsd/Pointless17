@@ -1,24 +1,27 @@
 <div  class="mat-form-field"
       [formGroup]="searchForm">
+
   <mat-form-field class="formFieldClass"
                   appearance="outline"
-                  fxFlexFill >
+                   >
 
     <mat-label class="form-background">
       <mat-icon>search</mat-icon>Unit Type Lookup {{index}}
     </mat-label>
+
     <input
             #input
-            type="text"
-            class="input-field"
-            placeholder="Unit Lookup"
             matInput
-            formControlName="searchField"
-            [matAutocomplete]="auto">
+            type              ="text"
+            class             ="input-field"
+            placeholder       ="Unit Lookup"
+            formControlName   ="searchField"
+            [matAutocomplete] ="auto">
 
-        <mat-autocomplete panelWidth    = "auto"
-                          #auto         = "matAutocomplete"
-                          [displayWith] = "displayFn.bind(this)">
+      <mat-autocomplete panelWidth    = "auto"
+                        #auto         = "matAutocomplete"
+                        (optionSelected)="onChange($event)">
+                        <!-- [displayWith] = "displayFn.bind(this)"> -->
 
       <mat-option *ngFor="let item of (results$ | async)?.results"
                   [value]="item">
@@ -28,9 +31,11 @@
     </mat-autocomplete>
   </mat-form-field>
 
+  <!-- {{searchForm.value | json}} -->
 </div>
 
- <div  hidden="true"
+ <div hidden="true"
+      *ngIf="formfieldValue"
       [formGroup]='formfieldValue'>
   <input formControlName="unitTypeID">
 </div>

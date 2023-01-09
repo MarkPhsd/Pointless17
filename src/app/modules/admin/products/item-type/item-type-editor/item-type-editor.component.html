@@ -108,6 +108,22 @@
                 </mat-form-field>
               </div>
 
+              <div class="filterItem"  *ngIf="itemType && (itemType?.type === 'Grocery')">
+                <mat-form-field appearance="outline">
+                  <mat-label>WIC & EBT Option</mat-label>
+                  <mat-select
+                              type="number"
+                              formControlName  ="wicebt"
+                              name="taxable"
+                    >
+                    <mat-option *ngFor="let item of wicEBTList"
+                                [value]="item.id">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
               <div class="filterItem" >
                 <mat-form-field appearance="outline">
                   <mat-label>Use Type</mat-label>
@@ -191,21 +207,6 @@
                 </mat-form-field>
               </div>
 
-              <div class="filterItem"  *ngIf="itemType && (itemType.type === 'grocery' || itemType.useType === 'grocery')">
-                <mat-form-field appearance="outline">
-                  <mat-label>WIC & EBT Option</mat-label>
-                  <mat-select
-                              type="number"
-                              [formControlName]  ="'wicEBT'"
-                              name="taxable"
-                    >
-                    <mat-option *ngFor="let item of wicEBTList"
-                                [value]="item.id">
-                      {{item.name}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
 
               <div class="filterItem" *ngIf="itemType && (itemType.type === 'cannabis' || itemType.type === 'med-cannabis')"  >
                 <mat-form-field appearance="outline">
@@ -285,16 +286,25 @@
                 ..loading printer Locations
               </ng-template>
 
-              <div>
-                <div>
-                  <app-label-view-selector
-                    [labelList$]      ="labelList$"
-                    [labelID]         ="itemType.labelTypeID"
-                    [labelImageHeight]="200"
-                    (outPutLabelID)   ="setLabelID($event)">
-                    Exit Label Selection
-                  </app-label-view-selector>
-                </div>
+              <div class="filterItem">
+                <app-label-view-selector
+                  [labelList$]      ="labelList$"
+                  [labelID]         ="itemType.labelTypeID"
+                  [labelImageHeight]="200"
+                  (outPutLabelID)   ="setLabelID($event)">
+                  Exit Label Selection
+                </app-label-view-selector>
+              </div>
+
+
+              <div class="fields-width">
+                  <mat-form-field appearance="outline">
+                    <mat-label >Unit Type</mat-label>
+                    <input matInput
+                          type             ="text"
+                          formControlName  ="unitName"
+                          class="form-control" >
+                  </mat-form-field>
               </div>
 
               <div class="fields-width">
@@ -310,11 +320,11 @@
 
               <div class="meta-tags"
                     *ngIf="addOnItems">
-                  <tag-chips-products (remove)="remove($event)" 
+                  <tag-chips-products (remove)="remove($event)"
                                       [addOnItems]="addOnItems">
                   </tag-chips-products>
-              </div>   
-      
+              </div>
+
           </div>
         </div>
 

@@ -7,7 +7,7 @@ import { IPOSOrder, IUser } from 'src/app/_interfaces';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 // import { compress, decompress } from 'compress-json'
 
-export interface uuidList { 
+export interface uuidList {
   uuID: string;
   color: string;
 }
@@ -17,6 +17,8 @@ export interface uuidList {
   styleUrls: ['./floor-plan.component.scss']
 })
 export class FloorPlanComponent implements OnInit {
+
+  floorPlanRefresh$ : Observable<IPOSOrder[]>;
 
   displayImage: boolean;
 
@@ -59,19 +61,19 @@ export class FloorPlanComponent implements OnInit {
     this.toggleUserMode()
     this.zoomDefault = 100;
     this._zoom.next(this.zoomDefault);
-    // this.changeObjectColor.subscribe(data => { 
-    //   console.log('output', data)
-    // })
   }
 
 
+
   initPlansList(site) {
-    this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(site);
-    this.floorPlans$.subscribe(data => {
-      if (data) {
-        this._getFloorPlan(data[0])
-      }
-    })
+    this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(site).pipe(
+      switchMap(data => {
+        if (data) {
+          this._getFloorPlan(data[0])
+        }
+        return of(data)
+      })
+    )
   }
 
   refreshPlans() {
@@ -124,11 +126,9 @@ export class FloorPlanComponent implements OnInit {
 
   saveFloorPlan(event) {
     if (!event) { return }
-   
+
     if (event.template) {
-      event.template = JSON.stringify(event.template)
-      event.template = event.template.replace(/(^"|"$)/g, '');
-      event.template = event.template.replaceAll('\\', '');
+      event.template = this.floorPlanSevice.replaceJSONText(event.template)
     }
 
     const site = this.siteService.getAssignedSite();
@@ -142,14 +142,10 @@ export class FloorPlanComponent implements OnInit {
 
   saveFloorPlanfromOrder(event) {
     if (!event) { return }
-    console.log('save floorplan')
     this.saving = true;
- 
 
     if (event.template) {
-      event.template = JSON.stringify(event.template)
-      event.template = event.template.replace(/(^"|"$)/g, '');
-      event.template = event.template.replaceAll('\\', '');
+      event.template = this.floorPlanSevice.replaceJSONText(event.template)
     }
 
     const site = this.siteService.getAssignedSite();
@@ -161,7 +157,6 @@ export class FloorPlanComponent implements OnInit {
         return this.floorPlanSevice.listFloorPlansNames(site);
       }
     ))
-
   }
 
   outPutJSONFull() {
@@ -216,17 +211,17 @@ export class FloorPlanComponent implements OnInit {
     }
   }
 
-  backup() { 
+  backup() {
     const site = this.siteService.getAssignedSite()
     this.backupRestore$ = this.floorPlanSevice.saveBackup(site, this.floorPlan)
   }
 
-  restore() { 
+  restore() {
     this.loading = true;
     const site = this.siteService.getAssignedSite()
     const item$ = this.floorPlanSevice.restoreBackup(site, this.floorPlan.id)
     this.backupRestore$ = item$.pipe(
-      switchMap( data => { 
+      switchMap( data => {
         this._floorPlan.next(data)
         this.floorPlan = data;
         this.loading = false;
@@ -244,8 +239,6 @@ export class FloorPlanComponent implements OnInit {
           if (this.userMode) {
             this.orderInfo = item;
             this.tableInfo = event;
-            
-            // console.log(item)
             this.setActiveOrder(this.orderInfo.orderID, item.uuid, this.floorPlan.id, item.name )
           }
         }
@@ -271,14 +264,14 @@ export class FloorPlanComponent implements OnInit {
       if (this.orderInfo) {
         const item = {orderID: data.id, status: 'active'};
       }
-      if (data && this.floorPlan && this.refresh) { 
+      if (data && this.floorPlan && this.refresh) {
         return this.orderService.getActiveTableOrders(site, this.floorPlan.id);
       }
       const orders = [] as IPOSOrder[]
       return of(orders)
-    })).subscribe( orders => { 
+    })).subscribe( orders => {
 
-      if (this.refresh) { 
+      if (this.refresh) {
         if (orders && orders.length>0) {
           try {
             this.floorPlan.template  = JSON.parse(this.floorPlan.template);
@@ -309,7 +302,7 @@ export class FloorPlanComponent implements OnInit {
   }
 
   getFloorPlan(event) {
-    
+
   }
 
   _getFloorPlan(event) {
@@ -324,40 +317,42 @@ export class FloorPlanComponent implements OnInit {
       floorPlan$ = this.floorPlanSevice.getFloorPlan(site, event.id);
     }
 
-    floorPlan$.pipe(
+    this.floorPlanRefresh$ = floorPlan$.pipe(
       switchMap(data => {
-      data.template  = JSON.stringify(data.template)
-      try {
-        data.template  = JSON.parse(data.template)
-        data.template  = JSON.parse(data.template)
-      } catch (error) {console.log('error', error)}
-      // console.log(data.template)
 
-      this.floorPlan = data;
-      
-      if (data) { 
-        return this.orderService.getActiveTableOrders(site, data.id)
-      }
+        data.template  = JSON.stringify(data.template)
+        try {
+          data.template  = JSON.parse(data.template)
+          data.template  = JSON.parse(data.template)
+        } catch (error) {
+          console.log('error', error)
+        }
+        this.floorPlan = data;
 
-      this._floorPlan.next(this.floorPlan);
-      const orders = [] as IPOSOrder[]
-      return of(orders)
-    
-    })).subscribe(orders => { 
-      if (orders && orders.length>0) {
-        this.processActiveItems(orders);
-        return
-      }
-      this._floorPlan.next(this.floorPlan);
-      this.setZoomOnTimer();
+        if (data) {
+          return this.orderService.getActiveTableOrders(site, data.id)
+        }
 
-    })
+        this._floorPlan.next(this.floorPlan);
+        const orders = [] as IPOSOrder[]
+        return of(orders)
+
+    })).pipe(
+      switchMap( orders => {
+        if (orders && orders.length>0) {
+          this.processActiveItems(orders);
+          return of(orders)
+        }
+        this._floorPlan.next(this.floorPlan);
+        this.setZoomOnTimer();
+        return of(orders)
+    }))
 
   }
 
-  setZoomDefault() { 
+  setZoomDefault() {
     this.zoomDefault = +localStorage.getItem('zoomDefault');
-    if (this.zoomDefault == 0 || !this.zoomDefault) { 
+    if (this.zoomDefault == 0 || !this.zoomDefault) {
       this.zoomDefault = 100;
     }
   }
@@ -368,15 +363,10 @@ export class FloorPlanComponent implements OnInit {
     this._zoom.next(this.zoomDefault)
   }
 
-  processActiveItems(orders: IPOSOrder[]) { 
-    // console.log('processActiveItems', orders)
-
-    // this.changeObjectColor.next(orders)
-    // return;
-
-    if (orders && orders.length>0) {
-      // const list = [] as uuidList[] 
-      orders.forEach(order => { 
+  processActiveItems(orders: IPOSOrder[]) {
+    if (orders && orders.length >0 ) {
+      // console.log('active orders', orders)
+      orders.forEach(order => {
         const item = {uuID: order.tableUUID, color: 'red'};
         this.floorPlan.template = this.floorPlanSevice.alterObjectColor(item.uuID,item.color, this.floorPlan.template)
       })
@@ -385,10 +375,10 @@ export class FloorPlanComponent implements OnInit {
 
     this._floorPlan.next(this.floorPlan);
     this.setZoomOnTimer()
-    
+
   }
 
-  setZoomOnTimer() { 
+  setZoomOnTimer() {
     this.setZoomDefault()
     this._zoom.next(this.zoomDefault)
     // setTimeout (() => {

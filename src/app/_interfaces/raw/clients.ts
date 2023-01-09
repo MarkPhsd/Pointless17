@@ -125,4 +125,5 @@ export interface IClientTable {
   medConcentrateLimit     :  string;
   patientRecOption: boolean;
   message: string;
+  preferences: string;
 }

@@ -1,6 +1,8 @@
 @import "/src/mixins.scss";
 
-
+h1 {
+  font-size: 2em;
+}
 
 .gallery-container {
   height: 86vh;
@@ -59,7 +61,7 @@ input {
 
 #product-name {
   font-weight: 500;
-  font-size: 1.4em;
+  font-size: 1.75em;
   width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;

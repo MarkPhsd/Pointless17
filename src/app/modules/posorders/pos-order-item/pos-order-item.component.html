@@ -14,24 +14,23 @@
       <div *ngIf="orderItem">
         <div>
 
-          <span *ngIf="!isModifier  && !prepScreen">
+          <span class="index" *ngIf="!isModifier  && !prepScreen">
             {{index+1}}:
           </span>
+
           <span [class]="productnameClass" >
             {{ orderItem?.productName }}
           </span>
+
           <span class="product-name" *ngIf="orderItem?.itemType">
             ( {{orderItem?.itemType?.name}} )
           </span>
 
-          <!-- quantity {{quantity}}<br>
-          subTotal {{subTotal}} -->
-
-          <span  *ngIf="quantity && !prepScreen">
-            <div *ngIf="subTotal > 0">
+          <span *ngIf="quantity && !prepScreen">
+            <div class="quantity"  *ngIf="subTotal > 0">
               {{ quantity }} {{orderItem?.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
             </div>
-            <div *ngIf="subTotal < 0"  style="color:crimson">
+            <div class="quantity"   *ngIf="subTotal < 0"  style="color:crimson">
               {{ quantity }} {{orderItem?.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
             </div>
           </span>

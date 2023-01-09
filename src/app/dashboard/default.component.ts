@@ -11,7 +11,7 @@ import { fader } from 'src/app/_animations/route-animations';
 import { ToolBarUIService } from '../_services/system/tool-bar-ui.service';
 import { Capacitor } from '@capacitor/core';
 import { AppInitService } from '../_services/system/app-init.service';
-import { AuthenticationService, IDepartmentList, ThemesService } from '../_services';
+import { AuthenticationService, IDepartmentList } from '../_services';
 import { IUser } from '../_interfaces';
 import { UIHomePageSettings, UISettingsService } from '../_services/system/settings/uisettings.service';
 import { isDevMode } from '@angular/core';
@@ -19,6 +19,7 @@ import { SitesService } from '../_services/reporting/sites.service';
 import { SplashScreenStateService } from 'src/app/_services/system/splash-screen-state.service';
 import { PlatformService } from '../_services/system/platform.service';
 import { UserAuthorizationService } from '../_services/system/user-authorization.service';
+import { ReportDateHelpersService } from '../_services/reporting/report-date-helpers.service';
 
 @Component({
   selector: 'app-default',
@@ -28,6 +29,11 @@ import { UserAuthorizationService } from '../_services/system/user-authorization
 })
 
 export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
+
+  // @ViewChild('menuOrOrderBar')
+  @ViewChild('appMenuSearchBar')   appMenuSearchBar: TemplateRef<any>;
+  @ViewChild('appOrderBar')        appOrderBar: TemplateRef<any>;
+  @ViewChild('menuBarView')        menuBarView: TemplateRef<any>;
 
   @ViewChild('appSiteFooter')  appSiteFooter: TemplateRef<any>;
   @ViewChild("footer") footer: ElementRef;
@@ -68,6 +74,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   _barSize        : Subscription;
   barSize         : boolean;
   smallMenu        = false;
+
+
+  _swapMenuWithOrder : Subscription;
+  swapMenuWithOrder  : boolean;
 
   _orderBar       : Subscription;
   orderBar        : boolean;
@@ -112,10 +122,22 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  swapMenuWithOrderSubscriber() {
+    // this._swapMenuWithOrder = this.themeService.swapMenuWithOrder$.subscribe(data =>  {
+    //   this.swapMenuWithOrder = false;
+    //   if (data) {
+    //     this.swapMenuWithOrder = data
+    //   }
+    // })
+  }
+
   userSubscriber() {
     try {
       this._user =     this.authorizationService.user$.subscribe(data => {
         this.user = data
+        // this.swapMenuWithOrder = this.user?.userPreferences?.swapMenuOrderPlacement
+        this.swapMenuWithOrder = false;
+        // this.themeService.setDarkLight(this.user?.userPreferences?.darkMode)
       })
     } catch (error) {
       console.log('userSubscriber', error)
@@ -125,6 +147,11 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   orderBarSubscriber() {
     try {
       this.toolBarUIService.orderBar$.subscribe(data => {
+        if (this.swapMenuWithOrder) {
+          this.leftSideBarToggle = data
+          this.searchSideBar = data //!this.searchSideBar;
+          return
+        }
         this.orderBarOpen = data
       })
     } catch (error) {
@@ -161,6 +188,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   searchSideBarSubscriber() {
     this._searchSideBar = this.toolBarUIService.searchSideBar$.subscribe( data => {
+      if (this.swapMenuWithOrder) {
+        this.orderBarOpen = data //!this.searchSideBar;
+        return;
+      }
       this.searchSideBar = data
     })
   }
@@ -169,7 +200,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     try {
       this._searchSideBar = this.toolBarUIService._searchBarWidth$.subscribe(data => {
         this.searchBarWidth = data
-
         if (data) {
           if (data == 55 || this.smallMenu) {
             this.barType =  "mat-drawer-searchbar-tiny"
@@ -194,7 +224,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   get appSiteFooterOn() {
     if ( !this.platFormService.isApp() ) {
-      if (this.userAuthorizationService.isStaff) { 
+      if (this.userAuthorizationService.isStaff) {
         return this.appSiteFooter
       }
     }
@@ -273,9 +303,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private router                  : Router,
                private siteService             : SitesService,
                private splashLoader            : SplashScreenStateService,
-               private platFormService         : PlatformService, 
+               private platFormService         : PlatformService,
                private userAuthorizationService: UserAuthorizationService,
-              //  private themesService           : ThemesService,
+              //  private themeService           : ThemesService,
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
     if (!this.platFormService.isApp()) {
@@ -309,7 +339,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   initSettings() {
-
     this.homePageSetting$ = this.uiSettingsService.getSetting('UIHomePageSettings').pipe(
         switchMap(  data => {
           const ui = {} as UIHomePageSettings
@@ -322,6 +351,28 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
           }
           return of(null)
     }))
+  }
+
+  get leftSideBar() {
+    if (this.swapMenuWithOrder) {
+      return this.appOrderBar
+    }
+    return this.appMenuSearchBar
+  }
+
+  get rightSideBar() {
+    if (this.swapMenuWithOrder) {
+      return this.appMenuSearchBar
+    }
+    return this.appOrderBar
+  }
+
+
+  get menuOrOrderBar() {
+    if (this.swapMenuWithOrder) {
+      return
+    }
+    return this.menuBarView;
   }
 
   initUI() {

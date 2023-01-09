@@ -25,6 +25,9 @@
                     fxFill
                     (click)="menuItemActionObs(true)">
               {{ menuItem.name  | truncateText: 30  }}
+              <span *ngIf="menuItem.unitDescription">
+                per {{menuItem?.unitDescription}}
+              </span>
               <mat-icon>{{menuItem?.itemType?.icon}}</mat-icon>
             </button>
           </div>
@@ -39,6 +42,9 @@
                     fxFill
                     (click)="menuItemActionObs(true)">
               {{ menuItem.name  | truncateText: 30  }}
+              <span *ngIf="menuItem.unitDescription">
+                per {{menuItem?.unitDescription}}
+              </span>
               <mat-icon>refresh</mat-icon>
             </button>
           </div>
@@ -104,6 +110,9 @@
       <div *ngIf="isProduct && !isCategory"
            id="price">
           {{menuItem.retail | currency}}
+          <span *ngIf="menuItem?.unitDescription">
+            / {{menuItem?.unitDescription}}
+          </span>
       </div>
 
       <div *ngIf="menuItem.itemType">

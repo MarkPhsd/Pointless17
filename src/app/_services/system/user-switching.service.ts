@@ -110,7 +110,7 @@ export class UserSwitchingService implements  OnDestroy {
   getCurrentUser() {
 
   }
-  
+
   getUserTypeAuthorizations(id: number) {
     const site = this.siteService.getAssignedSite()
     return this.clientTypeService.getClientType(site, id).pipe(
@@ -122,7 +122,7 @@ export class UserSwitchingService implements  OnDestroy {
       }
     ))
   }
- 
+
 
   setAppUser() {
     //then we can set the user to the secret user
@@ -224,33 +224,33 @@ export class UserSwitchingService implements  OnDestroy {
               user.message = 'success'
               const currentUser = this.setUserInfo(user, password)
               this.uiSettingService.initSecureSettings();
-
-              console.log('user', user)
-              return of(user) 
+              return of(user)
             } else {
               const user = {message: 'failed'} as IUser;
               return of(user)
             }
-      })).pipe(switchMap(data => { 
-       
+      })).pipe(switchMap(data => {
+
         if (data?.message === 'failed') { return of(null)}
         return this.contactsService.getContact(site, data?.id)
-        
-      })).pipe(switchMap(data => { 
-        
+
+      })).pipe(switchMap(data => {
+
         if ( !data ) { return of( {message: 'failed'} ) }
-        
+
         const item = localStorage.getItem('user')
         const user = JSON.parse(item) as IUser;
 
-        console.log('data result', user)
+        // console.log('data result', user)
         this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
         if ( this.platformService.isApp()  )  { return this.changeUser(user) }
         if ( !this.platformService.isApp() )  { return of(user)              }
-      
+
       }
      ))
   }
+
+
 
   // getAuthorization()
   setUserInfo(user: IUser, password) {
@@ -270,6 +270,8 @@ export class UserSwitchingService implements  OnDestroy {
     currentUser.lastName     = user?.lastName;
     currentUser.errorMessage = user.errorMessage
     currentUser.message      = user.message
+    currentUser.userPreferences = JSON.parse(user.prefrences);
+
     user.authdata = window.btoa(user.username + ':' + user.password);
     currentUser.authdata     = user.authdata
     localStorage.setItem('user', JSON.stringify(currentUser))
@@ -277,7 +279,7 @@ export class UserSwitchingService implements  OnDestroy {
     return currentUser
   }
 
-  setUserAuth(userAuth: string) { 
+  setUserAuth(userAuth: string) {
     localStorage.setItem('userAuth', userAuth)
   }
 
@@ -341,8 +343,8 @@ export class UserSwitchingService implements  OnDestroy {
   loginToURL(path) {
 
     let returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    console.log('returnUrl', returnUrl)
-    console.log('path', path)
+    // console.log('returnUrl', returnUrl)
+    // console.log('path', path)
 
     if (path) {
       this.router.navigate([path])

@@ -12,18 +12,19 @@ mat-card  {
   overflow-x   : hidden;
   font-size    : large;
   margin-bottom: 0px;
-  margin-right : 5px;
+  padding-right: 15px;
 }
 
 .transaction-data-side-panel {
-  display      : grid;
+  display: grid;
   grid-template-columns: 1fr 1fr;
-  width        : 100%;
-  overflow-y   : auto;
-  overflow-x   : hidden;
-  font-size    : large;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-size: large;
   margin-bottom: 0px;
   margin-right : 5px;
+  padding-right: 15px;
+
 }
 
 .foreground-color {
