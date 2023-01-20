@@ -708,6 +708,7 @@ export class SettingsService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     let appCache =  JSON.parse(localStorage.getItem('appCache')) as any;
+    // console.log('get setting cached or not ', appCache)
     if (appCache) {
       if (appCache?.value && appCache?.boolean) {
         const uri = { url: url, cacheMins: appCache.value}

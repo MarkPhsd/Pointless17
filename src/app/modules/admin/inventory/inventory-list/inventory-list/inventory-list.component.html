@@ -78,9 +78,9 @@
       <mat-form-field appearance="outline">
         <mat-label>Status</mat-label>
           <mat-select
-                    type="text"
-                    (selectionChange)="getInventoryStatus($event)"
-                    formControlName="inventoryStatusID"
+                      type="text"
+                      (selectionChange)="getInventoryStatus($event)"
+                      formControlName="inventoryStatusID"
                   >
           <div *ngIf="inventoryStatusList">
             <mat-option *ngFor="let item of inventoryStatusList" [value]="item.name">
@@ -135,66 +135,76 @@
 
     <div  *ngIf="!listOnly">
         <button mat-button
-              (click)="listAll()"><mat-icon>list</mat-icon>List All
+                (click)="listAll()">
+          <mat-icon>list</mat-icon>List All
       </button>
     </div>
 
     <div>
       <button mat-button
-            (click)="refreshSearch()"><mat-icon>refresh</mat-icon>Refresh
+            (click)="refreshSearch()">
+          <mat-icon>refresh</mat-icon>Refresh
       </button>
     </div>
 
     <div  *ngIf="!listOnly">
       <button class="info-buttons"
               mat-button
-              (click)="addInventoryItem()"><mat-icon>add</mat-icon> Add
+              (click)="addInventoryItem()">
+          <mat-icon>add</mat-icon> Add
       </button>
     </div>
 
     <div *ngIf="currentManifest && !listOnly">
       <button class="info-buttons"
               mat-button
-              (click)="addItemsToManifest()"><mat-icon>add</mat-icon>Assign to Manifest
+              (click)="addItemsToManifest()">
+          <mat-icon>add</mat-icon>Assign to Manifest
       </button>
     </div>
 
     <div *ngIf="!currentManifest && !listOnly">
       <button class="info-buttons"
               mat-button
-              (click)="addToNewManifest()"><mat-icon>add</mat-icon>Make Manifest
+              (click)="addToNewManifest()">
+          <mat-icon>add</mat-icon>Make Manifest
       </button>
     </div>
 
     <div *ngIf="listOnly">
         <button color="warn" mat-button
-          (click)="removeSelectedFromManifest()"><mat-icon>delete</mat-icon>Remove Selected
+          (click)="removeSelectedFromManifest()">
+          <mat-icon>delete</mat-icon>Remove Selected
         </button>
     </div>
 
     <div *ngIf="!currentManifest && !listOnly">
       <button class="info-buttons"
               mat-button
-              (click)="addItemsToManifest()"><mat-icon>add</mat-icon>Add to Manifest
+              (click)="addItemsToManifest()">
+          <mat-icon>add</mat-icon>Add to Manifest
       </button>
     </div>
 
     <div *ngIf="currentManifest && !listOnly">
       <button class="info-buttons"
               mat-button
-              (click)="clearAssignedManifest()"><mat-icon>remove</mat-icon>Exit Manifest
+              (click)="clearAssignedManifest()">
+          <mat-icon>remove</mat-icon>Exit Manifest
       </button>
     </div>
 
     <div *ngIf="listOnly && isDistributor">
       <button mat-button color="warn"
-        (click)="removeSelectedFromManifest()"><mat-icon>refresh</mat-icon>Remove Selected
+        (click)="removeSelectedFromManifest()">
+        <mat-icon>refresh</mat-icon>Remove Selected
       </button>
     </div>
 
     <div *ngIf="listOnly && isSiteSatellite">
       <button mat-button color="warn"
-        (click)="rejectFromManifest()"><mat-icon>thumb_down_alt</mat-icon>Reject Selected
+        (click)="rejectFromManifest()">
+        <mat-icon>thumb_down_alt</mat-icon>Reject Selected
       </button>
     </div>
 

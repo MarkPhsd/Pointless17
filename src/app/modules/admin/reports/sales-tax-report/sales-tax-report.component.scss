@@ -147,7 +147,6 @@ mat-card {
 
 
 .grid-item {
-  // background-color: rgba(169, 163, 163, 0.8);
   align-items: flex-end;
 }
 
@@ -156,7 +155,6 @@ mat-card {
   grid-template-columns: 1fr auto ;
   grid-template-rows: auto;
   grid-gap: 2px;
-  // height: calc(100vh - 10px);
 }
 
 
@@ -170,22 +168,5 @@ mat-card {
   margin-left          : 15px;
   justify-content: space-between;
   max-width: 350px;
-  // height: calc(100vh - 10px);
+
 }
-
-
-// .grid {
-//   --gap: 15px;
-//   display: grid;
-//   gap: var(--gap);
-//   grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
-// }
-
-// .grid-headerfooter {
-//   --gap: 15px;
-//   display: grid;
-//   gap: var(--gap);
-//   grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
-//   margin-right: 10px;
-//   margin-left:  10px;
-// }

@@ -203,7 +203,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     const site              = this.siteService.getAssignedSite()
     const searchModel       = {} as ProductSearchModel;
     searchModel.itemTypeID  = this.itemTypeID.toString()
-    searchModel.pageSize    = 25;
+    searchModel.pageSize    = 45;
     searchModel.currentPage = 1;
     searchModel.pageSize    = 1;
     searchModel.webMode     = this.menuService.isWebModeMenu;

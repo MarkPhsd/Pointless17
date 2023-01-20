@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SalesTaxReportComponent } from './sales-tax-report.component';
+import { DailyReportComponent } from './daily-report.component';
 
-describe('SalesTaxReportComponent', () => {
-  let component: SalesTaxReportComponent;
-  let fixture: ComponentFixture<SalesTaxReportComponent>;
+describe('DailyReportComponent', () => {
+  let component: DailyReportComponent;
+  let fixture: ComponentFixture<DailyReportComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SalesTaxReportComponent ]
+      declarations: [ DailyReportComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SalesTaxReportComponent);
+    fixture = TestBed.createComponent(DailyReportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

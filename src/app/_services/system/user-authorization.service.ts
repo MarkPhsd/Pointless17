@@ -29,6 +29,13 @@ export class UserAuthorizationService {
   isUserAuthorized(requiredArray: string): boolean {
 
     const user = this.currentUser();
+
+    if (user && user.roles) {
+      // console.log(user?.roles, user?.lastName)
+    }
+    if (!user || !user.roles) {return}
+
+    // console.log(user.roles, user.lastName)
     const currentRole = user?.roles.toLowerCase();
 
     if (!currentRole) { return }
@@ -46,6 +53,7 @@ export class UserAuthorizationService {
       }
     )
 
+    // console.log('result', result)
     return result
   }
 

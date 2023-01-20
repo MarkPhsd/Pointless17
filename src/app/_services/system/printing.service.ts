@@ -1,6 +1,6 @@
 import { Injectable, Output } from '@angular/core';
 import * as _ from "lodash";
-import { SettingsService } from 'src/app/_services/system/settings.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISetting, ISite } from 'src/app/_interfaces';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
@@ -324,14 +324,17 @@ export class PrintingService {
     return true;
   }
 
-  async printElectron(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
+  printElectron(contents: string, printerName: string, options: printOptions) : boolean {
 
     let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
+
     printWindow.loadURL(contents)
       .then( e => {
+
         if (options.silent) {
           printWindow.hide();
         }
+
         if (!options) {
           options = {
             silent: true,
@@ -359,6 +362,7 @@ export class PrintingService {
         )
 
         }).catch( err => {
+          console.log('error', err)
           printWindow.close();
           printWindow = null;
           return false
@@ -432,23 +436,20 @@ export class PrintingService {
     this.printElectron( contents, printerName, options)
   }
 
-  printTestLabelElectron(printString: string, printerName: string): boolean {
+  async printTestLabelElectron(contents: string, printerName: string) {
     const fileName = `c:\\pointless\\print.txt`;
-    try {
-      // window.fs.writeFileSync(fileName, printString);
-    } catch (error) {
-      this.snack.open(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Error')
-      return false
-    }
+    // this.snack.open(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Error')
     const file = `file:///c://pointless//print.txt`
     const options = {
-      silent: true,
+      silent: false,
       printBackground: false,
       deviceName: printerName
     }  as printOptions
 
+    console.log('printTestLabelElectron contents', contents)
+    console.log('printTestLabelElectron printer', printerName)
     try {
-      this.printElectron( printString, printerName, options)
+      await  this.printElectron( contents, printerName, options )
       return true;
     } catch (error) {
       return false
@@ -457,58 +458,94 @@ export class PrintingService {
     return false
   }
 
-  async printLabel(item: PosOrderItem) {
+   printLabel(item: PosOrderItem) {
 
-    if (!item) {return}
+    console.log('print Label', item);
+
+    if (!item) {return of(null)}
+
     const site = this.siteService.getAssignedSite();
 
-      //get cached label printer name
-      const printer$ =  this.getElectronLabelPrinterCached()
-      // const printerName = printer.text
-      let printer = {} as any;
+    let printer = {} as any;
+    const menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID);
 
-      const menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
-      printer$.pipe(data => {
-          printer = data;
-          if (!printer || !printer.text) {return of(null)}
-          return  menuItem$
-        }).pipe(
-          switchMap(data => {
-            if ( !data || !data.itemType) {return of(null)}
-            if ( data.itemType && ( (data.itemType.labelTypeID != 0 ) && printer.text ) ) {
-                if (data.itemType.labelTypeID !=0 ) {
-                  return   this.settingService.getSetting(site, data.itemType.labelTypeID)
-                }
-            } else {
-              return this.orderItemService.setItemAsPrinted(site, item )
-            }
-        })).pipe(
-          switchMap( data => {
-            if (!data) { return of(null) }
-            const content = this.renderingService.interpolateText(item, data.text)
-            if (printer.text) {
-              const result  = this.printLabelElectron(content, printer.text)
-            }
+    const printer$ = this.settingService.getDeviceSettings().pipe(
+      switchMap(data => {
+        console.log(data)
+        const item = JSON.parse(data.text) as ITerminalSettings;
+        this.uiSettingsService.updatePOSDevice(item)
+        console.log('device info', item)
 
-            if (!item.printed || (data && !data.printed)) {
-              return this.orderItemService.setItemAsPrinted(site, item )
-            }
-
-            return EMPTY
-        })).subscribe( data => {
-          this.orderMethodsService.refreshOrder(item.orderID);
+        printer = {text: item?.labelPrinter}
+        return of(item)
       })
+    )
+
+    const result$ =  printer$.pipe(
+      switchMap(data => {
+
+        if (!data ) {
+          this.siteService.notify('No Printer assigned to label', 'Alert', 2000)
+          return of(null)
+        }
+        return menuItem$
+      })).pipe(
+        switchMap(data => {
+          if ( !data || !data.itemType) {return of(null)}
+          if ( data.itemType && ( (data.itemType.labelTypeID != 0 ) && printer.text ) ) {
+              if (data.itemType.labelTypeID !=0 ) {
+                return  this.settingService.getSetting(site, data.itemType.labelTypeID)
+              }
+          } else {
+            return this.orderItemService.setItemAsPrinted(site, item )
+          }
+      })).pipe(
+        switchMap( data => {
+          console.log('data', data)
+          if (!data) { return of(null) }
+          const content = this.renderingService.interpolateText(item, data.text)
+          if (printer.text) {
+            console.log('printer print label electron', printer)
+            this.printLabelElectron(content, printer.text)
+          }
+          if (!item.printed || (data && !data.printed)) {
+            return this.orderItemService.setItemAsPrinted(site, item )
+          }
+          return of(null)
+      })).pipe(
+        switchMap( data => {
+        this.orderMethodsService.refreshOrder(item.orderID);
+        return of(data)
+    }))
+
+    return result$
+  }
+
+
+  async saveContentsToFile(filePath: string, contents: string) {
+    try {
+      const fileWriting = this.electronService.remote.require('./datacap/transactions.js');
+      let response        : any;
+      response   =  await fileWriting.writeToFile(filePath, contents)
+      console.log(response)
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
   printLabelElectron(printString: string, printerName: string): boolean {
+
+    const file = `file:///c://pointless//print.txt`
     const fileName = `c:\\pointless\\print.txt`;
+    this.saveContentsToFile(fileName, printString);
+
     try {
       // window.fs.writeFileSync(fileName, printString);
+      // window.file
     } catch (error) {
       this.snack.open(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Error')
     }
 
-    const file = `file:///c://pointless//print.txt`
     const options = {
       silent: true,
       printBackground: false,
@@ -525,7 +562,6 @@ export class PrintingService {
   }
 
   getPrintHTML(prtContent) {
-    console.log('print')
     const content      = `${prtContent.innerHTML}`
     let styles  = ''
     if (this.receiptStyles) {

@@ -22,7 +22,6 @@ button {
 
 .container {
   margin-left: 10px;
-
   @include for-phone-only {
     margin-left: 0;
   }

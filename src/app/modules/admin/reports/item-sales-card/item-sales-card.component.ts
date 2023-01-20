@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSalesService, IReportItemSaleSummary } from 'src/app/_services/reporting/reporting-items-sales.service';
@@ -8,7 +8,7 @@ import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSale
   templateUrl: './item-sales-card.component.html',
   styleUrls: ['./item-sales-card.component.scss']
 })
-export class ItemSalesCardComponent implements OnChanges {
+export class ItemSalesCardComponent implements OnInit,OnChanges {
 
   //[site]="site" [dateFrom]="dateFrom" [dateTo]="dateTo"   [notifier]="childNotifier"
   @Input() site     : ISite;
@@ -24,10 +24,19 @@ export class ItemSalesCardComponent implements OnChanges {
 
   constructor(private reportingItemsSalesService: ReportingItemsSalesService) { }
 
-  ngOnChanges() {
-    this.refreshSales();
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(this.site)
+    if (this.site) {
+      this.refreshSales();
+    }
   }
 
+  ngOnInit(): void {
+    console.log(this.site)
+    if (this.site) {
+      this.refreshSales();
+    }
+  }
   togglesShowAll() {
     this.showAll = !this.showAll;
   }
@@ -46,14 +55,19 @@ export class ItemSalesCardComponent implements OnChanges {
     if (this.groupBy === 'type') {
       searchModel.groupByType = true;
     }
-    if (this.removeGiftCard) { 
+    if (this.removeGiftCard) {
 
     }
     searchModel.removeGiftCards = this.removeGiftCard
     searchModel.startDate = this.dateFrom;
     searchModel.endDate = this.dateTo;
     searchModel.zrunID = this.zrunID;
-    this.sales$ = this.reportingItemsSalesService.groupItemSales(this.site, searchModel)
+
+    console.table(searchModel)
+    console.log(this.site.url )
+    if (this.site) {
+      this.sales$ = this.reportingItemsSalesService.groupItemSales(this.site, searchModel)
+    }
     return
   }
 

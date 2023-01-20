@@ -24,8 +24,11 @@
             class="menu-button"
             (click)="toggleBars()">
       <mat-icon color="primary">
-        toggle
+        swap_horiz
       </mat-icon>
     </button>
   </div>
 
+  <div *ngIf="action$ | async"></div>
+    <!-- userPreferences
+    {{userAuthorizationService?.user?.userPreferences | json}} -->

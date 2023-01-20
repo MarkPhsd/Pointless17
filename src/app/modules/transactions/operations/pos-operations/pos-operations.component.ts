@@ -18,6 +18,7 @@ import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrdersService } from 'src/app/_services';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'pos-operations',
@@ -28,6 +29,8 @@ export class PosOperationsComponent implements OnInit {
 
   closingProcedure$: Observable<any>
   @ViewChild('printsection') printsection: ElementRef;
+  printAction$: Observable<any>
+  styles: string;
   @Input() site    : ISite;
   @Input() notifier: Subject<boolean>
   localSite: ISite;
@@ -35,6 +38,7 @@ export class PosOperationsComponent implements OnInit {
   dateTo  : any;
 
   printerName: string;
+  printing   : boolean;
 
   closeResult     = '';
   runningClose :  boolean;
@@ -68,11 +72,11 @@ export class PosOperationsComponent implements OnInit {
     private platFormService    : PlatformService,
     private printingService    : PrintingService,
     private dsiProcess         : DSIProcessService,
-    private sendGridService     :   SendGridService,
+    private sendGridService    : SendGridService,
     private matSnack           : MatSnackBar,
-    private uISettingsService: UISettingsService,
-    private orderService        : OrdersService,
-    // private AuthService       : UserAuth
+    private uISettingsService  : UISettingsService,
+    private orderService       : OrdersService,
+    private httpClient: HttpClient,
   ) {
     if (!this.site) {
       this.site = this.siteService.getAssignedSite();
@@ -80,12 +84,12 @@ export class PosOperationsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     const item  = localStorage.getItem('DSIEMVSettings');
     if (item) {
       this.dsiEMVSettings = JSON.parse(item) as Transaction;
     }
-
+    this.printerName = localStorage.getItem('closeDayPrinter')
+    this.printAction$ =  this.setPrintStyles();
     this.getUser();
     this.refreshSales();
     this.refreshClosingCheck();
@@ -110,11 +114,9 @@ export class PosOperationsComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     this.closingCheck$ = this.transferDataService.canCloseDay(site).pipe(
       switchMap( data => {
-        
         return of(data)
       }
     ))
-
   }
 
   _email() {
@@ -124,20 +126,28 @@ export class PosOperationsComponent implements OnInit {
     const item$ = zRun$.pipe(
       switchMap( data => {
         if (data && data.id) {
-          // console.log('data', data)
           return this.sendGridService.sendSalesReport(site,data.id, null,null)
         }
         return null;
     })).pipe(
      switchMap( data => {
-        // console.log('email ', data)
         this.emailSending = false;
         this.matSnack.open('Email Sent', 'Success', {duration: 1500})
         return of(data)
       }
     ))
-
     return item$
+  }
+
+  setPrintStyles() { 
+    const styles$ = this.httpClient.get('assets/htmlTemplates/salesreportStyles.html', {responseType: 'text'});
+    styles$.pipe(
+      switchMap(styles => { 
+        console.log('STYLes' , styles);
+        this.styles = styles;
+        return of(styles)
+    }))
+    return styles$
   }
 
   email() {
@@ -186,7 +196,6 @@ export class PosOperationsComponent implements OnInit {
         return true
       }
     } catch (error) {
-      console.log('error batch', error)
     }
     return false
   }
@@ -266,17 +275,20 @@ export class PosOperationsComponent implements OnInit {
     )
   }
 
-
   ordersWindow() {
     this.router.navigateByUrl('/pos-orders')
   }
 
-  async print() {
+  print(styles) {
+    if (!this.printerName) { 
+      this.siteService.notify('Please select a printer', 'Alert', 1000)
+      return 
+    }
     if (this.platFormService.isAppElectron) {
-      const result = this.printElectron()
+      this.printElectron(styles)
       return
     }
-    if (this.platFormService.androidApp) {this.printAndroid();}
+    if (this.platFormService.androidApp) { this.printAndroid();}
     if (this.platFormService.webMode)    { this.convertToPDF();}
   }
 
@@ -298,11 +310,8 @@ export class PosOperationsComponent implements OnInit {
   }
 
   getReceiptContents(styles: string) {
-    const prtContent     = document.getElementById('printsection');
-    if (!prtContent) { return  }
-    const content        = `${prtContent.innerHTML}`
-    if (!content) { return }
-
+   
+    const content = this.printsection.nativeElement.innerHTML;
     const  title = 'Receipt';
     const loadView       = ({ title }) => {
       return (`
@@ -322,35 +331,45 @@ export class PosOperationsComponent implements OnInit {
     const file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
       title: "Receipt"
     }));
+ 
     return file
   }
 
   convertToPDF() {
-    console.log('convertToPdf')
     this.printingService.convertToPDF( document.getElementById('printsection') )
   }
 
-  async printElectron() {
-    const styles =  '' //this.receiptStyles.text;
+  printElectron(styles) {
     const contents = this.getReceiptContents(styles)
-
     const options = {
       silent: true,
       printBackground: false,
       deviceName: this.printerName
     } as printOptions;
 
-    if (!contents) { console.log('no contents in print electron')}
-    if (!options) { console.log('no options in print electron')}
-    if (!this.printerName) { console.log('no printerName in print electron')}
+    if (!contents) { 
+      console.log('no contents in print electron')
+      return
+    }
+    if (!options) {
+      console.log('no options in print electron')
+      return
+    }
+    if (!this.printerName) { 
+      console.log('no printerName in print electron')
+      return 
+    }
     if (contents && this.printerName, options) {
-        this.printingService.printElectron( contents, this.printerName, options)
+      this.printing = true;
+      this.printingService.printElectron( contents, this.printerName, options)
+      this.printing = true;
     }
 
   }
-
+ 
   setPrinter(event) {
     this.printerName = event;
+    localStorage.setItem('closeDayPrinter',event)
   }
 
   savePDF() {

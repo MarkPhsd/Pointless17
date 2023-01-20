@@ -1,9 +1,5 @@
 <div *ngIf="(layout$ | async) as layout">
-  <!-- <div *ngIf="printOrder">  -->
-  <!-- <div *ngIf="(printOrder$ | async) as printOrder"> -->
   <div *ngIf="order" class="mat-card-white" >
-    <!-- <ng-container [ngTemplateOutlet]="currentView"></ng-container>
-    <ng-template #printTemplate> -->
       <div  *ngIf="receiptLayoutSetting &&
                   ((headerText &&  itemsText) || order)"
             class="border-section">
@@ -29,7 +25,6 @@
                             >
           </app-receipt-layout>
       </div>
-    <!-- </ng-template> -->
   </div>
 </div>
 

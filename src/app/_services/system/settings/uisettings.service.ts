@@ -165,6 +165,9 @@ export interface UIHomePageSettings {
 
   wordpressHeadless: string;
   displaySendButton: boolean;
+
+  staffHideSearchBar: boolean;
+  hideSearchBar: boolean;
 }
 
 @Injectable({
@@ -377,6 +380,7 @@ export class UISettingsService {
 
   openEditPOSDevice(data): Observable<typeof dialogRef> {
     let dialogRef: any;
+    console.log('open device')
     dialogRef = this.dialog.open(PosEditSettingsComponent,
       { width:        '800px',
         minWidth:     '800px',
@@ -497,7 +501,8 @@ export class UISettingsService {
       staffTypesEnabled     : [''],
       backgroundImage       : [''],
       logoHomePage          : [''],
-
+      staffHideSearchBar    : [''],
+      hideSearchBar         : [''],
       scheduleSubMenu       : [],
       staffscheduleSubMenu  : [],
 

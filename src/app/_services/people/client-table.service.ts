@@ -5,6 +5,7 @@ import { EMPTY, Observable, } from 'rxjs';
 import { IClientTable, ISite, IUserProfile,employee, FlowVendor, ImportFlowVendorResults }   from  'src/app/_interfaces';
 import { IDriversLicense } from 'src/app/_interfaces/people/drivers-license';
 import { IEmployeeClient } from './employee-service.service';
+import { IItemBasic } from '..';
 
 export interface NamesCities {
   names: string[];
@@ -14,7 +15,7 @@ export interface NamesCities {
   providedIn: 'root'
 })
 export class ClientTableService {
-  
+
   constructor( private http: HttpClient, private auth: AuthenticationService) { }
 
   pageNumber = 1;
@@ -38,7 +39,7 @@ export class ClientTableService {
   }
 
   newTempClient(site: ISite) : Observable<IClientTable>  {
-    
+
     const controller =  "/ClientTable/"
 
     const endPoint = `getTempClient`
@@ -153,6 +154,24 @@ export class ClientTableService {
       return this.postClient(site, client)
 
     }
+
+  }
+
+  savePreferences(site: ISite, preference: string, id: number) {
+
+    const item = {} as IItemBasic;
+    item.name = preference;
+    item.id = id;
+
+    const controller =  "/ClientTable/"
+
+    const endPoint = `SavePreferences`
+
+    const parameters  = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<any>(url , item)
 
   }
 

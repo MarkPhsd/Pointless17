@@ -61,20 +61,22 @@ export class DashboardComponent implements OnChanges,OnInit  {
   }
 
   ngOnInit(): void {
-    this.getUser()
-    this.sites$ = this.sitesService.getSites()
-    this.initDateRange()
-    this.setInitialDateRange();
+    this.refreshReports()
   };
 
   setInitialDateRange() {
     const date = new Date();
     const firstDay =   new Date(date.getFullYear(), date.getMonth(), 1);
     const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    // this.dateFrom = firstDay.toLocaleDateString();
-    // this.dateTo = lastDay.toLocaleDateString()
     this.dateFrom = this.datepipe.transform(firstDay, 'yyyy-MM-dd')
     this.dateTo = this.datepipe.transform(lastDay, 'yyyy-MM-dd')
+  }
+
+  refreshReports() {
+    this.getUser()
+    this.sites$ = this.sitesService.getSites()
+    this.initDateRange()
+    this.setInitialDateRange();
   }
 
   getUser() {

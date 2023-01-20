@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { switchMap,   } from 'rxjs/operators';
-import { clientType, IUser, IUserProfile } from 'src/app/_interfaces';
+import { clientType, IUser, IUserProfile, UserPreferences } from 'src/app/_interfaces';
 import { EmployeeService } from '../people/employee-service.service';
 import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switch/fast-user-switch.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -41,6 +41,10 @@ export class UserSwitchingService implements  OnDestroy {
   _user : Subscription
 
   isElectron: boolean;
+
+  public  swapMenuWithOrderBoolean    :boolean;
+  private _swapMenuWithOrder   = new BehaviorSubject<boolean>(null);
+  public  swapMenuWithOrder$   = this._swapMenuWithOrder.asObservable();
 
   private _loginStatus         = new BehaviorSubject<number>(0);
   public  loginStatus$         = this._loginStatus.asObservable();
@@ -208,27 +212,28 @@ export class UserSwitchingService implements  OnDestroy {
     return  this.authenticate(userLogin)
       .pipe(
         switchMap(
-           user => {
-            if (user && user.errorMessage) {
-              const message = user?.errorMessage;
-              this.snackBar.open(message, 'Failed Login', {duration: 1500})
-              const item = {message: 'failed'}
-              return of(item)
-            }
+          user => {
+          if (user && user.errorMessage) {
+            const message = user?.errorMessage;
+            this.snackBar.open(message, 'Failed Login', {duration: 1500})
+            const item = {message: 'failed'}
+            return of(item)
+          }
 
-            if (user) {
-              if (user?.message.toLowerCase() === 'failed') {
-                const user = {message: 'failed'}
-                return of(user)
-              }
-              user.message = 'success'
-              const currentUser = this.setUserInfo(user, password)
-              this.uiSettingService.initSecureSettings();
-              return of(user)
-            } else {
-              const user = {message: 'failed'} as IUser;
+          if (user) {
+            if (user?.message.toLowerCase() === 'failed') {
+              const user = {message: 'failed'}
               return of(user)
             }
+            user.message = 'success'
+            // console.log('switch user new data', user)
+            const currentUser = this.setUserInfo(user, password)
+            this.uiSettingService.initSecureSettings();
+            return of(user)
+          } else {
+            const user = {message: 'failed'} as IUser;
+            return of(user)
+          }
       })).pipe(switchMap(data => {
 
         if (data?.message === 'failed') { return of(null)}
@@ -237,23 +242,23 @@ export class UserSwitchingService implements  OnDestroy {
       })).pipe(switchMap(data => {
 
         if ( !data ) { return of( {message: 'failed'} ) }
-
         const item = localStorage.getItem('user')
         const user = JSON.parse(item) as IUser;
 
-        // console.log('data result', user)
-        this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
+        if (data.clientType && data.clientType.jsonObject) {
+          this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
+        }
+
         if ( this.platformService.isApp()  )  { return this.changeUser(user) }
         if ( !this.platformService.isApp() )  { return of(user)              }
 
       }
-     ))
+    ))
   }
-
-
 
   // getAuthorization()
   setUserInfo(user: IUser, password) {
+
     const currentUser = {} as IUser;
     if (!user.roles)     { user.roles = 'user' }
     if (!user.firstName) { user.firstName = user.username }
@@ -270,13 +275,35 @@ export class UserSwitchingService implements  OnDestroy {
     currentUser.lastName     = user?.lastName;
     currentUser.errorMessage = user.errorMessage
     currentUser.message      = user.message
-    currentUser.userPreferences = JSON.parse(user.prefrences);
+
+    if (user.preferences) {
+      currentUser.userPreferences = JSON.parse(user.preferences) as UserPreferences;
+      currentUser.preferences = user.preferences;
+      if (!currentUser.userPreferences.swapMenuOrderPlacement) {
+        currentUser.userPreferences.swapMenuOrderPlacement = false;
+      }
+    }
+
+    if (!user.preferences) {
+      currentUser.userPreferences =  {} as UserPreferences;
+      currentUser.userPreferences.darkMode = false;
+      currentUser.userPreferences.swapMenuOrderPlacement = false;
+      currentUser.preferences = JSON.stringify(currentUser.userPreferences);
+    }
+
+    if (currentUser?.userPreferences.swapMenuOrderPlacement) {
+      this.swapMenuWithOrder(currentUser.userPreferences.swapMenuOrderPlacement);
+    } else {
+      this.swapMenuWithOrder(false);
+    }
 
     user.authdata = window.btoa(user.username + ':' + user.password);
     currentUser.authdata     = user.authdata
     localStorage.setItem('user', JSON.stringify(currentUser))
     this.authenticationService.updateUser(currentUser)
+
     return currentUser
+
   }
 
   setUserAuth(userAuth: string) {
@@ -311,14 +338,19 @@ export class UserSwitchingService implements  OnDestroy {
     )
   }
 
+  swapMenuWithOrder(swap: boolean) {
+    this.swapMenuWithOrderBoolean = swap;
+    this._swapMenuWithOrder.next(swap)
+  }
+
   processLogin(user: IUser, path : string) {
-    //login the user based on the message response of the user.
+    // login the user based on the message response of the user.
     // console.log('user from Process login', user, path)
     // console.log('loginAction', localStorage.getItem('loginAction'))
     if (user && user.message == undefined) {
       return 'user undefined'
     }
-    //if account loccked out then change here.
+    // if account loccked out then change here.
     if (user.message.toLowerCase() === 'failed') {
       return user.errorMessage
     }
@@ -341,10 +373,7 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   loginToURL(path) {
-
     let returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    // console.log('returnUrl', returnUrl)
-    // console.log('path', path)
 
     if (path) {
       this.router.navigate([path])
@@ -354,9 +383,9 @@ export class UserSwitchingService implements  OnDestroy {
       this.router.navigate([returnUrl])
     }
 
-
     this.loginToReturnUrl()
   }
+
   assignCurrentOrder(user: IUserProfile)  {
     const site = this.siteService.getAssignedSite()
     if (user.roles == 'user' && user.id) {
@@ -368,7 +397,6 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   loginApp(user) {
-
     const currentUser   = user.user
     const sheet         = user.sheet
     this.processLogin(currentUser, null)
@@ -382,14 +410,13 @@ export class UserSwitchingService implements  OnDestroy {
         return true
       }
     }
-
   }
 
   initUserFeatures() {
     this.uiSettingService.initSecureSettings();
   }
 
-  async  browseMenu() {
+  browseMenu() {
     this.toolbarUIService.updateDepartmentMenu(0);
     this.router.navigate(['/app-main-menu']);
   }
@@ -407,7 +434,6 @@ export class UserSwitchingService implements  OnDestroy {
       if (returnUrl === '/login') {  returnUrl = '/app-main-menu'}
     }
 
-    // console.log('loginToReturnUrl', returnUrl)
     this.router.navigate([returnUrl]);
 
   }

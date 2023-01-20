@@ -47,7 +47,7 @@
       </app-client-search-selector>
     </div>
 
-    <div class="new-button float-left" >
+    <div>
       <button mat-button
               (click)="addClient()">
               <mat-icon>add</mat-icon>New
@@ -56,7 +56,7 @@
   </div>
 
   <div class="grid-demo"
-      *ngIf="transactionSettings?.showOrderName">
+       *ngIf="transactionSettings?.showOrderName">
     <div>
       <app-value-fields
         [inputForm]="orderNameForm"

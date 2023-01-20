@@ -20,6 +20,7 @@ import { SplashScreenStateService } from 'src/app/_services/system/splash-screen
 import { PlatformService } from '../_services/system/platform.service';
 import { UserAuthorizationService } from '../_services/system/user-authorization.service';
 import { ReportDateHelpersService } from '../_services/reporting/report-date-helpers.service';
+import { UserSwitchingService } from '../_services/system/user-switching.service';
 
 @Component({
   selector: 'app-default',
@@ -48,7 +49,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   prev$:           Observable<number>;
   routeTrigger$:   Observable<object>;
   toolbarTiny:     boolean;
-  orderBarOpen:    boolean;
+  rightSideBarToggle:    boolean;
   sidebarMode    = 'side'
   id             : any;
   smallDevice    : boolean;
@@ -67,6 +68,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   _mainMenuBar    : Subscription;
   mainMenuBar     : boolean;
 
+  _rightSideBarToggle: Subscription;
+
   _searchSideBar    : Subscription;
   searchSideBar     : boolean;
   searchBarWidth    : number;
@@ -74,7 +77,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   _barSize        : Subscription;
   barSize         : boolean;
   smallMenu        = false;
-
 
   _swapMenuWithOrder : Subscription;
   swapMenuWithOrder  : boolean;
@@ -123,12 +125,13 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   swapMenuWithOrderSubscriber() {
-    // this._swapMenuWithOrder = this.themeService.swapMenuWithOrder$.subscribe(data =>  {
-    //   this.swapMenuWithOrder = false;
-    //   if (data) {
-    //     this.swapMenuWithOrder = data
-    //   }
-    // })
+    this._swapMenuWithOrder = this.userSwitchingService.swapMenuWithOrder$.subscribe(data =>  {
+      this.swapMenuWithOrder = false;
+      if (data) {
+        this.swapMenuWithOrder = data
+      }
+      console.log(this.swapMenuWithOrder)
+    })
   }
 
   userSubscriber() {
@@ -136,7 +139,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       this._user =     this.authorizationService.user$.subscribe(data => {
         this.user = data
         // this.swapMenuWithOrder = this.user?.userPreferences?.swapMenuOrderPlacement
-        this.swapMenuWithOrder = false;
+        // this.swapMenuWithOrder = false;
         // this.themeService.setDarkLight(this.user?.userPreferences?.darkMode)
       })
     } catch (error) {
@@ -148,14 +151,12 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     try {
       this.toolBarUIService.orderBar$.subscribe(data => {
         if (this.swapMenuWithOrder) {
-          this.leftSideBarToggle = data
-          this.searchSideBar = data //!this.searchSideBar;
+          this.orderBar = data;
           return
         }
-        this.orderBarOpen = data
+        this.rightSideBarToggle = data
       })
     } catch (error) {
-      console.log('orderBarSubscriber', error)
     }
   }
 
@@ -188,11 +189,30 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   searchSideBarSubscriber() {
     this._searchSideBar = this.toolBarUIService.searchSideBar$.subscribe( data => {
-      if (this.swapMenuWithOrder) {
-        this.orderBarOpen = data //!this.searchSideBar;
+      console.log('data', data)
+      if (!this.swapMenuWithOrder) {
+        this.searchSideBar = data
         return;
       }
-      this.searchSideBar = data
+      if (this.swapMenuWithOrder) {
+        if (data) {
+          this.toolbarUIService.updateOrderBar(data)
+        }
+        this.rightSideBarToggle = data;
+        return;
+      }
+    })
+  }
+
+  rightSideBarToggleSubscriber() {
+    this._rightSideBarToggle = this.toolBarUIService.rightSideBarToggle$.subscribe( data => {
+      if (this.swapMenuWithOrder) {
+        this.rightSideBarToggle = false;
+        if (data) {
+          this.rightSideBarToggle = data;
+        }
+        return;
+      }
     })
   }
 
@@ -252,7 +272,17 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.matorderBar = 'mat-orderBar-wide'
     this.style = ""
     try {
+      this.rightSideBarToggleSubscriber()
+    } catch (error) {
+    }
+
+    try {
       this.leftSideBarToggleSubscriber();
+    } catch (error) {
+    }
+
+    try {
+      this.swapMenuWithOrderSubscriber();
     } catch (error) {
     }
 
@@ -293,7 +323,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 }
 
   constructor(
-               private toolBarUIService: ToolBarUIService,
+               public toolBarUIService: ToolBarUIService,
                private _renderer       : Renderer2,
                private cd              : ChangeDetectorRef,
                private appInitService          : AppInitService,
@@ -305,6 +335,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private splashLoader            : SplashScreenStateService,
                private platFormService         : PlatformService,
                private userAuthorizationService: UserAuthorizationService,
+               private userSwitchingService    : UserSwitchingService,
               //  private themeService           : ThemesService,
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
@@ -355,7 +386,11 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   get leftSideBar() {
     if (this.swapMenuWithOrder) {
-      return this.appOrderBar
+      // console.log('this order bar',this.toolBarUIService.orderBar, this.orderBar)
+      if (this.toolBarUIService.orderBar) {
+        return this.appOrderBar
+      }
+      return this.menuBarView
     }
     return this.appMenuSearchBar
   }
@@ -400,10 +435,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     this.cd.detectChanges();
     setTimeout(()=>{
-      this.orderBarOpen = true;
+      this.rightSideBarToggle = true;
     },50);
     setTimeout(()=>{
-      this.orderBarOpen = false;
+      this.rightSideBarToggle = false;
     },50);
   };
 
@@ -413,7 +448,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @HostListener('window:beforeunload')
   ngOnDestroy() {
-    this.orderBarOpen = false;
+    this.rightSideBarToggle = false;
     if (this.id) { clearInterval(this.id);   }
     this.toolbarTiny = true
     if (this._department)    { this._department.unsubscribe()}

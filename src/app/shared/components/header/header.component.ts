@@ -150,6 +150,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.getUserInfo()
     })
   }
+
   initToobarServiceUI() {
     this._searchSideBar = this.toolbarUIService.searchSideBar$.subscribe( data => {
       if (data) {
@@ -160,9 +161,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       }
     })
   }
+
   initMainToolbarUI() {
     this._mainMenuSideBar = this.toolbarUIService.mainMenuSideBar$.subscribe( data => {
-      if (data) {  this.searchBar = 'menu_open'
+      if (data) {
         this.menuBar = 'menu_open'
       }
       if (!data) {
@@ -546,7 +548,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   deviceInfo() {
-    if (this.terminalSetting) { return }
+    if (!this.terminalSetting) { return }
     this.uiSettings.openEditPOSDevice(this.terminalSetting)
   }
 
@@ -566,8 +568,41 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   toggleSideBar() {
-    this.openOrderBar = !this.openOrderBar
+
+    if (this.userSwitchingService.swapMenuWithOrderBoolean) {
+      if (this.openOrderBar) {
+        this.toolbarUIService.updateOrderBar(false)
+        this.toolbarUIService.updateToolBarSideBar(true)
+        return;
+      }
+
+      this.toolbarUIService.updateleftSideBarToggle(false)
+      this.openOrderBar     = false
+      this.toolbarUIService.switchToolBarSideBar()
+      return;
+    }
+
+    if (this.searchSideBar) {
+      this.searchSideBar = !this.searchSideBar;
+    }
+
+    this.openOrderBar     = !this.openOrderBar
     this.toolbarUIService.switchToolBarSideBar()
+
+  }
+
+  toggleOpenOrderBar() {
+    if (this.router.url.substring(0, 28 ) === '/currentorder;mainPanel=true') {
+      ///
+      // console.log('toggleOpenOrderBar order bar update', this.openOrderBar)
+      this.openOrderBar = false
+      this.toolbarUIService.updateOrderBar(this.openOrderBar)
+      return;
+    }
+    this.openOrderBar = !this.openOrderBar
+    this.toolbarUIService.updateOrderBar(this.openOrderBar)
+
+    console.log('toggleOpenOrderBar order bar update', this.openOrderBar)
   }
 
   toggleSearchMenu() {

@@ -360,8 +360,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.initAuthorization();
     this.gettransactionUISettingsSubscriber();
     this.updateItemsPerPage();
-    this.bucketName =   await this.awsBucket.awsBucket();
-    this.awsBucketURL = await this.awsBucket.awsBucketURL();
+    this.bucketName     =   await this.awsBucket.awsBucket();
+    this.awsBucketURL   = await this.awsBucket.awsBucketURL();
     this.sidePanelWidth = this.el.nativeElement.offsetWidth;
     this.initSubscriptions();
 
@@ -373,7 +373,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.sidePanelPercentAdjust = 60
     }
 
-    this.toolbarUIService.hidetoolBars();
+    // console.log('hide toolbar pos ordercomponent')
+    if (!this.toolbarUIService.swapMenuWithOrderBoolean) { 
+      this.toolbarUIService.hidetoolBars();
+    }
   }
 
   initAuthorization() {
@@ -615,9 +618,14 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   makePayment() {
-    if (this.smallDevice) {
-      this.openOrderBar = false
-    }
+    // if (this.smallDevice) {
+    // }
+    this.openOrderBar = false
+    console.log('order bar update', this.openOrderBar)
+    this.toolbarUIService.updateOrderBar(false);
+    this.toolbarUIService.updateSideBar(false)
+    this.toolbarUIService.updateToolBarSideBar(false)
+    // this.toolbarUIService.updateSearchBarSideBar(false)
     let path = ''
     if (this.order) {
       if (this.order.tableName && this.order.tableName.length>0) {

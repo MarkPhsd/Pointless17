@@ -19,15 +19,14 @@
       </div>
     </div>
 
-    <!-- mainPanel {{mainPanel}}
-    hidePrint {{hidePrint}} -->
     <div *ngIf="!mainPanel && !hidePrint">
       <div class="button-container">
         <button color="primary" mat-raised-button (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>
       </div>
       <div class="button-container" *ngIf="platFormService.isApp()">
-        <button color="primary" mat-raised-button (click)="prepPrintingServiceService.sendToPrep(order)"><mat-icon>countertops</mat-icon></button>
+        <button color="primary" mat-raised-button (click)="sendOrder()"><mat-icon>countertops</mat-icon></button>
       </div>
     </div>
   </div>
 </span>
+<div *ngIf="action$ | async"></div>

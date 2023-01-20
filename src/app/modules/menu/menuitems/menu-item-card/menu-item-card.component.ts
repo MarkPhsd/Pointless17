@@ -36,7 +36,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   _order             : Subscription;
   order              : IPOSOrder;
 
-  action$ : Observable<any>;
+  action$          : Observable<any>;
 
   isApp     = false;
   isProduct : boolean;
@@ -55,7 +55,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     this.isApp    = this.platFormService.isApp()
   }
 
-  async ngOnInit() {
+ ngOnInit() {
     this.initSubscriptions();
     if (!this.menuItem) {return }
     this.isProduct = this.getIsNonProduct(this.menuItem)
@@ -74,13 +74,13 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     if (!menuItem) { return false}
     if (menuItem) {
       if (!menuItem.itemType)   {
-        // this.orderMethodService.notifyEvent('This item has no type, please contact administrator.', 'Error')
         return false
       }
-      if (menuItem.itemType.useType.toLowerCase()  === 'adjustment') { return false}
-      if (menuItem.itemType.type.toLowerCase()     === 'adjustment') { return false}
-      if (menuItem.itemType.type.toLowerCase()     === 'discounts') { return false}
-      if (menuItem.itemType.type.toLowerCase()     === 'grouping') {
+      
+      if (menuItem.itemType.useType && menuItem.itemType.useType.toLowerCase()  === 'adjustment') { return false}
+      if (menuItem.itemType.type && menuItem.itemType.type.toLowerCase()     === 'adjustment') { return false}
+      if (menuItem.itemType.type && menuItem.itemType.type.toLowerCase()     === 'discounts') { return false}
+      if (menuItem.itemType.type && menuItem.itemType.type.toLowerCase()     === 'grouping') {
         return false;
       }
     }
@@ -90,8 +90,8 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   get isCategory(): boolean {
     const menuItem = this.menuItem;
     if (menuItem) {
-        if (menuItem.itemType)   {
-          if (menuItem.itemType.type.toLowerCase()  === 'grouping') {
+        if (menuItem.itemType && menuItem.itemType.type)   {
+          if (menuItem?.itemType?.type.toLowerCase()  === 'grouping') {
             return true;
         }
       }
@@ -141,13 +141,26 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
    this.orderMethodService.menuItemAction(this.order,this.menuItem, add)
   }
 
-  menuItemActionObs(add: boolean) {
+  menuItemActionObs() {
+    let add : boolean;
+    add = true
     if (this.menuItem?.name.toLowerCase() === 'load more') {
       this.outPutLoadMore.emit('true')
       return ;
     }
 
+    if ( this.isApp && !this.isCategory ) {
+      add = true;
+    }
+    if (!this.isApp && !this.isCategory) {
+      add = false;
+    }
+    if (this.isCategory) {
+      add = false;
+    }
+
     this.action$ = this.orderMethodService.menuItemActionObs(this.order,this.menuItem, add)
+
   }
 
 

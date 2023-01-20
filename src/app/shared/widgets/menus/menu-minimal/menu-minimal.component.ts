@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, HostListener } from '@angular/core';
 import { AccordionMenu, accordionConfig, SubMenu, IUser, ISite } from 'src/app/_interfaces/index';
-import { EMPTY, Observable, Subscription, } from 'rxjs';
+import { EMPTY, Observable, of, Subscription, } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
 import { transition, animate, style, trigger } from '@angular/animations';
 import { Router } from '@angular/router';
@@ -47,6 +47,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   smallMenu : boolean;
   _barSize: Subscription
   barSize: boolean;
+  menus$ : Observable<AccordionMenu[]>;
 
   isAuthorized(userType: string): boolean {
     // console.log('userType', userType)
@@ -77,22 +78,48 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   }
 
   refreshMenu(user: IUser) {
-    this.initMenus()
-    if (!user || !user.token) {return}
-    const site = this.siteService.getAssignedSite();
+
+    this.initMenu();
+
+    if (!user || !user.token) {
+      return
+    }
+    const site  = this.siteService.getAssignedSite();
     const menu$ = this.menusService.getMainMenu(site)
 
-    menu$.subscribe( data => {
-    if (!data) { return }
-      this.config = this.mergeConfig(this.options);
+    this.menus$ = menu$.pipe(
+      switchMap(data => {
+
+        if (!data) { return of(null) }
+        this.config = this.mergeConfig(this.options);
         if (data)
-          data.filter( item => {
-            this.addItemToMenu(item, this.menus)
-          })
-          this.menus =  [...new Set(this.menus)]
-        }, err => {
+        
+        try {
+          if (data.toString() === 'no menu') { 
+            if (this.user && this.user?.roles === 'admin') {
+              this.siteService.notify('No Menu Found. Please do system check.', 'Alert', 2000)
+            }
+            return of(null)
+          }
+        } catch (error) { }
+          
+
+        data.filter( item => {
+          this.addItemToMenu(item, this.menus)
+        })
+        this.menus =  [...new Set(this.menus)]
+
+        if (this.menus) {
+          this.toggle(this.menus[0], 0)
+        }
+        return of(this.menus)
       }
-    )
+    ))
+
+    this._barSize = this.toolbarUIService.barSize$.subscribe( data => {
+      this.smallMenu = data;
+    })
+
   }
 
   addItemToMenu(item: AccordionMenu, mainMenu: AccordionMenu[]) {
@@ -145,12 +172,11 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
 
     if (!this.user || !this.user.token) {return}
     if (!this.user.roles) {return};
-    
+
     const menuCheck$ = this.menusService.mainMenuExists(site);
     // console.log('menu minimal init')
     menuCheck$.pipe(
       switchMap( data => {
-        console.log('menu minimal data', data)
         if (!data || !data.result) {
            if (this.user) {
             return  this.menusService.createMainMenu(this.user , site)
@@ -158,12 +184,13 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
           return EMPTY;
         }
       })
-    ).subscribe(data => {
-      // console.log('menu minimal menu group', data)
-      this.refreshMenu(this.user)
-    }, err => {
-      console.log('error init menu minimal compact', err)
-    })
+    ).pipe(
+      switchMap(data => {
+        // console.log('menu minimal menu group', data)
+        this.refreshMenu(this.user)
+        return of(data)
+      }
+    ))
   }
 
   mergeConfig(options: accordionConfig) {

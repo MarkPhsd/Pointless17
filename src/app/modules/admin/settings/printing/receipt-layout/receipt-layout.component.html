@@ -59,20 +59,16 @@
 
         <div   *ngIf="interpolatedFooterTexts && interpolatedFooterTexts.length>0"   class="section-item">
           <div *ngFor="let order of interpolatedFooterTexts; let i = index">
-
             <div [innerHTML]="interpolatedFooterTexts[i]" >  </div>
-
           </div>
         </div>
 
         <div   *ngIf="interpolatedPaymentsTexts && interpolatedPaymentsTexts.length>0"   class="section-item">
             <div *ngFor="let payment of payments">
               <div *ngIf=" payment.paymentMethod">
-
                 <div *ngIf="payment.paymentMethod.isCreditCard">
                   <div [innerHTML]="getInterpolatedHTML(paymentsCreditText, payment)" >  </div>
                 </div>
-
                 <div *ngIf=" !payment.paymentMethod.isCreditCard ">
                   <div [innerHTML]="getInterpolatedHTML(paymentsText, payment)" >  </div>
                 </div>

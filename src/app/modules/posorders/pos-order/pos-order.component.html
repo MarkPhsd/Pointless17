@@ -49,8 +49,7 @@
         </div>
 
         <!-- height is not fixed -->
-        <div  (resized)="onResizedorderSpecialsPanel($event)"
-              class="specials">
+        <div  (resized)="onResizedorderSpecialsPanel($event)" >
           <pos-order-price-schedule-info
             (outPutDiscount)="applyDiscount($event)">
           </pos-order-price-schedule-info>

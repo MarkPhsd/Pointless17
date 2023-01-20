@@ -17,11 +17,13 @@
         <div  [class]="grid"
               *ngIf="cardStyle === 'block' && orders">
           <ng-container *ngFor="let order of orders; let i = index">
-            <app-order-card
-              (click)="setActiveOrder(order)"
-              [order]="order"
-            ></app-order-card>
-          </ng-container>
+            <div *ngIf="order.id && order.id != 0">
+              <app-order-card
+                (click)="setActiveOrder(order)"
+                [order]="order"
+              ></app-order-card>
+            </div>
+            </ng-container>
         </div>
 
         <div  [class]="grid"

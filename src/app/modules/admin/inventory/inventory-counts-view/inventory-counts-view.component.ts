@@ -104,6 +104,11 @@ export class InventoryCountsViewComponent implements OnInit, OnDestroy {
   }
 
   addItem(){
+    console.log('!results', this.results, this.results.results)
+    if (!this.results.results) {
+      this.siteService.notify('Not items to sell.', "Alert", 3000);
+      return;
+    }
     if (this.results && this.results.results) {
       const item = this.results.results[this.results.results.length -1]
       this.outPutAddItem.emit(item)

@@ -21,9 +21,11 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 
 export class MenuTinyComponent implements OnInit, OnDestroy {
 
-  accordionMenu$:    Observable<AccordionMenu[]>;
+  accordionMenu$:    Observable<any>;
   @Input() options;
   @Input() menus:    AccordionMenu[];
+
+  menu$             : Observable< AccordionMenu[]>;
   submenu:           SubMenu[];
   config:            accordionConfig;
   displayCategories: boolean;
@@ -142,63 +144,46 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   initMenu() {
 
     this.initMenus();
-
     const user = this.authenticationService.userValue;
     this.user  = user;
-
-    // console.log('init Menu', user);
-
-    if (!user || !user.token) {
-      // console.log('no user or token', user)
-      return}
-    if (!user.roles) {
-      // console.log('no roles', user)
-      return}
+    if (!user || !user.token) { return}
+    if (!user.roles) { return }
 
     const site       = this.siteService.getAssignedSite();
     const menuCheck$ = this.menusService.mainMenuExists(site);
-
-    try {
-      menuCheck$.pipe(
-        switchMap( data => {
-            if (user.roles === 'admin' || (!data ||  !data.result)) {
-              // console.log('creating menu')
-              return  this.menusService.createMainMenu(user , site)
-            }
-            if (user) {
-              // console.log('getting menu')
-              return  this.menusService.getMainMenu(site)
-            }
+    this.accordionMenu$ = menuCheck$.pipe(
+      switchMap( data => {
+          if (user.roles === 'admin' || (!data ||  !data.result)) {
+            return  this.menusService.createMainMenu(user , site)
           }
-        )
-      ).subscribe(
-        {next: data => {
-          // console.log('menu data', data)
-          if (!user.roles) {return}
-
-          if (user.roles === 'admin' ) {
-            if (!data) {  return }
-            const menuGroup = data as MenuGroup;
-            this.refreshMenuFromAccordion(menuGroup.accordionMenus)
-            return
+          if (user) {
+            return  this.menusService.getMainMenu(site)
           }
+        }
+      )
+    ).pipe(
+      switchMap(data => {
+        if (!user.roles) {return}
 
-          if (user.roles && user.roles != 'admin' ) {
-            if (!data) {  return }
-            this.refreshMenuFromAccordion(data)
-            return
-          }
+        if (user.roles === 'admin' ) {
+          if (!data) {  return }
+          const menuGroup = data as MenuGroup;
+          this.refreshMenuFromAccordion(menuGroup.accordionMenus)
+          return
+        }
 
-        },
-        error: error=> {
-          console.log('error', error)
-        }})
-      } catch (error) {
-        console.log('error', error)
+        if (user.roles && user.roles != 'admin' ) {
+          if (!data) {  return }
+          this.refreshMenuFromAccordion(data)
+          return
+        }
+        return of(data)
       }
+    ))
   }
 
   refreshMenu(user: IUser) {
+
     this.initMenu();
 
     if (!user || !user.token) {
@@ -208,22 +193,38 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     const site  = this.siteService.getAssignedSite();
     const menu$ = this.menusService.getMainMenu(site)
 
-    menu$.subscribe(
-      {
-        next:  data => {
-          if (!data) { return }
-          this.config = this.mergeConfig(this.options);
-          if (data)
-            data.filter( item => {
-              this.addItemToMenu(item, this.menus)
-            })
-            this.menus =  [...new Set(this.menus)]
-          },
-        error: err => {
-          console.log('error', err)
+    this.menu$ = menu$.pipe(
+      switchMap(data => {
+
+        if (!data) { return of(null) }
+        this.config = this.mergeConfig(this.options);
+
+        console.log('refresh Menu', data)
+
+        try {
+          if (data.toString() === 'no menu') { 
+            if (this.user && this.user?.roles === 'admin') {
+              this.siteService.notify('No Menu Found. Please do system check.', 'Alert', 2000)
+            }
+            return of(null)
+          }
+        } catch (error) {
+          
         }
+        if (data.length>0) { 
+          if (data)
+          data.filter( item => {
+            this.addItemToMenu(item, this.menus)
+          })
+          this.menus =  [...new Set(this.menus)]
+ 
+          if (this.menus) {
+            this.toggle(this.menus[0], 0)
+          }
+        }
+        return of(this.menus)
       }
-    )
+    ))
 
     this._barSize = this.toolbarUIService.barSize$.subscribe( data => {
       this.smallMenu = data;

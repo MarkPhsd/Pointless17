@@ -274,14 +274,19 @@ export class OrderMethodsService implements OnDestroy {
   ///1. List item. 2. Add Item 3. View Sub Groups of Items.   //either move to s
   menuItemActionObs(order: IPOSOrder, item: IMenuItem, add: boolean): Observable<ItemPostResults> {
     const searchResults = this.updateMenuSearchModel(item)
-    if (searchResults) { return }
+    console.log('searchResults', searchResults, item)
+    // if (searchResults) { return }
+    console.log('list item', add, item?.id, item?.itemType?.requireInStock)
+
     if (add) {
-      if (item && item.itemType.requireInStock) {
+      if (item && (item.itemType.requireInStock == true))  {
+        console.log('list item',item, item.itemType.requireInStock)
         this.listItem(item.id);
         return of(null)
       }
       return  this.addItemToOrderObs(order, item, 1, 0)
     }
+
     this.listItem(item.id);
     return of(null)
   }
@@ -304,7 +309,6 @@ export class OrderMethodsService implements OnDestroy {
   updateMenuSearchModel(item: IMenuItem) : boolean {
     if (!item) {   return false }
     const model =  {} as ProductSearchModel;
-
 
     if (item?.itemType?.name?.toLowerCase() == 'category') {
       model.categoryID   = item.categoryID.toString()
@@ -535,15 +539,10 @@ export class OrderMethodsService implements OnDestroy {
                        input: any) {
 
     const valid = this.validateUser();
-
     if (!valid) { return };
-
     this.initItemProcess();
-
     if (quantity === 0 ) { quantity = 1};
-
     if (!this.validateItem(item, barcode)) { return }
-
     let passAlongItem;
     if (this.assignedPOSItem) {  passAlongItem  = this.assignedPOSItem; };
 
@@ -594,30 +593,70 @@ export class OrderMethodsService implements OnDestroy {
                             rewardGroupApplied: number,
                             passAlongItem: PosOrderItem) : Observable<ItemPostResults> {
 
-      const valid = this.validateUser();
+    console.log('processItemPOSObservable"')
 
-      if (!valid) {
-        this.notifyEvent(`Invalid user.`, 'Alert ')
-        return
-      };
+    const valid = this.validateUser();
+    if (!valid) {
+      this.notifyEvent(`Invalid user.`, 'Alert ')
+      return
+    };
 
-      this.initItemProcess();
+    console.log('valid"')
 
-      if (quantity === 0 ) { quantity = 1 };
+    this.initItemProcess();
+    if (quantity === 0 ) { quantity = 1 };
+    if (!this.validateItem(item, barcode)) {
+      this.notifyEvent(`Invalid item`, 'Alert ')
+      return
+    }
+    if (this.assignedPOSItem && !passAlongItem) {  passAlongItem  = this.assignedPOSItem[0]; };
+    order = this.validateOrder();
 
-      if (!this.validateItem(item, barcode)) {
-        this.notifyEvent(`Invalid item`, 'Alert ')
-        return
+    if (order) {
+      const site       = this.siteService.getAssignedSite();
+      if (barcode)  {
+        return this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,  input?.portionValue).pipe(switchMap(
+          data => {
+            this.processItemPostResultsPipe(data)
+            return of(data);
+          }
+        ))
       }
 
-      if (this.assignedPOSItem && !passAlongItem) {  passAlongItem  = this.assignedPOSItem[0]; };
+      try {
+        let packaging      = '';
+        let portionValue   = '';
+        let itemNote       = '';
+        if (input) {
+          packaging        = input?.packaging;
+          portionValue     = input?.portionValue;
+          itemNote         = input?.itemNote;
+        }
 
-      order = this.validateOrder();
-      if (order) {
-        const site       = this.siteService.getAssignedSite();
+        if (item) {
+          const deviceName  = localStorage.getItem('devicename')
+          let newItem     = { orderID: order.id, quantity: quantity, menuItem: item,
+                                passAlongItem: passAlongItem,
+                                packaging: packaging, portionValue: portionValue, barcode: '',
+                                weight: 1, itemNote: itemNote, deviceName: deviceName,
+                                rewardAvailableID: rewardAvailableID,
+                                rewardGroupApplied: rewardGroupApplied } as NewItem
+          if (order.id == 0 || !order.id) {
+            const orderPayload = this.orderService.getPayLoadDefaults(null)
+            return this.orderService.postOrderWithPayload(site, orderPayload).pipe(
+              switchMap(data => {
+                newItem.orderID = data.id;
+                return this.posOrderItemService.postItem(site, newItem)
+              })).pipe(
+                switchMap(data => {
+                  console.log('posOrderItemService results ', data)
+                  this.processItemPostResultsPipe(data)
+                  return of(data);
+              })
+            )
+          }
 
-        if (barcode)  {
-          return this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,  input?.portionValue).pipe(switchMap(
+          return  this.posOrderItemService.postItem(site, newItem).pipe(switchMap(
             data=> {
               this.processItemPostResultsPipe(data)
               return of(data);
@@ -625,55 +664,14 @@ export class OrderMethodsService implements OnDestroy {
           ))
         }
 
-        try {
-          let packaging      = '';
-          let portionValue   = '';
-          let itemNote       = '';
-          if (input) {
-            packaging        = input?.packaging;
-            portionValue     = input?.portionValue;
-            itemNote         = input?.itemNote;
-          }
+      } catch (error) {
+        this.notifyEvent(error, 'Alert ')
+        console.log('error', error)
 
-          if (item) {
-            const deviceName  = localStorage.getItem('devicename')
-            let newItem     = { orderID: order.id, quantity: quantity, menuItem: item,
-                                  passAlongItem: passAlongItem,
-                                  packaging: packaging, portionValue: portionValue, barcode: '',
-                                  weight: 1, itemNote: itemNote, deviceName: deviceName,
-                                  rewardAvailableID: rewardAvailableID,
-                                  rewardGroupApplied: rewardGroupApplied } as NewItem
-
-            console.log('neworder', order.id  )
-            if (order.id == 0 || !order.id) {
-              const orderPayload = this.orderService.getPayLoadDefaults(null)
-              return this.orderService.postOrderWithPayload(site, orderPayload).pipe(
-                switchMap(data => {
-                  newItem.orderID = data.id;
-                  return this.posOrderItemService.postItem(site, newItem)
-                })).pipe(
-                  switchMap(data => {
-                    console.log('posOrderItemService results ', data)
-                    this.processItemPostResultsPipe(data)
-                    return of(data);
-                })
-              )
-            }
-
-            return  this.posOrderItemService.postItem(site, newItem).pipe(switchMap(
-              data=> {
-                console.log('666 posOrderItemService results ', data)
-                this.processItemPostResultsPipe(data)
-                return of(data);
-              }
-            ))
-          }
-
-        } catch (error) {
-          this.notifyEvent(error, 'Alert ')
-          console.log('error', error)
-        }
       }
+    }
+    this.notifyEvent('Nothing added.', 'Alert ')
+    return of(null)
   }
 
   // tslint:disable-next-line: typedef
@@ -765,6 +763,11 @@ export class OrderMethodsService implements OnDestroy {
   async scanBarcodeAddItem(barcode: string, quantity: number, input: any) {
      this.processAddItem(this.order, barcode, null, quantity, input);
   }
+
+  scanBarcodeAddItemObservable(barcode: string, quantity: number, input: any) {
+    return this.processItemPOSObservable(this.order, barcode, null, quantity, input, 0, 0, null);
+ }
+
 
   promptSerial(menuItem: IMenuItem, id: number, editOverRide: boolean, serial: string): boolean {
 
@@ -950,19 +953,19 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
-  suspendOrder(order: IPOSOrder): Observable<IPOSOrder> { 
+  suspendOrder(order: IPOSOrder): Observable<IPOSOrder> {
     if (order) {
-  
+
       if (order.clientID == 0) {
         this.siteService.notify('Assign this order a customer for reference', 'Alert',1500)
         return of(null)
       }
-  
+
       const site = this.siteService.getAssignedSite();
       this.order.suspendedOrder = true;
       this.order.orderLocked = null;
       const suspend$ =  this.orderService.putOrder(site, this.order)
-  
+
       return  suspend$.pipe(
         switchMap(data =>{
           this.clearOrder()
@@ -971,11 +974,11 @@ export class OrderMethodsService implements OnDestroy {
           return of(data)
         })
        )
-  
+
      };
      return of(null)
   }
- 
+
 
 
   clearOrder() {
@@ -999,6 +1002,8 @@ export class OrderMethodsService implements OnDestroy {
     if (url === '/pos-orders') {
       // this.router.navigate(['app-main-menu'])
     }
+
+    //then close the order bar.
 
   }
 
@@ -1093,10 +1098,10 @@ export class OrderMethodsService implements OnDestroy {
         break;
       }
       case  4: {
-        
-        if ( 
+
+        if (
               this.processItem?.item?.itemType?.type.toLowerCase() === 'store credit'.toLowerCase() ||
-              this.processItem?.item?.itemType?.type.toLowerCase() === 'gift card'.toLowerCase() 
+              this.processItem?.item?.itemType?.type.toLowerCase() === 'gift card'.toLowerCase()
             )
           {
             console.log('open gift card prompt')

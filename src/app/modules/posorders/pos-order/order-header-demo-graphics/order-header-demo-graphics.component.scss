@@ -20,10 +20,8 @@ mat-card-subtitle {
 }
 
 .grid-demo {
-  display: grid;
+  display: flex;
   width: 95%;
-  grid-template-columns:repeat( auto-fit, minmax(75px, 1fr) );
-  gap: 5px;
   margin: 5px;
 }
 
@@ -39,14 +37,15 @@ mat-card-subtitle {
 .grid-item-button {
   margin-top: -15px;
   margin-bottom: 0px;
+  margin-left: 10px;
   align-items: center;
 }
 
 .transaction-data {
-  display: grid;
+  display              : grid;
   grid-template-columns: 60px 1fr;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-y           : auto;
+  overflow-x           : hidden;
 }
 
 .float-left {

@@ -4,12 +4,7 @@
 }
 
 mat-form-field {
-  font-size: .8em;
-}
-
-.form-background {
-  max-width: 200px;
-  width: 95%;
+  // font-size: .8em;
 }
 
 .small-text {
@@ -21,3 +16,10 @@ mat-form-field {
   line-height: normal;
 }
 
+.font-size {
+  font-size: 10px;
+}
+mat-form-field-appearance-outline mat-form-field-wrapper {
+  /* margin: .25em 0; */
+  margin: 10px;
+}

@@ -11,8 +11,6 @@ export class ThemesService {
 
   theme: Observable<ITheme[]>;
 
-  private _swapMenuWithOrder   = new BehaviorSubject<boolean>(null);
-  public  swapMenuWithOrder$   = this._swapMenuWithOrder.asObservable();
 
   constructor(
     private _renderer : Renderer2) {}
@@ -50,8 +48,5 @@ export class ThemesService {
 
   }
 
-  swapMenuWithOrder(swap: boolean) {
-    this._swapMenuWithOrder.next(swap)
-  }
 
 }

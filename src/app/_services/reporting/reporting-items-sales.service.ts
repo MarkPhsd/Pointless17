@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { Observable, } from 'rxjs';
+import { Observable, of, } from 'rxjs';
 import { ISite }   from 'src/app/_interfaces';
 import { SitesService } from './sites.service';
 
@@ -56,6 +56,8 @@ export interface IReportItemSales {
   department:              string;
   weightedItem:            number;
   siteID:                  number;
+  cost                   : number;
+  itemCost               : number;
 }
 
 export interface IReportingSearchModel {
@@ -153,9 +155,9 @@ export class ReportingItemsSalesService {
   getGifCardIssueReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSales[]> {
 
     IReportingSearchModel.productsOnly = true;
-    
+
     IReportingSearchModel.removeGiftCards = true;
-    
+
     const controller = `/ReportItemSales/`
 
     const endPoint = `getItemSalesReport`
@@ -226,6 +228,8 @@ export class ReportingItemsSalesService {
   //{ "startdate": "07/01/2018", "enddate": "12/10/2020", "groupByProduct": "true" }
   groupItemSales(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSaleSummary> {
 
+    if (!site || !site.url) { return of(null)}
+
     IReportingSearchModel.productsOnly = true;
 
     const controller = `/ReportItemSales/`
@@ -237,9 +241,5 @@ export class ReportingItemsSalesService {
     return  this.http.put<IReportItemSaleSummary>(url, IReportingSearchModel)
 
   }
-
-
-
-
 
 }

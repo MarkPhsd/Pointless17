@@ -155,7 +155,7 @@
       <div (click)="assignItem()" class="menu-buttons" *ngIf="!disableActions && !prepScreen" >
         <button aria-label="user menu"
                   mat-button
-                  class="more-button"
+                  [class]="morebutton"
                   [matMenuTriggerFor]="menu"
                   #menuTrigger="matMenuTrigger"
                   (click)="menuTrigger.openMenu()">

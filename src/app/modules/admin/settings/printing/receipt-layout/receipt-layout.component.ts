@@ -186,16 +186,16 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       const prtContent     = document.getElementById('printsection');
       if (!prtContent) {
-        console.log('no prtContent', this.index)
+        // console.log('no prtContent', this.index)
         return
       }
       const content        = `${prtContent.innerHTML}`
       if (!content) {
-        console.log('not out put in content', this.index)
+        // console.log('not out put in content', this.index)
         return
       }
 
-      console.log('content output', this.index, content.length)
+      // console.log('content output', this.index, content.length)
       this.outPutPrintReady.emit(content)
     }, 500)
   }
@@ -278,17 +278,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   getInterpolatedData() {
     if (!this.orders || !this.orders[0]) { return }
     this.scrubOrders(this.orders[0])
-
-    // if (this.items) {
-    //   this.items = this.items.filter(data => {
-    //     const item = data as IPOSOrderItem;
-    //     if (data?.productName.trim() === 'Gratuity') {
-    //       const order = this.order as IPOSOrder;
-    //       order.gratuity = +(item.unitPrice * item.quantity).toFixed(2)
-    //     }
-    //     return data?.productName.trim() != 'Gratuity'
-    //   })
-    // }
 
     try {
 

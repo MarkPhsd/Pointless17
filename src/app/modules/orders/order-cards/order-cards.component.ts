@@ -52,8 +52,8 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   orders            : IPOSOrder[];
   value             : any;
   currentPage       = 1 //paging component
-  pageSize          = 20;
-  itemsPerPage      = 20
+  pageSize          = 50;
+  itemsPerPage      = 45
 
   scrollingInfo  :   string;
   endofItems     :   boolean;
@@ -262,7 +262,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     this.loading      = true
 
     results$.subscribe(data => {
-      // console.log('results updated', data)
+
       if (!this.orders)  { this.orders = [] as IPOSOrder[] }
       this.currentPage += 1;
 

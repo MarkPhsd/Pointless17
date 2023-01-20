@@ -21,12 +21,14 @@ export class NavigationService {
   }
 
   navPOSOrders() {
+    console.log('nav pos orders')
     this.toolbarUIService.hidetoolBars();
     this.toolbarUIService.updateDepartmentMenu(0);
     this.router.navigate(['/pos-orders']);
   }
 
   navTableService() {
+
     this.toolbarUIService.hidetoolBars();
     this.router.navigate(['/table-layout']);
   }
@@ -70,6 +72,7 @@ export class NavigationService {
     let schedule = 'currentorder'
     if (isStaff) { schedule = '/currentorder/' }
     this.router.navigate([ schedule , {mainPanel:true}]);
+    console.log('reset order bar')
     this.toolbarUIService.updateOrderBar(false)
     this.toolbarUIService.resetOrderBar(true)
   }

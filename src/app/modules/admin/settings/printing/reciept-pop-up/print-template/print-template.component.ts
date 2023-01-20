@@ -17,13 +17,15 @@ import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder
 export class PrintTemplateComponent implements OnInit, OnDestroy {
 
   @ViewChild('printSection')  printSection: TemplateRef<any>;
+  @ViewChild('printsection')  printsection: ElementRef;
+
   @ViewChild('printTemplate') printTemplate: TemplateRef<any>;
   @ViewChild('balanceSheet')  balanceSheetTemplate: TemplateRef<any>;
   @Input() index            : number;
   @Input() autoPrint        : boolean;
   @Input() hideExit         = false;
   @Output() outPutExit      = new EventEmitter();
-  @ViewChild('printsection') printsection: ElementRef;
+
   @Input() printerName      : string;
   @Input() options          : printOptions;
   @Input() order            : IPOSOrder;
@@ -92,8 +94,8 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
           this.templateID    = data.location.templateID;
           this.printerName   = data.location.printer;
           this.printOrder    = data;
-          console.log('init subscriptions  template data')
-          console.table(data.location)
+          // console.log('init subscriptions  template data')
+          // console.table(data.location)
 
           if (this.templateID) {
             return this.initStyles()
@@ -161,12 +163,14 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
     const site = this.siteService.getAssignedSite();
     return this.printingService.appyStylesCachedObservable(site).pipe(switchMap(data => {
       this.receiptStyles = data ;
-      console.log('receipt style, data', data)
-      console.log('template ID', this.templateID)
-      //leave notifier
-      this.siteService.notify('no Template ID found for print out.', 'Alert', 1500)
+      // console.log('receipt style, data', data)
+      // console.log('template ID', this.templateID)
       styles = data
       this.applyStyle(this.receiptStyles)
+      if (!this.templateID) {
+        this.siteService.notify('no Template ID found for print out.', 'Alert', 1500)
+        return of(null)
+      }
       return this.settingService.getSetting(site, this.templateID)
     })).pipe(
       switchMap(data => {
@@ -216,6 +220,7 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
 
   getReceiptHTML(styles: string) {
     const prtContent     = document.getElementById('printsection');
+   
     if (!prtContent) { return  }
     const content        = `${prtContent.innerHTML}`
     if (!content) { return }
@@ -256,10 +261,10 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
 
   printHTML(html) {
     if (!html) {
-      console.log('no html', this.index)
+      // console.log('no html', this.index)
     }
     if (!this.receiptStyles) {
-      console.log('no receipt styles', this.index)
+      // console.log('no receipt styles', this.index)
     }
 
     if (this.receiptStyles) {

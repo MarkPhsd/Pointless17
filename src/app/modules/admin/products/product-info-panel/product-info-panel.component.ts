@@ -148,7 +148,7 @@ export class ProductInfoPanelComponent implements OnInit {
       //then get the quantity from this.printQuantity
       if(this.printQuantity == null) { this.printQuantity == 1}
       for (let i = 0; i < this.printQuantity; i++) {
-        this.printingService.printTestLabelElectron(content, this.printerName)
+         this.printingService.printLabelElectron(content, this.printerName)
       }
     }
   }

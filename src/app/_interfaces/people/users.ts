@@ -22,7 +22,7 @@ export interface IUser {
     message: string;
     errorMessage: string;
     sortMenu: string;
-    prefrences: string;
+    preferences: string;
     userPreferences: UserPreferences;
 }
 

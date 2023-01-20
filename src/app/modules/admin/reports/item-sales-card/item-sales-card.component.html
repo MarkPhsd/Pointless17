@@ -1,7 +1,6 @@
 
-<div
-    class="mat-card-container"
-    *ngIf="site && (sales$ | async) as summary; else loading">
+<div class="mat-card-container"
+     *ngIf="site && (sales$ | async) as summary; else loading">
   <div *ngIf="summary.results as sales">
     <mat-card >
       <mat-card-title>
@@ -23,16 +22,18 @@
       <mat-card-content >
         <div class="grid-body">
           <div class="totalslabel">Item :    </div>
-          <div class="totals">Pre Tax :</div>
-          <div class="totals">#         </div>
-        </div>
+          <div class="totals">     Pre Tax :</div>
+          <div class="totals">     #         </div>
+          <div class="totals">     Cost :</div>
 
+        </div>
 
         <div  class="grid-body"
               *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
             <div class="product-name">{{sale.productName | truncateText : 20   }}      </div>
             <div class="totals">{{sale.itemTotal | currency }}   </div>
             <div class="totals">{{sale.quantity }}               </div>
+            <div class="totals">{{sale.cost | currency }}   </div>
         </div>
 
         <div class="margin-divider">
@@ -41,13 +42,13 @@
       </mat-card-content>
 
       <mat-card-footer>
-        <div *ngIf="summary.summary">
-          <div class="grid-footer">
-            <div class="totals"> PreTax Totals                             </div>
-            <div class="totals">{{summary.summary.itemTotal | currency }}  </div>
-            <div class="totals">{{summary.summary.quantity }}              </div>
-          </div>
+        <div *ngIf="summary.summary" class="grid-footer">
+          <div class="product-name"> PreTax Totals                             </div>
+          <div class="totals">{{summary.summary?.itemTotal | currency }}  </div>
+          <div class="totals">{{summary.summary?.quantity }}              </div>
+          <div class="totals">{{summary.summary?.cost | currency }}   </div>
         </div>
+        <!-- {{summary.summary | json}} -->
       </mat-card-footer>
 
     </mat-card>

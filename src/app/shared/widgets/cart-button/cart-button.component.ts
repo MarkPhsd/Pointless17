@@ -7,6 +7,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { IUser } from 'src/app/_interfaces';
 import { Router } from '@angular/router';
+import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 
 @Component({
   selector: 'app-cart-button',
@@ -63,12 +64,14 @@ export class CartButtonComponent implements OnInit, OnDestroy {
       }
     })
   }
+
   constructor(
     private siteService:            SitesService,
     public orderService:            OrdersService,
     private authenticationService : AuthenticationService,
     private toolbarServiceUI:       ToolBarUIService,
     private router                : Router,
+    private userSwitchingService: UserSwitchingService,
     ) {
    }
 
@@ -229,17 +232,32 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   }
 
   toggleOpenOrderBar() {
-    //get url.
-    // console.log('this.href', '/currentorder;mainPanel=true'.length)
-    // console.log(this.router.url.length)
-    // console.log('is equal', this.router.url.substring(0, 28 ), '/currentorder;mainPanel=true')
     if (this.router.url.substring(0, 28 ) === '/currentorder;mainPanel=true') {
-      this.openOrderBar = false // !this.openOrderBar
+      console.log('order bar setting false')
+      this.openOrderBar = false
       this.toolbarServiceUI.updateOrderBar(this.openOrderBar)
       return;
     }
-    this.openOrderBar = !this.openOrderBar
-    this.toolbarServiceUI.updateOrderBar(this.openOrderBar)
+
+    if (this.userSwitchingService.swapMenuWithOrderBoolean) {
+      this.openOrderBar = !this.openOrderBar
+      const item = this.openOrderBar 
+      this.toolbarServiceUI.updateOrderBar(item)
+      this.toolbarServiceUI.updateToolBarSideBar(item)
+      return
+    }
+
+    if (!this.userSwitchingService.swapMenuWithOrderBoolean) {
+      this.openOrderBar = !this.openOrderBar
+      this.toolbarServiceUI.updateOrderBar(this.openOrderBar)
+      return;
+    }
+
+  }
+
+
+  updateleftSideBarToggle(value: boolean) {
+    this.toolbarServiceUI.updateleftSideBarToggle(value)
   }
 
   resizeWindow() {

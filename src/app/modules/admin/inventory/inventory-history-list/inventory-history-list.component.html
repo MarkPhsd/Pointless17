@@ -80,12 +80,10 @@
                     (click)="printSerial()"><mat-icon>print</mat-icon>Serial </button>
           </div>
         </div>
-      <!-- <mat-divider class="divider-margin"></mat-divider> -->
-    </div>
+      </div>
 
     <div *ngIf="toggleLabelEvents == 'events'">
       <br>
-
       <div class="cards" *ngIf="inventoryAssignments" >
         <div *ngFor="let item of inventoryAssignments.slice().reverse()">
             <app-inventory-history-item

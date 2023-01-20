@@ -16,6 +16,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   isApp = false;
   @Output() outPutchangeTransactionType = new EventEmitter();
   @Output() outPutSendToPrep    = new EventEmitter();
+  @Output() outPutClearOrder    = new EventEmitter();
   @Output() outPutPrint         = new EventEmitter();
   @Output() outPutPrintLabel    = new EventEmitter();
   @Output() outPutRePrintLabel  = new EventEmitter();
@@ -26,7 +27,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   @Output() outPutShowItems     = new EventEmitter();
   @Output() outPutSuspendOrder  = new EventEmitter();
   @Output() outPutRemoveSuspension  = new EventEmitter();
-  @Output() outPutClearOrder    = new EventEmitter();
+
   @Output() outPutToggleSuspension = new EventEmitter();
   @Output() outPutEmailOrder    = new EventEmitter();
   @Output() outPutEmailNotifyOrder = new EventEmitter();
@@ -56,7 +57,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   assignedItems   : Subscription;
   refundItems     : boolean;
   smallDevice     : boolean;
-  
+
   constructor(private platFormService: PlatformService,
               public userAuthorizationService: UserAuthorizationService,
               private orderMethodsService: OrderMethodsService ) { }
@@ -66,7 +67,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     // this.initSubscriptions();
   }
 
-  toggleListView() { 
+  toggleListView() {
     this.listView = !this.listView;
     this.outPutListView.emit(this.listView)
   }
@@ -101,7 +102,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     this.outPutchangeTransactionType.emit(true)
   }
 
-  makeManifest() { 
+  makeManifest() {
     this.outPutPurchaseOrder.emit(true)
   }
   refundItem() {
@@ -119,6 +120,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   }
   sendToPrep(){
     this.outPutSendToPrep.emit(true)
+    this.outPutClearOrder.emit(true)
   }
   rePrintLabels(){
     this.outPutRePrintLabel.emit(true)

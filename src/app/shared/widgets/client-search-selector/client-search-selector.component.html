@@ -1,39 +1,27 @@
-<div [formGroup]="searchForm"
-     class="form-background">
-
-  <mat-form-field class="form-background"  appearance="outline" fxFlexFill >
-
-    <input
+<div [formGroup]="searchForm" >
+  <mat-form-field appearance="outline" class="font-size">
+    <input class="font-size"
            #input
            type="text"
-           class="form-background"
            placeholder="Search People"
            matInput
            formControlName="searchEntry"
            [matAutocomplete]="auto">
-
     <mat-autocomplete panelWidth="auto"
                       #auto="matAutocomplete"
                       [displayWith]="displayFn.bind(this)">
-
       <div *ngIf="(results$ | async) as results">
-
         <mat-option *ngFor="let item of results.results "
                     [value]="item">
-
           <div>
             {{item.firstName}}  {{item.lastName}}
             <div class="small-text">
               {{item.phone}} {{item.accountNumber}} {{item.email}}
             </div>
           </div>
-
         </mat-option>
-
       </div>
     </mat-autocomplete>
-
  </mat-form-field>
-
 </div>
 

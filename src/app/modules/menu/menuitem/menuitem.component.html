@@ -1,3 +1,4 @@
+<div *ngIf="(action$ | async) as action"></div>
 
 <ng-template #loading><mat-spinner
           [diameter]="75"></mat-spinner>
@@ -68,7 +69,7 @@
                         [showList]      ="false"
                         [showAddButton] ="!priceTiersShown"
                         [productID]     ="menuItem.id"
-                        (outPutAddItem) ="addItemByCode($event)">
+                        (outPutAddItem) ="addItemByCodeOBS($event)">
                         Add to Cart
                     </inventory-counts-view>
                   </div>

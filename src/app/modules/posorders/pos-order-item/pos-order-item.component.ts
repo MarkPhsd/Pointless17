@@ -74,6 +74,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   @Input() disableActions = false;
   @Input() prepScreen: string;
 
+  morebutton               = 'more-button';
   customcard               ='custom-card'
   orderPromptGroup        : IPromptGroup;
   menuItem$               : Observable<IMenuItem>;
@@ -140,8 +141,10 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   initBottomSheetSubscriber() {
     this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
       this.bottomSheetOpen = data
+      this.morebutton = 'more-button'
       if (data) {
         this.mainPanel = data;
+        this.morebutton = 'more-button-main'
         this.isNotInSidePanel = data;
         this.updateCardStyle(data)
       }
@@ -227,6 +230,13 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     this.showEdit = !item.printed && (this.quantity && !item.voidReason) &&  item.promptGroupID != 0 && item.id != item.idRef
     this.showView = this.mainPanel && ( (  item.promptGroupID === 0) || ( item.promptGroupID != 0 && item.id != item.idRef ) )
     this.promptOption = (item.promptGroupID != undefined && item.promptGroupID != 0)
+
+    if (this.mainPanel) {
+      this.morebutton = 'more-button-main';
+    }
+    if (!this.mainPanel) {
+      this.morebutton = 'more-button';
+    }
     this.updateCardStyle(this.mainPanel)
     this.refreshSidePanel()
   }
@@ -399,8 +409,10 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   refreshSidePanel() {
     this.gridItems = 'grid-items';
+    this.morebutton = 'more-button'
     if (this.mainPanel) {
       this.gridItems ='grid-items-main-panel'
+      this.morebutton = 'more-button-main'
     }
 
     if (this.sidePanelWidth == undefined) { return }
@@ -570,7 +582,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   printLabel(item) {
-    this.printingService.printLabel(item)
+    this.action$ = this.printingService.printLabel(item)
   }
 
   swipeOutItem(){

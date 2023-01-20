@@ -1,8 +1,9 @@
 <mat-sidenav-container>
-  <div class="grid-container">
+  <div class="grid-container c1">
 
     <div  class="form-width"
-          *ngIf="searchForm && !smallDevice && !tinyDepartmentFilter">
+          *ngIf="searchForm && !smallDevice && !tinyDepartmentFilter && (uiHomePage && !uiHomePage.staffHideSearchBar && isUser) || 
+                                                                        (uiHomePage && !uiHomePage.hideSearchBar && isStaff)">
       <search-debounce-input
             [(itemNameInput)] = "itemNameInput"
             [itemNameControl] = "'itemName'"

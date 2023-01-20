@@ -1,44 +1,45 @@
 
-<div fxLayout="column"
-     class="row-class"
-     *ngIf="isStaff && !displayCategories && menus">
+<div *ngIf="(menus$ | async) as menus">
+  <div fxLayout="column"
+      class="row-class"
+      *ngIf="isStaff && !displayCategories && menus">
 
-  <ul id="accordion"
-      class="accordion">
-    <li class="menu-item"
-        @fade
-        *ngFor="let menu of menus; let i = index"
-        [class.active]="menu.active">
-        <div  *ngIf="isAuthorized(menu?.userType)">
-          <div class="menu"
-                (click)="toggle(menu, i)">
+    <ul id="accordion"
+        class="accordion">
+      <li class="menu-item"
+          @fade
+          *ngFor="let menu of menus; let i = index"
+          [class.active]="menu.active">
+          <div  *ngIf="isAuthorized(menu?.userType)">
+            <div class="menu"
+                  (click)="toggle(menu, i)">
 
-            <div class="grid-toggle-tiny">
-              <div class="item-font" *ngIf="menu.icon">
-                <mat-icon>{{ menu.icon }}</mat-icon>
+              <div class="grid-toggle-tiny">
+                <div class="item-font" *ngIf="menu?.icon">
+                  <mat-icon>{{ menu?.icon }}</mat-icon>
+                </div>
+                <div class="item-text" *ngIf="!tinyMenu">
+                  {{menu?.name | truncateText : 20}}
+                </div>
               </div>
-              <div class="item-text" *ngIf="!tinyMenu">
-                {{menu.name | truncateText : 20}}
-              </div>
+
             </div>
-
-          </div>
-      </div>
-    </li>
-  </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>
 
 <div fxLayout="column" class="row-class"
       *ngIf="displayCategories">
-
   <div class="accordion  menu-header">
 
     <div class="grid-toggle-tiny">
-      <div class="item-font" *ngIf="menus[index].icon">
-        <mat-icon>{{menus[index].icon}}</mat-icon>
+      <div class="item-font" *ngIf="menus[index]?.icon">
+        <mat-icon>{{menus[index]?.icon}}</mat-icon>
       </div>
       <div class="item-text" *ngIf="!tinyMenu">
-        {{menus[index].name  | truncateText : 20}}
+        {{menus[index]?.name  | truncateText : 20}}
       </div>
     </div>
     <div *ngIf="!tinyMenu">
@@ -58,15 +59,15 @@
           <div class="menu"
                *ngIf="isAuthorized(item?.userType)">
               <a mat-list-item
-                routerLinkActive={{item.routerLinkActive}}
-                routerLink=      {{item.routerLink}}>
+                routerLinkActive={{item?.routerLinkActive}}
+                routerLink=      {{item?.routerLink}}>
 
               <div class="grid-toggle-tiny">
                 <div class="item-font" *ngIf="item.icon">
-                  <mat-icon>{{item.icon}}</mat-icon>
+                  <mat-icon>{{item?.icon}}</mat-icon>
                 </div>
                 <div class="item-text" *ngIf="!tinyMenu">
-                  {{item.name | truncateText : 20}}
+                  {{item?.name | truncateText : 20}}
                 </div>
               </div>
             </a>

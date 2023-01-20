@@ -5,11 +5,13 @@
           (messageOut)="receiveData($event)">
         </app-widget-filter>
       </div>
+
       <div>
         <button mat-raised-button (click)="email()">
-          <mat-icon>email</mat-icon>
+          Email <mat-icon>email</mat-icon>
         </button>
       </div>
+
       <div>
         <button mat-raised-button (click)="showValues=!showValues">
           <span *ngIf="showValues">
@@ -20,6 +22,13 @@
           </span>
         </button>
       </div>
+
+      <div>
+        <button mat-raised-button (click)="refreshReports()">
+          Refresh Reports
+        </button>
+      </div>
+
     </div>
 
     <div *ngIf="(email$ | async) as email; else emailing"></div>
@@ -53,8 +62,33 @@
                   [dateFrom]="dateFrom"
                   [dateTo]  ="dateTo"
                   [notifier]="childNotifier">
-                  <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
+            <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
           </payment-report>
+
+
+          <div>
+            <item-sales-card
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [groupBy]="'category'">
+                <mat-icon>menu</mat-icon>  Category Sales
+                <mat-divider></mat-divider>
+            </item-sales-card>
+          </div>
+
+          <div>
+            <item-sales-card
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [groupBy]="'items'">
+                <mat-icon>menu</mat-icon>  Item Sales
+                <mat-divider></mat-divider>
+            </item-sales-card>
+          </div>
 
         </div>
       </div>

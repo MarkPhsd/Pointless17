@@ -354,6 +354,7 @@ import { EmployeeClockEditComponent } from '../modules/admin/employeeClockAdmin/
 import { EmployeeClockFilterComponent } from '../modules/admin/employeeClockAdmin/employee-clock-filter/employee-clock-filter.component';
 import { EmployeeClockListComponent } from '../modules/admin/employeeClockAdmin/employee-clock-list/employee-clock-list.component';
 import { ClockBreaksTypesComponent } from '../modules/admin/employeeClockAdmin/clock-breaks-types/clock-breaks-types.component';
+import { DailyReportComponent } from '../modules/admin/settings/printing/daily-report/daily-report.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -423,8 +424,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
     ClockBreaksTypesComponent,
     CSVImportComponent,
+    DailyReportComponent,
     DatabaseSchemaComponent,
-
     DevxReportDesignerComponent,
     ReportViewerComponent,
 

@@ -1,4 +1,6 @@
 <div *ngIf="(closingProcedure$ | async) as closingProcedures"></div>
+
+
 <mat-card *ngIf="(uiTransactions$ | async) as uiTransactions">
 
   <mat-card-title></mat-card-title>
@@ -16,8 +18,8 @@
       <button mat-raised-button (click)="closeDay()">Close Day</button>
     </span>
 
-    <span>
-      <button mat-raised-button (click)="print()"> <mat-icon>print</mat-icon>Print</button>
+    <span *ngIf="(printAction$ | async) as action">
+      <button mat-raised-button (click)="print(action)"> <mat-icon>print</mat-icon>Print</button>
     </span>
 
     <span>
@@ -31,6 +33,7 @@
     <span *ngIf="(uiTransactions && uiTransactions.dsiEMVNeteEpayEnabled) && dsiEMVSettings && isElectronApp">
       <button mat-raised-button (click)="emvDataCapBatchInquire()"> <mat-icon>credit_card</mat-icon>Batch Inquire</button>
     </span>
+
 
     <app-list-printers-electron
         [printerName]      ="printerName"
@@ -120,74 +123,32 @@
   </mat-card>
 </div>
 
-<div #printsection class="container">
-  <div class=" grid-sales-cards " *ngIf="iBalanceSheet && localSite">
-      <div>
-        <sales-tax-report
-              [site]="localSite"
-              [dateFrom]="dateFrom"
-              [dateTo]="dateTo"
-              [zrunID]="zrunID" >
-            <mat-icon>receipt</mat-icon>  Sales
-            <mat-divider></mat-divider>
-        </sales-tax-report>
-      </div>
-
-     <div>
-       <item-sales-card
-              [site]="localSite"
-              [dateFrom]="dateFrom"
-              [dateTo]="dateTo"
-              [zrunID]="zrunID"
-              [removeGiftCard]="true"
-              [groupBy]="'items'">
-            <mat-icon>menu</mat-icon>  Items
-            <mat-divider></mat-divider>
-        </item-sales-card>
-        <item-sales-card
-            [site]="localSite"
-            [dateFrom]="dateFrom"
-            [dateTo]="dateTo"
-            [zrunID]="zrunID"
-            [removeGiftCard]="false"
-            [groupBy]="'items'">
-          <mat-icon>menu</mat-icon>  Gift Card / Store Credit Issuances
-          <mat-divider></mat-divider>
-        </item-sales-card>
-      </div>
+<div class="container">
+  <div  class="grid-sales-cards" 
+        *ngIf="iBalanceSheet && localSite">
       
-      <div>
-        <payment-report
-              [site]    ="localSite"
-              [dateFrom]="dateFrom"
-              [dateTo]  ="dateTo"
-              [zrunID]  ="zrunID"
-              [groupBy] ="'paymentMethod'"
-              >
-            <mat-icon>credit_card</mat-icon>  Payment Methods
-            <mat-divider></mat-divider>
-        </payment-report>
+    <div #printsection>
+    
+      <ng-container [ngTemplateOutlet]="taxReport"></ng-container>
 
-        <payment-report
-              [site]    ="localSite"
-              [dateFrom]="dateFrom"
-              [dateTo]  ="dateTo"
-              [zrunID]  ="zrunID"
-              [groupBy]="'orderEmployeeCount'">
-              <mat-icon>people_alt</mat-icon> Employee Orders By Hour
-        </payment-report>
+      <ng-container [ngTemplateOutlet]="paymentReport"></ng-container>
 
-        <payment-report
-              [site]    ="localSite"
-              [dateFrom]="dateFrom"
-              [dateTo]  ="dateTo"
-              [zrunID]  ="zrunID"
-              [groupBy] ="'Employee'"
-              >
-            <mat-icon>people</mat-icon>  Employee Sales
-            <mat-divider></mat-divider>
-        </payment-report>
+      <div *ngIf="!printing">
+        <ng-container [ngTemplateOutlet]="employeeOrdersByHourReport"></ng-container>
       </div>
+
+      <ng-container [ngTemplateOutlet]="employeeReport"></ng-container>
+
+      <ng-container [ngTemplateOutlet]="giftCardReport"></ng-container>
+
+    </div>
+
+    <div>
+
+      <ng-container [ngTemplateOutlet]="itemSalesReport"></ng-container>
+
+    </div>
+
   </div>
 
   <div
@@ -207,8 +168,83 @@
   </div>
 
 </div>
-  <!-- <div class ="container">
 
-  </div> -->
+<ng-template #taxReport>
+  <div>
+    <sales-tax-report
+          [site]="localSite"
+          [dateFrom]="dateFrom"
+          [dateTo]="dateTo"
+          [zrunID]="zrunID" >
+        <mat-icon>receipt</mat-icon>  Sales
+        <mat-divider></mat-divider>
+    </sales-tax-report>
+  </div>
+</ng-template>
 
+<ng-template #paymentReport>
+  <payment-report
+      [site]    ="localSite"
+      [dateFrom]="dateFrom"
+      [dateTo]  ="dateTo"
+      [zrunID]  ="zrunID"
+      [groupBy] ="'paymentMethod'"
+      >
+    <mat-icon>credit_card</mat-icon>  Payment Methods
+    <mat-divider></mat-divider>
+  </payment-report>
+</ng-template>
 
+<ng-template #discountReport>
+  
+</ng-template>
+
+<ng-template #employeeOrdersByHourReport>
+  <payment-report
+    [site]    ="localSite"
+    [dateFrom]="dateFrom"
+    [dateTo]  ="dateTo"
+    [zrunID]  ="zrunID"
+    [groupBy]="'orderEmployeeCount'">
+    <mat-icon>people_alt</mat-icon> Employee Orders By Hour
+  </payment-report>
+</ng-template>
+
+<ng-template #employeeReport>
+  <payment-report
+      [site]    ="localSite"
+      [dateFrom]="dateFrom"
+      [dateTo]  ="dateTo"
+      [zrunID]  ="zrunID"
+      [groupBy] ="'Employee'"
+      >
+    <mat-icon>people</mat-icon>  Employee Sales
+    <mat-divider></mat-divider>
+  </payment-report>
+</ng-template>
+
+<ng-template #giftCardReport>
+  <item-sales-card
+      [site]="localSite"
+      [dateFrom]="dateFrom"
+      [dateTo]="dateTo"
+      [zrunID]="zrunID"
+      [removeGiftCard]="false"
+      [groupBy]="'items'">
+    <mat-icon>menu</mat-icon>  Gift Card / Store Credit Issuances
+    <mat-divider></mat-divider>
+  </item-sales-card>
+</ng-template>
+
+<ng-template #itemSalesReport>
+  <item-sales-card
+      [site]="localSite"
+      [dateFrom]="dateFrom"
+      [dateTo]="dateTo"
+      [zrunID]="zrunID"
+      [removeGiftCard]="true"
+      [groupBy]="'items'">
+    <mat-icon>menu</mat-icon>  Items
+    <mat-divider></mat-divider>
+  </item-sales-card>
+</ng-template>

@@ -1,22 +1,25 @@
+
+  .margin-small {
+    maring-left:  0.25cm;
+    maring-right: 0.25cm;
+  }
+
   .grid-receipt  {
     display: grid;
     grid-template-columns: 50px auto 80px;
     grid-template-rows:  auto;
-
   }
 
   .grid-receipt-85 {
     display: grid;
     grid-template-columns: 50px auto 80px;
     grid-template-rows:  auto;
-
   }
 
   .grid-receipt-80 {
     display: grid;
     grid-template-columns: 50px auto 80px;
     grid-template-rows:  auto;
-
   }
 
   .grid-receipt-58  {
@@ -101,14 +104,16 @@
   .printsection {
     font-size: .8em;
     @media : print {
-      font-size: 10pt;
+      font-size: 12pt;
+      font-family: 'FontA11'
     }
   }
 
   .printsection-58 {
     font-size: .8em;
     @media : print {
-      font-size: 10pt;
+      font-size: 12pt;
+      font-family: 'FontA11'
     }
   }
 
@@ -118,7 +123,7 @@
     font-weight: bold;
     @media : print {
       font-size: 14pt;
-     font-weight: bold;
+      font-family: 'FontA11'
     }
   }
 
@@ -127,8 +132,8 @@
     font-size: .9em;
     font-weight: bold;
     @media : print {
-      font-size: 11pt;
-      font-weight: bold;
+      font-size: 12pt;
+      font-family: 'FontA11'
     }
   }
 
@@ -136,7 +141,8 @@
     text-align: center;
     font-size: .8em;
     @media : print {
-      font-size: 10pt;
+      font-size: 12pt;
+      font-family: 'FontA11'
     }
   }
 
@@ -145,6 +151,7 @@
     font-size: .8em;
     @media : print {
       font-size: 10pt;
+      font-family: 'FontA11'
     }
   }
 
@@ -153,6 +160,7 @@
     font-size: .8em;
     @media : print {
       font-size: 10pt;
+      font-family: 'FontA11'
     }
   }
 
@@ -161,6 +169,7 @@
     font-size: .8em;
     @media : print {
       font-size: 10pt;
+      font-family: 'FontA11'
     }
   }
 
@@ -168,7 +177,8 @@
       text-align: right;
       font-size: .8em;
       @media : print {
-        font-size: 10pt;
+      font-size: 10pt;
+      font-family: 'FontA11'
       }
   }
 
@@ -176,6 +186,7 @@
     font-size: .8em;
     @media : print {
       font-size: 10pt;
+      font-family: 'FontA11'
     }
   }
 
@@ -184,6 +195,7 @@
     text-align: right;
     @media : print {
       font-size: 10pt;
+      font-family: 'FontA11'
     }
   }
 
@@ -191,13 +203,15 @@
     font-size: .8em;
     @media : print {
       font-size: 10pt;
+      font-family: 'FontA11'
     }
   }
 
   .description {
       font-size: .8em;
       @media : print {
-        font-size: 10pt;
+      font-size: 10pt;
+      font-family: 'FontA11'
       }
   }
 

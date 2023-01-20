@@ -10,14 +10,23 @@
         [mode]   ="sidebarMode"
         [opened] ="leftSideBarToggle">
 
-    <div [hidden]="searchSideBar" [class]="barType">
-      <ng-container [ngTemplateOutlet]="menuOrOrderBar"></ng-container>
-    </div>
+    <!-- leftSideBarToggle   {{leftSideBarToggle}}<br>
+    swapMenuWithOrder {{swapMenuWithOrder}} <br>
+    orderBar {{toolBarUIService.orderBar}} <br> -->
 
-    <div [hidden]="!searchSideBar">
+    <div *ngIf="swapMenuWithOrder">
       <ng-container [ngTemplateOutlet]="leftSideBar"></ng-container>
     </div>
 
+    <div *ngIf="!swapMenuWithOrder">
+      <div [hidden]="searchSideBar" [class]="barType">
+        <ng-container [ngTemplateOutlet]="menuOrOrderBar"></ng-container>
+      </div>
+
+      <div [hidden]="!searchSideBar">
+        <ng-container [ngTemplateOutlet]="leftSideBar"></ng-container>
+      </div>
+    </div>
     <ng-container #chatURL></ng-container>
 
   </mat-drawer>
@@ -40,8 +49,7 @@
   <mat-drawer
               position  = "end"
               [mode]    = "sidebarMode"
-              [opened]  = "orderBarOpen"
-              >
+              [opened]  = "rightSideBarToggle" >
 
     <ng-container [ngTemplateOutlet]="rightSideBar"></ng-container>
 

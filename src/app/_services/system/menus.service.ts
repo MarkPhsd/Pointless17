@@ -21,24 +21,6 @@ export class MenusService {
 
   submenu = {} as SubMenu[]
   accordionMenus: AccordionMenu[] = [
-    // {
-    //   id:               0,
-    //   name:             'Menu',
-    //   icon:             'search',
-    //   active:           true,
-    //   sortOrder:        1,
-    //   menuGroupID:      0,
-    //   userType:         this.getAnonymous(),
-    //   routerLink:       '/app-main-menu',
-    //   routerLinkActive: 'app-main-menu',
-    //   method:           '',
-    //   submenus: [
-    //     { name: 'Categories', minimized: false, method: '', routerLink: '/categories', routerLinkActive: 'categories', icon: 'article', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType:  this.getUsers(), meunyType: 0},
-    //     { name: 'Brands',     minimized: false,  method: '', routerLink: '/brandslist',     routerLinkActive: 'brandslist',   icon: 'article',   onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType:  this.getUsers(), meunyType: 0},
-    //     { name: 'Flowers',    minimized: true,  method: '',  routerLink: '/tier-menu',   routerLinkActive: 'tier-menu',   icon: 'yard',   onClick: '', id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType:  this.getUsers(), meunyType: 0},
-    //     { name: 'Search',     minimized: true,  method: '', routerLink: '/searchproducts',   routerLinkActive: 'searchproducts',   icon: 'search',   onClick: '', id: 4, sortOrder: 0, submenuID:0, menuID: 0, submenus: this.submenu, userType:  this.getUsers(), meunyType: 0},
-    //   ]
-    // },
 
     {
       id:             0,
@@ -68,10 +50,10 @@ export class MenusService {
       method:           '',
       submenus: [
         { name: 'Orders',  minimized: false, method: '',  routerLink: '/pos-orders', routerLinkActive: 'pos-orders', icon: 'list', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
-        { name: 'Payments',  minimized: false, method: '',  routerLink: '/pos-payments', routerLinkActive: 'pos-payments', icon: 'credit_card', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: 'Payments',  minimized: false, method: '',  routerLink: '/pos-payments', routerLinkActive: 'pos-payments', icon: 'credit_card', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Balance Sheets',  minimized: true, method: '',  routerLink: '/balance-sheets', routerLinkActive: 'balance-sheets', icon: 'list', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: 'Balance Sheet',  minimized: false, method: '',  routerLink: '/balance-sheet-edit', routerLinkActive: 'balance-sheet-edit', icon: 'point_of_sale', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: 'Operations',    minimized: false,  method: '' ,routerLink: '/operations', routerLinkActive: 'operations',   icon: 'article',   onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Balance Sheet',  minimized: false, method: '',  routerLink: '/balance-sheet-edit', routerLinkActive: 'balance-sheet-edit', icon: 'point_of_sale', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: 'Operations',    minimized: false,  method: '' ,routerLink: '/operations', routerLinkActive: 'operations',   icon: 'article',   onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
         { name: 'Tables' ,   minimized: true,  method: '' ,  routerLink: '/table-layout',     routerLinkActive: 'pos-orders',   icon: 'flatware',   onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
         { name: 'Gift/Credit',  minimized: false, method: '',  routerLink: '/store-credit', routerLinkActive: 'store-credit', icon: 'list', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
       ]
@@ -88,10 +70,12 @@ export class MenusService {
       routerLinkActive: 'profileListing',
       method: '' ,
       submenus: [
-        { name: 'Find Profile',    method: '' ,minimized: true, routerLink: '/profileListing', routerLinkActive: 'profileListing', icon: 'person_search', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
-        { name: 'Scan',            method: '' ,minimized: false, routerLink: '/barcodescanner', routerLinkActive: 'barcodescanner', icon: 'qr_code_scanner', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
-        { name: 'Employees',       method: '' ,minimized: false, routerLink: '/employee-list',  routerLinkActive: 'employee-list',  icon: 'groups', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: 'Clock',           method: '' ,minimized: false, routerLink: '/employee-clock',  routerLinkActive: 'employee-clock',  icon: 'schedule', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Find Profile',    method: '' ,minimized: true, routerLink:   '/profileListing', routerLinkActive:    'profileListing', icon: 'person_search', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: 'Scan',            method: '' ,minimized: false, routerLink:  '/barcodescanner', routerLinkActive:    'barcodescanner', icon: 'qr_code_scanner', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: 'User Types',       method: '' ,minimized: false, routerLink: '/client-type-list',  routerLinkActive: 'client-type-list',  icon: 'groups', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Employees',       method: '' ,minimized: false, routerLink:  '/employee-list',  routerLinkActive:    'employee-list',  icon: 'groups', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Job Types',       method: '' ,minimized: false, routerLink:  '/job-type-list',  routerLinkActive:    'job-type-list',  icon: 'groups', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Clock',           method: '' ,minimized: false, routerLink:  '/employee-clock',  routerLinkActive:   'employee-clock',  icon: 'schedule', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
     {
@@ -243,7 +227,9 @@ export class MenusService {
 
       const user = JSON.parse(localStorage.getItem('user')) as IUser;
 
+      // console.log('getmenu user', user)
       if (!user || !user.token || !user.token || user.token == '' ) { return of(null) }
+
 
       if (!user || !user.roles ||  !user.username ) {
         return of(null)
@@ -338,7 +324,7 @@ export class MenusService {
 
     if (user.roles != 'admin') { return }
 
-    const  menuGroup =  {name: 'main', id: 0, userType: user.roles,
+    const  menuGroup =  {name: 'main', id: 0, userType: 'admin,manager,user,employee',
                          accordionMenus: this.accordionMenus }  as MenuGroup;
 
     const controller = "/MenuGroups/"

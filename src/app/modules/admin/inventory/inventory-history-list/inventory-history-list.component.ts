@@ -199,15 +199,20 @@ export class InventoryHistoryListComponent implements OnInit, OnDestroy {
     this._snackBar.open('Feature not implemented', 'Alert')
   }
 
-  printSku() {
+   printSku() {
     // const item =  this.fakeDataService.getInventoryItemTestData();
     // const printString = this.renderingService.interpolateText(item, zplString )
     if (this.labelSetting && this.inventoryAssignment) {
       const content = this.renderingService.interpolateText(this.inventoryAssignment, this.labelSetting.text)
       //then get the quantity from this.printQuantity
       if(this.printQuantity == null) { this.printQuantity == 1}
+
+      // await this.printingService.printLabelElectron(content, this.printerName)
+
+      // // await  this.printingService.printTestLabelElectron(content, this.printerName)
+
       for (let i = 0; i < this.printQuantity; i++) {
-        this.printingService.printTestLabelElectron(content, this.printerName)
+        this.printingService.printLabelElectron(content, this.printerName)
       }
     }
 

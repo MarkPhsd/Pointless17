@@ -99,14 +99,13 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   printView: number;
 
   intSubscriptions() {
-
     this.printingService.printView$.subscribe(data => {
         if (!data) {
           this.printingService._printView.next(1);
         }
 
         this.printView = data;
-        if (!this.printView) { 
+        if (!this.printView) {
           this.printView = 1;
         }
         if (this.printView == 1) {
@@ -116,7 +115,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
           // this.setOrderPrintView()
         }
 
-        console.log('refresh view', this.printView)
         this.refreshView$ =  this.refreshViewObservable()
       }
     )
@@ -126,8 +124,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
           if ((this.options && this.options.silent) || this.autoPrint) {
             this.print();
             this.autoPrinted = true;
-
-
           }
         }
       }
@@ -146,14 +142,10 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     )
   {}
 
-  //this.router.navigate(["/profileEditor/", {id:clientID, miles:clientID }]);
-  // await this.getAndroidPrinterAssignment()
-
   ngOnInit() {
     this.isElectronApp = this.platFormService.isAppElectron
     this.initPrintView() //done
     this.intSubscriptions();
-    // this.refreshView$ =  this.refreshViewObservable()
   }
 
   ngOnDestroy(): void {
@@ -169,37 +161,30 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
     return receipt$.pipe(
       switchMap(data => { return defaultReceipt$ })
-          ,catchError(e => { 
+          ,catchError(e => {
                     console.log('e 1', e)
             this.siteService.notify('Error defaultReceipt receipt view' + e, 'Alert', 2000)
             return of(null)
           })).pipe(
       switchMap(data => { return styles$ })
-          ,catchError(e => { 
+          ,catchError(e => {
             console.log('e 2', e)
             this.siteService.notify('Error  stylesreceipt view' + e, 'Alert', 2000)
             return of(null)
           })).pipe(
       switchMap(data => { return deviceInfo$}
-          ),catchError(e => { 
+          ),catchError(e => {
             console.log('e 3', e)
             this.siteService.notify('Error deviceInfo receipt view' + e, 'Alert', 2000)
             return of(null)
           })).pipe(
       switchMap(data => {
-        console.log('data' , data)
-        // if (this.printingService.__printView == 1) {
-        //   this.printingService._printView.next(1)
-        // }
-        // if (this.printingService.__printView == 2) {
-        //   this.printingService._printView.next(2)
-        // }
         return of(data)
-          }),catchError(e => { 
+          }),catchError(e => {
             console.log('e4' , e)
             this.siteService.notify('Error receipt view' + e, 'Alert', 2000)
             return of(null)
-        }))
+      }))
 
   }
 
@@ -228,8 +213,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   //Step 1
   getDefaultReceipt() {
-    const site = this.siteService.getAssignedSite();
-    this.receiptName =  'defaultElectronReceiptPrinterName'
+    const site        = this.siteService.getAssignedSite();
+    this.receiptName  =  'defaultElectronReceiptPrinterName'
     const defaultReceipt$ = this.settingService.getSettingByNameCachedNoRoles(site, this.receiptName)
     return defaultReceipt$.pipe(
       switchMap(data => {
@@ -237,7 +222,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
         return this.settingService.getSetting(site, +data.option1)
     })).pipe(
       switchMap(data => {
-      // console.log('sub component', data)
       this.initSubComponent(data)
       return of(data)
     }))
@@ -293,8 +277,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     if (this.printView == 1) {
       return this.receiptTemplate
     }
-    if (!this.printView) { 
-      this.printView = 1; 
+    if (!this.printView) {
+      this.printView = 1;
       return this.receiptTemplate
     }
   }
@@ -342,13 +326,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     )
   }
 
-
   async applyBalanceSheetStyles(): Promise<ISetting> {
-    // const value = await  this.printingService.appyBalanceSheetStyle();
-    // const style             = document.createElement('style');
-    // style.innerHTML         = value;
-    // document.head.appendChild(style);
-    // return  this.receiptStyles
     return this.printingService.applyBalanceSheetStyles()
   }
 
@@ -496,7 +474,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     }
   }
 
-  getOrder() { 
+  getOrder() {
     return  this.orderService.currentOrder$.pipe(
       switchMap(data => {
           console.log('order  id:', data.id)
@@ -522,8 +500,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
           }
           return of(this.order)
         }
-      ),catchError(e => { 
-        console.log('error', e) 
+      ),catchError(e => {
+        console.log('error', e)
         return of(null)
       })
     )

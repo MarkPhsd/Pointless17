@@ -106,7 +106,7 @@ export class PosEditSettingsComponent implements OnInit {
 
   initForm() {
     this.inputForm = this.fb.group({
-      medicalRecSales    : [''],
+      medicalRecSales    : [],
       receiptPrinter     : [],
       labelPrinter       : [],
       labelPrinter2      : [],

@@ -54,6 +54,9 @@ export interface  emailSMTP {
 })
 export class SendGridService {
 
+  dateFrom:any;
+  dateTo: any;
+  
   constructor(
     private http: HttpClient,
     private _fb: FormBuilder,

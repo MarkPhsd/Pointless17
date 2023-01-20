@@ -3,7 +3,7 @@ import {Component,  HostListener, OnInit, AfterViewInit,OnDestroy,
 import {IMenuItem} from 'src/app/_interfaces/menu/menu-products';
 import {AWSBucketService, MenuService} from 'src/app/_services';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, Subscription} from 'rxjs';
+import { Observable, of, Subscription, switchMap} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
@@ -11,6 +11,8 @@ import { Capacitor, Plugins } from '@capacitor/core';
 import { Title } from '@angular/platform-browser';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ISite } from 'src/app/_interfaces';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-menu-items-infinite',
@@ -20,6 +22,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 )
 
 export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  action$ : Observable<any>;
 
   @ViewChild('nextPage', {read: ElementRef, static:false}) elementView: ElementRef;
   // @ViewChild('scrollframe', {static: false}) scrollFrame: ElementRef;
@@ -52,9 +56,10 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   menuItems:        IMenuItem[];
   value             : any;
   currentPage       = 1 //paging component
-  pageSize          = 35;
+  pageSize          = 25;
   itemsPerPage      = 35
 
+  ordersListClass = 'orders-list'
   @Input() departmentID :   string;
   @Input() categoryID:      string;
   @Input() subCategoryID :  string;
@@ -79,9 +84,12 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   platForm          = this.getPlatForm()
   isApp             = false;
 
+  style$ : Observable<any>;
+
   getPlatForm() { return Capacitor.getPlatform(); }
 
   initOrderBarSubscription() {
+
     this.toolbarServiceUI.orderBar$.subscribe(data => {
       this.orderBar = data
       if (this.orderBar) {
@@ -102,9 +110,29 @@ constructor(private menuService        : MenuService,
               private titleService     : Title,
               private platFormService  : PlatformService,
               private fb: FormBuilder,
+              private httpClient: HttpClient,
       )
   {
     this.isApp = this.platFormService.isApp()
+    this.initStyles();
+  }
+
+  initStyles() { 
+    if (!this.isApp) { return }
+    this.ordersListClass = 'orders-list c1'
+    // this.http.get('assets/htmlTemplates/receiptTemplateCreditPayments.html', {responseType: 'text'});
+    // const item$ =  this.httpClient.get('assets/htmlTemplates/scrollbarStyleWide.txt', {responseType: 'text'}).pipe(
+    //   switchMap(styles => { 
+    //     console.log('styles', styles)
+    //     const style     = document.createElement('style');
+    //     style.innerHTML = styles.toString();
+    //     document.head.appendChild(style);
+    //     return of(styles)
+    //   })
+    // )
+
+    // return item$
+
   }
 
   async ngOnInit()  {
@@ -133,9 +161,10 @@ constructor(private menuService        : MenuService,
     this.initSearchFromModel();
     this.setItemsPerPage();
     this.updateItemsPerPage()
-    this.pageSize = 35;
     this.currentPage = 1;
-    await this.nextPage();
+    this.menuItems = [] as IMenuItem[]
+    this.nextPage();
+
     this.initOrderBarSubscription();
     this.setTitle();
   }
@@ -172,7 +201,6 @@ constructor(private menuService        : MenuService,
       console.log('error', error)
     }
   }
-
 
   ngAfterViewInit() {
     this.itemElements.changes.subscribe(_ => this.onItemElementsChanged());
@@ -260,8 +288,8 @@ constructor(private menuService        : MenuService,
       const value = this.route.snapshot.paramMap.get('value');
       if (model && !value)  {
 
-        console.log('department source', this.route.snapshot.paramMap.get('departmentID'))
-        console.log('subCategory', this.route.snapshot.paramMap.get('subCategoryID'))
+        // console.log('department source', this.route.snapshot.paramMap.get('departmentID'))
+        // console.log('subCategory', this.route.snapshot.paramMap.get('subCategoryID'))
 
         this.departmentID  = this.route.snapshot.paramMap.get('departmentID');
         this.categoryID    = this.route.snapshot.paramMap.get('categoryID');
@@ -288,7 +316,6 @@ constructor(private menuService        : MenuService,
       model.pageSize    = pageSize
       model.active      = true;
       const site        = this.siteService.getAssignedSite();
-      console.log('Search Model', model)
       const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
       this.loading      = true
 
@@ -306,7 +333,6 @@ constructor(private menuService        : MenuService,
         if (this.menuItems) {
 
           try {
-            // console.log('menu length', this.menuItems.length)
             if (this.menuItems[this.menuItems.length -1 ].name.toLowerCase() === 'load more') {
               this.menuItems.splice(this.menuItems.length-1,1)
             };
@@ -316,7 +342,6 @@ constructor(private menuService        : MenuService,
           data.results.forEach( item => {
             this.menuItems.push(item)
           })
-
 
           this.totalRecords = data.paging.totalRecordCount;
           if ( this.menuItems.length == this.totalRecords ) {
@@ -332,8 +357,6 @@ constructor(private menuService        : MenuService,
             this.menuItems.push(lastItem)
           }
 
-
-
           this.value = ((this.menuItems.length / this.totalRecords ) * 100).toFixed(0)
           this.loading      = false
           return
@@ -345,15 +368,127 @@ constructor(private menuService        : MenuService,
           this.loading      = false
           this.value = 100;
         }
+
       }
     )
+
+
   };
+
+  getListSearchModel(model : ProductSearchModel) {
+    this.departmentID  = this.route.snapshot.paramMap.get('departmentID');
+    this.categoryID    = this.route.snapshot.paramMap.get('categoryID');
+    this.subCategoryID = this.route.snapshot.paramMap.get('subCategoryID');
+    this.brandID       = this.route.snapshot.paramMap.get('brandID')
+    this.typeID       = this.route.snapshot.paramMap.get('typeID')
+
+    model.categoryID   = this.categoryID
+    model.departmentID = this.departmentID
+    model.subCategoryID = this.subCategoryID;
+
+    if (this.typeID) {
+      if (this.typeID) { model.itemTypeID     = this.typeID     }
+    }
+    if (this.brandID) {
+      if (this.brandID) { model.brandID       = this.brandID     }
+    }
+    return model;
+
+  }
+
+  addToListOBS(pageSize: number, pageNumber: number)  {
+
+    let model   = this.productSearchModelData;
+    if (!model) { model = {} as ProductSearchModel }
+    const value = this.route.snapshot.paramMap.get('value');
+    if (!pageNumber || pageNumber == null) {pageNumber = 1 }
+    if (!pageSize   || pageSize   == null) {pageSize   = 35}
+
+    if (model && !value)  {
+      model = this.getListSearchModel(model)
+    }
+
+    model.pageNumber  = pageNumber
+    model.pageSize    = pageSize
+    model.active      = true;
+
+    const site        = this.siteService.getAssignedSite();
+    const process$    = this.getProcess(site, model)
+    this.loading      = true
+
+    return process$.pipe(
+      switchMap(data => {
+        if (pageNumber == 1) {
+          // model.pageNumber = 2;
+          // return  this.getProcess(site, model)
+          return  this.addToListOBS(this.pageSize, 2)
+        }
+      return of(data)
+    })).pipe(switchMap(data => {
+      return of(data)
+    }))
+
+  };
+
+  getProcess(site: ISite, model: ProductSearchModel) {
+     const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
+     return results$.pipe(
+        switchMap(data => {
+          this.currentPage += 1;
+          if (data.results && data.results.length == 0 || data == null || (!data || !data.results)) {
+            this.value = 100;
+            this.loading = false;
+            this.endOfRecords = true
+            return of(null)
+          }
+          this.itemsPerPage = this.itemsPerPage + data.results.length;
+          if (this.menuItems) {
+            try {
+              if (this.menuItems[this.menuItems.length -1 ].name.toLowerCase() === 'load more') {
+                this.menuItems.splice(this.menuItems.length-1,1)
+              };
+            } catch (error) {
+            }
+
+            data.results.forEach( item => {
+              this.menuItems.push(item)
+            })
+
+            this.totalRecords = data.paging.totalRecordCount;
+            if ( this.menuItems.length == this.totalRecords ) {
+              this.endOfRecords = true;
+              this.loading = false;
+              this.value = 100;
+            }
+
+            if ( this.value != 100) {
+              const lastItem = this.getNextMenuItem();
+              this.loading = false;
+              this.menuItems.push(lastItem)
+            }
+
+            this.value     = ((this.menuItems.length / this.totalRecords ) * 100).toFixed(0)
+            this.loading   = false
+            return of(data)
+          }
+
+          this.pagingInfo = data.paging
+
+          if (data) {
+            this.menuItems    = data.results
+            this.loading      = false
+            this.value = 100;
+          }
+
+          return of(data)
+      }
+    ))
+  }
 
   moveNext(event) {
     this.menuItems.splice(this.menuItems.length,1)
     this.onScrollDown();
   }
-
 
   onScrollDown() {
     this.scrollingInfo = 'scroll down'
@@ -368,8 +503,8 @@ constructor(private menuService        : MenuService,
 
   }
 
-  async nextPage() {
-    await this.addToList(this.pageSize, this.currentPage)
+  nextPage() {
+    this.action$ = this.addToListOBS(this.pageSize, this.currentPage)
   }
 
   scrollDown() {

@@ -40,8 +40,8 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     productForm:            FormGroup;
     quantity:               number;
     id:                     string;
-
-    menuItem:               IMenuItem;
+    action$  : Observable<any>;
+    menuItem :               IMenuItem;
     menuItem$:              Observable<IMenuItem>;
     brand$:                 Observable<IClientTable>;
 
@@ -325,11 +325,18 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       }
     }
 
-    addItemByCode(item) {
+    async addItemByCode(item) {
       if (item) {
-        this.orderMethodsService.scanBarcodeAddItem(item.sku, 1, {packaging: this.packaging, portionValue: this.portionValue} )
+       await   this.orderMethodsService.scanBarcodeAddItem(item.sku, 1, {packaging: this.packaging, portionValue: this.portionValue} )
       }
     }
+
+    addItemByCodeOBS(item) {
+      if (item) {
+        this.action$ = this.orderMethodsService.scanBarcodeAddItemObservable(item.sku, 1, {packaging: this.packaging, portionValue: this.portionValue} )
+      }
+    }
+
 
     goBackToList() {
       try {

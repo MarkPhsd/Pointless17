@@ -26,14 +26,13 @@
 
  .side-panel-buttons-container  {
    width: 95%;
-
    display: grid;
    gap: 5px;
    grid-template-columns: repeat( auto-fit, minmax(65px, 1fr) );
-   margin-bottom : 1px;
-   margin-top    : 1px;
-   margin-left   : 2px;
-   height: 75px;
+  //  margin-bottom : 1px;
+  //  margin-top    : 1px;
+  //  margin-left   : 2px;
+  //  height: 75px;
    overflow: hidden;
  }
 
@@ -63,8 +62,8 @@
 }
 
 .specials {
-  padding: 3px;
-  margin : 3px;
+  // padding: 3px;
+  // margin : 3px;
 }
 
 .button {
@@ -74,7 +73,7 @@
 
 .buttons-container {
   width: 98%;
-  margin: 2px;
+  margin-top:   2px;
   overflow: hidden;
   display: flex;
   align-content: center;

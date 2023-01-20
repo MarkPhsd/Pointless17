@@ -10,7 +10,6 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { HTMLEditPrintingComponent } from '../htmledit-printing/htmledit-printing.component';
 
 @Component({
   selector: 'app-edit-cssstyles',
@@ -57,11 +56,7 @@ export class EditCSSStylesComponent implements OnInit {
     private settingsService  : SettingsService,
     private siteService      : SitesService,
     private _snackBar        : MatSnackBar,
-    private printingService  : PrintingService,
-    private router           : Router,
-    private fb               : FormBuilder,
     private fbService        : FbSettingsService,
-    private dialog           : MatDialog,
     private dialogRef        : MatDialogRef<EditCSSStylesComponent>,
     public  route            : ActivatedRoute,
     private renderingService : RenderingService,
@@ -70,7 +65,6 @@ export class EditCSSStylesComponent implements OnInit {
   {
     if (data) {
       this.setting = data
-      // console.log('constructor', this.setting)
       this.initForm()
     }
   }
@@ -117,7 +111,7 @@ export class EditCSSStylesComponent implements OnInit {
   }
 
   onCancel() {
-    this.dialogRef.close();
+    this.dialogRef.close(this.setting);
   }
 
   update() {

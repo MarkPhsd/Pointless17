@@ -185,6 +185,10 @@ export class OrdersService {
         this.toolbarServiceUI.updateOrderBar(false)
         return;
       }
+      if (!order) {
+        this.toolbarServiceUI.updateOrderBar(false);
+
+      }
     }
 
     this.currentOrder = order;
@@ -925,6 +929,7 @@ export class OrdersService {
     if (isStaff) { schedule = '/currentorder/' }
     this.router.navigate([ schedule , {mainPanel:true}]);
     this.toolbarServiceUI.updateOrderBar(false)
+
     this.toolbarServiceUI.resetOrderBar(true)
   }
 
