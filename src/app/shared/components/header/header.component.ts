@@ -104,7 +104,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   _searchSideBar      : Subscription;
 
   _mainMenuSideBar:   Subscription;
-
+  userSwitching = true;
+  public widthOfWindow: number;
   message: string;
   menuBar    = 'menu'
   searchBar  = 'search';
@@ -398,6 +399,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   @HostListener("window:resize", [])
   updateItemsPerPage() {
+    this.widthOfWindow = window.innerWidth;
+    console.log(this.widthOfWindow)
     this.showSearchForm = true
     this.smallDevice = false
     this.phoneDevice = false;
@@ -406,6 +409,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     } else if (window.innerWidth >= 992) {
       this.sitePickerWidth = 33
     }
+
 
     if (811 >= window.innerWidth ) {
       this.showSearchForm = false
@@ -420,6 +424,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   @HostListener("window:resize", [])
   updateScreenSize() {
+    this.widthOfWindow = window.innerWidth;
     this.smallDevice = false
     if (811 >= window.innerWidth ) {
       this.smallDevice = true
@@ -432,6 +437,13 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (this.platFormService.androidApp && !this.user) {
       this.mattoolbar = 'mat-toolbar-android-no-user'
     }
+
+    if ( this.widthOfWindow >= 1025 ) {
+      this.userSwitching = true;
+    } else {
+      this.userSwitching = false;
+    }
+
   }
 
   getUserInfo() {

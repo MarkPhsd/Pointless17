@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Observable,switchMap,of } from 'rxjs';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
 
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -58,9 +58,9 @@ export class HTMLEditPrintingComponent implements OnInit {
   paymentWEICEBT   : string;
   subFooterText    : string;
 
-  labelImage$               : Observable<any>;
+  imageLabel$               : Observable<any>;
   labelImage64              : string;
-
+  imageLable$: Observable<any>;
   receiptLayoutSetting  : ISetting;
   receiptStyles         : ISetting;
 
@@ -200,10 +200,15 @@ export class HTMLEditPrintingComponent implements OnInit {
     }
   }
 
-  async refreshLabelImage() {
+   refreshLabelImage() {
     if (!this.setting) {return}
     const item = this.fakeData.getInventoryItemTestData();
-    this.labelImage64 = await this.printingService.refreshInventoryLabel(this.setting.text, item)
+    this.imageLabel$ = this.printingService.refreshInventoryLabelObs(this.setting.text, item).pipe(
+      switchMap(data => { 
+        this.labelImage64 = data
+        return of(data)
+      })
+    )
   }
 
   setPrinterWidthValue() {

@@ -1,0 +1,9 @@
+.grid-tip-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  row-gap: 5px;
+  column-gap: 5px;
+  justify-content: space-between;
+  margin: 5px;
+}

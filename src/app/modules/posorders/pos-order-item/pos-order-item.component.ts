@@ -15,6 +15,7 @@ import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-se
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
 import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
+import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -78,6 +79,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   customcard               ='custom-card'
   orderPromptGroup        : IPromptGroup;
   menuItem$               : Observable<IMenuItem>;
+  printLabel$             : Observable<any>;
   isNotInSidePanel        : boolean
   sidePanelWidth          : number
   sidePanelPercentAdjust  : number
@@ -188,6 +190,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                 private dialog             : MatDialog,
                 private menuService        : MenuService,
                 private posOrderItemService: POSOrderItemServiceService,
+                private inventoryService   : InventoryAssignmentService,
                 private promptGroupservice : PromptGroupService,
                 private printingService    : PrintingService,
                 public  userAuthService    : UserAuthorizationService,
@@ -581,8 +584,29 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     });
   }
 
-  printLabel(item) {
-    this.action$ = this.printingService.printLabel(item)
+  printLabel(item: PosOrderItem) {
+    const site = this.siteService.getAssignedSite()
+    const posItem$ = this.posOrderItemService.getPurchaseOrderItem(site,item.id)
+ 
+    this.printLabel$ = posItem$.pipe(
+      switchMap(data => { 
+        if (data && data.inventoryAssignmentID) { 
+          return this.inventoryService.getInventoryAssignment(site, data.inventoryAssignmentID)
+        }
+        return of(null)
+      })
+    ).pipe(
+      switchMap(data => { 
+        console.log('item with inventory', item, data)
+        if (data) {
+          item.inventory = data;
+        }
+        return this.menuItem$
+      }
+    )).pipe(switchMap(data => { 
+      item.menuItem = data;
+      return this.printingService.printLabel(item)
+    }))
   }
 
   swipeOutItem(){

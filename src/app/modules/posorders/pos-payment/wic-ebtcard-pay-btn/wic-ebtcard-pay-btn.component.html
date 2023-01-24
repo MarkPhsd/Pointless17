@@ -1,0 +1,20 @@
+<mat-card *ngIf="order.wicTotal !=0 || order.ebtTotal != 0" >
+  <mat-card-content>
+    <span 
+          *ngIf="order.wicTotal && order.wicTotal !=0">
+      <button class="payment-buttons"
+              mat-raised-button
+              (click)="applyWICPayment()">
+        <mat-icon color="warn">credit_card</mat-icon>WIC Payment
+      </button>
+    </span>
+    <span 
+          *ngIf="order.ebtTotal && order.ebtTotal !=0 ">
+      <button class="payment-buttons"
+              mat-raised-button
+              (click)="applyEBTPayment()">
+        <mat-icon color="warn">credit_card</mat-icon>EBT Payment
+      </button>
+    </span>
+  </mat-card-content>
+</mat-card>

@@ -64,6 +64,7 @@ export class NavigationService {
     if (isStaff || completionDate) {
        url = 'pos-payment'
        this.router.navigateByUrl(url)
+      //  console.log('continue')
        return
     }
   }

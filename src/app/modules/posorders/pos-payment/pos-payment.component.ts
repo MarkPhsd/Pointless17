@@ -31,7 +31,6 @@ import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-c
 import { CardPointMethodsService } from '../../payment-processing/services';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 
 @Component({
@@ -45,7 +44,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   @ViewChild('splitItemsView') splitItemsView: TemplateRef<any>;
 
   @Input() order  :   IPOSOrder;
-
+   isApp = this.platFormService.isApp();
   userAuths       :   IUserAuth_Properties;
   _userAuths      : Subscription;
 
@@ -95,9 +94,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   groupPaymentGroupID = 0;
   _paymentAmount       = 0;
   enterCustomAmount   = false;
-
   _creditPaymentAmount = 0;
-
 
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
   uiTransactions: TransactionUISettings
@@ -119,7 +116,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         const site = this.sitesService.getAssignedSite();
         return this.serviceTypeService.getTypeCached(site, data.serviceTypeID)
       }
-      return EMPTY
+      return of(null)
       }
 
     )).subscribe(data => {
@@ -133,7 +130,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       this.posPayment = data
     })
 
-    this._userAuths = this.authenticationService.userAuths$.subscribe(data => { 
+    this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
       if (data) {
         this.userAuths = data;
       }
@@ -165,6 +162,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
     this.initAuthorization()
 
+
     const site = this.sitesService.getAssignedSite();
     this.paymentService.updatePaymentSubscription(this.posPayment)
     this.toolbarUI.updateOrderBar(false)
@@ -184,17 +182,15 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
 
     this.refreshIsOrderPaid();
-    this.updateItemsPerPage();
-    this.initStripe();
+    this.freshDevice();
+
     this.initTransactionUISettings();
-
     this.paymentMethods$ = this.getPaymentMethods(site)
-    this.paymentMethods$.subscribe(data =>  { this.paymentMethods = data; })
-
-    this.authenticationService.updateUser(this.authenticationService.userValue)
+    this.paymentMethods$.subscribe(data => { this.paymentMethods = data; })
     if (this.authenticationService.userValue) {
       this.orderAction$ = this.orderMethodsService.getLoginActions()
     }
+    return;
   }
 
   setLoginAction() {
@@ -211,13 +207,12 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
-  houseAccountPayment() { 
+  houseAccountPayment() {
     this.action$ =  this.orderMethodsService.suspendOrder(this.order)
   }
 
-
   initTransactionUISettings() {
-      this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
+    this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
       switchMap(data => {
         if (data) {
           this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
@@ -239,22 +234,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (this._userAuths) { this._userAuths.unsubscribe()}
   }
 
-  initStripe() {
-    this.uISettingsService.getSetting('StripeAPISettings').subscribe(data => {
-      if (data) {
-        const stripeAPISettings   = JSON.parse(data.text) as StripeAPISettings;
-        this.stripeEnabled        = stripeAPISettings?.enabled;
-      }
-    });
-  }
-
-  addStripeTipPercent(value) {
-    if (value) {
-
-      this.stripeTipValue = ( this.paymentAmount * (value/100) ).toFixed(2);
-    }
-  }
-
   getPaymentMethods(site: ISite) {
     const paymentMethods$ = this.paymentMethodService.getCacheList(site);
 
@@ -267,15 +246,17 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
           list = list.filter( item => !item.ebt)
           list = list.filter( item => item.enabledOnline)
         return  of(list)
-      }))
+      })
+
+      )
     }
 
     if (this.platFormService.isApp()) {
-      console.log('getting payments')
       return paymentMethods$.pipe(
         switchMap(data => {
-          const list = data.filter( item => !item.isCreditCard)
-          console.log('list', list)
+          let list = data.filter( item => !item.isCreditCard)
+          list = list.filter( item => !item.wic)
+          list = list.filter( item => !item.ebt)
           return  of(list)
       }))
     }
@@ -290,17 +271,15 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   @HostListener("window:resize", [])
-  updateItemsPerPage() {
+  freshDevice() {
     this.smallDevice = false
     if (window.innerWidth < 768) {
       this.smallDevice = true
     }
-
     if (!this.smallDevice) {
       this.orderlayout = 'order-layout'
       this.orderItemsPanel = 'item-list'
     }
-
     if (window.innerWidth < 599) {
       this.phoneDevice = true
     }
@@ -368,7 +347,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
 
     this.serviceTypeService.getType(site, serviceTypeID).subscribe(data => {
-        // console.log('result', data)
         if (!data) { return }
         this.serviceType = data;
         this.processPaymentReady(data)
@@ -426,66 +404,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       return amountEntered
     }
     return 0
-  }
-
-  applyStripePayment() {
-    const order = this.order;
-    if (order) {
-      const data = {title: 'Payment', amount: this.creditPaymentAmount, tip: this.stripeTipValue}
-      this.openStripePayment(data)
-    }
-  }
-
-
-  applyBoltPayment(manual: boolean) {
-    const order = this.order;
-    if (order) {
-      this.cardPointMethodsService.processSubCreditPayment(order, this.creditPaymentAmount, false, this.uiTransactions)
-    }
-  }
-
-  applyPayPalPayment(manual: boolean) {
-    const order = this.order;
-    if (order) {
-      this.paymentsMethodsService.processPayPalCreditPayment(order, this.creditPaymentAmount, false, this.uiTransactions)
-    }
-  }
-
-  processDSICreditCardPayment(manual: boolean) {
-    const order = this.order;
-    if (order) {
-      this.paymentsMethodsService.processSubDSIEMVCreditPayment(order, this.creditPaymentAmount, manual)
-    }
-  }
-
-  processDSIEMVAndroidCreditCardPayment(manual: boolean) {
-    const order = this.order;
-    if (order) {
-      this.paymentsMethodsService.processDSIEMVAndroidCreditVoid(order, this.creditPaymentAmount, manual, this.uiTransactions)
-    }
-  }
-
-  async dsiResetDevice() {
-    const response  = await this.dsiProcess.pinPadReset( );
-    this.notify('PIN Pad Reset', 'Success', 1000)
-  }
-
-  openStripePayment(data: any){
-    let dialogRef: any;
-    const site = this.sitesService.getAssignedSite();
-    dialogRef = this.dialog.open(StripeCheckOutComponent,
-      { width:        '100vw',
-        minWidth:     '100vw',
-        maxWidth:     '100vw',
-        height:       '800px',
-        minHeight:    '800px',
-        data: data,
-      },
-    )
-    dialogRef.afterClosed().subscribe(result => {
-      if (!result) { return }
-      this.processResults(result)
-    });
   }
 
   inputPartialAmount() {
@@ -581,9 +499,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   processResults(paymentResponse: IPaymentResponse) {
     let result = 0
-
-    // console.log('processResults paymentResponse', paymentResponse)
-
     if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
       if (paymentResponse.orderCompleted) {
         result =  this.orderMethodsService.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
@@ -595,13 +510,11 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
     if (paymentResponse.paymentSuccess || paymentResponse.responseMessage.toLowerCase() === 'success') {
       this.orderService.updateOrderSubscription(paymentResponse.order)
-
       this.notify(`Payment succeeded: ${paymentResponse.responseMessage}`, 'Success', 1000)
     } else {
       this.notify(`Payment failed because: ${paymentResponse.responseMessage}`, 'Something unexpected happened.',3000)
     }
   }
-
 
   closeOrder() {
     const site = this.sitesService.getAssignedSite();
@@ -609,7 +522,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   getResults(amount): Observable<IPaymentResponse> {
-      //if credit card - prompt for credit card payment
+    //if credit card - prompt for credit card payment
     const site = this.sitesService.getAssignedSite();
 
     if (this.paymentMethod && this.posPayment && this.order)
@@ -654,9 +567,24 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
-      // const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
-      // const results =  await payment$.pipe().toPromise();
-      return this.paymentsMethodsService.processCashPayment(site, posPayment, order, amount, paymentMethod )
+    return this.paymentsMethodsService.processCashPayment(site, posPayment, order, amount, paymentMethod )
+  }
+
+  applyCashPayment(amount: number) { 
+    const site = this.sitesService.getAssignedSite()
+    if (this.posPayment) { 
+      this.action$ = this.paymentMethodService.getPaymentMethodByName(site, 'cash').pipe(switchMap(method => { 
+        return this.paymentsMethodsService.processCashPayment(site, this.posPayment, this.order, amount, method )
+      })).pipe(switchMap(data => { 
+        return this.orderService.getOrder(site, this.order.id.toString(), false )
+      })).pipe(switchMap(data => {
+        this.orderService.updateOrderSubscription(data)
+        return of(data)
+      }))
+    } 
+    if (!this.posPayment) { 
+      this.sitesService.notify('No payment assigned', 'Alert', 2000)
+    }
   }
 
   processCreditPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
@@ -669,16 +597,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   processRewardPoints(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
-    // if (order.clients_POSOrders) {
-    //   if (order.clients_POSOrders.loyaltyPointValue >= amount) {
-    //     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
-    //     const results  = await payment$.pipe().toPromise();
-    //     return results
-    //   } else  {
-    //     this.notify(`There are not enough points to pay this amount. The client has $${order.clients_POSOrders.loyaltyPointValue} in total.`, 'Try Again',3000)
-    //     return
-    //   }
-    // }
     return this.processRewardPoints(site, posPayment, order, amount, paymentMethod)
   }
 
@@ -706,21 +624,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   enterPointCashValue(event) {
-    //apply payment as cash value
-    // if (this.posPayment && event && this.paymentMethod && this.order) {
-    //   const amountPaid = event;
-    //   if (this.order.balanceRemaining >= amountPaid)  {
-    //     return await this.processRewardPoints(site, this.posPayment, this.order, amountPaid, this.paymentMethod)
-    //   }
-    //   if (amountPaid > this.order.balanceRemaining )  {
-    //     this.notify('Amount entered is greater than the total. Please try again.', 'Oops!', 1500)
-    //     return
-    //   }
-    // }
     const site = this.sitesService.getAssignedSite();
     return  this.paymentsMethodsService.enterPointCashValue(
         event, this.paymentMethod, this.posPayment, this.order)
-
   }
 
   storeCredit() {
@@ -729,11 +635,11 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
-  giftCard() {
-    if (this.order) {
-      this.storeCreditMethodsService.openStoreCreditPopUp(0, 0)
-    }
-  }
+  // giftCard() {
+  //   if (this.order) {
+  //     this.storeCreditMethodsService.openStoreCreditPopUp(0, 0)
+  //   }
+  // }
 
   get paymentAmount() {
     if (!this._paymentAmount || this._paymentAmount ==0) {
@@ -742,7 +648,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     return this._paymentAmount;
   }
 
-  get creditPaymentAmount() {
+  public get creditPaymentAmount() {
     if (!this._creditPaymentAmount || this._creditPaymentAmount != 0) {
       if (this.order.creditBalanceRemaining == 0) {
         return  this.order.balanceRemaining;
@@ -751,7 +657,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
     return this._creditPaymentAmount;
   }
-
 
   applyBalance() {
     if (!this.paymentMethod.isCreditCard) {
@@ -769,12 +674,10 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   getPaymentMethod(paymentMethod) {
     this.paymentMethod = paymentMethod;
     if (this.paymentMethod) {
-
       if (this.groupPaymentAmount != 0) {
         this.applyPaymentAmount(this.groupPaymentAmount)
         return
       }
-
       if (this.paymentMethod.name.toLowerCase() === 'check') {
         this.stepSelection = 2;
         return
@@ -826,6 +729,10 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.stepSelection = 1;
   }
 
+  setStep(value: number) {
+    this.resetPaymentMethod()
+  }
+
   applyEBTPayment() {
   }
 
@@ -839,7 +746,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         switchMap( method => {
             if (!method) {
               this.notify('payment method not found', 'error', 1000)
-              return EMPTY
+              return of(null)
             }
             return   this.paymentsMethodsService.getResults(amount, method, this.posPayment, this.order)
           }

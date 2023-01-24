@@ -74,6 +74,21 @@ export class FbInventoryService {
       caseQuantity: [],
       casePrice: [],
       itemSku: [],
+
+      originID : [],
+      vendor : [],
+      createdAtTime : [],
+      lastAuditDate : [],
+      itemForm : [],
+      description : [],
+      testLotNumber : [],
+      testDate : [],
+      testedBy : [],
+      batchdescription : [],
+      itemTypeName : [],
+      itemTypeID : [],
+      brandID : [],
+      itemSKU : [],
     })
 
     return fb;

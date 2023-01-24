@@ -123,7 +123,7 @@ export class PrintingService {
     this.zplSetting   = await this.settingService.setDefaultZPLText(site);
   }
 
-  async refreshInventoryLabel(zplText: string, data: IInventoryAssignment): Promise<string> {
+  async refreshInventoryLabel(zplText: string, data: any): Promise<string> {
 
     const site        =  this.siteService.getAssignedSite();
     if (!zplText) {return}
@@ -143,6 +143,31 @@ export class PrintingService {
       const img = await labelImage$.pipe().toPromise()
       return  `data:image/jpeg;base64,${img}`
     }
+  }
+
+  refreshInventoryLabelObs(zplText: string, data: any): Observable<string> {
+
+    const site        =  this.siteService.getAssignedSite();
+    if (!zplText) {return}
+
+    let zpl = {} as  zplLabel;
+    zpl.height = '5' // this.zplSetting.option2;
+    zpl.width  = '4' // this.zplSetting.option3;
+
+    if (!zpl) { return }
+
+    //interpolate the zpl text
+    zplText =  this.renderingService.interpolateText(data, zplText)
+    zpl.text   = zplText
+
+    if (zpl) {
+      const labelImage$  =  this.labelaryService.postZPL(site, zpl)
+      return labelImage$.pipe(switchMap(data => { 
+        return  of(`data:image/jpeg;base64,${data}`)
+      }))
+    }
+
+    return of(null)
   }
 
   refreshProductLabel(zplText: string, data: IInventoryAssignment): Observable<string> {
@@ -458,9 +483,7 @@ export class PrintingService {
     return false
   }
 
-   printLabel(item: PosOrderItem) {
-
-    console.log('print Label', item);
+   printLabel(item: any) {
 
     if (!item) {return of(null)}
 
@@ -474,8 +497,6 @@ export class PrintingService {
         console.log(data)
         const item = JSON.parse(data.text) as ITerminalSettings;
         this.uiSettingsService.updatePOSDevice(item)
-        console.log('device info', item)
-
         printer = {text: item?.labelPrinter}
         return of(item)
       })
@@ -483,7 +504,6 @@ export class PrintingService {
 
     const result$ =  printer$.pipe(
       switchMap(data => {
-
         if (!data ) {
           this.siteService.notify('No Printer assigned to label', 'Alert', 2000)
           return of(null)
@@ -501,11 +521,9 @@ export class PrintingService {
           }
       })).pipe(
         switchMap( data => {
-          console.log('data', data)
           if (!data) { return of(null) }
           const content = this.renderingService.interpolateText(item, data.text)
           if (printer.text) {
-            console.log('printer print label electron', printer)
             this.printLabelElectron(content, printer.text)
           }
           if (!item.printed || (data && !data.printed)) {

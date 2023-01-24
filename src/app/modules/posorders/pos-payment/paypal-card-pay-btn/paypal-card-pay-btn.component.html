@@ -1,0 +1,10 @@
+<span *ngIf="(platForm === 'web') &&
+            uiTransactions?.payPalEnabled &&
+            (order && order?.balanceRemaining != 0)">
+  <button class="payment-buttons"
+          mat-raised-button
+          color="primary"
+          (click)="applyPayPalPayment(false)">
+    Paypal
+  </button>
+</span>

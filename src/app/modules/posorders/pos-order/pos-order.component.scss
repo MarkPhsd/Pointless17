@@ -24,6 +24,11 @@
     -webkit-font-smoothing: antialiased;
  }
 
+ .pay-buttons { 
+    margin-left: 10px;
+    margin-top: 5px;
+  }
+
  .side-panel-buttons-container  {
    width: 95%;
    display: grid;
@@ -90,6 +95,26 @@
     overflow: auto;
   }
 }
+
+.payment-buttons-container {
+  --gap: 5px;
+  display: grid;
+  margin-left: 10px;
+  margin-top: 5px;
+  gap: var(--gap);
+  grid-template-columns:  repeat( auto-fit, minmax(145px, 1fr) );
+  grid-auto-flow: row;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  @include for-phone-only  {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(155px, 1fr) );
+    grid-auto-flow: row;
+  }
+}
+
 
 
 .grid-buttons {

@@ -1,0 +1,9 @@
+<div *ngIf="devicename &&
+    uiTransactions?.cardPointBoltEnabled &&
+    (order && order?.balanceRemaining != 0)">
+  <button class="payment-buttons"
+    mat-raised-button
+    (click)="applyBoltPayment(false)">
+    <mat-icon color="warn">credit_card</mat-icon>CardPointe <br> Credit Card
+  </button>
+</div>

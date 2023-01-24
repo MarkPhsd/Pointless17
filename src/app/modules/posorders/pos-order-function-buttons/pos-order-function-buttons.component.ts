@@ -1,4 +1,6 @@
-import { Component, OnInit, Output, Input,EventEmitter, HostListener, OnDestroy } from '@angular/core';
+import { Component, OnInit, Output, Input,EventEmitter, HostListener, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
+import { ThumbnailsPosition } from '@ngx-gallery/core';
+import { TouchBarOtherItemsProxy } from 'electron';
 import { Subscription } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
@@ -12,6 +14,24 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 
 export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
+
+  @ViewChild('payButton')     payButton: TemplateRef<any>;
+  @ViewChild('exitButton')    exitButton: TemplateRef<any>;
+  @ViewChild('refundOrderButton')  refundOrderButton: TemplateRef<any>;
+  @ViewChild('cancelButton') cancelButton: TemplateRef<any>;
+
+
+  spacer1: any;
+  spacer2: any;
+  spacer3: any;
+  spacer4: any;
+  spacer5: any;
+  spacer6: any;
+  spacer7: any;
+  spacer10: any;
+  spacer11: any;
+  windowSize: string;
+  windowWidth: number;
 
   isApp = false;
   @Output() outPutchangeTransactionType = new EventEmitter();
@@ -65,21 +85,13 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isApp = this.platFormService.isApp();
     // this.initSubscriptions();
+    this.refreshWindowInfo();
   }
 
   toggleListView() {
     this.listView = !this.listView;
     this.outPutListView.emit(this.listView)
   }
-
-  // initSubscriptions() {
-  //   this.assignedItems = this.orderMethodsService.assignedPOSItems$.subscribe(data => {
-  //     this.refundItems = false;
-  //     if (data && data.length> 0) {
-  //       this.refundItems = true;
-  //     }
-  //   })
-  // }
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
@@ -90,12 +102,50 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   }
 
   @HostListener("window:resize", [])
-   updateItemsPerPage() {
+  refreshWindowInfo() {
      this.smallDevice = false
      if (window.innerWidth < 768) {
        this.smallDevice = true
      }
      this.order.balanceRemaining
+
+     this.spacer1 = null;
+     this.spacer2 = null;
+     this.spacer3 = null;
+     this.spacer4 = null;
+     this.spacer5 = null;
+     this.spacer6 = null;
+     this.spacer10 = null
+     this.spacer11 = null
+     this.windowWidth = window.innerWidth
+
+     if (window.innerWidth < 1024) { 
+      this.spacer5 = this.exitButton;
+      // this.spacer11 = this.clearDiscounts
+      this.spacer11 = this.payButton
+     }
+     if (window.innerWidth >= 1024 && window.innerWidth <= 1565) { 
+      // this.spacer1 = this.exitButton
+      this.spacer5 = this.exitButton
+      this.spacer1 = this.cancelButton
+      this.spacer11 = this.payButton;
+      this.windowSize = 'medium'
+     }
+     if (window.innerWidth >= 1366) {
+      // this.spacer5 = this.exitButton
+      this.spacer11 = null;
+      this.spacer7 = this.payButton
+      this.windowSize = 'large'
+      // this.spacer3 = this.payButton
+     }
+     if (window.innerWidth > 1565) {
+      this.spacer5 = this.exitButton
+      this.spacer4 = this.payButton
+      this.spacer7 = null;
+      
+      this.windowSize = 'large'
+      // this.spacer3 = this.payButton
+     }
    }
 
   changeTransactionType() {

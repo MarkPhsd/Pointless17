@@ -4,6 +4,7 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IInventoryAssignment } from '../inventory/inventory-assignment.service';
 import { IPOSOrder, PosPayment,PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { IServiceType } from 'src/app/_interfaces';
+import { IPOSOrderItem, PosOrderMenuItem } from 'src/app/_interfaces/transactions/posorderitems';
 
 // export interface IPOSOrder  {
 //   order: any;
@@ -76,13 +77,28 @@ export class FakeDataService {
     return types;
   }
 
-  getInventoryItemTestData(): IInventoryAssignment  {
-    const item = {} as  IInventoryAssignment;
+  getInventoryItemTestData(): any  {
+    const item = {} as any;
     item.sku         = 'MTA1234567';
     item.productName = 'Rec The Clear  OG Elite 1G C CEll';
-    item.price       = 55.00;
-    item.label       = '1A4FFFB303D5721000000112';
-    item.label       = `METRC ${item.label}`;
+    item.unitPrice   = 55.00;
+    item.serialCode  = '1A4FFFB303D5721000000112';
+    item.menuItem = {} as IMenuItem;
+    item.menuItem.unitPrice = 55.00;
+    item.inventory = {} as IInventoryAssignment;
+    item.inventory.label = "Example Label"
+    item.inventory.sku   = 'Example Sku'
+    item.inventory.thc = '30.00'
+    item.inventory.cbd = '25.00'
+
+    item.inventory.batchDate = '01/01/2001';
+    item.inventory.testDate = '01/01/2001'
+
+    item.inventory.price = '45.00'
+    item.inventory.facilityLicenseNumber = '10481404'
+    item.menuItem.thc  = '30.00'
+    item.menuItem.cbd  = '25.00'
+    item.posOrderMenuItem = {} as PosOrderMenuItem;
     return item
   }
 

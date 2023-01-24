@@ -44,7 +44,13 @@ export class PriceCategorySelectComponent implements OnInit {
 
   clearPriceCategory() {
     this.priceCategoryID = 0;
-    this.inputForm.patchValue({priceCategoryID: 0})
+    if (!this.isInventory) { 
+      const  price = { priceCategory : 0 }
+      this.inputForm.patchValue(price)
+    }
+    if (!this.isInventory) { 
+      this.inputForm.patchValue({priceCategoryID: 0})
+    }
   }
 
   getPriceCategory(event) {
@@ -54,7 +60,6 @@ export class PriceCategorySelectComponent implements OnInit {
         const site = this.sitesService.getAssignedSite();
         this.priceCategoryService.getPriceCategory(site, item.id).subscribe(data => {
           this.priceCategory = data
-
           }
         )
       }

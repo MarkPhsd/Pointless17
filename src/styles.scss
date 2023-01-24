@@ -217,6 +217,12 @@
     top: -24px;
   }
 
+  .payment-buttons {
+    height: 75px;
+    width: 135px;
+    margin: 10px;
+  }
+
   svg#rocket-smoke {
     height: calc(100vh - 95px);
     position: absolute;

@@ -2,7 +2,7 @@
 <div *ngIf="!setting">
   Loading...
 </div>
-
+<div *ngIf="(imageLabel$ | async) as image"></div>
 <div *ngIf="setting">
 
   <div class="header-alignment">

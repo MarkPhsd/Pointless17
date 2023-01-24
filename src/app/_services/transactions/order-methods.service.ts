@@ -1207,6 +1207,28 @@ export class OrderMethodsService implements OnDestroy {
     return;
   }
 
+  processResults(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod) {
+    let result = 0
+
+    // console.log('processResults paymentResponse', paymentResponse)
+
+    if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
+      if (paymentResponse.orderCompleted) {
+        result =  this.finalizeOrder(paymentResponse, paymentMethod, paymentResponse.order)
+      } else {
+      }
+    }
+
+    if (paymentResponse.paymentSuccess || paymentResponse.responseMessage.toLowerCase() === 'success') {
+      this.orderService.updateOrderSubscription(paymentResponse.order)
+
+      this.siteService.notify(`Payment succeeded: ${paymentResponse.responseMessage}`, 'Success', 1000)
+    } else {
+      this.siteService.notify(`Payment failed because: ${paymentResponse.responseMessage}`, 'Something unexpected happened.',3000)
+    }
+
+  }
+
   refreshOrder(id: number) {
     if (this.order) {
       const site = this.siteService.getAssignedSite();

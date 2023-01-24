@@ -89,6 +89,22 @@ export interface IInventoryAssignment {
   casePrice           : number;
   product             : IProduct;
   serials:              Serial[];
+
+  originID : number;
+  vendor : number
+  createdAtTime : string;
+  lastAuditDate : string;
+  itemForm : string;
+  description : string;
+  testLotNumber : string;
+  testDate : string;
+  testedBy : string;
+  batchdescription : string;
+  itemTypeName : string;
+  itemTypeID : number;
+  brandID : number;
+  itemSKU : string;
+
 }
 
 export interface Serial {

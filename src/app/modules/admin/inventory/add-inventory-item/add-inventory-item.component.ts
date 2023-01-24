@@ -13,6 +13,8 @@ import { MenuService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ScaleInfo, ScaleService, ScaleSetup } from 'src/app/_services/system/scale-service.service';
 import { NewInventoryItemComponent } from '../new-inventory-item/new-inventory-item.component';
+import { ItemType } from 'src/app/_interfaces/menu/price-schedule';
+import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 
 @Component({
   selector: 'app-add-inventory-item',
@@ -28,6 +30,8 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   searchForm:                FormGroup;
   quantityMoving:            number;
   inventoryLocation:         IInventoryLocation;
+  itemType: ItemType;
+  itemType$:Observable<ItemType>;
 
   scaleName           :   any;
   scaleValue          :   any;
@@ -67,6 +71,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     private scaleService        : ScaleService,
     private dialog              : MatDialog,
     private fb: FormBuilder,
+    private itemtypeService: ItemTypeService,
     private dialogRef: MatDialogRef<AddInventoryItemComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
   {
@@ -80,20 +85,22 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
 
   ngOnInit() {
     this.initSubscriptions()
-
-    this.locations$ = this.inventoryLocationsService.getLocations().pipe(switchMap(data => { 
+    const site = this.siteService.getAssignedSite();
+    this.locations$ = this.inventoryLocationsService.getLocations().pipe(switchMap(data => {
       this.inventoryLocations = data;
       return of(data)
     }))
 
     this.inventoryLocations$ = this.locations$;
     this.site =  this.siteService.getAssignedSite();
+
     this.inputForm = this.fbInventory.initForm(this.inputForm)
     this.initSearchForm();
     if (this.id !=0) {
       this.inventoryAssignment$ = this.inventoryAssignmentService.getInventoryAssignment(this.site, this.id)
       this.inventoryAssignment$.subscribe( data=> {
         this.item = data
+        this.itemType$ = this.itemtypeService.getItemType(site, this.item.itemTypeID);
         this.inputForm = this.fbInventory.initForm(this.inputForm)
         this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
         this.productName = this.item.productName
@@ -103,7 +110,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
         this.inventoryLocations = data;
       })
     }
- 
+
   }
 
   ngOnDestroy(): void {
@@ -112,8 +119,8 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     if( this._scaleInfo) { this._scaleInfo.unsubscribe()}
   }
 
-  initSearchForm() { 
-    this.searchForm = this.fb.group( { 
+  initSearchForm() {
+    this.searchForm = this.fb.group( {
       productName: []
     })
   }
@@ -136,7 +143,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
         const packageQuantity = this.inputForm.controls['packageQuantity'].value
         const baseQuantity = { baseQuantity: packageQuantity}
         this.inputForm.patchValue(baseQuantity)
-        
+
         if (this.id != 0) {
           let item = this.inventoryAssignmentService.setItemValues(this.inputForm, this.item)
           const item$ = this.inventoryAssignmentService.editInventory(this.site,this.item.id, item)
@@ -157,7 +164,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     item$.subscribe(data => {
       this.notifySave(data)
       this.inventoryAssignment = data;
-      if (exit) { 
+      if (exit) {
         this.onCancel(true, true)
       }
       return
@@ -168,7 +175,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     if (item) {
       this.notifyEvent('Inventory info updated.', 'Success')
       return
-    } 
+    }
     this.notifyEvent('Inventory info not  updated.', 'failed')
     return  false
   }
@@ -227,10 +234,10 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   }
 
   onCancel(event, openEditor) {
-    if (this.inventoryAssignment) { 
+    if (this.inventoryAssignment) {
       this.openInventoryDialog(this.inventoryAssignment.id)
       this.dialogRef.close(this.inventoryAssignment);
-      return 
+      return
     }
     this.dialogRef.close(event);
   }

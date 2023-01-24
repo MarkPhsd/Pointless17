@@ -93,14 +93,38 @@
                 [emailOption]         ="emailOption"
                 [ssmsOption]          ="ssmsOption"
                 [refundItemEnabled]   ="refundItemsAvalible"
-
           ></pos-order-function-buttons>
         </div>
+    
+        <div  *ngIf="mainPanel && uiTransactionSettings && 
+                    (!paymentsEqualTotal && !order.completionDate && order?.balanceRemaining != 0)"
+                    class="payment-buttons-container">
+          
+          <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
+          
+          <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
+  
+          <ng-container [ngTemplateOutlet]="cardPointeButton"></ng-container>
+      
+          <ng-container [ngTemplateOutlet]="giftCardPayButton"></ng-container>
+      
+          <ng-container ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
+          
+          <!-- <ng-container [ngTemplateOutlet]="stripePayButton"></ng-container> -->
 
+          <div *ngIf="order && order.clientID">
+            <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
+          </div>
+  
+          <ng-container [ngTemplateOutlet]="wicEBTButton"></ng-container>
+  
+        
+        </div>
+       
+       
         <div class="side-panel-buttons-container"
-             [style.width]="deviceWidthPercentage"
-             *ngIf="!mainPanel && (uiSettings && uiSettings.wideOrderBar)" >
-
+              [style.width]="deviceWidthPercentage"
+              *ngIf="!mainPanel && (uiSettings && uiSettings.wideOrderBar)" >
           <div *ngIf="!phoneDevice">
             <button mat-raised-button
               color="primary"
@@ -116,30 +140,26 @@
               </div>
             </button>
           </div>
-
           <div>
             <button  mat-raised-button
               color="primary"
               class="button"
               (click)="makePayment()">
               <mat-icon>credit_card</mat-icon>
-               Check Out
+              Check Out
             </button>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- height is not fixed -->
-    <div    [style.height]="orderItemsHeightStyle"
-            class="order-items"
-            *ngIf="(!smallDevice && mainPanel)
-                || (!mainPanel && smallDevice)
-                || (!mainPanel && !smallDevice)">
-
-        <ng-container [ngTemplateOutlet]="getListViewType"></ng-container>
     </div>
-  </div>
+    <div  [style.height]="orderItemsHeightStyle"
+          class="order-items"
+          *ngIf="(!smallDevice && mainPanel)
+              || (!mainPanel && smallDevice)
+              || (!mainPanel && !smallDevice)">
+      <ng-container [ngTemplateOutlet]="getListViewType"></ng-container>
+    </div>
 </div>
 
 <ng-template #itemViewType>
@@ -153,4 +173,102 @@
 
 <ng-template #listViewType>
   <pos-order-item-list></pos-order-item-list>
+</ng-template>
+
+<ng-template #cardPointeButton>
+  <card-pointe-card-pay-btn
+    [order]="order"
+    [devicename]="devicename"
+    [uiTransactions]="uiTransactionSettings"
+    [platForm]="platForm"
+    [creditBalanceRemaining]="creditPaymentAmount"
+    [paymentAmount]="order.balanceRemaining"
+    (setStep) ="setStep(1)">
+  </card-pointe-card-pay-btn>
+</ng-template>
+
+<ng-template #dsiEMVAndroidCardButton>
+  <dsiemvandroid-pay-btn
+      [order]="order"
+      [devicename]="devicename"
+      [uiTransactions]="uiTransactionSettings"
+      [platForm]="platForm"
+      [creditBalanceRemaining]="creditPaymentAmount"
+      [paymentAmount]="order.balanceRemaining"
+      (setStep) ="setStep(1)">
+  </dsiemvandroid-pay-btn>
+</ng-template>
+
+<ng-template #disEMVCardButton>
+  <dsi-emvcard-pay-btn
+    [devicename]="devicename"
+    [order]="order"
+    [uiTransactions]="uiTransactionSettings"
+    [platForm]="platForm"
+    [creditBalanceRemaining]="creditPaymentAmount"
+    [paymentAmount]="order.balanceRemaining"
+    (setStep) ="setStep(1)">
+  </dsi-emvcard-pay-btn>
+</ng-template>
+
+<ng-template #giftCardPayButton>
+  <gift-card-pay-btn
+    [order]="order"
+    [devicename]="devicename"
+    [uiTransactions]="uiTransactionSettings"
+    [platForm]="platForm"
+    [creditBalanceRemaining]="creditPaymentAmount"
+    [paymentAmount]="order.balanceRemaining"
+    (setStep) ="setStep(1)">
+  </gift-card-pay-btn>
+</ng-template>
+
+<ng-template #storeCreditPaybutton>
+  <store-credit-info
+      [order]        ="order"
+      [clientID]     ="order?.clientID"
+      [accountNumber]="order?.clients_POSOrders?.accountNumber"
+      [userName]     ="order?.clients_POSOrders?.userName"
+      [showPayment]  ="true"
+      [showIssueMoney]="false"
+      [showBalance] = "false">
+  </store-credit-info>
+</ng-template>
+
+<ng-template #wicEBTButton>
+  <wic-ebtcard-pay-btn
+      [order]="order"
+    [devicename]="devicename"
+      [uiTransactions]="uiTransactionSettings"
+      [platForm]="platForm"
+      [creditBalanceRemaining]="creditPaymentAmount"
+      [paymentAmount]="order.balanceRemaining"
+      (setStep) ="setStep(1)">
+  </wic-ebtcard-pay-btn>
+</ng-template>
+
+<ng-template #houseAccountButton>
+  <div *ngIf="(userAuths && userAuths.houseAccountPayment) && order.clientID != 0 &&
+        order?.clients_POSOrders?.client_Type?.name.toLowerCase() === 'house account'">
+    <button class="splitbutton"
+          mat-raised-button
+          color="primary"
+          (click)="houseAccountPayment()">
+      <div *ngIf="!paymentsEqualTotal">
+        House Account
+      </div>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #stripePayButton>
+  <stripe-card-pay-btn
+    [order]="order"
+    [uiTransactions]="uiTransactionSettings"
+    [platForm]="platForm"
+    [creditBalanceRemaining]="creditPaymentAmount"
+    [stripeTipValue]="0"
+    [paymentAmount]="order.balanceRemaining"
+    (setStep) ="setStep(1)">
+  </stripe-card-pay-btn>
 </ng-template>

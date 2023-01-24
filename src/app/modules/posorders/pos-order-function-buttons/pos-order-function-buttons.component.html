@@ -1,3 +1,4 @@
+<!-- windowWidth {{windowWidth}} -->
 <div  *ngIf="order && mainPanel"
       class="buttons-container">
 
@@ -57,20 +58,6 @@
     </button>
   </div>
 
-  <div >
-    <button mat-raised-button
-            [disabled] = "!((!order.history || !order.completionDate) || isStaff)"
-            class="button"
-            color="primary"
-            aria-label="Check Out"
-            (click)="makePayment()">
-      <mat-icon>credit_card</mat-icon>
-      <span>
-         Pay
-       </span>
-    </button>
-  </div>
-
   <div *ngIf="isApp">
     <button mat-raised-button
             [disabled]="!(isStaff)"
@@ -83,14 +70,8 @@
   </div>
 
   <div *ngIf="isApp">
-    <button mat-raised-button
-            [disabled]="isApp && !(isStaff)"
-            class="button"
-            color="primary"
-            (click)="printLabels()">
-      <mat-icon>print</mat-icon>
-       Labels
-    </button>
+    <ng-container [ngTemplateOutlet]="spacer5"></ng-container>
+    <!-- spacer 5s -->
   </div>
 
   <div *ngIf="!isUser && (mainPanel && !order.suspendedOrder)">
@@ -123,15 +104,8 @@
   </div>
 
   <div  *ngIf="!isUser">
-    <button mat-raised-button class="button"
-            [disabled]=" !refundItemEnabled || ((order.history) && (itemsPrinted || paymentsMade)) == true"
-            color="primary"
-            (click)="refundItem()">
-            <mat-icon>refresh</mat-icon>
-      <span>
-        Refund Item
-      </span>
-    </button>
+    <!-- spcaer 9 -->
+    <ng-container [ngTemplateOutlet]="refundOrderButton"></ng-container>
   </div>
 
 
@@ -171,15 +145,9 @@
     </button>
   </div>
 
-
   <div  *ngIf="!isUser">
-    <button mat-raised-button class="button"
-            color="primary"
-            (click)="removeDiscounts()">
-      <span>
-        Clear Discounts
-      </span>
-    </button>
+      <!-- spacer 11 -->
+      <ng-container [ngTemplateOutlet]="spacer11"></ng-container>
   </div>
 
   <div  *ngIf="!(mainPanel && !smallDevice)">
@@ -193,56 +161,112 @@
   </div>
 
   <div *ngIf="isApp">
-    <button mat-raised-button
-            [disabled]="isApp && !(isStaff)"
-            class="button"
-            color="primary"
-            (click)="rePrintLabels()">
-      <mat-icon>print</mat-icon>
-        Re-Print Labels
-    </button>
+    <!-- spacer 4   -->
+    <ng-container [ngTemplateOutlet]="spacer4"></ng-container>
   </div>
 
   <!-- If the order is completed it's one kind of refund if it's not it's another | right now refunds only happen on new orders, not completed orders -->
   <!-- So this refund option is only enabled if the order is not history -->
-  <div></div>
+  <div>
+    <!-- Spacer1 -->
+  </div>
 
   <div>
-    <button   mat-raised-button class="button"
-              color="warn"
-              [disabled]="(order.history || order.completionDate) || (order.balanceRemaining > 0 && order.balanceRemaining != 0)"
-              aria-label="delete"
-              (click)="deleteOrder()">
-        <mat-icon>delete</mat-icon>
-        <span>
-          Cancel
-        </span>
-    </button>
+    <!-- spacer7 -->
+    <ng-container [ngTemplateOutlet]="spacer7"></ng-container>
   </div>
 
-  <div  *ngIf="!isUser">
-    <button mat-raised-button class="button"
-            [disabled]="  ((order.history) && (itemsPrinted || paymentsMade)) == true"
-            color="primary"
-            (click)="refundOrder()">
-        <mat-icon>refresh</mat-icon>
-      <span>
-        Refund Order
-      </span>
-    </button>
+  <div  *ngIf="!isUser && windowSize === 'large' ">
+    <!-- spacer 6 -->
+    <ng-container [ngTemplateOutlet]="spacer6"></ng-container>
   </div>
 
-  <div  *ngIf="!isUser">
-    <button mat-raised-button
-            class="button"
-            color="warn"
-            aria-label="Clear"
-            (click)="clearOrder()">
-        <mat-icon>exit_to_app</mat-icon>
-        <span >
-          Exit
-        </span>
-    </button>
+  <div  *ngIf="!isUser && windowSize === 'large'">
+    <!-- spacer 10/ -->
+    <ng-container [ngTemplateOutlet]="spacer10"></ng-container>
+  </div>
+  
+  <div *ngIf=" windowSize === 'large'">
+    <!-- spacer 3 -->
+    <ng-container [ngTemplateOutlet]="spacer3"></ng-container>
+  </div>
+
+  <div *ngIf=" windowSize === 'large'">
+    <!-- spacer 2 -->
+    <ng-container [ngTemplateOutlet]="spacer2"></ng-container>
   </div>
 
 </div>
+
+<ng-template #exitButton>
+  <button mat-raised-button
+          class="button"
+          color="warn"
+          aria-label="Clear"
+          (click)="clearOrder()">
+    <mat-icon>exit_to_app</mat-icon>
+    <span>
+    Exit
+    </span>
+  </button>
+</ng-template>
+
+<ng-template #payButton>
+  <button mat-raised-button
+      [disabled] = "!((!order.history || !order.completionDate) || isStaff)"
+      class="button"
+      color="primary"
+      aria-label="Check Out"
+      (click)="makePayment()">
+    <mat-icon>credit_card</mat-icon>
+    <span>
+    Pay
+    </span>
+  </button>
+</ng-template>
+
+<ng-template #refundOrderButton>
+  <button mat-raised-button class="button"
+          [disabled]="  ((order.history) && (itemsPrinted || paymentsMade)) == true"
+          color="primary"
+          (click)="refundOrder()">
+    <mat-icon>refresh</mat-icon>
+    <span>
+      Refund Order
+    </span>
+  </button>
+</ng-template>
+
+<ng-template #cancelButton>
+  <button   mat-raised-button class="button"
+          color="warn"
+          [disabled]="(order.history || order.completionDate) || (order.balanceRemaining > 0 && order.balanceRemaining != 0)"
+          aria-label="delete"
+          (click)="deleteOrder()">
+  <mat-icon>delete</mat-icon>
+  <span>
+      Cancel
+      </span>
+    </button>
+</ng-template>
+
+<ng-template #refundItem>
+  <!-- <button mat-raised-button class="button"
+      [disabled]=" !refundItemEnabled || ((order.history) && (itemsPrinted || paymentsMade)) == true"
+      color="primary"
+      (click)="refundItem()">
+      <mat-icon>refresh</mat-icon>
+    <span>
+    Refund Item
+    </span>
+  </button> -->
+</ng-template>
+<ng-template #refundItem>
+  <button mat-raised-button class="button"
+    color="primary"
+    (click)="removeDiscounts()">
+    <span>
+    Clear Discounts
+    </span>
+  </button>
+</ng-template>

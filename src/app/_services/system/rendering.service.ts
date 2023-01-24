@@ -15,34 +15,29 @@ export class RenderingService {
       if (!item && text) {
         _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
 
-        text =  this.getFormater(text)
 
+
+        text =  this.getFormater(text)
         const compiled = _.template( text );
-        // console.log('compiled - no item', compiled)
 
         return  compiled({});
       }
 
       if (item && text) {
         try {
-          // use custom delimiter ${ }
+          
           _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
-
-          // console.log('item', item);
-          // console.log('text', text)
 
           const regEx = new RegExp('</tt>', 'g');
           const regExFront = new RegExp('<tt>', 'g');
-          // console.log('template text', text)
+          
+          item = _.mapValues(item, v => _.isNil(v) ? '' : v)
 
           const compiled = _.template( text );
           const compiledText = compiled( { item } );
-
+          
           let compiledResult =  compiledText.replace(regExFront, '')
           compiledResult     =  compiledResult.replace(regEx,  '')
-
-          // console.log('compiledResult', compiledResult )
-          // console.log('compiledText'  , compiledText )
 
           if (item) { return  compiledResult }
 
@@ -79,8 +74,6 @@ export class RenderingService {
         if (data) {
 
           newText = text;
-          // console.log('text', text)
-          // console.log('data pre processeds', data) 
           if (type === 'items') {
             if (data.itemPercentageDiscountValue && data?.itemPercentageDiscountValue != 0) {
               console.log('data itemPercentageDiscountValue %', data?.itemPercentageDiscountValue)
@@ -88,8 +81,6 @@ export class RenderingService {
               newText = disc;
             }
           }
-
-          
           if (type === 'items') {
             if (data.ItemOrderPercentageDiscount && data?.ItemOrderPercentageDiscount != 0) {
               console.log('data ItemOrderPercentageDiscount %', data?.ItemOrderPercentageDiscount)
@@ -97,7 +88,6 @@ export class RenderingService {
               newText = disc;
             }
           }
-
           if (type === 'items') {
             if (data.itemCashDiscount && data?.itemCashDiscount != 0) {
               console.log('data itemCashDiscount %', data?.itemCashDiscount)
@@ -105,7 +95,6 @@ export class RenderingService {
               newText =  disc;
             }
           }
-
           if (type === 'items') {
             if (data.itemOrderCashDiscount && data?.itemOrderCashDiscount != 0) {
               console.log('data itemOrderCashDiscount %', data?.itemOrderCashDiscount)
@@ -114,8 +103,6 @@ export class RenderingService {
             }
           }
 
-          // console.log('new text', newText)
-          // console.log('data', data)
           stringArray.push( this.interpolateText(data, newText))
           // console.log(this.interpolateText(data, newText))
         }

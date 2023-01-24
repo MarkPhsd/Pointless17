@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PosOrderComponent } from './pos-order.component';
+import { QuickPayButtonsComponent } from './quick-pay-buttons.component';
 
-describe('PosOrderComponent', () => {
-  let component: PosOrderComponent;
-  let fixture: ComponentFixture<PosOrderComponent>;
+describe('QuickPayButtonsComponent', () => {
+  let component: QuickPayButtonsComponent;
+  let fixture: ComponentFixture<QuickPayButtonsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PosOrderComponent ]
+      declarations: [ QuickPayButtonsComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PosOrderComponent);
+    fixture = TestBed.createComponent(QuickPayButtonsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

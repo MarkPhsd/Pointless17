@@ -30,6 +30,10 @@ import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/i
 import { IServiceType } from 'src/app/_interfaces';
 import { coerceStringArray } from '@angular/cdk/coercion';
 import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { Capacitor } from '@capacitor/core';
+import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
+import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 
 @Component({
 selector: 'app-pos-order',
@@ -50,11 +54,14 @@ styleUrls: ['./pos-order.component.scss'],
 })
 
 export class PosOrderComponent implements OnInit ,OnDestroy {
-
+  get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('listViewType')   listViewType: TemplateRef<any>;
   @ViewChild('itemViewType')   itemViewType: TemplateRef<any>;
   action$: Observable<any>;
 
+  userAuths       :   IUserAuth_Properties;
+  _userAuths      : Subscription;
+  
   deviceWidthPercentage ='100%'
   orderItemsHeightStyle ='150px'
   windowHeight: number;
@@ -83,6 +90,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   currentPage: any;
   @Input() itemsPerPage  = 8
 
+  _creditPaymentAmount = 0;
+  dsiEMVEnabled = this.paymentsMethodsService.DSIEmvSettings?.enabled;
   _openBar      : Subscription;
   openBar       : boolean;
 
@@ -115,6 +124,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   _uiTransactionSettings: Subscription;
   uiTransactionSettings : TransactionUISettings;
 
+  devicename = localStorage.getItem('devicename')
+
   emailOption : boolean;
   ssmsOption   : boolean;
   purchaseOrderEnabled: boolean;
@@ -139,8 +150,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   transactionUISettingsSubscriber() {
     this.uiSettingsService.transactionUISettings$.subscribe( data => {
+      console.log('ui settings', data)
       this.enableLimitsView  = false;
       if (data) {
+      
         this.uiTransactionSettings = data;
         this.enableLimitsView = data.enableLimitsView
       }
@@ -192,6 +205,14 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     })
   }
 
+
+  userAuthSubscriber() { 
+    this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
+      if (data) {
+        this.userAuths = data;
+      }
+    })
+  }
   onResizedorderHeightPanel(event: ResizedEvent) {
     // console.log('order header event', event)
     this.uiSettingsService.updateorderHeaderHeight(event.newRect.height, this.windowHeight) //this.orderHeightPanel.nativeElement.offsetHeight)
@@ -264,7 +285,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.userSubscriber();
     this.initBarSubscription();
     this.resizePanel();
-    this.initAssignedItemsSubscriber()
+    this.initAssignedItemsSubscriber(); 
+    this.userAuthSubscriber();
   }
 
   initBarSubscription() {
@@ -273,7 +295,27 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     })
   }
 
+  get paymentsEqualTotal() {
+    if (!this.order) { return }
+    if (this.order.completionDate) {
+      return true;
+    }
+    return this.paymentsMethodsService.isOrderBalanceZero(this.order)
+  }
+
+  public get creditPaymentAmount() {
+    if (!this._creditPaymentAmount || this._creditPaymentAmount != 0) {
+      if (this.order.creditBalanceRemaining == 0) {
+        return  this.order.balanceRemaining;
+      }
+      return  this.order.creditBalanceRemaining;
+    }
+    return this._creditPaymentAmount;
+  }
+
+
   constructor(
+              private paymentsMethodsService: PaymentsMethodsProcessService,
               private renderer          : Renderer2,
               private navigationService : NavigationService,
               private orderService      : OrdersService,
@@ -374,7 +416,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
 
     // console.log('hide toolbar pos ordercomponent')
-    if (!this.toolbarUIService.swapMenuWithOrderBoolean) { 
+    if (!this.toolbarUIService.swapMenuWithOrderBoolean) {
       this.toolbarUIService.hidetoolBars();
     }
   }
@@ -621,7 +663,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     // if (this.smallDevice) {
     // }
     this.openOrderBar = false
-    console.log('order bar update', this.openOrderBar)
+    // console.log('order bar update', this.openOrderBar)
     this.toolbarUIService.updateOrderBar(false);
     this.toolbarUIService.updateSideBar(false)
     this.toolbarUIService.updateToolBarSideBar(false)
@@ -636,6 +678,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
                                       this.isStaff, this.order.completionDate, path )
   }
 
+  houseAccountPayment() {
+    this.action$ =  this.orderMethodService.suspendOrder(this.order)
+  }
   //loop the items
   //print labels
   //update the items that have the label printed
@@ -660,6 +705,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
+  setStep(value:number) { 
+
+  }
     //get item
   //print maybe
   //update inventory

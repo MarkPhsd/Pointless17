@@ -355,6 +355,15 @@ import { EmployeeClockFilterComponent } from '../modules/admin/employeeClockAdmi
 import { EmployeeClockListComponent } from '../modules/admin/employeeClockAdmin/employee-clock-list/employee-clock-list.component';
 import { ClockBreaksTypesComponent } from '../modules/admin/employeeClockAdmin/clock-breaks-types/clock-breaks-types.component';
 import { DailyReportComponent } from '../modules/admin/settings/printing/daily-report/daily-report.component';
+import { QuickPayButtonsComponent } from '../modules/posorders/pos-order/quick-pay-buttons/quick-pay-buttons.component';
+import { CardPointeCardPayBtnComponent } from '../modules/posorders/pos-payment/card-pointe-card-pay-btn/card-pointe-card-pay-btn.component';
+import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-emvcard-pay-btn/dsi-emvcard-pay-btn.component';
+import { GiftCardPayBtnComponent } from '../modules/posorders/pos-payment/gift-card-pay-btn/gift-card-pay-btn.component';
+import { PaypalCardPayBtnComponent } from '../modules/posorders/pos-payment/paypal-card-pay-btn/paypal-card-pay-btn.component';
+import { StripeCardPayBtnComponent } from '../modules/posorders/pos-payment/stripe-card-pay-btn/stripe-card-pay-btn.component';
+import { TriPOSCardPayBtnComponent } from '../modules/posorders/pos-payment/tri-poscard-pay-btn/tri-poscard-pay-btn.component';
+import { WicEBTCardPayBtnComponent } from '../modules/posorders/pos-payment/wic-ebtcard-pay-btn/wic-ebtcard-pay-btn.component';
+import { DSIEMVAndroidPayBtnComponent } from '../modules/posorders/pos-payment/dsiemvandroid-pay-btn/dsiemvandroid-pay-btn.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -451,6 +460,15 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PriceCategoryConversionsComponent,
     PriceCategoryTimeFiltersComponent,
     PriceCategoriesComponent,
+
+    WicEBTCardPayBtnComponent,
+    TriPOSCardPayBtnComponent,
+    StripeCardPayBtnComponent,
+    PaypalCardPayBtnComponent,
+    GiftCardPayBtnComponent,
+    DsiEMVCardPayBtnComponent,
+    DSIEMVAndroidPayBtnComponent,
+    CardPointeCardPayBtnComponent,
 
     PriceTierEditComponent,
     PriceTiersComponent,
@@ -612,7 +630,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PriceScheduleMenuOptionsComponent,
     PriceScheduleMenuItemsComponent,
     PriceScheduleSortComponent,
-
+    QuickPayButtonsComponent,
     ProfileRolesComponent,
     ProfileListComponent,
     ProfileComponent,

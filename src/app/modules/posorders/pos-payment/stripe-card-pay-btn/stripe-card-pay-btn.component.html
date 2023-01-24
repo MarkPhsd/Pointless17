@@ -1,0 +1,32 @@
+
+<div *ngIf="stripeEnabled && order && order.balanceRemaining != 0 && !this.platFormService.isApp()">
+  <div *ngIf="(paymentMethod$ | async) as paymentMethod">
+    <h3>Apply tip to Stripe Payment</h3>
+    <div class="grid-tip-buttons">
+      <div><button class="payment-buttons" mat-raised-button (click)="addStripeTipPercent(15)">15 % Tip</button></div>
+      <div><button class="payment-buttons" mat-raised-button (click)="addStripeTipPercent(18)">18 % Tip</button></div>
+      <div><button class="payment-buttons" mat-raised-button (click)="addStripeTipPercent(20)">20 % Tip</button></div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
+      <div>
+        <mat-form-field appearance="outline">
+            <input matInput
+              [(ngModel)]="stripeTipValue"
+              ngDefaultControl
+              type="text">
+            <mat-label>
+            Custom Tip Amount
+            </mat-label>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div  class="row-height">
+      <button class="payment-buttons"
+          mat-raised-button
+          (click)="applyStripePayment()">
+        <mat-icon color="warn">credit_card</mat-icon>Stripe Payment <br> (credit card)
+      </button>
+    </div>
+  </div>
+</div>

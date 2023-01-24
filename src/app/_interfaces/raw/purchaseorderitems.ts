@@ -138,4 +138,5 @@ export interface IPurchaseOrderItem {
   itemOrderCashDiscount:         number;
   idRef:                         number;
   promptGroupID                 :number;
+  inventoryAssignmentID         : number;
 }

@@ -28,15 +28,13 @@ button{
 
 .buttons-container {
 
-  // max-height: 300px;
-
   --gap: 5px;
   display: grid;
   margin-left: 10px;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(145px, 1fr) );
   grid-auto-flow: row;
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: hidden;
   @include for-phone-only  {
     --gap: 5px;

@@ -1,3 +1,6 @@
+<span *ngIf="(uiTransactionSetting$ | async) as item"></span>
+<span *ngIf="(uiHomePageSetting$ | async) as item"></span>
+
 <mat-toolbar [class]="mattoolbar"
              [color]="matToolbarColor">
   <mat-toolbar-row>
@@ -101,14 +104,7 @@
             <ng-container [ngTemplateOutlet]="isfloorPlan"></ng-container>
 
             <li *ngIf="platFormService.androidApp">
-              <div class='search-input'>
-                  <button mat-button
-                          aria-label="badge"
-                          routerLinkActive="list-item-active"
-                          routerLink="/barcodescanner">
-                    <mat-icon>badge</mat-icon>
-                  </button>
-              </div>
+              <ng-container [ngTemplateOutlet]="barcodeScanner"></ng-container>
             </li>
 
             <li *ngIf="!phoneDevice">
@@ -121,7 +117,7 @@
               </div>
             </li>
 
-            <li *ngIf="platFormService.isApp()">
+            <li *ngIf="platFormService.isApp() && userSwitching">
               <div class='search-input'>
                 <button mat-button
                         aria-label="transfer_within_a_station"
@@ -131,6 +127,11 @@
                 </button>
               </div>
             </li>
+
+             <li *ngIf="!userSwitching">
+              <ng-container [ngTemplateOutlet]="menuButtonContainer"></ng-container>
+            </li>
+
           </ul>
         </mat-card>
 
@@ -145,7 +146,6 @@
       <div [class]="gridlayout">
 
         <div *ngIf="!smallDevice && isAdmin">
-
           <clock-in-out [displayOnly]="true"></clock-in-out>
           <wizard-progress-button></wizard-progress-button>
         </div>
@@ -196,58 +196,78 @@
     </button>
   </div>
 
-  <div *ngIf="user">
+  <div *ngIf="user && userSwitching">
+    <ng-container [ngTemplateOutlet]="menuButtonContainer"></ng-container>
+  </div>
+</ng-template>
 
-    <button aria-label="user menu"
-            mat-raised-button
-            [matMenuTriggerFor]="menu"
-            #menuTrigger="matMenuTrigger"
-            (click)="menuTrigger.openMenu()"
-            >
-      <mat-icon *ngIf="mailCount == 0 ">person</mat-icon>
+<ng-template #clockInOut>
+  <clock-in-out></clock-in-out>
+</ng-template>
 
-      <mat-icon
-          *ngIf="mailCount != 0"
-          matBadge="{{ mailCount }}"
-          matBadgeColor="accent"
-          matBadgePosition="before">
-          mail
-        </mat-icon>
+<ng-template #barcodeScanner>
+  <div class='search-input'>
+    <button mat-button
+            aria-label="badge"
+            routerLinkActive="list-item-active"
+            routerLink="/barcodescanner">
+      <mat-icon>badge</mat-icon>
     </button>
+  </div>
+</ng-template>
 
-    <mat-menu class="mat-menu-panel"
-              [overlapTrigger]="false"
-              #menu="matMenu">
+<ng-template #menuButtonContainer>
+
+  <button aria-label="user menu"
+          mat-raised-button
+          [matMenuTriggerFor]="menu"
+          #menuTrigger="matMenuTrigger"
+          (click)="menuTrigger.openMenu()" >
+    <mat-icon *ngIf="mailCount == 0 ">person</mat-icon>
+
+    <mat-icon
+        *ngIf="mailCount != 0"
+        matBadge="{{ mailCount }}"
+        matBadgeColor="accent"
+        matBadgePosition="before">
+        mail
+    </mat-icon>
+  </button>
+
+  <mat-menu class="mat-menu-panel"
+            [overlapTrigger]="false"
+            #menu="matMenu">
+
+    <div  class="mat-item">
+      <app-request-messages
+        [user]="user"
+        [hideshowMessages]="true"
+        (emitCount)="emailMailCount($event)">
+      </app-request-messages>
+    </div>
+
+    <span (mouseleave)="menuTrigger.closeMenu()">
 
       <div  class="mat-item">
-        <app-request-messages
-          [user]="user"
-          [hideshowMessages]="true"
-          (emitCount)="emailMailCount($event)">
-        </app-request-messages>
+        <button
+            mat-button
+            color="accent"
+            class="menu-button"
+            aria-label="logout"
+            (click)="logout()">
+          Log Out
+          <mat-icon>exit_to_app</mat-icon>
+        </button>
+        <mat-divider class="mat-divider"></mat-divider>
       </div>
 
-      <span (mouseleave)="menuTrigger.closeMenu()">
-        <div  class="mat-item">
-          <button
-                  mat-button
-                  color="accent"
-                  class="menu-button"
-                  aria-label="logout"
-                  (click)="logout()">
-                Log Out
-              <mat-icon>exit_to_app</mat-icon>
-          </button>
-          <mat-divider class="mat-divider"></mat-divider>
-        </div>
+      <div *ngIf="smallDevice">
+        <app-cart-button
+          [smallDevice]="smallDevice">
+        </app-cart-button>
+      </div>
 
-        <div *ngIf="smallDevice">
-          <app-cart-button
-            [smallDevice]="smallDevice">
-          </app-cart-button>
-        </div>
-
-        <div  class="mat-item">
+      <div  class="mat-item">
           <button
               mat-button
               color="accent"
@@ -255,72 +275,64 @@
               aria-label="face"
               routerLink="/app-profile">
               {{ user?.lastName }} - {{userRoles}}
-              <mat-icon>face</mat-icon>
+            <mat-icon>face</mat-icon>
           </button>
-          <mat-divider class="mat-divider"></mat-divider>
-        </div>
+        <mat-divider class="mat-divider"></mat-divider>
+      </div>
 
-        <div>
-          <app-toggle-theme></app-toggle-theme>
-        </div>
+      <div>
+        <app-toggle-theme></app-toggle-theme>
+      </div>
 
-        <div  mat-menu-item
-              *ngIf="smallDevice && siteName"
-              class="mat-item" >
+      <div  mat-menu-item
+            *ngIf="smallDevice && siteName"
+            class="mat-item" >
             <h2> {{ siteName  }} </h2>
             <mat-divider class="mat-divider"></mat-divider>
-        </div>
+      </div>
 
-        <div  class="mat-item"
-              *ngIf="smallDevice">
+      <div  class="mat-item"
+          *ngIf="smallDevice">
+        <button
+              mat-raised-button
+              color="primary"
+              aria-label="location"
+              class="menu-button"
+              (click)="siteSelector()">
+          <mat-icon>location_on</mat-icon>
+        </button>
+        <mat-divider class="mat-divider"></mat-divider>
+      </div>
+
+      <div  class="mat-item"
+          *ngIf="user && user.roles === 'user'  && user?.username != 'user'">
           <button
-                  mat-raised-button
-                  color="primary"
-                  aria-label="location"
-                  class="menu-button"
-                  (click)="siteSelector()">
-            <mat-icon>location_on</mat-icon>
-          </button>
-          <mat-divider class="mat-divider"></mat-divider>
-        </div>
-
-        <div  class="mat-item"
-              *ngIf="user && user.roles === 'user'  && user?.username != 'user'">
-            <button
                     mat-raised-button
                     color="primary"
                     aria-label="Order history"
                     class="mat-item"
                     (click)="navPOSOrders()">
               My Orders<mat-icon>list</mat-icon>
-            </button>
+          </button>
+      </div>
+
+      <div>
+        <ng-container [ngTemplateOutlet]="isClockInOutOn"></ng-container>
+      </div>
+
+      <span  *ngIf="posDevice$ | async as device">
+        <mat-divider></mat-divider>
+        <li *ngIf="device  && (isAdmin || isManager) && !smallDevice">
+        <br>
+        <div class='search-input'>
+          <button  mat-raised-button (click)="deviceInfo()">
+            Device Info  <mat-icon>device_hub</mat-icon>
+          </button>
         </div>
-
-        <div>
-          <ng-container [ngTemplateOutlet]="isClockInOutOn"></ng-container>
-        </div>
-
-        <span  *ngIf="posDevice$ | async as device">
-          <!-- {{device | json}} -->
-          <mat-divider></mat-divider>
-          <li *ngIf="device  && (isAdmin || isManager) && !smallDevice">
-            <br>
-            <div class='search-input'>
-              <button  mat-raised-button (click)="deviceInfo()">
-                Device Info  <mat-icon>device_hub</mat-icon>
-              </button>
-          </div>
-        </span>
-
       </span>
+    </span>
 
     </mat-menu>
-  </div>
-</ng-template>
 
-<span *ngIf="(uiTransactionSetting$ | async) as item"></span>
-<span *ngIf="(uiHomePageSetting$ | async) as item"></span>
 
-<ng-template #clockInOut>
-  <clock-in-out></clock-in-out>
 </ng-template>

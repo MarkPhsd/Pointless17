@@ -56,6 +56,29 @@
                   (itemSelect)="getVendor($event)">
                   >
               </app-facility-search-selector>
+
+              <div>
+                <mat-form-field appearance="outline" >
+                  <mat-label>Test Date</mat-label>
+                  <input  matInput
+                          type="text"
+                          formControlName="testDate"
+                          name="testDate"
+                          [matDatepicker]="picker">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <app-value-fields
+                    [inputForm]="inputForm"
+                    [fieldName]="'testedBy'">
+                    Tested By
+              </app-value-fields>
+              <app-value-fields
+                    [inputForm]="inputForm"
+                    [fieldName]="'testLotNumber'">
+                   Test Lot #
+              </app-value-fields>
           </div>
 
           <div>
@@ -190,9 +213,21 @@
             </app-value-fields>
           </div>
 
+          <div *ngIf="(itemType$| async) as itemType">
+            <app-price-category-select
+              [itemType]        ="itemType"
+              [priceCategoryID] ="item.priceCategoryID"
+              [inputForm]       ="inputForm" >
+            </app-price-category-select>
+          </div>
+
         </div>
 
       </mat-card-content>
     </mat-card>
 
   </div>
+
+
+
+  <!--  -->

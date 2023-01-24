@@ -163,8 +163,6 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
     const site = this.siteService.getAssignedSite();
     return this.printingService.appyStylesCachedObservable(site).pipe(switchMap(data => {
       this.receiptStyles = data ;
-      // console.log('receipt style, data', data)
-      // console.log('template ID', this.templateID)
       styles = data
       this.applyStyle(this.receiptStyles)
       if (!this.templateID) {

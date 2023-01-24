@@ -1,0 +1,11 @@
+<span *ngIf="(platForm === 'android') &&
+    devicename &&
+    uiTransactions?.cardPointAndroidEnabled &&
+    (order && order?.balanceRemaining != 0)">
+    goodb
+  <button class="payment-buttons"
+          mat-raised-button
+          (click)="processDSIEMVAndroidCreditCardPayment(false)">
+    <mat-icon color="warn">android</mat-icon>Android <br> Credit Card
+  </button>
+</span>
