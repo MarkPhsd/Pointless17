@@ -42,27 +42,21 @@
   </div>
 
   <div [class]="gridcontainer">
-
+<!--
     <span *ngIf="viewType == 1">
-      <app-order-cards
-        [cardStyle]="'block'"
-      ></app-order-cards>
+
     </span>
 
     <span *ngIf="viewType == 0">
-      <app-orders-list
-        [height]="listHeight">
-      </app-orders-list>
+
     </span>
 
     <span *ngIf="viewType == 2">
-      <app-order-cards
-        [cardStyle]="'panel'">
-        <h2>
-          Your order history
-        </h2>
-      </app-order-cards>
-    </span>
+
+    </span> -->
+
+    <ng-container [ngTemplateOutlet]="orderView"></ng-container>
+
 
     <span *ngIf="viewType == 3">
       <span *ngIf="viewType == 3 && (printerLocations$ | async) as printLocations">
@@ -133,3 +127,24 @@
   </div>
 
 </div>
+
+<ng-template #orderCard>
+  <app-order-cards
+    [cardStyle]="'block'"
+  ></app-order-cards>
+</ng-template>
+
+<ng-template #orderList>
+  <app-orders-list
+    [height]="listHeight">
+  </app-orders-list>
+</ng-template>
+
+<ng-template #orderPanel>
+  <app-order-cards
+    [cardStyle]="'panel'">
+    <h2>
+      Your order history
+    </h2>
+  </app-order-cards>
+</ng-template>

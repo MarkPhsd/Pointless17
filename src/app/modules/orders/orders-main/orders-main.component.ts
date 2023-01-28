@@ -1,4 +1,4 @@
-import {Component,  OnInit, OnDestroy, AfterViewInit, HostListener,
+import {Component,  OnInit, OnDestroy, AfterViewInit, HostListener, TemplateRef,
   }  from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
 import { OrderFilterPanelComponent } from '../order-filter-panel/order-filter-panel.component';
@@ -18,7 +18,9 @@ import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/men
 })
 
 export class OrdersMainComponent implements OnInit, OnDestroy {
-
+  @ViewChild('orderCard')    orderCard: TemplateRef<any>;
+  @ViewChild('orderList')    orderList: TemplateRef<any>;
+  @ViewChild('orderPanel')   orderPanel: TemplateRef<any>;
   smallDevice  : boolean;
   site         : ISite;
   isAuthorized : boolean;
@@ -142,6 +144,20 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     this.updatePreptStatus(this.prepStatus)
   }
 
+
+
+  get orderView() {
+    if (this.viewType == 1) {
+      return  this.orderCard
+    }
+    if (this.viewType == 0 ) {
+      return  this.orderList
+    }
+    if (this.viewType == 2 ) {
+      return this.orderPanel
+    }
+
+  }
   displayPanel(event)  {
     const show =  localStorage.getItem('OrderFilterPanelVisible')
     // console.log(show)
