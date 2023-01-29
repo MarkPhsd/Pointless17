@@ -31,8 +31,9 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
   results$ = this.searchPhrase.pipe(
     debounceTime(225),
     distinctUntilChanged(),
-    switchMap(searchPhrase =>
-      this.priceCategories.searchPriceCategories(this.site,  searchPhrase)
+    switchMap(searchPhrase => {
+        return this.priceCategories.searchPriceCategories(this.site,  searchPhrase)
+      }
     )
   )
 
@@ -69,7 +70,7 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
     private siteService    : SitesService,
     )
   {
-
+    this.site = this.siteService.getAssignedSite()
   }
 
   init() {

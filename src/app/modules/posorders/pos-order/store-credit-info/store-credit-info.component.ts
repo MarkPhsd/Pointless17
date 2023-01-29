@@ -59,7 +59,7 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
     try {
       this._search       = this.storeCreditMethodService.searchModel$.subscribe(data => {
         this.search      = data;
-        console.log('data store credit', data)
+        // console.log('data store credit', data)
         if (!data) {
           this.search              = null;
           this.storeCreditSearch$  = null;

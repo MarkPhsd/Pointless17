@@ -226,11 +226,12 @@ export class ReportingItemsSalesService {
   //https://localhost:44309/api/ReportItemSales/GroupItemSales
   //https://ccsposdemo.ddns.net:4444/api/ReportItemSales/GroupItemSales
   //{ "startdate": "07/01/2018", "enddate": "12/10/2020", "groupByProduct": "true" }
-  groupItemSales(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSaleSummary> {
+  groupItemSales(site: ISite, searchModel: IReportingSearchModel): Observable<IReportItemSaleSummary> {
 
+    console.log(searchModel)
     if (!site || !site.url) { return of(null)}
 
-    IReportingSearchModel.productsOnly = true;
+    searchModel.productsOnly = true;
 
     const controller = `/ReportItemSales/`
 
@@ -238,7 +239,7 @@ export class ReportingItemsSalesService {
 
     const url = `${site.url}${controller}${endPoint}`
 
-    return  this.http.put<IReportItemSaleSummary>(url, IReportingSearchModel)
+    return  this.http.put<IReportItemSaleSummary>(url, searchModel)
 
   }
 

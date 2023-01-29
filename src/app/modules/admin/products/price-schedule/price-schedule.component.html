@@ -53,7 +53,7 @@
                     </div>
 
                     <div *ngIf="inputForm.controls['type'].value !=  'Menu List' &&
-                                inputForm.controls['allItems'].value == true">
+                                inputForm.controls['allItems'].value != true">
                       <mat-tab label="Category & Items">
                         <app-type-filter
                           [inputForm]="inputForm"
@@ -73,6 +73,7 @@
 
                     <div class="value-field"  *ngIf="inputForm.controls['type'].value !=  'Menu List'">
                       <mat-tab label="Offers and Rewards">
+                         <!-- type: {{inputForm.controls['type'].value}}<br> -->
                          <div class="value-field" *ngIf="inputForm.controls['type'].value === 'Percent Off' ||
                                                          inputForm.controls['type'].value === 'Item % Off' ||
                                                          inputForm.controls['type'].value === 'Order % Off' ||
@@ -111,15 +112,18 @@
                               [fieldName]="'value'">
                               Value
                             </app-value-fields>
+
+                            
                         </div>
 
-                         <div *ngIf="inputForm.controls['type'].value &&
-                                     inputForm.controls['type'].value === 'Free Item Off'">
+                        <div *ngIf="inputForm.controls['type'].value &&
+                              inputForm.controls['type'].value === 'Free Item Off'">
                             <app-reward-type-filter
                               [inputForm]="inputForm"
                               [item]     ="priceSchedule">
                               Info
                             </app-reward-type-filter>
+                            
                         </div>
 
                       </mat-tab>

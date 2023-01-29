@@ -5,6 +5,7 @@
     <span *ngIf="sheet.overUnderTotal < 0">Current Balance under</span>
     <span *ngIf="sheet.overUnderTotal == 0">Current Balance</span>
   </div>
+
   <div class="calculation">
     <span color="warn" class="balance-low" *ngIf="sheet.overUnderTotal>=0">
       {{sheet.overUnderTotal | currency}}
@@ -18,19 +19,25 @@
   <div>Cash</div>         <div class="calculation"> {{sheet.cashIn         | currency}} </div>
   <div>Credit</div>       <div class="calculation"> {{sheet.creditIn       | currency}} </div>
 
-  <div class="item-span cashdrop-border" *ngIf="sheet.cashDrops">
-    <span class="title">Cash Drops</span>
-    <div class="header-grid info-width" *ngFor="let item of sheet.cashDrops">
-      <div class="calculation"> {{item.amount | currency}} </div>
+  <div class="item-span cashdrop-border" *ngIf="drops">
+    <div class="title">Cash Drops</div>
+  
+    <div *ngFor="let item of drops">
+      <div  class="cash-drop-grid">
+          <div>{{item.id}}</div>
+          <div  class="calculation">{{item.amount | currency}} </div>
+      </div>
     </div>
-    <div class="title">Drop Total </div>
-     <div class="calculation"> {{ sheet.cashDropTotal | currency }}</div>
+
+    <div class="header-grid info-width">
+      <div>Drop Total </div>
+      <div> {{ dropTotal | currency }}</div>
+    </div>
   </div>
 
   <div  *ngIf="currentBalance">Adjusted Balance</div>
   <div class="calculation"
-       *ngIf="currentBalance"
-    >
+       *ngIf="currentBalance">
     <span *ngIf="currentBalance>=0">
       {{currentBalance | currency}}
     </span>

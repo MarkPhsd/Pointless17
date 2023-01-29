@@ -46,7 +46,7 @@ export class InventoryHistoryListComponent implements OnInit, OnDestroy {
 
   labelSetting    : ISetting;
   printForm       : FormGroup;
-  printQuantity   : number;
+  printQuantity   = 1;
   labelList$      : Observable<ISetting[]>;
   labelID         : number;
 

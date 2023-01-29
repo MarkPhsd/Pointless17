@@ -226,7 +226,6 @@ export class UserSwitchingService implements  OnDestroy {
               return of(user)
             }
             user.message = 'success'
-            // console.log('switch user new data', user)
             const currentUser = this.setUserInfo(user, password)
             this.uiSettingService.initSecureSettings();
             return of(user)
@@ -251,7 +250,6 @@ export class UserSwitchingService implements  OnDestroy {
 
         if ( this.platformService.isApp()  )  { return this.changeUser(user) }
         if ( !this.platformService.isApp() )  { return of(user)              }
-
       }
     ))
   }
@@ -345,30 +343,33 @@ export class UserSwitchingService implements  OnDestroy {
 
   processLogin(user: IUser, path : string) {
     // login the user based on the message response of the user.
-    // console.log('user from Process login', user, path)
+    console.log('user from Process login', user, path)
     // console.log('loginAction', localStorage.getItem('loginAction'))
+    // console.log('processlogin1')
     if (user && user.message == undefined) {
       return 'user undefined'
     }
+    console.log('processlogin1')
     // if account loccked out then change here.
     if (user.message.toLowerCase() === 'failed') {
       return user.errorMessage
     }
-
+    console.log('processlogin2')
     if (user && !user.message) {
       return 'No message response from API.'
     }
-
+    console.log('processlogin3')
     if (path) {
       this.router.navigate([path]);
       return 'success'
     }
-
+    console.log('processlogin4')
     if (user.message === 'success') {
+      console.log('loginToReturnUrl')
       this.loginToReturnUrl();
       return 'success'
     }
-
+    console.log('processlogin5')
     this.setAppUser()
   }
 
@@ -388,7 +389,7 @@ export class UserSwitchingService implements  OnDestroy {
 
   assignCurrentOrder(user: IUserProfile)  {
     const site = this.siteService.getAssignedSite()
-    if (user.roles == 'user' && user.id) {
+    if (user && user.roles == 'user' && user.id) {
       const order$ = this.orderService.getUserCurrentOrder(site, user.id)
       order$.subscribe(data => {
         this.orderService.updateOrderSubscription(data)
@@ -399,17 +400,27 @@ export class UserSwitchingService implements  OnDestroy {
   loginApp(user) {
     const currentUser   = user.user
     const sheet         = user.sheet
-    this.processLogin(currentUser, null)
+
     if (sheet) {
       if (sheet.message) {
         this.siteService.notify(`Message ${sheet.message}`, `Error`, 20000)
-        return false
+        const result =   this.processLogin(currentUser, null)
+        if (result === 'success') {
+          return true;
+        }
       }
-      if (sheet.shiftStarted == 0) {
+
+      console.log('sheet.shiftStarted', sheet.shiftStarted)
+      console.log('sheet.shiftStarted', sheet.endTime)
+
+      if (sheet.shiftStarted == 0 ||  (sheet.shiftStarted == 1 && sheet.endTime)) {
         this.router.navigate(['/balance-sheet-edit', {id:sheet.id}]);
         return true
       }
     }
+
+    return false
+
   }
 
   initUserFeatures() {
@@ -435,7 +446,7 @@ export class UserSwitchingService implements  OnDestroy {
     }
 
     this.router.navigate([returnUrl]);
-
+    console.log('returnUrl', returnUrl)
   }
 
 

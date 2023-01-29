@@ -268,21 +268,20 @@
 </div>
 
 <ng-template #cashPaymentButtons>
-  <div>
-    <button class="payment-buttons" mat-raised-button (click)="applyCashPayment(5)">$5.00</button>
-  </div>
-  <div>
-    <button class="payment-buttons" mat-raised-button (click)="applyCashPayment(10)">$10.00</button>
-  </div>
-  <div>
-    <button class="payment-buttons" mat-raised-button (click)="applyCashPayment(20)">$20.00</button>
-  </div>
-  <!-- <div>
-    <button class="payment-buttons" mat-raised-button (click)="applyCashPayment(5)">$50.00</button>
-  </div>   -->
-  <div>
-    <button class="payment-buttons" mat-raised-button (click)="applyCashPayment(100)">$100.00</button>
-  </div>
+  <div class="margin-bottom">
+    <cash-payment-buttons
+        [order]         ="order"
+        [uiTransactions]="uiTransactions"
+        [posPayment]    ="posPayment"
+        [platForm]      ="platForm"
+        [creditBalanceRemaining]="creditPaymentAmount"
+        [stripeTipValue]="stripeTipValue"
+        [paymentAmount] ="paymentAmount"
+        [isApp]="platFormService.isApp()"
+      >
+    </cash-payment-buttons>
+   </div>
+
 </ng-template>
 
 <ng-template #splitItemsView>
@@ -367,16 +366,18 @@
 </ng-template>
 
 <ng-template #giftCardPayButton>
-  <gift-card-pay-btn
-    [order]="order"
-    [uiTransactions]="uiTransactions"
-    [platForm]="platForm"
-    [creditBalanceRemaining]="creditPaymentAmount"
-    [stripeTipValue]="stripeTipValue"
-    [paymentAmount]="paymentAmount"
-    [paymentsEqualTotal]="paymentsEqualTotal"
-    (setStep) ="setStep(1)">
-  </gift-card-pay-btn>
+  <div class="margin-top">
+    <gift-card-pay-btn
+      [order]="order"
+      [uiTransactions]="uiTransactions"
+      [platForm]="platForm"
+      [creditBalanceRemaining]="creditPaymentAmount"
+      [stripeTipValue]="stripeTipValue"
+      [paymentAmount]="paymentAmount"
+      [paymentsEqualTotal]="paymentsEqualTotal"
+      (setStep) ="setStep(1)">
+    </gift-card-pay-btn>
+  </div>
 </ng-template>
 
 <ng-template #storeCreditPaybutton>

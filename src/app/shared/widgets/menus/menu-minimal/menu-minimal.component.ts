@@ -102,16 +102,21 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
             return of(null)
           }
         } catch (error) { }
-          
 
-        data.filter( item => {
-          this.addItemToMenu(item, this.menus)
-        })
-        this.menus =  [...new Set(this.menus)]
 
-        if (this.menus) {
-          this.toggle(this.menus[0], 0)
+        try {
+          data.filter( item => {
+            this.addItemToMenu(item, this.menus)
+          })
+          this.menus =  [...new Set(this.menus)]
+
+          if (this.menus) {
+            // this.toggle(this.menus[0], 0)
+          }
+            
+        } catch (error) {
         }
+         
         return of(this.menus)
       }
     ))

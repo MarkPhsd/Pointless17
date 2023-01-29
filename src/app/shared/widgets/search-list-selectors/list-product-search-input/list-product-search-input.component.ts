@@ -161,6 +161,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
 
    onUpdate() {
     if (this.requireEnter) {
+
       const barcode  =  this.input.nativeElement.value
       this.barcodeScanner$ = this.scan(barcode)
       this.initForm()
@@ -174,7 +175,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
 
     const scanner$ = this.addItemToOrderObs(barcode)
 
-    this.obs$.push(scanner$.pipe(switchMap(data => { 
+    this.obs$.push(scanner$.pipe(switchMap(data => {
       this.scans.shift();
       this.obs$ = []
       this.scans.forEach(item => {
@@ -187,18 +188,24 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     return  forkJoin(this.obs$)
   }
 
-  
+
   addItemToOrderObs(barcode: string) {
     const site = this.siteService.getAssignedSite();
-    const item$ = this.menuItemService.getMenuItemByBarcode(site, barcode);
+    if (!this.order) {
+      this.siteService.notify('No order assigned', 'Alert', 1000)
+      return
+    }
     this.initForm()
+    const item$ = this.menuItemService.getMenuItemByBarcode(site, barcode, this.order.clientID);
     return  item$.pipe( switchMap( data => {
         if ( !data ) {
-          return this.orderMethodService.processItemPOSObservable(this.order, barcode, null, 1, this.input, 0, 0, null)
+          console.log('1', this.orderMethodService.assignPOSItems)
+          return this.orderMethodService.processItemPOSObservable(this.order, barcode, null, 1, this.input, 0, 0, this.orderMethodService.assignPOSItems[0])
         } else
         {
           if (data.length == 1 || data.length == 0) {
-            return this.orderMethodService.processItemPOSObservable(this.order, barcode, null, 1, this.input, 0, 0, null)
+            console.log('2', this.orderMethodService.assignPOSItems)
+            return this.orderMethodService.processItemPOSObservable(this.order, barcode, null, 1, this.input, 0, 0, this.orderMethodService.assignPOSItems[0])
           } else {
             this.listBarcodeItems(data, this.order)
           }

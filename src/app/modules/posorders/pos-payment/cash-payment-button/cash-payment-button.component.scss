@@ -1,0 +1,36 @@
+.buttons { 
+  display: flex;
+  flex-direction: row;
+  row-gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.item-container {
+  margin-top: 10px;
+  // margin-left: -5px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-content: center;
+  row-gap: 5px;
+  column-gap: 5px;
+  justify-content: space-evenly;
+  width: 100%;
+
+  // display: grid;
+  // margin-left: 10px;
+  // margin-top: 5px;
+  // grid-gap: 10px;
+  // grid-template-columns:  repeat( auto-fit, minmax(125px, 1fr) );
+  // grid-auto-flow: row;
+  // overflow-x: auto;
+  // overflow-y: auto;
+  // @include for-phone-only  {
+  //   --gap: 5px;
+  //   display: grid;
+  //   gap: var(--gap);
+  //   grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
+  //   grid-auto-flow: row;
+  // }
+}

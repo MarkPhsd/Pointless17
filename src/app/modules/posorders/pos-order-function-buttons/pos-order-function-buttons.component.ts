@@ -30,6 +30,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   spacer7: any;
   spacer10: any;
   spacer11: any;
+  spacer12: any;
   windowSize: string;
   windowWidth: number;
 
@@ -115,34 +116,50 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
      this.spacer4 = null;
      this.spacer5 = null;
      this.spacer6 = null;
-     this.spacer10 = null
-     this.spacer11 = null
+     this.spacer7 = null;
+     this.spacer10 = null;
+     this.spacer11 = null;
+     this.spacer12 = null;
      this.windowWidth = window.innerWidth
 
      if (window.innerWidth < 1024) { 
       this.spacer5 = this.exitButton;
       // this.spacer11 = this.clearDiscounts
       this.spacer11 = this.payButton
+      // this.spacer4 = this.vipButton
      }
+     
+     if (window.innerWidth >= 954 && window.innerWidth < 1024) { 
+      this.spacer11 = null;
+      this.spacer11 = this.payButton
+      this.spacer12 = null
+     }
+
      if (window.innerWidth >= 1024 && window.innerWidth <= 1565) { 
       // this.spacer1 = this.exitButton
       this.spacer5 = this.exitButton
       this.spacer1 = this.cancelButton
-      this.spacer11 = this.payButton;
+      this.spacer11 = this.payButton
+      this.spacer12 = null
+
       this.windowSize = 'medium'
      }
-     if (window.innerWidth >= 1366) {
+     if (window.innerWidth >= 1366 && window.innerWidth < 1564) {
       // this.spacer5 = this.exitButton
+      this.spacer12 = null;
+      this.spacer7 = this.payButton;
       this.spacer11 = null;
-      this.spacer7 = this.payButton
+      // this.spacer11 = this.vipButton
       this.windowSize = 'large'
       // this.spacer3 = this.payButton
      }
-     if (window.innerWidth > 1565) {
+     if (  window.innerWidth > 1564) {
       this.spacer5 = this.exitButton
-      this.spacer4 = this.payButton
-      this.spacer7 = null;
-      
+      this.spacer11 = null;
+      this.spacer12 = null
+      this.spacer4 = this.payButton;
+      // this.spacer7 = this.payButton;// this.payButton;
+      // this.spacer4 = this.vipButton
       this.windowSize = 'large'
       // this.spacer3 = this.payButton
      }

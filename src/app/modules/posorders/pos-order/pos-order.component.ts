@@ -34,6 +34,7 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { Capacitor } from '@capacitor/core';
 import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
 selector: 'app-pos-order',
@@ -61,7 +62,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   userAuths       :   IUserAuth_Properties;
   _userAuths      : Subscription;
-  
+
   deviceWidthPercentage ='100%'
   orderItemsHeightStyle ='150px'
   windowHeight: number;
@@ -317,6 +318,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   constructor(
               private paymentsMethodsService: PaymentsMethodsProcessService,
               private renderer          : Renderer2,
+              public platFormService    : PlatformService,
               private navigationService : NavigationService,
               private orderService      : OrdersService,
               private awsBucket         : AWSBucketService,
@@ -346,6 +348,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.mainPanel = true
     }
     this.refreshOrder();
+
   }
 
   @HostListener("window:resize", [])

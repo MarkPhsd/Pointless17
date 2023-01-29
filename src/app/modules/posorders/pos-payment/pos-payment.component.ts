@@ -161,8 +161,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.initAuthorization()
-
-
     const site = this.sitesService.getAssignedSite();
     this.paymentService.updatePaymentSubscription(this.posPayment)
     this.toolbarUI.updateOrderBar(false)
@@ -236,7 +234,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   getPaymentMethods(site: ISite) {
     const paymentMethods$ = this.paymentMethodService.getCacheList(site);
-
     if (this.userAuthorization?.user?.roles === 'user') {
       return paymentMethods$.pipe(
         switchMap(data => {
@@ -247,7 +244,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
           list = list.filter( item => item.enabledOnline)
         return  of(list)
       })
-
       )
     }
 
@@ -324,7 +320,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     //otherwise it will accept the service type assigned.
     const site = this.sitesService.getAssignedSite();
     if (!serviceTypeID || this.platFormService.isApp()) {
-
       this.settingService.getSettingByNameCached(site, 'DefaultOrderType').pipe(
         switchMap(data => {
           // console.log('update order scheduleddata', data)
@@ -570,23 +565,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     return this.paymentsMethodsService.processCashPayment(site, posPayment, order, amount, paymentMethod )
   }
 
-  applyCashPayment(amount: number) { 
-    const site = this.sitesService.getAssignedSite()
-    if (this.posPayment) { 
-      this.action$ = this.paymentMethodService.getPaymentMethodByName(site, 'cash').pipe(switchMap(method => { 
-        return this.paymentsMethodsService.processCashPayment(site, this.posPayment, this.order, amount, method )
-      })).pipe(switchMap(data => { 
-        return this.orderService.getOrder(site, this.order.id.toString(), false )
-      })).pipe(switchMap(data => {
-        this.orderService.updateOrderSubscription(data)
-        return of(data)
-      }))
-    } 
-    if (!this.posPayment) { 
-      this.sitesService.notify('No payment assigned', 'Alert', 2000)
-    }
-  }
-
   processCreditPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
     const enabled = this.paymentsMethodsService.DSIEmvSettings.enabled
     if (enabled) {
@@ -622,6 +600,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     posPayment.amountReceived = amount;
     return  this.paymentsMethodsService.getResults(amount, this.paymentMethod, this.posPayment, this.order)
   }
+
+
 
   enterPointCashValue(event) {
     const site = this.sitesService.getAssignedSite();

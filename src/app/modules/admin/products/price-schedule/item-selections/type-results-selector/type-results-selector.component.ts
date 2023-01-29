@@ -45,8 +45,13 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   @Input()  inputForm : FormGroup;
   @Input()  item      : IPriceSchedule;
   lastSelectedItem    : DiscountInfo;
-  requiredItems       : DiscountInfo[] = [];
-  requiredCategories  : DiscountInfo[] = [];
+  // export interface RequiredOption {
+  id:                 number;
+  priceScheduleID:    number;
+  requiredItemTypes:  DiscountInfo[] = []; //what is a main type? This is itemType
+  requiredBrands:     DiscountInfo[] = [];
+  requiredCategories: DiscountInfo[] = [];
+  requiredItems:      DiscountInfo[] = [];
   accordionStep = 0;
   //AgGrid
   params               : any;
@@ -91,6 +96,9 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   initSubscriptions() {
     this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
       this.priceScheduleTracking = data
+      this.requiredItemTypes     = data.requiredItemTypes;
+      this.requiredBrands        = data.requiredBrands;
+      this.requiredCategories    = data.requiredCategories;
       this.requiredItems         = data.requiredItems;
     })
   }
@@ -134,14 +142,13 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   }
 
   ngOnChanges() {
-
     this.currentPage        = 1;
     this.navItemsByCategory()
     this.refreshSearch('');
-
   }
 
   initGridOptions()  {
+    console.log('initGridOptions')
     this.frameworkComponents  = this.agGridService.initFrameworkComponents();
     this.defaultColDef        = this.agGridService.initDefaultColumnDef();
     this.rowSelection         = 'multiple';
@@ -157,6 +164,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   }
 
   initColumnDefs() {
+    console.log('initColumnDefs')
     return  [
       {headerName: 'Name', field: 'name', sortable: true, width: 300, minWidth: 300},
       {
@@ -210,7 +218,6 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
     }
   }
 
-
   setCurrentPage(startRow: number, endRow: number): number {
     const tempStartRow = this.startRow
     this.startRow      = startRow
@@ -224,12 +231,14 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   getRowData(params, startRow: number, endRow: number):  Observable<IProductSearchResultsPaged>  {
     this.currentPage = this.setCurrentPage(startRow, endRow)
     const productSearchModel = this.initSearchModel( );
+    console.log('productSearchModel', productSearchModel)
     const site = this.siteService.getAssignedSite()
     return this.menuService.getProductsBySearchForLists(site, productSearchModel)
   }
 
   //ag-grid standard method
   onGridReady(params: any) {
+    console.log('on grid ready')
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
@@ -237,7 +246,6 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
     }
 
     if (params == undefined) {
-      console.log('params is not defined')
       return
     }
 
@@ -260,6 +268,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 
   //ag-grid standard method.
   getDataSource(params) {
+    console.log('getDataSource')
     return {
       getRows: (params: IGetRowsParams) => {
         const items$ = this.getRowData(params, params.startRow, params.endRow)
@@ -282,14 +291,11 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   navItemsByCategory(): Observable<IProductSearchResults[]> {
     const site = this.siteService.getAssignedSite()
     const productSearchModel = this.initSearchModel();
-    console.log('refreshSearch', productSearchModel)
     return this.getData(site, productSearchModel)
   }
 
-  //this is called from subject rxjs obversablve above constructor.
-
-  //this is called from subject rxjs obversablve above constructor.
   refreshSearch(searchPhrase: string): Observable<IProductSearchResults[]> {
+    console.log('refreshSearch')
     if (!this.params) { return }
     this.currentPage         = 1
     const site               = this.siteService.getAssignedSite()
@@ -301,8 +307,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   }
 
   getData(site, productSearchModel): Observable<IProductSearchResults[]> {
-    console.log('this.getCategoryID()', this.getCategoryID())
-    console.log('getData', productSearchModel)
+    console.log('productSearch get data')
     const menu$  = this.menuService.getProductsBySearchForLists(site, productSearchModel)
     menu$.subscribe( data => {
       this.rowData = data.results
@@ -326,7 +331,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   initSearchModel(): ProductSearchModel {
     const categoryID = this.getCategoryID();
     const brandID  = this.getBrandID();
-
+    console.log('initSearchModel')
     return this.agGridService.initProductSearchModel(
         categoryID,
         this.input.nativeElement.value,
@@ -342,7 +347,8 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
     let selectedRows = this.gridApi.getSelectedRows();
     let selectedRowsString = '';
     let maxToShow = 5;
-    let selected = []
+    let selected = [];
+
     selectedRows.forEach(function (selectedRow, index) {
       if (index >= maxToShow) {  return;   }
       if (index > 0) {  selectedRowsString += ', ';}
@@ -370,10 +376,8 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 
   selectItemFromGrid(e) {
     if (e.rowData.id)  {
-
-      console.log( 'row data', e.rowData)
       this.enableItem(e.rowData);
-      this.lastSelectedItem = e.rowData;
+      // this.lastSelectedItem = e.rowData;
     }
   }
 
@@ -383,12 +387,11 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
     this.lastSelectedItem = null
     if (!item)                 { return }
     if (item.id == undefined)  { return }
-
     const itemID = parseInt( item.id );
 
     if (this.requiredItemsControl) {
-
-      console.log('item type.', item?.prodModifierType)
+      this.requiredItems = this.requiredItemsControl.value;
+      console.log('presss',  this.requiredItems)
 
       if (item.prodModifierType != 5 && item.prodModifierType != 4) {
         if (!this.requiredItems) {
@@ -397,6 +400,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
         const array = this.requiredItems;
         const index = array.findIndex( data =>  data.itemID === itemID)
         this.pushRequiredItems(index, itemID, item, this.requiredItems )
+        return;
       }
 
       if (item.prodModifierType == 5 || item.prodModifierType == 4 ) {
@@ -407,40 +411,52 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
         const index = array.findIndex( data =>  data.itemID === itemID)
         this.pushCategory(index, itemID, item, this.requiredCategories )
       }
-
     }
   }
 
-
   pushRequiredItems(index, itemID, item,  requiredItems) {
-
-    if (index == -1){
-      const newItem    =  {} as DiscountInfo;
-      newItem.itemID   =  itemID;
-      newItem.name     =  item.name;
-      newItem.quantity =  1;
-      this.requiredItems.push(newItem)
-      this.applyChanges(newItem);
-      this.lastSelectedItem = newItem
-      console.log(newItem)
-    } else {
-      this.requiredItems = this.requiredItems.splice(index, 1)
-      this.applyChanges(null);
-      this.lastSelectedItem = null
+    // console.log('requiredITems', requiredItems)
+    try {
+      if (index == -1){
+        const newItem    =  {} as DiscountInfo;
+        newItem.itemID   =  parseInt( itemID );
+        newItem.name     =  item.name;
+        newItem.quantity =  1;
+        requiredItems.push(newItem)
+        this.applyChanges(newItem);
+        this.lastSelectedItem = newItem
+      } else {
+        this.requiredItems = requiredItems.splice(index, 1)
+        this.applyChanges(null);
+        this.lastSelectedItem = null
+      }
+    } catch (error) {
+      console.log(error)
     }
+
 
   }
 
   pushCategory(index, itemID, item,  requiredItems) {
+
+    if (!this.requiredCategories) {
+      this.requiredCategories = []
+    }
+
+    if (!this.requiredCategories) {
+      this.requiredCategories = []
+    }
+    const array = this.requiredCategories
+    index = array.findIndex( data =>   data.itemID === parseInt( itemID ))
+
     if (index == -1){
       const newItem    =  {} as DiscountInfo;
       newItem.itemID   =  itemID;
       newItem.name     =  item.name;
       newItem.quantity =  1;
-      this.requiredCategories.push(newItem)
+      this.requiredCategories.push(newItem);
       this.applyCategoryChanges(newItem);
       this.lastSelectedItem = newItem
-      console.log(newItem)
     } else {
       this.requiredItems = this.requiredCategories.splice(index, 1)
       this.applyCategoryChanges(null);
@@ -449,15 +465,16 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   }
 
   applyChanges(item: DiscountInfo) {
+    if (!this.requiredItems) { this.requiredItems = []}
     this.priceScheduleTracking.requiredItems = this.requiredItems;
-    console.table(this.requiredItems)
+    this.requiredItemsControl.patchValue(this.requiredItems)
     this.priceScheduleDataService.updatePriceSchedule(this.priceScheduleTracking)
     this.lastSelectedItem  = item
   }
 
   applyCategoryChanges(item: DiscountInfo) {
+    if (!this.requiredCategories) { this.requiredCategories = []}
     this.priceScheduleTracking.requiredCategories = this.requiredCategories;
-    console.table(this.requiredCategories)
     this.priceScheduleDataService.updatePriceSchedule(this.priceScheduleTracking)
     this.lastSelectedItem  = item
   }
@@ -472,8 +489,12 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
       this.priceScheduleDataService.updatePriceSchedule(this.inputForm.value)
       return
     }
-
     this.priceScheduleDataService.updatePriceSchedule(this.inputForm.value)
+  }
+
+  patchValues() {
+    this.inputForm.patchValue({requiredItems: this.requiredItems})
+    this.inputForm.patchValue({requiredCategories: this.requiredCategories})
   }
 
   //requiredCategories

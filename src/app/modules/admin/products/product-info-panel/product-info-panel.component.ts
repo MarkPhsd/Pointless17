@@ -32,7 +32,7 @@ export class ProductInfoPanelComponent implements OnInit {
   toggleLabelEvents: string;
   labelSetting    : ISetting;
   printForm       : FormGroup;
-  printQuantity   : number;
+  printQuantity   = 1;
   labelList$      : Observable<ISetting[]>;
   labelID         : number;
 

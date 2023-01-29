@@ -1,21 +1,21 @@
+import { C } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
 import * as _ from "lodash";
+import { DateHelperService } from '../reporting/date-helper.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RenderingService {
 
-  constructor() { }
+  constructor(private dateHelperService: DateHelperService) { }
 
   interpolateText(item: any, text: string) {
     if (!item && !text) { return }
-
+    // console.log('values passed', item, text);
     try {
       if (!item && text) {
         _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
-
-
 
         text =  this.getFormater(text)
         const compiled = _.template( text );
@@ -34,6 +34,8 @@ export class RenderingService {
           item = _.mapValues(item, v => _.isNil(v) ? '' : v)
 
           const compiled = _.template( text );
+          item = this.removeUndefined( item );
+
           const compiledText = compiled( { item } );
           
           let compiledResult =  compiledText.replace(regExFront, '')
@@ -47,6 +49,116 @@ export class RenderingService {
       }
     } catch (error) {
     }
+  }
+
+  removeUndefined(item: any) { 
+    // console.log('item before remove nulls', item)
+    // console.log('removeUndefined')
+    const result = _.mapValues(item, v => _.isNil(v) ? '' : v)
+    // console.log('item remove nulls', item)
+    if (item) { 
+      
+      item = this.setItemValues(item)
+       
+    }
+    return item
+  }
+
+  setItemValues(item) { 
+    for (const key in item) {
+      if (item[key] && isNaN(item[key])) {
+        const result = this.checkDate(item[key]);
+        if (result) { 
+          item[key] = result
+        }
+        if (!result) { 
+          if (this.isObject(item[key])) { 
+            if (key === 'serials') {
+              item[key] = this.setItemValues(item[key])
+            }
+            if (key === 'inventory') {
+              item[key] = this.setItemValues(item[key])
+            }
+            if (key === 'menuItem') {
+              item[key] = this.setItemValues(item[key])
+            }
+            if (key === 'priceCategories') {
+              item[key] = this.setItemValues(item[key])
+            }
+          }
+        }
+      }
+    }
+    return item
+  }
+
+  checkDate(e) { 
+
+    try {
+      if (e instanceof Date) { 
+        // console.log('instanceof e', e)
+        e = this.dateHelperService.format(e, 'MM-dd-yyyy')
+        // console.log('new instanceof e', e)
+        return e;
+      }
+    } catch (error) {
+      
+    }
+
+    try {
+      if (this.isIsoDate(e)) {
+        // console.log('isIsoDate e', e)
+        e = this.dateHelperService.format(e,'MM-dd-yyyy')
+        // console.log('isIsoDate new e', e)
+        return e
+      }
+    } catch (error) {
+        
+    }
+    try {
+      if (e) { 
+        if (this.dateHelperService.isValidDate(e)) { 
+          e = this.dateHelperService.format(e, 'MM-dd-yyyy')
+        }
+      }
+      } catch (error) {
+          
+      }
+    //  return e
+  }
+
+
+   isIsoDate(str) {
+
+    console.log('is date', str)
+    try {
+      var dateParsed = new Date(Date.parse(str));
+      if (dateParsed) { 
+        return true
+      }
+    } catch (error) {
+      // console.log('error', error)
+      console.log('str', str)
+    }
+
+    if (!isNaN(str)) { 
+      // console.log('!IsNAN', str)
+      return false 
+    }
+
+    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) {
+      console.log('date not formated adequately', str)
+      return false;
+    }
+
+    console.log('date formated', str)
+    const d = new Date(str); 
+
+    return d instanceof Date &&   d.toISOString()===str; // valid date 
+  }
+
+  isObject(obj) {
+    return obj === Object(obj);
   }
 
   getFormater(text: string): string {

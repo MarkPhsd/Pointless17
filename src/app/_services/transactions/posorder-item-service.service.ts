@@ -56,6 +56,8 @@ export interface NewItem            {
   itemNote: string,
   deviceName: string,
   passAlongItem: any,
+  order: IPOSOrder;
+  clientID: number;
 }
 export interface NewInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number, portionValue: string, packaging: string,  itemNote: string}
 export interface NewSerializedItem  { orderID: number, quantity: number, menuItem: Serial, barcode: string,  weight: number, portionValue: string, packaging:string,  itemNote: string}
@@ -299,7 +301,7 @@ export class POSOrderItemServiceService {
   }
 
   postPromptItems(site: ISite, iPrompt: IPromptGroup): Observable<IPromptGroup> {
-    
+
     const controller = "/POSOrderItems/";
 
     const endPoint = "PostPostPrompGroup";
@@ -426,7 +428,7 @@ export class POSOrderItemServiceService {
     return  this.http.post<IPOSOrder>(url, posOrderItem)
 
   }
-  
+
   changeItemQuantity(site: ISite, posOrderItem: PosOrderItem): Observable<IPOSOrder> {
 
     // const result = this.validateItemchange(posOrderItem)

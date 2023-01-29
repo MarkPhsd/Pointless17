@@ -143,7 +143,7 @@ export interface IBalanceSheet {
   tooniesStart:         number;
   cashDropTotal:        number;
   balanceSheetEmployee: BalanceSheetEmployee;
-  cashDrops            : CashDrop;
+  cashDrops            : CashDrop[];
   message              : string;
 }
 
@@ -306,6 +306,19 @@ export class BalanceSheetService {
 
     return this.http.get<IBalanceSheet>(url);
   }
+
+  postDrop(site: ISite, id: number, amount: number)  : Observable<IBalanceSheet> {
+    const controller = '/BalanceSheets/'
+
+    const endPoint  = "PostDrop"
+
+    const parameters = `?amount=${amount}&balanceSheetID=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IBalanceSheet>(url);
+  }
+
 
   getUsersOfBalanceSheet(site: ISite, id: number)  : Observable<IBalanceEmployeeSummary> {
     const controller = '/BalanceSheets/'

@@ -1,6 +1,9 @@
-<h3>Balance Sheet</h3>
 
-<div>
+<div *ngIf="printType === 'balanceSheetFinal'">
+  <h3>Balance Sheet</h3>
+</div>
+
+<div *ngIf="printType === 'balanceSheetFinal'">
   <balance-sheet-header-view
     [disableAuditButton]="true"
     [sheetType]="sheetType"
@@ -8,15 +11,71 @@
   </balance-sheet-header-view>
 </div>
 
-<div>
+<div *ngIf="printType === 'balanceSheetFinal'">
   <balance-sheet-calculations-view
     [sheet]="sheet">
   </balance-sheet-calculations-view>
 </div>
 
-<h3>Payments:</h3>
-<div *ngIf="(list$ | async) as list">
-  <credit-card-payments-print-list
-    [list]="list">
-  </credit-card-payments-print-list>
+<div *ngIf="printType === 'balanceSheetFinal'">
+  <h3>Payments:</h3>
+  <div *ngIf="(list$ | async) as list">
+    <credit-card-payments-print-list
+      [list]="list">
+    </credit-card-payments-print-list>
+  </div>
+</div>
+
+<div *ngIf="printType === 'balanceSheetValues' || printType === 'balanceSheetFinal'">
+  <h2>Remaining in Drawer</h2>
+  <div class="balance-grid-summary">
+    <div>Dollars</div>
+    <div>{{sheet.onesEnd | currency}}</div>
+
+    <div>Five</div>
+    <div>{{sheet.fivesEnd | currency}}</div>
+
+    <div>Ten</div>
+    <div>{{sheet.tensEnd | currency}}</div>
+
+    <div>Twenty</div>
+    <div>{{sheet.twentiesEnd | currency}}</div>
+
+    <div>Fifty</div>
+    <div>{{sheet.fiftiesEnd | currency}}</div>
+
+    <div>100</div>
+    <div>{{sheet.hundredsEnd | currency}}</div>
+
+    <div>Penny</div>
+    <div>{{sheet.pennyEnd | currency}}</div>
+
+    <div>Nickle</div>
+    <div>{{sheet.nickelEnd | currency}}</div>
+
+    <div>Dime</div>
+    <div>{{sheet.dimeEnd | currency}}</div>
+
+    <div>Quarter</div>
+    <div>{{sheet.quarterEnd | currency}}</div>
+
+    <div>Half</div>
+    <div>{{sheet.halfDollarEnd | currency}}</div>
+
+    <div>Dollar</div>
+    <div>{{sheet.dollarsEnd | currency}}</div>
+  </div>
+</div>
+
+
+<div *ngIf="printType === 'cashDrop'">
+  <h1>Cash Drop</h1>
+  <div class="balance-grid-summary">
+    <div><h3>Sheet ID</h3> </div>
+    <div><h3>{{sheet.id}}</h3></div>
+    <div><h3>DROP ID</h3> </div>
+    <div *ngIf="cashDrop"><h3>{{cashDrop?.id}}</h3></div>
+    <div><h3>Amount</h3> </div>
+    <div *ngIf="cashDrop"><h3>{{cashDrop?.amount | currency}}</h3></div>
+  </div>
 </div>

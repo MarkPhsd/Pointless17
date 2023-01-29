@@ -21,6 +21,17 @@
   }
 }
 
+.cash-drop-container {
+  // display: flex;
+  // flex-direction: row;
+  display: flex;
+  grid-column: 1fr 1fr;
+  column-gap: 100px;
+  margin-top: 10px;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
 .info-width {
   width: 275px;
   @include for-phone-only  {

@@ -65,7 +65,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
         }
       })
 
-      if (this.fieldName  && this.fieldName != 'itemName') { 
+      if (this.fieldName  && this.fieldName != 'itemName') {
         this.inputForm.controls[this.fieldName].valueChanges.subscribe(data => {
           if (data) {
             this.onChangeValueUpdate(data)
@@ -85,10 +85,8 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   initForm() {
-    this.inputForm = this.fb.group({
-      itemName: [],
-    })
-    
+
+    this._initForm();
     if (this.inputForm && this.fieldName) {
       this.inputForm.addControl( this.fieldName,new FormControl([]) );
       this.formSubscriber()
@@ -99,6 +97,19 @@ export class KeyPadComponent implements OnInit, OnChanges {
       })
       this.initSearchOption();
     }
+  }
+
+  _initForm() {
+    this.inputForm = this.fb.group({
+      itemName: [],
+    })
+  }
+
+  resetValues() {
+    this._initForm();
+    this.value = '';
+    this.cashValue = ''
+    this.formattedValue = ''
   }
 
   initShowInput() {
@@ -176,7 +187,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
       return
     }
     if (len > 0) {  this.value = this.value.substring(0, len -1) }
-    
+
     this.updateDisplayOutput();
   }
 
@@ -287,12 +298,14 @@ export class KeyPadComponent implements OnInit, OnChanges {
   returnEnterPress(){
 
     if (!this.value && this.cashValue) {
-      this.outPutReturnEnter.emit(this.cashValue)
+      this.outPutReturnEnter.emit(this.cashValue);
+
       return;
     }
 
     if (!this.formatted) {
       this.outPutReturnEnter.emit(this.value)
+
       return
     }
 

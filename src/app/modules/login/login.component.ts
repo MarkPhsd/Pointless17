@@ -15,6 +15,8 @@ import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { SplashScreenStateService } from 'src/app/_services/system/splash-screen-state.service';
+import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
+import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY } from '@angular/cdk/overlay/overlay-directives';
 
 @Component({
     selector   : 'login-dashboard',
@@ -170,17 +172,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.initLogo();
     })
   }
-
-
-//  async waitForOneSecond() {
-//     return new Promise(resolve => {
-//       setTimeout(() => {
-
-//         await this.uiSettingService.electronZoom(terminal.electronZoom)
-//         resolve("I promise to return after one second!");
-//       }, 1000);
-//     });
-//   }
 
   ngOnDestroy(): void {
     this.statusMessage = ''
@@ -399,35 +390,36 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   submitLogin(userName: string, password: string) {
     this.loginAction$ = this.userSwitchingService.login(userName, password).pipe(
-      switchMap(user =>
-          {
+      switchMap(result =>
+        {
           this.initForm();
-          if (user && user.errorMessage) {
-            this.notifyEvent(user.errorMessage, 'Failed Login');
+          if (result && result.errorMessage) {
+            this.notifyEvent(result.errorMessage, 'Failed Login');
             return of('failed')
           }
 
-          if (user) {
+          const user = result.user;
+          const sheet = result.sheet;
+          console.log(result, user)
+          if (result) {
             this.spinnerLoading = false;
             if (user.message === 'failed' ||
                 (user.errorMessage ||
-                (user.user && user.user.errorMessage))) {
+                (user && user.errorMessage))) {
               this.authenticationService.updateUser(null);
               return of('failed')
            }
 
-          if (this.platformService.isApp()) {
             if (this.loginApp(user)) {
               return of('success')
             }
-          }
 
-            if (user.message && user.message.toLowerCase() === 'success') {
+            if (user && user.message && user.message.toLowerCase() === 'success') {
+              let pass = false
+
               if (!this.loginAction) {
                 this.userSwitchingService.assignCurrentOrder(user)
               }
-
-              let pass = false
 
               if (this.loginAction) {
                 if (this.loginAction.name === 'setActiveOrder') {
@@ -436,25 +428,30 @@ export class LoginComponent implements OnInit, OnDestroy {
                 }
               }
 
+              console.log('pass', pass)
+
               if (!pass) {
                 this.userSwitchingService.processLogin(user, '')
               }
 
-              if (this.dialogOpen) {
-                try {
-                  this.dialogRef.close();
-                } catch (error) {
-                  return of('error')
-                }
-              }
-
+              this.closeDialog();
               return of('success')
             }
-
           }
+            console.log('error', user?.errorMessage)
             return of('error')
           }
       ))
+  }
+
+  closeDialog() {
+    if (this.dialogOpen) {
+      try {
+        this.dialogRef.close();
+      } catch (error) {
+        return of('error')
+      }
+    }
   }
 
   setloginAction(): Observable<IPOSOrder> {
@@ -463,17 +460,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   loginApp(user) {
     if (this.platformService.isApp()) {
-      this.loggedInUser   = user.user
+      this.loggedInUser   = user.user;
       this.spinnerLoading = false
       return this.userSwitchingService.loginApp(user)
-      return true;
     }
+    return false;
   }
-
-  // testCredit() {
-  //   // this.router.navigate('payments')
-  //   this.router.navigate(['/payments'])
-  // }
 
   assingBackGround(image: string) {
     if (!image) {

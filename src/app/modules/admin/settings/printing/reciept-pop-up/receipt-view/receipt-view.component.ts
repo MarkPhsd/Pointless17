@@ -18,13 +18,17 @@ import { Router } from '@angular/router';
 })
 export class ReceiptViewComponent implements OnInit , OnDestroy{
 
-  @ViewChild('receipt')      receiptTemplate: TemplateRef<any>;
-  @ViewChild('balanceSheet') balanceSheetTemplate: TemplateRef<any>;
+  @ViewChild('printsection')        printsection: ElementRef;
+
+  @ViewChild('receiptTemplate' ,{static: false})      receiptTemplate: TemplateRef<any>;
+  @ViewChild('balanceSheetTemplate',{static: false})  balanceSheetTemplate: TemplateRef<any>;
+  @ViewChild('balanceSheetValues',{static: false})    balanceSheetValues: TemplateRef<any>;
+  @ViewChild('cashDropView',{static: false})          cashDropView:   TemplateRef<any>;
 
   @Input() autoPrint : boolean;
   @Input() hideExit = false;
   @Output() outPutExit      = new EventEmitter();
-  @ViewChild('printsection') printsection: ElementRef;
+
   @Input() printerName      : string;
   @Input() options           : printOptions;
 
@@ -202,7 +206,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   getStylesForPrintOut() {
     let ob$ : Observable<any>
-    if (this.printingService.printView  == 2) {
+    if (this.printingService.printView  == 2 || this.printingService.printView  == 3 || this.printingService.printView  == 4) {
       ob$ = this.initBalanceSheetDefaultLayoutsObservable()
     }
     if (this.printingService.printView  == 1 || !this.printingService.printView) {
@@ -270,18 +274,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     this.exit();
   }
 
-  get currentView() {
-    if (this.printView == 2) {
-      return this.balanceSheetTemplate
-    }
-    if (this.printView == 1) {
-      return this.receiptTemplate
-    }
-    if (!this.printView) {
-      this.printView = 1;
-      return this.receiptTemplate
-    }
-  }
 
   getDeviceInfo(): Observable<ISetting> {
     const site = this.siteService.getAssignedSite();
@@ -340,7 +332,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   getPrinterName() {
   }
-
   ///step 1B
   initSubComponent(receiptPromise: ISetting): boolean {
     if (receiptPromise ) {
@@ -356,11 +347,35 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     }
   }
 
+  get currentView() {
+
+    if (this.printView == 4) {
+      return this.cashDropView
+    }
+    if (this.printView == 3) {
+      return this.balanceSheetValues
+    }
+    if (this.printView == 2) {
+      return this.balanceSheetTemplate
+    }
+    if (this.printView == 1) {
+      return this.receiptTemplate
+    }
+    if (!this.printView) {
+      this.printView = 1;
+      return this.receiptTemplate
+    }
+  }
+
   getReceiptContents(styles: string) {
-    const prtContent     = document.getElementById('printsection');
-    if (!prtContent) { return  }
-    const content        = `${prtContent.innerHTML}`
-    if (!content) { return }
+
+    let  prtContent = document.getElementById('printsection');
+
+    console.log(prtContent  )
+    if ( prtContent == null) { return }
+    if ( !prtContent )       { return }
+    const content        = `${ prtContent.innerHTML }`
+    if (!content)            { return }
 
     const  title   = 'Receipt';
     const loadView = ({ title }) => {
@@ -393,7 +408,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       const result = this.printElectron()
       return
     }
-    // if (this.platFormService.androidApp) {this.printAndroid() }
     if (this.platFormService.webMode)    {this.convertToPDF() }
   }
 
@@ -402,6 +416,9 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     if (this.receiptStyles) {
       styles = this.receiptStyles.text;
       const contents = this.getReceiptContents(styles)
+
+      if (!contents) { return }
+
       const options  = {
         silent: true,
         printBackground: false,

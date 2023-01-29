@@ -1,11 +1,10 @@
 <div class="grid-container">
   <div *ngIf="(itemTypes$ | async) as list"
          class="type-list" >
-
+      {{list.length }}
       <div class="" [@listAnimation]="list.length">
         <div class="toggle-buttons-margins categories"
-            *ngFor="let item of list"
-            >
+            *ngFor="let item of list">
 
             <div class="itemtype-buttons-container">
               <button mat-button-stroked

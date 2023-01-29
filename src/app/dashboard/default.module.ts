@@ -364,6 +364,7 @@ import { StripeCardPayBtnComponent } from '../modules/posorders/pos-payment/stri
 import { TriPOSCardPayBtnComponent } from '../modules/posorders/pos-payment/tri-poscard-pay-btn/tri-poscard-pay-btn.component';
 import { WicEBTCardPayBtnComponent } from '../modules/posorders/pos-payment/wic-ebtcard-pay-btn/wic-ebtcard-pay-btn.component';
 import { DSIEMVAndroidPayBtnComponent } from '../modules/posorders/pos-payment/dsiemvandroid-pay-btn/dsiemvandroid-pay-btn.component';
+import { CashPaymentButtonComponent } from '../modules/posorders/pos-payment/cash-payment-button/cash-payment-button.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -404,6 +405,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     CacheSettingsComponent,
     CategoriesComponent,
     CategorieslistviewComponent,
+    CashPaymentButtonComponent,
     CheckInProfileComponent,
     ClientTypeSelectionComponent,
 
@@ -808,7 +810,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     LoggingInterceptor,
     MenuService,
     MetrcFacilitiesService,
-    OrdersService,
+    // OrdersService,
     // OrderMethodsService,
     PrintingService,
     ReportingService,

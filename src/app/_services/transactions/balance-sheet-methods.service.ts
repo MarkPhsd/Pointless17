@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { IOrdersPaged, IUser } from 'src/app/_interfaces';
 import { OrdersService } from '..';
 import { SitesService } from '../reporting/sites.service';
-import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet } from './balance-sheet.service';
+import { BalanceSheetSearchModel, BalanceSheetService, CashDrop, IBalanceSheet } from './balance-sheet.service';
 import { Capacitor } from '@capacitor/core';
 import { catchError, switchMap } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -21,6 +21,8 @@ export class BalanceSheetMethodsService {
   get platForm() {  return Capacitor.getPlatform(); }
   deviceName: string;
   isApp                       = false;
+
+  cashDrop: CashDrop; //for priting cash drops
 
   private _orderCount         = new BehaviorSubject<number>(null);
   public orderCount$           = this._orderCount.asObservable();
@@ -84,10 +86,8 @@ export class BalanceSheetMethodsService {
     if (this.platformService.isAppElectron || this.platformService.androidApp) {
       const site     = this.sitesService.getAssignedSite()
       const deviceName = this.getDeviceName();
-      // this.getCurrentBalanceSheet()
       return this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
         switchMap( data => {
-          // console.log('Returning balance sheet', data)
           if (data.id == 0 )  {
              return of({sheet: null, user: user})
           }
@@ -113,7 +113,7 @@ export class BalanceSheetMethodsService {
     const site = this.sitesService.getAssignedSite()
     return   this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
       switchMap(sheet => {
-        console.log('get current balance sheet ', sheet)
+        // console.log('get current balance sheet ', sheet)
         this.updateBalanceSheet(sheet)
         return  this.sheetService.getSheetCalculations(site, sheet)
     }))
@@ -167,12 +167,12 @@ export class BalanceSheetMethodsService {
       if (sheet.shiftStarted  != 1) {
         sheet.shiftStarted = startShiftInt;
       }
-      console.table (sheet)
+      // console.table (sheet)
       return this.sheetService.putSheet(site, sheet).pipe(
         switchMap(
           data => {
             this.updateBalanceSheet(data)
-            // this.notify('Sheet saved.', 'Succes')
+    
             return of(data)
           }),
           catchError(err => {

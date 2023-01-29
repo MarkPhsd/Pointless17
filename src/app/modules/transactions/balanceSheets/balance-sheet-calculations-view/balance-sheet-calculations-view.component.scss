@@ -1,5 +1,4 @@
 @import "/src/mixins.scss";
-@import '~@angular/material/theming';
 
 .grid-container {
   --gap: 5px;
@@ -20,8 +19,18 @@
   grid-column: 1 / span 2;
 }
 
-.balance-low {
-  // color: mat-color($accent, default);
+.cash-drop-grid {
+  display: grid;
+  grid-template-columns: 100px 150px;
+  gap: 10px;
+  padding: 2px;
+  text-align: right;
+  @media print {
+    display: grid;
+    grid-template-columns: 100px 150px;
+    gap: 10px;
+    padding: 2px;
+  }
 }
 
 .header-grid {
@@ -30,7 +39,6 @@
   gap: var(--gap);
   grid-template-columns: repeat( 125px, minmax(105px, 1fr) );
   margin: 3px;
-
   @include for-phone-only  {
     display: grid;
     grid-template-columns: 1fr;
@@ -39,9 +47,10 @@
 }
 
 .info-width {
-  width: 275px;
+  max-width: 275px;
+  width:  100%;
   @include for-phone-only  {
-    width: 275px;
+    max-width: 275px;
   }
 }
 
@@ -61,5 +70,4 @@
 .calculation {
   grid-column: 2/3;
   text-align: right;
-
 }

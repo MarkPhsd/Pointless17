@@ -173,6 +173,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
     async addItemToOrder() {
       // if (this.order) {
+        console.log('assigned items', this.orderMethodsService.assignPOSItems)
         this.orderMethodsService.addItemToOrder(this.order, this.menuItem, this.quantity)
       // }
     }
@@ -333,7 +334,9 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
     addItemByCodeOBS(item) {
       if (item) {
-        this.action$ = this.orderMethodsService.scanBarcodeAddItemObservable(item.sku, 1, {packaging: this.packaging, portionValue: this.portionValue} )
+        console.log('this.orderMethodsService.assignPOSItems, ', this.orderMethodsService.assignPOSItems)
+        this.action$ = this.orderMethodsService.scanBarcodeAddItemObservable(item.barcode, 1,
+              {packaging: this.packaging, portionValue: this.portionValue}, this.orderMethodsService.assignPOSItems )
       }
     }
 

@@ -759,13 +759,17 @@ export class MenuService {
     return  this.httpClient.get<IMenuItem>(url)
   };
 
-  getMenuItemByBarcode(site: ISite, barcode:any): Observable<IMenuItem[]> {
+  getMenuItemByBarcode(site: ISite, barcode:any, clientID: number): Observable<IMenuItem[]> {
+
+    if (!clientID || clientID == null || clientID == undefined) {
+      clientID = 0;
+    }
 
     const controller ="/MenuItems/"
 
     const endPoint = `GetMenuItemByBarcode`
 
-    const parameters = `?barcode=${barcode}&quantity=1`
+    const parameters = `?barcode=${barcode}&quantity=1&clientID=${clientID}`
 
     const uri = `${site.url}${controller}${endPoint}${parameters}`
 

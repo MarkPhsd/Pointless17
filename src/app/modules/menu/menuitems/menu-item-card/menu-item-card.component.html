@@ -120,7 +120,7 @@
       mat-mini-fab
       class="add-button"
       color="warn"
-      (click)="menuItemAction(true)" >
+      (click)="menuItemActionObs()" >
     <div *ngIf="!isProduct">
       <mat-icon>open_in_new</mat-icon>
       View
@@ -136,7 +136,7 @@
       mat-mini-fab
       class="add-button"
       color="warn"
-      (click)="menuItemAction(false)" >
+      (click)="menuItemActionObs()" >
     <mat-icon>open_in_new</mat-icon>
   </button>
 </ng-template>

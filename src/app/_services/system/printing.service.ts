@@ -26,6 +26,7 @@ import { UISettingsService } from './settings/uisettings.service';
 import { PrintingAndroidService} from  './printing-android.service';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { PrintTemplatePopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 
 export interface printOptions {
   silent: boolean;
@@ -490,11 +491,15 @@ export class PrintingService {
     const site = this.siteService.getAssignedSite();
 
     let printer = {} as any;
-    const menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID);
+    let  menuItem$  : Observable<IMenuItem>
+    if (!item.menuItem) { 
+      menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID);
+    } else { 
+      menuItem$ = of(item.menuItem)
+    }
 
     const printer$ = this.settingService.getDeviceSettings().pipe(
       switchMap(data => {
-        console.log(data)
         const item = JSON.parse(data.text) as ITerminalSettings;
         this.uiSettingsService.updatePOSDevice(item)
         printer = {text: item?.labelPrinter}
@@ -513,15 +518,14 @@ export class PrintingService {
         switchMap(data => {
           if ( !data || !data.itemType) {return of(null)}
           if ( data.itemType && ( (data.itemType.labelTypeID != 0 ) && printer.text ) ) {
-              if (data.itemType.labelTypeID !=0 ) {
-                return  this.settingService.getSetting(site, data.itemType.labelTypeID)
-              }
+            return  this.settingService.getSetting(site, data.itemType.labelTypeID)
           } else {
             return this.orderItemService.setItemAsPrinted(site, item )
           }
       })).pipe(
         switchMap( data => {
           if (!data) { return of(null) }
+
           const content = this.renderingService.interpolateText(item, data.text)
           if (printer.text) {
             this.printLabelElectron(content, printer.text)

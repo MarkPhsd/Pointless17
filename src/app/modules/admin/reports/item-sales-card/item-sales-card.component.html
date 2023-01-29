@@ -27,13 +27,19 @@
           <div class="totals">     Cost :</div>
 
         </div>
-
+        <!-- <div  class="grid-body"
+              *ngFor="let sale of sales" >
+            <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
+            <div class="totals">{{sale?.itemTotal | currency }}   </div>
+            <div class="totals">{{sale?.quantity }}               </div>
+            <div class="totals">{{sale?.cost | currency }}   </div>
+        </div> -->
         <div  class="grid-body"
               *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
-            <div class="product-name">{{sale.productName | truncateText : 20   }}      </div>
-            <div class="totals">{{sale.itemTotal | currency }}   </div>
-            <div class="totals">{{sale.quantity }}               </div>
-            <div class="totals">{{sale.cost | currency }}   </div>
+            <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
+            <div class="totals">{{sale?.itemTotal | currency }}   </div>
+            <div class="totals">{{sale?.quantity }}               </div>
+            <div class="totals">{{sale?.cost | currency }}   </div>
         </div>
 
         <div class="margin-divider">
@@ -44,9 +50,9 @@
       <mat-card-footer>
         <div *ngIf="summary.summary" class="grid-footer">
           <div class="product-name"> PreTax Totals                             </div>
-          <div class="totals">{{summary.summary?.itemTotal | currency }}  </div>
-          <div class="totals">{{summary.summary?.quantity }}              </div>
-          <div class="totals">{{summary.summary?.cost | currency }}   </div>
+          <div class="totals">{{summary?.summary?.itemTotal | currency }}  </div>
+          <div class="totals">{{summary?.summary?.quantity }}              </div>
+          <div class="totals">{{summary?.summary?.cost | currency }}   </div>
         </div>
         <!-- {{summary.summary | json}} -->
       </mat-card-footer>

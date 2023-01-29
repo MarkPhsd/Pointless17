@@ -39,6 +39,22 @@
   }
 }
 
+.balance-grid-summary {
+  --gap: 3px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 100px 100px;
+  @media print {
+    font-size: 12pt;
+   font-weight: bold !important;
+    --gap: 3px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 100px 100px;
+  }
+}
+
+
 .section-item {
   margin-top: 10px;
   margin-bottom: 10px;

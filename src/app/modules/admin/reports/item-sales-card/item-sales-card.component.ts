@@ -1,7 +1,9 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, of, Subject, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSalesService, IReportItemSaleSummary } from 'src/app/_services/reporting/reporting-items-sales.service';
+
+// https://stackoverflow.com/questions/51487689/angular-5-how-to-export-data-to-csv-file
 
 @Component({
   selector: 'item-sales-card',
@@ -66,7 +68,10 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     console.table(searchModel)
     console.log(this.site.url )
     if (this.site) {
-      this.sales$ = this.reportingItemsSalesService.groupItemSales(this.site, searchModel)
+      this.sales$ = this.reportingItemsSalesService.groupItemSales(this.site, searchModel).pipe(switchMap(data => {
+        console.table(data)
+        return of(data)
+      }))
     }
     return
   }

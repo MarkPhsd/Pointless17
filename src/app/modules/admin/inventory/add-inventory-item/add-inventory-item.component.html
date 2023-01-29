@@ -33,196 +33,200 @@
 
     <mat-divider></mat-divider>
     </mat-card-subtitle>
-      <mat-card-content >
-        <div class="item-input">
-          <app-product-search-selector
-              class         = "fields"
-              [itemType]    = 1
-              [productName] = "productName"
-              [searchForm]  = "searchForm"
-              (itemSelect)  = "getItem($event)">
-            >
-          </app-product-search-selector>
-        </div>
+      <mat-card-content  >
+        <div class="content-container">
+          <div class="item-input">
+            <app-product-search-selector
+                class         = "fields"
+                [itemType]    = 1
+                [productName] = "productName"
+                [searchForm]  = "searchForm"
+                (itemSelect)  = "getItem($event)">
+              >
+            </app-product-search-selector>
+          </div>
 
-        <div [formGroup]="inputForm"
-             *ngIf="menuItem"
-             class="grid-container">
+          <div [formGroup]="inputForm"
+              *ngIf="menuItem"
+              class="grid-container">
 
-          <div *ngIf="menuItem.itemType.useGroups.name === 'cannabis'">
+              <!-- useGroups {{menuItem.itemType?.useGroups?.name.toLowerCase()}} <br>
+              type  {{menuItem.itemType?.type?.toLowerCase()}} -->
+            <div *ngIf="menuItem.itemType.useGroups.name.toLowerCase() === 'cannabis'">
               <app-facility-search-selector
                   [item]="facility"
                   [searchForm]="inputForm"
                   (itemSelect)="getVendor($event)">
-                  >
               </app-facility-search-selector>
+            </div>
 
-              <div>
-                <mat-form-field appearance="outline" >
-                  <mat-label>Test Date</mat-label>
-                  <input  matInput
-                          type="text"
-                          formControlName="testDate"
-                          name="testDate"
-                          [matDatepicker]="picker">
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-              </div>
+            <div *ngIf="menuItem.itemType.useGroups.name.toLowerCase() === 'cannabis'">
+              <mat-form-field appearance="outline" >
+                <mat-label>Test Date</mat-label>
+                <input  matInput
+                        type="text"
+                        formControlName="testDate"
+                        name="testDate"
+                        [matDatepicker]="picker">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div *ngIf="menuItem.itemType.useGroups.name.toLowerCase() === 'cannabis'">
               <app-value-fields
                     [inputForm]="inputForm"
                     [fieldName]="'testedBy'">
-                    Tested By
+                  Tested By
               </app-value-fields>
+            </div>
+
+            <div *ngIf="menuItem.itemType.useGroups.name.toLowerCase() === 'cannabis'">
               <app-value-fields
-                    [inputForm]="inputForm"
-                    [fieldName]="'testLotNumber'">
-                   Test Lot #
-              </app-value-fields>
-          </div>
-
-          <div>
-            <mat-form-field appearance="outline" >
-              <mat-label>Expiration</mat-label>
-              <input  matInput
-                      type="text"
-                      formControlName="expiration"
-                      name="expiration"
-                      [matDatepicker]="picker">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-          </div>
-
-          <div>
-            <app-value-fields
                   [inputForm]="inputForm"
-                  [fieldName]="'invoiceCode'">
-                  Vendor Invoice #
-            </app-value-fields>
-          </div>
+                  [fieldName]="'testLotNumber'">
+                Test Lot #
+              </app-value-fields>
+            </div>
 
-          <div *ngIf="menuItem.itemType.useGroups.name === 'cannabis'">
+            <div>
+              <mat-form-field appearance="outline" >
+                <mat-label>Expiration</mat-label>
+                <input  matInput
+                        type="text"
+                        formControlName="expiration"
+                        name="expiration"
+                        [matDatepicker]="picker">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+
             <div>
               <app-value-fields
                     [inputForm]="inputForm"
-                    [fieldName]="'productCategoryName'">
-                    Category Type
+                    [fieldName]="'invoiceCode'">
+                    Vendor Invoice #
               </app-value-fields>
             </div>
-          </div>
 
-          <div>
-            <mat-form-field appearance="outline" >
-              <mat-label>Locations</mat-label>
-              <mat-select
-                          type               ="text"
-                          [(ngModel)]        ="inventoryLocationID"
-                          formControlName    ="locationID"
-                          (selectionChange)  ="getLocationAssignment($event.value)"
-                  >
-                <div *ngIf="(inventoryLocations$ | async) as list">
-                  <mat-option *ngFor="let item of list" [value]="item.id">
-                    {{item.name}}
-                  </mat-option>
-                </div>
-              </mat-select>
-            </mat-form-field>
-          </div>
+            <div *ngIf="menuItem.itemType.useGroups.name.toLowerCase()  === 'cannabis'">
+                <app-value-fields
+                      [inputForm]="inputForm"
+                      [fieldName]="'productCategoryName'">
+                      Category Type
+                </app-value-fields>
+            </div>
 
-          <div>
-            <app-value-fields
-                  [inputForm]="inputForm"
-                  [fieldName]="'price'">
-                  Price
-            </app-value-fields>
-          </div>
+            <div>
+              <mat-form-field appearance="outline" >
+                <mat-label>Locations</mat-label>
+                <mat-select
+                            type               ="text"
+                            [(ngModel)]        ="inventoryLocationID"
+                            formControlName    ="locationID"
+                            (selectionChange)  ="getLocationAssignment($event.value)"
+                    >
+                  <div *ngIf="(inventoryLocations$ | async) as list">
+                    <mat-option *ngFor="let item of list" [value]="item.id">
+                      {{item.name}}
+                    </mat-option>
+                  </div>
+                </mat-select>
+              </mat-form-field>
+            </div>
 
-          <div>
-            <app-value-fields
-                  [inputForm]="inputForm"
-                  [fieldName]="'cost'">
-              Cost
-            </app-value-fields>
-          </div>
-
-          <div>
-            <app-value-fields
-                  [inputForm]="inputForm"
-                  [fieldName]="'unitOfMeasureName'">
-              Unit of Measure
-            </app-value-fields>
-          </div>
-
-
-          <div>
+            <div>
               <app-value-fields
                     [inputForm]="inputForm"
-                    [fieldName]="'packageQuantity'">
-                Package Quantity
+                    [fieldName]="'price'">
+                    Price
               </app-value-fields>
+            </div>
 
-              <span *ngIf="scaleInfo">
-                {{scaleInfo.value}} {{scaleInfo.mode}}
-                <span><button mat-raised-button (click)="applyWeightQuantity()">
-                  Apply Weight
-                </button></span>
-              </span>
+            <div>
+              <app-value-fields
+                    [inputForm]="inputForm"
+                    [fieldName]="'cost'">
+                Cost
+              </app-value-fields>
+            </div>
+
+            <div>
+              <app-value-fields
+                    [inputForm]="inputForm"
+                    [fieldName]="'unitOfMeasureName'">
+                Unit of Measure
+              </app-value-fields>
+            </div>
+
+            <div>
+                <app-value-fields
+                      [inputForm]="inputForm"
+                      [fieldName]="'packageQuantity'">
+                  Package Quantity
+                </app-value-fields>
+
+                <span *ngIf="scaleInfo">
+                  {{scaleInfo.value}} {{scaleInfo.mode}}
+                  <span><button mat-raised-button (click)="applyWeightQuantity()">
+                    Apply Weight
+                  </button></span>
+                </span>
+            </div>
+
+            <div>
+              <mat-slide-toggle
+                      name="notAvalibleForSale"
+                      class="mat-label"
+                      formControlName="notAvalibleForSale">
+                <mat-label class="mat-label">Disable</mat-label>
+              </mat-slide-toggle>
+            </div>
+
           </div>
 
-          <div>
-            <mat-slide-toggle
-                    name="notAvalibleForSale"
-                    class="mat-label"
-                    formControlName="notAvalibleForSale">
-              <mat-label class="mat-label">Disable</mat-label>
-            </mat-slide-toggle>
+          <mat-label
+                *ngIf="menuItem && menuItem?.itemType?.useGroups?.name.toLowerCase() != 'cannabis'">
+            Case Information - only for whole case / split case options
+          </mat-label>
+          <div
+                *ngIf="inputForm && menuItem &&  menuItem?.itemType?.useGroups?.name.toLowerCase() != 'cannabis'"
+                class="grid-container">
+            <div>
+              <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'caseQuantity'">
+                Case Quantity
+              </app-value-fields>
+            </div>
+
+            <div>
+              <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'casePrice'">
+                Case Price
+              </app-value-fields>
+            </div>
+
+            <div>
+              <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'itemSku'">
+                Item Sku
+              </app-value-fields>
+            </div>
+
+            <div *ngIf="(itemType$| async) as itemType">
+              <app-price-category-select
+                [itemType]        ="itemType"
+                [priceCategoryID] ="item.priceCategoryID"
+                [inputForm]       ="inputForm" >
+              </app-price-category-select>
+            </div>
+
           </div>
-
-
         </div>
-
-        <mat-label
-              *ngIf="menuItem && menuItem?.itemType?.useGroups?.name != 'cannabis'">
-          Case Information - only for whole case / split case options
-        </mat-label>
-        <div
-              *ngIf="inputForm && menuItem &&  menuItem?.itemType?.useGroups?.name != 'cannabis'"
-              class="grid-container">
-          <div>
-            <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'caseQuantity'">
-              Case Quantity
-            </app-value-fields>
-          </div>
-
-          <div>
-            <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'casePrice'">
-              Case Price
-            </app-value-fields>
-          </div>
-
-          <div>
-            <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'itemSku'">
-              Item Sku
-            </app-value-fields>
-          </div>
-
-          <div *ngIf="(itemType$| async) as itemType">
-            <app-price-category-select
-              [itemType]        ="itemType"
-              [priceCategoryID] ="item.priceCategoryID"
-              [inputForm]       ="inputForm" >
-            </app-price-category-select>
-          </div>
-
-        </div>
-
       </mat-card-content>
     </mat-card>
 

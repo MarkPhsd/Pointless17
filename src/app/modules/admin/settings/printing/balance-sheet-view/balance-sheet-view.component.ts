@@ -4,9 +4,10 @@ import { Observable, Subscription, switchMap,of } from 'rxjs';
 import { IPaymentSearchModel, IPOSPaymentsOptimzed } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
-import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
+import { BalanceSheetService, CashDrop, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 
+//printType balanceSheetValues balanceSheetFinal cashDrop
 @Component({
   selector: 'balance-sheet-view',
   templateUrl: './balance-sheet-view.component.html',
@@ -14,10 +15,10 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 })
 export class BalanceSheetViewComponent implements OnInit {
   @Input() disableAuditButton: boolean;
-
+  @Input() printType = 'balanceSheetFinal';
   sheet : IBalanceSheet;
   _sheet: Subscription;
-
+  cashDrop: CashDrop;
   sheetType = 'other';
   balance   : any;
 
@@ -33,7 +34,6 @@ export class BalanceSheetViewComponent implements OnInit {
         const search = {} as IPaymentSearchModel;
         search.pageSize = 500;
 
-        // search.isCreditCard = true;
         search.reportRunID = this.sheet.id
         this.list$ = this.paymentService.searchPayments(site, search).pipe(
           switchMap(data => {
@@ -61,7 +61,7 @@ export class BalanceSheetViewComponent implements OnInit {
 
   async ngOnInit() {
     this.initSubscriptions()
-
+    this.cashDrop = this.sheetMethodsService.cashDrop;
     // const styles = await this.httpClient.get('assets/htmlTemplates/balancesheetStyles.txt', {responseType: 'text'}).pipe().toPromise()
     // const style = document.createElement('style');
     // style.innerHTML = styles;

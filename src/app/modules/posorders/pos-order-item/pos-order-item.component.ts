@@ -596,15 +596,15 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
         return of(null)
       })
     ).pipe(
-      switchMap(data => { 
-        console.log('item with inventory', item, data)
-        if (data) {
-          item.inventory = data;
+      switchMap(inv => { 
+        if (inv) {
+          item.inventory = inv;
         }
         return this.menuItem$
       }
-    )).pipe(switchMap(data => { 
-      item.menuItem = data;
+    )).pipe(switchMap(menuItem => { 
+      item.menuItem = menuItem;
+      // console.log('positem', item);
       return this.printingService.printLabel(item)
     }))
   }

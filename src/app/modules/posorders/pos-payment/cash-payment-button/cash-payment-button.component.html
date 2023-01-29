@@ -1,0 +1,18 @@
+<div class="item-container" *ngIf="isApp">
+  <div>
+    <button class="payment-buttons" mat-raised-button (click)="applyCashPayment(5)">$5.00</button>
+  </div>
+  <div>
+    <button class="payment-buttons" mat-raised-button (click)="applyCashPayment(10)">$10.00</button>
+  </div>
+  <div>
+    <button class="payment-buttons" mat-raised-button (click)="applyCashPayment(20)">$20.00</button>
+  </div>
+  <div>
+    <button class="payment-buttons" mat-raised-button (click)="applyCashPayment(100)">$100.00</button>
+  </div>
+  <div></div>
+  <div></div>
+</div>
+
+<div *ngIf="(action$ | async) as action"></div>

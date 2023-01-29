@@ -737,6 +737,7 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   assignItem(e){
+    console.log('promp sub group', e.rowData.id)
     if (this.promptSubGroup) {
       this.outputPromptItem.emit(e.rowData.id)
     }

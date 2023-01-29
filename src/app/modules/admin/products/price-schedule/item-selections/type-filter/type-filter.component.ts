@@ -243,15 +243,10 @@ export class TypeFilterComponent implements OnInit {
     if (!this.requiredCategories) { this.requiredCategories = []}
     this.priceScheduleTracking.requiredCategories = this.requiredCategories
 
-    console.log('requiredItemTypes', this.priceScheduleTracking.requiredItemTypes)
-    console.log('itemTypeDiscounts', this.priceScheduleTracking.itemTypeDiscounts)
-
     this.priceScheduleDataService.updatePriceSchedule(this.priceScheduleTracking)
   }
 
   toggleItemTypeSelected(item: IItemType) {
-
-
     this.lastSelectedItemType = null
 
     if (!item) {return}
@@ -263,7 +258,6 @@ export class TypeFilterComponent implements OnInit {
 
     // //check the array of the form.
     const array = this.requiredItemTypes;
-
     const index = array.findIndex( data => data.itemID == item.id );
 
     if (index == -1){
@@ -281,9 +275,6 @@ export class TypeFilterComponent implements OnInit {
     //make sure only unique items are being added. no dupes.
     const unique           = [...new Map(this.requiredItemTypes.map(item => [item['itemID'], item])).values()]
     this.requiredItemTypes = unique;
-    // this.priceScheduleDataService.updateItemTypes(this.requiredItemTypes)
-    // this.priceScheduleDataService.updatePriceSchedule(this.item);
-
   }
 
   toggleCategory(item) {
@@ -294,7 +285,6 @@ export class TypeFilterComponent implements OnInit {
   toggleBrand(item)    {
     this.lastSelectedCategory = null;
     this.lastSelectedBrand = item;
-    console.log('item', item)
   }
 
   refreshAssignedCategories(id: number) {

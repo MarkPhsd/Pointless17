@@ -76,7 +76,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
       if (!menuItem.itemType)   {
         return false
       }
-      
+
       if (menuItem.itemType.useType && menuItem.itemType.useType.toLowerCase()  === 'adjustment') { return false}
       if (menuItem.itemType.type && menuItem.itemType.type.toLowerCase()     === 'adjustment') { return false}
       if (menuItem.itemType.type && menuItem.itemType.type.toLowerCase()     === 'discounts') { return false}
@@ -159,7 +159,8 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
       add = false;
     }
 
-    this.action$ = this.orderMethodService.menuItemActionObs(this.order,this.menuItem, add)
+    this.action$ = this.orderMethodService.menuItemActionObs(this.order,this.menuItem, add,
+           this.orderMethodService.assignPOSItems)
 
   }
 

@@ -60,7 +60,6 @@
 
       <!-- height is fixed -->
       <div class="buttons-container">
-        <!-- purchasOrderEnabled{{purchasOrderEnabled}} -->
         <div *ngIf="mainPanel">
           <pos-order-function-buttons
                 (outPutSendToPrep)    ="sendToPrep()"
@@ -95,7 +94,7 @@
                 [refundItemEnabled]   ="refundItemsAvalible"
           ></pos-order-function-buttons>
         </div>
-    
+ 
         <div  *ngIf="mainPanel && uiTransactionSettings && 
                     (!paymentsEqualTotal && !order.completionDate && order?.balanceRemaining != 0)"
                     class="payment-buttons-container">
@@ -110,18 +109,20 @@
       
           <ng-container ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
           
-          <!-- <ng-container [ngTemplateOutlet]="stripePayButton"></ng-container> -->
-
           <div *ngIf="order && order.clientID">
             <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
           </div>
   
           <ng-container [ngTemplateOutlet]="wicEBTButton"></ng-container>
-  
-        
+          
+          <div></div>
         </div>
-       
-       
+        
+        <div  *ngIf="mainPanel && uiTransactionSettings && 
+                (!paymentsEqualTotal && !order.completionDate && order?.balanceRemaining != 0)" >
+            <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
+        </div>
+
         <div class="side-panel-buttons-container"
               [style.width]="deviceWidthPercentage"
               *ngIf="!mainPanel && (uiSettings && uiSettings.wideOrderBar)" >
@@ -271,4 +272,15 @@
     [paymentAmount]="order.balanceRemaining"
     (setStep) ="setStep(1)">
   </stripe-card-pay-btn>
+</ng-template>
+
+<ng-template #cashPayButtons>
+  <cash-payment-buttons
+      [order]="order"
+      [uiTransactions]="uiTransactionSettings"
+      [platForm]="platForm"
+      [creditBalanceRemaining]="creditPaymentAmount"
+      [paymentAmount] ="order.balanceRemaining"
+      [isApp]         ="platFormService.isApp" >
+  </cash-payment-buttons>
 </ng-template>

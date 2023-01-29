@@ -15,6 +15,7 @@ import { PriceCategories, IPriceCategoryPaged } from 'src/app/_interfaces/menu/p
 export class PriceCategorySelectComponent implements OnInit {
   hidecheckbox = true;
   isOpenPrice: boolean;
+  showMorePrices: boolean;
   @Output() itemSelect  = new EventEmitter();
   @Input() inputForm:      FormGroup;
   @Input() priceCategoryID: number;
@@ -44,11 +45,11 @@ export class PriceCategorySelectComponent implements OnInit {
 
   clearPriceCategory() {
     this.priceCategoryID = 0;
-    if (!this.isInventory) { 
+    if (!this.isInventory) {
       const  price = { priceCategory : 0 }
       this.inputForm.patchValue(price)
     }
-    if (!this.isInventory) { 
+    if (!this.isInventory) {
       this.inputForm.patchValue({priceCategoryID: 0})
     }
   }

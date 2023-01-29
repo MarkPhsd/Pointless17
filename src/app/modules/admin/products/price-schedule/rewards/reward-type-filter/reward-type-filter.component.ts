@@ -98,10 +98,13 @@ export class RewardTypeFilterComponent  implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.initSubscriptions();
+    console.log('ngOnInit reward type')
     const site = this.siteService.getAssignedSite();
     this.itemTypes$ = this.itemTypeService.getItemTypeCategoriesReadOnlyList(site);
+    console.log('init item list type')
+    this.initSubscriptions();
   }
+
   ngDestroy() {
     if (this._priceSchedule) {
       this._priceSchedule.unsubscribe();
@@ -145,11 +148,12 @@ export class RewardTypeFilterComponent  implements OnInit {
     }
     return this.itemTypeDiscounts.findIndex(data => data.itemID == item.id)
   }
+  
   addItemType(item) {
     console.log(item)
     if (!item) { return } 
 
-    console.log('this happened')
+    // console.log('this happened')
     const index = this.getIndex(item)
     console.log(item , index)
 

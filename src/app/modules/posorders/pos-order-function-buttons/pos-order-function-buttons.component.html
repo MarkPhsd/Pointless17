@@ -70,8 +70,8 @@
   </div>
 
   <div *ngIf="isApp">
+    <!-- spacer 5/ -->
     <ng-container [ngTemplateOutlet]="spacer5"></ng-container>
-    <!-- spacer 5s -->
   </div>
 
   <div *ngIf="!isUser && (mainPanel && !order.suspendedOrder)">
@@ -146,8 +146,8 @@
   </div>
 
   <div  *ngIf="!isUser">
-      <!-- spacer 11 -->
-      <ng-container [ngTemplateOutlet]="spacer11"></ng-container>
+    <!-- spacer 11 -->
+    <ng-container [ngTemplateOutlet]="spacer11"></ng-container>
   </div>
 
   <div  *ngIf="!(mainPanel && !smallDevice)">
@@ -168,7 +168,8 @@
   <!-- If the order is completed it's one kind of refund if it's not it's another | right now refunds only happen on new orders, not completed orders -->
   <!-- So this refund option is only enabled if the order is not history -->
   <div>
-    <!-- Spacer1 -->
+    <!-- spacer 12 -->
+    <ng-container [ngTemplateOutlet]="spacer12"></ng-container>
   </div>
 
   <div>
@@ -182,7 +183,7 @@
   </div>
 
   <div  *ngIf="!isUser && windowSize === 'large'">
-    <!-- spacer 10/ -->
+    <!-- spacer 10 -->
     <ng-container [ngTemplateOutlet]="spacer10"></ng-container>
   </div>
   
@@ -197,6 +198,8 @@
   </div>
 
 </div>
+
+<!-- <ng-container [ngTemplateOutlet]="cashPaymentButtons"></ng-container> -->
 
 <ng-template #exitButton>
   <button mat-raised-button
@@ -270,3 +273,16 @@
     </span>
   </button>
 </ng-template>
+
+<!-- <ng-template #cashPaymentButtons> -->
+  <!-- <cash-payment-button
+      [order]="order"
+      [uiTransactions]="uiTransactions"
+      [platForm]="platForm"
+      [creditBalanceRemaining]="creditPaymentAmount"
+      [stripeTipValue]="stripeTipValue"
+      [paymentAmount]="paymentAmount"
+      [isApp]="isApp"
+      >
+   </cash-payment-button>
+</ng-template> -->

@@ -916,6 +916,12 @@ constructor(private http: HttpClient,
                   printerLocations   : printerLocations, enableCustomNote: false, wicebt: 0,
                   requireWholeNumber : false, instructions       : '', metrcCategoryID : 0,  requireInStock: false, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',   name : "Concentrate",        itemType_Categories: categories, imageName: '',       icon: 'chicken', useType:'concentrate',  sortOrder: 39, ageRequirement: 0, enabled: true, type:  'cannabis', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
 
+        {id: 70,  portionValue       : '', autoAddJSONProductList: '',
+                  packagingMaterial: '',
+                  useGroups          : useGroup, unitName: '',
+                  printerLocations   : printerLocations, enableCustomNote: false, wicebt: 0,
+                  requireWholeNumber : false, instructions       : '', metrcCategoryID : 0,  requireInStock: false, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',   name : "Tobacco",        itemType_Categories: categories, imageName: '',       icon: 'smoke', useType:'product',  sortOrder: 39, ageRequirement: 0, enabled: true, type:  'Tobacco', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
+
     ]
     return productType;
 

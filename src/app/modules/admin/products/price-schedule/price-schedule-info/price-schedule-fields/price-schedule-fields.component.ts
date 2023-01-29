@@ -26,6 +26,8 @@ export class PriceScheduleFieldsComponent implements OnInit {
   @Input() formArray        : FormArray;
   @Input() hideDelete       = false;
   @Input() item  : IPriceSchedule;
+
+
   isApp: boolean;
   showAllFlag = false;
   url: string;
@@ -38,10 +40,32 @@ export class PriceScheduleFieldsComponent implements OnInit {
     this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
         this.priceScheduleTracking = data
         const inputForm = this.inputForm;
+
+        // console.log('update date', data.requiredItems)
         if (data && data.type === 'Menu List') {
           this.isMenuList = true
         }
         this.fbPriceSchedule.updateDiscountInfos(inputForm, data)
+
+        // switch(this.arrayTypeName) {
+        //   case ('requiredItemTypes'): {
+    
+        //     break;
+        //   }
+        //   case 'requiredCategories': {
+
+        //     break;
+        //   }
+        //   case 'requiredBrands': {
+         
+        //     break;
+        //   }
+        //   case 'requiredItems': {
+        //     this.inputForm.patchValue( { requiredItems: this.priceScheduleTracking.requiredItems } );
+        //     break;
+        //   }
+        // }
+
       }
     )
   }
@@ -57,8 +81,8 @@ export class PriceScheduleFieldsComponent implements OnInit {
 
   }
   async ngOnInit() {
-        this.initSubscriptions();
-  await this.getImageUrl();
+      this.initSubscriptions();
+      await this.getImageUrl();
   }
 
   async getImageUrl() {
@@ -68,7 +92,6 @@ export class PriceScheduleFieldsComponent implements OnInit {
         this.url = `${this.bucket}${this.item.image}`
       }
   }
-
 
   ngDestroy() {
     if (this._priceSchedule) {

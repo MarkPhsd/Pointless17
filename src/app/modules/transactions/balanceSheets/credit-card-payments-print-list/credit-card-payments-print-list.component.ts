@@ -21,7 +21,7 @@ export class CreditCardPaymentsPrintListComponent implements OnInit {
   async  ngOnInit() {
 
     const styles = await this.httpClient.get('assets/htmlTemplates/balancesheetStyles.txt', {responseType: 'text'}).pipe().toPromise()
-    console.log('styles', styles)
+    // console.log('styles', styles)
     const style = document.createElement('style');
     style.innerHTML = styles;
     document.head.appendChild(style);

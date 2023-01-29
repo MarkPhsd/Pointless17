@@ -2,12 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
-import { Observable, of, Subscription, switchMap } from 'rxjs';
+import { Observable, of, Subscription, switchMap, switchMapTo } from 'rxjs';
 import { Capacitor, } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
+import { BalanceSheetSearchModel, BalanceSheetService, CashDrop, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { Location } from '@angular/common';
 import { AuthenticationService } from 'src/app/_services';
 import { IUser } from 'src/app/_interfaces';
@@ -22,6 +22,7 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
   styleUrls: ['./balance-sheet-edit.component.scss']
 })
 export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
+  selectedIndex: number;
 
   get halfDollarEnd()     { return this.inputForm.get('halfDollarEnd') as FormControl; }
   get quarterEnd()        { return this.inputForm.get('quarterEnd') as FormControl; }
@@ -52,6 +53,8 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
   balanceSheet$:   Observable<any>;
   searchForm      : FormGroup;
+  depositAmountForm: FormGroup;
+  dropAmountForm   : FormGroup;
   inputForm       : FormGroup;
   urlPath         : string;
 
@@ -89,6 +92,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
   _openOrders: Subscription;
   _ordersCount : Subscription;
+  deposit$: Observable<any>;
 
   initSubscriptions() {
     this.loading = true
@@ -122,10 +126,12 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 private route                   : ActivatedRoute,
                 private authenticationService   : AuthenticationService,
                 private router                  : Router,
+                private fb                      : FormBuilder,
                 private toolbarUIService        : ToolBarUIService,
                 private sheetMethodsService     : BalanceSheetMethodsService,
                 private sendGridService         :  SendGridService,
                 private printingService         : PrintingService,
+                private siteService: SitesService,
               )
   {
     this.inputForm = this.sheetMethodsService.initForm(this.inputForm);
@@ -146,6 +152,15 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     }
   };
 
+
+  initDepositForms() {
+    this.depositAmountForm = this.fb.group({
+      value: []
+    })
+    this.dropAmountForm = this.fb.group({
+      value: []
+    })
+  }
   ngOnDestroy() {
     this.sheetMethodsService.updateBalanceSheet(null)
     if (this._openOrders)  { this._openOrders.unsubscribe()}
@@ -172,6 +187,42 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
       this.sheet = data;
       return of(data)
     }))
+  }
+
+  selectChange() {
+
+  }
+
+  applyDropAmount(amount) {
+    this.applyDropPOST(amount)
+  }
+
+  applyDeposit(amount) {
+    this.applyDropPOST(-amount)
+  }
+
+  applyDropPOST(amount) {
+    this.initDepositForms();
+    const site = this.siteService.getAssignedSite()
+    const deposit$ = this.sheetService.postDrop(site, this.sheet.id, amount);
+
+    this.deposit$ = deposit$.pipe(switchMap(data => {
+      this.sheet = data;
+
+      if ( data.cashDrops) {
+        data.cashDrops = data.cashDrops.sort((a, b) => (a.id > b.id ? 1 : -1));
+        this.sheetMethodsService.cashDrop = data.cashDrops[data.cashDrops.length-1];
+        console.log('cash drop', data.cashDrops)
+        console.log('last drop', this.sheetMethodsService.cashDrop)
+        const drop = this.sheetMethodsService.cashDrop;
+
+        this.printDropValues(drop )
+      }
+      return this._updateItem()
+    })).pipe(switchMap(data => {
+      return of(data)
+    }))
+
   }
 
   getSheetType(sheet: IBalanceSheet) {
@@ -213,13 +264,17 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   updateItem(event) {
-    console.log('update  Item')
-    this.balanceSheet$ = this.sheetMethodsService.updateSheet(this.inputForm, this.startShiftInt).pipe(switchMap(data => {
-      this.sheet = data;
-      this.router.navigateByUrl('/app-main-menu')
+    this.balanceSheet$ = this._updateItem().pipe(switchMap(data => {
+
       return of(data)
     }))
+  }
 
+  _updateItem() {
+    return this.sheetMethodsService.updateSheet(this.inputForm, this.startShiftInt).pipe(switchMap(data => {
+      this.sheet = data;
+      return of(data)
+    }))
   }
 
   startShift() {
@@ -232,10 +287,8 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.action$ = this.sendGridService.sendBalanceSheet(this.sheet.id).pipe(
       switchMap( data => {
         if (!data) { return of(null) }
-        // this.printingService.previewReceipt();
         return  this.sheetMethodsService.closeSheet(this.sheet)
-    })).pipe(switchMap( data => { 
-      console.log('sheet closed. ')
+    })).pipe(switchMap( data => {
       return of (data)
     }))
   }
@@ -327,7 +380,11 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   updateItemExit(event){
-    this.updateItem(event)
+    this._updateItem().pipe(switchMap(data => {
+      // this.router.navigate(['pos-orders'])
+      this.onCancel(null);
+      return of(data)
+    }))
     this.location.back()
   }
 
@@ -345,9 +402,28 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     ))
   }
 
+
+
+  printEndingValues(event){
+    this.printingService.updatePrintView(3);
+    this.balanceSheet$ = this.sheetMethodsService.updateSheet(this.inputForm, this.startShiftInt).pipe(
+      switchMap(data => {
+        this.printingService.previewReceipt()
+        return of(data)
+      }
+    ))
+  }
+
+  printDropValues(cashDrop: CashDrop){
+    this.printingService.updatePrintView(4);
+    this.sheetMethodsService.cashDrop = cashDrop
+    this.printingService.previewReceipt()
+  }
+
+
   email(event) {
     this.sendGridService.sendBalanceSheet(this.sheet.id).subscribe( data => {
-      console.log(data)
+      // console.log(data)
       if (data.toString() === 'Success') {
         this.sendGridService.notify('Email Sent', 'Success')
         return;

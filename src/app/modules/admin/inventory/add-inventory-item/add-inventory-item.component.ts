@@ -126,8 +126,8 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   }
 
   applyWeightQuantity() {
-    if (!this.scaleValue && this.inputForm) {  return }
-    const value = { packageQuantity: this.scaleValue};
+    // if (!this.scaleValue || !this.inputForm) {  return }
+    const value = { packageQuantity : this.scaleInfo.value};
     this.inputForm.patchValue(value)
   }
 
@@ -155,7 +155,6 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
           const item$ = this.inventoryAssignmentService.addInventoryItem(this.site, this.item)
           this.updateInventory(item$, exit)
         }
-
       }
     }
   }
@@ -191,7 +190,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
           this.notifyEvent(`Item did not delete. ${error}` , 'Failed')
           return
         }
-    }
+      }
     )
   }
 
