@@ -1,4 +1,4 @@
-import {Component,  OnInit, OnDestroy, AfterViewInit, HostListener, TemplateRef,
+import {Component,  OnInit, OnDestroy, AfterViewInit, HostListener, TemplateRef, ViewChild,
   }  from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
 import { OrderFilterPanelComponent } from '../order-filter-panel/order-filter-panel.component';
@@ -7,9 +7,10 @@ import { NewOrderTypeComponent } from '../../posorders/components/new-order-type
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { Observable, Subscription } from 'rxjs';
-import { IPOSOrderSearchModel, ISite, IUser } from 'src/app/_interfaces';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
+import { IPOSOrder, IPOSOrderSearchModel, ISite, IUser } from 'src/app/_interfaces';
 import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
+import { IPositionElements } from 'ngx-infinite-scroll';
 
 @Component({
   selector: 'app-orders-main',
@@ -21,6 +22,13 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   @ViewChild('orderCard')    orderCard: TemplateRef<any>;
   @ViewChild('orderList')    orderList: TemplateRef<any>;
   @ViewChild('orderPanel')   orderPanel: TemplateRef<any>;
+  @ViewChild('orderPrep')    orderPrep: TemplateRef<any>;
+
+  @ViewChild('ordersSelectedView')    ordersSelectedView: TemplateRef<any>;
+  mergeOrders: boolean;
+  posOrdersSelectedList: IPOSOrder[]
+  action$: Observable<any>;
+
   smallDevice  : boolean;
   site         : ISite;
   isAuthorized : boolean;
@@ -56,7 +64,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   initPrintLocationSubscriber() {
     this._printLocation = this.orderService.printerLocation$.subscribe( data => {
       if (data) {
-        console.log('order main  printLocation')
         this.printLocation = data;
       }
     })
@@ -144,7 +151,61 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     this.updatePreptStatus(this.prepStatus)
   }
 
+  toggleMergeOrders() {
+    this.mergeOrders = !this.mergeOrders;
+    if (this.mergeOrders) {
+      this.gridcontainer = 'grid-container-merge'
+    } else {
+      this.gridcontainer = 'grid-container'
+    }
+    console.log(this.gridcontainer)
+    this.viewType = 1;
+  }
 
+  mergeOrdersComplete() {
+    const site =     this.siteService.getAssignedSite()
+    const list = []
+    this.posOrdersSelectedList.forEach(data => { list.push(data.id) })
+
+    this.action$ = this.orderService.mergeOrders(site, list).pipe(switchMap(data => {
+      this.orderService.updateOrderSubscription(data)
+      this.cancelMerge()
+      this.orderService.updateOrderSearchModel(this.searchModel)
+      return of(data)
+    }))
+  }
+
+  cancelMerge() {
+    this.mergeOrders = false;
+    this.posOrdersSelectedList = [];
+  }
+
+  get orderSelectedList() {
+    if (this.mergeOrders) {
+      return this.ordersSelectedView;
+    }
+    this.posOrdersSelectedList = []
+  }
+
+  addOrderToSelectedList(order: IPOSOrder) {
+    if (!this.posOrdersSelectedList) {
+      this.posOrdersSelectedList = []
+    }
+    this.posOrdersSelectedList.push(order)
+    const key = "id"
+    this.posOrdersSelectedList =  [...new Map(this.posOrdersSelectedList.map(item =>[item[key], item])).values()]
+    // this.posOrdersSelectedList = [... this.posOrdersSelectedList]
+    console.log(this.posOrdersSelectedList)
+  }
+
+  removeFromList(i) {
+    try {
+      console.log(i)
+      this.posOrdersSelectedList.splice(i,1)
+    } catch (error) {
+      console.log('eerror', error)
+    }
+  }
 
   get orderView() {
     if (this.viewType == 1) {
@@ -156,32 +217,48 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     if (this.viewType == 2 ) {
       return this.orderPanel
     }
-
+    if (this.viewType == 3 ) {
+      return this.orderPrep
+    }
+    return this.orderCard
   }
+
   displayPanel(event)  {
     const show =  localStorage.getItem('OrderFilterPanelVisible')
     // console.log(show)
     if (show === 'false') {
       this.hidePanel = true
       this.gridcontainer = 'grid-container-full'
+      if (this.mergeOrders) {
+        this.gridcontainer = 'grid-container-merge'
+      }
       localStorage.setItem('OrderFilterPanelVisible', 'true')
       return
     }
 
     this.hidePanel = false
-    this.gridcontainer = 'grid-container'
+    if (!this.mergeOrders) {
+      this.gridcontainer = 'grid-container'
+    }
+
     localStorage.setItem('OrderFilterPanelVisible', 'false')
+
   }
 
   hideFilterPanel(event) {
     this.hidePanel = event
-    console.log(this.hidePanel, event)
     if (event) {
       this.gridcontainer = 'grid-container-full'
       localStorage.setItem('OrderFilterPanelVisible', 'true')
+      if (this.mergeOrders) {
+        this.gridcontainer = 'grid-container-merge'
+      }
     }
+
     if (!event) {
-      this.gridcontainer = 'grid-container'
+      if (!this.mergeOrders) {
+        this.gridcontainer = 'grid-container'
+      }
       localStorage.setItem('OrderFilterPanelVisible', 'false')
     }
     this.displayPanel(event)
@@ -235,7 +312,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
 
     if (this.viewType == 3) {
       this.viewType = 0
-        // this.searchModel.prepStatus  = this.viewType;
       this.orderService.updateViewOrderType(this.viewType)
       return
     }

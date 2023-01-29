@@ -7,10 +7,19 @@ mat-button-toggle {
 
 button {
   height: 50px;
+  margin: 5px;
 }
+
 toggle-button {
   margin-left: 5px;
   width: 120px;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
 }
 
 .parent-container {
@@ -58,6 +67,21 @@ toggle-button {
     gap: var(--gap);
     grid-template-columns: auto;
   }
+}
+
+.grid-container-merge {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 60% 1fr ;
+  overflow: hidden;
+
+  // @include for-phone-only  {
+  //   --gap: 5px;
+  //   display: grid;
+  //   gap: var(--gap);
+  //   grid-template-columns: auto;
+  // }
 }
 
 .grid-flow {

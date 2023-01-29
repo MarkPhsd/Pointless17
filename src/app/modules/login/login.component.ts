@@ -1,6 +1,6 @@
 ﻿import { CompanyService, AuthenticationService, AWSBucketService, ThemesService, OrdersService} from 'src/app/_services';
 import { ICompany, IPOSOrder, IUser }  from 'src/app/_interfaces';
-import { Component, Inject, Input, OnDestroy, OnInit, Optional, Renderer2 } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit, Optional, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { fadeInAnimation } from 'src/app/_animations';
@@ -27,9 +27,10 @@ import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY } from '@angular/cdk/overlay/over
 
 export class LoginComponent implements OnInit, OnDestroy {
 
+  @ViewChild('pinEntryView')    pinEntryView: TemplateRef<any>;
+  @ViewChild('userEntryView')   userEntryView: TemplateRef<any>;
   @Input() statusMessage: string;
   initApp    = true
-  togglePIN: boolean;
 
   terminalSettings$: Observable<ITerminalSettings>;
   terminalSettings: ITerminalSettings;
@@ -54,7 +55,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   counter   =0;
   loggedInUser : IUser;
   _user     : Subscription;
-
+  togglePIN = false;
   _uISettings: Subscription;
   uiHomePageSetting: UIHomePageSettings;
 
@@ -183,6 +184,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     } catch (error) {
        console.log('on Destroy Error')
     }
+  }
+
+  get loginMethodView() {
+    // console.log(this.togglePIN)
+    if (this.togglePIN) {
+      return this.pinEntryView;
+    }
+    return this.userEntryView;
   }
 
   initForm() {

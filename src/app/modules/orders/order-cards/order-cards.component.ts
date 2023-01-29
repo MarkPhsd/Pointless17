@@ -1,5 +1,5 @@
 import {Component, HostListener, OnInit, OnDestroy,
-  ViewChild, ElementRef, QueryList, ViewChildren, Input}  from '@angular/core';
+  ViewChild, ElementRef, QueryList, ViewChildren, Input, Output,EventEmitter}  from '@angular/core';
 import { IPOSOrder,IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
 import { OrdersService, POSOrdersPaged } from 'src/app/_services';
 import { ActivatedRoute} from '@angular/router';
@@ -7,6 +7,7 @@ import { Observable, Subscription} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ISite } from 'src/app/_interfaces';
+
 // import { share } from 'rxjs/operators';
 
 @Component({
@@ -18,6 +19,8 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   @ViewChild('nextPage', {read: ElementRef, static:false}) elementView: ElementRef;
   // @ViewChild('scrollframe', {static: false}) scrollFrame: ElementRef;
   @ViewChildren('item') itemElements: QueryList<any>;
+  @Output() orderOutPut = new EventEmitter()
+
 
   scrollContainer     :   any;
   isNearBottom        :   any;
@@ -112,7 +115,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   {
   }
 
-  async ngOnInit()  {
+  ngOnInit()  {
 
     this.stateValue = this.route.snapshot.paramMap.get('value');
     this.initOrderBarSubscription();
@@ -130,7 +133,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     }
 
     this.value = 1;
-    // await this.nextPage(false);
+
     this.initSubscriptions();
   }
 
@@ -140,7 +143,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
   initSubscriptions() {
     this.initViewSubscriber()
-    // this.initPrintLocationSubscriber();
     try {
       this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
         this.searchModel = data
@@ -195,7 +197,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
   onScrollDown() {
     this.scrollingInfo = 'scroll down'
-    // console.log('scrolled down')
     this.nextPage(false);
   }
 
@@ -204,7 +205,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   }
 
   async nextPage(reset: boolean) {
-    // console.log('next page', this.pageSize, 'currentPage', this.currentPage, 'reset', reset)
     await this.addToList(this.pageSize, this.currentPage, reset)
   }
 
@@ -234,6 +234,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     order$.subscribe(data =>
       {
         if (data) {
+          this.orderOutPut.emit(data)
           this.orderService.setActiveOrder(site, data)
         }
       }
@@ -330,7 +331,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
       if  (p == i) { return p }
     })
 
-    // console.log(items)
     if ( items.length == 0 ) {
       return true
     }
@@ -360,7 +360,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
   @HostListener('window:scroll', ['$event']) // <- Add scroll listener to window
     scrolled(event: any): void {
-    // console.log('scrolled')
     this.isNearBottom = this.isUserNearBottom();
   }
 }

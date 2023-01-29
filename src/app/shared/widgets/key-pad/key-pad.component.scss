@@ -2,6 +2,26 @@
 
 .mat-card-floater {
   margin: 5px;
+
+  // font-size    : large;
+  // height       : 8vw;
+  // width        : 32vw;
+
+  // @include for-phone-only {
+  //   height       : 17vw;
+  //   width        : 50vw;
+  // }
+
+  // @include for-big-desktop-up {
+  //   height       : 5vw;
+  //   width        : 24vw;
+  // }
+  // @include for-desktop-up {
+  //   height       : 5vw;
+  //   width        : 24vw;
+  // }
+
+  // border-radius: 5px;
 }
 
 .header {

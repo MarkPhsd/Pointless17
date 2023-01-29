@@ -19,6 +19,39 @@ mat-checkbox {
   margin: 5px;
 }
 
+.centered-flex {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mat-card {
+  width: 500px;
+}
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+
+//  fxLayoutAlign="center center"
+//fxFlex="100%"
+.pin-entry {
+
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+}
+
+.pin-button {
+  width: 150px;
+  height: 50px;
+}
 .bg {
   /* The image used */
   // background-image: url('https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg');

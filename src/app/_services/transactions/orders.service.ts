@@ -55,6 +55,7 @@ export interface OrderActionResult {
 
 export class OrdersService {
 
+
   public toggleChangeOrderType: boolean;
 
   get platForm() {  return Capacitor.getPlatform(); }
@@ -84,7 +85,7 @@ export class OrdersService {
   public currentOrder         = {} as IPOSOrder
 
   private _templateOrder       = new BehaviorSubject<IPOSOrder>(null);
-  public templateOrder$        = this._currentOrder.asObservable();
+  public templateOrder$        = this._templateOrder.asObservable();
   public templateOrder         = {} as IPOSOrder
 
   private _bottomSheetOpen    = new BehaviorSubject<boolean>(null);
@@ -173,7 +174,6 @@ export class OrdersService {
     }
   }
 
-
   updateOrderSubscription(order: IPOSOrder) {
     this.storeCreditMethodService.updateSearchModel(null);
 
@@ -187,7 +187,6 @@ export class OrdersService {
       }
       if (!order) {
         this.toolbarServiceUI.updateOrderBar(false);
-
       }
     }
 
@@ -205,7 +204,6 @@ export class OrdersService {
       order$.subscribe(result => {
         this.orderClaimed = true;
       });
-
     }
   }
 
@@ -268,6 +266,8 @@ export class OrdersService {
       return false
     }
   }
+
+
 
   get posName(): string { return localStorage.getItem("devicename") };
 
@@ -510,6 +510,18 @@ export class OrdersService {
 
     return this.http.get<IPOSOrder>(url);
 
+  }
+
+  mergeOrders(site: ISite, list: IPOSOrder[]) {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "mergeOrders"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+    console.log(list)
+    return this.http.put<any>(url, list);
   }
 
   refundOrder(site: ISite, item: ItemWithAction):  Observable<OrderActionResult>  {

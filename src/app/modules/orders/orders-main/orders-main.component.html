@@ -1,7 +1,9 @@
+
+<div *ngIf="(action$ | async) as action"></div>
+
 <div class="parent-container">
   <div>
     <span >
-
       <button *ngIf="smallDevice"  mat-button (click)="filterBottomSheet()">
         <mat-icon>search</mat-icon>
       </button>
@@ -39,32 +41,44 @@
       </button>
     </span>
 
+    <span *ngIf="!smallDevice && !isUser">
+      <button mat-button (click)="toggleMergeOrders()">
+        <div *ngIf="mergeOrders">
+          Disable Merge
+        </div>
+        <div *ngIf="!mergeOrders">
+          <mat-icon>join_right</mat-icon>Merge Orders
+        </div>
+      </button>
+    </span>
+
   </div>
 
   <div [class]="gridcontainer">
-<!--
-    <span *ngIf="viewType == 1">
+    <div>
+      <ng-container [ngTemplateOutlet]="orderSelectedList"></ng-container>
 
-    </span>
+      <ng-container [ngTemplateOutlet]="orderView || orderCard"></ng-container>
+    </div>
 
-    <span *ngIf="viewType == 0">
+    <div *ngIf="!smallDevice && !hidePanel"
+         class="filter-container">
+      <app-order-filter-panel
+          (outPutHidePanel)="hideFilterPanel($event)">
+      </app-order-filter-panel>
+    </div>
 
-    </span>
+  </div>
 
-    <span *ngIf="viewType == 2">
+</div>
 
-    </span> -->
+<ng-template #orderPrep>
 
-    <ng-container [ngTemplateOutlet]="orderView"></ng-container>
-
-
-    <span *ngIf="viewType == 3">
-      <span *ngIf="viewType == 3 && (printerLocations$ | async) as printLocations">
-
-        <span class="toggle-sections">
+  <span *ngIf="viewType == 3 && (printerLocations$ | async) as printLocations">
+      <span class="toggle-sections">
           <mat-icon>location_on</mat-icon>
           <mat-button-toggle-group
-                 name        ="toggleOpenClosedAll"
+                name        ="toggleOpenClosedAll"
                 class       ="toggle-view"
                 [(ngModel)] ="printLocation"
                 (click)     ="updatePrinterLocation()" >
@@ -74,7 +88,7 @@
             </mat-button-toggle>
           </mat-button-toggle-group>
           <mat-button-toggle-group
-                 *ngFor      ="let item of printLocations; let i = index"
+                *ngFor      ="let item of printLocations; let i = index"
                 name        ="toggleOpenClosedAll"
                 class       ="toggle-view"
                 [(ngModel)] ="printLocation"
@@ -89,9 +103,9 @@
             </mat-button-toggle>
 
           </mat-button-toggle-group>
-        </span>
+      </span>
 
-        <span class="toggle-sections">
+      <span class="toggle-sections">
           <mat-icon>filter_alt</mat-icon>
           <mat-button-toggle-group
                   class="toggle-button"
@@ -109,29 +123,40 @@
                 <mat-icon>done</mat-icon>Ready
               </mat-button-toggle>
           </mat-button-toggle-group>
-        </span>
       </span>
-      <app-order-cards
-        [site]= 'site'
-        [cardStyle]="'prep'">
-      </app-order-cards>
     </span>
 
-    <div *ngIf="!smallDevice && !hidePanel"
-         class="filter-container">
-      <app-order-filter-panel
-          (outPutHidePanel)="hideFilterPanel($event)">
-      </app-order-filter-panel>
+  <app-order-cards
+    [site]= 'site'
+    [cardStyle]="'prep'">
+  </app-order-cards>
+</ng-template>
+
+<ng-template #ordersSelectedView>
+  <div>
+    <div class="flex-row" >
+      <div *ngFor="let order of posOrdersSelectedList; let i = index">
+        <div><button mat-raised-button (click)="removeFromList(i)" aria-label="trash">
+               {{order.id}}<mat-icon>delete</mat-icon>
+              </button></div>
+      </div>
+
+      <div><button
+                    *ngIf="posOrdersSelectedList && posOrdersSelectedList.length>0"
+                    mat-raised-button
+                    (click)="mergeOrdersComplete()"
+                    aria-label="merge"><mat-icon>join_full</mat-icon>Merge</button></div>
+
+      <div><button mat-raised-button (click)="cancelMerge()" aria-label="trash">Cancel</button></div>
     </div>
-
   </div>
-
-</div>
+</ng-template>
 
 <ng-template #orderCard>
   <app-order-cards
     [cardStyle]="'block'"
-  ></app-order-cards>
+    (orderOutPut)="addOrderToSelectedList($event)"
+    ></app-order-cards>
 </ng-template>
 
 <ng-template #orderList>

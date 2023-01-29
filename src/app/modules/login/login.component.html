@@ -1,175 +1,179 @@
 ﻿<div *ngIf="(terminalSettings$ | async) as terminal"></div>
 <div *ngIf="(loginAction$ | async) as loginAction"></div>
 
-<div class="bg row-height"
-     *ngIf="!platformService.isApp  || (!togglePIN && platformService.isApp)"
-     [ngStyle]="backgroundImage">
+<!-- <div *ngIf="!platformService.isApp  || (!togglePIN && platformService.isApp)"
+     [ngStyle]="backgroundImage"> -->
 
-  <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-    <div  class="login-window">
+  <!-- <div class="centered centered-flex"> -->
+    <ng-container [ngTemplateOutlet]="loginMethodView"></ng-container>
+  <!-- </div>
+</div> -->
 
-      <div  *ngIf="platformService.isApp() && pinToken" fxLayoutAlign="center center"
-            fxLayout="row"
-            fxlayoutGap="20px"
-            class="stat-cards">
-        <button  mat-raised-button
-                 class="center login"
-                 *ngIf="platformService.isApp"
-                 (click)="togglePIN = !togglePIN">
-            PIN Entry
-        </button>
-      </div>
-
-      <div fxLayout="row"  fxlayoutGap="20px" class="stat-cards">
-        <mat-card fxFlex="100%">
-          <mat-card-title>
-            <div fxLayout="column"
-                  fxLayoutAlign="center center"
-                  class="row-height"
+<ng-template #userEntryView>
+  <div class="centered centered-flex">
+    <mat-card>
+      <mat-card-title>
+        <div  *ngIf="platformService.isApp() && pinToken">
+          <div class="pin-entry">
+            <button  mat-raised-button
+                      class="center login"
+                      *ngIf="platformService.isApp"
+                      (click)="togglePIN = !togglePIN">
+                PIN Entry
+            </button>
+          </div>
+        </div>
+        <div (click)="setAPIAlt()">
+            <div *ngIf="uiHomePageSetting && uiHomePageSetting.logoHomePage"
+                  class="logo"
                   (click)="setAPIAlt()">
-
-                <div *ngIf="uiHomePageSetting && uiHomePageSetting.logoHomePage"
-                      class="logo"
-                      (click)="setAPIAlt()">
-                  <app-logo
-                        [uiHomePageSetting] ="uiHomePageSetting"
-                        [logoSize]          ="'large'"
-                        [logo]              ="uiHomePageSetting.logoHomePage"
-                  ></app-logo>
-                </div>
-
-                <div *ngIf="!uiHomePageSetting && logo">
-                  <img  *ngIf="logo"
-                        (click)="setAPIAlt()"
-                        [src]="logo"
-                        width="125px"
-                        [alt]="company"
-                        class="logo">
-                </div>
-
-                <h2 (click)="setAPIAlt()"
-                    *ngIf="uiHomePageSetting">
-                    {{uiHomePageSetting.displayCompanyName}}
-                </h2>
-
+              <app-logo
+                    [uiHomePageSetting] ="uiHomePageSetting"
+                    [logoSize]          ="'large'"
+                    [logo]              ="uiHomePageSetting.logoHomePage"
+              ></app-logo>
             </div>
-          </mat-card-title>
-          <mat-card-content>
 
-            <div  class="center"
-                  *ngIf="loginForm"
-                  [formGroup]="loginForm"
-                  (ngSubmit)="onSubmit()" >
-                <div>
-                  <mat-form-field appearance="fill">
-                    <mat-label>User</mat-label>
-                    <input matInput
-                          type="text"
-                          formControlName="username"
-                          class="form-control"
-                          [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-                    <div *ngIf="submitted && f.username.errors"
-                        class="invalid-feedback">
-                        <div *ngIf="f.username.errors.required">Username is required</div>
-                    </div>
-                  </mat-form-field>
-                </div>
-
-                <div>
-                  <mat-form-field appearance="fill">
-                      <mat-label>Password</mat-label>
-                      <input matInput
-                            type="password"
-                            formControlName="password"
-                            class="form-control"
-                            (keyup.enter)  = "onSubmit()"
-                            [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-                      <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                        <div *ngIf="f.password.errors.required">Password is required</div>
-                      </div>
-                  </mat-form-field>
-                </div>
-
-                <div>
-                  <div>
-                    <api-status-display>Service may be unavalible</api-status-display>
-                  </div>
-
-                  <button class="login"
-                          mat-raised-button
-                          color="primary"
-                          (click)="onSubmit()">Login</button>
-
-                  <button class="login"
-                          mat-raised-button color="primary"
-                          (click)='browseMenu()'>Guest</button>
-                </div>
-                <div *ngIf="(action$ | async)"></div>
+            <div *ngIf="!uiHomePageSetting && logo">
+              <img  *ngIf="logo"
+                    (click)="setAPIAlt()"
+                    [src]="logo"
+                    width="125px"
+                    [alt]="company"
+                    class="logo">
             </div>
-            <div class="center">
-                <div>
-                <mat-checkbox [(ngModel)]="rememberMe"
-                              (change)="updateRememberMe($event.checked)">
-                  Remember Me
-                </mat-checkbox>
-              </div>
-              <div class="spinner"
-                    *ngIf="spinnerLoading" >
-                <mat-spinner diameter="30"></mat-spinner>
-              </div>
 
-              <div *ngIf="(platformService && !platformService.webMode) &&
-                          platformService.apiUrl.length != 0 ">
-              </div>
+            <h2 (click)="setAPIAlt()"
+                *ngIf="uiHomePageSetting">
+                {{uiHomePageSetting.displayCompanyName}}
+            </h2>
 
-              <div>
-                  {{ statusMessage }}
-              </div>
-            </div>
-            <div class="center">
-              <mat-card-subtitle>
-                <div class="registration center">
-                  <h5>Login with email or phone.
-                </h5>
-              </div>
-              </mat-card-subtitle>
-              <div class="registration">
-                <mat-divider></mat-divider>
-              </div>
-              <div>
-                First time users please register.
-                If you have forgotten your password or user name,
-                press register or reset password below.</div>
-              <div class="registration">
-                <button mat-raised-button  (click)='changePassword()'>Reset Password</button>
-                <button mat-raised-button  (click)='registerUser()'>Register</button>
-                <button mat-raised-button  (click)='forgetMe()'>Forget Me</button>
-              </div>
-
-              <div class="registration">
-                <mat-divider>         </mat-divider>
-              </div>
-              <div class="registration" fxLayout="row" fxLayoutAlign="center center" class="row-height">
-                <div>Powered by <a href="https://pointlesspos.com">pointlesspos.com</a></div>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div  *ngIf="platformService.isApp && togglePIN"
-      fxLayoutAlign="center center"
-      fxFlex="100%" >
-    <mat-card class="pin-card">
-      <button mat-raised-button (click)="togglePIN = !togglePIN">Password Entry</button>
+        </div>
+      </mat-card-title>
       <mat-card-content>
-        <app-fast-user-switch
-          (outPutLogin)="pinLogin($event)"
-        ></app-fast-user-switch>
+        <div  class="center"
+              *ngIf="loginForm"
+              [formGroup]="loginForm"
+              (ngSubmit)="onSubmit()" >
+            <div>
+              <mat-form-field appearance="fill">
+                <mat-label>User</mat-label>
+                <input matInput
+                      type="text"
+                      formControlName="username"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                <div *ngIf="submitted && f.username.errors"
+                    class="invalid-feedback">
+                    <div *ngIf="f.username.errors.required">Username is required</div>
+                </div>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field appearance="fill">
+                  <mat-label>Password</mat-label>
+                  <input matInput
+                        type="password"
+                        formControlName="password"
+                        class="form-control"
+                        (keyup.enter)  = "onSubmit()"
+                        [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                  <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                    <div *ngIf="f.password.errors.required">Password is required</div>
+                  </div>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <div>
+                <api-status-display>Service may be unavalible</api-status-display>
+              </div>
+
+              <button class="login"
+                      mat-raised-button
+                      color="primary"
+                      (click)="onSubmit()">Login</button>
+
+              <button class="login"
+                      mat-raised-button color="primary"
+                      (click)='browseMenu()'>Guest</button>
+            </div>
+            <div *ngIf="(action$ | async)"></div>
+        </div>
+        <div class="center">
+            <div>
+            <mat-checkbox [(ngModel)]="rememberMe"
+                          (change)="updateRememberMe($event.checked)">
+              Remember Me
+            </mat-checkbox>
+          </div>
+          <div class="spinner"
+                *ngIf="spinnerLoading" >
+            <mat-spinner diameter="30"></mat-spinner>
+          </div>
+
+          <div *ngIf="(platformService && !platformService.webMode) &&
+                      platformService.apiUrl.length != 0 ">
+          </div>
+
+          <div>
+              {{ statusMessage }}
+          </div>
+        </div>
+        <div class="center">
+          <mat-card-subtitle>
+            <div class="registration center">
+              <h5>Login with email or phone.
+            </h5>
+          </div>
+          </mat-card-subtitle>
+          <div class="registration">
+            <mat-divider></mat-divider>
+          </div>
+          <div>
+            First time users please register.
+            If you have forgotten your password or user name,
+            press register or reset password below.</div>
+          <div class="registration">
+            <button mat-raised-button  (click)='changePassword()'>Reset Password</button>
+            <button mat-raised-button  (click)='registerUser()'>Register</button>
+            <button mat-raised-button  (click)='forgetMe()'>Forget Me</button>
+          </div>
+
+          <div class="registration">
+            <mat-divider>         </mat-divider>
+          </div>
+          <div class="registration" fxLayout="row" fxLayoutAlign="center center" class="row-height">
+            <div>Powered by <a href="https://pointlesspos.com">pointlesspos.com</a></div>
+          </div>
+        </div>
       </mat-card-content>
     </mat-card>
-</div>
+  </div>
+</ng-template>
+
+<ng-template #pinEntryView>
+
+  <div class="centered centered-flex">
+
+      <div *ngIf="platformService.isApp && togglePIN" >
+          <div class="pin-entry">
+            <button class="pin-button"
+                    mat-raised-button
+                    (click)="togglePIN = !togglePIN">
+                    Password Entry
+            </button>
+          </div>
+          <mat-card class="mat-card">
+            <div class="pin-entry">
+              <app-fast-user-switch
+                (outPutLogin)="pinLogin($event)"
+              ></app-fast-user-switch>
+            </div>
+          </mat-card>
+      </div>
+
+  </div>
+</ng-template>
 
