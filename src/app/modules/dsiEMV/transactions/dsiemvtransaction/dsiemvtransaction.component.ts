@@ -129,11 +129,22 @@ export class DSIEMVTransactionComponent implements OnInit {
   async process() {
     this.processing = true;
     this.message  = 'Please check the device for input if required.'
-
     this.resultMessage = '';
-
     await this.processTransation();
   }
+
+  async processManual() {
+    this.manualPrompt = true;
+    await this.process()
+  }
+
+  async dsiResetDevice() {
+    this.processing = true;
+    const response  = await this.dsiProcess.pinPadReset( );
+    this.message = 'Device Reset'
+    this.processing = false;
+  }
+
 
   async testProcess() {
     const amount = this.amount

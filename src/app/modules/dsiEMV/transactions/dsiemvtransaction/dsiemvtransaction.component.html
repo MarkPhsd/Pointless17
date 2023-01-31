@@ -46,12 +46,27 @@
   </mat-card-content>
 
   <mat-card-actions>
-      <div class="action-buttons">
+    <div class="action-buttons">
         <div *ngIf="!processing">
           <button mat-raised-button
-            [disabled]="!this.userAuthorization.isManagement"
+            [disabled]="!this.userAuthorization.isStaff"
             (click)="process()">
           <mat-icon>credit_card</mat-icon>Process
+        </button>
+      </div>
+
+      <div *ngIf="!processing">
+          <button mat-raised-button
+            [disabled]="!this.userAuthorization.isStaff"
+            (click)="processManual()">
+          <mat-icon>credit_card</mat-icon>Manual
+        </button>
+      </div>
+      <div *ngIf="!processing">
+        <button class="payment-buttons"
+            mat-raised-button
+            (click)="dsiResetDevice()">
+            <mat-icon color="warn">refresh</mat-icon>Device Reset
         </button>
       </div>
       <div><button mat-raised-button

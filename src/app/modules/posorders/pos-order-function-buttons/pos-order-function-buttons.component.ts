@@ -137,17 +137,26 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
 
      if (window.innerWidth >= 1024 && window.innerWidth <= 1565) {
       // this.spacer1 = this.exitButton
-      this.spacer1 = this.cancelButton
-      this.spacer5 = this.exitButton
-      this.spacer11 = this.payButton
-      this.spacer12 = null
+      this.spacer1 = this.cancelButton;
+      this.spacer2 = null;//this.payButton;
+      this.spacer3 = null;//this.payButton;
+      this.spacer4 = null;// this.payButton;
+      this.spacer5 = null;// this.exitButton
+      this.spacer6 = null;//this.payButton;
+      this.spacer7 =  null;
+      // this.spacer8 = this.payButton;
+      // this.spacer9 = this.payButton;
+      this.spacer10 = null;//this.payButton
+      this.spacer11 = null;// this.payButton;
+      this.spacer12 = this.payButton;
+
       this.windowSize = 'medium'
      }
 
      if (window.innerWidth >= 1366 && window.innerWidth < 1564) {
       this.spacer12 = null;
       this.spacer7 =  null;
-      this.spacer11 = this.payButton;;
+      this.spacer11 = this.payButton;
       this.windowSize = 'large'
      }
 
@@ -177,7 +186,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
       this.spacer4  = null;
       this.spacer11 = null;
       this.spacer12 = this.payButton;
-      this.windowSize = 'largest'
+      this.windowSize = 'xlargest'
      }
 
      if (  window.innerWidth > 2179) {
@@ -188,7 +197,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
       this.spacer6  = this.payButton;
       this.spacer11 = null;
       this.spacer12 = null;
-      this.windowSize = 'largest'
+      this.windowSize = 'xxlargest'
      }
 
      if (  window.innerWidth > 2483) {

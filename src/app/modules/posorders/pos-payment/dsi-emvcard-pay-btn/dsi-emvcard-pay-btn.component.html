@@ -1,13 +1,13 @@
-<span *ngIf="devicename && (uiTransactions && uiTransactions?.dsiEMVNeteEpayEnabled) 
+<span *ngIf="devicename && (uiTransactions && uiTransactions?.dsiEMVNeteEpayEnabled)
       && order && order?.balanceRemaining != 0" class="buttons">
   <button class="payment-buttons"
       mat-raised-button
       (click)="processDSICreditCardPayment(false)">
       <mat-icon color="warn">credit_card</mat-icon>Credit / Debit
   </button>
-  <button class="payment-buttons"
+  <!-- <button class="payment-buttons"
       mat-raised-button
       (click)="dsiResetDevice()">
       <mat-icon color="warn">refresh</mat-icon>Device Reset
-  </button>
+  </button> -->
 </span>
