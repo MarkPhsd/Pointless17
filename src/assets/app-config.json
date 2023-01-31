@@ -1,9 +1,7 @@
 {
-  "apiUrl": "https://pointlessposdemo.com/api",
+  "apiUrl": "https://pointlessposdemo.com:4445/api",
   "useAppGate" : false,
   "appGateMessage": "Are you over 21? If so press yes to continue.",
   "company": "Pointless POS",
-  "logo"   : "https://cafecartel.com/temp/logo.png",
-  "appUrl": "http://pointlesspos.web.app",
-  "apiVersion:": "1.0"
+  "logo"   : "https://cafecartel.com/temp/logo.png"
 }

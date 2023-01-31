@@ -1,5 +1,5 @@
 ﻿import { CompanyService, AuthenticationService, AWSBucketService, ThemesService, OrdersService} from 'src/app/_services';
-import { ICompany, IPOSOrder, IUser }  from 'src/app/_interfaces';
+import { ICompany, IPOSOrder, IUser, IUserProfile }  from 'src/app/_interfaces';
 import { Component, Inject, Input, OnDestroy, OnInit, Optional, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   isApp     : boolean;
   loginForm : FormGroup;
   amI21     : any;
-
+  errorMessage: string;
   counter   =0;
   loggedInUser : IUser;
   _user     : Subscription;
@@ -398,32 +398,40 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   submitLogin(userName: string, password: string) {
+    this.errorMessage = ''
     this.loginAction$ = this.userSwitchingService.login(userName, password).pipe(
       switchMap(result =>
         {
           this.initForm();
           if (result && result.errorMessage) {
+            console.log('result failed')
             this.notifyEvent(result.errorMessage, 'Failed Login');
             return of('failed')
           }
 
-          const user = result.user;
-          const sheet = result.sheet;
-          console.log(result, user)
-          if (result) {
+          //if is app then result is a combination of user and sheet
+          //if is not app then result is the user.
+          let user = result?.user ;
+          let sheet = result?.sheet as IBalanceSheet;
+
+          if (result && result.username != undefined) {
+            user = result;
+          }
+
+          if (user) {
             this.spinnerLoading = false;
-            if (user.message === 'failed' ||
-                (user.errorMessage ||
-                (user && user.errorMessage))) {
+
+            if (user && user?.errorMessage === 'failed') {
+              console.log('login failed', user.errorMessage)
               this.authenticationService.updateUser(null);
               return of('failed')
-           }
+            }
 
             if (this.loginApp(user)) {
               return of('success')
             }
 
-            if (user && user.message && user.message.toLowerCase() === 'success') {
+            if (user && user?.message && user?.message.toLowerCase() === 'success') {
               let pass = false
 
               if (!this.loginAction) {
@@ -437,8 +445,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                 }
               }
 
-              console.log('pass', pass)
-
               if (!pass) {
                 this.userSwitchingService.processLogin(user, '')
               }
@@ -447,9 +453,13 @@ export class LoginComponent implements OnInit, OnDestroy {
               return of('success')
             }
           }
-            console.log('error', user?.errorMessage)
-            return of('error')
-          }
+        }
+          // }
+          //   this.spinnerLoading = false;
+          //   this.errorMessage = user?.errorMessage
+          //   console.log('error', user, user?.errorMessage)
+          //   return of('error')
+          // }
       ))
   }
 

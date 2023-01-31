@@ -715,6 +715,7 @@ export class OrderMethodsService implements OnDestroy {
           }
 
           if (order && order.posOrderItems.length == 1 ) {
+            console.log('this toggle service ui ')
             this.toolbarServiceUI.updateOrderBar(true)
           }
 

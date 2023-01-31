@@ -320,7 +320,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.employees$      = this.orderService.getActiveEmployees(site)
   }
 
-
   initOrderSearch(searchModel: IPOSOrderSearchModel) {
     this.orderService.updateOrderSearchModel( searchModel )
   }

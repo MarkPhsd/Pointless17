@@ -1,8 +1,10 @@
-<!-- windowWidth {{windowWidth}} -->
+<!-- windowWidth {{windowWidth}}<br> -->
+<!-- Size {{windowSize}} <br> -->
 <div  *ngIf="order && mainPanel"
       class="buttons-container">
 
   <div *ngIf="order && order.history">
+    spacer unk
     <h5>Transaction can not be modified.</h5>
   </div>
 
@@ -160,8 +162,8 @@
     </button>
   </div>
 
-  <div *ngIf="isApp">
-    <!-- spacer 4   -->
+  <div>
+    <!-- spacer 4 -->
     <ng-container [ngTemplateOutlet]="spacer4"></ng-container>
   </div>
 
@@ -177,25 +179,38 @@
     <ng-container [ngTemplateOutlet]="spacer7"></ng-container>
   </div>
 
-  <div  *ngIf="!isUser && windowSize === 'large' ">
+  <div>
     <!-- spacer 6 -->
     <ng-container [ngTemplateOutlet]="spacer6"></ng-container>
   </div>
 
-  <div  *ngIf="!isUser && windowSize === 'large'">
+  <div>
     <!-- spacer 10 -->
     <ng-container [ngTemplateOutlet]="spacer10"></ng-container>
   </div>
-  
-  <div *ngIf=" windowSize === 'large'">
+
+  <div>
     <!-- spacer 3 -->
     <ng-container [ngTemplateOutlet]="spacer3"></ng-container>
   </div>
 
-  <div *ngIf=" windowSize === 'large'">
+  <div>
     <!-- spacer 2 -->
     <ng-container [ngTemplateOutlet]="spacer2"></ng-container>
   </div>
+
+  <!-- <div *ngIf="windowSize === 'large'">
+    spacer 13
+
+  </div>
+  <div *ngIf=" windowSize === 'large'">
+    spacer 14
+
+  </div>
+  <div *ngIf=" windowSize === 'large'">
+    spacer 15
+
+  </div> -->
 
 </div>
 

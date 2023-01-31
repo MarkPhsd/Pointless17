@@ -154,7 +154,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       console.log('ui settings', data)
       this.enableLimitsView  = false;
       if (data) {
-      
+
         this.uiTransactionSettings = data;
         this.enableLimitsView = data.enableLimitsView
       }
@@ -207,7 +207,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
 
-  userAuthSubscriber() { 
+  userAuthSubscriber() {
     this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
       if (data) {
         this.userAuths = data;
@@ -286,7 +286,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.userSubscriber();
     this.initBarSubscription();
     this.resizePanel();
-    this.initAssignedItemsSubscriber(); 
+    this.initAssignedItemsSubscriber();
     this.userAuthSubscriber();
   }
 
@@ -708,7 +708,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
-  setStep(value:number) { 
+  setStep(value:number) {
 
   }
     //get item
@@ -838,7 +838,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   emailNotifyOrder(event) {
     this.orderMethodService.emailOrder(this.order).subscribe(data => {
-      if (data.isSuccessStatusCode) {
+      if (data.isSuccessStatusCode  || data === 'success') {
         this.orderMethodService.notifyEvent('Email Sent', 'Success')
        }
       if (!data.isSuccessStatusCode) {

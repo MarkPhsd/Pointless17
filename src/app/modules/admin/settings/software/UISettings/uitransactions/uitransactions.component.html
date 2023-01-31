@@ -165,10 +165,20 @@
           </mat-form-field>
       </div>
 
+      <div>
+        <mat-label>Assign customer to VIP Button (this sets the customer of the order to a customer that has price column 1 as default)</mat-label>
+        <app-client-search-selector
+          (itemSelect)="assignCustomer($event)">
+          VIP Customer Assignment
+        </app-client-search-selector>
+        <div *ngIf="(vipCustomer$ | async) as vipCustomer">
+          {{vipCustomer?.firstName}} {{vipCustomer?.lastName}}
+        </div>
+      </div>
+
       <div class="toggle-fields">
         <mat-slide-toggle
-                  formControlName="validateCustomerLicenseID"
-                  >
+                  formControlName="validateCustomerLicenseID">
           <mat-label>Validate Customer License/ID</mat-label>
         </mat-slide-toggle>
       </div>
@@ -209,7 +219,7 @@
             Max Orders
           </app-value-fields>
         </div>
-   
+
 
         <div>
           <mat-label>Prefix for Order Prep Labels.</mat-label>

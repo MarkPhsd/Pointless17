@@ -3,6 +3,7 @@ import { FormGroup, FormGroupDirective,FormControl ,NgForm} from '@angular/forms
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Observable, switchMap, of } from 'rxjs';
 import { clientType, ISetting } from 'src/app/_interfaces';
+import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
@@ -24,14 +25,15 @@ export class UITransactionsComponent implements OnInit {
   uiTransactions  = {} as TransactionUISettings;
   uiTransactions$  : Observable<ISetting>;
   saving$ : Observable<any>;
-  clientTypes$    :  Observable<any>;
+  clientTypes$    : Observable<any>;
   clientTypes     : clientType[];
-
+  vipCustomer$    : Observable<any>;
   constructor(
       private uISettingsService: UISettingsService,
       private settingService   : SettingsService,
       private clientTypeService: ClientTypeService,
       private sitesService     : SitesService,
+      private clienTableSerivce: ClientTableService,
   ) {
   }
 
@@ -51,10 +53,12 @@ export class UITransactionsComponent implements OnInit {
             this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
             this.payPalEnabled = this.uiTransactions.payPalEnabled
             this.inputForm.patchValue( this.uiTransactions)
+            this.getVipClient(this.uiTransactions.vipCustomerID)
           } else {
             this.uiTransactions  = {} as TransactionUISettings;
             this.inputForm.patchValue( this.uiTransactions)
             this.payPalEnabled = this.uiTransactions.payPalEnabled
+            this.vipCustomer$ = null;
           }
         } catch (error) {
           console.log('error', error)
@@ -84,6 +88,20 @@ export class UITransactionsComponent implements OnInit {
 
   }
 
+  getVipClient(id){
+    if (id) {
+      this.vipCustomer$ = this.clienTableSerivce.getClient(this.sitesService.getAssignedSite(), id)
+    }
+  }
+
+  assignCustomer(event) {
+    if (!this.inputForm || !event) {
+      return
+    }
+    this.inputForm.patchValue({vipCustomerID: event.id})
+    this.getVipClient(this.inputForm.value)
+  }
+
   validateForm(form: FormGroup) {
     if (!this.inputForm.value) {
       this.uISettingsService.notify('Form has no value.', 'Problem Occured')
@@ -108,9 +126,7 @@ export class UITransactionsComponent implements OnInit {
           return  this.uISettingsService.saveConfig(this.inputForm, 'UITransactionSetting');
         })
       )
-
     }
-
     return true;
   }
 

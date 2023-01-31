@@ -45,6 +45,8 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   _order              :   Subscription;
   order               :   IPOSOrder;
 
+
+
   transactionUISettings:TransactionUISettings;
   requireEnter         : boolean;
 
@@ -113,7 +115,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
         console.log('search Items', error)
       }
     }
-
   }
 
   ngOnDestroy(): void {
@@ -134,7 +135,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
         })
       ).subscribe();
     } catch (error) {
-      console.log('initSearchSubscription', error)
     }
   }
 
@@ -142,6 +142,53 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     this.searchForm   = this.fb.group( {
       itemName          : ['']
     })
+  }
+
+  onUpdate() {
+    if (this.requireEnter) {
+      const barcode  =  this.input.nativeElement.value;
+      if (!this.scans) { this.scans = [] };
+      // this.scans.push(barcode);
+      this.barcodeScanner$ =  this.scan(barcode);
+      this.initForm();
+    }
+  }
+
+  scan(barcode: string){
+    if (!this.obs$) { this.obs$ = [] }
+    this.obs$.push(this.addItemToOrder(barcode).pipe(
+      switchMap(data => {
+        return of(data)
+      })
+    ))
+    return  forkJoin(this.obs$)
+  }
+
+  addItemToOrder(barcode: string) {
+    const site = this.siteService.getAssignedSite();
+    if (!this.order) {
+      this.obs$.shift()
+      this.siteService.notify('No order assigned', 'Alert', 1000)
+      return of(null)
+    }
+    this.initForm()
+    const item$ = this.menuItemService.getMenuItemByBarcode(site, barcode, this.order.clientID);
+    return  item$.pipe( switchMap( data => {
+        this.obs$.shift()
+        if ( !data ) {
+          return this.orderMethodService.processItemPOSObservable(this.order, barcode, null, 1, this.input, 0, 0, this.assignedItem)
+        } else
+        {
+          if (data.length == 1 || data.length == 0) {
+            return this.orderMethodService.processItemPOSObservable(this.order, barcode, null, 1, this.input, 0, 0, this.assignedItem)
+          } else {
+            this.listBarcodeItems(data, this.order)
+          }
+        }
+        return of(data);
+      })
+    )
+
   }
 
   hideKeyboardTimeOut() {
@@ -156,64 +203,17 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
 
   refreshSearch() {
     const barcode =  this.input.nativeElement.value
-    this.action$ =  this.addItemToOrderObs(barcode)
+    this.action$ =  this.addItemToOrder(barcode)
   }
 
-   onUpdate() {
-    if (this.requireEnter) {
 
-      const barcode  =  this.input.nativeElement.value
-      this.barcodeScanner$ = this.scan(barcode)
-      this.initForm()
+
+  get assignedItem() {
+    let assignedItems
+    if (this.orderMethodService.assignPOSItems && this.orderMethodService.assignPOSItems[0]) {
+      assignedItems =this.orderMethodService.assignPOSItems[0]
     }
-  }
-
-  scan(barcode: string){
-    if (!this.scans) { this.scans = [] }
-    if (!this.obs$) { this.obs$ = [] }
-    this.scans.push(barcode);
-
-    const scanner$ = this.addItemToOrderObs(barcode)
-
-    this.obs$.push(scanner$.pipe(switchMap(data => {
-      this.scans.shift();
-      this.obs$ = []
-      this.scans.forEach(item => {
-        this.obs$.push(this.addItemToOrderObs(item))
-      });
-      return of(data)
-    })))
-
-    forkJoin(this.obs$)
-    return  forkJoin(this.obs$)
-  }
-
-
-  addItemToOrderObs(barcode: string) {
-    const site = this.siteService.getAssignedSite();
-    if (!this.order) {
-      this.siteService.notify('No order assigned', 'Alert', 1000)
-      return
-    }
-    this.initForm()
-    const item$ = this.menuItemService.getMenuItemByBarcode(site, barcode, this.order.clientID);
-    return  item$.pipe( switchMap( data => {
-        if ( !data ) {
-          console.log('1', this.orderMethodService.assignPOSItems)
-          return this.orderMethodService.processItemPOSObservable(this.order, barcode, null, 1, this.input, 0, 0, this.orderMethodService.assignPOSItems[0])
-        } else
-        {
-          if (data.length == 1 || data.length == 0) {
-            console.log('2', this.orderMethodService.assignPOSItems)
-            return this.orderMethodService.processItemPOSObservable(this.order, barcode, null, 1, this.input, 0, 0, this.orderMethodService.assignPOSItems[0])
-          } else {
-            this.listBarcodeItems(data, this.order)
-          }
-        }
-        return of(data);
-      })
-    )
-
+    return assignedItems
   }
 
   listBarcodeItems(items: IMenuItem[], order: IPOSOrder) {

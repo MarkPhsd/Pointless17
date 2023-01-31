@@ -56,6 +56,7 @@ export interface TransactionUISettings {
   creditCardFee         : string;
   updateInventoryOnScan : boolean;
   giftCardLength        : number;
+  vipCustomerID         : number;
 }
 
 export interface StripeAPISettings {

@@ -1,38 +1,37 @@
 ﻿<div *ngIf="(terminalSettings$ | async) as terminal"></div>
 <div *ngIf="(loginAction$ | async) as loginAction"></div>
 
-<!-- <div *ngIf="!platformService.isApp  || (!togglePIN && platformService.isApp)"
-     [ngStyle]="backgroundImage"> -->
-
-  <!-- <div class="centered centered-flex"> -->
-    <ng-container [ngTemplateOutlet]="loginMethodView"></ng-container>
-  <!-- </div>
-</div> -->
+<ng-container [ngTemplateOutlet]="loginMethodView"></ng-container>
 
 <ng-template #userEntryView>
   <div class="centered centered-flex">
+
+    <div class="pin-entry">
+      <button  mat-raised-button
+                class="center login"
+                *ngIf="platformService.isApp"
+                (click)="togglePIN = !togglePIN">
+          PIN Entry
+      </button>
+    </div>
+
     <mat-card>
       <mat-card-title>
         <div  *ngIf="platformService.isApp() && pinToken">
-          <div class="pin-entry">
-            <button  mat-raised-button
-                      class="center login"
-                      *ngIf="platformService.isApp"
-                      (click)="togglePIN = !togglePIN">
-                PIN Entry
-            </button>
-          </div>
+
         </div>
         <div (click)="setAPIAlt()">
-            <div *ngIf="uiHomePageSetting && uiHomePageSetting.logoHomePage"
-                  class="logo"
-                  (click)="setAPIAlt()">
-              <app-logo
-                    [uiHomePageSetting] ="uiHomePageSetting"
-                    [logoSize]          ="'large'"
-                    [logo]              ="uiHomePageSetting.logoHomePage"
-              ></app-logo>
-            </div>
+            <div class="centered-flex">
+              <div *ngIf="uiHomePageSetting && uiHomePageSetting.logoHomePage"
+                    class="logo"
+                    (click)="setAPIAlt()">
+                <app-logo
+                      [uiHomePageSetting] ="uiHomePageSetting"
+                      [logoSize]          ="'large'"
+                      [logo]              ="uiHomePageSetting.logoHomePage"
+                ></app-logo>
+              </div>
+
 
             <div *ngIf="!uiHomePageSetting && logo">
               <img  *ngIf="logo"
@@ -47,9 +46,10 @@
                 *ngIf="uiHomePageSetting">
                 {{uiHomePageSetting.displayCompanyName}}
             </h2>
-
+          </div>
         </div>
       </mat-card-title>
+
       <mat-card-content>
         <div  class="center"
               *ngIf="loginForm"
@@ -87,6 +87,9 @@
 
             <div>
               <div>
+                <div *ngIf="errorMessage">
+                  {{errorMessage}}
+                </div>
                 <api-status-display>Service may be unavalible</api-status-display>
               </div>
 
@@ -154,9 +157,7 @@
 </ng-template>
 
 <ng-template #pinEntryView>
-
   <div class="centered centered-flex">
-
       <div *ngIf="platformService.isApp && togglePIN" >
           <div class="pin-entry">
             <button class="pin-button"
@@ -165,6 +166,7 @@
                     Password Entry
             </button>
           </div>
+
           <mat-card class="mat-card">
             <div class="pin-entry">
               <app-fast-user-switch

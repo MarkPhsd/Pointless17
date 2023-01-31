@@ -91,7 +91,8 @@ export interface IUserProfile {
   medPrescriptionExpiration :string;
   medConcentrateLimit     :  string;
   patientRecOption        : boolean;
-
+  errorMessage: string;
+  message: string;
 }
 
 export interface clientType {
@@ -181,7 +182,7 @@ export interface employee {
   employeeJobs:              employeeJobs;
 }
 
-export interface employeeJobs { 
+export interface employeeJobs {
   employeeID : number;
   position: number;
   hours: number;

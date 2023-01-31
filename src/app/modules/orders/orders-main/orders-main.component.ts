@@ -194,7 +194,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     this.posOrdersSelectedList.push(order)
     const key = "id"
     this.posOrdersSelectedList =  [...new Map(this.posOrdersSelectedList.map(item =>[item[key], item])).values()]
-    // this.posOrdersSelectedList = [... this.posOrdersSelectedList]
     console.log(this.posOrdersSelectedList)
   }
 

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { UserSwitchingService } from './user-switching.service';
 
@@ -46,7 +47,7 @@ export class ToolBarUIService {
   public searchBar : boolean;
   public orderBar  : boolean;
 
-  constructor() {
+  constructor( private router: Router) {
     this.mainMenuSideBar = false;
     this.searchBar = false;
   }
@@ -97,6 +98,12 @@ export class ToolBarUIService {
   }
 
   updateOrderBar(value: boolean) {
+    console.log('url', this.router.url )
+    if (this.router.url == '/currentorder;mainPanel=true') {
+      this.orderBar = false
+      this._orderBar.next(false)
+      return
+    }
     this.orderBar = value
     this._orderBar.next(value)
     this.resizeWindow();

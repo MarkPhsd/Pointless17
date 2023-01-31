@@ -133,22 +133,25 @@
 </ng-template>
 
 <ng-template #ordersSelectedView>
+
   <div>
     <div class="flex-row" >
+      <div><button
+        *ngIf="posOrdersSelectedList && posOrdersSelectedList.length>0"
+        mat-raised-button
+        (click)="mergeOrdersComplete()"
+        aria-label="merge"><mat-icon>join_full</mat-icon>Merge</button>
+      </div>
+
+      <div><button mat-raised-button (click)="cancelMerge()" aria-label="trash">Cancel</button></div>
+
       <div *ngFor="let order of posOrdersSelectedList; let i = index">
         <div><button mat-raised-button (click)="removeFromList(i)" aria-label="trash">
                {{order.id}}<mat-icon>delete</mat-icon>
               </button></div>
       </div>
 
-      <div><button
-                    *ngIf="posOrdersSelectedList && posOrdersSelectedList.length>0"
-                    mat-raised-button
-                    (click)="mergeOrdersComplete()"
-                    aria-label="merge"><mat-icon>join_full</mat-icon>Merge</button></div>
-
-      <div><button mat-raised-button (click)="cancelMerge()" aria-label="trash">Cancel</button></div>
-    </div>
+   </div>
   </div>
 </ng-template>
 

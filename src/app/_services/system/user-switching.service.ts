@@ -342,34 +342,31 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   processLogin(user: IUser, path : string) {
-    // login the user based on the message response of the user.
-    console.log('user from Process login', user, path)
-    // console.log('loginAction', localStorage.getItem('loginAction'))
-    // console.log('processlogin1')
+
     if (user && user.message == undefined) {
       return 'user undefined'
     }
-    console.log('processlogin1')
+    // console.log('processlogin1')
     // if account loccked out then change here.
     if (user.message.toLowerCase() === 'failed') {
       return user.errorMessage
     }
-    console.log('processlogin2')
+    // console.log('processlogin2')
     if (user && !user.message) {
       return 'No message response from API.'
     }
-    console.log('processlogin3')
+    // console.log('processlogin3')
     if (path) {
       this.router.navigate([path]);
       return 'success'
     }
-    console.log('processlogin4')
+    // console.log('processlogin4')
     if (user.message === 'success') {
       console.log('loginToReturnUrl')
       this.loginToReturnUrl();
       return 'success'
     }
-    console.log('processlogin5')
+    // console.log('processlogin5')
     this.setAppUser()
   }
 

@@ -109,7 +109,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
        this.smallDevice = true
      }
      this.order.balanceRemaining
-
+     this.windowSize = 'Normal'
      this.spacer1 = null;
      this.spacer2 = null;
      this.spacer3 = null;
@@ -122,46 +122,84 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
      this.spacer12 = null;
      this.windowWidth = window.innerWidth
 
-     if (window.innerWidth < 1024) { 
-      this.spacer5 = this.exitButton;
-      // this.spacer11 = this.clearDiscounts
-      this.spacer11 = this.payButton
-      // this.spacer4 = this.vipButton
+     if (window.innerWidth < 1024) {
+      this.spacer5          = this.exitButton;
+      this.spacer11         = this.payButton
+      this.windowSize = 'Less Than 1024'
      }
-     
-     if (window.innerWidth >= 954 && window.innerWidth < 1024) { 
+
+     if (window.innerWidth >= 954 && window.innerWidth < 1024) {
       this.spacer11 = null;
       this.spacer11 = this.payButton
       this.spacer12 = null
+      this.windowSize = 'Mid'
      }
 
-     if (window.innerWidth >= 1024 && window.innerWidth <= 1565) { 
+     if (window.innerWidth >= 1024 && window.innerWidth <= 1565) {
       // this.spacer1 = this.exitButton
-      this.spacer5 = this.exitButton
       this.spacer1 = this.cancelButton
+      this.spacer5 = this.exitButton
       this.spacer11 = this.payButton
       this.spacer12 = null
-
       this.windowSize = 'medium'
      }
+
      if (window.innerWidth >= 1366 && window.innerWidth < 1564) {
-      // this.spacer5 = this.exitButton
       this.spacer12 = null;
-      this.spacer7 = this.payButton;
-      this.spacer11 = null;
-      // this.spacer11 = this.vipButton
+      this.spacer7 =  null;
+      this.spacer11 = this.payButton;;
       this.windowSize = 'large'
-      // this.spacer3 = this.payButton
      }
-     if (  window.innerWidth > 1564) {
-      this.spacer5 = this.exitButton
+
+     if ( window.innerWidth > 1259 ) {
+      this.spacer5  = this.exitButton
+      this.spacer7  = null;
+      this.spacer3  = null;
+      this.spacer4  = null;
       this.spacer11 = null;
+      this.spacer12 = this.payButton;
+     }
+
+     if (  window.innerWidth > 1564) {
+      this.spacer5  = this.exitButton
+      this.spacer7  = null;
+      this.spacer3  = null;
+      this.spacer4  = null;
+      this.spacer11 = this.payButton;
       this.spacer12 = null
-      this.spacer4 = this.payButton;
-      // this.spacer7 = this.payButton;// this.payButton;
-      // this.spacer4 = this.vipButton
-      this.windowSize = 'large'
-      // this.spacer3 = this.payButton
+      this.windowSize = 'largest'
+     }
+
+     if (  window.innerWidth > 1871) {
+      this.spacer5  = this.exitButton
+      this.spacer7  = null;
+      this.spacer3  = null;
+      this.spacer4  = null;
+      this.spacer11 = null;
+      this.spacer12 = this.payButton;
+      this.windowSize = 'largest'
+     }
+
+     if (  window.innerWidth > 2179) {
+      this.spacer5  = this.exitButton
+      this.spacer7  = null;
+      this.spacer3  = null;
+      this.spacer4  = null;
+      this.spacer6  = this.payButton;
+      this.spacer11 = null;
+      this.spacer12 = null;
+      this.windowSize = 'largest'
+     }
+
+     if (  window.innerWidth > 2483) {
+      this.spacer5  = this.exitButton
+      this.spacer7  = null;
+      this.spacer3  = this.payButton;
+      this.spacer4  = null;
+      this.spacer6  = null;
+      this.spacer11 = null;
+      this.spacer12 = null;
+      this.windowSize = 'largest'
      }
    }
 
