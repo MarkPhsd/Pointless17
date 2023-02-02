@@ -1,0 +1,118 @@
+<div *ngIf="(terminalsettings$  | async) as terminalSettings; else loading"></div>
+<div *ngIf="processing">
+  <mat-spinner diameter="50"></mat-spinner>
+</div>
+
+<div *ngIf="(processing$ | async) as item">
+</div>
+
+<div *ngIf="!terminalSettings || (!terminalSettings?.triposLaneID || terminalSettings?.triposLaneID === '')">
+  <mat-icon>alert</mat-icon> No Lane ID found for Device.
+  <button mat-raised-button (click)="close()">Close</button>
+</div>
+
+<mat-card *ngIf="terminalSettings && terminalSettings.triposLaneID">
+
+  <mat-card-title>
+    Transaction Type:  {{transactionType}}
+    <h3>
+      Total  {{posPayment?.amountPaid | currency}}
+    </h3>
+  </mat-card-title>
+
+  <mat-card-subtitle>
+    <div *ngIf="message">
+      {{message}}
+    </div>
+    <div *ngIf="errorMessage">
+      <h3><mat-icon color="warn">warning</mat-icon>  {{errorMessage}}</h3>
+    </div>
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <mat-card>
+      <h4>Tip Amount: {{tipValue | currency}}</h4>
+      <div class="grid-tip-buttons button-grid">
+        <div><button class="payment-buttons" mat-raised-button (click)="addTipPercent(15)">15 % Tip</button></div>
+        <div><button class="payment-buttons" mat-raised-button (click)="addTipPercent(18)">18 % Tip</button></div>
+        <div><button class="payment-buttons" mat-raised-button (click)="addTipPercent(20)">20 % Tip</button></div>
+        <div>
+          <app-key-pad
+            [inputForm]        ="inputForm"
+            [inputTypeValue]   ="'decimal'"
+            [showInput]        ="false"
+            [numberbuttons]    ="'number-buttons button-sized-scaled'"
+            [alternateClass]   ="'grid-keypad-alternate'"
+            (outPutReturnEnter)="applyDropAmount($event)">
+            Custom Tip Amount
+          </app-key-pad>
+        </div>
+        <div><button class="payment-buttons" mat-raised-button (click)="addTipPercent(0)">No Tip</button></div>
+      </div>
+    </mat-card>
+
+    <div class="button-grid">
+      <div>
+        <!-- Show if No Authorization -->
+        <button color="primary" mat-raised-button (click)="authorizeAmount()">Authorize</button>
+      </div>
+
+      <div>
+        <!-- Show if Authorization or if Amount>0 -->
+        <button  color="primary"   mat-raised-button (click)="payAmount()">Pay Amount</button>
+      </div>
+
+      <div *ngIf="transactionType.toLowerCase() === 'refund'">
+        <!-- Show if Authorization Value Exists (or don't use here at all.) -->
+        <button  color="warn"  mat-raised-button (click)="refundAmount()">Refund</button>
+      </div>
+
+      <div>
+        <!-- Always show -->
+        <button  color="warn"  mat-raised-button (click)="close()">Cancel</button>
+      </div>
+    </div>
+
+    <div *ngIf="(processing$ | async) as result">
+      <div *ngIf="result">
+        result
+      </div>
+    </div>
+
+  </mat-card-content>
+
+  <mat-card-actions>
+    <mat-card>
+      <div class="button-grid">
+        <div *ngIf="userAuthService.isManagement">
+          <!-- Always show -->
+          <button  color="warn" mat-raised-button (click)="reboot()">Reboot</button>
+        </div>
+        <div *ngIf="userAuthService.isManagement">
+          <!-- Always show -->
+          <button  color="warn" mat-raised-button (click)="reset()">Reset</button>
+        </div>
+      </div>
+    </mat-card>
+  </mat-card-actions>
+
+</mat-card>
+
+
+<!-- </div> -->
+<ng-template #loading>
+  <mat-spinner diameter="50"></mat-spinner>
+</ng-template>
+
+
+<div *ngIf="data">
+  <!-- <div >
+    uiTransaction  {{uiTransaction | json}}
+  </div>
+  <div >
+    posPayment  {{posPayment | json}}
+  </div>
+  <div >
+    order {{order | json}}
+  </div> -->
+</div>

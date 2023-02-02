@@ -13,6 +13,7 @@ import { DSIEMVSettings, TransactionUISettings } from '../system/settings/uisett
 import { PrintingService } from '../system/printing.service';
 import { BalanceSheetService } from './balance-sheet.service';
 import { PrepPrintingServiceService } from '../system/prep-printing-service.service';
+import { TriposResult } from '../tripos/triposModels';
 
 @Injectable({
   providedIn: 'root'
@@ -212,8 +213,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     const cmdResponse       = rStream?.CmdResponse;
     const trans             = rStream?.TranResponse;
 
-    console.log('validateResponse,', cmdResponse, payment);
-
     if (!cmdResponse) {
       this.notify(`Error no response`, 'Transaction not Complete', 3000);
       return false
@@ -251,20 +250,39 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   isCardPointApproved(trans: any) {
-    if (trans && (trans?.resptext.toLowerCase() === 'Approved'.toLowerCase() ||
-                  trans?.resptext.toLowerCase() === 'Approval'.toLowerCase() ||
-                  trans?.respstat.toLowerCase() === 'A'.toLowerCase()
+    if (trans && trans.captureStatus && (trans?.captureStatus.toLowerCase() === 'approved'.toLowerCase() ||
+                  trans?.captureStatus.toLowerCase() === 'approval'.toLowerCase() ||
+                  trans?.captureStatus.toLowerCase() === 'A'.toLowerCase()
                   ) ) {
       return true;
     }
-    this.notify(`Response not approved. Response given ${trans.resptext}`, 'Failed', 3000)
+    if (trans && trans.exceptionMessage) {
+      this.notify(`Response not approved. Response given ${trans.exceptionMessage}`, 'Failed', 3000)
+      return false;
+    }
+    this.notify(`Response not approved. Response given ${trans.captureStatus}`, 'Failed', 3000)
     return false;
   }
+
+
+  isTriPOSApproved(trans: any) {
+    console.log('isTriPOSApproved', trans)
+    if (trans && trans.captureStatus && (trans?.captureStatus.toLowerCase() === 'approved'.toLowerCase() ||
+                  trans?.captureStatus.toLowerCase() === 'approval'.toLowerCase() ||
+                  trans?.captureStatus.toLowerCase() === 'A'.toLowerCase()
+                  ) ) {
+      return true;
+    }
+    this.notify(`Response not approved. Response given ${trans.captureStatus}`, 'Failed', 3000)
+    return false;
+  }
+
 
   processCardPointResponse(trans: any, payment: IPOSPayment, order: IPOSOrder) {
     // console.log('processCardPointResponse', trans)
     const site = this.sitesService.getAssignedSite();
     //validate response
+    console.log('processCardPointResponse',trans)
     if (this.isCardPointApproved(trans)) {
       payment   = this.applyCardPointResponseToPayment(trans, payment)
       payment.textResponse =  trans?.resptext.toLowerCase();
@@ -282,9 +300,50 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         this.orderMethodsService.finalizeOrder(data, paymentMethod, data.order);
         // this.printingService.previewReceipt();
         this._initTransactionComplete.next(true)
+
+        // why not this?
+        // if (data.orderCompleted) {
+        //   this._initTransactionComplete.next(true)
+        // }
+
         return payment.textResponse;
       })
+    } else {
+      // console.log('trans', trans)
+      // if (trans) {
+      //   return of (trans.exceptionMessage)
+      // }
+      return of(null)
     }
+
+  }
+
+  processTriPOSResponse(trans: any, payment: IPOSPayment, order: IPOSOrder): Observable<any> {
+    const site = this.sitesService.getAssignedSite();
+    //validate response
+    payment   = this.applyTripPOSResponseToPayment(trans, payment)
+    if (this.isTriPOSApproved(payment)) {
+      let paymentMethod    = {} as IPaymentMethod;
+      let cardType = 'credit'
+      if (trans?.cardLogo) {   cardType = trans?.cardLogo;  }
+      return this.paymentMethodService.getPaymentMethodByName(site, cardType).pipe(
+        switchMap( data => {
+          payment.paymentMethodID = data.id;
+          paymentMethod = data;
+          return this.paymentService.makePayment(site, payment, order, payment.amountPaid, data)
+        }
+      )).pipe(
+        switchMap(data => {
+          this.orderService.updateOrderSubscription(data.order);
+          this.orderMethodsService.finalizeOrder(data, paymentMethod, data.order);
+          if (data.orderCompleted) {
+            this._initTransactionComplete.next(true)
+          }
+          return of(data.payment)
+      }))
+
+    }
+    return of('not Approved')
 
   }
 
@@ -321,7 +380,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
         return  payment$.pipe(
           switchMap(data => {
-            // console.log('processCreditCardResponse makePayment data', data)
             this.orderService.updateOrderSubscription(data.order);
             this.orderMethodsService.finalizeOrder(data,  paymentMethod, data.order);
             this.printingService.previewReceipt();
@@ -359,17 +417,17 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     payment.account = response?.account;
     payment.transactionData = JSON.stringify(response);
 
-    const tip = +payment.tipAmount
-    const amountPaid = +payment.amountPaid
+    const tip = +payment?.tipAmount
+    const amountPaid = +payment?.amountPaid
     const amount  = +response?.amount
 
     console.log(amount == tip + amountPaid)
-    console.log(amount,amountPaid,tip)
+    console.log(amount, amountPaid, tip)
 
     if ( tip !=0 ) {
       if (amount == tip + amountPaid) {
-        payment.amountPaid      = +(+payment.amountPaid).toFixed(2)
-        payment.amountReceived  = +(+payment.amountPaid).toFixed(2)
+        payment.amountPaid      = +(+payment?.amountPaid).toFixed(2)
+        payment.amountReceived  = +(+payment?.amountPaid).toFixed(2)
         payment.tipAmount       = +(tip ).toFixed(2)
       }
     } else {
@@ -384,6 +442,24 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     return payment;
   }
+
+  applyTripPOSResponseToPayment(response: any, payment: IPOSPayment) {
+    console.log('applyTripPOSResponseToPayment', response)
+    payment.account         = response.accountNumber;
+    payment.approvalCode    = response.approvalNumber;
+    payment.amountPaid      = response.approvedAmount;
+    payment.amountReceived  = response.approvedAmount;
+    payment.captureStatus   = response.statusCode;
+    payment.entryMethod     = response.entryMode;
+    payment.entrymode       = response.entryMode;
+    payment.respproc        = response.networkTransactionId;
+    payment.bintype         = response.binValue;
+    payment.transactionData = JSON.stringify(response);
+    payment.tipAmount       = response.tipAmount;
+    payment.exp             = `${response.expirationMonth}${response?.expirationYear}`;
+    return payment;
+  }
+
 
   applyEMVResponseToPayment(trans: TranResponse, payment: IPOSPayment) {
     //void =6

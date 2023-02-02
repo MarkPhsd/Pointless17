@@ -57,6 +57,7 @@ export interface TransactionUISettings {
   updateInventoryOnScan : boolean;
   giftCardLength        : number;
   vipCustomerID         : number;
+  triposEnabled: boolean;
 }
 
 export interface StripeAPISettings {
@@ -669,6 +670,7 @@ export class UISettingsService {
       payPalCurrency         : [ ],
       creditCardFee          : [ ],
       updateInventoryOnScan: [ ],
+      triposEnabled:          [],
      })
   }
 

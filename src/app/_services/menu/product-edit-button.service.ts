@@ -49,6 +49,7 @@ import { PayPalTransactionComponent } from 'src/app/modules/payment-processing/p
 import { BlogPostEditComponent } from 'src/app/modules/admin/blogEditor/blog-post-edit/blog-post-edit.component';
 import { JobTypesEditComponent } from 'src/app/modules/admin/clients/jobs/job-types-edit/job-types-edit.component';
 import { EmployeeClockEditComponent } from 'src/app/modules/admin/employeeClockAdmin/employee-clock-edit/employee-clock-edit.component';
+import { TriPosTransactionsComponent } from 'src/app/modules/payment-processing/tri-pos-transactions/tri-pos-transactions.component';
 
 @Injectable({
   providedIn: 'root'
@@ -129,7 +130,7 @@ export class ProductEditButtonService {
     this.openProductEditor(product.id,  product.prodModifierType)
   }
 
-  
+
   openClockEditor(id: any) {
     let dialogRef: any;
     dialogRef = this.dialog.open(EmployeeClockEditComponent,
@@ -585,32 +586,42 @@ export class ProductEditButtonService {
 
   }
 
-  openVoidPaymentDialog(payment: IPOSPayment ) {
-     let dialogRef: any;
-    // const site = this.siteService.getAssignedSite();
-    // this.menuService.getProduct(site, id).subscribe( data=> {
-    //   const productTypeID = data.prodModifierType
-    //   this.openProductEditor(id, productTypeID)
-      const site = this.siteService.getAssignedSite();
-      if (payment) {
-        let action      = {}  as OperationWithAction;
-        action.action   = 2;
-        action.payment  = payment;
-        action.id       = payment.id
+  openVoidPaymentDialog(item ) {
+    let payment = item.payment;
+    let uiSetting =  item.uiSettings;
 
-        let method = {} as IPaymentMethod
-        const method$ = this.paymentMethodService.getCacheMethod(site,payment.paymentMethodID);
-        method$.subscribe(data => {
-          action.paymentMethod = data;
-          dialogRef = this.dialog.open(AdjustPaymentComponent,
-            { width:        '450px',
-              minWidth:     '450px',
-              height:       '400px',
-              minHeight:    '400px',
-              data     : action
-          })
+    if (!uiSetting) {
+      console.log('no settings')
+      return
+    }
+
+    if (!payment) {
+      console.log('no payment')
+      return
+    }
+
+    let dialogRef: any;
+    const site = this.siteService.getAssignedSite();
+    if (payment) {
+      let action      = {}  as OperationWithAction;
+      action.action   = 2;
+      action.payment  = payment;
+      action.id       = payment.id
+
+      let method = {} as IPaymentMethod
+      const method$ = this.paymentMethodService.getCacheMethod(site, payment.paymentMethodID);
+      method$.subscribe(data => {
+        action.paymentMethod = data;
+        action.uiSetting = uiSetting;
+        dialogRef = this.dialog.open(AdjustPaymentComponent,
+          { width:        '450px',
+            minWidth:     '450px',
+            height:       '400px',
+            minHeight:    '400px',
+            data     : action
         })
-      }
+      })
+    }
   }
 
   openPayPalTransaction(options: any ) {
@@ -640,6 +651,25 @@ export class ProductEditButtonService {
     //   this.openProductEditor(id, productTypeID)
     if (options) {
       dialogRef = this.dialog.open(CardpointeTransactionsComponent,
+        { width:        '100%',
+          minWidth:     '100%',
+          maxWidth:     'max-width: 100vw !important',
+          height:       '100vh',
+          minHeight:    '100vh',
+          data : options
+      })
+      return dialogRef
+    }
+  }
+
+  openTriPOSTransaction(options: any ) {
+    let dialogRef: any;
+    // const site = this.siteService.getAssignedSite();
+    // this.menuService.getProduct(site, id).subscribe( data=> {
+    //   const productTypeID = data.prodModifierType
+    //   this.openProductEditor(id, productTypeID)
+    if (options) {
+      dialogRef = this.dialog.open(TriPosTransactionsComponent,
         { width:        '100%',
           minWidth:     '100%',
           maxWidth:     'max-width: 100vw !important',

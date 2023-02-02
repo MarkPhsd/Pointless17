@@ -219,8 +219,6 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
 
   //preserve failed payments
   getPaymentFailed(): IPOSPayment {
-
-
     return null
   }
 

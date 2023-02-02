@@ -38,7 +38,7 @@
       <div class="item-font" *ngIf="menus[index]?.icon">
         <mat-icon>{{menus[index]?.icon}}</mat-icon>
       </div>
-      <div class="item-text" *ngIf="!tinyMenu">
+      <div class="item-font" *ngIf="!tinyMenu">
         {{menus[index]?.name  | truncateText : 20}}
       </div>
     </div>
@@ -58,7 +58,7 @@
         <div *ngIf="!item?.minimized">
           <div class="menu"
                *ngIf="isAuthorized(item?.userType)">
-              <a mat-list-item
+              <button mat-menu-item
                 routerLinkActive={{item?.routerLinkActive}}
                 routerLink=      {{item?.routerLink}}>
 
@@ -66,11 +66,11 @@
                 <div class="item-font" *ngIf="item.icon">
                   <mat-icon>{{item?.icon}}</mat-icon>
                 </div>
-                <div class="item-text" *ngIf="!tinyMenu">
+                <div class="item-font" *ngIf="!tinyMenu">
                   {{item?.name | truncateText : 20}}
                 </div>
               </div>
-            </a>
+            </button>
           </div>
         </div>
       </li>
@@ -84,7 +84,8 @@
 
     <ul id="accordion"
         class="accordion">
-        <li>
+        <li class="menu-item"
+            @fade>
           <mat-menu #menu="matMenu">
             <div  *ngFor="let item of submenu">
               <div  *ngIf="isAuthorized(item?.userType)">
@@ -97,7 +98,7 @@
                       <div class="item-font" *ngIf="item.icon">
                         <mat-icon>{{item.icon}}</mat-icon>
                       </div>
-                      <div class="item-text" *ngIf="!tinyMenu">
+                      <div class="item-font" *ngIf="!tinyMenu">
                         {{item.name | truncateText : 20}}
                       </div>
                     </div>
@@ -113,7 +114,8 @@
 
       <ul id="accordion"
           class="accordion">
-          <li>
+          <li class="menu-item"
+              @fade>
             <div class="menu">
               <a  mat-list-item
                       (click)="resetMenu()">

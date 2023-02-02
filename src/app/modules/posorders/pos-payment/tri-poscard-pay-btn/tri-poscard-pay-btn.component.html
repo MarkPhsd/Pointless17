@@ -1,1 +1,10 @@
-<p>tri-poscard-pay-btn works!</p>
+<div *ngIf="devicename &&
+    uiTransactions?.triposEnabled &&
+    (order && order?.balanceRemaining != 0)">
+  <button class="payment-buttons"
+    mat-raised-button
+    (click)="processTransaction(false)">
+  <ng-content></ng-content>
+  </button>
+</div>
+<div *ngIf="action$ | async"></div>

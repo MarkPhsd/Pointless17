@@ -119,6 +119,7 @@ export class PosEditSettingsComponent implements OnInit {
       btPrinter          : [],
       bluetoothDeviceName: [],
       electronZoom       : [],
+      triposLaneID       : [],
     })
 
     if (this.terminal) {

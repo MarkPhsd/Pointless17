@@ -67,6 +67,8 @@
 
 <div *ngIf="(homePageSetting$ | async) as setting">
   <div class="fab-chat-button" *ngIf="setting.threecxChatLink">
+    <!-- {{setting.threecxChatLink}} -->
+    <!-- {{setting.threeParty}} -->
     <app-three-cxfab></app-three-cxfab>
   </div>
 </div>

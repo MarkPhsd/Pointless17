@@ -1,4 +1,5 @@
-
+<div *ngIf="(deviceSettings$ | async) as deviceSettings"></div>
+<div *ngIf="(action$  | async) as item"></div>
 <!-- Adjusts Item Container -->
 <div *ngIf="resultAction && (voidPayment || manifest)">
   <mat-card>

@@ -39,7 +39,7 @@ ul {
   margin: auto;
   line-height: 1.6em;
   border-radius: 4px;
-    overflow-x: hidden;
+  overflow-x: hidden;
 }
 
 .accordion .menu {
@@ -73,7 +73,7 @@ ul {
   left: 0;
 }
 
-.submenu-position-tiny { 
+.submenu-position-tiny {
   position: fixed;
   bottom: 55px;
   left: 0;
@@ -90,8 +90,6 @@ ul {
 
 .grid-toggle-collapsed {
   height: 50px;
-  // grid-template-columns: minmax(45px, 50px) 140px;
-
   @include for-phone-only {
     grid-template-columns: minmax(45px, 50px);
   }
@@ -120,7 +118,8 @@ li {
 }
 
 .submenu li {
-  color: #d3c8ca;
+  // color: #d3c8ca;
+  color: #fff;
 }
 
 .accordion li.active i.fa-chevron-down {
@@ -149,13 +148,15 @@ li {
 }
 
 .submenu a:hover {
-  background: #af9b9e;
+  // background: #af9b9e;
+  background: #d3c8ca;
   color: #fff;
 }
 
 .item-icon .item-name {
   line-height: 2.5em;
 }
+
 .submenu {
   color: wheat
 }
@@ -170,4 +171,8 @@ li {
 
 .menu-header {
   margin-bottom: 15px
+}
+
+.item-font {
+  // color: wheat
 }

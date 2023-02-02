@@ -51,9 +51,9 @@
             *ngFor="let item of submenu" >
 
           <div *ngIf="isAuthorized(item.userType)" >
-            <div *ngIf="!item.minimized">
+          <div *ngIf="!item.minimized">
               <div class="menu" >
-                <a mat-list-item
+                <button mat-menu-item
                     color=""
                     routerLinkActive={{item.routerLinkActive}}
                     routerLink=      {{item.routerLink}}>
@@ -62,12 +62,12 @@
                       <div class="item-font" *ngIf="item.icon">
                         <mat-icon>{{item.icon}}</mat-icon>
                       </div>
-                      <div class="item-text" *ngIf="!tinyMenu">
+                      <div class="item-font" *ngIf="!tinyMenu">
                         {{item.name | truncateText : 20}}
                       </div>
                     </div>
 
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -83,23 +83,23 @@
   <div
        *ngIf="submenu"></div>
 
-    <ul id="accordion"
+    <ul id   ="accordion"
         class="accordion">
-        <li>
+        <li class="menu-item"
+              @fade>
           <mat-menu #menu="matMenu">
             <div  *ngFor="let item of submenu">
                 <div *ngIf="item.minimized">
                   <div *ngIf="isAuthorized(item?.userType)">
                     <button mat-menu-item
-                            color=""
                             routerLinkActive={{item?.routerLinkActive}}
-                            routerLink=      {{item?.routerLink}}>
+                            routerLink      = {{item?.routerLink}}>
 
                       <div class="grid-toggle-tiny">
                         <div class="item-font" *ngIf="item.icon">
                           <mat-icon>{{item.icon}}</mat-icon>
                         </div>
-                        <div class="item-text" *ngIf="!tinyMenu">
+                        <div class="item-font" *ngIf="!tinyMenu">
                           {{item.name | truncateText : 20}}
                         </div>
                       </div>

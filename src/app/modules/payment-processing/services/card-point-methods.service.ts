@@ -525,7 +525,7 @@ export class CardPointMethodsService {
       "capture": "y",
       "receipt": "y",
     }
-    console.log('getAuthCaptureRequest', item)
+    // console.log('getAuthCaptureRequest', item)
     this.request = item;
     return item
   }
@@ -552,7 +552,7 @@ export class CardPointMethodsService {
       "clearDisplayDelay" : "500"
     }
 
-    console.log('getAuthCardManualRequest', item)
+    // console.log('getAuthCardManualRequest', item)
     this.request = item;
     return item
   }

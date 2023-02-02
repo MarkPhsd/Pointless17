@@ -79,8 +79,8 @@
           <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
         </div>
       </div>
-     
-      <div *ngIf="!order.completionDate && !splitByItem && !paymentsEqualTotal && paymentIsReady 
+
+      <div *ngIf="!order.completionDate && !splitByItem && !paymentsEqualTotal && paymentIsReady
                   &&  order?.balanceRemaining != 0">
         <div class="grid-header-item" *ngIf="stepSelection == 1">
           <div>
@@ -93,6 +93,7 @@
                   <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
                   <ng-container [ngTemplateOutlet]="cardPointeButton"></ng-container>
                   <ng-container [ngTemplateOutlet]="stripePayButton"></ng-container>
+                  <ng-container [ngTemplateOutlet]="triposPayButton"></ng-container>
                 </div>
                 <div class="item-container" *ngIf="isApp">
                   <ng-container [ngTemplateOutlet]="cashPaymentButtons"></ng-container>
@@ -327,7 +328,23 @@
     [stripeTipValue]="stripeTipValue"
     [paymentAmount]="paymentAmount"
     (setStep) ="setStep(1)">
+    <mat-icon color="warn">credit_card</mat-icon>
+    <br> Credit / Debit
   </card-pointe-card-pay-btn>
+</ng-template>
+
+<ng-template #triposPayButton>
+  <app-tri-poscard-pay-btn
+    [order]="order"
+    [devicename]="devicename"
+    [uiTransactions]="uiTransactions"
+    [platForm]="platForm"
+    [creditBalanceRemaining]="creditPaymentAmount"
+    [paymentAmount]="paymentAmount"
+    (setStep) ="setStep(1)">
+    <mat-icon color="warn">credit_card</mat-icon>
+    <br> Credit / Debit
+  </app-tri-poscard-pay-btn>
 </ng-template>
 
 <ng-template #dsiEMVAndroidCardButton>
@@ -340,6 +357,8 @@
     [stripeTipValue]="stripeTipValue"
     [paymentAmount]="paymentAmount"
     (setStep) ="setStep(1)">
+    <mat-icon color="warn">credit_card</mat-icon>
+    <br> Credit / Debit
   </dsiemvandroid-pay-btn>
 </ng-template>
 
@@ -353,6 +372,8 @@
     [stripeTipValue]="stripeTipValue"
     [paymentAmount]="paymentAmount"
     (setStep) ="setStep(1)">
+    <mat-icon color="warn">credit_card</mat-icon>
+    <br> Credit / Debit
   </dsi-emvcard-pay-btn>
 </ng-template>
 

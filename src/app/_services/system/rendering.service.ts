@@ -25,19 +25,19 @@ export class RenderingService {
 
       if (item && text) {
         try {
-          
+
           _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
 
           const regEx = new RegExp('</tt>', 'g');
           const regExFront = new RegExp('<tt>', 'g');
-          
+
           item = _.mapValues(item, v => _.isNil(v) ? '' : v)
 
           const compiled = _.template( text );
           item = this.removeUndefined( item );
 
           const compiledText = compiled( { item } );
-          
+
           let compiledResult =  compiledText.replace(regExFront, '')
           compiledResult     =  compiledResult.replace(regEx,  '')
 
@@ -51,28 +51,28 @@ export class RenderingService {
     }
   }
 
-  removeUndefined(item: any) { 
+  removeUndefined(item: any) {
     // console.log('item before remove nulls', item)
     // console.log('removeUndefined')
     const result = _.mapValues(item, v => _.isNil(v) ? '' : v)
     // console.log('item remove nulls', item)
-    if (item) { 
-      
+    if (item) {
+
       item = this.setItemValues(item)
-       
+
     }
     return item
   }
 
-  setItemValues(item) { 
+  setItemValues(item) {
     for (const key in item) {
       if (item[key] && isNaN(item[key])) {
         const result = this.checkDate(item[key]);
-        if (result) { 
+        if (result) {
           item[key] = result
         }
-        if (!result) { 
-          if (this.isObject(item[key])) { 
+        if (!result) {
+          if (this.isObject(item[key])) {
             if (key === 'serials') {
               item[key] = this.setItemValues(item[key])
             }
@@ -92,17 +92,17 @@ export class RenderingService {
     return item
   }
 
-  checkDate(e) { 
+  checkDate(e) {
 
     try {
-      if (e instanceof Date) { 
+      if (e instanceof Date) {
         // console.log('instanceof e', e)
         e = this.dateHelperService.format(e, 'MM-dd-yyyy')
         // console.log('new instanceof e', e)
         return e;
       }
     } catch (error) {
-      
+
     }
 
     try {
@@ -113,16 +113,16 @@ export class RenderingService {
         return e
       }
     } catch (error) {
-        
+
     }
     try {
-      if (e) { 
-        if (this.dateHelperService.isValidDate(e)) { 
+      if (e) {
+        if (this.dateHelperService.isValidDate(e)) {
           e = this.dateHelperService.format(e, 'MM-dd-yyyy')
         }
       }
       } catch (error) {
-          
+
       }
     //  return e
   }
@@ -130,31 +130,31 @@ export class RenderingService {
 
    isIsoDate(str) {
 
-    console.log('is date', str)
+    // console.log('is date', str)
     try {
       var dateParsed = new Date(Date.parse(str));
-      if (dateParsed) { 
+      if (dateParsed) {
         return true
       }
     } catch (error) {
       // console.log('error', error)
-      console.log('str', str)
+      // console.log('str', str)
     }
 
-    if (!isNaN(str)) { 
+    if (!isNaN(str)) {
       // console.log('!IsNAN', str)
-      return false 
+      return false
     }
 
     if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) {
-      console.log('date not formated adequately', str)
+      // console.log('date not formated adequately', str)
       return false;
     }
 
-    console.log('date formated', str)
-    const d = new Date(str); 
+    // console.log('date formated', str)
+    const d = new Date(str);
 
-    return d instanceof Date &&   d.toISOString()===str; // valid date 
+    return d instanceof Date &&   d.toISOString()===str; // valid date
   }
 
   isObject(obj) {
@@ -188,28 +188,28 @@ export class RenderingService {
           newText = text;
           if (type === 'items') {
             if (data.itemPercentageDiscountValue && data?.itemPercentageDiscountValue != 0) {
-              console.log('data itemPercentageDiscountValue %', data?.itemPercentageDiscountValue)
+              // console.log('data itemPercentageDiscountValue %', data?.itemPercentageDiscountValue)
               let disc = `${newText} ${this.itemPercentageDiscountText}`;
               newText = disc;
             }
           }
           if (type === 'items') {
             if (data.ItemOrderPercentageDiscount && data?.ItemOrderPercentageDiscount != 0) {
-              console.log('data ItemOrderPercentageDiscount %', data?.ItemOrderPercentageDiscount)
+              // console.log('data ItemOrderPercentageDiscount %', data?.ItemOrderPercentageDiscount)
               let disc = `${newText} ${this.itemOrderPercentageDiscountText}`;
               newText = disc;
             }
           }
           if (type === 'items') {
             if (data.itemCashDiscount && data?.itemCashDiscount != 0) {
-              console.log('data itemCashDiscount %', data?.itemCashDiscount)
+              // console.log('data itemCashDiscount %', data?.itemCashDiscount)
               let disc = `${newText} ${this.itemCashDiscountText}`;
               newText =  disc;
             }
           }
           if (type === 'items') {
             if (data.itemOrderCashDiscount && data?.itemOrderCashDiscount != 0) {
-              console.log('data itemOrderCashDiscount %', data?.itemOrderCashDiscount)
+              // console.log('data itemOrderCashDiscount %', data?.itemOrderCashDiscount)
               let disc = `${newText} ${this.itemOrderCashDiscountText}`;
               newText =  disc;
             }

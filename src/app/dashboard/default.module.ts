@@ -365,6 +365,7 @@ import { TriPOSCardPayBtnComponent } from '../modules/posorders/pos-payment/tri-
 import { WicEBTCardPayBtnComponent } from '../modules/posorders/pos-payment/wic-ebtcard-pay-btn/wic-ebtcard-pay-btn.component';
 import { DSIEMVAndroidPayBtnComponent } from '../modules/posorders/pos-payment/dsiemvandroid-pay-btn/dsiemvandroid-pay-btn.component';
 import { CashPaymentButtonComponent } from '../modules/posorders/pos-payment/cash-payment-button/cash-payment-button.component';
+import { TriPosTransactionsComponent } from '../modules/payment-processing/tri-pos-transactions/tri-pos-transactions.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -719,11 +720,13 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     TierPriceLineComponent,
     TierPricesComponent,
     TiersWithPricesComponent,
+
+    TriPosTransactionsComponent,
+
     TypeFilterComponent,
     TypeResultsSelectorComponent,
     TypeBoardComponent,
     TypeBoardItemsComponent,
-
     //price categories first before moving to admin
     // PriceCategoriesEditComponent,
     // PriceCategoryPriceFieldsComponent,

@@ -27,13 +27,11 @@ export class ThreeCXFabComponent {
 
   get exceptions() {
     this.hide = false  ;
-
     // console.log('hide', this.hide)
     // (this.href.substring(0, 11 ) === '/display-menu')
     if ((this.href.substring(0, 13 ) === '/display-menu')) {
       this.hide = true;
     }
-
     return true
   }
 

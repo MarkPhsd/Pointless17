@@ -7,6 +7,7 @@ import { OrdersService } from 'src/app/_services';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -59,6 +60,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
               private toolBarUI       : ToolBarUIService,
               private matSnackBar   : MatSnackBar,
               public printingService: PrintingService,
+              private settingsService: SettingsService,
               private toolbarUIService  : ToolBarUIService,
               private router: Router) {
    }
@@ -69,6 +71,8 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     this.site = this.siteService.getAssignedSite();
     this.initSubscriptions();
     this.paymentsEqualTotal = false;
+
+
     if (this.order) {
 
       if ( this.order.balanceRemaining == 0)  {
@@ -127,6 +131,8 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
      }
    }
 
+
+
    closeOrder() {
      if (this.order) {
      const site = this.siteService.getAssignedSite();
@@ -151,13 +157,14 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
    voidPayment(payment) {
     //run void method.
     const message = 'Paypal can be voided from the POS Sales, but must be completed in the paypal account itself.'
-
     const method$ = this.getPaymentMethod(payment.paymentMethodID)
     this.void$ = method$.pipe(switchMap( data=> {
         if (payment && data.name === 'paypal') {
           this.notify(message, 'Alert', 2000)
         }
-        this.productEditButtonService.openVoidPaymentDialog(payment)
+        const itemdata = { payment: payment, uiSettings: this.uiTransactions}
+        console.log(itemdata)
+        this.productEditButtonService.openVoidPaymentDialog(itemdata)
         return of(data)
         }
       )

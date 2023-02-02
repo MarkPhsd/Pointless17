@@ -15,10 +15,13 @@ import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-c
 import { StoreCreditService } from 'src/app/_services/storecredit/store-credit.service';
 import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-reasons.service';
 import { RequestMessageService } from 'src/app/_services/system/request-message.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
+import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 
 @Component({
   selector: 'app-adjust-payment',
@@ -37,6 +40,11 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   isAuthorized            = false;
   payment                 : IPOSPayment;
   voidPayment             : IPOSPayment;
+  action$                 : Observable<any>;
+
+  settings: TransactionUISettings;
+  terminalSettings: ITerminalSettings;
+  deviceSettings$ : Observable<any>;
 
   initSubscriptions() {
     if (!this.manifest) {
@@ -55,15 +63,19 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                 private matSnackBar           : MatSnackBar,
                 private storeCreditService    : StoreCreditService,
                 private cardPointMethdsService: CardPointMethodsService,
+                private triPOSMethodService   : TriPOSMethodService,
                 private userAuthorization     : UserAuthorizationService,
                 private adjustMentService     : AdjustmentReasonsService,
                 private productEditButonService: ProductEditButtonService,
                 private manifestService       : ManifestInventoryService,
+                private settingsService       : SettingsService,
                 private dialogRef             : MatDialogRef<AdjustPaymentComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: OperationWithAction,
                 )
   {
     if (data) {
+      this.deviceSettings$ = this.getDevice();
+      this.settings        =  data.uiSetting;
       const site = this.siteService.getAssignedSite();
       this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
       let action = 2;
@@ -77,6 +89,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
         return
       }
 
+
       this.resultAction  = data
       this.pOSPaymentService.updateItemWithAction(data);
       this.list$         = this.adjustMentService.getReasonsByFilter(site, action);
@@ -84,7 +97,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       this.pOSPaymentService.getPOSPayment(site,this.payment.id, false).subscribe(data => {
         this.voidPayment = data;
       })
-
     }
   }
 
@@ -102,6 +114,20 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   closeManifestDialog(message: string ) {
     this.dialogRef.close(message);
+  }
+
+  getDevice() {
+    const name = localStorage.getItem('devicename');
+    const site = this.siteService.getAssignedSite()
+    return this.settingsService.getSettingByName(site, name).pipe(switchMap(data => {
+      if (data && data.text) {
+        this.terminalSettings = JSON.parse(data.text)
+        if (!this.terminalSettings.triposLaneID) {
+          this.terminalSettings.triposLaneID = '4'
+        }
+      }
+      return of(data)
+    }))
   }
 
   // void = 1,
@@ -144,8 +170,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   voidPaymentFromSelection(setting) {
 
-
-
     if (setting) {
       const site = this.siteService.getAssignedSite();
       this.resultAction.voidReason = setting.name
@@ -159,77 +183,88 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
           if (method.isCreditCard) {
             this.voidPayment.voidReason = this.resultAction.voidReason
 
-            if (this.isDSIEmvPayment && this.voidPayment) {
-
-              this.voidDSIEmvPayment();
-              return ;
+            if (this.settings.dsiEMVNeteEpayEnabled) {
+              if (this.isDSIEmvPayment && this.voidPayment) {
+                this.voidDSIEmvPayment();
+                return ;
+              }
             }
 
+            if (this.settings.triposEnabled) {
+              const site = this.siteService.getAssignedSite()
+              let item = {} as authorizationPOST
+              item.terminalId  = this.terminalSettings.triposLaneID;
+              item.transactionID = this.payment.id.toString();
+              item.referenceNumber = this.payment.refNumber;
+              this.action$ = this.triPOSMethodService.void(site, item)
+              return;
+            }
 
-            if (this.voidPayment.respstat) {
-              const voidByRef$ = this.cardPointMethdsService.voidByRetRef(this.voidPayment.retref);
-
-              voidByRef$.pipe(
-                switchMap( data => {
-
-                  if (data && data === "Void Not Allowed") {
-                    return of(null)
-                  }
-
-                  if (data && data?.respstat && data?.respstat.toLowerCase() == 'a') {
-                    this.resultAction.payment.amountPaid = 0;
-                    this.resultAction.payment.amountReceived = 0;
-                    this.resultAction.payment.voidReason = this.resultAction.voidReason;
-                    this.resultAction.payment.retref   = data?.retref;
-                    this.resultAction.payment.respstat = data?.respstat;
-                    this.resultAction.payment.respcode = data?.respcode;
-                    return of(this.resultAction)
-                  }
-                  if (data && data?.respstat && data?.respstat.toLowerCase() == 'b') {
-                    this.notifyEvent('Please retry', 'Alert')
-                  }
-                  if (data && data?.respstat && data?.respstat.toLowerCase() == 'c') {
-                    this.notifyEvent(`Declined, refund most likely required.  ${data?.resptext}`, 'Alert');
-                    const confirm = window.confirm('This credit card transaction may already be voided. If you want to void the record of the payment here, you can press okay to continue. Otherwise the payment will remain as it appears.')
-                  }
-
-                  if (confirm) {
-                    this.resultAction.payment.amountPaid = 0;
-                    this.resultAction.payment.amountReceived = 0;
-                    this.resultAction.payment.voidReason = this.resultAction.voidReason;
-                    return of(this.resultAction)
-                  }
-
-                  // console.log('voided credit ', data?.respstat)
-                  this.resultAction = null
-                  return of(this.resultAction)
-
-                })).pipe(
-                  switchMap( resultAction => {
-                    // console.log(' voiding pos payment', resultAction)
-                    if (!resultAction) {
-                      this.notifyEvent('Void not allowed by user', 'CC Result')
+            if (this.settings.cardPointBoltEnabled) {
+              if ( this.voidPayment.respstat) {
+                const voidByRef$ = this.cardPointMethdsService.voidByRetRef(this.voidPayment.retref);
+                voidByRef$.pipe(
+                  switchMap( data => {
+                    if (data && data === "Void Not Allowed") {
                       return of(null)
                     }
-                    if (resultAction) {
-                      return this.pOSPaymentService.voidPayment(site, resultAction);
+
+                    if (data && data?.respstat && data?.respstat.toLowerCase() == 'a') {
+                      this.resultAction.payment.amountPaid = 0;
+                      this.resultAction.payment.amountReceived = 0;
+                      this.resultAction.payment.voidReason = this.resultAction.voidReason;
+                      this.resultAction.payment.retref   = data?.retref;
+                      this.resultAction.payment.respstat = data?.respstat;
+                      this.resultAction.payment.respcode = data?.respcode;
+                      return of(this.resultAction)
                     }
-                  })
-                ).subscribe( data => {
-                  // console.log('voiding pos payment result', data)
-                  if (!data || !data.result) {
-                    if ( data?.resultMessage == null ) {
-                      this.notifyEvent(`Void failed: user may not be authorized`, 'Void Result')
-                      return
+                    if (data && data?.respstat && data?.respstat.toLowerCase() == 'b') {
+                      this.notifyEvent('Please retry', 'Alert')
+                    }
+                    if (data && data?.respstat && data?.respstat.toLowerCase() == 'c') {
+                      this.notifyEvent(`Declined, refund most likely required.  ${data?.resptext}`, 'Alert');
+                      const confirm = window.confirm('This credit card transaction may already be voided. If you want to void the record of the payment here, you can press okay to continue. Otherwise the payment will remain as it appears.')
                     }
 
-                    this.notifyEvent(`Void failed: ${data?.resultMessage}`, 'Void Result')
-                    return
-                  }
-                  this.updateVoidPayment(data)
-                })
-                return;
+                    if (confirm) {
+                      this.resultAction.payment.amountPaid = 0;
+                      this.resultAction.payment.amountReceived = 0;
+                      this.resultAction.payment.voidReason = this.resultAction.voidReason;
+                      return of(this.resultAction)
+                    }
+
+                    // console.log('voided credit ', data?.respstat)
+                    this.resultAction = null
+                    return of(this.resultAction)
+
+                  })).pipe(
+                    switchMap( resultAction => {
+                      // console.log(' voiding pos payment', resultAction)
+                      if (!resultAction) {
+                        this.notifyEvent('Void not allowed by user', 'CC Result')
+                        return of(null)
+                      }
+                      if (resultAction) {
+                        return this.pOSPaymentService.voidPayment(site, resultAction);
+                      }
+                    })
+                  ).subscribe( data => {
+                    // console.log('voiding pos payment result', data)
+                    if (!data || !data.result) {
+                      if ( data?.resultMessage == null ) {
+                        this.notifyEvent(`Void failed: user may not be authorized`, 'Void Result')
+                        return
+                      }
+
+                      this.notifyEvent(`Void failed: ${data?.resultMessage}`, 'Void Result')
+                      return
+                    }
+                    this.updateVoidPayment(data)
+                  })
+                  return;
+              }
             }
+
             response$ = this.pOSPaymentService.voidPayment(site, this.resultAction)
             this.updateVoidPaymentResponse(response$)
 
@@ -286,11 +321,9 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
  get isDSIEmvPayment() {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
-      // if (voidPayment.entryMethod === 'CHIP READ/CONTACT') {
-        if (voidPayment.trancode.toLowerCase() ===  'EMVSale'.toLowerCase()) {
-          return true
-        }
-      // }
+      if (voidPayment.trancode && voidPayment.trancode.toLowerCase() ===  'EMVSale'.toLowerCase()) {
+        return true
+      }
     }
   }
 
