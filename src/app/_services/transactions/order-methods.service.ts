@@ -270,13 +270,9 @@ export class OrderMethodsService implements OnDestroy {
   ///1. List item. 2. Add Item 3. View Sub Groups of Items.   //either move to s
   menuItemActionObs(order: IPOSOrder, item: IMenuItem, add: boolean, passAlongItem: PosOrderItem[]): Observable<ItemPostResults> {
     const searchResults = this.updateMenuSearchModel(item)
-    // console.log('searchResults', searchResults, item)
-    // if (searchResults) { return }
-    // console.log('list item', add, item?.id, item?.itemType?.requireInStock)
 
     if (add) {
       if (item && (item.itemType.requireInStock == true))  {
-        // console.log('list item',item, item.itemType.requireInStock)
         this.listItem(item.id);
         return of(null)
       }
@@ -386,7 +382,7 @@ export class OrderMethodsService implements OnDestroy {
 
   emailOrderFromEntry(order: IPOSOrder, email: string) : Observable<any> {
     if (order && email) {
-        return  this.sendGridService.sendOrder(order.id, order.history, email, email  )
+      return  this.sendGridService.sendOrder(order.id, order.history, email, email  )
     }
     this.notifyEvent('No email in contact', 'Alert')
     return null

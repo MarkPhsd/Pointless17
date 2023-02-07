@@ -24,7 +24,16 @@
             <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'medLicenseNumber'">
-              MED License Number
+              MED License Number / OOMP #
+            </app-value-fields>
+          </div>
+
+          <div class="name-fields">
+            <app-value-fields
+                    [enabled]="isStaff"
+                    [inputForm]="inputForm"
+                    [fieldName]="'userName'">
+              OOMPB #
             </app-value-fields>
           </div>
 

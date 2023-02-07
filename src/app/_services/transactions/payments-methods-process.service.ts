@@ -14,6 +14,7 @@ import { PrintingService } from '../system/printing.service';
 import { BalanceSheetService } from './balance-sheet.service';
 import { PrepPrintingServiceService } from '../system/prep-printing-service.service';
 import { TriposResult } from '../tripos/triposModels';
+import { Console } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -266,13 +267,18 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
 
   isTriPOSApproved(trans: any) {
-    console.log('isTriPOSApproved', trans)
+
+    if (trans?.statusCode === 'Approved') {
+      return true;
+    }
+
     if (trans && trans.captureStatus && (trans?.captureStatus.toLowerCase() === 'approved'.toLowerCase() ||
                   trans?.captureStatus.toLowerCase() === 'approval'.toLowerCase() ||
                   trans?.captureStatus.toLowerCase() === 'A'.toLowerCase()
                   ) ) {
       return true;
     }
+    console.log('isTriPOSApproved', trans)
     this.notify(`Response not approved. Response given ${trans.captureStatus}`, 'Failed', 3000)
     return false;
   }
@@ -320,8 +326,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   processTriPOSResponse(trans: any, payment: IPOSPayment, order: IPOSOrder): Observable<any> {
     const site = this.sitesService.getAssignedSite();
-    //validate response
+
     payment   = this.applyTripPOSResponseToPayment(trans, payment)
+
     if (this.isTriPOSApproved(payment)) {
       let paymentMethod    = {} as IPaymentMethod;
       let cardType = 'credit'
@@ -339,20 +346,49 @@ export class PaymentsMethodsProcessService implements OnDestroy {
           if (data.orderCompleted) {
             this._initTransactionComplete.next(true)
           }
-          return of(data.payment)
+          return of({order: data.order, payment: data.payment, trans: trans})
       }))
+    } else {
+
 
     }
-    return of('not Approved')
 
+
+  }
+
+  processAuthTriPOSResponse(trans: any, payment: IPOSPayment, order: IPOSOrder): Observable<any> {
+    const site = this.sitesService.getAssignedSite();
+    payment   = this.applyTripPOSResponseToPayment(trans, payment)
+
+    if (!order) {
+      this.sitesService.notify('Error retrieiving order information. Please re-open order.', 'Alert',1000)
+      return of(null)
+    }
+
+    if (this.isTriPOSApproved(payment)) {
+      let paymentMethod    = {} as IPaymentMethod;
+      let cardType = 'credit'
+      if (trans?.cardLogo) {   cardType = trans?.cardLogo;  }
+      return this.paymentMethodService.getPaymentMethodByName(site, cardType).pipe(
+        switchMap( data => {
+          payment.paymentMethodID = data.id;
+          paymentMethod = data;
+          return this.paymentService.savePOSPayment(site, payment);
+        }
+      )).pipe(
+        switchMap(data => {
+          const id =  data?.orderID.toString();
+          return this.orderService.getOrder(site, id, false)
+      }))
+    }
+
+    return of('not Approved')
   }
 
   processCreditCardResponse(rStream: RStream,  payment: IPOSPayment, order: IPOSOrder) {
 
     const site = this.sitesService.getAssignedSite();
-
     if (rStream) {
-
       const validate = this.validateResponse( rStream, payment)
       if (!validate) {
         console.log('processCreditCardResponse - not valid')
@@ -421,9 +457,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     const amountPaid = +payment?.amountPaid
     const amount  = +response?.amount
 
-    console.log(amount == tip + amountPaid)
-    console.log(amount, amountPaid, tip)
-
     if ( tip !=0 ) {
       if (amount == tip + amountPaid) {
         payment.amountPaid      = +(+payment?.amountPaid).toFixed(2)
@@ -440,23 +473,40 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     payment.approvalCode  =  response?.authcode;
     payment.captureStatus =  response?.resptext;
 
+    console.log('response payment', payment)
     return payment;
   }
 
   applyTripPOSResponseToPayment(response: any, payment: IPOSPayment) {
-    console.log('applyTripPOSResponseToPayment', response)
+    // console.log('applyTripPOSResponseToPayment', response)
     payment.account         = response.accountNumber;
+    payment.accountNum      = response.accountNum;
     payment.approvalCode    = response.approvalNumber;
     payment.amountPaid      = response.approvedAmount;
     payment.amountReceived  = response.approvedAmount;
+    payment.tipAmount       = response.tipAmount;
     payment.captureStatus   = response.statusCode;
     payment.entryMethod     = response.entryMode;
     payment.entrymode       = response.entryMode;
     payment.respproc        = response.networkTransactionId;
+    payment.respcode        = response.tranType
+    payment.tranType        = response._type;
+    //important value for references.
+
+    if (response._type === 'refundResponse') {
+      payment.amountPaid      = - response.totalAmount;
+      payment.amountReceived  = - response.totalAmount;
+      payment.approvalCode    = response.approvalNumber;
+    }
+
+    payment.refNumber       = response.transactionId;
+    if (!payment.approvalCode) {
+      payment.approvalCode  = response.transactionId;
+    }
     payment.bintype         = response.binValue;
     payment.transactionData = JSON.stringify(response);
-    payment.tipAmount       = response.tipAmount;
     payment.exp             = `${response.expirationMonth}${response?.expirationYear}`;
+
     return payment;
   }
 
@@ -596,7 +646,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       //   this.notify(`Enter amount smaller than ${balanceRemaining}.`, 'Try Again', 3000)
       //   return false
       // }
-      console.log('creditBalanceRemaining', creditBalanceRemaining)
+      // console.log('creditBalanceRemaining', creditBalanceRemaining)
       if (paymentMethod.isCreditCard) {
         this.notify(`Enter amount smaller than ${creditBalanceRemaining}.`, 'Try Again', 3000)
         return false

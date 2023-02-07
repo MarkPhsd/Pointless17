@@ -24,7 +24,11 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
   sales$:  Observable<IReportItemSaleSummary>;
   showAll: boolean;
 
-  constructor(private reportingItemsSalesService: ReportingItemsSalesService) { }
+  sales: IReportItemSaleSummary
+
+  constructor(
+    private reportingItemsSalesService: ReportingItemsSalesService)
+     { }
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(this.site)
@@ -69,11 +73,17 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     console.log(this.site.url )
     if (this.site) {
       this.sales$ = this.reportingItemsSalesService.groupItemSales(this.site, searchModel).pipe(switchMap(data => {
-        console.table(data)
+        this.sales = data;
         return of(data)
       }))
     }
     return
+  }
+
+  downloadCSV() {
+    if (this.sales) {
+      this.reportingItemsSalesService.downloadFile(this.sales.results, 'ItemReport')
+    }
   }
 
 

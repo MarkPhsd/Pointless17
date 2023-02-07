@@ -244,8 +244,9 @@ Size {{windowSize}} <br> -->
 </ng-template>
 
 <ng-template #refundOrderButton>
+
   <button mat-raised-button class="button"
-          [disabled]="  ((order.history) && (itemsPrinted || paymentsMade)) == true"
+          [disabled]=" order.total<0 || ((order.history) && (itemsPrinted || paymentsMade)) == true"
           color="primary"
           (click)="refundOrder()">
     <mat-icon>refresh</mat-icon>

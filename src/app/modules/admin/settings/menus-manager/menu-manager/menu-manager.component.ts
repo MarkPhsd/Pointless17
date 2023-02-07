@@ -82,6 +82,7 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
 
   assignSubMenuItem(event) {
     this.submenuItem = event
+    // this.
   }
 
   addAccordionMenu() {
@@ -119,21 +120,17 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
   }
 
   assignSubMenu(item: AccordionMenu, submenu: SubMenu[]) {
+    // this.submenuItem = {} as SubMenu;
 
     if (!item) { return }
-
     const site         =  this.siteService.getAssignedSite();
-
     this.accordionMenuItem$ = this.menusService.getAccordionMenuByID(site,item.id).pipe(
       switchMap(data => {
         this.accordionMenu = data;
-        console.log(data, data.submenus)
         this.submenu = data.submenus
         return of(data)
       })
     )
-
-
   }
 
   initMenu() {

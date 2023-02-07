@@ -248,14 +248,17 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   email() {
+
     if (this.order && this.order.clients_POSOrders && this.order.clients_POSOrders.email) {
+
         const email = this.order.clients_POSOrders.email;
+
         this.email$ =  this.orderMethodService.emailOrderFromEntry(this.order, email).pipe(
           switchMap(data => {
             if (data === 'Success') {
               this.orderMethodService.notifyEvent('Email Sent', 'Success')
               this.exit();
-              return;
+              return of (data)
             }
             if (data && data.isSuccessStatusCode || data === 'Success') {
               this.orderMethodService.notifyEvent('Email Sent', 'Success')
@@ -263,13 +266,17 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
             if (!data || !data.isSuccessStatusCode) {
               this.orderMethodService.notifyEvent('Email not sent. Check email settings', 'Failed')
             }
+
+
             return of (data)
           }
         )
       )
-      this.exit();
-      return
+
+
+      return;
     }
+
     this.orderMethodService.emailOrderByEntry(this.order)
     this.exit();
   }
@@ -485,8 +492,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   setOrderPrintView() {
-    if (this.printView == 1 ) {
-      console.log('receipt view updating ')
+    if (this.printView == 1  || !this.printView) {
       this.order$ = this.getOrder();
     }
   }
@@ -494,7 +500,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   getOrder() {
     return  this.orderService.currentOrder$.pipe(
       switchMap(data => {
-          console.log('order  id:', data.id)
           this.order      = data;
           this.orders     = [];
           if (!data)       {return}

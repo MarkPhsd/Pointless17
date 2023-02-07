@@ -8,7 +8,8 @@
     <app-progress-bar
         *ngIf="order.gramCount != 0"
         [value]="order.gramCount"
-        [ratio]="28"
+        [ratio]="gramRatio"
+        [uom]="'Gram'"
         [percentage]="gramCountProgress">
         Gram
     </app-progress-bar>
@@ -16,7 +17,7 @@
     <app-progress-bar
         *ngIf="order.concentrateCount != 0"
         [value]="order.concentrateCount"
-        [ratio]="28"
+        [ratio]="concentrateCountRatio"
         [percentage]="concentrateCountProgress">
         Concentrate
     </app-progress-bar>
@@ -24,7 +25,7 @@
     <app-progress-bar
         *ngIf="order.extractCount != 0"
         [value]="order.extractCount"
-        [ratio]="28"
+        [ratio]="extractRatio"
         [percentage]="extractCountProgress">
         Extract
     </app-progress-bar>
@@ -40,7 +41,7 @@
     <app-progress-bar
         *ngIf="order.seedCount != 0"
         [value]="order.seedCount"
-        [ratio]="28"
+        [ratio]="seedCountRatio"
         [percentage]="seedCountProgress">
         Seed
     </app-progress-bar>

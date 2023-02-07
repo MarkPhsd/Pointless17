@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, of, Subject, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 
@@ -17,7 +17,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   @Input() notifier: Subject<boolean>
   @Input() zrunID  : string;
   @Input() minimized: boolean;
-
+  sales: ITaxReport;
   sales$ : Observable<ITaxReport>;
   constructor(private reportingItemsSalesService: ReportingItemsSalesService) { }
 
@@ -36,15 +36,27 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
     if (this.zrunID) {
       this.sales$ =
       this.reportingItemsSalesService.putSalesTaxReport
-        (this.site, null, null, this.zrunID)
+        (this.site, null, null, this.zrunID).pipe(switchMap(data => {
+          this.sales = data;
+          return of(data)
+        }))
       return
     }
 
     this.sales$ =
       this.reportingItemsSalesService.putSalesTaxReport
-        (this.site, this.dateFrom, this.dateTo, null)
+        (this.site, this.dateFrom, this.dateTo, null).pipe(switchMap(data => {
+          this.sales = data;
+          return of(data)
+        }))
   }
 
-
+  downloadCSV() {
+    if (!this.sales) { return }
+    console.log('sales', this.sales)
+    const item = [] as unknown as ITaxReport[];
+    item.push (this.sales)
+    this.reportingItemsSalesService.downloadFile(item, 'SalesTaxReport')
+  }
 
 }

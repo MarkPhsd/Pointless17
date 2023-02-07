@@ -105,12 +105,14 @@
 
       <div class="name-fields">
         <app-value-fields
-                [enabled]="!isStaff"
+                [enabled]="isStaff"
                 [inputForm]="inputForm"
                 [fieldName]="'accountNumber'">
           Account #
         </app-value-fields>
       </div>
+
+
 
       <div *ngIf="enableLimitsView" class="counts-container">
         <div *ngIf="isStaff">
@@ -228,7 +230,7 @@
       </div>
     </div>
 
-    <mat-divider></mat-divider>
+    <!-- <mat-divider></mat-divider> -->
 
     <div>
       <h3>Features</h3>

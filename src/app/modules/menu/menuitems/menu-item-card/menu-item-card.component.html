@@ -44,7 +44,7 @@
       class="product-name-only" >
       <button mat-button
               class="image-button"
-              (click)="menuItemActionObs()">
+              (click)="menuItemActionObs(true)">
 
         <div *ngIf="isDiscountItem && !isApp">
           <div *ngIf="menuItem.itemType.name.toLowerCase() == 'Discount % Entire Order' ||
@@ -70,7 +70,7 @@
               class="image-button"
               color="warn"
               fxFill
-              (click)="menuItemActionObs()">
+              (click)="menuItemActionObs(true)">
         {{ menuItem.name  | truncateText: 30  }}
         <mat-icon>refresh</mat-icon>
       </button>
@@ -90,7 +90,7 @@
         [src]="imageUrl"
         onerror   = "this.src='assets/images/placeholderimage.png'"
         class="product-image"
-        (click)="menuItemActionObs()"/>
+        (click)="menuItemActionObs(true)"/>
 </ng-template>
 
 <ng-template #price>
@@ -111,7 +111,7 @@
       [src]="imageUrl"
       onerror   = "this.src='assets/images/placeholderimage.png'"
       class="product-image"
-      (click)="menuItemActionObs()"/>
+      (click)="menuItemActionObs(false)"/>
   </div>
 </ng-template>
 
@@ -120,7 +120,7 @@
       mat-mini-fab
       class="add-button"
       color="warn"
-      (click)="menuItemActionObs()" >
+      (click)="menuItemActionObs(true)" >
     <div *ngIf="!isProduct">
       <mat-icon>open_in_new</mat-icon>
       View
@@ -136,7 +136,7 @@
       mat-mini-fab
       class="add-button"
       color="warn"
-      (click)="menuItemActionObs()" >
+      (click)="menuItemActionObs(false)" >
     <mat-icon>open_in_new</mat-icon>
   </button>
 </ng-template>

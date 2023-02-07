@@ -131,10 +131,12 @@ import { ReportViewerComponent } from './modules/admin/devx-reporting/report-vie
 import { JobTypesListComponent } from './modules/admin/clients/jobs/job-types-list/job-types-list.component';
 import { EmployeeClockListComponent } from './modules/admin/employeeClockAdmin/employee-clock-list/employee-clock-list.component';
 import { ClockBreaksTypesComponent } from './modules/admin/employeeClockAdmin/clock-breaks-types/clock-breaks-types.component';
+import { PointlessMETRCSalesComponent } from './modules/admin/metrc/pointless-metrcsales/pointless-metrcsales.component';
 
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
 
+    { path: 'printerslist',  component: InstalledPrintersComponent, data: { title: 'Print Settings', animation: 'isLeft'} },
 
     { path: 'blog-post-list',  component: BlogPostListComponent, data: { title: 'BlogPosts', animation: 'isLeft'} },
 
@@ -270,8 +272,12 @@ const routes: Routes = [
         { path: 'app-order-items-list', component: OrderItemsListComponent, canActivate: [AuthGuard], data: { animation:  'isLeft'} },
         { path: 'app-order-item-list', component: OrderItemListComponent, canActivate: [AuthGuard], data: { animation:  'isLeft'} },
 
+        // { name: 'Sales Report',minimized: false, method: '' , routerLink: '/metrc-sales-report', routerLinkActive: 'metrc-sales-report', icon: 'list', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        // { name: 'METRC Posted Sales',minimized: false, method: '' , routerLink: '/metrc-posted-sales', routerLinkActive: 'metrc-posted-sales', icon: 'list', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+
         //app-metrc-sales
-        { path: 'metrc-sales', component: MetrcSalesListComponent, canActivate: [AuthGuard], data: {title: 'METRC Sales', animation:  'isLeft'} },
+        { path: 'metrc-sales-report', component: PointlessMETRCSalesComponent, canActivate: [AuthGuard], data: {title: 'METRC Sales Report', animation:  'isLeft'} },
+        { path: 'metrc-posted-sales', component: MetrcSalesListComponent, canActivate: [AuthGuard], data: {title: 'METRC Posted Sales', animation:  'isLeft'} },
 
         // app-package-list
         { path: 'package-list', component: PackageListComponent, canActivate: [AuthGuard], data: {title: 'Package List',  animation:  'isLeft'} },
@@ -361,7 +367,7 @@ const routes: Routes = [
 
     { path: '**', component: PageNotFoundComponent},
 
-    
+
     // { path: 'menu-board', component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},
     // { path: 'client-type-list', component: ClientTypeListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
     // { path: 'payments', component: DsiEMVPaymentComponent, data: { animation: 'isLeft'}},

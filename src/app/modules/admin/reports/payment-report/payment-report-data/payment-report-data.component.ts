@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
+import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { IPaymentSalesSummary } from 'src/app/_services/reporting/sales-payments.service';
 
 @Component({
@@ -18,10 +19,16 @@ export class PaymentReportDataComponent implements OnInit {
   @Input() zrunID  : string;
   @Input() sales   : IPaymentSalesSummary;
 
-  constructor() { }
+  constructor(
+    private reportingItemsSalesService: ReportingItemsSalesService)
+     { }
 
   ngOnInit(): void {
     const i = 0
   }
 
+  downloadCSV() {
+    if (!this.sales) { return }
+    this.reportingItemsSalesService.downloadFile(this.sales.paymentSummary, 'PaymentReport')
+  }
 }

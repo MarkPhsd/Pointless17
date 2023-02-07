@@ -1,9 +1,9 @@
 <mat-sidenav-container>
   <div class="grid-container c1">
-
     <div  class="form-width"
-          *ngIf="searchForm && !smallDevice && !tinyDepartmentFilter && (uiHomePage && !uiHomePage.staffHideSearchBar && isUser) || 
-                                                                        (uiHomePage && !uiHomePage.hideSearchBar && isStaff)">
+          *ngIf="searchForm && !smallDevice && !tinyDepartmentFilter &&
+                 (uiHomePage && !uiHomePage.staffHideSearchBar && isUser) ||
+                 (uiHomePage && !uiHomePage.hideSearchBar && isStaff)">
       <search-debounce-input
             [(itemNameInput)] = "itemNameInput"
             [itemNameControl] = "'itemName'"
@@ -75,7 +75,8 @@
       </div>
     </div>
 
-    <div *ngIf="( uiHomePage && ( uiHomePage.sideToolbarEnableCategory) )">
+    <div *ngIf="uiHomePage &&  uiHomePage.sideToolbarEnableCategory">
+
       <mat-accordion multi>
         <mat-expansion-panel
              [expanded]="accordionStep == 0"

@@ -20,7 +20,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class TriPosTransactionsComponent implements OnInit {
 
-  processing$: Observable<TriposResult>;
+  processing$: Observable<any>;
   terminalsettings$ : Observable<any>;
   posPayment: IPOSPayment;
   laneID: string;
@@ -33,8 +33,8 @@ export class TriPosTransactionsComponent implements OnInit {
   processing: boolean;
   errorMessage: string;
   inputForm: FormGroup;
+  uiTransaction: TransactionUISettings
 
-  uiTransaction:TransactionUISettings
   constructor(  public methodsService : TriPOSMethodService,
     public userAuthService: UserAuthorizationService,
     public auth                 : UserAuthorizationService,
@@ -61,6 +61,7 @@ export class TriPosTransactionsComponent implements OnInit {
     this.dataPass = data;
 
     this.terminalsettings$ =  this.getDevice();
+
     if (this.posPayment.amountPaid>0) {
       this.transactionType = 'Sale or Pre-Authorization'
     }
@@ -97,47 +98,22 @@ export class TriPosTransactionsComponent implements OnInit {
     }
   }
 
-  authorizeAmount() {
-    if (this.posPayment && this.laneID) {
-      const item = {} as authorizationPOST;
-      item.transactionAmount = this.posPayment.amountPaid.toFixed(2).toString();
-      item.laneId = this.laneID;
-      item.tipAmount = this.tipValue;
-      const site = this.siteService.getAssignedSite();
-      this.processing = true;
-
-      this.processing$ =  this.methodsService.authorizeAmount(site, item ).pipe(switchMap(data => {
-
-        this.errorMessage = ''
-        if (data._hasErrors) {
-          this.displayErrors(data)
-          return of (null)
-        }
-
-        this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
-        this.processing = false;
-        return of(data)
-      })), catchError(error => {
-        this.errorMessage = error;
-        this.processing = false;
-        return of(error)
-      })
-    }
-  }
-
-  payAmount() {
+  completeAuthorization() {
+    if (!this.validateTransaction()) { return }
     if (this.posPayment && this.terminalSettings.triposLaneID) {
 
       const item = {} as authorizationPOST;
       item.transactionAmount = this.posPayment.amountPaid.toFixed(2).toString();
       item.laneId = this.terminalSettings.triposLaneID;
+      if (!this.tipValue) {this.tipValue = '0'}
       item.tipAmount = this.tipValue;
-      item.transactionID = this.posPayment.id.toString();
+      item.transactionID = this.posPayment.refNumber.toString();
+      item.transactionAmount = this.posPayment.amountPaid.toFixed(2).toString();
       const site = this.siteService.getAssignedSite();
       this.processing = true;
       this.errorMessage = ''
 
-      this.processing$ =  this.methodsService.sale(site, item ).pipe(switchMap(data => {
+      this.processing$ =  this.methodsService.authorizationCompletion(site, item ).pipe(switchMap(data => {
 
         this.errorMessage = ''
         if (data._hasErrors) {
@@ -157,6 +133,89 @@ export class TriPosTransactionsComponent implements OnInit {
         return of(data)
       }))
     }
+  }
+
+  authorizeAmount() {
+    if (!this.validateTransaction()) { return }
+    if (this.posPayment && this.terminalSettings.triposLaneID) {
+      const item = {} as authorizationPOST;
+      item.transactionAmount = this.posPayment.amountPaid.toFixed(2).toString();
+      item.laneId = this.terminalSettings.triposLaneID;
+      item.tipAmount = this.tipValue;
+      const site = this.siteService.getAssignedSite();
+      this.processing = true;
+
+      this.processing$ =  this.methodsService.authorizeAmount(site, item ).pipe(switchMap(data => {
+        this.errorMessage = ''
+        if (data._hasErrors) {
+          this.displayErrors(data)
+          return of (null)
+        }
+        return this.paymentMethodsService.processAuthTriPOSResponse(data ,this.posPayment, this.order)
+      })).pipe(switchMap(data => {
+        this.processing = false;
+        this.errorMessage = ''
+        this.message = ''
+        if (!data) { return of(null)}
+        this.orderService.updateOrderSubscription(data);
+        this.dialogRef.close(true)
+        return of(data)
+      }))
+    }
+
+  }
+
+  payAmount() {
+    if (!this.validateTransaction()) { return }
+    if (this.posPayment && this.terminalSettings.triposLaneID) {
+
+      const item = {} as authorizationPOST;
+      item.transactionAmount = this.posPayment.amountPaid.toFixed(2).toString();
+      item.laneId = this.terminalSettings.triposLaneID;
+      if (!this.tipValue) {this.tipValue = '0'}
+      item.tipAmount = this.tipValue;
+      item.laneId  = this.terminalSettings.triposLaneID;
+      item.transactionID = this.posPayment.refNumber;
+      const site = this.siteService.getAssignedSite();
+      this.processing = true;
+      this.errorMessage = ''
+
+      this.processing$ =  this.methodsService.sale(site, item )
+        .pipe(switchMap(data => {
+            this.errorMessage = ''
+            if (data._hasErrors) {
+              this.displayErrors(data)
+              return of (null)
+            }
+            this.posPayment.saleType      = 1;
+            return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
+          }
+        )).pipe(switchMap(data => {
+          const pay = data.payment
+          const trans = data.trans
+          const order = data.order;
+
+          if (!data || !data.order) {
+            this.errorMessage = 'Unknown error occurred.'
+            return this.orderService.getOrder(site, this.posPayment.orderID.toString(), false)
+          }
+
+          if (!this.paymentMethodsService.isTriPOSApproved(data.trans)) {
+            this.errorMessage = trans?.captureStatus;
+            return of(data.order)
+          }
+
+          this.processing = false;
+          this.errorMessage = ''
+          this.message = ''
+          this.dialogRef.close(true)
+          return of(data.order)
+
+        })).pipe(switchMap(data => {
+          this.orderService.updateOrderSubscription(data);
+          return of(data)
+      }))
+    }
 
   }
 
@@ -167,35 +226,44 @@ export class TriPosTransactionsComponent implements OnInit {
   }
 
   refundAmount() {
-    if (this.posPayment && this.laneID) {
+    if (!this.validateTransaction()) { return }
+    if (this.posPayment && this.terminalSettings.triposLaneID) {
+
       const item = {} as authorizationPOST;
-      item.transactionAmount = this.posPayment.amountPaid.toFixed(2).toString();
-      item.laneId = this.laneID;
+      item.transactionAmount = Math.abs(this.posPayment.amountPaid).toFixed(2).toString();
+
+      item.laneId = this.terminalSettings.triposLaneID;
       const site = this.siteService.getAssignedSite();
       this.processing = true;
       this.errorMessage = ''
 
       this.posPayment.saleType = 3;
-      this.processing$ =  this.methodsService.authorizeAmount(site, item ).pipe(
+      this.processing$ =  this.methodsService.refund(site, item ).pipe(
         switchMap(data => {
+          this.errorMessage = ''
+          if (data._hasErrors) {
+            this.displayErrors(data)
+            return of (null)
+          }
+          return   this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
+      })).pipe(switchMap(data => {
+          this.processing = false;
+          this.errorMessage = ''
+          return this.orderService.getOrder(site, this.order.id.toString(), false)
+      })).pipe(switchMap(data => {
+          this.orderService.updateOrderSubscription(data);
+          this.dialogRef.close(true)
+          return of(data)
+      }))
 
-        this.errorMessage = ''
-        if (data._hasErrors) {
-          this.displayErrors(data)
-          return of (null)
-        }
+      // })), catchError(error => {
+      //   this.errorMessage = error;
+      //   this.processing = false;
 
-        this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
-        this.processing = false;
-        this.errorMessage = ''
+      //   return of(error)
+      // })
 
-        return of(data)
-      })), catchError(error => {
-        this.errorMessage = error;
-        this.processing = false;
 
-        return of(error)
-      })
     }
   }
 
@@ -228,6 +296,23 @@ export class TriPosTransactionsComponent implements OnInit {
 
   close() {
     this.dialogRef.close()
+  }
+
+  validateTransaction() {
+    let result = true;
+    if (!this.posPayment) {
+      this.siteService.notify('No Payment', 'Alert', 2000)
+       result = false
+    }
+    if (!this.terminalSettings) {
+      this.siteService.notify('No device settings', 'Alert', 2000)
+       result = false
+    }
+    if (!this.uiTransaction) {
+      this.siteService.notify('No system settings', 'Alert', 2000)
+        result = false
+    }
+    return result
   }
 
 }

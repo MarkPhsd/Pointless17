@@ -10,6 +10,8 @@
             <span>
               <button mat-raised (click)="togglesShowAll()">
               <mat-icon>expand</mat-icon></button>
+              <button mat-raised (click)="downloadCSV()">
+                <mat-icon>download</mat-icon></button>
             </span>
             <div *ngIf="summary.resultMessage">
               <mat-icon>alert</mat-icon>

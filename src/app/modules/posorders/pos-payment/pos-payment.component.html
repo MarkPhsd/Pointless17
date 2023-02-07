@@ -2,6 +2,7 @@
 <div *ngIf="(orderAction$ | async)"></div>
 
 <div *ngIf="order  && (uiTransactions$ | async) as uiTransactions">
+
   <div [class]="orderlayout">
     <div class="transaction-data">
       <div class="grid-header-item">
@@ -31,14 +32,6 @@
             *ngIf="(paymentsEqualTotal || order.completionDate)">
           <ng-container [ngTemplateOutlet]="receiptShowTemplate"></ng-container>
       </div>
-
-      <ng-template #receiptView>
-        <mat-card class="card-dimensions">
-          <mat-card-content>
-            <app-receipt-view [hideExit]="true" [order]="order"></app-receipt-view>
-          </mat-card-content>
-        </mat-card>
-      </ng-template>
 
       <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
         <div class="action-center grid-items" *ngIf="!order.completionDate && order?.balanceRemaining != 0">
@@ -422,4 +415,12 @@
     [paymentAmount]="paymentAmount"
     (setStep) ="setStep(1)">
   </wic-ebtcard-pay-btn>
+</ng-template>
+
+<ng-template #receiptView>
+  <mat-card class="card-dimensions">
+    <mat-card-content>
+      <app-receipt-view [hideExit]="true" [order]="order"></app-receipt-view>
+    </mat-card-content>
+  </mat-card>
 </ng-template>

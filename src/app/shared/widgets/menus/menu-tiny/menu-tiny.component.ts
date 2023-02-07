@@ -185,7 +185,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     this.initMenu();
 
     if (!user || !user.token) {
-      console.log('user', user)
+      // console.log('user', user)
       return
     }
     const site  = this.siteService.getAssignedSite();
@@ -193,36 +193,36 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
     this.menu$ = menu$.pipe(
       switchMap(data => {
-        
+
         if (!data) { return of(null) }
         this.config = this.mergeConfig(this.options);
 
-        console.log('refresh Menu', data)
+        // console.log('refresh Menu', data)
 
         try {
-          if (data.toString() === 'no menu') { 
+          if (data.toString() === 'no menu') {
             if (this.user && this.user?.roles === 'admin') {
               this.siteService.notify('No Menu Found. Please do system check.', 'Alert', 2000)
             }
             return of(null)
           }
         } catch (error) {
-          
+
         }
-        if (data.length>0) { 
+        if (data.length>0) {
           if (data)
           try {
             data.filter( item => {
               this.addItemToMenu(item, this.menus)
             })
             this.menus =  [...new Set(this.menus)]
-   
+
             if (this.menus) {
               // this.toggle(this.menus[0], 0)
               this._toggle(this.menus[0], 0, true)
             }
           } catch (error) {
-            
+
           }
         }
         return of(this.menus)
@@ -256,7 +256,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     this._toggle(menu, index, false)
   }
 
-  _toggle(menu: AccordionMenu, index: number, toggleOn: boolean) { 
+  _toggle(menu: AccordionMenu, index: number, toggleOn: boolean) {
     try {
       this.displayCategories = true
       this.index = index;
@@ -268,7 +268,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
       this.menus[index].active = !this.menus[index].active;
       this.submenu  = this.menus[index].submenus
 
-      if (!toggleOn) { 
+      if (!toggleOn) {
         if (menu.routerLink) {
           this.routerNavigation(menu.routerLink)
         }

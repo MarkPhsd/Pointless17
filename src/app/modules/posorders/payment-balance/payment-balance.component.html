@@ -1,7 +1,8 @@
 
 <!-- <div *ngIf="(deviceSettings$ | async) as deviceSettings"></div> -->
-
+<div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(void$ | async) as void"></div>
+
 <mat-card *ngIf="order">
   <mat-card-subtitle>
     <ng-content></ng-content>
@@ -79,10 +80,12 @@
 
         <div class="payment-grid" *ngIf="(item.account && !item.completionDate) ||
                                         (item.completionDate && item.amountPaid != 0) ||
-                                         (item && item.voidReason)">
+                                         (item && item.voidReason) ||
+                                         (item.tranType === 'authorizationResponse' )">
 
+                  <!-- type {{item | json}} -->
           <div *ngIf="item.paymentMethod" class="grid-item">
-            {{item?.paymentMethod?.name}}
+            {{item?.paymentMethod?.name}}  {{ item.tranType }}
             <span *ngIf="item.voidReason"><mat-icon>void</mat-icon> </span>
             <div *ngIf="item?.paymentMethod?.isCash && item?.amountPaid > 0">
               <span *ngIf="item.amountPaid - item.amountReceived !=0">
@@ -91,7 +94,7 @@
             </div>
           </div>
 
-          <div *ngIf="!isUser && (item?.paymentMethod?.isCreditCard) ||
+          <div *ngIf="!isUser && (item?.paymentMethod?.isCreditCard && (item.tranType != 'refundResponse' || item.tranType != 'refundResponse')) ||
                       item?.paymentMethod?.name.toLowerCase() != 'stripe' &&
                       item?.paymentMethod?.name.toLowerCase() != 'paypal' &&
                       (item.account && !item.completionDate && uiTransactions?.cardPointPreAuth)">
@@ -102,10 +105,29 @@
 
           <div *ngIf="!isUser && item?.paymentMethod?.name.toLowerCase() != 'stripe' &&
                       !isUser && item?.paymentMethod?.name.toLowerCase() != 'paypal' &&
-                      (item?.paymentMethod?.isCreditCard &&  (uiTransactions && uiTransactions.cardPointPreAuth)) ||
-                      (item.account && !item.completionDate &&
-                      (uiTransactions && uiTransactions.cardPointPreAuth))">
-            <button mat-raised-button color='primary' (click)="capture(item)">Capture</button>
+                      (item?.paymentMethod?.isCreditCard &&
+                        (uiTransactions && uiTransactions.cardPointPreAuth)) ||
+                        (item.account && !item.completionDate &&
+                        (uiTransactions && uiTransactions.cardPointPreAuth)
+                      ) ">
+            <button mat-raised-button color='primary' (click)="capture(item)">
+              Capture
+              <br>
+              {{ order.creditBalanceRemaining | currency}}
+            </button>
+          </div>
+
+          <div *ngIf="
+                  (item?.paymentMethod?.isCreditCard &&
+                    (uiTransactions && uiTransactions.triposEnabled && !item.completionDate)) ||
+                    (item.account && !item.completionDate &&
+                    (uiTransactions && uiTransactions.triposEnabled)
+                  )">
+            <button mat-raised-button color='primary' (click)="captureTriPOS(item)">
+              Capture
+              <br>
+              {{ order.creditBalanceRemaining | currency}}
+            </button>
           </div>
 
           <div *ngIf="item?.paymentMethod?.isCreditCard && item?.cardNum" >
@@ -137,7 +159,7 @@
             </button>
           </div>
 
-          <div *ngIf="isAuthorized && item.amountPaid > 0">
+          <div *ngIf="isAuthorized && item.completionDate">
             <button mat-button
                     [disabled]="item.voidReason && item.voidReason != 0"
                     class="grid-item-button"

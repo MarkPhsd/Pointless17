@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +9,12 @@ export class FbContactsService {
 
   constructor(private _fb: FormBuilder) { }
 
+
   initForm(fb: FormGroup): FormGroup {
 
-      fb = this._fb.group({
+    const oompPattern = "^[0-9]{2}-[0-9]{3}-[0-9]{3}-[A-Za-z]{2}$"
+
+    fb = this._fb.group({
         id: [''], //                       number;
         companyName: [''], //              string;
         firstName: [''], //                string;
@@ -116,6 +119,7 @@ export class FbContactsService {
         uid: [''], //                      string;
         apiPassword: [''], //              string;
         apiUserName: [''], //              string;
+        userName: [''], //              string;
         roles:                      [''], //                    string;
         onlineDescriptionImage:     [''], //   string;
         onlineDescription:          [''], //        string;
@@ -128,7 +132,7 @@ export class FbContactsService {
         accountDelay              : [''],
         medTempLicense            : [''],
         medPhysicianApproved:       [''], //
-        medLicenseNumber:           [''], //
+        medLicenseNumber:           ['',Validators.pattern(oompPattern)], //
         medPlantLimit:              [''], //
         medGramLimit:               [''], //
         medPrescriptionExpiration:  [''], //

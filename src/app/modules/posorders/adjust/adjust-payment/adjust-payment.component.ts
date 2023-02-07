@@ -41,7 +41,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   payment                 : IPOSPayment;
   voidPayment             : IPOSPayment;
   action$                 : Observable<any>;
-
+  voidAction$ : Observable<any>;
   settings: TransactionUISettings;
   terminalSettings: ITerminalSettings;
   deviceSettings$ : Observable<any>;
@@ -149,7 +149,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   rejectManifestItemsFromSelection(setting) {
     if (setting) {
-      console.log(setting)
+      // console.log(setting)
       const site = this.siteService.getAssignedSite();
       this.resultAction.voidReason = setting.name
       this.resultAction.voidReasonID = setting.id
@@ -191,19 +191,56 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
             }
 
             if (this.settings.triposEnabled) {
+              // console.log('this.settings.triposEnabled')
               const site = this.siteService.getAssignedSite()
               let item = {} as authorizationPOST
-              item.terminalId  = this.terminalSettings.triposLaneID;
-              item.transactionID = this.payment.id.toString();
-              item.referenceNumber = this.payment.refNumber;
-              this.action$ = this.triPOSMethodService.void(site, item)
+              item.laneId  = this.terminalSettings.triposLaneID;
+              item.transactionID = this.payment.refNumber;
+              this.action$ = this.triPOSMethodService.void(site, item).pipe(switchMap(data => {
+
+                // console.log('void result', data)
+                if (this.validateTriPOSVoid(data)) {
+                  this.resultAction.payment.amountPaid = 0;
+                  this.resultAction.payment.amountReceived = 0;
+                  this.resultAction.payment.tranType = data._type;
+                  this.resultAction.payment.voidReason = this.resultAction.voidReason;
+                  return of(this.resultAction)
+                }
+
+                this.resultAction = null
+                return of(this.resultAction)
+              })).pipe(switchMap(resultAction => {
+                if (!resultAction) {
+                  this.notifyEvent('Void not allowed by user', 'CC Result')
+                  return of(null)
+                }
+                if (resultAction) {
+                  return this.pOSPaymentService.voidPayment(site, resultAction);
+                }
+              })).pipe(
+                switchMap(data => {
+                  if (!data || !data.result) {
+                    if ( data?.resultMessage == null ) {
+                      this.notifyEvent(`Void failed: user may not be authorized`, 'Void Result')
+                      return of(null)
+                      return
+                    }
+                    this.notifyEvent(`Void failed: ${data?.resultMessage}`, 'Void Result')
+                    return of(null)
+                  }
+                  this.updateVoidPayment(data)
+                  return of(data)
+              }))
+
               return;
+
             }
 
             if (this.settings.cardPointBoltEnabled) {
               if ( this.voidPayment.respstat) {
                 const voidByRef$ = this.cardPointMethdsService.voidByRetRef(this.voidPayment.retref);
-                voidByRef$.pipe(
+
+                this.action$ = voidByRef$.pipe(
                   switchMap( data => {
                     if (data && data === "Void Not Allowed") {
                       return of(null)
@@ -218,6 +255,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                       this.resultAction.payment.respcode = data?.respcode;
                       return of(this.resultAction)
                     }
+
                     if (data && data?.respstat && data?.respstat.toLowerCase() == 'b') {
                       this.notifyEvent('Please retry', 'Alert')
                     }
@@ -233,13 +271,11 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                       return of(this.resultAction)
                     }
 
-                    // console.log('voided credit ', data?.respstat)
                     this.resultAction = null
                     return of(this.resultAction)
 
                   })).pipe(
                     switchMap( resultAction => {
-                      // console.log(' voiding pos payment', resultAction)
                       if (!resultAction) {
                         this.notifyEvent('Void not allowed by user', 'CC Result')
                         return of(null)
@@ -248,8 +284,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                         return this.pOSPaymentService.voidPayment(site, resultAction);
                       }
                     })
-                  ).subscribe( data => {
-                    // console.log('voiding pos payment result', data)
+                  ).pipe(
+                  switchMap(data => {
                     if (!data || !data.result) {
                       if ( data?.resultMessage == null ) {
                         this.notifyEvent(`Void failed: user may not be authorized`, 'Void Result')
@@ -260,23 +296,32 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                       return
                     }
                     this.updateVoidPayment(data)
-                  })
+                    return of(data)
+                  }))
                   return;
               }
             }
 
             response$ = this.pOSPaymentService.voidPayment(site, this.resultAction)
-            this.updateVoidPaymentResponse(response$)
+            this.action$ = this.updateVoidPaymentResponse(response$)
 
           } else {
             response$ = this.pOSPaymentService.voidPayment(site, this.resultAction)
-            this.updateVoidPaymentResponse(response$)
+            this.action$ = this.updateVoidPaymentResponse(response$)
           }
         }
       }
     }
   }
 
+
+  validateTriPOSVoid(data) {
+    if (data.statusCode === "Approved") {
+      return true;
+    }
+    return false;
+
+  }
   updateVoidPayment(response: OperationWithAction) {
 
     const site = this.siteService.getAssignedSite();
@@ -329,8 +374,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   updateVoidPaymentResponse(response$: Observable<OperationWithAction>) {
     const site = this.siteService.getAssignedSite();
-
-    response$.pipe(
+    return response$.pipe(
       switchMap(response => {
         if (response && response.result) {
           const item$ = this.updateOrderSubscription()
@@ -340,7 +384,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
             this.closeDialog(response.payment, response.paymentMethod);
           });
         }
-
         if (response.purchaseOrderPayment && response.purchaseOrderPayment.giftCardID != 0) {
           const valueToReduce = response.payment.amountPaid
           this.closeDialog(response.payment, response.paymentMethod);
@@ -348,10 +391,11 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
         }
         return of(null)
       }
-    )).subscribe(data => {
+    )).pipe(switchMap(data => {
       if (data == null) { return }
       this.storeCreditMethodService.updateSearchModel(null)
-    })
+      return of(data)
+    }))
 
   }
 

@@ -1,4 +1,8 @@
-<div *ngIf="(email$ | async) as email"></div>
+<div *ngIf="(email$ | async) as email">
+  Email: {{email}}
+  <button  mat-raised-button (click) ="email$ = null">Clear</button>
+</div>
+
 <div *ngIf="(printAction$ | async) as printAction"></div>
 
 <div *ngIf="printView">
@@ -22,7 +26,8 @@
 
       <div class="buttons-grid">
         <div *ngIf="(order$ | async) as order">
-          <button *ngIf="!order" mat-button (click)="email()"><mat-icon>email</mat-icon>Email </button>
+          <button *ngIf="order" mat-button (click)="email()"><mat-icon>email</mat-icon>Email </button>
+
           <button mat-button
                   [disabled]="!order || !order?.orderCode"
                   *ngIf="!isElectronApp"

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ISite } from 'src/app/_interfaces';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { UserAuthorizationService } from './user-authorization.service';
 import { type } from 'os';
@@ -80,14 +80,14 @@ export class RequestMessageService {
   saveMessage(site: ISite,  message: IRequestMessage): Observable<IRequestResponse> {
     //this shouold perform the operation on the backend via the api.
 
-    if (message.id) { 
+    if (message.id) {
       return  this.putMessage(site, message)
     }
     return this.postMessage(site, message)
 
   }
 
-  postMessage(site: ISite, message: IRequestMessage) : Observable<IRequestResponse> { 
+  postMessage(site: ISite, message: IRequestMessage) : Observable<IRequestResponse> {
     const controller = "/RequestMessages/"
 
     const endPoint = "PostRequestMessage"
@@ -100,7 +100,8 @@ export class RequestMessageService {
 
   }
 
-  putMessage(site: ISite, message: IRequestMessage) : Observable<IRequestResponse> { 
+  putMessage(site: ISite, message: IRequestMessage) : Observable<IRequestResponse> {
+
     const controller = "/RequestMessages/"
 
     const endPoint = "PutRequestMessage"
@@ -115,6 +116,8 @@ export class RequestMessageService {
 
   getRequestMessagesByCurrentUser(site: ISite, searchModel: IRequestMessageSearchModel): Observable<IRequestMessage[]> {
     //this shouold perform the operation on the backend via the api.
+
+    if (!this.userAuthorization.user) { return of(null)}
 
     const controller = "/RequestMessages/"
 
@@ -131,7 +134,7 @@ export class RequestMessageService {
 
   getOpenRequestMessages(site: ISite, searchModel: IRequestMessageSearchModel): Observable<IRequestMessage[]> {
     //this shouold perform the operation on the backend via the api.
-
+    if (!this.userAuthorization.user) { return of(null)}
     const controller = "/RequestMessages/"
 
     const endPoint = "getOpenRequestMessages"
@@ -161,6 +164,7 @@ export class RequestMessageService {
 
   getRequestMessage(site: ISite, id: number): Observable<IRequestMessage[]> {
     //this shouold perform the operation on the backend via the api.
+    if (!this.userAuthorization.user) { return of(null)}
 
     const controller = "/RequestMessages/"
 

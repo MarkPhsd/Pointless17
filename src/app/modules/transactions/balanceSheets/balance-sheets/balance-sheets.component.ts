@@ -141,7 +141,7 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit, OnDestroy 
     if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
   }
 
-  async initForm() {
+  initForm() {
     this.searchForm = this.fb.group({
       itemName : ['']
     })

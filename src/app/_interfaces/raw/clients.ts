@@ -126,4 +126,6 @@ export interface IClientTable {
   patientRecOption: boolean;
   message: string;
   preferences: string;
+  instertiaryNum: string;
+  userName: string; //not used as username used for client oomp
 }

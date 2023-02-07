@@ -171,6 +171,7 @@ import { TagChipsProductsComponent } from '../modules/admin/products/productedit
 import { CashDrawerSettingsComponent } from '../modules/admin/settings/software/cash-drawer-settings/cash-drawer-settings.component';
 import { PaymentReportDataComponent } from '../modules/admin/reports/payment-report/payment-report-data/payment-report-data.component';
 import { ClockInOutComponent } from './widgets/clock-in-out/clock-in-out.component';
+import { TruncateRightPipe } from '../_pipes/truncate-right.pipe';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -323,6 +324,7 @@ import { ClockInOutComponent } from './widgets/clock-in-out/clock-in-out.compone
     QuantiySelectorComponent,
     ToggleThemeComponent,
     TruncateTextPipe,
+    TruncateRightPipe,
     UnitTypeFieldsComponent,
     WebEnabledComponent,
     ValueFieldsComponent,
@@ -508,6 +510,7 @@ import { ClockInOutComponent } from './widgets/clock-in-out/clock-in-out.compone
     ThreeCXFabComponent,
     ToggleThemeComponent,
     TruncateTextPipe,
+    TruncateRightPipe,
     UIHomePageSettingsComponent,
     UnitTypeFieldsComponent,
     UploaderComponent,

@@ -1,0 +1,90 @@
+<mat-card class="mat-card-view">
+  <mat-card-content>
+    <div class="grid-items">
+      <div *ngIf="(zRun$ | async) as zrun; else loadingDay">
+        <button class="button grid-item"
+                mat-raised-button
+                (click)="reportCurrentSales(zrun.id)">
+          Current Sales  {{zrun.id}}
+        </button>
+      </div>
+
+      <ng-template #loadingDay>
+        ...getting today.
+      </ng-template>
+
+      <div class="grid-item">
+        <mat-divider></mat-divider>
+      </div>
+
+      <div>
+        <button class="button grid-item" mat-raised-button
+                (click)="resetSearch()">
+          Reset <mat-icon>reset</mat-icon>
+        </button>
+      </div>
+
+      <div>
+        <button mat-raised-button
+                 class="button grid-item"
+                (click)="refreshDateSearch()">
+          Refresh <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+
+      <div *ngIf="searchModel"
+          class="keypad fields">
+        <app-key-pad
+          [inputForm]     ="searchForm"
+          [inputTypeValue]="'text'"
+          (outPutValue)   ="refreshBalanceSearch($event)">
+          Report ID
+        </app-key-pad>
+      </div>
+
+      <div class="fields grid-item">
+        <mat-form-field appearance="outline" *ngIf="dateRangeForm">
+          <mat-label>Date Range (Start Time)</mat-label>
+
+          <mat-date-range-input [formGroup]="dateRangeForm"
+                                [rangePicker]="reportRangePicker"
+                              >
+            <input matStartDate
+                  formControlName="startDate"
+                  placeholder="Start date"
+                  #dateRangeStart
+                  >
+            <input matEndDate
+                  formControlName="endDate"
+                  placeholder="End date"
+                  #dateRangeEnd
+                  >
+          </mat-date-range-input>
+
+          <mat-datepicker-toggle matSuffix [for]="reportRangePicker"
+                                ></mat-datepicker-toggle>
+          <mat-date-range-picker touchUi #reportRangePicker
+                                ></mat-date-range-picker>
+
+          <mat-error *ngIf="dateRangeForm.controls.startDate.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+          <mat-error *ngIf="dateRangeForm.controls.endDate.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="(employees$ | async) as employees"
+           class="toggle-selector-employee">
+        <app-mat-toggle-selector
+                [list]="employees"
+                (outPutID)="setEmployee($event)">
+                Employee
+        </app-mat-toggle-selector>
+      </div>
+
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<ng-template #loading >
+  <mat-spinner></mat-spinner>
+</ng-template>
+

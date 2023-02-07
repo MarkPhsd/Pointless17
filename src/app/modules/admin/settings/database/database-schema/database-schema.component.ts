@@ -1,7 +1,9 @@
-import { AfterViewInit,Component, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit,Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { SchemaUpdateResults, SystemService } from 'src/app/_services/system/system.service';
 import { forkJoin, Observable } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { SettingsService } from 'src/app/_services/system/settings.service';
+import { ISetting } from 'src/app/_interfaces';
 
 @Component({
   selector: 'app-database-schema',
@@ -9,8 +11,9 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
   styleUrls: ['./database-schema.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DatabaseSchemaComponent implements AfterViewInit {
+export class DatabaseSchemaComponent implements AfterViewInit, OnInit{
 
+  version$: Observable<ISetting>;
   updateSections = ['GetSyncDatabaseSchema', 'CreateAPIViews', 'CreateViews', 'CreateTablesA', 'CreateTablesB', 'createAPIReportviews']
   schemaResults : any[] ;
   schema$:              Observable<SchemaUpdateResults[]>;
@@ -24,12 +27,18 @@ export class DatabaseSchemaComponent implements AfterViewInit {
   constructor(
               private systemService:     SystemService,
               private sitesService:      SitesService,
+              private settingService: SettingsService,
              )
   {
     // console.log('')
   }
 
-  async  ngAfterViewInit() {
+  ngOnInit() {
+    const site = this.sitesService.getAssignedSite()
+    this.version$ = this.settingService.getSettingByName(site, 'PointlessAPIVersion');
+  }
+
+   ngAfterViewInit() {
     this.things.changes.subscribe(t => {
       this.ngForRendred();
     })

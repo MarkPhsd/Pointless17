@@ -19,7 +19,7 @@ export interface DialogData {
 
 @Component({
   selector: 'app-menu-item-card',
-  templateUrl: './menu-item-card.component.html',
+  templateUrl:  './menu-item-card.component.html',
   styleUrls: ['./menu-item-card.component.scss'],
   providers: [ TruncateTextPipe ]
 })
@@ -141,26 +141,28 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
    this.orderMethodService.menuItemAction(this.order,this.menuItem, add)
   }
 
-  menuItemActionObs() {
-    let add : boolean;
-    add = true
+  menuItemActionObs(add : boolean) {
+
+    console.log(add)
+
     if (this.menuItem?.name.toLowerCase() === 'load more') {
       this.outPutLoadMore.emit('true')
       return ;
     }
 
-    if ( this.isApp && !this.isCategory ) {
-      add = true;
-    }
-    if (!this.isApp && !this.isCategory) {
-      add = false;
-    }
+    // if ( this.isApp && !this.isCategory ) {
+    //   add = true;
+    // }
+    // if (!this.isApp && !this.isCategory) {
+    //   add = false;
+    // }
+
     if (this.isCategory) {
       add = false;
     }
 
     this.action$ = this.orderMethodService.menuItemActionObs(this.order,this.menuItem, add,
-           this.orderMethodService.assignPOSItems)
+                                            this.orderMethodService.assignPOSItems)
 
   }
 

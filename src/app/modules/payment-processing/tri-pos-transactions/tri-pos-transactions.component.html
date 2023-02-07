@@ -1,13 +1,18 @@
-<div *ngIf="(terminalsettings$  | async) as terminalSettings; else loading"></div>
+ <div *ngIf="(terminalsettings$  | async) as terminalSettings; else loading"></div>
 <div *ngIf="processing">
   <mat-spinner diameter="50"></mat-spinner>
 </div>
 
-<div *ngIf="(processing$ | async) as item">
-</div>
+<div *ngIf="(!terminalSettings || (!terminalSettings?.triposLaneID || terminalSettings?.triposLaneID === '')) || !posPayment">
 
-<div *ngIf="!terminalSettings || (!terminalSettings?.triposLaneID || terminalSettings?.triposLaneID === '')">
-  <mat-icon>alert</mat-icon> No Lane ID found for Device.
+  <div *ngIf="!posPayment">
+    <mat-icon>alert</mat-icon> No Payment Found
+  </div>
+
+  <div *ngIf="(!terminalSettings || (!terminalSettings?.triposLaneID || terminalSettings?.triposLaneID === ''))">
+    <mat-icon>alert</mat-icon> No Lane ID found for Device.
+  </div>
+
   <button mat-raised-button (click)="close()">Close</button>
 </div>
 
@@ -52,30 +57,40 @@
     </mat-card>
 
     <div class="button-grid">
-      <div>
-        <!-- Show if No Authorization -->
+
+
+      <div *ngIf="posPayment.amountPaid > 0 && posPayment.tranType === 'authorizationResponse'">
+        <button color="primary" mat-raised-button (click)="completeAuthorization()">Complete Payment</button>
+      </div>
+
+      <div *ngIf="posPayment.amountPaid > 0 && posPayment.tranType != 'authorizationResponse'">
         <button color="primary" mat-raised-button (click)="authorizeAmount()">Authorize</button>
       </div>
 
-      <div>
+      <div *ngIf="posPayment.amountPaid > 0 &&  posPayment.tranType != 'authorizationResponse'">
         <!-- Show if Authorization or if Amount>0 -->
         <button  color="primary"   mat-raised-button (click)="payAmount()">Pay Amount</button>
       </div>
 
-      <div *ngIf="transactionType.toLowerCase() === 'refund'">
+      <div *ngIf="posPayment.amountPaid < 0 &&  posPayment.tranType != 'authorizationResponse'">
         <!-- Show if Authorization Value Exists (or don't use here at all.) -->
         <button  color="warn"  mat-raised-button (click)="refundAmount()">Refund</button>
       </div>
 
-      <div>
+      <div *ngIf="posPayment.tranType">
+        <!-- Always show -->
+        <button  color="warn"  mat-raised-button (click)="close()">Close</button>
+      </div>
+      <div *ngIf="!posPayment.tranType">
         <!-- Always show -->
         <button  color="warn"  mat-raised-button (click)="close()">Cancel</button>
       </div>
     </div>
 
     <div *ngIf="(processing$ | async) as result">
-      <div *ngIf="result">
-        result
+      <div *ngIf="result && result?.approvedAmount>0">
+        <h5>{{result?._type}}   {{result?.statusCode}} </h5><br>
+        <h5>Approved: {{result?.approvedAmount | currency}}</h5>
       </div>
     </div>
 
@@ -85,11 +100,9 @@
     <mat-card>
       <div class="button-grid">
         <div *ngIf="userAuthService.isManagement">
-          <!-- Always show -->
           <button  color="warn" mat-raised-button (click)="reboot()">Reboot</button>
         </div>
         <div *ngIf="userAuthService.isManagement">
-          <!-- Always show -->
           <button  color="warn" mat-raised-button (click)="reset()">Reset</button>
         </div>
       </div>
@@ -98,21 +111,19 @@
 
 </mat-card>
 
-
-<!-- </div> -->
 <ng-template #loading>
   <mat-spinner diameter="50"></mat-spinner>
 </ng-template>
 
 
-<div *ngIf="data">
+ <div *ngIf="data">
   <!-- <div >
     uiTransaction  {{uiTransaction | json}}
-  </div>
+  </div> -->
   <div >
     posPayment  {{posPayment | json}}
   </div>
-  <div >
+  <!-- <div >
     order {{order | json}}
   </div> -->
 </div>

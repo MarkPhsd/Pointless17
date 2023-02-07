@@ -618,7 +618,6 @@ export class CardPointMethodsService {
     return
   }
 
-
   processSubCreditPayment ( order: IPOSOrder, amount: number, manualPrompt: boolean, settings: TransactionUISettings) {
     //once we get back the method 'Card Type'
     //lookup the payment method.

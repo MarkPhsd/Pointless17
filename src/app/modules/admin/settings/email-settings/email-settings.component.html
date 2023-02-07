@@ -131,8 +131,19 @@
                 color="primary"
                 (click)="sendSMTPTestEmail()"><mat-icon>email</mat-icon>SMTP Email Test</button>
       </div>
+      <div>
+        <button mat-raised-button
+                color="primary"
+                (click)="sendOrderTest()">
+                <mat-icon>email</mat-icon>Send Current Active Order
+        </button>
+      </div>
 
-      <div *ngIf="testEmail$ | async as item">{{message}}</div>
+      <div *ngIf="(testEmail$ | async) as item; else emailing">{{message | json}}</div>
+
+      <ng-template #emailing>
+        Waiting to Send.
+      </ng-template>
 
     </mat-card-content>
   </mat-card>

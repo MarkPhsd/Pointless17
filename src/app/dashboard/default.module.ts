@@ -366,6 +366,8 @@ import { WicEBTCardPayBtnComponent } from '../modules/posorders/pos-payment/wic-
 import { DSIEMVAndroidPayBtnComponent } from '../modules/posorders/pos-payment/dsiemvandroid-pay-btn/dsiemvandroid-pay-btn.component';
 import { CashPaymentButtonComponent } from '../modules/posorders/pos-payment/cash-payment-button/cash-payment-button.component';
 import { TriPosTransactionsComponent } from '../modules/payment-processing/tri-pos-transactions/tri-pos-transactions.component';
+import { PointlessMETRCSalesComponent } from '../modules/admin/metrc/pointless-metrcsales/pointless-metrcsales.component';
+import { MetrcSalesFilterComponent } from '../modules/admin/metrc/pointless-metrcsales/metrc-sales-filter/metrc-sales-filter.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -472,6 +474,10 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DsiEMVCardPayBtnComponent,
     DSIEMVAndroidPayBtnComponent,
     CardPointeCardPayBtnComponent,
+
+
+    PointlessMETRCSalesComponent,
+    MetrcSalesFilterComponent,
 
     PriceTierEditComponent,
     PriceTiersComponent,

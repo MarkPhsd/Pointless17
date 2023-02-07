@@ -162,7 +162,7 @@ export class OrdersService {
   }
 
   getCost(order: IPOSOrder) {
-    if (order) {
+    if (order && order.cost) {
       order.cost = 0
       if (order.posOrderItems && order.posOrderItems.length>0) {
         order.posOrderItems.forEach(data => {
@@ -170,8 +170,8 @@ export class OrdersService {
           order.cost = itemCost + order.cost
         })
       }
-      return order
     }
+    return order
   }
 
   updateOrderSubscription(order: IPOSOrder) {
@@ -921,18 +921,14 @@ export class OrdersService {
   setActiveOrder(site, order: IPOSOrder) {
     if (order) {
       this.updateOrderSubscription(order)
+
       this.toolbarServiceUI.updateOrderBar(true)
-
-      // if (order && order.service && order.service.retailServiceType) {
-      //   this.toggleOpenOrderBar(this.userAuthorizationService.isStaff)
-      //   return
-      // }
-
       if (!order.history && this.platFormService.isApp()) {
-        this.toolbarServiceUI.showSearchSideBar()
-        return
+        if (!order.completionDate) {
+          this.toolbarServiceUI.showSearchSideBar()
+          return
+        }
       }
-
     }
   }
 

@@ -56,7 +56,7 @@ export class SendGridService {
 
   dateFrom:any;
   dateTo: any;
-  
+
   constructor(
     private http: HttpClient,
     private _fb: FormBuilder,
@@ -122,6 +122,22 @@ export class SendGridService {
     const controller =  "/SendGrid/"
 
     const endPoint = `sendOrder`
+
+    const parameters = `?id=${id}&history=${history}&emailTo=${emailTo}&emailReceiverName=${customerName}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>(url)
+
+  }
+
+  sendOrderTest(id: number, history: boolean, emailTo: string, customerName: string): Observable<any> {
+
+    const site = this.siteService.getAssignedSite()
+
+    const controller =  "/SendGrid/"
+
+    const endPoint = `sendOrderTest`
 
     const parameters = `?id=${id}&history=${history}&emailTo=${emailTo}&emailReceiverName=${customerName}`
 

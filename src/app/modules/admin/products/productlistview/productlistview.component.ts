@@ -205,7 +205,7 @@ constructor(  private _snackBar              : MatSnackBar,
     this.categories$    = this.menuService.getListOfCategoriesAll(site).pipe(
       switchMap(data => {
 
-        console.log('this.departmentID', this.departmentID)
+        // console.log('this.departmentID', this.departmentID)
 
         if (this.departmentID == undefined)  {
           this.categoriesList = data;

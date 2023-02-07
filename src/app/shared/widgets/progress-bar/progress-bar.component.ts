@@ -16,7 +16,6 @@ export class ProgressBarComponent implements  OnChanges {
   constructor () {
   }
 
-
   ngOnChanges(): void {
     this.refreshPercentage();
   }

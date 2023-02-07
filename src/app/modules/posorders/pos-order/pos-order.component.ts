@@ -62,8 +62,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   userAuths       :   IUserAuth_Properties;
   _userAuths      : Subscription;
-
-  deviceWidthPercentage ='100%'
+  gridheaderitem = 'grid-header-item-main'
+  deviceWidthPercentage ='90%'
   orderItemsHeightStyle ='150px'
   windowHeight: number;
   CDK_DRAG_CONFIG = {}
@@ -355,12 +355,14 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   updateItemsPerPage() {
     this.smallDevice = false
     this.phoneDevice = false
-    this.deviceWidthPercentage = '100%'
+    this.deviceWidthPercentage = '90%'
     this.gridRight       = 'grid-order-header ';
     this.orderlayout     = 'order-layout-empty';
     this.resizePanel();
 
     this.windowHeight = window.innerHeight;
+    this.gridheaderitem  = 'grid-header-item'
+
 
     if (window.innerWidth < 768) {
       this.smallDevice = true
@@ -376,6 +378,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
     if (this.mainPanel && !this.smallDevice) {
       this.orderlayout     = 'order-layout reverse'
+      this.gridheaderitem  = 'grid-header-item-main'
       this.gridRight       = 'order-layout-buttons'// 'grid-order-header reverse'
     }
 
@@ -418,7 +421,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.sidePanelPercentAdjust = 60
     }
 
-    // console.log('hide toolbar pos ordercomponent')
     if (!this.toolbarUIService.swapMenuWithOrderBoolean) {
       this.toolbarUIService.hidetoolBars();
     }
@@ -838,12 +840,13 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   emailNotifyOrder(event) {
     this.orderMethodService.emailOrder(this.order).subscribe(data => {
-      if (data.isSuccessStatusCode  || data === 'success') {
-        this.orderMethodService.notifyEvent('Email Sent', 'Success')
-       }
-      if (!data.isSuccessStatusCode) {
-        this.orderMethodService.notifyEvent('Email not sent. Check email settings', 'Failed')
-      }
+      // if (data.isSuccessStatusCode  || data === 'success') {
+      this.orderMethodService.notifyEvent('Email Sent', 'Sent');
+      //   this.orderMethodService.notifyEvent('Email Sent', 'Success')
+      //  }
+      // if (!data.isSuccessStatusCode) {
+      //   this.orderMethodService.notifyEvent('Email not sent. Check email settings', 'Failed')
+      // }
     })
   }
 

@@ -189,7 +189,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   searchSideBarSubscriber() {
     this._searchSideBar = this.toolBarUIService.searchSideBar$.subscribe( data => {
-      console.log('data', data)
+      // console.log('data', data)
       if (!this.swapMenuWithOrder) {
         this.searchSideBar = data
         return;
@@ -362,7 +362,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
-      console.log(event.url);
+      // console.log(event.url);
       if (event.url === '/menu-manager'){
         this.menuManager = true;
       }

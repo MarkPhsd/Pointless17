@@ -35,7 +35,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     {name: 'Last 10  days',value: '10'},
     {name: 'Open Orders', value: 'open'}
   ]
-  inputForm   : FormGroup;
+  inputForm   :  FormGroup;
   bucketName  :  string;
   awsBucketURL:  string;
   profile     :  IUserProfile;
@@ -145,6 +145,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 		  rangeSelect: ['']
 		})
   }
+
   initConfirmPassword()  {
 		this.confirmPassword = this.fb.group( {
 		  confirmPassword: ['']
@@ -219,17 +220,17 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     this.refreshDateSearch()
   }
 
-  consolidateClientOrders() { 
+  consolidateClientOrders() {
     const site = this.siteService.getAssignedSite()
     this.action$ =  this.orderService.consolidateClientOrders(site,this.clientTable.id).pipe(
-      switchMap(data => { 
-        if (!data.id) { 
+      switchMap(data => {
+        if (!data.id) {
           this.orderService.notificationEvent('Orders not consolidated.' + data.toString(), 'Alert')
           console.log(data.toString())
           return of(null)
         }
       return  this.orderService.getOrder(site, data.id.toString(), false)
-    })).pipe(switchMap(data => { 
+    })).pipe(switchMap(data => {
       this.orderService.notificationEvent('Orders Consolidated. Primary order unsuspended. Check the current order.', 'Alert')
       this.orderService.updateOrderSubscriptionLoginAction(data);
       return of(data)

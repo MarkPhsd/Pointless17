@@ -90,7 +90,8 @@ export class MenusService {
       routerLinkActive: 'package-list',
       method: '' ,
       submenus: [
-        { name: 'METRC Sales',minimized: false, method: '' , routerLink: '/metrc-sales', routerLinkActive: 'metrc-sales', icon: 'list', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Sales Report',minimized: false, method: '' , routerLink: '/metrc-sales-report', routerLinkActive: 'metrc-sales-report', icon: 'list', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'METRC Posted Sales',minimized: false, method: '' , routerLink: '/metrc-posted-sales', routerLinkActive: 'metrc-posted-sales', icon: 'list', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Packages',   minimized: false, method: '' ,routerLink: '/package-list', routerLinkActive: 'package-list', icon: 'download', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Facilites',  minimized: true, method: '' , routerLink: '/metrc-facilities-list', routerLinkActive: 'metrc-facilities-list', icon: 'add_business', onClick: '', id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Categories', minimized: true, method: '' , routerLink: '/metrc-categories-list', routerLinkActive: 'metrc-categories-list', icon: 'list', onClick: '', id: 0, sortOrder: 4, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},

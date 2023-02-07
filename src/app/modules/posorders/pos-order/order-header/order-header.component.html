@@ -3,8 +3,8 @@
     <div>
       <div class="total-card">
         <h4>
-          <span  *ngIf="!isOrderClaimed" > <mat-icon color="warn">lock</mat-icon>
-         </span> Order {{order?.id}} - {{order?.serviceType | truncateText: 8}}
+          <span  *ngIf="!isOrderClaimed && order.id" > <mat-icon color="warn">lock</mat-icon>
+          </span> Order {{order?.id | truncateRight: 5}} {{order?.serviceType | truncateText: 8}}
         </h4>
       </div>
       <div class="total-card">

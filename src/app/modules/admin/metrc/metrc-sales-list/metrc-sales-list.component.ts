@@ -12,6 +12,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MetrcSalesService } from 'src/app/_services/metrc/metrc-sales.service';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { Capacitor, Plugins } from '@capacitor/core';
+import { PointlessMETRCSalesService } from 'src/app/_services/metrc/pointless-metrcsales.service';
 
 @Component({
   selector: 'app-metrc-sales-list',
@@ -73,6 +74,7 @@ export class MetrcSalesListComponent implements OnInit {
             private metrcSalesService: MetrcSalesService,
             private siteService: SitesService,
             private reportingServices: ReportingService,
+            private pointlessMetrcSalesReport: PointlessMETRCSalesService,
             ) { }
 
 
@@ -140,6 +142,39 @@ export class MetrcSalesListComponent implements OnInit {
     };
   }
 
+  // CONVERT(VARCHAR, CompletionDate, 111) + ' ' +
+  // CONVERT(VARCHAR, CompletionDate, 108) AS CompleteDate,
+  // clienttypes.clienttype,
+  // Products.BarcodeID,
+  // (Details.Quantity)*Products.GramCountMultiplier,
+  // Types.[unitType],
+  // Round(([Quantity]*UnitPrice),2)-ItemLoyaltyPointDiscount-ItemPercentageDiscountValue-ItemCashDiscount-ItemOrderCashDiscount-ItemOrderPercentageDiscount,
+  // Clients.clAccountNumber as OOMP,
+  // Clients.clLogon as OOMPB,
+     //POdetailID,
+  // CONVERT(VARCHAR, CompletionDate, 111),
+  // CONVERT(VARCHAR, CompletionDate, 108) AS CompleteDate,
+  // Clients.InstertiaryNum, Details.OrderID
+
+
+
+  // completeDate:        string;
+  // clientType:          string;
+  // barcodeID:           null;
+  // quantityTotal:       null;
+  // unitType:            null;
+  // netTotal:            number;
+  // oomp:                null;
+  // oompb:               string;
+  // pOdetailID:          number;
+  // completionShortDate: string;
+  // completeDateTime:    string;
+  // clientAccount:       null;
+  // orderID:             number;
+  // grossTotal:          number;
+  // zrun:                string;
+
+
   onGridReady(params) {
     this.gridApi = params.api;
     // this.gridColumnApi = params.columnApi;
@@ -157,11 +192,8 @@ export class MetrcSalesListComponent implements OnInit {
   }
 
   async setSite(id: any) {
-
     this.site = await this.assingSite(id);
-
     this.siteService.setAssignedSite(this.site);
-
   }
 
   async assingSite(id: any) {
@@ -175,7 +207,7 @@ export class MetrcSalesListComponent implements OnInit {
     let site: ISite = this.siteService.getAssignedSite()
     this.metrcSales$ = this.metrcSalesService.getMetrcSales(this.siteService.getAssignedSite());
     this.metrcSales$.subscribe(data => {
-      console.log(data)
+
     })
   }
 

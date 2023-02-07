@@ -1,0 +1,91 @@
+<div *ngIf="(order$ | async) as order"></div>
+<div class="header-row">
+  <div>
+    <button class="button" mat-raised-button (click)="onExportToCsv()">
+      CSV Export
+      <mat-icon>download</mat-icon>
+    </button>
+  </div>
+
+ <div *ngIf="processing">
+    <mat-spinner [diameter]="50"></mat-spinner>
+ </div>
+
+ <div>
+   <div class="text-row header-row">
+     <div>Current Page: {{currentPage}}</div>
+     <div>Records: {{totalRecordCount}} (Max 10000)</div>
+   </div>
+   <div class="text-row header-row" *ngIf="searchModel">
+     <div *ngIf="searchModel.zRUN">
+       ID {{ searchModel.zRUN }}
+     </div>
+
+     <div *ngIf="searchModel.startDate">
+       Start {{searchModel.startDate }}
+     </div>
+
+     <div *ngIf="searchModel.endDate">
+       End: {{searchModel.endDate}}
+     </div>
+   </div>
+ </div>
+
+</div>
+
+<div *ngIf="exceptions && exceptions.length>0">
+  <mat-card>
+  <mat-card-title>
+    <h3>{{exceptions.length}} Exceptions </h3>
+  </mat-card-title>
+  <mat-card-content>
+    <div class="exceptions-card">
+
+    <div  class="exception-grid e">
+      <div  *ngFor="let item of exceptions; let i = index">
+        <div><button mat-raised-button color="warn" (click)="setActiveOrderByException(item?.orderID, item?.history)">
+          {{item.orderID}}</button>
+        </div>
+        <div>{{item.exceptionNote}}</div>
+      </div>
+    </div>
+  </div>
+  </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="container" >
+
+ <div *ngIf="smallDevice">
+   <mat-divider></mat-divider>
+ </div>
+
+  <div class="grid-list">
+    <div>
+      <div *ngIf="value" class="loader">
+        <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+      </div>
+
+      <ag-grid-angular
+            #agGrid
+            [style]              ="gridDimensions"
+            id                   ="myGrid"
+            [class]              ="agtheme"
+            [columnDefs]         ="columnDefs"
+            [defaultColDef]      ="defaultColDef"
+            [gridOptions]        ="gridOptions"
+            [rowSelection]       ="rowSelection"
+            [frameworkComponents]="frameworkComponents"
+            (selectionChanged)   ="onSelectionChanged($event)"
+            (gridReady)          ="onGridReady($event)">
+
+      </ag-grid-angular>
+    </div>
+
+    <div class="filter-panel" [style]="filterDimensions">
+      <metrc-sales-filter (outputClearExceptions)="clearExceptions($event)">
+      </metrc-sales-filter>
+    </div>
+  </div>
+
+</div>

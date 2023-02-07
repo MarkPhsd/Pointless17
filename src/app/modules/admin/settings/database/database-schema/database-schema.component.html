@@ -3,11 +3,14 @@
 </div>
 
 <div>
+
   <button mat-raised-button
           color="primary"
           (click)="updateSchema()">
           Update Schema
   </button>
+
+  <h4>API Database Release: <span *ngIf="(version$ | async) as version">{{version.option1}}</span></h4>
 </div>
 
 <div class="results">

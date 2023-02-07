@@ -14,6 +14,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { CardPointMethodsService } from '../../payment-processing/services';
 
 @Component({
@@ -27,7 +28,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   @Input() mainPanel = true;
   @Input() uiTransactions: TransactionUISettings;
   void$: Observable<any>;
-
+  action$: Observable<any>;
   paymentsEqualTotal: boolean;
   site           : ISite;
   _order:          Subscription;
@@ -57,6 +58,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
               private productEditButtonService: ProductEditButtonService,
               private editDialog      : ProductEditButtonService,
               private methodsService: CardPointMethodsService,
+              private triposMethodService: TriPOSMethodService,
               private toolBarUI       : ToolBarUIService,
               private matSnackBar   : MatSnackBar,
               public printingService: PrintingService,
@@ -66,15 +68,11 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
    }
 
    ngOnInit() {
-
     this.href = this.router.url;
     this.site = this.siteService.getAssignedSite();
     this.initSubscriptions();
     this.paymentsEqualTotal = false;
-
-
     if (this.order) {
-
       if ( this.order.balanceRemaining == 0)  {
         this.paymentsEqualTotal = true;
       }
@@ -92,7 +90,6 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       this.hidePrint = true;
       return;
     }
-
   }
 
   editCart() {
@@ -102,10 +99,25 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
   capture(item: IPOSPayment) {
-    if (this.order) {
-      this.methodsService.processCapture(item, this.order.creditBalanceRemaining,
-                                                   this.uiTransactions)
+    const site = this.siteService.getAssignedSite();
+    if (this.order && this.uiTransactions.cardPointPreAuth && this.uiTransactions.cardPointBoltEnabled) {
+      const payment$ =  this.paymentService.getPOSPayment(site, item.id, false)
+      this.action$ = payment$.pipe(switchMap(payment => {
+          this.methodsService.processCapture(item, this.order.creditBalanceRemaining,
+                                                      this.uiTransactions)
+                                                      return of(payment)
+      }))
     }
+  }
+
+  captureTriPOS(item: IPOSPayment) {
+    const site = this.siteService.getAssignedSite();
+    const payment$ =  this.paymentService.getPOSPayment(site, item.id, false)
+    this.action$ = payment$.pipe(switchMap(payment => {
+
+      return this.triposMethodService.openDialogCompleteCreditPayment(this.order, this.order.creditBalanceRemaining,
+                                                                payment, this.uiTransactions)
+    }))
   }
 
   editPayment(payment: IPOSPayment) {
@@ -125,6 +137,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
      if (this._currentPayment) {
       this._currentPayment.unsubscribe();
      }
+
 
      if (this._order) {
        this._order.unsubscribe();
@@ -163,7 +176,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
           this.notify(message, 'Alert', 2000)
         }
         const itemdata = { payment: payment, uiSettings: this.uiTransactions}
-        console.log(itemdata)
+        // console.log(itemdata)
         this.productEditButtonService.openVoidPaymentDialog(itemdata)
         return of(data)
         }

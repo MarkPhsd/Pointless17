@@ -7,7 +7,7 @@
     <div>
       <div>
 
-        <div  class="grid-header-item"
+        <div  [class]="gridheaderitem"
               (resized)="onResizedorderHeightPanel($event)">
           <pos-order-transaction-data
               [purchaseOrderEnabled]="purchaseOrderEnabled"
@@ -25,7 +25,7 @@
           </div>
         </div>
 
-        <div  class="grid-header-item"
+        <div  [class]="gridheaderitem"
               *ngIf="enableLimitsView  && (wideBar || mainPanel)"
               (resized)="onResizedorderLimitsPanel($event)">
           <limit-values-progress-bars
@@ -34,7 +34,7 @@
         </div>
 
         <div  (resized)="onResizedorderCustomerPanel($event)"
-              class="grid-header-item"
+              [class]="gridheaderitem"
               *ngIf="((wideBar || mainPanel) || (phoneDevice && !isUser)) &&
                      !isUser">
 
@@ -123,7 +123,7 @@
                 (!paymentsEqualTotal && !order.completionDate && order?.balanceRemaining != 0)" >
             <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
         </div>
-
+       <!-- {{deviceWidthPercentage}} -->
         <div class="side-panel-buttons-container"
               [style.width]="deviceWidthPercentage"
               *ngIf="!mainPanel && (uiSettings && uiSettings.wideOrderBar)" >

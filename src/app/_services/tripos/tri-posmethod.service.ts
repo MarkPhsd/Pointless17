@@ -232,4 +232,36 @@ export class TriPOSMethodService {
 
   }
 
+  openDialogCompleteCreditPayment ( order: IPOSOrder,
+    amount: number,
+    posPayment: IPOSPayment,
+    settings: TransactionUISettings) {
+    //once we get back the method 'Card Type'
+    //lookup the payment method.
+    //we can't get the type of payment before we get the PaymentID.
+    //so we just have to request the ID, and then we can establish everything after that.
+    const site = this.siteService.getAssignedSite();
+    // const  posPayment = {} as IPOSPayment;
+    posPayment.orderID      = order.id;
+    posPayment.zrun         = order.zrun;
+    posPayment.reportRunID  = order.reportRunID;
+    posPayment.amountPaid   = order.creditBalanceRemaining;
+    const payment$          = this.paymentService.savePOSPayment(site, posPayment)
+    const paymentProcess    = {order: order, posPayment: posPayment, settings: settings, manualPrompt: false, action: 1}
+
+    return payment$.pipe(
+    switchMap(data =>
+      {
+        data.amountPaid = amount;
+        paymentProcess.posPayment = data;
+        this.dialogRef = this.dialogOptions.openTriPOSTransaction(
+        paymentProcess
+      );
+        this._dialog.next(this.dialogRef)
+        return of(data)
+    }
+  ))
+
+}
+
 }

@@ -4,6 +4,9 @@ import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { Observable,switchMap,of } from 'rxjs';
 import { SystemService } from 'src/app/_services/system/system.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { OrdersService } from 'src/app/_services';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { EmployeeDetailsPanelComponent } from '../../employees/employee-details-panel/employee-details-panel.component';
 @Component({
   selector: 'app-email-settings',
   templateUrl: './email-settings.component.html',
@@ -12,13 +15,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class EmailSettingsComponent implements OnInit {
   showSendGridOptions: boolean;
   testEmail$: Observable<any>;
-  message: string;
+  message: any;
 
   @Input() inputForm          : FormGroup;
 
   constructor(
     private systemService   : SystemService,
     private _snackbar: MatSnackBar,
+    private orderService: OrdersService,
+    private sitesSerivce: SitesService,
     private sendGridService :  SendGridService,
   ) {
   }
@@ -49,6 +54,20 @@ export class EmailSettingsComponent implements OnInit {
       this._snackbar.open('Please check your email', 'Alert')
 
     }
+  }
+
+  sendOrderTest() {
+
+    const site = this.sitesSerivce.getAssignedSite()
+    const orderID = this.orderService.currentOrder.id;
+    const emailTo = this.inputForm.controls['salesReportsEmail'].value;
+    const emailName = this.inputForm.controls['salesReportsEmail'].value;
+
+    this.testEmail$ = this.sendGridService.sendOrderTest(orderID, false, emailTo, emailName).pipe(data => {
+      this.message = data;
+      return of(data)
+    })
+
   }
 
   sendTestEmail() {

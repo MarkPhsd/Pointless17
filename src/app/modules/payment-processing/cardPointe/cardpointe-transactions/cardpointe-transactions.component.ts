@@ -285,7 +285,6 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
         }
       )).pipe(
         switchMap(data => {
-            console.log('savePOSPayment', data, data.orderID);
             if (data && data.orderID) {
               const id =  data?.orderID.toString();
               return this.orderService.getOrder(site, id, false)

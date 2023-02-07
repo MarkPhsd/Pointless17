@@ -80,7 +80,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   receiptSaved              : boolean;
   zplSetting                : ISetting;
   receiptLayoutSetting      : ISetting;
-
+  receiptLayoutSetting$     : Observable<ISetting>;
   receiptStyles$            : Observable<any>;
   receiptStyles             : ISetting;
   zplText                   : string;
@@ -248,19 +248,19 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     }
   }
 
-  async refreshReceipt(id: any) {
+  refreshReceipt(id: any) {
     if (!id || id == 0) { return }
-    try {
-      this.receiptLayoutSetting   = null;
-      const site                  = this.siteService.getAssignedSite();
-      const receipt$              = this.settingService.getSetting(site, id)
-      receipt$.subscribe(data => {
-        this.receiptID = id
-        this.initSubComponent( data, this.receiptStyles )
-      })
-    } catch (error) {
-      console.log(error)
-    }
+    this.receiptLayoutSetting   = null;
+    const site                  = this.siteService.getAssignedSite();
+    const receipt$              = this.settingService.getSetting(site, id)
+    this.receiptLayoutSetting$ = receipt$.pipe(
+      switchMap(data => {
+      this.receiptID = id
+      this.receiptLayoutSetting = data;
+      this.initSubComponent( data, this.receiptStyles )
+      return of(data)
+    })
+    )
   }
 
   async initDefaultLabel(){
@@ -344,9 +344,9 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
 
   applyStyles() {
     const site         = this.siteService.getAssignedSite();
-    this.receiptStyles$ =   this.printingService.applyStylesObservable(site)
-    
-    this.receiptStyles$.pipe(switchMap(data => { 
+    const styles$ =   this.printingService.applyStylesObservable(site)
+
+    this.receiptStyles$  = styles$.pipe(switchMap(data => {
       if (data) {
         this.receiptStyles = data;
         const style     = document.createElement('style');
