@@ -455,7 +455,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     }
 
     //ag-grid standard method
-    async onGridReady(params: any) {
+    onGridReady(params: any) {
       if (params)  {
         this.params  = params
         this.gridApi = params.api;
@@ -472,14 +472,17 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         params.startRow = 1;
         params.endRow = this.pageSize;
       }
+
       this.processing = true;
+      console.log("check records")
       let datasource =  {
         getRows: (params: IGetRowsParams) => {
         const items$ =  this.getRowData(params, params.startRow, params.endRow)
+        this.processing = true;
         items$.subscribe(data =>
           {
               const resp           =  data.paging
-
+              this.processing = true;
               if (!this.exceptions) { this.exceptions = []}
               if (data.exceptions)  {
                 this.exceptions = [ ...this.exceptions, ...data.exceptions];

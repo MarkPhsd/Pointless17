@@ -1,10 +1,30 @@
 
+<div *ngIf="order &&
+            order.clients_POSOrders  &&
+            order.clients_POSOrders.client_Type &&
+            order.clients_POSOrders.client_Type.name &&
+            ( order.clients_POSOrders.client_Type.name.toLowerCase() === 'patient' ||
+              order.clients_POSOrders.client_Type.name.toLowerCase() === 'caregiver'
+             )
+           ">
+  <!-- {{order?.clients_POSOrders?.client_Type?.name.toLowerCase()}} -->
+  <div *ngIf="(last30Days$| async) as last30Days">
+    <app-progress-bar
+        *ngIf="order.gramCount != 0"
+        [value]="last30Days.gramTotal"
+        [ratio]="gramRatio"
+        [uom]="'Gram'"
+        [percentage]="gramCountProgress">
+        Last 30 Days Grams
+    </app-progress-bar>
+  </div>
+</div>
+
 <div class="bars" *ngIf="order&&  (order?.gramCount != 0
           || order?.concentrateCount != 0
           || order?.extractCount != 0
           || order?.liquidCount != 0
           || order?.seedCount != 0 )" >
-
     <app-progress-bar
         *ngIf="order.gramCount != 0"
         [value]="order.gramCount"

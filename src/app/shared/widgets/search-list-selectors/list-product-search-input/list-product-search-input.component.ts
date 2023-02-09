@@ -45,8 +45,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   _order              :   Subscription;
   order               :   IPOSOrder;
 
-
-
   transactionUISettings:TransactionUISettings;
   requireEnter         : boolean;
 

@@ -222,3 +222,13 @@ export interface ImportFlowVendorResults {
   listAdded: FlowVendor[];
   listNotAdded: FlowVendor[];
 }
+
+
+export interface Last30DaysSales {
+  clientID: number;
+  gramTotal: number;
+  medLicenseNumber: string;
+  oompb: string;
+  thirtyDayProgress: number;
+  gramRatio: number;
+}

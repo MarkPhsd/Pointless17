@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 // import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { BehaviorSubject, Observable, } from 'rxjs';
-import { ClientSearchModel, ClientSearchResults, ISite, IUserProfile }   from  'src/app/_interfaces';
+import { ClientSearchModel, ClientSearchResults, ISite, IUserProfile, Last30DaysSales }   from  'src/app/_interfaces';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { HttpClient } from '@angular/common/http';
 import { IItemBasic } from '../menuPrompt/prompt-group.service';
@@ -120,6 +120,22 @@ export class ContactsService {
     const url = { url: uri, cacheMins: 0}
 
     return  this.http.get<IUserProfile[]>(url)
+
+  };
+
+  last30DayValues(site: ISite, id): Observable<Last30DaysSales> {
+
+    const   controller =  "/clients/"
+
+    const endPoint = `last30DayValues`
+
+    const parameters = `?id=${id}`
+
+    const uri = `${site.url}${controller}${endPoint}${parameters}`
+
+    const url = { url: uri, cacheMins: 5}
+
+    return  this.http.get<Last30DaysSales>(url)
 
   };
 

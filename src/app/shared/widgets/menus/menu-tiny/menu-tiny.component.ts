@@ -111,7 +111,34 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     const result = !this.smallMenu
     this.toolbarUIService.updateBarSize(result)
     localStorage.setItem('barSize', String(result))
+
+    let fixed ;
+    if (result == true) {
+      fixed = false
+    } else {
+      fixed = true;
+    }
+
+    localStorage.setItem('barSizeFixed', String(fixed))
     this.updateScreenSize();
+  }
+
+  expandMenu () {
+    const result = false
+    console.log(result)
+    this.toolbarUIService.updateBarSize(result)
+    localStorage.setItem('barSize', String(result))
+    this.updateScreenSize();
+    console.log('moust over')
+  }
+
+  minimizeMenu () {
+    const result = true
+    console.log(result)
+    this.toolbarUIService.updateBarSize(result)
+    localStorage.setItem('barSize', String(result))
+    this.updateScreenSize();
+    console.log('moust out')
   }
 
   @HostListener("window:resize", [])

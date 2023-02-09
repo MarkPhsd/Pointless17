@@ -1,7 +1,11 @@
 import { Component, OnInit, Input, OnChanges} from '@angular/core';
 import { IPOSOrder, }  from 'src/app/_interfaces/transactions/posorder';
 import { ActivatedRoute, } from '@angular/router';
-import { clientType } from 'src/app/_interfaces';
+import { clientType, Last30DaysSales } from 'src/app/_interfaces';
+import { ClientTableService } from 'src/app/_services/people/client-table.service';
+import { Observable, of, switchMap } from 'rxjs';
+import { ContactsService } from 'src/app/_services';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
   selector: 'limit-values-progress-bars',
@@ -26,8 +30,13 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
   liquidCountRatio: number;
   seedCountRatio: number;
   concentrateCountRatio: number;
+  last30Days$ : Observable<Last30DaysSales>;
 
-  constructor(    public route: ActivatedRoute,) {
+
+  constructor(
+    private contactService: ContactsService,
+    private siteService: SitesService,
+    public route: ActivatedRoute,) {
     const outPut = this.route.snapshot.paramMap.get('mainPanel');
     if (outPut) {
       this.mainPanel = true
@@ -36,6 +45,37 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
 
   ngOnInit(): void {
     const i  =0
+    this.getLast30DayRatio();
+
+  }
+
+  getLast30DayRatio() {
+    // console.log('dramatic')
+    if (this.order &&
+      this.order.clients_POSOrders &&
+      this.order.clients_POSOrders.client_Type &&
+       ( this.order.clients_POSOrders.client_Type.name.toLowerCase() === 'patient' ||
+         this.order.clients_POSOrders.client_Type.name.toLowerCase() === 'caregiver'
+        )
+      ) {
+      // console.log('azula')
+       const customLimit = this.order.clients_POSOrders.medGramLimit;
+       const standardLimit = this.order.clients_POSOrders.client_Type.limitGram;
+
+       let currentLimit: number;
+       currentLimit = standardLimit
+       if (!customLimit || customLimit == 0) {
+        currentLimit = customLimit
+       }
+
+       const site = this.siteService.getAssignedSite()
+       this.last30Days$ = this.contactService.last30DayValues(site, this.order.clientID).pipe(
+        switchMap(data => {
+         if (!data || !data.gramTotal) return of(null)
+         data.thirtyDayProgress  = ((data.gramTotal / standardLimit ) * 100)
+         return of(data)
+       }))
+   }
   }
 
   ngOnChanges() {
@@ -77,17 +117,15 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
 
         if (client && client.client_Type) {
 
-          console.log('client.mEDGramLimit', client);
-          console.log('medGramLimit', client.medGramLimit, client.medGramLimit && client.medGramLimit != 0);
-          console.log('isPatient', client.client_Type.name.toLowerCase() === 'patient')
+          // console.log('client.mEDGramLimit', client);
+          // console.log('medGramLimit', client.medGramLimit, client.medGramLimit && client.medGramLimit != 0);
+          // console.log('isPatient', client.client_Type.name.toLowerCase() === 'patient')
 
           if (client.client_Type.name.toLowerCase() === 'patient' ||
               client.client_Type.name.toLowerCase() === 'caregiver' ) {
 
             if (client.medGramLimit && client.medGramLimit != 0){
-              console.log('gramRatio', gramRatio)
               gramRatio = client.medGramLimit
-              console.log('gramRatio2', gramRatio)
             }
 
             if (client.medConcentrateLimit && client.medConcentrateLimit != 0){

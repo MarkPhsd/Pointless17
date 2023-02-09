@@ -31,7 +31,7 @@
           </span>
 
           <span *ngIf="quantity && !prepScreen">
-            <div class="quantity"  *ngIf="subTotal > 0">
+            <div class="quantity"  *ngIf="subTotal >= 0">
               {{ quantity }} {{orderItem?.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
             </div>
             <div class="quantity"   *ngIf="subTotal < 0"  style="color:crimson">

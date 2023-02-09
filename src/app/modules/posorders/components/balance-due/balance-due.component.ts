@@ -14,6 +14,7 @@ import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printi
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { TransactionUISettings,  UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
@@ -49,6 +50,7 @@ export class ChangeDueComponent implements OnInit  {
                private uISettingsService: UISettingsService,
               private printingService: PrintingService,
               private methodsService: CardPointMethodsService,
+              private orderMethodService: OrderMethodsService,
               private prepPrintingService: PrepPrintingServiceService ,
               private dialogRef: MatDialogRef<ChangeDueComponent>,
               @Inject(MAT_DIALOG_DATA) public data: IBalanceDuePayload
@@ -112,7 +114,9 @@ export class ChangeDueComponent implements OnInit  {
   close() {
     // this.clearSubscriptions()
     // this.router.navigateByUrl('/')
+    this.orderMethodService.clearOrder();
     this.dialogRef.close()
+
   }
 
   customTipAmount(amount) {

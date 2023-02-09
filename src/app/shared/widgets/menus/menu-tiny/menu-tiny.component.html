@@ -6,96 +6,64 @@
   </div>
 </ng-template>
 
-<!-- fxLayout="row" -->
 <div
-     class="row-class"
-     *ngIf="(menu$ | async) as menus; else loading">
 
-  <ul id="accordion"
-      class="accordion">
-    <li class="menu-item"
-        @fade
-        *ngFor="let menu of menus; let i = index"
-        [class.active]="menu?.active">
-
-        <div class="menu"
-            *ngIf="isAuthorized(menu?.userType)"
-             (click)="toggle(menu, i)">
-
-          <div   class="grid-toggle-tiny">
-            <div  class="item-icon" *ngIf="menu.icon">
-              <mat-icon>{{ menu.icon }}</mat-icon>
-            </div>
-            <div  class ="item-name" *ngIf="!tinyMenu">
-              {{menu?.name | truncateText : 20}}
-            </div>
-          </div>
-
-        </div>
-    </li>
-  </ul>
-
-</div>
-
-<div [class]="submenuposition">
+     class="container">
 
   <div
-       class="submenu-sections"
-       *ngIf="displayCategories" >
+      class="row-class"
+      *ngIf="(menu$ | async) as menus; else loading">
 
-    <div *ngIf="submenu">
-      <ul id="accordion"
-          class="accordion">
-        <li class="menu-item"
-            @fade
-            *ngFor="let item of submenu" >
+    <ul id="accordion"
+        class="accordion">
+      <li class="menu-item"
+          @fade
+          *ngFor="let menu of menus; let i = index"
+          [class.active]="menu?.active">
 
-          <div *ngIf="isAuthorized(item.userType)" >
-          <div *ngIf="!item.minimized">
-              <div class="menu" >
-                <button mat-menu-item
-                    color=""
-                    routerLinkActive={{item.routerLinkActive}}
-                    routerLink=      {{item.routerLink}}>
+          <div  class="menu"
 
-                    <div [class]="gridtoggletiny">
-                      <div class="item-font" *ngIf="item.icon">
-                        <mat-icon>{{item.icon}}</mat-icon>
-                      </div>
-                      <div class="item-font" *ngIf="!tinyMenu">
-                        {{item.name | truncateText : 20}}
-                      </div>
-                    </div>
 
-                </button>
+                *ngIf="isAuthorized(menu?.userType)"
+                (click)="toggle(menu, i)">
+
+            <div   class="grid-toggle-tiny">
+              <div  class="item-icon" *ngIf="menu.icon">
+                <mat-icon>{{ menu.icon }}</mat-icon>
+              </div>
+              <div  class ="item-name" *ngIf="!tinyMenu">
+                {{menu?.name | truncateText : 20}}
               </div>
             </div>
+
           </div>
-        </li>
-      </ul>
-      <button mat-icon-button
-              [matMenuTriggerFor]="menu"
-              aria-label=" icon button with a menu">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-    </div>
+      </li>
+    </ul>
 
-  <div
-       *ngIf="submenu"></div>
+  </div>
 
-    <ul id   ="accordion"
-        class="accordion">
-        <li class="menu-item"
-              @fade>
-          <mat-menu #menu="matMenu">
-            <div  *ngFor="let item of submenu">
-                <div *ngIf="item.minimized">
-                  <div *ngIf="isAuthorized(item?.userType)">
-                    <button mat-menu-item
-                            routerLinkActive={{item?.routerLinkActive}}
-                            routerLink      = {{item?.routerLink}}>
+  <div [class]="submenuposition"
+      >
+    <div
+        class="submenu-sections"
+        *ngIf="displayCategories" >
 
-                      <div class="grid-toggle-tiny">
+      <div *ngIf="submenu">
+        <ul id="accordion"
+            class="accordion">
+          <li class="menu-item"
+              @fade
+              *ngFor="let item of submenu" >
+
+            <div *ngIf="isAuthorized(item.userType)" >
+            <div *ngIf="!item.minimized">
+                <div class="menu" >
+                  <button mat-menu-item
+                      color=""
+                      routerLinkActive={{item.routerLinkActive}}
+                      routerLink=      {{item.routerLink}}>
+
+                      <div [class]="gridtoggletiny">
                         <div class="item-font" *ngIf="item.icon">
                           <mat-icon>{{item.icon}}</mat-icon>
                         </div>
@@ -104,20 +72,61 @@
                         </div>
                       </div>
 
-                    </button>
-                  </div>
+                  </button>
                 </div>
               </div>
-          </mat-menu>
-        </li>
-    </ul>
+            </div>
+          </li>
+        </ul>
+        <button mat-icon-button
+                [matMenuTriggerFor]="menu"
+                aria-label=" icon button with a menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </div>
+
+    <div
+        *ngIf="submenu"></div>
+
+      <ul id   ="accordion"
+          class="accordion">
+          <li class="menu-item"
+                @fade>
+            <mat-menu #menu="matMenu">
+              <div  *ngFor="let item of submenu">
+                  <div *ngIf="item.minimized">
+                    <div *ngIf="isAuthorized(item?.userType)">
+                        <button
+
+                              mat-menu-item
+                              routerLinkActive={{item?.routerLinkActive}}
+                              routerLink      = {{item?.routerLink}}>
+
+                        <div class="grid-toggle-tiny">
+                          <div class="item-font" *ngIf="item.icon">
+                            <mat-icon>{{item.icon}}</mat-icon>
+                          </div>
+                          <div class="item-font" *ngIf="!tinyMenu">
+                            {{item.name | truncateText : 20}}
+                          </div>
+                        </div>
+
+                      </button>
+                    </div>
+                  </div>
+                </div>
+            </mat-menu>
+          </li>
+      </ul>
+
+    </div>
+
+    <button mat-icon-button
+        (click)="setSmallMenu()"
+        aria-label=" toggle">
+      <mat-icon>view_compact</mat-icon>
+    </button>
 
   </div>
-
-  <button mat-icon-button
-      (click)="setSmallMenu()"
-      aria-label=" toggle">
-    <mat-icon>view_compact</mat-icon>
-  </button>
 
 </div>

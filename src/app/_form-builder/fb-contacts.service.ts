@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { TryCatch } from '@sentry/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,21 @@ export class FbContactsService {
 
   constructor(private _fb: FormBuilder) { }
 
+  //Usage
+  // sampleFormControl = new FormControl('', [
+  //     validateInput
+  // ]);
+
+  validateLicenseType(c: FormControl){ //Dual Pattern Check
+    let oldPattern = '^[0-9]{2}-[0-9]{3}-[0-9]{3}-[A-Za-z]{2}$'; // Regular Expression 1
+    let newPattern = '^\d{7}$'; // Regular Expression 2
+    try {
+      if (!c.value) { return null}
+      return (c.value.match(oldPattern) || c.value.match(newPattern)? null :{checkValidAddress : true});
+    } catch (error) {
+      return null;
+    }
+  }
 
   initForm(fb: FormGroup): FormGroup {
 
@@ -17,9 +33,9 @@ export class FbContactsService {
     fb = this._fb.group({
         id: [''], //                       number;
         companyName: [''], //              string;
-        firstName: [''], //                string;
+        firstName: ['' ], //                string;
         lastName: [''], //                 string;
-        email: [''], //                    string;
+        email: ['', Validators.email], //                    string;
         accountNumber: [''], //            string;
         shippingAddress2: [''], //         string;
         shippingAddress: [''], //          string;
@@ -132,7 +148,7 @@ export class FbContactsService {
         accountDelay              : [''],
         medTempLicense            : [''],
         medPhysicianApproved:       [''], //
-        medLicenseNumber:           ['',Validators.pattern(oompPattern)], //
+        medLicenseNumber:           ['', this.validateLicenseType], //
         medPlantLimit:              [''], //
         medGramLimit:               [''], //
         medPrescriptionExpiration:  [''], //
