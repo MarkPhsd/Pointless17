@@ -101,8 +101,11 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   tempPayments: PosPayment[];
 
   printView: number;
+  groupID = 0
 
   intSubscriptions() {
+
+    this.groupID = this.printingService.currentGroupID
     this.printingService.printView$.subscribe(data => {
         if (!data) {
           this.printingService._printView.next(1);
@@ -134,7 +137,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     )
   }
 
-
   constructor(
     public orderService          : OrdersService,
     private settingService        : SettingsService,
@@ -155,6 +157,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   ngOnDestroy(): void {
     this.printingService.updatePrintView(1);
     if(this._order) { this._order.unsubscribe() }
+    this.printingService.currentGroupID = 0;
   }
 
   refreshViewObservable(){
@@ -166,26 +169,26 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     return receipt$.pipe(
       switchMap(data => { return defaultReceipt$ })
           ,catchError(e => {
-                    console.log('e 1', e)
+                    // console.log('e 1', e)
             this.siteService.notify('Error defaultReceipt receipt view' + e, 'Alert', 2000)
             return of(null)
           })).pipe(
       switchMap(data => { return styles$ })
           ,catchError(e => {
-            console.log('e 2', e)
+            // console.log('e 2', e)
             this.siteService.notify('Error  stylesreceipt view' + e, 'Alert', 2000)
             return of(null)
           })).pipe(
       switchMap(data => { return deviceInfo$}
           ),catchError(e => {
-            console.log('e 3', e)
+            // console.log('e 3', e)
             this.siteService.notify('Error deviceInfo receipt view' + e, 'Alert', 2000)
             return of(null)
           })).pipe(
       switchMap(data => {
         return of(data)
           }),catchError(e => {
-            console.log('e4' , e)
+            // console.log('e4' , e)
             this.siteService.notify('Error receipt view' + e, 'Alert', 2000)
             return of(null)
       }))
@@ -250,9 +253,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   email() {
 
     if (this.order && this.order.clients_POSOrders && this.order.clients_POSOrders.email) {
-
         const email = this.order.clients_POSOrders.email;
-
         this.email$ =  this.orderMethodService.emailOrderFromEntry(this.order, email).pipe(
           switchMap(data => {
             if (data === 'Success') {
@@ -266,21 +267,15 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
             if (!data || !data.isSuccessStatusCode) {
               this.orderMethodService.notifyEvent('Email not sent. Check email settings', 'Failed')
             }
-
-
             return of (data)
           }
         )
       )
-
-
       return;
     }
-
     this.orderMethodService.emailOrderByEntry(this.order)
     this.exit();
   }
-
 
   getDeviceInfo(): Observable<ISetting> {
     const site = this.siteService.getAssignedSite();
@@ -296,7 +291,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       }
       return of(data)
     }))
-
   }
 
   initBalanceSheetDefaultLayoutsObservable() {
@@ -339,6 +333,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   getPrinterName() {
   }
+
   ///step 1B
   initSubComponent(receiptPromise: ISetting): boolean {
     if (receiptPromise ) {
@@ -423,9 +418,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     if (this.receiptStyles) {
       styles = this.receiptStyles.text;
       const contents = this.getReceiptContents(styles)
-
       if (!contents) { return }
-
       const options  = {
         silent: true,
         printBackground: false,
@@ -452,7 +445,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   exit() {
     this.outPutExit.emit('true')
   }
-
 
   getLabelPrinterAssignment() {
     const label$ = this.getLabelPrinterOBS()
@@ -500,18 +492,18 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   getOrder() {
     return  this.orderService.currentOrder$.pipe(
       switchMap(data => {
-          this.order      = data;
-          this.orders     = [];
-          if (!data)       {return}
-          this.orders.push(data)
-          if (data.posPayments) {
-            this.tempPayments   = data.posPayments
+            this.order      = data;
+            this.orders     = [];
+            if (!data)       {return}
+            this.orders.push(data)
+            if (data.posPayments) {
+              this.tempPayments   = data.posPayments
+            }
+            if (data.posOrderItems) {
+              this.items      = data.posOrderItems
+            }
+            return  this.orderService.getSelectedPayment()
           }
-          if (data.posOrderItems) {
-            this.items      = data.posOrderItems
-          }
-          return  this.orderService.getSelectedPayment()
-        }
         )
       ).pipe(switchMap(payment => {
           if (payment) {

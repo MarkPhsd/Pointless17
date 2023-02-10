@@ -41,13 +41,13 @@
             <br>
             <mat-label>Apply all splits before making payments. </mat-label>
             <mat-label>Once payments are made more splits can not be done.</mat-label>
-
-            <mat-card *ngIf="(orderGroupTotal$ | async) as order; else calculating">
+            <div><button color="primary" mat-raised-button (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button></div>
+            <mat-card *ngIf="(orderGroupTotal$ | async) as groupOrder; else calculating">
               <mat-card-content>
                 <br>
-                Balance: {{order.balanceRemaining |currency}}
+                Balance: {{groupOrder.balanceRemaining |currency}}
                 <br>
-                Total:  {{order.total | currency}}
+                Total:   {{groupOrder.total | currency}}
               </mat-card-content>
 
               <mat-card-actions >
@@ -57,7 +57,7 @@
                       <mat-icon>save</mat-icon>Save Changes
                     </button>
                   </div>
-                  <div *ngIf="!changesOcurred && order.total>0">
+                  <div *ngIf="!changesOcurred && groupOrder.total>0">
                     <button mat-raised-button color="primary" (click)="submitPaymentAmount()">
                       <mat-icon>save</mat-icon>Make Payment
                     </button>
@@ -117,16 +117,14 @@
                     [cdkDropListData]="selectedItems"
                     [cdkDropListConnectedTo]="[availables]"
                     (cdkDropListDropped)="drop($event)"
-                    class="drag-drop-list"
-                  >
+                    class="drag-drop-list" >
                     <div
                       nbButton
                       outline
                       status="primary"
                       class="drag-drop-box"
                       *ngFor="let item of selectedItems"
-                      cdkDrag
-                    >
+                      cdkDrag>
                       {{ item.text }}
                     </div>
                   </div>
@@ -139,4 +137,16 @@
         </mat-card-content>
       </mat-card>
     </div>
-  </div>
+</div>
+
+<!-- <h3>availableItems</h3>
+<div *ngIf="availableItems">
+  {{availableItems | json }}
+</div>
+<h3>selectedItems</h3>
+<div *ngIf="selectedItems">
+  {{selectedItems | json }}
+</div> -->
+<div *ngIf="(selectedItems$ | async) as selectedItems"></div>
+<div *ngIf="(allitems$ | async) as allitems"></div>
+<div *ngIf="(saveAssignedItems$ | async) as savedItems"></div>

@@ -53,6 +53,7 @@ export class PrintingService {
   public _printView         = new BehaviorSubject<number>(null);
   public printView$         = this._printView.asObservable();
   public __printView        : number;
+  currentGroupID: number;
 
   image: string;
   get printView() {
@@ -163,7 +164,7 @@ export class PrintingService {
 
     if (zpl) {
       const labelImage$  =  this.labelaryService.postZPL(site, zpl)
-      return labelImage$.pipe(switchMap(data => { 
+      return labelImage$.pipe(switchMap(data => {
         return  of(`data:image/jpeg;base64,${data}`)
       }))
     }
@@ -492,9 +493,9 @@ export class PrintingService {
 
     let printer = {} as any;
     let  menuItem$  : Observable<IMenuItem>
-    if (!item.menuItem) { 
+    if (!item.menuItem) {
       menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID);
-    } else { 
+    } else {
       menuItem$ = of(item.menuItem)
     }
 
