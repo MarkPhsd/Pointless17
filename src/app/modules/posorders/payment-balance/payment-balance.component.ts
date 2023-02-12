@@ -29,6 +29,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   @Input() uiTransactions: TransactionUISettings;
   void$: Observable<any>;
   action$: Observable<any>;
+  printing$: Observable<any>;
   paymentsEqualTotal: boolean;
   site           : ISite;
   _order:          Subscription;
@@ -137,14 +138,10 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
      if (this._currentPayment) {
       this._currentPayment.unsubscribe();
      }
-
-
      if (this._order) {
        this._order.unsubscribe();
      }
    }
-
-
 
    closeOrder() {
      if (this.order) {
@@ -182,9 +179,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
         }
       )
     )
-
   }
-
 
    requestVoidPayment(payment) {
     //run void method.
@@ -196,8 +191,20 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
    }
 
    printPaymentReceipt(item) {
+
+    this.orderService.selectedPayment = item;
+    console.log(item)
+    if (item && (item.groupID && item.groupID != 0)) {
+      const site = this.siteService.getAssignedSite();
+        this.printing$ = this.orderService.getPOSOrderGroupTotal(site, item.orderID, item.groupID).pipe(switchMap(data => {
+        this.orderService.printOrder = data;
+        this.printingService.previewReceipt();
+        return of(data)
+      }))
+      return;
+    }
+
     if (item) {
-      this.orderService.selectedPayment = item;
       this.printingService.previewReceipt()
     }
    }

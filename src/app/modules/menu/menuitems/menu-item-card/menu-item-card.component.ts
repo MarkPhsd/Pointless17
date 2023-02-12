@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy, Output,EventEmitter} from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
-import { AWSBucketService, OrdersService } from 'src/app/_services';
-import { ActivatedRoute,  } from '@angular/router';
+import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
+import { ActivatedRoute, Router,  } from '@angular/router';
 import * as _  from "lodash";
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
 import { Observable, Subscription } from 'rxjs';
@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Capacitor } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 
 
 // https://stackoverflow.com/questions/54687522/best-practice-in-angular-material-to-reuse-component-in-dialog
@@ -50,6 +51,8 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     private _snackBar: MatSnackBar,
     private orderMethodService: OrderMethodsService,
     private platFormService   : PlatformService,
+    private menuService: MenuService,
+    private router: Router,
     )
   {
     this.isApp    = this.platFormService.isApp()
@@ -143,29 +146,50 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   menuItemActionObs(add : boolean) {
 
-    console.log(add)
-
     if (this.menuItem?.name.toLowerCase() === 'load more') {
       this.outPutLoadMore.emit('true')
       return ;
     }
 
-    // if ( this.isApp && !this.isCategory ) {
-    //   add = true;
-    // }
-    // if (!this.isApp && !this.isCategory) {
-    //   add = false;
-    // }
-
     if (this.isCategory) {
+      this.listItems(this.menuItem.id);
       add = false;
+      return;
     }
 
+    // console.log(add)
     this.action$ = this.orderMethodService.menuItemActionObs(this.order,this.menuItem, add,
                                             this.orderMethodService.assignPOSItems)
 
   }
 
+  listItems(id:number) {
+    this.initProductSearchModel(id, this.menuItem?.itemType?.id )
+    if (this.menuItem?.itemType?.id == 4) {
+      this.router.navigate(["/menuitems-infinite/", {categoryID:id }]);
+    }
+    if (this.menuItem?.itemType?.id == 6) {
+      this.router.navigate(["/menuitems-infinite/", {departmentID:id, typeID:4}]);
+    }
+  }
+
+  initProductSearchModel(id: number, itemTypeID: number): ProductSearchModel {
+    let productSearchModel        = {} as ProductSearchModel;
+
+    if (itemTypeID== 6) {
+     { productSearchModel.departmentID  = id.toString(); }
+    }
+
+    if (itemTypeID == 4) {
+      { productSearchModel.categoryID  = id.toString(); }
+    }
+
+    productSearchModel.pageSize   = 25
+    productSearchModel.pageNumber = 1
+    this.menuService.updateMeunuItemData(productSearchModel)
+    return productSearchModel;
+
+  }
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

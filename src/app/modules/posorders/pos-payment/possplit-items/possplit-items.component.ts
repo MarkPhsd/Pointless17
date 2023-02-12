@@ -30,6 +30,7 @@ export class POSSplitItemsComponent implements OnInit {
     orderItems       : PosOrderItem[];
     productTypes     : IItemBasic[];
     orderGroupTotal$ : Observable<IPOSOrder>;
+    printReceipt$    : Observable<IPOSOrder>;
     typeID           : number;
     assignedStatic   : any;
     allAssigned      : any;
@@ -134,9 +135,18 @@ export class POSSplitItemsComponent implements OnInit {
     }
 
     printReceipt()  {
-      const groupID = this.currentGroupID;
-      this.printingService.currentGroupID = groupID;
-      // this.printing
+      const groupID = this.currentGroupID
+      if (groupID && groupID != 0) {
+        const site = this.siteService.getAssignedSite()
+        this.printReceipt$  = this.orderService.getPOSOrderGroupTotal(site, this.order.id, groupID).pipe(
+          switchMap(data => {
+            this.printingService.currentGroupID = groupID;
+            this.orderService.printOrder = data;
+            this.printingService.previewReceipt();
+            return of(data);
+        }))
+      }
+
     }
 
     initGroupList(): any {
@@ -227,7 +237,7 @@ export class POSSplitItemsComponent implements OnInit {
     submitPaymentAmount() {
       this.orderGroupTotal$.subscribe( data => {
         if (!data) { return }
-        this.outPutPaymentAmount.emit({amount: data.total.toFixed(2), groupID: this.currentGroupID})
+         this.outPutPaymentAmount.emit({amount: data.total.toFixed(2), groupID: this.currentGroupID})
       })
     }
 

@@ -80,6 +80,12 @@ export class OrdersService {
   private _posOrders          = new BehaviorSubject<IPOSOrder[]>(null);
   public posOrders$           = this._posOrders.asObservable();
 
+
+  printOrder: IPOSOrder ;
+
+  public _scanner             = new BehaviorSubject<boolean>(null);
+  public scanner$             = this._scanner.asObservable();
+
   private _currentOrder       = new BehaviorSubject<IPOSOrder>(null);
   public currentOrder$        = this._currentOrder.asObservable();
   public currentOrder         = {} as IPOSOrder
@@ -179,6 +185,7 @@ export class OrdersService {
 
     order = this.getCost(order)
     this._currentOrder.next(order);
+
     if (order == null) {
       order = this.getStateOrder();
       if (order) {
@@ -193,7 +200,7 @@ export class OrdersService {
     this.currentOrder = order;
     this.orderClaimed = false;
     this.setStateOrder(order);
-
+    this._scanner.next(true)
     const site = this.siteService.getAssignedSite();
     if (order && order.id) {
       const order$ = this.claimOrder(site, order.id.toString(), order.history)

@@ -25,7 +25,7 @@ export class PosOrderItemEditComponent  {
   decimals    = 2;
   requireWholeNumber: boolean;
   inputTypeValue = 'decimal'
-  
+
   constructor(
       private posOrderItemService : POSOrderItemServiceService,
       private orderService        : OrdersService,
@@ -134,7 +134,7 @@ export class PosOrderItemEditComponent  {
     this.save()
   }
 
-  saveCostChange(event) { 
+  saveCostChange(event) {
     const item = this.getItemValue();
     item.wholeSale = event;
     this.save()
@@ -228,6 +228,7 @@ export class PosOrderItemEditComponent  {
 
   onCancel() {
     this.closeOnEnterPress.emit('true')
+    this.orderService._scanner.next(true)
     this.dialogRef.close();
   }
 

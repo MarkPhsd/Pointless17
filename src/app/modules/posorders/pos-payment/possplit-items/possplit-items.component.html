@@ -41,7 +41,7 @@
             <br>
             <mat-label>Apply all splits before making payments. </mat-label>
             <mat-label>Once payments are made more splits can not be done.</mat-label>
-            <div><button color="primary" mat-raised-button (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button></div>
+            <div><button color="primary" mat-raised-button (click)="printReceipt()"><mat-icon>print</mat-icon></button></div>
             <mat-card *ngIf="(orderGroupTotal$ | async) as groupOrder; else calculating">
               <mat-card-content>
                 <br>
@@ -139,14 +139,7 @@
     </div>
 </div>
 
-<!-- <h3>availableItems</h3>
-<div *ngIf="availableItems">
-  {{availableItems | json }}
-</div>
-<h3>selectedItems</h3>
-<div *ngIf="selectedItems">
-  {{selectedItems | json }}
-</div> -->
 <div *ngIf="(selectedItems$ | async) as selectedItems"></div>
 <div *ngIf="(allitems$ | async) as allitems"></div>
 <div *ngIf="(saveAssignedItems$ | async) as savedItems"></div>
+<div *ngIf="(printReceipt$ | async) as printView"></div>

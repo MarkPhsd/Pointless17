@@ -49,6 +49,10 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   requireEnter         : boolean;
 
   initSubscriptions() {
+    this.orderService.scanner$.subscribe(data =>  {
+      this.input.nativeElement.focus();
+    })
+
     this._order = this.orderService.currentOrder$.subscribe( data => {
       if ( data ) {
         if (!this.order) {

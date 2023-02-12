@@ -2,7 +2,7 @@
 <!-- <div *ngIf="(deviceSettings$ | async) as deviceSettings"></div> -->
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(void$ | async) as void"></div>
-
+<div *ngIf="(printing$ | async) as printing"></div>
 <mat-card *ngIf="order">
   <mat-card-subtitle>
     <ng-content></ng-content>
@@ -86,6 +86,7 @@
                   <!-- type {{item | json}} -->
           <div *ngIf="item.paymentMethod" class="grid-item">
             {{item?.paymentMethod?.name}}  {{ item.tranType }}
+            <span *ngIf="item.groupID != 0"> ({{item.groupID}})</span>
             <span *ngIf="item.voidReason"><mat-icon>void</mat-icon> </span>
             <div *ngIf="item?.paymentMethod?.isCash && item?.amountPaid > 0">
               <span *ngIf="item.amountPaid - item.amountReceived !=0">

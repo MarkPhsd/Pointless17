@@ -32,10 +32,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   @Input() paymentsText: string;
   @Input() paymentsCreditText: string;
   @Input() paymentsWICEBTText: string;
-    // [paymentsWICEBTText]="setting.option10"
-    // [paymentsCreditText]="setting.option11"
-
-
   @Input() subFooterText: string;
   @Input() testdata    : boolean
   @Input() printerWidth: number;
@@ -78,7 +74,13 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
 
   initSubscriptions() {
     this.site = this.siteService.getAssignedSite();
-    return this.orderService.currentOrder$.pipe(
+
+    let printOrder$  = of(this.orderService.printOrder);
+    if (!this.orderService.printOrder) {
+     printOrder$ = this.orderService.currentOrder$
+    }
+
+    return  printOrder$.pipe(
       switchMap(
         data => {
           if (!data)  {
@@ -89,7 +91,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
           if (!this.payments) {
             this.payments   = this.order.posPayments
           }
-          console.log('payments', this.payments)
           this.orders     = []
           if (this.order) { this.orders.push(this.order)};
           const datepipe: DatePipe = new DatePipe('en-US');
@@ -119,7 +120,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
       if (data && data.name) {
         this.order.service.menuItem1 = data;
       }
-
+      // this.orderService.printOrder = null;
       return of(data)
     }))
   }
@@ -138,9 +139,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   }
 
   initTemplateData(order) {
-
     if (!order) {
-      console.log('initTemplateData order update null')
       return null
     }
 
@@ -180,9 +179,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   }
 
   outputPrint() {
-    // if (this.autoPrinted) { return }
-    // this.autoPrinted = true;
-
     setTimeout(() => {
       const prtContent     = document.getElementById('printsection');
       if (!prtContent) {
@@ -195,7 +191,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
         return
       }
 
-      // console.log('content output', this.index, content.length)
       this.outPutPrintReady.emit(content)
     }, 500)
   }

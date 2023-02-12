@@ -108,6 +108,15 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   printReceipt() {
+    if (this.payment && (this.payment.groupID && this.payment.groupID != 0)) {
+      const site = this.siteService.getAssignedSite();
+       this.printing$ = this.orderService.getPOSOrderGroupTotal(site, this.payment.orderID, this.payment.groupID).pipe(switchMap(data => {
+        this.orderService.printOrder = data;
+        this.printingService.previewReceipt();
+        return of(data)
+      }))
+      return;
+    }
     this.printingService.previewReceipt()
   }
 

@@ -1,4 +1,20 @@
 @import "/src/mixins.scss";
+mat-card {
+  padding: 3px;
+  object-fit: cover;
+  height: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  max-width: 200px;
+}
+mat-card:hover {
+  transform: scale(1.03);
+}
+
+mat-card:active {
+  box-shadow: 1px 1px 2px black, 0 0 25px rgb(33, 43, 33), 0 0 5px darkblue;
+  transform: scale(1.03);
+}
 
 .container {
   position: relative;
@@ -12,23 +28,6 @@
   height: 45px;
 }
 
-:host mat-card {
-  padding: 3px;
-  object-fit: cover;
-  height: 100%;
-  overflow-y: hidden;
-  overflow-x: hidden;
-  max-width: 200px;
-}
-
-mat-card:hover {
-  transform: scale(1.03);
-}
-
-mat-card:active {
-  box-shadow: 1px 1px 2px black, 0 0 25px rgb(33, 43, 33), 0 0 5px darkblue;
-  transform: scale(1.03);
-}
 
 .text-max-width {
   max-width: 200px;

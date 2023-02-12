@@ -53,7 +53,7 @@ export class PrintingService {
   public _printView         = new BehaviorSubject<number>(null);
   public printView$         = this._printView.asObservable();
   public __printView        : number;
-  currentGroupID: number;
+  currentGroupID = 0
 
   image: string;
   get printView() {
@@ -694,7 +694,6 @@ export class PrintingService {
     //get device settings;
     if (this.uiSettingsService.posDeviceInfo) {
       if (this.platFormService.androidApp) {
-        // console.log(this.uiSettingsService.posDeviceInfo)
         const device = this.uiSettingsService.posDeviceInfo;
         this.printingAndroidService.printAndroidPOSReceipt( this.orderService.currentOrder,
                                                             null, device.btPrinter );

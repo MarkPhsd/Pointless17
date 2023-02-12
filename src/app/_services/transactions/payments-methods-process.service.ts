@@ -618,6 +618,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         return  this.processCreditPayment(site, posPayment, order, amount, paymentMethod)
       }
 
+      console.log( 'payment method', paymentMethod )
       //else
       if (paymentMethod.name.toLowerCase()  == 'check') {
         return  this.processCashPayment(site, posPayment, order, amount, paymentMethod)

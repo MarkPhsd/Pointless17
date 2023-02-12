@@ -418,22 +418,23 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
 
     if (this.order &&  this.paymentMethod) {
-        let amount
+        let amount;
+
         if (event) {
           amount = event
         }  else {
           amount = this.groupPaymentAmount;
         }
 
+        this.posPayment.groupID = this.groupPaymentGroupID;
+        console.log(this.posPayment)
         if (!amount || amount == 0) {
           amount   = this.formatValueEntered(event)
-          if ( this.groupPaymentGroupID) {
-            this.posPayment.groupID = this.groupPaymentGroupID;
-          }
         }
+
         if (!amount) {
           this.notify('Error getting values for payment.', 'Alert', 2000);
-          return
+          return;
         }
 
         const isValidAmount = this.paymentsMethodsService.validatePaymentAmount(amount,
@@ -456,6 +457,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         }
 
         let processResults$
+
+        console.log('(this.posPayment) 2', this.posPayment);
+
         processResults$ = this.processGetResults(amount, this.posPayment)
 
         if (!processResults$) {
@@ -489,7 +493,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this._paymentAmount = event.amount;
     this.groupPaymentAmount = event.amount;
     this.groupPaymentGroupID = event.groupID;
-    this.applyPaymentAmount(event.amount)
+    // this.applyPaymentAmount(event.amount)
   }
 
   processResults(paymentResponse: IPaymentResponse) {
@@ -601,8 +605,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     return  this.paymentsMethodsService.getResults(amount, this.paymentMethod, this.posPayment, this.order)
   }
 
-
-
   enterPointCashValue(event) {
     const site = this.sitesService.getAssignedSite();
     return  this.paymentsMethodsService.enterPointCashValue(
@@ -653,8 +655,12 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   getPaymentMethod(paymentMethod) {
     this.paymentMethod = paymentMethod;
+
+    console.log(this.groupPaymentGroupID);
+
     if (this.paymentMethod) {
       if (this.groupPaymentAmount != 0) {
+        console.log('apply payment amount')
         this.applyPaymentAmount(this.groupPaymentAmount)
         return
       }

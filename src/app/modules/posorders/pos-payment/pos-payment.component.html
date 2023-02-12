@@ -104,7 +104,14 @@
                   [toggleDimensions] = "'toggle-group-tall'"
                   [buttonDimensions] = "'button-dimensions-tall'"
                   (outPutItem)       = "getPaymentMethod($event)"  >
-                Enter Partial Payments
+
+                <div *ngIf="groupPaymentGroupID != 0">
+                  Apply Payment Amount
+                </div>
+                <div *ngIf="groupPaymentGroupID == 0">
+                  Enter Partial Payments
+                </div>
+
               </app-mat-toggle-selector>
             </mat-card>
           </div>

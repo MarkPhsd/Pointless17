@@ -19,7 +19,6 @@ import { Router } from '@angular/router';
 export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   @ViewChild('printsection')        printsection: ElementRef;
-
   @ViewChild('receiptTemplate' ,{static: false})      receiptTemplate: TemplateRef<any>;
   @ViewChild('balanceSheetTemplate',{static: false})  balanceSheetTemplate: TemplateRef<any>;
   @ViewChild('balanceSheetValues',{static: false})    balanceSheetValues: TemplateRef<any>;
@@ -138,7 +137,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   constructor(
-    public orderService          : OrdersService,
+    public orderService           : OrdersService,
     private settingService        : SettingsService,
     private siteService           : SitesService,
     private platFormService       : PlatformService,
@@ -251,7 +250,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   email() {
-
     if (this.order && this.order.clients_POSOrders && this.order.clients_POSOrders.email) {
         const email = this.order.clients_POSOrders.email;
         this.email$ =  this.orderMethodService.emailOrderFromEntry(this.order, email).pipe(
@@ -350,7 +348,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   get currentView() {
-
     if (this.printView == 4) {
       return this.cashDropView
     }
@@ -441,7 +438,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     this.printingService.convertToPDF( document.getElementById('printsection') )
   }
 
-
   exit() {
     this.outPutExit.emit('true')
   }
@@ -490,8 +486,14 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   getOrder() {
-    return  this.orderService.currentOrder$.pipe(
-      switchMap(data => {
+     let printOrder$  = of(this.orderService.printOrder);
+     if (!this.orderService.printOrder) {
+      printOrder$ = this.orderService.currentOrder$
+     }
+
+     return printOrder$.pipe(switchMap(data => {
+         return of(data)
+      })).pipe(switchMap(data => {
             this.order      = data;
             this.orders     = [];
             if (!data)       {return}
