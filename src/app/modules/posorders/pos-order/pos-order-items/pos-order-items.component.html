@@ -3,10 +3,10 @@
       [style.height] = "panelHeight"
       *ngIf="order && order.posOrderItems && order.posOrderItems.length>0"
       [class]="mainStyle" >
-   
+
     <ion-item-sliding
               class="nopadd"
-              *ngFor="let item of order.posOrderItems; 
+              *ngFor="let item of order.posOrderItems;
                       let i = index;trackBy: trackByFN"
               (ionSwipe)="swipeAction(i)" >
 
@@ -73,3 +73,5 @@
       </ion-item-options>
     </ion-item-sliding>
 </div>
+
+

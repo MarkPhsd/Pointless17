@@ -24,6 +24,9 @@
 
           <span [class]="productnameClass" >
             {{ orderItem?.productName }}
+            <span *ngIf="orderItem.splitGroupID  && orderItem.splitGroupID != 0">
+              ( {{ orderItem?.splitGroupID }} )
+            </span>
           </span>
 
           <span class="product-name" *ngIf="orderItem?.itemType">
@@ -42,7 +45,7 @@
           <span *ngIf="purchaseOrderEnabled">
             Cost : {{ quantity }}  @  {{ wholeSale | currency }} = {{ wholeSale*quantity | currency}}
           </span>
-          <span  *ngIf="( mainPanel || wideBar) && orderItem?.serialCode && !prepScreen">
+          <span  *ngIf="( mainPanel || wideBar) && orderItem?.serialCode && !prepScreen && (orderItem?.serialCode != orderItem.id)">
             SN#/({{ orderItem?.serialCode }})
           </span>
 

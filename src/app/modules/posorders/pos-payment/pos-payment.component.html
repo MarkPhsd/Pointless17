@@ -38,40 +38,34 @@
           <div>
             <h4>Payment Amount: {{paymentAmount | currency}}</h4>
           </div>
+
           <div>
             <button class="splitbutton"
                     mat-raised-button
                     color="primary"
                     (click)="changeAmount()">
-              <mat-icon>edit</mat-icon>Change
+              <mat-icon>edit</mat-icon>Change <br>Amount
             </button>
           </div>
+
+          <div  *ngIf="!paymentsEqualTotal">
+            <button class="splitbutton"
+                    mat-raised-button
+                    color="primary"
+                    (click)="splitByItem = !splitByItem">
+              <span *ngIf="splitByItem">
+                <mat-icon>credit_card</mat-icon> Payment <br> Methods
+              </span>
+              <span *ngIf="!splitByItem">
+                <mat-icon>call_split</mat-icon>Split By <br>  Items
+              </span>
+            </button>
+          </div>
+
         </div>
       </div>
 
-      <div class="action-center grid-items"  *ngIf="!order.completionDate && order?.balanceRemaining != 0">
 
-        <ng-container [ngTemplateOutlet]="giftCardPayButton"></ng-container>
-        <ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
-
-        <div  *ngIf="!paymentsEqualTotal">
-          <button class="splitbutton"
-                  mat-raised-button
-                  color="primary"
-                  (click)="splitByItem = !splitByItem">
-            <span *ngIf="splitByItem">
-              Payment Methods
-            </span>
-            <span *ngIf="!splitByItem">
-              <mat-icon>split</mat-icon>Split By Items
-            </span>
-          </button>
-        </div>
-
-        <div *ngIf="order && order.clientID">
-          <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
-        </div>
-      </div>
 
       <div *ngIf="!order.completionDate && !splitByItem && !paymentsEqualTotal && paymentIsReady
                   &&  order?.balanceRemaining != 0">
@@ -80,6 +74,15 @@
             <ng-container [ngTemplateOutlet]="wicEBTButton"></ng-container>
             <mat-card>
               <mat-card-content>
+
+                <div class="action-center grid-items"  *ngIf="!order.completionDate && order?.balanceRemaining != 0 && !splitByItem">
+                  <ng-container [ngTemplateOutlet]="giftCardPayButton"></ng-container>
+                  <ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
+                  <div *ngIf="order && order.clientID">
+                    <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
+                  </div>
+                </div>
+
                 <div class="item-container">
                   <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
                   <ng-container [ngTemplateOutlet]="paypalButton"></ng-container>

@@ -1,6 +1,6 @@
 @import "/src/mixins.scss";
 
-mat-card { 
+mat-card {
   width: 100%;
   min-width: 500px;
 }
@@ -77,8 +77,15 @@ mat-card {
   grid-template-columns: 150px 1fr;
   gap: 10px;
   @include for-phone-only  {
-    grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
   }
+}
+
+.grid-split-groups {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  font-size: 1rem;
 }
 
 .grid-dual-list {
@@ -91,7 +98,7 @@ mat-card {
   }
 }
 
-.span-column { 
+.span-column {
   grid-column-end: span 2;
   max-height: 600px;
   overflow-y: auto;
@@ -117,7 +124,7 @@ mat-card {
   text-align: left;
 }
 
-.toggle-group { 
+.toggle-group {
   margin-top: 10px;
 }
 
@@ -133,18 +140,18 @@ mat-button-toggle {
 mat-button-toggle-group {
   width: 150px;
   margin-left: 5px;
-  text-align: left ; 
+  text-align: left ;
   @include for-phone-only  {
     width: 99%;
   }
 }
 
-button { 
+button {
   width: 150px;
   height: 50px;
 }
 
-.buttons-grid { 
+.buttons-grid {
   display: grid;
   grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
   gap: 5px;

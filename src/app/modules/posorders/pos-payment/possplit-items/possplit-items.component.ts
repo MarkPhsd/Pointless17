@@ -22,9 +22,11 @@ export interface   ISelectedItems{
   styleUrls: ['./possplit-items.component.scss']
 })
 export class POSSplitItemsComponent implements OnInit {
+
     smallDevice         = false;
     @Output() outPutPaymentAmount = new EventEmitter();
     @Input() order   : IPOSOrder;
+    order$: Observable<IPOSOrder>;
     saveAssignedItems$: Observable<any>;
     productTypes$    : Observable<IItemBasicB[]>;
     orderItems       : PosOrderItem[];
@@ -94,6 +96,11 @@ export class POSSplitItemsComponent implements OnInit {
     selectedItems : Array<IListBoxItem> = [];
     listBoxForm   : FormGroup;
 
+    filterGroup(item: PosOrderItem, groupValue: number) {
+      if (!item.splitGroupID) return false;
+      return item.splitGroupID == groupValue;
+    }
+
     subscriber() {
       this.orderService.currentOrder$.subscribe(data => {
         if (data) {
@@ -132,6 +139,7 @@ export class POSSplitItemsComponent implements OnInit {
       this.refreshAssignedItems();
       // this.refreshUnassignedItems();
       // this.subscriber()
+      this.refreshOrder();
     }
 
     printReceipt()  {
@@ -228,10 +236,22 @@ export class POSSplitItemsComponent implements OnInit {
               this.changesOcurred = false;
               this.savingChanges = false
             }
-            return of(data)
+
+            this.refreshOrder()
+            return of(data);
+
         }));
 
       };
+    }
+
+    refreshOrder() {
+      const site = this.siteService.getAssignedSite()
+      this.order$ = this.orderService.getOrder(site, this.order.id.toString() , false).pipe(
+        switchMap(data => {
+        this.orderService.updateOrderSubscription(data);
+        return of(data)
+      }))
     }
 
     submitPaymentAmount() {

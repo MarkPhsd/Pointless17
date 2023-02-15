@@ -23,7 +23,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input()  mainPanel      : boolean;
   @Output() outputRemoveItem  = new EventEmitter();
   @Input() purchaseOrderEnabled: boolean;
-  
+
   @Input() printLocation  : number;
   @Input() prepStatus     : boolean;
   @Input() prepScreen     : boolean;
@@ -148,20 +148,20 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     this.initStyles()
   }
 
-  initStyles() { 
+  initStyles() {
     this.qrCodeStyle = ''
 
-    if (!this.mainPanel && !this.qrOrder) { 
-      //get the hieght of the components. this is got from the subscription to the 
+    if (!this.mainPanel && !this.qrOrder) {
+      //get the hieght of the components. this is got from the subscription to the
       //UI Service.
       // this.panelHeight = 'calc(100vh - 450px)'
       this.mainStyle = `main-panel orderItemsPanel`
       return;
     }
-    
-    if (this.qrOrder) { 
+
+    if (this.qrOrder) {
       this.panelHeight = 'calc(100vh - 550px)'
-      this.qrCodeStyle = 'qr-style'  
+      this.qrCodeStyle = 'qr-style'
       this.mainStyle = `${this.qrCodeStyle} orderItemsPanel`
       return;
     }
@@ -169,14 +169,14 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     if (this.mainPanel) {
       this.mainStyle = `main-panel orderItemsPanel`
       this.panelHeight = 'calc(100vh - 100px)'
-      if (window.innerWidth < 768) { 
+      if (window.innerWidth < 768) {
         this.panelHeight = 'calc(100vh - 200px)'
       }
     }
-  
-  
+
+
   }
-  
+
   getTransactionUI() {
     this.uiSettingsService.getSetting('UITransactionSetting').subscribe(data => {
       if (data) {
@@ -214,7 +214,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async removeItemFromList(payload: any) {
+  removeItemFromList(payload: any) {
     const index = payload.index;
     const orderItem = payload.item
     this.orderMethodService.removeItemFromList(index, orderItem)
@@ -235,19 +235,19 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     this.swipeItemFromList(i)
   }
 
-  async swipeItemFromList(index) {
+  swipeItemFromList(index) {
     if (this.disableActions) {return}
     const item =  this.order.posOrderItems[index]
     if (!item)  { return }
     this.orderMethodService.removeItemFromList(index, item)
   }
 
-   updateSubscription(orderID: number) {
-    const site = this.siteService.getAssignedSite();
-    this.orderService.getOrder(site, orderID.toString(), false).subscribe(order => {
-      this.orderService.updateOrderSubscription(order)
-    })
-  }
+  // updateSubscription(orderID: number) {
+  //   const site = this.siteService.getAssignedSite();
+  //   this.orderService.getOrder(site, orderID.toString(), false).subscribe(order => {
+  //     this.orderService.updateOrderSubscription(order)
+  //   })
+  // }
 
   startAnimation(state) {
     if (!this.animationState) {

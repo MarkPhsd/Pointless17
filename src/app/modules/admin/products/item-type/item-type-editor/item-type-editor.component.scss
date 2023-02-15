@@ -1,3 +1,27 @@
+mat-form-field {
+  font-size: small;
+}
+
+mat-label {
+  font-size: small;
+}
+
+meta-tags {
+  height: 100px;
+}
+
+mat-form-field {
+  margin: 3px;
+  font-size: .8em;
+}
+
+mat-card{
+  margin:  5px;
+  // height: 485px;
+}
+
+// body{ overflow-x: hidden;}
+
 .mat-input-element {
   font-size: small;
 }
@@ -16,9 +40,8 @@
   margin-top: 5px;
 }
 
-.grid-flow {
+.grid-flow-sections {
   display: grid;
-  // grid-template-columns: auto auto;
   grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
   gap: 10px;
   margin-top: 5px;
@@ -28,28 +51,10 @@
 .toggle-footer {
   margin-bottom: 5px;
 }
-mat-label {
-  font-size: small;
-}
-
-meta-tags {
-  height: 100px;
-}
-
-mat-form-field {
-  margin: 3px;
-  // font-size: small;
-  font-size: .8em;
-}
 
 .instructions {
   font: small;
   font-weight: 400;
-}
-
-mat-card{
-  margin:  5px;
-  // height: 485px;
 }
 
 .content-container {
@@ -75,17 +80,11 @@ img {
 }
 
 
-body{ overflow-x: hidden;}
-
-mat-form-field {
-  font-size: small;
-}
-
 .grid-container {
   display: flex;
   flex-wrap: wrap;
 }
 
-.fields-width { 
+.fields-width {
   width: 150px;
 }
