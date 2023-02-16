@@ -15,11 +15,11 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class OrderHeaderComponent implements OnInit  {
 
-  @Input() mainPanel: boolean;
+  @Input() mainPanel = false;
   @Input() order: IPOSOrder
   isOrderClaimed: boolean;
   href: string;
-  hidePrint: boolean;
+  hidePrint = false;
   action$: Observable<any>;
 
   constructor(

@@ -1,0 +1,98 @@
+<div  *ngIf="order">
+  <div class="grid-split-groups"
+       *ngIf="order.posOrderItems.length>0">
+
+    <div>
+      <h5>Group 0</h5>
+      <div *ngFor="let item of order.posOrderItems">
+        <div class="items" *ngIf="!item.splitGroupID || item.splitGroupID == 0 ">
+          {{item.productName}}
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h5>Group 1</h5>
+      <div *ngFor="let item of order.posOrderItems">
+        <div  class="items" *ngIf="item.splitGroupID == 1">
+          {{item.productName}}
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h5>Group 2</h5>
+      <div *ngFor="let item of order.posOrderItems">
+        <div class="items"  *ngIf="item.splitGroupID == 2 ">
+          {{item.productName}}
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h5>Group 3</h5>
+        <div *ngFor="let item of order.posOrderItems">
+          <div class="items"  *ngIf="item.splitGroupID == 3">
+            {{item.productName}}
+          </div>
+        </div>
+    </div>
+
+    <div>
+      <h5>Group 4</h5>
+        <div *ngFor="let item of order.posOrderItems">
+          <div  class="items" *ngIf="item.splitGroupID == 4">
+            {{item.productName}}
+          </div>
+        </div>
+    </div>
+
+    <div>
+      <h5>Group 5</h5>
+        <div *ngFor="let item of order.posOrderItems">
+          <div  class="items" *ngIf="item.splitGroupID == 5">
+            {{item.productName}}
+          </div>
+        </div>
+    </div>
+
+    <div>
+      <h5>Group 6</h5>
+        <div *ngFor="let item of order.posOrderItems">
+          <div  class="items" *ngIf="item.splitGroupID == 6">
+            {{item.productName}}
+          </div>
+        </div>
+    </div>
+
+    <div>
+      <h5>Group 7</h5>
+        <div *ngFor="let item of order.posOrderItems">
+          <div  class="items" *ngIf="item.splitGroupID == 7">
+            {{item.productName}}
+          </div>
+        </div>
+    </div>
+
+    <div>
+      <h5>Group 8</h5>
+        <div *ngFor="let item of order.posOrderItems">
+          <div  class="items" *ngIf="item.splitGroupID == 8">
+            {{item.productName}}
+          </div>
+        </div>
+    </div>
+
+    <div>
+      <h5>Group 9</h5>
+        <div *ngFor="let item of order.posOrderItems">
+          <div  class="items" *ngIf="item.splitGroupID == 9">
+            {{item.productName}}
+          </div>
+        </div>
+    </div>
+
+
+
+  </div>
+</div>

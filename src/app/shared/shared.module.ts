@@ -172,6 +172,7 @@ import { CashDrawerSettingsComponent } from '../modules/admin/settings/software/
 import { PaymentReportDataComponent } from '../modules/admin/reports/payment-report/payment-report-data/payment-report-data.component';
 import { ClockInOutComponent } from './widgets/clock-in-out/clock-in-out.component';
 import { TruncateRightPipe } from '../_pipes/truncate-right.pipe';
+import { PosCheckOutButtonsComponent } from '../modules/posorders/pos-order/pos-check-out-buttons/pos-check-out-buttons.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -284,7 +285,7 @@ import { TruncateRightPipe } from '../_pipes/truncate-right.pipe';
     PieComponent,
     PosOrderItemComponent,
     PosOrderItemsComponent,
-
+    PosCheckOutButtonsComponent,
     IonicSwipeToDeleteComponent,
     PosOrderFunctionButtonsComponent,
     PosOrderTransactionDataComponent,
@@ -478,6 +479,7 @@ import { TruncateRightPipe } from '../_pipes/truncate-right.pipe';
     PaymentReportComponent,
     PosOrderItemComponent,
     PosOrderItemsComponent,
+    PosCheckOutButtonsComponent,
     PosOrderFunctionButtonsComponent,
     PosOrderTransactionDataComponent,
     PosPaymentEditComponent,

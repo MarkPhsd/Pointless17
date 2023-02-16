@@ -58,6 +58,8 @@ export interface TransactionUISettings {
   giftCardLength        : number;
   vipCustomerID         : number;
   triposEnabled: boolean;
+  displayEditCardOnHeader: boolean;
+  showCustomerOption: boolean;
 }
 
 export interface StripeAPISettings {
@@ -671,6 +673,8 @@ export class UISettingsService {
       creditCardFee          : [ ],
       updateInventoryOnScan: [ ],
       triposEnabled:          [],
+      displayEditCardOnHeader: [],
+      showCustomerOption: [],
      })
   }
 

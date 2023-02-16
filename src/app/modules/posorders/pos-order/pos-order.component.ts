@@ -206,6 +206,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     })
   }
 
+  get isApp() {
+   return this.platFormService.isApp()
+  }
 
   userAuthSubscriber() {
     this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
@@ -316,6 +319,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
 
   constructor(
+
               private paymentsMethodsService: PaymentsMethodsProcessService,
               private renderer          : Renderer2,
               public platFormService    : PlatformService,
@@ -362,7 +366,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
     this.windowHeight = window.innerHeight;
     this.gridheaderitem  = 'grid-header-item'
-
 
     if (window.innerWidth < 768) {
       this.smallDevice = true
@@ -659,29 +662,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
-  toggleOpenOrderBar() {
-    this.openOrderBar= false
-    this.navigationService.toggleOpenOrderBar(this.isStaff)
-  }
-
-  makePayment() {
-    // if (this.smallDevice) {
-    // }
-    this.openOrderBar = false
-    // console.log('order bar update', this.openOrderBar)
-    this.toolbarUIService.updateOrderBar(false);
-    this.toolbarUIService.updateSideBar(false)
-    this.toolbarUIService.updateToolBarSideBar(false)
-    // this.toolbarUIService.updateSearchBarSideBar(false)
-    let path = ''
-    if (this.order) {
-      if (this.order.tableName && this.order.tableName.length>0) {
-        path = 'pos-payment'
-      }
-    }
-    this.navigationService.makePayment(this.openOrderBar, this.smallDevice,
-                                      this.isStaff, this.order.completionDate, path )
-  }
 
   houseAccountPayment() {
     this.action$ =  this.orderMethodService.suspendOrder(this.order)
@@ -812,6 +792,24 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   //   this.printingService.printTestLabelElectron(content, this.printerName)
   // }
 
+
+  makePayment() {
+    this.openOrderBar = false
+    // this.toolbarUIService.updateOrderBar(false);
+    // this.toolbarUIService.updateSideBar(false)
+    // this.toolbarUIService.updateToolBarSideBar(false)
+    // let path = ''
+    // if (this.order) {
+    //   if (this.order.tableName && this.order.tableName.length>0) {
+    //     path = 'pos-payment'
+    //   }
+    // }
+    // this.navigationService.makePayment(this.openOrderBar, this.smallDevice,
+    //                                   this.isStaff, this.order.completionDate, path )
+
+    this.navigationService.makePaymentFromSidePanel(this.openOrderBar, this.smallDevice,
+      this.isStaff, this.order  )
+  }
 
   rePrintLabels() {
 

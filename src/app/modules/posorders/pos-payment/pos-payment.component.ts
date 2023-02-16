@@ -242,6 +242,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
           list = list.filter( item => !item.wic)
           list = list.filter( item => !item.ebt)
           list = list.filter( item => item.enabledOnline)
+          list = list.filter( item => item.name != 'Gift Card')
         return  of(list)
       })
       )
@@ -253,6 +254,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
           let list = data.filter( item => !item.isCreditCard)
           list = list.filter( item => !item.wic)
           list = list.filter( item => !item.ebt)
+          list = list.filter( item => item.name != 'Gift Card')
           return  of(list)
       }))
     }
@@ -260,7 +262,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     return paymentMethods$.pipe(
       switchMap(data => {
       const list = data.filter( item => item.enabledOnline)
-      const list2 = list.filter( item => !item.isCreditCard)
+      let list2 = list.filter( item => !item.isCreditCard)
+      list2 = list2.filter( item => item.name != 'Gift Card')
       return  of(list2)
     }))
 

@@ -56,6 +56,7 @@ export interface OrderActionResult {
 export class OrdersService {
 
 
+
   public toggleChangeOrderType: boolean;
 
   get platForm() {  return Capacitor.getPlatform(); }
@@ -76,6 +77,10 @@ export class OrdersService {
 
   private _posSearchModel     = new BehaviorSubject<IPOSOrderSearchModel>(null);
   public posSearchModel$      = this._posSearchModel.asObservable();
+
+
+  private _splitGroupOrder     = new BehaviorSubject<IPOSOrder>(null);
+  public splitGroupOrder$      = this._splitGroupOrder.asObservable();
 
   private _posOrders          = new BehaviorSubject<IPOSOrder[]>(null);
   public posOrders$           = this._posOrders.asObservable();
@@ -236,6 +241,10 @@ export class OrdersService {
 
   updateOrderSearchModel(searchModel: IPOSOrderSearchModel) {
     this._posSearchModel.next(searchModel);
+  }
+
+  updateSplitGroup(data: IPOSOrder) {
+    this._splitGroupOrder.next(data);
   }
 
   constructor(

@@ -203,7 +203,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private router                : Router,
               private floorPlanSevice       : FloorPlanService,
               private settingsService       : SettingsService,
-              private uiSettings            : UISettingsService,
+              public uiSettings            : UISettingsService,
               private fb                    : FormBuilder ) {
   }
 
@@ -261,6 +261,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.uiTransactionSetting$ = this.settingsService.getUITransactionSetting().pipe(
       switchMap( data => {
         this.uiSettings.updateUITransactionSubscription(data);
+        this.uiTransactionSetting = data;
         return of(data)
       })
     )

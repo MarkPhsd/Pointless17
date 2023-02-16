@@ -150,7 +150,14 @@
           <wizard-progress-button></wizard-progress-button>
         </div>
 
-        <div *ngIf="!smallDevice"
+        <!-- <div>
+          {{order?.id}}
+        </div> -->
+        <div  class="check-out-button" >
+          <ng-container [ngTemplateOutlet]="editCartButtons"></ng-container>
+        </div>
+
+        <div *ngIf="!smallDevice && isApp && uiTransactionSetting.displayEditCardOnHeader"
               class="cart-button" >
           <app-cart-button> </app-cart-button>
         </div>
@@ -336,3 +343,17 @@
 
 
 </ng-template>
+
+
+<ng-template #editCartButtons>
+  <pos-check-out-buttons
+    [order]="order"
+    [phoneDevice]="phoneDevice"
+    [smallDevice]="smallDevice"
+    [isStaff]="isUserStaff"
+    [uiSettings]="homePageSetings"
+    [mainPanel]="false"
+    >
+  </pos-check-out-buttons>
+</ng-template>
+

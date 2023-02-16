@@ -145,60 +145,7 @@
 
         </mat-card-content>
       </mat-card>
-      <mat-card *ngIf="(order$ | async) as order">
-        <div >
-          <div  class="grid-split-groups"
-                *ngIf="order.posOrderItems.length>0">
 
-            <div>
-              <h5>Group 0</h5>
-              <div *ngFor="let item of order.posOrderItems">
-                <div *ngIf="item.splitGroupID == 0 ">
-                  {{item.productName}}
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h5>Group 1</h5>
-              <div *ngFor="let item of order.posOrderItems">
-                <div *ngIf="item.splitGroupID == 1">
-                  {{item.productName}}
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h5>Group 2</h5>
-              <div *ngFor="let item of order.posOrderItems">
-                <div *ngIf="item.splitGroupID == 2 ">
-                  {{item.productName}}
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h5>Group 3</h5>
-                <div *ngFor="let item of order.posOrderItems">
-                  <div *ngIf="item.splitGroupID == 3">
-                    {{item.productName}}
-                  </div>
-                </div>
-            </div>
-
-            <div>
-              <h5>Group 4</h5>
-                <div *ngFor="let item of order.posOrderItems">
-                  <div *ngIf="item.splitGroupID == 4">
-                    {{item.productName}}
-                  </div>
-                </div>
-            </div>
-
-          </div>
-        </div>
-
-      </mat-card>
     </div>
 </div>
 

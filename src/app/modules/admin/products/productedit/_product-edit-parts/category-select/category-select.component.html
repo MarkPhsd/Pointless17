@@ -4,16 +4,17 @@
 
      <div *ngIf="(categories$ | async) as list; else loading">
         <mat-form-field class="category-list" appearance="outline">
-        <mat-label><ng-content></ng-content></mat-label>
-        <mat-select
-                    type="number"
-                    [formControlName] = "fieldName"
-                    name="categoryID"
-                    (selectionChange)="getCategory($event)" >
-            <mat-option *ngFor="let item of list" [value]="item.id">
-                {{item.name}}
-            </mat-option>
-        </mat-select>
+          <mat-label> {{type}} </mat-label>
+          <mat-select
+                      type="number"
+                      [formControlName] = "fieldName"
+
+                      (selectionChange)="getCategory($event)" >
+              <mat-option *ngFor="let item of list"
+                          [value]="item.id">
+                {{item?.name}}
+              </mat-option>
+          </mat-select>
       </mat-form-field>
     </div>
 

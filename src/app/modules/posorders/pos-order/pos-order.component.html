@@ -123,35 +123,11 @@
                 (!paymentsEqualTotal && !order.completionDate && order?.balanceRemaining != 0)" >
             <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
         </div>
-       <!-- {{deviceWidthPercentage}} -->
-        <div class="side-panel-buttons-container"
-              [style.width]="deviceWidthPercentage"
-              *ngIf="!mainPanel && (uiSettings && uiSettings.wideOrderBar)" >
-          <div *ngIf="!phoneDevice">
-            <button mat-raised-button
-              color="primary"
-              class="button"
-              (click)="toggleOpenOrderBar()">
-              <div *ngIf="order && order.history">
-                <mat-icon>view</mat-icon>
-                View Cart
-              </div>
-              <div *ngIf="order && !order.history">
-                <mat-icon>edit</mat-icon>
-                Edit Cart
-              </div>
-            </button>
-          </div>
-          <div>
-            <button  mat-raised-button
-              color="primary"
-              class="button"
-              (click)="makePayment()">
-              <mat-icon>credit_card</mat-icon>
-              Check Out
-            </button>
-          </div>
+
+        <div *ngIf="!mainPanel && !isApp && !uiTransactionSettings.displayEditCardOnHeader">
+          <ng-container [ngTemplateOutlet]="editCartButtons"></ng-container>
         </div>
+
       </div>
 
     </div>
@@ -171,6 +147,18 @@
     [panelHeight] ="orderItemsHeightStyle"
     [order]       ="order">
   </pos-order-items>
+</ng-template>
+
+<ng-template #editCartButtons>
+  <pos-check-out-buttons
+    [order]="order"
+    [phoneDevice]="phoneDevice"
+    [smallDevice]="smallDevice"
+    [isStaff]="isStaff"
+    [deviceWidthPercentage]="deviceWidthPercentage"
+    [uiSettings]="uiSettings"
+    [mainPanel]="mainPanel">
+  </pos-check-out-buttons>
 </ng-template>
 
 <ng-template #listViewType>

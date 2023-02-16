@@ -29,17 +29,8 @@
     margin-top: 5px;
   }
 
- .side-panel-buttons-container  {
-   width: 95%;
-   display: grid;
-   gap: 5px;
-   grid-template-columns: repeat( auto-fit, minmax(65px, 1fr) );
-  //  margin-bottom : 1px;
-  //  margin-top    : 1px;
-  //  margin-left   : 2px;
-  //  height: 75px;
-   overflow: hidden;
- }
+
+
 
 .grid-header-order-total {
   display: grid;

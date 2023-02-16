@@ -71,8 +71,12 @@
               <app-category-select   [inputForm]="productForm"
                                      [fieldName]="'subCategoryID'"
                                      [type]="'subcategory'">Sub Category</app-category-select>
-              <app-category-select   [inputForm]="productForm" [type]="'category'">Category</app-category-select>
-              <app-department-select [inputForm]="productForm" >Department</app-department-select>
+
+              <app-category-select   [inputForm]="productForm"
+                                     [type]="'category'">Category</app-category-select>
+
+              <app-department-select [inputForm]="productForm">Department</app-department-select>
+
               <product-type-select   [inputForm]="productForm"></product-type-select>
 
               <app-brand-type-select

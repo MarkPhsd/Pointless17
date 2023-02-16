@@ -21,6 +21,12 @@
         </app-order-header-demo-graphics>
       </div>
 
+      <div  class="grid-header-item">
+        <mat-card *ngIf="splitByItem">
+          <ng-container [ngTemplateOutlet]="splitItemorders"></ng-container>
+        </mat-card>
+      </div>
+
       <div *ngIf="serviceIsScheduled" class="grid-header-item">
         <posorder-schedule-card>
         </posorder-schedule-card>
@@ -35,11 +41,11 @@
 
       <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
         <div class="action-center grid-items" *ngIf="!order.completionDate && order?.balanceRemaining != 0">
-          <div>
+          <div *ngIf="!splitByItem">
             <h4>Payment Amount: {{paymentAmount | currency}}</h4>
           </div>
 
-          <div>
+          <div *ngIf="!splitByItem">
             <button class="splitbutton"
                     mat-raised-button
                     color="primary"
@@ -287,6 +293,12 @@
    </div>
 
 </ng-template>
+
+
+<ng-template #splitItemorders>
+  <pos-split-groups></pos-split-groups>
+</ng-template>
+
 
 <ng-template #splitItemsView>
   <app-possplit-items

@@ -41,7 +41,7 @@
 
 <mat-card *ngIf="!disableActions && !order.clients_POSOrders">
   <div class="grid-demo">
-    <div>
+    <div *ngIf="transactionSettings?.showCustomerOption">
       <app-client-search-selector
         (itemSelect)="assignCustomer($event)">
       </app-client-search-selector>

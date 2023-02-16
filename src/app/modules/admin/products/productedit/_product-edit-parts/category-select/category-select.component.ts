@@ -28,7 +28,7 @@ export class CategorySelectComponent implements OnInit {
     const type        = this.type;
     const item$       = this.menuService.getGetCategoriesListAll(site, type)
 
-    if (this.type.toLowerCase() == 'subCategory') {
+    if (this.type.toLowerCase() == 'subcategory') {
       this.fieldName = 'subCategoryID'
     }
 
@@ -36,7 +36,7 @@ export class CategorySelectComponent implements OnInit {
       this.fieldName = 'categoryID'
     }
 
-    this.categories$ =  item$ .pipe(
+    this.categories$ =  item$.pipe(
       switchMap(data => {
         this.loadingItems = false;
         return of(data)
@@ -50,15 +50,16 @@ export class CategorySelectComponent implements OnInit {
 
   clearItem() {
 
-    if (this.type.toLowerCase() == 'subCategory') {
+    if (this.type.toLowerCase() == 'subcategory') {
       this.inputForm.patchValue({subCategoryID: 0})
+      // this.outputCategoryID.emit(0)
     }
 
     if (this.type.toLowerCase() == 'category') {
       this.inputForm.patchValue({categoryID: 0})
+      this.outputCategoryID.emit(0)
     }
 
-    this.outputCategoryID.emit(0)
   }
 
 

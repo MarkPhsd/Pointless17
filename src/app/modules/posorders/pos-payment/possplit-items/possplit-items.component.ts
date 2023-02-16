@@ -144,7 +144,7 @@ export class POSSplitItemsComponent implements OnInit {
 
     printReceipt()  {
       const groupID = this.currentGroupID
-      if (groupID && groupID != 0) {
+      if (groupID) {
         const site = this.siteService.getAssignedSite()
         this.printReceipt$  = this.orderService.getPOSOrderGroupTotal(site, this.order.id, groupID).pipe(
           switchMap(data => {
@@ -154,7 +154,6 @@ export class POSSplitItemsComponent implements OnInit {
             return of(data);
         }))
       }
-
     }
 
     initGroupList(): any {
@@ -196,7 +195,7 @@ export class POSSplitItemsComponent implements OnInit {
         }
       })
 
-      console.log('assignedItems' , assignedItems)
+      // console.log('assignedItems' , assignedItems)
       return assignedItems;
     }
 
@@ -219,27 +218,32 @@ export class POSSplitItemsComponent implements OnInit {
     //and keep a reference to the selecteditems, then push the whole list.
     saveAssignedCategories(selected: IListBoxItem[]) {
       if (selected) {
-        if (selected.length     == 0)      { return   }
-        if (this.currentGroupID == 0 ) { return   }
+        if (selected.length     == 0)  { return   }
+        // if (this.currentGroupID == 0 ) { return   }
 
         const site           = this.siteService.getAssignedSite();
         const items$         = this.orderService.applyItemsToGroup(site, this.currentGroupID, selected);
         const assignedItems$ = this.orderService.applyItemsToGroup(site, 0, this.availableItems)
 
         this.saveAssignedItems$ = items$.pipe(
-          map( data => {
+          switchMap(data => {
             return assignedItems$
           })).pipe(
             switchMap(data => {
             if (data) {
-              this.orderGroupTotal$ = this.orderService.getPOSOrderGroupTotal(site, this.order.id, this.currentGroupID)
+              this.orderGroupTotal$ = this.orderService.getPOSOrderGroupTotal(site, this.order.id, this.currentGroupID).pipe(
+                switchMap(data => {
+                  return of(data)
+                })
+              )
               this.changesOcurred = false;
               this.savingChanges = false
             }
-
-            this.refreshOrder()
-            return of(data);
-
+            return this.orderService.getOrder(site, this.order.id.toString() , false)
+        })).pipe(
+          switchMap(data => {
+          this.orderService.updateOrderSubscription(data);
+          return of(data)
         }));
 
       };
@@ -249,8 +253,8 @@ export class POSSplitItemsComponent implements OnInit {
       const site = this.siteService.getAssignedSite()
       this.order$ = this.orderService.getOrder(site, this.order.id.toString() , false).pipe(
         switchMap(data => {
-        this.orderService.updateOrderSubscription(data);
-        return of(data)
+          this.orderService.updateOrderSubscription(data);
+          return of(data)
       }))
     }
 
@@ -262,33 +266,28 @@ export class POSSplitItemsComponent implements OnInit {
     }
 
     refreshAssignedItems() {
+
       if (!this.order) return;
-      if (!this.currentGroupID) { this.currentGroupID = 1 };
-
+      if (!this.currentGroupID) { this.currentGroupID = 0 };
       const site = this.siteService.getAssignedSite();
-
       const selectedItems$  = this.orderService.getSplitItemsList(site, this.order?.id, this.currentGroupID);
 
       this.orderGroupTotal$ = selectedItems$.pipe(switchMap(data => {
-
-          // console.log('selectedItems', data)
           this.selectedItems = data
-
-          return  this.orderService.getSplitItemsList(site,  this.order.id, 0);
-
+          return  this.orderService.getSplitItemsList(site, this.order.id, 0);
         }
       )).pipe(switchMap(data => {
         {
-
-          // console.log('availableItems', data)
           this.availableItems = data
-
+          return this.orderService.getOrder(site, this.order.id.toString(), false);
+        }
+      })).pipe(switchMap(data => {
+        {
+          this.orderService.updateOrderSubscription(data)
           return this.orderService.getPOSOrderGroupTotal(site, this.order.id, this.currentGroupID);
         }
       })).pipe(switchMap(data => {
-
         return of(data)
-
       }));
 
     }
@@ -311,8 +310,10 @@ export class POSSplitItemsComponent implements OnInit {
 
     drop(event: CdkDragDrop<IListBoxItem[]>) {
       if (event.previousContainer === event.container) {
+        console.log('moveItemInArray')
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
       } else {
+        console.log('transferArrayItem')
         transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
       }
 
@@ -326,6 +327,7 @@ export class POSSplitItemsComponent implements OnInit {
       });
 
       this.availableItems.forEach(data => {  data.groupID = 0; })
+
       this.selectedItems.forEach(data => { data.groupID = this.currentGroupID; });
       this.changesOcurred = true;
     }
