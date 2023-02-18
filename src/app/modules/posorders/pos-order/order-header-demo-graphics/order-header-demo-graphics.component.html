@@ -40,13 +40,12 @@
 </mat-card>
 
 <mat-card *ngIf="!disableActions && !order.clients_POSOrders">
-  <div class="grid-demo">
-    <div *ngIf="transactionSettings?.showCustomerOption">
+  <div class="grid-demo" *ngIf="transactionSettings?.showCustomerOption">
+    <div >
       <app-client-search-selector
         (itemSelect)="assignCustomer($event)">
       </app-client-search-selector>
     </div>
-
     <div>
       <button mat-button
               (click)="addClient()">

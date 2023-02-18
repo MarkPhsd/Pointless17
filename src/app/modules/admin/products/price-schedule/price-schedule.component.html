@@ -20,7 +20,7 @@
               </button>
             </span>
             <span>
-              <button mat-button color="accent"
+              <button mat-button color="warn"
                       (click)="delete()">
                 <mat-icon>delete</mat-icon>Delete
               </button>
@@ -113,7 +113,7 @@
                               Value
                             </app-value-fields>
 
-                            
+
                         </div>
 
                         <div *ngIf="inputForm.controls['type'].value &&
@@ -123,7 +123,7 @@
                               [item]     ="priceSchedule">
                               Info
                             </app-reward-type-filter>
-                            
+
                         </div>
 
                       </mat-tab>

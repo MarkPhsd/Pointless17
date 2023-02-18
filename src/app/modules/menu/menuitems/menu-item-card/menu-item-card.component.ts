@@ -168,6 +168,9 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     if (this.menuItem?.itemType?.id == 4) {
       this.router.navigate(["/menuitems-infinite/", {categoryID:id }]);
     }
+    if (this.menuItem?.itemType?.id == 5) {
+      this.router.navigate(["/menuitems-infinite/", {subCategoryID:id, typeID:5}]);
+    }
     if (this.menuItem?.itemType?.id == 6) {
       this.router.navigate(["/menuitems-infinite/", {departmentID:id, typeID:4}]);
     }

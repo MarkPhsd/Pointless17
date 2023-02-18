@@ -75,6 +75,8 @@
         </mat-slide-toggle>
       </div>
 
+      <mat-divider></mat-divider>
+      <h4>Order Options</h4>
 
       <div class="toggle-fields">
         <mat-slide-toggle
@@ -83,21 +85,18 @@
         </mat-slide-toggle>
       </div>
 
-      <mat-divider></mat-divider>
-      <h4>Order Options</h4>
-
+      <mat-label>Side Order Bar Option</mat-label>
       <div class="toggle-fields">
         <mat-slide-toggle
-                  formControlName="showOrderName"
-                  >
+                  formControlName="showOrderName">
           <mat-label>Show Order Name Option</mat-label>
         </mat-slide-toggle>
       </div>
 
+      <mat-label>Side Order Bar Option</mat-label>
       <div class="toggle-fields">
         <mat-slide-toggle
-                  formControlName="showCustomerOption"
-                  >
+                  formControlName="showCustomerOption">
           <mat-label>Show Customer Option</mat-label>
         </mat-slide-toggle>
       </div>
@@ -180,7 +179,7 @@
           </mat-form-field>
       </div>
 
-      <div>
+      <!-- <div>
         <mat-label>Assign customer to VIP Button (this sets the customer of the order to a customer that has price column 1 as default)</mat-label>
         <app-client-search-selector
           (itemSelect)="assignCustomer($event)">
@@ -189,7 +188,7 @@
         <div *ngIf="(vipCustomer$ | async) as vipCustomer">
           {{vipCustomer?.firstName}} {{vipCustomer?.lastName}}
         </div>
-      </div>
+      </div> -->
 
       <div class="toggle-fields">
         <mat-slide-toggle
@@ -396,7 +395,7 @@
       <mat-slide-toggle
                 formControlName="triposEnabled"
                 >
-        <mat-label>Tri POS Enabled (FISGloab)</mat-label>
+        <mat-label>Tri POS Enabled (FISGlobal)</mat-label>
       </mat-slide-toggle>
     </div>
 

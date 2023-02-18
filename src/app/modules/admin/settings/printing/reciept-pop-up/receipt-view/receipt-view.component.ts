@@ -157,6 +157,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     this.printingService.updatePrintView(1);
     if(this._order) { this._order.unsubscribe() }
     this.printingService.currentGroupID = 0;
+    this.orderService.printOrder = null;
   }
 
   refreshViewObservable(){
@@ -514,10 +515,11 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
           } else {
             this.payments = this.tempPayments;
           }
+
           return of(this.order)
         }
       ),catchError(e => {
-        console.log('error', e)
+
         return of(null)
       })
     )

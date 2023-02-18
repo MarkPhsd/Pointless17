@@ -4,7 +4,7 @@
       <div *ngIf="(zRun$ | async) as zrun; else loadingDay">
         <button class="button grid-item"
                 mat-raised-button
-                (click)="reportCurrentSales(zrun.id)">
+                (click)="reportCurrentSales()">
           Current Sales  {{zrun.id}}
         </button>
       </div>

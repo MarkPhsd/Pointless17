@@ -47,6 +47,7 @@ export class UITransactionsComponent implements OnInit {
   initUITransactionSettings() {
     this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
       switchMap( data => {
+        console.log('data', data.text)
         this.inputForm = this.uISettingsService.initForm(this.inputForm);
         try {
           if (data && data.text) {

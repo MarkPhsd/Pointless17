@@ -127,7 +127,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     const site = this.siteService.getAssignedSite();
      this.actionOrder$ = this.orderService.newOrderWithPayloadMethod(site, null).pipe(
       switchMap(data => {
-        this.orderService.processOrderResult(data, site)
         return of(data)
       })
     )
@@ -241,7 +240,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
     if (this.userSwitchingService.swapMenuWithOrderBoolean) {
       this.openOrderBar = !this.openOrderBar
-      const item = this.openOrderBar 
+      const item = this.openOrderBar
       this.toolbarServiceUI.updateOrderBar(item)
       this.toolbarServiceUI.updateToolBarSideBar(item)
       return

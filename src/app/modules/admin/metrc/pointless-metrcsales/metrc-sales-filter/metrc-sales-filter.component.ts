@@ -95,7 +95,8 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
   getCurrentDay() {
     const site = this.siteService.getAssignedSite();
     this.zRun$ =  this.balanceSheetService.getZRUNBalanceSheet(site).pipe(switchMap(data => {
-      this.reportCurrentSales(data.id)
+      // this.reportZRUNIDSales(data.id);
+      this.reportCurrentSales();
       return of(data)
     }))
   }
@@ -158,14 +159,26 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
   }
 
   refreshSearch() {
+    this.searchModel.currentDay = false;
     if (! this.searchModel) {  this.searchModel = {} as PointlessMetrcSearchModel }
     this.searchModel.currentPage = 1;
     this.outputClearExceptions.emit(true)
     this.pointlessMetrcSalesReport.updateSearchModel( this.searchModel )
   }
 
-  reportCurrentSales(id:number) {
+  reportCurrentSales() {
+    this.searchModel = {} as PointlessMetrcSearchModel
+    this.searchModel.currentDay  = true;
+    this.searchModel.pageNumber  = 1;
+    this.searchModel.currentPage = 1;
+    this.searchModel.pageSize    = 1000000;
+    this.outputClearExceptions.emit(true)
+    this.pointlessMetrcSalesReport.updateSearchModel( this.searchModel )
+  }
+
+  reportZRUNIDSales(id:number) {
     if (! this.searchModel) {  this.searchModel = {} as PointlessMetrcSearchModel }
+    this.searchModel.currentDay = false;
     this.searchModel.startDate = null;
     this.searchModel.endDate = null;
     this.searchModel.employeeID = null;
@@ -178,7 +191,7 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
   }
 
   refreshBalanceSearch(event) {
-    this.reportCurrentSales(event)
+    this.reportZRUNIDSales(event)
   }
 
   initSearchModel() {

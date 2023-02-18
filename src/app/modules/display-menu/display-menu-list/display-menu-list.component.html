@@ -56,7 +56,14 @@
 
             <div class="item-container" *ngIf="item" >
               <div class="grid-container">
-                <div>{{ item?.menuItem?.name }}</div>
+
+                <div>
+                  <button mat-button (click)="menuItemActionObs(item?.menuItem)">
+                    <div class="item-price">
+                      {{ item?.menuItem?.name }}
+                    </div>
+                  </button>
+                </div>
 
                 <div  class="menu-item-image"
                     *ngIf="(!item?.menuItem?.urlImageMain ||
@@ -74,19 +81,19 @@
                       [alt]     = "item?.logo">
                 </div>
 
-                <div *ngIf="item?.menuItem?.abv && category.showABV">
+                <div *ngIf="item?.menuItem?.abv && category && category.showABV">
                   {{ item?.menuItem?.abv | percent: '1.2-2' }}
                 </div>
 
-                <div *ngIf="item?.menuItem?.proof && category.showProof">
+                <div *ngIf="item?.menuItem?.proof && category && category.showProof">
                   {{ item?.menuItem?.proof | percent: '1.2-2' }}
                 </div>
 
-                <div *ngIf="item?.menuItem?.thc && category.showTHC">
+                <div *ngIf="item?.menuItem?.thc && category && category.showTHC">
                   {{ item?.menuItem?.thc }}
                 </div>
 
-                <div *ngIf="item?.menuItem?.cbd && category.showCBD">
+                <div *ngIf="item?.menuItem?.cbd && category && category.showCBD">
                   {{ item?.menuItem?.cbd }}
                 </div>
 
@@ -114,6 +121,9 @@
     </div>
   </div>
 
+
+  <!-- backgroundURL {{backgroundURL }}
+  menu?.backcolorOpacity {{menu?.backcolorOpacity }} -->
   <!-- [style.background]="backgroundURL" -->
   <!-- [style.opacity]="menu?.backcolorOpacity" -->
   <div class="category-view"
@@ -121,7 +131,7 @@
             style.background-repeat="repeat"
             [style.height]="'calc(120% + 200px)'"
             [style.width]="'100%'"
-            [style.opacity]="menu.backcolorOpacity"
+            [style.opacity]="menu?.backcolorOpacity"
       >
     <div *ngIf="menu && menu.footer">
     {{ menu?.footer }}
@@ -129,3 +139,5 @@
   </div>
 
 </div>
+
+<div *ngIf="(addMenuItem$ | async) as menuItemAdd"></div>

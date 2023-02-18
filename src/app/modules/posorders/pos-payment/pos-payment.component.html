@@ -81,15 +81,14 @@
             <mat-card>
               <mat-card-content>
 
-                <div class="action-center grid-items"  *ngIf="!order.completionDate && order?.balanceRemaining != 0 && !splitByItem">
+                <div class="action-center grid-items"  *ngIf="!order.completionDate &&
+                                                              order?.balanceRemaining != 0 &&
+                                                              !splitByItem">
                   <ng-container [ngTemplateOutlet]="giftCardPayButton"></ng-container>
                   <ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
                   <div *ngIf="order && order.clientID">
                     <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
                   </div>
-                </div>
-
-                <div class="item-container">
                   <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
                   <ng-container [ngTemplateOutlet]="paypalButton"></ng-container>
                   <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
@@ -97,9 +96,11 @@
                   <ng-container [ngTemplateOutlet]="stripePayButton"></ng-container>
                   <ng-container [ngTemplateOutlet]="triposPayButton"></ng-container>
                 </div>
+
                 <div class="item-container" *ngIf="isApp">
                   <ng-container [ngTemplateOutlet]="cashPaymentButtons"></ng-container>
                 </div>
+
               </mat-card-content>
             </mat-card>
           </div>
@@ -291,14 +292,11 @@
       >
     </cash-payment-buttons>
    </div>
-
 </ng-template>
-
 
 <ng-template #splitItemorders>
   <pos-split-groups></pos-split-groups>
 </ng-template>
-
 
 <ng-template #splitItemsView>
   <app-possplit-items
@@ -402,7 +400,7 @@
 </ng-template>
 
 <ng-template #giftCardPayButton>
-  <div class="margin-top">
+  <!-- <div class="margin-top"> -->
     <gift-card-pay-btn
       [order]="order"
       [uiTransactions]="uiTransactions"
@@ -413,7 +411,7 @@
       [paymentsEqualTotal]="paymentsEqualTotal"
       (setStep) ="setStep(1)">
     </gift-card-pay-btn>
-  </div>
+  <!-- </div> -->
 </ng-template>
 
 <ng-template #storeCreditPaybutton>

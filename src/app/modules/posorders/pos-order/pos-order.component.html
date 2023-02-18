@@ -124,7 +124,7 @@
             <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
         </div>
 
-        <div *ngIf="!mainPanel && !isApp && !uiTransactionSettings.displayEditCardOnHeader">
+        <div *ngIf="!mainPanel && !uiTransactionSettings?.displayEditCardOnHeader">
           <ng-container [ngTemplateOutlet]="editCartButtons"></ng-container>
         </div>
 

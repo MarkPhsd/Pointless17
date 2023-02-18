@@ -153,11 +153,12 @@
         <!-- <div>
           {{order?.id}}
         </div> -->
-        <div  class="check-out-button" >
+         <!-- cartButtons {{uiTransactionSetting.displayEditCardOnHeader}} -->
+        <div  class="check-out-button" *ngIf="uiTransactionSetting && uiTransactionSetting?.displayEditCardOnHeader" >
           <ng-container [ngTemplateOutlet]="editCartButtons"></ng-container>
         </div>
 
-        <div *ngIf="!smallDevice && isApp && uiTransactionSetting.displayEditCardOnHeader"
+        <div *ngIf="!smallDevice && isApp"
               class="cart-button" >
           <app-cart-button> </app-cart-button>
         </div>

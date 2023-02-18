@@ -39,7 +39,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
   site$: Observable<ISite>;
   sites$: Observable<ISite[]>;
   site: ISite;
-
+  currentDayRan: boolean;
    //AgGrid
    params               : any;
    private gridApi      : GridApi;
@@ -61,6 +61,8 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
    recordCount             = 0;
    isfirstpage             = true;
    islastpage              = true;
+
+   exceptionMessage: string;
    value             : any;
    totalRecordCount: number;
    searchForm      : FormGroup;
@@ -93,32 +95,15 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
    )
 
    clearExceptions(event) { this.exceptions = [] }
+
    initSubscriptions() {
     try {
       this._searchModel = this.pointlessMetrcSalesReport.searchModel$.subscribe( data => {
-
+        this.currentDayRan = false;
         if (!data) {
-          console.log('clear exceptions')
-          console.log(this.searchModel, data )
           this.exceptions = []
         }
-          //  if (this.searchModel && data) {
-         console.log(this.searchModel, data )
-          //    if (this.searchModel.zRUN != data.zRUN) {
-          //     this.exceptions = []
-          //    }
-          //    if (this.searchModel.startDate != data.startDate) {
-          //     this.exceptions = []
-          //    }
-          //    if (this.searchModel.endDate != data.endDate) {
-          //     this.exceptions = []
-          //    }
-          //    if (this.searchModel.employeeID != data.employeeID) {
-          //     this.exceptions = []
-          //    }
-          //  }
-           this.searchModel            = data
-
+          this.searchModel            = data
           if (!this.searchModel) {
             const searchModel       = {} as PointlessMetrcSearchModel;
             this.currentPage        = 1
@@ -128,7 +113,10 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
             return;
           }
           if (data) {
-
+            if (this.searchModel.currentDay) {
+              this.pageSize = 100000;
+              this.initColumnDefs(1000000);
+            }
             this.refreshSearch_sub()
           }
         }
@@ -136,7 +124,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     } catch (error) {
       console.log('init subscription error', error)
     }
-  }
+   }
 
   constructor(
     private readonly datePipe: DatePipe,
@@ -191,7 +179,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         this.gridDimensions =  'width: 100%;  height: calc(100vh - 350px);'
         this.filterDimensions = 'height: calc(100vh - 350px)'
       }
-
     }
 
     initClasses()  {
@@ -359,7 +346,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
     }
 
-
     initSearchModel() {
       let searchModel        = {} as PointlessMetrcSearchModel;
       if (this.searchModel) {
@@ -386,7 +372,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     refreshSearchAny(event) {
       if (!event) {  return;  }
       this.exceptions = []
-      // this.pageSize   = 20;
       this.currentPage = 1;
       this.refreshSearch();
     }
@@ -408,11 +393,11 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       this.endRow        = endRow;
       if (tempStartRow > startRow) { return this.currentPage - 1 };
       if (tempStartRow < startRow) { return this.currentPage + 1 };
-      console.log('current page', this.currentPage)
       return this.currentPage;
     }
 
-  // //ag-grid standard method.
+
+    // //ag-grid standard method.
   //   getDataSource(params) {
   //     return {
   //       getRows: (params: IGetRowsParams) => {
@@ -444,13 +429,23 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
     //ag-grid standard method
     getRowData(params, startRow: number, endRow: number):  Observable<METRCSalesReportPaged>  {
+
+      const site                = this.siteService.getAssignedSite()
+      if (this.searchModel && this.searchModel.currentDay) {
+        if (this.currentDayRan) {
+          this.processing = false
+          return of(null) }
+        this.setCurrentPage(1, 100000)
+        this.currentPage = 1;
+        this.currentDayRan = true;
+
+        return this.pointlessMetrcSalesReport.getUnclosedSalesReport(site, this.searchModel)
+      }
+
       this.currentPage          = this.setCurrentPage(startRow, endRow)
-      // const searchModel         = this.initSearchModel();
       if (!this.searchModel) { this.searchModel = {}  as PointlessMetrcSearchModel};
       this.searchModel.pageSize   = this.pageSize
       this.searchModel.pageNumber = this.currentPage;
-
-      const site                = this.siteService.getAssignedSite()
       return this.pointlessMetrcSalesReport.getSalesReport(site, this.searchModel)
     }
 
@@ -474,15 +469,22 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       }
 
       this.processing = true;
-      console.log("check records")
+
       let datasource =  {
         getRows: (params: IGetRowsParams) => {
-        const items$ =  this.getRowData(params, params.startRow, params.endRow)
+        const items$    = this.getRowData(params, params.startRow, params.endRow)
         this.processing = true;
         items$.subscribe(data =>
           {
+              if (!data || data?.exceptionMessage) {
+                this.exceptionMessage = data?.exceptionMessage;
+                this.processing = false
+                return;
+              }
               const resp           =  data.paging
               this.processing = true;
+
+              console.log('exception message', data?.exceptionMessage)
               if (!this.exceptions) { this.exceptions = []}
               if (data.exceptions)  {
                 this.exceptions = [ ...this.exceptions, ...data.exceptions];
@@ -522,6 +524,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
     onFirstDataRendered (params) {
       try {
+        if (!params || params.api) {return}
         params.api.sizeColumnsToFit()
       } catch (error) {
         console.log(error)
@@ -533,7 +536,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     }
 
     editProductFromGrid(e) {
-
       let history = false
       // const historyValue =
 
@@ -549,7 +551,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
 
   setActiveOrderByException(orderID: number,history: any) {
-    console.log('orderid', orderID, history)
     if (+history == 1) {
       history = true;
     }
@@ -616,6 +617,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
     autoSizeAll(skipHeader) {
       if (! this.gridOptions ) { return }
+      if (!this.gridOptions || !this.gridOptions.columnApi) {return}
       try {
         var allColumnIds = [];
         this.gridOptions.columnApi.getAllColumns().forEach(function (column) {
@@ -639,7 +641,13 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     }
 
     onExportToCsv() {
-    this.gridApi.exportDataAsCsv({fileName: 'metrc', skipHeader: true});
+
+      const columnKeys = [ 'Sale Date', 'Client Type', 'Patient License', 'Caregiver License', 'Identification Method',  'Package Label', 'Quantity','UOM','UTHC%', 'UTHCC','UTHCUOM','Unit Weight', 'UWUOM', 'TotalAmount', 'Invoice#', 'Price', 'ExciseTax','CityTax', 'CountyTax','MunicipalTax', 'DiscountAmount','SubTotal','SalesTax']
+
+      const fields  =['completeDate','clientType', 'oomp',  'oompb', '','packageLabel','quantityTotal','unitType',  '', '', '', '', '', 'netTotal','orderID',
+      , '', '', '', , '', '' , '', '', '' ]
+      this.gridApi.exportDataAsCsv({ columnKeys: fields, allColumns: false,
+                                     fileName: 'metrc', skipHeader: true, suppressQuotes: true});
     }
 
     setSite(id: any) {

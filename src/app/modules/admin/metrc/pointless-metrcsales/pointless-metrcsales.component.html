@@ -28,7 +28,16 @@
      <div *ngIf="searchModel.endDate">
        End: {{searchModel.endDate}}
      </div>
-   </div>
+
+     <div *ngIf="searchModel.pageSize">
+        Page Size: {{searchModel.pageSize}}
+     </div>
+     <div *ngIf="searchModel.currentPage">
+        Current: {{searchModel.currentPage}}
+     </div>
+
+     <div *ngIf="exceptionMessage"><mat-icon>warning</mat-icon>{{exceptionMessage}}</div>
+  </div>
  </div>
 
 </div>

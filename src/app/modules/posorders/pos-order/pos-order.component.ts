@@ -73,7 +73,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   openOrderBar                      : boolean;
   // @ViewChild('container') container : ElementRef;
   @Input() OrderID : string;
-  @Input() mainPanel: boolean;
+  @Input() mainPanel = false;
   // totalOrderHeight$: Observable<any>;
   // remainingHeight$:  Observable<any>;
   // state   = 'nothing';
@@ -103,7 +103,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   itemsPrinted  : boolean;
   paymentsMade  : boolean;
-
+  _transactionUI:   Subscription;
   _order        :   Subscription;
   order         :   IPOSOrder;
   posOrderItem  :   PosOrderItem;
@@ -150,8 +150,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   // item$ = this.orderMethodService.assignedPOSItems$;
 
   transactionUISettingsSubscriber() {
-    this.uiSettingsService.transactionUISettings$.subscribe( data => {
-      console.log('ui settings', data)
+    this._transactionUI = this.uiSettingsService.transactionUISettings$.subscribe( data => {
+
       this.enableLimitsView  = false;
       if (data) {
 
@@ -250,9 +250,13 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       }
       if (data) {
         const value = +data.toFixed(0)
-        this.orderItemsHeightStyle = `${value - 70}px`
+        let cartHeight = 70;
+        if (this.uiTransactionSettings && this.uiTransactionSettings?.displayEditCardOnHeader) {
+          cartHeight = 0
+        }
+        this.orderItemsHeightStyle = `${value - cartHeight}px`
         if (this.smallDevice) {
-          this.orderItemsHeightStyle = `${value - 105}px`
+          this.orderItemsHeightStyle = `${value - cartHeight - 30}px`
         }
       }
     })
@@ -592,6 +596,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   ngOnDestroy() {
     if (this.id) { clearInterval(this.id); }
     if(this._order) { this._order.unsubscribe() }
+    if (this._transactionUI) { this._transactionUI.unsubscribe()}
     this.orderService.updateBottomSheetOpen(false)
     if (this._user) { this._user.unsubscribe()}
     if (this._uiSettings) { this._uiSettings.unsubscribe()}

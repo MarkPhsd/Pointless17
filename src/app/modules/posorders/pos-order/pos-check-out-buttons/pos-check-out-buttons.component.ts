@@ -36,7 +36,7 @@ export class PosCheckOutButtonsComponent  {
     //                                   this.isStaff, this.order.completionDate, path )
 
     this.navigationService.makePaymentFromSidePanel(this.openOrderBar, this.smallDevice,
-      this.isStaff, this.order  )
+      this.isStaff, this.order)
   }
 
   toggleOpenOrderBar() {

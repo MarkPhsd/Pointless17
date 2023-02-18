@@ -81,6 +81,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   isManager           :     boolean;
   isAdmin             =   false;
   isUser              =   false;
+
+  _transactionUI      :   Subscription;
   _order              :   Subscription;
   order               :   IPOSOrder;
 
@@ -173,7 +175,13 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       }
     })
   }
-
+  getUITransactionsSettings() {
+    this._transactionUI = this.uiSettings.transactionUISettings$.subscribe( data => {
+      if (data) {
+        this.uiTransactionSetting = data;
+      }
+    });
+  }
   initSubscriptions() {
     this.initOrderSubscriber()
     this.initScaleSubscriber();
@@ -257,15 +265,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  getUITransactionsSettings() {
-    this.uiTransactionSetting$ = this.settingsService.getUITransactionSetting().pipe(
-      switchMap( data => {
-        this.uiSettings.updateUITransactionSubscription(data);
-        this.uiTransactionSetting = data;
-        return of(data)
-      })
-    )
-  }
+
 
 
   get isClockInOutOn() {

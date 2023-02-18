@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
 import { IProductPostOrderItem, IServiceType, ISite, IUserProfile }   from 'src/app/_interfaces';
 import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel, IPOSPayment, PosOrderItem,  } from 'src/app/_interfaces/transactions/posorder';
 import { IPagedList } from '../system/paging.service';
@@ -875,8 +875,15 @@ export class OrdersService {
 
   newOrderWithPayloadMethod(site: ISite, serviceType: IServiceType): Observable<IPOSOrder> {
     if (!site) { return }
+    if (!this.userAuthorizationService.user) {
+      this.siteService.notify('user required', 'Alert', 1000)
+      return of(null)
+    }
     const orderPayload = this.getPayLoadDefaults(serviceType)
-    return  this.postOrderWithPayload(site, orderPayload)
+    return  this.postOrderWithPayload(site, orderPayload).pipe(switchMap(data => {
+      this.processOrderResult(data, site)
+      return of(data)
+    }))
   }
 
   newOrderFromTable(site: ISite, serviceType: IServiceType, uuID: string, floorPlanID: number, name: string): Observable<IPOSOrder> {

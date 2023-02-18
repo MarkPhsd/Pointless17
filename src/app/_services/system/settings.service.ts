@@ -348,9 +348,15 @@ export class SettingsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    const options = { url: url, cacheMins: 60};
+    let appCache =  JSON.parse(localStorage.getItem('appCache')) as any;
+    if (appCache) {
+      if (appCache?.value && appCache?.boolean) {
+        const uri = { url: url, cacheMins: appCache.value}
+        return  this.httpCache.get<UIHomePageSettings>(uri)
+      }
+    }
 
-    return this.httpCache.get<UIHomePageSettings>(options);
+    return this.http.get<UIHomePageSettings>(url);
 
   }
 
@@ -408,7 +414,15 @@ export class SettingsService {
 
     const options = { url: url, cacheMins: 60};
 
-    return this.httpCache.get<TransactionUISettings>(options);
+    let appCache =  JSON.parse(localStorage.getItem('appCache')) as any;
+    if (appCache) {
+      if (appCache?.value && appCache?.boolean) {
+        const uri = { url: url, cacheMins: appCache.value}
+        return  this.httpCache.get<TransactionUISettings>(uri)
+      }
+    }
+
+    return this.http.get<TransactionUISettings>(url);
 
   }
 

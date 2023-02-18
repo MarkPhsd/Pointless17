@@ -29,7 +29,7 @@ initGridOptions(pageSize: number, columnDefs: any)  {
   return {
     pagination: true,
     paginationPageSize: pageSize,
-    cacheBlockSize: 20,
+    cacheBlockSize: pageSize,
     maxBlocksInCache: 50,
     rowModelType: 'infinite',
     infiniteInitialRowCount: 0,
@@ -39,7 +39,6 @@ initGridOptions(pageSize: number, columnDefs: any)  {
 
       "" :  (params) => {
         if (params.node.selected) {
-          console.log('selected')
           return true;
         }
       },
