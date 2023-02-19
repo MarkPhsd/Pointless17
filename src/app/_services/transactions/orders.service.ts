@@ -185,12 +185,15 @@ export class OrdersService {
     return order
   }
 
-  updateOrderSubscription(order: IPOSOrder) {
-    this.storeCreditMethodService.updateSearchModel(null);
 
-    order = this.getCost(order)
+  updateOrder(order: IPOSOrder) {
     this._currentOrder.next(order);
+    this.setStateOrder(order);
+  }
 
+  updateOrderSubscription(order: IPOSOrder) {
+
+    this.updateOrder(order)
     if (order == null) {
       order = this.getStateOrder();
       if (order) {
@@ -202,12 +205,19 @@ export class OrdersService {
       }
     }
 
+    this.storeCreditMethodService.updateSearchModel(null);
+    order = this.getCost(order)
     this.currentOrder = order;
-    this.orderClaimed = false;
     this.setStateOrder(order);
     this._scanner.next(true)
     const site = this.siteService.getAssignedSite();
-    if (order && order.id) {
+
+    const devicename = localStorage.getItem('devicename')
+    if (order?.deviceName === devicename) { return }
+
+    this.orderClaimed = false;
+
+    if (order && order.id ) {
       const order$ = this.claimOrder(site, order.id.toString(), order.history)
       if (!order$) {
         this.orderClaimed = false;

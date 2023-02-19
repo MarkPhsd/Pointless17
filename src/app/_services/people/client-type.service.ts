@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders,  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { EMPTY, Observable, } from 'rxjs';
 import {clientType, ISite }   from 'src/app/_interfaces';
+import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 
 export interface IUserAuth_Properties {
   // 'pos section
@@ -64,6 +65,7 @@ export interface IUserAuth_Properties {
 export class ClientTypeService {
 
   constructor( private http: HttpClient,
+               private httpCache: HttpClientCacheService,
                 private auth: AuthenticationService,
               ) { }
 
@@ -90,6 +92,28 @@ export class ClientTypeService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<clientType>(url)
+
+  }
+
+  getClientTypeCached(site: ISite, id: any): Observable<clientType> {
+
+    const controller = '/clientTypes/'
+
+    const endPoint = "getClientType"
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    let appCache =  JSON.parse(localStorage.getItem('appCache')) as any;
+    if (appCache) {
+      if (appCache?.value && appCache?.boolean) {
+        const uri = { url: url, cacheMins: appCache.value}
+        return  this.httpCache.get<clientType>(uri)
+      }
+    }
+
+    return this.http.get<clientType>(url);
 
   }
 

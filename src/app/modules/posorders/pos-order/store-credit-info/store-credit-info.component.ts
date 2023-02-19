@@ -59,20 +59,18 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
     try {
       this._search       = this.storeCreditMethodService.searchModel$.subscribe(data => {
         this.search      = data;
-        // console.log('data store credit', data)
         if (!data) {
           this.search              = null;
           this.storeCreditSearch$  = null;
+          this.setObservable(null)
+          return;
         }
         this.clientID = this.order?.clientID
-        // console.log('set observable 1 from store credit', this.clientID, this.order?.clientID)
-        // console.log('this.storeCreditValue', this.storeCreditValue)
         if ((this.clientID != this.order?.clientID) || !this.storeCreditValue)  {
           this.setObservable(data)
         } else {
           this.setObservable(null)
         }
-
       })
     } catch (error) {
 
@@ -96,16 +94,13 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
       this._order = this.orderService.currentOrder$.subscribe( data => {
         if (!data) {
           this.order = null;
-          this.clientID = 0; //this.order.clientID
+          this.clientID = 0;
           this.storeCreditMethodService.updateSearchModel(this.search)
         }
         if (data) {
           this.order = data
-          this.clientID = this.order.clientID; //this.order.clientID
-          // if (this.clientID != this.order.clientID) {
-            // console.log('update search model from store credit')
-            this.storeCreditMethodService.updateSearchModel(this.search)
-          // }
+          this.clientID = this.order.clientID;
+          this.storeCreditMethodService.updateSearchModel(this.search)
         }
       })
     } catch (error) {

@@ -98,7 +98,6 @@ export class ToolBarUIService {
   }
 
   updateOrderBar(value: boolean) {
-    console.log('url', this.router.url )
     if (this.router.url == '/currentorder;mainPanel=true') {
       this.orderBar = false
       this._orderBar.next(false)

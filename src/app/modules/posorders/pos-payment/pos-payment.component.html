@@ -44,7 +44,6 @@
           <div *ngIf="!splitByItem">
             <h4>Payment Amount: {{paymentAmount | currency}}</h4>
           </div>
-
           <div *ngIf="!splitByItem">
             <button class="splitbutton"
                     mat-raised-button
@@ -53,7 +52,6 @@
               <mat-icon>edit</mat-icon>Change <br>Amount
             </button>
           </div>
-
           <div  *ngIf="!paymentsEqualTotal">
             <button class="splitbutton"
                     mat-raised-button
@@ -71,8 +69,6 @@
         </div>
       </div>
 
-
-
       <div *ngIf="!order.completionDate && !splitByItem && !paymentsEqualTotal && paymentIsReady
                   &&  order?.balanceRemaining != 0">
         <div class="grid-header-item" *ngIf="stepSelection == 1">
@@ -80,7 +76,6 @@
             <ng-container [ngTemplateOutlet]="wicEBTButton"></ng-container>
             <mat-card>
               <mat-card-content>
-
                 <div class="action-center grid-items"  *ngIf="!order.completionDate &&
                                                               order?.balanceRemaining != 0 &&
                                                               !splitByItem">

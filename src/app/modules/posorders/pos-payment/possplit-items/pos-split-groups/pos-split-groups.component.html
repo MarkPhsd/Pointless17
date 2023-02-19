@@ -1,29 +1,37 @@
 <div  *ngIf="order">
   <div class="grid-split-groups"
        *ngIf="order.posOrderItems.length>0">
-    <div *ngFor="let value of values">
-      <h5>Group {{value}}</h5>
-      <ng-container [ngTemplateOutlet]="header"></ng-container>
-      <div *ngFor="let item of order.posOrderItems; index as i">
-        <ng-container
-          [ngTemplateOutlet]="optionTemplate"
-          [ngTemplateOutletContext]="{ $implicit: item, idx: i, splitGroup: value }"
-        ></ng-container>
+    <div *ngFor="let value of values" >
+      <div class="group" *ngIf="isGreaterThanZero(order.posOrderItems,value)">
+        <h5>Group {{value}}</h5>
+        <ng-container [ngTemplateOutlet]="header"></ng-container>
+        <div *ngFor="let item of order.posOrderItems; index as i">
+          <ng-container
+            [ngTemplateOutlet]="optionTemplate"
+            [ngTemplateOutletContext]="{ $implicit: item, idx: i, splitGroup: value }"
+          ></ng-container>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <ng-template #header>
-  <div class="grid-group-items">
-    <div>QT</div>
-    <div>Item</div>
+  <div class="header">
+    <div class="grid-group-items">
+      <div>QT</div>
+      <div>Item</div>
+    </div>
   </div>
 </ng-template>
 
 <ng-template #optionTemplate  let-option let-position="idx" let-splitGroup="splitGroup">
   <div  class="grid-group-items" *ngIf="option.splitGroupID == splitGroup">
-    <div class="items"> {{ option.quantity }} </div>
+    <div class="items"> {{ option.quantity }}
+      <span *ngIf="option.unitName && option.unitName != '1'">
+        {{ option.unitName.slice(0,2) }}
+      </span>
+    </div>
     <div class="items"> {{ option?.productName | truncateText:20 }}</div>
   </div>
 </ng-template>

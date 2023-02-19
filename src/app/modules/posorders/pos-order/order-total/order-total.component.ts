@@ -26,23 +26,6 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
 
   @Input()  purchaseOrderEnabled: boolean;
 
-  // initPurchaseOrderOption(id: number) {
-  //   if (!id) { return }
-  //   if (this.userAuthorization.isManagement) {
-  //     const site = this.siteService.getAssignedSite()
-  //     this.serviceType$ = this.serviceTypeService.getType (site,id).pipe(
-  //       switchMap(data => {
-  //         this.purchasOrderEnabled = false
-  //         if ( data.filterType  && data.filterType != 0 ) {
-  //           this.purchasOrderEnabled = true
-  //         }
-  //         return of(null)
-  //       })
-  //     )
-  //   }
-  // }
-
-
   homePageSubscriber(){
     try {
       this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
@@ -55,18 +38,9 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
         if (!data?.wideOrderBar) {
           this.transactionDataClass = 'transaction-data-side-panel-small'
         }
-        // if (data) {
-        //   if (data.wideOrderBar) {
-        //     if (this.smallDevice)  {
-        //         this.matorderBar = 'mat-orderBar'
-        //     }
-        //   }
 
-        //   if (data.wideOrderBar) {
         if (this.smallDevice)  { this.transactionDataClass = 'transaction-data-side-panel-small'   }
-        //     if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
-        //   }
-        // }
+
       })
     } catch (error) {
       console.log('HomePage Subscriber', error)
@@ -81,7 +55,6 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
       }
     })
   }
-
 
   constructor(
       private uiSettingsService   : UISettingsService,

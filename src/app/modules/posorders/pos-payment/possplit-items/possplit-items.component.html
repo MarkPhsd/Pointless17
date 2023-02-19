@@ -1,8 +1,7 @@
 <div class="grid-container">
-    <div class="toggle-group" *ngIf="!smallDevice &&  values && !savingChanges">
+   <div class="toggle-group" *ngIf="!smallDevice &&  values && !savingChanges">
       <mat-button-toggle-group
             name         = "type"
-            [(ngModel)]  = "currentGroup"
             vertical>
         <mat-button-toggle
               *ngFor      ="let item of values"
@@ -16,30 +15,11 @@
       </mat-button-toggle-group>
     </div>
 
-    <div cass="toggle-group" *ngIf="smallDevice && values && !savingChanges">
-      <mat-button-toggle-group
-            name         = "type"
-            [(ngModel)]  = "currentGroup"
-            horizontal>
-        <mat-button-toggle
-              *ngFor      ="let item of values"
-              class       ="toggle-button-wide"
-              type        ="button"
-              [value]     ="item"
-              (click)     ="applyGroupID(item)"
-              id          ="item.id">
-          {{item.name}}
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
     <div>
       <mat-card>
         <mat-card-subtitle>
           <div class="span-column">
-
-            <h5> Group {{currentGroup}}  </h5>
-            <br>
-            <mat-label>Apply all splits before making payments. </mat-label>
+            <mat-label>Group: {{currentGroupID}}. Apply all splits before making payments. </mat-label>
             <mat-label>Once payments are made more splits can not be done.</mat-label>
              <mat-card *ngIf="(orderGroupTotal$ | async) as groupOrder; else calculating">
               <mat-card-content>

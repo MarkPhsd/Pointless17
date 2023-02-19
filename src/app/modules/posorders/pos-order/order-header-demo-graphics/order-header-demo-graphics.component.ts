@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Input, Output, OnChanges } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, OnChanges, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
   templateUrl: './order-header-demo-graphics.component.html',
   styleUrls: ['./order-header-demo-graphics.component.scss']
 })
-export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
+export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDestroy  {
 
   orderNameForm: FormGroup;
 
@@ -30,31 +30,10 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
   transactionSettings: TransactionUISettings;
 
   homePageSubscriber(){
-    try {
-      this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
-        this.uiSettings = data;
-       
-        // if (!data.wideOrderBar) { 
-        //   // this.transactionDataClass = 'transaction-data-side-panel-small' 
-        // }
-        // if (data) {
-        //   if (data.wideOrderBar) { 
-        //     if (this.smallDevice)  {
-        //         this.matorderBar = 'mat-orderBar'
-        //     }
-        //   }
-
-        //   if (data.wideOrderBar) {
-        //     if (this.smallDevice)  { this.matorderBar = 'mat-orderBar'  }
-        //     if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
-        //   }
-        // }
-      })
-    } catch (error) {
-      console.log('HomePage Subscriber', error)
-    }
+    this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
+      this.uiSettings = data;
+    })
   }
-
 
   constructor(private router: Router,
               private siteService: SitesService,
@@ -78,6 +57,9 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
     this.homePageSubscriber();
   }
 
+  ngOnDestroy() {
+    if (this._uiSettings) { this._uiSettings.unsubscribe()}
+  }
   ngOnChanges(): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
@@ -142,12 +124,12 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
   assignClientID(client) {
     if (this.order) {
       const site = this.siteService.getAssignedSite();
-      if (client) { 
+      if (client) {
         try {
           this.order.clientID = client?.id;
           this.order.customerName = client?.lastName.substr(0,2) + ', ' + client?.firstName
         } catch (error) {
-          
+
         }
       }
       this.orderService.putOrder(site, this.order).subscribe(data => {

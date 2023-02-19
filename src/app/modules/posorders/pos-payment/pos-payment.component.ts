@@ -461,8 +461,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
         let processResults$
 
-        console.log('(this.posPayment) 2', this.posPayment);
-
         processResults$ = this.processGetResults(amount, this.posPayment)
 
         if (!processResults$) {
@@ -658,12 +656,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   getPaymentMethod(paymentMethod) {
     this.paymentMethod = paymentMethod;
-
-    console.log(this.groupPaymentGroupID);
-
     if (this.paymentMethod) {
       if (this.groupPaymentAmount != 0) {
-        console.log('apply payment amount')
         this.applyPaymentAmount(this.groupPaymentAmount)
         return
       }

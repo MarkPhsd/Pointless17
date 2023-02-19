@@ -6,7 +6,7 @@
       <mat-slide-toggle
               name="medTempLicense"
               formControlName="patientRecOption">
-        <mat-label >Med Patient</mat-label>
+        <mat-label >Med Patient / Caregiver</mat-label>
       </mat-slide-toggle>
     </div>
 
@@ -19,24 +19,36 @@
            [formGroup]="inputForm">
 
         <div class="name-fields">
+          <span *ngIf="(clientType$ | async) as clientType">
+            <div >
+              <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'medLicenseNumber'">
 
-          <div>
-            <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'medLicenseNumber'">
-              MED License Number / OOMP #
-            </app-value-fields>
-          </div>
+                <div *ngIf="clientType?.name && clientType?.name.toLowerCase() === 'caregiver'">
+                  OOMPB
+                </div>
+                <div *ngIf="clientType?.name && clientType?.name.toLowerCase() === 'patient'">
+                  MED License Number / OOMP #
+                </div>
+              </app-value-fields>
+            </div>
 
-          <div class="name-fields">
-            <app-value-fields
-                    [enabled]="isStaff"
-                    [inputForm]="inputForm"
-                    [fieldName]="'userName'">
-              OOMPB #
-            </app-value-fields>
-          </div>
+            <div  class="name-fields">
+              <app-value-fields
+                      [enabled]="isStaff"
+                      [inputForm]="inputForm"
+                      [fieldName]="'userName'">
 
+                <div *ngIf="clientType?.name && clientType.name.toLowerCase() === 'caregiver'">
+                  MED License Number / OOMP #
+                </div>
+                <div *ngIf="clientType?.name && clientType.name.toLowerCase() === 'patient'">
+                  OOMPB #
+                </div>
+              </app-value-fields>
+            </div>
+          </span>
           <div>
             <mat-form-field  appearance="outline">
               <mat-label>Expiration</mat-label>

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IPOSOrder } from 'src/app/_interfaces';
+import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 
 @Component({
@@ -18,7 +18,6 @@ export class PosSplitGroupsComponent implements OnInit , OnDestroy{
   ngOnInit(): void {
     const i = 0;
     this._order = this.orderService.currentOrder$.subscribe(data => {
-      // console.log('split groups updated')
       this.order = data;
     })
   }
@@ -27,6 +26,17 @@ export class PosSplitGroupsComponent implements OnInit , OnDestroy{
     if (this._order) {
       this._order.unsubscribe()
     }
+  }
+
+  isGreaterThanZero(posOrderItems : PosOrderItem[],value): boolean {
+
+    const items = posOrderItems.filter(data => {
+      return data.splitGroupID == value
+    })
+
+    if (items.length>0) { return true }
+    return false;
+
   }
 
 }

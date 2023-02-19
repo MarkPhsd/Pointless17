@@ -16,8 +16,6 @@ export class TruncateTextPipe implements PipeTransform {
     //.. truncate to about correct lenght
 
     let truncatedText = value.slice(0, length + biggestWord);
-    // console.log(truncatedText)
-    //.. now nibble ends till correct length
 
     while (truncatedText.length > length - elipses.length) {
         let lastSpace = truncatedText.lastIndexOf(" ");

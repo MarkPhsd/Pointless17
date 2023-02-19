@@ -12,6 +12,22 @@
 .grid-group-items {
   display: grid;
   gap: 10px;
-  grid-template-columns: 25px repeat( auto-fit, minmax(150px, 1fr) );
+  grid-template-columns: 40px 160px; //repeat( auto-fit, minmax(150px, 1fr) );
   font-size: 1rem;
+}
+
+.group {
+  margin: 1px;
+  border-style: dashed;
+  overflow: hidden;
+  padding: 1px;
+  border-width: 1px;
+  height: 100%;
+}
+
+.header {
+  margin-bottom: 2px;
+  overflow: hidden;
+  border-style: dashed;
+  border-width: 1px;
 }
