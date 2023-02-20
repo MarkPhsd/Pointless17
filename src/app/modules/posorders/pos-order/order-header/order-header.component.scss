@@ -1,20 +1,29 @@
 h4 {
   font-size: medium !important;
 }
-
 mat-card {
   padding: 3px !important;
+}
 
+.button {
+  height: 50px;
+  // margin: 5px;
+  // margin: 4px;
 }
 
 .container {
   display: grid;
-  grid-template-columns: 75% 100px;
-  // gap: 10px;
+  grid-template-columns: 1fr 125px;
   width:100%;
-;
 }
 
-.button-container {
-  margin: 10px;
+.button-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: true;
+  row-gap: 5px;
+  column-gap: 5px;
+  margin-bottom: 5px;
 }
+
+

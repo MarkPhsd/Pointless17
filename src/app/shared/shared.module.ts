@@ -173,6 +173,7 @@ import { PaymentReportDataComponent } from '../modules/admin/reports/payment-rep
 import { ClockInOutComponent } from './widgets/clock-in-out/clock-in-out.component';
 import { TruncateRightPipe } from '../_pipes/truncate-right.pipe';
 import { PosCheckOutButtonsComponent } from '../modules/posorders/pos-order/pos-check-out-buttons/pos-check-out-buttons.component';
+import { SplitEntrySelectorComponent } from '../modules/posorders/pos-order/split-entry-selector/split-entry-selector.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -308,6 +309,9 @@ import { PosCheckOutButtonsComponent } from '../modules/posorders/pos-order/pos-
     RewardsAvailibleComponent,
     RetailProductEditComponent,
     SimpleTinyComponent,
+
+    SplitEntrySelectorComponent,
+
     SalesTaxReportComponent,
     ScaleReaderComponent,
     ScaleSettingsComponent,
@@ -494,6 +498,9 @@ import { PosCheckOutButtonsComponent } from '../modules/posorders/pos-order/pos-
     RequestMessageComponent,
     RequestMessagesComponent,
     QuantiySelectorComponent,
+
+    SplitEntrySelectorComponent,
+
     SalesTaxReportComponent,
     ScaleSettingsComponent,
     ScaleReaderComponent,

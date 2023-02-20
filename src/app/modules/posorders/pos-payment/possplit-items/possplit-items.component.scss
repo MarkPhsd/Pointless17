@@ -140,14 +140,20 @@ mat-button-toggle-group {
   }
 }
 
+.spacer-10 {
+  margin-left: 10px;
+}
+
 button {
   width: 150px;
   height: 50px;
 }
 
 .buttons-grid {
-  display: grid;
-  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
   gap: 5px;
   margin: 10px;
 }

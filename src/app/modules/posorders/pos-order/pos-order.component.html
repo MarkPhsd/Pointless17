@@ -10,6 +10,7 @@
         <div  [class]="gridheaderitem"
               (resized)="onResizedorderHeightPanel($event)">
           <pos-order-transaction-data
+              [uiTransactionSettings]="uiTransactionSettings"
               [purchaseOrderEnabled]="purchaseOrderEnabled"
               [mainPanel]="mainPanel"
               [order]="order">
@@ -41,6 +42,7 @@
           <app-order-header-demo-graphics
             [canRemoveClient]     ="canRemoveClient"
             [order]               ="order"
+            [mainPanel]           ="mainPanel"
             (outPutOpenClient)    ="openClient()"
             (outPutRemoveClient)  ="removeClient()"
             (outPutAssignCustomer)="assignCustomer($event)" >
@@ -100,11 +102,8 @@
                     class="payment-buttons-container">
 
           <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
-
           <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
-
           <ng-container [ngTemplateOutlet]="cardPointeButton"></ng-container>
-
           <ng-container [ngTemplateOutlet]="giftCardPayButton"></ng-container>
 
           <ng-container ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
@@ -114,7 +113,6 @@
           </div>
 
           <ng-container [ngTemplateOutlet]="wicEBTButton"></ng-container>
-
           <ng-container [ngTemplateOutlet]="triPOSPaymentButton"></ng-container>
           <div></div>
         </div>

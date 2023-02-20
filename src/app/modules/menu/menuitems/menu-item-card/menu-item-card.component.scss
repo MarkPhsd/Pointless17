@@ -76,6 +76,7 @@ mat-card:active {
  }
 
 .image-container {
+  width: 100%;
   @include for-phone-only          {min-height: 15vh; max-height: 100px;}
   @include for-tablet-landscape-up {min-height: 13vh; max-height: 100px;}
   @include for-tablet-portrait-up  {min-height: 13vh; max-height: 100px;}

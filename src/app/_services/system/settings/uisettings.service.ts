@@ -60,6 +60,7 @@ export interface TransactionUISettings {
   triposEnabled: boolean;
   displayEditCardOnHeader: boolean;
   showCustomerOption: boolean;
+  splitEntry: boolean;
 }
 
 export interface StripeAPISettings {
@@ -675,6 +676,7 @@ export class UISettingsService {
       triposEnabled:          [],
       displayEditCardOnHeader: [],
       showCustomerOption: [],
+      splitEntry: [],
      })
   }
 

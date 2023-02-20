@@ -9,6 +9,7 @@ import { OrdersService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { group } from 'console';
 
 export interface   ISelectedItems{
   id        : number;
@@ -32,7 +33,7 @@ export class POSSplitItemsComponent implements OnInit {
     orderItems       : PosOrderItem[];
     productTypes     : IItemBasic[];
     orderGroupTotal$ : Observable<IPOSOrder>;
-    printReceipt$    : Observable<IPOSOrder>;
+
     typeID           : number;
     assignedStatic   : any;
     allAssigned      : any;
@@ -135,22 +136,10 @@ export class POSSplitItemsComponent implements OnInit {
       this.updateItemsPerPage()
       const site = this.siteService.getAssignedSite()
       this.initGroupList();
-      this.refreshAssignedItems();
-      this.refreshOrder();
-    }
+      this.applyGroupID(0);
+      this.setGroupOrderTotal(site, this.order.id, 0)
 
-    printReceipt()  {
-      const groupID = this.currentGroupID
-      if (groupID) {
-        const site = this.siteService.getAssignedSite()
-        this.printReceipt$  = this.orderService.getPOSOrderGroupTotal(site, this.order.id, groupID).pipe(
-          switchMap(data => {
-            this.printingService.currentGroupID = groupID;
-            this.orderService.printOrder = data;
-            this.printingService.previewReceipt();
-            return of(data);
-        }))
-      }
+      this.refreshOrder();
     }
 
     initGroupList(): any {
@@ -214,8 +203,8 @@ export class POSSplitItemsComponent implements OnInit {
     // i feel like it's easier to push the whole list,
     //and keep a reference to the selecteditems, then push the whole list.
     saveAssignedCategories(selected: IListBoxItem[]) {
-      if (selected) {
-        if (selected.length     == 0)  { return   }
+      // if (selected) {
+        // if (selected.length     == 0)  { return   }
 
         const site           = this.siteService.getAssignedSite();
         const items$         = this.orderService.applyItemsToGroup(site, this.currentGroupID, selected);
@@ -231,14 +220,14 @@ export class POSSplitItemsComponent implements OnInit {
               this.changesOcurred = false;
               this.savingChanges = false
             }
-            return of(this.order)
+            return  this.orderService.getOrder(site, this.order.id.toString() , false)
         })).pipe(
           switchMap(data => {
           this.orderService.updateOrder(data);
           return of(data)
         }));
 
-      };
+      console.log('selected', selected)
     }
 
     setGroupOrderTotal(site, orderID, groupID) {
@@ -253,7 +242,7 @@ export class POSSplitItemsComponent implements OnInit {
       const site = this.siteService.getAssignedSite()
       this.order$ = this.orderService.getOrder(site, this.order.id.toString() , false).pipe(
         switchMap(data => {
-          this.orderService.updateOrderSubscription(data);
+          this.orderService.updateOrder(data);
           return of(data)
       }))
     }
@@ -263,6 +252,10 @@ export class POSSplitItemsComponent implements OnInit {
         if (!data) { return }
          this.outPutPaymentAmount.emit({amount: data.total.toFixed(2), groupID: this.currentGroupID})
       })
+    }
+
+    makePayment(event) {
+      this.outPutPaymentAmount.emit(event)
     }
 
     refreshAssignedItems() {

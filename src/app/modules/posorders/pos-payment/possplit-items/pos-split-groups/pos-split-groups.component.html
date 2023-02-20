@@ -1,9 +1,21 @@
 <div  *ngIf="order">
   <div class="grid-split-groups"
        *ngIf="order.posOrderItems.length>0">
+
     <div *ngFor="let value of values" >
       <div class="group" *ngIf="isGreaterThanZero(order.posOrderItems,value)">
-        <h5>Group {{value}}</h5>
+          <div *ngIf="orderGroupTotal$ && (orderGroupTotal$[value] | async) as order; else loading">
+            <print-group-receipt
+                (outPutPaymentAmount)="makePayment($event)"
+                [orderID]="order.id"
+                [order]="order"
+                [groupID]="value">
+                <div>
+                  <h5>Group {{value}} Total: {{order.total | currency }} </h5>
+                </div>
+            </print-group-receipt>
+          </div>
+
         <ng-container [ngTemplateOutlet]="header"></ng-container>
         <div *ngFor="let item of order.posOrderItems; index as i">
           <ng-container
@@ -12,8 +24,8 @@
           ></ng-container>
         </div>
       </div>
+
     </div>
-  </div>
 </div>
 
 <ng-template #header>
@@ -34,4 +46,8 @@
     </div>
     <div class="items"> {{ option?.productName | truncateText:20 }}</div>
   </div>
+</ng-template>
+
+<ng-template #loading>
+  ...
 </ng-template>

@@ -369,6 +369,7 @@ import { TriPosTransactionsComponent } from '../modules/payment-processing/tri-p
 import { PointlessMETRCSalesComponent } from '../modules/admin/metrc/pointless-metrcsales/pointless-metrcsales.component';
 import { MetrcSalesFilterComponent } from '../modules/admin/metrc/pointless-metrcsales/metrc-sales-filter/metrc-sales-filter.component';
 import { PosSplitGroupsComponent } from '../modules/posorders/pos-payment/possplit-items/pos-split-groups/pos-split-groups.component';
+import { PrintGroupReceiptComponent } from '../modules/posorders/pos-payment/possplit-items/print-group-receipt/print-group-receipt.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -600,8 +601,10 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PackageListComponent,
     PackageSearchSelectorComponent,
 
+
     POSSplitItemsComponent,
     PosSplitGroupsComponent,
+    PrintGroupReceiptComponent,
     PrepOrderComponent,
     PrepContainerComponent,
     PrepOrderFilterComponent,

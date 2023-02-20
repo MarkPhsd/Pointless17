@@ -24,9 +24,11 @@
              <mat-card *ngIf="(orderGroupTotal$ | async) as groupOrder; else calculating">
               <mat-card-content>
                 <br>
-                Balance: {{groupOrder.balanceRemaining |currency}}
+                <h5>Balance: {{groupOrder.balanceRemaining |currency}}</h5>
                 <br>
-                Total:   {{groupOrder.total | currency}}
+                <h5>
+                  Total:   {{groupOrder.total | currency}}
+                </h5>
               </mat-card-content>
 
               <mat-card-actions >
@@ -37,8 +39,15 @@
                     </button>
                   </div>
 
-                  <div>
-                    <div><button color="primary" mat-raised-button (click)="printReceipt()"><mat-icon>print</mat-icon></button></div>
+                  <div class="spacer-10" *ngIf="(orderGroupTotal$ | async) as order">
+                    <div *ngIf="!changesOcurred">
+                      <print-group-receipt
+                          (outPutPaymentAmount)="makePayment($event)"
+                          [orderID]="order.id"
+                          [order]="order"
+                          [groupID]="currentGroupID">
+                        </print-group-receipt>
+                    </div>
                   </div>
 
                   <div *ngIf="changesOcurred">
@@ -46,11 +55,7 @@
                       <mat-icon>save</mat-icon>Save Changes
                     </button>
                   </div>
-                  <div *ngIf="!changesOcurred && groupOrder.total>0">
-                    <button mat-raised-button color="primary" (click)="submitPaymentAmount()">
-                      <mat-icon>save</mat-icon>Make Payment
-                    </button>
-                  </div>
+
                 </div>
 
               </mat-card-actions>
@@ -132,4 +137,4 @@
 <div *ngIf="(selectedItems$ | async) as selectedItems"></div>
 <div *ngIf="(allitems$ | async) as allitems"></div>
 <div *ngIf="(saveAssignedItems$ | async) as savedItems"></div>
-<div *ngIf="(printReceipt$ | async) as printView"></div>
+<div *ngIf="order$ && (order$ | async) as order;else calculating"></div>

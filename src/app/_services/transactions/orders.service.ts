@@ -187,6 +187,7 @@ export class OrdersService {
 
 
   updateOrder(order: IPOSOrder) {
+    this.currentOrder = order;
     this._currentOrder.next(order);
     this.setStateOrder(order);
   }
@@ -194,6 +195,7 @@ export class OrdersService {
   updateOrderSubscription(order: IPOSOrder) {
 
     this.updateOrder(order)
+
     if (order == null) {
       order = this.getStateOrder();
       if (order) {
@@ -207,7 +209,6 @@ export class OrdersService {
 
     this.storeCreditMethodService.updateSearchModel(null);
     order = this.getCost(order)
-    this.currentOrder = order;
     this.setStateOrder(order);
     this._scanner.next(true)
     const site = this.siteService.getAssignedSite();

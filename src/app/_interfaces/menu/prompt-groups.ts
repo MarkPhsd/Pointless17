@@ -13,6 +13,7 @@ export interface IPromptGroup {
   posOrderItem              : IPurchaseOrderItem;
   orderID                   : number;
   currentAccordionStep      : number;
+  splitGroupID              : number;
 }
 
 export interface SelectedPromptSubGroup {

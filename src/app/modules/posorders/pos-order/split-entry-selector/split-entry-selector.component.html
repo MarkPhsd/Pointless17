@@ -1,0 +1,24 @@
+
+	<div class="menu-buttons" *ngIf="isUserStaff && uiTransactionSettings?.splitEntry" >
+    <button aria-label="user menu"
+              mat-raised-button
+              color="primary"
+              class="more-button"
+              [matMenuTriggerFor]="menu"
+              #menuTrigger="matMenuTrigger"
+              (click)="menuTrigger.openMenu()">
+        <mat-icon>group</mat-icon> {{orderMethodsService.splitEntryValue}}
+    </button>
+
+  <mat-menu class="mat-menu-panel"
+                [overlapTrigger]="false"
+                #menu="matMenu">
+    <span (mouseleave)="menuTrigger.closeMenu()">
+      <div class="button-list" *ngFor="let value of values">
+        <div>
+          <button mat-button class="selector" color="accent"  (click)="assignVaue(value)"><mat-icon>group</mat-icon>{{value}}</button>
+        </div>
+      </div>
+    </span>
+  </mat-menu>
+</div>

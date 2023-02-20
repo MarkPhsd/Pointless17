@@ -2,10 +2,11 @@
     devicename &&
     uiTransactions?.cardPointAndroidEnabled &&
     (order && order?.balanceRemaining != 0)">
-
   <button class="payment-buttons"
           mat-raised-button
+          color="primary"
           (click)="processDSIEMVAndroidCreditCardPayment(false)">
     <ng-content></ng-content>
   </button>
+
 </span>

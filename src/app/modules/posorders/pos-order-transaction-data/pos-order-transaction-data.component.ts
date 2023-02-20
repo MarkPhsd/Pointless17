@@ -1,6 +1,7 @@
 import { Component,  Input} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IPOSOrder } from 'src/app/_interfaces';
+import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
   styleUrls: ['./pos-order-transaction-data.component.scss']
 })
 export class PosOrderTransactionDataComponent{
-
+  @Input() uiTransactionSettings : TransactionUISettings;
   @Input() order    : IPOSOrder;
   @Input() mainPanel: boolean;
   @Input() purchaseOrderEnabled: boolean;

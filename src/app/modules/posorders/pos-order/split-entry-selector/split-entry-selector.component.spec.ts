@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OrderHeaderComponent } from './order-header.component';
+import { SplitEntrySelectorComponent } from './split-entry-selector.component';
 
-describe('OrderHeaderComponent', () => {
-  let component: OrderHeaderComponent;
-  let fixture: ComponentFixture<OrderHeaderComponent>;
+describe('SplitEntrySelectorComponent', () => {
+  let component: SplitEntrySelectorComponent;
+  let fixture: ComponentFixture<SplitEntrySelectorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OrderHeaderComponent ]
+      declarations: [ SplitEntrySelectorComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OrderHeaderComponent);
+    fixture = TestBed.createComponent(SplitEntrySelectorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,13 +1,9 @@
 <span *ngIf="devicename && (uiTransactions && uiTransactions?.dsiEMVNeteEpayEnabled)
-      && order && order?.balanceRemaining != 0" class="buttons">
+      && order && order?.balanceRemaining != 0">
   <button class="payment-buttons"
       mat-raised-button
+      color="primary"
       (click)="processDSICreditCardPayment(false)">
       <ng-content></ng-content>
   </button>
-  <!-- <button class="payment-buttons"
-      mat-raised-button
-      (click)="dsiResetDevice()">
-      <mat-icon color="warn">refresh</mat-icon>Device Reset
-  </button> -->
 </span>

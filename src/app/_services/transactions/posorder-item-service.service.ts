@@ -304,7 +304,7 @@ export class POSOrderItemServiceService {
 
     const controller = "/POSOrderItems/";
 
-    const endPoint = "PostPostPrompGroup";
+    const endPoint = "postPromptItems";
 
     const parameters = ``
 

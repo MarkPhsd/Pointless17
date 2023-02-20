@@ -12,6 +12,7 @@
   overflow-x: hidden;
   margin: 10px;
 }
+
 .grid-items {
   display: grid;
   grid-template-columns: 50px 100px 100px;
@@ -24,6 +25,11 @@
   max-width: 400px;
   min-width: 410px;
   margin-left: 5px;
+}
+
+.reasons-selection {
+  height: 250px;
+  overflow-x: auto;
 }
 
 .toggle-buttons {

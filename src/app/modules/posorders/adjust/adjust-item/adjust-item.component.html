@@ -5,6 +5,8 @@
 <div *ngIf="(actionResponse$  | async) as action">
   {{action}}
 </div>
+
+
 <div *ngIf="itemWithAction">
   <mat-card>
     <mat-card-title>
@@ -25,11 +27,12 @@
       </ng-template>
 
       <div  *ngIf="inventoryReturnDiscard || inventoryReturnDiscard != undefined">
-        <div *ngIf="(list$ | async) as list; else loading">
+        <div *ngIf="(list$ | async) as list; else loading" class="reason-selection">
           <app-mat-toggle-selector
               [toggleButtonClass]="'toggle-buttons-wide'"
               (outPutID)="selectItem($event)"
               [hideAllOption]="true"
+              [toggleStyleHeight]="'300px'"
               [list]="list">
               Reason for Action
           </app-mat-toggle-selector>

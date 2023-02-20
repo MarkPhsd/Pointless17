@@ -42,12 +42,6 @@ mat-card {
   align-content: center;
 }
 
-.grid-items {
-  display: grid;
-  grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
-  gap: 10px;
-  margin: 10px;
-}
 
 
 .split-item-button {
@@ -163,11 +157,11 @@ mat-card {
   justify-content: center;
 }
 
-.margin-bottom { 
+.margin-bottom {
   margin-bottom: 5px;
 }
 
-.margin-top{ 
+.margin-top{
   margin-top: 10px;
 }
 
@@ -202,11 +196,21 @@ mat-card {
   display         : flex;
   flex-direction  : row;
   flex-wrap       : wrap;
-  justify-content : center ;
+  justify-content : space-around ;
   align-items     : baseline;
   align-content   : center;
+  column-gap      : 5px;
+  row-gap:          5px;
   margin-bottom   : 5px;
 }
+
+.grid-items {
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
+  gap: 10px;
+  margin: 10px;
+}
+
 
 .card-dimensions {
   overflow-y: auto;

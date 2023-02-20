@@ -19,6 +19,7 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
 
   @Input()  canRemoveClient = false;
   @Input()  order           : IPOSOrder;
+  @Input()  mainPanel = false;
   @Input()  disableActions  = false;
   @Output() outPutOpenClient:   EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutRemoveClient:   EventEmitter<any> = new EventEmitter<any>();

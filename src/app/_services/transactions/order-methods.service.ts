@@ -62,6 +62,7 @@ export class OrderMethodsService implements OnDestroy {
 
   private _posIssueItem = new BehaviorSubject<PosOrderItem>(null);
   public  posIssueItem$ = this._posIssueItem.asObservable();
+  public splitEntryValue  = 0;
 
   public get assignedPOSItem() {return this.assignPOSItems }
 
@@ -113,7 +114,6 @@ export class OrderMethodsService implements OnDestroy {
     if (!this.assignPOSItems) { this.assignPOSItems= [] }
     this.assignPOSItems.push(item);
     this._assingedPOSItems.next(this.assignPOSItems)
-    // console.log(' this.assignPOSItems',  this.assignPOSItems)
   }
 
   removeAssignedItem(item: PosOrderItem) {
@@ -122,13 +122,10 @@ export class OrderMethodsService implements OnDestroy {
     }
 
     const index = this.assignPOSItems.findIndex( data => {
-        // console.log(data.productName + ' ' + data.id)
         return +data.id == +item.id;
       }
     )
-    // if (index) {
-      // console.log(this.assignPOSItems, item.productName, item.id, index)
-    // }
+
     this.assignPOSItems.splice(index, 1)
     this._assingedPOSItems.next(this.assignPOSItems)
   }
@@ -212,6 +209,7 @@ export class OrderMethodsService implements OnDestroy {
     }
     return of(this.order)
   }
+
   appylySerial(id: number, serialCode: string) {
     const site = this.siteService.getAssignedSite();
     return this.posOrderItemService.appylySerial(site, id, serialCode, null)
@@ -635,12 +633,13 @@ export class OrderMethodsService implements OnDestroy {
 
         if (item) {
           const deviceName  = localStorage.getItem('devicename')
+          const splitGroupID = this.splitEntryValue;
           let newItem     = { orderID: order.id, quantity: quantity, menuItem: item,
                                 passAlongItem: passAlongItem,
                                 packaging: packaging, portionValue: portionValue, barcode: '',
                                 weight: 1, itemNote: itemNote, deviceName: deviceName,
                                 rewardAvailableID: rewardAvailableID,
-                                rewardGroupApplied: rewardGroupApplied, clientID: order.clientID }
+                                rewardGroupApplied: rewardGroupApplied, clientID: order.clientID, splitGroupID: splitGroupID }
           if (order.id == 0 || !order.id) {
             const orderPayload = this.orderService.getPayLoadDefaults(null)
             return this.orderService.postOrderWithPayload(site, orderPayload).pipe(
@@ -769,8 +768,7 @@ export class OrderMethodsService implements OnDestroy {
     return this.processItemPOSObservable(this.order, barcode, null, quantity, input, 0, 0, passAlongItem[0]);
  }
 
-
-  promptSerial(menuItem: IMenuItem, id: number, editOverRide: boolean, serial: string): boolean {
+ promptSerial(menuItem: IMenuItem, id: number, editOverRide: boolean, serial: string): boolean {
 
     if (id) {
       if ( (menuItem && menuItem.itemType.requiresSerial) || editOverRide)
@@ -980,14 +978,12 @@ export class OrderMethodsService implements OnDestroy {
      return of(null)
   }
 
-
-
   clearOrder() {
 
     // localStorage.setItem('orderSubscription', null);
     localStorage.removeItem('orderSubscription')
     this.orderService.updateOrderSubscription(null);
-
+    this.splitEntryValue = 0;
     if (this.userAuthorization.user.roles = 'user') {
       this.router.navigate(['/app-main-menu']);
       return;
