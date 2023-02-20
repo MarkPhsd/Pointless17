@@ -31,6 +31,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   value: any;
   order: IPOSOrder;
   actionResponse$ : Observable<any>;
+  void$: Observable<any>;
   initSubscriptions() {
     this._ItemWithAction = this.itemService.itemWithAction$.subscribe(data=> {
       this.itemWithAction = data
@@ -161,29 +162,36 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
               response$ = this.orderService.voidOrder(site, this.itemWithAction)
               break;
           case 2: //priceAdjust
-
-              break;
+            return of(null)
+            break;
           case 2: //note
-
-              break;
+            return of(null)
+            break;
+          case 3:
+            response$ = this.orderService.voidOrder(site, this.itemWithAction);
+            break;
         }
-        response$.subscribe(data => {
-          if (data === 'success') {
-            this.notifyEvent('Voided', 'Success')
-            this.updateOrderSubscription()
-            return
+        return response$.pipe(
+          switchMap(data => {
+            if (data === 'success') {
+              this.notifyEvent('Voided', 'Success')
+              this.updateOrderSubscription()
+              return of(data)
+            }
+            this.notifyEvent(data.toString(), 'Not voided')
+            this.message = data.toString();
+            this.closeDialog();
+            return of(data)
           }
-            this.message = data;
-            return
-        })
+        ))
       }
     }
   }
 
   selectItem(setting) {
 
-    if (this.itemWithAction.typeOfAction.toLowerCase() === 'VoidOrder'.toLowerCase()) {
-      this.voidOrder(setting)
+    if (this.itemWithAction.action == 3 || this.itemWithAction.typeOfAction.toLowerCase() === 'VoidOrder'.toLowerCase()) {
+      this.actionResponse$ = this.voidOrder(setting)
       return
     }
 
@@ -218,7 +226,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
           case 2: //priceAdjust
               break;
           case 3: //note
-            response$ =  this.orderMethodService.voidOrder(this.itemWithAction.id)
+            this.actionResponse$ = this.voidOrder(setting)//  this.orderMethodService.voidOrder(this.itemWithAction.id)
             break;
           case 10:
             this.itemWithAction.order = this.order;
