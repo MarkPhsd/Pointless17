@@ -61,11 +61,10 @@ export class SettingsService {
      this.apiUrl =  this.appInitService.apiBaseUrl()
   }
 
-  getDeviceSettings(): Observable<ISetting> {
-    const devicename = localStorage.getItem('devicename')
+  getDeviceSettings(deviceName: string): Observable<ISetting> {
     const site = {} as ISite;
     site.url = this.apiUrl;
-    return this.getSettingByName(site, devicename);
+    return this.getSettingByName(site, deviceName);
   }
 
   isAPIOnline(): Observable<any> {

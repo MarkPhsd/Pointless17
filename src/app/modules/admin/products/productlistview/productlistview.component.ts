@@ -523,8 +523,8 @@ constructor(  private _snackBar              : MatSnackBar,
     searchModel.barcode    = searchModel.name
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
-
-    console.log('searchmodel', searchModel)
+    searchModel.hideSubCategoryItems = false;
+    // console.log('searchmodel', searchModel)
     return searchModel;
   }
 

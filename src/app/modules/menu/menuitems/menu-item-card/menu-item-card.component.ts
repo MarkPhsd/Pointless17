@@ -11,6 +11,7 @@ import { Capacitor } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
+import { MenuItem } from 'electron';
 
 
 // https://stackoverflow.com/questions/54687522/best-practice-in-angular-material-to-reuse-component-in-dialog
@@ -152,7 +153,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     }
 
     if (this.isCategory) {
-      this.listItems(this.menuItem.id);
+      this.listItems(this.menuItem.id,this.menuItem.itemType.id);
       add = false;
       return;
     }
@@ -163,16 +164,17 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   }
 
-  listItems(id:number) {
-    this.initProductSearchModel(id, this.menuItem?.itemType?.id )
+  listItems(id: number, typeID: number) {
+    console.log('init search Model')
+    // this.initProductSearchModel(id, typeID)
     if (this.menuItem?.itemType?.id == 4) {
-      this.router.navigate(["/menuitems-infinite/", {categoryID:id }]);
+      this.router.navigate(["/menuitems-infinite/", {categoryID: id }]);
     }
     if (this.menuItem?.itemType?.id == 5) {
-      this.router.navigate(["/menuitems-infinite/", {subCategoryID:id, typeID:5}]);
+      this.router.navigate(["/menuitems-infinite/", {subCategoryID:id}]);
     }
     if (this.menuItem?.itemType?.id == 6) {
-      this.router.navigate(["/menuitems-infinite/", {departmentID:id, typeID:4}]);
+      this.router.navigate(["/menuitems-infinite/", {departmentID:id}]);
     }
   }
 

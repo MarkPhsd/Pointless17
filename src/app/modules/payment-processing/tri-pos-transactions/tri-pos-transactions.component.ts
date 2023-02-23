@@ -184,6 +184,7 @@ export class TriPosTransactionsComponent implements OnInit {
         .pipe(switchMap(data => {
             this.errorMessage = ''
             if (data._hasErrors) {
+              this.processing = false;
               this.displayErrors(data)
               return of (null)
             }

@@ -12,7 +12,7 @@ export class RenderingService {
 
   interpolateText(item: any, text: string) {
     if (!item && !text) { return }
-    // console.log('values passed', item, text);
+
     try {
       if (!item && text) {
         _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
@@ -31,15 +31,23 @@ export class RenderingService {
           const regEx = new RegExp('</tt>', 'g');
           const regExFront = new RegExp('<tt>', 'g');
 
-          item = _.mapValues(item, v => _.isNil(v) ? '' : v)
+          // item = this.getFormatedText(item);
 
-          const compiled = _.template( text );
+          item = _.mapValues(item, v => _.isNil(v) ? '' : v)
           item = this.removeUndefined( item );
 
+          const compiled = _.template( text );
+
+          // console.log('item ProductName', item?.productName)
+          // if (item?.productName) {
+          //   console.log('Product', item)
+          // }
           const compiledText = compiled( { item } );
 
-          let compiledResult =  compiledText.replace(regExFront, '')
-          compiledResult     =  compiledResult.replace(regEx,  '')
+          // console.log('compiledText', compiledText)
+          let compiledResult =  compiledText.replace(regExFront, '');
+
+          compiledResult     =  compiledResult.replace(regEx,  '');
 
           if (item) { return  compiledResult }
 
@@ -51,15 +59,22 @@ export class RenderingService {
     }
   }
 
+  getFormatedText(text: any) {
+    let newValue = JSON.stringify(text)
+    newValue = newValue.replace('%', '')
+    const item  = JSON.parse(newValue)
+    // console.log('newiTem', item)
+    return item
+
+  }
+
   removeUndefined(item: any) {
     // console.log('item before remove nulls', item)
     // console.log('removeUndefined')
     const result = _.mapValues(item, v => _.isNil(v) ? '' : v)
-    // console.log('item remove nulls', item)
+
     if (item) {
-
       item = this.setItemValues(item)
-
     }
     return item
   }
@@ -67,25 +82,46 @@ export class RenderingService {
   setItemValues(item) {
     for (const key in item) {
       if (item[key] && isNaN(item[key])) {
-        const result = this.checkDate(item[key]);
+        let result;
         if (result) {
           item[key] = result
         }
         if (!result) {
           if (this.isObject(item[key])) {
+            if (key === 'name') {
+              item[key] = this.setItemValues(item[key])
+              return item
+            }
+            if (key === 'unitName') {
+              item[key] = this.setItemValues(item[key])
+              return item
+            }
+            if (key === 'modifierNote') {
+              item[key] = this.setItemValues(item[key])
+              return item
+            }
             if (key === 'serials') {
               item[key] = this.setItemValues(item[key])
+              return item
+            }
+            if (key === 'productName') {
+              item[key] = this.setItemValues(item[key])
+              return item
             }
             if (key === 'inventory') {
               item[key] = this.setItemValues(item[key])
+              return item
             }
             if (key === 'menuItem') {
               item[key] = this.setItemValues(item[key])
+              return item
             }
             if (key === 'priceCategories') {
               item[key] = this.setItemValues(item[key])
+              return item
             }
           }
+          result = this.checkDate(item[key]);
         }
       }
     }
@@ -188,28 +224,24 @@ export class RenderingService {
           newText = text;
           if (type === 'items') {
             if (data.itemPercentageDiscountValue && data?.itemPercentageDiscountValue != 0) {
-              // console.log('data itemPercentageDiscountValue %', data?.itemPercentageDiscountValue)
               let disc = `${newText} ${this.itemPercentageDiscountText}`;
               newText = disc;
             }
           }
           if (type === 'items') {
             if (data.ItemOrderPercentageDiscount && data?.ItemOrderPercentageDiscount != 0) {
-              // console.log('data ItemOrderPercentageDiscount %', data?.ItemOrderPercentageDiscount)
               let disc = `${newText} ${this.itemOrderPercentageDiscountText}`;
               newText = disc;
             }
           }
           if (type === 'items') {
             if (data.itemCashDiscount && data?.itemCashDiscount != 0) {
-              // console.log('data itemCashDiscount %', data?.itemCashDiscount)
               let disc = `${newText} ${this.itemCashDiscountText}`;
               newText =  disc;
             }
           }
           if (type === 'items') {
             if (data.itemOrderCashDiscount && data?.itemOrderCashDiscount != 0) {
-              // console.log('data itemOrderCashDiscount %', data?.itemOrderCashDiscount)
               let disc = `${newText} ${this.itemOrderCashDiscountText}`;
               newText =  disc;
             }

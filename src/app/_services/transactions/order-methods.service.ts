@@ -432,7 +432,6 @@ export class OrderMethodsService implements OnDestroy {
     if (!order) {const order = {} as IPOSOrder}
 
     let passAlongItem = {} as any;
-    // console.log('this.assignPOSItems', this.assignPOSItems);
 
     if (this.assignPOSItems) {
       passAlongItem =  this.assignPOSItems[0];

@@ -374,8 +374,8 @@ export class UISettingsService {
     })
   }
 
-  getPOSDeviceSettings() {
-    return this.settingsService.getDeviceSettings()
+  getPOSDeviceSettings(deviceName: string) {
+    return this.settingsService.getDeviceSettings(deviceName)
   }
 
   updatePOSDevice(data: ITerminalSettings) {

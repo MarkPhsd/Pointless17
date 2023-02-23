@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.37.5",
+  "version": "1.38.9",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -147,6 +147,7 @@
     "ngx-infinite-scroll": "^10.0.1",
     "ngx-numeral": "0.0.1-beta.0",
     "ngx-pagination": "^5.1.1",
+    "ngx-papaparse": "^7.0.0",
     "ngx-paypal": "^9.0.0",
     "ngx-pipes": "^3.0.0",
     "ngx-stripe": "^13.2.1",

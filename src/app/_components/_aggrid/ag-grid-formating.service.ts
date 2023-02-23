@@ -25,6 +25,64 @@ initDefaultColumnDef() {
   };
 }
 
+initGridOptionsClientType(pageSize: number, columnDefs: any)  {
+  return {
+    pagination: true,
+    // rowModelType: 'clienttype',
+    columnDefs: columnDefs,
+    rowSelection: 'multiple',
+    rowClassRules: this.rowClasses
+  }
+}
+
+get rowClasses() {
+  return  {
+
+    "" :  (params) => {
+      if (params.node.selected) {
+        return true;
+      }
+    },
+
+    "row-not-forsale" :  (params) => {
+      const value = params.api.getValue("notAvalibleForSale", params.node) == true;
+      if (value) {
+        return true
+      }
+    },
+
+    "row-manifest-rejected" :  (params) => {
+      const value = params.api.getValue("rejected", params.node) != null;
+      if (value) {
+        return true
+      }
+    },
+
+    "row-active" :  (params) => {
+      const value = params.api.getValue("active", params.node) != false;
+      if (value) {
+        return true
+      }
+    },
+
+    "row-not-active" :  (params) => {
+      const value = params.api.getValue("active", params.node) == false;
+      if (value) {
+        return true
+      }
+    },
+
+    "row-unassigned": (params) => {
+      return params.api.getValue("manifestID", params.node) == 0
+    },
+
+    "row-manifest": (params) => {
+      return params.api.getValue("manifestID", params.node) >= 1
+    }
+  }
+
+}
+
 initGridOptions(pageSize: number, columnDefs: any)  {
   return {
     pagination: true,
@@ -35,51 +93,7 @@ initGridOptions(pageSize: number, columnDefs: any)  {
     infiniteInitialRowCount: 0,
     columnDefs: columnDefs,
     rowSelection: 'multiple',
-    rowClassRules: {
-
-      "" :  (params) => {
-        if (params.node.selected) {
-          return true;
-        }
-      },
-
-      "row-not-forsale" :  (params) => {
-        const value = params.api.getValue("notAvalibleForSale", params.node) == true;
-        if (value) {
-          return true
-        }
-      },
-
-      "row-manifest-rejected" :  (params) => {
-        const value = params.api.getValue("rejected", params.node) != null;
-        if (value) {
-          return true
-        }
-      },
-
-      "row-active" :  (params) => {
-        const value = params.api.getValue("active", params.node) != false;
-        if (value) {
-          return true
-        }
-      },
-
-      "row-not-active" :  (params) => {
-        const value = params.api.getValue("active", params.node) == false;
-        if (value) {
-          return true
-        }
-      },
-
-      "row-unassigned": (params) => {
-        return params.api.getValue("manifestID", params.node) == 0
-      },
-
-      "row-manifest": (params) => {
-        return params.api.getValue("manifestID", params.node) >= 1
-      },
-
-    },
+    rowClassRules: this.rowClasses
   }
 
 }
@@ -105,9 +119,7 @@ initGridOptionsFormated(pageSize: number, columnDefs: any) {
       "row-manifest": params => params.api.getValue("manifestID", params.node) >= 1
     },
   }
-
   return grid
-
 }
 // getRowCalassRules() {
 //   return {

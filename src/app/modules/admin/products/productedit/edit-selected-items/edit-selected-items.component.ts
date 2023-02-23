@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of, switchMap } from 'rxjs';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -79,11 +79,22 @@ export class EditSelectedItemsComponent implements OnInit {
     const warn = window.confirm('Plase confirm. You can not reverse this decision');
     if (!warn) { return }
     const site   =  this.siteService.getAssignedSite();
-    this.action$ = this.menuService.deleteProducts(site, this.selected)
+    this.action$ = this.menuService.deleteProducts(site, this.selected).pipe(
+      switchMap(
+      data => {
+        return of(`Result: ${data.toString()}. Refresh list to see results.`)
+      }),
+      catchError(data => {
+        return of(data)
+      }
+      )
+    )
   }
+
   exit () {
     this.dialogRef.close()
   }
+
   updateItems() {
     if (this.selected) {
 

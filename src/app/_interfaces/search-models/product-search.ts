@@ -42,6 +42,7 @@ export interface ProductSearchModel {
   exactNameMatch            : boolean;
   sku                       : string;
   itemTypeIDList            : number[];
+  hideSubCategoryItems      : boolean;
 }
 
 

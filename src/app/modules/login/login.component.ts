@@ -265,15 +265,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  async  forgetMe() {
+  forgetMe() {
     this.initForm();
     localStorage.clear()
-    await this.clearUserSettings();
+    this.clearUserSettings();
     this.notifyEvent("Your settings have been removed from this device.", "Bye!");
     this.statusMessage = ''
   }
 
-  async  browseMenu() {
+   browseMenu() {
     this.initForm();
     this.userSwitchingService.browseMenu();
     this.statusMessage = ''
@@ -285,7 +285,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.statusMessage = ''
   }
 
-  async clearUserSettings() {
+  clearUserSettings() {
     this.authenticationService.clearUserSettings();
     // await this.siteService.setDefaultSite();
   }
@@ -460,7 +460,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           //   console.log('error', user, user?.errorMessage)
           //   return of('error')
           // }
-      ))
+    ))
   }
 
   closeDialog() {

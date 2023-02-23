@@ -231,7 +231,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
     this.platFormService.getPlatForm();
     this.initSubscriptions();
-
+    this.getDeviceInfo();
     this.getUserInfo();
     this.refreshScannerOption()
     this.searchForm = this.fb.group( {  searchProducts: '' });
@@ -245,14 +245,20 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.initUserOrder();
     this.updateScreenSize();
     this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(this.site);
+  }
 
-    const devicename = localStorage.getItem('devicename')
+
+  getDeviceInfo() {
+    const devicename = this.orderService.posName
+    console.log(devicename)
     if (devicename) {
-      this.posDevice$ = this.uiSettings.getPOSDeviceSettings().pipe(
+      console.log('devicename', devicename)
+      this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
         switchMap(data => {
-          this.terminalSetting = data;
+
           const posDevice = JSON.parse(data.text) as ITerminalSettings;
           this.uiSettings.updatePOSDevice(posDevice)
+          this.terminalSetting = data;
 
           if (this.platformService.isAppElectron) {
             if (posDevice && posDevice.electronZoom && posDevice.electronZoom != '0') {
@@ -264,9 +270,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       ))
     }
   }
-
-
-
 
   get isClockInOutOn() {
     if (this.isUserStaff)  {

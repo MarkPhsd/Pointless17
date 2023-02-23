@@ -499,7 +499,7 @@ export class PrintingService {
       menuItem$ = of(item.menuItem)
     }
 
-    const printer$ = this.settingService.getDeviceSettings().pipe(
+    const printer$ = this.settingService.getDeviceSettings(this.orderService.posName).pipe(
       switchMap(data => {
         const item = JSON.parse(data.text) as ITerminalSettings;
         this.uiSettingsService.updatePOSDevice(item)

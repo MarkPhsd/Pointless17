@@ -150,7 +150,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     if (this.requireEnter) {
       const barcode  =  this.input.nativeElement.value;
       if (!this.scans) { this.scans = [] };
-      // this.scans.push(barcode);
       this.barcodeScanner$ =  this.scan(barcode);
       this.initForm();
     }

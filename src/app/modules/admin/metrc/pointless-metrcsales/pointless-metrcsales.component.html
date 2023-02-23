@@ -69,13 +69,13 @@
    <mat-divider></mat-divider>
  </div>
 
-  <div class="grid-list">
+  <div class="grid-list" *ngIf="searchModel">
     <div>
       <div *ngIf="value" class="loader">
         <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
       </div>
 
-      <ag-grid-angular
+      <ag-grid-angular *ngIf="!searchModel.currentDay"
             #agGrid
             [style]              ="gridDimensions"
             id                   ="myGrid"
@@ -87,7 +87,22 @@
             [frameworkComponents]="frameworkComponents"
             (selectionChanged)   ="onSelectionChanged($event)"
             (gridReady)          ="onGridReady($event)">
+      </ag-grid-angular>
 
+      <ag-grid-angular *ngIf="searchModel.currentDay"
+            #agGrid2
+            [style]              ="gridDimensions"
+            id                   ="myGrid"
+            [class]              ="agtheme"
+            [columnDefs]         ="columnDefs"
+            [defaultColDef]      ="defaultColDef"
+            [rowData]            ="rowData"
+            [gridOptions]        ="gridOptions"
+            [rowSelection]       ="rowSelection"
+            [frameworkComponents]="frameworkComponents"
+            (selectionChanged)   ="onSelectionChanged($event)"
+            (gridReady)          ="onGridReady($event)"
+            >
       </ag-grid-angular>
     </div>
 

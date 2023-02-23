@@ -172,10 +172,8 @@ export class POSOrderItemServiceService {
 
     if (!newItem ) {
       console.log('no item for add item to order with barcode')
-
-      return }
-    // console.log('menuItem', newItem.menuItem)
-    // console.log('menuItem itemType', newItem.menuItem.itemType)
+      return
+    }
 
     newItem = this.getNewItemWeight(newItem);
 

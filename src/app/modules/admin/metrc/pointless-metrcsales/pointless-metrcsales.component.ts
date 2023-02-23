@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IMETRCSales } from 'src/app/_interfaces/transactions/metrc-sales';
 import { employee, IPOSOrder, IServiceType, ISite } from 'src/app/_interfaces';
@@ -21,6 +21,38 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { IPagedList } from 'src/app/_services/system/paging.service';
+import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
+import { UnparseConfig } from 'ngx-papaparse';
+
+// const fields = ['completeDate','clientType', 'oomp',  'oompb', 'value', 'packageLabel','quantityTotal','unitType',  'value', 'value', 'value', 'value', 'value', 'netTotal','orderID',
+//         , 'value', 'value', 'value', , 'value', 'value' , 'value', 'value', 'value' ]
+
+export interface metrcSalesReport {
+  completeDate: string;
+  clientType: string;
+  oomp: string;
+  oompb: string;
+  idMethod: string;
+  packageLabel: string;
+  quantityTotal: string;
+  uom: string;
+  UTHC: string;
+  UTHCC: string;
+  UTHCUOM: string;
+  UnitWeight: string;
+  UWUOM: string;
+  netTotal: string;
+  orderID: string;
+  Price: string;
+  ExciseTax: string;
+  CityTax: string;
+  CountyTax: string;
+  MunicipalTax: string;
+  DiscountAmount: string;
+  SubTotal: string;
+  SalesTax: string;
+}
 
 @Component({
   selector: 'app-pointless-metrcsales',
@@ -29,6 +61,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 })
 export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
+  @ViewChild('agGrid2')      agGrid2: any;
   get platForm()         {  return Capacitor.getPlatform(); }
   get PaginationPageSize(): number {return this.pageSize;  }
   get gridAPI(): GridApi {  return this.gridApi;  }
@@ -112,11 +145,12 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
             this.searchModel        = searchModel;
             return;
           }
+
           if (data) {
-            if (this.searchModel.currentDay) {
-              this.pageSize = 100000;
-              this.initColumnDefs(1000000);
+            if (!this.searchModel.currentDay) {
+              this.gridOptions = this.agGridFormatingService.initGridOptions(1000000, this.columnDefs);
             }
+            console.log('search update', data)
             this.refreshSearch_sub()
           }
         }
@@ -136,6 +170,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     private reportingServices: ReportingService,
     private orderService: OrdersService,
     private pointlessMetrcSalesReport: PointlessMETRCSalesService,
+    private reportingItemsSalesService: ReportingItemsSalesService,
     ) {
       this.initSubscriptions();
       this.initForm();
@@ -197,7 +232,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         flex: 1,
         minWidth: 100
       };
-
       this.columnDefs =  [
         {
           field: 'orderID',
@@ -343,7 +377,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
           minWidth: 90,
           maxWidth: 90,},
       ]
-      this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
     }
 
     initSearchModel() {
@@ -353,7 +386,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       }
       searchModel.pageSize   = this.pageSize
       searchModel.pageNumber = this.currentPage;
-
       this.pointlessMetrcSalesReport.updateSearchModel(searchModel)
       return searchModel
     }
@@ -381,7 +413,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         this.params.startRow     = 1;
         this.params.endRow       = this.pageSize;
       }
-      this.processing = true;
       this.onGridReady(this.params);
       return this._searchItems$;
     }
@@ -396,49 +427,16 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       return this.currentPage;
     }
 
-
-    // //ag-grid standard method.
-  //   getDataSource(params) {
-  //     return {
-  //       getRows: (params: IGetRowsParams) => {
-  //         const items$ = this.getRowData(params, params.startRow, params.endRow)
-  //         items$.subscribe(data =>
-  //           {
-  //               if (data.paging) {
-  //                 const resp =  data.paging
-  //                 this.isfirstpage   = resp.isFirstPage
-  //                 this.islastpage    = resp.isFirstPage
-  //                 this.currentPage   = resp.currentPage
-  //                 this.numberOfPages = resp.pageCount
-  //                 this.recordCount   = resp.recordCount
-  //               }
-  //               if (this.numberOfPages !=0 && this.numberOfPages) {
-  //                 this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-  //               }
-  //               if (data.results) {
-  //                 params.successCallback(data.results)
-  //                 this.rowData = data.results
-  //               }
-  //             }, err => {
-  //               console.log(err)
-  //             }
-  //         );
-  //       }
-  //     };
-  //   }
-
-    //ag-grid standard method
     getRowData(params, startRow: number, endRow: number):  Observable<METRCSalesReportPaged>  {
-
       const site                = this.siteService.getAssignedSite()
       if (this.searchModel && this.searchModel.currentDay) {
         if (this.currentDayRan) {
           this.processing = false
-          return of(null) }
+          return of(null)
+        }
         this.setCurrentPage(1, 100000)
         this.currentPage = 1;
         this.currentDayRan = true;
-
         return this.pointlessMetrcSalesReport.getUnclosedSalesReport(site, this.searchModel)
       }
 
@@ -447,6 +445,15 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       this.searchModel.pageSize   = this.pageSize
       this.searchModel.pageNumber = this.currentPage;
       return this.pointlessMetrcSalesReport.getSalesReport(site, this.searchModel)
+    }
+
+    setPaging(resp: IPagedList) {
+      this.isfirstpage   = resp.isFirstPage
+      this.islastpage    = resp.isFirstPage
+      this.currentPage   = resp.currentPage
+      this.numberOfPages = resp.pageCount
+      this.recordCount   = resp.recordCount
+      this.totalRecordCount = resp.totalRecordCount;
     }
 
     //ag-grid standard method
@@ -460,6 +467,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       this.onFirstDataRendered(this.params)
 
       if (params == undefined) {
+        console.log('params undefined')
         return;
       }
 
@@ -470,36 +478,37 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
       this.processing = true;
 
+
+      if (this.searchModel.currentDay) {
+        this.pageSize = 100000;
+        this.initColumnDefs(1000000);
+        // console.log('results for day 2')
+        this.gridOptions = this.agGridFormatingService.initGridOptionsClientType(this.recordCount , this.columnDefs);
+        this.getRowData(params, params.startRow, params.endRow).subscribe(data => {
+          if (!data)  {return;}
+          if (this.getException(data))  {return;}
+          this.processing = false;
+          this.rowData    = data.results;
+          this.getExceptions(data?.exceptions);
+          this.setPaging(data.paging);
+        })
+        return;
+      }
+
       let datasource =  {
         getRows: (params: IGetRowsParams) => {
         const items$    = this.getRowData(params, params.startRow, params.endRow)
-        this.processing = true;
         items$.subscribe(data =>
           {
-              if (!data || data?.exceptionMessage) {
-                this.exceptionMessage = data?.exceptionMessage;
-                this.processing = false
-                return;
-              }
-              const resp           =  data.paging
+              if (!data)  {return;}
+              if (this.getException(data))  {return;}
+              const resp      =  data.paging;
               this.processing = true;
-
-              console.log('exception message', data?.exceptionMessage)
-              if (!this.exceptions) { this.exceptions = []}
-              if (data.exceptions)  {
-                this.exceptions = [ ...this.exceptions, ...data.exceptions];
-                this.exceptions = [ ... this.exceptions];
-              }
+              this.getExceptions(data?.exceptions);
               this.updateResize();
 
               if (resp) {
-                this.isfirstpage   = resp.isFirstPage
-                this.islastpage    = resp.isFirstPage
-                this.currentPage   = resp.currentPage
-                this.numberOfPages = resp.pageCount
-                this.recordCount   = resp.recordCount
-                this.totalRecordCount = resp.totalRecordCount;
-
+                this.setPaging(data.paging)
                 if (this.numberOfPages !=0 && this.numberOfPages) {
                   this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
                 }
@@ -520,6 +529,23 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       if (!this.gridApi) { return }
       this.gridApi.setDatasource(datasource);
       this.autoSizeAll(true);
+    }
+
+    getException(data: any) {
+      if (!data || data?.exceptionMessage) {
+        this.exceptionMessage = data?.exceptionMessage;
+        this.processing = false
+        return true
+      }
+      return false;
+    }
+
+    getExceptions(exceptions: any[]) {
+      if (!this.exceptions) { this.exceptions = []}
+      if (exceptions)  {
+        this.exceptions = [ ...this.exceptions, ...exceptions];
+        this.exceptions = [ ... this.exceptions];
+      }
     }
 
     onFirstDataRendered (params) {
@@ -641,13 +667,57 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     }
 
     onExportToCsv() {
+      if (this.searchModel.currentDay) {
+        this.exportDailySales()
+        return;
+      }
+      if (!this.searchModel.currentDay) {
+        const fields = ['completeDate','clientType', 'oomp',  'oompb', 'value', 'packageLabel','quantityTotal','unitType',  'value', 'value', 'value', 'value', 'value', 'netTotal','orderID',
+        , 'value', 'value', 'value', , 'value', 'value' , 'value', 'value', 'value' ]
+        this.gridApi.exportDataAsCsv({ columnKeys: fields, allColumns: false,
+                                        fileName: 'metrc', skipColumnHeaders: true, suppressQuotes: true});
+        return;
+      }
+    }
 
-      const columnKeys = [ 'Sale Date', 'Client Type', 'Patient License', 'Caregiver License', 'Identification Method',  'Package Label', 'Quantity','UOM','UTHC%', 'UTHCC','UTHCUOM','Unit Weight', 'UWUOM', 'TotalAmount', 'Invoice#', 'Price', 'ExciseTax','CityTax', 'CountyTax','MunicipalTax', 'DiscountAmount','SubTotal','SalesTax']
+    exportDailySales() {
+      const list = [] as  metrcSalesReport[];
+      this.rowData.forEach(data => {
+        let item = {} as metrcSalesReport;
+        const right = this.datePipe.transform( data?.completeDate, 'short').slice(-2);
+        // console.log('date', data?.completeDate)
+        item.completeDate = `${data?.completeDate} ${right}`;
+        item.clientType= data?.clientType;
+        item.oomp= data?.oomp;
+        item.oompb= data?.oompb;
+        item.idMethod = '';
+        item.packageLabel = data?.packageLabel;
+        item.quantityTotal= data?.quantityTotal;
+        item.uom = data?.unitType;
+        item.UTHC = '';
+        item.UTHCC = '';
+        item.UTHCUOM = '';
+        item.UnitWeight = '';
+        item.UWUOM = '';
+        item.netTotal = data?.netTotal;
+        item.orderID  = data?.orderID;
+        item.Price= '';
+        item.ExciseTax = '';
+        item.CityTax = '';
+        item.CountyTax = '';
+        item.MunicipalTax = '';
+        item.DiscountAmount = '';
+        item.SubTotal = '';
+        item.SalesTax = '';
+        list.push(item)
+      })
+      // const data = JSON.stringify(list)
+      const options = {} as UnparseConfig;
+      options.quotes = false;
+      options.header = false;
+      options.skipEmptyLines = true;
 
-      const fields = ['completeDate','clientType', 'oomp',  'oompb', 'value', 'packageLabel','quantityTotal','unitType',  'value', 'value', 'value', 'value', 'value', 'netTotal','orderID',
-      , '', '', '', , '', '' , '', '', '' ]
-      this.gridApi.exportDataAsCsv({ columnKeys: fields, allColumns: false,
-                                     fileName: 'metrc', skipColumnHeaders: true, suppressQuotes: true});
+      this.reportingItemsSalesService.downloadPapa(list, 'METRCSalesReport', options)
     }
 
     setSite(id: any) {

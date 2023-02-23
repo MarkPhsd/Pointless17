@@ -278,7 +278,6 @@ export class OrdersService {
   }
 
   setPOSName(name: string): boolean {
-    // console.log('name.length <= 5', name.length)
     if (name.length) {
       if (name.length <= 5) {
         localStorage.setItem(`devicename`, name)
@@ -296,7 +295,7 @@ export class OrdersService {
 
 
 
-  get posName(): string { return localStorage.getItem("devicename") };
+  get posName(): string { return localStorage.getItem(`devicename`) };
 
   applyItemsToGroup(site: ISite, groupID: number, selectedItems: any) :  Observable<any>  {
     const controller = "/POSOrders/"
