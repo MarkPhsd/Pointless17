@@ -423,6 +423,23 @@ export class MenuService {
 
   }
 
+
+  getGetCategoriesListActive(site: ISite, type: string, option: number):  Observable<IMenuItem[]>  {
+
+    const controller =  '/MenuItems/'
+
+    const endPoint = 'GetGetCategoriesList'
+
+    const parameters = `?TypeofCategoryasName=${type}&activeOption=${option}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const uri =  this.sitesService.getCacheURI(url)
+
+    return  this.httpCache.get<any[]>(uri)
+
+  }
+
   getGetCategoriesListByID(site: ISite, type: string, id: number):  Observable<IMenuItem[]>  {
 
     const controller =  '/MenuItems/'
@@ -488,15 +505,15 @@ export class MenuService {
   }
 
   getListOfCategories(site: ISite):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesList(site, `category`);
+    return this.getGetCategoriesListActive(site, `category`, 0);
   }
 
   getListOfDepartments(site: ISite):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesList(site, `department`);
+    return this.getGetCategoriesListActive(site, `department`, 0);
   }
 
   getListOfSubCategories(site: ISite):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesList(site, `subcategory`);
+    return this.getGetCategoriesListActive(site, `subcategory`, 0);
   }
 
   getListOfSubCategoriesByCategory(site: ISite, id: number):  Observable<IMenuItem[]>  {

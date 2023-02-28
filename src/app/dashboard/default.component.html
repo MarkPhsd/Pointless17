@@ -10,10 +10,6 @@
         [mode]   ="sidebarMode"
         [opened] ="leftSideBarToggle">
 
-    <!-- leftSideBarToggle   {{leftSideBarToggle}}<br>
-    swapMenuWithOrder {{swapMenuWithOrder}} <br>
-    orderBar {{toolBarUIService.orderBar}} <br> -->
-
     <div *ngIf="swapMenuWithOrder">
       <ng-container [ngTemplateOutlet]="leftSideBar"></ng-container>
     </div>
@@ -27,6 +23,7 @@
         <ng-container [ngTemplateOutlet]="leftSideBar"></ng-container>
       </div>
     </div>
+
     <ng-container #chatURL></ng-container>
 
   </mat-drawer>
@@ -65,10 +62,9 @@
   <app-site-footer></app-site-footer>
 </ng-template>
 
-<div *ngIf="(homePageSetting$ | async) as setting">
-  <div class="fab-chat-button" *ngIf="setting.threecxChatLink">
-    <!-- {{setting.threecxChatLink}} -->
-    <!-- {{setting.threeParty}} -->
+<div   *ngIf="(homePageSetting$ | async) as setting">
+  <div class="fab-chat-button"
+       *ngIf="setting.threecxChatLink">
     <app-three-cxfab></app-three-cxfab>
   </div>
 </div>
@@ -85,14 +81,15 @@
     <app-menu-minimal>
     </app-menu-minimal>
   </div>
-  <div  [hidden]="!toolbarTiny" class="menu-tiny" >
+  <div  [hidden]="!toolbarTiny"
+        class="menu-tiny" >
     <app-menu-tiny>
     </app-menu-tiny>
   </div>
 </ng-template>
 
-<ng-template #appOrderBar>
-  <div  [class]   = "matorderBar">
+<ng-template  #appOrderBar>
+  <div  [class] = "matorderBar">
     <app-order-bar>
     </app-order-bar>
   </div>

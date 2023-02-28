@@ -261,7 +261,7 @@ export interface PosOrderItem {
   gratuity                    :  number;
   itemReturn                  :  number;
   inventoryAssignmentID       :  number;
-
+  prodSecondLanguage          : string;
 }
 
 export interface PosPayment {

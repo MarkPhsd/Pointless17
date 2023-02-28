@@ -74,7 +74,7 @@ export class RewardTypeFilterComponent  implements OnInit {
   brands$           : Observable<IUserProfile[]>
   @Input() lastSelectedBrand:     DiscountInfo;
   @Input() lastSelectedItem:     DiscountInfo;//this item will be assigned to the search selector.
-  @Input() lastSelectedCategory: DiscountInfo;//this item will be assigned to the search selector.
+  @Input() lastSelectedCategory  : DiscountInfo;//this item will be assigned to the search selector.
   lastSelectedItemType: DiscountInfo
 
   _priceSchedule              : Subscription;
@@ -98,11 +98,10 @@ export class RewardTypeFilterComponent  implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('ngOnInit reward type')
+    // console.log('ngOnInit reward type')
     const site = this.siteService.getAssignedSite();
     this.itemTypes$ = this.itemTypeService.getItemTypeCategoriesReadOnlyList(site);
-    console.log('init item list type')
-    this.initSubscriptions();
+     this.initSubscriptions();
   }
 
   ngDestroy() {
@@ -110,6 +109,17 @@ export class RewardTypeFilterComponent  implements OnInit {
       this._priceSchedule.unsubscribe();
     }
   }
+
+
+  resetSearch() {
+    this.lastSelectedCategory     = null ; "lastSelectedCategory"
+    this.lastSelectedBrand         = null ; //"lastSelectedBrand"
+    this.lastSelectedItemType = null ;// [selectedItemType]="lastSelectedItemType"
+  }
+
+  // [selectedCategory]="lastSelectedCategory"
+  // [selectedBrand]   ="lastSelectedBrand"
+  // [selectedItemType]="lastSelectedItemType"
 
   isItemToggled(item) {
 
@@ -141,21 +151,21 @@ export class RewardTypeFilterComponent  implements OnInit {
 
   }
 
-  getIndex(item) { 
-    if (!this.itemTypeDiscounts) { 
+  getIndex(item) {
+    if (!this.itemTypeDiscounts) {
       this.itemTypeDiscounts = []
       return 0
     }
     return this.itemTypeDiscounts.findIndex(data => data.itemID == item.id)
   }
-  
+
   addItemType(item) {
-    console.log(item)
-    if (!item) { return } 
+    // console.log(item)
+    if (!item) { return }
 
     // console.log('this happened')
     const index = this.getIndex(item)
-    console.log(item , index)
+    // console.log(item , index)
 
     if (!this.itemTypeDiscounts) { this.itemTypeDiscounts = [] }
     if (index == -1){
@@ -164,7 +174,7 @@ export class RewardTypeFilterComponent  implements OnInit {
       mainType.name             =  item.name;
       mainType.quantity         =  1;
       mainType.andOr            =  "OR";
-      
+
       this.itemTypeDiscounts.push(mainType);
       this.updateItems();
       this.lastSelectedItemType = mainType;
@@ -173,7 +183,7 @@ export class RewardTypeFilterComponent  implements OnInit {
       this.updateItems();
       this.lastSelectedItemType  = null
     }
-   
+
   }
 
   addCategory(sub) {
@@ -185,7 +195,6 @@ export class RewardTypeFilterComponent  implements OnInit {
       if (sub.categoryID != undefined) { categoryID = sub.categoryID}
       if (!this.categoriesDiscounts) { this.categoriesDiscounts = []}
       const array = this.categoriesDiscounts
-      
       const index = array.findIndex( data =>   data.itemID === parseInt( categoryID ))
 
       if (index == -1){
@@ -235,7 +244,6 @@ export class RewardTypeFilterComponent  implements OnInit {
   }
 
   updateItems() {
-
     if (!this.itemTypeDiscounts)   { this.itemTypeDiscounts = []}
     this.priceScheduleTracking.itemTypeDiscounts  = this.itemTypeDiscounts
 

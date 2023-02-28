@@ -565,6 +565,9 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   refreshGrid() {
+    this.refreshDepartments()
+    this.refreshCategories();
+    this.refreshSubCategories()
     this.onGridReady(this.params)
   }
 

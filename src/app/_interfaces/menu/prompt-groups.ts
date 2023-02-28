@@ -60,6 +60,7 @@ export interface PromptProducts {
   promptID              : number;
   urlImageMain          : string;
   onlineShortDescription: string;
+  prodSecondLanguage    : string;
 }
 
 

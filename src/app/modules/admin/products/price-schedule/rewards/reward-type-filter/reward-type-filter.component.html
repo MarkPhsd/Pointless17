@@ -1,7 +1,14 @@
+<div
+    *ngIf="lastSelectedCategory || lastSelectedBrand || lastSelectedItemType">
+    <button mat-button (click)="resetSearch()"><mat-icon>reset</mat-icon>Reset Search</button>
+</div>
+
 <div class="grid-container">
+
+
   <div *ngIf="(itemTypes$ | async) as list"
          class="type-list" >
-      {{list.length }}
+
       <div class="" [@listAnimation]="list.length">
         <div class="toggle-buttons-margins categories"
             *ngFor="let item of list">
@@ -44,7 +51,7 @@
                     <div>
                       <button mat-button-stroked
                               (click)="toggleCategory(sub)"
-                              class="subitemTypes ">
+                              class="subitemTypes">
                         <div *ngIf="sub.itemCount">
                           <mat-icon>search</mat-icon>
                           {{sub.name }}  ({{sub.itemCount.itemCount}})
@@ -78,7 +85,7 @@
                       <div>
                         <button mat-button-stroked
                                 (click)="toggleBrand(brand)"
-                                class="subitemTypes  ">
+                                class="subitemTypes">
                           <mat-icon>search</mat-icon>
                           {{brand.name}} ({{brand.itemCount}})
                         </button>

@@ -11,8 +11,6 @@ import { Capacitor } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
-import { MenuItem } from 'electron';
-
 
 // https://stackoverflow.com/questions/54687522/best-practice-in-angular-material-to-reuse-component-in-dialog
 export interface DialogData {
@@ -176,6 +174,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     if (this.menuItem?.itemType?.id == 6) {
       this.router.navigate(["/menuitems-infinite/", {departmentID:id}]);
     }
+
   }
 
   initProductSearchModel(id: number, itemTypeID: number): ProductSearchModel {

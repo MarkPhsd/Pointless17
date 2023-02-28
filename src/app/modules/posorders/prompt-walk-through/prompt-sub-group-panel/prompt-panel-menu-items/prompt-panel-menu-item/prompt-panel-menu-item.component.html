@@ -11,6 +11,9 @@
         class="buttons"
         (click)="addItem()">
       {{promptMenuItem?.prompt_Products?.name}}
+      <div *ngIf="promptMenuItem?.prompt_Products?.prodSecondLanguage">
+        {{promptMenuItem?.prompt_Products?.prodSecondLanguage}}
+      </div>
     </button>
   </div>
 

@@ -9,7 +9,7 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
+import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { ClientSearchModel, ClientSearchResults, IPOSOrder, IProduct, IUserProfile } from 'src/app/_interfaces';
 import { Capacitor, Plugins,  } from '@capacitor/core';
 import { IPagedList } from 'src/app/_services/system/paging.service';
@@ -168,16 +168,27 @@ constructor(
     this.isApp = this.platFormService.isApp();
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     const site          = this.siteService.getAssignedSite()
     const clientSearchModel          = {} as ClientSearchModel;
     clientSearchModel.pageNumber     = 1
     clientSearchModel.pageSize       = 25;
     this.clientSearchModel           = clientSearchModel;
     this.clientSearchResults$        = this.contactsService.getLiveBrands(site, clientSearchModel)
-    this.urlPath        = await this.awsService.awsBucketURL();
-    this.categories$    = this.menuService.getListOfCategories(site)
-    this.departments$   = this.menuService.getListOfDepartments(site)
+    // this.urlPath        = await this.awsService.awsBucketURL();
+
+    this.categories$    = this.menuService.getListOfCategories(site).pipe(switchMap(data => {
+        let result = data.filter(data => { return data.active} )
+        return of(result)
+      })
+    )
+
+    this.departments$   = this.menuService.getListOfDepartments(site).pipe(switchMap(data => {
+        let result = data.filter(data => { return data.active} )
+        return of(result)
+      })
+    )
+
     this.productTypes$  = this.itemTypeService.getBasicTypesByUseType(site, 'product')
     this.isDevMode      = isDevMode()
     this.initSubscriptions();

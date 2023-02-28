@@ -11,6 +11,9 @@
         <div class="item-name-center"
               *ngIf="!isDiscountItem && imageUrl" >
           {{ menuItem.name  | truncateText: 30   }}
+          <div *ngIf="menuItem?.prodSecondLanguage">
+            {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}
+          </div>
         </div>
       </div>
     </div>
@@ -58,6 +61,9 @@
           </div>
         </div>
         {{ menuItem.name  | truncateText: 30  }}
+        <div *ngIf="menuItem?.prodSecondLanguage">
+          {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}
+        </div>
         <mat-icon *ngIf="menuItem?.icon">{{menuItem?.icon}}</mat-icon>
       </button>
   </div>
@@ -73,6 +79,9 @@
               fxFill
               (click)="menuItemActionObs(true)">
         {{ menuItem.name  | truncateText: 30  }}
+        <div *ngIf="menuItem?.prodSecondLanguage">
+          {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}
+        </div>
         <mat-icon>refresh</mat-icon>
       </button>
   </div>

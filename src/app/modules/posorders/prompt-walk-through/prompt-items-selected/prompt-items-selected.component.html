@@ -25,7 +25,11 @@
        <div class="grid-list"
             *ngFor="let item of selectedSubPrompts?.promptSubGroups?.itemsSelected; let itemIndex = index">
           <div>
-            {{item?.menuItem?.name}} <br> {{ (item?.menuItem?.retail * item?.quantity)  | currency}}
+            {{item?.menuItem?.name}}
+            <div *ngIf="item?.menuItem?.prodSecondLanguage">
+              {{ item?.menuItem?.prodSecondLanguage  | truncateText: 30  }}
+            </div>
+            <br> {{ (item?.menuItem?.retail * item?.quantity)  | currency}}
           </div>
           <div>
             <button class="button" color="warn" mat-button (click)="remove( itemIndex, index)"><mat-icon>delete</mat-icon></button>

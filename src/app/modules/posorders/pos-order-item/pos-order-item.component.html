@@ -27,6 +27,9 @@
             <span *ngIf="orderItem.splitGroupID  && orderItem.splitGroupID != 0">
               (  {{ orderItem?.splitGroupID }} )
             </span>
+            <div *ngIf="orderItem?.prodSecondLanguage">
+              {{ orderItem?.prodSecondLanguage  | truncateText: 30  }}
+            </div>
           </span>
 
           <span class="product-name" *ngIf="orderItem?.itemType">

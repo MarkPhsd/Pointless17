@@ -230,6 +230,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
           this.barType =  "mat-drawer-searchbar-tiny"
           this.style   = `width:${this.style}`
         }
+
       })
     } catch (error) {
       console.log('searchBarWidthSubscriber', error)
