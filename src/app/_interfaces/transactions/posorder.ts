@@ -262,6 +262,7 @@ export interface PosOrderItem {
   itemReturn                  :  number;
   inventoryAssignmentID       :  number;
   prodSecondLanguage          : string;
+  productSortOrder            : number;
 }
 
 export interface PosPayment {

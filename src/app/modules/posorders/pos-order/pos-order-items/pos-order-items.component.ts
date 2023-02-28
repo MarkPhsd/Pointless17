@@ -3,7 +3,7 @@ import { Observable, Subscription, } from 'rxjs';
 import {  Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild,EventEmitter, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
+import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -11,6 +11,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { ISite } from 'src/app/_interfaces';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { SettingsService } from 'src/app/_services/system/settings.service';
+
 @Component({
   selector: 'pos-order-items',
   templateUrl: './pos-order-items.component.html',
@@ -79,6 +80,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
         if (!this.disableActions) {
           this._order = this.orderService.currentOrder$.subscribe( order => {
             this.order = order
+            this.order.posOrderItems = this.sortItems(this.order.posOrderItems)
             setTimeout(() => {
               this.scrollToBottom();
             }, 200);
@@ -92,6 +94,12 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       this.scrollToBottom();
     }, 200);
 
+  }
+
+  sortItems(items:  PosOrderItem[]) {
+    let list = items.sort((a, b) => (a.idRef > b.idRef) ? 1 : -1);
+    list = items.sort((a, b) => (a.productSortOrder > b.productSortOrder) ? 1 : -1);
+    return list
   }
 
   ngOnDestroy(): void {
@@ -112,7 +120,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
                 private settingService: SettingsService,
               )
   {
-      this.orderItemsPanel = 'item-list';
+    this.orderItemsPanel = 'item-list';
   }
 
   ngOnInit() {
@@ -144,7 +152,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       this.orderItemsPanel = 'item-list';
     }
     this.initSubscriptions();
-
     this.initStyles()
   }
 
@@ -173,7 +180,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
         this.panelHeight = 'calc(100vh - 200px)'
       }
     }
-
 
   }
 
