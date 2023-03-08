@@ -156,16 +156,16 @@
     </button>
   </div>
 
-    <div *ngIf="electronLabelPrinter$ | async as label; else loadingLabel" class="margin-padding">
+    <!-- <div *ngIf="electronLabelPrinter$ | async as label; else loadingLabel" class="margin-padding">
     <app-list-printers-electron
       [printerName]      ="label.text"
       (outputPrinterName)="setElectronLabelPrinterName($event)" >
       Label Printer
-    </app-list-printers-electron>
-  </div>
+    </app-list-printers-electron> -->
+  <!-- </div> -->
 
-    <div>
-    <ng-template #loadingLabel>...loading labels</ng-template>
+  <div>
+    <!-- <ng-template #loadingLabel>...loading labels</ng-template> -->
   </div>
 </ng-template>
 

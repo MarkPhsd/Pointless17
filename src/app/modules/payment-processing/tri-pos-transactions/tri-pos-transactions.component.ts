@@ -98,41 +98,71 @@ export class TriPosTransactionsComponent implements OnInit {
     }
   }
 
+  setTransactionInfo() {
+    const item = {} as authorizationPOST;
+    item.laneId = this.terminalSettings.triposLaneID;
+    if (!this.tipValue) {this.tipValue = '0'}
+    item.tipAmount = this.tipValue;
+    item.transactionID = this.posPayment.respcode;
+    item.transactionAmount = this.posPayment.amountPaid.toFixed(2).toString();
+
+    this.processing = true;
+    this.errorMessage = ''
+    return item;
+  }
+
+  reverseAuthorization() {
+    if (!this.validateTransaction()) { return }
+    const site = this.siteService.getAssignedSite();
+    let item = this.setTransactionInfo()
+    item.paymentType = 'credit'
+    this.processing$ =  this.methodsService.reversal(site, item ).pipe(switchMap(data => {
+      this.errorMessage = ''
+      if (data._hasErrors) {
+        this.displayErrors(data)
+        return of (null)
+      }
+      this.posPayment.saleType      = 0;
+      return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
+    }
+    )).pipe(switchMap(data => {
+      this.initMessaging()
+      if (!data) { return of(null)}
+      this.dialogRef.close(true)
+      return of(data)
+    }))
+  }
+
   completeAuthorization() {
     if (!this.validateTransaction()) { return }
     if (this.posPayment && this.terminalSettings.triposLaneID) {
-
-      const item = {} as authorizationPOST;
-      item.transactionAmount = this.posPayment.amountPaid.toFixed(2).toString();
-      item.laneId = this.terminalSettings.triposLaneID;
-      if (!this.tipValue) {this.tipValue = '0'}
-      item.tipAmount = this.tipValue;
-      item.transactionID = this.posPayment.refNumber.toString();
-      item.transactionAmount = this.posPayment.amountPaid.toFixed(2).toString();
       const site = this.siteService.getAssignedSite();
-      this.processing = true;
-      this.errorMessage = ''
-
+      const item = this.setTransactionInfo()
       this.processing$ =  this.methodsService.authorizationCompletion(site, item ).pipe(switchMap(data => {
-
         this.errorMessage = ''
         if (data._hasErrors) {
           this.displayErrors(data)
           return of (null)
         }
-
         this.posPayment.saleType      = 1;
+
+        console.log('completeAuthorization', this.order)
+        console.log(this.posPayment)
         return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
       }
       )).pipe(switchMap(data => {
-        this.processing = false;
-        this.errorMessage = ''
-        this.message = ''
+        this.initMessaging()
         if (!data) { return of(null)}
         this.dialogRef.close(true)
         return of(data)
       }))
     }
+  }
+
+  initMessaging() {
+    this.processing = false;
+    this.errorMessage = ''
+    this.message = ''
   }
 
   authorizeAmount() {
@@ -214,7 +244,7 @@ export class TriPosTransactionsComponent implements OnInit {
 
         })).pipe(switchMap(data => {
           this.orderService.updateOrderSubscription(data);
-          return of(data)
+          return of(data);
       }))
     }
 

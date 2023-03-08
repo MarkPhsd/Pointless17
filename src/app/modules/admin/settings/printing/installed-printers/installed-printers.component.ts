@@ -656,7 +656,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
             const labelID = this.labelID
             this.labelID = 0
             this.labelID = labelID;
-            // this.refreshLabelImage(this.labelID)
           }
         });
       }

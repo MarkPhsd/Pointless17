@@ -1,6 +1,7 @@
 <div *ngIf="(serviceType$ | async) as item"></div>
 <div *ngIf="(action$ | async) as item"></div>
 <div *ngIf="(printAction$ | async) as item"></div>
+<div *ngIf="(printLabels$ | async) as items"></div>
 
 <div  *ngIf="order" class="container">
   <div [class]="orderlayout">
@@ -65,7 +66,7 @@
         <div *ngIf="mainPanel">
           <pos-order-function-buttons
                 (outPutSendToPrep)    ="sendToPrep()"
-                (outPutPrintLabel)    ="printLabels()"
+                (outPutPrintLabel)    ="printLabels(true)"
                 (outPutRePrintLabel)  ="rePrintLabels()"
                 (outPutPrintReceipt)  ="printReceipt()"
                 (outPutMakePayment)   ="makePayment()"

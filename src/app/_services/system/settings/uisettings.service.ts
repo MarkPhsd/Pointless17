@@ -61,6 +61,9 @@ export interface TransactionUISettings {
   displayEditCardOnHeader: boolean;
   showCustomerOption: boolean;
   splitEntry: boolean;
+  idParseOnlyAgeConfirmation: boolean;
+  assignBarcodeAsSerial: boolean;
+  minClientAge: number;
 }
 
 export interface StripeAPISettings {
@@ -653,6 +656,7 @@ export class UISettingsService {
       lotPreBarCode          : [],
       creditRecieptMinimum   : [],
       buyerAmountDiscount    : [],
+      giftCardLength         : [],
       idleTime               : [],
       highTipInputPercentage : [],
       onlyAllowInventory     : [],
@@ -665,7 +669,7 @@ export class UISettingsService {
       cardPointPreAuth       : [''],
       cardPointBoltEnabled   : [''],
       cardPointAndroidEnabled: [''],
-      dsiEMVAndroidEnabled   : [''],
+      dsiEMVAndroidEnabcardPointPreAuthled   : [''],
       dsiEMVNeteEpayEnabled  : [''],
       dsiEMVIP               : [''],
       payPalEnabled          : [ ],
@@ -677,6 +681,10 @@ export class UISettingsService {
       displayEditCardOnHeader: [],
       showCustomerOption: [],
       splitEntry: [],
+      idParseOnlyAgeConfirmation: [],
+      dsiEMVAndroidEnabled: [],
+      assignBarcodeAsSerial: [],
+      minClientAge:  [],
      })
   }
 

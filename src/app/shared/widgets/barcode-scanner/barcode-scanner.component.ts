@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DlParserService } from 'src/app/_services/people/dl-parser.service';
-import { IUserProfile } from 'src/app/_interfaces';
+import { ISetting, IUserProfile } from 'src/app/_interfaces';
 import { ActionSheetController } from '@ionic/angular';
 import { Plugins} from '@capacitor/core';
 import { CameraPreviewOptions }  from '@capacitor-community/camera-preview';
@@ -15,7 +15,8 @@ const { CameraPreview } = Plugins;
 // https://www.ionicanddjangotutorial.com/ionic-qrcode-scanning/
 // https://github.com/DutchConcepts/capacitor-barcode-scanner#usage
 // (window.document.querySelector('ion-app') as HTMLElement).classList.remove('cameraView');
-import { Observable } from 'rxjs';
+import { catchError, Observable, of, switchMap } from 'rxjs';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
   selector: 'app-barcode-scanner',
@@ -39,6 +40,10 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   scanStatus: string;
   scanResult: string;
   statusCheckPermision: string;
+  uiTransactions  = {} as TransactionUISettings;
+  uiTransactions$  : Observable<TransactionUISettings>;
+  // Dim UI = Await settingController._GetUITransactionSetting()
+  // Dim doNotSaveValues = UI.idParseOnlyAgeConfirmation
 
   @ViewChild('video') video: ElementRef
   videoElement: any;
@@ -52,7 +57,7 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     // if the result has content
     if (result.hasContent) {
       this.result = result.content;
-      console.log(result.content); // log the raw scanned content
+      // console.log(result.content); // log the raw scanned content
     }
   };
 
@@ -60,16 +65,22 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
               private dlParserService       : DlParserService,
               private siteService           : SitesService,
               public actionSheetController  : ActionSheetController,
+              private uISettingsService: UISettingsService,
               private router                : Router,
               ) { }
 
-  async ngOnInit() {
-    // this.image = `${environment.logo}`
+  ngOnInit() {
     if (this.checkPermission()) {
       this.startScan();
     }
     window.document.body.style.background = "transparent"
-    // this.video.style.background = 'transparent'
+
+    this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(switchMap(data => {
+      if (data && data.text) {
+        this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+      }
+      return of(this.uiTransactions)
+    }))
   }
 
   ngOnDestroy(): void {
@@ -110,12 +121,10 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     } catch (error) {
     }
     this.stopScan();
-    ///then exit
     this.goHome();
   }
 
   async checkPermission() {
-    // const { BarcodeScanner } = Plugins;
     const status = await BarcodeScanner.checkPermission({ force: true });
     if (status.granted) {
       return true;
@@ -125,50 +134,85 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   }
 
   async startScan() {
-
     await BarcodeScanner.prepare();
     await BarcodeScanner.hideBackground();
     this.scanStatus = 'Scanning Started';
-
     const result = await BarcodeScanner.startScan();
 
     if (result.hasContent) {
       this.stopScan();
       this.scanResult = 'Content Resolved ' + result.content
-      console.log(result.content)
+      // console.log(result.content)
       this.resolveContent(result)
     } else {
       this.stopScan();
       this.scanResult = 'Content not resolved '
       this.status = 'no content';
     }
-
-    // this.cameraOff();
-
   }
 
   resolveContent(result: any) {
+    if (this.uiTransactions.idParseOnlyAgeConfirmation) {
+      this.saveCustomer(result)
+      return
+    }
 
+    if (!this.uiTransactions.idParseOnlyAgeConfirmation) {
+      this.saveCustomer(result)
+      return
+    }
+  }
+
+  validateCustomerOnly(result: any) {
+    const site    = this.siteService.getAssignedSite();
+    const data    =  result.content.replace(/(\r\n|\n|\r)/gm, "--");
+    const parser$ =  this.dlParserService.checkIfIDisValid(site, data)
+    this.parser$  =  parser$.pipe(
+      switchMap(data => {
+        if (!data) {
+          this.notifyEvent('No response', 'Try again')
+          return of (null)
+        }
+        if (!data.result || data.errorMessage || data.message == 'failure') {
+          this.notifyEvent(data.errorMessage, data.message)
+          return of (data)
+        }
+        // this.scanStatus = 'Scanned and valid';
+        this.notifyEvent('Client is valid', 'Success')
+        return of(data)
+    }),
+    catchError( err => {
+      this.notifyEvent(err, 'Unexpected Error')
+      this.error = err
+      return of(err)
+    }))
+  }
+
+  saveCustomer(result: any) {
     const data   =  result.content.replace(/(\r\n|\n|\r)/gm, "--");
-    const site = this.siteService.getAssignedSite();
     this.result = result.content;
-    console.log(data)
+    const site = this.siteService.getAssignedSite();
     const parser$ =  this.dlParserService.parseDriverLicense(site, data)
-
-    parser$.subscribe(data => {
-      if (data.errorMessage || data.message == 'failure') {
-        this.notifyEvent(data.errorMessage, data.message)
-        return
-      }
-      if (data.id) {
-        this.router.navigate(["/profileEditor/", {id: data.id}]);
-      }
-
-    }, error => {
-      this.notifyEvent(error, 'Unexpected Error')
-      this.error = error
-    })
-
+    this.parser$ =  parser$.pipe(
+      switchMap(data => {
+        if (!data) {
+          this.notifyEvent('No response', 'Try again')
+          return of (null)
+        }
+        if (data.errorMessage || data.message == 'failure') {
+          this.notifyEvent(data.errorMessage, data.message)
+          return of (data)
+        }
+        if (data.id) {
+          this.router.navigate(["/profileEditor/", {id: data.id}]);
+        }
+        return of(data)
+    }),
+    catchError( err => {
+      this.notifyEvent(err, 'Unexpected Error')
+      this.error = err
+      return of(err)
+    }))
   }
 
   async stopScan() {

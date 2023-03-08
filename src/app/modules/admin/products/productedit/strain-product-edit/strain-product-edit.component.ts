@@ -12,6 +12,7 @@ import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.ser
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { switchMap } from 'rxjs/operators';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods.service';
 
 @Component({
   selector: 'app-strain-product-edit',
@@ -47,6 +48,7 @@ export class StrainProductEditComponent implements OnInit {
               private fbProductsService: FbProductsService,
               private productEditButtonService: ProductEditButtonService,
               private dialogRef: MatDialogRef<StrainProductEditComponent>,
+              private itemTypeMethodsService: ItemTypeMethodsService,
               @Inject(MAT_DIALOG_DATA) public data: any
     )
   {
@@ -100,6 +102,18 @@ export class StrainProductEditComponent implements OnInit {
 
     this.initializeForm()
   };
+
+  editType() {
+    if (this.product.prodModifierType) {
+      let dialogRef = this.itemTypeMethodsService.openItemEditor(this.product.prodModifierType);
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+
+        }
+      });
+    }
+
+  }
 
 
   initializeForm()  {

@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input,
          OnInit, Output, OnDestroy,  ViewChild, HostListener, Renderer2, TemplateRef } from '@angular/core';
 import { AuthenticationService, AWSBucketService, OrdersService, TextMessagingService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
-import { Observable, of, Subscription } from 'rxjs';
+import { forkJoin, Observable, of, Subscription } from 'rxjs';
 import { delay,  repeatWhen, switchMap  } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -59,7 +59,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @ViewChild('listViewType')   listViewType: TemplateRef<any>;
   @ViewChild('itemViewType')   itemViewType: TemplateRef<any>;
   action$: Observable<any>;
-
+  printLabels$:  Observable<any>;
+  obs$ : Observable<any>[];
   userAuths       :   IUserAuth_Properties;
   _userAuths      : Subscription;
   gridheaderitem = 'grid-header-item-main'
@@ -671,39 +672,47 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   houseAccountPayment() {
     this.action$ =  this.orderMethodService.suspendOrder(this.order)
   }
+
   //loop the items
   //print labels
   //update the items that have the label printed
   ///update the inventory
   //update the subscription order Info
-  async printLabels() {
-
-    //get the order
+ printLabels(newLabels: boolean) {
     if (this.order) {
       if (this.order.posOrderItems) {
+        this.obs$ = []
         const items = this.order.posOrderItems
-        let loop = 1
         if (items.length > 0) {
           items.forEach( item => {
-            if (!item.printed) {
-               this.printLabel(item)
+            if (!item.printed && newLabels) {
+              this.obs$.push(this.printLabel(item))
+            }
+            if (!newLabels) {
+              this.obs$.push(this.printLabel(item))
             }
           })
-
         }
       }
+      this.printLabels$ = forkJoin(this.obs$)
     }
   }
+
 
   setStep(value:number) {
 
   }
-    //get item
+
+  rePrintLabels() {
+    this.printLabels(false)
+  }
+
+
+  //get item
   //print maybe
   //update inventory
-  async  printLabel(item: PosOrderItem) {
-
-
+  printLabel(item: PosOrderItem) {
+    return this.printingService.printItemLabel(item, null, this.order)
   }
 
   // //get item
@@ -814,10 +823,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
     this.navigationService.makePaymentFromSidePanel(this.openOrderBar, this.smallDevice,
       this.isStaff, this.order  )
-  }
-
-  rePrintLabels() {
-
   }
 
   printReceipt() {

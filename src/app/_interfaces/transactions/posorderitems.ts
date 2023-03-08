@@ -137,5 +137,7 @@ export interface PosOrderMenuItem {
   taxRate2:                 TaxRate;
   taxRate3:                 TaxRate;
   promptGroupID           : number;
+  dateMade                : string;
+  testDate                : string;
 }
 

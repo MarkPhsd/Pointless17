@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Observable, of, switchMap } from 'rxjs';
+import { catchError, Observable, of, switchMap } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -17,10 +17,10 @@ export class UIHomePageSettingsComponent implements OnInit {
   inputForm   : FormGroup;
   uiSettings  : ISetting;
   uiSettings$ : Observable<ISetting>;
+  uiHomePage$ : Observable<any>
   uiHomePage  : UIHomePageSettings;
   saving$     : Observable<any>;
   message     : string;
-
   showEmailSettings = false;
 
   constructor(
@@ -31,8 +31,8 @@ export class UIHomePageSettingsComponent implements OnInit {
 
     this.saving$  = null;
 
-    this.settingsService.getUIHomePageSettingsNoCache().subscribe(
-      {next:
+    this. uiHomePage$ = this.settingsService.getUIHomePageSettingsNoCache().pipe(
+      switchMap(
         data => {
         if (data) {
           this.inputForm = this.uISettingsService.initHomePageForm(this.inputForm)
@@ -41,17 +41,17 @@ export class UIHomePageSettingsComponent implements OnInit {
             this.inputForm.patchValue(data)
             this.initializeImages(this.uiHomePage)
           }
-          return
+
         } else {
           this.inputForm = this.uISettingsService.initHomePageForm(this.inputForm);
           this.initializeImages(this.uiHomePage)
           this.initForm(this.uiHomePage);
         }
-      },
-      error: error => {
-        console.log('error initializing settings')
-      }
-    });
+        return of(this.uiHomePage)
+      })),catchError( error => {
+        console.log(error  + ' error initializing settings')
+        return of(error)
+       });
   }
 
   initializeImages(data: UIHomePageSettings) {

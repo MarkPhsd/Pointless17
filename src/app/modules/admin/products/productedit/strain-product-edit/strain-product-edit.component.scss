@@ -32,6 +32,19 @@ mat-form-field {
   overflow-x: hidden;
 }
 
+
+.flex-container-medium {
+  display: flex;
+  flex-direction: row;
+  // flex-wrap: wrap;
+  // gap: 10px;
+  max-width: 200px;
+}
+
+.edit-button {
+  max-height: 50px;
+}
+
 .grid-container-small {
   --gap: 10px;
   display: grid;

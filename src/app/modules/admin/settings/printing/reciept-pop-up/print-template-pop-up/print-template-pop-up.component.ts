@@ -52,18 +52,7 @@ export class PrintTemplatePopUpComponent implements OnInit, OnDestroy {
   printingCompleted(event) {
     this.hideTemplate = true
     this.currentView = null;
-    // if (this.printOrders.length > this.index + 1) {return}
-    // if (this.printOrders.length == this.index )  { return }
-
-    // if (this.index + 1 > this.printOrders.length) {
-    //   this.exit
-    //   return
-    // }
-
-    // this.index = this.index + 1;
     this.printOrder = this.printOrders[this.index+1]
-
-    console.log('printingCompleted', this.printOrder)
     this.orderService._printOrder.next(this.printOrder)
     this.currentView = this.printTemplate;
     this.hideTemplate = false
@@ -72,8 +61,6 @@ export class PrintTemplatePopUpComponent implements OnInit, OnDestroy {
       this.exit()
       return;
     }
-
-
   }
 
   get templateCurrent() {
@@ -85,29 +72,4 @@ export class PrintTemplatePopUpComponent implements OnInit, OnDestroy {
   printingComplete(){
     this.dialogRef.close('sucess')
   }
-
-  // moveNextSectionSubscriber() {
-  //   this.printTemplate = null;
-  //   this.moveNext$.subscribe(index => {
-  //     console.log('data', this.printOrders[index])
-  //     console.log('data', index)
-  //     if ( this.printOrders.length +1 > this.index ) {
-  //       this.exit()
-  //       return;
-  //     }
-  //     this.printOrder = this.printOrders[index];
-  //   })
-  // }
-
-
-
 }
-
-  // // this.printOrders[0].order.posOrderItems.length
-  // get allSectionsPrinted() {
-  //   if (this.printedArray.length == this.index) {
-  //     this.printingComplete()
-  //     return true;
-  //   }
-  //   return false
-  // }

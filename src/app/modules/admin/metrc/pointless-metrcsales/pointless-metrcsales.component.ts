@@ -150,7 +150,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
             if (!this.searchModel.currentDay) {
               this.gridOptions = this.agGridFormatingService.initGridOptions(1000000, this.columnDefs);
             }
-            console.log('search update', data)
             this.refreshSearch_sub()
           }
         }
@@ -172,408 +171,411 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     private pointlessMetrcSalesReport: PointlessMETRCSalesService,
     private reportingItemsSalesService: ReportingItemsSalesService,
     ) {
-      this.initSubscriptions();
-      this.initForm();
-      this.initColumnDefs(10000);
+    this.initSubscriptions();
+    this.initForm();
+    this.initColumnDefs(10000);
+  }
+
+  ngOnInit(): void {
+    this.site = {} as ISite;
+    this.sites$ = this.siteService.getSites();
+    this.site = this.siteService.getAssignedSite()
+    this.initClasses();
+    this.updateResize()
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._searchModel) { this._searchModel.unsubscribe()}
+  }
+
+  initForm() {
+    this.searchForm = this.fb.group({
+      itemName : ['']
+    })
+    this.dateRange = new FormGroup({
+      startDate: new FormControl(),
+      endDate: new FormControl()
+    });
+  }
+
+  @HostListener("window:resize", [])
+  updateResize() {
+    this.smallDevice = false
+    if (window.innerWidth < 768) {
+      this.smallDevice = true
+      this.gridDimensions = 'width: 100%; height: calc(100vh - 200px);'
     }
-
-    ngOnInit(): void {
-      this.site = {} as ISite;
-      this.sites$ = this.siteService.getSites();
-      this.site = this.siteService.getAssignedSite()
-      this.initClasses();
-      this.updateResize()
+    this.filterDimensions = 'height: calc(100vh - 200px)'
+    this.gridDimensions =  'width: 100%;  height: calc(100vh - 200px);'
+    if (this.exceptions && this.exceptions.length>0) {
+      this.gridDimensions =  'width: 100%;  height: calc(100vh - 350px);'
+      this.filterDimensions = 'height: calc(100vh - 350px)'
     }
+  }
 
-    ngOnDestroy(): void {
-      //Called once, before the instance is destroyed.
-      //Add 'implements OnDestroy' to the class.
-      if (this._searchModel) { this._searchModel.unsubscribe()}
-    }
+  initClasses()  {
+    const platForm = this.platForm;
+    this.gridDimensions =  'width: 100%;  height: calc(100vh - 200px);'
+    this.agtheme  = 'ag-theme-material';
+    if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%;  height: calc(100vh - 200px);'}
+    if (platForm === 'electron')  { this.gridDimensions = 'width: 100%;  height: calc(100vh - 200px);'}
+  }
 
-    initForm() {
-      this.searchForm = this.fb.group({
-        itemName : ['']
-      })
-      this.dateRange = new FormGroup({
-        startDate: new FormControl(),
-        endDate: new FormControl()
-      });
-    }
-
-    @HostListener("window:resize", [])
-    updateResize() {
-      this.smallDevice = false
-      if (window.innerWidth < 768) {
-        this.smallDevice = true
-        this.gridDimensions = 'width: 100%; height: calc(100vh - 200px);'
-      }
-      this.filterDimensions = 'height: calc(100vh - 200px)'
-      this.gridDimensions =  'width: 100%;  height: calc(100vh - 200px);'
-      if (this.exceptions && this.exceptions.length>0) {
-        this.gridDimensions =  'width: 100%;  height: calc(100vh - 350px);'
-        this.filterDimensions = 'height: calc(100vh - 350px)'
-      }
-    }
-
-    initClasses()  {
-      const platForm = this.platForm;
-      this.gridDimensions =  'width: 100%;  height: calc(100vh - 200px);'
-      this.agtheme  = 'ag-theme-material';
-      if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%;  height: calc(100vh - 200px);'}
-      if (platForm === 'electron')  { this.gridDimensions = 'width: 100%;  height: calc(100vh - 200px);'}
-    }
-
-    initColumnDefs(pageSize: number) {
-      this.frameworkComponents = {
-        btnCellRenderer: ButtonRendererComponent
-      };
-      this.defaultColDef = {
-        flex: 1,
-        minWidth: 100
-      };
-      this.columnDefs =  [
-        {
-          field: 'orderID',
-          cellRenderer: "btnCellRenderer",
-                        cellRendererParams: {
-                          onClick: this.editProductFromGrid.bind(this),
-                          label: this.getLabel.bind(this),
-                          getLabelFunction: this.getLabel.bind(this),
-                          btnClass: 'btn btn-primary btn-sm'
-                        },
-                        minWidth: 125,
-                        maxWidth: 125,
-                        flex: 2,
-        },
-        {headerName: 'Sale Date',  sortable: true,
-                      field: 'completeDate',
-          width:    155,
-          minWidth: 155,
-          maxWidth: 225,
-          flex: 2,
-          valueFormatter: ({ value }) => this.datePipe.transform(value, 'short')
-        },
-
-        {headerName: 'Client Type', field: 'clientType', sortable: true,
-          width:    155,
-          minWidth: 155,
-          maxWidth: 225,
-          flex: 2,
-        },
-        {headerName: 'Patient License', field: 'oomp', sortable: true, cellClass: 'number-cell',
-          width:    155,
-          minWidth: 155,
-          maxWidth: 225,
-          flex: 2,
-        },
-        {headerName: 'Caregiver License', field: 'oompb', sortable: true,
-          width:    155,
-          minWidth: 155,
-          maxWidth: 225,
-          flex: 2,
-        },
-        {headerName: 'Identification Method', field: 'value', sortable: true,
-          width:    155,
-          minWidth: 155,
-          maxWidth: 225,
-          flex: 2,
-        },
-        {headerName: 'Package Label', field: 'packageLabel', sortable: true,
+  initColumnDefs(pageSize: number) {
+    this.frameworkComponents = {
+      btnCellRenderer: ButtonRendererComponent
+    };
+    this.defaultColDef = {
+      flex: 1,
+      minWidth: 100
+    };
+    this.columnDefs =  [
+      {
+        field: 'orderID',
+        cellRenderer: "btnCellRenderer",
+                      cellRendererParams: {
+                        onClick: this.editProductFromGrid.bind(this),
+                        label: this.getLabel.bind(this),
+                        getLabelFunction: this.getLabel.bind(this),
+                        btnClass: 'btn btn-primary btn-sm'
+                      },
+                      minWidth: 125,
+                      maxWidth: 125,
+                      flex: 2,
+      },
+      {headerName: 'Sale Date',  sortable: true,
+                    field: 'completeDate',
         width:    155,
         minWidth: 155,
         maxWidth: 225,
         flex: 2,
-        },
-        {headerName: 'Quantity', field: 'quantityTotal', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,
-        },
-        {headerName: 'UOM', field: 'unitType', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,
-        },
-        {headerName: 'UTHC%', field: 'value', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,
-        },
-        {headerName: 'UTHCC', field: 'value', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,},
-        {headerName: 'UTHCUOM', field: 'value', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,
-        },
-        {headerName: 'Unit Weight', field: 'value', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,
-        },
-        {headerName: 'UWUOM', field: 'value', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,
-        },
-        {headerName: 'TotalAmount', field: 'netTotal', sortable: true,
-          width:    155,
-          minWidth: 155,
-          maxWidth: 225,
-          flex: 2,
-          cellRenderer: this.agGridService.currencyCellRendererUSD},
-        {headerName: 'Invoice#', field: 'orderID', sortable: true,
-          width:    155,
-          minWidth: 155,
-          maxWidth: 225,
-          flex: 2,
-        },
-        {headerName: 'Price', field: 'value', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,
-        },
-        {headerName: 'ExciseTax', field: 'value', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,
-        },
-        {headerName: 'CityTax', field: 'value', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,
-        },
-        {headerName: 'CountyTax', field: 'value', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,
-        },
-        {headerName: 'MunicipalTax', field: 'value', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,
-        },
-        {headerName: 'DiscountAmount', field: 'value', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,
-        },
-        {headerName: 'SubTotal', field: 'value', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,
-        },
-        {headerName: 'SalesTax', field: 'value', sortable: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,},
+        valueFormatter: ({ value }) => this.datePipe.transform(value, 'short')
+      },
 
-        {headerName: 'History', field: 'history', sortable: true,
-          hide: true,
-          width: 90,
-          minWidth: 90,
-          maxWidth: 90,},
-      ]
+      {headerName: 'Client Type', field: 'clientType', sortable: true,
+        width:    155,
+        minWidth: 155,
+        maxWidth: 225,
+        flex: 2,
+      },
+      {headerName: 'Patient License', field: 'oomp', sortable: true, cellClass: 'number-cell',
+        width:    155,
+        minWidth: 155,
+        maxWidth: 225,
+        flex: 2,
+      },
+      {headerName: 'Caregiver License', field: 'oompb', sortable: true,
+        width:    155,
+        minWidth: 155,
+        maxWidth: 225,
+        flex: 2,
+      },
+      {headerName: 'Identification Method', field: 'value', sortable: true,
+        width:    155,
+        minWidth: 155,
+        maxWidth: 225,
+        flex: 2,
+      },
+      {headerName: 'Package Label', field: 'packageLabel', sortable: true,
+      width:    155,
+      minWidth: 155,
+      maxWidth: 225,
+      flex: 2,
+      },
+      {headerName: 'Quantity', field: 'quantityTotal', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,
+      },
+      {headerName: 'UOM', field: 'unitType', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,
+      },
+      {headerName: 'UTHC%', field: 'value', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,
+      },
+      {headerName: 'UTHCC', field: 'value', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,},
+      {headerName: 'UTHCUOM', field: 'value', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,
+      },
+      {headerName: 'Unit Weight', field: 'value', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,
+      },
+      {headerName: 'UWUOM', field: 'value', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,
+      },
+      {headerName: 'TotalAmount', field: 'netTotal', sortable: true,
+        width:    155,
+        minWidth: 155,
+        maxWidth: 225,
+        flex: 2,
+        cellRenderer: this.agGridService.currencyCellRendererUSD},
+      {headerName: 'Invoice#', field: 'orderID', sortable: true,
+        width:    155,
+        minWidth: 155,
+        maxWidth: 225,
+        flex: 2,
+      },
+      {headerName: 'Price', field: 'value', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,
+      },
+      {headerName: 'ExciseTax', field: 'value', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,
+      },
+      {headerName: 'CityTax', field: 'value', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,
+      },
+      {headerName: 'CountyTax', field: 'value', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,
+      },
+      {headerName: 'MunicipalTax', field: 'value', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,
+      },
+      {headerName: 'DiscountAmount', field: 'value', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,
+      },
+      {headerName: 'SubTotal', field: 'value', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,
+      },
+      {headerName: 'SalesTax', field: 'value', sortable: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,},
+
+      {headerName: 'History', field: 'history', sortable: true,
+        hide: true,
+        width: 90,
+        minWidth: 90,
+        maxWidth: 90,},
+    ]
+  }
+
+  initSearchModel() {
+    let searchModel        = {} as PointlessMetrcSearchModel;
+    if (this.searchModel) {
+      searchModel = this.searchModel
     }
+    searchModel.pageSize   = this.pageSize
+    searchModel.pageNumber = this.currentPage;
+    this.pointlessMetrcSalesReport.updateSearchModel(searchModel)
+    return searchModel
+  }
 
-    initSearchModel() {
-      let searchModel        = {} as PointlessMetrcSearchModel;
-      if (this.searchModel) {
-        searchModel = this.searchModel
-      }
-      searchModel.pageSize   = this.pageSize
-      searchModel.pageNumber = this.currentPage;
-      this.pointlessMetrcSalesReport.updateSearchModel(searchModel)
-      return searchModel
+  refreshSearch(): Observable<PointlessMetrcSearchModel> {
+    return this.refreshSearch_sub();
+  }
+
+  refreshSearchByZRUN(event) {
+    if (!event) {  return;  }
+    this.exceptions = []
+    this.searchModel.zRUN = event.zrun;
+    this.refreshSearch();
+  }
+
+  refreshSearchAny(event) {
+    if (!event) {  return;  }
+    this.exceptions = []
+    this.currentPage = 1;
+    this.refreshSearch();
+  }
+
+  refreshSearch_sub(): Observable<PointlessMetrcSearchModel> {
+    if (this.params){
+      this.params.startRow     = 1;
+      this.params.endRow       = this.pageSize;
     }
+    this.onGridReady(this.params);
+    return this._searchItems$;
+  }
 
-    refreshSearch(): Observable<PointlessMetrcSearchModel> {
-      return this.refreshSearch_sub();
-    }
+  //this doesn't change the page, but updates the properties for getting data from the server.
+  setCurrentPage(startRow: number, endRow: number): number {
+    const tempStartRow = this.startRow;
+    this.startRow      = startRow;
+    this.endRow        = endRow;
+    if (tempStartRow > startRow) { return this.currentPage - 1 };
+    if (tempStartRow < startRow) { return this.currentPage + 1 };
+    return this.currentPage;
+  }
 
-    refreshSearchByZRUN(event) {
-      if (!event) {  return;  }
-      this.exceptions = []
-      this.searchModel.zRUN = event.zrun;
-      this.refreshSearch();
-    }
-
-    refreshSearchAny(event) {
-      if (!event) {  return;  }
-      this.exceptions = []
-      this.currentPage = 1;
-      this.refreshSearch();
-    }
-
-    refreshSearch_sub(): Observable<PointlessMetrcSearchModel> {
-      if (this.params){
-        this.params.startRow     = 1;
-        this.params.endRow       = this.pageSize;
-      }
-      this.onGridReady(this.params);
-      return this._searchItems$;
-    }
-
-    //this doesn't change the page, but updates the properties for getting data from the server.
-    setCurrentPage(startRow: number, endRow: number): number {
-      const tempStartRow = this.startRow;
-      this.startRow      = startRow;
-      this.endRow        = endRow;
-      if (tempStartRow > startRow) { return this.currentPage - 1 };
-      if (tempStartRow < startRow) { return this.currentPage + 1 };
-      return this.currentPage;
-    }
-
-    getRowData(params, startRow: number, endRow: number):  Observable<METRCSalesReportPaged>  {
-      const site                = this.siteService.getAssignedSite()
-      if (this.searchModel && this.searchModel.currentDay) {
-        if (this.currentDayRan) {
-          this.processing = false
-          return of(null)
-        }
-        this.setCurrentPage(1, 100000)
-        this.currentPage = 1;
-        this.currentDayRan = true;
-        return this.pointlessMetrcSalesReport.getUnclosedSalesReport(site, this.searchModel)
-      }
-
-      this.currentPage          = this.setCurrentPage(startRow, endRow)
-      if (!this.searchModel) { this.searchModel = {}  as PointlessMetrcSearchModel};
-      this.searchModel.pageSize   = this.pageSize
-      this.searchModel.pageNumber = this.currentPage;
-      return this.pointlessMetrcSalesReport.getSalesReport(site, this.searchModel)
-    }
-
-    setPaging(resp: IPagedList) {
-      this.isfirstpage   = resp.isFirstPage
-      this.islastpage    = resp.isFirstPage
-      this.currentPage   = resp.currentPage
-      this.numberOfPages = resp.pageCount
-      this.recordCount   = resp.recordCount
-      this.totalRecordCount = resp.totalRecordCount;
-    }
-
-    //ag-grid standard method
-    onGridReady(params: any) {
-      if (params)  {
-        this.params  = params
-        this.gridApi = params.api;
-        params.api.sizeColumnsToFit();
-        this.autoSizeAll(false);
-      }
-      this.onFirstDataRendered(this.params)
-
-      if (params == undefined) {
-        console.log('params undefined')
-        return;
-      }
-
-      if (!params.startRow ||  !params.endRow) {
-        params.startRow = 1;
-        params.endRow = this.pageSize;
-      }
-
-      this.processing = true;
-
-
-      if (this.searchModel.currentDay) {
-        this.pageSize = 100000;
-        this.initColumnDefs(1000000);
-        // console.log('results for day 2')
-        this.gridOptions = this.agGridFormatingService.initGridOptionsClientType(this.recordCount , this.columnDefs);
-        this.getRowData(params, params.startRow, params.endRow).subscribe(data => {
-          if (!data)  {return;}
-          if (this.getException(data))  {return;}
-          this.processing = false;
-          this.rowData    = data.results;
-          this.getExceptions(data?.exceptions);
-          this.setPaging(data.paging);
-        })
-        return;
-      }
-
-      let datasource =  {
-        getRows: (params: IGetRowsParams) => {
-        const items$    = this.getRowData(params, params.startRow, params.endRow)
-        items$.subscribe(data =>
-          {
-              if (!data)  {return;}
-              if (this.getException(data))  {return;}
-              const resp      =  data.paging;
-              this.processing = true;
-              this.getExceptions(data?.exceptions);
-              this.updateResize();
-
-              if (resp) {
-                this.setPaging(data.paging)
-                if (this.numberOfPages !=0 && this.numberOfPages) {
-                  this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-                }
-              }
-
-              if (data.results) {
-                let results  =  this.refreshImages(data.results)
-                params.successCallback(results)
-                this.rowData = results
-              }
-              this.processing = false;
-            }
-          );
-        }
-      };
-
-      if (!datasource)   { return }
-      if (!this.gridApi) { return }
-      this.gridApi.setDatasource(datasource);
-      this.autoSizeAll(true);
-    }
-
-    getException(data: any) {
-      if (!data || data?.exceptionMessage) {
-        this.exceptionMessage = data?.exceptionMessage;
+  getRowData(params, startRow: number, endRow: number):  Observable<METRCSalesReportPaged>  {
+    const site                = this.siteService.getAssignedSite()
+    if (this.searchModel && this.searchModel.currentDay) {
+      if (this.currentDayRan) {
         this.processing = false
-        return true
+        return of(null)
       }
-      return false;
+      this.setCurrentPage(1, 100000)
+      this.currentPage = 1;
+      this.currentDayRan = true;
+      return this.pointlessMetrcSalesReport.getUnclosedSalesReport(site, this.searchModel)
     }
 
-    getExceptions(exceptions: any[]) {
-      if (!this.exceptions) { this.exceptions = []}
-      if (exceptions)  {
-        this.exceptions = [ ...this.exceptions, ...exceptions];
-        this.exceptions = [ ... this.exceptions];
-      }
+    this.currentPage          = this.setCurrentPage(startRow, endRow)
+    if (!this.searchModel) { this.searchModel = {}  as PointlessMetrcSearchModel};
+    this.searchModel.pageSize   = this.pageSize
+    this.searchModel.pageNumber = this.currentPage;
+    return this.pointlessMetrcSalesReport.getSalesReport(site, this.searchModel)
+  }
+
+  setPaging(resp: IPagedList) {
+    this.isfirstpage   = resp.isFirstPage
+    this.islastpage    = resp.isFirstPage
+    this.currentPage   = resp.currentPage
+    this.numberOfPages = resp.pageCount
+    this.recordCount   = resp.recordCount
+    this.totalRecordCount = resp.totalRecordCount;
+  }
+
+  //ag-grid standard method
+  onGridReady(params: any) {
+    if (params)  {
+      this.params  = params
+      this.gridApi = params.api;
+      params.api.sizeColumnsToFit();
+      this.autoSizeAll(false);
+    }
+    this.onFirstDataRendered(this.params)
+
+    if (params == undefined) {
+      console.log('params undefined')
+      return;
     }
 
-    onFirstDataRendered (params) {
-      try {
-        if (!params || params.api) {return}
-        params.api.sizeColumnsToFit()
-      } catch (error) {
-        console.log(error)
-      }
+    if (!params.startRow ||  !params.endRow) {
+      params.startRow = 1;
+      params.endRow = this.pageSize;
     }
 
-    onSelectionChanged(event) {
-      if (!event) { return }
+    this.processing = true;
+
+    if (this.searchModel.currentDay) {
+      this.pageSize = 100000;
+      this.initColumnDefs(1000000);
+      this.gridOptions = this.agGridFormatingService.initGridOptionsClientType(this.recordCount , this.columnDefs);
+      this.getRowData(params, params.startRow, params.endRow).subscribe(data => {
+        if (!data)  {
+          this.rowData = null;
+          return;}
+        if (this.getException(data))  {
+          this.rowData = null;
+          return;
+        }
+        this.processing = false;
+        this.rowData    = data.results;
+        this.getExceptions(data?.exceptions);
+        this.setPaging(data.paging);
+      })
+      return;
     }
 
-    editProductFromGrid(e) {
-      let history = false
-      // const historyValue =
+    let datasource =  {
+      getRows: (params: IGetRowsParams) => {
+      const items$    = this.getRowData(params, params.startRow, params.endRow)
+      items$.subscribe(data =>
+        {
+            if (!data)  {return;}
+            if (this.getException(data))  {return;}
+            const resp      =  data.paging;
+            this.processing = true;
+            this.getExceptions(data?.exceptions);
+            this.updateResize();
 
-      if ( +e.rowData?.history == 1) {
-        history = true;
-      }
-      if (! e.rowData?.history || +e.rowData?.history == 0) {
-        history = false;
-      }
+            if (resp) {
+              this.setPaging(data.paging)
+              if (this.numberOfPages !=0 && this.numberOfPages) {
+                this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
+              }
+            }
 
-      this.setActiveOrder({id: e.rowData.orderID, history: history})
+            if (data.results) {
+              let results  =  this.refreshImages(data.results)
+              params.successCallback(results)
+              this.rowData = results
+            }
+            this.processing = false;
+          }
+        );
+      }
+    };
+
+    if (!datasource)   { return }
+    if (!this.gridApi) { return }
+    this.gridApi.setDatasource(datasource);
+    this.autoSizeAll(true);
+  }
+
+  getException(data: any) {
+    if (!data || data?.exceptionMessage) {
+      this.exceptionMessage = data?.exceptionMessage;
+      this.processing = false
+      return true
     }
+    return false;
+  }
+
+  getExceptions(exceptions: any[]) {
+    if (!this.exceptions) { this.exceptions = []}
+    if (exceptions)  {
+      this.exceptions = [ ...this.exceptions, ...exceptions];
+      this.exceptions = [ ... this.exceptions];
+    }
+  }
+
+  onFirstDataRendered (params) {
+    try {
+      if (!params || params.api) {return}
+      params.api.sizeColumnsToFit()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  onSelectionChanged(event) {
+    if (!event) { return }
+  }
+
+  editProductFromGrid(e) {
+    let history = false
+    // const historyValue =
+
+    if ( +e.rowData?.history == 1) {
+      history = true;
+    }
+    if (! e.rowData?.history || +e.rowData?.history == 0) {
+      history = false;
+    }
+
+    this.setActiveOrder({id: e.rowData.orderID, history: history})
+  }
 
 
   setActiveOrderByException(orderID: number,history: any) {
@@ -627,19 +629,19 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     return data;
   }
 
-    //search method for debounce on form fieldf
-    displayFn(search) {
-      this.selectItem(search)
-      return search;
-    }
+  //search method for debounce on form fieldf
+  displayFn(search) {
+    this.selectItem(search)
+    return search;
+  }
 
-  //search method for debounce on form field
-    selectItem(search){
-      if (search) {
-        this.currentPage = 1
-        this.searchPhrase.next(search)
-      }
+//search method for debounce on form field
+  selectItem(search){
+    if (search) {
+      this.currentPage = 1
+      this.searchPhrase.next(search)
     }
+  }
 
     autoSizeAll(skipHeader) {
       if (! this.gridOptions ) { return }
@@ -672,7 +674,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         return;
       }
       if (!this.searchModel.currentDay) {
-        const fields = ['completeDate','clientType', 'oomp',  'oompb', 'value', 'packageLabel','quantityTotal','unitType',  'value', 'value', 'value', 'value', 'value', 'netTotal','orderID',
+        const fields = ['completeDate','clientType', 'oomp',  'oompb', 'value', 'packageLabel','quantityTotal','unitType','value', 'value', 'value', 'value', 'value', 'netTotal','orderID',
         , 'value', 'value', 'value', , 'value', 'value' , 'value', 'value', 'value' ]
         this.gridApi.exportDataAsCsv({ columnKeys: fields, allColumns: false,
                                         fileName: 'metrc', skipColumnHeaders: true, suppressQuotes: true});
@@ -680,26 +682,37 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       }
     }
 
+    capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     exportDailySales() {
       const list = [] as  metrcSalesReport[];
       this.rowData.forEach(data => {
         let item = {} as metrcSalesReport;
+        const clientType = data?.clientType.toString() as string;
+        if (clientType.toLowerCase() === 'caregiver') {
+          console.log('item sale', data)
+        }
         const right = this.datePipe.transform( data?.completeDate, 'short').slice(-2);
-        // console.log('date', data?.completeDate)
-        item.completeDate = `${data?.completeDate} ${right}`;
-        item.clientType= data?.clientType;
+        console.log( this.datePipe.transform( data?.completeDate, 'shortDate'))
+        console.log( this.datePipe.transform( data?.completeDate, 'mediumTime'))
+        const dateFormat =  this.datePipe.transform( data?.completeDate, 'yyyy/mm/dd');
+        const mediumTime =  this.datePipe.transform( data?.completeDate, 'mediumTime');
+        item.completeDate = `${dateFormat} ${mediumTime}`;
+        item.clientType=  this.capitalizeFirstLetter(clientType);
         item.oomp= data?.oomp;
         item.oompb= data?.oompb;
         item.idMethod = '';
         item.packageLabel = data?.packageLabel;
-        item.quantityTotal= data?.quantityTotal;
+        item.quantityTotal= data?.quantityTotal.toFixed(2);
         item.uom = data?.unitType;
         item.UTHC = '';
         item.UTHCC = '';
         item.UTHCUOM = '';
         item.UnitWeight = '';
         item.UWUOM = '';
-        item.netTotal = data?.netTotal;
+        item.netTotal = data?.netTotal.toFixed(2);
         item.orderID  = data?.orderID;
         item.Price= '';
         item.ExciseTax = '';
@@ -716,12 +729,10 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       options.quotes = false;
       options.header = false;
       options.skipEmptyLines = true;
-
       this.reportingItemsSalesService.downloadPapa(list, 'METRCSalesReport', options)
     }
 
     setSite(id: any) {
-
       this.site$ = this.siteService.getSite(id).pipe(
         switchMap(data => {
           this.site = data

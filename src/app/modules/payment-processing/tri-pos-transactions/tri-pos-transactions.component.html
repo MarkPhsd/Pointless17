@@ -58,9 +58,13 @@
 
     <div class="button-grid">
 
-
+      <!-- {{posPayment.tranType}} -->
       <div *ngIf="posPayment.amountPaid > 0 && posPayment.tranType === 'authorizationResponse'">
         <button color="primary" mat-raised-button (click)="completeAuthorization()">Complete Payment</button>
+      </div>
+
+      <div *ngIf="posPayment.amountPaid > 0 && posPayment.tranType === 'authorizationResponse'">
+        <button color="primary" mat-raised-button (click)="reverseAuthorization()">Reverse Authorization</button>
       </div>
 
       <div *ngIf="posPayment.amountPaid > 0 && posPayment.tranType != 'authorizationResponse'">

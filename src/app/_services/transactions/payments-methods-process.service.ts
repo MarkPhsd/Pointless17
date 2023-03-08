@@ -341,6 +341,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         }
       )).pipe(
         switchMap(data => {
+
           this.orderService.updateOrderSubscription(data.order);
           this.orderMethodsService.finalizeOrder(data, paymentMethod, data.order);
           if (data.orderCompleted) {
@@ -479,6 +480,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   applyTripPOSResponseToPayment(response: any, payment: IPOSPayment) {
     // console.log('applyTripPOSResponseToPayment', response)
+
     payment.account         = response.accountNumber;
     payment.accountNum      = response.accountNum;
     payment.approvalCode    = response.approvalNumber;
@@ -489,8 +491,11 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     payment.entryMethod     = response.entryMode;
     payment.entrymode       = response.entryMode;
     payment.respproc        = response.networkTransactionId;
-    payment.respcode        = response.tranType
+    payment.respcode        = response.transactionId
+    payment.batchid         = response.binValue;
     payment.tranType        = response._type;
+    payment.expiry          = `${response.expirationMonth}${response.expirationYear}`
+    console.log(payment, response.transactionId, response.transactionID)
     //important value for references.
 
     if (response._type === 'refundResponse') {

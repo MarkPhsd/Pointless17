@@ -116,12 +116,8 @@ export class DisplayMenuListComponent implements OnInit {
   }
 
   menuItemActionObs(menuItem : IMenuItem) {
-
-
     const site = this.siteService.getAssignedSite();
-
     let order$ = of(this.order)
-
     if (!this.order || this.order == null) {
       order$ = this.orderService.newOrderWithPayloadMethod(site, null);
     }
@@ -132,7 +128,6 @@ export class DisplayMenuListComponent implements OnInit {
       if (!order) {
          this.siteService.notify('No order started', 'Alert', 1000)
          return of(null) }
-         console.log('order', order.id)
          return this.orderMethodService.menuItemActionObs(order, menuItem, true,
         this.orderMethodService.assignPOSItems)
     }))

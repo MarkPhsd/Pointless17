@@ -3,9 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { ElectronService } from 'ngx-electron';
 import { Observable } from 'rxjs';
 import { PointlessCCDSIEMVAndroidService } from 'src/app/modules/payment-processing/services';
 import { ISetting } from 'src/app/_interfaces';
+import { FileSystemService } from 'src/app/_services/fileSystem/file-system.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
@@ -49,6 +51,7 @@ export class PosEditSettingsComponent implements OnInit {
     private btPrinterService    : BtPrintingService,
     private printingService     : PrintingService,
       private uiSettingService  : UISettingsService,
+    private fileSystemService   : FileSystemService,
     private dialogRef           : MatDialogRef<PosEditSettingsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number
   )
@@ -83,6 +86,13 @@ export class PosEditSettingsComponent implements OnInit {
     this.initForm()
     await this.listBTDevices();
     await this.getAndroidPrinterAssignment()
+    // await this.createZPLFolderData()
+  }
+
+  async createZPLFolderData() {
+
+    await this.fileSystemService.makeDirectory('c:\\pointless');
+    await this.fileSystemService.makeFile('c:\\pointless', 'print.txt')
   }
 
   async  getAndroidPrinterAssignment() {
@@ -142,7 +152,7 @@ export class PosEditSettingsComponent implements OnInit {
     this.setting.text   = text;
     this.setting.filter = 421
     this.uiSettingService.posDevice.next(item);
-    console.log(text, this.setting.id)
+    // console.log(text, this.setting.id)
 
     this.saving$ = this.settingsService.putSetting(site, this.setting.id, this.setting)
     this.saving = true;

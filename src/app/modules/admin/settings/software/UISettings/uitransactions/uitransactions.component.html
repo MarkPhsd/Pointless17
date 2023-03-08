@@ -12,12 +12,9 @@
 
   <mat-card-actions>
 
-
-    <div  *ngIf="inputForm && uiTransactions">
-      <button mat-raised-button
-              color="primary"
-              (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
-    </div>
+    <save-changes-button [inputForm]="inputForm"
+                          (updateSetting)="updateSetting()">
+    </save-changes-button>
 
     <div *ngIf="saving$">
       <div *ngIf="(saving$ | async) as item; else saving">
@@ -163,6 +160,13 @@
 
       <div class="toggle-fields">
         <mat-slide-toggle
+                  formControlName="assignBarcodeAsSerial">
+          <mat-label>Assign Barcode as Serial</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
                   formControlName="requireEnterTabBarcodeLookup"
                   >
           <mat-label>Require Enter/Tab to Lookup</mat-label>
@@ -187,17 +191,6 @@
           </mat-form-field>
       </div>
 
-      <!-- <div>
-        <mat-label>Assign customer to VIP Button (this sets the customer of the order to a customer that has price column 1 as default)</mat-label>
-        <app-client-search-selector
-          (itemSelect)="assignCustomer($event)">
-          VIP Customer Assignment
-        </app-client-search-selector>
-        <div *ngIf="(vipCustomer$ | async) as vipCustomer">
-          {{vipCustomer?.firstName}} {{vipCustomer?.lastName}}
-        </div>
-      </div> -->
-
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="validateCustomerLicenseID">
@@ -213,13 +206,6 @@
         </mat-slide-toggle>
       </div>
 
-      <!-- <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="VIPPriceButton">
-          <mat-label>Vip Price Button</mat-label>
-        </mat-slide-toggle>
-      </div> -->
-
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="ordersRequireCustomer"
@@ -232,19 +218,37 @@
       <h3>Operation Settings:</h3>
 
       <div class="grid-small">
-
-         <div>
-          <mat-label>Gift card character length.</mat-label>
+        <div>
+          <mat-label class="mat-label-design">Gift card character length.</mat-label>
           <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'giftCardLength'">
             Max Orders
           </app-value-fields>
         </div>
+        <div>
+
+        <div>
+          <mat-label  class="mat-label-design">Enable to not save customer info on ID Scanning (driver license, id etc.).</mat-label>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'idParseOnlyAgeConfirmation'">
+             ID Parse
+          </app-value-fields>
+        </div>
+
+        <div>
+          <mat-label  class="mat-label-design">Minimum Client Age.</mat-label>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'minClientAge'">
+             Minumum Client Age
+          </app-value-fields>
+        </div>
 
 
         <div>
-          <mat-label>Prefix for Order Prep Labels.</mat-label>
+          <mat-label class="mat-label-design">Prefix for Order Prep Labels.</mat-label>
           <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'prefixBarcodeLabel'">
@@ -253,7 +257,7 @@
         </div>
 
         <div>
-          <mat-label>Pre fix for intaken inventory items.</mat-label>
+          <mat-label class="mat-label-design">Pre fix for intaken inventory items.</mat-label>
           <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'lotPreBarCode'">
@@ -262,7 +266,7 @@
         </div>
 
         <div>
-          <mat-label>Percentage of Buyer Amount.</mat-label>
+          <mat-label class="mat-label-design">Percentage of Buyer Amount.</mat-label>
           <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'buyerAmountDiscount'">
@@ -271,7 +275,7 @@
         </div>
 
         <div>
-          <mat-label>Log out time in minutes of inactivity.</mat-label>
+          <mat-label class="mat-label-design">Log out time in minutes of inactivity.</mat-label>
           <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'idleTime'">
@@ -280,7 +284,7 @@
         </div>
 
         <div>
-          <mat-label>Minimum value of credit card payment.</mat-label>
+          <mat-label class="mat-label-design">Minimum value of credit card payment.</mat-label>
           <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'creditRecieptMinimum'">
@@ -289,8 +293,8 @@
         </div>
 
         <div>
-          <mat-label>Cash Discount - Credit Card Percentage fee. </mat-label>
-          <mat-label>Enter as Whole Number.</mat-label>
+          <mat-label class="mat-label-design">Cash Discount - Credit Card Percentage fee. Enter as Whole Number.</mat-label>
+
           <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'creditCardFee'">
@@ -298,9 +302,8 @@
           </app-value-fields>
         </div>
 
-
         <div>
-          <mat-label>High tip warning on percentage compared of payment.</mat-label>
+          <mat-label class="mat-label-design">High tip warning on percentage compared of payment.</mat-label>
           <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'highTipInputPercentage'">
@@ -309,10 +312,12 @@
         </div>
 
       </div>
+      </div>
     </div>
 
     <mat-divider></mat-divider>
     <h4>Credit Card Processing</h4>
+
     <div class="toggle-fields">
       <mat-slide-toggle
                 formControlName="payPalEnabled"
@@ -359,8 +364,6 @@
       </mat-slide-toggle>
     </div>
 
-
-
     <div class="toggle-fields">
       <mat-slide-toggle
                 formControlName="cardPointRequestTip"
@@ -384,6 +387,7 @@
         <mat-label>Data Cap EMV Android</mat-label>
       </mat-slide-toggle>
     </div>
+
     <div class="toggle-fields">
       <mat-slide-toggle
                 formControlName="dsiEMVNeteEpayEnabled"
@@ -391,6 +395,7 @@
         <mat-label>Data Cap Netepay PDCX</mat-label>
       </mat-slide-toggle>
     </div>
+
     <div class="toggle-fields">
       <mat-slide-toggle
                 formControlName="dsiEMVIP"
@@ -406,7 +411,6 @@
         <mat-label>Tri POS Enabled (FISGlobal)</mat-label>
       </mat-slide-toggle>
     </div>
-
   </mat-card-content>
 
 

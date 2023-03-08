@@ -5,12 +5,6 @@
   </mat-card-subtitle>
 
   <mat-card-actions>
-    <div>
-      <button mat-raised-button
-              color="primary"
-              (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
-    </div>
-
     <ng-template #saving>
       <div class="saving-container">
         <mat-spinner [diameter]="50"></mat-spinner>
@@ -29,342 +23,343 @@
   <ng-template #loading>... loading
     <mat-spinner [diameter]="25"></mat-spinner>
   </ng-template>
+  <div *ngIf="(uiHomePage$ | async) as uiHomePage; else loading">
+    <mat-card-content *ngIf="inputForm && uiHomePage; else loading">
 
-  <mat-card-content *ngIf="inputForm && uiHomePage; else loading">
+      <save-changes-button
+          [inputForm]="inputForm"
+          (updateSetting)="updateSetting()">
+      </save-changes-button>
 
-    <mat-divider></mat-divider>
-    <div  *ngIf="inputForm">
-      <button mat-raised-button color="primary"
-              (click)="showEmailSettings = !showEmailSettings">
-        <mat-icon mat-icon>email</mat-icon>Email Settings
-      </button>
+      <mat-divider></mat-divider>
+      <div  *ngIf="inputForm">
+        <button mat-raised-button color="primary"
+                (click)="showEmailSettings = !showEmailSettings">
+          <mat-icon mat-icon>email</mat-icon>Email Settings
+        </button>
 
-      <app-email-settings
-          *ngIf="showEmailSettings"
-          [inputForm]="inputForm">
-      </app-email-settings>
+        <app-email-settings
+            *ngIf="showEmailSettings"
+            [inputForm]="inputForm">
+        </app-email-settings>
 
-      <div  *ngIf="inputForm && showEmailSettings"
+        <div  *ngIf="inputForm && showEmailSettings"
+              [formGroup]="inputForm">
+          <h4>Email </h4>
+          <div class="toggle-fields">
+            Requires SMTP Email account. Must be assignged in webconfig.
+            <mat-slide-toggle
+                      formControlName="smtpEmailEnabled"
+                      >
+              <mat-label>SMTP Email Enabled</mat-label>
+            </mat-slide-toggle>
+          </div>
+        </div>
+
+      </div>
+
+      <div
+          *ngIf="inputForm"
+          [formGroup]="inputForm">
+
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'displayCompanyName'">
+              Company Name Display
+          </app-value-fields>
+        </div>
+
+        <div><h4> Chat</h4></div>
+        <div><mat-label> Allows you to incorporate a chat bubble for vistors and users.</mat-label></div>
+        <div><mat-label> Requires chat subscription.</mat-label></div>
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'threecxChatLink'">
+           Chat Server
+          </app-value-fields>
+        </div>
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'threeParty'">
+           Chat - Sub Group
+          </app-value-fields>
+        </div>
+
+        <div><h4> Wordpress Content</h4></div>
+        <div><mat-label> Connect your data from Wordpress to Your POS</mat-label></div>
+        <div><mat-label> Must be filled out in the following format:</mat-label></div>
+        <div><mat-label> https://yourdomain.com/wp-json/wp/v2/posts?slug=</mat-label></div>
+
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'wordpressHeadless'">
+            CMS - Wordpress
+          </app-value-fields>
+        </div>
+
+        <div class="grid-view-sections">
+          <div class="grid-views">
+            <div>Customer View </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="hideSearchBar"
+                      >
+                <mat-label>Hide Search bar</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="menuEnabled"
+                      >
+                <mat-label>Full Print/TV Menu</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="scheduleSubMenu"
+                      >
+                <mat-label>Sub Menus On Side Bar</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <!-- scheduleSubMenu       : [],
+            staffscheduleSubMenu  : [], -->
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="brandsEnabled"
+                      >
+                <mat-label>Brands</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="departmentsEnabled">
+
+                <mat-label>Departments</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="categoriesEnabled"
+                        >
+                <mat-label>Categories</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="typesEnabled"
+                        >
+                <mat-label>Types</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="tierMenuEnabled"
+                        >
+                <mat-label>Tier Menu</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+          </div>
+
+          <div class="grid-views">
+            <div>Staff View </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="staffHideSearchBar"
+                      >
+                <mat-label>Hide Search bar</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="staffMenuEnabled"
+                      >
+                <mat-label>Full Print/TV Menu</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="staffscheduleSubMenu"
+                      >
+                <mat-label>Sub Menus On Side Bar</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="staffBrandsEnabled"
+                        >
+                <mat-label>Brands</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="staffDepartmentsEnabled"
+                        >
+                <mat-label>Departments</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="staffCategoriesEnabled"
+                        >
+                <mat-label>Categories</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="staffTypesEnabled"
+                        >
+                <mat-label>Types</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="staffTierMenuEnabled"
+                        >
+                <mat-label>Tier Menu</mat-label>
+              </mat-slide-toggle>
+            </div>
+          </div>
+
+          <div class="grid-views">
+            <div>Side Bar (Search)</div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="sideToolbarDefaultBrand"
+                        >
+                <mat-label>Default Department</mat-label>
+              </mat-slide-toggle>
+            </div>
+               <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="sideToolbarEnableBrand"
+                        >
+                <mat-label>Enable Brand</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="sideToolbarEnableType"
+                        >
+                <mat-label>Enable Type</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="sideToolbarEnableCategory"
+                        >
+                <mat-label>Enable Category</mat-label>
+              </mat-slide-toggle>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h4>Order Settings</h4>
+          <mat-divider></mat-divider>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="wideOrderBar"
+                      >
+              <mat-label>Wide Order Bar</mat-label>
+            </mat-slide-toggle>
+          </div>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="displaySendButton"
+                      >
+              <mat-label>Send Order Button</mat-label>
+              <mat-hint>Show button beneath print button</mat-hint>
+            </mat-slide-toggle>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div *ngIf="uiHomePage">
+
+        <h4>Images</h4>
+        <mat-divider></mat-divider>
+
+        <div class="grid-views">
+          <div class="grid-item">
+            <mat-card >
+              <app-widget-uploader
+                  [(fileNames)]="backgroundImage"
+                  (messageOut) ="received_Image($event)"
+                  >
+                  Upload Background Image
+              </app-widget-uploader>
+            </mat-card>
+          </div>
+
+          <div class="grid-item">
+            <mat-card >
+              <app-widget-uploader
+                  [(fileNames)]="logoHomePage"
+                  (messageOut) ="received_Logo($event)"
+                  >
+                  Upload Home Page Logo
+              </app-widget-uploader>
+            </mat-card>
+          </div>
+
+          <div class="grid-item">
+            <mat-card >
+              <app-widget-uploader
+                  [(fileNames)]="tinyLogo"
+                  (messageOut) ="received_TinyLogo($event)"
+                  >
+                  Tiny Logo
+              </app-widget-uploader>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+
+      <div  *ngIf="inputForm"
             [formGroup]="inputForm">
-        <h4>Email </h4>
-        <div class="toggle-fields">
-          Requires SMTP Email account. Must be assignged in webconfig.
-          <mat-slide-toggle
-                    formControlName="smtpEmailEnabled"
-                    >
-            <mat-label>SMTP Email Enabled</mat-label>
-          </mat-slide-toggle>
-        </div>
-      </div>
-
-    </div>
-
-    <div
-        *ngIf="inputForm"
-        [formGroup]="inputForm">
-
-      <div class="grid-item">
-        <app-value-fields
-            [fieldType]     ="'text'"
-            [inputForm]     ="inputForm"
-            [fieldName]     ="'displayCompanyName'">
-            Company Name Display
-        </app-value-fields>
-      </div>
-
-      <div><h4> Chat</h4></div>
-      <div><mat-label> Allows you to incorporate a chat bubble for vistors and users.</mat-label></div>
-      <div><mat-label> Requires chat subscription.</mat-label></div>
-      <div class="grid-item">
-        <app-value-fields
-            [fieldType]     ="'text'"
-            [inputForm]     ="inputForm"
-            [fieldName]     ="'threecxChatLink'">
-         Chat Server
-        </app-value-fields>
-      </div>
-      <div class="grid-item">
-        <app-value-fields
-            [fieldType]     ="'text'"
-            [inputForm]     ="inputForm"
-            [fieldName]     ="'threeParty'">
-         Chat - Sub Group
-        </app-value-fields>
-      </div>
-
-      <div><h4> Wordpress Content</h4></div>
-      <div><mat-label> Connect your data from Wordpress to Your POS</mat-label></div>
-      <div><mat-label> Must be filled out in the following format:</mat-label></div>
-      <div><mat-label> https://yourdomain.com/wp-json/wp/v2/posts?slug=</mat-label></div>
-
-      <div class="grid-item">
-        <app-value-fields
-            [fieldType]     ="'text'"
-            [inputForm]     ="inputForm"
-            [fieldName]     ="'wordpressHeadless'">
-          CMS - Wordpress
-        </app-value-fields>
-      </div>
-
-      <div class="grid-view-sections">
-        <div class="grid-views">
-          <div>Customer View </div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="hideSearchBar"
-                    >
-              <mat-label>Hide Search bar</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="menuEnabled"
-                    >
-              <mat-label>Full Print/TV Menu</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="scheduleSubMenu"
-                    >
-              <mat-label>Sub Menus On Side Bar</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <!-- scheduleSubMenu       : [],
-          staffscheduleSubMenu  : [], -->
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="brandsEnabled"
-                    >
-              <mat-label>Brands</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="departmentsEnabled">
-
-              <mat-label>Departments</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="categoriesEnabled"
-                      >
-              <mat-label>Categories</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="typesEnabled"
-                      >
-              <mat-label>Types</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="tierMenuEnabled"
-                      >
-              <mat-label>Tier Menu</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-        </div>
-
-        <div class="grid-views">
-          <div>Staff View </div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="staffHideSearchBar"
-                    >
-              <mat-label>Hide Search bar</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="staffMenuEnabled"
-                    >
-              <mat-label>Full Print/TV Menu</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="staffscheduleSubMenu"
-                    >
-              <mat-label>Sub Menus On Side Bar</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <!-- scheduleSubMenu       : [],
-          staffscheduleSubMenu  : [], -->
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="staffBrandsEnabled"
-                      >
-              <mat-label>Brands</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="staffDepartmentsEnabled"
-                      >
-              <mat-label>Departments</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="staffCategoriesEnabled"
-                      >
-              <mat-label>Categories</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="staffTypesEnabled"
-                      >
-              <mat-label>Types</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="staffTierMenuEnabled"
-                      >
-              <mat-label>Tier Menu</mat-label>
-            </mat-slide-toggle>
-          </div>
-        </div>
-
-        <div class="grid-views">
-          <div>Side Bar (Search)</div>
-
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="sideToolbarDefaultBrand"
-                      >
-              <mat-label>Default Department</mat-label>
-            </mat-slide-toggle>
-          </div>
-             <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="sideToolbarEnableBrand"
-                      >
-              <mat-label>Enable Brand</mat-label>
-            </mat-slide-toggle>
-          </div>
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="sideToolbarEnableType"
-                      >
-              <mat-label>Enable Type</mat-label>
-            </mat-slide-toggle>
-          </div>
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="sideToolbarEnableCategory"
-                      >
-              <mat-label>Enable Category</mat-label>
-            </mat-slide-toggle>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h4>Order Settings</h4>
+        <h4>SSMS</h4>
         <mat-divider></mat-divider>
         <div class="toggle-fields">
+          Requires Twilio SSMS Message account. Secret APIKey must be assigned in configuration.
           <mat-slide-toggle
-                    formControlName="wideOrderBar"
+                    formControlName="twilioEnabled"
                     >
-            <mat-label>Wide Order Bar</mat-label>
+            <mat-label>Twilio Enabled</mat-label>
           </mat-slide-toggle>
         </div>
-        <div class="toggle-fields">
-          <mat-slide-toggle
-                    formControlName="displaySendButton"
-                    >
-            <mat-label>Send Order Button</mat-label>
-            <mat-hint>Show button beneath print button</mat-hint>
-          </mat-slide-toggle>
-        </div>
-
       </div>
+    </mat-card-content>
+  </div>
 
-    </div>
-
-    <div *ngIf="uiHomePage">
-
-      <h4>Images</h4>
-      <mat-divider></mat-divider>
-
-      <div class="grid-views">
-        <div class="grid-item">
-          <mat-card >
-            <app-widget-uploader
-                [(fileNames)]="backgroundImage"
-                (messageOut) ="received_Image($event)"
-                >
-                Upload Background Image
-            </app-widget-uploader>
-          </mat-card>
-        </div>
-
-        <div class="grid-item">
-          <mat-card >
-            <app-widget-uploader
-                [(fileNames)]="logoHomePage"
-                (messageOut) ="received_Logo($event)"
-                >
-                Upload Home Page Logo
-            </app-widget-uploader>
-          </mat-card>
-        </div>
-
-        <div class="grid-item">
-          <mat-card >
-            <app-widget-uploader
-                [(fileNames)]="tinyLogo"
-                (messageOut) ="received_TinyLogo($event)"
-                >
-                Tiny Logo
-            </app-widget-uploader>
-          </mat-card>
-        </div>
-      </div>
-    </div>
-
-    <div  *ngIf="inputForm"
-          [formGroup]="inputForm">
-      <h4>SSMS</h4>
-      <mat-divider></mat-divider>
-      <div class="toggle-fields">
-        Requires Twilio SSMS Message account. Secret APIKey must be assigned in configuration.
-        <mat-slide-toggle
-                  formControlName="twilioEnabled"
-                  >
-          <mat-label>Twilio Enabled</mat-label>
-        </mat-slide-toggle>
-      </div>
-    </div>
-
-
-
-  </mat-card-content>
 
 
 

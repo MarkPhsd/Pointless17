@@ -92,20 +92,20 @@ export class ItemTypeComponent implements OnInit {
 
     this.itemTypeBasic            =  await this.itemTypeService.getBasicTypes(site).pipe().toPromise();
     this.selectedItemTypes        =  await this.itemTypeDisplay.getSortedList(site).pipe().toPromise();
-    
+
     const step = this.route.snapshot.paramMap.get('accordionStep');
     console.log('step', step)
-    if (step) { 
+    if (step) {
       this.accordionStep = +step;
       this.setStep(+step)
     }
-    
+
   }
 
   initalizeTypes() {
     this.loading_initTypes = true;
     const result = window.confirm('Please confirm. This function will delete all item type settings and re-initialize all options for item types.');
-      
+
     if (!result) { this.loading_initTypes = false;}
 
     if (result) {
@@ -114,7 +114,7 @@ export class ItemTypeComponent implements OnInit {
         next: data => {
           this.itemTypeMethodsService.notify(`Items initialized.`, 'Success', 2000)
           this.loading_initTypes = false;
-        }, 
+        },
         error: err => {
           this.itemTypeMethodsService.notify(`Error. ${err}`, 'Failure', 2000)
           this.loading_initTypes = false;
@@ -272,20 +272,7 @@ export class ItemTypeComponent implements OnInit {
   }
 
   openItemEditor(id: number) {
-    // this.openEditor(id)
-    let dialogRef: any;
-    {
-      if (id) {
-        dialogRef = this.dialog.open(ItemTypeEditorComponent,
-          { width:        '800px',
-            minWidth:     '800px',
-            height:       '740px',
-            minHeight:    '740px',
-            data : {id: id}
-          },
-        )
-      }
-    }
+    let dialogRef = this.itemTypeMethodsService.openItemEditor(id);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.refreshData();

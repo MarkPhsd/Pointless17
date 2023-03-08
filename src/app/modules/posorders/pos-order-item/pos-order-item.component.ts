@@ -1,3 +1,4 @@
+import { ObserversModule } from '@angular/cdk/observers';
 import { AfterViewInit, Component, ElementRef,  HostListener,
          Input, OnInit, Output, EventEmitter, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -13,6 +14,7 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
+import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
 import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
 import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
@@ -585,28 +587,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   printLabel(item: PosOrderItem) {
-    const site = this.siteService.getAssignedSite()
-    const posItem$ = this.posOrderItemService.getPurchaseOrderItem(site,item.id)
- 
-    this.printLabel$ = posItem$.pipe(
-      switchMap(data => { 
-        if (data && data.inventoryAssignmentID) { 
-          return this.inventoryService.getInventoryAssignment(site, data.inventoryAssignmentID)
-        }
-        return of(null)
-      })
-    ).pipe(
-      switchMap(inv => { 
-        if (inv) {
-          item.inventory = inv;
-        }
-        return this.menuItem$
-      }
-    )).pipe(switchMap(menuItem => { 
-      item.menuItem = menuItem;
-      // console.log('positem', item);
-      return this.printingService.printLabel(item)
-    }))
+    this.printLabel$ = this.printingService.printItemLabel(item, this.menuItem$, this.order) // this.menuItem$)
   }
 
   swipeOutItem(){

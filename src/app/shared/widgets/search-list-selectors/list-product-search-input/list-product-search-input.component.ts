@@ -177,11 +177,11 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     return  item$.pipe( switchMap( data => {
         if (this.obs$) {  this.obs$.shift() }
         if ( !data ) {
-          return this.orderMethodService.processItemPOSObservable(this.order, barcode, null, 1, this.input, 0, 0, this.assignedItem)
+          return this.orderMethodService.processItemPOSObservable( this.order, barcode, null, 1, this.input, 0, 0, this.assignedItem)
         } else
         {
           if (data.length == 1 || data.length == 0) {
-            return this.orderMethodService.processItemPOSObservable(this.order, barcode, null, 1, this.input, 0, 0, this.assignedItem)
+            return this.orderMethodService.processItemPOSObservable(this.order, barcode, data[0], 1, this.input, 0, 0, this.assignedItem)
           } else {
             this.listBarcodeItems(data, this.order)
           }

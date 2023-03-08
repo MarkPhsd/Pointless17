@@ -94,9 +94,6 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
           this.templateID    = data.location.templateID;
           this.printerName   = data.location.printer;
           this.printOrder    = data;
-          // console.log('init subscriptions  template data')
-          // console.table(data.location)
-
           if (this.templateID) {
             return this.initStyles()
           }
@@ -218,7 +215,7 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
 
   getReceiptHTML(styles: string) {
     const prtContent     = document.getElementById('printsection');
-   
+
     if (!prtContent) { return  }
     const content        = `${prtContent.innerHTML}`
     if (!content) { return }
@@ -299,7 +296,7 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
       console.log('no printerName in print electron')
       return;
     }
-    console.log('All good to print')
+    // console.log('All good to print')
     if (contents && this.printerName, options) {
         this.printingService.printElectron( contents, this.printerName, options)
     }
@@ -310,32 +307,4 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
   }
 
 }
-
-
-  // getElectronPrinterAssignent(id: number) {
-  //   if (this.platFormService.isAppElectron) {
-  //     template$ = this.getElectronReceiptPrinterAssignentOBS(id);
-  //     receipt$.subscribe(data =>{})
-  //   }
-  // }
-
-  // getElectronReceiptPrinterAssignentOBS(id: number) {
-  //   if (this.platFormService.isAppElectron) {
-  //      const site = this.siteService.getAssignedSite()
-  //      this.settingService.getSetting(site, id).pipe(
-  //         switchMap(data => {
-  //           this.electronSetting        = data;
-  //           // this.electronReceiptPrinter = data.text;
-  //           // this.electronReceipt        = data.value ;
-  //           // this.electronReceiptID      = +data.option1?
-  //           if (this.printOptions) {
-  //             this.printOptions.deviceName = data.text
-  //           }
-  //           return of(data)
-  //         }
-  //       )
-  //     )
-  //   }
-  //   return of(null)
-  // }
 

@@ -465,7 +465,12 @@ export class OrderMethodsService implements OnDestroy {
 
     }
 
+    console.log('finalize OrderpaymentResponse',paymentResponse )
+    console.log('finalizeOrder order',order )
+
     const payment = paymentResponse.payment;
+
+    if (order && !order.balanceRemaining) { order.balanceRemaining = 0}
     // console.log('finalizeorder balance greater than 0', order.balanceRemaining > 0)
     if (order.balanceRemaining > 0) { return 0 };
 
@@ -508,10 +513,17 @@ export class OrderMethodsService implements OnDestroy {
       this.notifyEvent(`Item not found`, 'Alert');
       return false;
     }
-    if (!barcode && !item && !item.itemType) {
+
+    if (item && !item.active){
+      this.notifyEvent(`Item not active`, 'Alert');
+      return false;
+    }
+
+    if (item && !item.itemType) {
       this.notifyEvent(`Item not found or configured properly. Item type is not assigned.`, 'Alert');
       return false;
     }
+
     return true
   }
 
@@ -578,7 +590,8 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
-  processItemPOSObservable( order : IPOSOrder ,
+  processItemPOSObservable(
+                            order : IPOSOrder ,
                             barcode: string,
                             item: IMenuItem,
                             quantity: number,
@@ -595,9 +608,10 @@ export class OrderMethodsService implements OnDestroy {
 
     this.initItemProcess();
     if (quantity === 0 ) { quantity = 1 };
+
     if (!this.validateItem(item, barcode)) {
-      this.notifyEvent(`Invalid item`, 'Alert ')
-      return
+      // this.notifyEvent(`Invalid item`, 'Alert ')
+      return of(null)
     }
 
     if (this.assignedPOSItem && !passAlongItem) {  passAlongItem  = this.assignedPOSItem[0]; };

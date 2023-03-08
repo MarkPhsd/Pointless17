@@ -2,8 +2,8 @@ import { Injectable, Output } from '@angular/core';
 import * as _ from "lodash";
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { ISetting, ISite } from 'src/app/_interfaces';
-import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
+import { IClientTable, IPurchaseOrderItem, ISetting, ISite, IUser } from 'src/app/_interfaces';
+import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ElectronService } from 'ngx-electron';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
@@ -14,7 +14,7 @@ import { RenderingService } from './rendering.service';
 import { LabelaryService, zplLabel } from '../labelary/labelary.service';
 import { RecieptPopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/reciept-pop-up.component';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, EMPTY, Observable, switchMap, of, catchError } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, switchMap, of, catchError, forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
 import { PlatformService } from './platform.service';
 import { UserAuthorizationService } from './user-authorization.service';
@@ -27,6 +27,7 @@ import { PrintingAndroidService} from  './printing-android.service';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { PrintTemplatePopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { ClientTableService } from '../people/client-table.service';
 
 export interface printOptions {
   silent: boolean;
@@ -39,7 +40,7 @@ export interface printOptions {
 })
 
 export class PrintingService {
-
+  menuItem: IMenuItem;
   zplSetting            : ISetting;
   receiptLayoutSetting  : ISetting;
   receiptStyles         : ISetting;
@@ -79,7 +80,10 @@ export class PrintingService {
                 private menuItemService   : MenuService,
                 private orderMethodsService: OrderMethodsService,
                 private http              : HttpClient,
+                private posOrderItemService : POSOrderItemServiceService,
+                private inventoryService   : InventoryAssignmentService,
                 private uiSettingsService : UISettingsService,
+                private clientService     : ClientTableService,
                 private printingAndroidService   : PrintingAndroidService,
                 private dialog            : MatDialog,) {
   }
@@ -148,7 +152,6 @@ export class PrintingService {
   }
 
   refreshInventoryLabelObs(zplText: string, data: any): Observable<string> {
-
     const site        =  this.siteService.getAssignedSite();
     if (!zplText) {return}
 
@@ -194,7 +197,6 @@ export class PrintingService {
       }))
     }
   }
-
 
   applyStylesObservable(site: ISite): Observable<ISetting> {
     const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
@@ -261,7 +263,6 @@ export class PrintingService {
   }
 
   setHTMLReceiptStyle(receiptStyle) {
-    // console.log('setHtmlReceiptStyle', receiptStyle)
     if (receiptStyle) {
       const style = document.createElement('style');
       style.innerHTML = receiptStyle.text;
@@ -390,6 +391,7 @@ export class PrintingService {
 
         }).catch( err => {
           console.log('error', err)
+          this.siteService.notify(`Error occured: ${err}`, 'Alert', 2000 )
           printWindow.close();
           printWindow = null;
           return false
@@ -473,8 +475,6 @@ export class PrintingService {
       deviceName: printerName
     }  as printOptions
 
-    console.log('printTestLabelElectron contents', contents)
-    console.log('printTestLabelElectron printer', printerName)
     try {
       await  this.printElectron( contents, printerName, options )
       return true;
@@ -485,7 +485,38 @@ export class PrintingService {
     return false
   }
 
-   printLabel(item: any) {
+   printItemLabel(item: any, menuItem$: Observable<IMenuItem>, order: IPOSOrder ) {
+      const site = this.siteService.getAssignedSite()
+      let posItem$: Observable<IPurchaseOrderItem>
+
+      if (!menuItem$) {
+        menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
+      }
+      posItem$ = this.posOrderItemService.getPurchaseOrderItem(site, item.id)
+      if (order.history) {
+        posItem$ = this.posOrderItemService.getPurchaseOrderItemHistory(site, item.id)
+      }
+      return posItem$.pipe(
+        switchMap(data => {
+          if (data && data.inventoryAssignmentID) {
+            return this.inventoryService.getInventoryAssignment(site, data.inventoryAssignmentID)
+          }
+          return of(null)
+        })
+      ).pipe(
+        switchMap(inv => {
+          if (inv) {
+            item.inventory = inv;
+          }
+          return menuItem$
+        }
+      )).pipe(switchMap(menuItem => {
+        item.menuItem = menuItem;
+        return this.printLabel(item,  order.history)
+      }))
+   }
+
+   printLabel(item: any, history: boolean) {
 
     if (!item) {return of(null)}
 
@@ -517,24 +548,48 @@ export class PrintingService {
         return menuItem$
       })).pipe(
         switchMap(data => {
+          this.menuItem = data;
           if ( !data || !data.itemType) {return of(null)}
           if ( data.itemType && ( (data.itemType.labelTypeID != 0 ) && printer.text ) ) {
             return  this.settingService.getSetting(site, data.itemType.labelTypeID)
           } else {
+            console.log('no label type.s')
+            if (history) {
+              return of(null)
+            }
             return this.orderItemService.setItemAsPrinted(site, item )
           }
       })).pipe(
         switchMap( data => {
           if (!data) { return of(null) }
 
-          const content = this.renderingService.interpolateText(item, data.text)
-          if (printer.text) {
-            this.printLabelElectron(content, printer.text)
-          }
-          if (!item.printed || (data && !data.printed)) {
-            return this.orderItemService.setItemAsPrinted(site, item )
-          }
-          return of(null)
+          item.menuItem = this.menuItem;
+          const lab$ = this.clientService.getClient(site, this.menuItem.labID);
+          const producer$ = this.clientService.getClient(site, this.menuItem.producerID);
+
+          return forkJoin([lab$, producer$, of(data)])
+
+        })).pipe(
+          switchMap( results => {
+
+            const lab = results[0]
+            const producer = results[1];
+            const data = results[2];
+
+            item.lab = lab;
+            item.producer = producer;
+
+            const content = this.renderingService.interpolateText(item, data.text);
+
+            if (printer.text) {
+
+              this.printLabelElectron(content, printer.text)
+            }
+
+            if (!item.printed || (data && !data.printed)) {
+              return this.orderItemService.setItemAsPrinted(site, item )
+            }
+            return of(null);
       })).pipe(
         switchMap( data => {
         this.orderMethodsService.refreshOrder(item.orderID);
@@ -576,6 +631,7 @@ export class PrintingService {
     } as printOptions
 
     try {
+      console.log('print electron label')
       this.printElectron( file, printerName, options)
       return true;
     } catch (error) {

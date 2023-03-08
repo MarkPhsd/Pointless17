@@ -77,7 +77,10 @@
 
               <app-department-select [inputForm]="productForm">Department</app-department-select>
 
-              <product-type-select   [inputForm]="productForm"></product-type-select>
+              <div class="flex-container-medium">
+                <product-type-select   [inputForm]="productForm"></product-type-select>
+                <button mat-button  class="edit-button" (click)="editType()"><mat-icon>edit</mat-icon></button>
+              </div>
 
               <app-brand-type-select
                       [formFieldClass]="'formFieldClass-standard'"

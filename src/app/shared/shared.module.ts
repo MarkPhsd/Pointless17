@@ -174,6 +174,7 @@ import { ClockInOutComponent } from './widgets/clock-in-out/clock-in-out.compone
 import { TruncateRightPipe } from '../_pipes/truncate-right.pipe';
 import { PosCheckOutButtonsComponent } from '../modules/posorders/pos-order/pos-check-out-buttons/pos-check-out-buttons.component';
 import { SplitEntrySelectorComponent } from '../modules/posorders/pos-order/split-entry-selector/split-entry-selector.component';
+import { SaveChangesButtonComponent } from './widgets/save-changes-button/save-changes-button.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -311,7 +312,7 @@ import { SplitEntrySelectorComponent } from '../modules/posorders/pos-order/spli
     SimpleTinyComponent,
 
     SplitEntrySelectorComponent,
-
+    SaveChangesButtonComponent,
     SalesTaxReportComponent,
     ScaleReaderComponent,
     ScaleSettingsComponent,
@@ -499,8 +500,8 @@ import { SplitEntrySelectorComponent } from '../modules/posorders/pos-order/spli
     RequestMessagesComponent,
     QuantiySelectorComponent,
 
+    SaveChangesButtonComponent,
     SplitEntrySelectorComponent,
-
     SalesTaxReportComponent,
     ScaleSettingsComponent,
     ScaleReaderComponent,

@@ -148,7 +148,6 @@ Size {{windowSize}} <br> -->
   </div>
 
   <div  *ngIf="!isUser">
-    <!-- spacer 11 -->
     <ng-container [ngTemplateOutlet]="spacer11"></ng-container>
   </div>
 
@@ -199,22 +198,45 @@ Size {{windowSize}} <br> -->
     <ng-container [ngTemplateOutlet]="spacer2"></ng-container>
   </div>
 
-  <!-- <div *ngIf="windowSize === 'large'">
-    spacer 13
+   <div *ngIf="isApp && (mainPanel && !smallDevice)">
+    <ng-container [ngTemplateOutlet]="printLabelView"></ng-container>
+  </div>
 
+  <div *ngIf="isApp && (mainPanel && !smallDevice)">
+    <ng-container [ngTemplateOutlet]="rePrintLabelsView"></ng-container>
   </div>
   <div *ngIf=" windowSize === 'large'">
-    spacer 14
 
   </div>
-  <div *ngIf=" windowSize === 'large'">
-    spacer 15
-
-  </div> -->
 
 </div>
 
 <!-- <ng-container [ngTemplateOutlet]="cashPaymentButtons"></ng-container> -->
+<ng-template #rePrintLabelsView>
+  <button mat-raised-button
+          class="button"
+          color="primary"
+          aria-label="Clear"
+          (click)="rePrintLabels()">
+    <mat-icon>print</mat-icon>
+    <span>
+    RePrint Labels
+    </span>
+  </button>
+</ng-template>
+
+<ng-template #printLabelView>
+  <button mat-raised-button
+          class="primary"
+          color="primary"
+          aria-label="Clear"
+          (click)="printLabels()">
+    <mat-icon>print</mat-icon>
+    <span>
+    Print labels
+    </span>
+  </button>
+</ng-template>
 
 <ng-template #exitButton>
   <button mat-raised-button
@@ -244,7 +266,6 @@ Size {{windowSize}} <br> -->
 </ng-template>
 
 <ng-template #refundOrderButton>
-
   <button mat-raised-button class="button"
           [disabled]=" order.total<0 || ((order.history) && (itemsPrinted || paymentsMade)) == true"
           color="primary"
@@ -257,7 +278,7 @@ Size {{windowSize}} <br> -->
 </ng-template>
 
 <ng-template #cancelButton>
-  <button   mat-raised-button class="button"
+  <button mat-raised-button class="button"
           color="warn"
           [disabled]="(order.history || order.completionDate) || (order.balanceRemaining > 0 && order.balanceRemaining != 0)"
           aria-label="delete"
@@ -280,6 +301,7 @@ Size {{windowSize}} <br> -->
     </span>
   </button> -->
 </ng-template>
+
 <ng-template #refundItem>
   <button mat-raised-button class="button"
     color="primary"

@@ -12,7 +12,7 @@ export class DSIProcessService {
   constructor(
     private orderMethodsService: OrderMethodsService,
     private matSnack        : MatSnackBar,
-    private dsi : DSIEMVTransactionsService) { }
+    private dsi             : DSIEMVTransactionsService) { }
 
   initTransaction(): Transaction {
     const item = localStorage.getItem('DSIEMVSettings');

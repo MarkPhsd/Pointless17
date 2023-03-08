@@ -80,10 +80,12 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
         if (!this.disableActions) {
           this._order = this.orderService.currentOrder$.subscribe( order => {
             this.order = order
-            this.order.posOrderItems = this.sortItems(this.order.posOrderItems)
-            setTimeout(() => {
-              this.scrollToBottom();
-            }, 200);
+            if (this.order && this.order.posOrderItems)  {
+              this.order.posOrderItems = this.sortItems(this.order.posOrderItems)
+              setTimeout(() => {
+                this.scrollToBottom();
+              }, 200);
+            }
           })
         }
       }
@@ -97,8 +99,12 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   sortItems(items:  PosOrderItem[]) {
-    let list = items.sort((a, b) => (a.idRef > b.idRef) ? 1 : -1);
+    let list = items.sort((a, b) => (a.idRef > b.idRef) ? 1 : 1);
     list = items.sort((a, b) => (a.productSortOrder > b.productSortOrder) ? 1 : -1);
+    list.forEach(data => {
+      console.log(data.productName, data.productSortOrder)
+    })
+
     return list
   }
 

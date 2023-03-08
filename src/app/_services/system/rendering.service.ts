@@ -34,17 +34,13 @@ export class RenderingService {
           // item = this.getFormatedText(item);
 
           item = _.mapValues(item, v => _.isNil(v) ? '' : v)
+
           item = this.removeUndefined( item );
 
           const compiled = _.template( text );
 
-          // console.log('item ProductName', item?.productName)
-          // if (item?.productName) {
-          //   console.log('Product', item)
-          // }
           const compiledText = compiled( { item } );
 
-          // console.log('compiledText', compiledText)
           let compiledResult =  compiledText.replace(regExFront, '');
 
           compiledResult     =  compiledResult.replace(regEx,  '');
@@ -63,7 +59,7 @@ export class RenderingService {
     let newValue = JSON.stringify(text)
     newValue = newValue.replace('%', '')
     const item  = JSON.parse(newValue)
-    // console.log('newiTem', item)
+
     return item
 
   }
@@ -81,11 +77,19 @@ export class RenderingService {
 
   setItemValues(item) {
     for (const key in item) {
+
+      if (key === 'dateMade') {
+        let value = this.checkDate(item[key])
+        console.log('dateMade', value)
+        item[key] = value
+      }
+
       if (item[key] && isNaN(item[key])) {
         let result;
         if (result) {
           item[key] = result
         }
+
         if (!result) {
           if (this.isObject(item[key])) {
             if (key === 'name') {
@@ -114,11 +118,9 @@ export class RenderingService {
             }
             if (key === 'menuItem') {
               item[key] = this.setItemValues(item[key])
-              return item
             }
             if (key === 'priceCategories') {
               item[key] = this.setItemValues(item[key])
-              return item
             }
           }
           result = this.checkDate(item[key]);
@@ -132,9 +134,8 @@ export class RenderingService {
 
     try {
       if (e instanceof Date) {
-        // console.log('instanceof e', e)
         e = this.dateHelperService.format(e, 'MM-dd-yyyy')
-        // console.log('new instanceof e', e)
+        console.log('date', e)
         return e;
       }
     } catch (error) {
@@ -143,9 +144,8 @@ export class RenderingService {
 
     try {
       if (this.isIsoDate(e)) {
-        // console.log('isIsoDate e', e)
         e = this.dateHelperService.format(e,'MM-dd-yyyy')
-        // console.log('isIsoDate new e', e)
+        console.log('date', e)
         return e
       }
     } catch (error) {
@@ -155,6 +155,7 @@ export class RenderingService {
       if (e) {
         if (this.dateHelperService.isValidDate(e)) {
           e = this.dateHelperService.format(e, 'MM-dd-yyyy')
+          console.log('date', e)
         }
       }
       } catch (error) {

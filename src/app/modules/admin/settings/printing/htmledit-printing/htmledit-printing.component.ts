@@ -204,7 +204,7 @@ export class HTMLEditPrintingComponent implements OnInit {
     if (!this.setting) {return}
     const item = this.fakeData.getInventoryItemTestData();
     this.imageLabel$ = this.printingService.refreshInventoryLabelObs(this.setting.text, item).pipe(
-      switchMap(data => { 
+      switchMap(data => {
         this.labelImage64 = data
         return of(data)
       })
@@ -282,6 +282,11 @@ export class HTMLEditPrintingComponent implements OnInit {
       const site      = this.siteService.getAssignedSite();
       let setting     = this.setting;
       const id        = this.setting.id;
+
+      if (this.isLabel) {
+        this.setting.description = "labels"
+      }
+
       setting.option9 = this.printerWidthValue.toString();
       const obs$ = this.settingsService.putSetting(site, id, setting)
       obs$.subscribe(

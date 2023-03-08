@@ -1,4 +1,6 @@
 <!-- <ion-header> -->
+  <div *ngIf="(parser$ | async) as parse"></div>
+
   <ion-toolbar class ='toolbar' color="primary">
 
     <span class="site-info">
@@ -47,15 +49,12 @@
                     slot="icon-only"></ion-icon>
         </ion-button>
 
-        <ion-button (click)="startScan()" expand="block" id="capture">
-          <ion-icon name="camera"
-                    slot="icon-only"></ion-icon>
-        </ion-button>
-
-        <!-- <ion-button (click)="startScan()" expand="block" id="flip">
-          <ion-icon name="camera-reverse" slot="icon-only">
-          </ion-icon>
-        </ion-button> -->
+        <div  *ngIf="(uiTransactions$ | async) as uiTransactions; else loading">
+          <ion-button (click)="startScan()" expand="block" id="capture">
+            <ion-icon name="camera"
+                      slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
 
         <ion-button (click)="flipCamera()" expand="block" id="flip">
           <ion-icon name="camera-reverse" slot="icon-only"></ion-icon>
@@ -65,3 +64,5 @@
     </div>
 
 </ion-content>
+
+<ng-template #loading>...loading</ng-template>

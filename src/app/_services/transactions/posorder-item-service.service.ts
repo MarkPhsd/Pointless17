@@ -493,6 +493,22 @@ export class POSOrderItemServiceService {
 
   }
 
+
+  getPurchaseOrderItemHistory(site: ISite, id: number): Observable<IPurchaseOrderItem> {
+
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "GetItemHistory";
+
+    const parameters = `?id=${id}&history=true`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<IPurchaseOrderItem>(url)
+
+  }
+
+
   deletePOSOrderItem(site: ISite, id: number): Observable<ItemPostResults> {
 
     const controller = "/POSOrderItems/"

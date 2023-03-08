@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {  Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { ItemTypeEditorComponent } from 'src/app/modules/admin/products/item-type/item-type-editor/item-type-editor.component';
 import { SitesService } from '../reporting/sites.service';
 import { ItemTypeService } from './item-type.service';
 import { UseGroupsService } from './use-groups.service';
@@ -15,6 +17,7 @@ export class ItemTypeMethodsService {
     private itemTypeService: ItemTypeService,
     private siteService    : SitesService,
     private snackBar      :  MatSnackBar,
+    private dialog: MatDialog,
     ) { }
 
   initalizeTypes(): Observable<any> {
@@ -32,6 +35,30 @@ export class ItemTypeMethodsService {
       duration: time,
     })
   }
+
+  openItemEditor(id: number) {
+    let dialogRef: any;
+    {
+      if (id) {
+        dialogRef = this.dialog.open(ItemTypeEditorComponent,
+          { width:        '800px',
+            minWidth:     '800px',
+            height:       '740px',
+            minHeight:    '740px',
+            data : {id: id}
+          },
+        )
+      }
+    }
+
+    return dialogRef
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result) {
+    //     this.refreshData();
+    //   }
+    // });
+  }
+
 
 }
 

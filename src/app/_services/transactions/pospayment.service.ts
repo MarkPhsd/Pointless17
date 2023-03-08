@@ -51,7 +51,7 @@ export class POSPaymentService {
 
     const devicename = localStorage.getItem('devicename')
 
-    const payLoad  = { order, payment, amount, paymentMethod, deviceName: devicename }
+    const payLoad  = { order, payment: payment, amount: amount, paymentMethod, deviceName: devicename }
 
     const controller = '/POSPayments/'
 

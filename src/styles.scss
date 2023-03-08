@@ -512,3 +512,10 @@ mat-dialog-container {
   width: 100%;
   max-width: 175px;
 }
+
+.floater-save {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  z-index: 10;
+}

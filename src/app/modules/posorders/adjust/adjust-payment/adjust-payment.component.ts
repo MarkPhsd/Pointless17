@@ -191,14 +191,12 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
             }
 
             if (this.settings.triposEnabled) {
-              // console.log('this.settings.triposEnabled')
               const site = this.siteService.getAssignedSite()
               let item = {} as authorizationPOST
               item.laneId  = this.terminalSettings.triposLaneID;
               item.transactionID = this.payment.refNumber;
               this.action$ = this.triPOSMethodService.void(site, item).pipe(switchMap(data => {
 
-                // console.log('void result', data)
                 if (this.validateTriPOSVoid(data)) {
                   this.resultAction.payment.amountPaid = 0;
                   this.resultAction.payment.amountReceived = 0;
