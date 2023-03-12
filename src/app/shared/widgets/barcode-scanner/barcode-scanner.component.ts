@@ -57,7 +57,6 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     // if the result has content
     if (result.hasContent) {
       this.result = result.content;
-      // console.log(result.content); // log the raw scanned content
     }
   };
 
@@ -74,7 +73,6 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
       this.startScan();
     }
     window.document.body.style.background = "transparent"
-
     this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(switchMap(data => {
       if (data && data.text) {
         this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
@@ -109,7 +107,7 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     this.scanStatus = ''
   }
 
-  async cameraOff() {
+  async cameraOff(goHome: boolean) {
     this.initDisplayResults();
     this.cameraActive = false
     try {
@@ -121,7 +119,9 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     } catch (error) {
     }
     this.stopScan();
-    this.goHome();
+    if (goHome) {
+      this.goHome();
+    }
   }
 
   async checkPermission() {
@@ -142,18 +142,19 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     if (result.hasContent) {
       this.stopScan();
       this.scanResult = 'Content Resolved ' + result.content
-      // console.log(result.content)
-      this.resolveContent(result)
+      this.resolveContent(result);
+
     } else {
       this.stopScan();
       this.scanResult = 'Content not resolved '
       this.status = 'no content';
+
     }
   }
 
   resolveContent(result: any) {
     if (this.uiTransactions.idParseOnlyAgeConfirmation) {
-      this.saveCustomer(result)
+      this.validateCustomerOnly(result)
       return
     }
 
@@ -167,17 +168,18 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     const site    = this.siteService.getAssignedSite();
     const data    =  result.content.replace(/(\r\n|\n|\r)/gm, "--");
     const parser$ =  this.dlParserService.checkIfIDisValid(site, data)
+    console.log(data)
     this.parser$  =  parser$.pipe(
       switchMap(data => {
         if (!data) {
           this.notifyEvent('No response', 'Try again')
           return of (null)
         }
-        if (!data.result || data.errorMessage || data.message == 'failure') {
+        // console.log(data)
+        if (!data.result || data.errorMessage ) {
           this.notifyEvent(data.errorMessage, data.message)
           return of (data)
         }
-        // this.scanStatus = 'Scanned and valid';
         this.notifyEvent('Client is valid', 'Success')
         return of(data)
     }),
@@ -201,12 +203,13 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
         }
         if (data.errorMessage || data.message == 'failure') {
           this.notifyEvent(data.errorMessage, data.message)
-          return of (data)
+          return of (null)
         }
         if (data.id) {
           this.router.navigate(["/profileEditor/", {id: data.id}]);
+          return of(null)
         }
-        return of(data)
+        return of(null)
     }),
     catchError( err => {
       this.notifyEvent(err, 'Unexpected Error')
@@ -240,13 +243,13 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   }
 
   async stopReadingCamera() {
-    await this.cameraOff();
+    await this.cameraOff(false);
     this.stopScan();
   }
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-      duration: 2000,
+      duration: 5000,
       verticalPosition: 'top'
     });
   }

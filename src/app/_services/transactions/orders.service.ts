@@ -185,7 +185,6 @@ export class OrdersService {
     return order
   }
 
-
   updateOrder(order: IPOSOrder) {
     this.currentOrder = order;
     this._currentOrder.next(order);
@@ -248,7 +247,6 @@ export class OrdersService {
       return null;
     }
   }
-
 
   updateOrderSearchModel(searchModel: IPOSOrderSearchModel) {
     this._posSearchModel.next(searchModel);
@@ -419,6 +417,20 @@ export class OrdersService {
     const endPoint  = "SetOrderName"
 
     const parameters = `?orderID=${id}&orderName=${orderName}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
+  }
+
+  setOrderPriceColumn(orderID: number, priceColumn: number):  Observable<any>  {
+    const site = this.siteService.getAssignedSite();
+
+    const controller = "/POSOrders/"
+
+    const endPoint  = "setOrderPriceColumn"
+
+    const parameters = `?orderID=${orderID}&priceColumn=${priceColumn}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 

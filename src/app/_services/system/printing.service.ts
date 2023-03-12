@@ -40,6 +40,7 @@ export interface printOptions {
 })
 
 export class PrintingService {
+
   menuItem: IMenuItem;
   zplSetting            : ISetting;
   receiptLayoutSetting  : ISetting;
@@ -47,7 +48,7 @@ export class PrintingService {
   item                  : IInventoryAssignment;
   order                 : IPOSOrder
   isElectronServiceInitiated = false
-
+  obs$ : Observable<any>[];
   private _printReady       = new BehaviorSubject<any>(null);
   public printReady$        = this._printReady.asObservable();
 
@@ -94,6 +95,27 @@ export class PrintingService {
 
   updatePrintReady(data) {
     this._printReady.next(data)
+  }
+
+  printLabels(order: IPOSOrder, newLabels: boolean): Observable<any> {
+    if (this.order) {
+      if (this.order.posOrderItems) {
+        this.obs$ = []
+        const items = this.order.posOrderItems
+        if (items.length > 0) {
+          items.forEach( item => {
+            if (!item.printed && newLabels) {
+              this.obs$.push(this.printItemLabel(item, null, order))
+            }
+            if (!newLabels) {
+              this.obs$.push(this.printItemLabel(item, null, order))
+            }
+          })
+        }
+      }
+      return forkJoin(this.obs$)
+    }
+    return of(null)
   }
 
   async initDefaultLayouts() {
@@ -492,10 +514,12 @@ export class PrintingService {
       if (!menuItem$) {
         menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
       }
+
       posItem$ = this.posOrderItemService.getPurchaseOrderItem(site, item.id)
       if (order.history) {
         posItem$ = this.posOrderItemService.getPurchaseOrderItemHistory(site, item.id)
       }
+
       return posItem$.pipe(
         switchMap(data => {
           if (data && data.inventoryAssignmentID) {
@@ -512,6 +536,7 @@ export class PrintingService {
         }
       )).pipe(switchMap(menuItem => {
         item.menuItem = menuItem;
+        console.log('print label', item, order.history)
         return this.printLabel(item,  order.history)
       }))
    }
@@ -553,7 +578,6 @@ export class PrintingService {
           if ( data.itemType && ( (data.itemType.labelTypeID != 0 ) && printer.text ) ) {
             return  this.settingService.getSetting(site, data.itemType.labelTypeID)
           } else {
-            console.log('no label type.s')
             if (history) {
               return of(null)
             }
@@ -564,8 +588,8 @@ export class PrintingService {
           if (!data) { return of(null) }
 
           item.menuItem = this.menuItem;
-          const lab$ = this.clientService.getClient(site, this.menuItem.labID);
-          const producer$ = this.clientService.getClient(site, this.menuItem.producerID);
+          const lab$ = this.getContact(site, this.menuItem.labID)
+          const producer$ = this.getContact(site, this.menuItem.producerID);
 
           return forkJoin([lab$, producer$, of(data)])
 
@@ -579,10 +603,19 @@ export class PrintingService {
             item.lab = lab;
             item.producer = producer;
 
+            if (this.menuItem) {
+              if (this.menuItem?.itemType?.type === 'cannabis') {
+                if (!lab) {
+                  this.siteService.notify('Item has no lab assigned.', 'Alert', 2000)
+                }
+                if (!producer) {
+                  this.siteService.notify('Item has no producer assigned.', 'Alert', 2000)
+                }
+              }
+            }
             const content = this.renderingService.interpolateText(item, data.text);
 
             if (printer.text) {
-
               this.printLabelElectron(content, printer.text)
             }
 
@@ -599,6 +632,18 @@ export class PrintingService {
     return result$
   }
 
+  getContact(site: ISite, labID: number): Observable<IClientTable> {
+    const client$ = this.clientService.getClient(site, labID).pipe(
+    switchMap(data =>
+      {
+        return of(data)
+      }
+      ),
+      catchError(data => {
+        return of(null)
+    }))
+    return client$
+  }
 
   async saveContentsToFile(filePath: string, contents: string) {
     try {
@@ -744,6 +789,11 @@ export class PrintingService {
   getSettingCached(settingName: string): Observable<ISetting> {
     const site = this.siteService.getAssignedSite();
     return this.settingService.getSettingByNameCached(site, settingName)
+  }
+
+  printDropValues(){
+    this.updatePrintView(4);
+    this.previewReceipt()
   }
 
   previewReceipt() {

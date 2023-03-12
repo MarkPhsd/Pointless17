@@ -3,8 +3,7 @@
     <div>
       <img class="pointless-logo"
           onerror   = "this.src='../assets/images/logo.png'"
-          src       = '../assets/images/logo.png'
-          >
+          src       = '../assets/images/logo.png' >
     </div>
     <div>Powered By pointlesspos.com</div>
   </div>
@@ -13,7 +12,7 @@
 <mat-divider></mat-divider>
 
 <div class="bg row-height">
-  
+
   <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
     <div  class="login-window">
 
@@ -23,11 +22,11 @@
         </div>
         <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
           <app-logo [logoSize]="'large'" ></app-logo>
-        </div> 
+        </div>
       </div>
 
       <div *ngIf="(action$ | async) as order">
-     
+
       </div>
 
       <div class="order-message" *ngIf="goingToPay">
@@ -35,7 +34,7 @@
         ...going to payment
       </div>
 
-      <div class="message-grid" 
+      <div class="message-grid"
            *ngIf="(message$ | async) as message">
         <div>
           {{message?.message}}
@@ -53,7 +52,7 @@
         </div>
       </div>
 
-      <div class="navigating order-message" 
+      <div class="navigating order-message"
             *ngIf="(order$ | async) as order; else loadingOrder">
 
           <mat-card>
@@ -119,7 +118,7 @@
       </div>
 
     </div>
-    
+
   </div>
 
 </div>

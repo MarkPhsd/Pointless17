@@ -6,3 +6,23 @@
   <app-chemical-values [inputForm]="inputForm">
   </app-chemical-values>
 </div>
+
+<div>
+  <app-brand-type-select
+    [formFieldClass]="'formFieldClass-standard'"
+    [id] = "product?.yearsOld"
+    [fieldName]="'yearsOld'"
+    [inputForm]="inputForm">
+    Lab
+  </app-brand-type-select>
+</div>
+
+<div>
+  <app-brand-type-select
+    [formFieldClass]="'formFieldClass-standard'"
+    [id] = "product?.packager"
+    [fieldName]="'packager'"
+    [inputForm]="inputForm">
+    Packager
+  </app-brand-type-select>
+</div>

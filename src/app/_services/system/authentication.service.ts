@@ -49,13 +49,14 @@ export class AuthenticationService {
     private _userx              = new BehaviorSubject<IUser>(null);
     public  userx$              = this._userx.asObservable();
 
-    userAuths           : IUserAuth_Properties;
+    userAuths            : IUserAuth_Properties;
     _userAuths           = new BehaviorSubject<IUserAuth_Properties>(null);
     public  userAuths$   = this._userAuths.asObservable();
 
     updateUserAuths(userAuths : IUserAuth_Properties ) {
       this._userAuths.next(userAuths)
       if (userAuths) {
+        this.userAuths = userAuths;
         localStorage.setItem('userAuth', JSON.stringify(userAuths));
       }
     }

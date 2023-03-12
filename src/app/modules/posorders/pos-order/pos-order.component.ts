@@ -28,11 +28,9 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
 import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
 import { IServiceType } from 'src/app/_interfaces';
-import { coerceStringArray } from '@angular/cdk/coercion';
 import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { Capacitor } from '@capacitor/core';
-import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 
@@ -59,6 +57,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @ViewChild('listViewType')   listViewType: TemplateRef<any>;
   @ViewChild('itemViewType')   itemViewType: TemplateRef<any>;
   action$: Observable<any>;
+  deleteOrder$: Observable<any>;
   printLabels$:  Observable<any>;
   obs$ : Observable<any>[];
   userAuths       :   IUserAuth_Properties;
@@ -590,8 +589,11 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.productEditButtonService.openRefundOrderDialog(this.order)
   }
 
-  async deleteOrder(event) {
-    this.orderMethodService.deleteOrder(this.order.id, false)
+  deleteOrder(event) {
+    this.deleteOrder$ = this.orderMethodService.deleteOrder(this.order.id, false).pipe(switchMap(data => {
+
+      return of(data)
+    }))
   }
 
   ngOnDestroy() {
@@ -679,23 +681,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   ///update the inventory
   //update the subscription order Info
  printLabels(newLabels: boolean) {
-    if (this.order) {
-      if (this.order.posOrderItems) {
-        this.obs$ = []
-        const items = this.order.posOrderItems
-        if (items.length > 0) {
-          items.forEach( item => {
-            if (!item.printed && newLabels) {
-              this.obs$.push(this.printLabel(item))
-            }
-            if (!newLabels) {
-              this.obs$.push(this.printLabel(item))
-            }
-          })
-        }
-      }
-      this.printLabels$ = forkJoin(this.obs$)
-    }
+    this.printLabels$ = this.printingService.printLabels(this.order , newLabels)
   }
 
 
@@ -707,13 +693,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.printLabels(false)
   }
 
-
   //get item
   //print maybe
   //update inventory
-  printLabel(item: PosOrderItem) {
-    return this.printingService.printItemLabel(item, null, this.order)
-  }
+
 
   // //get item
   // //print maybe
@@ -809,18 +792,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   makePayment() {
     this.openOrderBar = false
-    // this.toolbarUIService.updateOrderBar(false);
-    // this.toolbarUIService.updateSideBar(false)
-    // this.toolbarUIService.updateToolBarSideBar(false)
-    // let path = ''
-    // if (this.order) {
-    //   if (this.order.tableName && this.order.tableName.length>0) {
-    //     path = 'pos-payment'
-    //   }
-    // }
-    // this.navigationService.makePayment(this.openOrderBar, this.smallDevice,
-    //                                   this.isStaff, this.order.completionDate, path )
-
     this.navigationService.makePaymentFromSidePanel(this.openOrderBar, this.smallDevice,
       this.isStaff, this.order  )
   }

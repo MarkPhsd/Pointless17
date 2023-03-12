@@ -56,6 +56,7 @@ export interface IUserAuth_Properties {
 
   uploadPictures: boolean;
 
+  priceColumnOption: boolean;
 }
 
 @Injectable({

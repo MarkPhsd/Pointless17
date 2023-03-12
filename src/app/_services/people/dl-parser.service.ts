@@ -173,14 +173,15 @@ checkIfIDisValid(site: ISite,text: string): Observable<DLScanResults> {
 
   const  controller =  "/DLParser/"
 
-  const endPoint = "checkIfIDisValid"
+  const endPoint = "CheckIfIDisValid"
 
   const parameters = ''
 
   const url = `${site.url}${controller}${endPoint}${parameters}`
 
   const content = {DriverDataString: text};
-
+  console.log('validate customer', content)
+  console.log('validate url', url)
   return  this.http.post<any>(url, content)
 
 };

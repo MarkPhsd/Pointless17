@@ -192,6 +192,7 @@
       </div>
 
       <div class="toggle-fields">
+        <mat-label  class="mat-label-design">Used when order requires a customer be assigned.</mat-label>
         <mat-slide-toggle
                   formControlName="validateCustomerLicenseID">
           <mat-label>Validate Customer License/ID</mat-label>
@@ -214,6 +215,17 @@
         </mat-slide-toggle>
       </div>
 
+      <div>
+        <mat-label  class="mat-label-design">Enable to not save customer info on ID Scanning (driver license, id etc.).</mat-label>
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="idParseOnlyAgeConfirmation" >
+            <mat-label>Only Validate ID</mat-label>
+          </mat-slide-toggle>
+        </div>
+      </div>
+
+
       <mat-divider></mat-divider>
       <h3>Operation Settings:</h3>
 
@@ -228,14 +240,6 @@
         </div>
         <div>
 
-        <div>
-          <mat-label  class="mat-label-design">Enable to not save customer info on ID Scanning (driver license, id etc.).</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'idParseOnlyAgeConfirmation'">
-             ID Parse
-          </app-value-fields>
-        </div>
 
         <div>
           <mat-label  class="mat-label-design">Minimum Client Age.</mat-label>

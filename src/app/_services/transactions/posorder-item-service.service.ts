@@ -58,6 +58,7 @@ export interface NewItem            {
   passAlongItem: any,
   order: IPOSOrder;
   clientID: number;
+  priceColumn: number;
 }
 export interface NewInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number, portionValue: string, packaging: string,  itemNote: string}
 export interface NewSerializedItem  { orderID: number, quantity: number, menuItem: Serial, barcode: string,  weight: number, portionValue: string, packaging:string,  itemNote: string}

@@ -1,6 +1,15 @@
+@import "/src/mixins.scss";
 
-body { 
-  overflow: auto;
+:host {
+  display: block;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+
+body {
+  // overflow: auto;
+  overflow-y: scroll;
 }
 .bg {
   /* The image used */
@@ -11,14 +20,15 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .large {
   width: 125px;
 }
 
-.small-button { 
+.small-button {
   height: 35px;
 }
-.message-grid { 
+.message-grid {
   display: grid;
   grid-template-columns: 1fr 45px;
   width: 100%;
@@ -28,14 +38,14 @@ mat-card  {
   width: 100%;
 }
 
-.buttons-header { 
+.buttons-header {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 5px;
   width        : 100%;
 }
 
-button { 
+button {
   height: 75px;
   min-width: 75px;
   width: 100px;
@@ -47,22 +57,22 @@ mat-card-content {
   padding: 5px;
 }
 
-.loading { 
+.loading {
   margin-top: 50px;
   top: 450px;
   position: absolute;
 }
 
-.sendingMessage { 
+.sendingMessage {
   margin-top: 70px;
   // top: 450px;
 }
 
-.pointless-logo { 
+.pointless-logo {
   width: 25px;
 }
 
-.grid-about { 
+.grid-about {
   display: grid;
   grid-template-columns: 45px 1fr;
   gap: 10px;
@@ -103,9 +113,9 @@ mat-card-content {
   gap: 5px;
 }
 
-.user-name { 
+.user-name {
   max-width: 155px;
-  white-space: nowrap; 
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -126,6 +136,6 @@ mat-card-content {
   font-size     : medium;
 }
 
-.order-message { 
+.order-message {
   margin: 10px
 }

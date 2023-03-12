@@ -89,7 +89,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   startOptionsDisabled = false;
   ordersCount      = 0;
   ordersOpen       = 0;
-
+  cashDropActive: number;
   _openOrders: Subscription;
   _ordersCount : Subscription;
   deposit$: Observable<any>;
@@ -134,7 +134,11 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 private siteService: SitesService,
               )
   {
-    this.inputForm = this.sheetMethodsService.initForm(this.inputForm);
+    this.cashDropActive  = +this.route.snapshot.paramMap.get('cashdrop');
+    if (this.cashDropActive) {
+      this.selectedIndex = 1;
+    }
+    this.inputForm       = this.sheetMethodsService.initForm(this.inputForm);
   }
 
   ngOnInit() {
@@ -152,7 +156,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     }
   };
 
-
   initDepositForms() {
     this.depositAmountForm = this.fb.group({
       value: []
@@ -161,6 +164,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
       value: []
     })
   }
+
   ngOnDestroy() {
     this.sheetMethodsService.updateBalanceSheet(null)
     if (this._openOrders)  { this._openOrders.unsubscribe()}
@@ -208,14 +212,10 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
     this.deposit$ = deposit$.pipe(switchMap(data => {
       this.sheet = data;
-
       if ( data.cashDrops) {
         data.cashDrops = data.cashDrops.sort((a, b) => (a.id > b.id ? 1 : -1));
         this.sheetMethodsService.cashDrop = data.cashDrops[data.cashDrops.length-1];
-        console.log('cash drop', data.cashDrops)
-        console.log('last drop', this.sheetMethodsService.cashDrop)
         const drop = this.sheetMethodsService.cashDrop;
-
         this.printDropValues(drop )
       }
       return this._updateItem()
@@ -402,8 +402,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     ))
   }
 
-
-
   printEndingValues(event){
     this.printingService.updatePrintView(3);
     this.balanceSheet$ = this.sheetMethodsService.updateSheet(this.inputForm, this.startShiftInt).pipe(
@@ -415,11 +413,9 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   printDropValues(cashDrop: CashDrop){
-    this.printingService.updatePrintView(4);
     this.sheetMethodsService.cashDrop = cashDrop
-    this.printingService.previewReceipt()
+    this.printingService.printDropValues()
   }
-
 
   email(event) {
     this.sendGridService.sendBalanceSheet(this.sheet.id).subscribe( data => {

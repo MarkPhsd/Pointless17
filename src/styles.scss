@@ -191,8 +191,8 @@
   }
 
   .payment-buttons {
-    height: 75px;
-    width: 135px;
+    height: 65px;
+    width: 115px;
     margin: 10px;
   }
 
@@ -517,5 +517,5 @@ mat-dialog-container {
   position: fixed;
   bottom: 50px;
   right: 50px;
-  z-index: 10;
+  z-index: 100;
 }

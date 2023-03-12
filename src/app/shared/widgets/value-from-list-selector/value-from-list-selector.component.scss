@@ -1,0 +1,27 @@
+.more-button {
+  width: 55px;
+  padding:0px;
+  height: 50px;
+}
+
+.selector {
+  height: 65px;
+  width: 100%;
+  margin: 5px;
+}
+
+.button-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mat-icon {
+  height: 15px;
+  width: 15px;
+  margin-right: 15px;
+}
+
+.button-selector-content {
+  margin-bottom: -13px;
+}

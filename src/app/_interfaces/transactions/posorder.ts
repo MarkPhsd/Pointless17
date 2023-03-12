@@ -37,8 +37,6 @@ export interface IPOSOrderSearchModel {
   prepStatus        :          number;
   printLocation     :          number;
 }
-
-
 export interface IPOSOrder {
   id:                    number;
   orderTime:             string;
@@ -120,7 +118,7 @@ export interface IPOSOrder {
   creditFee_Total       : number;
   cashDiscountFee       : number;
   creditBalanceRemaining: number;
-
+  priceColumn           : number;
 }
 
 export interface ClientsPOSOrders {

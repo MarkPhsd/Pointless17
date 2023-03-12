@@ -133,7 +133,6 @@ import { MenuGroupItemEditComponent } from '../modules/admin/settings/menus-mana
 
 import { TypeResultsSelectorComponent } from '../modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component';
 import { EditSelectedItemsComponent } from '../modules/admin/products/productedit/edit-selected-items/edit-selected-items.component';
-import { BrandTypeSelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/brand-type-select/brand-type-select.component';
 import { AddItemByTypeComponent } from '../modules/admin/products/productedit/add-item-by-type/add-item-by-type.component';
 import { AgPaginationComponent } from '../shared/widgets/ag-pagination/ag-pagination.component';
 import { RewardTypeFilterComponent } from '../modules/admin/products/price-schedule/rewards/reward-type-filter/reward-type-filter.component';
@@ -406,7 +405,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     BalanceSheetViewComponent,
 
     BrandslistComponent,
-    BrandTypeSelectComponent,
+
     CacheSettingsComponent,
     CategoriesComponent,
     CategorieslistviewComponent,

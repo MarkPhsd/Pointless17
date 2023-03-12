@@ -75,17 +75,19 @@
               <app-category-select   [inputForm]="productForm"
                                      [type]="'category'">Category</app-category-select>
 
-              <app-department-select [inputForm]="productForm">Department</app-department-select>
+              <app-department-select [id] = "product?.brandID" [inputForm]="productForm">Department</app-department-select>
 
               <div class="flex-container-medium">
-                <product-type-select   [inputForm]="productForm"></product-type-select>
+                <product-type-select  [inputForm]="productForm"></product-type-select>
                 <button mat-button  class="edit-button" (click)="editType()"><mat-icon>edit</mat-icon></button>
               </div>
 
               <app-brand-type-select
                       [formFieldClass]="'formFieldClass-standard'"
-                      [id] = "brandID.value"
+                      [id] = "product.brandID"
+                      [fieldName]="'brandID'"
                       [inputForm]="productForm">
+                  Brand
               </app-brand-type-select>
 
               <app-value-fields
@@ -174,15 +176,12 @@
             </div>
             <div *ngIf="itemType && itemType.useType && (itemType.type?.toLowerCase() === 'grocery' ||
                           itemType.type?.toLowerCase() === 'restaurant')">
-
               <ng-container [ngTemplateOutlet]="gluetenFree"></ng-container>
-
             </div>
             <div *ngIf="itemType && itemType.name && ( itemType.type?.toLowerCase() === 'store credit' )">
               <ng-container [ngTemplateOutlet]="style"></ng-container>
               <ng-container [ngTemplateOutlet]="productCount"></ng-container>
             </div>
-
 
             <div *ngIf="itemType && itemType.name && ( itemType.type?.toLowerCase() === 'discounts' ||
                                                        itemType.type?.toLowerCase() === 'service fee' )">
@@ -194,7 +193,6 @@
               <ng-container [ngTemplateOutlet]="productCount"></ng-container>
               <ng-container [ngTemplateOutlet]="reOrderAmount"></ng-container>
               <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
-
             </div>
 
             <div *ngIf="itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'retail' )">
@@ -220,9 +218,11 @@
             </div>
 
             <div  *ngIf="itemType && itemType.type &&
-                          (itemType.type?.toLowerCase() === 'cannabis' ||
-                          itemType.type?.toLowerCase() === 'med-cannabis')">
-              <cannabis-item-edit [inputForm]="productForm"></cannabis-item-edit>
+                        (itemType.type?.toLowerCase() === 'cannabis' ||
+                        itemType.type?.toLowerCase()  === 'med-cannabis')">
+              <cannabis-item-edit [product]  ="product"
+                                  [inputForm]="productForm">
+              </cannabis-item-edit>
             </div>
 
             <div *ngIf="itemType && itemType.useType &&  (

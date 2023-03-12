@@ -2,11 +2,13 @@ import { Component, Input , OnChanges, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { of, switchMap, Observable } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
-import { OrdersService } from 'src/app/_services';
+import { AuthenticationService, OrdersService } from 'src/app/_services';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
@@ -20,7 +22,6 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
   @Input() order: IPOSOrder
   @Input() isUserStaff = false
 
-
   isOrderClaimed: boolean;
   href: string;
   hidePrint = false;
@@ -28,16 +29,19 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
 
   constructor(
              private ordersService:   OrdersService,
-             public router: Router,
+             public  router: Router,
              public  printingService: PrintingService,
              public  platFormService: PlatformService,
              private orderMethodsService: OrderMethodsService,
+             private siteService : SitesService,
+             public  authenticationService: AuthenticationService,
              public  prepPrintingService: PrepPrintingServiceService,
     ) {
 
     this.ordersService.currentOrder$.subscribe(data => {
       this.isOrderClaimed = this.ordersService.IsOrderClaimed
     })
+
 
   }
 
@@ -67,11 +71,27 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
         return of(data)
       })
     )
-
   }
 
   clearOrder() {
     this.orderMethodsService.clearOrder()
   }
+
+  assignPriceColumn(value: number){
+    const site = this.siteService.getAssignedSite()
+    if (this.order) {
+      this.order.priceColumn = value
+      console.log(this.order.id,value)
+      this.action$ = this.ordersService.setOrderPriceColumn(this.order.id, value).pipe(
+        switchMap(data => {
+          this.siteService.notify(`Price Column Set: ${value}`, 'Result', 2000)
+          this.order.priceColumn = data;
+          this.ordersService.updateOrder(this.order)
+          return of(data)
+        })
+      )
+    }
+  }
+
 
 }

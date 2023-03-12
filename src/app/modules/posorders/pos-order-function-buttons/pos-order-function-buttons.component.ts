@@ -1,10 +1,12 @@
 import { Component, OnInit, Output, Input,EventEmitter, HostListener, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { ThumbnailsPosition } from '@ngx-gallery/core';
 import { TouchBarOtherItemsProxy } from 'electron';
 import { Subscription } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
@@ -15,11 +17,11 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 
 export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
 
-  @ViewChild('payButton')     payButton: TemplateRef<any>;
+  // @ViewChild('payButton')     payButton: TemplateRef<any>;
   @ViewChild('exitButton')    exitButton: TemplateRef<any>;
   @ViewChild('refundOrderButton')  refundOrderButton: TemplateRef<any>;
   @ViewChild('cancelButton') cancelButton: TemplateRef<any>;
-
+  @Input() devicename: string;
 
   spacer1: any;
   spacer2: any;
@@ -81,7 +83,9 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
 
   constructor(private platFormService: PlatformService,
               public userAuthorizationService: UserAuthorizationService,
-              private orderMethodsService: OrderMethodsService ) { }
+              private orderMethodsService: OrderMethodsService,
+              private router: Router,
+              private balanceSheetMethods: BalanceSheetMethodsService ) { }
 
   ngOnInit() {
     this.isApp = this.platFormService.isApp();
@@ -110,7 +114,10 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
      }
      this.order.balanceRemaining
      this.windowSize = 'Normal'
-     this.spacer1 = null;
+
+    //  this.spacer1 = this.payButton;
+
+    //  this.spacer1 = null;
      this.spacer2 = null;
      this.spacer3 = null;
      this.spacer4 = null;
@@ -123,32 +130,31 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
      this.windowWidth = window.innerWidth
 
      if (window.innerWidth < 1024) {
-      this.spacer5          = this.exitButton;
-      this.spacer11         = this.payButton
+      this.spacer5          = null;
+      this.spacer11         = null;
       this.windowSize = 'Less Than 1024'
      }
 
      if (window.innerWidth >= 954 && window.innerWidth < 1024) {
       this.spacer11 = null;
-      this.spacer11 = this.payButton
+      this.spacer11 = null
       this.spacer12 = null
       this.windowSize = 'Mid'
      }
 
      if (window.innerWidth >= 1024 && window.innerWidth <= 1565) {
       // this.spacer1 = this.exitButton
-      this.spacer1 = this.cancelButton;
       this.spacer2 = null;//this.payButton;
       this.spacer3 = null;//this.payButton;
       this.spacer4 = null;// this.payButton;
       this.spacer5 = null;// this.exitButton
       this.spacer6 = null;//this.payButton;
-      this.spacer7 =  null;
+      this.spacer7 = null;
       // this.spacer8 = this.payButton;
       // this.spacer9 = this.payButton;
       this.spacer10 = null;//this.payButton
       this.spacer11 = null;// this.payButton;
-      this.spacer12 = this.payButton;
+      // this.spacer12 = this.payButton;
 
       this.windowSize = 'medium'
      }
@@ -156,7 +162,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
      if (window.innerWidth >= 1366 && window.innerWidth < 1564) {
       this.spacer12 = null;
       this.spacer7 =  null;
-      this.spacer11 = this.payButton;
+      this.spacer11 = null;
       this.windowSize = 'large'
      }
 
@@ -166,7 +172,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
       this.spacer3  = null;
       this.spacer4  = null;
       this.spacer11 = null;
-      this.spacer12 = this.payButton;
+      // this.spacer12 = this.payButton;
      }
 
      if (  window.innerWidth > 1564) {
@@ -174,7 +180,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
       this.spacer7  = null;
       this.spacer3  = null;
       this.spacer4  = null;
-      this.spacer11 = this.payButton;
+      this.spacer11 = null;;
       this.spacer12 = null
       this.windowSize = 'largest'
      }
@@ -185,7 +191,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
       this.spacer3  = null;
       this.spacer4  = null;
       this.spacer11 = null;
-      this.spacer12 = this.payButton;
+      this.spacer12 = null;
       this.windowSize = 'xlargest'
      }
 
@@ -194,7 +200,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
       this.spacer7  = null;
       this.spacer3  = null;
       this.spacer4  = null;
-      this.spacer6  = this.payButton;
+      this.spacer6  = null;
       this.spacer11 = null;
       this.spacer12 = null;
       this.windowSize = 'xxlargest'
@@ -203,7 +209,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
      if (  window.innerWidth > 2483) {
       this.spacer5  = this.exitButton
       this.spacer7  = null;
-      this.spacer3  = this.payButton;
+      this.spacer3  = null;
       this.spacer4  = null;
       this.spacer6  = null;
       this.spacer11 = null;
@@ -270,15 +276,28 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   removeDiscounts() {
     this.outPutRemoveDiscount.emit(true)
   }
+
   textNotify() {
     this.outPutTextNotify.emit(true)
   }
+
   emailNotifyOrder() {
     this.outPutEmailNotifyOrder.emit(true)
+  }
+
+  drawerDropAction(value: number) {
+    const dropValues = {cashdrop: value}
+    this.router.navigate(['/balance-sheet-edit', dropValues])
+  }
+
+  openBalanceSheetAction() {
+    this.router.navigate(['/balance-sheet-edit'])
   }
 
   get orderHasDiscounts() {
     return true;
   }
+
+
 
 }

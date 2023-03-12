@@ -18,34 +18,39 @@
         Completed  {{order.completionDate | date: 'shortDate'}} - {{order?.completionDate | date: 'shortTime'}}
       </div>
     </div>
-<!-- && this.router.url.substring(0, '/currentorder'.length ) != '/currentorder' -->
-    <div *ngIf="!mainPanel">
 
-      <div class="button-row">
+    <div >
+      <div class="button-row" *ngIf="!mainPanel">
         <div>
           <button  class="button" color="primary" mat-raised-button (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>
         </div>
         <div>
-          <button  class="button" color="primary" mat-raised-button (click)="sendOrder()"><mat-icon>countertops</mat-icon></button>
+          <button  class="button" color="primary" mat-raised-button (click)="sendOrder()">
+            <mat-icon>countertops</mat-icon>
+          </button>
         </div>
       </div>
-
-      <div class="button-row" *ngIf="isUserStaff && platFormService.isApp()">
+      <div class="button-row" *ngIf="isUserStaff">
         <div>
-          <split-entry-selector [order]="order" [isUserStaff]="isUserStaff" [uiTransactionSettings]="uiTransactionSettings"></split-entry-selector>
+          <split-entry-selector [order]="order"
+                                [isUserStaff]="isUserStaff"
+                                [uiTransactionSettings]="uiTransactionSettings">
+
+          </split-entry-selector>
         </div>
+        <div>
 
+          <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption" >
+            <value-from-list-selector
+                [value] ="order.priceColumn"
+                (assignValue)="assignPriceColumn($event)">
+              Price </value-from-list-selector>
+          </div>
+        </div>
       </div>
-
     </div>
-
-    <!-- <div>
-      {{this.router.url}} <br>
-      mainPanel {{mainPanel}}<br>
-      hidePrint {{hidePrint}}
-    </div> -->
   </div>
 </span>
-<div *ngIf="action$ | async"></div>
+<div *ngIf="(action$ | async) as result"></div>
 
 

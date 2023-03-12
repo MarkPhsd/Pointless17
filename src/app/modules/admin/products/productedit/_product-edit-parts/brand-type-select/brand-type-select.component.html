@@ -1,38 +1,42 @@
-  <div [class]="formFieldClass"
+  <div class="grid"
        [formGroup]="searchForm">
+    <div [class]="formFieldClass">
+      <mat-form-field [class]="formFieldClass"
+                      appearance="outline"
+                      fxFlexFill >
+        <mat-label class="form-background">
+          <mat-icon>search</mat-icon><ng-content></ng-content>
+        </mat-label>
 
-    <mat-form-field [class]="formFieldClass"
-                    appearance="outline"
-                    fxFlexFill >
-      <mat-label class="form-background">
-        <mat-icon>search</mat-icon>Brand Lookup
-      </mat-label>
+        <input
+                #input
+                matInput
+                type             ="text"
+                [class]          ="formFieldClass"
+                placeholder      ="Lookup"
+                formControlName  ="idLookup"
+                [matAutocomplete]="auto">
 
-      <input
-              #input
-              matInput
-              type             ="text"
-              [class]          ="formFieldClass"
-              placeholder      ="Brand Lookup"
-              formControlName  ="brandIDLookup"
-              [matAutocomplete]="auto">
+            <mat-autocomplete panelWidth    = "auto"
+                              #auto         = "matAutocomplete"
+                              (optionSelected)="onChange($event)">
 
-          <mat-autocomplete panelWidth    = "auto"
-                            #auto         = "matAutocomplete"
-                            (optionSelected)="onChange($event)">
+          <mat-option *ngFor="let item of (results$ | async)?.results"
+                        [value]="item">
+              {{item.company}} -- {{item.account}}
+          </mat-option>
 
-        <mat-option *ngFor="let item of (results$ | async)?.results"
-                      [value]="item">
-            {{item.company}} -- {{item.account}}
-        </mat-option>
-
-      </mat-autocomplete>
-    </mat-form-field>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div>
+      <button *ngIf="!disableDelete" mat-button color="warn" (click)="deleteValue()"><mat-icon>delete</mat-icon></button>
+    </div>
 
   </div>
 
   <div      hidden="true"
             [formGroup]="inputForm">
-    <input  formControlName="brandID">
+    <input  [formControlName]="fieldName">
   </div>
 

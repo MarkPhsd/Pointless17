@@ -139,10 +139,10 @@ export class PosOperationsComponent implements OnInit {
     return item$
   }
 
-  setPrintStyles() { 
+  setPrintStyles() {
     const styles$ = this.httpClient.get('assets/htmlTemplates/salesreportStyles.html', {responseType: 'text'});
     styles$.pipe(
-      switchMap(styles => { 
+      switchMap(styles => {
         console.log('STYLes' , styles);
         this.styles = styles;
         return of(styles)
@@ -237,11 +237,10 @@ export class PosOperationsComponent implements OnInit {
         return  this.transferDataService.canCloseDay(site)
       }
     ))
-    // const closingCheck$ = this.transferDataService.canCloseDay(site)
     this.orderService.clearOrderSubscription();
     this.balanceSheetsClosed = ''
 
-    this.closingProcedure$ =closingCheck$.pipe(
+    this.closingProcedure$ = closingCheck$.pipe(
       switchMap( data => {
         //determine if the day can be closed.
         //if it can't then return what is told from the webapi
@@ -256,7 +255,6 @@ export class PosOperationsComponent implements OnInit {
             return
           }
         }
-        console.log('close all continue')
         return this.transferDataService.closeAll(site);
       })).pipe(
         switchMap(
@@ -270,7 +268,7 @@ export class PosOperationsComponent implements OnInit {
           this.balanceSheetsClosed = ''
           this.runningClose = false;
           return of(data)
-        } 
+        }
       )
     )
   }
@@ -280,9 +278,9 @@ export class PosOperationsComponent implements OnInit {
   }
 
   print(styles) {
-    if (!this.printerName) { 
+    if (!this.printerName) {
       this.siteService.notify('Please select a printer', 'Alert', 1000)
-      return 
+      return
     }
     if (this.platFormService.isAppElectron) {
       this.printElectron(styles)
@@ -310,7 +308,7 @@ export class PosOperationsComponent implements OnInit {
   }
 
   getReceiptContents(styles: string) {
-   
+
     const content = this.printsection.nativeElement.innerHTML;
     const  title = 'Receipt';
     const loadView       = ({ title }) => {
@@ -331,7 +329,7 @@ export class PosOperationsComponent implements OnInit {
     const file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
       title: "Receipt"
     }));
- 
+
     return file
   }
 
@@ -347,7 +345,7 @@ export class PosOperationsComponent implements OnInit {
       deviceName: this.printerName
     } as printOptions;
 
-    if (!contents) { 
+    if (!contents) {
       console.log('no contents in print electron')
       return
     }
@@ -355,9 +353,9 @@ export class PosOperationsComponent implements OnInit {
       console.log('no options in print electron')
       return
     }
-    if (!this.printerName) { 
+    if (!this.printerName) {
       console.log('no printerName in print electron')
-      return 
+      return
     }
     if (contents && this.printerName, options) {
       this.printing = true;
@@ -366,7 +364,7 @@ export class PosOperationsComponent implements OnInit {
     }
 
   }
- 
+
   setPrinter(event) {
     this.printerName = event;
     localStorage.setItem('closeDayPrinter',event)

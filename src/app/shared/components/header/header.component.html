@@ -227,10 +227,10 @@
           [matMenuTriggerFor]="menu"
           #menuTrigger="matMenuTrigger"
           (click)="menuTrigger.openMenu()" >
-    <mat-icon *ngIf="mailCount == 0 ">person</mat-icon>
+    <mat-icon *ngIf="mailCount == 0 || !mailCount">person</mat-icon>
 
     <mat-icon
-        *ngIf="mailCount != 0"
+        *ngIf="mailCount && mailCount != 0"
         matBadge="{{ mailCount }}"
         matBadgeColor="accent"
         matBadgePosition="before">

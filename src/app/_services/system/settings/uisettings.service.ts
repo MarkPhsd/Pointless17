@@ -64,6 +64,7 @@ export interface TransactionUISettings {
   idParseOnlyAgeConfirmation: boolean;
   assignBarcodeAsSerial: boolean;
   minClientAge: number;
+
 }
 
 export interface StripeAPISettings {

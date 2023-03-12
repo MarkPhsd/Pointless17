@@ -441,7 +441,7 @@ export class OrderMethodsService implements OnDestroy {
 
     const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging,
                       portionValue: portionValue, deviceName: deviceName, passAlongItem: passAlongItem,
-                      clientID: order.clientID  } as NewItem;
+                      clientID: order.clientID , priceColumn : order.priceColumn } as NewItem;
 
     return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
   }
@@ -933,19 +933,20 @@ export class OrderMethodsService implements OnDestroy {
     // })
   }
 
-  deleteOrder(id: number, confirmed: boolean) {
+  deleteOrder(id: number, confirmed: boolean): Observable<any> {
     const site = this.siteService.getAssignedSite();
 
     if (!confirmed && id) {
       const confirm = window.confirm('Are you sure you want to delete this order?')
-      if (!confirm) { return }
+      if (!confirm) { return of(null)}
     }
 
     if (id) {
 
       const orderDelete$ = this.orderService.deleteOrder(site, id)
-      orderDelete$.subscribe(
-        {next: data => {
+      return orderDelete$.pipe(
+        switchMap(
+           data => {
             if (data) {
               this._snackBar.open('Order deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
               this.clearOrder();
@@ -957,12 +958,16 @@ export class OrderMethodsService implements OnDestroy {
             if (!data) {
               this._snackBar.open('Order not deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
             }
-          }, error : err => {
+            return of(data)
+          }),
+          catchError(error => {
             this._snackBar.open('Order not deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
+            return of(error)
           }
-        }
+        )
       )
     }
+    return of(null)
   }
 
   suspendOrder(order: IPOSOrder): Observable<IPOSOrder> {

@@ -117,7 +117,8 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
    smallDevice     = false;
    exceptions      :PointlessMetrcSales[]
    searchPhrase:   Subject<any> = new Subject();
-   order$:  Observable<IPOSOrder>
+   order$:  Observable<IPOSOrder>;
+
    searchItems$              : Subject<PointlessMetrcSearchModel> = new Subject();
    _searchItems$ = this.searchPhrase.pipe(
      debounceTime(250),
@@ -188,6 +189,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     if (this._searchModel) { this._searchModel.unsubscribe()}
+    this.exceptions = null;
   }
 
   initForm() {
@@ -434,12 +436,11 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         return of(null)
       }
       this.setCurrentPage(1, 100000)
-      this.currentPage = 1;
+      this.currentPage   = 1;
       this.currentDayRan = true;
       return this.pointlessMetrcSalesReport.getUnclosedSalesReport(site, this.searchModel)
     }
-
-    this.currentPage          = this.setCurrentPage(startRow, endRow)
+    this.currentPage            = this.setCurrentPage(startRow, endRow)
     if (!this.searchModel) { this.searchModel = {}  as PointlessMetrcSearchModel};
     this.searchModel.pageSize   = this.pageSize
     this.searchModel.pageNumber = this.currentPage;
@@ -466,7 +467,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     this.onFirstDataRendered(this.params)
 
     if (params == undefined) {
-      console.log('params undefined')
       return;
     }
 
@@ -694,10 +694,14 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         if (clientType.toLowerCase() === 'caregiver') {
           console.log('item sale', data)
         }
-        const right = this.datePipe.transform( data?.completeDate, 'short').slice(-2);
-        console.log( this.datePipe.transform( data?.completeDate, 'shortDate'))
-        console.log( this.datePipe.transform( data?.completeDate, 'mediumTime'))
-        const dateFormat =  this.datePipe.transform( data?.completeDate, 'yyyy/mm/dd');
+
+        const dateFormat = data?.completeDate.slice(0, 10);
+
+        // console.log('completionDate', data.completeDate)
+        // console.log('left', left)
+        // console.log('short date', this.datePipe.transform( data?.completeDate, 'shortDate'))
+        // console.log('mediumTime date', this.datePipe.transform( data?.completeDate, 'mediumTime'))
+        // const dateFormat =  this.datePipe.transform( data?.completeDate, 'shortDate');
         const mediumTime =  this.datePipe.transform( data?.completeDate, 'mediumTime');
         item.completeDate = `${dateFormat} ${mediumTime}`;
         item.clientType=  this.capitalizeFirstLetter(clientType);

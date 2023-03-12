@@ -68,7 +68,6 @@ export class UserSwitchingService implements  OnDestroy {
     private router           : Router,
     private http             : HttpClient,
     private siteService      : SitesService,
-    private employeeService  : EmployeeService,
     private dialog           : MatDialog,
     private authenticationService: AuthenticationService,
     private orderService     : OrdersService,
@@ -129,7 +128,6 @@ export class UserSwitchingService implements  OnDestroy {
 
 
   setAppUser() {
-    //then we can set the user to the secret user
     const appUser = JSON.parse(localStorage.getItem('appUser')) as ElectronDimensions;
     const iUser = {} as IUser;
     iUser.username  = this.encryptionService.decrypt(appUser.height, appUser.depth)
@@ -192,15 +190,10 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   authenticate(userLogin: userLogin): Observable<any> {
-
     const apiUrl =  this.appInitService.apiBaseUrl()
-
     const url = `${apiUrl}/users/authenticate`
-    // console.log('userLogin', userLogin)
     return this.http.post<any>(url, userLogin )
-
   }
-
 
   login(userName: string, password: string): Observable<any> {
     this.clearSubscriptions();
@@ -362,7 +355,7 @@ export class UserSwitchingService implements  OnDestroy {
     }
     // console.log('processlogin4')
     if (user.message === 'success') {
-      console.log('loginToReturnUrl')
+      // console.log('loginToReturnUrl')
       this.loginToReturnUrl();
       return 'success'
     }
@@ -443,7 +436,7 @@ export class UserSwitchingService implements  OnDestroy {
     }
 
     this.router.navigate([returnUrl]);
-    console.log('returnUrl', returnUrl)
+    // console.log('returnUrl', returnUrl)
   }
 
 

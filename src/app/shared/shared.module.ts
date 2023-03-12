@@ -175,6 +175,8 @@ import { TruncateRightPipe } from '../_pipes/truncate-right.pipe';
 import { PosCheckOutButtonsComponent } from '../modules/posorders/pos-order/pos-check-out-buttons/pos-check-out-buttons.component';
 import { SplitEntrySelectorComponent } from '../modules/posorders/pos-order/split-entry-selector/split-entry-selector.component';
 import { SaveChangesButtonComponent } from './widgets/save-changes-button/save-changes-button.component';
+import { BrandTypeSelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/brand-type-select/brand-type-select.component';
+import { ValueFromListSelectorComponent } from './widgets/value-from-list-selector/value-from-list-selector.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -190,7 +192,7 @@ import { SaveChangesButtonComponent } from './widgets/save-changes-button/save-c
     ArrayFilterPipe,
     ArraySortPipe,
     BackgroundUrlPipe,
-
+    BrandTypeSelectComponent,
     AccordionComponent,
     AdjustmentReasonsComponent,
     AdjustPaymentComponent,
@@ -354,6 +356,7 @@ import { SaveChangesButtonComponent } from './widgets/save-changes-button/save-c
     RequestMessageComponent,
     RequestMessagesComponent,
     ThreeCXFabComponent,
+    ValueFromListSelectorComponent,
     CallUsSelectorComponent,
   ],
 
@@ -383,6 +386,7 @@ import { SaveChangesButtonComponent } from './widgets/save-changes-button/save-c
     ArrayFilterPipe,
     ArraySortPipe,
     BackgroundUrlPipe,
+    BrandTypeSelectComponent,
     AccordionComponent,
     AdjustPaymentComponent,
     AreaComponent,
@@ -528,6 +532,7 @@ import { SaveChangesButtonComponent } from './widgets/save-changes-button/save-c
     WebEnabledComponent,
     SimpleTinyComponent,
     NumericDirective,
+    ValueFromListSelectorComponent,
   ],
 
   providers: [

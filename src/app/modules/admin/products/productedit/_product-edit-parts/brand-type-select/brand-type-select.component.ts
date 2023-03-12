@@ -15,20 +15,19 @@ import { Observable, Subject ,fromEvent } from 'rxjs';
 export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
 
   @ViewChild('input', {static: true}) input: ElementRef;
-  @Output() itemSelect  = new EventEmitter();
-
-  itemNameInput: string; //for clear button
+  @Output() itemSelect      = new EventEmitter();
+  itemNameInput             : string; //for clear button
   @Input() formFieldClass     = 'formFieldClass-standard'
   @Input() inputForm:         FormGroup;
   @Input() searchForm:        FormGroup;
-  // @Input() searchField:       FormControl;
   @Input() id               : any;
-  // @Input() name:              string;
+  @Input() disableDelete    : boolean;
+  @Input() fieldName        = 'brandID';
   searchPhrase:               Subject<any> = new Subject();
   item:                       IUserProfile;
   site:                       ISite;
 
-  get brandLookupControl()   { return this.inputForm.get("brandID") as FormControl};
+  // get brandLookupControl()   { return this.inputForm.get("brandID") as FormControl};
 
   brands$                   : Observable<ClientSearchResults>;
   brands                    : IUserProfile[]
@@ -44,7 +43,10 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
   searchList(searchPhrase):  Observable<ClientSearchResults> {
     const site  = this.siteService.getAssignedSite();
     const model = this.initSearchModel(searchPhrase)
-    console.log('searchphrase', searchPhrase)
+    console.log('fieldname', this.fieldName)
+    if (this.fieldName != 'brandID') {
+      return this.contactsService.getContactBySearchModel(site,model)
+    }
     return this.contactsService.getLiveBrands(site, model)
   }
 
@@ -66,7 +68,6 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
                 private fb             : FormBuilder,
                 private siteService    : SitesService,
                ) {
-
   }
 
   ngOnInit(): void {
@@ -75,7 +76,12 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
     this.site = this.siteService.getAssignedSite();
     if (this.inputForm) {
       if (this.id != 0) {
-        this.id = this.inputForm.controls['brandID'].value;
+        if (this.fieldName) {
+          this.id = this.inputForm.controls[this.fieldName].value;
+        }
+        if (!this.fieldName) {
+          this.id = this.inputForm.controls['brandID'].value;
+        }
       }
     }
     this.initForm();
@@ -84,7 +90,7 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
 
   initForm(){
     this.searchForm = this.fb.group({
-      brandIDLookup: [],
+      idLookup: [],
     })
   }
 
@@ -93,13 +99,26 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
     const site  = this.siteService.getAssignedSite();
     if(site) {
       let model = this.initModel(this.id)
-      this.contactsService.getLiveBrands(site, model).subscribe( data => {
-        if (data && data.results) {
-          const item =  { brandIDLookup: data.results[0].company  }
+
+      let search$  = this.contactsService.getContactBySearch(site, this.id, 1, 10)
+
+      console.log(this.fieldName, this.id)
+      search$.subscribe( data => {
+        console.log('getName ' + this.fieldName,  data?.results[0]?.company)
+        if (data && data.results && data?.results[0]?.company) {
+          // this.setValues(this.searchForm, this.fieldName, data?.results[0]?.company );
+          const item =  { idLookup: data?.results[0]?.company }
           this.searchForm.patchValue( item )
         }
       })
     }
+  }
+
+  deleteValue() {
+    const item =  { idLookup: '' }
+    this.searchForm.patchValue( item )
+    this.setValues(this.inputForm, this.fieldName, '')
+
   }
 
   refreshSearch(search: any){
@@ -117,10 +136,11 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
     if (!item) { return }
     this.itemSelect.emit(item)
 
-    const lookup = { brandID : item.id }
-    this.inputForm.patchValue( lookup )
+    this.setValues(this.inputForm, this.fieldName, item.id  )
+    // const lookup = { brandID : item.id }
+    // this.inputForm.patchValue( lookup )
 
-    const brand =  { brandIDLookup: item.company }
+    const brand =  { idLookup: item.company }
     this.searchForm.patchValue( brand )
   }
 
@@ -155,6 +175,23 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
     model.currentPage = 1;
     model.id          = id
     return model;
+  }
+
+
+  setValues(form: FormGroup, fieldName: string, data: any) {
+    if (fieldName == 'yearsOld') {
+      const  item =  { yearsOld: data  }
+      form.patchValue( item )
+    }
+    if (fieldName == 'packager') {
+      const item =  { packager: data  }
+      form.patchValue( item )
+    }
+    if (fieldName === 'brandID') {
+      let item =  { brandIDLookup: data  }
+      form.patchValue( item )
+    }
+    console.log('form value', form.value)
   }
 
 }

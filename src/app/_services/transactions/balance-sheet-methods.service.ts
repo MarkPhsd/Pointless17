@@ -108,16 +108,13 @@ export class BalanceSheetMethodsService {
   }
 
   getCurrentBalanceSheet(): Observable<IBalanceSheet> {
-
     const deviceName = this.getDeviceName();
     const site = this.sitesService.getAssignedSite()
     return   this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
       switchMap(sheet => {
-        // console.log('get current balance sheet ', sheet)
         this.updateBalanceSheet(sheet)
         return  this.sheetService.getSheetCalculations(site, sheet)
     }))
-
   }
 
   async getSheet(sheetID: string) {
@@ -172,7 +169,7 @@ export class BalanceSheetMethodsService {
         switchMap(
           data => {
             this.updateBalanceSheet(data)
-    
+
             return of(data)
           }),
           catchError(err => {

@@ -62,10 +62,6 @@ export class BalanceSheetViewComponent implements OnInit {
   async ngOnInit() {
     this.initSubscriptions()
     this.cashDrop = this.sheetMethodsService.cashDrop;
-    // const styles = await this.httpClient.get('assets/htmlTemplates/balancesheetStyles.txt', {responseType: 'text'}).pipe().toPromise()
-    // const style = document.createElement('style');
-    // style.innerHTML = styles;
-    // document.head.appendChild(style);
   }
 
 

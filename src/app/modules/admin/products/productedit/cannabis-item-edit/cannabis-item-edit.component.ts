@@ -1,15 +1,16 @@
-import { Component, OnInit , Input} from '@angular/core';
+import { Component,  Input} from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { IProduct } from 'src/app/_interfaces';
 
 @Component({
   selector: 'cannabis-item-edit',
   templateUrl: './cannabis-item-edit.component.html',
   styleUrls: ['./cannabis-item-edit.component.scss']
 })
-export class CannabisItemEditComponent   {
 
+export class CannabisItemEditComponent   {
+  @Input() product: IProduct
   @Input() inputForm: FormGroup
   constructor() { }
-
 
 }

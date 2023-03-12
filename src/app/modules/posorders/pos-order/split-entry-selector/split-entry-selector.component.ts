@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-
 @Component({
   selector: 'split-entry-selector',
   templateUrl: './split-entry-selector.component.html',
