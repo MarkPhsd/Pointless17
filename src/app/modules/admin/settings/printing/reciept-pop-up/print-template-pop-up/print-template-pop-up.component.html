@@ -3,7 +3,7 @@
 <button mat-raised-button (click)="exit()"><mat-icon>close</mat-icon>Exit</button>
 
 <ng-template #printTemplate>
-  <app-print-template
+<app-print-template
     [index]        ="index"
     [autoPrint]    ="true"
     (outPutPrinted)="printingCompleted($event)"

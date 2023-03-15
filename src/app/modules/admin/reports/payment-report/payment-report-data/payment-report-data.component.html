@@ -32,13 +32,15 @@
 
         <mat-card-content>
           <div  class="grid-headerfooter"
-               *ngIf="payments && (groupBy === 'paymentMethod' || groupBy === 'Employee')">
+               *ngIf="payments && (groupBy.toLowerCase() === 'devicename' ||
+                                   groupBy.toLowerCase() === 'paymentMethod'.toLowerCase() ||
+                                   groupBy.toLowerCase() === 'employee'.toLowerCase())">
 
-              <div *ngIf="groupBy === 'Employee'" class="grid-item">Staff </div>
-              <div *ngIf="groupBy === 'Employee'" class="totals">Amount</div>
-              <div *ngIf="groupBy === 'Employee'" class="totals">Avg</div>
-              <div *ngIf="groupBy === 'Employee'" class="totals">Count</div>
-              <div *ngIf="groupBy === 'Employee'" class="totals">Tip</div>
+              <div *ngIf="groupBy.toLowerCase()  === 'employee'" class="grid-item">Staff </div>
+              <div *ngIf="groupBy.toLowerCase()  === 'employee'" class="totals">Amount</div>
+              <div *ngIf="groupBy.toLowerCase()  === 'employee'" class="totals">Avg</div>
+              <div *ngIf="groupBy.toLowerCase()  === 'employee'" class="totals">Count</div>
+              <div *ngIf="groupBy.toLowerCase() === 'employee'" class="totals">Tip</div>
 
               <div *ngIf="groupBy === 'paymentMethod'" class="grid-item">Method</div>
               <div *ngIf="groupBy === 'paymentMethod'" class="totals">Amount</div>
@@ -57,7 +59,6 @@
           </div>
 
           <div class="mat-divider">
-
           </div>
 
           <app-payment-report-card

@@ -1,28 +1,31 @@
 <mat-card>
   <mat-card-title>
-    <h3>Issue Credit</h3>
+    <h1>Issue Credit</h1>
   </mat-card-title>
+
   <mat-card-subtitle>
-    <div *ngIf="posIssueItem">
-      Adding Value:  {{+posIssueItem.unitPrice | currency}}
-    </div>
+    <!-- <div *ngIf="posIssueItem">
+      <h2> Adding Value 1:  {{+posIssueItem.unitPrice | currency}}</h2>
+    </div> -->
     <div *ngIf="purchaseOrderItem">
-      Adding Value :  {{+purchaseOrderItem.unitPrice | currency}}
+      <h2>
+        Adding Value:  {{+purchaseOrderItem.unitPrice | currency}}
+      </h2>
     </div>
 
     <store-credit-search
       (outPutResults)="setResults($event)">
     </store-credit-search>
-  
   </mat-card-subtitle>
 
   <mat-card-content>
     <store-credit-info
-      [showPayment]="false"
+      [showPayment]   ="false"
       [showIssueMoney]="true"
-      [order]="order"
-     
-      (closeDialog)="onCancel($event)">
+      [purchaseOrderItem]="purchaseOrderItem"
+      [order]         ="order"
+      (closeDialog)   ="onCancel($event)"
+      >
     </store-credit-info>
   </mat-card-content>
 </mat-card>

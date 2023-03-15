@@ -19,8 +19,8 @@
       </div>
     </div>
 
-    <div >
-      <div class="button-row" *ngIf="!mainPanel">
+    <div>
+      <div class="button-row" *ngIf="!qrOrder && !mainPanel">
         <div>
           <button  class="button" color="primary" mat-raised-button (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>
         </div>
@@ -31,15 +31,15 @@
         </div>
       </div>
       <div class="button-row" *ngIf="isUserStaff">
+
         <div>
           <split-entry-selector [order]="order"
                                 [isUserStaff]="isUserStaff"
                                 [uiTransactionSettings]="uiTransactionSettings">
-
           </split-entry-selector>
         </div>
-        <div>
 
+        <div>
           <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption" >
             <value-from-list-selector
                 [value] ="order.priceColumn"
@@ -47,6 +47,7 @@
               Price </value-from-list-selector>
           </div>
         </div>
+
       </div>
     </div>
   </div>

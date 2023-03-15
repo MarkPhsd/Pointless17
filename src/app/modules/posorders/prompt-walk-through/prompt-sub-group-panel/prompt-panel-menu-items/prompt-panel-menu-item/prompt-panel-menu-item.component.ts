@@ -96,8 +96,8 @@ export class PromptPanelMenuItemComponent implements OnInit {
     this.bucket$ = this.awsBucket.getAWSBucketObservable().pipe(
       switchMap(data => {
         this.bucketName =  data.preassignedURL;
-        if (this.promptMenuItem.prompt_Products.name) {
-          this.imageURL = this.getItemSrc(this.promptMenuItem.prompt_Products)
+        if (this.promptMenuItem.prompt_Products?.name) {
+          this.imageURL = this.getItemSrc(this.promptMenuItem?.prompt_Products)
           return of(data)
         }
         return of('')
@@ -106,10 +106,10 @@ export class PromptPanelMenuItemComponent implements OnInit {
   }
 
   getItemSrc(prompt_Products) {
-    if (!prompt_Products || !prompt_Products.urlImageMain) {
+    if (!prompt_Products || !prompt_Products?.urlImageMain) {
       return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.jpg")
     }
-    return this.awsBucket.getImageURLPath(this.bucketName, this.promptMenuItem.prompt_Products.urlImageMain)
+    return this.awsBucket.getImageURLPath(this.bucketName, this.promptMenuItem.prompt_Products?.urlImageMain)
   }
 
   //promptMenuItem.prompt_Products.name

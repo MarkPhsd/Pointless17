@@ -415,8 +415,27 @@
         <mat-label>Tri POS Enabled (FISGlobal)</mat-label>
       </mat-slide-toggle>
     </div>
-  </mat-card-content>
 
+    <h3>API Connectors</h3>
+    <div>
+      <mat-label  class="mat-label-design">Contact API.</mat-label>
+      <app-value-fields
+          [inputForm]="inputForm"
+          [fieldName]="'contactAPI'">
+        Contact API
+      </app-value-fields>
+    </div>
+
+    <div>
+      <mat-label  class="mat-label-design">Store Credit API.</mat-label>
+      <app-value-fields
+          [inputForm]="inputForm"
+          [fieldName]="'storeCreditAPI'">
+        Store Credit API
+      </app-value-fields>
+    </div>
+
+  </mat-card-content>
 
 </mat-card>
 

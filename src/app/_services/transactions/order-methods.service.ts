@@ -1283,7 +1283,7 @@ export class OrderMethodsService implements OnDestroy {
         const orderID = orderItem.orderID
         this.posOrderItemService.setItemPrep(site,orderItem).subscribe( item => {
           if (item) {
-            this.notifyEvent('Item Prepped!', "Success")
+            // this.notifyEvent('Item Prepped!', "Success")
             this.order.posOrderItems.splice(index, 1, item)
             this.orderService.updateOrderSubscription(this.order)
           }
@@ -1311,7 +1311,7 @@ export class OrderMethodsService implements OnDestroy {
         })).pipe(
           switchMap( order => {
           if (order) {
-            this.notifyEvent('Item Sent to Prep!', "Success")
+            // this.siteService.notify('Item Sent to Prep!', "Printed",500)
             this.orderService.updateOrderSubscription(order)
             return of(order)
           }
@@ -1327,7 +1327,7 @@ export class OrderMethodsService implements OnDestroy {
         const orderID = orderItem.orderID
         this.posOrderItemService.setItemPrep(site,orderItem).subscribe( item => {
           if (item) {
-            this.notifyEvent('Item Prepped!', "Success")
+            // this.siteService.notify('Item Prepped!', "Success",500)
             this.order.posOrderItems.splice(index, 1, item)
             this.orderService.updateOrderSubscription(this.order)
           }
@@ -1380,10 +1380,8 @@ export class OrderMethodsService implements OnDestroy {
         }
       }
     }
-
     return {valid: true, resultMessage: resultMessage}
   }
-
 
   isDateExpired(expiryDate: string) {
     const expiry = new Date(expiryDate)

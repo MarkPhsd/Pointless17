@@ -41,6 +41,7 @@ export class DSIEMVAndroidPayBtnComponent implements OnInit {
 
     ngOnInit(): void {
       const i = 0
+      // this.uiTransactions.dsiEMVAndroidEnabled
     }
 
     processDSIEMVAndroidCreditCardPayment(manual: boolean) {

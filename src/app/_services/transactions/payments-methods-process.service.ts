@@ -13,9 +13,6 @@ import { DSIEMVSettings, TransactionUISettings } from '../system/settings/uisett
 import { PrintingService } from '../system/printing.service';
 import { BalanceSheetService } from './balance-sheet.service';
 import { PrepPrintingServiceService } from '../system/prep-printing-service.service';
-import { TriposResult } from '../tripos/triposModels';
-import { Console } from 'console';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -34,7 +31,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     this.dialogSubject = this.dialogRef.afterClosed().pipe(
       switchMap( result => {
-        console.log('dialog ref result (payment-methods.process.service)', result)
+        // console.log('dialog ref result (payment-methods.process.service)', result)
         if (result) {
           return this.processSendOrder(this.orderService.currentOrder)
         }
@@ -84,32 +81,25 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   //openDrawerFromBalanceSheet
-
   processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder,
                      amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
-
     const balance$ =  this.balanceSheetService.openDrawerFromBalanceSheet()
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
-
     return balance$.pipe(switchMap(data => {
       return payment$
     })).pipe(switchMap(data => {
       return of(data)
     }))
-
   }
 
   processCreditPayment(site: ISite, posPayment: IPOSPayment,
                        order: IPOSOrder, amount: number,
                        paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
-
     if (this.DSIEmvSettings.enabled) {
       this.processSubDSIEMVCreditPayment(order, amount, true)
       return
     }
-
     return this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
-
   }
 
   processPayPalCreditPayment(order: IPOSOrder, amount: number, manualPrompt: boolean, settings: TransactionUISettings): Observable<IPOSPayment> {
@@ -123,14 +113,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       posPayment.zrun = order.zrun;
       posPayment.reportRunID = order.reportRunID;
       posPayment.amountPaid = amount;
-
-      // this.order    = data.order;
-      // this.payment  = data.payment;
-      // this.settings = data.settings;
-      // this.amount   = this.payment.amountPaid.toString();
-      // this.clientID = this.settings.payPalClientID;
-      // this.currencyCode = this.settings.payPalCurrency;
-      // console.log('processPayPalCreditPayment settings', settings)
       const payment$  = this.paymentService.postPOSPayment(site, posPayment)
       payment$.subscribe(data =>
         {
@@ -234,7 +216,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       return false
     }
 
-    console.log('valid', true)
+    // console.log('valid', true)
     return true;
 
   }
@@ -267,18 +249,13 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
 
   isTriPOSApproved(trans: any) {
-
-    if (trans?.statusCode === 'Approved') {
-      return true;
-    }
-
-    if (trans && trans.captureStatus && (trans?.captureStatus.toLowerCase() === 'approved'.toLowerCase() ||
-                  trans?.captureStatus.toLowerCase() === 'approval'.toLowerCase() ||
-                  trans?.captureStatus.toLowerCase() === 'A'.toLowerCase()
+    if (trans && trans.statusCode && (trans?.statusCode.toLowerCase() === 'approved'.toLowerCase() ||
+                  trans?.statusCode.toLowerCase() === 'approval'.toLowerCase() ||
+                  trans?.statusCode.toLowerCase() === 'A'.toLowerCase()
                   ) ) {
       return true;
     }
-    console.log('isTriPOSApproved', trans)
+    // console.log('isTriPOSApproved status, should be approved or similiar', trans.captureStatus , trans)
     this.notify(`Response not approved. Response given ${trans.captureStatus}`, 'Failed', 3000)
     return false;
   }
@@ -288,7 +265,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     // console.log('processCardPointResponse', trans)
     const site = this.sitesService.getAssignedSite();
     //validate response
-    console.log('processCardPointResponse',trans)
+    // console.log('processCardPointResponse',trans)
     if (this.isCardPointApproved(trans)) {
       payment   = this.applyCardPointResponseToPayment(trans, payment)
       payment.textResponse =  trans?.resptext.toLowerCase();
@@ -324,16 +301,31 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   }
 
+  getPaymentMethodByName(site, cardType): Observable<IPaymentMethod> {
+    const item$  = this.paymentMethodService.getPaymentMethodByName(site, cardType)
+    return  item$.pipe(
+      switchMap(data => {
+      if (!data) {
+        const type = {} as IPaymentMethod;
+        type.name = cardType;
+        type.isCreditCard = true;
+        return this.paymentMethodService.post(site, type);
+      }
+      return of(data)
+    }))
+  }
+
+
   processTriPOSResponse(trans: any, payment: IPOSPayment, order: IPOSOrder): Observable<any> {
     const site = this.sitesService.getAssignedSite();
 
-    payment   = this.applyTripPOSResponseToPayment(trans, payment)
-
-    if (this.isTriPOSApproved(payment)) {
+    if (this.isTriPOSApproved(trans)) {
+      payment   = this.applyTripPOSResponseToPayment(trans, payment)
       let paymentMethod    = {} as IPaymentMethod;
       let cardType = 'credit'
       if (trans?.cardLogo) {   cardType = trans?.cardLogo;  }
-      return this.paymentMethodService.getPaymentMethodByName(site, cardType).pipe(
+
+      return this.getPaymentMethodByName(site, cardType).pipe(
         switchMap( data => {
           payment.paymentMethodID = data.id;
           paymentMethod = data;
@@ -350,23 +342,21 @@ export class PaymentsMethodsProcessService implements OnDestroy {
           return of({order: data.order, payment: data.payment, trans: trans})
       }))
     } else {
-
-
+      this.notify('Payment not resolved.', 'Alert', 2000)
+      return of(null)
     }
-
 
   }
 
   processAuthTriPOSResponse(trans: any, payment: IPOSPayment, order: IPOSOrder): Observable<any> {
     const site = this.sitesService.getAssignedSite();
-    payment   = this.applyTripPOSResponseToPayment(trans, payment)
-
     if (!order) {
       this.sitesService.notify('Error retrieiving order information. Please re-open order.', 'Alert',1000)
-      return of(null)
+      return of(order)
     }
 
-    if (this.isTriPOSApproved(payment)) {
+    if (this.isTriPOSApproved(trans)) {
+      payment   = this.applyTripPOSResponseToPayment(trans, payment)
       let paymentMethod    = {} as IPaymentMethod;
       let cardType = 'credit'
       if (trans?.cardLogo) {   cardType = trans?.cardLogo;  }
@@ -382,8 +372,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
           return this.orderService.getOrder(site, id, false)
       }))
     }
-
-    return of('not Approved')
+    // this.sitesService.notify('Not approved.', 'Alert', 1500)
+    return of(order)
   }
 
   processCreditCardResponse(rStream: RStream,  payment: IPOSPayment, order: IPOSOrder) {
@@ -437,8 +427,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   applyCardPointResponseToPayment(response: any, payment: IPOSPayment) {
 
-    // payment.au
-    // payment.commcard = response?.commcard;
     payment.resptext = response?.resptext;
     payment.cvvresp = response?.cvvresp;
     payment.respcode = response?.respcode;
@@ -478,14 +466,36 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return payment;
   }
 
+
   applyTripPOSResponseToPayment(response: any, payment: IPOSPayment) {
-    // console.log('applyTripPOSResponseToPayment', response)
+    // console.log('type', response._type, )
+    // console.table(response)
+    if (response._type === 'authorizationResponse') {
+      payment.amountPaid      = response.approvedAmount;
+      payment.amountReceived  = response.approvedAmount;
+    }
+
+    if (response._type != 'authorizationResponse') {
+      payment.amountPaid      = response.transactionAmount;
+      payment.amountReceived  = response.transactionAmount;
+    }
+
+    if (response._type === 'authorizationCompletionResponse') {
+      payment.amountPaid      = response?.subTotalAmount;
+      payment.amountReceived  = response?.subTotalAmount;
+      payment.tipAmount       = response?.tipAmount
+    }
+
+    if (response._type === 'saleResponse') {
+      payment.amountPaid      = response?.approvedAmount;
+      payment.amountReceived  = response?.approvedAmount;
+      // payment.tipAmount       = response?.tipAmount
+    }
 
     payment.account         = response.accountNumber;
     payment.accountNum      = response.accountNum;
     payment.approvalCode    = response.approvalNumber;
-    payment.amountPaid      = response.approvedAmount;
-    payment.amountReceived  = response.approvedAmount;
+
     payment.tipAmount       = response.tipAmount;
     payment.captureStatus   = response.statusCode;
     payment.entryMethod     = response.entryMode;
@@ -494,9 +504,10 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     payment.respcode        = response.transactionId
     payment.batchid         = response.binValue;
     payment.tranType        = response._type;
-    payment.expiry          = `${response.expirationMonth}${response.expirationYear}`
-    console.log(payment, response.transactionId, response.transactionID)
-    //important value for references.
+    if (response.expirationMonth && response.expirationYear) {
+      payment.expiry          = `${response.expirationMonth}${response.expirationYear}`
+    }
+    // console.log( response.transactionId, response.transactionID)
 
     if (response._type === 'refundResponse') {
       payment.amountPaid      = - response.totalAmount;
@@ -510,7 +521,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }
     payment.bintype         = response.binValue;
     payment.transactionData = JSON.stringify(response);
-    payment.exp             = `${response.expirationMonth}${response?.expirationYear}`;
 
     return payment;
   }
@@ -623,7 +633,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         return  this.processCreditPayment(site, posPayment, order, amount, paymentMethod)
       }
 
-      console.log( 'payment method', paymentMethod )
+      // console.log( 'payment method', paymentMethod )
       //else
       if (paymentMethod.name.toLowerCase()  == 'check') {
         return  this.processCashPayment(site, posPayment, order, amount, paymentMethod)

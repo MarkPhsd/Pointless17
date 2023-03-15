@@ -98,10 +98,13 @@ export class PrintingService {
   }
 
   printLabels(order: IPOSOrder, newLabels: boolean): Observable<any> {
-    if (this.order) {
-      if (this.order.posOrderItems) {
+    // console.log('items',order, order.posOrderItems)
+    if (order) {
+      // console.log('items', order.posOrderItems)
+      if (order.posOrderItems) {
         this.obs$ = []
-        const items = this.order.posOrderItems
+        const items = order.posOrderItems
+        // console.log('items', items.length)
         if (items.length > 0) {
           items.forEach( item => {
             if (!item.printed && newLabels) {
@@ -113,8 +116,10 @@ export class PrintingService {
           })
         }
       }
+      // console.log('forkjoin', this.obs$)
       return forkJoin(this.obs$)
     }
+    // console.log('null')
     return of(null)
   }
 
@@ -377,6 +382,7 @@ export class PrintingService {
   printElectron(contents: string, printerName: string, options: printOptions) : boolean {
 
     let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
+    if (options.silent) { printWindow.hide(); }
 
     printWindow.loadURL(contents)
       .then( e => {
@@ -412,8 +418,8 @@ export class PrintingService {
         )
 
         }).catch( err => {
-          console.log('error', err)
-          this.siteService.notify(`Error occured: ${err}`, 'Alert', 2000 )
+          console.log('error', err,options)
+          this.siteService.notify(`Error occured: ${err}. options: ${options}`, 'Alert', 2000 )
           printWindow.close();
           printWindow = null;
           return false
@@ -536,7 +542,7 @@ export class PrintingService {
         }
       )).pipe(switchMap(menuItem => {
         item.menuItem = menuItem;
-        console.log('print label', item, order.history)
+        // console.log('print label', item, order.history)
         return this.printLabel(item,  order.history)
       }))
    }
@@ -676,7 +682,7 @@ export class PrintingService {
     } as printOptions
 
     try {
-      console.log('print electron label')
+      // console.log('print electron label')
       this.printElectron( file, printerName, options)
       return true;
     } catch (error) {

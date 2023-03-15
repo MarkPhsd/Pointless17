@@ -23,7 +23,7 @@ import { CardPointMethodsService } from '../../payment-processing/services';
   styleUrls: ['./payment-balance.component.scss']
 })
 export class PaymentBalanceComponent implements OnInit, OnDestroy {
-
+  @Input() qrOrder :boolean;
   @Input() order : IPOSOrder;
   @Input() mainPanel = true;
   @Input() uiTransactions: TransactionUISettings;
@@ -112,11 +112,15 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
   captureTriPOS(item: IPOSPayment) {
+    this.uiTransactions.triposEnabled
     const site = this.siteService.getAssignedSite();
     const payment$ =  this.paymentService.getPOSPayment(site, item.id, false)
     this.action$ = payment$.pipe(switchMap(payment => {
-
-      return this.triposMethodService.openDialogCompleteCreditPayment(this.order, this.order.creditBalanceRemaining,
+      let amount = this.order.creditBalanceRemaining;
+      if (this.uiTransactions.triposEnabled) {
+        amount = item.amountPaid;
+      }
+      return this.triposMethodService.openDialogCompleteCreditPayment(this.order, amount,
                                                                 payment, this.uiTransactions)
     }))
   }

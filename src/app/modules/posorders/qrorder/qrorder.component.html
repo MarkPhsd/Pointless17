@@ -1,16 +1,16 @@
 <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-    <mat-card *ngIf="(order$ | async) as order; else loading"> 
+    <mat-card *ngIf="(order$ | async) as order; else loading">
     </mat-card>
 </div>
 
 <ng-template #loading>
-    
+
     <div class="spinner">
       <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
           <mat-spinner [diameter]="50"></mat-spinner>
       </div>
     </div>
-    
+
     <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
         <mat-card>
             <h4>

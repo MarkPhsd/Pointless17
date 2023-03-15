@@ -680,7 +680,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   //update the items that have the label printed
   ///update the inventory
   //update the subscription order Info
- printLabels(newLabels: boolean) {
+  printLabels(newLabels: boolean) {
+    console.log(newLabels)
     this.printLabels$ = this.printingService.printLabels(this.order , newLabels)
   }
 

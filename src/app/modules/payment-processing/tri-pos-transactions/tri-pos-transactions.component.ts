@@ -117,12 +117,15 @@ export class TriPosTransactionsComponent implements OnInit {
     let item = this.setTransactionInfo()
     item.paymentType = 'credit'
     this.processing$ =  this.methodsService.reversal(site, item ).pipe(switchMap(data => {
+      // console.log(data.approvalNumber, data.isApproved)
       this.errorMessage = ''
       if (data._hasErrors) {
         this.displayErrors(data)
         return of (null)
       }
       this.posPayment.saleType      = 0;
+      this.posPayment.amountPaid = 0
+      this.posPayment.amountReceived = 0
       return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
     }
     )).pipe(switchMap(data => {
@@ -138,20 +141,20 @@ export class TriPosTransactionsComponent implements OnInit {
     if (this.posPayment && this.terminalSettings.triposLaneID) {
       const site = this.siteService.getAssignedSite();
       const item = this.setTransactionInfo()
-      this.processing$ =  this.methodsService.authorizationCompletion(site, item ).pipe(switchMap(data => {
-        this.errorMessage = ''
-        if (data._hasErrors) {
-          this.displayErrors(data)
-          return of (null)
-        }
-        this.posPayment.saleType      = 1;
+      const authorizationCompletion$ = this.methodsService.authorizationCompletion(site, item );
 
-        console.log('completeAuthorization', this.order)
-        console.log(this.posPayment)
-        return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
+      this.processing$ =  authorizationCompletion$.pipe(
+        switchMap(data => {
+          this.errorMessage = ''
+          if (data._hasErrors) {
+            this.displayErrors(data)
+            return of (null)
+          }
+          this.posPayment.saleType      = 1;
+          return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order);
       }
       )).pipe(switchMap(data => {
-        this.initMessaging()
+        this.initMessaging();
         if (!data) { return of(null)}
         this.dialogRef.close(true)
         return of(data)
@@ -175,7 +178,7 @@ export class TriPosTransactionsComponent implements OnInit {
       const site = this.siteService.getAssignedSite();
       this.processing = true;
 
-      this.processing$ =  this.methodsService.authorizeAmount(site, item ).pipe(switchMap(data => {
+      this.processing$ =  this.methodsService.authorizeAmount( site, item ).pipe(switchMap(data => {
         this.errorMessage = ''
         if (data._hasErrors) {
           this.displayErrors(data)

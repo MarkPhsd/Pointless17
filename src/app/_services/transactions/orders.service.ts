@@ -189,6 +189,7 @@ export class OrdersService {
     this.currentOrder = order;
     this._currentOrder.next(order);
     this.setStateOrder(order);
+    this._scanner.next(true)
   }
 
   updateOrderSubscription(order: IPOSOrder) {

@@ -8,7 +8,6 @@
   <div [class]="orderlayout">
     <div>
       <div>
-
         <div  [class]="gridheaderitem"
               (resized)="onResizedorderHeightPanel($event)">
           <pos-order-transaction-data
@@ -40,7 +39,6 @@
               [class]="gridheaderitem"
               *ngIf="((wideBar || mainPanel) || (phoneDevice && !isUser)) &&
                      !isUser">
-
           <app-order-header-demo-graphics
             [canRemoveClient]     ="canRemoveClient"
             [order]               ="order"
@@ -49,7 +47,6 @@
             (outPutRemoveClient)  ="removeClient()"
             (outPutAssignCustomer)="assignCustomer($event)" >
           </app-order-header-demo-graphics>
-
         </div>
 
         <!-- height is not fixed -->

@@ -1,10 +1,10 @@
-<!-- <div *ngIf="devicename &&
+<div *ngIf="devicename &&
     uiTransactions?.cardPointBoltEnabled &&
-    (order && order?.balanceRemaining != 0)"> -->
+    (order && order?.balanceRemaining != 0)">
   <button class="payment-buttons"
     color="primary"
     mat-raised-button
     (click)="applyBoltPayment(false)">
     <ng-content></ng-content>
    </button>
-<!-- </div> -->
+</div>

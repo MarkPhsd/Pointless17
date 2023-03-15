@@ -1,9 +1,10 @@
 import { Component, Inject, OnInit,OnDestroy } from '@angular/core';
+import { DateAdapter } from '@angular/material/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { isNull } from 'lodash';
-import { Subscription,Observable, switchMap, EMPTY, of } from 'rxjs';
+import { Subscription,Observable, switchMap, EMPTY, of, catchError } from 'rxjs';
 import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
 import { IPOSOrder, IPOSPayment, OperationWithAction } from 'src/app/_interfaces';
 import { IItemBasic, OrdersService } from 'src/app/_services';
@@ -76,11 +77,10 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     if (data) {
       this.deviceSettings$ = this.getDevice();
       this.settings        =  data.uiSetting;
-      const site = this.siteService.getAssignedSite();
-      this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
+      const site           = this.siteService.getAssignedSite();
+      this.isAuthorized    = this.userAuthorization.isUserAuthorized('admin, manager')
       let action = 2;
       if (data.action) { action =  data.action };
-
       if (this.data.manifest) {
         this.manifest = data.manifest;
         this.id       = data.id.toString();
@@ -88,8 +88,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
         this.resultAction = data
         return
       }
-
-
       this.resultAction  = data
       this.pOSPaymentService.updateItemWithAction(data);
       this.list$         = this.adjustMentService.getReasonsByFilter(site, action);
@@ -118,7 +116,13 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   getDevice() {
     const name = localStorage.getItem('devicename');
-    const site = this.siteService.getAssignedSite()
+    const site = this.siteService.getAssignedSite();
+
+    if (!name) {
+      this.siteService.notify('A credit card void cant be made if there is no device associated.', 'Alert',2000);
+      return of(null)
+    }
+
     return this.settingsService.getSettingByName(site, name).pipe(switchMap(data => {
       if (data && data.text) {
         this.terminalSettings = JSON.parse(data.text)
@@ -127,6 +131,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
         }
       }
       return of(data)
+    }),catchError(data => {
+      return of(null)
     }))
   }
 
@@ -196,12 +202,14 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
               item.laneId  = this.terminalSettings.triposLaneID;
               item.transactionID = this.payment.refNumber;
               this.action$ = this.triPOSMethodService.void(site, item).pipe(switchMap(data => {
-
+                console.log(data)
                 if (this.validateTriPOSVoid(data)) {
                   this.resultAction.payment.amountPaid = 0;
                   this.resultAction.payment.amountReceived = 0;
+                  this.resultAction.payment.refNumber = data.transactionId;
                   this.resultAction.payment.tranType = data._type;
                   this.resultAction.payment.voidReason = this.resultAction.voidReason;
+                  this.resultAction.payment.transactionData = JSON.stringify(data)
                   return of(this.resultAction)
                 }
 
@@ -314,7 +322,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
 
   validateTriPOSVoid(data) {
-    if (data.statusCode === "Approved") {
+    if (data.statusCode.toLowerCase() === "Approved".toLowerCase()) {
       return true;
     }
     return false;

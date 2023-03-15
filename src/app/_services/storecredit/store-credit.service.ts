@@ -33,8 +33,6 @@ export class StoreCreditService {
 
   search(site: ISite, searchModel: IStoreCreditSearchModel): Observable<StoreCreditResultsPaged> {
 
-    // console.log('search Model', searchModel);
-
     const controller = "/StoreCredits/"
 
     const endPoint = "SearchItems"

@@ -44,15 +44,18 @@ export class PaymentMethodEditComponent  implements OnInit {
     this.initializeForm()
   }
 
-    async ngOnInit() {
-      this.bucketName =       await this.awsBucket.awsBucket();
-      this.awsBucketURL =     await this.awsBucket.awsBucketURL();
+     ngOnInit() {
+      console.log('constructor')
+
+      // this.bucketName =       await this.awsBucket.awsBucket();
+      // this.awsBucketURL =     await this.awsBucket.awsBucketURL();
     };
 
-    async initializeForm()  {
+    initializeForm()  {
 
       this.initFormFields()
       if (this.inputForm && this.id) {
+        console.log('initialize form')
         const site = this.siteService.getAssignedSite();
         const payments$ = this.paymentMethodService.getPaymentMethod(site, this.id).pipe(
             tap(data => {
@@ -91,12 +94,12 @@ export class PaymentMethodEditComponent  implements OnInit {
         return EMPTY;
     };
 
-    update(item$: Observable<IPaymentMethod>, close: boolean){ 
-      item$.subscribe( 
+    update(item$: Observable<IPaymentMethod>, close: boolean){
+      item$.subscribe(
         {
           next: data => {
           this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'bottom'})
-          if (close) { 
+          if (close) {
             this.onCancel(true)
           }
         }, error: error => {
@@ -106,7 +109,7 @@ export class PaymentMethodEditComponent  implements OnInit {
       )
     }
 
-    save(event) { 
+    save(event) {
       const item$ = this.updateItem(event);
       this.update(item$, false)
     }

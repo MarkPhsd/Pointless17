@@ -48,7 +48,7 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     searchModel.endDate   = this.dateTo;
     searchModel.groupBy   = this.groupBy;
     searchModel.zrunID    = this.zrunID;
-    searchModel.refunds     = true;
-    this.refunds$  = this.salesPaymentService.getPaymentSales(this.site, searchModel);
+    searchModel.refunds   = true;
+    this.refunds$          = this.salesPaymentService.getPaymentSales(this.site, searchModel);
   }
 }

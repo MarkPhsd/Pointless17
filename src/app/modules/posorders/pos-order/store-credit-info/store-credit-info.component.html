@@ -1,7 +1,13 @@
+<!-- storeCreditValue {{storeCreditValue | json}} <br>
+showIssueMoney {{showIssueMoney}}<br>
+search {{search | json}}<br> -->
+
 <div *ngIf="(storeCreditSearch$ | async) as storeCreditSearch"></div>
+
 <div *ngIf="storeCreditValue && storeCreditValue?.results">
   <div *ngFor="let item of storeCreditValue.results;trackby identify">
-      <div *ngIf="item">
+
+    <div *ngIf="item">
         <div class="grid-totals">
           <div *ngIf="item && item.cardNum && item?.cardNum.trim() != ''">Card #</div>
           <div *ngIf="item && item.cardNum &&  item?.cardNum.trim() != ''">{{item?.cardNum}} </div>
@@ -20,9 +26,10 @@
             </div>
           </div>
         </div>
-        <div *ngIf="showIssueMoney && search">
+
+        <div *ngIf="storeCreditValue && storeCreditValue.results[0]?.id && storeCreditValue.results[0]?.id > 0 && showIssueMoney && search">
           Issuing for Card: {{search.cardNumber | json}}
-          <div *ngIf="posIssuePurchaseItem && !posIssuePurchaseItem.gcid && showIssueMoney">
+          <div *ngIf="purchaseOrderItem && !purchaseOrderItem.gcid && showIssueMoney">
             <button  mat-raised-button
                     color="primary"
                     (click)="issueMoney(item)">
@@ -30,13 +37,45 @@
             </button>
           </div>
         </div>
+
       </div>
   </div>
 </div>
 
-<div *ngIf="posIssuePurchaseItem && showIssueMoney">
+<!-- {{storeCreditValue.results[0]?.id | json}} -->
+
+<div *ngIf="storeCreditValue &&
+            storeCreditValue.results[0] != null &&
+            storeCreditValue.results[0]?.id == 0 &&
+            showIssueMoney &&
+            search">
+  Issuing for Card: {{search?.cardNumber }}
+  <div *ngIf="purchaseOrderItem && !purchaseOrderItem.gcid && showIssueMoney">
+    <button  mat-raised-button
+            color="primary"
+            (click)="issueMoney(null)">
+      Add Credit <mat-icon>credit_card</mat-icon>
+    </button>
+  </div>
+</div>
+
+<div *ngIf="storeCreditValue &&
+           ( !storeCreditValue.results || storeCreditValue.results.length == 0 ) &&
+            showIssueMoney &&
+            search">
+  Issuing for Card: {{search?.cardNumber }}
+  <div *ngIf="purchaseOrderItem && !purchaseOrderItem.gcid && showIssueMoney">
+    <button  mat-raised-button
+            color="primary"
+            (click)="issueMoney(null)">
+      Add Credit <mat-icon>credit_card</mat-icon>
+    </button>
+  </div>
+</div>
+
+<div *ngIf="purchaseOrderItem && showIssueMoney">
   <button  mat-raised-button
-          (click)="cancel(posIssuePurchaseItem)">
+          (click)="cancel(purchaseOrderItem)">
     Close
   </button>
 </div>

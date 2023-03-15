@@ -1,5 +1,6 @@
 import { Component, Input , OnChanges, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
+import { NgxPayPalModule } from 'ngx-paypal';
 import { of, switchMap, Observable } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
@@ -17,6 +18,8 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   styleUrls: ['./order-header.component.scss']
 })
 export class OrderHeaderComponent implements OnInit , OnChanges {
+
+  @Input() qrOrder: boolean;
   @Input() uiTransactionSettings  = {} as TransactionUISettings;
   @Input() mainPanel = false;
   @Input() order: IPOSOrder
@@ -84,7 +87,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
       console.log(this.order.id,value)
       this.action$ = this.ordersService.setOrderPriceColumn(this.order.id, value).pipe(
         switchMap(data => {
-          this.siteService.notify(`Price Column Set: ${value}`, 'Result', 2000)
+          // this.siteService.notify(`Price Column Set: ${value}`, 'Result', 2000)
           this.order.priceColumn = data;
           this.ordersService.updateOrder(this.order)
           return of(data)

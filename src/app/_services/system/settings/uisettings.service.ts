@@ -64,7 +64,8 @@ export interface TransactionUISettings {
   idParseOnlyAgeConfirmation: boolean;
   assignBarcodeAsSerial: boolean;
   minClientAge: number;
-
+  storeCreditAPI: string;
+  contactAPI: string;
 }
 
 export interface StripeAPISettings {
@@ -686,6 +687,8 @@ export class UISettingsService {
       dsiEMVAndroidEnabled: [],
       assignBarcodeAsSerial: [],
       minClientAge:  [],
+      storeCreditAPI: [],
+      contactAPI:  [],
      })
   }
 

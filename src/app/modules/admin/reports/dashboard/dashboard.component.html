@@ -65,6 +65,14 @@
             <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
           </payment-report>
 
+          <payment-report
+                  [groupBy]="'deviceName'"
+                  [site]    ="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]  ="dateTo"
+                  [notifier]="childNotifier">
+            <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
+          </payment-report>
 
           <div>
             <item-sales-card

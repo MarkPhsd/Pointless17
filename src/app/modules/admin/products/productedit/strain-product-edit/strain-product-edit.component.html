@@ -128,10 +128,8 @@
 
             <div>
                 <h4><mat-icon>design</mat-icon>Design / Layout</h4>
-
                 <ng-container [ngTemplateOutlet]="icon"></ng-container>
                 <ng-container [ngTemplateOutlet]="menuSort"></ng-container>
-
                 <div class="header">
                   <h4><mat-icon>image</mat-icon>Images</h4>
                 </div>
@@ -154,12 +152,10 @@
              <div *ngIf="itemType && itemType.name && (
                         itemType.type?.toLowerCase() === 'retail liquor' ||
                         itemType.type?.toLowerCase() === 'service liquor'   )">
-
                 <ng-container [ngTemplateOutlet]="countryOfOrigin"></ng-container>
                 <ng-container [ngTemplateOutlet]="proof"></ng-container>
                 <ng-container [ngTemplateOutlet]="yearsOld"></ng-container>
                 <ng-container [ngTemplateOutlet]="abv"></ng-container>
-
             </div>
 
             <div *ngIf="itemType && itemType.useType && (itemType.type?.toLowerCase() === 'grocery' ||
@@ -226,8 +222,7 @@
             </div>
 
             <div *ngIf="itemType && itemType.useType &&  (
-                        itemType.useType?.toLowerCase() == 'product'
-                  )">
+                        itemType.useType?.toLowerCase() == 'product' )">
               <ng-container [ngTemplateOutlet]="unitSelector"></ng-container>
               <ng-container [ngTemplateOutlet]="gramCount"></ng-container>
               <ng-container [ngTemplateOutlet]="productCount"></ng-container>

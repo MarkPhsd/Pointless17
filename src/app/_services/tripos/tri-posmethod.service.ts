@@ -246,6 +246,9 @@ export class TriPOSMethodService {
     posPayment.zrun         = order.zrun;
     posPayment.reportRunID  = order.reportRunID;
     posPayment.amountPaid   = order.creditBalanceRemaining;
+    if (settings.triposEnabled) {
+      posPayment.amountPaid = amount;
+    }
     const payment$          = this.paymentService.savePOSPayment(site, posPayment)
     const paymentProcess    = {order: order, posPayment: posPayment, settings: settings, manualPrompt: false, action: 1}
 

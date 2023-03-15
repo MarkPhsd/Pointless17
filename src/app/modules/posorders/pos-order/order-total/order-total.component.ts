@@ -13,7 +13,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 export class OrderTotalComponent implements OnInit, OnDestroy {
   smallDevice = false;
   cost: number;
-
+  @Input() qrOrder: boolean
   @Input() order: IPOSOrder
   @Input() mainPanel = false;
   @Input() disableActions: boolean;

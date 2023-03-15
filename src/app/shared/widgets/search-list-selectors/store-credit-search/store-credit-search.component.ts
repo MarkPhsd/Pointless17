@@ -114,7 +114,7 @@ export class StoreCreditSearchComponent implements OnInit,OnDestroy {
     }
   }
 
-  async refreshSearch(searchPhrase) {
+  refreshSearch(searchPhrase) {
     if (!searchPhrase) { return }
     try {
       const search = this.getResults(searchPhrase);
@@ -136,7 +136,6 @@ export class StoreCreditSearchComponent implements OnInit,OnDestroy {
     searchModel.cardNumber = scan;
     this.storeCreditMethodsService.updateSearchModel(searchModel)
     return searchModel
-    //
   }
 
 }

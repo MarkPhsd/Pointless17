@@ -718,14 +718,14 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         item.UWUOM = '';
         item.netTotal = data?.netTotal.toFixed(2);
         item.orderID  = data?.orderID;
-        item.Price= '';
-        item.ExciseTax = '';
-        item.CityTax = '';
-        item.CountyTax = '';
-        item.MunicipalTax = '';
-        item.DiscountAmount = '';
-        item.SubTotal = '';
-        item.SalesTax = '';
+        item.Price= '0';
+        item.ExciseTax = '0';
+        item.CityTax = '0';
+        item.CountyTax = '0';
+        item.MunicipalTax = '0';
+        item.DiscountAmount = '0';
+        item.SubTotal = '0';
+        item.SalesTax = '0';
         list.push(item)
       })
       // const data = JSON.stringify(list)

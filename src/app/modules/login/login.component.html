@@ -6,10 +6,10 @@
 <ng-template #userEntryView>
   <div class="centered centered-flex">
 
-    <div class="pin-entry">
+    <div  class="pin-entry">
       <button  mat-raised-button
                 class="center login"
-                *ngIf="platformService.isApp"
+                *ngIf="platformService.isApp() && pinToken"
                 (click)="togglePIN = !togglePIN">
           PIN Entry
       </button>

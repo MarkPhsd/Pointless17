@@ -215,7 +215,6 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
 
   getReceiptHTML(styles: string) {
     const prtContent     = document.getElementById('printsection');
-
     if (!prtContent) { return  }
     const content        = `${prtContent.innerHTML}`
     if (!content) { return }
@@ -248,6 +247,7 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
 
   print() {
     if (!this.printerName) { return }
+    console.log('print', this.printerName)
     if (this.platFormService.isAppElectron) {
       const result = this.printElectron()
       return
@@ -278,22 +278,23 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
   }
 
   printElectronHTML(contents) {
+
+    if (!contents) {
+      console.log('no contents in print electron')
+      return;
+    }
+    if (!this.printerName) {
+      console.log('no printerName in print electron')
+      return;
+    }
     const options  = {
       silent: true,
       printBackground: false,
       deviceName: this.printerName
     } as printOptions;
 
-    if (!contents) {
-      console.log('no contents in print electron')
-      return;
-    }
     if (!options) {
       console.log('no options in print electron')
-      return;
-    }
-    if (!this.printerName) {
-      console.log('no printerName in print electron')
       return;
     }
     // console.log('All good to print')

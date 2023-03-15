@@ -11,6 +11,7 @@ import { IPOSOrder, IPurchaseOrderItem, PosOrderItem,  } from 'src/app/_interfac
 import { IStoreCreditSearchModel, StoreCredit, StoreCreditMethodsService, StoreCreditResultsPaged } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { values } from 'lodash';
 
 @Component({
   selector: 'app-store-credit-issue',
@@ -25,7 +26,8 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
   currentTemplate     : TemplateRef<any>;
   _order              : Subscription;
   order               : IPOSOrder;
-
+  cardNum: string;
+  credit: StoreCredit
   storeCreditSearch$  : Observable<StoreCreditResultsPaged>
   storeCreditSearch   : StoreCreditResultsPaged;
   searchModel         : IStoreCreditSearchModel;
@@ -34,9 +36,7 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
   posIssueItem        : PosOrderItem;
   purchaseOrderItem  : IPurchaseOrderItem;
 
-
   initSubscriptions() {
-
     try {
       this._search = this.storeCreditMethodService.searchModel$.subscribe(data => {
         this.searchModel = data
@@ -57,6 +57,8 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
       }
         if (data) {
           this.posIssueItem = data;
+          this.initCredit()
+          this.credit
         }
       })
     } catch (error) {
@@ -68,12 +70,23 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
         }
         if (data) {
           this.purchaseOrderItem = data;
+          this.initCredit()
         }
       })
     } catch (error) {
     }
   }
 
+  initCredit() {
+    let credit = {} as StoreCredit;
+    if (this.purchaseOrderItem)  {
+      if (credit) {
+        credit.accountNumber = this.cardNum;
+        credit.value = this.purchaseOrderItem.unitPrice
+      }
+    }
+
+  }
   constructor(
     private orderMethodService       : OrderMethodsService,
     private storeCreditMethodService : StoreCreditMethodsService,
@@ -100,10 +113,11 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
   }
 
   setResults(event) {
-    console.log('setResults', event)
     if (event) {
       const cardNum = event?.cardNum
-      this.initStoreCreditItem(null, cardNum)
+      this.cardNum = event?.cardNum;
+      const credit  =  this.initStoreCreditItem(null, cardNum)
+      console.log('setResults', credit, event)
       this.storeCreditMethodService.updateSearchModel(event)
     }
   }
@@ -112,7 +126,7 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
     if (!credit) {
       credit = {} as StoreCredit
       credit.orderID = this.order.id;
-      if (this.order.clientID) { 
+      if (this.order.clientID) {
         credit.clientID= this.order?.clientID;
       }
       if (cardNum) {
@@ -120,9 +134,34 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
       }
       credit.type = 1;
     }
-    if (this.purchaseOrderItem) {
-      credit.value   = credit.value  + this.purchaseOrderItem.unitPrice;
+
+    if (!this.posIssueItem) {
+      console.log('no pos issue item')
     }
+
+    if (!this.purchaseOrderItem) {
+      console.log('no purchaseOrderItem item')
+    }
+
+    if (this.posIssueItem) {
+      if (!credit.value) {
+        credit.value   =  this.posIssueItem.unitPrice;
+      } else {
+        credit.value   = credit.value + this.posIssueItem.unitPrice;
+      }
+      console.log('posIssueItem', credit.value)
+    }
+
+    if (this.purchaseOrderItem) {
+      if (!credit.value) {
+        credit.value   =  this.purchaseOrderItem.unitPrice;
+      } else {
+        credit.value   = credit.value + this.purchaseOrderItem.unitPrice;
+      }
+      console.log('purchaseOrderItem', credit.value)
+    }
+
+    console.log('initStoreCreditItem', credit)
     return credit
   }
 

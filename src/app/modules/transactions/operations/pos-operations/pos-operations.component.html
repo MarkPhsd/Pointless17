@@ -124,11 +124,11 @@
 </div>
 
 <div class="container">
-  <div  class="grid-sales-cards" 
+  <div  class="grid-sales-cards"
         *ngIf="iBalanceSheet && localSite">
-      
+
     <div #printsection>
-    
+
       <ng-container [ngTemplateOutlet]="taxReport"></ng-container>
 
       <ng-container [ngTemplateOutlet]="paymentReport"></ng-container>
@@ -136,6 +136,8 @@
       <div *ngIf="!printing">
         <ng-container [ngTemplateOutlet]="employeeOrdersByHourReport"></ng-container>
       </div>
+
+      <ng-container [ngTemplateOutlet]="salesByDevice"></ng-container>
 
       <ng-container [ngTemplateOutlet]="employeeReport"></ng-container>
 
@@ -196,7 +198,19 @@
 </ng-template>
 
 <ng-template #discountReport>
-  
+
+</ng-template>
+
+<ng-template #salesByDevice>
+  <payment-report
+    [groupBy]="'devicename'"
+    [site]    ="site"
+    [dateFrom]="dateFrom"
+    [dateTo]  ="dateTo"
+    [zrunID]  ="zrunID"
+  >
+  <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
+  </payment-report>
 </ng-template>
 
 <ng-template #employeeOrdersByHourReport>
@@ -216,7 +230,7 @@
       [dateFrom]="dateFrom"
       [dateTo]  ="dateTo"
       [zrunID]  ="zrunID"
-      [groupBy] ="'Employee'"
+      [groupBy] ="'employee'"
       >
     <mat-icon>people</mat-icon>  Employee Sales
     <mat-divider></mat-divider>

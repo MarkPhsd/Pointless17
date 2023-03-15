@@ -59,16 +59,13 @@ export class RenderingService {
     let newValue = JSON.stringify(text)
     newValue = newValue.replace('%', '')
     const item  = JSON.parse(newValue)
-
     return item
-
   }
 
   removeUndefined(item: any) {
     // console.log('item before remove nulls', item)
     // console.log('removeUndefined')
     const result = _.mapValues(item, v => _.isNil(v) ? '' : v)
-
     if (item) {
       item = this.setItemValues(item)
     }
@@ -135,7 +132,7 @@ export class RenderingService {
     try {
       if (e instanceof Date) {
         e = this.dateHelperService.format(e, 'MM-dd-yyyy')
-        console.log('date', e)
+        // console.log('date', e)
         return e;
       }
     } catch (error) {
@@ -145,7 +142,7 @@ export class RenderingService {
     try {
       if (this.isIsoDate(e)) {
         e = this.dateHelperService.format(e,'MM-dd-yyyy')
-        console.log('date', e)
+        // console.log('date', e)
         return e
       }
     } catch (error) {
@@ -155,7 +152,7 @@ export class RenderingService {
       if (e) {
         if (this.dateHelperService.isValidDate(e)) {
           e = this.dateHelperService.format(e, 'MM-dd-yyyy')
-          console.log('date', e)
+          // console.log('date', e)
         }
       }
       } catch (error) {

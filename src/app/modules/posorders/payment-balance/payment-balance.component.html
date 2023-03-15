@@ -7,14 +7,13 @@
   <mat-card-subtitle>
     <ng-content></ng-content>
     <div class="grid-header">
-
       <div>
         <app-order-header
+          [qrOrder]="qrOrder"
           [order]="order">
         </app-order-header>
       </div>
-
-      <div *ngIf="!order || !order.completionDate" class="cart-button">
+      <div *ngIf="!qrOrder && (!order || !order.completionDate)" class="cart-button">
         <button
               mat-raised-button
               (click)="editCart()">
@@ -23,8 +22,7 @@
             Edit
         </button>
       </div>
-
-      <div *ngIf="order && order.completionDate" class="cart-button">
+      <div *ngIf="!qrOrder && (order && order.completionDate)" class="cart-button">
         <button
               mat-raised-button
               (click)="exitOrder()">
@@ -32,15 +30,16 @@
             Exit
         </button>
       </div>
-
     </div>
 
     <app-order-total
+      [qrOrder]="qrOrder"
       [mainPanel]="mainPanel"
       [order]="order">
     </app-order-total>
 
-    <div class="transaction-data" *ngIf="order?.creditBalanceRemaining > 0 && order?.balanceRemaining != order?.creditBalanceRemaining " >
+    <div class="transaction-data" *ngIf="order?.creditBalanceRemaining > 0
+                                          && order?.balanceRemaining != order?.creditBalanceRemaining" >
       <div>
         Credit Balance
       </div>
@@ -55,7 +54,8 @@
       </div>
     </div>
 
-    <div class="transaction-data" *ngIf="order?.creditBalanceRemaining == 0 ||  order?.balanceRemaining == order?.creditBalanceRemaining " >
+    <div class="transaction-data" *ngIf="order?.creditBalanceRemaining == 0 ||
+                                         order?.balanceRemaining == order?.creditBalanceRemaining " >
       <div>
         Remaining Balance
       </div>
@@ -72,117 +72,107 @@
         {{ order?.totalPayments  | currency }}
       </div>
     </div>
-
   </mat-card-subtitle>
 
   <mat-card-content *ngIf="order.posPayments">
     <div  *ngFor="let item of order.posPayments">
-
         <div class="payment-grid" *ngIf="(item.account && !item.completionDate) ||
                                         (item.completionDate && item.amountPaid != 0) ||
                                          (item && item.voidReason) ||
                                          (item.tranType === 'authorizationResponse' )">
-
-                  <!-- type {{item | json}} -->
-          <div *ngIf="item.paymentMethod" class="grid-item">
-            {{item?.paymentMethod?.name}}  {{ item.tranType }}
-            <span *ngIf="item.groupID != 0"> ({{item.groupID}})</span>
-            <span *ngIf="item.voidReason"><mat-icon>void</mat-icon> </span>
-            <div *ngIf="item?.paymentMethod?.isCash && item?.amountPaid > 0">
-              <span *ngIf="item.amountPaid - item.amountReceived !=0">
-                Due:
-              </span>
-            </div>
-          </div>
-
-          <div *ngIf="!isUser && (item?.paymentMethod?.isCreditCard && (item.tranType != 'refundResponse' || item.tranType != 'refundResponse')) ||
-                      item?.paymentMethod?.name.toLowerCase() != 'stripe' &&
-                      item?.paymentMethod?.name.toLowerCase() != 'paypal' &&
-                      (item.account && !item.completionDate && uiTransactions?.cardPointPreAuth)">
-            <button [disabled]="item.voidReason" color="warn"
-                    mat-button (click)="editPayment(item)">
-              <mat-icon>edit</mat-icon></button>
-          </div>
-
-          <div *ngIf="!isUser && item?.paymentMethod?.name.toLowerCase() != 'stripe' &&
-                      !isUser && item?.paymentMethod?.name.toLowerCase() != 'paypal' &&
-                      (item?.paymentMethod?.isCreditCard &&
-                        (uiTransactions && uiTransactions.cardPointPreAuth)) ||
-                        (item.account && !item.completionDate &&
-                        (uiTransactions && uiTransactions.cardPointPreAuth)
-                      ) ">
-            <button mat-raised-button color='primary' (click)="capture(item)">
-              Capture
-              <br>
-              {{ order.creditBalanceRemaining | currency}}
-            </button>
-          </div>
-
-          <div *ngIf="
-                  (item?.paymentMethod?.isCreditCard &&
-                    (uiTransactions && uiTransactions.triposEnabled && !item.completionDate)) ||
-                    (item.account && !item.completionDate &&
-                    (uiTransactions && uiTransactions.triposEnabled)
-                  )">
-            <button mat-raised-button color='primary' (click)="captureTriPOS(item)">
-              Capture
-              <br>
-              {{ order.creditBalanceRemaining | currency}}
-            </button>
-          </div>
-
-          <div *ngIf="item?.paymentMethod?.isCreditCard && item?.cardNum" >
-            {{item.cardNum}}
-            <div *ngIf="item.cardHolder">
-              <span >
-                {{item.cardHolder}}
-              </span>
-            </div>
-          </div>
-
-          <div>
-            {{item.amountPaid + +item.addedPercentageFee | currency}}
-            <div  *ngIf="item?.tipAmount > 0">
-              Tip {{item.tipAmount  | currency}}
-            </div>
-            <div class="totals" *ngIf="item?.paymentMethod?.isCash && item?.amountPaid != 0">
-              <span  *ngIf="item.amountPaid - item.amountReceived !=0">
-                   {{  (item.amountReceived + +item.addedPercentageFee - item.amountPaid)  | currency }}
-              </span>
-            </div>
-          </div>
-
-          <div>
-            <button mat-button
-                    class="grid-item-button"
-                    (click)="printPaymentReceipt(item)"
-                    ><mat-icon>print</mat-icon>
-            </button>
-          </div>
-
-          <div *ngIf="isAuthorized && item.completionDate">
-            <button mat-button
-                    [disabled]="item.voidReason && item.voidReason != 0"
-                    class="grid-item-button"
-                    color="warn"
-                    (click)="voidPayment(item)"  >
-              <mat-icon>delete</mat-icon>Void
-            </button>
-          </div>
-
-          <div *ngIf="item.voidReason && item.voidReason != 0" >
-            <mat-label class="void-info">
-              {{item.voidReason}}
-            </mat-label>
+        <div *ngIf="item.paymentMethod" class="grid-item">
+          {{item?.paymentMethod?.name}}  {{ item.tranType }}
+          <span *ngIf="item.groupID != 0"> ({{item.groupID}})</span>
+          <span *ngIf="item.voidReason"><mat-icon>void</mat-icon> </span>
+          <div *ngIf="item?.paymentMethod?.isCash && item?.amountPaid > 0">
+            <span *ngIf="item.amountPaid - item.amountReceived !=0">
+              Due:
+            </span>
           </div>
         </div>
+        <div *ngIf="!qrOrder &&
+                    (!isUser && (item?.paymentMethod?.isCreditCard &&
+                    (item.tranType != 'refundResponse' || item.tranType != 'refundResponse')) ||
+                    item?.paymentMethod?.name.toLowerCase() != 'stripe' &&
+                    item?.paymentMethod?.name.toLowerCase() != 'paypal' &&
+                    (item.account && !item.completionDate && uiTransactions?.cardPointPreAuth))">
+          <button [disabled]="item.voidReason" color="warn"
+                  mat-button (click)="editPayment(item)">
+            <mat-icon>edit</mat-icon></button>
+        </div>
 
+        <div *ngIf="!qrOrder && (!isUser && item?.paymentMethod?.name.toLowerCase() != 'stripe' &&
+                    !isUser && item?.paymentMethod?.name.toLowerCase() != 'paypal' &&
+                    (item?.paymentMethod?.isCreditCard &&
+                      (uiTransactions && uiTransactions.cardPointPreAuth)) ||
+                      (item.account && !item.completionDate &&
+                      (uiTransactions && uiTransactions.cardPointPreAuth)
+                    ) )">
+          <button mat-raised-button color='primary' (click)="capture(item)">
+            Capture
+            <br>
+            {{ order.creditBalanceRemaining | currency}}
+          </button>
+        </div>
+
+        <div *ngIf="!qrOrder && (
+                (item?.paymentMethod?.isCreditCard &&
+                  (uiTransactions && uiTransactions.triposEnabled && !item.completionDate)) ||
+                  (item.account && !item.completionDate &&
+                  (uiTransactions && uiTransactions.triposEnabled)
+                ))">
+          <button mat-raised-button color='primary' (click)="captureTriPOS(item)">
+            Capture
+            <br>
+            {{ item.amountPaid | currency }}
+          </button>
+        </div>
+        <div *ngIf="item?.paymentMethod?.isCreditCard && item?.cardNum" >
+          {{item.cardNum}}
+          <div *ngIf="item.cardHolder">
+            <span >
+              {{item.cardHolder}}
+            </span>
+          </div>
+        </div>
+        <div>
+          {{item.amountPaid + +item.addedPercentageFee | currency}}
+          <div  *ngIf="item?.tipAmount > 0">
+            Tip {{item.tipAmount  | currency}}
+          </div>
+          <div class="totals" *ngIf="item?.paymentMethod?.isCash && item?.amountPaid != 0">
+            <span  *ngIf="item.amountPaid - item.amountReceived !=0">
+                  {{  (item.amountReceived + +item.addedPercentageFee - item.amountPaid)  | currency }}
+            </span>
+          </div>
+        </div>
+        <div *ngIf="!qrOrder">
+          <button mat-button
+                  class="grid-item-button"
+                  (click)="printPaymentReceipt(item)"
+                  ><mat-icon>print</mat-icon>
+          </button>
+        </div>
+        <div *ngIf="!qrOrder && (isAuthorized && item.completionDate)">
+          <button mat-button
+                  [disabled]="item.voidReason && item.voidReason != 0"
+                  class="grid-item-button"
+                  color="warn"
+                  (click)="voidPayment(item)"  >
+            <mat-icon>delete</mat-icon>Void
+          </button>
+        </div>
+        <div *ngIf="item.voidReason && item.voidReason != 0" >
+          <mat-label class="void-info">
+            {{item.voidReason}}
+          </mat-label>
+        </div>
+      </div>
     </div>
-
   </mat-card-content>
 
   <mat-card-actions>
-    <div  *ngIf="!isUser && paymentsEqualTotal">
+    <div  *ngIf="!qrOrder && (!isUser && paymentsEqualTotal)">
       <button mat-raised-button color="warn"  (click)="closeOrder()">
         <mat-icon >close</mat-icon>Close</button>
     </div>
