@@ -19,7 +19,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class StoreCreditPopUpComponent implements OnInit,OnDestroy {
 
-  
   @ViewChild('giftCardScan')     giftCardScan: TemplateRef<any>;
   @ViewChild('storeCreditItems') storeCreditItems: TemplateRef<any>;
 	@ViewChild('noItems')          noItems         : TemplateRef<any>;
@@ -32,6 +31,7 @@ export class StoreCreditPopUpComponent implements OnInit,OnDestroy {
   searchModel         : IStoreCreditSearchModel
   search              : IStoreCreditSearchModel
   clientID: number;
+  method: string
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -46,8 +46,11 @@ export class StoreCreditPopUpComponent implements OnInit,OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: any)
   {
     if (data) {
-      if (data.clientID) {
+      if (data?.method === 'payment') {}
+      if (data?.method === 'issue')
+      this.method = data?.method;
 
+      if (data.clientID) {
         this.initClientStoreCredit(data.clientID)
         return
       }
@@ -74,7 +77,7 @@ export class StoreCreditPopUpComponent implements OnInit,OnDestroy {
     this.storeCreditMethodsService.updateSearchModel(search)
     this.currentTemplate      = null;
     this.currentTemplate      = this.giftCardScan
-    this.templateOption;
+    // this.templateOption;
   }
 
   initClientStoreCredit(clientID: number) {
@@ -99,7 +102,7 @@ export class StoreCreditPopUpComponent implements OnInit,OnDestroy {
       this.currentTemplate = this.noItems
     }
 
-    if (this.searchModel) { 
+    if (this.searchModel) {
       console.log('returning current template, gifcard scan')
     }
     return this.currentTemplate

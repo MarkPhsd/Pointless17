@@ -1,31 +1,33 @@
-<mat-card>
-  <mat-card-title>
-    <h1>Issue Credit</h1>
-  </mat-card-title>
+<div class="centered centered-flex">
+  <mat-card>
+    <mat-card-title>
+      <h1>Issue Credit</h1>
+    </mat-card-title>
 
-  <mat-card-subtitle>
-    <!-- <div *ngIf="posIssueItem">
-      <h2> Adding Value 1:  {{+posIssueItem.unitPrice | currency}}</h2>
-    </div> -->
-    <div *ngIf="purchaseOrderItem">
-      <h2>
-        Adding Value:  {{+purchaseOrderItem.unitPrice | currency}}
-      </h2>
-    </div>
+    <mat-card-subtitle>
+      <!-- <div *ngIf="posIssueItem">
+        <h2> Adding Value 1:  {{+posIssueItem.unitPrice | currency}}</h2>
+      </div> -->
+      <div *ngIf="purchaseOrderItem">
+        <h2>
+          Adding Value:  {{+purchaseOrderItem.unitPrice | currency}}
+        </h2>
+      </div>
 
-    <store-credit-search
-      (outPutResults)="setResults($event)">
-    </store-credit-search>
-  </mat-card-subtitle>
+      <store-credit-search
+        (outPutResults)="setResults($event)">
+      </store-credit-search>
+    </mat-card-subtitle>
 
-  <mat-card-content>
-    <store-credit-info
-      [showPayment]   ="false"
-      [showIssueMoney]="true"
-      [purchaseOrderItem]="purchaseOrderItem"
-      [order]         ="order"
-      (closeDialog)   ="onCancel($event)"
-      >
-    </store-credit-info>
-  </mat-card-content>
-</mat-card>
+    <mat-card-content>
+      <store-credit-info
+        [showPayment]   ="false"
+        [showIssueMoney]="true"
+        [purchaseOrderItem]="purchaseOrderItem"
+        [order]         ="order"
+        (closeDialog)   ="onCancel($event)"
+        >
+      </store-credit-info>
+    </mat-card-content>
+  </mat-card>
+</div>

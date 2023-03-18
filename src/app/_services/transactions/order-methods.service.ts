@@ -703,7 +703,8 @@ export class OrderMethodsService implements OnDestroy {
       if (data?.message) {  this.notifyEvent(`Process Result: ${data?.message}`, 'Alert ')};
 
       if (data && data.resultErrorDescription) {
-        this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert');
+        // this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert');
+        this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 2000, 'red');
         return;
       }
 
@@ -726,16 +727,15 @@ export class OrderMethodsService implements OnDestroy {
             console.log('this toggle service ui ')
             this.toolbarServiceUI.updateOrderBar(true)
           }
-
         }
 
       } else {
-        this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert');
+        this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 2000, 'red');
         return;
       }
 
       if (this.openDialogsExist) {
-        this.notification('Item added to cart.', 'Check Cart');
+        // this.notification('Item added to cart.', 'Check Cart');
       }
 
   }
@@ -902,7 +902,7 @@ export class OrderMethodsService implements OnDestroy {
         if (result.scanResult) {
           // this.notifyWithOption('Item Deleted', 'Notice', notify)
         } else  {
-          this.notifyWithOption('Item must be voided', 'Notice', notify)
+          this.siteService.notify('Item must be voided', 'Notice', 1500, 'yellow')
         }
         if (result && result.order) {
           this.orderService.updateOrderSubscription(result.order);
@@ -948,7 +948,7 @@ export class OrderMethodsService implements OnDestroy {
         switchMap(
            data => {
             if (data) {
-              this._snackBar.open('Order deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
+              this.siteService.notify('Order deleted.', 'Alert', 1000, 'green' ) // {verticalPosition: 'top', duration: 1000})
               this.clearOrder();
               if (this.router.url == '/pos-orders') {
                 return
@@ -956,12 +956,12 @@ export class OrderMethodsService implements OnDestroy {
               this.router.navigate(['app-main-menu'])
             }
             if (!data) {
-              this._snackBar.open('Order not deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
+              this.siteService.notify('Order not deleted.', 'Alert', 1000, 'red' ) // {verticalPosition: 'top', duration: 1000})
             }
             return of(data)
           }),
           catchError(error => {
-            this._snackBar.open('Order not deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
+            this.siteService.notify('Order not deleted.', 'Alert', 1000, 'red' ) //{verticalPosition: 'top', duration: 1000, 'red'})
             return of(error)
           }
         )
@@ -974,7 +974,7 @@ export class OrderMethodsService implements OnDestroy {
     if (order) {
 
       if (order.clientID == 0) {
-        this.siteService.notify('Assign this order a customer for reference', 'Alert',1500)
+        this.siteService.notify('Assign this order a customer for reference', 'Alert', 1500, 'yellow')
         return of(null)
       }
 
@@ -986,7 +986,7 @@ export class OrderMethodsService implements OnDestroy {
       return  suspend$.pipe(
         switchMap(data =>{
           this.clearOrder()
-          this.siteService.notify('This order has been suspended', 'Success', 1000)
+          this.siteService.notify('This order has been suspended', 'Success', 1000, 'green')
           this.router.navigateByUrl('/pos-orders');
           return of(data)
         })
@@ -1159,10 +1159,11 @@ export class OrderMethodsService implements OnDestroy {
 
     const dialogRef = this.dialog.open(StoreCreditIssueComponent,
       {
-        width:     '500px',
-        maxWidth:  '500px',
-        height:    '500px',
-        maxHeight: '500px',
+        width:        '100%',
+        minWidth:     '100%',
+        maxWidth:     'max-width: 100vw !important',
+        height:       '100vh',
+        minHeight:    '100vh',
       }
     )
     dialogRef.afterClosed().subscribe(result => {

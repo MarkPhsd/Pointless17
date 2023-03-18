@@ -82,6 +82,7 @@ export interface PosOrderMenuItem {
   thc:                      string;
   cbd:                      string;
   gramCount:                number;
+
   metaTags:                 string;
   metaDescription:          string;
   onlineDescription:        string;

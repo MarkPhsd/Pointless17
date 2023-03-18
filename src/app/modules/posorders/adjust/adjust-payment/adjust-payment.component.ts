@@ -12,7 +12,7 @@ import { InventoryAssignmentService } from 'src/app/_services/inventory/inventor
 import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-credit-methods.service';
+import { StoreCredit, StoreCreditMethodsService } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { StoreCreditService } from 'src/app/_services/storecredit/store-credit.service';
 import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-reasons.service';
 import { RequestMessageService } from 'src/app/_services/system/request-message.service';
@@ -63,6 +63,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                 private orderService          : OrdersService,
                 private matSnackBar           : MatSnackBar,
                 private storeCreditService    : StoreCreditService,
+
                 private cardPointMethdsService: CardPointMethodsService,
                 private triPOSMethodService   : TriPOSMethodService,
                 private userAuthorization     : UserAuthorizationService,
@@ -117,12 +118,10 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   getDevice() {
     const name = localStorage.getItem('devicename');
     const site = this.siteService.getAssignedSite();
-
     if (!name) {
       this.siteService.notify('A credit card void cant be made if there is no device associated.', 'Alert',2000);
       return of(null)
     }
-
     return this.settingsService.getSettingByName(site, name).pipe(switchMap(data => {
       if (data && data.text) {
         this.terminalSettings = JSON.parse(data.text)
@@ -140,36 +139,28 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   // priceAdjust = 2,
   // note = 3
   selectItem(setting) {
-
     if (this.voidPayment) {
       this.voidPaymentFromSelection(setting)
       return
     }
-
     if (this.manifest) {
       this.rejectManifestItemsFromSelection(setting)
       return
     }
-
   }
 
   rejectManifestItemsFromSelection(setting) {
     if (setting) {
-      // console.log(setting)
       const site = this.siteService.getAssignedSite();
       this.resultAction.voidReason = setting.name
       this.resultAction.voidReasonID = setting.id
       this.resultAction.action = 1;
-
       let response$: Observable<OperationWithAction>;
-
       if (this.resultAction) {
         if (this.manifest) {
           const items = this.manifest.inventoryAssignments;
           this.closeManifestDialog(this.resultAction.voidReason);
         }
-        // response$ = this.inventoryAssignmentService.putInventoryAssignmentList(site, this.resultAction)//.pipe().toPromise();
-        // this.updateManifestResponse(response$)
       }
     }
   }
@@ -186,6 +177,43 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
       if (this.resultAction) {
         if (method) {
+
+          if (method?.companyCredit) {
+
+            this.voidPayment.voidReason = this.resultAction.voidReason
+
+            const credit = {} as StoreCredit;
+            console.log('this void card issue', credit)
+
+            this.resultAction.payment = this.payment;
+            const msg ='Unable to void this store credit. Before voiding this order, please ensure the card can be voided.';
+
+            const getPayment$ = this.pOSPaymentService.getPOSPayment(site, this.payment.id, false);
+
+            this.action$ =
+            getPayment$.pipe( switchMap ( payment => {
+              this.payment = payment;
+              credit.cardNum = payment.cardNum;
+              credit.reduceValue = payment.amountPaid;
+              console.log('credit should be', credit.cardNum)
+              return this.storeCreditService.updateCreditValue(site, credit)
+            })).pipe( switchMap ( data => {
+                if (data) {
+                  return this.voidPaymentWithAction(this.resultAction)
+                }
+                if (!data) {
+                  this.siteService.notify(msg, 'Alert', 1000)
+                  return of(null)
+                }
+              }
+            )),catchError(err => {
+              this.siteService.notify(`Error ${err}`, 'Error Voiding', 5000)
+              return of(err)
+            })
+            return;
+
+          }
+
           if (method.isCreditCard) {
             this.voidPayment.voidReason = this.resultAction.voidReason
 
@@ -202,7 +230,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
               item.laneId  = this.terminalSettings.triposLaneID;
               item.transactionID = this.payment.refNumber;
               this.action$ = this.triPOSMethodService.void(site, item).pipe(switchMap(data => {
-                console.log(data)
+                // console.log(data)
                 if (this.validateTriPOSVoid(data)) {
                   this.resultAction.payment.amountPaid = 0;
                   this.resultAction.payment.amountReceived = 0;
@@ -229,7 +257,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                     if ( data?.resultMessage == null ) {
                       this.notifyEvent(`Void failed: user may not be authorized`, 'Void Result')
                       return of(null)
-                      return
                     }
                     this.notifyEvent(`Void failed: ${data?.resultMessage}`, 'Void Result')
                     return of(null)
@@ -320,16 +347,41 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
+  voidPaymentWithAction(action: OperationWithAction) {
+    let voidPayment$ : Observable<OperationWithAction>;
+    const site = this.siteService.getAssignedSite();
+    if (!action) {
+      this.notifyEvent('Void not allowed by user', 'CC Result')
+      voidPayment$ =  of(null)
+    }
+    if (action) {
+      voidPayment$ = this.pOSPaymentService.voidPayment(site, action);
+    }
+
+    return  voidPayment$.pipe(
+      switchMap(data => {
+        if (!data || !data?.result) {
+          if ( data?.resultMessage == null ) {
+            this.notifyEvent(`Void failed: user may not be authorized`, 'Void Result')
+            return of(null)
+          }
+          this.notifyEvent(`Void failed: ${data?.resultMessage}`, 'Void Result')
+          return of(null)
+        }
+        this.updateVoidPayment(data)
+        return of(data)
+    }))
+
+  }
 
   validateTriPOSVoid(data) {
     if (data.statusCode.toLowerCase() === "Approved".toLowerCase()) {
       return true;
     }
     return false;
-
   }
-  updateVoidPayment(response: OperationWithAction) {
 
+  updateVoidPayment(response: OperationWithAction) {
     const site = this.siteService.getAssignedSite();
     const item$ = this.updateOrderSubscription()
 
@@ -342,20 +394,21 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       return
     }
 
-    if (response.purchaseOrderPayment && response.purchaseOrderPayment.giftCardID != 0) {
-      const valueToReduce = response.payment.amountPaid
-      this.closeDialog(response.payment, response.paymentMethod);
-      if (response.purchaseOrderPayment && response.purchaseOrderPayment.giftCardID) {
-        this.storeCreditService.updateCreditValue(site ,response.purchaseOrderPayment.giftCardID, valueToReduce).subscribe(data => {
-          if (data == null) { return }
-          this.storeCreditMethodService.updateSearchModel(null)
-        })
-      }
-      return;
-    }
-
+    // if (response.purchaseOrderPayment && response.purchaseOrderPayment.giftCardID != 0) {
+    //   const valueToReduce = response.payment.amountPaid
+    //   this.closeDialog(response.payment, response.paymentMethod);
+    //   if (response.purchaseOrderPayment && response.purchaseOrderPayment.cardNum) {
+    //     const credit = {} as StoreCredit  ;
+    //     credit.cardNum = response.purchaseOrderPayment.cardNum;
+    //     credit.reduceValue = valueToReduce;
+    //     this.storeCreditService.updateCreditValue(site, credit).subscribe(data => {
+    //       if (data == null) { return }
+    //       this.storeCreditMethodService.updateSearchModel(null)
+    //     })
+    //   }
+    //   return;
+    // }
   }
-
 
   voidDSIEmvPayment() {
     if (this.voidPayment) {
@@ -369,7 +422,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
- get isDSIEmvPayment() {
+  get isDSIEmvPayment() {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
       if (voidPayment.trancode && voidPayment.trancode.toLowerCase() ===  'EMVSale'.toLowerCase()) {
@@ -390,11 +443,11 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
             this.closeDialog(response.payment, response.paymentMethod);
           });
         }
-        if (response.purchaseOrderPayment && response.purchaseOrderPayment.giftCardID != 0) {
-          const valueToReduce = response.payment.amountPaid
-          this.closeDialog(response.payment, response.paymentMethod);
-          return this.storeCreditService.updateCreditValue(site ,response.purchaseOrderPayment.giftCardID, valueToReduce)
-        }
+        // if (response.purchaseOrderPayment && response.purchaseOrderPayment.giftCardID != 0) {
+        //   const valueToReduce = response.payment.amountPaid
+        //   this.closeDialog(response.payment, response.paymentMethod);
+        //   return this.storeCreditService.updateCreditValue(site ,response.purchaseOrderPayment.cardNum, valueToReduce)
+        // }
         return of(null)
       }
     )).pipe(switchMap(data => {

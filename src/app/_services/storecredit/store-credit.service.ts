@@ -1,10 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
-import { AuthenticationService } from '..';
-import { SitesService } from '../reporting/sites.service';
-import { IPagedList } from '../system/paging.service';
 import { IStoreCreditSearchModel, StoreCredit, StoreCreditResultsPaged } from './store-credit-methods.service';
 
 @Injectable({
@@ -17,17 +14,17 @@ export class StoreCreditService {
   ) {
  }
 
-  delete(site: ISite, id: number): Observable<StoreCredit> {
+  delete(site: ISite, cardNum: string ): Observable<StoreCredit> {
 
     const controller ="/StoreCredits/"
 
-    const endPoint = `GetStoreCredits`
+    const endPoint = `DeleteStoreCredits`
 
-    const parameters = `?id=${id}`
+    const parameters = `?cardNum=${cardNum}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.httpClient.delete<any>(url)
+    return this.httpClient.get<any>(url)
 
   }
 
@@ -59,13 +56,13 @@ export class StoreCreditService {
 
   };
 
-  putStoreCredit(site: ISite, id: number, storeCredit: StoreCredit): Observable<StoreCredit> {
+  putStoreCredit(site: ISite, cardNum: string, storeCredit: StoreCredit): Observable<StoreCredit> {
 
     const controller =  "/StoreCredits/"
 
-    const endPoint = "putStoreCredit"
+    const endPoint = "putStoreCreditApp"
 
-    const parameters = `?id=${id}`
+    const parameters = `?cardNum=${cardNum}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
@@ -75,11 +72,11 @@ export class StoreCreditService {
 
   postStoreCredit(site: ISite, storeCredit: StoreCredit): Observable<StoreCredit> {
 
-    if (!storeCredit) {return null;}
+    if (!storeCredit) {return of(null);}
 
     const controller =  "/StoreCredits/"
 
-    const endPoint = "PostStoreCredit"
+    const endPoint = "PostStoreCreditApp"
 
     const parameters = ``
 
@@ -89,34 +86,29 @@ export class StoreCreditService {
 
   };
 
-  updateCreditValue(site: ISite, id: number, valueToReduce: number) {
-
-    if (!id) {return null;}
+  updateCreditValue(site: ISite, credit: StoreCredit) {
 
     const controller =  "/StoreCredits/"
 
-    const endPoint = "updateCreditValue"
+    const endPoint = "updateCreditValueApp"
 
-    const parameters = `?id=${id}&value=${valueToReduce}`
+    const parameters = ``
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.httpClient.get<StoreCredit>(url);
+    return this.httpClient.post<StoreCredit>(url, credit);
 
   }
 
-  save(site:ISite, storeCredit: StoreCredit) {
-
-    if (!storeCredit) { return null}
-    if (storeCredit.id == 0 || !storeCredit.id) {
-      return this.postStoreCredit(site, storeCredit)
+  save(site:ISite, credit: StoreCredit) {
+    // console.log(credit)
+    if (!credit || !credit.cardNum) {
+      console.log('returning nothing')
+      return of(null) }
+    if (!credit.id ||  credit.id == 0 ) {
+      return this.postStoreCredit(site, credit)
     }
-    if ( storeCredit.id &&  storeCredit.id !=0 ) {
-      return this.putStoreCredit(site, storeCredit.id, storeCredit)
-    }
-
-    return null;
-
+    return this.putStoreCredit(site, credit.cardNum, credit)
   }
 
   // PostStoreCredits

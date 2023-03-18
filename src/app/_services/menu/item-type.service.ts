@@ -225,7 +225,7 @@ export class ItemTypeService {
 packageType = ['Not-Specified', 'Marijuana Weighed',
                'Marijuana - Packaged', 'Medicine - Weighed',
                'Medicine Each', 'Seeds', 'Plants', 'Concentrates',
-               'Solid', 'Liquid', 'Extract']
+               'Solid', 'Liquid', 'Extract', 'Combined Category']
 
 type       = [
    'adjustment',

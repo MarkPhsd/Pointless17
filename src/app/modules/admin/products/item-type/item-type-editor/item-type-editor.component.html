@@ -141,6 +141,24 @@
                 </mat-form-field>
               </div>
 
+              <div class="filterItem" *ngIf="itemType && itemType?.type &&
+                          (itemType?.type.toLowerCase() === 'cannabis' ||
+                          itemType.type.toLowerCase()  === 'med-cannabis')"  >
+                <mat-form-field appearance="outline">
+                  <mat-label>Package Type</mat-label>
+                    <mat-select
+                              type="number"
+                              [formControlName]  ="'packageType'"
+                              name="packageType">
+                      <mat-option value= "">Clear</mat-option>
+                      <mat-option *ngFor="let item of itemType_PackageTypes"
+                        [value]="item">
+                        {{item}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
               <div>
                 <mat-label>Input portion types, separated by comma.</mat-label>
                 <mat-form-field appearance="outline">
@@ -208,22 +226,6 @@
               </div>
 
 
-              <div class="filterItem" *ngIf="itemType && (itemType.type === 'cannabis' || itemType.type === 'med-cannabis')"  >
-                <mat-form-field appearance="outline">
-                  <mat-label>Package Type</mat-label>
-                  <mat-select
-                              type="number"
-                              [formControlName]  ="'packageType'"
-                              name="packageType"
-                    >
-                    <mat-option value= "">Clear</mat-option>
-                    <mat-option *ngFor="let item of itemType_PackageTypes"
-                                [value]="item">
-                      {{item}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
 
               <div class="filterItem"
                 *ngIf="metrcCategories$ &&  typeName === 'cannabis'"  >

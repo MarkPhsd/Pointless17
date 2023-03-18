@@ -8,13 +8,13 @@ import { InterceptorSkipHeader } from 'src/app/_http-interceptors/basic-auth.int
 
 import { AppInitService, IAppConfig } from '../system/app-init.service';
 import { PlatformService } from '../system/platform.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SitesService {
-
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   sites: ISite[];
   site: ISite;
   apiUrl: any;
@@ -313,8 +313,26 @@ export class SitesService {
     return this.getSite(id)
   }
 
-  notify(message: string, title: string, time: number){
-    this.snackBar.open(message, title, {duration: time})
+  notify(message: string, title: string, time: number, color?: string, vPOS?: string){
+    if (color) {
+      if (color === 'red') { color = 'mat-warn'}
+      if (color === 'yellow') { color = 'mat-accent'}
+      if (color === 'green') { color = 'mat-primary'}
+    }
+    if (!color) { color = 'mat-primary'}
+    console.log('color', color)
+    if (!vPOS) { vPOS = 'bottom'}
+
+    this.verticalPosition = vPOS as MatSnackBarVerticalPosition ;
+
+    this.snackBar.open(
+      message,
+      title, {
+        verticalPosition: this.verticalPosition,
+        duration: time,
+        panelClass: ['mat-toolbar', color]
+      }
+    );
   }
 
 }

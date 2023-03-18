@@ -177,7 +177,6 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
           this.notify(message, 'Alert', 2000)
         }
         const itemdata = { payment: payment, uiSettings: this.uiTransactions}
-        // console.log(itemdata)
         this.productEditButtonService.openVoidPaymentDialog(itemdata)
         return of(data)
         }

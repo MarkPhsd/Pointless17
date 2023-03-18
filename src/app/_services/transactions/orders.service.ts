@@ -193,9 +193,7 @@ export class OrdersService {
   }
 
   updateOrderSubscription(order: IPOSOrder) {
-
     this.updateOrder(order)
-
     if (order == null) {
       order = this.getStateOrder();
       if (order) {

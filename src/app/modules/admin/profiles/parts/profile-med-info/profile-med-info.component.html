@@ -79,16 +79,18 @@
           </mat-slide-toggle>
         </div>
 
-        <div>
-          <mat-card class="image-container">
-            <app-widget-uploader
-                [(fileNames)]="fileList"
-                (imageUrl)   ="updateFileList($event)">
-              File Uploads
-            </app-widget-uploader>
-          </mat-card>
-        </div>
 
+
+      </div>
+
+      <div>
+        <mat-card class="image-container">
+          <app-widget-uploader
+              [(fileNames)]="fileList"
+              (imageUrl)   ="updateFileList($event)">
+            File Uploads
+          </app-widget-uploader>
+        </mat-card>
       </div>
     </div>
   </mat-card>

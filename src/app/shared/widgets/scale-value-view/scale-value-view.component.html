@@ -1,0 +1,5 @@
+<div class='search-input' *ngIf="platformService.isAppElectron">
+  <div *ngIf="(scaleService.scaleInfo$ | async) as scale">
+    {{scale?.value}} {{scale?.mode}}
+  </div>
+</div>

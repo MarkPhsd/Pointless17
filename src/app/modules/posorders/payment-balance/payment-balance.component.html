@@ -39,7 +39,7 @@
     </app-order-total>
 
     <div class="transaction-data" *ngIf="order?.creditBalanceRemaining > 0
-                                          && order?.balanceRemaining != order?.creditBalanceRemaining" >
+                                          && order?.balanceRemaining != order?.creditBalanceRemaining">
       <div>
         Credit Balance
       </div>
@@ -55,7 +55,7 @@
     </div>
 
     <div class="transaction-data" *ngIf="order?.creditBalanceRemaining == 0 ||
-                                         order?.balanceRemaining == order?.creditBalanceRemaining " >
+                                         order?.balanceRemaining == order?.creditBalanceRemaining" >
       <div>
         Remaining Balance
       </div>

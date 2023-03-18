@@ -87,6 +87,7 @@ export interface IPOSOrder {
   liquidCount:           number;
   concentrateCount:      number;
   extractCount:          number;
+  combinedCategory      :number;
   quantity:              number;
   itemQuantity:          number;
   orderID:               number;
@@ -167,6 +168,7 @@ export interface ClientsPOSOrders {
   medConcentrateLimit: number;
   medPlantLimit: number;
   medFlowerLimit: number;
+  combinedCategoryLimit: number;
 }
 
 export interface ClientType {
@@ -182,6 +184,7 @@ export interface ClientType {
   limitConcentrate:  number;
   limitExtract:      number;
   limitConcentrates: number;
+  limitCombinedCategory:number;
   allowStaffUse    : boolean;
   authorizationGroupID:  number;
   jsonObject      : string;

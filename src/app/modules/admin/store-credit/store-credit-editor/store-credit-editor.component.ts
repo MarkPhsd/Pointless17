@@ -35,9 +35,7 @@ export class StoreCreditEditorComponent implements OnInit {
     private siteService             : SitesService,
     private snack                   : MatSnackBar,
     private awsBucket               : AWSBucketService,
-    private fbClientTypesService    : FbClientTypesService,
     private contactsService         : ContactsService,
-
     private dialogRef               : MatDialogRef<StoreCreditEditorComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
   {
@@ -45,7 +43,6 @@ export class StoreCreditEditorComponent implements OnInit {
       this.id = data
     }
     this.initializeForm()
-
   }
 
   async ngOnInit() {
@@ -91,7 +88,6 @@ export class StoreCreditEditorComponent implements OnInit {
           data.cardData = data.cardData.trim();
           this.inputForm.patchValue(data)
         })
-
       }
     }
   }
@@ -143,7 +139,7 @@ export class StoreCreditEditorComponent implements OnInit {
       this.snack.open("Item note initiated", "Success", {duration:2000, verticalPosition: 'top'})
       return
     }
-    this.storeCreditService.delete(site,this.storeCredit.id).subscribe( data =>{
+    this.storeCreditService.delete(site,this.storeCredit.cardNum).subscribe( data =>{
         this.snack.open("Item deleted", "Success", {duration:2000, verticalPosition: 'top'})
         this.onCancel(event)
     })

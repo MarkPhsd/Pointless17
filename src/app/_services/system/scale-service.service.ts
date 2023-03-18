@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {  Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
 import { PlatformService } from './platform.service';
@@ -40,7 +40,7 @@ export class ScaleService  {
   constructor(
     private electronService: ElectronService,
     private platformService: PlatformService,
-    public IPCService :     IPCService,
+    public IPCService :     IPCService
     ) {
     if (!this.IPCService.isElectronApp) { return }
     this.readScaleEvent();
@@ -78,7 +78,6 @@ export class ScaleService  {
 
   async readScale() {
     if (!this.IPCService.isElectronApp) { return }
-
     const scaleInfo = this.getScaleInfo();
     if (!scaleInfo) { return }
     this.updateSubscription(scaleInfo)
@@ -133,7 +132,7 @@ export class ScaleService  {
     if (!this.IPCService.isElectronApp) { return }
     let scaleSetup                  = {}  as ScaleSetup;
     scaleSetup.decimalPlaces      = 2;
-    scaleSetup.timer              = 500;
+    scaleSetup.timer              = 250;
 
     scaleSetup.enabled            = true;
     this.updateScaleSetup(scaleSetup);

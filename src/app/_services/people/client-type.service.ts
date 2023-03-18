@@ -134,6 +134,32 @@ export class ClientTypeService {
 
   }
 
+  getClientTypeByNameCached(site: ISite, name: any) : Observable<clientType> {
+
+    if (!name) {return EMPTY}
+
+    const controller =  "/clientTypes/"
+
+    const endPoint = `getClientTypeByName`
+
+    const parameters = `?name=${name}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    let appCache =  JSON.parse(localStorage.getItem('appCache')) as any;
+    if (appCache) {
+      if (appCache?.value && appCache?.boolean) {
+        const uri = { url: url, cacheMins: appCache.value}
+        return  this.httpCache.get<clientType>(uri)
+      }
+    }
+
+    return this.http.get<clientType>(url);
+
+
+  }
+
+
   getClientTypes(site: ISite): Observable<any> {
 
     const controller = "/clientTypes/"

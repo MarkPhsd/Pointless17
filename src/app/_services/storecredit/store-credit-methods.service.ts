@@ -43,6 +43,7 @@ import { StoreCreditService } from './store-credit.service';
     endDate:        string;
     userNameSecret: string;
     accountNumber:  string;
+    reduceValue: number;
   }
 
 
@@ -136,16 +137,16 @@ getStoreCreditForm(inputForm:FormGroup): FormGroup {
     return dialogRef
   }
 
-  openStoreCreditPopUp(id: any, clientID : number) {
+  openStoreCreditPopUp(id: any, clientID : number, method: string) {
     let dialogRef: any;
-
-    const item = {clientID: clientID}
+    const item = {clientID: clientID, method: method}
     dialogRef = this.dialog.open(StoreCreditPopUpComponent,
-      { width:        '655px',
-        minWidth:     '655px',
-        height:       '550px',
-        minHeight:    '550px',
-        data     :    item,
+      {   width:        '100%',
+          minWidth:     '100%',
+          maxWidth:     'max-width: 100vw !important',
+          height:       '100vh',
+          minHeight:    '100vh',
+          data     :    item,
       },
     )
     return dialogRef
@@ -155,7 +156,6 @@ getStoreCreditForm(inputForm:FormGroup): FormGroup {
     //get order total
     //check balance of storeCredit
     const site = this.sitesService.getAssignedSite();
-
     if (!order) {
       this.notifyEvent('Order not initiated', 'Alert')
       return
@@ -165,16 +165,16 @@ getStoreCreditForm(inputForm:FormGroup): FormGroup {
       //get payment method of the store credit if
       // payment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod
       const storeCredit$ = this.storeCreditService.save(site, credit)
-
       let posItem = {} as IPurchaseOrderItem
       posItem.id = POSItemID;
       posItem.modifierNote = "Store credit issued."
-
      return storeCredit$.pipe(
           switchMap( data => {
             posItem.gcid = data.id.toString();
-            posItem.modifierNote = `Issued : ${data?.cardNum} `
-            posItem.originalPrice = posItem.unitPrice
+            posItem.modifierNote = `${data?.cardNum}`
+            if (posItem.unitPrice) {
+              posItem.originalPrice = posItem.unitPrice
+            }
             return this.poOrderItemService.setItemStoreCreditInfo(site, posItem);
           })
         )

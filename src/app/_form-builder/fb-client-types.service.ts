@@ -73,7 +73,6 @@ export class FbClientTypesService {
   initForm(fb: FormGroup): FormGroup {
 
          fb = this._fb.group({
-
             id: [],
             name: [],
             pointValue: [],
@@ -87,6 +86,7 @@ export class FbClientTypesService {
             limitConcentrate: [],
             limitExtract: [],
             limitConcentrates: [],
+            limitCombinedCategory: [],
             allowStaffUse: [],
             authorizationGroupID: [],
             jsonObject       : [],

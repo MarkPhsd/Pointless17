@@ -177,6 +177,7 @@ import { SplitEntrySelectorComponent } from '../modules/posorders/pos-order/spli
 import { SaveChangesButtonComponent } from './widgets/save-changes-button/save-changes-button.component';
 import { BrandTypeSelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/brand-type-select/brand-type-select.component';
 import { ValueFromListSelectorComponent } from './widgets/value-from-list-selector/value-from-list-selector.component';
+import { ScaleValueViewComponent } from './widgets/scale-value-view/scale-value-view.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -312,7 +313,7 @@ import { ValueFromListSelectorComponent } from './widgets/value-from-list-select
     RewardsAvailibleComponent,
     RetailProductEditComponent,
     SimpleTinyComponent,
-
+    ScaleValueViewComponent,
     SplitEntrySelectorComponent,
     SaveChangesButtonComponent,
     SalesTaxReportComponent,
@@ -505,6 +506,7 @@ import { ValueFromListSelectorComponent } from './widgets/value-from-list-select
     QuantiySelectorComponent,
 
     SaveChangesButtonComponent,
+    ScaleValueViewComponent,
     SplitEntrySelectorComponent,
     SalesTaxReportComponent,
     ScaleSettingsComponent,

@@ -132,16 +132,15 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.site = data
     })
   }
+
   initOrderSubscriber() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
     })
   }
-  initScaleSubscriber() {
-    this._scaleInfo = this.scaleService.scaleInfo$.subscribe( data => {
-      this.scaleInfo = data
-    })
-  }
+
+
+
   initOrderBarSubscriber() {
     this._openOrderBar = this.toolbarUIService.orderBar$.subscribe( data => {
       this.openOrderBar = data;
@@ -184,7 +183,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
   initSubscriptions() {
     this.initOrderSubscriber()
-    this.initScaleSubscriber();
+
     this.initOrderBarSubscriber();
     this.initUserSubscriber();
     this.initToobarServiceUI() ;
@@ -196,7 +195,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private userSwitchingService  : UserSwitchingService,
               private pollingService        : PollingService,
               private dialog:                 MatDialog,
-              public platformService       : PlatformService,
+              public  platformService       : PlatformService,
               private companyService:         CompanyService,
               private _renderer:              Renderer2,
               public  orderService:           OrdersService,
@@ -205,7 +204,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private siteService:            SitesService,
               public  toolbarUIService:       ToolBarUIService,
               private location:               Location,
-              public  scaleService          : ScaleService,
+
               private navigationService     : NavigationService,
               public  platFormService       : PlatformService,
               private router                : Router,
@@ -225,7 +224,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.getUITransactionsSettings();
     this.initUIService();
 
-    this.scaleSetup = this.scaleService.getScaleSetup(); //get before subscriptions;
+
     this.initSearchObservable();
     this.messageService.sendMessage('show');
 
@@ -297,9 +296,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
     )
-
   }
-
 
   ngOnDestroy() {
     if (this._searchSideBar) { this._searchSideBar.unsubscribe()}
@@ -659,9 +656,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-  readScale() {
-    this.scaleService.readScale();
-  }
+  // readScale() {
+  //   this.scaleService.readScale();
+  // }
 
   switchUser() {
     this.userSwitchingService.openPIN({request: 'switchUser'})

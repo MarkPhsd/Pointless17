@@ -519,3 +519,50 @@ mat-dialog-container {
   right: 50px;
   z-index: 100;
 }
+
+.centered-flex {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mat-snack-bar-container.pizza-party {
+  color: hotpink;
+}
+
+.mat-snack-bar-container.mat-primary {
+  background: #13a84c;
+}
+
+.mat-snack-bar-container.mat-warn {
+  background: #ce480a;
+}
+
+.mat-snack-bar-container.mat-accent {
+  background: #b6d313;
+}
+
+// See the Stackblitz example
+// Angular >= v15
+
+// The Angular team did add global css variable
+
+// So you still add the panelClass but you know add it like this
+
+//   .mat-mdc-snack-bar-container {
+//     &.blue-snackbar {
+//       --mdc-snackbar-container-color: #2196f3;
+//       --mat-mdc-snack-bar-button-color: #fff;
+//       --mdc-snackbar-supporting-text-color: #fff;
+//     }
+//   }

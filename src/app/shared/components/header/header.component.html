@@ -111,11 +111,10 @@
               <list-product-search-input></list-product-search-input>
             </li>
 
-            <li *ngIf="scaleInfo && (platFormService && platFormService.isAppElectron)">
-              <div class='search-input'>
-                {{scaleInfo?.value}} {{scaleInfo?.mode}}
-              </div>
+            <li>
+              <scale-value-view></scale-value-view>
             </li>
+
 
             <li *ngIf="platFormService.isApp() && userSwitching">
               <div class='search-input'>

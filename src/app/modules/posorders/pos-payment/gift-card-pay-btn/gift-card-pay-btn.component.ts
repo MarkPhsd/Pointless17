@@ -34,7 +34,7 @@ export class GiftCardPayBtnComponent implements OnInit {
 
   giftCard() {
     if (this.order) {
-      this.storeCreditMethodsService.openStoreCreditPopUp(0, 0)
+        this.storeCreditMethodsService.openStoreCreditPopUp(0, 0, 'issue')
     }
   }
 
