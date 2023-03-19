@@ -60,7 +60,6 @@ export class StoreCreditSearchComponent implements OnInit,OnDestroy {
   constructor(
     private fb                       : FormBuilder,
     private orderService             : OrdersService,
-    private storeCreditService       : StoreCreditService,
     private sitesService             : SitesService,
     private storeCreditMethodsService: StoreCreditMethodsService,
   )
@@ -73,7 +72,6 @@ export class StoreCreditSearchComponent implements OnInit,OnDestroy {
     if ( this.platForm != 'android' ) {return}
     this.keyboardDisplayOn = true
     if (this.platForm != 'android') {
-      // Keyboard.hide()
     }
   }
 
@@ -84,7 +82,6 @@ export class StoreCreditSearchComponent implements OnInit,OnDestroy {
   initSearchSubscription() {
     if (!this.searchForm) { return }
     if (!this.input ) { return }
-    console.log('init search subscription')
     fromEvent(this.input.nativeElement,'keyup')
     .pipe(
       filter(Boolean),
@@ -121,6 +118,7 @@ export class StoreCreditSearchComponent implements OnInit,OnDestroy {
     } catch (error) {
       console.log(error)
     }
+    return;
     this.searchForm.patchValue({itemName: ''})
   }
 
