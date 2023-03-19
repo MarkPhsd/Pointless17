@@ -85,7 +85,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   initForm() {
-
     this._initForm();
     if (this.inputForm && this.fieldName) {
       this.inputForm.addControl( this.fieldName,new FormControl([]) );

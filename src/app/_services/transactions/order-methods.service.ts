@@ -443,7 +443,7 @@ export class OrderMethodsService implements OnDestroy {
                       portionValue: portionValue, deviceName: deviceName, passAlongItem: passAlongItem,
                       clientID: order.clientID , priceColumn : order.priceColumn } as NewItem;
 
-    return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
+    return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem);
   }
 
   async addItemToOrder(order: IPOSOrder, item: IMenuItem, quantity: number) {
@@ -451,7 +451,6 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   addItemToOrderObs(order: IPOSOrder, item: IMenuItem, quantity: number, rewardAvailableID: number, passAlongItem: PosOrderItem[]) {
-    // return this.processItemPOSObservable(order, null, item, quantity, null);
     let passAlong; // = passAlongItem[0]
     if (passAlongItem && passAlongItem[0]) {
       passAlong = passAlongItem[0]
@@ -462,11 +461,7 @@ export class OrderMethodsService implements OnDestroy {
   finalizeOrder(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder): number {
 
     if (paymentMethod.reverseCharge) {
-
     }
-
-    console.log('finalize OrderpaymentResponse',paymentResponse )
-    console.log('finalizeOrder order',order )
 
     const payment = paymentResponse.payment;
 
@@ -474,7 +469,6 @@ export class OrderMethodsService implements OnDestroy {
     // console.log('finalizeorder balance greater than 0', order.balanceRemaining > 0)
     if (order.balanceRemaining > 0) { return 0 };
 
-    // console.log('finalizeorder', payment , paymentMethod)
     if (payment && paymentMethod) {
 
       if (paymentMethod.isCreditCard) {
@@ -610,7 +604,6 @@ export class OrderMethodsService implements OnDestroy {
     if (quantity === 0 ) { quantity = 1 };
 
     if (!this.validateItem(item, barcode)) {
-      // this.notifyEvent(`Invalid item`, 'Alert ')
       return of(null)
     }
 
@@ -704,7 +697,7 @@ export class OrderMethodsService implements OnDestroy {
 
       if (data && data.resultErrorDescription) {
         // this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert');
-        this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 2000, 'red');
+        this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red');
         return;
       }
 
@@ -730,7 +723,7 @@ export class OrderMethodsService implements OnDestroy {
         }
 
       } else {
-        this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 2000, 'red');
+        this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red');
         return;
       }
 
@@ -1081,18 +1074,14 @@ export class OrderMethodsService implements OnDestroy {
       this.itemProcessSection = 4;
     }
 
-    // console.log('process Item', process,  this.processItem?.posItem?.prodModifierType)
-
     switch(process) {
       case  0: {
-
           if (!this.priceCategoryID || this.priceCategoryID == 0) {
             this.promptOpenPriceOption(this.order,this.processItem.item,this.processItem.posItem)
             return
           }
           this.processInventoryPrice(this.order,this.processItem.item,this.processItem.posItem, this.priceCategoryID)
           break;
-
         }
       case  1: {
           if (!this.processItem.posItem.serialCode) {
@@ -1113,13 +1102,11 @@ export class OrderMethodsService implements OnDestroy {
         break;
       }
       case  4: {
-
         if (
               this.processItem?.item?.itemType?.type.toLowerCase() === 'store credit'.toLowerCase() ||
               this.processItem?.item?.itemType?.type.toLowerCase() === 'gift card'.toLowerCase()
             )
           {
-            // console.log('open gift card prompt')
             this.openGiftCardPrompt(this.order,this.processItem.item,this.processItem.posItem);
             return
           }

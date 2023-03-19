@@ -5,29 +5,51 @@
     </mat-card-title>
 
     <mat-card-subtitle>
-      <!-- <div *ngIf="posIssueItem">
-        <h2> Adding Value 1:  {{+posIssueItem.unitPrice | currency}}</h2>
-      </div> -->
       <div *ngIf="purchaseOrderItem">
-        <h2>
-          Adding Value:  {{+purchaseOrderItem.unitPrice | currency}}
-        </h2>
+        <h2>  Adding Value:  {{+purchaseOrderItem.unitPrice | currency}} </h2>
       </div>
-
       <store-credit-search
         (outPutResults)="setResults($event)">
       </store-credit-search>
+
+      <div>
+        <button class="payment-buttons"
+                mat-raised-button
+                color="primary"
+                (click) ="toggleKeyValue = !toggleKeyValue">
+          <div  *ngIf="!toggleKeyValue">Change Value</div>
+          <div *ngIf="toggleKeyValue">Cancel</div>
+        </button>
+      </div>
     </mat-card-subtitle>
 
+
     <mat-card-content>
-      <store-credit-info
-        [showPayment]   ="false"
-        [showIssueMoney]="true"
-        [purchaseOrderItem]="purchaseOrderItem"
-        [order]         ="order"
-        (closeDialog)   ="onCancel($event)"
-        >
-      </store-credit-info>
+      <ng-container [ngTemplateOutlet]="currentView"></ng-container>
     </mat-card-content>
+
   </mat-card>
 </div>
+
+<ng-template #storeCreditInfoView>
+  <store-credit-info
+    [showPayment]   ="false"
+    [showIssueMoney]="true"
+    [purchaseOrderItem]="purchaseOrderItem"
+    [order]         ="order"
+    (closeDialog)   ="onCancel($event)" >
+  </store-credit-info>
+</ng-template>
+
+<ng-template #keyValueView>
+  <app-key-pad
+      [inputForm]        ="inputForm"
+      [inputTypeValue]   ="'decimal'"
+      [showInput]        ="true"
+      [numberbuttons]    ="'number-buttons button-sized-scaled'"
+      [alternateClass]   ="'grid-keypad-alternate'"
+      (outPutReturnEnter)="applyChange($event)">
+      Change Value
+    </app-key-pad>
+</ng-template>
+<div *ngIf="(action$ | async) as action"></div>

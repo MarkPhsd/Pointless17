@@ -43,6 +43,7 @@ export class FbItemTypeService {
       enableCustomNote    : [''],
       wicebt              : [''],
       requireWholeNumber  : [''],
+      pricePrompt:          [''],
     })
     return inputForm
   }

@@ -6,12 +6,15 @@ import { Component,Output,OnInit,
   OnDestroy
 } from '@angular/core';
 import { OrdersService } from 'src/app/_services';
-import { Subscription, Observable, switchMap } from 'rxjs';
+import { Subscription, Observable, switchMap, of } from 'rxjs';
 import { IPOSOrder, IPurchaseOrderItem, PosOrderItem,  } from 'src/app/_interfaces';
 import { IStoreCreditSearchModel, StoreCredit, StoreCreditMethodsService, StoreCreditResultsPaged } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { values } from 'lodash';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
   selector: 'app-store-credit-issue',
@@ -20,6 +23,12 @@ import { values } from 'lodash';
 })
 export class StoreCreditIssueComponent implements OnInit, OnDestroy {
 
+  action$: Observable<any>;
+  @ViewChild('keyValueView')             keyValueView: TemplateRef<any>;
+  @ViewChild('storeCreditInfoView')      storeCreditInfoView: TemplateRef<any>;
+
+  toggleKeyValue: boolean;
+
   @Output() closeDialog = new EventEmitter();
   @ViewChild('storeCreditItems') storeCreditItems: TemplateRef<any>;
 	@ViewChild('noItems')          noItems         : TemplateRef<any>;
@@ -27,7 +36,8 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
   _order              : Subscription;
   order               : IPOSOrder;
   cardNum: string;
-  credit: StoreCredit
+  credit : StoreCredit;
+
   storeCreditSearch$  : Observable<StoreCreditResultsPaged>
   storeCreditSearch   : StoreCreditResultsPaged;
   searchModel         : IStoreCreditSearchModel;
@@ -35,6 +45,15 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
   _issueItem          : Subscription;
   posIssueItem        : PosOrderItem;
   purchaseOrderItem  : IPurchaseOrderItem;
+  inputForm           : FormGroup;
+  keyInstruction = 'Enter Value';
+
+  get currentView() {
+    if (this.toggleKeyValue) {
+      return this.keyValueView;
+    }
+    return this.storeCreditInfoView;
+  }
 
   initSubscriptions() {
     try {
@@ -85,12 +104,15 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
         credit.value = this.purchaseOrderItem.unitPrice
       }
     }
-
   }
+
   constructor(
+    private fb: FormBuilder,
     private orderMethodService       : OrderMethodsService,
     private storeCreditMethodService : StoreCreditMethodsService,
     private orderService             : OrdersService,
+    private posOrderItemService      : POSOrderItemServiceService,
+    private siteService              : SitesService,
     private dialogRef                : MatDialogRef<StoreCreditIssueComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
   {   this.currentTemplate = this.noItems  }
@@ -98,6 +120,12 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentTemplate = this.noItems
     this.initSubscriptions()
+  }
+
+  initForm() {
+    this.inputForm = this.fb.group({
+      itemName: [],
+    })
   }
 
   ngOnDestroy(): void {
@@ -117,7 +145,6 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
       const cardNum = event?.cardNum
       this.cardNum = event?.cardNum;
       const credit  =  this.initStoreCreditItem(null, cardNum)
-      console.log('setResults', credit, event)
       this.storeCreditMethodService.updateSearchModel(event)
     }
   }
@@ -149,7 +176,6 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
       } else {
         credit.value   = credit.value + this.posIssueItem.unitPrice;
       }
-      console.log('posIssueItem', credit.value)
     }
 
     if (this.purchaseOrderItem) {
@@ -165,6 +191,31 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
     return credit
   }
 
+  applyChange(amount) {
+    console.log('amount', amount)
+    let item
+    if (this.posIssueItem) {
+      item = this.posIssueItem;
+    }
+    if (this.purchaseOrderItem) {
+      item = this.purchaseOrderItem
+    }
+
+    if (!item || !amount) { return };
+
+    item.unitPrice = amount;
+    const site = this.siteService.getAssignedSite()
+    this.action$ =  this.posOrderItemService.changeItemPrice(site, item).pipe(
+      switchMap( data => {
+        if (data) {
+          if (data.resultMessage) {this.siteService.notify(data.resultMessage, 'Alert', 1500, 'red')}
+        }
+        this.orderService.updateOrderSubscription(data)
+        this.toggleKeyValue = false
+        return of(data)
+      })
+    );
+  }
 
 }
 

@@ -149,6 +149,7 @@ export interface ItemType {
   enableCustomNote   : boolean;
   wicebt             : number;
   requireWholeNumber : boolean;
+  pricePrompt        : boolean;
 }
 
 export interface ItemTypeCategory {

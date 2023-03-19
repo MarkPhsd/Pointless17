@@ -26,7 +26,8 @@
             || order?.extractCount != 0
             || order?.liquidCount != 0
             || order?.seedCount != 0
-            || order?.combinedCategory != 0 )" >
+            || order?.combinedCategory != 0  )" >
+
 
       <app-progress-bar
           *ngIf="order.gramCount != 0"
@@ -38,17 +39,17 @@
       </app-progress-bar>
 
       <app-progress-bar
-          *ngIf="order.combinedCategory != 0"
-          [value]="order.combinedCategory"
-          [ratio]="combinedCategoryRatio"
+          *ngIf       ="order.combinedCategory != 0 && order.combinedCategory != undefined"
+          [value]     ="order.combinedCategory"
+          [ratio]     ="combinedCategoryRatio"
           [percentage]="combinedCateogryProgress">
           Combined Category
       </app-progress-bar>
 
       <app-progress-bar
-          *ngIf="order.concentrateCount != 0"
-          [value]="order.concentrateCount"
-          [ratio]="concentrateCountRatio"
+          *ngIf       ="order.concentrateCount != 0"
+          [value]     ="order.concentrateCount"
+          [ratio]     ="concentrateCountRatio"
           [percentage]="concentrateCountProgress">
           Concentrate
       </app-progress-bar>
