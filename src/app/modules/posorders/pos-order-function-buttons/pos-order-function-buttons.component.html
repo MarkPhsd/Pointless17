@@ -1,9 +1,5 @@
-<div  *ngIf="order && mainPanel"
+<div  *ngIf="order && mainPanel && uiTransactionSetting"
       class="buttons-container">
-
-  <!-- <div>
-    <ng-container [ngTemplateOutlet]="payButton"></ng-container>
-  </div> -->
 
   <div>
     <ng-container [ngTemplateOutlet]="receiptView"></ng-container>
@@ -78,11 +74,11 @@
     <ng-container [ngTemplateOutlet]="listItemsView"></ng-container>
   </div>
 
-   <div *ngIf="isApp && (mainPanel && !smallDevice) && uiTransactions.enableExitLabelButton">
+   <div *ngIf="isApp && (mainPanel && !smallDevice)  && (posDevice && posDevice.enableExitLabel)">
     <ng-container [ngTemplateOutlet]="printLabelView"></ng-container>
   </div>
 
-  <div *ngIf="isApp && (mainPanel && !smallDevice) && uiTransactions.enableExitLabelButton">
+  <div *ngIf="isApp && (mainPanel && !smallDevice)  && (posDevice && posDevice.enableExitLabel)">
     <ng-container [ngTemplateOutlet]="rePrintLabelsView"></ng-container>
   </div>
 

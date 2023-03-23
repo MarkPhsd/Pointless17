@@ -323,7 +323,7 @@
         <ng-container [ngTemplateOutlet]="isClockInOutOn"></ng-container>
       </div>
 
-      <span  *ngIf="(posDevice$ | async) as device;else loadingDevice">
+      <span  *ngIf="(posDevice$ | async) as device; else loadingDevice">
         <mat-divider></mat-divider>
         <li *ngIf="device  && (isAdmin || isManager) && !smallDevice">
         <br>

@@ -70,7 +70,7 @@
 
       <div *ngIf="!order.completionDate && !splitByItem && !paymentsEqualTotal && paymentIsReady
                   &&  order?.balanceRemaining != 0">
-        <!-- stepSelection {{stepSelection}} -->
+
         <div *ngIf="(saleProcess$ |async) as saleProcess">  </div>
 
           <div class="grid-header-item" *ngIf="stepSelection == 1 || stepSelection  == 0">

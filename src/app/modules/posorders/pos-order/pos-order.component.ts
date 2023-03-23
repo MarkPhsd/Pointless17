@@ -138,6 +138,17 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   uiTransactionSetting$: Observable<TransactionUISettings>;
   uiTransactionSetting : TransactionUISettings;
 
+  transactionUISettingsSubscriber() {
+    this._transactionUI = this.uiSettingsService.transactionUISettings$.subscribe( data => {
+      this.enableLimitsView  = false;
+      if (data) {
+        this.uiTransactionSettings = data;
+        this.enableLimitsView = data.enableLimitsView
+      }
+    });
+  }
+
+
   initAssignedItemsSubscriber() {
     this._items = this.orderMethodService.assignedPOSItems$.subscribe(data => {
       this.assignedItems = data;
@@ -147,19 +158,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.refundItemsAvalible = false;
     })
   }
-  // item$ = this.orderMethodService.assignedPOSItems$;
 
-  transactionUISettingsSubscriber() {
-    this._transactionUI = this.uiSettingsService.transactionUISettings$.subscribe( data => {
-
-      this.enableLimitsView  = false;
-      if (data) {
-
-        this.uiTransactionSettings = data;
-        this.enableLimitsView = data.enableLimitsView
-      }
-    });
-  }
 
   gettransactionUISettingsSubscriber() {
     this.uiTransactionSetting$ = this.settingService.getUITransactionSetting().pipe(

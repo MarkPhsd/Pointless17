@@ -67,7 +67,7 @@ export interface TransactionUISettings {
   storeCreditAPI: string;
   contactAPI: string;
   startNewOrderOnCloseOrder: boolean;
-  enableExitLabelButton: boolean;
+
 }
 
 export interface StripeAPISettings {
@@ -205,7 +205,6 @@ export class UISettingsService {
   private orderHeaderHeight   :number;
   private customerOrderHeight :number;
   private specialOrderHeight  :number;
-  private orderItemsHeight    : number;
   private limitOrderHeight: number;
 
   private _orderSpecialsHeight        = new BehaviorSubject<number>(null);
@@ -229,8 +228,8 @@ export class UISettingsService {
   emailModel: EmailModel
 
   public  posDeviceInfo            : ITerminalSettings;
-  public  posDevice               = new BehaviorSubject<ITerminalSettings>(null);
-  private _posDevice$             = new BehaviorSubject<ITerminalSettings>(null);
+  private  _posDevice               = new BehaviorSubject<ITerminalSettings>(null);
+  public  posDevice$               = this._posDevice.asObservable();
 
   private _transactionUISettings  = new BehaviorSubject<TransactionUISettings>(null);
   public  transactionUISettings$  = this._transactionUISettings.asObservable();
@@ -387,10 +386,10 @@ export class UISettingsService {
 
   updatePOSDevice(data: ITerminalSettings) {
     this.posDeviceInfo = data;
-    this._posDevice$.next(data)
+    this._posDevice.next(data)
   }
 
-  openEditPOSDevice(data): Observable<typeof dialogRef> {
+  openEditPOSDevice(data): any {
     let dialogRef: any;
     console.log('open device')
     dialogRef = this.dialog.open(PosEditSettingsComponent,
@@ -692,7 +691,6 @@ export class UISettingsService {
       storeCreditAPI: [],
       contactAPI:  [],
       startNewOrderOnCloseOrder: [],
-      enableExitLabelButton: [],
      })
   }
 

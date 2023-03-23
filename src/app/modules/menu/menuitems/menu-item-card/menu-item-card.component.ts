@@ -156,7 +156,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // console.log(add)
     this.action$ = this.orderMethodService.menuItemActionObs(this.order,this.menuItem, add,
                                             this.orderMethodService.assignPOSItems)
 

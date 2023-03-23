@@ -1,16 +1,14 @@
 import { Component, OnInit, Output, Input,EventEmitter, HostListener, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { ThumbnailsPosition } from '@ngx-gallery/core';
-import { TouchBarOtherItemsProxy } from 'electron';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 @Component({
   selector: 'pos-order-function-buttons',
   templateUrl: './pos-order-function-buttons.component.html',
@@ -19,7 +17,13 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 
 export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
 
-  @Input() uiTransactions: TransactionUISettings
+  posDevice$: Observable<ITerminalSettings>;
+  posDevice : ITerminalSettings;
+  _posDevice: Subscription;
+
+  uiTransactionSetting$: Observable<TransactionUISettings>;
+  uiTransactionSetting : TransactionUISettings;
+  _transactionUI: Subscription;
   // @ViewChild('payButton')     payButton: TemplateRef<any>;
   @ViewChild('exitButton')    exitButton: TemplateRef<any>;
   @ViewChild('refundOrderButton')  refundOrderButton: TemplateRef<any>;
@@ -84,10 +88,26 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   refundItems     : boolean;
   smallDevice     : boolean;
 
+  transactionUISettingsSubscriber() {
+    this._transactionUI = this.uiSettingsService.transactionUISettings$.subscribe( data => {
+      if (data) {
+        this.uiTransactionSetting = data;
+      }
+    });
+  }
+
+  posDeviceSubscriber() {
+    this._posDevice = this.uiSettingsService.posDevice$.subscribe( data => {
+      if (data) {
+        this.posDevice = data;
+      }
+    });
+  }
   constructor(private platFormService: PlatformService,
               public userAuthorizationService: UserAuthorizationService,
               private orderMethodsService: OrderMethodsService,
               private router: Router,
+              private uiSettingsService: UISettingsService,
               private balanceSheetService: BalanceSheetService,
               private balanceSheetMethods: BalanceSheetMethodsService ) { }
 
@@ -95,6 +115,8 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     this.isApp = this.platFormService.isApp();
     // this.initSubscriptions();
     this.refreshWindowInfo();
+    this.transactionUISettingsSubscriber();
+    this.posDeviceSubscriber();
   }
 
   toggleListView() {

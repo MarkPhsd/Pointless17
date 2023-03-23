@@ -121,8 +121,6 @@ export class PrintingService {
       }
 
       if (printCount == 0) {return of(null)};
-      console.log('items.length', order.posOrderItems)
-      console.log('forkJoin', this.obs$)
       return forkJoin(this.obs$)
     }
     return of(null)
@@ -454,106 +452,108 @@ export class PrintingService {
   }
 
 
-  getPrintContent(htmlContent: any, styles: any) {
-    const htmlHeader = `<!DOCTYPE html <html><head> ${styles}</head> <body>`
-    const htmlFooter = '</body> </html>'
-    const html = `${htmlHeader}  ${htmlContent} ${htmlFooter}`
-    const file = `$data:text/html;charset=UTF-8, ${encodeURIComponent(html)}`
-    return file
-  }
+    getPrintContent(htmlContent: any, styles: any) {
+      const htmlHeader = `<!DOCTYPE html <html><head> ${styles}</head> <body>`
+      const htmlFooter = '</body> </html>'
+      const html = `${htmlHeader}  ${htmlContent} ${htmlFooter}`
+      const file = `$data:text/html;charset=UTF-8, ${encodeURIComponent(html)}`
+      return file
+    }
 
-  savePDF(nativeElement: any, _this) {
-    if (!nativeElement) { return }
+    savePDF(nativeElement: any, _this) {
+      if (!nativeElement) { return }
 
+      {
+        try {
+          html2canvas(nativeElement).then(canvas => {
+            var pdf = new jsPDF('p', 'pt', [canvas.width +15 , canvas.height + 25]);
+            _this.canvas.nativeElement.src = canvas.toDataURL();
+            const content = canvas.toDataURL('image/png');
+            // let imageData = this.getBase64Image(this.canvas.nativeElement);
+            pdf.addImage(content, "JPG", 10, 10, canvas.width -15,   canvas.height -25);
+            pdf.save('pointlessOutput.pdf');
+          });
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    }
+
+    getDefaultReceiptPrinter()
     {
-       try {
-         html2canvas(nativeElement).then(canvas => {
-           var pdf = new jsPDF('p', 'pt', [canvas.width +15 , canvas.height + 25]);
-           _this.canvas.nativeElement.src = canvas.toDataURL();
-           const content = canvas.toDataURL('image/png');
-           // let imageData = this.getBase64Image(this.canvas.nativeElement);
-           pdf.addImage(content, "JPG", 10, 10, canvas.width -15,   canvas.height -25);
-           pdf.save('pointlessOutput.pdf');
-         });
-       } catch (error) {
-         console.log(error)
-       }
-     }
-  }
+      console.log('')
+    }
 
-  getDefaultReceiptPrinter()
-  {
-    console.log('')
-  }
+    printElectronReceipt(printerName: string, document) {
+      const prtContent  = document.getElementById('printsection');
+      const html = this.getPrintHTML(prtContent)
+      const contents = `data:text/html;charset=utf-8,  ${encodeURIComponent(html) }`
+      const options = {
+        silent: true,
+        printBackground: false,
+        deviceName: printerName
+      } as printOptions
 
-  printElectronReceipt(printerName: string, document) {
-    const prtContent  = document.getElementById('printsection');
-    const html = this.getPrintHTML(prtContent)
-    const contents = `data:text/html;charset=utf-8,  ${encodeURIComponent(html) }`
-    const options = {
-      silent: true,
-      printBackground: false,
-      deviceName: printerName
-    } as printOptions
+      this.printElectron( contents, printerName, options)
+    }
 
-    this.printElectron( contents, printerName, options)
-  }
+    async printTestLabelElectron(contents: string, printerName: string) {
+      const fileName = `c:\\pointless\\print.txt`;
+      // this.snack.open(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Error')
+      const file = `file:///c://pointless//print.txt`
+      const options = {
+        silent: false,
+        printBackground: false,
+        deviceName: printerName
+      }  as printOptions
 
-  async printTestLabelElectron(contents: string, printerName: string) {
-    const fileName = `c:\\pointless\\print.txt`;
-    // this.snack.open(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Error')
-    const file = `file:///c://pointless//print.txt`
-    const options = {
-      silent: false,
-      printBackground: false,
-      deviceName: printerName
-    }  as printOptions
+      try {
+        await  this.printElectron( contents, printerName, options )
+        return true;
+      } catch (error) {
+        return false
+      }
 
-    try {
-      await  this.printElectron( contents, printerName, options )
-      return true;
-    } catch (error) {
       return false
     }
 
-    return false
+  getPOSItem(site, id: number, history: boolean): Observable<IPurchaseOrderItem> {
+    let posItem$: Observable<IPurchaseOrderItem>
+    posItem$ = this.posOrderItemService.getPurchaseOrderItem(site, id)
+    if (history) {
+      posItem$ = this.posOrderItemService.getPurchaseOrderItemHistory(site, id)
+    }
+    return posItem$
   }
 
-   printItemLabel(item: any, menuItem$: Observable<IMenuItem>, order: IPOSOrder ) {
-      const site = this.siteService.getAssignedSite()
-      let posItem$: Observable<IPurchaseOrderItem>
+  printItemLabel(item: any, menuItem$: Observable<IMenuItem>, order: IPOSOrder ) {
+    const site = this.siteService.getAssignedSite()
+    if (!menuItem$) {
+      menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
+    }
+    const posItem$ = this.getPOSItem(site, item.id, order.history)
 
-      if (!menuItem$) {
-        menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
-      }
-
-      posItem$ = this.posOrderItemService.getPurchaseOrderItem(site, item.id)
-      if (order.history) {
-        posItem$ = this.posOrderItemService.getPurchaseOrderItemHistory(site, item.id)
-      }
-
-      return posItem$.pipe(
-        switchMap(data => {
-          if (data && data.inventoryAssignmentID) {
-            return this.inventoryService.getInventoryAssignment(site, data.inventoryAssignmentID)
-          }
-          return of(null)
-        })
-      ).pipe(
-        switchMap(inv => {
-          if (inv) {
-            item.inventory = inv;
-          }
-          return menuItem$
+    return posItem$.pipe(
+      switchMap(data => {
+        if (data && data.inventoryAssignmentID) {
+          return this.inventoryService.getInventoryAssignment(site, data.inventoryAssignmentID)
         }
-      )).pipe(switchMap(menuItem => {
-        item.menuItem = menuItem;
-        // console.log('print label', item, order.history)
-        return this.printLabel(item,  order.history)
-      }))
-   }
+        return of(null)
+      })
+    ).pipe(
+      switchMap(inv => {
+        if (inv) {
+          item.inventory = inv;
+        }
+        return menuItem$
+      }
+    )).pipe(switchMap(menuItem => {
+      item.menuItem = menuItem;
+      return this.printLabel(item,  order.history)
+    }))
+  }
 
-   printLabel(item: any, history: boolean) {
+  printLabel(item: any, history: boolean) {
 
     if (!item) {return of(null)}
 
@@ -585,8 +585,9 @@ export class PrintingService {
         return menuItem$
       })).pipe(
         switchMap(data => {
-          this.menuItem = data;
+
           if ( !data || !data.itemType) {return of(null)}
+          this.menuItem = data;
           console.log('label name id' ,data.itemType.name, data.itemType.labelTypeID)
 
           if ( data.itemType && ( ( data.itemType.labelTypeID != 0 ) && printer.text ) ) {
@@ -601,14 +602,17 @@ export class PrintingService {
       })).pipe(
         switchMap( data => {
 
-          if (data.productName != undefined) {
+          try {
+            let field = 'productName';
+            if (!data[field] || data[field] ==  null) {
+              return of(null)
+            }
+          } catch (error) {
             return of(null)
           }
 
 
-          console.log('next 1')
           if (!data) { return of(null) }
-          console.log('next 2' )
 
           item.menuItem = this.menuItem;
           const labID = this.menuItem?.labID;
@@ -616,22 +620,15 @@ export class PrintingService {
 
           const lab$ = this.getContact(site, labID)
           const producer$ = this.getContact(site, producerID);
-
-          console.log('lab', labID);
-          console.log('producerid', producerID);
-
           return forkJoin([lab$, producer$, of(data)])
 
         })).pipe(
           switchMap( results => {
 
-            console.log('results', results)
-            console.log('next 3' );
             if (!results) { return of(null)}
-            console.log('next 4' );
+
             const data = results[2];
             if (!data) {return of(null)}
-            console.log('next 5' );
 
             try {
 
@@ -654,7 +651,7 @@ export class PrintingService {
             } catch (error) {
               console.log('error printing label', error )
             }
-            console.log('pre render 2' )
+
             const content = this.renderingService.interpolateText(item, data.text);
 
             if (printer.text) {

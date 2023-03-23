@@ -130,7 +130,7 @@ export class PosEditSettingsComponent implements OnInit {
       bluetoothDeviceName: [],
       electronZoom       : [],
       triposLaneID       : [],
-
+      enableExitLabel : [],
       enableScale: [],
     })
 
@@ -153,7 +153,7 @@ export class PosEditSettingsComponent implements OnInit {
     this.setting.name   = item.name;
     this.setting.text   = text;
     this.setting.filter = 421
-    this.uiSettingService.posDevice.next(item);
+    // this.uiSettingService.updatePOSDevice(item)
 
     this.saving$ = this.settingsService.putSetting(site, this.setting.id, this.setting)
     this.saving = true;

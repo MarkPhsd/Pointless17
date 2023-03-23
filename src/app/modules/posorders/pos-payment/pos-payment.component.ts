@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { IPaymentResponse, IPaymentSearchModel, IPOSOrder,
          IPOSPayment, IPOSPaymentsOptimzed,
          IServiceType, ISite } from 'src/app/_interfaces';
@@ -29,6 +29,7 @@ import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-c
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-pos-payment',
@@ -439,7 +440,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
           return
         }
 
-        let processResults$
+        let processResults$ : Observable<IPaymentResponse>
 
         processResults$ = this.processGetResults(amount, this.posPayment)
 
@@ -448,21 +449,20 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
           return
         }
 
-        this.process$ =    processResults$.subscribe( {
-          next: (data) => {
+        this.process$ = processResults$.pipe(
+          switchMap( data => {
             if (!data) {
               this.sitesService.notify('Payment not processed','close', 5000, 'red');
             }
             this.processResults(data)
             this.groupPaymentAmount  = 0;
             this.groupPaymentGroupID = 0;
-          },
-          error: err => {
-            this.sitesService.notify(`Payment not processed ${err}`, 'close', 5000, 'red');
-            console.error(err)
-          }
-        }
-      )
+            return of(data)
+          })
+          ,catchError(data => {
+            this.sitesService.notify('Error : Payment not processed' + data.toString(),'close', 5000, 'red');
+            return of(data)
+        }))
     }
     this.initPaymentForm();
   }

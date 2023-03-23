@@ -167,13 +167,14 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
 
   addItemToOrder(barcode: string) {
     const site = this.siteService.getAssignedSite();
-    if (!this.order) {
-      if (this.obs$) { this.obs$.shift() }
-      this.siteService.notify('No order assigned', 'Alert', 1000)
-      return of(null)
-    }
+    // if (!this.order) {
+    //   if (this.obs$) { this.obs$.shift() }
+    //   this.siteService.notify('No order assigned', 'Alert', 1000)
+    //   return of(null)
+    // }
+
     this.initForm()
-    const item$ = this.menuItemService.getMenuItemByBarcode(site, barcode, this.order.clientID);
+    const item$ = this.menuItemService.getMenuItemByBarcode(site, barcode, this.order?.clientID);
     return  item$.pipe( switchMap( data => {
         if (this.obs$) {  this.obs$.shift() }
         if ( !data ) {

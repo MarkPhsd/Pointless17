@@ -139,8 +139,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     })
   }
 
-
-
   initOrderBarSubscriber() {
     this._openOrderBar = this.toolbarUIService.orderBar$.subscribe( data => {
       this.openOrderBar = data;
@@ -174,6 +172,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       }
     })
   }
+
   getUITransactionsSettings() {
     this._transactionUI = this.uiSettings.transactionUISettings$.subscribe( data => {
       if (data) {
@@ -181,9 +180,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
+
   initSubscriptions() {
     this.initOrderSubscriber()
-
     this.initOrderBarSubscriber();
     this.initUserSubscriber();
     this.initToobarServiceUI() ;
@@ -223,8 +222,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
     this.getUITransactionsSettings();
     this.initUIService();
-
-
     this.initSearchObservable();
     this.messageService.sendMessage('show');
 
@@ -249,16 +246,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   getDeviceInfo() {
     const devicename = this.orderService.posName
-    console.log(devicename)
     if (devicename) {
-      console.log('devicename', devicename)
       this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
         switchMap(data => {
-
           const posDevice = JSON.parse(data.text) as ITerminalSettings;
           this.uiSettings.updatePOSDevice(posDevice)
           this.terminalSetting = data;
-
           if (this.platformService.isAppElectron) {
             if (posDevice && posDevice.electronZoom && posDevice.electronZoom != '0') {
               this.uiSettings.electronZoom(posDevice.electronZoom)
@@ -562,7 +555,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   deviceInfo() {
     if (!this.terminalSetting) { return }
-    this.uiSettings.openEditPOSDevice(this.terminalSetting)
+    const dialog = this.uiSettings.openEditPOSDevice(this.terminalSetting)
+    dialog.afterClosed().subscribe(data => {
+      this.getDeviceInfo()
+      console.log('blah blah')
+    })
   }
 
   goHome() {

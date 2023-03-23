@@ -13,22 +13,37 @@
           [order]="order">
         </app-order-header>
       </div>
-      <div *ngIf="!qrOrder && (!order || !order.completionDate)" class="cart-button">
-        <button
-              mat-raised-button
-              (click)="editCart()">
-          <mat-icon  color="primary">edit</mat-icon>
-          <mat-icon color="primary">shopping_cart</mat-icon>
-            Edit
-        </button>
-      </div>
-      <div *ngIf="!qrOrder && (order && order.completionDate)" class="cart-button">
-        <button
-              mat-raised-button
-              (click)="exitOrder()">
-          <mat-icon color="primary">exit_to_app</mat-icon>
-            Exit
-        </button>
+      <div class="grid-items">
+        <div>
+          <button  class="cart-button"
+                   mat-raised-button
+                   color="accent"
+                   (click)="editCart()">
+            <div class="button-content">
+              <div>
+                <mat-icon class="no-margins" color="primary">shopping_cart</mat-icon>
+              </div>
+              <div>
+                <mat-label class="no-margins-label">Cart</mat-label>
+              </div>
+            </div>
+          </button>
+        </div>
+        <div>
+          <button  class="cart-button"
+                   mat-raised-button
+                   color="warn"
+                   (click)="exitOrder()">
+            <div class="button-content">
+              <div>
+                <mat-icon class="no-margins" color="primary">exit_to_app</mat-icon>
+              </div>
+              <div>
+                <mat-label class="no-margins-label">Exit</mat-label>
+              </div>
+            </div>
+          </button>
+        </div>
       </div>
     </div>
 
