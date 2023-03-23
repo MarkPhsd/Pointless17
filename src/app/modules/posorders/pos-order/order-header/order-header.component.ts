@@ -9,7 +9,6 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
-import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
@@ -67,10 +66,9 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
   }
 
   sendOrder() {
-    this.action$ = this.prepPrintingService.sendToPrep(this.order).pipe(
+    this.action$ = this.orderMethodsService.sendToPrep(this.order).pipe(
       switchMap(data => {
-        this.clearOrder()
-        console.log('sendOrder', data)
+        // this.clearOrder()
         return of(data)
       })
     )

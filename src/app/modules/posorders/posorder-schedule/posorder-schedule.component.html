@@ -2,10 +2,10 @@
   <mat-card-title>
     Plan Order
   </mat-card-title>
-  <mat-card-subtitle>
 
+  <mat-card-subtitle>
     <div *ngIf="errorMessage">
-      <mat-icon>alert</mat-icon>  {{errorMessage}}
+      <mat-icon>warning</mat-icon>  {{errorMessage}}
     </div>
 
     <div *ngIf="!order.clients_POSOrders">
@@ -17,22 +17,25 @@
         </app-order-header-demo-graphics>
       </div>
     </div>
+
   </mat-card-subtitle>
 
-  <mat-card-content>
+  <mat-card-content *ngIf="serviceType">
+
     <mat-tab-group  mat-align-tabs="start"
                     [(selectedIndex)]="selectedIndex"
                     (selectedIndexChange)="selectChange()">
 
         <mat-tab label="Sale Type"
-                class="sale-type-tab">
+                 class="sale-type-tab">
           <posorder-service-type
             (outPutSelectServiceType)='selectedServiceType($event)'>
             Select Service Type
           </posorder-service-type>
         </mat-tab>
 
-        <mat-tab *ngIf="serviceType && serviceType.deliveryService"
+        <mat-tab *ngIf="serviceType &&
+                        serviceType.deliveryService"
                  label="Delivery Information">
           <div>
             <posorder-shipping-address
@@ -44,7 +47,7 @@
           </div>
         </mat-tab>
 
-        <mat-tab (click)="selectedIndex==2"
+        <mat-tab (click)="selectedIndex == 2"
                 *ngIf   ="serviceType && serviceType.promptScheduleTime"
                  label  ="Schedule Information">
           <app-posorder-schedule-form
@@ -54,7 +57,8 @@
           </app-posorder-schedule-form>
         </mat-tab>
 
-        <mat-tab (click)="selectedIndex == 3" label="Special Requests">
+        <mat-tab (click)="selectedIndex == 3"
+                 label="Special Requests">
           <pos-order-notes
             [serviceType]="serviceType"
             [order]="order"
@@ -75,3 +79,4 @@
     </div>
   </mat-card-actions>
 </mat-card>
+<div *ngIf="(action$ | async) as action"></div>

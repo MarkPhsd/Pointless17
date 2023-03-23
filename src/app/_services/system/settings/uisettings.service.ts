@@ -66,6 +66,8 @@ export interface TransactionUISettings {
   minClientAge: number;
   storeCreditAPI: string;
   contactAPI: string;
+  startNewOrderOnCloseOrder: boolean;
+  enableExitLabelButton: boolean;
 }
 
 export interface StripeAPISettings {
@@ -689,6 +691,8 @@ export class UISettingsService {
       minClientAge:  [],
       storeCreditAPI: [],
       contactAPI:  [],
+      startNewOrderOnCloseOrder: [],
+      enableExitLabelButton: [],
      })
   }
 

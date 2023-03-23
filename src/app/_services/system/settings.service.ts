@@ -30,6 +30,7 @@ export interface ITerminalSettings {
   bluetoothDeviceName : string;
   electronZoom        : string;
   triposLaneID        : string;
+  enableScale : boolean;
 }
 
 @Injectable({

@@ -63,6 +63,7 @@ import { DashBoardRoutingModule } from './dash-board-routing.module';
 import * as Sentry from "@sentry/angular";
 import { BrowserTracing } from "@sentry/tracing";
 import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-loading.component';
+
 // import { AdminModule } from './modules/admin/admin.module';
 
 // Sentry.init({

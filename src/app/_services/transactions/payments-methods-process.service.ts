@@ -28,17 +28,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   _initTransactionComplete = new BehaviorSubject<any>(null);
 
   initSubscriptions() {
-
     this.dialogSubject = this.dialogRef.afterClosed().pipe(
       switchMap( result => {
-        // console.log('dialog ref result (payment-methods.process.service)', result)
         if (result) {
           return this.processSendOrder(this.orderService.currentOrder)
         }
     })).subscribe(data => {
       return of(data)
     })
-
   }
 
   ngOnDestroy(): void {
@@ -85,10 +82,16 @@ export class PaymentsMethodsProcessService implements OnDestroy {
                      amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
     const balance$ =  this.balanceSheetService.openDrawerFromBalanceSheet()
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
+    let response: IPaymentResponse;
     return balance$.pipe(switchMap(data => {
       return payment$
     })).pipe(switchMap(data => {
-      return of(data)
+      response  = data;
+      return this.orderMethodsService.finalizeOrderProcesses(null, null, order )
+    })).pipe(switchMap(data => {
+      console.log('finalize order from cash payment')
+      this.orderMethodsService.finalizeOrder(response, paymentMethod, order)
+      return of(response)
     }))
   }
 
@@ -247,7 +250,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return false;
   }
 
-
   isTriPOSApproved(trans: any) {
     if (trans && trans.statusCode && (trans?.statusCode.toLowerCase() === 'approved'.toLowerCase() ||
                   trans?.statusCode.toLowerCase() === 'approval'.toLowerCase() ||
@@ -260,45 +262,35 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return false;
   }
 
-
   processCardPointResponse(trans: any, payment: IPOSPayment, order: IPOSOrder) {
     // console.log('processCardPointResponse', trans)
     const site = this.sitesService.getAssignedSite();
-    //validate response
-    // console.log('processCardPointResponse',trans)
+
     if (this.isCardPointApproved(trans)) {
       payment   = this.applyCardPointResponseToPayment(trans, payment)
       payment.textResponse =  trans?.resptext.toLowerCase();
       let paymentMethod    = {} as IPaymentMethod;
-      // console.log('processCardPointResponse', trans);
+      let paymentResponse: IPaymentResponse
+
       this.paymentMethodService.getPaymentMethodByName(site, 'credit').pipe(
         switchMap( data => {
           payment.paymentMethodID = data.id;
           paymentMethod = data;
           return this.paymentService.makePayment(site, payment, order, payment.amountPaid, data)
         }
+      )).pipe(switchMap(data => {
+          paymentResponse = data;
+          return this.orderMethodsService.finalizeOrderProcesses(null, null, order )
+        }
       )).subscribe(data => {
-        // console.log('data. completed response', data.orderCompleted)
-        this.orderService.updateOrderSubscription(data.order);
-        this.orderMethodsService.finalizeOrder(data, paymentMethod, data.order);
-        // this.printingService.previewReceipt();
+        this.orderService.updateOrderSubscription(paymentResponse.order);
+        this.orderMethodsService.finalizeOrder(paymentResponse, paymentMethod, paymentResponse.order);
         this._initTransactionComplete.next(true)
-
-        // why not this?
-        // if (data.orderCompleted) {
-        //   this._initTransactionComplete.next(true)
-        // }
-
         return payment.textResponse;
       })
     } else {
-      // console.log('trans', trans)
-      // if (trans) {
-      //   return of (trans.exceptionMessage)
-      // }
       return of(null)
     }
-
   }
 
   getPaymentMethodByName(site, cardType): Observable<IPaymentMethod> {
@@ -315,16 +307,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }))
   }
 
-
   processTriPOSResponse(trans: any, payment: IPOSPayment, order: IPOSOrder): Observable<any> {
     const site = this.sitesService.getAssignedSite();
-
     if (this.isTriPOSApproved(trans)) {
       payment   = this.applyTripPOSResponseToPayment(trans, payment)
       let paymentMethod    = {} as IPaymentMethod;
       let cardType = 'credit'
+      let paymentResponse: IPaymentResponse
       if (trans?.cardLogo) {   cardType = trans?.cardLogo;  }
-
       return this.getPaymentMethodByName(site, cardType).pipe(
         switchMap( data => {
           payment.paymentMethodID = data.id;
@@ -333,19 +323,21 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         }
       )).pipe(
         switchMap(data => {
-
-          this.orderService.updateOrderSubscription(data.order);
-          this.orderMethodsService.finalizeOrder(data, paymentMethod, data.order);
-          if (data.orderCompleted) {
+          paymentResponse = data;
+          return this.orderMethodsService.finalizeOrderProcesses(null, null, order )
+      })).pipe(
+        switchMap(data => {
+          this.orderService.updateOrderSubscription(paymentResponse.order);
+          this.orderMethodsService.finalizeOrder(data, paymentMethod, order);
+          if (paymentResponse.orderCompleted) {
             this._initTransactionComplete.next(true)
           }
-          return of({order: data.order, payment: data.payment, trans: trans})
+          return of({order: paymentResponse.order, payment: paymentResponse.payment, trans: trans})
       }))
     } else {
       this.notify('Payment not resolved.', 'Alert', 2000)
       return of(null)
     }
-
   }
 
   processAuthTriPOSResponse(trans: any, payment: IPOSPayment, order: IPOSOrder): Observable<any> {
@@ -372,7 +364,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
           return this.orderService.getOrder(site, id, false)
       }))
     }
-    // this.sitesService.notify('Not approved.', 'Alert', 1500)
+
     return of(order)
   }
 
@@ -382,7 +374,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     if (rStream) {
       const validate = this.validateResponse( rStream, payment)
       if (!validate) {
-        console.log('processCreditCardResponse - not valid')
         return of(null)
       }
 
@@ -408,13 +399,13 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         return  payment$.pipe(
           switchMap(data => {
             this.orderService.updateOrderSubscription(data.order);
-            this.orderMethodsService.finalizeOrder(data,  paymentMethod, data.order);
             this.printingService.previewReceipt();
+            return this.orderMethodsService.finalizeOrderProcesses(null, null, order )
+          })).pipe(switchMap(data => {
+            this.orderMethodsService.finalizeOrder(data,  paymentMethod, data.order);
             return of(cmdResponse);
-        }),catchError( err => {
-          this.sitesService.notify('Error: ' + err, 'Alert', 4000)
-          return of(null)
-        }))
+          })
+        )
       }
 
     }
@@ -422,7 +413,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   processSendOrder(order: IPOSOrder) {
-    return this.prepPrintingService.sendToPrep(order)
+    return this.orderMethodsService.sendToPrep(order)
   }
 
   applyCardPointResponseToPayment(response: any, payment: IPOSPayment) {
@@ -606,53 +597,49 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   getResults(amount, paymentMethod: IPaymentMethod,
-                  posPayment: IPOSPayment, order: IPOSOrder): Observable<IPaymentResponse> {
+             posPayment: IPOSPayment, order: IPOSOrder): Observable<IPaymentResponse> {
     //if credit card - prompt for credit card payment
     const site = this.sitesService.getAssignedSite();
+    // const labelPrint$ = this.printingService.printLabels(order , true);
+    let method$
 
     if (paymentMethod && posPayment && order)
-    {
-      // console.log('pos method, payment method, order are true')
-    }
-
-    if (paymentMethod && posPayment && order)
-
       if (paymentMethod.wic) {
-        return  this.processCashPayment(site, posPayment, order, amount, paymentMethod)
+        console.log('method is wic')
+        return   this.processCashPayment(site, posPayment, order, amount, paymentMethod)
       }
       if (paymentMethod.ebt) {
-        return  this.processCashPayment(site, posPayment, order, amount, paymentMethod)
+        console.log('method is ebt')
+        return   this.processCashPayment(site, posPayment, order, amount, paymentMethod)
       }
       //cash
       if (paymentMethod.isCash) {
-        return  this.processCashPayment(site, posPayment, order, amount, paymentMethod)
+        console.log('method is isCash')
+        return   this.processCashPayment(site, posPayment, order, amount, paymentMethod)
       }
 
-      //else
       if (paymentMethod.isCreditCard) {
+        console.log('method is isCreditCard')
         return  this.processCreditPayment(site, posPayment, order, amount, paymentMethod)
       }
 
-      // console.log( 'payment method', paymentMethod )
-      //else
       if (paymentMethod.name.toLowerCase()  == 'check') {
-        return  this.processCashPayment(site, posPayment, order, amount, paymentMethod)
+        console.log('method is check')
+        return   this.processCashPayment(site, posPayment, order, amount, paymentMethod)
       }
 
       if (paymentMethod.name.toLowerCase() === 'rewards points' || paymentMethod.name.toLowerCase() === 'loyalty points') {
-        return  this.enterPointCashValue(amount, paymentMethod, posPayment, order)
+        console.log('method is points')
+        return this.enterPointCashValue(amount, paymentMethod, posPayment, order)
       }
 
-      //else
-      if (paymentMethod.companyCredit) {
-
-      }
-
-      //else
-      if (paymentMethod.name.toLowerCase() === 'gift card') {
-
-      }
-      return null;
+      return   this.processCashPayment(site, posPayment, order, amount, paymentMethod)
+      // console.log('paymentMethod', paymentMethod, posPayment )
+      // console.log('is there a method' , method$)
+      // if (!method$) {return of(null)}
+      // labelPrint$.pipe(switchMap(data => {
+      //   return of(method$)
+      // }))
   }
 
   validatePaymentAmount(amount, paymentMethod: IPaymentMethod, balanceRemaining: number, creditBalanceRemaining): boolean {

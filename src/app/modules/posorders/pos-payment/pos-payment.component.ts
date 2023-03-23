@@ -4,12 +4,13 @@ import { Component,
          HostListener,
          OnDestroy,
          ViewChild,
-         TemplateRef } from '@angular/core';
+         TemplateRef,
+         ChangeDetectorRef} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { EMPTY, Observable, of, Subscription } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Observable, of, Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { IPaymentResponse, IPaymentSearchModel, IPOSOrder,
          IPOSPayment, IPOSPaymentsOptimzed,
          IServiceType, ISite } from 'src/app/_interfaces';
@@ -17,18 +18,14 @@ import { AuthenticationService, IItemBasic, OrdersService } from 'src/app/_servi
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { StripeAPISettings, TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
-import { MatDialog,} from '@angular/material/dialog';
-import { StripeCheckOutComponent } from '../../admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
-import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-credit-methods.service';
-import { CardPointMethodsService } from '../../payment-processing/services';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
@@ -42,7 +39,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('receiptView') receiptView: TemplateRef<any>;
   @ViewChild('splitItemsView') splitItemsView: TemplateRef<any>;
-
+  process$: Observable<any>;
   @Input() order  :   IPOSOrder;
    isApp = this.platFormService.isApp();
   userAuths       :   IUserAuth_Properties;
@@ -67,7 +64,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   checkNumberForm :   FormGroup
   _order          :   Subscription;
   showInput       =   true // initialize keypad open
-  stepSelection   =   1;
+  stepSelection   = 1;
   stripeEnabled   : boolean;
   dsiEMVEnabled   : boolean;
   paymentSummary$    : Observable<IPOSPaymentsOptimzed>;
@@ -103,6 +100,23 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   message: string;
   serviceIsScheduled: boolean;
   orderAction$  : Observable<any>;
+  saleProcess$  : Observable<any>;
+
+  initStepSelectionSubscription() {
+     this.saleProcess$ = this.orderMethodsService.posPaymentStepSelection$.pipe(
+      switchMap( data => {
+        if (data && (data?.isCash || data?.name.toLowerCase() === 'cash')) {
+          this.getPaymentMethod(data)
+          this.changeDetectorRef.detectChanges();
+          this.paymentMethod = data;
+          this.stepSelection = 3;
+          console.log('apply payment method', data.name)
+          this.orderMethodsService.updatePaymentMethodStep(null)
+        }
+      return of(null)
+    }))
+  }
+
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.pipe(
@@ -112,7 +126,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         this.refreshIsOrderPaid();
       }
       if (data && data.serviceTypeID) {
-        this.updateOrderSchedule(data.serviceTypeID);
         const site = this.sitesService.getAssignedSite();
         return this.serviceTypeService.getTypeCached(site, data.serviceTypeID)
       }
@@ -124,6 +137,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       if (data && data.scheduleInstructions || (this.order && this.order.preferredScheduleDate) || ( data && data.shippingInstructions) ) {
         this.serviceIsScheduled = true
       }
+      this.processPaymentReady(data)
     })
 
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
@@ -138,23 +152,20 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   constructor(private paymentService  : POSPaymentService,
-              private orderMethodsService: OrderMethodsService,
+              public orderMethodsService: OrderMethodsService,
               private sitesService    : SitesService,
               private orderService    : OrdersService,
               private serviceTypeService: ServiceTypeService,
-              private settingService  : SettingsService,
               private paymentMethodService: PaymentMethodsService,
               private matSnackBar     : MatSnackBar,
               private toolbarUI       : ToolBarUIService,
               private paymentsMethodsService: PaymentsMethodsProcessService,
               public  platFormService : PlatformService,
               private uISettingsService: UISettingsService,
-              private dialog          : MatDialog,
-              private dsiProcess      : DSIProcessService,
               private storeCreditMethodsService: StoreCreditMethodsService,
-              private cardPointMethodsService: CardPointMethodsService,
               private userAuthorization : UserAuthorizationService,
               private authenticationService: AuthenticationService,
+              private changeDetectorRef: ChangeDetectorRef,
               private router          : Router,
               private fb              : FormBuilder) { }
 
@@ -171,7 +182,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     try {
       this.dsiEMVEnabled = this.paymentsMethodsService.DSIEmvSettings?.enabled;
     } catch (error) {
-      console.log('error pospayment init' , error)
     }
 
     if (this.order) {
@@ -188,7 +198,12 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (this.authenticationService.userValue) {
       this.orderAction$ = this.orderMethodsService.getLoginActions()
     }
-    return;
+
+    // this.changetDd
+
+    this.initStepSelectionSubscription();
+
+
   }
 
   setLoginAction() {
@@ -317,43 +332,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     })
   }
 
-  updateOrderSchedule(serviceTypeID: number){
-    //if app is in place, then there is a default order.
-    //if there is no service type or the plateform is an app then it will go to schedule.
-    //otherwise it will accept the service type assigned.
-    const site = this.sitesService.getAssignedSite();
-    if (!serviceTypeID || this.platFormService.isApp()) {
-      this.settingService.getSettingByNameCached(site, 'DefaultOrderType').pipe(
-        switchMap(data => {
-          // console.log('update order scheduleddata', data)
-        if (data) {
-          if (+data.value != this.order.serviceTypeID) {
-            return this.serviceTypeService.getType(site, +data.value)
-          }
-          if (this.platFormService.isApp() ) {
-            return this.serviceTypeService.getType(site, +data.value)
-          }
-          return of(null)
-        }
-        return of(null)
-      })).subscribe(result => {
-          if (!result) { return }
-          this.serviceType = result;
-          this.processPaymentReady(result)
-        }
-      )
-    }
-
-    this.serviceTypeService.getType(site, serviceTypeID).subscribe(data => {
-        if (!data) { return }
-        this.serviceType = data;
-        this.processPaymentReady(data)
-      }
-    )
-  }
-
   processPaymentReady(serviceType: IServiceType) {
-
     if (serviceType) {
       if (serviceType.deliveryService && !this.order.shipAddress ) {
         this.paymentIsReady  = false;
@@ -361,12 +340,14 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         return false
       }
 
+      // console.log('prompt schedule time', serviceType.promptScheduleTime, this.order.preferredScheduleDate)
       if (serviceType.promptScheduleTime && !this.order.preferredScheduleDate) {
         this.paymentIsReady = false;
         this.message = `Schedule date required.`
         return
       }
 
+      // console.log('order min', serviceType.orderMinimum, this.order.subTotal)
       if (serviceType.orderMinimum > 0 && this.order.subTotal < serviceType.orderMinimum) {
         this.paymentIsReady = false;
         this.message = `Minumun purchase amount of $ ${serviceType.orderMinimum} required.`
@@ -422,7 +403,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
     if (this.order &&  this.paymentMethod) {
         let amount;
-
         if (event) {
           amount = event
         }  else {
@@ -430,13 +410,13 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         }
 
         this.posPayment.groupID = this.groupPaymentGroupID;
-        console.log(this.posPayment)
+
         if (!amount || amount == 0) {
           amount   = this.formatValueEntered(event)
         }
 
-        if (!amount) {
-          this.notify('Error getting values for payment.', 'Alert', 2000);
+        if (amount && amount === 0) {
+          this.notify('Error getting values for payment. ' + amount, 'Alert', 2000);
           return;
         }
 
@@ -448,7 +428,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
         if (!isValidAmount) {
           this.paymentAmountForm  = this.fb.group({fieldname: []})
-          return
+          return;
         }
 
         if (this.enterCustomAmount) {
@@ -464,32 +444,30 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         processResults$ = this.processGetResults(amount, this.posPayment)
 
         if (!processResults$) {
-          this.notify('Error getting values for payment.', 'Alert', 2000);
+          this.sitesService.notify('Error getting values for payment.', 'close', 2000, 'red');
           return
         }
 
-        processResults$.subscribe( {
+        this.process$ =    processResults$.subscribe( {
           next: (data) => {
             if (!data) {
-              this.notify('Payment not processed', 'failure', 1000)
+              this.sitesService.notify('Payment not processed','close', 5000, 'red');
             }
             this.processResults(data)
             this.groupPaymentAmount  = 0;
             this.groupPaymentGroupID = 0;
           },
           error: err => {
-            this.notify(`Payment not processed ${err}`, 'failure', 1000)
+            this.sitesService.notify(`Payment not processed ${err}`, 'close', 5000, 'red');
             console.error(err)
           }
         }
       )
     }
-    //if order or payment method don't exist, we have a bigger problem, but we can ignore for now.
     this.initPaymentForm();
   }
 
   applyGroupPayment(event) {
-    console.log('event', event)
     if (!event || event.amount == 0) { return }
     this.splitByItem = false;
     this._paymentAmount = event.amount;
@@ -499,20 +477,22 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   processResults(paymentResponse: IPaymentResponse) {
     let result = 0
-    if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
-      if (paymentResponse.orderCompleted) {
-        result =  this.orderMethodsService.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
-      } else {
+    if (paymentResponse?.paymentSuccess || paymentResponse?.orderCompleted) {
+      if (paymentResponse?.orderCompleted) {
+        this.action$ =   this.orderMethodsService.finalizeOrderProcesses(paymentResponse, this.paymentMethod, paymentResponse.order).pipe(switchMap(data => {
+          result =  this.orderMethodsService.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
+          return of(data)
+        }))
       }
     }
 
     this.resetPaymentMethod();
 
-    if (paymentResponse.paymentSuccess || paymentResponse.responseMessage.toLowerCase() === 'success') {
+    if (paymentResponse?.paymentSuccess || paymentResponse?.responseMessage.toLowerCase() === 'success') {
       this.orderService.updateOrderSubscription(paymentResponse.order)
       this.notify(`Payment succeeded: ${paymentResponse.responseMessage}`, 'Success', 1000)
     } else {
-      this.notify(`Payment failed because: ${paymentResponse.responseMessage}`, 'Something unexpected happened.',3000)
+      this.notify(`Payment failed because: ${paymentResponse?.responseMessage}`, 'Something unexpected happened.',3000)
     }
   }
 
@@ -524,15 +504,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   getResults(amount): Observable<IPaymentResponse> {
     //if credit card - prompt for credit card payment
     const site = this.sitesService.getAssignedSite();
-
-    if (this.paymentMethod && this.posPayment && this.order)
-    {
-      // console.log('pos method, payment method, order are true')
-    }
-
     if (this.paymentMethod && this.posPayment && this.order) {
 
-      //cash
       if (this.paymentMethod.isCash) {
         return  this.processCashPayment(site, this.posPayment, this.order, amount, this.paymentMethod)
       }
@@ -645,12 +618,15 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   applyBalance() {
-    if (!this.paymentMethod.isCreditCard) {
-      this.applyPaymentAmount(this.order.balanceRemaining)
+    if (!this.paymentMethod) { return }
+    let amount : number;
+    if (!this.paymentMethod?.isCreditCard) {
+      amount = this.order?.creditBalanceRemaining
     }
-    if (this.paymentMethod.isCreditCard) {
-      this.applyPaymentAmount(this.order.creditBalanceRemaining)
+    if (this.paymentMethod  && this.paymentMethod.isCreditCard) {
+      amount = this.order?.creditBalanceRemaining
     }
+    this.applyPaymentAmount(amount)
   }
 
   async processCheckPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Promise<IPOSPayment> {
@@ -674,8 +650,10 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       }
       this.stepSelection = 3;
     }
+    console.log('getPaymentMethod .stepselection', this.stepSelection)
     return
   }
+
 
   goToPaymentMethod(){
     this.resetPaymentMethod();
@@ -710,6 +688,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   resetPaymentMethod() {
+    console.log('resetpayment method')
     this.initForms();
     this.paymentMethod = null;
     this.stepSelection = 1;

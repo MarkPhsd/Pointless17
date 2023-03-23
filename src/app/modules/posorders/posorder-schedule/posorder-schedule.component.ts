@@ -1,41 +1,45 @@
 import { Component, OnInit, Input,OnDestroy } from '@angular/core';
 import { FormGroup,FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, IServiceType,  } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DatePipe } from '@angular/common'
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 @Component({
   selector   : 'pos-order-schedule',
   templateUrl: './posorder-schedule.component.html',
   styleUrls  : ['./posorder-schedule.component.scss']
 })
 export class POSOrderScheduleComponent implements OnInit,OnDestroy {
-
+  @Input() serviceType          : IServiceType;
+  action$: Observable<any>;
   inputFormNotes       : FormGroup;
   inputForm            : FormGroup;
   order                : IPOSOrder;
   _order               : Subscription;
-  serviceType          : IServiceType;
   errorMessage: string;
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
-  public       selectedIndex          : number;
+  public       selectedIndex          = 0;
   showSaveButton = false;
-
   processingUpdate: boolean;
-
   scheduledDate: string;
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderService.currentOrder$.pipe(
+      switchMap( data => {
       if (data) {
         this.order =  data
       }
-      if (data) {
-        this.scheduledDate = data.preferredScheduleDate;
+      if (data && data.preferredScheduleDate) {
+        this.scheduledDate = data?.preferredScheduleDate;
       }
+      const site = this.siteService.getAssignedSite()
+      return this.serviceTypeService.getTypeCached(site, +data.serviceTypeID)
+    })).subscribe(data => {
+      this.serviceType = data;
     })
   }
 
@@ -45,6 +49,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     private fb :                FormBuilder,
     private siteService :      SitesService,
     private matSnack          : MatSnackBar,
+    private serviceTypeService: ServiceTypeService,
     public datepipe: DatePipe)
   { }
 
@@ -102,17 +107,16 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   save() {
 
     if (!this.order) {
-      this.errorMessage = 'The order appears to not be initialized. Please go back a page.'
+      this.errorMessage = 'The order is not initialized. Please go back a page.'
       this.matSnack.open(this.errorMessage, 'Alert')
       return
     }
 
       if (this.order) {
-
         if (!this.order.tableName) {
           this.order.suspendedOrder = true;
         }
-        
+
         try {
           const notes                      = this.inputFormNotes.controls['productOrderMemo'].value;
           this.order.productOrderMemo      = notes;
@@ -150,17 +154,18 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     if (!serviceType) { return }
     this.serviceType = serviceType;
     if (serviceType) {
+
       if (serviceType.deliveryService) {
-        this.updateSelectedIndex(1)
+        this.updateSelectedIndex(0)
         return
       }
       if (serviceType.promptScheduleTime) {
-        this.updateSelectedIndex(2)
+        this.updateSelectedIndex(1)
         return
       }
+
       this.showSaveButton = true;
-      this.updateSelectedIndex(3)
-      console.log(this.selectedIndex)
+      this.updateSelectedIndex(2)
     }
   }
 
@@ -179,15 +184,19 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
         this.processingUpdate = false;
         this.updateSelectedIndex(2)
       }, error: err =>{
-        // this.notify
         this.processingUpdate = false;
-        // this.updateSelectedIndex(2)
         this.errorMessage = "Error occured. Please check your address and save again." + err
       }}
     )
   }
 
   saveShippingTime(event) {
+    const site = this.siteService.getAssignedSite();
+    this.order.preferredScheduleDate = event;
+    this.action$ = this.orderService.putOrder(site, this.order).pipe(switchMap(data => {
+      this.orderService.updateOrderSubscription(data)
+      return of(data)
+    }))
     this.updateSelectedIndex(3)
   }
 

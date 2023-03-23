@@ -78,11 +78,11 @@
     <ng-container [ngTemplateOutlet]="listItemsView"></ng-container>
   </div>
 
-   <div *ngIf="isApp && (mainPanel && !smallDevice)">
+   <div *ngIf="isApp && (mainPanel && !smallDevice) && uiTransactions.enableExitLabelButton">
     <ng-container [ngTemplateOutlet]="printLabelView"></ng-container>
   </div>
 
-  <div *ngIf="isApp && (mainPanel && !smallDevice)">
+  <div *ngIf="isApp && (mainPanel && !smallDevice) && uiTransactions.enableExitLabelButton">
     <ng-container [ngTemplateOutlet]="rePrintLabelsView"></ng-container>
   </div>
 
@@ -241,7 +241,7 @@
           (click)="printLabels()">
     <mat-icon>print</mat-icon>
     <span>
-    Print labels
+    Print Labels
     </span>
   </button>
 </ng-template>
@@ -343,12 +343,24 @@
   </button>
 </ng-template>
 
+<ng-template #openCashDrawerView>
+  <button mat-raised-button
+          class="button"
+          color="primary"
+          (click)="openCashDrawer(1)">
+    <span>
+      Open Drawer
+    </span>
+  </button>
+</ng-template>
+
+
 <ng-template #balanceSheetView>
   <button mat-raised-button class="button"
     color="primary"
     (click)="openBalanceSheetAction()">
     <span>
-    Balance Sheet
+      Balance Sheet
     </span>
   </button>
 </ng-template>
@@ -382,6 +394,10 @@
 
       <div>
         <ng-container [ngTemplateOutlet]="cashDropView"></ng-container>
+      </div>
+
+      <div>
+        <ng-container [ngTemplateOutlet]="openCashDrawerView"></ng-container>
       </div>
 
     </span>

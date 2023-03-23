@@ -1,4 +1,5 @@
-<div class="menu-buttons" *ngIf="isUserStaff && uiTransactionSettings?.splitEntry" >
+<div class="menu-buttons" *ngIf="isUserStaff &&
+                                 uiTransactionSettings?.splitEntry" >
   <value-from-list-selector
     [values] ="values"
     [value] ="orderMethodsService.splitEntryValue"

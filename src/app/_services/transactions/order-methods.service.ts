@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BehaviorSubject, catchError, Observable, of, Subscription, switchMap } from 'rxjs';
-import { IClientTable, IPaymentResponse, IPOSOrder, IPurchaseOrderItem, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
+import { IClientTable, IPaymentResponse, IPOSOrder, IPurchaseOrderItem, PaymentMethod, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
@@ -31,6 +31,8 @@ import { ProductListByBarcodeComponent } from 'src/app/modules/menu/product-list
 import { ToolBarUIService } from '../system/tool-bar-ui.service';
 import { FloorPlanService } from '../floor-plan.service';
 import { OrderHeaderComponent } from 'src/app/modules/posorders/pos-order/order-header/order-header.component';
+import { PrintingService } from '../system/printing.service';
+import { PrepPrintingServiceService } from '../system/prep-printing-service.service';
 
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -42,6 +44,9 @@ export interface ProcessItem {
   providedIn: 'root'
 })
 export class OrderMethodsService implements OnDestroy {
+
+  private _posPaymentStepSelection     = new BehaviorSubject<IPaymentMethod>(null);
+  public posPaymentStepSelection$      = this._posPaymentStepSelection.asObservable();
 
   public order                    : IPOSOrder;
   _order                          : Subscription;
@@ -67,6 +72,10 @@ export class OrderMethodsService implements OnDestroy {
   public get assignedPOSItem() {return this.assignPOSItems }
 
   priceCategoryID: number;
+
+  updatePaymentMethodStep(item: IPaymentMethod) {
+    this._posPaymentStepSelection.next(item)
+  }
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(order => {
@@ -167,6 +176,8 @@ export class OrderMethodsService implements OnDestroy {
               private toolbarServiceUI        : ToolBarUIService,
               public authenticationService    : AuthenticationService,
               private floorPlanService        : FloorPlanService,
+              private printingService         : PrintingService,
+              private prepPrintingService: PrepPrintingServiceService,
 
              ) {
     this.initSubscriptions();
@@ -458,16 +469,36 @@ export class OrderMethodsService implements OnDestroy {
     return this.processItemPOSObservable(order, null, item, 1, null , 0, 0, passAlong )
   }
 
+
+  sendToPrep(order: IPOSOrder): Observable<any> {
+    if (order) {
+      const site = this.siteService.getAssignedSite()
+      const item$ = this.prepPrintingService.printLocations(order).pipe(
+        switchMap( data => {
+          return  this.prepPrintUnPrintedItems(order.id)
+        })
+        ,catchError( data => {
+          this.siteService.notify('Error printing templates' + data.toString(), 'close', 5000, 'red')
+          return of(data)
+      }))
+      return item$;
+    }
+  }
+
+  finalizeOrderProcesses(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder) {
+    return this.printingService.printLabels(order, true).pipe(switchMap(data => {
+      return this.sendToPrep(order)
+    }))
+  }
+
   finalizeOrder(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder): number {
 
-    if (paymentMethod.reverseCharge) {
-    }
+    // if (paymentMethod && paymentMethod.reverseCharge) {
+    // }
 
     const payment = paymentResponse.payment;
 
     if (order && !order.balanceRemaining) { order.balanceRemaining = 0}
-    // console.log('finalizeorder balance greater than 0', order.balanceRemaining > 0)
-    if (order.balanceRemaining > 0) { return 0 };
 
     if (payment && paymentMethod) {
 
@@ -478,15 +509,13 @@ export class OrderMethodsService implements OnDestroy {
         return 1
       }
 
-      if (payment.amountReceived >= payment.amountPaid) {
+      if (payment.amountReceived >= payment.amountPaid || order.balanceRemaining == 0) {
         if (this.platFormService.isApp()) {
           this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
         }
         return 1
       }
-
       return 0
-
     }
   }
 
@@ -654,7 +683,6 @@ export class OrderMethodsService implements OnDestroy {
                 return this.posOrderItemService.postItem(site, newItem)
               })).pipe(
                 switchMap(data => {
-                  // console.log('posOrderItemService results ', data)
                   this.processItemPostResultsPipe(data)
                   return of(data);
               })
@@ -1212,9 +1240,6 @@ export class OrderMethodsService implements OnDestroy {
 
   processResults(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod) {
     let result = 0
-
-    // console.log('processResults paymentResponse', paymentResponse)
-
     if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
       if (paymentResponse.orderCompleted) {
         result =  this.finalizeOrder(paymentResponse, paymentMethod, paymentResponse.order)
@@ -1224,7 +1249,6 @@ export class OrderMethodsService implements OnDestroy {
 
     if (paymentResponse.paymentSuccess || paymentResponse.responseMessage.toLowerCase() === 'success') {
       this.orderService.updateOrderSubscription(paymentResponse.order)
-
       this.siteService.notify(`Payment succeeded: ${paymentResponse.responseMessage}`, 'Success', 1000)
     } else {
       this.siteService.notify(`Payment failed because: ${paymentResponse.responseMessage}`, 'Something unexpected happened.',3000)
@@ -1291,6 +1315,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   prepPrintUnPrintedItems(id: number) {
+    console.log('id ', id)
     if (id) {
       const site = this.siteService.getAssignedSite()
       return  this.posOrderItemService.setUnPrintedItemsAsPrinted(site, id).pipe(
@@ -1299,12 +1324,12 @@ export class OrderMethodsService implements OnDestroy {
         })).pipe(
           switchMap( order => {
           if (order) {
-            // this.siteService.notify('Item Sent to Prep!', "Printed",500)
             this.orderService.updateOrderSubscription(order)
             return of(order)
           }
       }));
     }
+
     return of(null)
   }
 

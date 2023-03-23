@@ -215,8 +215,6 @@ export class ItemTypeEditorComponent implements OnInit  {
         this.itemTypes.forEach( item => {
           const id = item.id;
           item = this.inputForm.value;
-
-
           item.id = id;
           item.labelTypeID = this.labelTypeID;
           return  this.updateItem(site, item, optionClose)
@@ -224,7 +222,6 @@ export class ItemTypeEditorComponent implements OnInit  {
       }
 
       if (itemType) {
-        // this._snackBar.open(itemType.name, 'Added', { duration: 2000} )
         return  this.updateItem(site, itemType, optionClose)
       }
     }
@@ -252,8 +249,6 @@ export class ItemTypeEditorComponent implements OnInit  {
 
       console.log('addOnItems', this.addOnItems)
       item.autoAddJSONProductList = JSON.stringify(this.addOnItems);
-      console.table(item)
-
       const item$ = this.itemTypeService.putItemTypeNoChildren(site, item)
 
       item$.subscribe(
@@ -273,13 +268,6 @@ export class ItemTypeEditorComponent implements OnInit  {
       console.log(error)
     }
   }
-
-  // async updateExit() {
-  //   const result =  this.update(true)
-  //   if (result) {
-  //     this.onCancel(true);
-  //   }
-  // }
 
   setPrepTicketID(event) {
     this.itemType.prepTicketID = parseInt(event)

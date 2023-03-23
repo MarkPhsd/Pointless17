@@ -57,7 +57,6 @@
   <div [class]="gridcontainer">
     <div>
       <ng-container [ngTemplateOutlet]="orderSelectedList"></ng-container>
-
       <ng-container [ngTemplateOutlet]="orderView || orderCard"></ng-container>
     </div>
 
@@ -73,7 +72,6 @@
 </div>
 
 <ng-template #orderPrep>
-
   <span *ngIf="viewType == 3 && (printerLocations$ | async) as printLocations">
       <span class="toggle-sections">
           <mat-icon>location_on</mat-icon>
@@ -82,8 +80,7 @@
                 class       ="toggle-view"
                 [(ngModel)] ="printLocation"
                 (click)     ="updatePrinterLocation()" >
-            <mat-button-toggle
-                color="warn" value="0" >
+            <mat-button-toggle   color="warn" value="0" >
                   All
             </mat-button-toggle>
           </mat-button-toggle-group>
@@ -112,7 +109,6 @@
                   mat-button
                   [(ngModel)] ="prepStatus"
                   (click)="togglePrepStatus()">
-
               <mat-button-toggle   color="primary" value="0" >
                 <mat-icon>pending</mat-icon>Pending
               </mat-button-toggle>
@@ -126,14 +122,14 @@
       </span>
     </span>
 
-  <app-order-cards
-    [site]= 'site'
-    [cardStyle]="'prep'">
-  </app-order-cards>
+    <app-order-cards
+      [site]= 'site'
+      [cardStyle]="'prep'">
+    </app-order-cards>
+
 </ng-template>
 
 <ng-template #ordersSelectedView>
-
   <div>
     <div class="flex-row" >
       <div><button
@@ -142,15 +138,12 @@
         (click)="mergeOrdersComplete()"
         aria-label="merge"><mat-icon>join_full</mat-icon>Merge</button>
       </div>
-
       <div><button mat-raised-button (click)="cancelMerge()" aria-label="trash">Cancel</button></div>
-
       <div *ngFor="let order of posOrdersSelectedList; let i = index">
         <div><button mat-raised-button (click)="removeFromList(i)" aria-label="trash">
                {{order.id}}<mat-icon>delete</mat-icon>
               </button></div>
       </div>
-
    </div>
   </div>
 </ng-template>

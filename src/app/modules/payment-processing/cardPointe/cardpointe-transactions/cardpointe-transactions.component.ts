@@ -193,7 +193,6 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
     })
   }
 
-
  sendAuthCardAndCapture(manual: boolean) {
     // this.methodsService.initValues()
     const sendAuth$ = this.methodsService.sendAuthCard(null, true, manual);

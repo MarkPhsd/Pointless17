@@ -1,7 +1,5 @@
-<div class="container">
-
+<div class="container" *ngIf="inputForm">
   <div class="name-fields">
-
     <div *ngIf="inputForm" [formGroup]="inputForm">
       <mat-slide-toggle
               name="medTempLicense"
@@ -9,10 +7,9 @@
         <mat-label >Med Patient / Caregiver</mat-label>
       </mat-slide-toggle>
     </div>
-
   </div>
 
-  <mat-card *ngIf="medPatient">
+  <mat-card *ngIf="isMedPatient">
     <mat-card-subtitle>MED Info</mat-card-subtitle>
     <div  *ngIf="isStaff">
       <div *ngIf="inputForm"
@@ -20,17 +17,11 @@
 
         <div class="name-fields">
           <span *ngIf="(clientType$ | async) as clientType">
-            <div >
+            <div>
               <app-value-fields
                 [inputForm]="inputForm"
                 [fieldName]="'medLicenseNumber'">
-
-                <div *ngIf="clientType?.name && clientType?.name.toLowerCase() === 'caregiver'">
-                  OOMPB
-                </div>
-                <div *ngIf="clientType?.name && clientType?.name.toLowerCase() === 'patient'">
-                  MED License Number / OOMP #
-                </div>
+                  OOMP
               </app-value-fields>
             </div>
 
@@ -38,14 +29,8 @@
               <app-value-fields
                       [enabled]="isStaff"
                       [inputForm]="inputForm"
-                      [fieldName]="'userName'">
-
-                <div *ngIf="clientType?.name && clientType.name.toLowerCase() === 'caregiver'">
-                  MED License Number / OOMP #
-                </div>
-                <div *ngIf="clientType?.name && clientType.name.toLowerCase() === 'patient'">
-                  OOMPB #
-                </div>
+                      [fieldName]="'insTertiaryNum'">
+                  OOMPB
               </app-value-fields>
             </div>
           </span>

@@ -365,6 +365,14 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       item.wholeSale = event.value
     }
 
+    if (colName === 'total') {
+      if (item.quantity == 0) {
+        this.siteService.notify('Item quantity can not be zero when changing cost total.', 'close', 4000, 'yellow');
+        return
+      }
+      item.wholeSale = event.value / item.quantity
+    }
+
     this.action$ = this.updateValues(item)
   }
 

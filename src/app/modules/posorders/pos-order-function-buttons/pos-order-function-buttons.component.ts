@@ -5,8 +5,10 @@ import { TouchBarOtherItemsProxy } from 'electron';
 import { Subscription } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
+import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
@@ -17,6 +19,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 
 export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
 
+  @Input() uiTransactions: TransactionUISettings
   // @ViewChild('payButton')     payButton: TemplateRef<any>;
   @ViewChild('exitButton')    exitButton: TemplateRef<any>;
   @ViewChild('refundOrderButton')  refundOrderButton: TemplateRef<any>;
@@ -85,6 +88,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
               public userAuthorizationService: UserAuthorizationService,
               private orderMethodsService: OrderMethodsService,
               private router: Router,
+              private balanceSheetService: BalanceSheetService,
               private balanceSheetMethods: BalanceSheetMethodsService ) { }
 
   ngOnInit() {
@@ -298,6 +302,8 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     return true;
   }
 
-
+  async openCashDrawer(value: number) {
+    await this.balanceSheetService.openDrawerOne()
+  }
 
 }

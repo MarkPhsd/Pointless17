@@ -29,7 +29,7 @@ export class ChangeDueComponent implements OnInit  {
   uiTransactions$ : Observable<TransactionUISettings>;
 
   printing$ : Observable<any>;
-
+  action$   : Observable<any>;
   inputForm             : FormGroup;
   @Input() paymentMethod: IPaymentMethod;
   @Input() order        : IPOSOrder;
@@ -71,8 +71,29 @@ export class ChangeDueComponent implements OnInit  {
 
   }
 
+  newDefaultOrder(){
+    const site = this.siteService.getAssignedSite();
+    this.action$ = this.orderService.newOrderWithPayloadMethod(site, null).pipe(
+     switchMap(data => {
+      this.dialogRef.close()
+       return of(data)
+     })
+   )
+   }
+
   processSendOrder(order: IPOSOrder) {
-    return this.prepPrintingService.sendToPrep(order)
+    return this.orderMethodService.sendToPrep(order)
+  }
+
+  changeStep() {
+    if (this.step == 2) {
+      this.step = 1
+      return
+    }
+    if (this.step == 1) {
+      this.step = 2
+      return
+    }
   }
 
   ngOnInit(): void {

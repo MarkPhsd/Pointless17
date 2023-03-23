@@ -124,7 +124,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   enableLimitsView : boolean;
   _uiTransactionSettings: Subscription;
   uiTransactionSettings : TransactionUISettings;
-
+  uiTransactions
   devicename = localStorage.getItem('devicename')
 
   emailOption : boolean;
@@ -525,7 +525,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   sendToPrep() {
     if (this.order) {
-      this.printAction$ = this.prepPrintingService.sendToPrep(this.order)
+      this.printAction$ = this.orderMethodService.sendToPrep(this.order)
     }
   }
 

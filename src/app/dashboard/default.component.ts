@@ -21,6 +21,9 @@ import { PlatformService } from '../_services/system/platform.service';
 import { UserAuthorizationService } from '../_services/system/user-authorization.service';
 // import { ReportDateHelpersService } from '../_services/reporting/report-date-helpers.service';
 import { UserSwitchingService } from '../_services/system/user-switching.service';
+import { ITerminalSettings, SettingsService } from '../_services/system/settings.service';
+import { ElectronService } from 'ngx-electron';
+import { BalanceSheetService } from '../_services/transactions/balance-sheet.service';
 
 @Component({
   selector: 'app-default',
@@ -105,6 +108,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   phoneDevice : boolean;
   pointlessPOSDemo: boolean;
   hideAppHeader: boolean;
+  posDevice$ : Observable<ITerminalSettings>
 
   homePageSubscriber(){
     try {
@@ -337,7 +341,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private platFormService         : PlatformService,
                private userAuthorizationService: UserAuthorizationService,
                private userSwitchingService    : UserSwitchingService,
-              //  private themeService           : ThemesService,
+               private balanceSheetService     : BalanceSheetService,
+               private settingService          : SettingsService,
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
     if (!this.platFormService.isApp()) {
@@ -352,6 +357,20 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initSettings();
     const site = this.siteService.getAssignedSite();
     this.splashLoader.stop()
+    this.initDevice()
+  }
+
+  initDevice() {
+    const site = this.siteService.getAssignedSite();
+    const devicename = localStorage.getItem('devicename');
+    this.posDevice$ = this.settingService.getPOSDeviceBYName(site, devicename).pipe(switchMap(data => {
+      const device = JSON.parse(data.text) as ITerminalSettings;
+      this.settingService.updateTerminalSetting(device)
+      if (device.enableScale && this.platFormService.isAppElectron) {
+        this.balanceSheetService.startScaleService()
+      }
+      return of(device)
+    }))
   }
 
   getHelp() {

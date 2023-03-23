@@ -2,6 +2,7 @@
   <app-header> </app-header>
 </div>
 
+<div *ngIf="(posDevice$ | async) as device"></div>
 <mat-drawer-container>
 
   <mat-drawer

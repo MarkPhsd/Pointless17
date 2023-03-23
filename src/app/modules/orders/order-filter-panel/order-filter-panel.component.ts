@@ -50,7 +50,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   printForm          : FormGroup;
   user               = {} as IUser;
 
-  dateRangeForm     : FormGroup;
+  completionDateForm     : FormGroup;
   dateFrom          : any;
   dateTo            : any;
 
@@ -112,7 +112,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       }
     )
   )
-
 
   initTerminalSettingSubscriber() {
     this.settingService.terminalSettings$.subscribe(data => {
@@ -194,25 +193,29 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   {
 
     this.initSubscriptions();
-
     if ( this.terminalSetting) {
       if (this.terminalSetting.resetOrdersFilter) {
         this.orderService.updateOrderSearchModel(null)
       }
     }
+  }
 
+  ngOnInit() {
     const site           = this.siteService.getAssignedSite();
     this.employees$      = this.orderService.getActiveEmployees(site);
     this.serviceTypes$   = this.serviceTypes.getSaleTypes(site);
     this.initAuthorization();
-    this.initDateForm();
+    this.initCompletionDateForm();
+    this.initScheduledDateForm();
     this.initForm();
-    this.refreshSearch();
-  }
 
-  ngOnInit() {
+    console.log(this.isAuthorized)
+    if (this.isAuthorized) {
+      console.log('get all service types')
+      this.serviceTypes$   = this.serviceTypes.getAllServiceTypes(site);
+    }
+    this.refreshSearch();
     this.updateItemsPerPage();
-    return
   }
 
   displayPanel()  {
@@ -231,8 +234,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   initAuthorization() {
-    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
-    this.isStaff  = this.userAuthorization.isUserAuthorized('admin, manager, employee');
+    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
+    this.isStaff  = this.userAuthorization.isUserAuthorized('admin,manager,employee');
     this.isUser  = this.userAuthorization.isUserAuthorized('user');
     if (this.isUser) {
       // this.showScheduleFilter = true;
@@ -289,7 +292,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   resetSearch() {
     this.searchModel = {} as IPOSOrderSearchModel;
-    this.initDateForm()
+    this.initCompletionDateForm();
+    this.initScheduledDateForm();
     this.toggleSuspendedOrders       = "0";
     this.toggleOrdersGreaterThanZero = "0";
     this.toggleOpenClosedAll         = "1"
@@ -300,7 +304,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     }
     if (this.searchModel) {  this.searchModel.orderID = 0}
     this.initForm();
-    this.initDateForm();
     this.refreshSearch();
     this.clearOrder();
   }
@@ -377,15 +380,14 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     search.prepStatus          = 1;
     if (this.viewType ==3) {
       search.printLocation      = this.printLocation;
-      search.prepStatus         = 1//this.prepStatus
+      search.prepStatus         = 1;
     }
-    this.initOrderSearch(search)
+    this.initOrderSearch(search);
     return of('')
-    return this._searchItems$
   }
 
   refreshOrderSearch(searchPhrase) {
-    this.searchModel = {} as IPOSOrderSearchModel
+    this.searchModel = {} as IPOSOrderSearchModel;
     this.searchModel.serviceTypeID = 0
     this.searchModel.employeeID    = 0
     this.searchModel.orderID   = parseInt(searchPhrase)
@@ -393,8 +395,13 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     search.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
     search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
     search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
+
+    if (search.closedOpenAllOrders == 2) {
+      search.scheduleDate_From = null;
+      search.scheduleDate_To = null;
+    }
+
     this.initOrderSearch(search)
-    // return this._searchItems$
   }
 
   setServiceType(event) {
@@ -431,7 +438,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   toggleDateRangeFilter() {
     this.showDateFilter = !this.showDateFilter;
-    this.initDateForm()
+    this.initCompletionDateForm()
   }
 
   toggleScheduleDateRangeFilter() {
@@ -439,154 +446,161 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.initScheduledDateForm();
   }
 
-  initDateForm() {
+  initCompletionDateForm() {
 
-    if (!this.showDateFilter ) {
-      if (this.searchModel) {
-        this.searchModel.completionDate_From = null;
-        this.searchModel.completionDate_To = null;
+      if (!this.showDateFilter ) {
+        if (this.searchModel) {
+          this.searchModel.completionDate_From = null;
+          this.searchModel.completionDate_To = null;
+        }
+        this.completionDateForm = null;
+        return
       }
-      this.dateRangeForm = null;
-      return
+
+      const today = new Date();
+      const month = today.getMonth();
+      const year = today.getFullYear();
+
+      this.completionDateForm =  this.fb.group({
+        start: new Date(year, month, 1),
+        end: new Date()
+      })
+
+      this.searchModel.completionDate_From = this.completionDateForm.get("start").value;
+      this.searchModel.completionDate_To   = this.completionDateForm.get("end").value;
+
+      this.subscribeToCompletionDatePicker();
     }
 
-    this.dateRangeForm = new FormGroup({
-      start: new FormControl(),
-      end: new FormControl()
-    });
+    initScheduledDateForm() {
 
-    const today = new Date();
-    const month = today.getMonth();
-    const year = today.getFullYear();
+      const today = new Date();
+      const month = today.getMonth();
+      const year = today.getFullYear();
 
-    this.dateRangeForm =  this.fb.group({
-      start: new Date(year, month, 1),
-      end: new Date()
-    })
+      this.scheduleDateForm =  this.fb.group({
+        start:  new Date() ,
+        end:    new Date(year, month, 1),
+      })
 
-    this.searchModel.completionDate_From = this.dateRangeForm.get("start").value;
-    this.searchModel.completionDate_To   = this.dateRangeForm.get("end").value;
+      this.searchModel.scheduleDate_From = this.scheduleDateForm.get("start").value;
+      this.searchModel.scheduleDate_To   = this.scheduleDateForm.get("end").value;
 
-    this.subscribeToDatePicker();
+      if (!this.showScheduleFilter) {
+        if (this.searchModel) {
+          this.searchModel.scheduleDate_From = null;
+          this.searchModel.scheduleDate_To = null;
+        }
+        return
+      }
+    }
+
+    subscribeToCompletionDatePicker() {
+      this.subscribeToDateRangeData(this.completionDateForm)
+      // if (this.completionDateForm) {
+      //   this.completionDateForm.get('start').valueChanges.subscribe(res=>{
+      //     if (!res) {return}
+      //     this.dateFrom = res
+      //   }
+      // )
+
+      // this.completionDateForm.get('end').valueChanges.subscribe(res=>{
+      //   if (!res) {return}
+      //   this.dateTo = res
+      //   }
+      // )
+
+      // this.completionDateForm.valueChanges.subscribe(res=>{
+      //     const start = this.completionDateForm.get("start").value;
+      //     const end = this.completionDateForm.get("end").value;
+      //     if (this.completionDateForm.valid) {
+      //       if (start && end ) {
+      //         if (this.dateHelper.isValidDate(start) && this.dateHelper.isValidDate(end))
+      //           this.refreshCompletionDateSearch()
+      //         }
+      //       }
+      //     }
+      //   )
+      // }
+    }
+
+    subscribeToScheduledDatePicker() {
+      this.subscribeToDateRangeData(this.scheduleDateForm)
+      // if (this.scheduleDateForm) {
+      //   this.scheduleDateForm.get('start').valueChanges.subscribe(res=>{
+      //     if (!res) {return}
+      //     this.dateFrom = res
+      //   }
+      // )
+
+      // this.scheduleDateForm.get('end').valueChanges.subscribe(res=>{
+      //   if (!res) {return}
+      //   this.dateTo = res
+      //   }
+      // )
+
+      // this.scheduleDateForm.valueChanges.subscribe(res=>{
+      //     if (this.scheduleDateForm.get("start").value &&
+      //         this.scheduleDateForm.get("start").value) {
+      //       this.refreshScheduledDateSearch()
+      //     }
+      //   }
+      // )
+    // }
 
   }
 
-   initScheduledDateForm() {
+  subscribeToDateRangeData(form: FormGroup) {
+      if (form) {
+        form.get('start').valueChanges.subscribe( res=> {
+          if (!res) {return}
+          this.dateFrom = res
+        }
+      )
 
-    this.scheduleDateForm = new FormGroup({
-      start: new FormControl(),
-      end: new FormControl()
-    });
-
-    const today = new Date();
-    const month = today.getMonth();
-    const year = today.getFullYear();
-
-    this.dateRangeForm =  this.fb.group({
-      start: new Date(year, month, 1),
-      end: new Date()
-    })
-
-    this.searchModel.scheduleDate_From = this.scheduleDateForm.get("start").value;
-    this.searchModel.scheduleDate_To   = this.scheduleDateForm.get("end").value;
-    // this.subscribeToDatePicker();
-
-    if (!this.showScheduleFilter) {
-      if (this.searchModel) {
-        this.searchModel.scheduleDate_From = null;
-        this.searchModel.scheduleDate_To = null;
-      }
-      // this.scheduleDateForm = null;
-      return
-    }
-
-  }
-
-  subscribeToDatePicker()
-    {
-    if (this.dateRangeForm) {
-      this.dateRangeForm.get('start').valueChanges.subscribe(res=>{
+      form.get('end').valueChanges.subscribe( res=> {
         if (!res) {return}
-        this.dateFrom = res //this.dateRangeForm.get("start").value
-      }
-    )
+        this.dateTo = res
+        }
+      )
 
-    this.dateRangeForm.get('end').valueChanges.subscribe(res=>{
-      if (!res) {return}
-      this.dateTo = res
-      }
-    )
-
-    this.dateRangeForm.valueChanges.subscribe(res=>{
-        const start = this.dateRangeForm.get("start").value;
-        const end = this.dateRangeForm.get("end").value;
-        if (this.dateRangeForm.valid) {
-
-          console.log('start is date', this.dateHelper.isValidDate(start))
-          console.log('end is date', this.dateHelper.isValidDate(end))
-
-          if (start && end ) {
-            if (this.dateHelper.isValidDate(start) && this.dateHelper.isValidDate(end))
-              this.refreshDateSearch()
-            }
+      form.valueChanges.subscribe( res=> {
+          if (form.get("start").value &&
+              form.get("start").value) {
+            this.refreshScheduledDateSearch()
           }
         }
       )
     }
   }
 
-
-  subscribeToScheduledDatePicker()
-  {
-  if (this.scheduleDateForm) {
-    this.scheduleDateForm.get('start').valueChanges.subscribe(res=>{
-      if (!res) {return}
-      this.dateFrom = res //this.dateRangeForm.get("start").value
-    }
-  )
-
-  this.scheduleDateForm.get('end').valueChanges.subscribe(res=>{
-    if (!res) {return}
-    this.dateTo = res
-    }
-  )
-
-  this.scheduleDateForm.valueChanges.subscribe(res=>{
-      if (this.scheduleDateForm.get("start").value && this.scheduleDateForm.get("start").value) {
-        this.refreshDateSearch()
-      }
-      }
-    )
-  }
-}
-
   emitDatePickerData(event) {
-    if (this.dateRangeForm) {
-      if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("end").value) {
-        this.dateFrom = this.dateRangeForm.get("start").value
-        this.dateTo = (  this.dateRangeForm.get("end").value )
-        this.refreshDateSearch()
+    if (this.completionDateForm) {
+      if (!this.completionDateForm.get("start").value || !this.completionDateForm.get("end").value) {
+        this.dateFrom = this.completionDateForm.get("start").value
+        this.dateTo = (  this.completionDateForm.get("end").value )
+        this.refreshCompletionDateSearch()
       }
     }
   }
 
   emitScheduledDatePickerData(event) {
-    if (this.dateRangeForm) {
-      if (!this.scheduleDateForm.get("start").value || !this.dateRangeForm.get("end").value) {
+    if (this.completionDateForm) {
+      if (!this.scheduleDateForm.get("start").value || !this.completionDateForm.get("end").value) {
         this.scheduleDateFrom = this.scheduleDateForm.get("start").value
         this.scheduleDateTo = (  this.scheduleDateForm.get("end").value )
-        this.refreshDateSearch()
+        this.refreshScheduledDateSearch()
       }
     }
   }
 
-  refreshDateSearch() {
+  refreshCompletionDateSearch() {
     if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
 
-      this.dateFrom = this.dateRangeForm.get("start").value
-      this.dateTo   = this.dateRangeForm.get("end").value
+      this.dateFrom = this.completionDateForm.get("start").value
+      this.dateTo   = this.completionDateForm.get("end").value
 
-      if (!this.dateRangeForm || !this.dateFrom || !this.dateTo) {
+      if (!this.completionDateForm || !this.dateFrom || !this.dateTo) {
         this.searchModel.completionDate_From = '';
         this.searchModel.completionDate_To   = '';
         this.refreshSearch()
@@ -595,13 +609,11 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
       const start  = this.dateHelper.format(this.dateFrom, 'short')
       const end = this.dateHelper.format(this.dateTo, 'short')
-      this.searchModel.completionDate_From = start // this.dateFrom.toLocaleDateString()
-      this.searchModel.completionDate_To   = end // this.dateTo.toLocaleDateString()
+      this.searchModel.completionDate_From = start
+      this.searchModel.completionDate_To   = end
       console.log('searchmodel', this.searchModel)
 
-
       this.refreshSearch()
-
   }
 
 

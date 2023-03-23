@@ -13,6 +13,7 @@ import { Observable, } from 'rxjs';
   styleUrls: ['./posorder-schedule-form.component.scss']
 })
 export class POSOrderScheduleFormComponent implements OnInit {
+
   @Output() OutPutSaveShippingTime = new EventEmitter();
   @Input() order     : IPOSOrder;
   @Input() inptuForm : FormGroup;

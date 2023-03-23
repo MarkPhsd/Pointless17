@@ -1,11 +1,7 @@
 <div class="container">
-
   <mat-card>
-
     <mat-card-content class="center">
-
       <div *ngIf="!smallDevice" class="grid-orderproperties">
-
         <div class='date-header' *ngIf="order.orderDate">
           {{order.orderDate |  date: 'shortTime'}}  |  {{minutesOpen}} .
         </div>
@@ -65,7 +61,7 @@
           <div *ngIf="!prepScreen" class="items">Items</div>
           <div *ngIf="!prepScreen" class="itemcount">{{order.itemCount}} </div>
 
-          <div *ngIf="prepScreen"class="items">Prep  </div>
+          <div *ngIf="prepScreen" class="items">Prep  </div>
           <div *ngIf="prepScreen" class="itemcount">{{itemCount}} </div>
 
         </div>
@@ -75,7 +71,7 @@
   </mat-card>
 
   <div class="order-items"
-      *ngIf="orderItems">
+       *ngIf="orderItems">
         <pos-order-items
           [mainPanel]    ="false"
           [printLocation]="printLocation"

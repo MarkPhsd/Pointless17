@@ -308,16 +308,13 @@ export class CardPointMethodsService {
   }
 
   sendAuthCard(aid: string, capture: boolean, manual: boolean) {
-
     if (!this.connect) {
       this.sale = {errorMessage:  'Failed, No connection to device', errorCode: -1}
       return of({errorMessage: 'Failed, No connection to device', errorCode: -1})
     }
 
     const item  = this.getAuthRequest(aid, capture, manual)
-
     this.request = item;
-    // console.log('sendAuthCard', item);
 
     if (!item) {
       // console.log('Error 2 sendAuthCard')
@@ -326,7 +323,6 @@ export class CardPointMethodsService {
     }
 
     if (!this.boltTerminal) {
-      // console.log('Terminal not initiated')
       this.transaction = {errorMessage: 'Terminal not initiated', errorCode: -1}
       return of({errorMessage: 'Terminal not initiated', errorCode: -1})
     }
@@ -403,10 +399,8 @@ export class CardPointMethodsService {
   }
 
   authCapture() {
-
     const invalid = this.validateAuth();
     if (invalid) { return of(invalid) }
-
     const item = this.getAuthCaptureRequest(this.transaction);
 
     if (!item) {
@@ -425,10 +419,7 @@ export class CardPointMethodsService {
   }
 
   captureOnly(auth) {
-
     let boltInfo = this.boltInfo
-    // this.posPayment , this.order , this.order.balanceRemaining,
-    //                                                     this.uiTransactions
     if (!boltInfo) {
        boltInfo = JSON.parse(localStorage.getItem('boltInfo'))
     }
@@ -437,11 +428,8 @@ export class CardPointMethodsService {
       return
     }
     this.boltInfo = boltInfo;
-
     const site = this.siteService.getAssignedSite();
-
     return this.cardPointService.capture(site.url, auth)
-
   }
 
   refundByRetRef(retref: any) {
@@ -453,14 +441,12 @@ export class CardPointMethodsService {
     if (!boltTerminal) {
       boltInfo = JSON.parse(localStorage.getItem('boltTerminal'))
     }
-
     const item = { retref: retref, merchID: boltInfo.merchID }
     return this.cardPointService.refundWithReference(boltInfo.apiURL, item )
   }
 
   voidByRetRef(retref: any) {
     let boltInfo = this.boltInfo
-
     if (!boltInfo) {
       boltInfo = JSON.parse(localStorage.getItem('boltInfo'))
     }
@@ -472,13 +458,11 @@ export class CardPointMethodsService {
 
   voidByOrderID(orderID: any) {
     let boltInfo = this.boltInfo
-
     if (!boltInfo) {
       boltInfo = JSON.parse(localStorage.getItem('boltInfo'))
     }
 
     const item = { orderid: orderID, merchID: boltInfo.merchID }
-
     return this.cardPointService.voidByOrderId(boltInfo.apiURL, item )
   }
 
@@ -497,7 +481,6 @@ export class CardPointMethodsService {
   getProcessTip(session: string) {
     const bolt = this.initTerminal(this.connect.xSessionKey, this.connect.expiry);
     if (!bolt) {
-      console.log('no bolt terminal')
       return
     }
     return this.cardPointBoltService.tip(bolt.url, this.boltTerminal.hsn, this.connect.xSessionKey)

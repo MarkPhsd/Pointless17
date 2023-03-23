@@ -369,6 +369,7 @@ import { PointlessMETRCSalesComponent } from '../modules/admin/metrc/pointless-m
 import { MetrcSalesFilterComponent } from '../modules/admin/metrc/pointless-metrcsales/metrc-sales-filter/metrc-sales-filter.component';
 import { PosSplitGroupsComponent } from '../modules/posorders/pos-payment/possplit-items/pos-split-groups/pos-split-groups.component';
 import { PrintGroupReceiptComponent } from '../modules/posorders/pos-payment/possplit-items/print-group-receipt/print-group-receipt.component';
+import { PrepPrintingServiceService } from '../_services/system/prep-printing-service.service';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -836,7 +837,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ItemTypeService,
     ViewComponent,
     RoomLayoutDesignerComponent,
-
+    PrepPrintingServiceService,
+    OrderMethodsService,
+    PrintingService,
    {provide: RouteReuseStrategy , useClass: RouteReuseService},
 
   ],

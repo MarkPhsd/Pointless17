@@ -68,25 +68,24 @@ export class PrintingService {
   }
 
   constructor(  private electronService   : ElectronService,
-                private snack             : MatSnackBar,
-                private settingService    : SettingsService,
-                private siteService       : SitesService,
-                private renderingService  : RenderingService,
+                private dialog            : MatDialog,
+                private clientService     : ClientTableService,
                 private labelaryService   : LabelaryService,
+                private inventoryService   : InventoryAssignmentService,
                 private orderService      : OrdersService,
                 private router            : Router,
                 private userAuthService   : UserAuthorizationService,
                 private orderItemService  : POSOrderItemServiceService,
                 private platFormService   : PlatformService,
                 private menuItemService   : MenuService,
-                private orderMethodsService: OrderMethodsService,
                 private http              : HttpClient,
                 private posOrderItemService : POSOrderItemServiceService,
-                private inventoryService   : InventoryAssignmentService,
-                private uiSettingsService : UISettingsService,
-                private clientService     : ClientTableService,
                 private printingAndroidService   : PrintingAndroidService,
-                private dialog            : MatDialog,) {
+                private renderingService  : RenderingService,
+                private settingService    : SettingsService,
+                private siteService       : SitesService,
+                private uiSettingsService : UISettingsService,
+                ) {
   }
 
   getPrintReady(): Observable<boolean> {
@@ -98,28 +97,34 @@ export class PrintingService {
   }
 
   printLabels(order: IPOSOrder, newLabels: boolean): Observable<any> {
-    // console.log('items',order, order.posOrderItems)
+
+    if (!order || !order.posOrderItems) {
+      return of(null)
+    }
+    let printCount = 0
     if (order) {
-      // console.log('items', order.posOrderItems)
       if (order.posOrderItems) {
         this.obs$ = []
         const items = order.posOrderItems
-        // console.log('items', items.length)
         if (items.length > 0) {
           items.forEach( item => {
             if (!item.printed && newLabels) {
               this.obs$.push(this.printItemLabel(item, null, order))
+              printCount += 1
             }
             if (!newLabels) {
               this.obs$.push(this.printItemLabel(item, null, order))
+              printCount += 1
             }
           })
         }
       }
-      // console.log('forkjoin', this.obs$)
+
+      if (printCount == 0) {return of(null)};
+      console.log('items.length', order.posOrderItems)
+      console.log('forkJoin', this.obs$)
       return forkJoin(this.obs$)
     }
-    // console.log('null')
     return of(null)
   }
 
@@ -133,23 +138,6 @@ export class PrintingService {
     }
   }
 
-  //     this.printingService.printElectronTemplateOrder(location.printer, order, location.templateID )
-  printElectronTemplateOrder(printOrderList): Observable<any> {
-    const site = this.siteService.getAssignedSite()
-    const styles$ = this.appyStylesCachedObservable(site)
-
-    return styles$.pipe(switchMap(data => {
-      return this.dialog.open(PrintTemplatePopUpComponent,
-        { width:        '450px',
-          minWidth:     '450px',
-          height:       '600px',
-          minHeight:    '600px',
-          data : printOrderList
-        },
-        ).afterClosed()
-    }))
-
-  }
 
   async initDefaultLabel() {
     const site        = this.siteService.getAssignedSite();
@@ -336,11 +324,11 @@ export class PrintingService {
         doc.save('invoice.pdf');
       }, error =>
       {
-        this.snack.open(error, 'PNG Error error')
+        this.siteService.notify(error.toString(), 'PNG Error error', 3000)
       }
       )
     } catch (error) {
-      this.snack.open(error, 'PNG Error error')
+      this.siteService.notify(error.toString(),  'PNG Error error', 3000)
     }
   }
 
@@ -350,7 +338,7 @@ export class PrintingService {
       const options = { background: 'white', height: 845, width: 300 };
       return  domtoimage.toPng(node, options)
     } catch (error) {
-      this.snack.open(error, 'PNG Error error')
+      this.siteService.notify(error.toString(),  'PNG Error error', 3000)
     }
   }
 
@@ -419,7 +407,7 @@ export class PrintingService {
 
         }).catch( err => {
           console.log('error', err,options)
-          this.siteService.notify(`Error occured: ${err}. options: ${options}`, 'Alert', 2000 )
+          this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
           printWindow.close();
           printWindow = null;
           return false
@@ -429,24 +417,42 @@ export class PrintingService {
 
   }
 
-  printDocuments(printOrderList: any): Observable<any> {
-    const printOrders = printOrderList as IPrintOrders[]
-    return this.printElectronTemplateOrder(printOrderList)
-    // printOrders.forEach(data => {
-    //   const location = data.location;
-    //   const order = data.order;
-    //   //we can get the document and we can get the printer
-    //   //then we can print to electron
-    //   if (this.platFormService.isAppElectron) {
-    //     console.log(`print to ${location.printer} and ${location.name} and item Count
-    //                           ${order.posOrderItems.length}`)
-    //   }
-    //   return of(null)
-    //   // if (this.platFormService.androidApp) {
-    //   //   // this.printingService.printAndroidTemplateOrder(location.address, document )
-    //   // }
-    // })
+  printDocuments(printOrderList: IPrintOrders[]): Observable<any> {
+
+    if (this.platFormService.isAppElectron) {
+      console.log('print documents')
+      return this.printElectronTemplateOrder(printOrderList)
+    }
+
+    try {
+
+    } catch (error) {
+      this.siteService.notify('error printElectronTemplateOrder :' + error.toString(), 'close', 5000, 'red')
+    }
+
+    return of(null)
   }
+
+  printElectronTemplateOrder(printOrderList:IPrintOrders[]): Observable<any> {
+    try {
+      const site = this.siteService.getAssignedSite()
+      const styles$ = this.appyStylesCachedObservable(site)
+      return styles$.pipe(switchMap(data => {
+        return this.dialog.open(PrintTemplatePopUpComponent,
+          { width:        '450px',
+            minWidth:     '450px',
+            height:       '600px',
+            minHeight:    '600px',
+            data : printOrderList
+          },
+          ).afterClosed()
+      }))
+    } catch (error) {
+      this.siteService.notify('error printElectronTemplateOrder :' + error.toString(), 'close', 5000, 'red')
+    }
+    return of(null)
+  }
+
 
   getPrintContent(htmlContent: any, styles: any) {
     const htmlHeader = `<!DOCTYPE html <html><head> ${styles}</head> <body>`
@@ -581,7 +587,9 @@ export class PrintingService {
         switchMap(data => {
           this.menuItem = data;
           if ( !data || !data.itemType) {return of(null)}
-          if ( data.itemType && ( (data.itemType.labelTypeID != 0 ) && printer.text ) ) {
+          console.log('label name id' ,data.itemType.name, data.itemType.labelTypeID)
+
+          if ( data.itemType && ( ( data.itemType.labelTypeID != 0 ) && printer.text ) ) {
             return  this.settingService.getSetting(site, data.itemType.labelTypeID)
           } else {
             if (history) {
@@ -589,36 +597,64 @@ export class PrintingService {
             }
             return this.orderItemService.setItemAsPrinted(site, item )
           }
+
       })).pipe(
         switchMap( data => {
+
+          if (data.productName != undefined) {
+            return of(null)
+          }
+
+
+          console.log('next 1')
           if (!data) { return of(null) }
+          console.log('next 2' )
 
           item.menuItem = this.menuItem;
-          const lab$ = this.getContact(site, this.menuItem.labID)
-          const producer$ = this.getContact(site, this.menuItem.producerID);
+          const labID = this.menuItem?.labID;
+          const producerID = this.menuItem?.producerID;
+
+          const lab$ = this.getContact(site, labID)
+          const producer$ = this.getContact(site, producerID);
+
+          console.log('lab', labID);
+          console.log('producerid', producerID);
 
           return forkJoin([lab$, producer$, of(data)])
 
         })).pipe(
           switchMap( results => {
 
-            const lab = results[0]
-            const producer = results[1];
+            console.log('results', results)
+            console.log('next 3' );
+            if (!results) { return of(null)}
+            console.log('next 4' );
             const data = results[2];
+            if (!data) {return of(null)}
+            console.log('next 5' );
 
-            item.lab = lab;
-            item.producer = producer;
+            try {
 
-            if (this.menuItem) {
-              if (this.menuItem?.itemType?.type === 'cannabis') {
-                if (!lab) {
-                  this.siteService.notify('Item has no lab assigned.', 'Alert', 2000)
-                }
-                if (!producer) {
-                  this.siteService.notify('Item has no producer assigned.', 'Alert', 2000)
+              const lab = results[0]
+              const producer = results[1];
+
+              item.lab = lab;
+              item.producer = producer;
+
+              if (this.menuItem) {
+                if (this.menuItem?.itemType?.type === 'cannabis') {
+                  if (!lab) {
+                    this.siteService.notify('Item has no lab assigned.', 'Alert', 2000)
+                  }
+                  if (!producer) {
+                    this.siteService.notify('Item has no producer assigned.', 'Alert', 2000)
+                  }
                 }
               }
+            } catch (error) {
+              console.log('error printing label', error )
             }
+            console.log('pre render 2' )
             const content = this.renderingService.interpolateText(item, data.text);
 
             if (printer.text) {
@@ -631,14 +667,28 @@ export class PrintingService {
             return of(null);
       })).pipe(
         switchMap( data => {
-        this.orderMethodsService.refreshOrder(item.orderID);
+        this.refreshOrder(item.orderID, history);
         return of(data)
     }))
 
     return result$
   }
 
+  refreshOrder(id: number, history) {
+    if (this.order) {
+      const site = this.siteService.getAssignedSite();
+      const order$ = this.orderService.getOrder(site, this.order.id.toString() , this.order.history)
+      // const source = timer(5000, 3000);
+      order$.subscribe( data => {
+          this.orderService.updateOrderSubscription(data)
+      })
+    }
+  }
+
   getContact(site: ISite, labID: number): Observable<IClientTable> {
+
+    if (!labID || labID == null) {return of(null)};
+
     const client$ = this.clientService.getClient(site, labID).pipe(
     switchMap(data =>
       {
@@ -672,7 +722,7 @@ export class PrintingService {
       // window.fs.writeFileSync(fileName, printString);
       // window.file
     } catch (error) {
-      this.snack.open(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Error')
+      this.siteService.notify(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Close', 3000, 'red')
     }
 
     const options = {

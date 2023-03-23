@@ -87,3 +87,18 @@ mat-icon {
     height: 45px;
   }
 }
+
+.grid-items {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.center-panel  {
+  min-width: 300px;
+}
+
+.big-button {
+  height: 100%;
+  width: calc(100vw - 66vw - 25px);
+}

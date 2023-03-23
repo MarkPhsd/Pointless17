@@ -53,25 +53,34 @@ export class CashPaymentButtonComponent implements OnInit {
     const i = 0
   }
 
-  applyCashPayment(amount: number) { 
+  applyCashPayment(amount: number) {
     const site = this.sitesService.getAssignedSite()
     this.posPayment = {} as IPOSPayment;
 
-    if (this.posPayment) { 
-      this.action$ = this.paymentMethodService.getPaymentMethodByName(site, 'cash').pipe(switchMap(method => { 
+    if (this.posPayment) {
+      this.action$ = this.paymentMethodService.getPaymentMethodByName(site, 'cash').pipe(switchMap(method => {
         return this.paymentsMethodsService.processCashPayment(site, this.posPayment, this.order, amount, method )
-      })).pipe(switchMap(data => { 
+      })).pipe(switchMap(data => {
         return this.orderService.getOrder(site, this.order.id.toString(), false )
       })).pipe(switchMap(data => {
         this.orderService.updateOrderSubscription(data)
-        // this.navig(['pos-payment'])
         this.router.navigate(['pos-payment']);
         return of(data)
       }))
-    } 
-    if (!this.posPayment) { 
+    }
+    if (!this.posPayment) {
       this.sitesService.notify('No payment assigned', 'Alert', 2000)
     }
   }
+
+  cashPayment() {
+    const site = this.sitesService.getAssignedSite()
+    this.action$ = this.paymentMethodService.getPaymentMethodByName(site,'cash').pipe(switchMap(data => {
+      this.orderMethodsService.updatePaymentMethodStep(data)
+      this.router.navigate(['pos-payment']);
+      return of(data)
+    }));
+  }
+
 
 }

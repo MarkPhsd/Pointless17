@@ -4,7 +4,7 @@
 <div *ngIf="(printLabels$ | async) as items"></div>
 <div *ngIf="(deleteOrder$ | async) as items"></div>
 
-<div  *ngIf="order" class="container">
+<div  *ngIf="order && uiTransactionSettings" class="container">
   <div [class]="orderlayout">
     <div>
       <div>
@@ -94,6 +94,7 @@
                 [ssmsOption]          ="ssmsOption"
                 [refundItemEnabled]   ="refundItemsAvalible"
                 [devicename]          ="devicename"
+                [uiTransactions]      ="uiTransactionSettings"
           ></pos-order-function-buttons>
         </div>
 

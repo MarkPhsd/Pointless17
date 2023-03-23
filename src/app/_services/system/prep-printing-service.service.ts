@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, switchMap } from 'rxjs';
-import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
+import { MatDialog } from '@angular/material/dialog';
+import { catchError, Observable, of, switchMap } from 'rxjs';
+import { PrintTemplatePopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
+import { IPOSOrder, ISetting, ISite, PosOrderItem } from 'src/app/_interfaces';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { IPrinterLocation, PrinterLocationsService } from '../menu/printer-locations.service';
 import { SitesService } from '../reporting/sites.service';
 import { OrderMethodsService } from '../transactions/order-methods.service';
 import { PlatformService } from './platform.service';
 import { PrintingService } from './printing.service';
+import { SettingsService } from './settings.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,16 +21,19 @@ export class PrepPrintingServiceService {
   constructor(
               private locationsService: PrinterLocationsService,
               private siteService: SitesService,
-              private orderMethodsService: OrderMethodsService,
-              private printingService: PrintingService) { }
+              private dialog            : MatDialog,
+              private settingService: SettingsService,
+              ) { }
 
   printLocations(order: IPOSOrder): Observable<any> {
+
     const site = this.siteService.getAssignedSite();
     const locations$ = this.locationsService.getLocations();
     const printOrders = [] as IPrintOrders[]
     const posItems  = order.posOrderItems;
 
     const result$ = locations$.pipe(switchMap(data => {
+      console.log('locations', data)
       return of(data);
     })).pipe(switchMap(data => {
         data.forEach(location => {
@@ -43,11 +49,58 @@ export class PrepPrintingServiceService {
           }
         }
       )
+
       return of(printOrders)
-    })).pipe(switchMap(sections => {
-      return this.printingService.printDocuments(sections)
+    })).pipe(switchMap(printOrders => {
+      if (!printOrders || printOrders.length == 0) { return of(null)}
+      console.log('printing service')
+      return this.printElectronTemplateOrder(printOrders)
+    }),catchError(data => {
+      this.siteService.notify('Error in printing' + data.toString(), 'Close', 5000, 'red')
+      return of(data)
     }))
+
     return result$
+  }
+
+  printElectronTemplateOrder(printOrderList:IPrintOrders[]): Observable<any> {
+    try {
+      const site = this.siteService.getAssignedSite()
+      const styles$ = this.appyStylesCachedObservable(site)
+      return styles$.pipe(switchMap(data => {
+        return this.dialog.open(PrintTemplatePopUpComponent,
+          { width:        '450px',
+            minWidth:     '450px',
+            height:       '600px',
+            minHeight:    '600px',
+            data : printOrderList
+          },
+          ).afterClosed()
+      }))
+    } catch (error) {
+      this.siteService.notify('error printElectronTemplateOrder :' + error.toString(), 'close', 5000, 'red')
+    }
+    return of(null)
+  }
+
+  appyStylesCachedObservable(site: ISite): Observable<ISetting> {
+    const receiptStyle$ = this.settingService.getSettingByNameCachedNoRoles(site, 'ReceiptStyles')
+    return  receiptStyle$.pipe(
+      switchMap( data => {
+          return of(this.setHTMLReceiptStyle(data))
+        }
+      )
+    )
+  }
+
+  setHTMLReceiptStyle(receiptStyle) {
+    if (receiptStyle) {
+      const style = document.createElement('style');
+      style.innerHTML = receiptStyle.text;
+      document.head.appendChild(style);
+      return receiptStyle
+    }
+    return null;
   }
 
   setOrder(newItems: PosOrderItem[], order: IPOSOrder, location: IPrinterLocation): IPrintOrders {
@@ -59,18 +112,6 @@ export class PrepPrintingServiceService {
     return item
   }
 
-  sendToPrep(order: IPOSOrder) {
-    if (order) {
-      const site = this.siteService.getAssignedSite()
-      // this.orderMethodsService.prepPrintUnPrintedItems(order.id)
-      const item$ = this.printLocations(order).pipe(
-        switchMap( data => {
-          return  this.orderMethodsService.prepPrintUnPrintedItems(order.id)
-        })
-      )
-      return item$;
-    }
-  }
 
 
 

@@ -130,6 +130,7 @@ export class FbContactsService {
         tipDefault: [''], //               number;
         versionNumber: [''], //            string;
         lastModified: [''], //             string;
+        insTertiaryNum: [''], //
         clientUUID: [''], //               string;
         gramCountMonthly: [''], //         number;
         uid: [''], //                      string;

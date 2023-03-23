@@ -106,7 +106,7 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
     this.destroySubscriptions()
   }
 
-  refreshOrder() { 
+  refreshOrder() {
     const printerLocation = this.orderService.printerLocation
     if (this.order) {
       if(!this.order.total) {  this.order.total = 0      }
@@ -145,9 +145,9 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
             if (printerLocation == 0) {
               printLocation = true;
             }
-           
+
             if (printLocation && display) {
-              if (item.id == item.idRef) { 
+              if (item.id == item.idRef) {
                 count = item.quantity + count
                 this.itemCount = count;
               }
@@ -163,9 +163,9 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
 
         this.orderItems = data;
       })
-
     }
   }
+
   getMinutesOpen(order) : number {
     if (this.order.orderDate) {
       if (this.order.completionDate) {

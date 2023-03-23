@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, switchMap } from 'rxjs';
 import { IProductPostOrderItem, IServiceType, ISite, IUserProfile }   from 'src/app/_interfaces';
 import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel, IPOSPayment, PosOrderItem,  } from 'src/app/_interfaces/transactions/posorder';
 import { IPagedList } from '../system/paging.service';
@@ -876,13 +876,28 @@ export class OrdersService {
     const order$ = this.newOrderWithPayloadMethod(site, serviceType )
     order$.subscribe( {
         next:  order => {
-          this.processOrderResult(order,site)
+          this.processOrderResult(order ,site)
         },
         error:  catchError => {
           this.notificationEvent(`Error submitting Order # ${catchError}`, "Posted")
         }
       }
     )
+  }
+
+  newOrderWithPayloadObs(site: ISite, serviceType: IServiceType) {
+    const order$ = this.newOrderWithPayloadMethod(site, serviceType )
+    return order$.pipe(
+      switchMap( data => {
+           console.log('order')
+          this.processOrderResult(data, site)
+          return of(data)
+      })
+      // , catchError( err  => {
+      //     this.notificationEvent(`Error submitting Order # ${err}`, "Posted")
+      //     return of(err)
+      // }
+    );
   }
 
   processOrderResult(order: IPOSOrder, site: ISite, ) {
@@ -903,6 +918,10 @@ export class OrdersService {
     const orderPayload = this.getPayLoadDefaults(serviceType)
     return  this.postOrderWithPayload(site, orderPayload).pipe(switchMap(data => {
       this.processOrderResult(data, site)
+      return of(data)
+    }),
+      catchError(data => {
+      this.siteService.notify('Order not started', 'Alert', 2000, 'red')
       return of(data)
     }))
   }

@@ -22,14 +22,17 @@
     <div>
       <div class="button-row" *ngIf="!qrOrder && !mainPanel">
         <div>
-          <button  class="button" color="primary" mat-raised-button (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>
+          <button  class="button" color="primary" mat-raised-button
+                  (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>
         </div>
         <div>
-          <button  class="button" color="primary" mat-raised-button (click)="sendOrder()">
+          <button  class="button" color="primary" mat-raised-button
+                   (click)="sendOrder()">
             <mat-icon>countertops</mat-icon>
           </button>
         </div>
       </div>
+
       <div class="button-row" *ngIf="isUserStaff">
 
         <div>

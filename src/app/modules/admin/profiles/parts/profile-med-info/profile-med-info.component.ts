@@ -41,6 +41,15 @@ export class ProfileMedInfoComponent implements OnInit {
 
   }
 
+get isMedPatient() {
+  if (this.inputForm) {
+    if (this.inputForm.controls['patientRecOption'].value) {
+      return true
+    }
+  }
+  return false
+}
+
   updateFileList(event) {
     this.fileList = event;
     this.inputForm.patchValue({fileList: this.fileList})

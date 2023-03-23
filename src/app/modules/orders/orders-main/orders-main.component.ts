@@ -53,6 +53,17 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   searchModel: IPOSOrderSearchModel;
   _searchModel: Subscription;
 
+  interval
+  setPrepInterval() {
+    if (this.viewType == 3) {
+      this.interval = setInterval(() => {
+        this.refreshPrep();
+      }, 30000);
+      return;
+    }
+    clearInterval(this.interval)
+  }
+
   initStatusSubscriber() {
     this._prepStatus = this.orderService.prepStatus$.subscribe( data => {
       if (data) {
@@ -85,6 +96,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
       this.viewType = data;
     })
   }
+
   initSubscriptions(){
     this.initStatusSubscriber();
     this.initPrintLocationSubscriber();
@@ -124,9 +136,11 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     this.initSubscriptions();
     this.printerLocations$ = this.printerService.getLocations()
   }
+
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
+    clearInterval(this.interval)
     this.destroySubscriptions()
   }
 
@@ -140,11 +154,15 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
 
   updatePreptStatus(value:number) {
     if (value) {
-      this.searchModel.printLocation = this.printLocation;
-      this.searchModel.prepStatus = this.prepStatus
-      this.orderService.updatePrepStatus(this.prepStatus)
-      this.orderService.updateOrderSearchModel(this.searchModel)
+      this.refreshPrep()
     }
+  }
+
+  refreshPrep() {
+    this.searchModel.printLocation = this.printLocation;
+    this.searchModel.prepStatus = this.prepStatus
+    this.orderService.updatePrepStatus(this.prepStatus)
+    this.orderService.updateOrderSearchModel(this.searchModel)
   }
 
   togglePrepStatus() {
@@ -199,7 +217,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
 
   removeFromList(i) {
     try {
-      console.log(i)
       this.posOrdersSelectedList.splice(i,1)
     } catch (error) {
       console.log('eerror', error)
@@ -224,7 +241,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
 
   displayPanel(event)  {
     const show =  localStorage.getItem('OrderFilterPanelVisible')
-    // console.log(show)
     if (show === 'false') {
       this.hidePanel = true
       this.gridcontainer = 'grid-container-full'
@@ -295,7 +311,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   }
 
   changeView() {
-    // if (!this.viewType) { this.viewType = 1}
 
     if (this.viewType == 1) {
       this.viewType = 0
@@ -319,7 +334,8 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
 
   setViewType(value) {
     this.viewType = value;
-    this.orderService.updateViewOrderType(value)
+    this.orderService.updateViewOrderType(value);
+    this.setPrepInterval()
   }
 
 }

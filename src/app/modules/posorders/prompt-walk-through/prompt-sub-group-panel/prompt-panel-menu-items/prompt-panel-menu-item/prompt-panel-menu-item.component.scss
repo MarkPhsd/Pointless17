@@ -39,6 +39,7 @@ button {
 
 .buttons {
   height: 75px;
+  width: 100%;
   @include for-phone-only {
     height: 50px;
     margin: 2px;

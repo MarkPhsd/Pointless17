@@ -112,24 +112,23 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.bucketName    = await this.awsBucket.awsBucket();
+    this.awsBucketURL  = await this.awsBucket.awsBucketURL();
 
     this.uiSettingsService.getSetting('UITransactionSetting').subscribe(data => {
       if (!data) {return}
       this.transactionUISettings = JSON.parse(data.text)
       this.enableMEDClients = this.transactionUISettings.enablMEDClients;
+      const site         = this.siteService.getAssignedSite();
+      this.selectedIndex = 0
+      this.fillForm( this.id );
+      const currentYear                   = new Date().getFullYear();
+      this.minumumAllowedDateForPurchases = new Date(currentYear - 21, 0, 1);
+      this.initDateRangeForm();
+      this.initConfirmPassword();
+      this.initSelectForm();
     })
 
-    const site         = this.siteService.getAssignedSite();
-    this.bucketName    = await this.awsBucket.awsBucket();
-    this.awsBucketURL  = await this.awsBucket.awsBucketURL();
-    this.selectedIndex = 0
-
-    this.fillForm( this.id );
-    const currentYear                   = new Date().getFullYear();
-    this.minumumAllowedDateForPurchases = new Date(currentYear - 21, 0, 1);
-    this.initDateRangeForm();
-    this.initConfirmPassword();
-    this.initSelectForm();
   }
 
   ngOnDestroy(): void {

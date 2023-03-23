@@ -246,9 +246,23 @@ export class BalanceSheetService {
     const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
     const response        = await emvTransactions.openCashDrawerOne()
   }
+
+  async  startScaleService() {
+    try {
+      const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+      const response        = await emvTransactions.startScaleService()
+    } catch (error) {
+
+    }
+  }
+
   async  openDrawerTwo() {
     const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
     const response        = await emvTransactions.openCashDraweTwo()
+  }
+
+  async openDrawerNoSale(sheet:IBalanceSheet) {
+    await this.openDrawerOne()
   }
 
   getSheetType(sheet: IBalanceSheet) {

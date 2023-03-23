@@ -33,10 +33,11 @@
         name="type"
         [(ngModel)]="itemOption">
           <mat-button-toggle
-          *ngFor="let item of itemOptions"
+            *ngFor="let item of itemOptions"
             class="button-toggle"
+
             [value]="item.id">
-            {{ item.name }}
+             {{ item.name }}
           </mat-button-toggle>
     </mat-button-toggle-group>
 
@@ -45,7 +46,7 @@
       <div   *ngFor="let item of subGroup.promptMenuItems;
               let i = index;"
               class='grid-item' >
-              
+
         <prompt-panel-menu-item
           [promptMenuItem] = "item"
           [index]          = "index"
