@@ -1,11 +1,25 @@
+<div *ngIf="action$ && (action$ | async) as action"></div>
 
 <div class="mat-card-container"
-     *ngIf="site && (sales$ | async) as summary; else loading">
-  <div *ngIf="summary.results as sales">
-    <mat-card >
-      <mat-card-title>
-        <h4> <ng-content></ng-content> </h4>
-        <div class="grid">
+      *ngIf="site && (sales$ | async) as summary; else loading">
+  <ng-container 
+                [ngTemplateOutlet]="reportView" 
+                [ngTemplateOutletContext]="{$implicit: summary}">
+  </ng-container>
+</div>
+
+<ng-template #loading>
+  <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
+</ng-template>
+
+<ng-template #activeReportView let-summary>
+  <div><button mat-raised-button (click)="hideList = !hideList">Toggle List</button></div>
+  <div *ngIf="!hideList">
+    <div *ngIf="summary.results as sales">
+      <mat-card >
+        <mat-card-title>
+          Scheduled Items <br>
+           {{scheduleDateStart | date : 'shortDate'}} - {{scheduleDateEnd | date : 'shortDate'}}
           <div  class="totals_label">
             <span>
               <button mat-raised (click)="togglesShowAll()">
@@ -13,56 +27,81 @@
               <button mat-raised (click)="downloadCSV()">
                 <mat-icon>download</mat-icon></button>
             </span>
-            <div *ngIf="summary.resultMessage">
-              <mat-icon>alert</mat-icon>
-              {{summary.resultMessage}}
+          </div>
+        </mat-card-title>
+        <mat-card-content>
+          <div class="grid-body">
+            <div class="totalslabel">Item :    </div>
+            <div class="totals">     #         </div>
+            <div class="totals">     Dismiss        </div>
+          </div>
+          <div  class="grid-body"
+                *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
+              <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
+              <div class="totals">{{sale?.quantity }}               </div>
+              <div class="totals"><button mat-raised-button (click)="setItemGroupAsPrepped(sale.id)">Dismiss</button></div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #salesView let-summary>
+  
+  <div *ngIf="summary.results as sales">
+      <mat-card >
+        <mat-card-title>
+          <h4> <ng-content></ng-content> </h4>
+          <div    class="grid">
+            <div  class="totals_label">
+              <span>
+                <button mat-raised (click)="togglesShowAll()">
+                <mat-icon>expand</mat-icon></button>
+                <button mat-raised (click)="downloadCSV()">
+                  <mat-icon>download</mat-icon></button>
+              </span>
+              <div *ngIf="summary.resultMessage">
+                <mat-icon>alert</mat-icon>
+                {{summary.resultMessage}}
+              </div>
             </div>
           </div>
-        </div>
-      </mat-card-title>
+        </mat-card-title>
 
-      <mat-card-content >
-        <div class="grid-body">
-          <div class="totalslabel">Item :    </div>
-          <div class="totals">     Pre Tax :</div>
-          <div class="totals">     #         </div>
-          <div class="totals">     Cost :</div>
+        <mat-card-content >
+          <div class="grid-body">
+            <div class="totalslabel">Item :    </div>
+            <div class="totals">     Pre Tax :</div>
+            <div class="totals">     #         </div>
+            <div class="totals">     Cost :</div>
 
-        </div>
-        <!-- <div  class="grid-body"
-              *ngFor="let sale of sales" >
-            <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
-            <div class="totals">{{sale?.itemTotal | currency }}   </div>
-            <div class="totals">{{sale?.quantity }}               </div>
-            <div class="totals">{{sale?.cost | currency }}   </div>
-        </div> -->
-        <div  class="grid-body"
-              *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
-            <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
-            <div class="totals">{{sale?.itemTotal | currency }}   </div>
-            <div class="totals">{{sale?.quantity }}               </div>
-            <div class="totals">{{sale?.cost | currency }}   </div>
-        </div>
+          </div>
+          <div  class="grid-body"
+                *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
+              <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
+              <div class="totals">{{sale?.itemTotal | currency }}   </div>
+              <div class="totals">{{sale?.quantity }}               </div>
+              <div class="totals">{{sale?.cost | currency }}   </div>
+          </div>
 
-        <div class="margin-divider">
-          <mat-divider></mat-divider>
-        </div>
-      </mat-card-content>
+          <div class="margin-divider">
+            <mat-divider></mat-divider>
+          </div>
+        </mat-card-content>
 
-      <mat-card-footer>
-        <div *ngIf="summary.summary" class="grid-footer">
-          <div class="product-name"> PreTax Totals                             </div>
-          <div class="totals">{{summary?.summary?.itemTotal | currency }}  </div>
-          <div class="totals">{{summary?.summary?.quantity }}              </div>
-          <div class="totals">{{summary?.summary?.cost | currency }}   </div>
-        </div>
-        <!-- {{summary.summary | json}} -->
-      </mat-card-footer>
+        <mat-card-footer>
+          <div *ngIf="summary.summary" class="grid-footer">
+            <div class="product-name"> PreTax Totals                             </div>
+            <div class="totals">{{summary?.summary?.itemTotal | currency }}  </div>
+            <div class="totals">{{summary?.summary?.quantity }}              </div>
+            <div class="totals">{{summary?.summary?.cost | currency }}   </div>
+          </div>
+        </mat-card-footer>
 
-    </mat-card>
+      </mat-card>
   </div>
-</div>
 
-<ng-template #loading>
-  <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
 </ng-template>
+
+
