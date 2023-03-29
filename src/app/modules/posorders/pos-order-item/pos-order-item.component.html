@@ -10,7 +10,7 @@
           [class]="customcard"
           >
 <mat-card-content >
-  <!-- <div *ngIf="inputForm">{{inputForm.value | json}}</div> -->
+  <!-- <div *ngIf="inputForm">{{inputF  orm.value | json}}</div> -->
 
     <div  [class]="gridItems">
       <div *ngIf="orderItem">
@@ -208,12 +208,21 @@
                 <button mat-button  color="accent"  (click)="editQuantity()"><mat-icon>note_pad</mat-icon>Quantity</button>
               </div>
 
-              <div *ngIf="userAuthService.isManagement ">
+              <!-- ? || userAutService.changeItemPrice -->
+              <div *ngIf="userAuthService.isManagement">
                 <button mat-button  color="accent"  (click)="editPrice()"><mat-icon>edit</mat-icon>Price</button>
+              </div>
+
+              <div *ngIf="userAuthService.isManagement">
+                <button mat-button  color="accent"  (click)="editSubTotal()"><mat-icon>edit</mat-icon>Total Price</button>
               </div>
 
               <div *ngIf="userAuthService.isManagement && purchaseOrderEnabled">
                 <button mat-button  color="accent"  (click)="editCost()"><mat-icon>edit</mat-icon>Cost</button>
+              </div>
+
+              <div *ngIf="userAuthService.isManagement && purchaseOrderEnabled">
+                <button mat-button  color="accent"  (click)="editWholeSaleCost()"><mat-icon>edit</mat-icon>Total Cost</button>
               </div>
 
               <div *ngIf="(quantity && !orderItem.voidReason)">

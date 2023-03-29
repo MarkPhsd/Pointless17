@@ -987,7 +987,7 @@ export class OrdersService {
 
       this.toolbarServiceUI.updateOrderBar(true)
       if (!order.history && this.platFormService.isApp()) {
-        if (!order.completionDate) {
+        if (!order.completionDate && !order.preferredScheduleDate) {
           this.toolbarServiceUI.showSearchSideBar()
           return
         }

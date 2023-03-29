@@ -96,7 +96,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
           const datepipe: DatePipe = new DatePipe('en-US');
           if (data.orderDate) { this.order.orderTime = datepipe.transform( data.orderDate, 'HH:mm')     }
           if (this.items)     { this.items           = this.items.filter( item => item.quantity != 0  );     }
-          if ( this.payments) { this.payments        = this.payments.filter(item => item.amountPaid != 0 ); }
+          // if ( this.payments) { this.payments        = this.payments.filter(item => (item.iscreditCard || (!item.iscreditCard && item.amountPaid != 0)) ); }
            return this.serviceTypeService.getTypeCached(this.site, data.serviceTypeID)
         }
       )

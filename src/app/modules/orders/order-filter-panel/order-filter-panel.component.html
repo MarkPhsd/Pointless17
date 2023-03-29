@@ -1,7 +1,7 @@
 <mat-card >
   <mat-card-content>
     <div class="button-grid">
-
+     
       <div>
         <button class="button"
                 mat-button
@@ -97,27 +97,10 @@
     <div *ngIf="showScheduleFilter && scheduleDateForm">
       <mat-date-range
           [inputForm]      ="scheduleDateForm"
-          (outputDateRange)="emitDatePickerData($event)">
+          (outputDateRange)="emitScheduledDatePickerData($event)">
           Schedule Dates
       </mat-date-range>
     </div>
-
-    <!-- <div   *ngIf="isAuthorized || isUser" class="fields">
-      <button mat-raised-button
-              class="date-filter-buttton"
-              (click)="toggleDateRangeFilter()">
-              Order Dates
-        <mat-icon>date_range</mat-icon>
-      </button>
-    </div>
-
-    <div *ngIf="showDateFilter && dateRangeForm">
-      <mat-date-range
-          [inputForm]      ="dateRangeForm"
-          (outputDateRange)="emitDatePickerData($event)">
-          Order Dates
-      </mat-date-range>
-    </div> -->
 
     <mat-button-toggle-group
           *ngIf       ="searchModel"

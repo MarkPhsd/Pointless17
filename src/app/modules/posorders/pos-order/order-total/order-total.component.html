@@ -18,8 +18,8 @@
   <div class="total-headers foreground-color" *ngIf="order.gratuity && order.gratuity != 0">Service %{{ ( (order?.gratuity / order?.subTotal) * 100 ).toFixed(0) }} </div>
   <div class="totals foreground-color"        *ngIf="order.gratuity && order.gratuity != 0"> {{ order?.gratuity | currency }}</div>
 
-  <div class="total-headers foreground-color">Total </div>
-  <div class="totals foreground-color"> {{ order.total | currency }}</div>
+  <div class="grand-total-headers foreground-color">Total</div>
+  <div class="grand-totals foreground-color"> {{ order.total | currency }}</div>
 
   <div class="total-headers foreground-color">Items </div>
   <div class="totals foreground-color">{{ order.itemCount }}</div>

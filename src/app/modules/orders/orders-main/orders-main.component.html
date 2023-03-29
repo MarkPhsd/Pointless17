@@ -56,6 +56,10 @@
 
   <div [class]="gridcontainer">
     <div>
+      <div *ngIf="scheduleDateStart && scheduleDateEnd">
+  
+        <ng-container [ngTemplateOutlet]="scheduledItems"></ng-container>
+      </div>
       <ng-container [ngTemplateOutlet]="orderSelectedList"></ng-container>
       <ng-container [ngTemplateOutlet]="orderView || orderCard"></ng-container>
     </div>
@@ -168,4 +172,19 @@
       Your order history
     </h2>
   </app-order-cards>
+</ng-template>
+
+<ng-template #scheduledItems>
+  <div>
+    <item-sales-card
+          [site]="site"
+          [viewType]="'activeReportView'"
+          [scheduleDateStart]="scheduleDateStart"
+          [scheduleDateEnd]  ="scheduleDateEnd"
+          [removeGiftCard]="true"
+          [groupBy]="'items'">
+        <mat-icon>menu</mat-icon> Scheduled Items
+        <mat-divider></mat-divider>
+    </item-sales-card>
+  </div>
 </ng-template>

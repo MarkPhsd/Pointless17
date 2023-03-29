@@ -75,9 +75,31 @@ export class PosOrderItemEditComponent  {
         })
       }
 
+      if (this.editField == 'price') {
+        this.inputForm = this._fb.group({
+          quantity: [this.posOrderItem.quantity],
+          itemName: [],
+          price   : [this.posOrderItem.unitPrice]
+        })
+      }
+
+      if (this.editField == 'subTotal') {
+        this.inputForm = this._fb.group({
+          subTotal: [this.posOrderItem.subTotal],
+          itemName: [],
+        })
+      } 
+
       if (this.editField == 'wholeSale') {
         this.inputForm = this._fb.group({
           wholeSale: [this.posOrderItem.wholeSale],
+          itemName: [],
+        })
+      }
+
+      if (this.editField == 'wholeSaleCost') {
+        this.inputForm = this._fb.group({
+          wholeSaleCost: [this.posOrderItem.wholeSaleCost],
           itemName: [],
         })
       }
@@ -89,17 +111,8 @@ export class PosOrderItemEditComponent  {
         })
       }
 
-      if (this.editField == 'price') {
-        this.inputForm = this._fb.group({
-          quantity: [this.posOrderItem.quantity],
-          itemName: [],
-          price   : [this.posOrderItem.unitPrice]
-        })
-      }
-
     }
   }
-
 
   initValueType() {
     if (!this.menuItem) {
@@ -130,8 +143,11 @@ export class PosOrderItemEditComponent  {
 
   savePriceChange(event) {
     const item = this.getItemValue();
-    item.unitPrice = event;
-    this.save()
+    if (item){
+      this.posOrderItem.unitPrice = event;
+      this.inputForm.patchValue({price: event})
+      this.save()  
+    }
   }
 
   saveCostChange(event) {
@@ -144,6 +160,7 @@ export class PosOrderItemEditComponent  {
     if (this.posOrderItem) {
       const site = this.siteService.getAssignedSite();
       const item = this.getItemValue();
+
       if (item && site) {
 
         if (this.editField == 'quantity') {
@@ -166,9 +183,40 @@ export class PosOrderItemEditComponent  {
           return
         }
 
+        if (this.editField == 'subTotal') {
+          if (item) {
+            this.posOrderItem.subTotal = item.unitPrice;
+            this.posOrderItemService.changeItemSubTotal(site, item).subscribe( data => {
+              if (data) {
+                if (data.resultMessage) {
+                  this.siteService.notify(data.resultMessage, 'Alert', 1500)
+                }
+              }
+              this.orderService.updateOrderSubscription(data)
+              this.onCancel();
+            })
+          }
+          return
+        }
+
         if (this.editField == 'wholeSale') {
           if (item) {
-            this.posOrderItemService.changeItemPrice(site, item).subscribe( data => {
+            this.posOrderItemService.changeItemCost(site, item).subscribe( data => {
+              if (data) {
+                if (data.resultMessage) {
+                  this.siteService.notify(data.resultMessage, 'Alert', 1500)
+                }
+              }
+              this.orderService.updateOrderSubscription(data)
+              this.onCancel();
+            })
+          }
+          return
+        }
+
+        if (this.editField == 'wholeSaleCost') {
+          if (item) {
+            this.posOrderItemService.changeItemTotalCost(site, item).subscribe( data => {
               if (data) {
                 if (data.resultMessage) {
                   this.siteService.notify(data.resultMessage, 'Alert', 1500)
@@ -191,7 +239,6 @@ export class PosOrderItemEditComponent  {
       }
     }
   }
-
 
   updateQuantity(item: PosOrderItem) {
     const site = this.siteService.getAssignedSite();
@@ -216,25 +263,34 @@ export class PosOrderItemEditComponent  {
 
     if (this.editField === 'price') {
       const value = this.inputForm.controls['price'].value;
-      // item.unitPrice = value;
-      // console.log('value', value)
+      item.unitPrice = value;
     }
 
+    if (this.editField === 'subTotal') {
+      const value = this.inputForm.controls['subTotal'].value;
+      item.subTotal = value;
+    }
+
+    if (this.editField === 'wholeSaleCost') {
+      const value = this.inputForm.controls['price'].value;
+      item.subTotal = value;
+      item.wholeSaleCost = value;
+    }
+
+    // console.log('get item value', item)
     return item
   }
 
-  //
-
 
   onCancel() {
-    this.closeOnEnterPress.emit('true')
     this.orderService._scanner.next(true)
     this.dialogRef.close();
+    this.closeOnEnterPress.emit('true')
   }
 
   onClose(event) {
-    this.closeOnEnterPress.emit('true')
     this.dialogRef.close();
+    this.closeOnEnterPress.emit('true')
   }
 }
 

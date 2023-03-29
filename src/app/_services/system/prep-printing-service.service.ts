@@ -33,7 +33,6 @@ export class PrepPrintingServiceService {
     const posItems  = order.posOrderItems;
 
     const result$ = locations$.pipe(switchMap(data => {
-      console.log('locations', data)
       return of(data);
     })).pipe(switchMap(data => {
         data.forEach(location => {

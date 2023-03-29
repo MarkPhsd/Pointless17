@@ -33,6 +33,7 @@ import { FloorPlanService } from '../floor-plan.service';
 import { OrderHeaderComponent } from 'src/app/modules/posorders/pos-order/order-header/order-header.component';
 import { PrintingService } from '../system/printing.service';
 import { PrepPrintingServiceService } from '../system/prep-printing-service.service';
+import { IReportItemSaleSummary } from '../reporting/reporting-items-sales.service';
 
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -397,7 +398,6 @@ export class OrderMethodsService implements OnDestroy {
     return null
   }
 
-
   emailOrder(order: IPOSOrder) : Observable<any> {
     if (order && order.clientID) {
       if (order.clients_POSOrders.email) {
@@ -468,7 +468,6 @@ export class OrderMethodsService implements OnDestroy {
     }
     return this.processItemPOSObservable(order, null, item, 1, null , 0, 0, passAlong )
   }
-
 
   sendToPrep(order: IPOSOrder): Observable<any> {
     if (order) {
@@ -1310,6 +1309,33 @@ export class OrderMethodsService implements OnDestroy {
      return this.posOrderItemService.setItemsAsPrepped(site, orderID, printLocation).pipe(
         switchMap(data => {
           return this.orderService.getOrder(site, orderID.toString(), false)
+        }))
+    }
+  }
+
+  setItemGroupAsPrepped(site: ISite, id: number, startDate: string, endDate: string, currentList: IReportItemSaleSummary): Observable<IReportItemSaleSummary> {
+    if (id) {
+      const site = this.siteService.getAssignedSite()
+     return this.posOrderItemService.setItemGroupAsPrepped(site, id, startDate, endDate).pipe(
+        switchMap(data => {
+          if (data) {
+            return of(null)
+          }
+          return of(null)
+        }))
+    }
+  }
+
+  setOneItemFromGroupAsPrepped(id: number, startDate: string, endDate: string, currentList: any[]): Observable<any> {
+    if (id) {
+      const site = this.siteService.getAssignedSite()
+     return this.posOrderItemService.setOneItemFromGroupAsPrepped(site, id, startDate, endDate).pipe(
+        switchMap(data => {
+          if (data) {
+            return of(null)
+          }
+          return of(null)
+          ///remove the item from the list and return the list
         }))
     }
   }

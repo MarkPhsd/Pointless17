@@ -46,29 +46,19 @@
         </div>
 
         <div *ngIf="menuItem && editField === 'price'">
-          <app-key-pad
-                  [inputForm]           = "inputForm"
-                  [inputTypeValue]      = "inputTypeValue"
-                  [decimals]            = decimals
-                  [showInput]           = "true"
-                  [requireWholeNumber]  = "false"
-                  (outPutReturnEnter)   = "savePriceChange($event)"
-                  (closeOnEnterPress)   = "onClose($event)">
-            Enter Value
-          </app-key-pad>
+          <ng-container *ngTemplateOutlet="fillValueView,context: {$implicit: editField, name: 'Enter Value'}"></ng-container>
+        </div>
+ 
+        <div *ngIf="menuItem && editField === 'subTotal'">
+          <ng-container *ngTemplateOutlet="fillValueView,context: {$implicit: editField, name: 'Enter Total Price'}"></ng-container>
         </div>
 
         <div *ngIf="menuItem && editField === 'wholeSale'">
-          <app-key-pad
-                  [inputForm]           = "inputForm"
-                  [inputTypeValue]      = "inputTypeValue"
-                  [decimals]            =  decimals
-                  [showInput]           = "true"
-                  [requireWholeNumber]  = "false"
-                  (outPutReturnEnter)   = "savePriceChange($event)"
-                  (closeOnEnterPress)   = "onClose($event)">
-            Enter Cost
-          </app-key-pad>
+          <ng-container *ngTemplateOutlet="fillValueView,context: {$implicit: editField, name: 'Enter Cost'}"></ng-container>
+        </div>
+
+        <div *ngIf="menuItem && editField === 'wholeSaleCost'">
+          <ng-container *ngTemplateOutlet="fillValueView,context: {$implicit: editField, name: 'Enter Total Cost'}"></ng-container>
         </div>
 
       </div>
@@ -86,5 +76,17 @@
       </div>
     </mat-card-actions>
   </mat-card>
-
 </div>
+
+<ng-template #fillValueView let-param>
+  <app-key-pad
+              [inputForm]           = "inputForm"
+              [inputTypeValue]      = "inputTypeValue"
+              [decimals]            =  decimals
+              [showInput]           = "true"
+              [requireWholeNumber]  = "false"
+              (outPutReturnEnter)   = "savePriceChange($event)"
+              (closeOnEnterPress)   = "onClose($event)">
+       <ng-content select="name"></ng-content>
+    </app-key-pad>
+</ng-template>

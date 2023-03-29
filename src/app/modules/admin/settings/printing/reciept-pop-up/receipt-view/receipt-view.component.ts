@@ -1,11 +1,10 @@
-import { Component, ElementRef, OnInit,  ViewChild, Input,AfterViewInit, Output, EventEmitter, TemplateRef, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnInit,  ViewChild, Input,Output, EventEmitter, TemplateRef, OnDestroy } from '@angular/core';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IPOSOrder,  IPOSPayment,  ISetting, PosPayment } from 'src/app/_interfaces';
+import { IPOSOrder,   ISetting, PosPayment } from 'src/app/_interfaces';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
-import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
-import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
+
 import { OrdersService } from 'src/app/_services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -511,11 +510,11 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       ).pipe(switchMap(payment => {
           if (payment) {
             this.payments = [];
+            // this.payments[0].
             this.payments.push(payment)
           } else {
             this.payments = this.tempPayments;
           }
-
           return of(this.order)
         }
       ),catchError(e => {

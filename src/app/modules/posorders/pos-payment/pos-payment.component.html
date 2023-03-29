@@ -183,6 +183,16 @@
                   <div>
                     <h4>
                       {{paymentMethod?.name}} | Order Balance : {{order?.balanceRemaining | currency}}
+
+                      <div *ngIf="changeDueComing && changeDueComing != 0">
+                        <div *ngIf="changeDueComing > 0">
+                          Expected Due: {{changeDueComing | currency}}
+                        </div>
+                        <div *ngIf="changeDueComing < 0">
+                          Owes: {{changeDueComing | currency}}
+                        </div>
+                      </div>
+
                       <span *ngIf="paymentMethod.name === 'check'">
                           {{posPayment?.checkNumber}}
                       </span>
@@ -270,6 +280,7 @@
         [showInput]        ="showInput"
         [numberbuttons]    ="'number-buttons button-sized-scaled'"
         [alternateClass]   ="'grid-keypad-alternate'"
+        (outPutCheckEntry) ="checkCurrentBalance($event)"
         (outPutReturnEnter)="applyPaymentAmount($event)">
         Enter Payment
     </app-key-pad>

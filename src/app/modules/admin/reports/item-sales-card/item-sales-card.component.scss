@@ -60,7 +60,21 @@ mat-card-title {
   margin-bottom: 10px;
 }
 
+.grid-body-action {
+  display              : grid;
+  grid-template-columns: 125px 90px 75px; //90px;
+  grid-template-rows   : auto;
+  grid-gap             : 10px;
+  justify-content      : space-between;
+  margin-left          : 5px;
+  max-width            : 350px;
+  font-size            : 1em;
 
+  @include for-phone-only {
+    grid-template-columns: 125px 90px 50px 75px; //90px;
+  }
+
+}
 
 .grid-body {
   display              : grid;

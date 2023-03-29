@@ -27,6 +27,7 @@
           </div>
         </div>
 
+      
         <div *ngIf="paymentsText && payments && payments.length>0">
           <div *ngFor="let payment of payments">
               <div [innerHTML]="getInterpolatedHTML(paymentsText, payment)" >  </div>
@@ -62,7 +63,7 @@
             <div [innerHTML]="interpolatedFooterTexts[i]" >  </div>
           </div>
         </div>
-
+       
         <div   *ngIf="interpolatedPaymentsTexts && interpolatedPaymentsTexts.length>0"   class="section-item">
             <div *ngFor="let payment of payments">
               <div *ngIf=" payment.paymentMethod">

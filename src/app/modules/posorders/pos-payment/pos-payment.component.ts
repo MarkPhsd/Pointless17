@@ -45,7 +45,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
    isApp = this.platFormService.isApp();
   userAuths       :   IUserAuth_Properties;
   _userAuths      : Subscription;
-
+  changeDueComing :  any;
   loginAction     :   any;
   id              :   number;
   _currentPayment :   Subscription; //    = new BehaviorSubject<IPOSPayment>(null);
@@ -393,6 +393,17 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   changeAmount() {
     this.enterCustomAmount = true;
     this.stepSelection = 3
+  }
+
+  checkCurrentBalance(event) {
+    //show remaining balance after entry.
+    console.log('event', event)
+    if (!event) {
+      this.changeDueComing = null;
+      return;
+    }
+    this.changeDueComing = event - this.order.balanceRemaining;
+
   }
 
   applyPaymentAmount(event) {

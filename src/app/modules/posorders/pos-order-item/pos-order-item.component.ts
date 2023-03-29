@@ -331,8 +331,16 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     this.editProperties('price' , 'Change Price')
   }
 
+  editSubTotal() {
+    this.editProperties('subTotal' , 'Change Sub Total Price')
+  }
+
   editCost() {
     this.editProperties('wholeSale' , 'Change Cost')
+  }
+
+  editWholeSaleCost() {
+    this.editProperties('wholeSaleCost' , 'Change Total Cost')
   }
 
   selectItem() {

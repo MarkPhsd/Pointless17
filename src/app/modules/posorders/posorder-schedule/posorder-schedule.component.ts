@@ -121,6 +121,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
           const notes                      = this.inputFormNotes.controls['productOrderMemo'].value;
           this.order.productOrderMemo      = notes;
         } catch (error) {
+          this.siteService.notify('Error' + error, 'Close', 5000, 'yellow')
         }
 
         this.order.preferredScheduleDate = this.scheduledDate;
@@ -133,10 +134,13 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
         const site = this.siteService.getAssignedSite();
         this.orderService.putOrder(site, this.order).subscribe(data => {
           this.orderService.updateOrderSubscription(data)
+          if (this.selectedIndex == 2) { 
+            this.selectedIndex = 3;
+          }
+          if (this.selectedIndex ==3 ) {
+            
+          }
           this.router.navigate(['pos-payment'])
-        // }, err =>{
-        //   this.processingUpdate = false;
-        //   this.errorMessage = "Error occured. Please check your address and save again." + err
         }
       )
     }

@@ -21,7 +21,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
 
   //returns on number input
   @Output() outPutValue   = new EventEmitter();
-
+  @Output() outPutCheckEntry  = new EventEmitter();
   //returns on enter press
   @Output() outPutReturnEnter = new EventEmitter();
 
@@ -81,6 +81,9 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this.cashValue = ''
     this.formattedValue = ''
     this.outPutValue.emit('')
+
+    console.log('updated display out put check entry', this.formatted)
+    this.outPutCheckEntry.emit(null)
     this.initForm()
   }
 
@@ -153,6 +156,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this.formatted = data
     this.value     = this.formatted
     this.outPutValue.emit(this.formatted)
+    this.outPutCheckEntry.emit(this.formatted)
   }
 
   enterValue(event) {
@@ -176,6 +180,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
       this.refreshDisplay()
       this.outPutValue.emit(this.formatted)
     }
+    // this.outPutCheckEntry.emit(this.formatted)
   }
 
   deleteLastItem() {
@@ -319,6 +324,8 @@ export class KeyPadComponent implements OnInit, OnChanges {
     if (this.formatted && this.formatted.length > 1) {
       this.outPutValue.emit(this.formatted)
     }
+    console.log('updated display out put check entry', this.formatted)
+    this.outPutCheckEntry.emit(this.formatted)
   }
 
 }

@@ -16,12 +16,10 @@ import { ISite } from 'src/app/_interfaces';
   styleUrls: ['./order-cards.component.scss']
 })
 export class OrderCardsComponent implements OnInit,OnDestroy {
+
   @ViewChild('nextPage', {read: ElementRef, static:false}) elementView: ElementRef;
-  // @ViewChild('scrollframe', {static: false}) scrollFrame: ElementRef;
   @ViewChildren('item') itemElements: QueryList<any>;
   @Output() orderOutPut = new EventEmitter()
-
-
   scrollContainer     :   any;
   isNearBottom        :   any;
   @Input() cardStyle = 'block';
@@ -133,7 +131,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     }
 
     this.value = 1;
-
     this.initSubscriptions();
   }
 
@@ -163,7 +160,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   }
 
   initOrderBarSubscription() {
-
     this.toolbarServiceUI.orderBar$.subscribe(data => {
       this.orderBar = data
       this.refreshGridClass()
@@ -204,8 +200,8 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     this.scrollingInfo = 'scroll up'
   }
 
-  async nextPage(reset: boolean) {
-    await this.addToList(this.pageSize, this.currentPage, reset)
+  nextPage(reset: boolean) {
+     this.addToList(this.pageSize, this.currentPage, reset)
   }
 
   scrollDown() {
@@ -241,7 +237,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     )
   }
 
-  async addToList(pageSize: number, pageNumber: number, reset : boolean)  {
+  addToList(pageSize: number, pageNumber: number, reset : boolean)  {
     let model         = {} as IPOSOrderSearchModel
     if (this.searchModel)  {  model = this.searchModel}
     model.pageNumber  = pageNumber

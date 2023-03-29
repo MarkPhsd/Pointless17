@@ -196,9 +196,10 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
    printPaymentReceipt(item) {
 
     this.orderService.selectedPayment = item;
-    console.log(item)
+
     if (item && (item.groupID && item.groupID != 0)) {
-      const site = this.siteService.getAssignedSite();
+        console.log('prinint item group total')
+        const site = this.siteService.getAssignedSite();
         this.printing$ = this.orderService.getPOSOrderGroupTotal(site, item.orderID, item.groupID).pipe(switchMap(data => {
         this.orderService.printOrder = data;
         this.printingService.previewReceipt();

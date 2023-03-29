@@ -285,6 +285,36 @@ export class POSOrderItemServiceService {
 
   }
 
+  setOneItemFromGroupAsPrepped(site: ISite, id: number, startDate: string, endDate: string): Observable<any> {
+
+    const controller = "/POSOrderItems/";
+
+    let endPoint = "setOneItemFromGroupAsPrepped";
+
+    const parameters = `?id=${id}&startDate=${startDate}&endDate=${endDate}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>(url)
+
+  }
+
+  
+  setItemGroupAsPrepped(site: ISite, id: number, startDate: string, endDate: string): Observable<any> {
+
+    const controller = "/POSOrderItems/";
+
+    let endPoint = "setItemGroupAsPrepped";
+
+    const parameters = `?id=${id}&startDate=${startDate}&endDate=${endDate}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>(url)
+
+  }
+
+
   setItemAsUnPrinted(site: ISite, item: PosOrderItem): Observable<PosOrderItem> {
 
     const controller = "/POSOrderItems/";
@@ -372,6 +402,22 @@ export class POSOrderItemServiceService {
 
   changeItemPrice(site: ISite, posOrderItem: PosOrderItem): Observable<IPOSOrder> {
 
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "changeItemPrice";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const payLoad = { posOrderItem: posOrderItem, menuItem: null}
+
+    return  this.http.post<IPOSOrder>(url, payLoad)
+
+  }
+
+  changeItemSubTotal(site: ISite, posOrderItem: PosOrderItem): Observable<IPOSOrder> {
+
     // const result = this.validateItemchange(posOrderItem)
     // if (!result) {
     //   this.notificationEvent(`Error ${result}`, 'Failure' )
@@ -380,7 +426,7 @@ export class POSOrderItemServiceService {
 
     const controller = "/POSOrderItems/";
 
-    const endPoint = "changeItemPrice";
+    const endPoint = "changeItemSubTotal";
 
     const parameters = ``
 
@@ -403,6 +449,28 @@ export class POSOrderItemServiceService {
     const controller = "/POSOrderItems/";
 
     const endPoint = "changeItemCost";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const payLoad = { posOrderItem: posOrderItem, menuItem: null}
+
+    return  this.http.post<IPOSOrder>(url, payLoad)
+
+  }
+
+  changeItemTotalCost(site: ISite, posOrderItem: PosOrderItem): Observable<IPOSOrder> {
+
+    // const result = this.validateItemchange(posOrderItem)
+    // if (!result) {
+    //   this.notificationEvent(`Error ${result}`, 'Failure' )
+    //   return
+    // }
+
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "changeTotalCost";
 
     const parameters = ``
 

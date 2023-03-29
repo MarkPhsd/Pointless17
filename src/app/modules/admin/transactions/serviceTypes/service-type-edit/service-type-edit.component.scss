@@ -14,6 +14,13 @@ mat-card{
   gap: 5px;
 }
 
+.grid-items {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
 .grid-fields {
   display: grid;
   grid-template-columns: 100px ;

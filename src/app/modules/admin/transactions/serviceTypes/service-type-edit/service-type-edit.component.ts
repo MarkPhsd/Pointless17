@@ -58,7 +58,6 @@ export class ServiceTypeEditComponent implements OnInit {
            {next:  data => {
               this.serviceType = data
               this.id         = data.id
-
               this.inputForm.patchValue(this.serviceType)
             }, error: error => {
               this.snack.open(`Issue. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
@@ -90,6 +89,7 @@ export class ServiceTypeEditComponent implements OnInit {
         switchMap(
          data => {
             this.serviceType = data;
+            this.inputForm.patchValue(this.serviceType)
             this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'top'})
             if (event) { this.onCancel(event) }
             return of(data)
@@ -109,6 +109,16 @@ export class ServiceTypeEditComponent implements OnInit {
 
     onCancel(event) {
       this.dialogRef.close();
+    }
+
+    deleteDefaultProductID1() { 
+      this.inputForm.patchValue({defaultProductID1: 0})
+      this.updateItem(null)
+    }
+
+    deleteDefaultProductID2() { 
+      this.inputForm.patchValue({defaultProductID2: 0})
+      this.updateItem(null)
     }
 
     deleteItem(event) {

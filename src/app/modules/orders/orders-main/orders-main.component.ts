@@ -30,7 +30,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   action$: Observable<any>;
 
   smallDevice  : boolean;
-  site         : ISite;
+  site         = this.siteService.getAssignedSite()
   isAuthorized : boolean;
   isStaff      : boolean;
   isUser       : boolean;
@@ -52,16 +52,19 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
 
   searchModel: IPOSOrderSearchModel;
   _searchModel: Subscription;
+ 
+  scheduleDateStart: string;
+  scheduleDateEnd: string;
 
   interval
   setPrepInterval() {
-    if (this.viewType == 3) {
-      this.interval = setInterval(() => {
-        this.refreshPrep();
-      }, 30000);
-      return;
-    }
-    clearInterval(this.interval)
+    // if (this.viewType == 3) {
+    //   this.interval = setInterval(() => {
+    //     this.refreshPrep();
+    //   }, 30000);
+    //   return;
+    // }
+    // clearInterval(this.interval)
   }
 
   initStatusSubscriber() {
@@ -87,6 +90,12 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
       }
       if (data) {
         this.searchModel = data;
+        this.scheduleDateStart= null;
+        this.scheduleDateEnd  = null;
+        if (this.searchModel.scheduleDate_From && this.searchModel.scheduleDate_To) { 
+          this.scheduleDateStart = this.searchModel.scheduleDate_From;
+          this.scheduleDateEnd   = this.searchModel.scheduleDate_To;
+        }
       }
     })
   }

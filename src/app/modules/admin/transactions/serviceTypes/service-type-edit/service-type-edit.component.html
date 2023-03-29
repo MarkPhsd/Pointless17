@@ -151,9 +151,11 @@
               [description]        = "'Default Item 1'"
               >
             </product-search-selector2>
-          </div>
 
-          <div *ngIf="serviceType">
+            <div><button color="warn" mat-raised-button (click)="deleteDefaultProductID1()"> <mat-icon>delete</mat-icon> </button></div>
+          </div>    
+
+          <div *ngIf="serviceType" class="grid-items">
             <product-search-selector2
               [productLookupField] = "'defaultProductID2'"
               [id]                 = "serviceType.defaultProductID2"
@@ -161,6 +163,8 @@
               [description]        = "'Default Item 2'"
               >
             </product-search-selector2>
+            
+            <div><button color="warn"  mat-raised-button (click)="deleteDefaultProductID2()"> <mat-icon>delete</mat-icon> </button></div>
           </div>
 
           <div>

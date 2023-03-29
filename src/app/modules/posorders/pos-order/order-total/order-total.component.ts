@@ -43,7 +43,6 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
 
       })
     } catch (error) {
-      console.log('HomePage Subscriber', error)
     }
   }
 
@@ -67,8 +66,9 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.updateScreenSize()
-    this.homePageSubscriber()
+    this.updateScreenSize();
+    this.homePageSubscriber();
+    this.orderSubscriber();
   }
 
   ngOnDestroy() {

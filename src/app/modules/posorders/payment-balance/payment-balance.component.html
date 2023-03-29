@@ -1,5 +1,5 @@
 
-<!-- <div *ngIf="(deviceSettings$ | async) as deviceSettings"></div> -->
+
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(void$ | async) as void"></div>
 <div *ngIf="(printing$ | async) as printing"></div>
@@ -91,10 +91,12 @@
 
   <mat-card-content *ngIf="order.posPayments">
     <div  *ngFor="let item of order.posPayments">
-        <div class="payment-grid" *ngIf="(item.account && !item.completionDate) ||
-                                        (item.completionDate && item.amountPaid != 0) ||
-                                         (item && item.voidReason) ||
-                                         (item.tranType === 'authorizationResponse' )">
+        <div class="payment-grid" 
+              *ngIf="(item.account && !item.completionDate) ||
+                     (item.completionDate && item.amountPaid != 0) ||
+                     (item && item.voidReason) ||
+                     (item.tranType  && item?.tranType.toLowerCase()  === 'authorizationresponse'.toLowerCase() ) || 
+                     (item.tranType  && item?.tranType.toLowerCase() === 'VoidSaleByRecordNo'.toLowerCase() )">
         <div *ngIf="item.paymentMethod" class="grid-item">
           {{item?.paymentMethod?.name}}  {{ item.tranType }}
           <span *ngIf="item.groupID != 0"> ({{item.groupID}})</span>
@@ -105,6 +107,7 @@
             </span>
           </div>
         </div>
+
         <div *ngIf="!qrOrder &&
                     (!isUser && (item?.paymentMethod?.isCreditCard &&
                     (item.tranType != 'refundResponse' || item.tranType != 'refundResponse')) ||

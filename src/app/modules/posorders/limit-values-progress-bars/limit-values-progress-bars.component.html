@@ -1,5 +1,5 @@
 
-<div *ngIf="(clientType$ | async) as clientType">
+  <div *ngIf="(clientType$ | async) as clientType"></div>
   <div *ngIf="order &&
               order.clients_POSOrders  &&
               order.clients_POSOrders.client_Type &&
@@ -27,7 +27,6 @@
             || order?.liquidCount != 0
             || order?.seedCount != 0
             || order?.combinedCategory != 0  )" >
-
 
       <app-progress-bar
           *ngIf="order.gramCount != 0"
@@ -80,4 +79,4 @@
 
   </div>
 
-</div>
+
