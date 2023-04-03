@@ -33,6 +33,7 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { Capacitor } from '@capacitor/core';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { truncate } from 'original-fs';
 
 @Component({
 selector: 'app-pos-order',
@@ -524,7 +525,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   sendToPrep() {
     if (this.order) {
-      this.printAction$ = this.orderMethodService.sendToPrep(this.order)
+      this.printAction$ = this.orderMethodService.sendToPrep(this.order, true)
     }
   }
 

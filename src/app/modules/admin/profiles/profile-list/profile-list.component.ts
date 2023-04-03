@@ -1,7 +1,7 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit, Input,
          AfterViewInit,ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { ClientSearchModel, ClientSearchResults, Item,  IUserProfile, }  from 'src/app/_interfaces';
-import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
+import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService, OrdersService,AWSBucketService } from 'src/app/_services';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -55,7 +55,7 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
     get platForm() {  return Capacitor.getPlatform(); }
     get PaginationPageSize(): number {return this.pageSize;  }
     get gridAPI(): GridApi {  return this.gridApi;  }
-
+    action$ : Observable<any>;
     //AgGrid
     params               : any;
     private gridApi      : GridApi;
@@ -508,24 +508,8 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let order: IPOSOrder;
     const order$ = this.orderService.getNewDefaultCheckIn(this.siteService.getAssignedSite(), clientID)
+    this.action$ = order$
 
-    order$.subscribe(
-      data => {
-        if (!data) {
-          this.notifyEvent(`Order was not submitted`, "Error", 2000 )
-          return
-        }
-        if (data.id == 0 && data.resultMessage){
-          this.notifyEvent(`Order was not submitted ${data.resultMessage}`, "Error", 2000 )
-          return
-        }
-        this.notifyEvent(`Order Submitted Order # ${data.id}`, "Posted", 3000)
-      },
-      catchError => {
-        console.log(catchError)
-        this.notifyEvent(`Order was not submitted ${order.resultMessage}`, "Error", 2000 )
-      }
-    )
   }
 
   async getCountOfPendingOrdersByClient(clientId: number): Promise<any> {

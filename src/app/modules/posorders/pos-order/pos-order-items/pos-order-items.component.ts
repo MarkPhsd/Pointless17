@@ -102,7 +102,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     let list = items.sort((a, b) => (a.idRef > b.idRef) ? 1 : 1);
     list = items.sort((a, b) => (a.productSortOrder > b.productSortOrder) ? 1 : -1);
     list.forEach(data => {
-      console.log(data.productName, data.productSortOrder)
+      // console.log(data.productName, data.productSortOrder)
     })
 
     return list

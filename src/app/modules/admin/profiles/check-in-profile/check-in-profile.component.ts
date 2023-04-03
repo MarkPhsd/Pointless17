@@ -4,12 +4,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, of, Subscription } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
-import { IClientTable, IUserProfile } from 'src/app/_interfaces';
+import { clientType, IClientTable, IUserProfile } from 'src/app/_interfaces';
+import { ClientType } from 'src/app/_interfaces/menu/price-schedule';
 import { IPOSOrder, IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
 import { AWSBucketService, ContactsService, OrdersService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
+import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { IStatuses} from 'src/app/_services/people/status-type.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -42,7 +44,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 
   statuses$   : Observable<IStatuses[]>;
   client$     : Observable<IClientTable>;
-
+  clientType$: Observable<clientType>; 
   @Input() clientTable  : IClientTable;
   @Input() id           : string;
 
@@ -101,7 +103,10 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
               private userAuthorization   : UserAuthorizationService,
               private uiSettingsService   : UISettingsService,
               private orderMethodsService : OrderMethodsService,
-              private dateHelperService         : DateHelperService
+              private clientTypeService:    ClientTypeService,
+              private dateHelperService         : DateHelperService,
+
+              
               ) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin,manager');
@@ -114,7 +119,6 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.bucketName    = await this.awsBucket.awsBucket();
     this.awsBucketURL  = await this.awsBucket.awsBucketURL();
-
     this.uiSettingsService.getSetting('UITransactionSetting').subscribe(data => {
       if (!data) {return}
       this.transactionUISettings = JSON.parse(data.text)
@@ -145,6 +149,25 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 		})
   }
 
+  checkValidity(client: IClientTable, requiresLicenseValidation: boolean) { 
+   
+    if (!client) {return}
+    let requires : boolean
+    const typeID =  client.clientTypeID;
+    const site = this.siteService.getAssignedSite()
+    this.clientType$   = this.clientTypeService.getClientTypeCached(site, typeID).pipe(switchMap(data => { 
+      const result =  this.orderMethodsService.validateCustomerForOrder(client,  requiresLicenseValidation, data.name)
+      this.accountDisabled = false 
+      this.validationMessage = '';
+      if (!result.valid)  { 
+        this.accountDisabled = true 
+        this.validationMessage = result.resultMessage;
+      }
+      return of(data)
+    }))
+  }
+
+ 
   initConfirmPassword()  {
 		this.confirmPassword = this.fb.group( {
 		  confirmPassword: ['']
@@ -265,16 +288,13 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     this.orderService.updateOrderSearchModel(search)
   }
 
-
   initForm() {
     this.inputForm = this.fbContactsService.initForm(this.inputForm)
     if (this.inputForm) {
       this.inputForm.valueChanges.subscribe( data => {
-        this.accountDisabled = false;
+        console.log(data)
         if (data && this.transactionUISettings &&   this.transactionUISettings.validateCustomerLicenseID) {
-          const result = this.orderMethodsService.validateCustomerForOrder(this.inputForm.value, this.transactionUISettings.ordersRequireCustomer )
-          this.validationMessage = result.resultMessage;
-          this.accountDisabled = !result.valid;
+          this.checkValidity(this.inputForm.value,  this.transactionUISettings.validateCustomerLicenseID) 
         }
       })
     }
@@ -282,26 +302,21 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   };
 
   initDateRangeForm() {
-
     if (this.searchModel) {
       this.searchModel.completionDate_From = null;
       this.searchModel.completionDate_To = null;
     }
-
     this.dateRangeForm = new FormGroup({
       start: new FormControl(),
       end: new FormControl()
     });
-
     const today = new Date();
     const month = today.getMonth();
     const year  = today.getFullYear();
-
     this.dateRangeForm =  this.fb.group({
       start: new Date(year, month, 1),
       end: new Date()
     })
-
     if (this.dateRangeForm.get("start").value) {
       this.searchModel.completionDate_From = this.dateRangeForm.get("start").value.toISOString();
     }
@@ -313,7 +328,6 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   }
 
   subscribeToDatePicker() {
-
     if (this.dateRangeForm) {
       this.dateRangeForm.valueChanges.subscribe(res=>{
         if (this.dateRangeForm.get('start').value && this.dateRangeForm.get('end').value) {
@@ -325,7 +339,6 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
         }
       })
     }
-
   }
 
   refreshDateSearch() {
@@ -385,59 +398,78 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     const client$ =this.clientTableService.getClient(site, id)
     client$.subscribe(data => {
       this.inputForm.patchValue(data)
+      this.checkValidity(data, this.transactionUISettings.validateCustomerLicenseID)
       return
     })
   }
 
+
   postNewCheckIn() {
-    const site = this.siteService.getAssignedSite();
-    if (this.id) {
-      const order$ = this.orderService.getNewDefaultCheckIn(site, this.id)
-      order$.subscribe(
-        data => {
-          this.notifyEvent(`Order Submitted Order # ${data.id}`, "Posted")
-          this.listAllOrders();
-        }, catchError => {
-          this.notifyEvent("Order was not submitted " + catchError, "Error")
+    if (!this.clientTable) { return }
+    return this.orderService.getNewDefaultCheckIn(this.siteService.getAssignedSite(), this.clientTable?.id).pipe( switchMap (
+      data => {
+        console.log(data)
+        if (!data) {
+          this.siteService.notify(`Order was not submitted`, "Error", 2000, 'yellow' )
+          return
         }
-      )
-    }
+        if (data.id == 0 && data.resultMessage){
+          this.siteService.notify(`Order was not submitted ${JSON.stringify(data.resultMessage)}`, "Error", 2000, 'yellow' )
+          return
+        }
+        this.siteService.notify(`Order Submitted Order # ${data.id}`, "Posted", 3000, 'green')
+        return of(data)
+      })
+    )
   }
+
+  // ,
+  //     catchError => {
+  //       console.log(catchError  )
+  //       this.siteService.notify(`Order was not submitted ${catchError.toString()}`, "Error", 2000, 'red' )
+  //       return of(null)
+  //     }
 
   updateUser(event): void {
     const site = this.siteService.getAssignedSite();
     let result = ''
-    try {
-      const client$ = this.clientTableService.saveClient(site, this.inputForm.value)
-      client$.pipe(
-        switchMap(data =>
-          {
+    console.log(this.inputForm.value)
+    const client$ = this.clientTableService.saveClient(site, this.inputForm.value);
 
-            if (data) {
-              if (data === 'Not authorized.') {
-                this.notifyEvent('Not authorized', 'Failed')
-                return EMPTY;
-              }
+    this.action$ = client$.pipe(
+      switchMap(data =>
+        {
+          if (data) {
+            if (data.errorMessage === 'Not authorized.') {
+              this.siteService.notify(`Not authorized `, 'Close', 5000, 'yellow' );
+              return of(null);
             }
-
-            this.notifyEvent('Account updated', 'Success')
-            if (!data) { return EMPTY }
-            if (this.currentOrder) {
-              return this.orderService.getOrder(site, this.currentOrder.id.toString(), false)
-            }
-            return EMPTY;
           }
-        )).subscribe( order => {
-          this.orderService.updateOrderSubscription(order)
-        })
-    } catch (error) {
-      this.notifyEvent(result, "Failure")
-    }
+          this.checkValidity(data,  this.transactionUISettings?.validateCustomerLicenseID)
+          this.notifyEvent('Account updated', 'Success');
+          this.inputForm.patchValue(data)
+          this.clientTable = data;
+          if (!data) { return of(null) }
+          if (this.currentOrder) {
+            return this.orderService.getOrder(site, this.currentOrder.id.toString(), false)
+          }
+          return of(null);
+        }
+      )).pipe(
+        switchMap( order => {
+        this.orderService.updateOrderSubscription(order)
+        if (event) { 
+          this.goBackToList();
+        }
+        return of(order)
+      }), catchError(data => {
+        this.siteService.notify(`Error ${data} `, 'Close', 5000, 'red' );
+        return of(data)
+    }))
   };
 
   updateUserExit(event) {
-    this.updateUser(event);
-    this.goBackToList();
+    this.updateUser(true);
   };
 
   navUserList(event) {
@@ -505,26 +537,19 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   }
 
   startOrder(event) {
+    const site = this.siteService.getAssignedSite()
+    const clientType$  = this.clientTypeService.getClientTypeCached(site, this.clientTable.clientTypeID)
+    this.action$ =   clientType$.pipe(
+      switchMap( data => { 
+        if (!data) { return of(null)}
+        const result = this.orderMethodsService.validateCustomerForOrder(this.clientTable, false, data?.name)
+        if (!result.valid) {
+          this.notifyEvent(result.resultMessage, 'Failed');
+          return of(null)
+        }
+        return   this.postNewCheckIn()
 
-    let ordersRequireCustomer = false
-    if (this.transactionUISettings && this.transactionUISettings?.ordersRequireCustomer) {
-      ordersRequireCustomer = this.transactionUISettings.ordersRequireCustomer;
-    }
-
-
-    const resultSaved = this.orderMethodsService.validateCustomerForOrder(this.clientTable, ordersRequireCustomer)
-    const resultForm  = this.orderMethodsService.validateCustomerForOrder(this.inputForm.value, ordersRequireCustomer)
-
-    if (!resultSaved.valid) {
-      this.notifyEvent(resultSaved.resultMessage, 'Failed');
-      return
-    }
-    if (!resultForm.valid) {
-      this.notifyEvent(resultForm.resultMessage, 'Failed');
-      return
-    }
-
-    this.postNewCheckIn()
+    }))
 
   }
 

@@ -193,7 +193,7 @@ export class OrdersService {
   }
 
   updateOrderSubscription(order: IPOSOrder) {
-    this.updateOrder(order)
+    this.updateOrder(order);
     if (order == null) {
       order = this.getStateOrder();
       if (order) {
@@ -206,8 +206,6 @@ export class OrdersService {
     }
 
     this.storeCreditMethodService.updateSearchModel(null);
-    order = this.getCost(order)
-    this.setStateOrder(order);
     this._scanner.next(true)
     const site = this.siteService.getAssignedSite();
 
@@ -215,7 +213,6 @@ export class OrdersService {
     if (order?.deviceName === devicename) { return }
 
     this.orderClaimed = false;
-
     if (order && order.id ) {
       const order$ = this.claimOrder(site, order.id.toString(), order.history)
       if (!order$) {
@@ -642,7 +639,7 @@ export class OrdersService {
     ///takes the clientID and submits a new POS order of Default Transaction Type.
   //posts a check in in store.
   getNewDefaultCheckIn(site: ISite, clientID: any): Observable<IPOSOrder> {
-
+    console.log('getNewDefaultCheckIn', clientID)
     const controller = '/POSOrders/'
 
     const endPoint  = 'getNewCheckIn'

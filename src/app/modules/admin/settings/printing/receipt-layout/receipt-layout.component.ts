@@ -46,6 +46,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   sites                = [] as ISite[];
   site                 : ISite;
   @Input() isLabel: boolean;
+  @Input() displayFeeInFooter = false;
 
   interpolatedHeaderText  :  string;
   interpolatedFooterText  :  string;
@@ -66,9 +67,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   setPrinterWidthClass = "receipt-width-80"
   gridReceiptClass     = 'receipt-width-85'
   _order: Subscription;
-
   _printOrder          : Subscription;
-
   printOrder$: Observable<any>;
   printOrder: IPrintOrders;
 
@@ -107,11 +106,11 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
         this.orderTypes = []
         this.orderTypes.push(this.orderType)
         if (this.subFooterText) {
-          this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes, 'ordertypes')
+          this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes, 'ordertypes');
         }
-        this.getInterpolatedData()
+        this.getInterpolatedData();
         this.printingService.updatePrintReady({ready: true, index: this.index})
-        if (this.order?.service?.defaultProductID1) {
+        if (this.order?.service?.defaultProductID1 && this.displayFeeInFooter) {
           return this.menuService.getMenuItemByID(this.site,this.order.service.defaultProductID1)
         }
         return of(this.order)
@@ -120,7 +119,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
       if (data && data.name) {
         this.order.service.menuItem1 = data;
       }
-      // this.orderService.printOrder = null;
+      
       return of(data)
     }))
   }
@@ -131,7 +130,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
         if (data) {
           this.printOrder    = data;
           this.order = data.order
-          console.log('template Subscription', data.order.posOrderItems.length)
+          // console.log('template Subscription', data.order.posOrderItems.length)
           this.action$ = this.initTemplateData(data.order)
         }
       }
@@ -153,8 +152,8 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
 
     const datepipe: DatePipe = new DatePipe('en-US');
     if (order.orderDate) { order.orderTime = datepipe.transform( order.orderDate, 'HH:mm')     }
-    if (this.items)      { this.items           = this.items.filter( item => item.quantity != 0  );     }
-    if ( this.payments)  { this.payments        = this.payments.filter(item => item.amountPaid != 0 ); }
+    if (this.items)      { this.items      = this.items.filter( item => item.quantity != 0  );     }
+    if ( this.payments)  { this.payments   = this.payments.filter(item => item.amountPaid != 0 ); }
 
     const site = this.siteService.getAssignedSite();
     return this.serviceTypeService.getTypeCached(site, order.serviceTypeID).pipe(
@@ -162,7 +161,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
         if (!data)  {
           console.log('no data', this.index, order)
         }
-
         this.orderType = data
         this.orderTypes = []
         this.orderTypes.push(this.orderType)

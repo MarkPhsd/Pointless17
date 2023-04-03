@@ -335,9 +335,7 @@
       </span>
     </span>
 
-    </mat-menu>
-
-
+  </mat-menu>
 </ng-template>
 
 
@@ -354,5 +352,7 @@
 </ng-template>
 
 <ng-template #loadingDevice>
-  ...loading device.
+  <div *ngIf="isApp">
+    ...loading device.
+  </div>
 </ng-template>

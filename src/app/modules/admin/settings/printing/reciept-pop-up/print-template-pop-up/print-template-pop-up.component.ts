@@ -34,7 +34,6 @@ export class PrintTemplatePopUpComponent implements OnInit, OnDestroy {
       this.orderService._printOrder.next(this.printOrder)
       this.currentView = this.printTemplate;
     }
-    // this.moveNextSectionSubscriber()
   }
 
   ngOnInit(): void {

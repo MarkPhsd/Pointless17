@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
-import { IPOSOrder, IPOSPayment, ISite } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSPayment, ISite, PosPayment } from 'src/app/_interfaces';
 import { ProductEditButtonService } from '../menu/product-edit-button.service';
 import { SitesService } from '../reporting/sites.service';
 import { TransactionUISettings } from '../system/settings/uisettings.service';
 import { POSPaymentService } from '../transactions/pospayment.service';
-import { TriposResult } from './triposModels';
+import { ITriPOSPatch, TriposResult } from './triposModels';
 
   export interface	authorizationPOST {
     action: string;
@@ -21,7 +21,7 @@ import { TriposResult } from './triposModels';
     tokenId: string;
     tokenProvider: string;
     vaultId: string;
-    transactionID: string;
+    transactionId: string;
     paymentType: string;
     description: string;
     terminalId: string;
@@ -197,11 +197,117 @@ export class TriPOSMethodService {
 
   }
 
+  pathLane(site: ISite, item: ITriPOSPatch): Observable<TriposResult> {
+
+    const controller = '/TriPOSLane/'
+
+    const endPoint = "PatchLane"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<TriposResult>(url,  item)
+
+  }
+
+  getLane(site: ISite, id: string): Observable<any> {
+
+    const controller = '/TriPOSLane/'
+
+    const endPoint = "getLane"
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url)
+
+  }
+
+  getLanes(site: ISite): Observable<any> {
+
+    const controller = '/TriPOSLane/'
+
+    const endPoint = "getLanes"
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url)
+
+  }
+
+  initializeLane(site: ISite, post: any): Observable<any> {
+
+    const controller = '/TriPOSLane/'
+
+    const endPoint = "createLane"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, post)
+
+  }
+
+  deleteLane(site: ISite, id: string): Observable<any> {
+
+    const controller = '/TriPOSLane/'
+
+    const endPoint = "deleteLane"
+
+    const parameters = `?laneID=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url)
+
+  }
+
+  increment(site: ISite, item: authorizationPOST): Observable<any> {
+
+    const controller = '/TriPOSProcessing/'
+
+    const endPoint = "incremental"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, item)
+
+  }
+
+  getAuthTotal(posPayments: PosPayment[]) : any { 
+    if (!posPayments ) {return }
+    let amount = 0;
+    posPayments.forEach(data => { 
+      amount += this.getTriPOSTotalAuthorizations(data)
+    })
+    return amount
+  }
+
+  getTriPOSTotalAuthorizations(data: PosPayment) { 
+    // if (data.tran)
+    let amount = 0
+    if (data.tranType === 'authorizationResponse') {
+      amount = data.amountPaid
+    }
+    if (data.tranType === 'incrementalAuthorizationResponse') {
+      amount = data.amountPaid
+    }
+    return amount
+  }
+
 
   openDialogCreditPayment ( order: IPOSOrder,
                             amount: number,
                             manualPrompt: boolean,
-                            settings: TransactionUISettings) {
+                            settings: TransactionUISettings, 
+                            ) {
     //once we get back the method 'Card Type'
     //lookup the payment method.
     //we can't get the type of payment before we get the PaymentID.
@@ -211,16 +317,16 @@ export class TriPOSMethodService {
     posPayment.orderID = order.id;
     posPayment.zrun = order.zrun;
     posPayment.reportRunID = order.reportRunID;
+  
     const payment$  = this.paymentService.postPOSPayment(site, posPayment)
 
     const paymentProcess = {order: order, posPayment: posPayment, settings: settings, manualPrompt: manualPrompt, action: 1}
 
-    console.log('paymentProcess', paymentProcess)
     return payment$.pipe(
       switchMap(data =>
       {
+        
         data.amountPaid = amount;
-        console.log('payment', data)
         paymentProcess.posPayment = data;
         this.dialogRef = this.dialogOptions.openTriPOSTransaction(
           paymentProcess
@@ -266,5 +372,36 @@ export class TriPOSMethodService {
   ))
 
 }
+
+  getValueToIncrement() { 
+
+  }
+
+  getTotalAuthorizedAmount() { 
+
+  }
+
+  processIncrement(site: ISite, transactionId: string, amount: string, laneID: string) : Observable<TriposResult> { 
+    //processes through tripos
+    const auth = {} as authorizationPOST
+    auth.transactionId = transactionId;
+    // auth.terminalId = terminalID;
+    auth.laneId = laneID
+    auth.transactionAmount = amount;
+    //creates new payment
+    return this.increment(site,auth)
+  }
+
+
+  getIncrementListOfTransactionIDs()  {
+    //we would take the payments
+    //get the transactionData
+    //get the AuthorizationCodes from each Transaction
+    //add to a list
+    //and update the Main Payment
+
+  }
+
+
 
 }

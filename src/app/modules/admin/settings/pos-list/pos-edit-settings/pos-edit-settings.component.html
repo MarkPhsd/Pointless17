@@ -125,8 +125,6 @@
           </mat-form-field>
         </div>
 
-
-
         <div>
           <mat-form-field appearance="standard">
             <mat-label >Label Printer</mat-label>
@@ -218,11 +216,18 @@
         <mat-label>Installed Windows App Only</mat-label><br>
         <electron-zoom-control (valueEmit)="setZoomValue($event)" [zoomValue]="terminal.electronZoom"></electron-zoom-control>
       </div>
-
     </div>
+
+    <ng-container [ngTemplateOutlet]="triPOS"></ng-container>
 
   </mat-card-content>
 </mat-card>
+
+<ng-template #triPOS>
+  <div *ngIf="inputForm && inputForm.controls['triposLaneID'].value">
+    <app-tripos-settings [laneID]="inputForm && inputForm.controls['triposLaneID'].value"></app-tripos-settings>
+   </div> 
+</ng-template>
 
 <!-- <mat-card>
   <mat-card-subtitle>

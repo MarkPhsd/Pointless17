@@ -143,16 +143,12 @@ export class ClientTableService {
 
   };
 
-  saveClient( site: ISite,  client: IClientTable) : Observable<any> {
+  saveClient( site: ISite,  client: IClientTable) : Observable<IClientTable> {
 
     if (client.id !== 0) {
-
       return this.putClient(site, client.id, client)
-
     } else {
-
       return this.postClient(site, client)
-
     }
 
   }

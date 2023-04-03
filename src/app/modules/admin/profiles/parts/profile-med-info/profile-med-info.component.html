@@ -1,3 +1,5 @@
+<div *ngIf="(clientType$ | async) as clientType"></div>
+
 <div class="container" *ngIf="inputForm">
   <div class="name-fields">
     <div *ngIf="inputForm" [formGroup]="inputForm">
@@ -16,24 +18,31 @@
            [formGroup]="inputForm">
 
         <div class="name-fields">
-          <span *ngIf="(clientType$ | async) as clientType">
-            <div>
+          <span *ngIf="clientType">
+
+            <div  class="name-fields" *ngIf="clientType?.name.toLowerCase() != 'patient'">
               <app-value-fields
-                [inputForm]="inputForm"
-                [fieldName]="'medLicenseNumber'">
-                  OOMP
+                      [inputForm] ="inputForm"
+                      [fieldName] ="'insTertiaryNum'">
+                  Patient # OOMP
               </app-value-fields>
             </div>
 
-            <div  class="name-fields">
+            <div >
               <app-value-fields
-                      [enabled]="isStaff"
-                      [inputForm]="inputForm"
-                      [fieldName]="'insTertiaryNum'">
-                  OOMPB
+                [inputForm]="inputForm"
+                [fieldName]="'medLicenseNumber'">
+                <div *ngIf="clientType?.name.toLowerCase() === 'patient'">
+                  Patient #  OOMP
+                </div>
+                <div *ngIf="clientType?.name.toLowerCase() === 'caregiver'">
+                  Caregiver  #  OOMPB
+                </div>
               </app-value-fields>
             </div>
+
           </span>
+
           <div>
             <mat-form-field  appearance="outline">
               <mat-label>Expiration</mat-label>
@@ -63,9 +72,6 @@
             <mat-label >Temp License</mat-label>
           </mat-slide-toggle>
         </div>
-
-
-
       </div>
 
     </div>

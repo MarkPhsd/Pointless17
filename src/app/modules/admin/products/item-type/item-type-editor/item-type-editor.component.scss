@@ -1,10 +1,10 @@
-mat-form-field {
-  font-size: small;
-}
+// mat-form-field {
+//   // font-size: small;
+// }
 
-mat-label {
-  font-size: small;
-}
+// mat-label {
+//   font-size: small;
+// }
 
 meta-tags {
   height: 100px;
@@ -12,12 +12,26 @@ meta-tags {
 
 mat-form-field {
   margin: 3px;
-  font-size: .8em;
+  // font-size: .8em;
 }
 
 mat-card{
   margin:  5px;
   // height: 485px;
+}
+
+.grid-flow-sections {
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
+  gap: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.content-container {
+  height     : 500px;
+  min-width: 425px;
+  overflow-y : auto;
+  overflow-x   : hidden;
 }
 
 // body{ overflow-x: hidden;}
@@ -40,28 +54,15 @@ mat-card{
   margin-top: 5px;
 }
 
-.grid-flow-sections {
-  display: grid;
-  grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
-  gap: 10px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
 .toggle-footer {
   margin-bottom: 5px;
 }
 
 .instructions {
-  font: small;
+  font: medium;
   font-weight: 400;
 }
 
-.content-container {
-   height     : 500px;
-   overflow-y : auto;
-   overflow-x   : hidden;
-}
 
 img {
   width: 150px;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
-import { Observable, } from 'rxjs';
+import { Observable, of, switchMap, } from 'rxjs';
 import { ISite }   from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
@@ -120,8 +120,22 @@ export class PaymentMethodsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.get<IPaymentMethod>(url);
+    return this.http.get<IPaymentMethod>(url)
 
+  }
+
+  getCreditCardPaymentMethod(site: ISite, name: string) : Observable<IPaymentMethod> {
+    
+    return this.getPaymentMethodByName(site, name).pipe(switchMap(data => { 
+      if (!data) { 
+        const pay = {} as IPaymentMethod
+        pay.name = name
+        pay.isCreditCard = true
+        pay.exchangeRate = 1
+        return this.post(site, pay)
+      }
+      return of(data)
+    }))
   }
 
 

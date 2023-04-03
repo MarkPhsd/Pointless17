@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { IPaymentMethod } from 'ngx-paypal';
 import { Observable } from 'rxjs';
-import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -35,13 +34,6 @@ export class TriPOSCardPayBtnComponent implements OnInit {
   @Input() devicename : string;
 
   constructor(
-    private uISettingsService: UISettingsService,
-    private sitesService    : SitesService,
-    private dialog          : MatDialog,
-    private dsiProcess      : DSIProcessService,
-    private paymentsMethodsService: PaymentsMethodsProcessService,
-    private orderMethodsService: OrderMethodsService,
-    private paymentMethodService: PaymentMethodsService,
     private triposMethod: TriPOSMethodService,
     public  platFormService : PlatformService,) { }
 
@@ -52,8 +44,11 @@ export class TriPOSCardPayBtnComponent implements OnInit {
   processTransaction(manual: boolean) {
     const order = this.order;
     if (order) {
-      console.log('process')
-      this.action$ = this.triposMethod.openDialogCreditPayment(order, this.creditBalanceRemaining, false, this.uiTransactions)
+      let amount = this.creditBalanceRemaining
+      if (this.paymentAmount && this.paymentAmount !=0) { 
+        amount =this.paymentAmount
+      }
+      this.action$ = this.triposMethod.openDialogCreditPayment(order, amount, false, this.uiTransactions)
     }
   }
 

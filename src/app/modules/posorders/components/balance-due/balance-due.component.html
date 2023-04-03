@@ -1,8 +1,8 @@
 <div *ngIf="(action$ | async) as newOrder"></div>
 
+
 <div  class="grid-items"
       *ngIf=" (uiTransactions$ | async) as uiTransactions" >
-
   <div>
     <button class="big-button" mat-raised-button (click)="newDefaultOrder()">New Order</button>
   </div>
@@ -17,9 +17,12 @@
             <h3>
               <div *ngIf="!payment.completionDate && payment">Payment: {{ payment.amountPaid }} </div>
               <div *ngIf="payment.completionDate"> Change Due: {{ changeDue | currency }}</div>
+              <!-- <div  class="big-button" *ngIf="finalizer">
+                ....printing <mat-icon color="accent">print</mat-icon>
+              </div> -->
             </h3>
           </div>
-
+        
           <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
 
           <div  *ngIf="(payment && payment?.account) || (paymentMethod && paymentMethod?.isCreditCard)">

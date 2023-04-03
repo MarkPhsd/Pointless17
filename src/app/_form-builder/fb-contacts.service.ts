@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { TryCatch } from '@sentry/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +51,7 @@ export class FbContactsService {
         dlCity: [''], //                   string;
         dlState: [''], //                  string;
         dlZip: [''], //                    string;
-        dlExp: [''], //                    string;
+        dlLicenseEXP: [''], //                    string;
         clientTypeID: [0], //             number;
         priceTier: [''], //                number;
         taxSales: [''], //                 number;

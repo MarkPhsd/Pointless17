@@ -1,5 +1,5 @@
-import { Component, Inject, OnDestroy, OnInit , Optional} from '@angular/core';
-import { BehaviorSubject, catchError, Observable, of, Subscription, switchMap } from 'rxjs';
+import { Component, Inject,  OnInit , Optional} from '@angular/core';
+import {  Observable, of, switchMap } from 'rxjs';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OrdersService } from 'src/app/_services';
@@ -10,7 +10,6 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
-import { TriposResult } from 'src/app/_services/tripos/triposModels';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
@@ -103,7 +102,7 @@ export class TriPosTransactionsComponent implements OnInit {
     item.laneId = this.terminalSettings.triposLaneID;
     if (!this.tipValue) {this.tipValue = '0'}
     item.tipAmount = this.tipValue;
-    item.transactionID = this.posPayment.respcode;
+    item.transactionId = this.posPayment.respcode;
     item.transactionAmount = this.posPayment.amountPaid.toFixed(2).toString();
 
     this.processing = true;
@@ -167,48 +166,52 @@ export class TriPosTransactionsComponent implements OnInit {
     this.errorMessage = ''
     this.message = ''
   }
+  
+  reset() {
+    this.processing$ = null;
+    this.initMessaging()
+  }
+
+  initTransaction( posPayment: IPOSPayment, terminal: ITerminalSettings) : authorizationPOST {
+    const authorizationPOST = {} as authorizationPOST;
+    if (!posPayment.tipAmount) { posPayment.tipAmount = 0}
+    authorizationPOST.transactionAmount = Math.abs(this.posPayment.amountPaid).toFixed(2).toString();
+    authorizationPOST.laneId            = terminal.triposLaneID;
+    authorizationPOST.tipAmount         = posPayment.tipAmount.toString();
+    return authorizationPOST;
+  }
 
   authorizeAmount() {
     if (!this.validateTransaction()) { return }
     if (this.posPayment && this.terminalSettings.triposLaneID) {
-      const item = {} as authorizationPOST;
-      item.transactionAmount = this.posPayment.amountPaid.toFixed(2).toString();
-      item.laneId = this.terminalSettings.triposLaneID;
-      item.tipAmount = this.tipValue;
+      const item = this.initTransaction(this.posPayment, this.terminalSettings);
       const site = this.siteService.getAssignedSite();
       this.processing = true;
-
+      this.errorMessage = ''
       this.processing$ =  this.methodsService.authorizeAmount( site, item ).pipe(switchMap(data => {
-        this.errorMessage = ''
         if (data._hasErrors) {
           this.displayErrors(data)
           return of (null)
         }
         return this.paymentMethodsService.processAuthTriPOSResponse(data ,this.posPayment, this.order)
       })).pipe(switchMap(data => {
-        this.processing = false;
-        this.errorMessage = ''
-        this.message = ''
+        this.reset()
         if (!data) { return of(null)}
         this.orderService.updateOrderSubscription(data);
         this.dialogRef.close(true)
         return of(data)
       }))
     }
-
   }
 
   payAmount() {
     if (!this.validateTransaction()) { return }
-    if (this.posPayment && this.terminalSettings.triposLaneID) {
 
-      const item = {} as authorizationPOST;
-      item.transactionAmount = this.posPayment.amountPaid.toFixed(2).toString();
-      item.laneId = this.terminalSettings.triposLaneID;
+    if (this.posPayment && this.terminalSettings.triposLaneID) {
       if (!this.tipValue) {this.tipValue = '0'}
-      item.tipAmount = this.tipValue;
-      item.laneId  = this.terminalSettings.triposLaneID;
-      item.transactionID = this.posPayment.refNumber;
+
+      const item = this.initTransaction(this.posPayment, this.terminalSettings);
+      item.transactionId   = this.posPayment.refNumber;
       const site = this.siteService.getAssignedSite();
       this.processing = true;
       this.errorMessage = ''
@@ -225,23 +228,27 @@ export class TriPosTransactionsComponent implements OnInit {
             return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
           }
         )).pipe(switchMap(data => {
-          const pay = data.payment
+     
+          if (!data || !data.payment) {
+            this.siteService.notify('No Payment found', 'close', 4000, 'red');
+            return of(null)
+          }
+          
+          const payment = data.payment
           const trans = data.trans
           const order = data.order;
 
           if (!data || !data.order) {
             this.errorMessage = 'Unknown error occurred.'
-            return this.orderService.getOrder(site, this.posPayment.orderID.toString(), false)
+            return this.orderService.getOrder(site, payment.orderID.toString(), false)
           }
 
           if (!this.paymentMethodsService.isTriPOSApproved(data.trans)) {
             this.errorMessage = trans?.captureStatus;
             return of(data.order)
           }
-
-          this.processing = false;
-          this.errorMessage = ''
-          this.message = ''
+    
+          this.reset()
           this.dialogRef.close(true)
           return of(data.order)
 
@@ -250,7 +257,6 @@ export class TriPosTransactionsComponent implements OnInit {
           return of(data);
       }))
     }
-
   }
 
   displayErrors(trans) {
@@ -262,15 +268,10 @@ export class TriPosTransactionsComponent implements OnInit {
   refundAmount() {
     if (!this.validateTransaction()) { return }
     if (this.posPayment && this.terminalSettings.triposLaneID) {
-
-      const item = {} as authorizationPOST;
-      item.transactionAmount = Math.abs(this.posPayment.amountPaid).toFixed(2).toString();
-
-      item.laneId = this.terminalSettings.triposLaneID;
+      const item = this.initTransaction(this.posPayment, this.terminalSettings);
       const site = this.siteService.getAssignedSite();
       this.processing = true;
       this.errorMessage = ''
-
       this.posPayment.saleType = 3;
       this.processing$ =  this.methodsService.refund(site, item ).pipe(
         switchMap(data => {
@@ -281,32 +282,16 @@ export class TriPosTransactionsComponent implements OnInit {
           }
           return   this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
       })).pipe(switchMap(data => {
-          this.processing = false;
-          this.errorMessage = ''
+          this.reset()
           return this.orderService.getOrder(site, this.order.id.toString(), false)
       })).pipe(switchMap(data => {
           this.orderService.updateOrderSubscription(data);
           this.dialogRef.close(true)
           return of(data)
       }))
-
-      // })), catchError(error => {
-      //   this.errorMessage = error;
-      //   this.processing = false;
-
-      //   return of(error)
-      // })
-
-
     }
   }
 
-  reset() {
-    this.processing = false
-    this.processing$ = null;
-    this.message = ""
-    this.errorMessage = ''
-  }
 
   reboot() {
     const site = this.siteService.getAssignedSite();

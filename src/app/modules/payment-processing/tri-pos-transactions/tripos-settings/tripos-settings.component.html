@@ -1,1 +1,75 @@
-<p>tripos-settings works!</p>
+
+<mat-card>
+  <mat-card-header>
+    <div class="header">
+      <div>
+        <div>
+          <h4>TriPOS Lane Settings.</h4>
+        </div>
+        <div>
+          <mat-label>Its recommended you set this feature at the terminal itself. Howwever, you can setup the multiple from any computer provided you have the activation code.</mat-label>
+        </div>
+      </div>
+
+      <div>
+        <div class="grid-header-buttons">
+          <div><button mat-raised-button (click)="getLane()">Get Lane {{laneID}}</button> </div>
+          <div><button mat-raised-button (click)="getLanes()">Get Lanes</button> </div>
+          <div><button mat-raised-button (click)="initializeLane()">Create Lane</button> </div>
+          <div><button mat-raised-button (click)="deleteLane()">Delete Lane</button> </div>
+        </div>
+      </div>
+    </div>
+
+    
+
+  </mat-card-header>
+
+  <mat-card-content>
+    
+    <div *ngIf="inputForm" [formGroup]="inputForm">
+
+          <div >
+            <mat-form-field appearance="outline">
+              <mat-label >Terminal ID</mat-label>
+              <input matInput type="text"
+                      formControlName="terminalID"
+                      class="form-control" >
+            </mat-form-field>
+        </div>
+        <div >
+          <mat-form-field appearance="outline">
+            <mat-label >Activation Code</mat-label>
+            <input matInput type="text"
+                    formControlName="activationCode"
+                    class="form-control" >
+          </mat-form-field>
+       </div>
+        <div>
+          <div>
+            <mat-label >Market Code retail is 7, Restaurant is 4</mat-label>
+          </div>
+          <mat-form-field appearance="outline">
+            <mat-label >Market Code</mat-label>
+            <input matInput type="text"
+                    formControlName="marketCode"
+                    class="form-control" >
+          </mat-form-field>
+        </div>
+    </div>
+
+    <div *ngIf="action$">
+      <div *ngIf="(action$ | async)  as jsonData; else loadingTPOSLane">
+        <div color="primary" *ngIf="jsonData"><button mat-raised-button (click)="clearJSON()">Clear</button></div>
+        <mat-label color="primary">
+          <ngx-json-viewer [json]="jsonData"></ngx-json-viewer>
+        </mat-label>
+      </div>
+    </div> 
+  </mat-card-content>
+</mat-card>
+
+
+<ng-template #loadingTPOSLane>
+  ... loading data. <mat-spinner [diameter]="25"></mat-spinner>
+</ng-template>

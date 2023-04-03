@@ -1,10 +1,10 @@
 <div *ngIf="devicename &&
-    uiTransactions?.triposEnabled &&
-    (order && order?.balanceRemaining != 0)">
+     uiTransactions?.triposEnabled &&
+     (order && order?.balanceRemaining != 0)">
   <button class="payment-buttons"
     mat-raised-button
     (click)="processTransaction(false)">
   <ng-content></ng-content>
   </button>
 </div>
-<div *ngIf="action$ | async"></div>
+<div *ngIf="action$ | async"></div> 

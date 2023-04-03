@@ -10,6 +10,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { switchMap, Observable, of, pipe} from 'rxjs';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
   selector: 'app-dsiemvtransaction',
@@ -44,8 +45,8 @@ export class DSIEMVTransactionComponent implements OnInit {
   //preauth = 3
   //preauth capture = 7
   //force = 4;
-
   order: IPOSOrder;
+ 
 
   constructor(
     private paymentsMethodsProcess: PaymentsMethodsProcessService,
@@ -55,6 +56,7 @@ export class DSIEMVTransactionComponent implements OnInit {
     private pOSPaymentService     : POSPaymentService,
     private siteService           : SitesService,
     public userAuthorization      : UserAuthorizationService,
+    private uISettingsService:    UISettingsService,
     private dialogRef             : MatDialogRef<DSIEMVTransactionComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   )
@@ -76,6 +78,7 @@ export class DSIEMVTransactionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.orderService.currentOrder$.subscribe(data  => {
       this.order = data;
       const i = 0;

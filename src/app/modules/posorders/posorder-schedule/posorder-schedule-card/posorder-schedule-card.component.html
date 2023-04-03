@@ -10,9 +10,8 @@
 
     <div class="grid-container">
       <div *ngIf="order?.preferredScheduleDate">Schedule</div>
-      <!-- date: {{order?.preferredScheduleDate}},  {{order?.preferredScheduleDate.length}} -->
-      <div>
-        {{ order?.preferredScheduleDate | date: 'shortDate' }}  {{ order?.preferredScheduleDate | date: 'shortTime' }}
+      <div *ngIf="order.preferredScheduleDate">
+        {{ order.preferredScheduleDate | date: 'shortDate' }}  {{ order.preferredScheduleDate | date: 'shortTime' }}
       </div>
       <!-- <div *ngIf="order?.preferredScheduleDate && order?.preferredScheduleDate.length>1"> {{ order?.preferredScheduleDate | date: 'short' }} </div> -->
 

@@ -154,6 +154,22 @@
         </mat-slide-toggle>
       </div>
 
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="printLabelsOnclose"
+                  >
+          <mat-label>Print Un Printed Labels at Close of Order</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="prepOrderOnClose"
+                  >
+          <mat-label>Send Items for Prep at Order Close.</mat-label>
+        </mat-slide-toggle>
+      </div>
+  
       <mat-divider></mat-divider>
       <h4>Barcode Options</h4>
 
@@ -199,7 +215,7 @@
       </div>
 
       <div class="toggle-fields">
-        <mat-label  class="mat-label-design">Used when order requires a customer be assigned.</mat-label>
+        <!-- -->
         <mat-slide-toggle
                   formControlName="validateCustomerLicenseID">
           <mat-label>Validate Customer License/ID</mat-label>

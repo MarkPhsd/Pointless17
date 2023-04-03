@@ -97,10 +97,11 @@ export class PrintingService {
   }
 
   printLabels(order: IPOSOrder, newLabels: boolean): Observable<any> {
-
+   
     if (!order || !order.posOrderItems) {
       return of(null)
     }
+
     let printCount = 0
     if (order) {
       if (order.posOrderItems) {
@@ -120,9 +121,11 @@ export class PrintingService {
         }
       }
 
+      console.log('printCount', printCount)
       if (printCount == 0) {return of(null)};
       return forkJoin(this.obs$)
     }
+    
     return of(null)
   }
 
@@ -558,6 +561,7 @@ export class PrintingService {
     if (!item) {return of(null)}
 
     const site = this.siteService.getAssignedSite();
+    const orderID = item.orderID;
 
     let printer = {} as any;
     let  menuItem$  : Observable<IMenuItem>
@@ -587,8 +591,8 @@ export class PrintingService {
         switchMap(data => {
 
           if ( !data || !data.itemType) {return of(null)}
+
           this.menuItem = data;
-          console.log('label name id' ,data.itemType.name, data.itemType.labelTypeID)
 
           if ( data.itemType && ( ( data.itemType.labelTypeID != 0 ) && printer.text ) ) {
             return  this.settingService.getSetting(site, data.itemType.labelTypeID)
@@ -601,25 +605,37 @@ export class PrintingService {
 
       })).pipe(
         switchMap( data => {
+          if (!data) { return of(null) }
 
           try {
             let field = 'productName';
-            if (!data[field] || data[field] ==  null) {
+            if (data[field]) {
+              console.log('not going to print label')
               return of(null)
             }
           } catch (error) {
+            console.log('error occured')
             return of(null)
           }
 
-
-          if (!data) { return of(null) }
-
+          //get the menu item from earlier.
           item.menuItem = this.menuItem;
           const labID = this.menuItem?.labID;
           const producerID = this.menuItem?.producerID;
 
-          const lab$ = this.getContact(site, labID)
-          const producer$ = this.getContact(site, producerID);
+          let lab$ : Observable<any>;
+          let producer$ : Observable<any>;
+          
+          lab$ = of(null)
+          producer$ = of(null);
+
+          if (labID) { 
+            this.getContact(site, labID)
+          }
+          if (producerID) {
+            producer$  = this.getContact(site, producerID);
+          } 
+          
           return forkJoin([lab$, producer$, of(data)])
 
         })).pipe(
@@ -631,12 +647,14 @@ export class PrintingService {
             if (!data) {return of(null)}
 
             try {
-
               const lab = results[0]
               const producer = results[1];
-
-              item.lab = lab;
-              item.producer = producer;
+              if (lab) { 
+                item.lab = lab;
+              }
+              if (producer) { 
+                item.producer = producer;
+              }
 
               if (this.menuItem) {
                 if (this.menuItem?.itemType?.type === 'cannabis') {
@@ -664,8 +682,13 @@ export class PrintingService {
             return of(null);
       })).pipe(
         switchMap( data => {
-        this.refreshOrder(item.orderID, history);
-        return of(data)
+        console.log(orderID)
+        const order$ = this.orderService.getOrder(site, orderID.toString() , history);
+        return order$
+    })).pipe(switchMap(data => { 
+      console.log('oroder', data)
+      this.orderService.updateOrder(data)
+      return of(data)
     }))
 
     return result$
@@ -675,7 +698,7 @@ export class PrintingService {
     if (this.order) {
       const site = this.siteService.getAssignedSite();
       const order$ = this.orderService.getOrder(site, this.order.id.toString() , this.order.history)
-      // const source = timer(5000, 3000);
+     
       order$.subscribe( data => {
           this.orderService.updateOrderSubscription(data)
       })

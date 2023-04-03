@@ -370,7 +370,8 @@ import { MetrcSalesFilterComponent } from '../modules/admin/metrc/pointless-metr
 import { PosSplitGroupsComponent } from '../modules/posorders/pos-payment/possplit-items/pos-split-groups/pos-split-groups.component';
 import { PrintGroupReceiptComponent } from '../modules/posorders/pos-payment/possplit-items/print-group-receipt/print-group-receipt.component';
 import { PrepPrintingServiceService } from '../_services/system/prep-printing-service.service';
-
+import { TriposSettingsComponent } from '../modules/payment-processing/tri-pos-transactions/tripos-settings/tripos-settings.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
   useClass: LoggingInterceptor,
@@ -732,7 +733,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     TiersWithPricesComponent,
 
     TriPosTransactionsComponent,
-
+    TriposSettingsComponent,
     TypeFilterComponent,
     TypeResultsSelectorComponent,
     TypeBoardComponent,
@@ -794,6 +795,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       NgxStripeModule.forRoot(),
       NgxCsvParserModule,
       NgxPayPalModule,
+      NgxJsonViewerModule,
     ],
 
   exports: [
@@ -802,6 +804,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     BrowserAnimationsModule,
     RouterModule,
     HammerModule,
+    NgxPayPalModule,
+    NgxJsonViewerModule,
     // NumericDirective,
     // RoomLayout,
   ],

@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { BehaviorSubject, catchError, Observable, of, Subscription, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, forkJoin, Observable, of, Subscription, switchMap } from 'rxjs';
 import { IClientTable, IPaymentResponse, IPOSOrder, IPurchaseOrderItem, PaymentMethod, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
@@ -26,7 +26,7 @@ import { IPaymentMethod } from './payment-methods.service';
 import { PlatformService } from '../system/platform.service';
 import { ClientTableService } from '../people/client-table.service';
 import { SendGridService } from '../twilio/send-grid.service';
-import { UISettingsService } from '../system/settings/uisettings.service';
+import { TransactionUISettings, UISettingsService } from '../system/settings/uisettings.service';
 import { ProductListByBarcodeComponent } from 'src/app/modules/menu/product-list-by-barcode/product-list-by-barcode.component';
 import { ToolBarUIService } from '../system/tool-bar-ui.service';
 import { FloorPlanService } from '../floor-plan.service';
@@ -34,11 +34,29 @@ import { OrderHeaderComponent } from 'src/app/modules/posorders/pos-order/order-
 import { PrintingService } from '../system/printing.service';
 import { PrepPrintingServiceService } from '../system/prep-printing-service.service';
 import { IReportItemSaleSummary } from '../reporting/reporting-items-sales.service';
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { UITransactionsComponent } from 'src/app/modules/admin/settings/software/UISettings/uitransactions/uitransactions.component';
 
 export interface ProcessItem {
   order   : IPOSOrder;
   item    : IMenuItem;
   posItem : IPurchaseOrderItem;
+}
+
+export class DateValidators {
+  static greaterThan(startControl: AbstractControl): ValidatorFn {
+    return (endControl: AbstractControl): ValidationErrors | null => {
+      const startDate: Date = startControl.value;
+      const endDate: Date = endControl.value;
+      if (!startDate || !endDate) {
+        return null;
+      }
+      if (startDate >= endDate) {
+        return { greaterThan: true };
+      }
+      return null;
+    };
+  }
 }
 
 @Injectable({
@@ -48,6 +66,9 @@ export class OrderMethodsService implements OnDestroy {
 
   private _posPaymentStepSelection     = new BehaviorSubject<IPaymentMethod>(null);
   public posPaymentStepSelection$      = this._posPaymentStepSelection.asObservable();
+
+  private _printingFinalizer      = new BehaviorSubject<boolean>(null);
+  public  printingFinalizer$      = this._printingFinalizer.asObservable();
 
   public order                    : IPOSOrder;
   _order                          : Subscription;
@@ -469,10 +490,10 @@ export class OrderMethodsService implements OnDestroy {
     return this.processItemPOSObservable(order, null, item, 1, null , 0, 0, passAlong )
   }
 
-  sendToPrep(order: IPOSOrder): Observable<any> {
+  sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean): Observable<any> {
     if (order) {
       const site = this.siteService.getAssignedSite()
-      const item$ = this.prepPrintingService.printLocations(order).pipe(
+      const item$ = this.prepPrintingService.printLocations(order,printUnPrintedOnly).pipe(
         switchMap( data => {
           return  this.prepPrintUnPrintedItems(order.id)
         })
@@ -482,18 +503,40 @@ export class OrderMethodsService implements OnDestroy {
       }))
       return item$;
     }
+    return of(null)
   }
 
   finalizeOrderProcesses(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder) {
-    return this.printingService.printLabels(order, true).pipe(switchMap(data => {
-      return this.sendToPrep(order)
+    this._printingFinalizer.next(true)
+    let printLabels$ : Observable<any>;
+    let sendOrder$   : Observable<any>;
+
+    return this.uiSettingService.transactionUISettings$.pipe(switchMap(data => { 
+      printLabels$ = of(null)
+      sendOrder$  = of(null)
+
+      if (data.prepOrderOnClose) {
+        this.sendToPrep(order, true)
+        // console.log('printing labels pre check', data.prepOrderOnClose, data.printLabelsOnclose) 
+      }
+      if (data.printLabelsOnclose) {
+        return this.printingService.printLabels(order, true)
+      }
+      return forkJoin([printLabels$, sendOrder$])
     }))
+
   }
 
   finalizeOrder(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder): number {
 
     // if (paymentMethod && paymentMethod.reverseCharge) {
     // }
+
+    console.log(paymentResponse)
+    if (!paymentResponse || !paymentResponse.payment) {
+      this.siteService.notify('No payment specificed', 'close', 3000, 'red');
+      return 0
+    }
 
     const payment = paymentResponse.payment;
 
@@ -503,6 +546,7 @@ export class OrderMethodsService implements OnDestroy {
 
       if (paymentMethod.isCreditCard) {
         if (this.platFormService.isApp()) {
+          console.log('open change due.')
           this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
         }
         return 1
@@ -510,12 +554,17 @@ export class OrderMethodsService implements OnDestroy {
 
       if (payment.amountReceived >= payment.amountPaid || order.balanceRemaining == 0) {
         if (this.platFormService.isApp()) {
+          console.log('open change due.')
           this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
         }
         return 1
       }
+
+      console.log('open change due  0.')
       return 0
     }
+
+    console.log('open change due  .', payment, paymentMethod)
   }
 
   validateUser(): boolean {
@@ -1258,7 +1307,7 @@ export class OrderMethodsService implements OnDestroy {
   refreshOrder(id: number) {
     if (this.order) {
       const site = this.siteService.getAssignedSite();
-      const order$ = this.orderService.getOrder(site, this.order.id.toString() , this.order.history)
+      const order$ = this.orderService.getOrder(site, id.toString() , this.order.history)
       // const source = timer(5000, 3000);
       order$.subscribe( data => {
           this.orderService.updateOrderSubscription(data)
@@ -1266,6 +1315,19 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
+  refreshOrderOBS(id: number, history: boolean) {
+    if (id) {
+      const site = this.siteService.getAssignedSite();
+      const order$ = this.orderService.getOrder(site, this.order.id.toString() , this.order.history)
+      // const source = timer(5000, 3000);
+     return order$.pipe(switchMap(data => {
+          this.orderService.updateOrderSubscription(data)
+          return of(data)
+      }))
+    }
+    this.orderService.updateOrderSubscription(null)
+    return of(null)
+  }
   removeItemFromList(index: number, orderItem: PosOrderItem) {
     if (orderItem) {
       const site = this.siteService.getAssignedSite()
@@ -1335,13 +1397,11 @@ export class OrderMethodsService implements OnDestroy {
             return of(null)
           }
           return of(null)
-          ///remove the item from the list and return the list
         }))
     }
   }
 
   prepPrintUnPrintedItems(id: number) {
-    console.log('id ', id)
     if (id) {
       const site = this.siteService.getAssignedSite()
       return  this.posOrderItemService.setUnPrintedItemsAsPrinted(site, id).pipe(
@@ -1366,7 +1426,6 @@ export class OrderMethodsService implements OnDestroy {
         const orderID = orderItem.orderID
         this.posOrderItemService.setItemPrep(site,orderItem).subscribe( item => {
           if (item) {
-            // this.siteService.notify('Item Prepped!', "Success",500)
             this.order.posOrderItems.splice(index, 1, item)
             this.orderService.updateOrderSubscription(this.order)
           }
@@ -1375,49 +1434,71 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
-  validateCustomerForOrder(client: IClientTable, ordersRequireCustomer: boolean) {
+
+  validateMEdExpriationDate(checkDateValue: string) {
+    const currentDate = new Date();
+    const checkDate = new Date(checkDateValue);
+    
+    if(checkDate > currentDate){
+
+    }else{
+        return 'Given date is not greater than the current date.';
+    }
+  }
+
+  validateCustomerForOrder(client: IClientTable, requiresLicenseValidation: boolean, clientType: string) {
     const accountLocked   = client.accountDisabled;
     const accountDisabled = client.accountLocked;
     let resultMessage = ''
 
     if (accountLocked || accountDisabled) {
-      resultMessage = 'Problem account is locked or disabled.'
+      resultMessage =resultMessage +  'Problem account is locked or disabled.'
       this.notifyEvent('Problem account is locked or disabled.', 'Failure')
       return {valid: false, resultMessage: resultMessage}
     }
 
-    if (ordersRequireCustomer) {
-      if (client.dlExp || !client?.dlExp) {
-        if (client.dlExp  && this.isDateExpired(client.dlExp)) {
-           resultMessage =' Problem with state ID or state driver license expiration date.'
+    if (requiresLicenseValidation) {
+      if (client.dlLicenseEXP || !client?.dlLicenseEXP) {
+        if (client.dlLicenseEXP  && this.isDateExpired(client.dlLicenseEXP)) {
+           resultMessage = resultMessage + ' Problem with state ID or state driver license expiration date.'
            return {valid: false, resultMessage: resultMessage}
         }
-        if (!client.dlExp ) {
-          resultMessage ='Driver license or ID expiration date does not exist for this customer'
-          return {valid: false, resultMessage: resultMessage}
-        }
-        if (!client.dlNumber ) {
-          resultMessage = 'Driver or ID number does not exist for this customer'
+        if (!client.dlLicenseEXP ) {
+          resultMessage = resultMessage + `Driver license or ID expiration date does not exist for this customer ${client.dlLicenseEXP}`
           return {valid: false, resultMessage: resultMessage}
         }
       }
     }
 
     if (client.patientRecOption) {
-      if (!client.medLicenseNumber) {
-        resultMessage = 'Problem with MED license.'
+
+      if (!client.medPrescriptionExpiration || this.isDateExpired(client.medPrescriptionExpiration)) {
+        resultMessage = resultMessage +  'Problem with MED expiration.'
         return {valid: false, resultMessage: resultMessage}
       }
-      if (!client.medPrescriptionExpiration) {
-        resultMessage = 'Problem with MED expiration.'
-        return {valid: false, resultMessage: resultMessage}
-      }
-      if (client.medPrescriptionExpiration) {
-        if (this.isDateExpired(client.medPrescriptionExpiration)) {
-          resultMessage = 'Problem with MED expiration.'
+
+      if (clientType === 'patient') { 
+        if (!client.medLicenseNumber) {
+          resultMessage = resultMessage +  'Problem with MED license.'
           return {valid: false, resultMessage: resultMessage}
         }
+        return {valid: true, resultMessage: resultMessage}
       }
+
+      if (clientType === 'caregiver') { 
+        console.log('instertiaryNum', client.insTertiaryNum)
+        if (!client.insTertiaryNum || client.insTertiaryNum == '') {
+          resultMessage = resultMessage + 'Problem with Patient Account #.'
+          return {valid: false, resultMessage: resultMessage}
+        }
+
+        if (!client.medLicenseNumber) {
+          resultMessage = resultMessage +  'Problem with Caregiver license.'
+          return {valid: false, resultMessage: resultMessage}
+        }
+
+      }
+      
     }
     return {valid: true, resultMessage: resultMessage}
   }

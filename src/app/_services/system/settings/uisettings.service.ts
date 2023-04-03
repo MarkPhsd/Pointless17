@@ -67,7 +67,8 @@ export interface TransactionUISettings {
   storeCreditAPI: string;
   contactAPI: string;
   startNewOrderOnCloseOrder: boolean;
-
+  prepOrderOnClose: boolean;
+  printLabelsOnclose: boolean;
 }
 
 export interface StripeAPISettings {
@@ -691,6 +692,8 @@ export class UISettingsService {
       storeCreditAPI: [],
       contactAPI:  [],
       startNewOrderOnCloseOrder: [],
+      prepOrderOnClose: [],
+      printLabelsOnclose: [],
      })
   }
 

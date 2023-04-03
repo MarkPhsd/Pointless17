@@ -81,6 +81,7 @@ export interface IUserProfile {
   metrcKey      :            string;
   metrcUser     :            string;
   dlNumber      :            string;
+  dlLicenseEXP  :            string;
   accountDisabled       :    boolean;
   accountLocked :            boolean;
   medTempLicense:            string;

@@ -93,6 +93,19 @@ export class POSPaymentService {
     return this.http.get<IPOSPayment>(url);
   }
 
+  
+  getFullPaymentInfo(site: ISite, id: number, history: boolean): Observable<IPOSPayment> {
+    const controller = '/POSPayments/'
+
+    const endPoint  = 'GetPOSPayment'
+
+    const parameters = `?id=${id}&history=${history}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSPayment>(url);
+  }
+
   putPOSPayment(site: ISite, payment: IPOSPayment): Observable<IPOSPayment> {
     const controller = '/POSPayments/'
 

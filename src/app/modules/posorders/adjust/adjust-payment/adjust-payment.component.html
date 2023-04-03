@@ -5,9 +5,33 @@
   <mat-card>
     <mat-card-title>
     </mat-card-title>
+
     <mat-card-subtitle>
     </mat-card-subtitle>
+
     <mat-card-content>
+
+      <div *ngIf="settings.triposEnabled">
+      
+    
+        <div *ngIf="toggleVoid">
+          Will process as Void - Required if reversal fails.
+        </div>
+        <div *ngIf="!toggleVoid">
+          Will process as Reversal - Preffered method.
+        </div>
+
+        <button class="button" color="accent" mat-raised-button (click)="toggleVoid = !toggleVoid">     
+          <div *ngIf="!toggleVoid">
+            Run as Void
+          </div>
+          <div *ngIf="toggleVoid">
+            Run as Reversal
+          </div>
+        </button>
+
+      </div>
+
       <div class="card-content">
         <app-mat-toggle-selector
             [toggleButtonClass]="'toggle-buttons-wide'"
@@ -22,7 +46,4 @@
     </mat-card-actions>
   </mat-card>
 </div>
-<!-- <div >
-  <div >  isDSIEmvPayment {{isDSIEmvPayment}} </div>
-  <div >  voidPayment {{voidPayment | json}} </div>
-</div> -->
+

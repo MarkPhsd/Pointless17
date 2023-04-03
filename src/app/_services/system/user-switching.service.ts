@@ -227,12 +227,12 @@ export class UserSwitchingService implements  OnDestroy {
             return of(user)
           }
       })).pipe(switchMap(data => {
-
+        // console.log(data)
         if (data?.message === 'failed') { return of(null)}
         return this.contactsService.getContact(site, data?.id)
 
       })).pipe(switchMap(data => {
-
+        // console.log(data)
         if ( !data ) { return of( {message: 'failed'} ) }
         const item = localStorage.getItem('user')
         const user = JSON.parse(item) as IUser;

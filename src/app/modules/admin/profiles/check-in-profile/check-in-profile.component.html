@@ -1,4 +1,5 @@
 <div *ngIf="(action$ | async) as action"></div>
+<div *ngIf="(clientType$ | async) as clientType"></div>
 <div *ngIf="clientTable && inputForm && transactionUISettings; else loading" >
 
   <div *ngIf="inputForm.controls?.firstName.errors?.required && inputForm.controls?.firstName.touched" class="error">
@@ -7,6 +8,8 @@
   <div *ngIf="inputForm.controls?.lastName.errors?.required && inputForm.controls?.lastName.touched" class="error">
     <mat-icon color="warn">warning</mat-icon> Name required in basic tab.
   </div>
+
+  <!-- //medPrescriptionExpiration -->
 
   <!-- <div *ngIf="inputForm.controls?.medLicenseNUmber.errors?.required && inputForm.controls?.medLicenseNUmber.touched" class="error">
     <mat-icon color="warn">warning</mat-icon> Pattern required 00-000-000-AA
@@ -47,6 +50,7 @@
                 (outputupdateonCancel)  ="navUserList($event)"
                 (outPutStartOrder)      ="startOrder($event)"
                 [enableDelete]= "true"
+                [enableStartOrder]="true"
               ></app-edit-buttons-standard>
             </div>
 

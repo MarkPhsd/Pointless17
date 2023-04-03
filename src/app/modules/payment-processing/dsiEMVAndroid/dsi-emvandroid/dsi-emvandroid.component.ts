@@ -12,6 +12,9 @@ import {PaymentsMethodsProcessService } from 'src/app/_services/transactions/pay
 import {OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPOSOrder,} from 'src/app/_interfaces';
 import { OrdersService} from 'src/app/_services/transactions/orders.service';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
+import { T } from '@angular/cdk/keycodes';
 
 // https://www.npmjs.com/package/capacitor-plugin-permissions
 // https://capacitorjs.com/docs/v2/plugins/android
@@ -70,7 +73,7 @@ export class DsiEMVAndroidComponent implements OnInit {
   payment: IPOSPayment;
   _order       : Subscription;
   order        : IPOSOrder;
-
+  uiTransactions: TransactionUISettings
   get isAndroid() {
     const platForm =   Capacitor.getPlatform();
     if (platForm === 'android') {
@@ -83,13 +86,25 @@ export class DsiEMVAndroidComponent implements OnInit {
     this._order = this.orderService.currentOrder$.subscribe(order => {
       this.order = order;
     })
+    this.initTransactionUISettings()
   }
+
+    // 
+  initTransactionUISettings() {
+    this.uISettingsService.transactionUISettings$.subscribe( data => {
+        this.uiTransactions = data
+      }
+    )
+  }
+
+
   constructor(
      private ngxXml2jsonService: NgxXml2jsonService,
      public dsiAndroidService: PointlessCCDSIEMVAndroidService,
      public paymentsMethodsProcessService: PaymentsMethodsProcessService,
      public orderMethodsService: OrderMethodsService,
      private orderService: OrdersService,
+     private uISettingsService:    UISettingsService,
      @Optional() private dialogRef: MatDialogRef<DsiEMVAndroidComponent>,
      @Inject(MAT_DIALOG_DATA) public data: any
   ){
@@ -103,6 +118,7 @@ export class DsiEMVAndroidComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.initSubscriptions()
     this.resetResponse();// = ''
     this.message = "...waiting for results."
@@ -502,10 +518,8 @@ export class DsiEMVAndroidComponent implements OnInit {
       this.cancelResponse = false;
       this.processRunning = false;
     }
-
     this.message = item;
     this.transactionResponse = item?.value;
-
   }
 
   async emvCancel() {
@@ -560,7 +574,8 @@ export class DsiEMVAndroidComponent implements OnInit {
         // const item = await dsiemvandroid.processSale(this.transaction);
         await  this.checkResponse();
         if (this.textResponse.toLowerCase() === 'approved') {
-          await this.paymentsMethodsProcessService.processCreditCardResponse(this.response, this.payment, this.orderMethodsService.order);
+          await this.paymentsMethodsProcessService.processCreditCardResponse(this.response, this.payment, 
+                                                this.orderMethodsService.order);
           if (this.dialogRef) {
             this.dialogRef.close()
           }
@@ -573,7 +588,7 @@ export class DsiEMVAndroidComponent implements OnInit {
     }
   }
 
-  async initTransaction(): Promise<any> {
+   initTransaction(): any {
     const item           = {} as any;
     const value          = this.dsiAndroidService.transaction;// as Transaction;
     item.amount          = value.amount;

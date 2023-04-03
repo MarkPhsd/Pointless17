@@ -1,9 +1,9 @@
-import { Component, OnInit,Input, Inject } from '@angular/core';
+import { Component, OnInit,Input, Inject, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscribable, Subscription } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
 import { IPOSOrder, IPOSPayment, IServiceType, ServiceType } from 'src/app/_interfaces';
@@ -34,7 +34,9 @@ export class ChangeDueComponent implements OnInit  {
   @Input() paymentMethod: IPaymentMethod;
   @Input() order        : IPOSOrder;
   @Input() payment      : IPOSPayment;
-
+  finalizer: boolean;
+  _finalizer: Subscription;
+  
   step                  = 1;
   changeDue             : any;
   serviceType           : IServiceType;
@@ -42,6 +44,7 @@ export class ChangeDueComponent implements OnInit  {
   constructor(
               private paymentService: POSPaymentService,
               private siteService: SitesService,
+              public orderMethodsService: OrderMethodsService,
               private orderService:  OrdersService,
               private toolbarServiceUI: ToolBarUIService,
               private snackBar : MatSnackBar,
@@ -52,6 +55,7 @@ export class ChangeDueComponent implements OnInit  {
               private methodsService: CardPointMethodsService,
               private orderMethodService: OrderMethodsService,
               private prepPrintingService: PrepPrintingServiceService ,
+              private changeDetect : ChangeDetectorRef,
               private dialogRef: MatDialogRef<ChangeDueComponent>,
               @Inject(MAT_DIALOG_DATA) public data: IBalanceDuePayload
             )
@@ -71,6 +75,15 @@ export class ChangeDueComponent implements OnInit  {
 
   }
 
+  printingCheck() { 
+    this._finalizer = this.orderMethodService.printingFinalizer$.subscribe(data => {
+      console.log('finalizer for balance due', data)
+      this.changeDetect.detectChanges()
+      this.finalizer = data;
+      this.changeDetect.detectChanges()
+    })
+  }
+
   newDefaultOrder(){
     const site = this.siteService.getAssignedSite();
     this.action$ = this.orderService.newOrderWithPayloadMethod(site, null).pipe(
@@ -82,7 +95,7 @@ export class ChangeDueComponent implements OnInit  {
    }
 
   processSendOrder(order: IPOSOrder) {
-    return this.orderMethodService.sendToPrep(order)
+    return this.orderMethodService.sendToPrep(order, true)
   }
 
   changeStep() {
@@ -99,7 +112,7 @@ export class ChangeDueComponent implements OnInit  {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-
+    this.printingCheck();
     this.initTransactionUISettings();
   }
 

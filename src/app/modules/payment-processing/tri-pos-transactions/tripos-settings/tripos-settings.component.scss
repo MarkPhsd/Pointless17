@@ -1,0 +1,16 @@
+button {
+  margin: 5px;
+  width:  110px;
+}
+
+.grid-header-buttons {
+  display : flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.header { 
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 10px;
+}

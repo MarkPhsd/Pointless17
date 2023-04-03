@@ -1,3 +1,4 @@
+import { E } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { catchError, Observable, of, switchMap } from 'rxjs';
@@ -6,9 +7,6 @@ import { IPOSOrder, ISetting, ISite, PosOrderItem } from 'src/app/_interfaces';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { IPrinterLocation, PrinterLocationsService } from '../menu/printer-locations.service';
 import { SitesService } from '../reporting/sites.service';
-import { OrderMethodsService } from '../transactions/order-methods.service';
-import { PlatformService } from './platform.service';
-import { PrintingService } from './printing.service';
 import { SettingsService } from './settings.service';
 
 @Injectable({
@@ -25,7 +23,7 @@ export class PrepPrintingServiceService {
               private settingService: SettingsService,
               ) { }
 
-  printLocations(order: IPOSOrder): Observable<any> {
+  printLocations(order: IPOSOrder, printUnPrintedOnly: boolean): Observable<any> {
 
     const site = this.siteService.getAssignedSite();
     const locations$ = this.locationsService.getLocations();
@@ -37,11 +35,21 @@ export class PrepPrintingServiceService {
     })).pipe(switchMap(data => {
         data.forEach(location => {
           const newItems = [] as PosOrderItem[];
-          posItems.forEach(data =>
-            {if(data.printLocation == location.id) {
-                newItems.push(data)
-            }}
+          posItems.forEach(data => {
+
+            if (printUnPrintedOnly) {
+              {if(data.printLocation == location.id && !data.printed) {
+                  newItems.push(data)
+              }}
+            } else {
+              {if(data.printLocation == location.id) {
+                  newItems.push(data)
+              }}
+            }
+            
+            }
           )
+
           if (newItems.length > 0) {
             const item = this.setOrder(newItems, order, location)
             printOrders.push(item)
@@ -52,7 +60,6 @@ export class PrepPrintingServiceService {
       return of(printOrders)
     })).pipe(switchMap(printOrders => {
       if (!printOrders || printOrders.length == 0) { return of(null)}
-      console.log('printing service')
       return this.printElectronTemplateOrder(printOrders)
     }),catchError(data => {
       this.siteService.notify('Error in printing' + data.toString(), 'Close', 5000, 'red')

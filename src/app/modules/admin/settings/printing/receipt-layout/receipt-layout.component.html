@@ -51,7 +51,7 @@
           </div>
         </div>
 
-        <div      *ngIf="interpolatedItemTexts  && interpolatedItemTexts.length>0"  class="section-item">
+        <div      *ngIf="interpolatedItemTexts && interpolatedItemTexts.length>0"  class="section-item">
           <div    *ngFor="let item of interpolatedItemTexts; let i = index">
             <div  [class]="gridReceiptClass"
                   [innerHTML]="interpolatedItemTexts[i]" >  </div>

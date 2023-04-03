@@ -96,7 +96,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
   uiTransactions: TransactionUISettings
-  uiTransactions$ : Observable<TransactionUISettings>;
   devicename = localStorage.getItem('devicename')
   message: string;
   serviceIsScheduled: boolean;
@@ -111,13 +110,11 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
           this.changeDetectorRef.detectChanges();
           this.paymentMethod = data;
           this.stepSelection = 3;
-          console.log('apply payment method', data.name)
           this.orderMethodsService.updatePaymentMethodStep(null)
         }
       return of(null)
     }))
   }
-
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.pipe(
@@ -171,7 +168,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
               private fb              : FormBuilder) { }
 
   ngOnInit(): void {
-
+    this.initTransactionUISettings();
     this.initAuthorization()
     const site = this.sitesService.getAssignedSite();
     this.paymentService.updatePaymentSubscription(this.posPayment)
@@ -193,7 +190,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.refreshIsOrderPaid();
     this.freshDevice();
 
-    this.initTransactionUISettings();
+
     this.paymentMethods$ = this.getPaymentMethods(site)
     this.paymentMethods$.subscribe(data => { this.paymentMethods = data; })
     if (this.authenticationService.userValue) {
@@ -226,17 +223,10 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   initTransactionUISettings() {
-    this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
-      switchMap(data => {
-        if (data) {
-          this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
-          return of(this.uiTransactions)
-        }
-        if (!data) {
-          this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
-          return of(this.uiTransactions)
-        }
-    }))
+    this.uISettingsService.transactionUISettings$.subscribe( data => {
+        this.uiTransactions = data
+      }
+    )
   }
 
   ngOnDestroy(): void {
@@ -488,6 +478,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   processResults(paymentResponse: IPaymentResponse) {
     let result = 0
+   
     if (paymentResponse?.paymentSuccess || paymentResponse?.orderCompleted) {
       if (paymentResponse?.orderCompleted) {
         this.action$ =   this.orderMethodsService.finalizeOrderProcesses(paymentResponse, this.paymentMethod, paymentResponse.order).pipe(switchMap(data => {
@@ -551,7 +542,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
-    return this.paymentsMethodsService.processCashPayment(site, posPayment, order, amount, paymentMethod )
+    return this.paymentsMethodsService.processCashPayment(site, posPayment, order, amount, paymentMethod)
   }
 
   processCreditPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
@@ -699,7 +690,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   resetPaymentMethod() {
-    console.log('resetpayment method')
     this.initForms();
     this.paymentMethod = null;
     this.stepSelection = 1;

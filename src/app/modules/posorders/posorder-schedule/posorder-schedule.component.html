@@ -8,7 +8,7 @@
       <mat-icon>warning</mat-icon>  {{errorMessage}}
     </div>
 
-    <div *ngIf="!order.clients_POSOrders">
+    <div *ngIf="order && !order.clients_POSOrders">
       To schedule an order, a customer must be associated with it.
       <div class="grid-header-item">
         <app-order-header-demo-graphics

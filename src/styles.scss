@@ -196,6 +196,15 @@
     margin: 10px;
   }
 
+  .payment-buttons-sm {
+    height: 65px;
+    width:  80px;
+    max-width: 80px;
+    margin: 5px;
+    line-height: .9em  ;
+    padding: 1px;
+  }
+
   svg#rocket-smoke {
     height: calc(100vh - 95px);
     position: absolute;

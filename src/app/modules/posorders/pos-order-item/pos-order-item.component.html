@@ -1,8 +1,6 @@
 <div *ngIf="(action$ | async) as item"></div>
 <div *ngIf="(printLabel$ | async) as item"></div>
 
-<!-- {{itemEdit}} -->
-<!-- (mouseover)="initEdit()" (mouseout)="destroyEdit()" -->
 <mat-card
           id="panel"
           (swipeleft)="swipeOutItem()"
@@ -10,13 +8,11 @@
           [class]="customcard"
           >
 <mat-card-content >
-  <!-- <div *ngIf="inputForm">{{inputF  orm.value | json}}</div> -->
-
     <div  [class]="gridItems">
       <div *ngIf="orderItem">
         <div>
 
-          <span class="index" *ngIf="!isModifier  && !prepScreen">
+          <span class="index" *ngIf="!isModifier && !prepScreen">
             {{index+1}}:
           </span>
 
@@ -69,9 +65,9 @@
           <span class="discount-description"  *ngIf="orderItem?.itemOrderPercentageDiscount>0">
             % Off Savings $ {{orderItem?.itemOrderPercentageDiscount}},
           </span>
-
-          <span class='status-icon' *ngIf="orderItem?.printed && prepScreen && !isModifier">
-            <mat-icon color="warn" *ngIf="orderItem?.printed && !prepScreen" >print</mat-icon>
+          
+          <span class='status-icon' *ngIf="orderItem?.printed && prepScreen && (!isModifier && orderItem.id != orderItem.idRef)">
+            <mat-icon color="warn"  *ngIf="orderItem?.printed && !prepScreen" >print</mat-icon>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>
           </span>
 
@@ -90,7 +86,6 @@
             </span>
 
           </div>
-
         </div>
 
         <div class="grid-item-span" *ngIf="!prepScreen && !isModifier">
@@ -102,13 +97,11 @@
           <div class="void-info" *ngIf="(orderItem?.voidReason || orderItem?.itemReturn == 1) && !isModifier">
             <span *ngIf="orderItem.itemReturn == 1">  <mat-icon  color="warn">refresh</mat-icon>  </span>
             <span *ngIf="orderItem.itemReturn != 1">  <mat-icon  color="warn">cancel</mat-icon>  </span>
-
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
               <b *ngIf="orderItem?.itemReturn == 1" style="color:crimson">Item Return:  {{ orderItem?.voidReason }}</b>
               <b *ngIf="orderItem?.itemReturn != 1" style="color:crimson">Voided:       {{ orderItem?.voidReason }}</b>
             </span>
           </div>
-
         </div>
 
         <div  class="grid-item-span" *ngIf="purchaseOrderEnabled && inputForm">
@@ -160,7 +153,9 @@
         <ng-container [ngTemplateOutlet]="isDisplayMenuItemOn"></ng-container>
       </div>
 
-      <div (click)="assignItem()" class="menu-buttons" *ngIf="!disableActions && !prepScreen" >
+      <div (click)="assignItem()" 
+           class="menu-buttons" 
+           *ngIf="!disableActions && !prepScreen" >
         <button aria-label="user menu"
                   mat-button
                   [class]="morebutton"

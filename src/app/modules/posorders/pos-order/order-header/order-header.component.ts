@@ -62,13 +62,24 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
       this.hidePrint = true;
       return;
     }
+  }
 
+  reSendOrder() {
+    this.action$ = this.orderMethodsService.sendToPrep(this.order, true).pipe(
+      switchMap(data => {
+        // this.clearOrder()
+        return of(data)
+      })
+    )
   }
 
   sendOrder() {
-    this.action$ = this.orderMethodsService.sendToPrep(this.order).pipe(
+    this.action$ = this.orderMethodsService.sendToPrep(this.order, true).pipe(
       switchMap(data => {
-        // this.clearOrder()
+        const confirm = window.confirm('Exit order?')
+        // if (confirm) { 
+        //   this.clearOrder()
+        // }
         return of(data)
       })
     )

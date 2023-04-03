@@ -155,8 +155,6 @@ export class ClientTypeService {
     }
 
     return this.http.get<clientType>(url);
-
-
   }
 
 

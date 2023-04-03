@@ -69,29 +69,32 @@
 
         <div>
           <mat-form-field  appearance="outline">
-            <mat-label>DOB</mat-label>
+            <mat-label>DOB {{client?.dob}}</mat-label>
             <input matInput
                   [disabled]="!isStaff"
-                  [matDatepicker]="picker"
+                  [matDatepicker]="picker2"
                   formControlName="dob">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker  #picker></mat-datepicker>
-          </mat-form-field>
-        </div>
-
-        <div>
-          <mat-form-field appearance="outline">
-            <mat-label>ID EXP</mat-label>
-            <input  matInput
-                     [disabled]="!isStaff"
-                    [matDatepicker]="picker2"
-                    formControlName="dlExp">
             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
             <mat-datepicker  #picker2></mat-datepicker>
           </mat-form-field>
         </div>
 
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>ID EXP {{client?.dlLicenseEXP}}</mat-label>
+            <input  matInput
+                    [disabled]="!isStaff"
+                    [matDatepicker]="picker"
+                    formControlName="dlLicenseEXP">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker  #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
       </div>
+
+      <!-- [matDatepicker]="picker"
+                    formControlName="medPrescriptionExpiration" -->
 
       <div class="name-fields">
         <app-value-fields
@@ -101,8 +104,6 @@
           Account #
         </app-value-fields>
       </div>
-
-
 
       <div *ngIf="enableLimitsView" class="counts-container">
         <div *ngIf="isStaff">

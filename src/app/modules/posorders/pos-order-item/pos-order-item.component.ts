@@ -230,7 +230,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     if (this.orderItem && this.orderItem.id != this.orderItem.idRef )  {
 
     }
-
+   
     const item = this.orderItem;
     this.showEdit = !item.printed && (this.quantity && !item.voidReason) &&  item.promptGroupID != 0 && item.id != item.idRef
     this.showView = this.mainPanel && ( (  item.promptGroupID === 0) || ( item.promptGroupID != 0 && item.id != item.idRef ) )
@@ -244,6 +244,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     }
     this.updateCardStyle(this.mainPanel)
     this.refreshSidePanel()
+    // this.orderItem.
   }
 
   initEdit() {
@@ -359,7 +360,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     if (!isAssigned) {
       this.productnameClass == 'product-name-alt'
     }
-    console.log(this.productnameClass )
+    // console.log(this.productnameClass )
   }
 
   editProperties(editField: string, instructions: string) {
@@ -516,7 +517,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   updateCardStyle(option: boolean)  {
-    if (this.orderItem && this.orderItem.id != this.orderItem.idRef) {
+    if (this.orderItem && this.orderItem.idRef && this.orderItem.id != this.orderItem.idRef) {
       this.customcard       = 'custom-card-modifier';
       this.productnameClass = 'productname-modifier'
       this.isModifier       = true;

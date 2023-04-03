@@ -318,6 +318,9 @@ export class SitesService {
       if (color === 'red') { color = 'mat-warn'}
       if (color === 'yellow') { color = 'mat-accent'}
       if (color === 'green') { color = 'mat-primary'}
+      if (color === 'accent') { color = 'mat-accent'}
+      if (color === 'warn') { color = 'mat-warn'}
+      if (color === 'primary') { color = 'mat-primary'}
     }
     if (!color) { color = 'mat-primary'}
     // console.log('color', color)

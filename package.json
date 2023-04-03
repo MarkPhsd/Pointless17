@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.47.1",
+  "version": "1.47.9",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -145,6 +145,7 @@
     "ngx-device-detector": "^2.1.1",
     "ngx-electron": "^2.2.0",
     "ngx-infinite-scroll": "^10.0.1",
+    "ngx-json-viewer": "^3.1.0",
     "ngx-numeral": "0.0.1-beta.0",
     "ngx-pagination": "^5.1.1",
     "ngx-papaparse": "^7.0.0",

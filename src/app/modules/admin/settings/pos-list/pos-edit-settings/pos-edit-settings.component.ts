@@ -14,6 +14,7 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ITerminalSettings,  SettingsService } from 'src/app/_services/system/settings.service';
 import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 
 @Component({
   selector: 'app-pos-edit-settings',
@@ -35,7 +36,7 @@ export class PosEditSettingsComponent implements OnInit {
 
   electronPrinterList : any;
   receiptPrinter: string;
-
+  
   medOrRecStoreList = [
     {id:0,name:'Any'},  {id:1,name:'Med'},  {id:2,name:'Rec'}
   ]
@@ -49,6 +50,7 @@ export class PosEditSettingsComponent implements OnInit {
     private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService,
     private platFormService     : PlatformService,
     private btPrinterService    : BtPrintingService,
+    private triPOSService       : TriPOSMethodService,
     private printingService     : PrintingService,
       private uiSettingService  : UISettingsService,
     private fileSystemService   : FileSystemService,
@@ -86,7 +88,6 @@ export class PosEditSettingsComponent implements OnInit {
     this.initForm()
     await this.listBTDevices();
     await this.getAndroidPrinterAssignment()
-    // await this.createZPLFolderData()
   }
 
   async createZPLFolderData() {

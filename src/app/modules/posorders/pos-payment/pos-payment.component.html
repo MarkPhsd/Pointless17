@@ -1,7 +1,7 @@
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(orderAction$ | async)"></div>
 <div *ngIf="(process$ | async) as process"></div>
-<div *ngIf="order  && (uiTransactions$ | async) as uiTransactions">
+<div *ngIf="order  && uiTransactions">
 
   <div [class]="orderlayout">
     <div class="transaction-data">
@@ -66,7 +66,6 @@
           </button>
         </div>
       </div>
-
 
       <div *ngIf="!order.completionDate && !splitByItem && !paymentsEqualTotal && paymentIsReady
                   &&  order?.balanceRemaining != 0">
