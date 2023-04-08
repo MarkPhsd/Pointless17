@@ -10,7 +10,7 @@ export interface IServiceType {
   isRegisterTransaction: boolean;
   taxItems:              boolean;
   showOrderType:         boolean;
-  retailServiceType:     boolean;
+  retailType       :     boolean;
   managerRequired:       number;
   showTipOption:         number;
   printerName:           string;

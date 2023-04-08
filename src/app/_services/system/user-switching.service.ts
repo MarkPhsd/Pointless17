@@ -126,7 +126,6 @@ export class UserSwitchingService implements  OnDestroy {
     ))
   }
 
-
   setAppUser() {
     const appUser = JSON.parse(localStorage.getItem('appUser')) as ElectronDimensions;
     const iUser = {} as IUser;

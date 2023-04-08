@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Navigation, Router } from '@angular/router';
 import { IPaymentMethod } from 'ngx-paypal';
-import { Observable, of, switchMap } from 'rxjs';
+import { catchError, Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
@@ -58,15 +58,37 @@ export class CashPaymentButtonComponent implements OnInit {
     this.posPayment = {} as IPOSPayment;
 
     if (this.posPayment) {
-      this.action$ = this.paymentMethodService.getPaymentMethodByName(site, 'cash').pipe(switchMap(method => {
+      this.action$ = this.paymentMethodService.getCashPaymentMethod(site, 'Cash').pipe(switchMap(method => {
+        // console.log('method ', method)
+        if (!method) { 
+          this.sitesService.notify('Cash Payment not found.', 'close', 5000, 'red')
+          return of(null)
+        }
         return this.paymentsMethodsService.processCashPayment(site, this.posPayment, this.order, amount, method )
       })).pipe(switchMap(data => {
+
+        // console.log('processCashPayment', data)
+
+        if (!data) { 
+          this.sitesService.notify('Cash Payment successfull ', 'close', 5000, 'red')
+          return of(null)
+        }
         return this.orderService.getOrder(site, this.order.id.toString(), false )
       })).pipe(switchMap(data => {
+        // console.log('getOrder', data)
+        if (!data) { 
+          this.sitesService.notify('Order not found ', 'close', 5000, 'red')
+          return of(null)
+        }
+
         this.orderService.updateOrderSubscription(data)
         this.router.navigate(['pos-payment']);
         return of(data)
-      }))
+      })),
+      catchError(data => { 
+        this.sitesService.notify('Error occured: ' + data.toString(), 'close', 5000, 'red')
+        return of(data)
+      })
     }
     if (!this.posPayment) {
       this.sitesService.notify('No payment assigned', 'Alert', 2000)
@@ -79,7 +101,7 @@ export class CashPaymentButtonComponent implements OnInit {
       this.orderMethodsService.updatePaymentMethodStep(data)
       this.router.navigate(['pos-payment']);
       return of(data)
-    }));
+    }))
   }
 
 

@@ -40,11 +40,14 @@ export class UnitTypeEditComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: UnitType
     )
   {
+    console.log(data)
     if (data) {
       this.refreshData_Sub(data)
+      return
     }
     if (!data) {
       this.refreshData();
+      return
     }
   }
 
@@ -119,13 +122,13 @@ export class UnitTypeEditComponent implements OnInit {
     this.action$ = this.update(this.inputForm.value).pipe(
       switchMap( data => {
         this.onCancel(item);
-        return of(null)
+        return of(true)
       })
     )
   }
 
   onCancel(event) {
-    this.dialogRef.close();
+    this.dialogRef.close(true);
   }
 
   delete(item) {

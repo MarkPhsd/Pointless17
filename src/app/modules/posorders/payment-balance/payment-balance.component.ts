@@ -2,7 +2,7 @@ import { Component, OnInit, Input , OnDestroy, ChangeDetectorRef} from '@angular
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { timeStamp } from 'node:console';
-import { Observable, of, Subscription, switchMap } from 'rxjs';
+import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
 import { itemsAnimation } from 'src/app/_animations/list-animations';
 import { IPOSOrder, IPOSPayment, ISite, PosPayment } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
@@ -17,7 +17,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
-import { TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
+import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { CardPointMethodsService } from '../../payment-processing/services';
 
 @Component({
@@ -43,12 +43,13 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   hidePrint:      boolean;
   href          : string;
   totalAuthTriPOSPayments : number;
+  incrementalAuth: PosPayment;
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
-      
       this.gettriPOSTotalPayments();
+      this.lastIncrementalAuth();
     })
 
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
@@ -122,6 +123,54 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     }
   }
 
+  lastIncrementalAuth() {
+    if (this.order  && 
+        this.order.posPayments &&
+        this.order.posPayments &&  
+        this.order.posPayments.length === 0){ return }
+    this.order.posPayments.slice().reverse().forEach(data => {
+      console.log(data?.tranType && data.amountPaid)
+      if (data?.tranType === 'incrementalAuthorizationResponse' && data?.amountPaid != 0) {
+        this.incrementalAuth = data;
+        return 
+      }
+    })
+  }
+
+  reverseIncrementalAuth(item: any) {
+    const site = this.siteService.getAssignedSite()
+    const auth = {} as authorizationPOST;
+    console.log(item)
+    if (!item || !item.refNumber) { 
+      this.siteService.notify('Error with transaction, no transactionID.', 'close',2000, 'yellow')
+      return 
+    }
+
+    const terminal= this.settingsService.terminalSettings;
+    if (!terminal) { return }
+  
+    auth.laneId = terminal?.triposLaneID;
+    auth.transactionId = item?.refNumber;
+    auth.paymentType = 'credit' //item?.paymentMethod?.name
+    console.log('auth', auth);
+
+    this.action$ = this.triposMethodService.processIncrementalReversal(auth, item).pipe(
+      switchMap(data => { 
+      console.log('processIncrementalReversal result', data)
+      return of(data)
+    })).pipe( switchMap( data => {
+      console.log('payment', data)
+      return this.orderMethodsService.refreshOrderOBS(item.orderID, false)
+    })).pipe(switchMap( data => {
+      console.log('order', data)
+      return of(data)
+    })),
+    catchError(err => { 
+      this.siteService.notify(`Error occured: ${err.toString()}`, 'close', 3000, 'red')
+      return of(err)
+    })
+
+  }
 
   incrementTriPOS(item: IPOSPayment) {
     const amount = this.order.creditBalanceRemaining - item.amountPaid;
@@ -148,17 +197,23 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       }
     )).pipe(switchMap(data => { 
       console.log('terminal', data)
+
       if (!data) {return of(null)}
 
       console.log(tranData.transactionId)
       if (tranData && tranData.transactionId) { 
         transactionId = tranData.transactionId
+
+        if (! data.triposLaneID) { 
+          this.siteService.notify(`No Lane ID, will not process.`, 'close', 3000, 'red')
+        } 
+
         return this.triposMethodService.processIncrement( site, tranData.transactionId, amount.toString(), data.triposLaneID)
       }
 
     })).pipe(switchMap(data => { 
 
-      if (!data) {return of(null)}
+      if (!data) {return of(null)}  
       console.log(data)
       if (data && !data._hasErrors && data.isApproved) {
         item.amountPaid = amount;
@@ -174,8 +229,11 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
         item.transactionIDRef  = transactionId;
         return this.paymentService.makePayment(site, item, this.order, amount, null)
       }
-
-      this.siteService.notify('Not approved ', 'close', 3000, 'red')
+      if (data?.exceptionMessage) { 
+        this.siteService.notify(`Not approved: ${data?.exceptionMessage}`, 'close', 3000, 'red')
+      } else { 
+        this.siteService.notify('Not approved: unknown. ', 'close', 3000, 'red')
+      }
       return of(this.order)
     })).pipe(switchMap(data => { 
       return   this.orderMethodsService.refreshOrderOBS(this.order.id, this.order.history)

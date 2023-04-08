@@ -1,7 +1,7 @@
 <ng-template #loading>
   <mat-spinner [diameter]="70"></mat-spinner>
 </ng-template>
-
+<div *ngIf="(product$ | async) as product"></div>
 <div class="container"
      [formGroup]="productForm"
      *ngIf="product && productForm ; else loading">
@@ -70,16 +70,24 @@
 
               <app-category-select   [inputForm]="productForm"
                                      [fieldName]="'subCategoryID'"
-                                     [type]="'subcategory'">Sub Category</app-category-select>
+                                     [type]="'subcategory'">Sub Category
+              </app-category-select>
 
               <app-category-select   [inputForm]="productForm"
-                                     [type]="'category'">Category</app-category-select>
+                                     [type]="'category'">Category
+              </app-category-select>
 
-              <app-department-select [id] = "product?.brandID" [inputForm]="productForm">Department</app-department-select>
+              <app-department-select 
+                    [id] = "product?.brandID" [inputForm]="productForm">Department
+              </app-department-select>
 
               <div class="flex-container-medium">
-                <product-type-select  [inputForm]="productForm"></product-type-select>
-                <button mat-button  class="edit-button" (click)="editType()"><mat-icon>edit</mat-icon></button>
+                <product-type-select  
+                      [inputForm]="productForm">
+                </product-type-select>
+                <button mat-button color="accent" class="edit-button" (click)="editType()">
+                  <mat-icon>edit</mat-icon>
+                </button>
               </div>
 
               <app-brand-type-select
@@ -375,7 +383,7 @@
       </unit-type-select>
     </div>
     <div>
-      <button mat-button (click)="openAddSize()">
+      <button mat-button (click)="openUnit()">
         <mat-icon>expand</mat-icon>
       </button>
     </div>

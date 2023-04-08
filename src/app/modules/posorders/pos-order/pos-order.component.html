@@ -102,21 +102,18 @@
         <div>
           <div *ngIf="mainPanel && uiTransactionSettings "
                 class="payment-buttons-container">
+                <ng-container [ngTemplateOutlet]="stripePayButtonView"></ng-container>
+                <ng-container [ngTemplateOutlet]="dsiButtonView"></ng-container>
+                <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButtonView"></ng-container>
+                <ng-container [ngTemplateOutlet]="cardPointButtonView"></ng-container>
+                <ng-container [ngTemplateOutlet]="giftCardButtonView"></ng-container>
+                <ng-container ng-container [ngTemplateOutlet]="houseAccountButtonView"></ng-container>
 
-                <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
-                <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
-                <ng-container [ngTemplateOutlet]="cardPointeButton"></ng-container>
-
-                <ng-container [ngTemplateOutlet]="giftCardPayButton"></ng-container>
-
-                <ng-container ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
-
-                <div *ngIf="order && order.clientID">
-                  <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
-                </div>
-
-                <ng-container [ngTemplateOutlet]="wicEBTButton"></ng-container>
-                <ng-container [ngTemplateOutlet]="triPOSPaymentButton"></ng-container>
+                <!-- <div *ngIf="order && order.clientID"> -->
+                  <ng-container [ngTemplateOutlet]="storeCreditPaybuttonView"></ng-container>
+                <!-- </div> -->
+                <ng-container [ngTemplateOutlet]="wicEBTButtonView"></ng-container>
+                <ng-container [ngTemplateOutlet]="triPOSPaymentButtonView"></ng-container>
                 <ng-container [ngTemplateOutlet]="payButton"></ng-container>
 
           </div>
@@ -170,9 +167,9 @@
 </ng-template>
 
 <ng-template #cardPointeButton>
-  <div *ngIf="devicename &&
+  <!-- <div *ngIf="devicename &&
        uiTransactionSettings?.cardPointBoltEnabled &&
-       (order && order?.balanceRemaining != 0)">
+       (order && order?.balanceRemaining != 0)"> -->
     <card-pointe-card-pay-btn
       [order]="order"
       [devicename]="devicename"
@@ -184,14 +181,14 @@
       <mat-icon>credit_card</mat-icon>
       <br>Credit / Debit
     </card-pointe-card-pay-btn>
-  </div>
+  <!-- </div> -->
 </ng-template>
 
 <ng-template #dsiEMVAndroidCardButton>
-  <span *ngIf="(platForm === 'android') &&
+  <!-- <span *ngIf="(platForm === 'android') &&
         devicename &&
         uiTransactionSettings?.cardPointAndroidEnabled &&
-        (order && order?.balanceRemaining != 0)">
+        (order && order?.balanceRemaining != 0)"> -->
     <dsiemvandroid-pay-btn
         [order]="order"
         [devicename]="devicename"
@@ -203,12 +200,11 @@
         <mat-icon>credit_card</mat-icon>
         <br>Credit / Debit
     </dsiemvandroid-pay-btn>
-  </span>
+  <!-- </span> -->
 </ng-template>
 
 <ng-template #disEMVCardButton>
-  <span *ngIf="devicename && (uiTransactionSettings && uiTransactionSettings?.dsiEMVNeteEpayEnabled)
-      && order && order?.balanceRemaining != 0">
+  <!-- <span *ngIf=""> -->
     <dsi-emvcard-pay-btn
       [devicename]="devicename"
       [order]="order"
@@ -220,13 +216,13 @@
       <mat-icon>credit_card</mat-icon>
       <br>Credit / Debit
     </dsi-emvcard-pay-btn>
-  </span>
+  <!-- </span> -->
 </ng-template>
 
 <ng-template #triPOSPaymentButton>
-  <div *ngIf="devicename &&
+  <!-- <div *ngIf="devicename &&
     uiTransactionSettings?.triposEnabled &&
-    (order && order?.balanceRemaining != 0)">
+    (order && order?.balanceRemaining != 0)"> -->
     <app-tri-poscard-pay-btn
       [order]="order"
       [devicename]="devicename"
@@ -238,12 +234,12 @@
         <mat-icon>credit_card</mat-icon>
         <br>Credit / Debit
     </app-tri-poscard-pay-btn>
-  </div>
+  <!-- </div> -->
 </ng-template>
 
 <ng-template #giftCardPayButton>
-  <div *ngIf="
-  (!paymentsEqualTotal && !order.completionDate && order?.balanceRemaining != 0)">
+  <!-- <div *ngIf="
+  (!paymentsEqualTotal && !order.completionDate && order?.balanceRemaining != 0)"> -->
     <gift-card-pay-btn
       [order]="order"
       [devicename]="devicename"
@@ -253,12 +249,12 @@
       [paymentAmount]="order.balanceRemaining"
       (setStep) ="setStep(1)">
     </gift-card-pay-btn>
-  </div>
+  <!-- </div> -->
 </ng-template>
 
 <ng-template #storeCreditPaybutton>
-  <div *ngIf="
-    (!paymentsEqualTotal && !order.completionDate && order?.balanceRemaining != 0)">
+  <!-- <div *ngIf="
+    (!paymentsEqualTotal && !order.completionDate && order?.balanceRemaining != 0)"> -->
     <store-credit-info
         [order]        ="order"
         [clientID]     ="order?.clientID"
@@ -268,12 +264,12 @@
         [showIssueMoney]="false"
         [showBalance] = "false">
     </store-credit-info>
-  </div>
+  <!-- </div> -->
 </ng-template>
 
 <ng-template #wicEBTButton>
-  <div *ngIf="
-  (!paymentsEqualTotal && !order.completionDate && order?.balanceRemaining != 0)">
+  <!-- <div *ngIf="
+  (!paymentsEqualTotal && !order.completionDate && order?.balanceRemaining != 0)"> -->
   <wic-ebtcard-pay-btn
       [order]="order"
       [devicename]="devicename"
@@ -283,12 +279,12 @@
       [paymentAmount]="order.balanceRemaining"
       (setStep) ="setStep(1)">
   </wic-ebtcard-pay-btn>
-  </div>
+  <!-- </div> -->
 </ng-template>
 
 <ng-template #houseAccountButton>
-  <div *ngIf="(userAuths && userAuths.houseAccountPayment) && order.clientID != 0 &&
-        order?.clients_POSOrders?.client_Type?.name.toLowerCase() === 'house account'">
+  <!-- <div *ngIf="(userAuths && userAuths.houseAccountPayment) && order.clientID != 0 &&
+        order?.clients_POSOrders?.client_Type?.name.toLowerCase() === 'house account'"> -->
     <button class="splitbutton"
           mat-raised-button
           color="primary"
@@ -297,11 +293,11 @@
         House Account
       </div>
     </button>
-  </div>
+  <!-- </div> -->
 </ng-template>
 
 <ng-template #stripePayButton>
-  <span *ngIf="order && order.balanceRemaining != 0 && !this.platFormService.isApp()">
+  <!-- <span *ngIf="order && order.balanceRemaining != 0 && !this.platFormService.isApp()"> -->
     <stripe-card-pay-btn
       [order]="order"
       [uiTransactions]="uiTransactionSettings"
@@ -311,7 +307,7 @@
       [paymentAmount]="order.balanceRemaining"
       (setStep) ="setStep(1)">
     </stripe-card-pay-btn>
-  </span>
+  <!-- </span> -->
 </ng-template>
 
 <ng-template #cashPayButtons>
@@ -332,6 +328,7 @@
       aria-label="Check Out"
       (click)="makePayment()">
     <mat-icon>credit_card</mat-icon>
+    <br>
     <span>
       Pay
     </span>

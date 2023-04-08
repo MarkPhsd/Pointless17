@@ -57,6 +57,19 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('listViewType')   listViewType: TemplateRef<any>;
   @ViewChild('itemViewType')   itemViewType: TemplateRef<any>;
+  @ViewChild('disEMVCardButton')   disEMVCardButton: TemplateRef<any>;
+  @ViewChild('dsiEMVAndroidCardButton')   dsiEMVAndroidCardButton: TemplateRef<any>;
+  @ViewChild('cardPointeButton')   cardPointeButton: TemplateRef<any>;
+  @ViewChild('giftCardPayButton')   giftCardPayButton: TemplateRef<any>;
+  @ViewChild('houseAccountButton')   houseAccountButton: TemplateRef<any>;
+  @ViewChild('storeCreditPaybutton')   storeCreditPaybutton: TemplateRef<any>;
+  @ViewChild('wicEBTButton')   wicEBTButton: TemplateRef<any>;
+  @ViewChild('triPOSPaymentButton')   triPOSPaymentButton: TemplateRef<any>;
+  @ViewChild('payButton')   payButton: TemplateRef<any>;
+  @ViewChild('stripePayButton')   stripePayButton: TemplateRef<any>;
+  
+  
+
   action$: Observable<any>;
   deleteOrder$: Observable<any>;
   printLabels$:  Observable<any>;
@@ -138,6 +151,86 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   refundItemsAvalible;
   uiTransactionSetting$: Observable<TransactionUISettings>;
   uiTransactionSetting : TransactionUISettings;
+
+  // @ViewChild('houseAccountButton')   houseAccountButton: TemplateRef<any>;
+  // @ViewChild('storeCreditPaybutton')   storeCreditPaybutton: TemplateRef<any>;
+  // @ViewChild('wicEBTButton')   wicEBTButton: TemplateRef<any>;
+  // @ViewChild('triPOSPaymentButton')   triPOSPaymentButton: TemplateRef<any>;
+  // @ViewChild('payButton')   payButton: TemplateRef<any>;
+
+  get stripePayButtonView() { 
+    if ( this.order && this.order.balanceRemaining != 0 && !this.platFormService.isApp() ) { 
+      return this.stripePayButton
+    }
+    return null;
+  }
+
+
+  get wicEBTButtonView() { 
+    if ( (!this.paymentsEqualTotal && !this.order.completionDate && this.order?.balanceRemaining != 0)) { 
+      return this.wicEBTButton
+    }
+    return null;
+  }
+
+
+  get storeCreditPaybuttonView() { 
+    if ( this.order && this.order.clientID &&  (!this.paymentsEqualTotal && !this.order.completionDate && this.order?.balanceRemaining != 0)) { 
+      return this.storeCreditPaybutton
+    }
+    return null;
+  }
+  
+  get triPOSPaymentButtonView() { 
+    if ( this.devicename &&
+          this.uiTransactionSettings?.triposEnabled &&
+          (this.order && this.order?.balanceRemaining != 0) ) { 
+      return this.triPOSPaymentButton
+    }
+    return null;
+  }
+
+  get houseAccountButtonView() { 
+    if (  (this.userAuths && this.userAuths.houseAccountPayment) && this.order.clientID != 0 &&
+            this.order?.clients_POSOrders?.client_Type?.name.toLowerCase() === 'house account') { 
+      return this.houseAccountButton
+    }
+    return null;
+  }
+
+  get dsiButtonView() { 
+    if (    this.devicename && (this.uiTransactionSettings && this.uiTransactionSettings?.dsiEMVNeteEpayEnabled)
+      && this.order && this.order?.balanceRemaining != 0) { 
+      return this.disEMVCardButton
+    }
+    return null;
+  }
+
+  get giftCardButtonView() { 
+    if (  (!this.paymentsEqualTotal && !this.order.completionDate && this.order?.balanceRemaining != 0)) {
+      return this.giftCardPayButton;
+    }
+    return null;
+  }
+
+  get cardPointButtonView() { 
+    if (this.devicename &&
+      this.uiTransactionSettings?.cardPointBoltEnabled &&
+      (this.order && this.order?.balanceRemaining != 0)) {
+        return this.cardPointeButton
+      }
+      return null;
+  }
+
+  get dsiEMVAndroidCardButtonView() {
+    if ((this.platForm === 'android') &&
+        this.devicename &&
+        this.uiTransactionSettings?.cardPointAndroidEnabled &&
+        (this.order && this.order?.balanceRemaining != 0)) {
+          return this.dsiEMVAndroidCardButton
+    }
+    return null;
+  }
 
   transactionUISettingsSubscriber() {
     this._transactionUI = this.uiSettingsService.transactionUISettings$.subscribe( data => {

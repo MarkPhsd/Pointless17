@@ -13,8 +13,6 @@
       <div *ngIf="priceCategory$ | async"></div>
       <mat-icon *ngIf="saving">save</mat-icon>
 
-
-
       <div *ngIf="actionMessage">
         {{actionMessage}} <button mat-button (click)="actionMessage = null"><mat-icon>clear</mat-icon></button>
       </div>

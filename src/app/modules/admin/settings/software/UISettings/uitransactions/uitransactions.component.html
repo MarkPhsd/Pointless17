@@ -148,6 +148,15 @@
 
       <div class="toggle-fields">
         <mat-slide-toggle
+                  formControlName="enableExactChange"
+                  >
+          <mat-label>Enable Exact Change</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
                   formControlName="startNewOrderOnCloseOrder"
                   >
           <mat-label>Start New Order On Order Close</mat-label>
@@ -237,6 +246,9 @@
           <mat-label>Orders require a customer</mat-label>
         </mat-slide-toggle>
       </div>
+
+      
+
 
       <div>
         <mat-label  class="mat-label-design">Enable to not save customer info on ID Scanning (driver license, id etc.).</mat-label>

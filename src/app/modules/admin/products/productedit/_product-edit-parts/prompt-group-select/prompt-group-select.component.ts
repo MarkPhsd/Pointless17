@@ -24,17 +24,20 @@ export class PromptGroupSelectComponent implements OnInit {
               )
         { }
 
-  async ngOnInit() {
+  ngOnInit() {
     const search = {} as MenuPromptSearchModel;
     search.pageSize = 1000
     search.pageNumber = 1;
     const site = this.siteService.getAssignedSite();
-    this.promptResults$  = await this.promptGroupservice.getPrompts(site)
+    this.promptResults$  =  this.promptGroupservice.getPrompts(site)
   }
 
   onSelect(event) {
-    console.log(event.value)
     this.outputProductTypeID.emit(event.value)
+  }
+
+  removePrompt() { 
+    this.outputProductTypeID.emit(0)
   }
 
 }

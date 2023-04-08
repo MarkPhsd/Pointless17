@@ -14,6 +14,10 @@ import { switchMap } from 'rxjs/operators';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods.service';
 
+import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
+import { UnitTypeMethodsService } from 'src/app/_services/menu/unit-type-methods.service';
+import { SearchModel } from 'src/app/_services/system/paging.service';
+
 @Component({
   selector: 'app-strain-product-edit',
   templateUrl: './strain-product-edit.component.html',
@@ -49,6 +53,8 @@ export class StrainProductEditComponent implements OnInit {
               private productEditButtonService: ProductEditButtonService,
               private dialogRef: MatDialogRef<StrainProductEditComponent>,
               private itemTypeMethodsService: ItemTypeMethodsService,
+              private unitTypeMethodsService: UnitTypeMethodsService,
+              private unitTypeService: UnitTypesService, 
               @Inject(MAT_DIALOG_DATA) public data: any
     )
   {
@@ -73,46 +79,37 @@ export class StrainProductEditComponent implements OnInit {
     }
   }
 
-  async ngOnInit() {
-
-    const site = this.siteService.getAssignedSite();
-    if (this.id == '0') {
-      this.product$ = this.menuService.getProduct(site, this.id)
-    }
-
-    if (!this.product) {
-      this.product = await this.product$.pipe().toPromise();
-    }
-
-    if (!this.product) { return }
-
-    if (this.itemType) {
-      this.product.prodModifierType = this.itemType.id;
-    }
-
-    if (!this.itemType) {
-      if (this.product && this.product.prodModifierType && this.product.prodModifierType != 0) {
-        this.itemTypeService.getItemType(site, this.product.prodModifierType).subscribe(
-          itemType => {
-              this.itemType = itemType
-          }
-        )
-      }
-    }
-
-    this.initializeForm()
+  ngOnInit() {
+    this.initializeDataAndForm()
   };
+
+
+  initializeDataAndForm() { 
+    const site = this.siteService.getAssignedSite();
+    console.log('initializeDataAndForm', this.id)
+    // if (this.id != '0') {
+      this.product$ = this.menuService.getProduct(site, this.id).pipe(switchMap(data => { 
+        this.product = data;
+        return  this.itemTypeService.getItemType(site, this.product.prodModifierType)
+        })).pipe(switchMap(data => { 
+          this.itemType = data
+          this.initializeForm()
+          return of(this.product)
+        }))
+    // }
+  }
 
   editType() {
     if (this.product.prodModifierType) {
       let dialogRef = this.itemTypeMethodsService.openItemEditor(this.product.prodModifierType);
       dialogRef.afterClosed().subscribe(result => {
+        //need to refresh whole item in case features about it change. 
+        this.product = null;
+        this.initializeDataAndForm()
         if (result) {
-
         }
       });
     }
-
   }
 
 
@@ -149,17 +146,39 @@ export class StrainProductEditComponent implements OnInit {
         switchMap(data => {
           this.product = data;
           this.message = 'Saved'
-          this.performingAction= false;
+          this.performingAction = false;
           return of(data)
         })
       )
     }
-
   }
 
-  openAddSize() {
-    this.productEditButtonService.openUnitTypeEditor(null)
-  }
+  // openUnit() {
+
+  //   const dialog$ =  item$.pipe(switchMap( data => {
+  //     const item  = data?.results[0];
+  //     const  editor$ = this.productEditButtonService.openUnitTypeEditor(item);
+  //     return editor$.afterClosed().pipe(switchMap(data => {
+  //       this.product = null;
+  //       this.initializeDataAndForm();
+  //       return of(true);
+  //     }))
+  //   }))
+
+  //   this.action$ = dialog$
+  // }
+
+  openUnit() {
+    const site = this.siteService.getAssignedSite();
+    this.action$ = this.unitTypeMethodsService.openUnitEditorOBS(this.product?.unitTypeID).pipe(switchMap(data => { 
+      const search = {id: data.id} as SearchModel
+      return  this.unitTypeService.getUnitTypesSearch(site, search);
+    })).pipe(switchMap(data => {
+      this.product = null;
+      this.initializeDataAndForm();
+      return of(data)
+    }))
+  }  
 
   assignItem(event) {
     if (!event) { return }
@@ -169,7 +188,6 @@ export class StrainProductEditComponent implements OnInit {
     const unitType   = event.unitType;
     this.product.unitTypeID = event.unitTypeID
     this.productForm.patchValue({unitTypeID: unitTypeID})
-    console.log('this.productForm.value', this.productForm.value)
     this.action$ = this.updateItem(null)
   }
 

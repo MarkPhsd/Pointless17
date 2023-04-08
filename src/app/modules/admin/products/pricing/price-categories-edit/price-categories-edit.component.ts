@@ -135,7 +135,6 @@ export class PriceCategoriesEditComponent implements OnInit {
   selectRecMedOption(event) {
     if (!event) { return }
     const id = event.id
-    console.log(event)
     this.inputForm.patchValue(this.priceCategory)
   }
 
@@ -162,7 +161,6 @@ export class PriceCategoriesEditComponent implements OnInit {
 
 
   addPrice() {
-
     if (!this.priceCategory) {return }
 
     let pricing          = this.productPrices
@@ -324,7 +322,7 @@ export class PriceCategoriesEditComponent implements OnInit {
   }
 
   onCancel(event) {
-    this.dialogRef.close();
+    this.dialogRef.close(true);
   }
 
   deleteCategory(item) {

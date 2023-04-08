@@ -79,18 +79,38 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   //openDrawerFromBalanceSheet
   processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder,
                      amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
+
+
     const balance$ =  this.balanceSheetService.openDrawerFromBalanceSheet()
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
     let response: IPaymentResponse;
-    return balance$.pipe(switchMap(data => {
-      return payment$
-    })).pipe(switchMap(data => {
-      response  = data;
-      this.orderMethodsService.finalizeOrder(response, paymentMethod, order);
-      return this.orderMethodsService.finalizeOrderProcesses(null, null, order);
-    })).pipe(switchMap( data => {
-      return of(response);
-    }))
+    
+    return balance$.pipe(
+        switchMap(data => {
+          console.log('processCashPayment Balance sheet', data)
+          return payment$
+      })).pipe(switchMap(data => {
+        console.log('makePayment data', data)
+        if (!data) { 
+          this.sitesService.notify('Payment not succeeded.', 'close', 5000, 'red')
+          return of(null)
+        }
+
+        response  = data;
+        this.orderMethodsService.finalizeOrder(response, paymentMethod, order);
+        return this.orderMethodsService.finalizeOrderProcesses(null, null, order);
+        
+      })).pipe(switchMap( data => {
+
+        if (!data) { 
+          this.sitesService.notify('Order finalized', 'close', 5000, 'red')
+          return of(null)
+        }
+
+        return of(response);
+      }))
+
+
   }
 
   processCreditPayment(site: ISite, posPayment: IPOSPayment,

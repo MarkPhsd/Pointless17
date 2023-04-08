@@ -1,12 +1,14 @@
 import { Injectable, Input } from '@angular/core';
 import { AuthenticationService } from '../system/authentication.service';
-import { Observable  } from 'rxjs';
+import { Observable, of, switchMap  } from 'rxjs';
 import { ISite,  }  from 'src/app/_interfaces';
 import { HttpClient } from '@angular/common/http';
 import { PriceCategories, IPriceCategoryPaged, IPriceCategory2 } from 'src/app/_interfaces/menu/price-categories';
 import { SearchModel } from '../system/paging.service';
 import { ProductEditButtonService } from './product-edit-button.service';
 import { SitesService } from '../reporting/sites.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { PriceCategoriesEditComponent } from 'src/app/modules/admin/products/pricing/price-categories-edit/price-categories-edit.component';
 
 export interface IItemBasic{
   name: string;
@@ -156,5 +158,15 @@ export class PriceCategoriesService {
       this.productEditButtonService.openPriceEditor(data)
     })
   }
-
+  
+  openPriceCategoryEditorOBS(id: number): Observable<any> {
+    const site = this.siteService.getAssignedSite();
+    const price$ = this.getPriceCategory(site, id)
+    const dialog$ =  price$.pipe(switchMap( data => {
+      return this.productEditButtonService.openPriceEditor(data).afterClosed().pipe(switchMap(data => { 
+        return of(true)
+      }))
+    }))
+    return dialog$
+  }
 }

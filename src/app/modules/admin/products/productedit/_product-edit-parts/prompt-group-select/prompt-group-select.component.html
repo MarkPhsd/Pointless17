@@ -1,5 +1,5 @@
 <div *ngIf="inputForm">
-  <div [formGroup]="inputForm"  >
+  <div [formGroup]="inputForm"  class="grid-items">
     <div class="filterItem" >
       <mat-form-field appearance="outline">
         <mat-label>Prompt Group</mat-label>
@@ -17,6 +17,12 @@
         </mat-select>
       </mat-form-field>
     </div>
+  </div>
+
+  <div>
+    <button mat-raised-button (click)="removePrompt()">
+      <mat-icon color="warn">delete</mat-icon>
+    </button>
   </div>
 </div>
 

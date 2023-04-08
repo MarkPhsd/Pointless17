@@ -512,12 +512,11 @@ export class OrderMethodsService implements OnDestroy {
     let sendOrder$   : Observable<any>;
 
     return this.uiSettingService.transactionUISettings$.pipe(switchMap(data => { 
-      printLabels$ = of(null)
-      sendOrder$  = of(null)
+      printLabels$ = of(null);
+      sendOrder$  = of(null);
 
       if (data.prepOrderOnClose) {
         this.sendToPrep(order, true)
-        // console.log('printing labels pre check', data.prepOrderOnClose, data.printLabelsOnclose) 
       }
       if (data.printLabelsOnclose) {
         return this.printingService.printLabels(order, true)
@@ -786,7 +785,7 @@ export class OrderMethodsService implements OnDestroy {
 
           const order = data.order as IPOSOrder;
 
-          if (order && order.service && order.service.retailServiceType) {
+          if (order && order.service && order.service.retailType) {
             this.toggleOpenOrderBar(this.userAuthorization.isStaff)
             this.toolbarServiceUI.updateOrderBar(false)
             return;

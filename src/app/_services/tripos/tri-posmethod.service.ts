@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder, IPOSPayment, ISite, PosPayment } from 'src/app/_interfaces';
 import { ProductEditButtonService } from '../menu/product-edit-button.service';
 import { SitesService } from '../reporting/sites.service';
+import { SettingsService } from '../system/settings.service';
 import { TransactionUISettings } from '../system/settings/uisettings.service';
 import { POSPaymentService } from '../transactions/pospayment.service';
 import { ITriPOSPatch, TriposResult } from './triposModels';
@@ -33,12 +34,14 @@ import { ITriPOSPatch, TriposResult } from './triposModels';
   providedIn: 'root'
 })
 export class TriPOSMethodService {
-
+  
+  
   public _dialog        = new BehaviorSubject<any>(null);
   public _dialog$       = this._dialog.asObservable();
   private dialogRef: any;
 
   constructor(private http: HttpClient,
+              private settingsService: SettingsService,
                 private dialogOptions       : ProductEditButtonService,
                 private paymentService: POSPaymentService,
               private siteService: SitesService) { }
@@ -50,31 +53,31 @@ export class TriPOSMethodService {
     const endPoint = "Authorization"
 
     const parameters = ``
-
+    
     const url = `${site.url}${controller}${endPoint}${parameters}`
-
+    
     return this.http.post<TriposResult>(url,  item)
-
+    
   }
-
+  
   authorizationToken(site: ISite,item: authorizationPOST): Observable<TriposResult> {
 
     const controller = '/TriPOSProcessing/'
 
     const endPoint = "authorizationToken"
-
+    
     const parameters = ``
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
-
+    
     return this.http.post<TriposResult>(url,  item)
-
+    
   }
 
   authorizationCompletion(site: ISite,item: authorizationPOST): Observable<TriposResult> {
 
     const controller = '/TriPOSProcessing/'
-
+    
     const endPoint = "authorizationCompletion"
 
     const parameters = ``
@@ -86,17 +89,17 @@ export class TriPOSMethodService {
   }
 
   sale(site: ISite,item: authorizationPOST): Observable<TriposResult> {
-
+    
     const controller = '/TriPOSProcessing/'
 
     const endPoint = "sale"
-
+    
     const parameters = ``
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.post<TriposResult>(url,  item)
-
+    
   }
 
   reboot(site: ISite,item: authorizationPOST): Observable<TriposResult> {
@@ -118,7 +121,7 @@ export class TriPOSMethodService {
     const controller = '/TriPOSProcessing/'
 
     const endPoint = "returnTransaction"
-
+    
     const parameters = ``
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
@@ -128,59 +131,61 @@ export class TriPOSMethodService {
   }
 
   refund(site: ISite,item: authorizationPOST): Observable<TriposResult> {
-
+    
     const controller = '/TriPOSProcessing/'
-
+    
     const endPoint = "refund"
-
+    
     const parameters = ``
-
+    
     const url = `${site.url}${controller}${endPoint}${parameters}`
-
+    
     return this.http.post<TriposResult>(url,  item)
 
   }
-
+  
   // {
-  //   "laneId": -90856942,
-  //   "cardHolderPresentCode": "non quis",
-  //   "clerkNumber": "enim ut",
-  //   "configuration": {
+    //   "laneId": -90856942,
+    //   "cardHolderPresentCode": "non quis",
+    //   "clerkNumber": "enim ut",
+    //   "configuration": {
   //     "marketCode": "culpa non irure velit dolore"
   //   },
   //   "referenceNumber": "amet dolor commodo non",
   //   "shiftId": "pariatur et consequat",
   //   "ticketNumber": "consectetur minim non"
   // }
-
+  
   void(site: ISite, item: authorizationPOST): Observable<TriposResult> {
-
+    
     const controller = '/TriPOSProcessing/'
-
+    
     const endPoint = "void"
-
+    
     const parameters = ``
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
-
+    
     return this.http.post<TriposResult>(url,  item)
 
   }
 
-
+  
   reversal(site: ISite,item: authorizationPOST): Observable<TriposResult> {
 
     const controller = '/TriPOSProcessing/'
-
+    
     const endPoint = "reversal"
-
+    
     const parameters = ``
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
-
+    
     return this.http.post<TriposResult>(url,  item)
-
+    
   }
+
+
 
 
   displayTextView(site: ISite,item: authorizationPOST): Observable<TriposResult> {
@@ -194,39 +199,39 @@ export class TriPOSMethodService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.post<TriposResult>(url,  item)
-
+    
   }
 
   pathLane(site: ISite, item: ITriPOSPatch): Observable<TriposResult> {
-
+    
     const controller = '/TriPOSLane/'
-
+    
     const endPoint = "PatchLane"
-
+    
     const parameters = ``
-
+    
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.post<TriposResult>(url,  item)
-
+    
   }
-
+  
   getLane(site: ISite, id: string): Observable<any> {
-
+    
     const controller = '/TriPOSLane/'
-
+    
     const endPoint = "getLane"
-
+    
     const parameters = `?id=${id}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<any>(url)
-
+    
   }
-
+  
   getLanes(site: ISite): Observable<any> {
-
+    
     const controller = '/TriPOSLane/'
 
     const endPoint = "getLanes"
@@ -234,33 +239,33 @@ export class TriPOSMethodService {
     const parameters = ''
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
-
+    
     return this.http.get<any>(url)
 
   }
-
+  
   initializeLane(site: ISite, post: any): Observable<any> {
 
     const controller = '/TriPOSLane/'
-
+    
     const endPoint = "createLane"
 
     const parameters = ``
-
+    
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.post<any>(url, post)
-
+    
   }
 
   deleteLane(site: ISite, id: string): Observable<any> {
-
+    
     const controller = '/TriPOSLane/'
 
     const endPoint = "deleteLane"
 
     const parameters = `?laneID=${id}`
-
+    
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<any>(url)
@@ -270,7 +275,7 @@ export class TriPOSMethodService {
   increment(site: ISite, item: authorizationPOST): Observable<any> {
 
     const controller = '/TriPOSProcessing/'
-
+    
     const endPoint = "incremental"
 
     const parameters = ``
@@ -289,7 +294,7 @@ export class TriPOSMethodService {
     })
     return amount
   }
-
+  
   getTriPOSTotalAuthorizations(data: PosPayment) { 
     // if (data.tran)
     let amount = 0
@@ -301,7 +306,31 @@ export class TriPOSMethodService {
     }
     return amount
   }
+    // /Observable<import("../system/settings.service").ITerminalSettings>,
+    processIncrementalReversal( auth: authorizationPOST, item: IPOSPayment): Observable<IPOSPayment> {
+    const site = this.siteService.getAssignedSite()
 
+    const item$ = this.reversal(site, auth).pipe(switchMap(data => { 
+      
+      console.log('reversal', data);
+
+      if (!data) {
+        this.siteService.notify('Error with reversal, not completed.', 'close',2000, 'yellow')
+        return of(null)
+      }
+      if (data && data.exceptionMessage) { 
+        this.siteService.notify(`Not approved: ${data?.exceptionMessage}`, 'close', 3000, 'red')
+        return of(null)
+      }
+
+      item.amountPaid = 0;  
+      item.amountReceived = 0;
+      return this.paymentService.savePOSPayment(site, item)
+    }))
+
+    return item$
+
+  }
 
   openDialogCreditPayment ( order: IPOSOrder,
                             amount: number,

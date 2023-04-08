@@ -98,6 +98,7 @@ export class ProductEditButtonService {
         minHeight:    '625px',
       },
     )
+    return dialogRef
   }
 
   openPSMenuGroupEditor(id: any) {
@@ -110,6 +111,7 @@ export class ProductEditButtonService {
         data     : id
       },
     )
+    return dialogRef
   }
 
   async openProductDialog(id: any) {
@@ -171,7 +173,7 @@ export class ProductEditButtonService {
     return dialogRef
   }
 
-  openPriceEditor(data: PriceCategories) {
+  openPriceEditor(data: PriceCategories): MatDialogRef<PriceCategoriesEditComponent> {
     let dialogRef: any;
     dialogRef = this.dialog.open(PriceCategoriesEditComponent,
       { width:        '800px',
@@ -181,6 +183,7 @@ export class ProductEditButtonService {
         data : data
       },
     )
+    return dialogRef
   }
 
   openPriceTierEditor(data: PriceTiers) {
@@ -193,10 +196,12 @@ export class ProductEditButtonService {
         data : data
       },
     )
+    return dialogRef
   }
 
-  openUnitTypeEditor(data: UnitType) {
+  openUnitTypeEditor(data: UnitType): MatDialogRef<UnitTypeEditComponent> {
     let dialogRef: any;
+   
     dialogRef = this.dialog.open(UnitTypeEditComponent,
       { width:        '600px',
         minWidth:     '500px',
@@ -205,7 +210,7 @@ export class ProductEditButtonService {
         data : data
       },
     )
-
+    return dialogRef
   }
 
   openEmployeeMetrcKeyEntryComponent(data: employee) {
@@ -218,6 +223,7 @@ export class ProductEditButtonService {
         data : data
       },
     )
+    return dialogRef
   }
 
   openAppWizard() {
@@ -229,6 +235,7 @@ export class ProductEditButtonService {
         minHeight:    '650px',
       },
     )
+    return dialogRef
   }
 
 

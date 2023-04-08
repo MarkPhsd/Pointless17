@@ -6,9 +6,9 @@
 
   .container {
     overflow-x: hidden;
-    overflow-y: hidden;
+    // overflow-y: hidden;
     height: calc(100vh - 75px);
-
+    overflow-y: auto;
     @include for-phone-only  {
       overflow-y: auto;
     }
@@ -95,11 +95,11 @@
   }
 }
 
-.payment-buttons {
-  height: 65px;
-  width: 115px;
-  margin: 10px;
-}
+  .payment-buttons {
+    height: 70px;
+    width: 115px;
+    margin: -3px;
+  }
 
 
 .payment-buttons-container {

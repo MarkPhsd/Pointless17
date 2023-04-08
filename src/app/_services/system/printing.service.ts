@@ -28,6 +28,7 @@ import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder
 import { PrintTemplatePopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ClientTableService } from '../people/client-table.service';
+import { UUID } from 'angular2-uuid';
 
 export interface printOptions {
   silent: boolean;
@@ -68,6 +69,7 @@ export class PrintingService {
   }
 
   constructor(  private electronService   : ElectronService,
+           
                 private dialog            : MatDialog,
                 private clientService     : ClientTableService,
                 private labelaryService   : LabelaryService,
@@ -103,6 +105,7 @@ export class PrintingService {
     }
 
     let printCount = 0
+    const printLabels  = []
     if (order) {
       if (order.posOrderItems) {
         this.obs$ = []
@@ -111,17 +114,19 @@ export class PrintingService {
           items.forEach( item => {
             if (!item.printed && newLabels) {
               this.obs$.push(this.printItemLabel(item, null, order))
+              printLabels.push(item)
               printCount += 1
             }
             if (!newLabels) {
               this.obs$.push(this.printItemLabel(item, null, order))
+              printLabels.push(item)
               printCount += 1
             }
           })
         }
       }
 
-      console.log('printCount', printCount)
+      console.log('printCount', printCount, printLabels)
       if (printCount == 0) {return of(null)};
       return forkJoin(this.obs$)
     }
@@ -421,7 +426,7 @@ export class PrintingService {
   printDocuments(printOrderList: IPrintOrders[]): Observable<any> {
 
     if (this.platFormService.isAppElectron) {
-      console.log('print documents')
+      // console.log('print documents')
       return this.printElectronTemplateOrder(printOrderList)
     }
 
@@ -725,22 +730,23 @@ export class PrintingService {
     try {
       const fileWriting = this.electronService.remote.require('./datacap/transactions.js');
       let response        : any;
+      // response   =  await fileWriting.createFile(filePath, contents)
       response   =  await fileWriting.writeToFile(filePath, contents)
       console.log(response)
     } catch (error) {
+      this.siteService.notify(`File could not be written. ${error}`, 'Close', 3000, 'red')
       console.log('error', error)
     }
   }
 
   printLabelElectron(printString: string, printerName: string): boolean {
 
+    const uuid = UUID.UUID().slice(0,5);
     const file = `file:///c://pointless//print.txt`
     const fileName = `c:\\pointless\\print.txt`;
-    this.saveContentsToFile(fileName, printString);
-
     try {
-      // window.fs.writeFileSync(fileName, printString);
-      // window.file
+      this.saveContentsToFile(fileName, printString);
+      console.log('Label Saved to File')
     } catch (error) {
       this.siteService.notify(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Close', 3000, 'red')
     }
@@ -752,8 +758,9 @@ export class PrintingService {
     } as printOptions
 
     try {
-      // console.log('print electron label')
       this.printElectron( file, printerName, options)
+      console.log('Label Printed')
+
       return true;
     } catch (error) {
       console.log(error)

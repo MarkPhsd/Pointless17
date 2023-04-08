@@ -103,6 +103,7 @@
                      ">
 
         <ng-container *ngTemplateOutlet="tranTypeInfoView, context: {$implicit: item}"></ng-container>
+
         <ng-container *ngTemplateOutlet="editPaymentView,  context: {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="cardPointCaptureView,  context: {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="triPOSCaptureView,  context: {$implicit: item}"></ng-container>
@@ -165,11 +166,15 @@
     </div>
 
     <div  *ngIf="order.creditBalanceRemaining > totalAuthTriPOSPayments "> 
-      <button  class="payment-buttons-sm" *ngIf="order.creditBalanceRemaining > totalAuthTriPOSPayments" mat-raised-button color='primary' 
+      <button   class="payment-buttons-sm" 
+                *ngIf="order.creditBalanceRemaining > totalAuthTriPOSPayments" 
+                 mat-raised-button color='primary' 
                 (click)="incrementTriPOS(item)">
         <mat-label>Add <br> {{ order.creditBalanceRemaining - totalAuthTriPOSPayments | currency }}</mat-label>  
       </button>
     </div>
+
+    <ng-container *ngTemplateOutlet="removeLastAuthView"></ng-container>
 
   </div>
 </ng-template>
@@ -216,6 +221,7 @@
 </ng-template>
 
 <ng-template #tipView let-item>
+
   <div class="amount-paid">
     <span *ngIf="item.tranType === 'authorizationResponse'">
       {{totalAuthTriPOSPayments + +item.addedPercentageFee | currency}}
@@ -227,11 +233,13 @@
     <div  *ngIf="item?.tipAmount > 0">
       Tip {{item.tipAmount  | currency}}
     </div>
+
     <div class="totals" *ngIf="item?.paymentMethod?.isCash && item?.amountPaid != 0">
       <span  *ngIf="item.amountPaid - item.amountReceived !=0">
             {{  (item.amountReceived + +item.addedPercentageFee - item.amountPaid)  | currency }}
       </span>
     </div>
+
   </div>
 </ng-template>
 
@@ -253,6 +261,16 @@
             class="grid-item-button"
             (click)="printPaymentReceipt(item)"
             ><mat-icon>print</mat-icon>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #removeLastAuthView>
+  <div *ngIf="incrementalAuth">
+    <button class="reverse-button" color="warn" mat-raised-button (click)="reverseIncrementalAuth(incrementalAuth)">
+      <mat-label class="reverse-label">
+        Reverse <br> Last Auth
+      </mat-label>
     </button>
   </div>
 </ng-template>

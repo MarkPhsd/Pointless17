@@ -1,3 +1,5 @@
+<div *ngIf="(action$ | async) as action"></div>
+
 <div *ngIf="inputForm"
      [formGroup]="inputForm"
      class="grid-container" >
@@ -37,11 +39,6 @@
           Price 3
         </app-value-fields>
     </div>
-
-    <!-- priceC:                       number;
-    priceA:                       number;
-    priceB:                       number; -->
-
     <app-value-fields
         *ngIf="!isInventory"
         [fieldsClass]="'font-medium'"
@@ -58,8 +55,6 @@
       Price
     </app-value-fields>
 
-
-
     <app-value-fields
         *ngIf="isInventory"
         [fieldsClass]="'font-medium'"
@@ -73,6 +68,7 @@
       <app-price-category-search
           [isInventory]="isInventory"
           [id]         ="priceCategoryID"
+          [searchForm] = "searchForm"
           [inputForm]  ="inputForm"  >
       </app-price-category-search>
     </div>

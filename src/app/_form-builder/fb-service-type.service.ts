@@ -26,7 +26,7 @@ export class FbServiceTypeService {
             isRegisterTransaction: [''], //boolean;
             taxItems:              [''], //boolean;
             showOrderType:         [''], //boolean;
-            retailServiceType:     [''], //number;
+            retailType       :     [''], //number;
             promptForOrderName:    [''], //number;
             requireNumOfGuests:    [''], // number;
             functionChoice:        [''], //number;

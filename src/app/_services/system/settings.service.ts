@@ -42,7 +42,7 @@ export class SettingsService {
 
   private _TerminalSettings     = new BehaviorSubject<ITerminalSettings>(null);
   public  terminalSettings$      = this._TerminalSettings.asObservable();
-
+  terminalSettings : ITerminalSettings;
 
   get deviceName() {
     return localStorage.getItem('devicename');
@@ -51,6 +51,7 @@ export class SettingsService {
   apiUrl: any;
 
   updateTerminalSetting(data: ITerminalSettings) {
+    this.terminalSettings = data;
     this._TerminalSettings.next(data);
   }
 

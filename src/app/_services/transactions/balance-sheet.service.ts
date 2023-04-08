@@ -145,6 +145,7 @@ export interface IBalanceSheet {
   balanceSheetEmployee: BalanceSheetEmployee;
   cashDrops            : CashDrop[];
   message              : string;
+  errorMessage         : string;
 }
 
 export interface CashDrop {
@@ -218,14 +219,21 @@ export class BalanceSheetService {
     if (!deviceName) {
        deviceName = localStorage.getItem('deviceName');
     }
+
     const site = this.siteService.getAssignedSite()
     const item$ =  this.getCurrentUserBalanceSheet(site, deviceName).pipe(switchMap(data => {
+
+      if (!data) { 
+        this.siteService.notify('Balance sheet was not defined', 'close', 2000, 'yellow')
+      }
+      
       if (data.drawerAB == 2) {
         if (this.platFormService.isAppElectron){
           this.openDrawerTwo()
         }
         return of(data)
       }
+    
       if (data.drawerAB == 1 || data.drawerAB == 0) {
         if (this.platFormService.isAppElectron){
           this.openDrawerOne()
@@ -238,7 +246,10 @@ export class BalanceSheetService {
         }
         return of(data)
       }
+      
+      return of(null)
     }))
+
     return item$
   }
 

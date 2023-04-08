@@ -115,10 +115,21 @@ body {
   }
 }
 .amount-paid { 
+  text-align: right;
+  justify-content: end;
   width: 100px;
   margin-left: 5px;
   padding-left: 5px;
-  
+}
+
+.reverse-button { 
+  width: 85px;
+  height: 65px;
+  margin-top: 5px;
+}
+
+.reverse-label { 
+  max-width: 85px;
 }
 .payment-grid {
   --gap: 5px;

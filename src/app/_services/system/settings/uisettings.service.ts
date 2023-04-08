@@ -69,6 +69,7 @@ export interface TransactionUISettings {
   startNewOrderOnCloseOrder: boolean;
   prepOrderOnClose: boolean;
   printLabelsOnclose: boolean;
+  enableExactChange: boolean;
 }
 
 export interface StripeAPISettings {
@@ -694,6 +695,7 @@ export class UISettingsService {
       startNewOrderOnCloseOrder: [],
       prepOrderOnClose: [],
       printLabelsOnclose: [],
+      enableExactChange: [],
      })
   }
 
