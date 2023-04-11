@@ -56,38 +56,47 @@ export class CashPaymentButtonComponent implements OnInit {
   applyCashPayment(amount: number) {
     const site = this.sitesService.getAssignedSite()
     this.posPayment = {} as IPOSPayment;
+    console.log('original order at apply cash', this.order)
+    const order = this.order;
 
     if (this.posPayment) {
       this.action$ = this.paymentMethodService.getCashPaymentMethod(site, 'Cash').pipe(switchMap(method => {
-        // console.log('method ', method)
-        if (!method) { 
+
+        if (!method) {
           this.sitesService.notify('Cash Payment not found.', 'close', 5000, 'red')
           return of(null)
         }
-        return this.paymentsMethodsService.processCashPayment(site, this.posPayment, this.order, amount, method )
-      })).pipe(switchMap(data => {
 
-        // console.log('processCashPayment', data)
+        return this.paymentsMethodsService.processCashPayment(site, this.posPayment, order, amount, method )
 
-        if (!data) { 
-          this.sitesService.notify('Cash Payment successfull ', 'close', 5000, 'red')
+      })).pipe(switchMap( data => {
+
+        // console.log('process cash payment results', data);
+
+        if (!data) {
+          this.sitesService.notify('Cash payment not successfull ', 'close', 5000, 'red')
           return of(null)
         }
-        return this.orderService.getOrder(site, this.order.id.toString(), false )
+
+        return of(data.order) // this.orderService.getOrder(site, order.id.toString(), false )
+
       })).pipe(switchMap(data => {
-        // console.log('getOrder', data)
-        if (!data) { 
+
+        // console.log('data from getOrder', data, order)
+        if (!order) {
           this.sitesService.notify('Order not found ', 'close', 5000, 'red')
           return of(null)
         }
-
         this.orderService.updateOrderSubscription(data)
         this.router.navigate(['pos-payment']);
         return of(data)
+
       })),
-      catchError(data => { 
+      catchError(data => {
+
         this.sitesService.notify('Error occured: ' + data.toString(), 'close', 5000, 'red')
         return of(data)
+
       })
     }
     if (!this.posPayment) {

@@ -13,7 +13,7 @@ export interface IReportItemSaleSummary {
   results: IReportItemSales[];
   summary: IReportItemSales;
   resultMessage: string;
-  site   : ISite;
+  site         : ISite;
 }
 
 export interface IReportItemSales {
@@ -59,8 +59,41 @@ export interface IReportItemSales {
   siteID:                  number;
   cost                   : number;
   itemCost               : number;
+  voidReason: string;
   printed : string;
-  ItemPrepped : string;
+  itemPrepped : string;
+}
+
+export interface POSItemSerachModel {
+  completionDate_From : string;
+  completionDate_To : string;
+  orderDate_From : string;
+  orderDate_To : string;
+  serviceTypes : string[]
+  serviceType : string;
+  serviceTypeID : number
+  closedOpenAllOrders : number;
+  employeeID : number
+  scheduleDate_From : string;
+  ccheduleDate_To : string;
+  pageSize : number
+  pageNumber : number
+  pageCount : number
+  currentPage : number
+  lastPage : number
+  useNameInAllFieldsForSearch : Boolean
+  routeID : number
+  routeDetailID : number
+  greaterThanZero : number
+  orderID : number
+  clientID :number;
+  orderBy : number
+  prepStatus :number;
+  printLocation :number;
+  history : boolean;
+  zrunID : string;
+  reportRunID :number;
+  showVoids: boolean;
 }
 
 export interface IReportingSearchModel {
@@ -86,7 +119,7 @@ export interface IReportingSearchModel {
   productsOnly:                 boolean;
   discountsOnly:                boolean;
   zrunID                  :     string;
-  scheduleDateStart      :     string;
+  scheduleDateStart       :     string;
   scheduleDateEnd         :     string;
   removeGiftCards: boolean;
   itemPrepped: number;
@@ -127,6 +160,7 @@ export interface ITaxReport {
 })
 export class ReportingItemsSalesService {
 
+
   constructor( private http: HttpClient, private auth: AuthenticationService,
                private papa: Papa,
                private sitesService: SitesService) { }
@@ -147,6 +181,18 @@ export class ReportingItemsSalesService {
     return  this.http.put<any>(url, filter)
 
   };
+
+
+  listAdjustedItems(site: ISite, searchModel: POSItemSerachModel): Observable<unknown> {
+
+    const controller = `/ReportItemSales/`
+
+    const endPoint = `ListAdjustedItems`
+
+    const url = `${site.url}${controller}${endPoint}`
+    console.log(searchModel)
+    return  this.http.post<unknown>(url, searchModel )
+  }
 
   getItemSalesReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSales[]> {
 
@@ -238,7 +284,7 @@ export class ReportingItemsSalesService {
   //{ "startdate": "07/01/2018", "enddate": "12/10/2020", "groupByProduct": "true" }
   groupItemSales(site: ISite, searchModel: IReportingSearchModel): Observable<IReportItemSaleSummary> {
 
-    console.log(searchModel)
+    // console.log(searchModel)
     if (!site || !site.url) { return of(null)}
 
     searchModel.productsOnly = true;

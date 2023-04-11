@@ -8,7 +8,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BehaviorSubject, catchError, forkJoin, Observable, of, Subscription, switchMap } from 'rxjs';
 import { IClientTable, IPaymentResponse, IPOSOrder, IPurchaseOrderItem, PaymentMethod, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
 import { PromptGroupService } from '../menuPrompt/prompt-group.service';
 import { ISite }   from 'src/app/_interfaces';
@@ -36,6 +36,7 @@ import { PrepPrintingServiceService } from '../system/prep-printing-service.serv
 import { IReportItemSaleSummary } from '../reporting/reporting-items-sales.service';
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UITransactionsComponent } from 'src/app/modules/admin/settings/software/UISettings/uitransactions/uitransactions.component';
+import { BalanceSheetMethodsService } from './balance-sheet-methods.service';
 
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -183,7 +184,7 @@ export class OrderMethodsService implements OnDestroy {
               private orderService            : OrdersService,
               private clientTableService      : ClientTableService,
               private _snackBar               : MatSnackBar,
-              private posOrderItemService     : POSOrderItemServiceService,
+              private posOrderItemService     : POSOrderItemService,
               private editDialog              : ProductEditButtonService,
               private promptGroupService      : PromptGroupService,
               private userAuthorization       : UserAuthorizationService,
@@ -196,9 +197,10 @@ export class OrderMethodsService implements OnDestroy {
               private uiSettingService        : UISettingsService,
               private textMessagingService    : TextMessagingService,
               private toolbarServiceUI        : ToolBarUIService,
-              public authenticationService    : AuthenticationService,
+              public  authenticationService    : AuthenticationService,
               private floorPlanService        : FloorPlanService,
               private printingService         : PrintingService,
+              private balanceSheetMethodsService    : BalanceSheetMethodsService,
               private prepPrintingService: PrepPrintingServiceService,
 
              ) {
@@ -511,7 +513,7 @@ export class OrderMethodsService implements OnDestroy {
     let printLabels$ : Observable<any>;
     let sendOrder$   : Observable<any>;
 
-    return this.uiSettingService.transactionUISettings$.pipe(switchMap(data => { 
+    return this.uiSettingService.transactionUISettings$.pipe(switchMap(data => {
       printLabels$ = of(null);
       sendOrder$  = of(null);
 
@@ -528,12 +530,14 @@ export class OrderMethodsService implements OnDestroy {
 
   finalizeOrder(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder): number {
 
-    // if (paymentMethod && paymentMethod.reverseCharge) {
-    // }
+    this.printingService.printJoinedLabels() ;
 
-    console.log(paymentResponse)
+    if (!paymentResponse ) {
+      this.siteService.notify('No payment response', 'close', 3000, 'red');
+      return 0
+    }
     if (!paymentResponse || !paymentResponse.payment) {
-      this.siteService.notify('No payment specificed', 'close', 3000, 'red');
+      this.siteService.notify('No payment in payment response', 'close', 3000, 'red');
       return 0
     }
 
@@ -545,15 +549,17 @@ export class OrderMethodsService implements OnDestroy {
 
       if (paymentMethod.isCreditCard) {
         if (this.platFormService.isApp()) {
-          console.log('open change due.')
           this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
         }
         return 1
       }
 
+      if (paymentMethod.isCash) {
+        this.balanceSheetMethodsService.openDrawerFromBalanceSheet()
+      }
+
       if (payment.amountReceived >= payment.amountPaid || order.balanceRemaining == 0) {
         if (this.platFormService.isApp()) {
-          console.log('open change due.')
           this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
         }
         return 1
@@ -562,8 +568,6 @@ export class OrderMethodsService implements OnDestroy {
       console.log('open change due  0.')
       return 0
     }
-
-    console.log('open change due  .', payment, paymentMethod)
   }
 
   validateUser(): boolean {
@@ -1106,6 +1110,8 @@ export class OrderMethodsService implements OnDestroy {
     const site = this.siteService.getAssignedSite()
     if (!posItem || posItem.promptGroupID == 0 || !posItem.promptGroupID) { return }
     const prompt = this.promptGroupService.getPrompt(site, item.promptGroupID).subscribe ( prompt => {
+      const item = posItem as unknown as PosOrderItem
+      this.posOrderItemService.updatePOSItemSubscription(item)
       this.openPromptWalkThroughWithItem(prompt, posItem);
     })
   }
@@ -1339,7 +1345,6 @@ export class OrderMethodsService implements OnDestroy {
         const orderID = orderItem.orderID
         this.posOrderItemService.deletePOSOrderItem(site, orderItem.id).subscribe( item=> {
           if (item) {
-            // this.notifyEvent('Item Deleted', "Success")
             this.order.posOrderItems.splice(index, 1)
             this.orderService.updateOrderSubscription(item.order)
           }
@@ -1437,7 +1442,7 @@ export class OrderMethodsService implements OnDestroy {
   validateMEdExpriationDate(checkDateValue: string) {
     const currentDate = new Date();
     const checkDate = new Date(checkDateValue);
-    
+
     if(checkDate > currentDate){
 
     }else{
@@ -1476,7 +1481,7 @@ export class OrderMethodsService implements OnDestroy {
         return {valid: false, resultMessage: resultMessage}
       }
 
-      if (clientType === 'patient') { 
+      if (clientType === 'patient') {
         if (!client.medLicenseNumber) {
           resultMessage = resultMessage +  'Problem with MED license.'
           return {valid: false, resultMessage: resultMessage}
@@ -1484,7 +1489,7 @@ export class OrderMethodsService implements OnDestroy {
         return {valid: true, resultMessage: resultMessage}
       }
 
-      if (clientType === 'caregiver') { 
+      if (clientType === 'caregiver') {
         console.log('instertiaryNum', client.insTertiaryNum)
         if (!client.insTertiaryNum || client.insTertiaryNum == '') {
           resultMessage = resultMessage + 'Problem with Patient Account #.'
@@ -1497,7 +1502,7 @@ export class OrderMethodsService implements OnDestroy {
         }
 
       }
-      
+
     }
     return {valid: true, resultMessage: resultMessage}
   }

@@ -20,6 +20,18 @@ h3, .h3 {
   font-size: 1.2em;
 }
 
+// .label-image-grid {
+//   display: flex;
+//   flex-direction: row;
+//   flex-wrap: wrap;
+//   justify-content: space-between;
+// }
+
+
+.exit-label-button {
+  max-width: 65px;
+}
+
 .index {
   font-weight: 350;
   font-size: 1.1em;
@@ -44,9 +56,9 @@ button {
   padding: 2px 2px 2px 2px
 }
 
-mat-icon {
-  margin: 1px 1px 1px 1px;
-  padding: 1px 1px 1px 1px;
+.mat-icon-label {
+  margin: 1px;
+  padding: 1px ;
   float: left;
 }
 
@@ -200,7 +212,7 @@ font-style: italic;
 
 .displayimage {
   width: 100%;
-
+  max-width: 65px;
   margin-left: 4px;
   margin-right: 4px;
   object-fit: cover;
@@ -216,7 +228,7 @@ font-style: italic;
 .grid-items-main-panel {
   display: grid;
   gap: 10px;
-  grid-template-columns: .9fr 65px auto;
+  grid-template-columns: .9fr 65px 65px auto;
 }
 
 .menu-buttons {

@@ -146,7 +146,7 @@
 </ng-template>
 
 <ng-template #sendOptionView>
-  <div *ngIf="isApp">
+  <div *ngIf="isApp && prepOrderOnClose">
     <button mat-raised-button
             [disabled]="!(isStaff)"
             class="button"

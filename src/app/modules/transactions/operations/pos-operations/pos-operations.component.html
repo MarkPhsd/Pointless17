@@ -133,11 +133,13 @@
 
       <ng-container [ngTemplateOutlet]="paymentReport"></ng-container>
 
-      <div *ngIf="!printing">
-        <ng-container [ngTemplateOutlet]="employeeOrdersByHourReport"></ng-container>
-      </div>
+      <ng-container [ngTemplateOutlet]="balanceSheetView"></ng-container>
 
-      <ng-container [ngTemplateOutlet]="salesByDevice"></ng-container>
+      <!-- <div *ngIf="!printing">
+        <ng-container [ngTemplateOutlet]="employeeOrdersByHourReport"></ng-container>
+      </div> -->
+
+     <ng-container [ngTemplateOutlet]="salesByDevice"></ng-container>
 
       <ng-container [ngTemplateOutlet]="employeeReport"></ng-container>
 
@@ -149,8 +151,9 @@
 
       <ng-container [ngTemplateOutlet]="itemSalesReport"></ng-container>
 
-    </div>
+      <ng-container [ngTemplateOutlet]="itemAdjustmentVoids"></ng-container>
 
+    </div>
   </div>
 
   <div
@@ -161,7 +164,7 @@
     <mat-card *ngIf="iBalanceSheet && iBalanceSheet.startTime" class="mat-card" fxFlex="100">
         <app-widget-card [dateFrom]  ="iBalanceSheet.startTime"
                          [dateTo]    ="iBalanceSheet.startTime"
-                         [zrunID]    ="zrunID"
+                         [zrunID]    ="iBalanceSheet.id"
                          [site]      ='localSite'
                          groupBy     ="orderemployeecount"
                          chartName   ="Employee Order Count"
@@ -171,13 +174,22 @@
 
 </div>
 
+<ng-template #balanceSheetView>
+  <balance-sheet-report
+      [site]="localSite"
+      [dateFrom]="dateFrom"
+      [dateTo]="dateTo"
+      [zrunID]="iBalanceSheet.id" >
+  </balance-sheet-report>
+</ng-template>
+
 <ng-template #taxReport>
   <div>
     <sales-tax-report
           [site]="localSite"
           [dateFrom]="dateFrom"
           [dateTo]="dateTo"
-          [zrunID]="zrunID" >
+          [zrunID]="iBalanceSheet.id" >
         <mat-icon>receipt</mat-icon>  Sales
         <mat-divider></mat-divider>
     </sales-tax-report>
@@ -189,16 +201,18 @@
       [site]    ="localSite"
       [dateFrom]="dateFrom"
       [dateTo]  ="dateTo"
-      [zrunID]  ="zrunID"
+      [zrunID]  ="iBalanceSheet.id"
       [groupBy] ="'paymentMethod'"
+      [type]    ="'sales'"
       >
-    <mat-icon>credit_card</mat-icon>  Payment Methods
-    <mat-divider></mat-divider>
+    <div class="header">
+      <mat-icon>credit_card</mat-icon>  Payment Methods
+      <mat-divider></mat-divider>
+    </div>
   </payment-report>
 </ng-template>
 
 <ng-template #discountReport>
-
 </ng-template>
 
 <ng-template #salesByDevice>
@@ -207,7 +221,7 @@
     [site]    ="site"
     [dateFrom]="dateFrom"
     [dateTo]  ="dateTo"
-    [zrunID]  ="zrunID"
+    [zrunID]  ="iBalanceSheet.id"
   >
   <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
   </payment-report>
@@ -218,7 +232,7 @@
     [site]    ="localSite"
     [dateFrom]="dateFrom"
     [dateTo]  ="dateTo"
-    [zrunID]  ="zrunID"
+    [zrunID]  ="iBalanceSheet.id"
     [groupBy]="'orderEmployeeCount'">
     <mat-icon>people_alt</mat-icon> Employee Orders By Hour
   </payment-report>
@@ -229,7 +243,7 @@
       [site]    ="localSite"
       [dateFrom]="dateFrom"
       [dateTo]  ="dateTo"
-      [zrunID]  ="zrunID"
+      [zrunID]  ="iBalanceSheet.id"
       [groupBy] ="'employee'"
       >
     <mat-icon>people</mat-icon>  Employee Sales
@@ -242,11 +256,14 @@
       [site]="localSite"
       [dateFrom]="dateFrom"
       [dateTo]="dateTo"
-      [zrunID]="zrunID"
+      [zrunID]="iBalanceSheet.id"
       [removeGiftCard]="false"
+      [viewType] = "'sales'"
       [groupBy]="'items'">
-    <mat-icon>menu</mat-icon>  Gift Card / Store Credit Issuances
-    <mat-divider></mat-divider>
+    <div class="header">
+      <mat-icon>menu</mat-icon>  Gift Card / Store Credit Issuances
+      <mat-divider></mat-divider>
+    </div>
   </item-sales-card>
 </ng-template>
 
@@ -255,10 +272,33 @@
       [site]="localSite"
       [dateFrom]="dateFrom"
       [dateTo]="dateTo"
-      [zrunID]="zrunID"
+      [zrunID]="iBalanceSheet.id"
       [removeGiftCard]="true"
+      [viewType] = "'sales'"
       [groupBy]="'items'">
-    <mat-icon>menu</mat-icon>  Items
-    <mat-divider></mat-divider>
+      <div class="header">
+        <h4>  <mat-icon>menu</mat-icon> Items </h4>
+        <mat-divider></mat-divider>
+      </div>
   </item-sales-card>
 </ng-template>
+
+<ng-template #itemAdjustmentVoids>
+  <div>
+    <item-sales-card
+          [site]    ="site"
+          [dateFrom]="dateFrom"
+          [dateTo]  ="dateTo"
+          [removeGiftCard]="true"
+          [groupBy]  = "'void'"
+          [viewType] = "'adjustment'"
+          [zrunID]="iBalanceSheet.id"
+          >
+        <div class="header">
+          <mat-icon>menu</mat-icon> Item Voids
+          <mat-divider></mat-divider>
+        </div>
+    </item-sales-card>
+  </div>
+</ng-template>
+

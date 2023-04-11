@@ -2,10 +2,18 @@
 
 button {
   min-width: 75px;
+  white-space: pre-wrap !important;
+}
+
+
+.buttons {
+  height: 75px;
+  width: 100%;
   @include for-phone-only {
-    min-width: 75px;
+    margin: 2px;
   }
 }
+
 
 .item-count {
   font-style : italic;
@@ -37,14 +45,6 @@ button {
   overflow-x: hidden;
 }
 
-.buttons {
-  height: 75px;
-  width: 100%;
-  @include for-phone-only {
-    height: 50px;
-    margin: 2px;
-  }
-}
 
 .item-text {
   text-overflow: ellipsis;
@@ -53,9 +53,9 @@ button {
 .freeze-text {
   -webkit-user-select:none;
   -webkit-touch-callout:none;
-       -moz-user-select:none;
-       -ms-user-select:none;
-       user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
 }
 
 

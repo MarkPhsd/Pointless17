@@ -4,6 +4,7 @@
   max-width: 375px;
   margin-top: 5px;
   margin-bottom: 5px;
+  padding: 2px;
 }
 
 .mat-divider {
@@ -11,8 +12,13 @@
   margin-bottom: 5px;
 }
 
+mat-card {
+  padding: 2px;
+}
+
 .mat-card-title {
-  margin-bottom: 10px;
+  padding-bottom: 10px;
+  font-size: 1.2em;
 }
 
 button {
@@ -58,11 +64,12 @@ mat-card-title {
 
 .margin-divider {
   margin-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .grid-body-action {
   display              : grid;
-  grid-template-columns: 125px 90px 75px; //90px;
+  grid-template-columns: 125px 90px 75px 75px; ; //90px;
   grid-template-rows   : auto;
   grid-gap             : 10px;
   justify-content      : space-between;
@@ -76,9 +83,61 @@ mat-card-title {
 
 }
 
+.grid-adjustment {
+  display: grid;
+  grid-template-columns: 115px 60px 60px auto 60px;
+  grid-template-rows: auto;
+  grid-gap: 2px;
+  justify-content: space-between;
+  margin-left: 0px;
+  max-width: 360px;
+  font-size: 1em;
+  @include for-phone-only {
+    grid-template-columns: 115px 60px 60px auto 60px;
+  }
+}
+
+.grid-body-header {
+  display              : grid;
+  grid-template-columns: 125px 125px ; //90px;
+  grid-template-rows   : auto;
+  grid-gap             : 2px;
+  justify-content      : space-between;
+  margin-left          : 5px;
+  max-width            : 350px;
+  font-size            : 1.4em;
+  font-weight: 700;
+
+  @include for-phone-only {
+    grid-template-columns: 125px 90px 50px 75px; //90px;
+  }
+
+}
+
+.grid-subbody-header {
+  display              : grid;
+  grid-template-columns: 125px 125px ; //90px;
+  grid-template-rows   : auto;
+  grid-gap             : 2px;
+  justify-content      : space-between;
+  margin-left          : 5px;
+  max-width            : 350px;
+  font-size            : 1.2em;
+  font-weight: 600;
+
+  @include for-phone-only {
+    grid-template-columns: 125px 90px 50px 75px; //90px;
+  }
+
+}
+
+.header-margin {
+  margin: 10px;
+}
+
 .grid-body {
   display              : grid;
-  grid-template-columns: 125px 90px 50px 75px; //90px;
+  grid-template-columns: 135px 90px 50px 75px; //90px;
   grid-template-rows   : auto;
   grid-gap             : 2px;
   justify-content      : space-between;
@@ -98,10 +157,10 @@ mat-card-title {
   grid-template-rows   : auto;
   grid-gap             : 2px;
   justify-content      : space-between;
-  margin-left          : 25px;
+  margin-left          : 5px;
   max-width            : 350px;
-  font-size            : .9em;
-
+  font-size            : 1.1em;
+  font-weight          : 600;
   @include for-phone-only {
     grid-template-columns: 125px 90px 50px 75px; //90px;
   }

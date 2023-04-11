@@ -42,13 +42,14 @@ export class PriceCategorySelectComponent implements OnInit {
   }
 
   openPriceCategory() {
-    if (this.priceCategoryID == 0) { return }
     const site = this.sitesService.getAssignedSite();
-    this.action$ = this.priceCategoryService.openPriceCategoryEditorOBS(this.priceCategoryID).pipe(switchMap(data => { 
+    let id = this.priceCategoryID;
+    if (!id) { id = 0}
+    this.action$ = this.priceCategoryService.openPriceCategoryEditorOBS(id).pipe(switchMap(data => {
       return  this.priceCategoryService.getPriceCategory(site, this.priceCategoryID);
     })).pipe(switchMap(data => {
-      // console.log('openPriceCategory getPriceCategory',data)
-      if (!data) { 
+
+      if (!data) {
         this.priceCategory = data
         this.searchForm = this.fb.group({
           priceCategoryLookup: [''],
@@ -63,15 +64,24 @@ export class PriceCategorySelectComponent implements OnInit {
       this.inputForm.patchValue({priceCategoryID: data.id})
       return of(data)
     }))
-  }  
-  
+  }
+
   clearPriceCategory() {
     this.priceCategoryID = 0;
+
     if (!this.isInventory) {
+      this.searchForm = this.fb.group({
+        priceCategoryLookup: '',
+      })
       const  price = { priceCategory : 0 }
       this.inputForm.patchValue(price)
+
     }
-    if (!this.isInventory) {
+    if (this.isInventory) {
+      const item = {priceCategoryLookup: ''}
+      this.searchForm = this.fb.group({
+        priceCategoryLookup: '',
+      })
       this.inputForm.patchValue({priceCategoryID: 0})
     }
   }

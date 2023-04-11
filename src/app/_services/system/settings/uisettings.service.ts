@@ -57,6 +57,7 @@ export interface TransactionUISettings {
   updateInventoryOnScan : boolean;
   giftCardLength        : number;
   vipCustomerID         : number;
+  enableGiftCards       : boolean;
   triposEnabled: boolean;
   displayEditCardOnHeader: boolean;
   showCustomerOption: boolean;
@@ -70,6 +71,7 @@ export interface TransactionUISettings {
   prepOrderOnClose: boolean;
   printLabelsOnclose: boolean;
   enableExactChange: boolean;
+
 }
 
 export interface StripeAPISettings {
@@ -696,6 +698,7 @@ export class UISettingsService {
       prepOrderOnClose: [],
       printLabelsOnclose: [],
       enableExactChange: [],
+      enableGiftCards: [],
      })
   }
 

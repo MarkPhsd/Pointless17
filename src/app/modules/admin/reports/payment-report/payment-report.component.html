@@ -6,11 +6,12 @@
       [dateFrom]="dateFrom"
       [notifier]="notifier"
       [groupBy]="groupBy"
+      [type]="'sales'"
       [zrunID]="zrunID"
     >{{groupBy}}</app-payment-report-data>
 </div>
 
-<div *ngIf="groupBy === 'paymentMethod'">
+<div *ngIf="type === 'sales'">
   <div *ngIf="(refunds$ | async) as sales; else loadingRefunds">
     <app-payment-report-data
         [sales]="sales"
@@ -19,23 +20,38 @@
         [dateFrom]="dateFrom"
         [notifier]="notifier"
         [groupBy]="groupBy"
+        [type]="'refunds'"
         [zrunID]="zrunID"
       >Refunds </app-payment-report-data>
   </div>
 </div>
 
-<ng-template #loading>
-  <div *ngIf="groupBy === 'paymentMethod'">
-    ...loading payments
+<div *ngIf="type === 'sales'">
+  <div *ngIf="(voids$ | async) as sales; else loadingVoids">
+    <app-payment-report-data
+        [sales]="sales"
+        [site]="site"
+        [dateTo]="dateTo"
+        [dateFrom]="dateFrom"
+        [notifier]="notifier"
+        [type]="'voids'"
+        [zrunID]="zrunID"
+      >Voids </app-payment-report-data>
   </div>
-
+</div>
+<ng-template #loading>
+    ...loading payments
   <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
 </ng-template>
 
 <ng-template #loadingRefunds>
-  <div *ngIf="groupBy === 'paymentMethod'">
     ..loading refunds
-  </div>
   <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
 </ng-template>
 
+<ng-template #loadingVoids>
+  <div>
+    ..loading voids
+  </div>
+  <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
+</ng-template>

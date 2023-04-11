@@ -81,7 +81,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   @Input() ssmsOption : boolean;
   @Input() refundItemEnabled: boolean;
   @Input() purchasOrderEnabled: boolean;
-
+  @Input() prepOrderOnClose: boolean;
   listView: Boolean;
 
   assignedItems   : Subscription;
@@ -325,7 +325,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   }
 
   async openCashDrawer(value: number) {
-    await this.balanceSheetService.openDrawerOne()
+    await this.balanceSheetMethods.openDrawerOne()
   }
 
 }

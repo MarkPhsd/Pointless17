@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { IPromptGroup, PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
 import { OrdersService } from '..';
-import { POSOrderItemServiceService } from '../transactions/posorder-item-service.service';
+import { POSOrderItemService } from '../transactions/posorder-item-service.service';
 import { PromptGroupService } from './prompt-group.service';
 import { PromptSubGroupsService } from './prompt-sub-groups.service';
 
@@ -37,6 +37,9 @@ import { PromptSubGroupsService } from './prompt-sub-groups.service';
 })
 export class PromptWalkThroughService {
 
+  private _savePromptSelection       = new BehaviorSubject<boolean>(null);
+  public  savePromptSelection$        = this._savePromptSelection.asObservable();
+
   private _orderPromptGroup    = new BehaviorSubject<IPromptGroup>(null);
   public orderPromptGroup$     = this._orderPromptGroup.asObservable();
 
@@ -47,8 +50,11 @@ export class PromptWalkThroughService {
   public  accordionStep$         = this._accordionStep.asObservable();
   accordionStep : number;
 
-  updatePromptGroup(orderPromptGroup:  IPromptGroup) {
+  updateSavePromptSelection(result: boolean) {
+    this._savePromptSelection.next(result)
+  }
 
+  updatePromptGroup(orderPromptGroup:  IPromptGroup) {
      this._orderPromptGroup.next(orderPromptGroup);
      if (!orderPromptGroup) {
       this._promptTotal.next(0)
@@ -76,7 +82,7 @@ export class PromptWalkThroughService {
   }
 
   constructor(private orderService         : OrdersService,
-              private OrderItemService     : POSOrderItemServiceService,
+              private OrderItemService     : POSOrderItemService,
               private promptSubService     : PromptGroupService,
               private promptSubGroupService: PromptSubGroupsService
               ) {

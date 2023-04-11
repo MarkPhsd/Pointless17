@@ -15,7 +15,8 @@ export class PaymentReportDataComponent implements OnInit {
   @Input() dateTo  : string;
   @Input() dateFrom: string;
   @Input() notifier: Subject<boolean>
-  @Input() groupBy = "paymentMethod"
+  @Input() groupBy : string;
+  @Input() type    : string;
   @Input() zrunID  : string;
   @Input() sales   : IPaymentSalesSummary;
 

@@ -13,10 +13,13 @@
       <mat-expansion-panel [expanded]="accordionStep === 0" (opened)="setStep(0)" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
+            <span *ngIf="accordionStep != 0">
+              <mat-icon>unfold_more</mat-icon>
+            </span>
             Prompt Groups
           </mat-panel-title>
           <mat-panel-description>
-             Prompt Group Titles and Settings
+             Prompt Groups - Edit Titles & Descriptions.
             <mat-icon>database</mat-icon>
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -33,10 +36,13 @@
       <mat-expansion-panel [expanded]="accordionStep === 1" (opened)="setStep(1)" hideToggle>
         <mat-expansion-panel-header>
             <mat-panel-title>
-              Item Groups
+              <span *ngIf="accordionStep != 1">
+                <mat-icon>unfold_more</mat-icon>
+              </span>
+              Pages for Prompts
             </mat-panel-title>
             <mat-panel-description>
-              Create Item Groups to associate with Prompts
+              Create Pages to associate with Prompts
               <mat-icon>speaker_group</mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
@@ -53,10 +59,13 @@
       <mat-expansion-panel [expanded]="accordionStep === 2" (opened)="setStep(2)" hideToggle>
         <mat-expansion-panel-header>
             <mat-panel-title>
+              <span *ngIf="accordionStep != 3">
+                <mat-icon>unfold_more</mat-icon>
+              </span>
               Associations
             </mat-panel-title>
             <mat-panel-description>
-              Associations - Link Sub Groups to Groups
+              Associations - Link Pages to Prompts
               <mat-icon>attachment</mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>

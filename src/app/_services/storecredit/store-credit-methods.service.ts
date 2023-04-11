@@ -10,7 +10,7 @@ import { IPOSOrder, IPurchaseOrderItem, ISite } from 'src/app/_interfaces';
 import { AuthenticationService } from '..';
 import { SitesService } from '../reporting/sites.service';
 import { IPagedList } from '../system/paging.service';
-import { POSOrderItemServiceService } from '../transactions/posorder-item-service.service';
+import { POSOrderItemService } from '../transactions/posorder-item-service.service';
 import { StoreCreditService } from './store-credit.service';
 
   export interface  StoreCreditResultsPaged {
@@ -82,7 +82,7 @@ export class StoreCreditMethodsService {
     private _snackBar          : MatSnackBar,
     private dialog             : MatDialog,
     private sitesService: SitesService,
-    private poOrderItemService: POSOrderItemServiceService,
+    private poOrderItemService: POSOrderItemService,
     private storeCreditService: StoreCreditService,
     private auth: AuthenticationService,) {
 }

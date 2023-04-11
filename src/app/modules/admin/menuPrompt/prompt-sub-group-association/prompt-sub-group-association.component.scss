@@ -6,7 +6,7 @@
   vertical-align: top;
 }
 
-button { 
+button {
   margin: 10px;
 }
 
@@ -43,6 +43,10 @@ button {
 
 .drag-drop-list.cdk-drop-list-dragging .drag-drop-box:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.margins {
+  margin: 5px;
 }
 
 .drag-drop-box {

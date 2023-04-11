@@ -1,7 +1,10 @@
 import { Component, OnInit,Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { IPOSOrder } from 'src/app/_interfaces';
+import { OrdersService } from 'src/app/_services';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { UIHomePageSettings } from 'src/app/_services/system/settings/uisettings.service';
+import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 
 @Component({
   selector: 'pos-check-out-buttons',
@@ -19,29 +22,25 @@ export class PosCheckOutButtonsComponent  {
   @Input() uiSettings: UIHomePageSettings;
   @Input() mainPanel: boolean;
 
-  constructor(  private navigationService : NavigationService, ) { }
+  constructor(
+    private toolbarUIService: ToolBarUIService,
+    private router: Router,
+    private orderService: OrdersService,
+    private navigationService : NavigationService, ) { }
 
   makePayment() {
-    // this.openOrderBar = false
-    // this.toolbarUIService.updateOrderBar(false);
-    // this.toolbarUIService.updateSideBar(false)
-    // this.toolbarUIService.updateToolBarSideBar(false)
-    // let path = ''
-    // if (this.order) {
-    //   if (this.order.tableName && this.order.tableName.length>0) {
-    //     path = 'pos-payment'
-    //   }
-    // }
-    // this.navigationService.makePayment(this.openOrderBar, this.smallDevice,
-    //                                   this.isStaff, this.order.completionDate, path )
-
     this.navigationService.makePaymentFromSidePanel(this.openOrderBar, this.smallDevice,
       this.isStaff, this.order)
   }
 
   toggleOpenOrderBar() {
     this.openOrderBar= false
-    this.navigationService.toggleOpenOrderBar(this.isStaff)
+    // this.navigationService.toggleOpenOrderBar(this.isStaff)
+
+    this.toolbarUIService.updateOrderBar(false)
+    this.toolbarUIService.resetOrderBar(true)
+    this.router.navigate(["/currentorder/", {mainPanel:true}]);
+    this.orderService.setScanner()
   }
 
 }

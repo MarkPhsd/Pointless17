@@ -1,7 +1,6 @@
 <h4>Range: {{ dateFrom }} to  {{ dateTo }} </h4>
 
 <div class="layout">
-  <!-- fxFlex="100" -->
     <mat-card >
         <app-widget-filter (messageOut)="receiveData($event)"></app-widget-filter>
      </mat-card>
@@ -13,7 +12,6 @@
 
 <div  *ngIf="dateFrom && dateTo"
       class="layout">
-      <!-- fxFlex="100" -->
     <mat-card >
             <app-widget-chart-table [sites]="chartData"
                                     [dateFrom]="dateFrom"

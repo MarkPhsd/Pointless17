@@ -20,7 +20,7 @@ import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { DatePipe } from '@angular/common';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 
 @Component({
@@ -134,7 +134,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                 private _bottomSheet            : MatBottomSheet,
                 private readonly datePipe       : DatePipe,
                 private orderService            : OrdersService,
-                private posOrderItemService    : POSOrderItemServiceService,
+                private posOrderItemService    : POSOrderItemService,
               )
   {
   }

@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { PlatformService } from '../system/platform.service';
+import { ElectronService } from 'ngx-electron';
 
 
 @Injectable({
@@ -44,8 +45,11 @@ export class BalanceSheetMethodsService {
     private _snackBar                      : MatSnackBar,
     private router                         : Router,
     private location                       : Location,
-    public platformService                 : PlatformService,
-
+    public  platformService                : PlatformService,
+    private electronService                : ElectronService,
+    private siteService: SitesService,
+    private balanceSheetService: BalanceSheetService,
+    private balancesheetMethodService: BalanceSheetMethodsService,
   ) {
     if ( this.platForm  === "Electron" || this.platForm === "android" || this.platForm === "capacitor")
     { this.isApp = true }
@@ -88,6 +92,7 @@ export class BalanceSheetMethodsService {
       const deviceName = this.getDeviceName();
       return this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
         switchMap( data => {
+
           if (data && data.errorMessage) {
             this.sitesService.notify(`Balance sheet error. ${data.errorMessage}`, 'Close', 3000, 'red')
             return of({sheet: null, user: user})
@@ -95,9 +100,12 @@ export class BalanceSheetMethodsService {
           if (data.id == 0 )  {
              return of({sheet: null, user: user})
           }
-          return of({sheet: data, user: user})
+          const item = {sheet: data, user: user};
+
+          return of(item)
         }),
         catchError( e => {
+          console.log('no balance Sheet',deviceName)
           this.sitesService.notify('Balance sheet error. User may not have employee assigned.', 'Close', 3000, 'red')
           return of({sheet: null, user: user, err: e})
         })
@@ -177,7 +185,7 @@ export class BalanceSheetMethodsService {
             return of(data)
           }),
           catchError(err => {
-            this.notify('Sheet not saved.' + err, 'Failure')
+            this.siteService.notify('Sheet not saved.' + err, 'Failure', 5000, 'red')
             return of(err)
           }
         )
@@ -204,10 +212,10 @@ export class BalanceSheetMethodsService {
       if (result && sheet.id) {
         const site = this.sitesService.getAssignedSite();
         this.sheetService.deleteSheet(site, sheet.id).subscribe( data => {
-          this.notify('Sheet is deleted.', 'Succes')
+          this.siteService.notify('Sheet is deleted.', 'Succes', 1000, 'yellow', )
           this.location.back()
         }, (err) => {
-          this.notify('Sheet not deleted.' + err, 'Failure')
+           this.siteService.notify('Sheet not deleted.' + err, 'Failure', 1000, 'red', )
         })
       }
     }
@@ -296,10 +304,80 @@ export class BalanceSheetMethodsService {
     return fb
   }
 
-  notify(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2000,
-      verticalPosition: 'top'
-    });
+  // notify(message: string, action: string) {
+  //   this._snackBar.open(message, action, {
+  //     duration: 2000,
+  //     verticalPosition: 'top'
+  //   });
+  // }
+
+  openDrawerFromBalanceSheet(): Observable<IBalanceSheet> {
+
+
+
+    let deviceName = localStorage.getItem('devicename');
+
+    const electron = this.platformService.isAppElectron
+
+    if (!deviceName && electron) {
+      this.siteService.notify('Please start a balance sheet. This message will appear until one is started.', 'close', 2000, 'yellow')
+      console.log('returning no balance sheet observable, opening drawer');
+      this.openDrawerOne()
+      return of(null)
+    }
+
+    const site = this.siteService.getAssignedSite()
+
+
+    const item$ =  this.balanceSheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(switchMap(data => {
+          if (!data) {
+            this.siteService.notify('Balance sheet was not defined', 'close', 2000, 'yellow')
+            return of(data)
+          }
+
+          if (data.drawerAB == 2) {
+            this.openDrawerTwo()
+          }
+
+          if (data.drawerAB == 1 || data.drawerAB == 0 || !data.drawerAB) {
+            this.openDrawerOne()
+          }
+
+          return of(data)
+        }
+      ), catchError(data => {
+      this.siteService.notify('Balance sheet was not defined', 'close', 2000, 'yellow')
+      return of(null)
+    }))
+
+    console.log('returning balance sheet observable')
+    return item$;
+
   }
+
+  async  openDrawerOne() {
+    console.log('open cash drawer one')
+    const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+    const response        = await emvTransactions.openCashDrawerOne()
+  }
+
+  async  openDrawerTwo() {
+    console.log('open cash drawer one')
+    const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+    const response        = await emvTransactions.openCashDraweTwo()
+  }
+
+  async openDrawerNoSale(sheet:IBalanceSheet) {
+    await this.openDrawerOne()
+  }
+
+  async  startScaleService() {
+    try {
+      const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+      const response        = await emvTransactions.startScaleService()
+    } catch (error) {
+
+    }
+  }
+
 }

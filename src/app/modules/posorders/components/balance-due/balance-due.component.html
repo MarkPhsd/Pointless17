@@ -14,15 +14,12 @@
         <div class="tip-grid">
 
           <div class="action-center">
-            <h3>
+            <h3 class="h3">
               <div *ngIf="!payment.completionDate && payment">Payment: {{ payment.amountPaid }} </div>
               <div *ngIf="payment.completionDate"> Change Due: {{ changeDue | currency }}</div>
-              <!-- <div  class="big-button" *ngIf="finalizer">
-                ....printing <mat-icon color="accent">print</mat-icon>
-              </div> -->
             </h3>
           </div>
-        
+
           <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
 
           <div  *ngIf="(payment && payment?.account) || (paymentMethod && paymentMethod?.isCreditCard)">

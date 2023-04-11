@@ -262,18 +262,20 @@ export class PriceCategoriesEditComponent implements OnInit {
     this.saving = true;
 
     let  price2 = {} as IPriceCategory2
-    price2.id = priceCategory.id
+    if (priceCategory.id) {
+      price2.id = priceCategory.id
+    }
     price2.uid = priceCategory.uid
     price2.name = priceCategory.name
     const site = this.siteService.getAssignedSite()
-
+    console.log(price2)
     const result$ = this.priceCategoryService.save(site, price2)
-    const prices$ = this.saveAllItems(priceCategory.productPrices)
 
     return result$.pipe(
       switchMap( data => {
         console.log('priceCategory about to save', priceCategory)
-        return prices$
+        priceCategory.id = data.id;
+        return this.saveAllItems(priceCategory.productPrices)
       })).pipe(
         switchMap(data => {
           this.saving = false

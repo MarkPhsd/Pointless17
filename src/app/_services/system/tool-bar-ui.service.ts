@@ -169,7 +169,7 @@ export class ToolBarUIService {
     this._searchSideBar.next(true)
     this._mainMenuSideBar.next(false);
     this._leftSideBarToggle.next(true);
-     this.resizeWindow();
+    this.resizeWindow();
   }
 
   switchSearchBarSideBar() {

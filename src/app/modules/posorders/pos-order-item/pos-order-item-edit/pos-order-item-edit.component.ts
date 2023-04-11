@@ -2,7 +2,7 @@ import { Component, EventEmitter, Inject, Input, Output, } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MenuService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
@@ -27,7 +27,7 @@ export class PosOrderItemEditComponent  {
   inputTypeValue = 'decimal'
 
   constructor(
-      private posOrderItemService : POSOrderItemServiceService,
+      private posOrderItemService : POSOrderItemService,
       private orderService        : OrdersService,
       private siteService         : SitesService,
       private _fb                 : FormBuilder,
@@ -88,7 +88,7 @@ export class PosOrderItemEditComponent  {
           subTotal: [this.posOrderItem.subTotal],
           itemName: [],
         })
-      } 
+      }
 
       if (this.editField == 'wholeSale') {
         this.inputForm = this._fb.group({
@@ -146,7 +146,7 @@ export class PosOrderItemEditComponent  {
     if (item){
       this.posOrderItem.unitPrice = event;
       this.inputForm.patchValue({price: event})
-      this.save()  
+      this.save()
     }
   }
 

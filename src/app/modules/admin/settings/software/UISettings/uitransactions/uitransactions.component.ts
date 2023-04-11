@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormGroupDirective,FormControl ,NgForm} from '@angular/forms';
+import { FormGroup, FormGroupDirective,FormControl ,NgForm, FormBuilder} from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Observable, switchMap, of } from 'rxjs';
 import { clientType, ISetting } from 'src/app/_interfaces';
@@ -15,7 +15,7 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
   styleUrls: ['./uitransactions.component.scss'],
 })
 export class UITransactionsComponent implements OnInit {
-
+  testForm        : FormGroup;
   inputForm       : FormGroup;
   uiSettings      : ISetting
   uiSettings$     : Observable<ISetting>;
@@ -34,6 +34,7 @@ export class UITransactionsComponent implements OnInit {
       private clientTypeService: ClientTypeService,
       private sitesService     : SitesService,
       private clienTableSerivce: ClientTableService,
+      private fb: FormBuilder,
   ) {
   }
 
@@ -42,6 +43,14 @@ export class UITransactionsComponent implements OnInit {
     this.clientTypes$    = this.clientTypeService.getClientTypes(site);
     this.initUITransactionSettings()
     this.saving$  = null;
+
+    this.testForm = this.fb.group({
+      testVariable: [localStorage.getItem('testVariable')],
+    })
+
+    this.testForm.valueChanges.subscribe(data => {
+       localStorage.setItem('testVariable' ,  this.testForm.controls['testVariable'].value)
+    })
   }
 
   initUITransactionSettings() {

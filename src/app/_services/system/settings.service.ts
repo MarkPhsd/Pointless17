@@ -219,6 +219,8 @@ export class SettingsService {
 
   getPOSDeviceBYName(site: ISite, name: String):  Observable<ISetting> {
 
+    if (!name) { return of(null)};
+
     const controller = "/settings/"
 
     const endPoint = 'getPOSDeviceBYName';

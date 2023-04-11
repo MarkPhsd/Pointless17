@@ -60,7 +60,7 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   //enter or chain observables here.
-  changeUser(user: IUser): Observable<any> {
+  promptBalanceSheet(user: IUser): Observable<any> {
     return this.sheetMethodsService.promptBalanceSheet(user)
   }
 
@@ -205,45 +205,65 @@ export class UserSwitchingService implements  OnDestroy {
       .pipe(
         switchMap(
           user => {
-          if (user && user.errorMessage) {
-            const message = user?.errorMessage;
-            this.snackBar.open(message, 'Failed Login', {duration: 1500})
-            const item = {message: 'failed'}
-            return of(item)
-          }
 
-          if (user) {
-            if (user?.message.toLowerCase() === 'failed') {
-              const user = {message: 'failed'}
+            if (user && user.errorMessage) {
+              const message = user?.errorMessage;
+              this.snackBar.open(message, 'Failed Login', {duration: 1500})
+              const item = {message: 'failed'}
+              return of(item)
+            }
+
+            if (user) {
+              if (user?.message.toLowerCase() === 'failed') {
+                const user = {message: 'failed'}
+                return of(user)
+              }
+              user.message = 'success'
+              const currentUser = this.setUserInfo(user, password)
+              this.uiSettingService.initSecureSettings();
+              return of(user)
+            } else {
+              const user = {message: 'failed'} as IUser;
               return of(user)
             }
-            user.message = 'success'
-            const currentUser = this.setUserInfo(user, password)
-            this.uiSettingService.initSecureSettings();
-            return of(user)
-          } else {
-            const user = {message: 'failed'} as IUser;
-            return of(user)
-          }
+
       })).pipe(switchMap(data => {
-        // console.log(data)
         if (data?.message === 'failed') { return of(null)}
         return this.contactsService.getContact(site, data?.id)
 
       })).pipe(switchMap(data => {
-        // console.log(data)
-        if ( !data ) { return of( {message: 'failed'} ) }
-        const item = localStorage.getItem('user')
-        const user = JSON.parse(item) as IUser;
+            if ( !data ) {
+              const user = {} as IUser
+              user.message = 'failed';
+              return of( user )
+            }
 
-        if (data.clientType && data.clientType.jsonObject) {
-          this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
+            const item = localStorage.getItem('user')
+            const user = JSON.parse(item) as IUser;
+
+            if (data.clientType && data.clientType.jsonObject) {
+            this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
+            return of(user)
+          }
         }
+      )).pipe(switchMap(user =>
+         {
+            if (user) {
+              ///this is where we prompt the balance sheet
+              if ( this.platformService.isApp()  )  {
+                // console.log('platform is app')
+                return this.promptBalanceSheet(user)
+              }
+              if ( !this.platformService.isApp() )  {
+                // console.log('platform is not app')
+                return of(user)
+              }
+            }
+            return of(null)
+          }
+        )
+      )
 
-        if ( this.platformService.isApp()  )  { return this.changeUser(user) }
-        if ( !this.platformService.isApp() )  { return of(user)              }
-      }
-    ))
   }
 
   // getAuthorization()
@@ -338,23 +358,22 @@ export class UserSwitchingService implements  OnDestroy {
     if (user && user.message == undefined) {
       return 'user undefined'
     }
-    // console.log('processlogin1')
+
     // if account loccked out then change here.
     if (user.message.toLowerCase() === 'failed') {
       return user.errorMessage
     }
-    // console.log('processlogin2')
+
     if (user && !user.message) {
       return 'No message response from API.'
     }
-    // console.log('processlogin3')
+
     if (path) {
       this.router.navigate([path]);
       return 'success'
     }
-    // console.log('processlogin4')
+
     if (user.message === 'success') {
-      // console.log('loginToReturnUrl')
       this.loginToReturnUrl();
       return 'success'
     }
@@ -389,6 +408,7 @@ export class UserSwitchingService implements  OnDestroy {
   loginApp(user) {
     const currentUser   = user.user
     const sheet         = user.sheet
+    // console.log('loginApp sheet.shiftStarted', sheet)
 
     if (sheet) {
       if (sheet.message) {
@@ -399,10 +419,8 @@ export class UserSwitchingService implements  OnDestroy {
         }
       }
 
-      console.log('sheet.shiftStarted', sheet.shiftStarted)
-      console.log('sheet.shiftStarted', sheet.endTime)
 
-      if (sheet.shiftStarted == 0 ||  (sheet.shiftStarted == 1 && sheet.endTime)) {
+      if (!sheet.shiftStarted || sheet.shiftStarted == 0 ||  (sheet.shiftStarted == 1 && sheet.endTime)) {
         this.router.navigate(['/balance-sheet-edit', {id:sheet.id}]);
         return true
       }
@@ -435,7 +453,7 @@ export class UserSwitchingService implements  OnDestroy {
     }
 
     this.router.navigate([returnUrl]);
-    // console.log('returnUrl', returnUrl)
+
   }
 
 

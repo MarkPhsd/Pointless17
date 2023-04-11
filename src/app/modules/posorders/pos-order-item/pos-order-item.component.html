@@ -65,21 +65,21 @@
           <span class="discount-description"  *ngIf="orderItem?.itemOrderPercentageDiscount>0">
             % Off Savings $ {{orderItem?.itemOrderPercentageDiscount}},
           </span>
-          
+
           <span class='status-icon' *ngIf="orderItem?.printed && prepScreen && (!isModifier && orderItem.id != orderItem.idRef)">
-            <mat-icon color="warn"  *ngIf="orderItem?.printed && !prepScreen" >print</mat-icon>
+            <mat-icon  class="mat-icon-label" color="warn"  *ngIf="orderItem?.printed && !prepScreen" >print</mat-icon>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>
           </span>
 
           <span  class='ready-icon' *ngIf="orderItem?.itemPrepped && prepScreen && !isModifier">
-            <mat-icon color="alert" & *ngIf="prepScreen" >done</mat-icon>
+            <mat-icon class="mat-icon-label" color="alert" & *ngIf="prepScreen" >done</mat-icon>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem?.itemPrepped | date: 'shortTime'}} </span>
           </span>
 
           <div class="void-icon void-info" *ngIf="(orderItem.voidReason ||
                                                   (orderItem?.itemReturn != 1 && orderItem?.itemReturn != 0) ) &&
                                                   prepScreen && !isModifier">
-            <span *ngIf="orderItem?.printed && !prepScreen">  <mat-icon color="warn">lock</mat-icon>  </span>
+            <span *ngIf="orderItem?.printed && !prepScreen">  <mat-icon   class="mat-icon-label" color="warn">lock</mat-icon>  </span>
 
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
               <b  style="color:crimson">return {{ orderItem?.itemReturn }} Item voided:  {{ orderItem?.voidReason }}</b>
@@ -95,8 +95,8 @@
           </span>
 
           <div class="void-info" *ngIf="(orderItem?.voidReason || orderItem?.itemReturn == 1) && !isModifier">
-            <span *ngIf="orderItem.itemReturn == 1">  <mat-icon  color="warn">refresh</mat-icon>  </span>
-            <span *ngIf="orderItem.itemReturn != 1">  <mat-icon  color="warn">cancel</mat-icon>  </span>
+            <span *ngIf="orderItem.itemReturn == 1">  <mat-icon   class="mat-icon-label" color="warn">refresh</mat-icon>  </span>
+            <span *ngIf="orderItem.itemReturn != 1">  <mat-icon   class="mat-icon-label" color="warn">cancel</mat-icon>  </span>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
               <b *ngIf="orderItem?.itemReturn == 1" style="color:crimson">Item Return:  {{ orderItem?.voidReason }}</b>
               <b *ngIf="orderItem?.itemReturn != 1" style="color:crimson">Voided:       {{ orderItem?.voidReason }}</b>
@@ -149,12 +149,16 @@
         </div>
       </div>
 
-      <div  *ngIf="(mainPanel && !bottomSheetOpen) && !prepScreen">
-        <ng-container [ngTemplateOutlet]="isDisplayMenuItemOn"></ng-container>
+      <div *ngIf="(mainPanel && !bottomSheetOpen) && !prepScreen">
+        <ng-container [ngTemplateOutlet]="exitlabelButtonView"></ng-container>
       </div>
 
-      <div (click)="assignItem()" 
-           class="menu-buttons" 
+      <div class="label-image-grid"  *ngIf="(mainPanel && !bottomSheetOpen) && !prepScreen">
+          <ng-container [ngTemplateOutlet]="isDisplayMenuItemOn"></ng-container>
+      </div>
+
+      <div (click)="assignItem()"
+           class="menu-buttons"
            *ngIf="!disableActions && !prepScreen" >
         <button aria-label="user menu"
                   mat-button
@@ -171,58 +175,57 @@
           <span (mouseleave)="menuTrigger.closeMenu()">
 
             <div class="button-list">
-              <div *ngIf="!userAuthService?.isUser">
-                <button mat-button  color="accent"  (click)="printLabel(orderItem)"><mat-icon>print</mat-icon>Label</button>
-              </div>
+
+             <!-- <ng-container [ngTemplateOutlet]="labelButtonView"></ng-container> -->
 
               <div *ngIf="!showEdit && (uiConfig.displayAdd)">
                 <button mat-raised-button    class="button"  color="accent" (click)="addItemToOrder()">
-                  <mat-icon>add</mat-icon>  <span *ngIf="!smallDevice">Add </span>
+                  <mat-icon  class="mat-icon-label" >add</mat-icon>  <span *ngIf="!smallDevice">Add </span>
                 </button>
               </div>
 
               <div *ngIf="!showView && (uiConfig.displayView) ">
                 <button mat-button class="button" color="accent" (click)="openDialog()" >
-                  <mat-icon>open_in_new</mat-icon> <span *ngIf="!smallDevice"> View </span>
+                  <mat-icon  class="mat-icon-label">open_in_new</mat-icon> <span *ngIf="!smallDevice"> View </span>
                 </button>
               </div>
 
               <div *ngIf="orderItem && orderItem.serialCode && !userAuthService?.isUser">
-                <button mat-button  color="accent"  (click)="editSerial()"><mat-icon>edit</mat-icon>Serial Edit</button>
+                <button mat-button  color="accent"  (click)="editSerial()"><mat-icon  class="mat-icon-label">edit</mat-icon>Serial Edit</button>
               </div>
 
               <div *ngIf="!showEdit && promptOption">
-                <button mat-button  color="accent"  (click)="editPrompt()"><mat-icon>edit</mat-icon>Edit</button>
+                <button mat-button  color="accent"  (click)="editPrompt()"><mat-icon  class="mat-icon-label">edit</mat-icon>Edit</button>
               </div>
 
               <div *ngIf="!showEdit  && (uiConfig.displayNotes)">
-                <button mat-button color="accent" (click)="openModifierNote()"><mat-icon>note_pad</mat-icon>Notes</button>
+                <button mat-button color="accent" (click)="openModifierNote()"><mat-icon  class="mat-icon-label">note_pad</mat-icon>Notes</button>
               </div>
 
               <div *ngIf="!showEdit  && (uiConfig.displayQuantity) && !orderItem.serialCode && !orderItem.printed">
-                <button mat-button  color="accent"  (click)="editQuantity()"><mat-icon>note_pad</mat-icon>Quantity</button>
+                <button mat-button  color="accent"  (click)="editQuantity()"><mat-icon  class="mat-icon-label">note_pad</mat-icon>Quantity</button>
               </div>
 
               <!-- ? || userAutService.changeItemPrice -->
               <div *ngIf="userAuthService.isManagement">
-                <button mat-button  color="accent"  (click)="editPrice()"><mat-icon>edit</mat-icon>Price</button>
+                <button mat-button  color="accent"  (click)="editPrice()"><mat-icon  class="mat-icon-label" class="mat-icon-label">edit</mat-icon>Price</button>
               </div>
 
               <div *ngIf="userAuthService.isManagement">
-                <button mat-button  color="accent"  (click)="editSubTotal()"><mat-icon>edit</mat-icon>Total Price</button>
+                <button mat-button  color="accent"  (click)="editSubTotal()"><mat-icon  class="mat-icon-label">edit</mat-icon>Total Price</button>
               </div>
 
               <div *ngIf="userAuthService.isManagement && purchaseOrderEnabled">
-                <button mat-button  color="accent"  (click)="editCost()"><mat-icon>edit</mat-icon>Cost</button>
+                <button mat-button  color="accent"  (click)="editCost()"><mat-icon  class="mat-icon-label">edit</mat-icon>Cost</button>
               </div>
 
               <div *ngIf="userAuthService.isManagement && purchaseOrderEnabled">
-                <button mat-button  color="accent"  (click)="editWholeSaleCost()"><mat-icon>edit</mat-icon>Total Cost</button>
+                <button mat-button  color="accent"  (click)="editWholeSaleCost()"><mat-icon  class="mat-icon-label">edit</mat-icon>Total Cost</button>
               </div>
 
               <div *ngIf="(quantity && !orderItem.voidReason)">
                 <button mat-raised-button  class="button" color="warn" (click)="swipeOutItem()" >
-                  <mat-icon>delete</mat-icon> <span *ngIf="!smallDevice">Remove </span>
+                  <mat-icon  class="mat-icon-label">delete</mat-icon> <span *ngIf="!smallDevice">Remove </span>
                 </button>
               </div>
               <div>
@@ -246,4 +249,25 @@
   <button mat-button (click)="openDialog()" class='displayimage' *ngIf="(basicItem$ | async) as item">
     <img class="image" *ngIf="imagePath" [src]="imagePath" />
   </button>
+</ng-template>
+
+
+<ng-template #labelButtonView>
+  <div *ngIf="!userAuthService?.isUser && enableExitLabel && orderItem?.printLocation">
+    <button mat-button  color="accent" (click)="printLabel(orderItem)">
+      <mat-icon  class="mat-icon-label">print</mat-icon>   Label
+
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #exitlabelButtonView>
+  <div *ngIf="!userAuthService?.isUser && enableExitLabel && mainPanel && orderItem?.printLocation">
+    <button mat-button  class="exit-label-button" color="accent" (click)="printLabel(orderItem)">
+      <mat-icon>print</mat-icon>
+      <br>
+      Label
+    </button>
+
+  </div>
 </ng-template>

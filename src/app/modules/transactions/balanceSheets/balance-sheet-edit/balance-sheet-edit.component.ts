@@ -265,7 +265,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
   updateItem(event) {
     this.balanceSheet$ = this._updateItem().pipe(switchMap(data => {
-
+      this.router.navigate(['app-main-menu'])
       return of(data)
     }))
   }

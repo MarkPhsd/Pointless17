@@ -41,6 +41,7 @@ button {
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(370px, 1fr) );
+  margin-top: 5px;
 }
 
 .grid-charts {

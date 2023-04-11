@@ -9,7 +9,7 @@ import { IItemBasic, OrderActionResult, OrdersService } from 'src/app/_services'
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { ItemWithAction, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { ItemWithAction, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 
 @Component({
   selector: 'app-adjust-item',
@@ -39,7 +39,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-          private itemService: POSOrderItemServiceService,
+          private itemService: POSOrderItemService,
           public  route: ActivatedRoute,
           private settingsService: SettingsService,
           private siteService: SitesService,

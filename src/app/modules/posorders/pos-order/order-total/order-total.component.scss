@@ -44,7 +44,6 @@ mat-card  {
 }
 
 .totals {
-
   float         : right;
   align-items   : flex-end;
   text-align    : right;
@@ -55,7 +54,8 @@ mat-card  {
   float         : right;
   align-items   : flex-end;
   text-align    : right;
-  font-size     : larger;
+  font-size     : 1.3em;
+  font-weight   : 600;
   margin-top: 0px;
   margin-bottom: 0px;
   padding-top: 0px;

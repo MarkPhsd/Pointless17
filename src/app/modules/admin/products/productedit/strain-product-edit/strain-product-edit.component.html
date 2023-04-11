@@ -77,13 +77,12 @@
                                      [type]="'category'">Category
               </app-category-select>
 
-              <app-department-select 
+              <app-department-select
                     [id] = "product?.brandID" [inputForm]="productForm">Department
               </app-department-select>
 
               <div class="flex-container-medium">
-                <product-type-select  
-                      [inputForm]="productForm">
+                <product-type-select  [inputForm]="productForm">
                 </product-type-select>
                 <button mat-button color="accent" class="edit-button" (click)="editType()">
                   <mat-icon>edit</mat-icon>
@@ -373,18 +372,29 @@
 </ng-template>
 
 <ng-template #unitSelector>
-  <div class="grid-container-medium">
+  <div class="grid-container-3Column">
     <div>
       <unit-type-select
         [inputForm]     = 'productForm'
         [product]       = 'productForm.value'
         [id]            = 'product.unitTypeID'
+        [searchForm]    = 'unitSearchForm'
         (itemSelect)    = 'assignItem($event)'>
       </unit-type-select>
     </div>
     <div>
       <button mat-button (click)="openUnit()">
-        <mat-icon>expand</mat-icon>
+        <div *ngIf="productForm.controls['unitTypeID'].value !=0">
+          <mat-icon>expand</mat-icon>
+        </div>
+        <div *ngIf="productForm.controls['unitTypeID'].value ==0">
+          <mat-icon>add</mat-icon>
+        </div>
+      </button>
+    </div>
+    <div>
+      <button mat-button (click)="clearUnit()">
+        <mat-icon color="warn">delete</mat-icon>
       </button>
     </div>
   </div>

@@ -113,9 +113,10 @@ export interface ItemWithAction {
   providedIn: 'root'
 })
 
-export class POSOrderItemServiceService {
+export class POSOrderItemService {
 
   get platForm() {  return Capacitor.getPlatform(); }
+
 
   private _posOrderItem       = new BehaviorSubject<PosOrderItem>(null);
   public posOrderItem$        = this._posOrderItem.asObservable();
@@ -126,6 +127,7 @@ export class POSOrderItemServiceService {
 
   _scaleInfo: Subscription;
   scaleInfo : ScaleInfo;
+
 
   updateItemWithAction(item: ItemWithAction ) {
     this._itemWithActions.next(item);
@@ -299,7 +301,7 @@ export class POSOrderItemServiceService {
 
   }
 
-  
+
   setItemGroupAsPrepped(site: ISite, id: number, startDate: string, endDate: string): Observable<any> {
 
     const controller = "/POSOrderItems/";

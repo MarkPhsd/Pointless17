@@ -431,7 +431,6 @@ export interface IPaymentResponse {
   orderCompleted  : boolean;
   responseMessage : string;
   order           : IPOSOrder;
-
 }
 
 enum actions {
@@ -441,6 +440,7 @@ enum actions {
 }
 
 export interface OperationWithAction {
+  order: IPOSOrder;
   payment           : IPOSPayment;
   action            : actions;
   voidReasonID      : number;

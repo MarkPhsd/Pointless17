@@ -31,6 +31,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input() site:            ISite;
   @Input() disableActions = false;
   @Input() qrOrder        = false;
+  @Input() enableExitLabel : boolean;
+
   qrCodeStyle = ''
   mainStyle   = ''
   deviceWidthPercentage = '100%'

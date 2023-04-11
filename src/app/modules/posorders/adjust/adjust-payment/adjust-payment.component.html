@@ -3,17 +3,10 @@
 
 <div *ngIf="resultAction && (voidPayment || manifest)">
   <mat-card>
-    <mat-card-title>
-    </mat-card-title>
-
-    <mat-card-subtitle>
-    </mat-card-subtitle>
-
     <mat-card-content>
 
       <div *ngIf="settings.triposEnabled">
-      
-    
+
         <div *ngIf="toggleVoid">
           Will process as Void - Required if reversal fails.
         </div>
@@ -21,7 +14,7 @@
           Will process as Reversal - Preffered method.
         </div>
 
-        <button class="button" color="accent" mat-raised-button (click)="toggleVoid = !toggleVoid">     
+        <button class="button" color="accent" mat-raised-button (click)="toggleVoid = !toggleVoid">
           <div *ngIf="!toggleVoid">
             Run as Void
           </div>

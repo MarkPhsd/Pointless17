@@ -111,7 +111,7 @@ export class PriceCategoriesService {
   };
 
   save(site: ISite,  price: IPriceCategory2): Observable<PriceCategories> {
-    if (price.id) {
+    if (price.id && price.id != 0) {
       return  this.put(site, price.id, price);
     }
     if (!price.id) {
@@ -158,12 +158,15 @@ export class PriceCategoriesService {
       this.productEditButtonService.openPriceEditor(data)
     })
   }
-  
+
   openPriceCategoryEditorOBS(id: number): Observable<any> {
     const site = this.siteService.getAssignedSite();
     const price$ = this.getPriceCategory(site, id)
     const dialog$ =  price$.pipe(switchMap( data => {
-      return this.productEditButtonService.openPriceEditor(data).afterClosed().pipe(switchMap(data => { 
+      if (!data) {
+        data = {} as PriceCategories
+      }
+      return this.productEditButtonService.openPriceEditor(data).afterClosed().pipe(switchMap(data => {
         return of(true)
       }))
     }))

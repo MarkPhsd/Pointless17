@@ -40,7 +40,9 @@
       </div>
 
       <div class="action-center" *ngIf="!order.completionDate &&
-                                         order?.balanceRemaining != 0">
+                                         (order?.balanceRemaining != 0 || isZeroPaymentAllowed) &&
+                                         (order?.balanceRemaining < 0 || isNegativePaymentAllowed )
+                                         ">
         <div *ngIf="!splitByItem">
           <h4>Payment Amount: {{paymentAmount | currency}}</h4>
         </div>
@@ -68,7 +70,7 @@
       </div>
 
       <div *ngIf="!order.completionDate && !splitByItem && !paymentsEqualTotal && paymentIsReady
-                  &&  order?.balanceRemaining != 0">
+                  &&  (order?.balanceRemaining != 0 || isNegativePaymentAllowed || isZeroPaymentAllowed ) ">
 
         <div *ngIf="(saleProcess$ |async) as saleProcess">  </div>
 
@@ -78,9 +80,12 @@
               <mat-card>
                 <mat-card-content>
                   <div class="">
-                    <div class="action-center"  *ngIf="!order.completionDate &&
-                                                        order?.balanceRemaining != 0 &&
-                                                      !splitByItem">
+                    <div class="action-center"  *ngIf="(!order.completionDate &&
+                                                       (
+                                                        (order?.balanceRemaining != 0 || isNegativePaymentAllowed || isZeroPaymentAllowed )
+                                                     || (order?.balanceRemaining < 0 || isNegativePaymentAllowed )
+                                                        ) &&
+                                                      !splitByItem)">
                       <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
                       <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
                       <ng-container [ngTemplateOutlet]="paypalButton"></ng-container>
@@ -330,7 +335,7 @@
 
 <ng-template #houseAccountButton>
   <div *ngIf="(userAuths && userAuths.houseAccountPayment) && order.clientID != 0 &&
-        order?.clients_POSOrders?.client_Type?.name.toLowerCase() === 'house account'">
+               order?.clients_POSOrders?.client_Type?.name.toLowerCase() === 'house account'">
     <button class="splitbutton"
           mat-raised-button
           color="primary"

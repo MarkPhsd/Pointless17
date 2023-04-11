@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output , EventEmitter, ChangeDetectionStrategy,
-  ChangeDetectorRef } from '@angular/core';
+  ChangeDetectorRef,
+  TemplateRef,
+  ViewChild} from '@angular/core';
 import { IPromptSubResults, MenuSubPromptSearchModel, PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
 import { editWindowState, IPromptResults, MenuPromptSearchModel, PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { PromptSubGroups, SelectedPromptSubGroup } from 'src/app/_interfaces/menu/prompt-groups';
@@ -7,7 +9,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-walk-through.service';
 import { AWSBucketService } from 'src/app/_services';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { Subscription } from 'rxjs';
 
@@ -18,6 +20,7 @@ import { Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PromptPanelMenuItemsComponent implements OnInit {
+  @ViewChild('promptMenuItemView')     promptMenuItemView: TemplateRef<any>;
 
   @Input() selectedSubGroup       : SelectedPromptSubGroup;
   @Input() subGroup               : PromptSubGroups;
@@ -52,7 +55,7 @@ export class PromptPanelMenuItemsComponent implements OnInit {
       this.posItem = data;
     })
   }
-  
+
   resetItemOption(event) {
     this.itemOption = 1;
   }
@@ -83,7 +86,7 @@ export class PromptPanelMenuItemsComponent implements OnInit {
 
   constructor(
     private promptGroupService       : PromptGroupService,
-    private posOrderItemService      : POSOrderItemServiceService,
+    private posOrderItemService      : POSOrderItemService,
     private promptWalkService        : PromptWalkThroughService,
     private awsBucket                : AWSBucketService,
   ) {
@@ -92,6 +95,11 @@ export class PromptPanelMenuItemsComponent implements OnInit {
   async ngOnInit() {
     if (this.subGroup) {
 
+      this.subGroup.promptMenuItems = this.subGroup.promptMenuItems.filter(data => {
+        if(data.prompt_Products) {
+          return data
+        }
+      })
       this.resetHideOptions()
       // this.subGroup.promptSubGroups.name
       // this.subGroup.promptSubGroups.promptMenuItems
@@ -104,14 +112,14 @@ export class PromptPanelMenuItemsComponent implements OnInit {
     this.intSubscriptions();
   }
 
-  resetHideOptions() { 
-    if (this.subGroup.hideSplitOptions) { 
+  resetHideOptions() {
+    if (this.subGroup.hideSplitOptions) {
       this.itemOptions = [
         {name: 'No', id: 4},
       ]
       return;
     }
-    if (!this.subGroup.hideSplitOptions) { 
+    if (!this.subGroup.hideSplitOptions) {
       this.itemOptions = [
         {name: 'whole', id: 1},
         {name: 'LFT 1/2', id: 2},
@@ -150,5 +158,16 @@ export class PromptPanelMenuItemsComponent implements OnInit {
 
   setAccordionStep(index) {
     this.promptWalkService.updateAccordionStep(index);
+  }
+
+  getPromptItemView(item) {
+    if (item &&
+        item.prompt_Products &&
+        item.prompt_Products.name &&
+        item.prompt_Products.name != '') {
+
+      return this.promptMenuItemView;
+    }
+    return null;
   }
 }

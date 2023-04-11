@@ -24,7 +24,7 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { MenuItemModalComponent } from '../../menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
 import { PosOrderItemEditComponent } from './pos-order-item-edit/pos-order-item-edit.component';
 
@@ -75,7 +75,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   @Input() mainPanel      : boolean;
   @Input() wideBar        = false;
   @Input() disableActions = false;
-  @Input() prepScreen: string;
+  @Input() prepScreen     : string;
+  @Input() enableExitLabel : boolean;
 
   morebutton               = 'more-button';
   customcard               ='custom-card'
@@ -191,7 +192,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                 private siteService        : SitesService,
                 private dialog             : MatDialog,
                 private menuService        : MenuService,
-                private posOrderItemService: POSOrderItemServiceService,
+                private posOrderItemService: POSOrderItemService,
                 private inventoryService   : InventoryAssignmentService,
                 private promptGroupservice : PromptGroupService,
                 private printingService    : PrintingService,
@@ -208,7 +209,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     const site = this.siteService.getAssignedSite();
     this.bucketName   =  await this.awsBucket.awsBucket();
     this.awsBucketURL =  await this.awsBucket.awsBucketURL();
-
+    // this.orderItem.printLocation
     if (this.orderItem) {
       this.menuItem$  = this.menuService.getMenuItemByID(site, this.orderItem.productID)
     }
@@ -230,7 +231,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     if (this.orderItem && this.orderItem.id != this.orderItem.idRef )  {
 
     }
-   
+
     const item = this.orderItem;
     this.showEdit = !item.printed && (this.quantity && !item.voidReason) &&  item.promptGroupID != 0 && item.id != item.idRef
     this.showView = this.mainPanel && ( (  item.promptGroupID === 0) || ( item.promptGroupID != 0 && item.id != item.idRef ) )
@@ -259,6 +260,16 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
       } catch (error) {
         console.log(error)
       }
+    }
+  }
+
+  displayPrintLabel(item) {
+    console.log('displayPrintLabel', item) //item?.itemType?.name, item?.itemType?.labelTypeID )//labelID)
+    // if (this.ui)
+    console.log('item type' , item?.itemType)
+    const labelID =  item?.itemType?.labelTypeID
+    if (labelID && labelID != 0) {
+      return true
     }
   }
 
@@ -596,7 +607,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   printLabel(item: PosOrderItem) {
-    this.printLabel$ = this.printingService.printItemLabel(item, this.menuItem$, this.order) // this.menuItem$)
+    this.printLabel$ = this.printingService.printItemLabel(item, this.menuItem$,
+                                                            this.order, false) // this.menuItem$)
   }
 
   swipeOutItem(){

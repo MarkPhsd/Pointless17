@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, TemplateRef, ViewChild} from '@angular/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IPromptSubResults, MenuSubPromptSearchModel, PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
 import {  PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
@@ -9,7 +9,7 @@ import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-wa
 import { of, Subscription, switchMap } from 'rxjs';
 import { AWSBucketService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { OrdersService } from 'src/app/_services/transactions/orders.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
 import { Observable } from 'rxjs';
@@ -25,7 +25,7 @@ interface itemOption {
 })
 
 export class PromptPanelMenuItemComponent implements OnInit {
-
+  @ViewChild('promptMenuItemView')     promptMenuItemView: TemplateRef<any>;
   menuItem                  : IMenuItem;
 
   @Input() promptMenuItem   : PromptMenuItem;
@@ -85,7 +85,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
      private promptGroupService        : PromptGroupService,
      private orderService              : OrdersService,
      private promptWalkService        : PromptWalkThroughService,
-     private posOrderItemService      : POSOrderItemServiceService,
+     private posOrderItemService      : POSOrderItemService,
      private siteService              : SitesService,
      private menuService              : MenuService,
      private awsBucket                : AWSBucketService,
@@ -103,6 +103,16 @@ export class PromptPanelMenuItemComponent implements OnInit {
         return of('')
       })
     )
+  }
+
+  get promptItemView() {
+    if (this.promptMenuItem &&
+        this.promptMenuItem.prompt_Products &&
+        this.promptMenuItem.prompt_Products.name &&
+        this.promptMenuItem.prompt_Products.name != '') {
+      return this.promptMenuItemView;
+    }
+    return null;
   }
 
   getItemSrc(prompt_Products) {
@@ -133,14 +143,6 @@ export class PromptPanelMenuItemComponent implements OnInit {
     ))
   }
 
-  // addLFTHalf() {
-  //   this.newItem$ = this.addItemSub(.5, 'LFT Half')
-  // }
-
-  // addRTHalf() {
-  //   this.newItem$ = this.addItemSub(.5, 'RT Half')
-  // }
-
   addItem() {
     this.newItem$ = this.addItemSub()
   }
@@ -150,7 +152,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
     const quantityItem = this.getQuantity()
 
     this.orderPromptGroup = this.promptWalkService.initPromptWalkThrough(this.order, this.promptGroup)
-    //can item be added to this sub group.
+
     if (!this.orderPromptGroup) { this.orderPromptGroup = {} as IPromptGroup}
     let orderPromptGroup = this.validateAddingItem();
 
@@ -170,10 +172,11 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
   }
 
-  getApplyNewItem(value: number, prefix: string, currentSubPrompt, orderPromptGroup): Observable<MenuItemsSelected> {
+  getApplyNewItem(value: number, prefix: string, currentSubPrompt: PromptSubGroups, orderPromptGroup: IPromptGroup): Observable<MenuItemsSelected> {
     return this.getMenuItemToApply().pipe(
       switchMap(item => {
         if (item) {
+
           if (!currentSubPrompt.itemsSelected) {
             currentSubPrompt.itemsSelected = [] as MenuItemsSelected[]
           }
@@ -200,6 +203,16 @@ export class PromptPanelMenuItemComponent implements OnInit {
         if (!orderPromptGroup) { return }
         if (currentSubPrompt.quantityMet) {
           this.nextStep()
+          const lastGroupIndex = orderPromptGroup.selected_PromptSubGroups.length;
+          const lastGroup =  orderPromptGroup.selected_PromptSubGroups[lastGroupIndex -1];
+          if (lastGroup) {
+            console.log(currentSubPrompt.id , lastGroup)
+            if (currentSubPrompt.id == lastGroup?.promptSubGroupsID) {
+              //then save and close
+              console.log('updating and saving')
+              this.promptWalkService.updateSavePromptSelection(true)
+            }
+          }
         }
         return of(item)
       })
@@ -236,8 +249,6 @@ export class PromptPanelMenuItemComponent implements OnInit {
   applyItem(value) {
 
   }
-
-
 
   getMenuItemToApply(): Observable<MenuItemsSelected> {
 
@@ -285,8 +296,6 @@ export class PromptPanelMenuItemComponent implements OnInit {
   }
 
   nextStep() {
-    // console.log('next step')
-    // this.outputNextStep.emit('true')
     this.promptWalkService.nextStep()
   }
 

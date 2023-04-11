@@ -1,48 +1,75 @@
 
-<div *ngFor="let payment of payments" >
+<div class="mat-card-container"
+      *ngIf="payments as summary">
+  <ng-container
+                [ngTemplateOutlet]="paymentsView"
+                [ngTemplateOutletContext]="{$implicit: summary}">
+  </ng-container>
+</div>
 
-  <!-- {{payments | json}} -->
-  <div *ngIf="groupBy.toLowerCase() === 'employee'"
-       class="grid-headerfooter">
+<ng-template #paymentsView let-payment>
+  <div *ngFor="let payment of payments" >
+    <!-- {{payment | json }} -->
+    <!--
+        groupBy {{groupBy }}
+        type    {{type}}
+    <div *ngIf="type === 'voids'">
+      {{payments | json}}
+    </div> -->
 
-    <div *ngIf="payment.employeeName" class="employeeName" >
-          {{ payment?.employeeName | truncateText: 10 }}
+    <div *ngIf="groupBy && groupBy.toLowerCase() === 'employee'"
+         class="grid-headerfooter">
+      <div *ngIf="payment.employeeName" class="employeeName" >
+            {{ payment?.employeeName | truncateText: 10 }}
+      </div>
+      <div *ngIf="!payment.employeeName" class="employeeName">Not Assigned</div>
+      <div *ngIf="payment?.hour != 0" class="grid-item">{{ payment?.hour }}</div>
+      <div class="totals"   *ngIf="payment.amountPaid != 0" >{{payment?.amountPaid | currency }}    </div>
+      <div class="totals"  *ngIf="payment?.count != 0"  >{{payment.amountPaid / payment.count | currency }}    </div>
+      <div class="totals" >                 {{payment?.tipAmount | currency }}</div>
+      <div class="totals"    *ngIf="payment?.count != 0"  >  {{ payment?.count }} </div>
     </div>
-    <div *ngIf="!payment.employeeName" class="employeeName">Not Assigned</div>
 
-    <div *ngIf="payment?.hour != 0" class="grid-item">{{ payment?.hour }}</div>
+    <div *ngIf="groupBy && groupBy === 'paymentMethod' || groupBy === 'devicename'"
+        class="grid-headerfooter">
+      <div class="grid-item" *ngIf="payment.paymentMethod" >{{ payment?.paymentMethod }} </div>
+      <div class="grid-item" *ngIf="!payment.paymentMethod" > Not Assigned </div>
+      <div  class="totals">    {{payment?.amountPaid | currency }}   </div>
+      <div  class="totals"  *ngIf="payment?.count != 0"  >{{payment.amountPaid / payment.count | currency }}    </div>
+      <div  class="totals"  *ngIf="payment?.count != 0" >  {{ payment.count }} </div>
+    </div>
 
-    <div class="totals"   *ngIf="payment.amountPaid != 0" >{{payment?.amountPaid | currency }}    </div>
 
-    <div  class="totals"  *ngIf="payment?.count != 0"  >{{payment.amountPaid / payment.count | currency }}    </div>
+    <div *ngIf="type === 'voids'"
+          class="grid-voids">
+      <div class="grid-item" >{{ payment?.paymentMethod }} </div>
+      <div class="grid-item" >{{ payment?.voidReason }} </div>
+      <div class="grid-item" >
+        {{ payment?.orderID }}
+      </div>
+      <div class="grid-item" >
+        {{ payment?.employeeName  }}
+      </div>
+      <div  class="totals">  {{payment?.voidAmount | currency }}   </div>
+    </div>
 
-    <div class="totals" >                 {{payment?.tipAmount | currency }}</div>
-
-    <div class="totals"    *ngIf="payment?.count != 0"  >  {{ payment?.count }} </div>
-
-    <!-- <div class="totals" *ngIf="payment?.tipAmount  != 0"> {{payment?.tipAmount | currency }}</div> -->
   </div>
 
-  <div *ngIf="groupBy === 'paymentMethod' || groupBy === 'devicename'"
-      class="grid-headerfooter">
-    <div class="grid-item" *ngIf="payment.paymentMethod" >{{ payment?.paymentMethod }} </div>
-    <div class="grid-item" *ngIf="!payment.paymentMethod" > Not Assigned </div>
-    <div  class="totals">    {{payment?.amountPaid | currency }}   </div>
-    <div  class="totals"  *ngIf="payment?.count != 0"  >{{payment.amountPaid / payment.count | currency }}    </div>
-    <div  class="totals"  *ngIf="payment?.count != 0" >  {{ payment.count }} </div>
+  <div *ngFor="let payment of payments" >
+    <div  *ngIf="groupBy && groupBy === 'OrderEmployeCount'"
+          class="grid-order-employeecount">
+      <div  class="grid-item"> {{ payment?.employeeName }}</div>
+      <div  class="totals">   {{ payment?.hour }}</div>
+      <div  *ngIf="payment?.count != 0"
+            class="totals">   {{ payment?.count }} </div>
+      <div  class="totals">   {{payment?.amountPaid | currency }} </div>
+      <div  *ngIf="payment?.count != 0"
+            class="totals">  {{payment?.amountPaid / payment?.count | currency }} </div>
+    </div>
   </div>
 
-</div>
+</ng-template>
 
-<div *ngFor="let payment of payments" >
-  <div  *ngIf="groupBy === 'OrderEmployeCount'"
-        class="grid-order-employeecount">
-    <div  class="grid-item"> {{ payment?.employeeName }}</div>
-    <div  class="totals">   {{ payment?.hour }}</div>
-    <div  *ngIf="payment?.count != 0"
-          class="totals">   {{ payment?.count }} </div>
-    <div  class="totals">   {{payment?.amountPaid | currency }} </div>
-    <div  *ngIf="payment?.count != 0"
-          class="totals">  {{payment?.amountPaid / payment?.count | currency }} </div>
-  </div>
-</div>
+<ng-template #loading>
+  ...loading
+</ng-template>

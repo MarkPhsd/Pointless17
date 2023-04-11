@@ -50,8 +50,6 @@ export class PlatformService {
     return false
   }
 
-
-
   constructor(
       private ipcService          : IPCService,
      ) {

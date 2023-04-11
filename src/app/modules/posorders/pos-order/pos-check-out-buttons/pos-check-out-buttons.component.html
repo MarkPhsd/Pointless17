@@ -1,28 +1,28 @@
-<div class="side-panel-buttons-container"
+<div  class="side-panel-buttons-container"
       [style.width]="deviceWidthPercentage"
       *ngIf="order && !mainPanel && !smallDevice && (uiSettings && uiSettings.wideOrderBar)" >
     <div *ngIf="!phoneDevice">
-    <button mat-raised-button
-      color="primary"
-      class="button"
-      (click)="toggleOpenOrderBar()">
-      <div *ngIf="order && order.history">
-        <mat-icon>view</mat-icon>
-        View Cart
-      </div>
-      <div *ngIf="order && !order.history">
-        <mat-icon>edit</mat-icon>
-        Edit Cart
-      </div>
-    </button>
+      <button mat-raised-button
+              color="primary"
+              class="button"
+              (click)="toggleOpenOrderBar()">
+        <div *ngIf="order && order.history">
+          <mat-icon>view</mat-icon>
+          View Cart
+        </div>
+        <div *ngIf="order && !order.history">
+          <mat-icon>edit</mat-icon>
+          Edit Cart
+        </div>
+      </button>
     </div>
     <div>
-    <button  mat-raised-button
-      color="primary"
-      class="button"
-      (click)="makePayment()">
-      <mat-icon>credit_card</mat-icon>
-      Check Out
-    </button>
+      <button  mat-raised-button
+              color="primary"
+              class="button"
+              (click)="makePayment()">
+        <mat-icon>credit_card</mat-icon>
+        Check Out
+      </button>
     </div>
   </div>

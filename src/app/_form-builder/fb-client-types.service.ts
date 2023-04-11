@@ -65,6 +65,9 @@ export class FbClientTypesService {
       deleteEmployee: [],
       uploadPictures: [],
       priceColumnOption: [],
+
+      allowNegativeTransaction: [],
+      allowZeroTransaction: [],
     })
     return fb
 

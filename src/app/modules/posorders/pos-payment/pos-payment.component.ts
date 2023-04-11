@@ -30,6 +30,7 @@ import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { DateAdapter } from '@angular/material/core';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 
 @Component({
   selector: 'app-pos-payment',
@@ -164,6 +165,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
               private userAuthorization : UserAuthorizationService,
               private authenticationService: AuthenticationService,
               private changeDetectorRef: ChangeDetectorRef,
+              private printingservice: PrintingService,
               private router          : Router,
               private fb              : FormBuilder) { }
 
@@ -478,7 +480,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   processResults(paymentResponse: IPaymentResponse) {
     let result = 0
-   
+
     if (paymentResponse?.paymentSuccess || paymentResponse?.orderCompleted) {
       if (paymentResponse?.orderCompleted) {
         this.action$ =   this.orderMethodsService.finalizeOrderProcesses(paymentResponse, this.paymentMethod, paymentResponse.order).pipe(switchMap(data => {
@@ -540,6 +542,30 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
     return
   }
+
+  get isZeroPaymentAllowed() {
+    // Public Property allowNegativeTransaction As Nullable(Of Boolean) = False
+    // Public Property allowZeroTransaction As Nullable(Of Boolean) = False
+    // if (this.userAuthorization.currentUser.)
+    if ( this.userAuths &&  this.userAuths.allowZeroTransaction) {
+      return true
+    }
+
+    return false;
+  }
+
+
+  get isNegativePaymentAllowed() {
+    // Public Property allowNegativeTransaction As Nullable(Of Boolean) = False
+    // Public Property allowZeroTransaction As Nullable(Of Boolean) = False
+    // if (this.userAuthorization.currentUser.)
+    if ( this.userAuths &&  this.userAuths.allowNegativeTransaction) {
+      return true
+    }
+
+    return false;
+  }
+
 
   processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
     return this.paymentsMethodsService.processCashPayment(site, posPayment, order, amount, paymentMethod)

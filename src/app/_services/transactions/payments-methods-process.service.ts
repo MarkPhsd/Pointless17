@@ -13,6 +13,7 @@ import { DSIEMVSettings, TransactionUISettings } from '../system/settings/uisett
 import { PrintingService } from '../system/printing.service';
 import { BalanceSheetService } from './balance-sheet.service';
 import { PrepPrintingServiceService } from '../system/prep-printing-service.service';
+import { BalanceSheetMethodsService } from './balance-sheet-methods.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -51,6 +52,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     public  printingService     : PrintingService,
     private dialogOptions       : ProductEditButtonService,
     private balanceSheetService : BalanceSheetService,
+    private balanceSheetMethodsSevice: BalanceSheetMethodsService,
     private matSnackBar         : MatSnackBar) {
   }
 
@@ -80,37 +82,41 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder,
                      amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
 
-
-    const balance$ =  this.balanceSheetService.openDrawerFromBalanceSheet()
+    const balance$ =  this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet();
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
     let response: IPaymentResponse;
-    
+
     return balance$.pipe(
         switchMap(data => {
-          console.log('processCashPayment Balance sheet', data)
+
           return payment$
+
       })).pipe(switchMap(data => {
-        console.log('makePayment data', data)
-        if (!data) { 
+
+        response = data
+        // console.log('makePayment data', response)
+        order = data.order;
+
+        if (!data) {
           this.sitesService.notify('Payment not succeeded.', 'close', 5000, 'red')
           return of(null)
         }
 
-        response  = data;
-        this.orderMethodsService.finalizeOrder(response, paymentMethod, order);
         return this.orderMethodsService.finalizeOrderProcesses(null, null, order);
-        
+
       })).pipe(switchMap( data => {
 
-        if (!data) { 
-          this.sitesService.notify('Order finalized', 'close', 5000, 'red')
-          return of(null)
-        }
-
+        // console.log('response data prep', response)
+        this.orderMethodsService.finalizeOrder(response, paymentMethod, order);
+        // if (!data) {
+        //   this.sitesService.notify('Order finalized', 'close', 5000, 'red')
+        //   return of(null)
+        // }
         return of(response);
-      }))
-
-
+      }), catchError(err => {
+        this.sitesService.notify('Error in processing cash payment' + err, 'Error', 5000, 'red')
+        return of(err)
+      }));
   }
 
   processCreditPayment(site: ISite, posPayment: IPOSPayment,
@@ -325,16 +331,16 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }))
   }
 
-  applyAssociatedAuths(transType: string, payment: IPOSPayment, order: IPOSOrder) { 
+  applyAssociatedAuths(transType: string, payment: IPOSPayment, order: IPOSOrder) {
     // console.log(transType)
     // console.log(order.posPayments);
     // console.log(payment)
     const list = [] as string[];
 
-    if (transType === 'authorizationCompletionResponse') { 
+    if (transType === 'authorizationCompletionResponse') {
       order.posPayments.forEach(data => {
-        // console.log('applyAssociatedAuths refnumber', data.tranType, data.refNumber, payment.respcode )  
-        if (data.tranType === 'incrementalAuthorizationResponse' ) { 
+        // console.log('applyAssociatedAuths refnumber', data.tranType, data.refNumber, payment.respcode )
+        if (data.tranType === 'incrementalAuthorizationResponse' ) {
           list.push(data.refNumber)
         }
       })
@@ -347,7 +353,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   processTriPOSResponse(trans: any, payment: IPOSPayment, order: IPOSOrder): Observable<any> {
     const site = this.sitesService.getAssignedSite();
 
-    if (!this.isTriPOSApproved(trans)) { 
+    if (!this.isTriPOSApproved(trans)) {
       this.sitesService.notify(`Error Processing. Message: ${trans?.expressResponseMessage}`, 'close', 5999, 'red')
       return of(null)
     }
@@ -363,8 +369,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     return this.getPaymentMethodByName(site, cardType).pipe(
       switchMap( data => {
-        if (!data) { 
-          // console.log('data is null') 
+        if (!data) {
+          // console.log('data is null')
           return of(null)   }
         payment.paymentMethodID = data.id;
         paymentMethod = data;
@@ -397,7 +403,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       this.sitesService.notify('Error retrieiving order information. Please re-open order.', 'Alert',1000)
       return of(order)
     }
-    if (!this.isTriPOSApproved(trans)) { 
+    if (!this.isTriPOSApproved(trans)) {
       this.sitesService.notify(`Error Processing. ${trans.expressResponseMessage}`, 'close', 5999, 'red')
       return of(null)
     }
@@ -411,7 +417,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
       return this.paymentMethodService.getCreditCardPaymentMethod(site, cardType).pipe(
         switchMap( data => {
-          if (!data) { 
+          if (!data) {
             this.sitesService.notify(`Error getting payment method.`, 'close', 3000, 'red')
             return of(null)
           }
@@ -421,7 +427,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         }
       )).pipe(
         switchMap(data => {
-          if (!data) { 
+          if (!data) {
             this.sitesService.notify(`Error saving payment.`, 'close', 3000, 'red')
             return of(null)
           }

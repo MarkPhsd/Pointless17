@@ -3,36 +3,52 @@
 <div *ngIf="(newItem$ | async) as item"></div>
 <div *ngIf="(removeItem$| async) as item"></div>
 
-<div *ngIf="promptMenuItem"
+<!-- <div *ngIf="promptMenuItem && promptMenuItem?.prompt_Products?.name"
       class="grid-items">
-  <div>
-    <button mat-raised-button
-        class="buttons"
-        (click)="addItem()">
-      <mat-label>{{promptMenuItem?.prompt_Products?.name}}</mat-label>
-      <div *ngIf="promptMenuItem?.prompt_Products?.prodSecondLanguage">
-        <mat-label>{{promptMenuItem?.prompt_Products?.prodSecondLanguage}}</mat-label>
-      </div>
-    </button>
+
+</div> -->
+<!-- name{{this.promptMenuItem?.prompt_Products?.name}} -->
+<ng-container
+  [ngTemplateOutlet]="promptItemView"
+  [ngTemplateOutletContext]="{$implicit: promptMenuItem}">
+</ng-container>
+
+<ng-template #promptMenuItemView let-promptMenuItem>
+  <div class="grid-items">
+    <div>
+      <button mat-raised-button
+          class="buttons"
+          color="primary"
+          (click)="addItem()">
+        <h5>
+          <mat-label>{{promptMenuItem?.prompt_Products?.name}}</mat-label>
+          <div *ngIf="promptMenuItem?.prompt_Products?.prodSecondLanguage">
+            <mat-label>{{promptMenuItem?.prompt_Products?.prodSecondLanguage}}</mat-label>
+          </div>
+        </h5>
+
+      </button>
+    </div>
+
+    <div *ngIf ="imageURL" class="image" (click)="addItem()">
+      <img class="image" [src]="imageURL">
+    </div>
+
+    <div  *ngIf="chosenCount || (chosenCount != '' && chosenCount != undefined)"
+          class="button-item">
+      <button mat-button
+              class="buttons"
+              color="warn"
+              (click)="removeItem()">
+              {{chosenCount}}
+      <mat-icon >delete</mat-icon> Remove
+      </button>
+    </div>
+
+    <div *ngIf="promptMenuItem.prompt_Products?.onlineShortDescription"
+        class="span-column onlineShortDescription"
+        [innerHTML]="promptMenuItem.prompt_Products?.onlineShortDescription">
+    </div>
   </div>
 
-  <div *ngIf ="imageURL" class="image" (click)="addItem()">
-    <img class="image" [src]="imageURL">
-  </div>
-
-  <div  *ngIf="chosenCount || (chosenCount != '' && chosenCount != undefined)"
-        class="button-item">
-    <button mat-button
-            class="buttons"
-            (click)="removeItem()">
-            {{chosenCount}}
-     <mat-icon>delete</mat-icon> Remove
-    </button>
-  </div>
-
-  <div *ngIf="promptMenuItem.prompt_Products?.onlineShortDescription"
-      class="span-column onlineShortDescription"
-      [innerHTML]="promptMenuItem.prompt_Products?.onlineShortDescription">
-  </div>
-
-</div>
+</ng-template>

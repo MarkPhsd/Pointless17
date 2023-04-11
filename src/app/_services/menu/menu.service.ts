@@ -161,6 +161,21 @@ export class MenuService {
     return this.searchIsLoaded.asObservable();
   }
 
+
+  setAllItemsActive(site: ISite): Observable<unknown> {
+
+    const controller ="/MenuItems/"
+
+    const endPoint = `setAllItemsActive`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.get<any>(url)
+
+  }
+
   // this.menuService.updateField('DepartmentID', id, listOfItems)
   updateField(site: ISite, fieldName: string,value: any, listofItems: any[] ) {
 

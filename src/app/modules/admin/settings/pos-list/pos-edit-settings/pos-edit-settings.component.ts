@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { ElectronService } from 'ngx-electron';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { PointlessCCDSIEMVAndroidService } from 'src/app/modules/payment-processing/services';
 import { ISetting } from 'src/app/_interfaces';
 import { FileSystemService } from 'src/app/_services/fileSystem/file-system.service';
@@ -36,7 +36,7 @@ export class PosEditSettingsComponent implements OnInit {
 
   electronPrinterList : any;
   receiptPrinter: string;
-  
+
   medOrRecStoreList = [
     {id:0,name:'Any'},  {id:1,name:'Med'},  {id:2,name:'Rec'}
   ]
@@ -58,6 +58,8 @@ export class PosEditSettingsComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: number
   )
  {
+
+
     if (data) {
       this.setting = data
       if (!this.setting.text) {
@@ -154,16 +156,28 @@ export class PosEditSettingsComponent implements OnInit {
     this.setting.name   = item.name;
     this.setting.text   = text;
     this.setting.filter = 421
-    // this.uiSettingService.updatePOSDevice(item)
+    const id = this.setting.id;
 
-    this.saving$ = this.settingsService.putSetting(site, this.setting.id, this.setting)
-    this.saving = true;
-    this.saving$.subscribe(data => {
+    const setting = this.setting;
+
+    console.log(id, setting)
+    this.saving$ = this.settingsService.putSetting(site, id, setting).pipe(
+      switchMap( data => {
       if (close) {
         this.onCancel(true);
       }
-      this.saving = false
-    })
+      this.saving = true;
+      return of(data)
+    }));
+
+    // this.saving = true;
+
+    // this.saving$.subscribe(data => {
+    //   if (close) {
+    //     this.onCancel(true);
+    //   }
+    //   this.saving = false
+    // })
   }
 
   setZoomValue(event) {

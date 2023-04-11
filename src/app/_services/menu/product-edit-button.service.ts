@@ -201,7 +201,7 @@ export class ProductEditButtonService {
 
   openUnitTypeEditor(data: UnitType): MatDialogRef<UnitTypeEditComponent> {
     let dialogRef: any;
-   
+
     dialogRef = this.dialog.open(UnitTypeEditComponent,
       { width:        '600px',
         minWidth:     '500px',

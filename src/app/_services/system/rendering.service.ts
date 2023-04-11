@@ -77,7 +77,7 @@ export class RenderingService {
 
       if (key === 'dateMade') {
         let value = this.checkDate(item[key])
-        console.log('dateMade', value)
+        // console.log('dateMade', value)
         item[key] = value
       }
 

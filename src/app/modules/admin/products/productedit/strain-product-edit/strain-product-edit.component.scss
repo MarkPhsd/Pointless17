@@ -59,6 +59,13 @@ mat-form-field {
   grid-template-columns: 150px auto;
 }
 
+.grid-container-3Column {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 115px 45px 45px;
+}
+
 .header-container {
   --gap: 10px;
   display: grid;

@@ -4,6 +4,12 @@ mat-action-row {
   place-content: start;
 }
 
+.mat-button-toggle {
+  background-color: #e7eaf1;
+  color: #ec3939;
+}
+
+
 mat-expansion-panel {
   margin: 3px;
 }
@@ -22,13 +28,12 @@ mat-button-toggle-group {
 
 .grid-items {
   max-height: 400px;
-  // height:     400px;
+
   display: grid;
-  // overflow-y: auto;
-  // overflow-x: hidden;
   grid-auto-flow: row;
   grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
   gap: 10px;
+  overflow-y: auto
 }
 
 .grid-item {

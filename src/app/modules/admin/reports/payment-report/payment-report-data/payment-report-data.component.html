@@ -32,7 +32,7 @@
 
         <mat-card-content>
           <div  class="grid-headerfooter"
-               *ngIf="payments && (groupBy.toLowerCase() === 'devicename' ||
+               *ngIf="payments && groupBy && (groupBy.toLowerCase() === 'devicename' ||
                                    groupBy.toLowerCase() === 'paymentMethod'.toLowerCase() ||
                                    groupBy.toLowerCase() === 'employee'.toLowerCase())">
 
@@ -50,7 +50,7 @@
           </div>
 
           <div  class="grid-order-employeecount"
-                *ngIf="payments && groupBy === 'orderemployeecount'">
+                *ngIf="payments && groupBy && groupBy === 'orderemployeecount'">
               <div class="grid-item">Staff</div>
               <div class="grid-item">Hour</div>
               <div class="grid-item">Count</div>
@@ -58,12 +58,22 @@
               <div class="grid-item">Avg</div>
           </div>
 
+          <div  class="grid-voids"
+                *ngIf="payments && !groupBy">
+              <div class="grid-item">Method</div>
+              <div class="grid-item">Reason</div>
+              <div class="grid-item">Employee</div>
+              <div class="grid-item">Order</div>
+              <div class="grid-item">Amount </div>
+          </div>
+
           <div class="mat-divider">
           </div>
 
           <app-payment-report-card
               [payments] ="payments"
-              [groupBy]="groupBy">
+              [type]     ="type"
+              [groupBy]  ="groupBy">
           </app-payment-report-card>
 
           <mat-divider></mat-divider>
@@ -71,7 +81,7 @@
 
         <mat-card-footer>
 
-          <div class="grid-footer-payments" *ngIf="(groupBy === 'paymentMethod')">
+          <div class="grid-footer-payments" *ngIf="groupBy && (groupBy === 'paymentMethod')">
             <div class="grid-items">
               Credit Total
             </div>

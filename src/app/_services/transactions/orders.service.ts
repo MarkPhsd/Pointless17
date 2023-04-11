@@ -192,6 +192,10 @@ export class OrdersService {
     this._scanner.next(true)
   }
 
+  setScanner() {
+    this._scanner.next(true)
+  }
+
   updateOrderSubscription(order: IPOSOrder) {
     this.updateOrder(order);
     if (order == null) {
@@ -206,7 +210,7 @@ export class OrdersService {
     }
 
     this.storeCreditMethodService.updateSearchModel(null);
-    this._scanner.next(true)
+    this.setScanner()
     const site = this.siteService.getAssignedSite();
 
     const devicename = localStorage.getItem('devicename')

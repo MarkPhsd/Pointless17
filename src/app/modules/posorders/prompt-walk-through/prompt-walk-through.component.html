@@ -1,12 +1,6 @@
 <div *ngIf="(action$ | async) as item; else loading"></div>
-<ng-template #loading>
-  <div *ngIf="processing">
-    ..sending
-    <mat-spinner [diameter]="50"></mat-spinner>
-  </div>
-</ng-template>
 
-<div *ngIf="promptGroup">
+<div *ngIf="promptGroup && posItem">
   <mat-card class="mat-card">
     <mat-card-subtitle>
       <div class="grid-menu">
@@ -58,11 +52,30 @@
 
 <ng-template #buttonDisplay>
   <div class="grid-list">
-    <button class="item-button" mat-raised-button (click)="reset()"><mat-icon>refresh</mat-icon>Start Over</button>
-    <button class="item-button" mat-raised-button (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel <br> All Items</button>
-    <button class="item-button" mat-raised-button (click)="close()"><mat-icon>close</mat-icon>Close <br> Without Saving</button>
-    <button class="item-button" mat-raised-button (click)="applyChoices()"><mat-icon>approval</mat-icon>Apply Choices</button>
+    <!-- <button class="item-button" mat-raised-button (click)="reset()">
+        <h5>
+          <mat-icon>refresh</mat-icon>Start Over
+        </h5>
+    </button> -->
+    <button class="item-button" mat-raised-button (click)="cancel()">
+       <h5>
+          <mat-icon>cancel</mat-icon>Cancel <br>
+        </h5>
+    </button>
+
+  <!-- <button class="item-button" mat-raised-button (click)="close()"><mat-icon>close</mat-icon>Close <br> Without Saving</button> -->
+
+    <button class="item-button" mat-raised-button (click)="applyChoices()">
+      <h5>
+        <mat-icon>approval</mat-icon>Save & Close
+      </h5>
+    </button>
   </div>
 </ng-template>
 
-<!-- {{orderPromptGroup | json}} -->
+<ng-template #loading>
+  <div *ngIf="processing">
+    ..sending
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+</ng-template>

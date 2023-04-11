@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   gridlayout        = 'grid-flow grid-margin'
   gridlayoutNoStaff = 'grid-flow grid-margin-nostaff'
-  isApp                      : boolean;
+
   company                    = {} as ICompany;
   compName:                  string;
   userName:                  string;
@@ -219,7 +219,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     this.site =  this.siteService.getAssignedSite();
-
+    this.getDeviceInfo();
     this.getUITransactionsSettings();
     this.initUIService();
     this.initSearchObservable();
@@ -227,7 +227,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
     this.platFormService.getPlatForm();
     this.initSubscriptions();
-    this.getDeviceInfo();
+
     this.getUserInfo();
     this.refreshScannerOption()
     this.searchForm = this.fb.group( {  searchProducts: '' });
@@ -243,24 +243,31 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(this.site);
   }
 
+  get isApp() {
+    return this.platFormService.isApp()
+  }
 
   getDeviceInfo() {
     const devicename = this.orderService.posName
-    if (devicename) {
+    console.log('get device info', devicename, this.isApp)
+    if (devicename && this.isApp) {
       this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
         switchMap(data => {
+          console.log('device', data)
           try {
             const posDevice = JSON.parse(data.text) as ITerminalSettings;
             this.uiSettings.updatePOSDevice(posDevice)
             this.terminalSetting = data;
+            console.log('device', posDevice)
             if (this.platformService.isAppElectron) {
               if (posDevice && posDevice.electronZoom && posDevice.electronZoom != '0') {
                 this.uiSettings.electronZoom(posDevice.electronZoom)
               }
             }
+
             return of(posDevice)
           } catch (error) {
-                this.siteService.notify('Error setting device info.' + error, 'Close', 5000, 'yellow')
+            this.siteService.notify('Error setting device info.' + error, 'Close', 5000, 'yellow')
           }
           return of(null)
         }
@@ -337,7 +344,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.scannerEnabled = false
     if (this.platFormService.isApp()) {
       this.scannerEnabled = true;
-      this.isApp = true
+
     }
   }
 
@@ -563,7 +570,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     const dialog = this.uiSettings.openEditPOSDevice(this.terminalSetting)
     dialog.afterClosed().subscribe(data => {
       this.getDeviceInfo()
-      console.log('blah blah')
     })
   }
 

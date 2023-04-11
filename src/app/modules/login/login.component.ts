@@ -402,6 +402,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginAction$ = this.userSwitchingService.login(userName, password).pipe(
       switchMap(result =>
         {
+
+          console.log('result of submit login', result);
+
           this.initForm();
           if (result && result.errorMessage) {
             this.notifyEvent(result.errorMessage, 'Failed Login');
@@ -413,21 +416,21 @@ export class LoginComponent implements OnInit, OnDestroy {
           let user = result?.user ;
           let sheet = result?.sheet as IBalanceSheet;
 
-          if (result && result.username != undefined) {
-            user = result;
+          //if there is a sheet we login here with the user to prompt the sheet if needed.
+          if (sheet) {
+            if (this.loginApp(result)) {
+              return of('success')
+            }
           }
+
+          if (result && result.username != undefined) {   user = result }
 
           if (user) {
             this.spinnerLoading = false;
 
             if (user && user?.errorMessage === 'failed') {
-              console.log('login failed', user.errorMessage)
               this.authenticationService.updateUser(null);
               return of('failed')
-            }
-
-            if (this.loginApp(user)) {
-              return of('success')
             }
 
             if (user && user?.message && user?.message.toLowerCase() === 'success') {
@@ -453,12 +456,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
           }
         }
-          // }
-          //   this.spinnerLoading = false;
-          //   this.errorMessage = user?.errorMessage
-          //   console.log('error', user, user?.errorMessage)
-          //   return of('error')
-          // }
     ))
   }
 

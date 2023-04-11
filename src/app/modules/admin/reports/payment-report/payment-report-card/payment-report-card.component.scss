@@ -86,6 +86,25 @@
 
 }
 
+// <!-- <div class="grid-item">Method</div>
+// <div class="grid-item">Reason</div>
+// <div class="grid-item">Employee</div>
+// <div class="grid-item">Device</div>
+// <div class="grid-item">Amount </div> -->
+
+
+.grid-voids {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 55px 65px 65px 55px 65px;
+  margin-left: 15px;
+  white-space   : nowrap;
+  overflow      : hidden;
+  text-overflow : ellipsis;
+  text-transform: capitalize;
+}
+
 .grid-order-employeecount {
   --gap: 5px;
   display: grid;

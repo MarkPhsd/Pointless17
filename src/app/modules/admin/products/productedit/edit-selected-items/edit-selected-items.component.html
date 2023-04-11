@@ -6,9 +6,11 @@
 
   <mat-card-subtitle>
     Any changes to this window will update all selected items.
+    <button mat-raised-button color="primary" (click)="enableAllItems()">Activate All Items</button>
     <button mat-raised-button color="primary"  (click)="updateItems()"><mat-icon>update</mat-icon>Update</button>
     <button mat-raised-button color="warn" (click)="delete()"><mat-icon>delete</mat-icon>Delete</button>
     <button mat-raised-button color="primary" (click)="exit()"><mat-icon>close</mat-icon>Close</button>
+    <!-- /setAllItemsActive -->
     <div *ngIf="selected">
     </div>
   </mat-card-subtitle>
@@ -43,7 +45,6 @@
       <div>
         <app-species-list        [inputForm]="inputForm"></app-species-list>
       </div>
-
       <div>
        <prompt-group-select      [inputForm]="inputForm"    ></prompt-group-select>
       </div>

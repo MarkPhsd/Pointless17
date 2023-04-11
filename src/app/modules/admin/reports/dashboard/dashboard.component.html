@@ -46,7 +46,7 @@
 
       <div class="grid-flow"
           *ngIf="showValues && dateFrom && dateTo">
-          
+
         <div  *ngFor="let site of sites$ | async">
           <sales-tax-report
                   [site]="site"
@@ -80,9 +80,12 @@
                   [dateFrom]="dateFrom"
                   [dateTo]="dateTo"
                   [removeGiftCard]="true"
+                  [viewType] = "'sales'"
                   [groupBy]="'category'">
-                <mat-icon>menu</mat-icon>  Category Sales
-                <mat-divider></mat-divider>
+                <div class="header">
+                  <mat-icon>menu</mat-icon>  Category Sales
+                  <mat-divider></mat-divider>
+                </div>
             </item-sales-card>
           </div>
 
@@ -92,9 +95,29 @@
                   [dateFrom]="dateFrom"
                   [dateTo]="dateTo"
                   [removeGiftCard]="true"
+                  [viewType] = "'sales'"
                   [groupBy]="'items'">
-                <mat-icon>menu</mat-icon>  Item Sales
-                <mat-divider></mat-divider>
+                <div class="header">
+                  <mat-icon>menu</mat-icon> Item Sales
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
+          </div>
+
+          <div>
+            <item-sales-card
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [groupBy]  = "'void'"
+                  [viewType] = "'adjustment'"
+                  >
+
+                <div class="header">
+                  <mat-icon>menu</mat-icon>  Item Voids
+                  <mat-divider></mat-divider>
+                </div>
             </item-sales-card>
           </div>
 

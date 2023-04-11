@@ -323,21 +323,24 @@
         <ng-container [ngTemplateOutlet]="isClockInOutOn"></ng-container>
       </div>
 
-      <span  *ngIf="(posDevice$ | async) as device; else loadingDevice">
-        <mat-divider></mat-divider>
-        <li *ngIf="device  && (isAdmin || isManager) && !smallDevice">
-        <br>
-        <div class='search-input'>
-          <button  mat-raised-button (click)="deviceInfo()">
-            Device Info  <mat-icon>device_hub</mat-icon>
-          </button>
-        </div>
-      </span>
+      <ng-container [ngTemplateOutlet]="posDevice"></ng-container>
     </span>
 
   </mat-menu>
 </ng-template>
 
+<ng-template #posDevice>
+  <span  *ngIf="(posDevice$ | async) as device; else loadingDevice">
+    <mat-divider></mat-divider>
+    <li *ngIf="device  && (isAdmin || isManager) && !smallDevice">
+    <br>
+    <div class='search-input'>
+      <button  mat-raised-button (click)="deviceInfo()">
+        Device {{device?.name}}  <mat-icon>device_hub</mat-icon>
+      </button>
+    </div>
+  </span>
+</ng-template>
 
 <ng-template #editCartButtons>
   <pos-check-out-buttons

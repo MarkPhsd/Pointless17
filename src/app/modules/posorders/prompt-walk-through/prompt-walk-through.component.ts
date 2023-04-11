@@ -8,7 +8,7 @@ import { OrdersService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { of, Subscription } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { Observable } from 'rxjs';
 @Component({
   selector: 'app-prompt-walk-through',
@@ -21,6 +21,7 @@ export class PromptWalkThroughComponent implements OnInit {
 
   @ViewChild('buttonDisplay')    buttonDisplay: TemplateRef<any>;
 
+  _savePrompt: Subscription
 
   modifierNote     : string;
   processing       : boolean;
@@ -47,16 +48,37 @@ export class PromptWalkThroughComponent implements OnInit {
 
   initPOSItemSubscription() {
     this._posItem = this.posOrderItemService.posOrderItem$.subscribe(data => {
-      // console.log('initPOSItemSubscription', data)
       this.posItem = data;
+    })
+
+  }
+
+  initSaveSubscription() {
+    this._savePrompt = this.promptWalkThroughService.savePromptSelection$.subscribe(data => {
+      if (data) {
+        this.applyChoices()
+      }
     })
   }
 
   initPromptGroupSubscription() {
-    this._promptGroup = this.promptGroupService.promptGroup$.subscribe(data => {
-      // console.log('initPromptGroupSubscription', data)
-      this.promptGroup = data;
-    })
+    try {
+      this._promptGroup = this.promptGroupService.promptGroup$.subscribe(data => {
+        this.promptGroup = data;
+      })
+    } catch (error) {
+    }
+
+    try {
+      this._order = this.orderService.currentOrder$.subscribe(data => {
+        this.order = data;
+      })
+    } catch (error) {
+    }
+    //this should be initialized from selecting an item earlier.
+    //the order and the prompt will be assigned.
+    //the main item should also be included .
+    //we might in the future want to use a multiplier. based on size selection
   }
 
   initOrderPromptGroupSubscription() {
@@ -73,7 +95,7 @@ export class PromptWalkThroughComponent implements OnInit {
 
   constructor(
     private sitesService             : SitesService,
-    private posOrderItemService      : POSOrderItemServiceService,
+    private posOrderItemService      : POSOrderItemService,
     private orderService             : OrdersService,
     private promptGroupService       : PromptGroupService,
     private promptWalkThroughService : PromptWalkThroughService,
@@ -81,14 +103,13 @@ export class PromptWalkThroughComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     )
   {
-
   }
 
   ngOnInit(): void {
     this.intSubscriptions()
     this.updateScreenSize()
+    this.initSaveSubscription()
   }
-
 
   @HostListener("window:resize", [])
   updateScreenSize() {
@@ -105,10 +126,32 @@ export class PromptWalkThroughComponent implements OnInit {
 
   reset() {
     // this.orderPromptGroup.prompts.
+    // this.orderPromptGroup.
   }
 
   close() {
     this.dialogRef.close()
+  }
+
+  getItem() {
+    if (!this.orderPromptGroup) {
+      return this.posItem;
+    }
+
+    if (this.orderPromptGroup) {
+      return this.orderPromptGroup.posOrderItem;
+    }
+  }
+
+  getOrderID() {
+    if (!this.orderPromptGroup) {
+      if (!this.posItem) { return 0}
+      return this.posItem.orderID;
+    }
+
+    if (this.orderPromptGroup) {
+      return this.orderPromptGroup.orderID;
+    }
   }
 
   cancel() {
@@ -116,30 +159,34 @@ export class PromptWalkThroughComponent implements OnInit {
     const result = window.confirm("Do you want to cancel this prompt? This will  apply all selections")
 
     if (result) {
-
       const site = this.sitesService.getAssignedSite();
-
-      if (this.orderPromptGroup) {
-
-        const item = this.orderPromptGroup.posOrderItem;
-        const orderID = this.orderPromptGroup.orderID.toString()
-
-        if (item) {
-          this.action$ = this.posOrderItemService.deletePOSOrderItem(site, item.id).pipe(
-            switchMap(data => {
-              return  this.orderService.getOrder(site, orderID, false)
-            }
-              )
-            ).pipe(
-              switchMap( data => {
-                this.orderService.updateOrderSubscription(data)
-                this.dialogRef.close()
-                return of('success')
-              }
-            )
-          )
-        }
+      let orderID = this.getOrderID()
+      console.log(orderID)
+      if (orderID == 0) {
+        this.dialogRef.close('success')
+        return;
       }
+      const item = this.getItem();
+      if (!item) {
+        this.dialogRef.close('success')
+        return
+      }
+      console.log(item?.orderID, item);
+      if (item) {
+        this.action$ = this.posOrderItemService.deletePOSOrderItem(site, item.id).pipe(
+          switchMap(data => {
+            return  this.orderService.getOrder(site, orderID.toString(), false)
+             }
+          )).pipe(
+            switchMap( data => {
+              this.orderService.updateOrderSubscription(data)
+              this.dialogRef.close('success')
+              return of('success')
+            }
+          )
+        )
+      }
+
     }
   }
 
@@ -180,9 +227,10 @@ export class PromptWalkThroughComponent implements OnInit {
               return of('success')
             }),
             catchError(data => {
+              this.sitesService.notify(`Error ${data}`, 'Error', 5000, 'red')
               this.processing = false;
               return of('false')
-            })
+          })
       )
     }
   }

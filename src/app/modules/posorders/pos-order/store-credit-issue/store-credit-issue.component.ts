@@ -13,7 +13,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { values } from 'lodash';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
@@ -111,7 +111,7 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
     private orderMethodService       : OrderMethodsService,
     private storeCreditMethodService : StoreCreditMethodsService,
     private orderService             : OrdersService,
-    private posOrderItemService      : POSOrderItemServiceService,
+    private posOrderItemService      : POSOrderItemService,
     private siteService              : SitesService,
     private dialogRef                : MatDialogRef<StoreCreditIssueComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)

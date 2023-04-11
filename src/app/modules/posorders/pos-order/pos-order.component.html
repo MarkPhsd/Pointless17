@@ -3,7 +3,7 @@
 <div *ngIf="(printAction$ | async) as item"></div>
 <div *ngIf="(printLabels$ | async) as items"></div>
 <div *ngIf="(deleteOrder$ | async) as items"></div>
-
+<div *ngIf="(posDevice$ | async) as posDevice"></div>
 <div  *ngIf="order && uiTransactionSettings" class="container">
   <div [class]="orderlayout">
     <div>
@@ -81,6 +81,7 @@
                 (outPutPurchaseOrder) ="makeManifest($event)"
                 (outPutchangeTransactionType)="changeTransactionType($event)"
                 (outPutListView)      ="toggleListView($event)"
+                [prepOrderOnClose]    ="prepOrderOnClose"
                 [itemsPrinted]        ="itemsPrinted"
                 [paymentsMade]        ="paymentsMade"
                 [isAuthorized]        ="isAuthorized"
@@ -100,22 +101,18 @@
         <mat-divider></mat-divider>
 
         <div>
-          <div *ngIf="mainPanel && uiTransactionSettings "
+          <div *ngIf="mainPanel && uiTransactionSettings"
                 class="payment-buttons-container">
-                <ng-container [ngTemplateOutlet]="stripePayButtonView"></ng-container>
-                <ng-container [ngTemplateOutlet]="dsiButtonView"></ng-container>
-                <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButtonView"></ng-container>
-                <ng-container [ngTemplateOutlet]="cardPointButtonView"></ng-container>
-                <ng-container [ngTemplateOutlet]="giftCardButtonView"></ng-container>
-                <ng-container ng-container [ngTemplateOutlet]="houseAccountButtonView"></ng-container>
-
-                <!-- <div *ngIf="order && order.clientID"> -->
-                  <ng-container [ngTemplateOutlet]="storeCreditPaybuttonView"></ng-container>
-                <!-- </div> -->
-                <ng-container [ngTemplateOutlet]="wicEBTButtonView"></ng-container>
-                <ng-container [ngTemplateOutlet]="triPOSPaymentButtonView"></ng-container>
-                <ng-container [ngTemplateOutlet]="payButton"></ng-container>
-
+              <ng-container [ngTemplateOutlet]="stripePayButtonView"></ng-container>
+              <ng-container [ngTemplateOutlet]="dsiButtonView"></ng-container>
+              <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButtonView"></ng-container>
+              <ng-container [ngTemplateOutlet]="cardPointButtonView"></ng-container>
+              <ng-container [ngTemplateOutlet]="giftCardButtonView"></ng-container>
+              <ng-container ng-container [ngTemplateOutlet]="houseAccountButtonView"></ng-container>
+              <ng-container [ngTemplateOutlet]="storeCreditPaybuttonView"></ng-container>
+              <ng-container [ngTemplateOutlet]="wicEBTButtonView"></ng-container>
+              <ng-container [ngTemplateOutlet]="triPOSPaymentButtonView"></ng-container>
+              <ng-container [ngTemplateOutlet]="payButton"></ng-container>
           </div>
         </div>
 
@@ -146,7 +143,8 @@
     [purchaseOrderEnabled]="purchaseOrderEnabled"
     [mainPanel]   ="mainPanel"
     [panelHeight] ="orderItemsHeightStyle"
-    [order]       ="order">
+    [enableExitLabel] ="enableExitLabel"
+    [order]           ="order">
   </pos-order-items>
 </ng-template>
 

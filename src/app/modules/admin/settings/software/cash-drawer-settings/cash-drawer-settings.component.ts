@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
-import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
+import { Component} from '@angular/core';
+
+import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 
 @Component({
   selector: 'app-cash-drawer-settings',
@@ -9,14 +9,14 @@ import { BalanceSheetService } from 'src/app/_services/transactions/balance-shee
 })
 export class CashDrawerSettingsComponent  {
 
-  constructor( 
-              private balanceSheetService: BalanceSheetService) { }
+  constructor(
+              private balanceSheetService: BalanceSheetMethodsService) { }
 
-  async  openDrawerOne() { 
+  async  openDrawerOne() {
     const response        = await this.balanceSheetService.openDrawerOne()
   }
-  
-  async  openDrawerTwo() { 
+
+  async  openDrawerTwo() {
     const response        = await this.balanceSheetService.openDrawerOne()
   }
 }

@@ -10,14 +10,17 @@ import { IPaymentSalesSearchModel, IPaymentSalesSummary, PaymentSummary, SalesPa
 })
 export class PaymentReportComponent implements OnInit, OnChanges {
 
+  @Input() type    : string;
   @Input() site    : ISite;
   @Input() dateTo  : string;
   @Input() dateFrom: string;
   @Input() notifier: Subject<boolean>
   @Input() groupBy = "paymentMethod"
   @Input() zrunID  : string;
+
   refunds$           : Observable<IPaymentSalesSummary>;
   sales$             : Observable<IPaymentSalesSummary>;
+  voids$             : Observable<IPaymentSalesSummary>;
   sales              : PaymentSummary[];
   paymentSalesSummary: IPaymentSalesSummary;
   message            : string;
@@ -29,8 +32,13 @@ export class PaymentReportComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    this.voids$ = null;
+    this.refunds$ = null;
     this.refreshSales();
-    this.refreshRefunds();
+    if (this.type === 'sales') {
+      this.refreshRefunds();
+      this.refreshVoids();
+    }
   }
 
   refreshSales() {
@@ -50,5 +58,15 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     searchModel.zrunID    = this.zrunID;
     searchModel.refunds   = true;
     this.refunds$          = this.salesPaymentService.getPaymentSales(this.site, searchModel);
+  }
+
+  refreshVoids() {
+    const searchModel = {} as IPaymentSalesSearchModel;
+    searchModel.startDate = this.dateFrom;
+    searchModel.endDate   = this.dateTo;
+    searchModel.groupBy   = this.groupBy;
+    searchModel.zrunID    = this.zrunID;
+    searchModel.voids     = true
+    this.voids$         = this.salesPaymentService.getPaymentSales(this.site, searchModel);
   }
 }

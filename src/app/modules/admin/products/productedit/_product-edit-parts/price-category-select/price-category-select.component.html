@@ -73,11 +73,16 @@
       </app-price-category-search>
     </div>
 
-    <div *ngIf="priceCategoryID  && priceCategoryID != 0">
+    <div>
       <button mat-button
               color="accent"
               (click)="openPriceCategory()">
-        <mat-icon>expand</mat-icon>
+        <div *ngIf="priceCategoryID != 0">
+          <mat-icon>expand</mat-icon>
+        </div>
+        <div *ngIf="priceCategoryID == 0">
+          <mat-icon>add</mat-icon>
+        </div>
       </button>
     </div>
     <div *ngIf="priceCategoryID  && priceCategoryID != 0">

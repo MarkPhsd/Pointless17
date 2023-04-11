@@ -50,7 +50,6 @@
       <div *ngIf="sheet" class="grid-container">
         <div>
           <h4><mat-icon>edit</mat-icon> Edit </h4>
-          <!-- sheet.shiftStarted {{sheet.shiftStarted}} -->
           <div *ngIf="!sheet.endTime">
             <span *ngIf ="sheet.shiftStarted != 1">
               <button color="warn" mat-raised-button (click)="startShift()">Start Sheet</button>

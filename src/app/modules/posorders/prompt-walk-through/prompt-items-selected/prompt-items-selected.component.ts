@@ -9,7 +9,7 @@ import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-wa
 import { Subscription } from 'rxjs';
 import { AWSBucketService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { OrdersService } from 'src/app/_services/transactions/orders.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
 
@@ -75,7 +75,7 @@ export class PromptItemsSelectedComponent implements OnInit {
      private promptGroupService        : PromptGroupService,
      private orderService              : OrdersService,
      private promptWalkService        : PromptWalkThroughService,
-     private posOrderItemService      : POSOrderItemServiceService,
+     private posOrderItemService      : POSOrderItemService,
      private siteService              : SitesService,
      private menuService              : MenuService,
      private awsBucket                : AWSBucketService,

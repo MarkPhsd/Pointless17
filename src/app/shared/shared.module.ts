@@ -178,6 +178,7 @@ import { SaveChangesButtonComponent } from './widgets/save-changes-button/save-c
 import { BrandTypeSelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/brand-type-select/brand-type-select.component';
 import { ValueFromListSelectorComponent } from './widgets/value-from-list-selector/value-from-list-selector.component';
 import { ScaleValueViewComponent } from './widgets/scale-value-view/scale-value-view.component';
+import { BalanceSheetReportComponent } from '../modules/admin/reports/balance-sheet-report/balance-sheet-report.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -203,6 +204,7 @@ import { ScaleValueViewComponent } from './widgets/scale-value-view/scale-value-
     ApiStoredValueComponent,
     ApiStatusDisplayComponent,
     AutofocusDirective,
+    BalanceSheetReportComponent,
     BlogPostListComponent,
     BlogPostComponent,
     ChangeDueComponent,
@@ -260,6 +262,7 @@ import { ScaleValueViewComponent } from './widgets/scale-value-view/scale-value-
     LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
     ListProductSearchInputComponent,
+
     MatDateRangeComponent,
     MatSelectComponent,
     MatSpinnerOverlayComponent,
@@ -396,6 +399,7 @@ import { ScaleValueViewComponent } from './widgets/scale-value-view/scale-value-
     ApiStoredValueComponent,
     ApiStatusDisplayComponent,
     AppWizardProgressButtonComponent,
+    BalanceSheetReportComponent,
     BlogPostListComponent,
     BlogPostComponent,
     EmailEntryComponent,
@@ -445,6 +449,7 @@ import { ScaleValueViewComponent } from './widgets/scale-value-view/scale-value-
     HeaderComponent,
     IonicGeoLocationComponent,
     IonicSwipeToDeleteComponent,
+
     ItemTypeSortComponent,
     ItemSalesCardComponent,
     ImageSwiperComponent,

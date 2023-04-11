@@ -24,6 +24,7 @@ import { UserSwitchingService } from '../_services/system/user-switching.service
 import { ITerminalSettings, SettingsService } from '../_services/system/settings.service';
 import { ElectronService } from 'ngx-electron';
 import { BalanceSheetService } from '../_services/transactions/balance-sheet.service';
+import { BalanceSheetMethodsService } from '../_services/transactions/balance-sheet-methods.service';
 
 @Component({
   selector: 'app-default',
@@ -342,6 +343,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private userAuthorizationService: UserAuthorizationService,
                private userSwitchingService    : UserSwitchingService,
                private balanceSheetService     : BalanceSheetService,
+               private balanceSheetMethodService: BalanceSheetMethodsService,
                private settingService          : SettingsService,
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
@@ -367,7 +369,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       const device = JSON.parse(data.text) as ITerminalSettings;
       this.settingService.updateTerminalSetting(device)
       if (device.enableScale && this.platFormService.isAppElectron) {
-        this.balanceSheetService.startScaleService()
+        this.balanceSheetMethodService.startScaleService()
       }
       return of(device)
     }))

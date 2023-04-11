@@ -14,14 +14,14 @@ import { fadeAnimation } from 'src/app/_animations';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { PosOrderItemsComponent } from './pos-order-items/pos-order-items.component';
 import { PrintingService } from 'src/app/_services/system/printing.service';
-import { SettingsService } from 'src/app/_services/system/settings.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { ResizedEvent } from 'angular-resize-event';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { NewOrderTypeComponent } from '../components/new-order-type/new-order-type.component';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
@@ -67,8 +67,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @ViewChild('triPOSPaymentButton')   triPOSPaymentButton: TemplateRef<any>;
   @ViewChild('payButton')   payButton: TemplateRef<any>;
   @ViewChild('stripePayButton')   stripePayButton: TemplateRef<any>;
-  
-  
 
   action$: Observable<any>;
   deleteOrder$: Observable<any>;
@@ -88,9 +86,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   // @ViewChild('container') container : ElementRef;
   @Input() OrderID : string;
   @Input() mainPanel = false;
-  // totalOrderHeight$: Observable<any>;
-  // remainingHeight$:  Observable<any>;
-  // state   = 'nothing';
+
   id: any = '';
   order$: Observable<IPOSOrder>;
   serviceType$: Observable<IServiceType>;
@@ -147,7 +143,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   private _items : Subscription
   assignedItems:  PosOrderItem[];
   bottomSheet$: Observable<any>;
-
+  posDevice$      : Observable<ITerminalSettings>;
+  posDevice       :  ITerminalSettings;
+  enableExitLabel : boolean;
+  prepOrderOnClose: boolean;
   refundItemsAvalible;
   uiTransactionSetting$: Observable<TransactionUISettings>;
   uiTransactionSetting : TransactionUISettings;
@@ -158,62 +157,65 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   // @ViewChild('triPOSPaymentButton')   triPOSPaymentButton: TemplateRef<any>;
   // @ViewChild('payButton')   payButton: TemplateRef<any>;
 
-  get stripePayButtonView() { 
-    if ( this.order && this.order.balanceRemaining != 0 && !this.platFormService.isApp() ) { 
+  get stripePayButtonView() {
+    if ( this.order && this.order.balanceRemaining != 0 && !this.platFormService.isApp() ) {
       return this.stripePayButton
     }
     return null;
   }
 
-
-  get wicEBTButtonView() { 
-    if ( (!this.paymentsEqualTotal && !this.order.completionDate && this.order?.balanceRemaining != 0)) { 
+  get wicEBTButtonView() {
+    if ( (!this.paymentsEqualTotal && !this.order.completionDate && this.order?.balanceRemaining != 0)) {
       return this.wicEBTButton
     }
     return null;
   }
 
 
-  get storeCreditPaybuttonView() { 
-    if ( this.order && this.order.clientID &&  (!this.paymentsEqualTotal && !this.order.completionDate && this.order?.balanceRemaining != 0)) { 
+  get storeCreditPaybuttonView() {
+    if ( this.order && this.order.clientID &&  (!this.paymentsEqualTotal && !this.order.completionDate && this.order?.balanceRemaining != 0)) {
       return this.storeCreditPaybutton
     }
     return null;
   }
-  
-  get triPOSPaymentButtonView() { 
+
+  get triPOSPaymentButtonView() {
     if ( this.devicename &&
           this.uiTransactionSettings?.triposEnabled &&
-          (this.order && this.order?.balanceRemaining != 0) ) { 
+          (this.order && this.order?.balanceRemaining != 0) ) {
       return this.triPOSPaymentButton
     }
     return null;
   }
 
-  get houseAccountButtonView() { 
+  get houseAccountButtonView() {
     if (  (this.userAuths && this.userAuths.houseAccountPayment) && this.order.clientID != 0 &&
-            this.order?.clients_POSOrders?.client_Type?.name.toLowerCase() === 'house account') { 
+            this.order?.clients_POSOrders?.client_Type?.name.toLowerCase() === 'house account') {
       return this.houseAccountButton
     }
     return null;
   }
 
-  get dsiButtonView() { 
+  get dsiButtonView() {
     if (    this.devicename && (this.uiTransactionSettings && this.uiTransactionSettings?.dsiEMVNeteEpayEnabled)
-      && this.order && this.order?.balanceRemaining != 0) { 
+      && this.order && this.order?.balanceRemaining != 0) {
       return this.disEMVCardButton
     }
     return null;
   }
 
-  get giftCardButtonView() { 
-    if (  (!this.paymentsEqualTotal && !this.order.completionDate && this.order?.balanceRemaining != 0)) {
-      return this.giftCardPayButton;
+  get giftCardButtonView() {
+    if (  (!this.paymentsEqualTotal &&
+           !this.order.completionDate &&
+           this.order?.balanceRemaining != 0)) {
+      if (this.uiTransactionSetting?.enableGiftCards) {
+        return this.giftCardPayButton;
+      }
     }
     return null;
   }
 
-  get cardPointButtonView() { 
+  get cardPointButtonView() {
     if (this.devicename &&
       this.uiTransactionSettings?.cardPointBoltEnabled &&
       (this.order && this.order?.balanceRemaining != 0)) {
@@ -258,6 +260,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.uiTransactionSetting$ = this.settingService.getUITransactionSetting().pipe(
       switchMap( data => {
         this.uiSettingsService.updateUITransactionSubscription(data);
+        this.prepOrderOnClose = data?.prepOrderOnClose;
         return of(data)
       })
     )
@@ -358,6 +361,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   initPurchaseOrderOption(id: number) {
     if (!id) { return }
     if (this.userAuthorization.isManagement) {
+
       const site = this.siteService.getAssignedSite()
       this.serviceType$ = this.serviceTypeService.getType (site,id).pipe(
         switchMap(data => {
@@ -438,7 +442,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private settingService    : SettingsService,
               private _bottomSheet     : MatBottomSheet,
               private inventoryAssignmentService: InventoryAssignmentService,
-              private posOrderItemService: POSOrderItemServiceService,
+              private posOrderItemService: POSOrderItemService,
               private manifestService: ManifestInventoryService,
               private productEditButtonService: ProductEditButtonService,
               private prepPrintingService: PrepPrintingServiceService,
@@ -504,7 +508,30 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
+  getDeviceInfo() {
+    const devicename = this.orderService.posName
+    if (devicename && this.isApp) {
+      this.posDevice$ = this.uiSettingsService.getPOSDeviceSettings(devicename).pipe(
+        switchMap(data => {
+          try {
+            const posDevice = JSON.parse(data.text) as ITerminalSettings;
+            this.uiSettingsService.updatePOSDevice(posDevice)
+            this.posDevice = posDevice;
+            this.enableExitLabel = posDevice.enableExitLabel;
+
+            return of(posDevice)
+          } catch (error) {
+
+             this.siteService.notify('Error setting device info.' + error, 'Close', 5000, 'yellow')
+          }
+          return of(null)
+        }
+      ))
+    }
+  }
+
   async ngOnInit() {
+    this.getDeviceInfo();
     this.initAuthorization();
     this.gettransactionUISettingsSubscriber();
     this.updateItemsPerPage();
@@ -532,6 +559,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.isUser  = this.userAuthorization.isUserAuthorized('user');
     if (this.isUser) {
     }
+    // if (this.userAuthorization.)
   }
 
   openClient() {
@@ -774,13 +802,17 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   ///update the inventory
   //update the subscription order Info
   printLabels(newLabels: boolean) {
-    console.log(newLabels)
-    this.printLabels$ = this.printingService.printLabels(this.order , newLabels)
+    this.printLabels$ = this.printingService.printLabels(this.order , newLabels).pipe(
+        switchMap(data => {
+
+          this.printingService.printJoinedLabels();
+          return of(data)
+        }
+      )
+    )
   }
 
-
   setStep(value:number) {
-
   }
 
   rePrintLabels() {

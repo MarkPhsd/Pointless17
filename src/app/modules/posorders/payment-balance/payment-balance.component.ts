@@ -9,7 +9,7 @@ import { OrdersService } from 'src/app/_services';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
-import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
+import { SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -19,6 +19,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { CardPointMethodsService } from '../../payment-processing/services';
+import { TryCatch } from '@sentry/angular';
 
 @Component({
   selector: 'app-payment-balance',
@@ -96,7 +97,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       this.isUser = true;
     }
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
- 
+
 
     if (this.href.substring(0, 11 ) === '/pos-payment') {
       this.hidePrint = true;
@@ -108,9 +109,10 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     this.toolbarUIService.updateOrderBar(false)
     this.toolbarUIService.resetOrderBar(true)
     this.router.navigate(["/currentorder/", {mainPanel:true}]);
+    this.orderService.setScanner()
   }
-  
- 
+
+
   capture(item: IPOSPayment) {
     const site = this.siteService.getAssignedSite();
     if (this.order && this.uiTransactions.cardPointPreAuth && this.uiTransactions.cardPointBoltEnabled) {
@@ -124,39 +126,51 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
   lastIncrementalAuth() {
-    if (this.order  && 
-        this.order.posPayments &&
-        this.order.posPayments &&  
-        this.order.posPayments.length === 0){ return }
-    this.order.posPayments.slice().reverse().forEach(data => {
-      console.log(data?.tranType && data.amountPaid)
-      if (data?.tranType === 'incrementalAuthorizationResponse' && data?.amountPaid != 0) {
-        this.incrementalAuth = data;
-        return 
+    if ( this.order  &&
+         !this.order.posPayments ||
+        (  this.order && this.order.posPayments &&
+           this.order.posPayments.length === 0 ) ){ return }
+
+      const order = this.order
+      if (!order) { return }
+      if (!order.posPayments) {return }
+      if (order.posPayments == null || order.posPayments == undefined) { return };
+
+      console.log('last incremental',  this.order.posPayments)
+      try {
+        this.order.posPayments.slice().reverse().forEach(data => {
+          // console.log(data?.tranType && data.amountPaid)
+          if (data?.tranType === 'incrementalAuthorizationResponse' && data?.amountPaid != 0) {
+            this.incrementalAuth = data;
+            return
+          }
+        })
+      } catch (error) {
+        console.log('lastIncrementalAuth error ', error)
       }
-    })
   }
+
 
   reverseIncrementalAuth(item: any) {
     const site = this.siteService.getAssignedSite()
     const auth = {} as authorizationPOST;
-    console.log(item)
-    if (!item || !item.refNumber) { 
+    // console.log(item)
+    if (!item || !item.refNumber) {
       this.siteService.notify('Error with transaction, no transactionID.', 'close',2000, 'yellow')
-      return 
+      return
     }
 
     const terminal= this.settingsService.terminalSettings;
     if (!terminal) { return }
-  
+
     auth.laneId = terminal?.triposLaneID;
     auth.transactionId = item?.refNumber;
     auth.paymentType = 'credit' //item?.paymentMethod?.name
-    console.log('auth', auth);
+    // console.log('auth', auth);
 
     this.action$ = this.triposMethodService.processIncrementalReversal(auth, item).pipe(
-      switchMap(data => { 
-      console.log('processIncrementalReversal result', data)
+      switchMap(data => {
+      // console.log('processIncrementalReversal result', data)
       return of(data)
     })).pipe( switchMap( data => {
       console.log('payment', data)
@@ -165,7 +179,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       console.log('order', data)
       return of(data)
     })),
-    catchError(err => { 
+    catchError(err => {
       this.siteService.notify(`Error occured: ${err.toString()}`, 'close', 3000, 'red')
       return of(err)
     })
@@ -175,8 +189,8 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   incrementTriPOS(item: IPOSPayment) {
     const amount = this.order.creditBalanceRemaining - item.amountPaid;
     const site = this.siteService.getAssignedSite()
-    let transactionId 
-    let tranData 
+    let transactionId
+    let tranData
     const payment$ = this.paymentService.getPOSPayment(site, item.id, item.history)
     const terminal$ = this.settingsService.terminalSettings$;
 
@@ -191,29 +205,29 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
         }
         return of(data)
       }
-    )).pipe(switchMap( data=> { 
+    )).pipe(switchMap( data=> {
         if (!data) {return of(null)}
         return  terminal$
       }
-    )).pipe(switchMap(data => { 
+    )).pipe(switchMap(data => {
       console.log('terminal', data)
 
       if (!data) {return of(null)}
 
       console.log(tranData.transactionId)
-      if (tranData && tranData.transactionId) { 
+      if (tranData && tranData.transactionId) {
         transactionId = tranData.transactionId
 
-        if (! data.triposLaneID) { 
+        if (! data.triposLaneID) {
           this.siteService.notify(`No Lane ID, will not process.`, 'close', 3000, 'red')
-        } 
+        }
 
         return this.triposMethodService.processIncrement( site, tranData.transactionId, amount.toString(), data.triposLaneID)
       }
 
-    })).pipe(switchMap(data => { 
+    })).pipe(switchMap(data => {
 
-      if (!data) {return of(null)}  
+      if (!data) {return of(null)}
       console.log(data)
       if (data && !data._hasErrors && data.isApproved) {
         item.amountPaid = amount;
@@ -222,29 +236,29 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
         try {
           item.transactionData = JSON.stringify(data)
         } catch (error) {
-          
+
         }
         item = this.paymentMethodsProessService.applyTripPOSResponseToPayment(data, item)
         item.id = 0;
         item.transactionIDRef  = transactionId;
         return this.paymentService.makePayment(site, item, this.order, amount, null)
       }
-      if (data?.exceptionMessage) { 
+      if (data?.exceptionMessage) {
         this.siteService.notify(`Not approved: ${data?.exceptionMessage}`, 'close', 3000, 'red')
-      } else { 
+      } else {
         this.siteService.notify('Not approved: unknown. ', 'close', 3000, 'red')
       }
       return of(this.order)
-    })).pipe(switchMap(data => { 
+    })).pipe(switchMap(data => {
       return   this.orderMethodsService.refreshOrderOBS(this.order.id, this.order.history)
     }))
-  } 
+  }
 
-  gettriPOSTotalPayments() { 
+  gettriPOSTotalPayments() {
     let amount = 0
     if (!this.order || !this.order.posPayments) {return}
 
-    if (this.uiTransactions.triposEnabled) { 
+    if (this.uiTransactions.triposEnabled) {
       amount = this.triposMethodService.getAuthTotal(this.order.posPayments)
     }
     this.totalAuthTriPOSPayments = amount;
@@ -252,12 +266,12 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
   captureTriPOS(item: IPOSPayment) {
- 
+
     const site = this.siteService.getAssignedSite();
     const payment$ =  this.paymentService.getPOSPayment(site, item.id, false)
     this.action$ = payment$.pipe(switchMap(payment => {
       let amount = this.totalAuthTriPOSPayments; // this.order.creditBalanceRemaining;
- 
+
       return this.triposMethodService.openDialogCompleteCreditPayment(this.order, amount,
                                                                 payment, this.uiTransactions)
     }))

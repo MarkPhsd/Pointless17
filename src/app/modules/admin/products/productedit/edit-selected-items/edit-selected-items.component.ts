@@ -91,6 +91,21 @@ export class EditSelectedItemsComponent implements OnInit {
     )
   }
 
+  enableAllItems() {
+    const warn = window.confirm('Plase confirm. You can not reverse this decision');
+    const site   =  this.siteService.getAssignedSite();
+    this.action$ = this.menuService.setAllItemsActive(site).pipe(
+      switchMap(
+      data => {
+        return of(`Result: ${data.toString()}. Refresh list to see results.`)
+      }),
+      catchError(data => {
+        return of(data)
+      }
+      )
+    )
+  }
+
   exit () {
     this.dialogRef.close()
   }

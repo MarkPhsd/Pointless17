@@ -14,12 +14,12 @@ import { RenderingService } from './rendering.service';
 import { LabelaryService, zplLabel } from '../labelary/labelary.service';
 import { RecieptPopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/reciept-pop-up.component';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, EMPTY, Observable, switchMap, of, catchError, forkJoin } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, switchMap, of, catchError, forkJoin, concat, delay } from 'rxjs';
 import { Router } from '@angular/router';
 import { PlatformService } from './platform.service';
 import { UserAuthorizationService } from './user-authorization.service';
 import { MenuService, OrdersService } from 'src/app/_services';
-import { POSOrderItemServiceService } from '../transactions/posorder-item-service.service';
+import { POSOrderItemService } from '../transactions/posorder-item-service.service';
 import { OrderMethodsService } from '../transactions/order-methods.service';
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { UISettingsService } from './settings/uisettings.service';
@@ -41,7 +41,9 @@ export interface printOptions {
 })
 
 export class PrintingService {
-
+  labelPrinter     : string;
+  labelContentList = []  as string[]
+  interval;
   menuItem: IMenuItem;
   zplSetting            : ISetting;
   receiptLayoutSetting  : ISetting;
@@ -69,7 +71,6 @@ export class PrintingService {
   }
 
   constructor(  private electronService   : ElectronService,
-           
                 private dialog            : MatDialog,
                 private clientService     : ClientTableService,
                 private labelaryService   : LabelaryService,
@@ -77,11 +78,11 @@ export class PrintingService {
                 private orderService      : OrdersService,
                 private router            : Router,
                 private userAuthService   : UserAuthorizationService,
-                private orderItemService  : POSOrderItemServiceService,
+                private orderItemService  : POSOrderItemService,
                 private platFormService   : PlatformService,
                 private menuItemService   : MenuService,
                 private http              : HttpClient,
-                private posOrderItemService : POSOrderItemServiceService,
+                private posOrderItemService : POSOrderItemService,
                 private printingAndroidService   : PrintingAndroidService,
                 private renderingService  : RenderingService,
                 private settingService    : SettingsService,
@@ -98,14 +99,30 @@ export class PrintingService {
     this._printReady.next(data)
   }
 
+
+  printJoinedLabels( ) {
+    let contents = ''
+    this.labelContentList.forEach(data => {
+      contents =`${data} ${contents}`
+    })
+    console.log('print Joined Labels', contents, this.labelPrinter)
+    if (!this.labelPrinter) { return }
+    this.printLabelElectron(contents, this.labelPrinter)
+    this.labelContentList = []
+  }
+
   printLabels(order: IPOSOrder, newLabels: boolean): Observable<any> {
-   
+
     if (!order || !order.posOrderItems) {
       return of(null)
     }
 
+    let timer  =  +localStorage.getItem('testVariable' )
+    if (!timer || timer != 0) {
+      timer = +50000
+    }
     let printCount = 0
-    const printLabels  = []
+    const printLabelList  = []
     if (order) {
       if (order.posOrderItems) {
         this.obs$ = []
@@ -113,24 +130,28 @@ export class PrintingService {
         if (items.length > 0) {
           items.forEach( item => {
             if (!item.printed && newLabels) {
-              this.obs$.push(this.printItemLabel(item, null, order))
-              printLabels.push(item)
+              this.obs$.push(
+                this.printItemLabel(item, null, order, true) //.pipe( delay(timer)  )
+              )
+              printLabelList.push(item)
               printCount += 1
             }
             if (!newLabels) {
-              this.obs$.push(this.printItemLabel(item, null, order))
-              printLabels.push(item)
+              this.obs$.push(
+                this.printItemLabel(item, null, order, true) //.pipe( delay(timer) )
+              )
+              printLabelList.push(item)
               printCount += 1
             }
           })
         }
       }
 
-      console.log('printCount', printCount, printLabels)
+      // console.log('fork join', printCount, printLabelList )
       if (printCount == 0) {return of(null)};
       return forkJoin(this.obs$)
+
     }
-    
     return of(null)
   }
 
@@ -373,52 +394,79 @@ export class PrintingService {
     return true;
   }
 
+  getdefaultOptions(printerName: string) {
+    return {
+      silent: true,
+      printBackground: false,
+      deviceName: printerName
+    }
+  }
+
+  printElectronForLabels(contents: string, printerName: string, options: printOptions) : any {
+
+    let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
+    if (options.silent) { printWindow.hide(); }
+
+    return  printWindow.loadURL(contents)
+      .then( e => {
+        console.log('result of load', e)
+        if (options.silent) { printWindow.hide(); }
+        if (!options) {  options = this.getdefaultOptions(printerName)  }
+
+        printWindow.webContents.print(
+          options,
+          (success, failureReason) => {
+            // printWindow.close();
+            // printWindow = null;
+            console.log('Print Window : printing, success, failurereason', success, failureReason);
+            return printWindow
+          }
+        )
+
+        }).catch( err => {
+          console.log('Print window Load URL error:', err, options)
+          this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
+          printWindow.close();
+          printWindow = null;
+          return null;
+          // return false
+      }
+    )
+
+    return null;
+
+  }
+
   printElectron(contents: string, printerName: string, options: printOptions) : boolean {
 
     let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
     if (options.silent) { printWindow.hide(); }
 
-    printWindow.loadURL(contents)
+      printWindow.loadURL(contents)
       .then( e => {
-
-        if (options.silent) {
-          printWindow.hide();
-        }
-
-        if (!options) {
-          options = {
-            silent: true,
-            printBackground: false,
-            deviceName: printerName
-          }
-        }
+        console.log('result of load', e)
+        if (options.silent) { printWindow.hide(); }
+        if (!options) {  options = this.getdefaultOptions(printerName)  }
 
         printWindow.webContents.print(
           options,
-          (error, data) => {
-            if (error) {
-              if (error == true)  {
-                printWindow.close();
-                printWindow = null;
-                return false
-              }
-            }
-            if (data) {
-              printWindow.close();
-              printWindow = null;
-              return true
-            }
+          (success, failureReason) => {
+            console.log('Print Window : printing, success, failurereason', success, failureReason);
+            printWindow.close();
+            printWindow = null;
+            return true
           }
         )
 
         }).catch( err => {
-          console.log('error', err,options)
+          console.log('Print window Load URL error:', err, options)
           this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
           printWindow.close();
           printWindow = null;
           return false
-        }
+      }
     )
+
     return false;
 
   }
@@ -426,7 +474,6 @@ export class PrintingService {
   printDocuments(printOrderList: IPrintOrders[]): Observable<any> {
 
     if (this.platFormService.isAppElectron) {
-      // console.log('print documents')
       return this.printElectronTemplateOrder(printOrderList)
     }
 
@@ -534,7 +581,7 @@ export class PrintingService {
     return posItem$
   }
 
-  printItemLabel(item: any, menuItem$: Observable<IMenuItem>, order: IPOSOrder ) {
+  printItemLabel(item: any, menuItem$: Observable<IMenuItem>, order: IPOSOrder, joinLabels: boolean ) {
     const site = this.siteService.getAssignedSite()
     if (!menuItem$) {
       menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
@@ -557,12 +604,17 @@ export class PrintingService {
       }
     )).pipe(switchMap(menuItem => {
       item.menuItem = menuItem;
-      return this.printLabel(item,  order.history)
+      return this.printLabel(item,  order.history, joinLabels)
     }))
   }
 
-  printLabel(item: any, history: boolean) {
+  getLabelPrinter() {
+    return
+  }
 
+  printLabel(item: any, history: boolean, joinLabels: boolean) {
+
+    let printWindows: any
     if (!item) {return of(null)}
 
     const site = this.siteService.getAssignedSite();
@@ -581,6 +633,7 @@ export class PrintingService {
         const item = JSON.parse(data.text) as ITerminalSettings;
         this.uiSettingsService.updatePOSDevice(item)
         printer = {text: item?.labelPrinter}
+        this.labelPrinter = item?.labelPrinter;
         return of(item)
       })
     )
@@ -594,11 +647,8 @@ export class PrintingService {
         return menuItem$
       })).pipe(
         switchMap(data => {
-
           if ( !data || !data.itemType) {return of(null)}
-
           this.menuItem = data;
-
           if ( data.itemType && ( ( data.itemType.labelTypeID != 0 ) && printer.text ) ) {
             return  this.settingService.getSetting(site, data.itemType.labelTypeID)
           } else {
@@ -607,15 +657,13 @@ export class PrintingService {
             }
             return this.orderItemService.setItemAsPrinted(site, item )
           }
-
       })).pipe(
         switchMap( data => {
           if (!data) { return of(null) }
-
           try {
             let field = 'productName';
             if (data[field]) {
-              console.log('not going to print label')
+              // console.log('not going to print label')
               return of(null)
             }
           } catch (error) {
@@ -630,34 +678,33 @@ export class PrintingService {
 
           let lab$ : Observable<any>;
           let producer$ : Observable<any>;
-          
+
           lab$ = of(null)
           producer$ = of(null);
 
-          if (labID) { 
+          if (labID) {
             this.getContact(site, labID)
           }
           if (producerID) {
             producer$  = this.getContact(site, producerID);
-          } 
-          
+          }
+
           return forkJoin([lab$, producer$, of(data)])
 
         })).pipe(
           switchMap( results => {
 
             if (!results) { return of(null)}
-
             const data = results[2];
             if (!data) {return of(null)}
 
             try {
               const lab = results[0]
               const producer = results[1];
-              if (lab) { 
+              if (lab) {
                 item.lab = lab;
               }
-              if (producer) { 
+              if (producer) {
                 item.producer = producer;
               }
 
@@ -678,7 +725,14 @@ export class PrintingService {
             const content = this.renderingService.interpolateText(item, data.text);
 
             if (printer.text) {
-              this.printLabelElectron(content, printer.text)
+              const printerName = printer.text
+              if (!joinLabels) {
+                this.labelContentList = []
+                this.printLabelElectron(content, printerName) ;
+              }
+              if (joinLabels) {
+                this.labelContentList.push(content)
+              }
             }
 
             if (!item.printed || (data && !data.printed)) {
@@ -687,23 +741,28 @@ export class PrintingService {
             return of(null);
       })).pipe(
         switchMap( data => {
-        console.log(orderID)
         const order$ = this.orderService.getOrder(site, orderID.toString() , history);
         return order$
-    })).pipe(switchMap(data => { 
-      console.log('oroder', data)
+    })).pipe(switchMap(data => {
       this.orderService.updateOrder(data)
+
       return of(data)
     }))
 
+
     return result$
   }
+
+  stopTime() {
+    clearInterval(this.interval);
+  }
+
 
   refreshOrder(id: number, history) {
     if (this.order) {
       const site = this.siteService.getAssignedSite();
       const order$ = this.orderService.getOrder(site, this.order.id.toString() , this.order.history)
-     
+
       order$.subscribe( data => {
           this.orderService.updateOrderSubscription(data)
       })
@@ -739,7 +798,7 @@ export class PrintingService {
     }
   }
 
-  printLabelElectron(printString: string, printerName: string): boolean {
+  printLabelElectron(printString: string, printerName: string) {
 
     const uuid = UUID.UUID().slice(0,5);
     const file = `file:///c://pointless//print.txt`
@@ -758,12 +817,8 @@ export class PrintingService {
     } as printOptions
 
     try {
-      this.printElectron( file, printerName, options)
-      console.log('Label Printed')
-
-      return true;
+      return this.printElectronForLabels( file, printerName, options )
     } catch (error) {
-      console.log(error)
       return false
     }
   }

@@ -26,7 +26,7 @@ import { SearchModel } from 'src/app/_services/system/paging.service';
 export class StrainProductEditComponent implements OnInit {
 
   productForm: FormGroup;
-
+  unitSearchForm: FormGroup;
   get f() { return this.productForm;}
   action$             :  Observable<any>;
   performingAction    : boolean;
@@ -54,7 +54,7 @@ export class StrainProductEditComponent implements OnInit {
               private dialogRef: MatDialogRef<StrainProductEditComponent>,
               private itemTypeMethodsService: ItemTypeMethodsService,
               private unitTypeMethodsService: UnitTypeMethodsService,
-              private unitTypeService: UnitTypesService, 
+              private unitTypeService: UnitTypesService,
               @Inject(MAT_DIALOG_DATA) public data: any
     )
   {
@@ -84,26 +84,24 @@ export class StrainProductEditComponent implements OnInit {
   };
 
 
-  initializeDataAndForm() { 
+  initializeDataAndForm() {
     const site = this.siteService.getAssignedSite();
-    console.log('initializeDataAndForm', this.id)
-    // if (this.id != '0') {
-      this.product$ = this.menuService.getProduct(site, this.id).pipe(switchMap(data => { 
-        this.product = data;
-        return  this.itemTypeService.getItemType(site, this.product.prodModifierType)
-        })).pipe(switchMap(data => { 
-          this.itemType = data
-          this.initializeForm()
-          return of(this.product)
-        }))
-    // }
+    this.product$ = this.menuService.getProduct(site, this.id).pipe(switchMap(data => {
+      this.product = data;
+      return  this.itemTypeService.getItemType(site, this.product.prodModifierType)
+      })).pipe(switchMap(data => {
+        this.itemType = data
+        this.initializeForm()
+        return of(this.product)
+    }))
+
   }
 
   editType() {
     if (this.product.prodModifierType) {
       let dialogRef = this.itemTypeMethodsService.openItemEditor(this.product.prodModifierType);
       dialogRef.afterClosed().subscribe(result => {
-        //need to refresh whole item in case features about it change. 
+        //need to refresh whole item in case features about it change.
         this.product = null;
         this.initializeDataAndForm()
         if (result) {
@@ -153,32 +151,24 @@ export class StrainProductEditComponent implements OnInit {
     }
   }
 
-  // openUnit() {
-
-  //   const dialog$ =  item$.pipe(switchMap( data => {
-  //     const item  = data?.results[0];
-  //     const  editor$ = this.productEditButtonService.openUnitTypeEditor(item);
-  //     return editor$.afterClosed().pipe(switchMap(data => {
-  //       this.product = null;
-  //       this.initializeDataAndForm();
-  //       return of(true);
-  //     }))
-  //   }))
-
-  //   this.action$ = dialog$
-  // }
-
   openUnit() {
     const site = this.siteService.getAssignedSite();
-    this.action$ = this.unitTypeMethodsService.openUnitEditorOBS(this.product?.unitTypeID).pipe(switchMap(data => { 
+    const id = this.productForm.controls['unitTypeID'].value;
+    if (!id) { return }
+    this.action$ = this.unitTypeMethodsService.openUnitEditorOBS(id).pipe(switchMap(data => {
       const search = {id: data.id} as SearchModel
       return  this.unitTypeService.getUnitTypesSearch(site, search);
     })).pipe(switchMap(data => {
-      this.product = null;
-      this.initializeDataAndForm();
       return of(data)
     }))
-  }  
+  }
+
+  clearUnit() {
+    this.productForm.patchValue({ unitTypeID: 0})
+    this.unitSearchForm = this.fb.group({
+      searchField: []
+    })
+  }
 
   assignItem(event) {
     if (!event) { return }

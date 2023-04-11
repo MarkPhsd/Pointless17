@@ -9,14 +9,14 @@ import { Subscription,Observable, switchMap, EMPTY, of, catchError } from 'rxjs'
 import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
 import { IPOSOrder, IPOSPayment, OperationWithAction } from 'src/app/_interfaces';
 import { IItemBasic, OrdersService } from 'src/app/_services';
-import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
+
 import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { StoreCredit, StoreCreditMethodsService } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { StoreCreditService } from 'src/app/_services/storecredit/store-credit.service';
 import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-reasons.service';
-import { RequestMessageService } from 'src/app/_services/system/request-message.service';
+
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -180,39 +180,36 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
       if (this.resultAction) {
         if (method) {
-
           if (method?.companyCredit) {
 
             this.voidPayment.voidReason = this.resultAction.voidReason
 
             const credit = {} as StoreCredit;
             console.log('this void card issue', credit)
-
             this.resultAction.payment = this.payment;
             const msg ='Unable to void this store credit. Before voiding this order, please ensure the card can be voided.';
-
             const getPayment$ = this.pOSPaymentService.getPOSPayment(site, this.payment.id, false);
 
             this.action$ =
-            getPayment$.pipe( switchMap ( payment => {
-              this.payment = payment;
-              credit.cardNum = payment.cardNum;
-              credit.reduceValue = payment.amountPaid;
-              console.log('credit should be', credit.cardNum)
-              return this.storeCreditService.updateCreditValue(site, credit)
-            })).pipe( switchMap ( data => {
-                if (data) {
-                  return this.voidPaymentWithAction(this.resultAction)
+              getPayment$.pipe( switchMap ( payment => {
+                this.payment = payment;
+                credit.cardNum = payment.cardNum;
+                credit.reduceValue = payment.amountPaid;
+                console.log('credit should be', credit.cardNum)
+                return this.storeCreditService.updateCreditValue(site, credit)
+              })).pipe( switchMap ( data => {
+                  if (data) {
+                    return this.voidPaymentWithAction(this.resultAction)
+                  }
+                  if (!data) {
+                    this.siteService.notify(msg, 'Alert', 1000)
+                    return of(null)
+                  }
                 }
-                if (!data) {
-                  this.siteService.notify(msg, 'Alert', 1000)
-                  return of(null)
-                }
-              }
-            )),catchError(err => {
-              this.siteService.notify(`Error ${err}`, 'Error Voiding', 5000)
-              return of(err)
-            })
+              )),catchError(err => {
+                this.siteService.notify(`Error ${err}`, 'Error Voiding', 5000)
+                return of(err)
+              })
             return;
 
           }
@@ -222,7 +219,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
             const transData   = JSON.parse(this.voidPayment.transactionData) ;
             console.log('transData', transData) ;
             const paymentType = transData.paymentType ;
-      
+
             console.log(transData.paymentType)
             if (this.settings.dsiEMVNeteEpayEnabled) {
               if (this.isDSIEmvPayment && this.voidPayment) {
@@ -243,18 +240,18 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
               let item = {} as authorizationPOST
               item.laneId  = this.terminalSettings.triposLaneID;
               item.paymentType = transData.paymentType;
-              item.transactionId = this.payment.refNumber;  
+              item.transactionId = this.payment.refNumber;
               let process$ : Observable<TriposResult>;
 
-              if (this.toggleVoid) { 
+              if (this.toggleVoid) {
                 process$ = this.triPOSMethodService.void(site, item)
               }
-              if (!this.toggleVoid) { 
+              if (!this.toggleVoid) {
                 process$ = this.triPOSMethodService.reversal(site, item)
               }
 
               this.action$ = process$.pipe(switchMap(data => {
-               
+
                 if (this.validateTriPOSVoid(data)) {
                   this.resultAction = this.applyTriPOSResults(data, this.resultAction.voidReason)
                   return of(this.resultAction)
@@ -312,7 +309,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                     }
                     if (data && data?.respstat && data?.respstat.toLowerCase() == 'c') {
                       this.notifyEvent(`Declined, refund most likely required.  ${data?.resptext}`, 'Alert');
-                      const confirm = window.confirm('This credit card transaction may already be voided.' + 
+                      const confirm = window.confirm('This credit card transaction may already be voided.' +
                                                      ' If you want to void the record of the payment here, you can press okay to continue. ' +
                                                      ' Otherwise the payment will remain as it appears.')
                     }
@@ -367,7 +364,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
-  applyCardPointResults(data, voidReason) { 
+  applyCardPointResults(data, voidReason) {
     this.resultAction.payment.amountPaid = 0;
     this.resultAction.payment.amountReceived = 0;
     this.resultAction.payment.voidReason = voidReason // this.resultAction.voidReason;
@@ -436,26 +433,11 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       return
     }
 
-    // if (response.purchaseOrderPayment && response.purchaseOrderPayment.giftCardID != 0) {
-    //   const valueToReduce = response.payment.amountPaid
-    //   this.closeDialog(response.payment, response.paymentMethod);
-    //   if (response.purchaseOrderPayment && response.purchaseOrderPayment.cardNum) {
-    //     const credit = {} as StoreCredit  ;
-    //     credit.cardNum = response.purchaseOrderPayment.cardNum;
-    //     credit.reduceValue = valueToReduce;
-    //     this.storeCreditService.updateCreditValue(site, credit).subscribe(data => {
-    //       if (data == null) { return }
-    //       this.storeCreditMethodService.updateSearchModel(null)
-    //     })
-    //   }
-    //   return;
-    // }
   }
 
   voidDSIEmvPayment() {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
-
       if (voidPayment) {
         this.paymentsMethodsService.processDSIEMVCreditVoid(voidPayment)
         //  this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
@@ -475,32 +457,30 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   updateVoidPaymentResponse(response$: Observable<OperationWithAction>) {
     const site = this.siteService.getAssignedSite();
+    let order: IPOSOrder
+    let response: OperationWithAction
     return response$.pipe(
       switchMap(response => {
+
         if (response && response.result) {
-          const item$ = this.updateOrderSubscription()
-          item$.subscribe( order => {
-            this.orderService.updateOrderSubscription(order)
-            this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
-            this.closeDialog(response.payment, response.paymentMethod);
-          });
+          this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
         }
-        // if (response.purchaseOrderPayment && response.purchaseOrderPayment.giftCardID != 0) {
-        //   const valueToReduce = response.payment.amountPaid
-        //   this.closeDialog(response.payment, response.paymentMethod);
-        //   return this.storeCreditService.updateCreditValue(site ,response.purchaseOrderPayment.cardNum, valueToReduce)
-        // }
-        return of(null)
+
+        return this.orderService.getOrder(site, response.payment.orderID.toString(), false)
+
       }
     )).pipe(switchMap(data => {
-      if (data == null) { return }
+
+      // console.log('getting order', data)
+      this.orderService.updateOrderSubscription(data)
       this.storeCreditMethodService.updateSearchModel(null)
-      return of(data)
+
+      this.dialogRef.close();
+
+      if (data == null) { return }
+      return of(response)
     }))
-
   }
-
-
 
   updateManifestResponse(response$: Observable<OperationWithAction>) {
     response$.subscribe( response => {

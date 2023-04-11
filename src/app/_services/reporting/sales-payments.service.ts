@@ -17,6 +17,7 @@ export interface IPaymentSalesSearchModel {
   siteID:       number;
   zrunID       :string;
   refunds     : boolean;
+  voids       : boolean;
 }
 
 export interface IPaymentSalesSummary {
@@ -44,6 +45,8 @@ export interface PaymentSummary {
   dateHour:      string;
   resultMessage: string;
   completionDate: string;
+  voidReason:     string;
+  voidAmount   : string;
 }
 
 @Injectable({

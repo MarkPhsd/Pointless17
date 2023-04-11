@@ -178,7 +178,7 @@
           <mat-label>Send Items for Prep at Order Close.</mat-label>
         </mat-slide-toggle>
       </div>
-  
+
       <mat-divider></mat-divider>
       <h4>Barcode Options</h4>
 
@@ -247,7 +247,7 @@
         </mat-slide-toggle>
       </div>
 
-      
+
 
 
       <div>
@@ -354,6 +354,17 @@
     </div>
 
     <mat-divider></mat-divider>
+
+    <h4>Gift Card Store Credit</h4>
+    <mat-label>Pointless can handle multiple locations for gift cards. Please see documentation.</mat-label>
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="enableGiftCards"
+                >
+        <mat-label>CardPointe Android Enabled</mat-label>
+      </mat-slide-toggle>
+    </div>
+
     <h4>Credit Card Processing</h4>
 
     <div class="toggle-fields">
@@ -473,3 +484,14 @@
 
 </mat-card>
 
+<mat-card>
+  <mat-card-content>
+    <div *ngIf="testForm" [formGroup]="testForm">
+      <app-value-fields
+          [inputForm]="testForm"
+          [fieldName]="'testVariable'">
+       Test Variable
+      </app-value-fields>
+    </div>
+  </mat-card-content>
+</mat-card>

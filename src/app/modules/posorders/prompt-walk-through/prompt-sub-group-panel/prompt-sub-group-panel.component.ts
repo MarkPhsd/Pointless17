@@ -6,7 +6,7 @@ import { OrdersService } from 'src/app/_services';
 import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-walk-through.service';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { Subscription } from 'rxjs';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 
 @Component({
   selector: 'prompt-sub-group-panel',
@@ -57,7 +57,7 @@ export class PromptSubGroupPanelComponent implements OnInit, OnDestroy {
         } else {
           this.accordionStep       = this.promptWalkService.accordionStep
         }
-        console.log('accordion from parent updated', this.accordionStep)
+        // console.log('accordion from parent updated', this.accordionStep)
       }
     })
 
@@ -70,7 +70,7 @@ export class PromptSubGroupPanelComponent implements OnInit, OnDestroy {
     private sitesService             : SitesService,
     private orderService             : OrdersService,
     private promptGroupService       : PromptGroupService,
-    private posOrderItemService      : POSOrderItemServiceService,
+    private posOrderItemService      : POSOrderItemService,
     private promptWalkService        : PromptWalkThroughService,
     )
   {
