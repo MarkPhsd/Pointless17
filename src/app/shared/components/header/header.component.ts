@@ -35,6 +35,7 @@ interface IIsOnline {
 export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('clockInOut')      clockInOut: TemplateRef<any>;
   @ViewChild('userActions')       userActions: TemplateRef<any>;
+  @ViewChild('searchMenuView')       searchMenuView: TemplateRef<any>;
   @ViewChild('floorPlanTemplate') floorPlanTemplate: TemplateRef<any>;
   @Output() outPutToggleSideBar:      EventEmitter<any> = new EventEmitter();
   @Output() outPutToggleSearchBar:    EventEmitter<any> = new EventEmitter();
@@ -54,7 +55,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   orderBarSource:            MatSlideToggle
   checked:                   boolean;
   timerID:                   any;
-  //Theme Control
+
   toggleTheme              : string;
   id:                        any;
   company$:                  Observable<ICompany>;
@@ -203,7 +204,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private siteService:            SitesService,
               public  toolbarUIService:       ToolBarUIService,
               private location:               Location,
-
               private navigationService     : NavigationService,
               public  platFormService       : PlatformService,
               private router                : Router,
@@ -245,6 +245,13 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   get isApp() {
     return this.platFormService.isApp()
+  }
+
+  get showSearchMenuView() {
+    if (this.smallDevice) {
+      return null
+    }
+    return this.searchMenuView;
   }
 
   getDeviceInfo() {

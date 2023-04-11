@@ -13,6 +13,7 @@ import { POSOrderItemService } from 'src/app/_services/transactions/posorder-ite
 import { OrdersService } from 'src/app/_services/transactions/orders.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
 import { Observable } from 'rxjs';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 interface itemOption {
   name: string;
@@ -89,6 +90,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
      private siteService              : SitesService,
      private menuService              : MenuService,
      private awsBucket                : AWSBucketService,
+     private platformService          : PlatformService,
      ) { }
 
    ngOnInit() {
@@ -208,9 +210,9 @@ export class PromptPanelMenuItemComponent implements OnInit {
           if (lastGroup) {
             console.log(currentSubPrompt.id , lastGroup)
             if (currentSubPrompt.id == lastGroup?.promptSubGroupsID) {
-              //then save and close
-              console.log('updating and saving')
-              this.promptWalkService.updateSavePromptSelection(true)
+              if (this.platformService.isApp()){
+                this.promptWalkService.updateSavePromptSelection(true)
+              }
             }
           }
         }

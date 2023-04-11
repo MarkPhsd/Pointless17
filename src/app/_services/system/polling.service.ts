@@ -92,7 +92,6 @@ export class PollingService   {
       )
       .subscribe({
         next: (data: any) => {
-          // console.log('Subscription next');
           this._poll.next(true)
         },
         complete: () => console.log('Subscription complete')

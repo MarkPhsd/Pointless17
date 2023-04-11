@@ -68,6 +68,7 @@ export class FbClientTypesService {
 
       allowNegativeTransaction: [],
       allowZeroTransaction: [],
+      allowSuspendTransaction:[],
     })
     return fb
 

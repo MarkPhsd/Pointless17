@@ -46,9 +46,9 @@
         </div>
 
         <div *ngIf="menuItem && editField === 'price'">
-          <ng-container *ngTemplateOutlet="fillValueView,context: {$implicit: editField, name: 'Enter Value'}"></ng-container>
+          <ng-container *ngTemplateOutlet="fillValueView, context: {$implicit: editField, name: 'Enter Value'}"></ng-container>
         </div>
- 
+
         <div *ngIf="menuItem && editField === 'subTotal'">
           <ng-container *ngTemplateOutlet="fillValueView,context: {$implicit: editField, name: 'Enter Total Price'}"></ng-container>
         </div>

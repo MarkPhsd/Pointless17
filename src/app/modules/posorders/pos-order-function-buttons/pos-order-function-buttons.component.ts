@@ -9,6 +9,8 @@ import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balan
 import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
+import { AuthenticationService } from 'src/app/_services';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 @Component({
   selector: 'pos-order-function-buttons',
   templateUrl: './pos-order-function-buttons.component.html',
@@ -25,8 +27,19 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   uiTransactionSetting : TransactionUISettings;
   _transactionUI: Subscription;
   // @ViewChild('payButton')     payButton: TemplateRef<any>;
+  @ViewChild('payOption')     payOption: TemplateRef<any>;
   @ViewChild('exitButton')    exitButton: TemplateRef<any>;
   @ViewChild('refundOrderButton')  refundOrderButton: TemplateRef<any>;
+  @ViewChild('listViewItemView')  listViewItemView: TemplateRef<any>;
+  @ViewChild('inventoryManifestView')  inventoryManifestView: TemplateRef<any>;
+  @ViewChild('ssmsOptionView')  ssmsOptionView: TemplateRef<any>;
+  @ViewChild('textOptionView')  textOptionView: TemplateRef<any>;
+  @ViewChild('emailOptionView')  emailOptionView: TemplateRef<any>;
+  @ViewChild('listItemsView')  listItemsView: TemplateRef<any>;
+  @ViewChild('adjustmentOptionsView')  adjustmentOptionsView: TemplateRef<any>;
+
+  @ViewChild('refundOrderButton')  balanceSheetMenuView: TemplateRef<any>;
+
   @ViewChild('cancelButton') cancelButton: TemplateRef<any>;
   @Input() devicename: string;
 
@@ -72,6 +85,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   @Input() itemsPrinted: boolean;
   @Input() paymentsMade: boolean;
   @Input() isStaff     : boolean;
+  @Input() smallDevice: boolean;
   @Input() isUser      : boolean;
   @Input() isAuthorized: boolean;
   @Input() openBar     : boolean;
@@ -83,11 +97,10 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   @Input() purchasOrderEnabled: boolean;
   @Input() prepOrderOnClose: boolean;
   listView: Boolean;
-
+  userAuths       :   IUserAuth_Properties;
+  _userAuths      : Subscription;
   assignedItems   : Subscription;
   refundItems     : boolean;
-  smallDevice     : boolean;
-
   transactionUISettingsSubscriber() {
     this._transactionUI = this.uiSettingsService.transactionUISettings$.subscribe( data => {
       if (data) {
@@ -103,8 +116,18 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+
+  userAuthSubscriber() {
+    this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
+      if (data) {
+        this.userAuths = data;
+      }
+    })
+  }
   constructor(private platFormService: PlatformService,
               public userAuthorizationService: UserAuthorizationService,
+              private authenticationService: AuthenticationService,
               private orderMethodsService: OrderMethodsService,
               private router: Router,
               private uiSettingsService: UISettingsService,
@@ -117,6 +140,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     this.refreshWindowInfo();
     this.transactionUISettingsSubscriber();
     this.posDeviceSubscriber();
+    this.userAuthSubscriber()
   }
 
   toggleListView() {
@@ -127,6 +151,9 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
+    if (this._userAuths) {
+      this._userAuths.unsubscribe()
+    }
     if (this.assignedItems) {
       this.assignedItems.unsubscribe()
     }
@@ -243,6 +270,76 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
       this.windowSize = 'largest'
      }
    }
+
+   payOrder(){
+    this.outPutMakePayment.emit(true)
+   }
+
+   get isrefundOrderButton() {
+    if ((this.userAuthorizationService.isManagement || !this.isUser )&& !this.smallDevice) {
+     return this.refundOrderButton
+    }
+    return null;
+  }
+
+
+  get islistViewItemView() {
+    if (this.userAuthorizationService.isManagement && !this.smallDevice) {
+     return this.listViewItemView
+    }
+    return null;
+  }
+
+   get islistItemsView() {
+    if (!this.smallDevice) { return null}
+    return this.listItemsView
+   }
+
+   get isbalanceSheetMenuView() {
+     if (this.isStaff && this.isApp) {
+      return this.balanceSheetMenuView
+     }
+     return null;
+   }
+
+   get adjustmentOptions() {
+    return this.adjustmentOptionsView
+   }
+
+   get isManifestView() {
+    if ( this.purchasOrderEnabled && this.userAuthorizationService.isManagement  && !this.smallDevice) {
+      return this.inventoryManifestView
+    }
+    return null
+  }
+
+  get isemailOptionView() {
+    if (this.emailOption) {
+      return this.isemailOptionView
+    }
+    return null;
+  }
+
+  get isSSMOptionView() {
+    if (this.ssmsOption && !this.isUser) {
+      return this.ssmsOptionView
+    }
+    return null;
+  }
+
+  get istextOptionView() {
+    if (this.ssmsOption && !this.isUser) {
+      return this.textOptionView
+    }
+    return null;
+  }
+
+   get payOptionView() {
+    if (this.smallDevice) {
+      return this.payOption;
+    }
+    return null;
+  }
 
   changeTransactionType() {
     this.outPutchangeTransactionType.emit(true)

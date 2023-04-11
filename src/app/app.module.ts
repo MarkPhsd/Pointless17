@@ -63,7 +63,7 @@ import { DashBoardRoutingModule } from './dash-board-routing.module';
 import * as Sentry from "@sentry/angular";
 import { BrowserTracing } from "@sentry/tracing";
 import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-loading.component';
-
+import {  UserIdleModule } from 'angular-user-idle';
 // import { AdminModule } from './modules/admin/admin.module';
 
 // Sentry.init({
@@ -135,6 +135,7 @@ export  function init_app(appLoadService: AppInitService) {
     IonicModule.forRoot(),
     AgGridModule.withComponents([AgGridImageFormatterComponent,AgGridToggleComponent]),
     // NgIdleModule.forRoot(),
+    UserIdleModule.forRoot({idle: 10, timeout: 100, ping: 120}),
     AppRoutingModule,
     AppMaterialModule,
     DashBoardRoutingModule,
@@ -165,7 +166,7 @@ export  function init_app(appLoadService: AppInitService) {
     AgGridToggleComponent,
     // NGXMaterialModule,
     SharedModule,
- 
+
   ],
 
   providers: [

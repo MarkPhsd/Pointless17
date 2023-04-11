@@ -31,16 +31,24 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
       this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
         this.uiSettings = data;
 
+        if(this.smallDevice && this.mainPanel)    {
+          this.transactionDataClass = 'main-panel-small'
+          return}
+
+        if (this.smallDevice && !this.mainPanel)  {
+          this.transactionDataClass = 'side-panel-small'
+          return
+        }
+
         if (!this.mainPanel) {
           this.transactionDataClass ="transaction-data-side-panel"
+          return;
         }
 
         if (!data?.wideOrderBar) {
-          this.transactionDataClass = 'transaction-data-side-panel-small'
+          this.transactionDataClass = 'side-panel-small';
+          return;
         }
-
-        if (this.smallDevice)  { this.transactionDataClass = 'transaction-data-side-panel-small'   }
-
       })
     } catch (error) {
     }

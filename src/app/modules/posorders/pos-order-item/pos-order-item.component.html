@@ -223,6 +223,12 @@
                 <button mat-button  color="accent"  (click)="editWholeSaleCost()"><mat-icon  class="mat-icon-label">edit</mat-icon>Total Cost</button>
               </div>
 
+              <div *ngIf="!showEdit && (uiConfig.displayAdd) && (userAuths && userAuths.refundItem)">
+                <button mat-raised-button    class="button"  color="warn" (click)="refundItem()">
+                  <mat-icon  class="warn" >delete</mat-icon>  <span *ngIf="!smallDevice">Refund Item </span>
+                </button>
+              </div>
+
               <div *ngIf="(quantity && !orderItem.voidReason)">
                 <button mat-raised-button  class="button" color="warn" (click)="swipeOutItem()" >
                   <mat-icon  class="mat-icon-label">delete</mat-icon> <span *ngIf="!smallDevice">Remove </span>
@@ -235,6 +241,7 @@
               <div *ngIf="itemHasDiscount">
                 <button mat-button  color="accent"  (click)="removeDiscount()"><mat-icon>edit</mat-icon>Clear Discount</button>
               </div>
+
 
             </div>
           </span>

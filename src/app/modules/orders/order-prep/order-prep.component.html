@@ -3,7 +3,8 @@
     <mat-card-content class="center">
       <div *ngIf="!smallDevice" class="grid-orderproperties">
         <div class='date-header' *ngIf="order.orderDate">
-          {{order.orderDate |  date: 'shortTime'}}  |  {{minutesOpen}} .
+          {{order.orderDate |  date: 'shortTime'}}  |  {{minutesOpen}} . <br>
+          {{order.orderDate |  date: 'shortDate'}}
         </div>
 
         <div class="orderType">

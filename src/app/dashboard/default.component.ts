@@ -25,6 +25,7 @@ import { ITerminalSettings, SettingsService } from '../_services/system/settings
 import { ElectronService } from 'ngx-electron';
 import { BalanceSheetService } from '../_services/transactions/balance-sheet.service';
 import { BalanceSheetMethodsService } from '../_services/transactions/balance-sheet-methods.service';
+import { UserIdleService } from 'angular-user-idle';
 
 @Component({
   selector: 'app-default',
@@ -99,7 +100,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   user        : IUser;
 
   style       = "width:195px"
-
+  _ping       : Subscription;
   _uiSettings : Subscription;
   uiSettings  : UIHomePageSettings;
   homePageSetting$: Observable<UIHomePageSettings>;
@@ -111,12 +112,33 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   hideAppHeader: boolean;
   posDevice$ : Observable<ITerminalSettings>
 
+  initDeviceSubscriber() {
+    if (this.platFormService.isApp()) {
+      const device = localStorage.getItem('devicename')
+      if (!device) { return }
+      this.uiSettingsService.homePageSetting$.pipe(switchMap(data => {
+        this.uiSettings = data;
+        return this.posDevice$
+      })).pipe(switchMap(data => {
+        if (!data) {
+          this.stopWatching()
+          return of(null)
+        }
+        if (!data.ignoreTimer) {
+          this.uiSettings.timeOut = false
+          this.stopWatching()
+        }
+        return of(data)
+      }))
+    }
+  }
   homePageSubscriber(){
     try {
       this.matorderBar = 'mat-orderBar-wide'
       this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
         if (data) {
           this.uiSettings = data;
+          this.initIdle();
           if (this.phoneDevice)  {
             this.matorderBar = 'mat-orderBar'
             return
@@ -125,7 +147,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       })
     } catch (error) {
-      console.log('HomePage Subscriber', error)
+
     }
   }
 
@@ -185,7 +207,13 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     try {
       this._mainMenuBar = this.toolBarUIService.mainMenuSideBar$.subscribe( data => {
         this.mainMenuBar = data
+        // console.log('app', this.platFormService.isApp())
         this.barType =  "mat-drawer-searchbar"
+        if (!this.platFormService.isApp()) {
+          this.barType =  "mat-drawer-searchbar-web"
+        }
+        // console.log('barttype', this.barType)
+        // return this.barType
       })
     } catch (error) {
       console.log('toolbarSideBarSubscriber', error)
@@ -274,7 +302,11 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   initSubscriptions() {
-    // console.log('init Subscriptions')
+    try {
+      this.initDeviceSubscriber();
+    } catch (error) {
+      console.log('device subscriber', error)
+    }
     this.matorderBar = 'mat-orderBar-wide'
     this.style = ""
     try {
@@ -345,6 +377,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private balanceSheetService     : BalanceSheetService,
                private balanceSheetMethodService: BalanceSheetMethodsService,
                private settingService          : SettingsService,
+               private userIdle               : UserIdleService,
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
     if (!this.platFormService.isApp()) {
@@ -360,12 +393,14 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     const site = this.siteService.getAssignedSite();
     this.splashLoader.stop()
     this.initDevice()
+
   }
 
   initDevice() {
     const site = this.siteService.getAssignedSite();
     const devicename = localStorage.getItem('devicename');
     this.posDevice$ = this.settingService.getPOSDeviceBYName(site, devicename).pipe(switchMap(data => {
+      if (!data) { return of(null)}
       const device = JSON.parse(data.text) as ITerminalSettings;
       this.settingService.updateTerminalSetting(device)
       if (device.enableScale && this.platFormService.isAppElectron) {
@@ -423,7 +458,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     return this.appOrderBar
   }
-
 
   get menuOrOrderBar() {
     if (this.swapMenuWithOrder) {
@@ -543,5 +577,83 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   prepareMessageRoute(outletMessage: RouterOutlet) {
     return outletMessage && outletMessage.activatedRouteData && outletMessage.activatedRouteData['animation']
+  }
+
+
+  initIdle() {
+  ////Idle Work
+    if (!this.uiSettings) {
+      this.uiSettings = {} as UIHomePageSettings
+      this.uiSettings.timeOut = true;
+      this.uiSettings.timeOutValue = 100
+    }
+
+    if (this.posDevice$)
+    if (this.uiSettings && !this.uiSettings.timeOut) { return }
+    if ( !this.uiSettings.timeOutValue || this.uiSettings.timeOutValue == undefined) {  this.uiSettings.timeOutValue = 0 }
+    let timeout = this.uiSettings.timeOutValue;
+    if (timeout == 0) { timeout = 100};
+
+    this.userIdle.startWatching();
+
+    const config = {timeout: timeout, idle: 10, ping: 300}
+
+    this.userIdle.setConfigValues(config);
+
+    // // Start watching when user idle is starting.
+    // this.userIdle.onTimerStart().subscribe(count => {
+    //   console.log('timer started', count)
+    // });
+
+    // this.userIdle.onTimeout().subscribe(count => {
+    //   console.log('onTimeout event called')
+    //   if (this.platFormService.isApp()){
+    //     if (this.uiSettings && this.uiSettings.timeOut) {
+    //       this.userSwitchingService.clearLoggedInUser();
+    //       this.userIdle.stopTimer();
+    //       return;
+    //     }
+    //   }
+    // })
+
+    // this.userIdle.onIdleStatusChanged().subscribe(count => {
+    //   console.log('onIdleStatusChanged event called',count);
+    //   this.userIdle.resetTimer();
+    // })
+
+   // Start watching when user idle is starting.
+   this.userIdle.onTimerStart().subscribe(count => console.log(count));
+
+   // Start watch when time is up.
+   this.userIdle.onTimeout().subscribe(() =>
+      {
+          console.log('Time is up!')
+        console.log('onTimeout event called')
+        if (this.platFormService.isApp()){
+          if (this.uiSettings && this.uiSettings.timeOut) {
+            this.userSwitchingService.clearLoggedInUser();
+            this.userIdle.stopTimer();
+            return;
+          }
+        }
+      }
+   );
+
+  }
+
+  stop() {
+    this.userIdle.stopTimer();
+  }
+
+  stopWatching() {
+    this.userIdle.stopWatching();
+  }
+
+  startWatching() {
+    this.userIdle.startWatching();
+  }
+
+  restart() {
+    this.userIdle.resetTimer();
   }
 }

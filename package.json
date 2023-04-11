@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.50.8",
+  "version": "1.51.6",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -101,6 +101,7 @@
     "angular-resize-event": "^3.1.1",
     "angular-super-gallery": "^2.1.9",
     "angular-typesafe-reactive-forms-helper": "^2.0.2",
+    "angular-user-idle": "3.0",
     "angular2-uuid": "^1.1.1",
     "assert": "^2.0.0",
     "bcryptjs": "^2.4.3",

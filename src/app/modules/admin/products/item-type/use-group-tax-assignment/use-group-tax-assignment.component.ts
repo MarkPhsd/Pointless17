@@ -53,7 +53,7 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
   taxes$           : Observable<TaxRate[]>;
   useGroups        : IProductCategory[];
   useGroupsList    : any[];
-  useGroupsList$    : Observable<any[]>;
+  useGroupsList$    : Observable<UseGroups[]>;
   useGroupID       : number;
   taxID            : number;
   taxRate          : TaxRate;
@@ -77,19 +77,21 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
     });
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     const site = this.siteService.getAssignedSite()
     this.taxes$ = this.taxService.getTaxRates(site);
-    this.useGroupsList$ = this.initGroups(site)
+    // this.useGroupsList$ = this.initGroups(site)
+    this.resetUseGroups();
   }
 
   resetUseGroups() {
     ///resetUseGroups
     const site = this.siteService.getAssignedSite()
     const removeItems$ = this.useGroupService.resetUseGroups(site);
-    this.useGroupsList$ = removeItems$.pipe(data => {
-      return this.initGroups(site);
-    })
+    this.useGroupsList$ = removeItems$.pipe(switchMap(data => {
+
+      return of(data)
+    }))
   }
 
   initGroups(site: ISite) {

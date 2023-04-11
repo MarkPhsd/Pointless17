@@ -299,6 +299,21 @@
             </mat-slide-toggle>
           </div>
 
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="timeOut"
+                      >
+              <mat-label>Time Out (3 Minutes)</mat-label>
+              <mat-hint>Will log out after 3 minutes no use.</mat-hint>
+            </mat-slide-toggle>
+          </div>
+
+          <app-value-fields
+              [fieldType]     ="'number'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'timeOutValue'">
+              Time out in Seconds
+          </app-value-fields>
         </div>
 
       </div>

@@ -96,12 +96,12 @@ export class EditSelectedItemsComponent implements OnInit {
     const site   =  this.siteService.getAssignedSite();
     this.action$ = this.menuService.setAllItemsActive(site).pipe(
       switchMap(
-      data => {
-        return of(`Result: ${data.toString()}. Refresh list to see results.`)
-      }),
-      catchError(data => {
-        return of(data)
-      }
+        data => {
+          return of(`Result: ${data.toString()}. Refresh list to see results.`)
+        }),
+        catchError(data => {
+          return of(data)
+        }
       )
     )
   }

@@ -184,6 +184,8 @@ export interface UIHomePageSettings {
 
   staffHideSearchBar: boolean;
   hideSearchBar: boolean;
+  timeOutValue: number
+  timeOut: boolean;
 }
 
 @Injectable({
@@ -544,7 +546,8 @@ export class UISettingsService {
       menuEnabled: [''],
       staffMenuEnabled: [''],
       wordpressHeadless: [],
-
+      timeOut: [],
+      timeOutValue: [],
       displaySendButton: [],
      })
     return fb

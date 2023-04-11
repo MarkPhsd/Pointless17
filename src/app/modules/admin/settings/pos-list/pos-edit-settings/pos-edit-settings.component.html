@@ -1,5 +1,8 @@
+<div *ngIf="(saving$ | async) as saving; else saving"></div>
+<ng-template #saving>
+  ...saving
+</ng-template>
 <mat-card >
-
   <mat-card-title>
     <div class="header-container">
       <div><mat-icon>computer</mat-icon>
@@ -105,6 +108,13 @@
           <mat-slide-toggle
                     formControlName="resetOrdersFilter">
             <mat-label>Reset Orders Filter Each Login</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="ignoreTimer">
+            <mat-label>Ignore Timer for Auto Log Off</mat-label>
           </mat-slide-toggle>
         </div>
 
@@ -226,7 +236,7 @@
 <ng-template #triPOS>
   <div *ngIf="inputForm && inputForm.controls['triposLaneID'].value">
     <app-tripos-settings [laneID]="inputForm && inputForm.controls['triposLaneID'].value"></app-tripos-settings>
-   </div> 
+   </div>
 </ng-template>
 
 <!-- <mat-card>

@@ -4,10 +4,21 @@ mat-card  {
   overflow-x   : hidden;
 }
 
-.transaction-data-side-panel-small {
+.side-panel-small {
   display      : grid;
   grid-template-columns: 55px 1fr;
-  width        : 125px;
+  width        : 165px;
+  overflow-y   : auto;
+  overflow-x   : hidden;
+  font-size    : large;
+  margin-bottom: 0px;
+  padding-right: 15px;
+}
+
+.main-panel-small {
+  display      : grid;
+  grid-template-columns: 55px 1fr;
+  width        : 95%;
   overflow-y   : auto;
   overflow-x   : hidden;
   font-size    : large;
@@ -24,7 +35,6 @@ mat-card  {
   margin-bottom: 0px;
   margin-right : 5px;
   padding-right: 15px;
-
 }
 
 .foreground-color {

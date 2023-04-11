@@ -95,6 +95,8 @@
                 [ssmsOption]          ="ssmsOption"
                 [refundItemEnabled]   ="refundItemsAvalible"
                 [devicename]          ="devicename"
+                [smallDevice]         ='smallDevice'
+
           ></pos-order-function-buttons>
         </div>
 
@@ -112,13 +114,16 @@
               <ng-container [ngTemplateOutlet]="storeCreditPaybuttonView"></ng-container>
               <ng-container [ngTemplateOutlet]="wicEBTButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="triPOSPaymentButtonView"></ng-container>
-              <ng-container [ngTemplateOutlet]="payButton"></ng-container>
+              <div *ngIf="!smallDevice">
+                <ng-container [ngTemplateOutlet]="payButton"></ng-container>
+              </div>
           </div>
         </div>
 
         <div  *ngIf="mainPanel && uiTransactionSettings &&
                 (!paymentsEqualTotal && !order.completionDate &&
-                order?.balanceRemaining != 0)" >
+                order?.balanceRemaining != 0)
+                " >
             <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
         </div>
 
@@ -144,6 +149,7 @@
     [mainPanel]   ="mainPanel"
     [panelHeight] ="orderItemsHeightStyle"
     [enableExitLabel] ="enableExitLabel"
+    [userAuths] ='userAuths'
     [order]           ="order">
   </pos-order-items>
 </ng-template>
@@ -161,7 +167,9 @@
 </ng-template>
 
 <ng-template #listViewType>
-  <pos-order-item-list></pos-order-item-list>
+  <pos-order-item-list
+         [userAuths] ='userAuths'
+  ></pos-order-item-list>
 </ng-template>
 
 <ng-template #cardPointeButton>
@@ -183,22 +191,17 @@
 </ng-template>
 
 <ng-template #dsiEMVAndroidCardButton>
-  <!-- <span *ngIf="(platForm === 'android') &&
-        devicename &&
-        uiTransactionSettings?.cardPointAndroidEnabled &&
-        (order && order?.balanceRemaining != 0)"> -->
-    <dsiemvandroid-pay-btn
-        [order]="order"
-        [devicename]="devicename"
-        [uiTransactions]="uiTransactionSettings"
-        [platForm]="platForm"
-        [creditBalanceRemaining]="creditPaymentAmount"
-        [paymentAmount]="order.balanceRemaining"
-        (setStep) ="setStep(1)">
-        <mat-icon>credit_card</mat-icon>
-        <br>Credit / Debit
-    </dsiemvandroid-pay-btn>
-  <!-- </span> -->
+  <dsiemvandroid-pay-btn
+      [order]="order"
+      [devicename]="devicename"
+      [uiTransactions]="uiTransactionSettings"
+      [platForm]="platForm"
+      [creditBalanceRemaining]="creditPaymentAmount"
+      [paymentAmount]="order.balanceRemaining"
+      (setStep) ="setStep(1)">
+      <mat-icon>credit_card</mat-icon>
+      <br>Credit / Debit
+  </dsiemvandroid-pay-btn>
 </ng-template>
 
 <ng-template #disEMVCardButton>
@@ -309,18 +312,21 @@
 </ng-template>
 
 <ng-template #cashPayButtons>
-  <cash-payment-buttons
-      [order]="order"
-      [uiTransactions]="uiTransactionSettings"
-      [platForm]="platForm"
-      [creditBalanceRemaining]="creditPaymentAmount"
-      [paymentAmount] ="order.balanceRemaining"
-      [isApp]         ="platFormService.isApp" >
-  </cash-payment-buttons>
+  <div *ngIf="!smallDevice">
+    <cash-payment-buttons
+        [order]="order"
+        [uiTransactions]="uiTransactionSettings"
+        [platForm]="platForm"
+        [creditBalanceRemaining]="creditPaymentAmount"
+        [paymentAmount] ="order.balanceRemaining"
+        [isApp]         ="platFormService.isApp" >
+    </cash-payment-buttons>
+  </div>
 </ng-template>
 
 <ng-template #payButton>
-  <button mat-raised-button
+  <button
+      mat-raised-button
       class="payment-buttons"
       color="primary"
       aria-label="Check Out"

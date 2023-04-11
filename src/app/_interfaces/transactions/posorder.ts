@@ -435,7 +435,7 @@ export interface IPaymentResponse {
 
 enum actions {
   void = 1,
-  // priceAdjust = 2,
+  priceAdjust = 2,
   note = 3
 }
 

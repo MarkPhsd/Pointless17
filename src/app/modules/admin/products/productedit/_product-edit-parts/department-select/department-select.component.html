@@ -7,6 +7,9 @@
                   type="number"
                   [formControlName]  ="'departmentID'"
                   name="departmentID" >
+          <mat-option [value]="0">
+            Clear
+          </mat-option>
           <mat-option *ngFor="let item of list" [value]="item.id">
             {{item?.name}}
           </mat-option>

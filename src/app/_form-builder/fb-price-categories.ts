@@ -1,9 +1,7 @@
 
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-
 import { PriceCategories, ProductPrice } from '../_interfaces/menu/price-categories';
-
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +10,6 @@ import { PriceCategories, ProductPrice } from '../_interfaces/menu/price-categor
 export class FbPriceCategoriesService {
 
   constructor(private fb: FormBuilder) { }
-
 
   intitFormData(inputForm: FormGroup, data: PriceCategories) {
     inputForm.patchValue(data)
@@ -25,7 +22,6 @@ export class FbPriceCategoriesService {
       id:                           [''],
       name:                         [''],
       productPrices:      this.fb.array([
-
       ]),
     })
     return fb

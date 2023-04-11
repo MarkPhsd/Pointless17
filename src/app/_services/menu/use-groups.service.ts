@@ -88,7 +88,7 @@ export class UseGroupsService {
     const useGroup = this.getDefaultGroups();
     return this.postItemGroups(site, useGroup)
   }
-  
+
   restoreGroups(site: ISite) {
     // postItemGroups
     //get groups, if empty, then post groups;
@@ -104,7 +104,10 @@ export class UseGroupsService {
     )
   }
 
-  resetUseGroups(site: ISite) { 
+  resetUseGroups(site: ISite): Observable<UseGroups[]> {
+
+    const list = this.getDefaultGroups();
+
     const controller = '/UseGroups/';
 
     const parameters = '';
@@ -113,7 +116,7 @@ export class UseGroupsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`;
 
-    return  this.http.get(url);
+    return  this.http.post<UseGroups[]>(url, list);
 
   }
 

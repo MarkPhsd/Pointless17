@@ -33,6 +33,20 @@ export class PriceCategoriesEditComponent implements OnInit {
     {id: 4, name: 'weighed'},
   ]
 
+  sizeList  = [
+    {name : 'Default', id: 0 },
+    {name : '1', id: 1 },
+    {name : '2', id: 2 },
+    {name : '3', id: 3 },
+    {name : '4', id: 4 },
+    {name : '5', id: 5 },
+    {name : '6', id: 6 },
+    {name : '7', id: 7 },
+    {name : '8', id: 8 },
+    {name : '9', id: 9 },
+    {name : '10', id: 10 },
+  ] as IItemBasic[];
+
   @Input() priceCategory  :  PriceCategories;
   inputForm               :  FormGroup;
   showMore                :  boolean;
@@ -41,10 +55,11 @@ export class PriceCategoriesEditComponent implements OnInit {
   showConversions         :  boolean;
   showPriceTiers          :  boolean;
   showModifiers           :  boolean;
+  toggleLinkedPrices      :  boolean;
+
   toggleSearchSize        = [] as  boolean[];
   saving                  : boolean;
   toggle                  : any;
-
   get productPrices() : FormArray {
     return this.inputForm.get('productPrices') as FormArray;
   }

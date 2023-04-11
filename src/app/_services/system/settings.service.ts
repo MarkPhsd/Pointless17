@@ -32,6 +32,7 @@ export interface ITerminalSettings {
   triposLaneID        : string;
   enableScale         : boolean;
   enableExitLabel     : boolean;
+  ignoreTimer         : boolean;
 }
 
 @Injectable({

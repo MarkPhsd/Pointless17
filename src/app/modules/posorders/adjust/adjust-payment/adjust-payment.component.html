@@ -1,6 +1,5 @@
 <div *ngIf="(deviceSettings$ | async) as deviceSettings"></div>
 <div *ngIf="(action$  | async) as item"></div>
-
 <div *ngIf="resultAction && (voidPayment || manifest)">
   <mat-card>
     <mat-card-content>
@@ -39,4 +38,6 @@
     </mat-card-actions>
   </mat-card>
 </div>
+
+
 

@@ -103,6 +103,15 @@ mat-sidebar {
   }
 }
 
+.mat-drawer-toolbar-web {
+  width: 100%;
+  box-shadow: 3px 0 6px rgba(0,0,0,.24);
+  @include for-phone-only  {
+    width: 55px;
+    box-shadow: 3px 0 6px rgba(0,0,0,.24);
+  }
+}
+
 .mat-drawer-searchbar {
   width: 190px;
   box-shadow: 3px 0 6px rgba(0,0,0,.24);

@@ -22,6 +22,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { DatePipe } from '@angular/common';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 
 @Component({
   selector: 'pos-order-item-list',
@@ -38,7 +39,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   //search with debounce: also requires AfterViewInit()
   // @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
-
+  @Input() userAuths       :   IUserAuth_Properties;
   _order: Subscription;
   order: IPOSOrder;
 

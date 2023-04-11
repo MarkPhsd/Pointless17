@@ -9,17 +9,11 @@
 
 <ng-template #paymentsView let-payment>
   <div *ngFor="let payment of payments" >
-    <!-- {{payment | json }} -->
-    <!--
-        groupBy {{groupBy }}
-        type    {{type}}
-    <div *ngIf="type === 'voids'">
-      {{payments | json}}
-    </div> -->
 
     <div *ngIf="groupBy && groupBy.toLowerCase() === 'employee'"
          class="grid-headerfooter">
-      <div *ngIf="payment.employeeName" class="employeeName" >
+      <div *ngIf="payment.employeeName"
+           class="employeeName" >
             {{ payment?.employeeName | truncateText: 10 }}
       </div>
       <div *ngIf="!payment.employeeName" class="employeeName">Not Assigned</div>

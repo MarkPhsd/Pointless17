@@ -11,6 +11,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { ISite } from 'src/app/_interfaces';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { SettingsService } from 'src/app/_services/system/settings.service';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 
 @Component({
   selector: 'pos-order-items',
@@ -32,6 +33,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input() disableActions = false;
   @Input() qrOrder        = false;
   @Input() enableExitLabel : boolean;
+  @Input() userAuths       :   IUserAuth_Properties;
 
   qrCodeStyle = ''
   mainStyle   = ''

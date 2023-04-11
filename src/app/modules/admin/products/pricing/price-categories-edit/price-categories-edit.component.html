@@ -41,17 +41,24 @@
           <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Conversions</button>
         </div>
 
+      </div>
+      <div class="grid-simple-price-container grid-width" >
+
         <div>
-          <button mat-button (click)="toggleWeightPrices()"><mat-icon>scale</mat-icon>Tiers</button>
+          <button mat-button (click)="toggleLinkedPrices = !toggleLinkedPrices"><mat-icon>keyboard_option_key</mat-icon>Linked Prices</button>
         </div>
 
         <div>
           <button mat-button (click)="toggleModifier()"><mat-icon>keyboard_option_key</mat-icon>Modifier</button>
         </div>
 
-      </div>
+        <div>
+          <button mat-button (click)="toggleWeightPrices()"><mat-icon>scale</mat-icon>Tiers</button>
+        </div>
 
-      <!--  -->
+
+      </div>
+        <!--  -->
       <div class="buttons-margin">
         <app-edit-buttons-standard
             (outputeupdateItem)     ="updateCategory($event)"
@@ -177,183 +184,27 @@
 
                   </div>
 
-                  <div  *ngIf="showMore || showTime"
-                        class="grid-price-time-container">
-                    <div  *ngIf="showMore"
-                          class=" grid-multiprice-container">
-<!--
-                      <div   *ngIf="showMore">
-                        <mat-form-field appearance="outline" class="prices-fields">
-                          <mat-label >price1</mat-label>
-                          <input matInput
-                                type="text"
-                                currencyMask
-                                formControlName="price1"
-                                class="form-control" >
-                        </mat-form-field>
-                      </div>
-                      <div   *ngIf="showMore">
-                        <mat-form-field appearance="outline" class="prices-fields">
-                          <mat-label >price2</mat-label>
-                          <input matInput
-                                type="text"
-                                currencyMask
-                                formControlName="price2"
-                                class="form-control" >
-                        </mat-form-field>
-                      </div>
-                      <div   *ngIf="showMore">
-                        <mat-form-field appearance="outline" class="prices-fields">
-                          <mat-label >price3</mat-label>
-                          <input matInput
-                                type="text"
-                                currencyMask
-                                formControlName="price3"
-                                class="form-control" >
-                        </mat-form-field>
-                      </div>
-                      <div   *ngIf="showMore">
-                        <mat-form-field appearance="outline" class="prices-fields">
-                          <mat-label >price4</mat-label>
-                          <input matInput
-                                type="text"
-                                currencyMask
-                                formControlName="price4"
-                                class="form-control" >
-                        </mat-form-field>
-                      </div>
-
-                      <div   *ngIf="showMore">
-                        <mat-form-field appearance="outline" class="prices-fields">
-                          <mat-label >price5</mat-label>
-                          <input matInput
-                                type="text"
-                                currencyMask
-                                formControlName="price5"
-                                class="form-control" >
-                        </mat-form-field>
-                      </div>
-
-                      <div   *ngIf="showMore">
-                        <mat-form-field appearance="outline" class="prices-fields">
-                          <mat-label >price6</mat-label>
-                          <input matInput
-                                type="text"
-                                currencyMask
-                                formControlName="price6"
-                                class="form-control" >
-                        </mat-form-field>
-                      </div>
-
-                      <div   *ngIf="showMore">
-                        <mat-form-field appearance="outline" class="prices-fields">
-                          <mat-label >price7</mat-label>
-                          <input matInput
-                                type="text"
-                                currencyMask
-                                formControlName="price7"
-                                class="form-control" >
-                        </mat-form-field>
-                      </div>
-
-                      <div   *ngIf="showMore">
-                        <mat-form-field appearance="outline" class="prices-fields">
-                          <mat-label >price8</mat-label>
-                          <input matInput
-                                type="text"
-                                currencyMask
-                                formControlName="price8"
-                                class="form-control" >
-                        </mat-form-field>
-                      </div>
-
-                      <div *ngIf="showMore">
-                        <mat-form-field appearance="outline" class="prices-fields">
-                          <mat-label >price9</mat-label>
-                          <input matInput
-                                type="text"
-                                currencyMask
-                                formControlName="price9"
-                                class="form-control" >
-                        </mat-form-field>
-                      </div>
-
-                      <div *ngIf="showMore">
-                        <mat-form-field appearance="outline" class="prices-fields">
-                          <mat-label >price10</mat-label>
-                          <input matInput
-                                type="text"
-                                currencyMask
-                                formControlName="price10"
-                                class="form-control" >
-                        </mat-form-field>
-                      </div> -->
-
-                    </div>
-
-                     <div *ngIf="showTime  ||
-                              (priceCategory.productPrices &&
-                              priceCategory?.productPrices.length > 0 &&
-                              priceCategory?.productPrices[i]?.startDate != undefined ||
-                              priceCategory?.productPrices[i]?.specialDatePrice != undefined ||
-                              priceCategory?.productPrices[i]?.endDate != undefined ||
-                              priceCategory?.productPrices[i]?.startTime != undefined ||
-                              priceCategory?.productPrices[i]?.endTime != undefined) "
-                          class="grid-time-container">
-
-                      <div>
-                        Time & Date based price will automatically apply when dates or time assigned.
-                      </div>
-
-                      <div *ngIf="showTime">
-                        <mat-form-field appearance="outline" class="date-fields">
-                          <mat-label >Price</mat-label>
-                          <input matInput
-                                type="number"
-                                formControlName="specialDatePrice"
-                                class="form-control" >
-                        </mat-form-field>
-                      </div>
-
-                      <div *ngIf="showTime">
-                        <mat-form-field appearance="outline" class="date-fields">
-                          <mat-label>Start Date</mat-label>
-                          <input matInput
-                                formControlName="startDate"
-                                [matDatepicker]="picker">
-                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                          <mat-datepicker #picker></mat-datepicker>
-                        </mat-form-field>
-                      </div>
-                      <div *ngIf="showTime">
-                        <mat-form-field appearance="outline" class="date-fields">
-                          <mat-label>End Date</mat-label>
-                          <input matInput
-                                formControlName="endDate"
-                                [matDatepicker]="picker">
-                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                          <mat-datepicker #picker></mat-datepicker>
-                        </mat-form-field>
-                      </div>
-                      <div *ngIf="showTime">
-                        <mat-form-field appearance="outline" class="date-fields">
-                          <mat-label >Start</mat-label>
-                          <input matInput
-                                type="time"
-                                formControlName="startTime"
-                                class="form-control" >
-                        </mat-form-field>
-                      </div>
-                      <div *ngIf="showTime">
-                        <mat-form-field appearance="outline" class="date-fields">
-                          <mat-label >End</mat-label>
-                          <input matInput
-                                type="time"
-                                formControlName="endTime"
-                                class="form-control" >
-                        </mat-form-field>
-                      </div>
-
+                  <div *ngIf="toggleLinkedPrices || (priceCategory?.productPrices && priceCategory?.productPrices.length>0
+                                                      && (priceCategory?.productPrices.length > 0 && priceCategory?.productPrices[i]?.pizzaSize != 0
+                                                          && priceCategory?.productPrices[i]?.pizzaSize != undefined) ) ">
+                    <!-- <div class="label-description">
+                      <mat-label >Linked Prices are to link this value to associated items with this item. An example would be a Pizza. izza could have several
+                        prices. The Large could use Linked Price 1, the Medium Linked Price 2, and the Small could use Linked Price 3. The toppings would also have 3 prices with
+                        the same features applied, where the large topping would have linked price 1 etc.</mat-label>
+                    </div> -->
+                    <div *ngIf="sizeList">
+                        <mat-form-field class="category-list" appearance="outline">
+                          <mat-label>Linked Size</mat-label>
+                          <mat-select
+                                      type="number"
+                                      formControlName = "pizzaSize"
+                                      >
+                              <mat-option *ngFor="let item of sizeList"
+                                          [value]="item.id">
+                                {{item?.name}}
+                              </mat-option>
+                          </mat-select>
+                      </mat-form-field>
                     </div>
                   </div>
 
@@ -401,7 +252,6 @@
                                 class="form-control" >
                         </mat-form-field>
                       </div>
-
                       <div   *ngIf="showMore">
                         <mat-form-field appearance="outline" class="prices-fields">
                           <mat-label >price5</mat-label>
@@ -412,7 +262,6 @@
                                 class="form-control" >
                         </mat-form-field>
                       </div>
-
                       <div   *ngIf="showMore">
                         <mat-form-field appearance="outline" class="prices-fields">
                           <mat-label >price6</mat-label>
@@ -423,7 +272,6 @@
                                 class="form-control" >
                         </mat-form-field>
                       </div>
-
                       <div   *ngIf="showMore">
                         <mat-form-field appearance="outline" class="prices-fields">
                           <mat-label >price7</mat-label>
@@ -471,13 +319,12 @@
                   </div>
 
                   <div *ngIf="showWeightPrices" class="grid-time-container">
-                    <div>
+                    <mat-label class="label-description">
                       These are prices set to quantities of greater than the mulitpliers, multipliers are 1, 3.5, 7, 14, 28.
                       Enter the price equal to the quantity. The final value will be calculated based
                       on that quantity times price as the rate.
                       The rate will be recalcualted to match the quantity provided when over a grace amouunt entered in price settings.
-                    </div>
-                    <div></div>
+                    </mat-label>
 
                     <div >
                       <mat-form-field appearance="outline" class="date-fields">
@@ -570,7 +417,6 @@
 
                       </mat-card-content>
                     </mat-card>
-
                   </div>
 
 
@@ -636,3 +482,11 @@
     </div>
   </mat-card-content>
 </mat-card>
+
+<ng-template #linkedPricesView let-i>
+  <!-- hey
+  {{i.value | json}} -->
+  <!-- <linked-price-selector [inputForm]="i"
+                         [fieldName]="'pizzaSize'">Linked Size Value
+    </linked-price-selector> -->
+</ng-template>

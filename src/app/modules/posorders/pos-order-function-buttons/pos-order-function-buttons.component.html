@@ -1,31 +1,26 @@
 <div  *ngIf="order && mainPanel && uiTransactionSetting"
       class="buttons-container">
 
-  <div>
-    <ng-container [ngTemplateOutlet]="receiptView"></ng-container>
-  </div>
+  <ng-container [ngTemplateOutlet]="receiptView"></ng-container>
 
-  <div *ngIf="emailOption">
-    <ng-container [ngTemplateOutlet]="emailOptionView"></ng-container>
-  </div>
+  <ng-container [ngTemplateOutlet]="payOptionView"></ng-container>
 
-  <div>
-    <ng-container [ngTemplateOutlet]="ssmsOptionView"></ng-container>
-  </div>
+  <ng-container [ngTemplateOutlet]="listItemsView"> </ng-container>
 
-  <div>
-    <ng-container [ngTemplateOutlet]="textOptionView"></ng-container>
-  </div>
 
-  <div>
-    <ng-container [ngTemplateOutlet]="sendOptionView"></ng-container>
-  </div>
+  <ng-container [ngTemplateOutlet]="emailOptionView"></ng-container>
+
+  <ng-container [ngTemplateOutlet]="isSSMOptionView"></ng-container>
+
+  <ng-container [ngTemplateOutlet]="istextOptionView"></ng-container>
+
+  <ng-container [ngTemplateOutlet]="sendOptionView"></ng-container>
 
   <div *ngIf="isApp">
     <ng-container [ngTemplateOutlet]="spacer5"></ng-container>
   </div>
 
-  <div *ngIf="!isUser && (mainPanel && !order.suspendedOrder)">
+  <div *ngIf="!smallDevice && !isUser && (mainPanel && !order.suspendedOrder) && (userAuths && userAuths.allowSuspendTransaction)">
     <span>
       <button mat-raised-button
               [disabled]="( (order.history && !isAuthorized) && order.clientID == 0)  == true"
@@ -34,7 +29,7 @@
     </span>
   </div>
 
-  <div *ngIf="!isUser && (mainPanel && order.suspendedOrder)">
+  <div *ngIf="!smallDevice && !isUser && (mainPanel && order.suspendedOrder)  && (userAuths && userAuths.allowSuspendTransaction)">
     <span>
       <button mat-raised-button color="warn"
               [disabled]="( (order.history && !isAuthorized) && order.clientID == 0)  == true"
@@ -42,36 +37,14 @@
     </span>
   </div>
 
-  <div  *ngIf="!isUser">
-    <button mat-raised-button class="button"
-            [disabled]="  ((order.history) && (itemsPrinted || paymentsMade)) == true"
-            color="warn"
-            (click)="voidOrder()">
-      <mat-icon>delete</mat-icon>
-      <span>
-        Void
-      </span>
-    </button>
-  </div>
+  <ng-container [ngTemplateOutlet]="adjustmentOptions"></ng-container>
 
-  <div  *ngIf="!isUser">
-    <ng-container [ngTemplateOutlet]="refundOrderButton"></ng-container>
-  </div>
+  <ng-container [ngTemplateOutlet]="isManifestView"></ng-container>
 
-  <div *ngIf="purchasOrderEnabled && userAuthorizationService.isManagement">
-    <ng-container [ngTemplateOutlet]="inventoryManifestView"></ng-container>
-  </div>
-
-  <div  *ngIf="userAuthorizationService.isManagement">
-    <ng-container [ngTemplateOutlet]="listViewItemView"></ng-container>
-  </div>
+  <ng-container [ngTemplateOutlet]="islistViewItemView"></ng-container>
 
   <div  *ngIf="isStaff">
     <ng-container [ngTemplateOutlet]="changeTransactionTypeView"></ng-container>
-  </div>
-
-  <div  *ngIf="!isUser">
-    <ng-container [ngTemplateOutlet]="listItemsView"></ng-container>
   </div>
 
    <div *ngIf="isApp && (mainPanel && !smallDevice)  && (posDevice && posDevice.enableExitLabel)">
@@ -82,12 +55,10 @@
     <ng-container [ngTemplateOutlet]="rePrintLabelsView"></ng-container>
   </div>
 
-  <div>
-    <ng-container [ngTemplateOutlet]="deleteOrderView"></ng-container>
-  </div>
+
 
   <div>
-    <ng-container [ngTemplateOutlet]="balanceSheetMenuView"></ng-container>
+    <ng-container [ngTemplateOutlet]="isbalanceSheetMenuView"></ng-container>
   </div>
 
   <div *ngIf="order && order.history">
@@ -107,7 +78,6 @@
     </button>
   </div>
 </ng-template>
-
 
 <ng-template #changeTransactionTypeView>
   <button mat-raised-button class="button"
@@ -173,9 +143,7 @@
   </div>
 </ng-template>
 
-
 <ng-template #ssmsOptionView>
-  <div *ngIf="ssmsOption && !isUser">
     <button  [disabled]="!(order && order.clients_POSOrders && order.clients_POSOrders.email) "
             mat-raised-button
             class="button"
@@ -185,7 +153,6 @@
          Notify ready
        </span>
     </button>
-  </div>
 </ng-template>
 
 <ng-template #emailOptionView>
@@ -214,7 +181,6 @@
   </button>
 </ng-template>
 
-
 <!-- <ng-container [ngTemplateOutlet]="cashPaymentButtons"></ng-container> -->
 <ng-template #rePrintLabelsView>
   <button mat-raised-button
@@ -242,16 +208,15 @@
   </button>
 </ng-template>
 
-<ng-template #deleteOrderView>
+<ng-template #payOption>
   <button mat-raised-button
           class="primary"
-          color="warn"
-          aria-label="delete"
-          [disabled]="order.posOrderItems.length != 0"
-          (click)="deleteOrder()">
-    <mat-icon>delete</mat-icon>
+          color="primary"
+          aria-label="Clear"
+          (click)="payOrder()">
+    <mat-icon>credit_card</mat-icon>
     <span>
-      Delete Order
+      Pay
     </span>
   </button>
 </ng-template>
@@ -270,8 +235,6 @@
   </button>
 </ng-template>
 
-
-
 <ng-template #refundOrderButton>
   <button mat-raised-button class="button"
           [disabled]=" order.total<0 || ((order.history) && (itemsPrinted || paymentsMade)) == true"
@@ -282,6 +245,68 @@
       Refund Order
     </span>
   </button>
+</ng-template>
+
+<ng-template #voidOrderButton>
+  <div  *ngIf="!isUser">
+    <button mat-raised-button class="button"
+            [disabled]="  ((order.history) && (itemsPrinted || paymentsMade)) == true"
+            color="warn"
+            (click)="voidOrder()">
+      <mat-icon>delete</mat-icon>
+      <span>
+        Void
+      </span>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #deleteOrderView>
+  <button mat-raised-button
+          class="primary"
+          color="warn"
+          aria-label="delete"
+          [disabled]="order.posOrderItems.length != 0"
+          (click)="deleteOrder()">
+    <mat-icon>delete</mat-icon>
+    <span>
+      Delete Order
+    </span>
+  </button>
+</ng-template>
+
+<ng-template #adjustmentOptionsView>
+
+  <button aria-label="user menu"
+          mat-raised-button
+
+          [matMenuTriggerFor]="menu"
+          #menuTrigger="matMenuTrigger"
+          (click)="menuTrigger.openMenu()" >
+    <mat-icon >manager</mat-icon>
+    Adjustment
+  </button>
+  <mat-menu class="mat-menu-panel"
+            [overlapTrigger]="false"
+            #menu="matMenu">
+
+    <span (mouseleave)="menuTrigger.closeMenu()">
+
+      <div>
+        <ng-container [ngTemplateOutlet]="refundOrderButton"></ng-container>
+      </div>
+
+      <div>
+        <ng-container [ngTemplateOutlet]="voidOrderButton"></ng-container>
+      </div>
+
+      <div>
+        <ng-container [ngTemplateOutlet]="deleteOrderView"></ng-container>
+      </div>
+
+    </span>
+  </mat-menu>
+
 </ng-template>
 
 <ng-template #cancelButton>
@@ -295,18 +320,6 @@
       Cancel
       </span>
     </button>
-</ng-template>
-
-<ng-template #refundItem>
-  <!-- <button mat-raised-button class="button"
-      [disabled]=" !refundItemEnabled || ((order.history) && (itemsPrinted || paymentsMade)) == true"
-      color="primary"
-      (click)="refundItem()">
-      <mat-icon>refresh</mat-icon>
-    <span>
-    Refund Item
-    </span>
-  </button> -->
 </ng-template>
 
 <ng-template #refundItem>
@@ -350,7 +363,6 @@
   </button>
 </ng-template>
 
-
 <ng-template #balanceSheetView>
   <button mat-raised-button class="button"
     color="primary"
@@ -360,6 +372,7 @@
     </span>
   </button>
 </ng-template>
+
 
 
 <ng-template #balanceSheetMenuView>

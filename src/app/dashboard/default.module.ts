@@ -372,6 +372,7 @@ import { PrintGroupReceiptComponent } from '../modules/posorders/pos-payment/pos
 import { PrepPrintingServiceService } from '../_services/system/prep-printing-service.service';
 import { TriposSettingsComponent } from '../modules/payment-processing/tri-pos-transactions/tripos-settings/tripos-settings.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { LinkedPriceSelectorComponent } from '../modules/admin/products/pricing/price-categories-edit/linked-price-selector/linked-price-selector.component';
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
   useClass: LoggingInterceptor,
@@ -467,6 +468,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PriceCategoryPriceFieldsComponent,
     PriceCategoryConversionsComponent,
     PriceCategoryTimeFiltersComponent,
+    LinkedPriceSelectorComponent,
     PriceCategoriesComponent,
 
     WicEBTCardPayBtnComponent,

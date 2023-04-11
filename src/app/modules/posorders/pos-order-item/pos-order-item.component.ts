@@ -27,6 +27,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { MenuItemModalComponent } from '../../menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
 import { PosOrderItemEditComponent } from './pos-order-item-edit/pos-order-item-edit.component';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 
 export interface payload{
   index : number;
@@ -104,6 +105,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   showEdit              : boolean;
   showView              : boolean;
   promptOption          : boolean;
+  @Input() userAuths       :   IUserAuth_Properties;
 
   bottomSheetOpen       : boolean ;
   _bottomSheetOpen      : Subscription;
@@ -136,6 +138,11 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
           return true;
     }
     return false;
+
+  }
+
+  refundItem() {
+
   }
 
   initSubscriptions() {
@@ -155,6 +162,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
       }
     })
   }
+
 
   initAssignedItemSubscriber() {
     //disabled  class style when added button for item functions
@@ -197,6 +205,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                 private promptGroupservice : PromptGroupService,
                 private printingService    : PrintingService,
                 public  userAuthService    : UserAuthorizationService,
+
                 private fb: FormBuilder,
               )
   {

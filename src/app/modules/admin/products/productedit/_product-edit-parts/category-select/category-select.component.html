@@ -10,6 +10,9 @@
                       [formControlName] = "fieldName"
 
                       (selectionChange)="getCategory($event)" >
+              <mat-option [value]="0">
+                Clear
+              </mat-option>
               <mat-option *ngFor="let item of list"
                           [value]="item.id">
                 {{item?.name}}
@@ -18,13 +21,13 @@
       </mat-form-field>
     </div>
 
-    <div *ngIf="inputForm.controls[fieldName].value != 0">
+    <!-- <div *ngIf="inputForm.controls[fieldName].value != 0">
       <button mat-button
               color="warn"
               (click)="clearItem()">
         <mat-icon>delete</mat-icon>
       </button>
-    </div>
+    </div> -->
 
     <ng-template #loading>
       <mat-label><ng-content></ng-content></mat-label>

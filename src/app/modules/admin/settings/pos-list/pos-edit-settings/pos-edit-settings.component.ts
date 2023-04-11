@@ -135,6 +135,7 @@ export class PosEditSettingsComponent implements OnInit {
       triposLaneID       : [],
       enableExitLabel : [],
       enableScale: [],
+      ignoreTimer: [],
     })
 
     if (this.terminal) {
@@ -170,14 +171,6 @@ export class PosEditSettingsComponent implements OnInit {
       return of(data)
     }));
 
-    // this.saving = true;
-
-    // this.saving$.subscribe(data => {
-    //   if (close) {
-    //     this.onCancel(true);
-    //   }
-    //   this.saving = false
-    // })
   }
 
   setZoomValue(event) {

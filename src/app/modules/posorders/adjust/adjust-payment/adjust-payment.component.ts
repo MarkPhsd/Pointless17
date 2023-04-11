@@ -176,6 +176,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       this.resultAction.voidReasonID = setting.id
       this.resultAction.action = 1;
       const method = this.resultAction.paymentMethod;
+      console.log('voidPaymentFromSelection:resultAction ', this.resultAction)
+
       let response$: Observable<OperationWithAction>;
 
       if (this.resultAction) {
@@ -183,9 +185,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
           if (method?.companyCredit) {
 
             this.voidPayment.voidReason = this.resultAction.voidReason
-
             const credit = {} as StoreCredit;
-            console.log('this void card issue', credit)
+
             this.resultAction.payment = this.payment;
             const msg ='Unable to void this store credit. Before voiding this order, please ensure the card can be voided.';
             const getPayment$ = this.pOSPaymentService.getPOSPayment(site, this.payment.id, false);
@@ -195,7 +196,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                 this.payment = payment;
                 credit.cardNum = payment.cardNum;
                 credit.reduceValue = payment.amountPaid;
-                console.log('credit should be', credit.cardNum)
+                // console.log('credit should be', credit.cardNum)
                 return this.storeCreditService.updateCreditValue(site, credit)
               })).pipe( switchMap ( data => {
                   if (data) {
@@ -216,11 +217,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
           if (method.isCreditCard) {
             this.voidPayment.voidReason = this.resultAction.voidReason;
-            const transData   = JSON.parse(this.voidPayment.transactionData) ;
-            console.log('transData', transData) ;
-            const paymentType = transData.paymentType ;
+            this.voidPayment = this.resultAction.payment;
 
-            console.log(transData.paymentType)
             if (this.settings.dsiEMVNeteEpayEnabled) {
               if (this.isDSIEmvPayment && this.voidPayment) {
                 this.voidDSIEmvPayment();
@@ -229,64 +227,80 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
             }
 
             if (this.settings.triposEnabled) {
-
-              if ( !transData.paymentType ) {
-                // console.log('his.voidPayment.transactionData', this.voidPayment.transactionData)
-                this.siteService.notify('No Payment type identitified', 'Close', 5000, 'red')
-                return of(null)
+              if(!this.voidPayment.transactionData) {
+                this.siteService.notify('No Transaction Data Found', "Close', 'yellow", 4000);
+                return
               }
+              if (this.voidPayment.transactionData) {
+                try {
 
-              const site = this.siteService.getAssignedSite()
-              let item = {} as authorizationPOST
-              item.laneId  = this.terminalSettings.triposLaneID;
-              item.paymentType = transData.paymentType;
-              item.transactionId = this.payment.refNumber;
-              let process$ : Observable<TriposResult>;
+                  const transData   = JSON.parse(this.voidPayment.transactionData) ;
+                  const paymentType = transData.paymentType ;
 
-              if (this.toggleVoid) {
-                process$ = this.triPOSMethodService.void(site, item)
-              }
-              if (!this.toggleVoid) {
-                process$ = this.triPOSMethodService.reversal(site, item)
-              }
-
-              this.action$ = process$.pipe(switchMap(data => {
-
-                if (this.validateTriPOSVoid(data)) {
-                  this.resultAction = this.applyTriPOSResults(data, this.resultAction.voidReason)
-                  return of(this.resultAction)
-                }
-
-                if (!this.validateTriPOSVoid(data?.statusCode)) {
-                  this.siteService.notify("Reversal Response Failed. Run again as a void.", 'Close', 5000, 'red')
-                }
-
-                this.resultAction = null
-                return of(this.resultAction)
-              })).pipe(switchMap(resultAction => {
-                if (!resultAction) {
-                  this.notifyEvent('Void not allowed by user', 'CC Result')
-                  return of(null)
-                }
-                if (resultAction) {
-                  return this.pOSPaymentService.voidPayment(site, resultAction);
-                }
-              })).pipe(
-                switchMap(data => {
-                  if (!data || !data.result) {
-                    if ( data?.resultMessage == null ) {
-                      this.notifyEvent(`Void failed: user may not be authorized`, 'Void Result')
-                      return of(null)
-                    }
-                    this.notifyEvent(`Void failed: ${data?.resultMessage}`, 'Void Result')
+                  if (!transData) {
+                    this.siteService.notify('No transData type identitified', 'Close', 5000, 'red')
                     return of(null)
                   }
-                  this.updateVoidPayment(data)
-                  return of(data)
-              }))
+                  if ( !paymentType ) {
+                    // console.log('his.voidPayment.transactionData', this.voidPayment.transactionData)
+                    this.siteService.notify('No Payment type identitified', 'Close', 5000, 'red')
+                    return of(null)
+                  }
 
-              return;
+                  const site = this.siteService.getAssignedSite()
+                  let item = {} as authorizationPOST
+                  item.laneId  = this.terminalSettings.triposLaneID;
+                  item.paymentType = transData.paymentType;
+                  item.transactionId = this.payment.refNumber;
+                  let process$ : Observable<TriposResult>;
 
+                  if (this.toggleVoid) {
+                    process$ = this.triPOSMethodService.void(site, item)
+                  }
+                  if (!this.toggleVoid) {
+                    process$ = this.triPOSMethodService.reversal(site, item)
+                  }
+
+                  this.action$ = process$.pipe(switchMap(data => {
+
+                    if (this.validateTriPOSVoid(data)) {
+                      this.resultAction = this.applyTriPOSResults(data, this.resultAction.voidReason)
+                      return of(this.resultAction)
+                    }
+
+                    if (!this.validateTriPOSVoid(data?.statusCode)) {
+                      this.siteService.notify("Reversal Response Failed. Run again as a void.", 'Close', 5000, 'red')
+                    }
+
+                    this.resultAction = null
+                    return of(this.resultAction)
+                  })).pipe(switchMap(resultAction => {
+                    if (!resultAction) {
+                      this.notifyEvent('Void not allowed by user', 'CC Result')
+                      return of(null)
+                    }
+                    if (resultAction) {
+                      return this.pOSPaymentService.voidPayment(site, resultAction);
+                    }
+                  })).pipe(
+                    switchMap(data => {
+                      if (!data || !data.result) {
+                        if ( data?.resultMessage == null ) {
+                          this.notifyEvent(`Void failed: user may not be authorized`, 'Void Result')
+                          return of(null)
+                        }
+                        this.notifyEvent(`Void failed: ${data?.resultMessage}`, 'Void Result')
+                        return of(null)
+                      }
+                      this.updateVoidPayment(data)
+                      return of(data)
+                  }))
+                }
+                catch (error) {
+                  this.siteService.notify('Error parsing data' + error, 'Close', 5000, 'red')
+                }
+                return;
+              }
             }
 
             if (this.settings.cardPointBoltEnabled) {
@@ -440,7 +454,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       const voidPayment = this.voidPayment;
       if (voidPayment) {
         this.paymentsMethodsService.processDSIEMVCreditVoid(voidPayment)
-        //  this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
         this.closeDialog(null, null);
       }
     }

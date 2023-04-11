@@ -611,7 +611,7 @@ export class ProductEditButtonService {
     const site = this.siteService.getAssignedSite();
     if (payment) {
       let action      = {}  as OperationWithAction;
-      action.action   = 2;
+      action.action   = 2 //actions.priceAdjust;
       action.payment  = payment;
       action.id       = payment.id
 

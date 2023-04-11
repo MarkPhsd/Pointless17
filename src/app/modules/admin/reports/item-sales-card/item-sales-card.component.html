@@ -171,10 +171,11 @@
 
           <div class="grid-adjustment">
             <div class="totalslabel">Item :    </div>
-            <div class="totalslabel">Reason :</div>
             <div class="totals">Order         </div>
             <div class="totals">Value         </div>
             <div class="totalslabel">User :</div>
+
+            <div class="totalslabel">Reason :</div>
           </div>
           <div class="margin-divider">
             <mat-divider></mat-divider>
@@ -183,13 +184,12 @@
           <div  class="grid-adjustment"
                 *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
               <div class="product-name">{{ sale?.productName | truncateText : 20   }}      </div>
-              <div class="product-name">{{ sale?.voidReason }}   </div>
               <div class="totals">      {{ sale?.orderID }}               </div>
               <div class="totals">      {{ sale?.originalPrice | currency }}   </div>
               <div class="product-name">{{ sale?.employee | truncateText: 8 }}   </div>
-          </div>
 
-
+              <div class="item-span product-name">{{ sale?.voidReason }}   </div>
+            </div>
         </mat-card-content>
 
       </mat-card>

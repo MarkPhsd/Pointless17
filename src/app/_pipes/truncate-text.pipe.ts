@@ -17,16 +17,35 @@ export class TruncateTextPipe implements PipeTransform {
 
     let truncatedText = value.slice(0, length + biggestWord);
 
+    // console.log('long', value.slice(0, length + biggestWord))
+    // console.log('short', value.slice(0, length));
+    return  value.slice(0, length) + elipses;
+
     while (truncatedText.length > length - elipses.length) {
         let lastSpace = truncatedText.lastIndexOf(" ");
         if(lastSpace === -1) break;
         truncatedText = truncatedText.slice(0, lastSpace).replace(/[!,.?;:]$/, '');
     };
 
+   console.log(truncatedText)
    return truncatedText + elipses;
 
   }
 }
+
+
+// <h1>{{longStr | truncate }}</h1>
+// <!-- Outputs: A really long string that... -->
+
+// <h1>{{longStr | truncate : 12 }}</h1>
+// <!-- Outputs: A really lon... -->
+
+// <h1>{{longStr | truncate : 12 : true }}</h1>
+// <!-- Outputs: A really... -->
+
+// <h1>{{longStr | truncate : 12 : false : '***' }}</h1>
+// <!-- Outputs: A really lon*** -->
+
 
 // /*
 
