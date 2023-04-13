@@ -55,6 +55,7 @@ export class  PromptSubGroupsService {
       image          : [],
       instructions   : [],
       hideSplitOptions: [],
+      freePage: [],
     })
 
     return inputForm

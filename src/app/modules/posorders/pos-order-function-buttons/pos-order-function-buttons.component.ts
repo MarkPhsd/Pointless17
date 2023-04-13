@@ -37,8 +37,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   @ViewChild('emailOptionView')  emailOptionView: TemplateRef<any>;
   @ViewChild('listItemsView')  listItemsView: TemplateRef<any>;
   @ViewChild('adjustmentOptionsView')  adjustmentOptionsView: TemplateRef<any>;
-
-  @ViewChild('refundOrderButton')  balanceSheetMenuView: TemplateRef<any>;
+  @ViewChild('balanceSheetMenuView')  balanceSheetMenuView: TemplateRef<any>;
 
   @ViewChild('cancelButton') cancelButton: TemplateRef<any>;
   @Input() devicename: string;

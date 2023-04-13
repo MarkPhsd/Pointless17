@@ -4,6 +4,7 @@ import { Observable, of, startWith, switchMap } from 'rxjs';
 import { IPOSOrder, IPurchaseOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 export interface Item {
   order: IPOSOrder;
   item: IMenuItem;
@@ -27,6 +28,7 @@ export class PriceOptionsComponent  {
 
   constructor(
     private orderMethodService       : OrderMethodsService,
+    private posOrderItemService: POSOrderItemService,
     private dialogRef                : MatDialogRef<PriceOptionsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,) {
 
@@ -45,14 +47,13 @@ export class PriceOptionsComponent  {
   }
 
   addItemPrice(price: ProductPrice) {
-    console.table(price)
     const item$ = this.orderMethodService.addPriceToItem(this.newItem.order, this.newItem.item,
                                                  price, this.newItem.posItem.quantity,
                                                  this.newItem.posItem.id)
 
     this.action$ = item$.pipe(
       switchMap( data => {
-        this.dialogRef.close(true);
+        this.dialogRef.close({posItem: data.posItem, result: true});
         return of(null)
     }))
 
@@ -60,7 +61,7 @@ export class PriceOptionsComponent  {
 
   cancel() {
     this.removeItem();
-    this.dialogRef.close(false);
+    this.dialogRef.close({posItem: {id: 0}, result: false});
   }
 
   removeItem(){

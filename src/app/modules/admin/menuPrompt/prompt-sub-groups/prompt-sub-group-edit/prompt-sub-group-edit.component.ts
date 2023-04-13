@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { IPromptGroup, PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
+import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 

@@ -1,13 +1,14 @@
 <div *ngIf="(action$ | async) as item; else loading"></div>
 
 <div *ngIf="promptGroup && posItem">
+
   <mat-card class="mat-card">
     <mat-card-subtitle>
       <div class="grid-menu">
         <div>
-          <h4>
+          <h2>
               {{promptGroup?.name}}
-          </h4>
+          </h2>
         </div>
         <div>
           <ng-container [ngTemplateOutlet]="largeScreenButtons"></ng-container>

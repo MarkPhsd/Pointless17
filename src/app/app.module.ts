@@ -128,7 +128,7 @@ export  function init_app(appLoadService: AppInitService) {
     CategoryItemsBoardComponent,
     CategoryItemsBoardItemComponent,
     GridcomponentPropertiesDesignComponent,
-    SplashLoadingComponent,
+    SplashLoadingComponent
   ],
 
   imports: [

@@ -141,8 +141,20 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   }
 
-  refundItem() {
+  //&&
+  // (!this.orderItem.rewardAvailibleID || this.orderItem.rewardCounterDiscountID ==0)
+  get showQuantityEdit() {
+    if ((!this.showEdit  && (this.uiConfig.displayQuantity) &&
+       !this.orderItem.serialCode && !this.orderItem.printed ) &&
+       this.orderItem.rewardGroupApplied == 0) {
+      return true;
+    }
+    return false;
 
+  }
+
+  refundItem() {
+    // this.orderItem.discountScheduleID
   }
 
   initSubscriptions() {

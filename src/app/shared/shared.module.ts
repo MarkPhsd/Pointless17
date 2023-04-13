@@ -208,6 +208,7 @@ import { BalanceSheetReportComponent } from '../modules/admin/reports/balance-sh
     BlogPostListComponent,
     BlogPostComponent,
     ChangeDueComponent,
+
     BackgroundCoverComponent,
     AgIconFormatterComponent,
     ButtonRendererComponent,
@@ -342,6 +343,7 @@ import { BalanceSheetReportComponent } from '../modules/admin/reports/balance-sh
     ValueFieldsComponent,
     CartButtonComponent,
     UIHomePageSettingsComponent,
+
     UserAuthorizedDirective,
     MatSpinnerOverlayComponent,
     QRCodeTableComponent,

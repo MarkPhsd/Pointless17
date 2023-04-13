@@ -134,6 +134,7 @@ export class POSOrderItemService {
   }
 
   updatePOSItemSubscription(item: PosOrderItem) {
+    item.pizzaMultiplier
     this._posOrderItem.next(item);
   }
 

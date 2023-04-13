@@ -1,7 +1,6 @@
 <div *ngIf="(action$  | async) as action"></div>
-
-<div *ngIf="itemAction$ | async as item">
-</div>
+<div *ngIf="priceCategory$ | async"></div>
+<div *ngIf="itemAction$ | async as item"></div>
 
 <mat-card>
   <mat-card-title *ngIf="priceCategory">
@@ -10,7 +9,7 @@
   </mat-card-title>
 
   <mat-card-subtitle>
-      <div *ngIf="priceCategory$ | async"></div>
+
       <mat-icon *ngIf="saving">save</mat-icon>
 
       <div *ngIf="actionMessage">
@@ -44,8 +43,9 @@
       </div>
       <div class="grid-simple-price-container grid-width" >
 
+
         <div>
-          <button mat-button (click)="toggleLinkedPrices = !toggleLinkedPrices"><mat-icon>keyboard_option_key</mat-icon>Linked Prices</button>
+          <button aria-label="Linked Info" mat-button (click)="toggleLinkedPrices = !toggleLinkedPrices"><mat-icon>keyboard_option_key</mat-icon>Linked Prices</button>
         </div>
 
         <div>
@@ -158,6 +158,12 @@
                           </button>
                         </div>
 
+                        <div>
+                          <button mat-button (click)="clearSize(i)">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </div>
+
                       </div>
 
                     </div>
@@ -187,14 +193,10 @@
                   <div *ngIf="toggleLinkedPrices || (priceCategory?.productPrices && priceCategory?.productPrices.length>0
                                                       && (priceCategory?.productPrices.length > 0 && priceCategory?.productPrices[i]?.pizzaSize != 0
                                                           && priceCategory?.productPrices[i]?.pizzaSize != undefined) ) ">
-                    <!-- <div class="label-description">
-                      <mat-label >Linked Prices are to link this value to associated items with this item. An example would be a Pizza. izza could have several
-                        prices. The Large could use Linked Price 1, the Medium Linked Price 2, and the Small could use Linked Price 3. The toppings would also have 3 prices with
-                        the same features applied, where the large topping would have linked price 1 etc.</mat-label>
-                    </div> -->
+
                     <div *ngIf="sizeList">
                         <mat-form-field class="category-list" appearance="outline">
-                          <mat-label>Linked Size</mat-label>
+                          <mat-label>Linked Price</mat-label>
                           <mat-select
                                       type="number"
                                       formControlName = "pizzaSize"
@@ -490,3 +492,25 @@
                          [fieldName]="'pizzaSize'">Linked Size Value
     </linked-price-selector> -->
 </ng-template>
+<!--
+<ng-template #contentTemplate let-event>
+  <app-custom-popover [contentTemplate]="contentTemplate">
+  <mat-label >Linked Prices are to link this value to associated items with this item. An example would be a Pizza. izza could have several
+    prices. The Large could use Linked Price 1, the Medium Linked Price 2, and the Small could use Linked Price 3. The toppings would also have 3 prices with
+    the same features applied, where the large topping would have linked price 1 etc.</mat-label>
+  </app-custom-popover>
+</ng-template> -->
+
+<!-- <app-popover-trigger [contentTemplate]="contentTemplate">
+  <button aria-label="Custom Popover example">
+    Hover me
+  </button>
+</app-popover-trigger>
+
+<ng-template #contentTemplate let-event>
+  <app-custom-popover [contentTemplate]="contentTemplate">
+    <h4>Custom Popover</h4>
+    <p>Mouse X: {{event.clientX}}</p>
+    <p>Mouse Y: {{event.clientY}}</p>
+  </app-custom-popover>
+</ng-template> -->

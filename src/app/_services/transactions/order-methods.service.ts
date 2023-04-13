@@ -265,6 +265,7 @@ export class OrderMethodsService implements OnDestroy {
       })
     ).pipe(
       switchMap(data => {
+        console.log('data', data.posItem)
         if (data.order) {
           this.order = data.order
           this.orderService.updateOrderSubscription(data.order)
@@ -892,7 +893,6 @@ export class OrderMethodsService implements OnDestroy {
   async  promptOpenPriceOption(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem): Promise<boolean> {
 
     if (!order || !item || !posItem) {return}
-
     const site = this.siteService.getAssignedSite()
     //if there are multiple prices for this item.
     //the webapi will return what price options are avalible for the item.
@@ -900,9 +900,7 @@ export class OrderMethodsService implements OnDestroy {
     //the function will return true once complete.
 
     item =  this.menuService.getPricesFromProductPrices(item)
-    // console.log('item price', item)
     if (item && item.priceCategories && item.priceCategories.productPrices.length > 1 ) {
-
 
       const  newItem = {order: order, item: item, posItem: posItem}
       const dialogRef = this.dialog.open(PriceOptionsComponent,
@@ -916,18 +914,19 @@ export class OrderMethodsService implements OnDestroy {
         }
       )
       dialogRef.afterClosed().subscribe(result => {
-        //use this to remove item if price isn't choice.
-        // this.promptGroupService.updatePromptGroup(null)
-        // this.promptWalkService.updatePromptGroup(null)
-        if (!result) {
+        const resultValue        = result.result;
+        this.updatePOSIssueItem(result.posItem)
+        this.posOrderItemService.updatePOSItemSubscription(result.posItem)
+        this.processItem.posItem = result.posItem
+
+        if (!resultValue) {
           this.cancelItem(posItem.id, false);
           return
         }
-        if (result) {
+        if (resultValue) {
           this.updateProcess() //
           return
         }
-
       });
     } else {
       // console.log('Confirm no Prompt for price.')
@@ -1110,8 +1109,6 @@ export class OrderMethodsService implements OnDestroy {
     const site = this.siteService.getAssignedSite()
     if (!posItem || posItem.promptGroupID == 0 || !posItem.promptGroupID) { return }
     const prompt = this.promptGroupService.getPrompt(site, item.promptGroupID).subscribe ( prompt => {
-      const item = posItem as unknown as PosOrderItem
-      this.posOrderItemService.updatePOSItemSubscription(item)
       this.openPromptWalkThroughWithItem(prompt, posItem);
     })
   }
@@ -1259,16 +1256,6 @@ export class OrderMethodsService implements OnDestroy {
     if (prompt) {
       prompt.posOrderItem = posItem;
       this.promptGroupService.updatePromptGroup(prompt);
-
-      // {
-      //   width:     '90vw',
-      //   maxWidth:  '1000px',
-      //   height:    '90vh',
-      //   maxHeight: '90vh',
-      //   panelClass: 'foo'
-      // }
-
-
       const dialogRef = this.dialog.open(PromptWalkThroughComponent,
         { width:        '100%',
           minWidth:     '100%',
@@ -1333,6 +1320,7 @@ export class OrderMethodsService implements OnDestroy {
     this.orderService.updateOrderSubscription(null)
     return of(null)
   }
+
   removeItemFromList(index: number, orderItem: PosOrderItem) {
     if (orderItem) {
       const site = this.siteService.getAssignedSite()

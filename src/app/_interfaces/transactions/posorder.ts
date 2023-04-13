@@ -265,9 +265,13 @@ export interface PosOrderItem {
   inventoryAssignmentID       :  number;
   prodSecondLanguage          : string;
   productSortOrder            : number;
-
+  priceTierID  : number;
+  pizzaGroup   : number;
+  pizzaMultiplier: number;
   wholeSaleCost: number;
+  rewardGroupApplied: number;
 }
+//ItemPrepped,PrintLocation,Splitter as SplitGroupID,Gratuity,ProdSecondLanguage,productSortOrder,PizzaMultiplier, PizzaGroup, PriceTierID
 
 export interface PosPayment {
   id:                  number;

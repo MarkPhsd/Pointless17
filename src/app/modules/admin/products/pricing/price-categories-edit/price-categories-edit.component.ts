@@ -1,4 +1,4 @@
-import { Component,  Inject,  Input, OnInit } from '@angular/core';
+import { Component,  Inject,  Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of, switchMap,  } from 'rxjs';
 import { IItemBasic } from 'src/app/_services';
@@ -25,6 +25,7 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
   styleUrls: ['./price-categories-edit.component.scss']
 })
 export class PriceCategoriesEditComponent implements OnInit {
+  @ViewChild('contentTemplate') contentTemplate: TemplateRef<any>;
 
   priceModifierOptions = [
     {id: 1, name: 'product'},
@@ -255,9 +256,13 @@ export class PriceCategoriesEditComponent implements OnInit {
     this.toggleSearchSize[i] = !this.toggleSearchSize[i];
   }
 
+  removeSize(i) {
+    //toggleSearchSize[i]=!toggleSearchSize[i]
+  }
+
   updateCategory(item): Observable<any> {
     if (!this.inputForm.valid) {
-      console.log('update category failed')
+      this.siteService.notify('Update failed, form data invalid.', 'Close',  3000, 'yellow')
       return
     }
     const priceCategory = this.inputForm.value;
@@ -271,25 +276,27 @@ export class PriceCategoriesEditComponent implements OnInit {
   updatePriceCategory(priceCategory: PriceCategories): Observable<PriceCategories> {
 
     if (!priceCategory) {
-      console.log('update category failed')
+      this.siteService.notify('Update failed, no data.', 'Close',  3000, 'yellow')
       return
     }
+
     this.saving = true;
 
     let  price2 = {} as IPriceCategory2
     if (priceCategory.id) {
       price2.id = priceCategory.id
     }
+
     price2.uid = priceCategory.uid
     price2.name = priceCategory.name
     const site = this.siteService.getAssignedSite()
-    console.log(price2)
     const result$ = this.priceCategoryService.save(site, price2)
 
     return result$.pipe(
       switchMap( data => {
-        console.log('priceCategory about to save', priceCategory)
         priceCategory.id = data.id;
+        this.priceCategory.id = data.id;
+        console.log('priceCategory about to save', priceCategory)
         return this.saveAllItems(priceCategory.productPrices)
       })).pipe(
         switchMap(data => {
@@ -393,9 +400,27 @@ export class PriceCategoriesEditComponent implements OnInit {
     return  this.fbPriceCategory.addPriceArray()
   }
 
+  clearSize(index) {
+    const unitTypeID = 0
+    let pricing = this.inputForm.controls['productPrices'] as FormArray;
+    let lines = pricing.value;
+    let line =  pricing.value[index] as ProductPrice;
+
+    line.unitType        = {} as UnitType;
+    line.unitTypeID      = 0
+    line.partMultiplyer  = 0
+
+    this.priceCategory.productPrices[index] = line;
+    pricing.value[index] = line;
+
+    this.updateCategoryFromObject(this.priceCategory);
+    this.toggleSearchSize[this.toggle] = !this.toggleSearchSize[this.toggle];
+    return;
+  }
+
   assignItem(event) {
-    const unitTypeID = event.unitTypeID
     let index        = event.index;
+    const unitTypeID = event.unitTypeID
     const unitName   = event.unitName
     const unitType   = event.unitType;
 
@@ -411,8 +436,6 @@ export class PriceCategoriesEditComponent implements OnInit {
 
     this.priceCategory.productPrices[index] = line;
     pricing.value[index] = line;
-
-    // console.table(this.priceCategory.productPrices);
 
     this.updateCategoryFromObject(this.priceCategory);
 

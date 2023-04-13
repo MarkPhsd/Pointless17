@@ -5,10 +5,9 @@ mat-action-row {
 }
 
 .mat-button-toggle {
-  background-color: #e7eaf1;
-  color: #ec3939;
+  background-color: #d4beba;
+  color: #140c0c;
 }
-
 
 mat-expansion-panel {
   margin: 3px;
@@ -24,6 +23,8 @@ mat-button-toggle-group {
   width : 85px;
   height: 60px;
   margin: 10px;
+  font-size: 1.2em;
+  font-weight: 600;
 }
 
 .grid-items {
@@ -38,6 +39,13 @@ mat-button-toggle-group {
 
 .grid-item {
   // max-width: 225px;
+}
+
+.grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .option-buttons {

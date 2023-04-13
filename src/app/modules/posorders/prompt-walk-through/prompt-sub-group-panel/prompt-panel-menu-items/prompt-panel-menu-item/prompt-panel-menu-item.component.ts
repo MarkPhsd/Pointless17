@@ -14,7 +14,6 @@ import { OrdersService } from 'src/app/_services/transactions/orders.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
 import { Observable } from 'rxjs';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-
 interface itemOption {
   name: string;
   quantity: number;
@@ -133,7 +132,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
     let orderPromptGroup = this.validateAddingItem();
     if (!orderPromptGroup) { return }
     const currentSubPrompt = orderPromptGroup.selected_PromptSubGroups[this.index]
-    this.removeItem$ =  this.getMenuItemToApply().pipe(switchMap(
+    this.removeItem$ =  this.getMenuItemToRemove().pipe(switchMap(
       data => {
         if (data) {
           currentSubPrompt.promptSubGroups.itemsSelected.push(data)
@@ -150,6 +149,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
   }
 
   addItemSub():Observable<MenuItemsSelected> {
+    const mainItem = this.posItem.unitType
 
     const quantityItem = this.getQuantity()
 
@@ -171,11 +171,12 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
     this.resetItemOption.emit('')
     return this.getApplyNewItem(quantityItem.quantity, quantityItem.name, currentSubPrompt, orderPromptGroup)
-
   }
 
   getApplyNewItem(value: number, prefix: string, currentSubPrompt: PromptSubGroups, orderPromptGroup: IPromptGroup): Observable<MenuItemsSelected> {
-    return this.getMenuItemToApply().pipe(
+
+
+    return this.getMenuItemToApply(currentSubPrompt).pipe(
       switchMap(item => {
         if (item) {
 
@@ -183,9 +184,11 @@ export class PromptPanelMenuItemComponent implements OnInit {
             currentSubPrompt.itemsSelected = [] as MenuItemsSelected[]
           }
 
-          if (!prefix) { prefix = ''}
+          if (!prefix) { prefix = ''};
           item.quantity = value;
-          item.menuItem.order_Quantity = value.toString();
+          if (value) {
+            item.menuItem.order_Quantity = value.toString();
+          }
 
           if (prefix.toLowerCase() === 'no') {
             item.price = 0;
@@ -193,22 +196,33 @@ export class PromptPanelMenuItemComponent implements OnInit {
             item.menuItem.retail = 0;
           }
 
-          item.menuItem.name = `${prefix} ${item.menuItem.name}`.trim()
+          if (currentSubPrompt.freePage) {
+            item.price = 0
+            item.quantity = value;
+            item.menuItem.retail = 0;
+            item.unitTypeID = 0;
+          }
 
-          currentSubPrompt.itemsSelected.push(item)
+          if (item.menuItem && item.menuItem.name) {
+            item.menuItem.name = `${prefix} ${item.menuItem.name}`.trim()
+          } else {
+            console.log('no menu item name');
+          }
+
+          currentSubPrompt.itemsSelected.push(item);
           orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups.itemsSelected = currentSubPrompt.itemsSelected;
-
-          this.promptWalkService.updatePromptGroup(orderPromptGroup)
+          this.promptWalkService.updatePromptGroup(orderPromptGroup);
         }
+
         //do check again after item has been added.
         orderPromptGroup = this.validateAddingItem();
-        if (!orderPromptGroup) { return }
+        if (!orderPromptGroup) { return };
         if (currentSubPrompt.quantityMet) {
           this.nextStep()
           const lastGroupIndex = orderPromptGroup.selected_PromptSubGroups.length;
           const lastGroup =  orderPromptGroup.selected_PromptSubGroups[lastGroupIndex -1];
           if (lastGroup) {
-            console.log(currentSubPrompt.id , lastGroup)
+            // console.log(currentSubPrompt.id , lastGroup)
             if (currentSubPrompt.id == lastGroup?.promptSubGroupsID) {
               if (this.platformService.isApp()){
                 this.promptWalkService.updateSavePromptSelection(true)
@@ -247,26 +261,63 @@ export class PromptPanelMenuItemComponent implements OnInit {
     return item;
   }
 
-
   applyItem(value) {
-
   }
 
-  getMenuItemToApply(): Observable<MenuItemsSelected> {
+  getMenuItemToApply(currentSubPrompt:PromptSubGroups): Observable<MenuItemsSelected> {
+    if (this.promptMenuItem) {
 
+        let multiplier = this.posItem.pizzaMultiplier
+        if (currentSubPrompt.freePage) {
+          multiplier = 0;
+        }
+
+        const site = this.siteService.getAssignedSite();
+        const menuItemsSelected    = {} as MenuItemsSelected
+        return this.menuService.getMenuItemByIDLinked( site, this.promptMenuItem.menuItemID, multiplier ).pipe(switchMap(data => {
+          this.menuItem = data;
+          menuItemsSelected.menuItem = data;
+          menuItemsSelected.price    = data.retail;
+          menuItemsSelected.quantity = 1
+
+          if (!currentSubPrompt.freePage) {
+            this.menuItem = this.getPrice(this.menuItem);
+          }
+
+          if (currentSubPrompt.freePage) {
+            this.menuItem.productPrice = null;
+            this.menuItem.retail = 0;
+            this.menuItem.priceCategories = null;
+            menuItemsSelected.price = 0
+            menuItemsSelected.quantity = 1;
+            menuItemsSelected.menuItem.retail = 0;
+            menuItemsSelected.unitTypeID = 0;
+          }
+
+          this.menuItem = data;
+
+          return of(menuItemsSelected);
+        })
+      )
+    };
+    return of(null);
+  }
+
+
+  getMenuItemToRemove(): Observable<MenuItemsSelected> {
     if (this.promptMenuItem) {
         const site = this.siteService.getAssignedSite();
         const menuItemsSelected    = {} as MenuItemsSelected
-        return this.menuService.getMenuItemByID( site, this.promptMenuItem.menuItemID ).pipe(switchMap(data => {
+        return this.menuService.getMenuItemByIDLinked( site, this.promptMenuItem.menuItemID, 0 ).pipe(switchMap(data => {
           menuItemsSelected.menuItem = data;
           menuItemsSelected.price    = data.retail;
           menuItemsSelected.quantity = 1
           this.menuItem = data;
-          this.menuItem = this.getPrice(this.menuItem)
+          this.menuItem = this.getPrice(this.menuItem);
           return of(menuItemsSelected);
         })
       )
-    }
+    };
     return of(null);
   }
 
@@ -280,7 +331,6 @@ export class PromptPanelMenuItemComponent implements OnInit {
   getPrice(menuItem: IMenuItem) {
     return this.menuService.getModiferPrices(menuItem)
   }
-
 
   // menuItem         : IMenuItem;
   // unitTypeID       : number;

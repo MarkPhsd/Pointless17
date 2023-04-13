@@ -8,7 +8,7 @@ import { PromptSubGroups, SelectedPromptSubGroup } from 'src/app/_interfaces/men
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-walk-through.service';
-import { AWSBucketService } from 'src/app/_services';
+import { AWSBucketService, IItemBasic } from 'src/app/_services';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { Subscription } from 'rxjs';
@@ -29,7 +29,7 @@ export class PromptPanelMenuItemsComponent implements OnInit {
 
   _accordionStep               : Subscription;
   @Input()  accordionStep      : number
-  itemOption                   = 1;
+
   @Output() outputSetStep  = new EventEmitter();
   @Output() outputNextStep = new EventEmitter();
   @Output() outputPrevStep = new EventEmitter(); //:   EventEmitter<any> = new EventEmitter();
@@ -43,6 +43,8 @@ export class PromptPanelMenuItemsComponent implements OnInit {
 
   orderPromptGroup : IPromptGroup;
   _orderPromptGroup: Subscription;
+  itemSelected = {} as IItemBasic
+  itemOption                   = 1;
   itemOptions = [
     {name: 'whole', id: 1},
     {name: 'LFT 1/2', id: 2},
@@ -56,8 +58,16 @@ export class PromptPanelMenuItemsComponent implements OnInit {
     })
   }
 
+  setItem(item) {
+    this.itemOption = item
+  }
+
+  // resetItemOption(event) {
+  //   this.itemOption = {name: 'whole', id: 1} as IItemBasic;
+  // }
+
   resetItemOption(event) {
-    this.itemOption = 1;
+    this.itemOption = 1 //{name: 'whole', id: 1} as IItemBasic;
   }
 
   initPromptSubscriber() {

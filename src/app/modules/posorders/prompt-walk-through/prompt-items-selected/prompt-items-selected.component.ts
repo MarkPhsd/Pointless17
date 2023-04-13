@@ -1,10 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
-import { IPromptSubResults, MenuSubPromptSearchModel, PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
 import {  PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
-import { MenuItemsSelected, PromptSubGroups, SelectedPromptSubGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IPromptGroup, PromptMenuItem } from 'src/app/_interfaces/menu/prompt-groups';
+import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-walk-through.service';
 import { Subscription } from 'rxjs';
 import { AWSBucketService } from 'src/app/_services';
@@ -60,13 +58,11 @@ export class PromptItemsSelectedComponent implements OnInit {
     })
 
     this._total = this.promptWalkService.promptTotal$.subscribe( data => {
-
       if (this.promptGroup && this.promptGroup.posOrderItem) {
         const item = this.promptGroup.posOrderItem;
         this.total = item.unitPrice + data
         return
       }
-
       this.total = data;
     })
   }
@@ -76,8 +72,6 @@ export class PromptItemsSelectedComponent implements OnInit {
      private orderService              : OrdersService,
      private promptWalkService        : PromptWalkThroughService,
      private posOrderItemService      : POSOrderItemService,
-     private siteService              : SitesService,
-     private menuService              : MenuService,
      private awsBucket                : AWSBucketService,
      ) { }
 
@@ -91,9 +85,7 @@ export class PromptItemsSelectedComponent implements OnInit {
   }
 
   remove(itemIndex: number, index: number) {
-
     const group = this.orderPromptGroup
-
     if (group  && group.selected_PromptSubGroups && group.selected_PromptSubGroups[index]) {
       const selected = group.selected_PromptSubGroups[index]
       if (selected &&  selected.promptSubGroups && selected.promptSubGroups.itemsSelected) {
@@ -102,8 +94,8 @@ export class PromptItemsSelectedComponent implements OnInit {
         this.promptWalkService.updatePromptGroup(this.orderPromptGroup);
       }
     }
-
   }
+
   applyNo(itemIndex: number, index: number) {
     const group = this.orderPromptGroup
     if (group  && group.selected_PromptSubGroups && group.selected_PromptSubGroups[index]) {

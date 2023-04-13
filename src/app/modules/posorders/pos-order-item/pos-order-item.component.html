@@ -202,7 +202,7 @@
                 <button mat-button color="accent" (click)="openModifierNote()"><mat-icon  class="mat-icon-label">note_pad</mat-icon>Notes</button>
               </div>
 
-              <div *ngIf="!showEdit  && (uiConfig.displayQuantity) && !orderItem.serialCode && !orderItem.printed">
+              <div *ngIf="showQuantityEdit">
                 <button mat-button  color="accent"  (click)="editQuantity()"><mat-icon  class="mat-icon-label">note_pad</mat-icon>Quantity</button>
               </div>
 

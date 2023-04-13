@@ -3,11 +3,6 @@
 <div *ngIf="(newItem$ | async) as item"></div>
 <div *ngIf="(removeItem$| async) as item"></div>
 
-<!-- <div *ngIf="promptMenuItem && promptMenuItem?.prompt_Products?.name"
-      class="grid-items">
-
-</div> -->
-<!-- name{{this.promptMenuItem?.prompt_Products?.name}} -->
 <ng-container
   [ngTemplateOutlet]="promptItemView"
   [ngTemplateOutletContext]="{$implicit: promptMenuItem}">
@@ -26,7 +21,6 @@
             <mat-label>{{promptMenuItem?.prompt_Products?.prodSecondLanguage}}</mat-label>
           </div>
         </h5>
-
       </button>
     </div>
 

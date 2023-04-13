@@ -791,6 +791,23 @@ export class MenuService {
     return  this.httpClient.get<IMenuItem>(url)
   };
 
+
+  getMenuItemByIDLinked(site: ISite, id: any, priceLink : number): Observable<IMenuItem> {
+
+    if (!id)  { return EMPTY };
+
+    const controller =  '/MenuItems/'
+
+    const endPoint = 'getMenuItemByIDLinked'
+
+    const parameters = `?id=${id}&quantity=1&priceLink=${priceLink}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.httpClient.get<IMenuItem>(url)
+  };
+
+
   getMenuItemByBarcode(site: ISite, barcode:any, clientID: number): Observable<IMenuItem[]> {
 
     if (!clientID || clientID == null || clientID == undefined) {
@@ -874,10 +891,10 @@ export class MenuService {
   }
 
   getModiferPrices(menuItem: IMenuItem) {
-    if (menuItem.priceCategories && menuItem.priceCategories.productPrices && menuItem.priceCategories.productPrices) {
+    if (menuItem && menuItem.priceCategories && menuItem.priceCategories.productPrices && menuItem.priceCategories.productPrices) {
       const items = menuItem.priceCategories.productPrices;
       if ( items.length>0 ) {
-        //  console.log('unfilteredd', items)
+
          items.filter(prices => { return prices.priceType == 2})
          let list =  items.filter( prices =>{ return prices.priceType == 2;})
          if (list.length>0){

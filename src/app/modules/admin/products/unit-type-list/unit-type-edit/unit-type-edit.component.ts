@@ -112,6 +112,7 @@ export class UnitTypeEditComponent implements OnInit {
     const item$ = this.unitTypeService.save(site, unitType)
     return  item$.pipe(
        switchMap( data => {
+        this.refreshData_Sub(data)
         this.notifyEvent('Item Updated', 'Success')
         return of(data)
       })
@@ -121,6 +122,7 @@ export class UnitTypeEditComponent implements OnInit {
   updateExit(item) {
     this.action$ = this.update(this.inputForm.value).pipe(
       switchMap( data => {
+        this.refreshData_Sub(data)
         this.onCancel(item);
         return of(true)
       })

@@ -63,17 +63,24 @@ ul {
   left: auto;
 }
 
-.submenu-position  {
+.more-menu {
+  display: flex;
+  flex-direction: column;
   position: fixed;
   bottom: 0px;
   left: 0;
+  max-height: 275px;
+  // overflow-x: auto;
 }
 
-// .submenu-position  {
-//   position: relative;
-//   // bottom: 0px;
-//   // left: 0;
-// }
+.submenu-position  {
+  position: fixed;
+  bottom: 70px;
+  left: 0;
+  max-height: 250px;
+  overflow-x: auto;
+}
+
 
 .submenu-position-tiny {
   position: fixed;
