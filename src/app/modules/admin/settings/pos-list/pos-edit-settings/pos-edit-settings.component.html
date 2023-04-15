@@ -1,7 +1,9 @@
-<div *ngIf="(saving$ | async) as saving; else saving"></div>
+<div *ngIf="(saving$ | async) as saving"></div>
+
 <ng-template #saving>
   ...saving
 </ng-template>
+
 <mat-card >
   <mat-card-title>
     <div class="header-container">

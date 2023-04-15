@@ -23,9 +23,7 @@
       </mat-card-title>
 
       <mat-card-content>
-
         <div *ngIf="sale.resultsMessage"> <mat-icon>warning</mat-icon>{{sale.resultsMessage}} </div>
-
         <div class="grid" *ngIf="!sale.resultsMessage" >
           <div class="grid-item totals_label">Net (pre-tax):</div>
           <div class="grid-item tax">{{sale.netSales | currency }} <br>  </div>
@@ -47,8 +45,8 @@
         </div>
 
         <mat-divider></mat-divider>
-
       </mat-card-content>
+
       <mat-card-footer  *ngIf="!sale.resultsMessage" >
         <div class="grid-footer" >
           <div class="grid-item field_bold totals_label"> Gross (net + taxes  ) :</div>

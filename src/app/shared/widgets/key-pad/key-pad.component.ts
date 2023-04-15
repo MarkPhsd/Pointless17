@@ -286,7 +286,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
     }
 
     if (this.formatted != undefined) {
-
       //{this.fieldName: this.formatted }
       const fieldName = this.fieldName
       const value     = this.formatted

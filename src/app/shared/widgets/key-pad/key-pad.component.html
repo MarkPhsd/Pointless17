@@ -6,13 +6,13 @@
        *ngIf="inputForm">
     <div class="header-info"
          [formGroup]="inputForm">
-      <div>
-        <mat-form-field  appearance="outline">
-
-            <mat-label >
+         <div>
+        <div class="ngcontent">
+            <mat-label>
               <ng-content></ng-content>
             </mat-label>
-
+        </div>
+        <mat-form-field  appearance="outline">
             <input  matInput
                     #input
                     appAutoFocusInput
@@ -20,14 +20,12 @@
                     [type]             ="inputType"
                     [formControlName]  ="fieldName"
                     class="form-control" >
-
             <button *ngIf="cashValue"
                     matSuffix
                     mat-icon-button aria-label="Clear"
                    (click)="clearInput()">
             <mat-icon>close</mat-icon>
           </button>
-
         </mat-form-field>
     </div>
 

@@ -6,32 +6,53 @@
 
       <div *ngIf="settings.triposEnabled">
 
+        <div class="ngcontent" *ngIf="voidAmount && voidAmount != 0">
+          <h3>
+            Void Amount - {{voidAmount | currency}}
+          </h3>
+        </div>
         <div *ngIf="toggleVoid">
-          Will process as Void - Required if reversal fails.
+          <h4>
+            Will process as Void - Required if reversal fails.
+          </h4>
         </div>
         <div *ngIf="!toggleVoid">
-          Will process as Reversal - Preffered method.
+          <h4>
+            Will process as Reversal - Preffered method.
+          </h4>
         </div>
 
         <button class="button" color="accent" mat-raised-button (click)="toggleVoid = !toggleVoid">
           <div *ngIf="!toggleVoid">
-            Run as Void
+              Run as Void
           </div>
           <div *ngIf="toggleVoid">
             Run as Reversal
           </div>
         </button>
-
       </div>
 
       <div class="card-content">
         <app-mat-toggle-selector
-            [toggleButtonClass]="'toggle-buttons-wide'"
+            [toggleButtonClass]="'toggle-buttons-height-short'"
+            [toggleStyleHeight] ="'300px'"
             (outPutID)="selectItem($event)"
             [hideAllOption]="true"
             [list$]="list$">
             Select Void Reason
         </app-mat-toggle-selector>
+      </div>
+
+      <div class="item-container">
+        <app-key-pad
+          [inputForm]        ="inputForm"
+          [inputTypeValue]   ="'number'"
+          [showInput]        ="true"
+          [alternateClass]   ="'grid-keypad-alternate'"
+          [numberbuttons]    ="'number-buttons button-sized-2'"
+          (outPutReturnEnter)="setVoidAmount($event)">
+          <mat-label>Enter Partial Void/Reversal Amount</mat-label>
+        </app-key-pad>
       </div>
     </mat-card-content>
     <mat-card-actions>

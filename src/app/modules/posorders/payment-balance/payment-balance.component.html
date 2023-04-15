@@ -92,18 +92,17 @@
 
   <mat-card-content *ngIf="order.posPayments">
     <div  *ngFor="let item of order.posPayments">
-        <div class="payment-grid" 
+        <div class="payment-grid"
               *ngIf="
                      ((item.account && !item.completionDate) ||
                      (item.completionDate && item.amountPaid != 0) ||
                      (item && item.voidReason) ||
-                     (item.tranType  && item?.tranType.toLowerCase()  === 'authorizationresponse'.toLowerCase() ) || 
-                     (item.tranType  && item?.tranType.toLowerCase() === 'VoidSaleByRecordNo'.toLowerCase() )) && 
+                     (item.tranType  && item?.tranType.toLowerCase()  === 'authorizationresponse'.toLowerCase() ) ||
+                     (item.tranType  && item?.tranType.toLowerCase() === 'VoidSaleByRecordNo'.toLowerCase() )) &&
                      item?.tranType != 'incrementalAuthorizationResponse'
                      ">
 
         <ng-container *ngTemplateOutlet="tranTypeInfoView, context: {$implicit: item}"></ng-container>
-
         <ng-container *ngTemplateOutlet="editPaymentView,  context: {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="cardPointCaptureView,  context: {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="triPOSCaptureView,  context: {$implicit: item}"></ng-container>
@@ -111,7 +110,7 @@
         <ng-container *ngTemplateOutlet="tipView,  context: {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="printButtonView,  context:  {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet ="voidActionView,  context:  {$implicit: item}"></ng-container>
-   
+
         <div *ngIf="item.voidReason && item.voidReason != 0" >
           <mat-label class="void-info">
             {{item.voidReason}}
@@ -132,7 +131,7 @@
 </mat-card>
 
 <ng-template #cardPointCaptureView let-item>
-  <div *ngIf="!qrOrder && (!isUser && 
+  <div *ngIf="!qrOrder && (!isUser &&
             item?.paymentMethod?.name.toLowerCase() != 'stripe' &&
             item?.paymentMethod?.name.toLowerCase() != 'paypal' &&
             (item?.paymentMethod?.isCreditCard &&
@@ -156,21 +155,21 @@
       (item.account && !item.completionDate &&
       (uiTransactions && uiTransactions.triposEnabled)
     ) && item.tranType === 'authorizationResponse')  " >
-      <!-- if amount of order is greater than authorized. 
+      <!-- if amount of order is greater than authorized.
         We can have two buttons, one to increment and one to complete for the current amount -->
 
     <div>
       <button class="payment-buttons-sm" mat-raised-button color='primary' (click)="captureTriPOS(item)">
-          <mat-label>Complete <br> {{ totalAuthTriPOSPayments | currency }}</mat-label>  
+          <mat-label>Complete <br> {{ totalAuthTriPOSPayments | currency }}</mat-label>
       </button>
     </div>
 
-    <div  *ngIf="order.creditBalanceRemaining > totalAuthTriPOSPayments "> 
-      <button   class="payment-buttons-sm" 
-                *ngIf="order.creditBalanceRemaining > totalAuthTriPOSPayments" 
-                 mat-raised-button color='primary' 
+    <div  *ngIf="order.creditBalanceRemaining > totalAuthTriPOSPayments ">
+      <button   class="payment-buttons-sm"
+                *ngIf="order.creditBalanceRemaining > totalAuthTriPOSPayments"
+                 mat-raised-button color='primary'
                 (click)="incrementTriPOS(item)">
-        <mat-label>Add <br> {{ order.creditBalanceRemaining - totalAuthTriPOSPayments | currency }}</mat-label>  
+        <mat-label>Add <br> {{ order.creditBalanceRemaining - totalAuthTriPOSPayments | currency }}</mat-label>
       </button>
     </div>
 
@@ -192,7 +191,7 @@
 
 <ng-template #tranTypeInfoView let-item>
   <div *ngIf="item.paymentMethod" class="grid-item">
-    {{item?.paymentMethod?.name}} 
+    {{item?.paymentMethod?.name}}
     <div *ngIf="item.tranType">
       <br> {{ item?.tranType.replace('Response', '') }}
     </div>
@@ -208,7 +207,7 @@
 
 <ng-template #editPaymentView let-item>
   <div *ngIf="!qrOrder &&
-              (!isUser && 
+              (!isUser &&
               (item?.paymentMethod?.isCreditCard &&
               ( item.tranType  != 'refundResponse' )) ||
                 item?.paymentMethod?.name.toLowerCase() != 'stripe' &&

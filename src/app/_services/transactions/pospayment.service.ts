@@ -93,7 +93,7 @@ export class POSPaymentService {
     return this.http.get<IPOSPayment>(url);
   }
 
-  
+
   getFullPaymentInfo(site: ISite, id: number, history: boolean): Observable<IPOSPayment> {
     const controller = '/POSPayments/'
 
@@ -154,11 +154,6 @@ export class POSPaymentService {
   }
 
   voidPayment(site: ISite, paymentWithAction: OperationWithAction): Observable<OperationWithAction> {
-
-    // if (paymentWithAction?.payment.voidReason && paymentWithAction?.payment.voidReason != '')  {
-    //   this.notificationEvent(`Payment already voided: ${paymentWithAction.voidReason}`, 'Payment Voided')
-    //   return
-    // }
 
     const controller = "/POSPayments/"
 

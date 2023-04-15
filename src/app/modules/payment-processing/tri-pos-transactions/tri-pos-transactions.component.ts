@@ -104,7 +104,7 @@ export class TriPosTransactionsComponent implements OnInit {
     item.tipAmount = this.tipValue;
     item.transactionId = this.posPayment.respcode;
     item.transactionAmount = this.posPayment.amountPaid.toFixed(2).toString();
-
+    item.ticketNumber = this.posPayment.id.toString();
     this.processing = true;
     this.errorMessage = ''
     return item;
@@ -166,7 +166,7 @@ export class TriPosTransactionsComponent implements OnInit {
     this.errorMessage = ''
     this.message = ''
   }
-  
+
   reset() {
     this.processing$ = null;
     this.initMessaging()
@@ -178,6 +178,7 @@ export class TriPosTransactionsComponent implements OnInit {
     authorizationPOST.transactionAmount = Math.abs(this.posPayment.amountPaid).toFixed(2).toString();
     authorizationPOST.laneId            = terminal.triposLaneID;
     authorizationPOST.tipAmount         = posPayment.tipAmount.toString();
+    authorizationPOST.ticketNumber      = this.posPayment.id.toString();
     return authorizationPOST;
   }
 
@@ -228,17 +229,17 @@ export class TriPosTransactionsComponent implements OnInit {
             return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
           }
         )).pipe(switchMap(data => {
-     
+          //return the current order. Error messsage should have been
           if (!data || !data.payment) {
-            this.siteService.notify('No Payment found', 'close', 4000, 'red');
-            return of(null)
+            return of(this.order)
           }
-          
+
           const payment = data.payment
           const trans = data.trans
           const order = data.order;
 
           if (!data || !data.order) {
+            this.siteService.notify('Unknown error occurred.', 'close', 4000, 'red');
             this.errorMessage = 'Unknown error occurred.'
             return this.orderService.getOrder(site, payment.orderID.toString(), false)
           }
@@ -247,14 +248,16 @@ export class TriPosTransactionsComponent implements OnInit {
             this.errorMessage = trans?.captureStatus;
             return of(data.order)
           }
-    
+
           this.reset()
           this.dialogRef.close(true)
           return of(data.order)
 
         })).pipe(switchMap(data => {
-          this.orderService.updateOrderSubscription(data);
-          return of(data);
+          if (data) {
+            this.orderService.updateOrderSubscription(data);
+            return of(data);
+          }
       }))
     }
   }
@@ -263,6 +266,10 @@ export class TriPosTransactionsComponent implements OnInit {
     trans._errors.forEach(item => {
       this.errorMessage = `${item?.exceptionMessage} ${this.errorMessage}`
     })
+
+    if (trans & trans.processor && trans.process.expressResponseMessage) {
+      this.errorMessage = this.errorMessage + ' ' + trans.process.expressResponseMessage
+    }
   }
 
   refundAmount() {
@@ -291,7 +298,6 @@ export class TriPosTransactionsComponent implements OnInit {
       }))
     }
   }
-
 
   reboot() {
     const site = this.siteService.getAssignedSite();

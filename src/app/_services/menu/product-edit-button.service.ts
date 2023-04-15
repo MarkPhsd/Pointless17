@@ -621,10 +621,10 @@ export class ProductEditButtonService {
         action.paymentMethod = data;
         action.uiSetting = uiSetting;
         dialogRef = this.dialog.open(AdjustPaymentComponent,
-          { width:        '450px',
-            minWidth:     '450px',
-            height:       '400px',
-            minHeight:    '400px',
+          { width:        '550px',
+            minWidth:     '550px',
+            height:       '800px',
+            minHeight:    '800px',
             data     : action
         })
       })

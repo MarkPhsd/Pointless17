@@ -125,8 +125,8 @@ export class PaymentMethodsService {
   }
 
   getCreditCardPaymentMethod(site: ISite, name: string) : Observable<IPaymentMethod> {
-    return this.getPaymentMethodByName(site, name).pipe(switchMap(data => { 
-      if (!data) { 
+    return this.getPaymentMethodByName(site, name).pipe(switchMap(data => {
+      if (!data) {
         const pay = {} as IPaymentMethod
         pay.name = name
         pay.isCreditCard = true
@@ -138,8 +138,8 @@ export class PaymentMethodsService {
   }
 
   getCashPaymentMethod(site: ISite, name: string) : Observable<IPaymentMethod> {
-    return this.getPaymentMethodByName(site, name).pipe(switchMap(data => { 
-      if (!data) { 
+    return this.getPaymentMethodByName(site, name).pipe(switchMap(data => {
+      if (!data) {
         const pay = {} as IPaymentMethod
         pay.name = 'Cash'
         pay.isCash = true
