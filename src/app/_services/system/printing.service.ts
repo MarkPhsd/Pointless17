@@ -99,7 +99,6 @@ export class PrintingService {
     this._printReady.next(data)
   }
 
-
   printJoinedLabels( ) {
     let contents = ''
     this.labelContentList.forEach(data => {

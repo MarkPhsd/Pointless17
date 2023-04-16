@@ -522,6 +522,7 @@ export class OrderMethodsService implements OnDestroy {
         this.sendToPrep(order, true)
       }
       if (data.printLabelsOnclose) {
+        console.log('finalizeOrderProcesses printing labels')
         return this.printingService.printLabels(order, true)
       }
       return forkJoin([printLabels$, sendOrder$])

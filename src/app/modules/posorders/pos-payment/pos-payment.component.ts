@@ -481,8 +481,10 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   processResults(paymentResponse: IPaymentResponse) {
     let result = 0
 
+    console.log('processing results, if completed will run finalize order process')
     if (paymentResponse?.paymentSuccess || paymentResponse?.orderCompleted) {
       if (paymentResponse?.orderCompleted) {
+        console.log('processing results, running finalizeOrderProcesses')
         this.action$ =   this.orderMethodsService.finalizeOrderProcesses(paymentResponse, this.paymentMethod, paymentResponse.order).pipe(switchMap(data => {
           result =  this.orderMethodsService.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
           return of(data)
