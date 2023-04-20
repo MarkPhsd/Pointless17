@@ -1,0 +1,18 @@
+
+<div *ngIf="(lastImage$ | async) as lastItem">
+  <ng-container *ngTemplateOutlet="viewDisplay, context: {$implicit: lastItem}"></ng-container>
+</div>
+
+<div *ngIf="(menuItem$ | async) as lastItem">
+  <ng-container *ngTemplateOutlet="viewDisplay, context: {$implicit: lastItem}"></ng-container>
+</div>
+
+
+<ng-template #viewDisplay let-lastItem>
+  <image-container
+      [imageHeight]    =  "'100'"
+      [imageSource]       ="imageSource"
+    >
+  </image-container>
+</ng-template>
+

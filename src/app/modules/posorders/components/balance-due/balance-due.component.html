@@ -44,8 +44,11 @@
         <div class="action-center">
           <mat-label class="h3"  color ="accent" *ngIf="payment.completionDate"> Change Due: <br> {{ changeDue | currency }}</mat-label>
         </div>
-
       </div>
+
+      <mat-card-actions>
+        <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
+      </mat-card-actions>
 
       <div class="action-center">
         <new-order-type
@@ -55,10 +58,6 @@
                   [showCancel]   ="'false'"
         ></new-order-type>
       </div>
-
-      <mat-card-actions>
-          <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
-      </mat-card-actions>
 
     </mat-card>
   </div>

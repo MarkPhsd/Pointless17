@@ -34,7 +34,6 @@
       <button mat-raised-button (click)="emvDataCapBatchInquire()"> <mat-icon>credit_card</mat-icon>Batch Inquire</button>
     </span>
 
-
     <app-list-printers-electron
         [printerName]      ="printerName"
         (outputPrinterName)="setPrinter($event)" >
@@ -87,7 +86,6 @@
       </div>
     </ng-template>
 
-
     <div *ngIf="closingCheck$ | async as closing">
       <div>
         <close-day-validation
@@ -128,7 +126,13 @@
         *ngIf="iBalanceSheet && localSite">
 
     <div #printsection>
-
+      <mat-card class="summary">
+        <mat-card-content>
+          <ng-container [ngTemplateOutlet]="pendingTransactions"></ng-container>
+          <ng-container [ngTemplateOutlet]="futureTransactions"></ng-container>
+        </mat-card-content>
+      </mat-card>
+  
       <ng-container [ngTemplateOutlet]="taxReport"></ng-container>
 
       <ng-container [ngTemplateOutlet]="paymentReport"></ng-container>
@@ -143,7 +147,7 @@
 
       <ng-container [ngTemplateOutlet]="employeeReport"></ng-container>
 
-      <ng-container [ngTemplateOutlet]="giftCardReport"></ng-container>
+      <ng-container [ngTemplateOutlet]="giftCardReport"></ng-container> 
 
     </div>
 
@@ -151,7 +155,7 @@
 
       <ng-container [ngTemplateOutlet]="itemSalesReport"></ng-container>
 
-      <ng-container [ngTemplateOutlet]="itemAdjustmentVoids"></ng-container>
+      <ng-container [ngTemplateOutlet]="itemAdjustmentVoids"></ng-container> 
 
     </div>
   </div>
@@ -182,6 +186,39 @@
       [zrunID]="iBalanceSheet.id" >
   </balance-sheet-report>
 </ng-template>
+
+<ng-template #pendingTransactions>
+  <div class="summary" >
+    <sales-tax-report
+          [site]="localSite"
+          [dateFrom]="dateFrom"
+          [dateTo]="dateTo"
+          [pendingTransactions]="true"
+          [summaryOnly]="true"
+          [zrunID]="iBalanceSheet.id" >
+        <div summary>
+          <mat-icon >receipt</mat-icon>  Pending Transactions
+        </div>
+    </sales-tax-report>
+  </div>
+</ng-template>
+
+<ng-template #futureTransactions>
+  <div class="summary" *ngIf="scheduleDateStart && scheduleDateEnd">
+    <sales-tax-report
+          [site]="localSite"
+          [scheduleDateStart]="scheduleDateStart"
+          [scheduleDateEnd]="scheduleDateEnd"
+          [pendingTransactions]="true"
+          [summaryOnly]="true"
+         >
+          <div summary>
+             <mat-icon >receipt</mat-icon> Next 30 Days
+          </div>
+    </sales-tax-report>
+  </div>
+</ng-template>
+
 
 <ng-template #taxReport>
   <div>

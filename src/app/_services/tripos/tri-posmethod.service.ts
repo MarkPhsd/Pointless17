@@ -29,6 +29,7 @@ import { ITriPOSPatch, TriposResult } from './triposModels';
     activationCode: string;
     marketCode: string;
     ticketNumber: string;
+    allowDebit: boolean;
   }
 
 @Injectable({

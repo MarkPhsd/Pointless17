@@ -165,7 +165,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   }
 
-
   refreshUIHomePageSettings() {
     this.uiSettingService.getSetting('UIHomePageSettings').subscribe(data =>  {
       this.uiHomePageSetting = JSON.parse(data.text) as UIHomePageSettings

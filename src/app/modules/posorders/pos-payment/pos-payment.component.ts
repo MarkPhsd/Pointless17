@@ -41,12 +41,14 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('receiptView') receiptView: TemplateRef<any>;
   @ViewChild('splitItemsView') splitItemsView: TemplateRef<any>;
+  @ViewChild('processingPayment') processingPayment: TemplateRef<any>;
+
   process$: Observable<any>;
   @Input() order  :   IPOSOrder;
    isApp = this.platFormService.isApp();
   userAuths       :   IUserAuth_Properties;
   _userAuths      : Subscription;
-  changeDueComing :  any;
+  changeDueComing :   any;
   loginAction     :   any;
   id              :   number;
   _currentPayment :   Subscription; //    = new BehaviorSubject<IPOSPayment>(null);
@@ -88,7 +90,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   paymentMethods  : IPaymentMethod[];
 
   stripeTipValue  : any;
-
+  processing: boolean;
   groupPaymentAmount  = 0;
   groupPaymentGroupID = 0;
   _paymentAmount       = 0;
@@ -103,6 +105,12 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   orderAction$  : Observable<any>;
   saleProcess$  : Observable<any>;
 
+  get isProcessingPayment() {
+    if (this.processing) {
+      return this.processingPayment;
+    }
+    return null;
+  }
   initStepSelectionSubscription() {
      this.saleProcess$ = this.orderMethodsService.posPaymentStepSelection$.pipe(
       switchMap( data => {
@@ -317,6 +325,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   initForms() {
     this.initCheckForm();
     this.initPaymentForm();
+
   }
 
   initCheckForm() {
@@ -414,11 +423,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         }
 
         this.posPayment.groupID = this.groupPaymentGroupID;
-
         if (!amount || amount == 0) {
           amount   = this.formatValueEntered(event)
         }
-
         if (amount && amount === 0) {
           this.notify('Error getting values for payment. ' + amount, 'Alert', 2000);
           return;
@@ -427,8 +434,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         const isValidAmount = this.paymentsMethodsService.validatePaymentAmount(amount,
                               this.paymentMethod,
                               this.order.balanceRemaining,
-                              this.order.creditBalanceRemaining
-                              );
+                              this.order.creditBalanceRemaining );
 
         if (!isValidAmount) {
           this.paymentAmountForm  = this.fb.group({fieldname: []})
@@ -443,28 +449,19 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
           return
         }
 
-        let processResults$ : Observable<IPaymentResponse>
-
-        processResults$ = this.processGetResults(amount, this.posPayment)
-
-        if (!processResults$) {
-          this.sitesService.notify('Error getting values for payment.', 'close', 2000, 'red');
-          return
-        }
-
-        this.process$ = processResults$.pipe(
+        this.process$ = this.processGetResults(amount, this.posPayment).pipe(
           switchMap( data => {
             if (!data) {
-              this.sitesService.notify('Payment not processed','close', 5000, 'red');
+              return this.sitesService.notifyObs('Payment not processed', 'close', 5000, 'red');
             }
-            this.processResults(data)
             this.groupPaymentAmount  = 0;
             this.groupPaymentGroupID = 0;
+            this.resetPaymentMethod()
             return of(data)
           })
-          ,catchError(data => {
-            this.sitesService.notify('Error : Payment not processed' + data.toString(),'close', 5000, 'red');
-            return of(data)
+          ,catchError(err => {
+            this.sitesService.notify('Error : Payment not processed' + err.toString(), 'close', 5000, 'red');
+            return of(err)
         }))
     }
     this.initPaymentForm();
@@ -476,30 +473,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this._paymentAmount = event.amount;
     this.groupPaymentAmount = event.amount;
     this.groupPaymentGroupID = event.groupID;
-  }
-
-  processResults(paymentResponse: IPaymentResponse) {
-    let result = 0
-
-    console.log('processing results, if completed will run finalize order process')
-    if (paymentResponse?.paymentSuccess || paymentResponse?.orderCompleted) {
-      if (paymentResponse?.orderCompleted) {
-        console.log('processing results, running finalizeOrderProcesses')
-        this.action$ =   this.orderMethodsService.finalizeOrderProcesses(paymentResponse, this.paymentMethod, paymentResponse.order).pipe(switchMap(data => {
-          result =  this.orderMethodsService.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
-          return of(data)
-        }))
-      }
-    }
-
-    this.resetPaymentMethod();
-
-    if (paymentResponse?.paymentSuccess || paymentResponse?.responseMessage.toLowerCase() === 'success') {
-      this.orderService.updateOrderSubscription(paymentResponse.order)
-      this.notify(`Payment succeeded: ${paymentResponse.responseMessage}`, 'Success', 1000)
-    } else {
-      this.notify(`Payment failed because: ${paymentResponse?.responseMessage}`, 'Something unexpected happened.',3000)
-    }
   }
 
   closeOrder() {
@@ -523,7 +496,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
       //else
       if (this.paymentMethod.name.toLowerCase()  == 'check') {
-        // console.log('processingcheck')
         return  this.processCashPayment(site, this.posPayment, this.order, amount, this.paymentMethod)
       }
 
@@ -552,7 +524,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if ( this.userAuths &&  this.userAuths.allowZeroTransaction) {
       return true
     }
-
     return false;
   }
 
@@ -564,7 +535,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if ( this.userAuths &&  this.userAuths.allowNegativeTransaction) {
       return true
     }
-
     return false;
   }
 
@@ -592,21 +562,22 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
                     this.order.clients_POSOrders.loyaltyPointValue);
     this.pointValueForm = this.fb.group( { itemName: [amountPaid] } );
     const paymentResponse$ = this.processGetResults(amountPaid, this.posPayment);
-    paymentResponse$.subscribe( {
-        next: (data) => {
-          if (!data) {
-            this.notify('Payment not processed', 'failure', 1000)
-          }
-          this.processResults(data)
-        },
-        error: (e) => console.error(e)
+    this.process$ = paymentResponse$.pipe(switchMap(data => {
+      if (!data) {
+        this.notify('Payment not processed', 'failure', 1000)
       }
-    )
+      return of(data)
+    }))
   }
 
   processGetResults(amount, posPayment: IPOSPayment): Observable<IPaymentResponse> {
     posPayment.amountReceived = amount;
-    return  this.paymentsMethodsService.getResults(amount, this.paymentMethod, this.posPayment, this.order)
+    this.processing = true
+    return  this.paymentsMethodsService.getResults(amount, this.paymentMethod, this.posPayment, this.order).pipe(
+      switchMap(data => {
+        this.processing = false
+        return of(data)
+    }))
   }
 
   enterPointCashValue(event) {
@@ -623,12 +594,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       })
     }
   }
-
-  // giftCard() {
-  //   if (this.order) {
-  //     this.storeCreditMethodsService.openStoreCreditPopUp(0, 0)
-  //   }
-  // }
 
   get paymentAmount() {
     if (!this._paymentAmount || this._paymentAmount ==0) {
@@ -721,6 +686,11 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.initForms();
     this.paymentMethod = null;
     this.stepSelection = 1;
+    this.groupPaymentAmount  = 0;
+    this.groupPaymentGroupID = 0;
+    this._paymentAmount       = 0;
+    this.enterCustomAmount   = false;
+    this._creditPaymentAmount = 0;
   }
 
   setStep(value: number) {
@@ -736,7 +706,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       const amount = this.order.wicTotal
       this.posPayment.amountReceived = amount;
       const site   = this.sitesService.getAssignedSite()
-      this.paymentMethodService.getPaymentMethodByName(site, 'wic').pipe(
+      this.process$ =  this.paymentMethodService.getPaymentMethodByName(site, 'wic').pipe(
         switchMap( method => {
             if (!method) {
               this.notify('payment method not found', 'error', 1000)
@@ -744,13 +714,13 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
             }
             return   this.paymentsMethodsService.getResults(amount, method, this.posPayment, this.order)
           }
-        )).subscribe(paymentResponse => {
+        )).pipe(
+          switchMap(paymentResponse => {
           if (!paymentResponse) {
-            this.notify('Payment not processed', 'failure', 1000)
-            return
+            return this.sitesService.notifyObs('Payment not processed', 'failure', 1000)
           }
-        this.processResults(paymentResponse)
-      })
+          return of(paymentResponse)
+      }))
     }
   }
 

@@ -260,12 +260,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (devicename && this.isApp) {
       this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
         switchMap(data => {
-          console.log('device', data)
+          // console.log('device', data)
           try {
             const posDevice = JSON.parse(data.text) as ITerminalSettings;
             this.uiSettings.updatePOSDevice(posDevice)
             this.terminalSetting = data;
-            console.log('device', posDevice)
+            // console.log('device', posDevice)
             if (this.platformService.isAppElectron) {
               if (posDevice && posDevice.electronZoom && posDevice.electronZoom != '0') {
                 this.uiSettings.electronZoom(posDevice.electronZoom)

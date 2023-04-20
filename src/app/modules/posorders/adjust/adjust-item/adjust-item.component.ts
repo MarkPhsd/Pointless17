@@ -32,6 +32,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   order: IPOSOrder;
   actionResponse$ : Observable<any>;
   void$: Observable<any>;
+
   initSubscriptions() {
     this._ItemWithAction = this.itemService.itemWithAction$.subscribe(data=> {
       this.itemWithAction = data
@@ -53,18 +54,15 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   {
     if (data) {
       this.orderService.currentOrder$.subscribe(order => {
-
         if (order) {
           this.order = order;
         }
-
         if (data) {
           this.itemWithAction = data;
           this.posItems = data.items;
           this.itemService.updateItemWithAction(data);
         }
         this.inventoryReturnDiscard = true;
-
         this.getVoidReasons();
       })
     }
@@ -111,7 +109,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     }
 
     if (+this.itemWithAction.action  == 11) {
-       console.log('item refund')
+      console.log('item refund')
       this.posItems = this.itemWithAction?.items;
       this.list$  = this.settingsService.getVoidReasons(site, this.itemWithAction?.action);
       return
@@ -124,7 +122,6 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   closeDialog() {
     if (this.itemWithAction.typeOfAction.toLowerCase() == 'voidorder'.toLowerCase()  ||
         this.itemWithAction?.typeOfAction.toLowerCase()  === 'refundOrder'.toLowerCase()
-
       ) {
       this.updateOrderSubscription()
       return ;
@@ -138,15 +135,14 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     ) {
       const site = this.siteService.getAssignedSite();
       this.orderService.getOrder(site, this.itemWithAction.id.toString() , false).subscribe(data => {
-        this.orderService.updateOrderSubscription(data)
-        this.dialogRef.close();
+        this.updateOrderSub(data)
       })
     }
   }
+
   // void = 1,
   // priceAdjust = 2,
   // note = 3
-
   voidOrder(setting) {
     if (setting) {
       const site = this.siteService.getAssignedSite();
@@ -188,6 +184,12 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     }
   }
 
+  updateOrderSub(order: IPOSOrder) { 
+    this.orderService.updateLastItemAdded(null)
+    this.orderService.updateOrderSubscription(order)
+    this.dialogRef.close();
+  }
+
   selectItem(setting) {
 
     if (this.itemWithAction.action == 3 || this.itemWithAction.typeOfAction.toLowerCase() === 'VoidOrder'.toLowerCase()) {
@@ -214,9 +216,10 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
             this.actionResponse$ = response$.pipe(switchMap(
               data => {
                   if (data === 'Item voided') {
-                  this.updateSubscription()
-                  this.notifyEvent('Item voided', 'Result')
-                  this.closeDialog();
+                 
+                    this.updateSubscription()
+                    this.notifyEvent('Item voided', 'Result')
+                    this.closeDialog();
                   }
                   return of(data)
                 }
@@ -233,7 +236,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
             const item = {} as OrderActionResult
             this.actionResponse$ = this.orderMethodService.refundOrder(this.itemWithAction).pipe(
               switchMap( data => {
-                  this.orderService.updateOrderSubscription(data.order)
+                 
                   if (data?.errorMessage) {
                     this.notifyEvent(data.errorMessage, 'Result')
                   }
@@ -242,7 +245,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
                   }
                   const url = 'pos-payment'
                   this.router.navigateByUrl(url)
-                  this.closeDialog();
+                  this.updateOrderSub(data.order)
                   return of(data)
                 }
               )
@@ -261,10 +264,9 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
                 if (!data?.errorMessage) {
                   this.notifyEvent(data?.message, 'Result')
                 }
-
-                this.orderService.updateOrderSubscription(data?.order)
-
-                this.closeDialog();
+                this.updateOrderSub(data?.order)
+                // this.orderService.updateOrderSubscription(data?.order)
+                // this.closeDialog();
                 return of(data)
               })
             )
@@ -286,6 +288,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     const site = this.siteService.getAssignedSite();
     const orderID = this.itemWithAction?.posItem?.orderID;
     this.orderService.getOrder(site, orderID.toString(), false).subscribe(data => {
+        this.orderService.updateLastItemAdded(null)
         this.orderService.updateOrderSubscription(data)
       }
     )

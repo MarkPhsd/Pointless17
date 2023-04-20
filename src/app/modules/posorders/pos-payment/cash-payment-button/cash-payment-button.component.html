@@ -3,10 +3,10 @@
     <button class="payment-buttons" color="primary" mat-raised-button (click)="cashPayment()">Cash</button>
   </div>
 
-  <div *ngIf="uiTransactions.enableExactChange" > 
+  <div *ngIf="uiTransactions.enableExactChange" >
     <button class="payment-buttons" color="primary" mat-raised-button (click)="applyCashPayment(order.balanceRemaining)">Pay Balance </button>
   </div>
-  
+
   <div>
     <button class="payment-buttons" color="primary" mat-raised-button (click)="applyCashPayment(5)">$5.00</button>
   </div>
@@ -14,7 +14,8 @@
     <button class="payment-buttons" color="primary" mat-raised-button (click)="applyCashPayment(10)">$10.00</button>
   </div>
   <div>
-    <button class="payment-buttons" color="primary" mat-raised-button (click)="applyCashPayment(20)">$20.00</button>
+    <button class="payment-buttons" color="primary" mat-raised-button
+            (click)="applyCashPayment(20)">$20.00</button>
   </div>
   <div>
     <button class="payment-buttons"
@@ -25,6 +26,6 @@
   <div></div>
 </div>
 
-<span *ngIf="(action$ | async) as action"> 
+<span *ngIf="(action$ | async) as action">
 
 </span>

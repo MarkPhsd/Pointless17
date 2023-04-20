@@ -104,7 +104,9 @@ export class PrintingService {
     this.labelContentList.forEach(data => {
       contents =`${data} ${contents}`
     })
-    console.log('print Joined Labels', contents, this.labelPrinter)
+    // console.log('print Joined Labels Contents:', contents)
+    // console.log('label', this.labelPrinter);
+
     if (!this.labelPrinter) { return }
     this.printLabelElectron(contents, this.labelPrinter)
     this.labelContentList = []
@@ -112,7 +114,9 @@ export class PrintingService {
 
   printLabels(order: IPOSOrder, newLabels: boolean): Observable<any> {
 
+
     if (!order || !order.posOrderItems) {
+      console.log('not printing anything')
       return of(null)
     }
 
@@ -120,6 +124,9 @@ export class PrintingService {
     if (!timer || timer != 0) {
       timer = +50000
     }
+
+    console.log('label count', order.posOrderItems.length, newLabels)
+
     let printCount = 0
     const printLabelList  = []
     if (order) {
@@ -127,6 +134,7 @@ export class PrintingService {
         this.obs$ = []
         const items = order.posOrderItems
         if (items.length > 0) {
+
           items.forEach( item => {
             if (!item.printed && newLabels) {
               this.obs$.push(
@@ -134,6 +142,7 @@ export class PrintingService {
               )
               printLabelList.push(item)
               printCount += 1
+              console.log('print label product:', item.productName)
             }
             if (!newLabels) {
               this.obs$.push(
@@ -146,6 +155,7 @@ export class PrintingService {
         }
       }
 
+      console.log('printLabelList', printLabelList)
       // console.log('fork join', printCount, printLabelList )
       if (printCount == 0) {return of(null)};
       return forkJoin(this.obs$)
@@ -408,7 +418,7 @@ export class PrintingService {
 
     return  printWindow.loadURL(contents)
       .then( e => {
-        console.log('result of load', e)
+
         if (options.silent) { printWindow.hide(); }
         if (!options) {  options = this.getdefaultOptions(printerName)  }
 
@@ -417,22 +427,19 @@ export class PrintingService {
           (success, failureReason) => {
             // printWindow.close();
             // printWindow = null;
-            console.log('Print Window : printing, success, failurereason', success, failureReason);
+            // console.log('Print Window : printing, success, failurereason', success, failureReason);
             return printWindow
           }
         )
 
         }).catch( err => {
-          console.log('Print window Load URL error:', err, options)
+          // console.log('Print window Load URL error:', err, options)
           this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
           printWindow.close();
           printWindow = null;
           return null;
-          // return false
       }
     )
-
-    return null;
 
   }
 
@@ -582,6 +589,7 @@ export class PrintingService {
 
   printItemLabel(item: any, menuItem$: Observable<IMenuItem>, order: IPOSOrder, joinLabels: boolean ) {
     const site = this.siteService.getAssignedSite()
+    console.log('print item label', item)
     if (!menuItem$) {
       menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
     }
@@ -627,6 +635,7 @@ export class PrintingService {
       menuItem$ = of(item.menuItem)
     }
 
+    console.log('now printing label')
     const printer$ = this.settingService.getDeviceSettings(this.orderService.posName).pipe(
       switchMap(data => {
         const item = JSON.parse(data.text) as ITerminalSettings;
@@ -639,14 +648,21 @@ export class PrintingService {
 
     const result$ =  printer$.pipe(
       switchMap(data => {
+        console.log('label printer', data.labelPrinter)
+        console.log('parameters', item,history,joinLabels);
+
         if (!data ) {
           this.siteService.notify('No Printer assigned to label', 'Alert', 2000)
           return of(null)
         }
         return menuItem$
+
       })).pipe(
         switchMap(data => {
-          if ( !data || !data.itemType) {return of(null)}
+          if ( !data || !data.itemType) {
+            console.log('no printer menu item')
+            return of(null)
+          }
           this.menuItem = data;
           if ( data.itemType && ( ( data.itemType.labelTypeID != 0 ) && printer.text ) ) {
             return  this.settingService.getSetting(site, data.itemType.labelTypeID)
@@ -654,15 +670,17 @@ export class PrintingService {
             if (history) {
               return of(null)
             }
+            console.log('setting item as printed')
             return this.orderItemService.setItemAsPrinted(site, item )
           }
       })).pipe(
         switchMap( data => {
+          console.log('Set as Printed returned null - it shouldn not have.')
           if (!data) { return of(null) }
           try {
             let field = 'productName';
             if (data[field]) {
-              // console.log('not going to print label')
+              console.log('not going to print label')
               return of(null)
             }
           } catch (error) {
@@ -682,9 +700,11 @@ export class PrintingService {
           producer$ = of(null);
 
           if (labID) {
+            console.log('trying to get contact for label')
             this.getContact(site, labID)
           }
           if (producerID) {
+            console.log('trying to get producer for label')
             producer$  = this.getContact(site, producerID);
           }
 
@@ -693,9 +713,16 @@ export class PrintingService {
         })).pipe(
           switchMap( results => {
 
-            if (!results) { return of(null)}
+            if (!results) {
+              console.log('no results for lab, producer, data')
+              return of(null)
+            }
             const data = results[2];
-            if (!data) {return of(null)}
+
+            if (!data) {
+              console.log('no results for forkJoin third element')
+              return of(null)
+            }
 
             try {
               const lab = results[0]
@@ -722,6 +749,9 @@ export class PrintingService {
             }
 
             const content = this.renderingService.interpolateText(item, data.text);
+
+            console.log('contents', content)
+            console.log('printer text', printer.text );
 
             if (printer.text) {
               const printerName = printer.text
@@ -798,13 +828,12 @@ export class PrintingService {
   }
 
   printLabelElectron(printString: string, printerName: string) {
-
+    // console.log('printLabelElectron')
     const uuid = UUID.UUID().slice(0,5);
     const file = `file:///c://pointless//print.txt`
     const fileName = `c:\\pointless\\print.txt`;
     try {
       this.saveContentsToFile(fileName, printString);
-      console.log('Label Saved to File')
     } catch (error) {
       this.siteService.notify(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Close', 3000, 'red')
     }

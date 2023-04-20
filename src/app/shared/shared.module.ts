@@ -179,6 +179,8 @@ import { BrandTypeSelectComponent } from '../modules/admin/products/productedit/
 import { ValueFromListSelectorComponent } from './widgets/value-from-list-selector/value-from-list-selector.component';
 import { ScaleValueViewComponent } from './widgets/scale-value-view/scale-value-view.component';
 import { BalanceSheetReportComponent } from '../modules/admin/reports/balance-sheet-report/balance-sheet-report.component';
+import { ImageContainerComponent } from './widgets/image-container/image-container.component';
+import { LastImageDisplayComponent } from './widgets/last-image-display/last-image-display.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -258,6 +260,7 @@ import { BalanceSheetReportComponent } from '../modules/admin/reports/balance-sh
     ItemTypeSortComponent,
     ItemSalesCardComponent,
     ImageSwiperComponent,
+    ImageContainerComponent,
     KeyPadComponent,
     Label1by8Component,
     LimitValuesProgressBarsComponent,
@@ -364,6 +367,7 @@ import { BalanceSheetReportComponent } from '../modules/admin/reports/balance-sh
     ThreeCXFabComponent,
     ValueFromListSelectorComponent,
     CallUsSelectorComponent,
+    LastImageDisplayComponent,
   ],
 
   imports: [
@@ -451,11 +455,12 @@ import { BalanceSheetReportComponent } from '../modules/admin/reports/balance-sh
     HeaderComponent,
     IonicGeoLocationComponent,
     IonicSwipeToDeleteComponent,
-
+    ImageContainerComponent,
     ItemTypeSortComponent,
     ItemSalesCardComponent,
     ImageSwiperComponent,
     KeyPadComponent,
+    LastImageDisplayComponent,
     LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
     LogoComponent,

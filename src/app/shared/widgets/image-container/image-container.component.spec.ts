@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TriPosTransactionsComponent } from './tri-pos-transactions.component';
+import { ImageContainerComponent } from './image-container.component';
 
-describe('TriPosTransactionsComponent', () => {
-  let component: TriPosTransactionsComponent;
-  let fixture: ComponentFixture<TriPosTransactionsComponent>;
+describe('ImageContainerComponent', () => {
+  let component: ImageContainerComponent;
+  let fixture: ComponentFixture<ImageContainerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TriPosTransactionsComponent ]
+      declarations: [ ImageContainerComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TriPosTransactionsComponent);
+    fixture = TestBed.createComponent(ImageContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

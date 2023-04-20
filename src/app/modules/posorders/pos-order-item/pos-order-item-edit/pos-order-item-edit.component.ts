@@ -3,10 +3,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MenuService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
-import { PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
+import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IonItem } from '@ionic/angular';
+import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
+import { Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-pos-order-item-edit',
@@ -25,6 +27,7 @@ export class PosOrderItemEditComponent  {
   decimals    = 2;
   requireWholeNumber: boolean;
   inputTypeValue = 'decimal'
+  action$: Observable<IPOSOrder>;
 
   constructor(
       private posOrderItemService : POSOrderItemService,
@@ -32,6 +35,7 @@ export class PosOrderItemEditComponent  {
       private siteService         : SitesService,
       private _fb                 : FormBuilder,
       private menuService         : MenuService,
+      private posOrderItemMethodsService: PosOrderItemMethodsService,
       private dialogRef           : MatDialogRef<PosOrderItemEditComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -58,7 +62,6 @@ export class PosOrderItemEditComponent  {
   }
 
   initForm() {
-
     if (this.posOrderItem) {
       this.initValueType()
 
@@ -110,7 +113,6 @@ export class PosOrderItemEditComponent  {
           itemName: [],
         })
       }
-
     }
   }
 
@@ -138,114 +140,61 @@ export class PosOrderItemEditComponent  {
   saveChange(event) {
     const item = this.getItemValue();
     item.quantity = event;
-    this.updateQuantity(item)
+    this.action$ = this.saveSub(item, this.editField)
   }
 
   savePriceChange(event) {
-    const item = this.getItemValue();
-    if (item){
-      this.posOrderItem.unitPrice = event;
-      this.inputForm.patchValue({price: event})
-      this.save()
-    }
+    const item =   this.setItemValue(event);
+    this.action$ = this.saveSub(item, this.editField)
   }
 
   saveCostChange(event) {
     const item = this.getItemValue();
     item.wholeSale = event;
-    this.save()
+    this.action$ = this.saveSub(item, this.editField)
   }
 
   save() {
     if (this.posOrderItem) {
-      const site = this.siteService.getAssignedSite();
       const item = this.getItemValue();
-
-      if (item && site) {
-
-        if (this.editField == 'quantity') {
-          this.updateQuantity(item)
-          return
-        }
-
-       if (this.editField == 'price') {
-          if (item) {
-            this.posOrderItemService.changeItemPrice(site, item).subscribe( data => {
-              if (data) {
-                if (data.resultMessage) {
-                  this.siteService.notify(data.resultMessage, 'Alert', 1500)
-                }
-              }
-              this.orderService.updateOrderSubscription(data)
-              this.onCancel();
-            })
-          }
-          return
-        }
-
-        if (this.editField == 'subTotal') {
-          if (item) {
-            this.posOrderItem.subTotal = item.unitPrice;
-            this.posOrderItemService.changeItemSubTotal(site, item).subscribe( data => {
-              if (data) {
-                if (data.resultMessage) {
-                  this.siteService.notify(data.resultMessage, 'Alert', 1500)
-                }
-              }
-              this.orderService.updateOrderSubscription(data)
-              this.onCancel();
-            })
-          }
-          return
-        }
-
-        if (this.editField == 'wholeSale') {
-          if (item) {
-            this.posOrderItemService.changeItemCost(site, item).subscribe( data => {
-              if (data) {
-                if (data.resultMessage) {
-                  this.siteService.notify(data.resultMessage, 'Alert', 1500)
-                }
-              }
-              this.orderService.updateOrderSubscription(data)
-              this.onCancel();
-            })
-          }
-          return
-        }
-
-        if (this.editField == 'wholeSaleCost') {
-          if (item) {
-            this.posOrderItemService.changeItemTotalCost(site, item).subscribe( data => {
-              if (data) {
-                if (data.resultMessage) {
-                  this.siteService.notify(data.resultMessage, 'Alert', 1500)
-                }
-              }
-              this.orderService.updateOrderSubscription(data)
-              this.onCancel();
-            })
-          }
-          return
-        }
-
-        if (this.editField == 'modifierNote') {
-          this.posOrderItemService.changeModifierNote(site, item ).subscribe( data => {
-            this.orderService.updateOrderSubscription(data)
-            this.onCancel();
-          })
-          return
-        }
-      }
+      this.action$ = this.saveSub(item, this.editField)
     }
   }
 
-  updateQuantity(item: PosOrderItem) {
-    const site = this.siteService.getAssignedSite();
-    this.posOrderItemService.changeItemQuantity(site, item ).subscribe( data => {
-      this.orderService.updateOrderSubscription(data)
-      this.onCancel();
-    })
+  saveSub(item: PosOrderItem, editField: string): Observable<IPOSOrder> { 
+    const order$ = this.posOrderItemMethodsService.saveSub(item, editField).pipe(
+      switchMap(data => {
+        this.onCancel();
+        return of(data)
+      }
+    ))
+    return order$
+  }
+
+  setItemValue(value: number) {
+    let item = this.posOrderItem;
+
+    if (this.editField === 'quantity') {
+      item.quantity = value;
+    }
+
+    if (this.editField === 'price') {
+      item.unitPrice = value;
+    }
+
+    if (this.editField === 'subTotal') {
+      item.subTotal = value;
+    }
+
+    if (this.editField === 'wholeSaleCost') {
+      item.wholeSaleCost = value;
+    }
+
+    if (this.editField === 'wholeSale') {
+      item.wholeSaleCost = value;
+    }
+
+    return item
   }
 
   getItemValue() {
@@ -272,15 +221,21 @@ export class PosOrderItemEditComponent  {
     }
 
     if (this.editField === 'wholeSaleCost') {
-      const value = this.inputForm.controls['price'].value;
-      item.subTotal = value;
+      const value = this.inputForm.controls['wholeSaleCost'].value;
+      // item.subTotal = value;s
+      item.wholeSaleCost = value;
+      this.posOrderItem.wholeSaleCost = value;
+      console.log('change item value', value)
+    }
+
+    if (this.editField === 'wholeSale') {
+      const value = this.inputForm.controls['wholeSale'].value;
+      // item.subTotal = value;s
       item.wholeSaleCost = value;
     }
 
-    // console.log('get item value', item)
     return item
   }
-
 
   onCancel() {
     this.orderService._scanner.next(true)

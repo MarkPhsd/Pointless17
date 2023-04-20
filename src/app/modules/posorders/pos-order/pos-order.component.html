@@ -4,18 +4,26 @@
 <div *ngIf="(printLabels$ | async) as items"></div>
 <div *ngIf="(deleteOrder$ | async) as items"></div>
 <div *ngIf="(posDevice$ | async) as posDevice"></div>
+
 <div  *ngIf="order && uiTransactionSettings" class="container">
   <div [class]="orderlayout">
     <div>
       <div>
         <div  [class]="gridheaderitem"
               (resized)="onResizedorderHeightPanel($event)">
-          <pos-order-transaction-data
+          
+            <pos-order-transaction-data
               [uiTransactionSettings]="uiTransactionSettings"
               [purchaseOrderEnabled]="purchaseOrderEnabled"
               [mainPanel]="mainPanel"
               [order]="order">
-          </pos-order-transaction-data>
+
+              <div image>
+                <ng-container *ngTemplateOutlet="isLastImageDisplayOn"></ng-container>
+              </div>
+
+            </pos-order-transaction-data>
+
           <div *ngIf="order?.clientID">
             <store-credit-info
               [clientID]     = "order?.clientID"
@@ -96,7 +104,6 @@
                 [refundItemEnabled]   ="refundItemsAvalible"
                 [devicename]          ="devicename"
                 [smallDevice]         ='smallDevice'
-
           ></pos-order-function-buttons>
         </div>
 
@@ -110,20 +117,20 @@
               <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="cardPointButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="giftCardButtonView"></ng-container>
-              <ng-container ng-container [ngTemplateOutlet]="houseAccountButtonView"></ng-container>
+              <ng-container [ngTemplateOutlet]="houseAccountButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="storeCreditPaybuttonView"></ng-container>
               <ng-container [ngTemplateOutlet]="wicEBTButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="triPOSPaymentButtonView"></ng-container>
               <div *ngIf="!smallDevice">
                 <ng-container [ngTemplateOutlet]="payButton"></ng-container>
               </div>
+ 
           </div>
         </div>
-
+        
         <div  *ngIf="mainPanel && uiTransactionSettings &&
-                (!paymentsEqualTotal && !order.completionDate &&
-                order?.balanceRemaining != 0)
-                " >
+                    (!paymentsEqualTotal && !order.completionDate &&
+                    order?.balanceRemaining != 0) " >
             <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
         </div>
 
@@ -334,7 +341,11 @@
     <mat-icon>credit_card</mat-icon>
     <br>
     <span>
-      Pay
+      Pay Options
     </span>
   </button>
+</ng-template>
+
+<ng-template #lastImageDisplayView>
+  <last-image-display></last-image-display>
 </ng-template>

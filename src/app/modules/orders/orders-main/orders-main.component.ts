@@ -10,7 +10,6 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, IPOSOrderSearchModel, ISite, IUser } from 'src/app/_interfaces';
 import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
-import { IPositionElements } from 'ngx-infinite-scroll';
 
 @Component({
   selector: 'app-orders-main',
@@ -128,6 +127,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     public  userAuthorization : UserAuthorizationService,
     private authenticationService: AuthenticationService,
     private printerService   : PrinterLocationsService,
+
     private orderService     : OrdersService)
   {
     this.initAuthorization();
@@ -346,5 +346,16 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     this.orderService.updateViewOrderType(value);
     this.setPrepInterval()
   }
+
+  toggleShowAllOrders() { 
+     let  user = this.userAuthorization.user
+     if ( user && user.userPreferences) {
+        user.userPreferences.showAllOrders = !user.userPreferences.showAllOrders ;
+     }
+     this.userAuthorization.setUser(user)
+     this.orderService.updateOrderSearchModel(this.orderService.posSearchModel)
+  }
+
+
 
 }

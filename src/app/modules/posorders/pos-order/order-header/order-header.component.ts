@@ -1,4 +1,4 @@
-import { Component, Input , OnChanges, OnInit} from '@angular/core';
+import { Component, Input , OnChanges, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxPayPalModule } from 'ngx-paypal';
 import { of, switchMap, Observable } from 'rxjs';
@@ -17,10 +17,10 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   styleUrls: ['./order-header.component.scss']
 })
 export class OrderHeaderComponent implements OnInit , OnChanges {
-
+ 
   @Input() qrOrder: boolean;
   @Input() uiTransactionSettings  = {} as TransactionUISettings;
-  @Input() mainPanel = false;
+  @Input() mainPanel : boolean;
   @Input() order: IPOSOrder
   @Input() isUserStaff = false
 
@@ -67,7 +67,6 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
   reSendOrder() {
     this.action$ = this.orderMethodsService.sendToPrep(this.order, true).pipe(
       switchMap(data => {
-        // this.clearOrder()
         return of(data)
       })
     )
@@ -76,9 +75,9 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
   sendOrder() {
     this.action$ = this.orderMethodsService.sendToPrep(this.order, true).pipe(
       switchMap(data => {
-        const confirm = window.confirm('Exit order?')
-        // if (confirm) { 
-        //   this.clearOrder()
+        // const confirm = window.confirm('Exit order?')
+        // if (confirm) {
+          this.clearOrder()
         // }
         return of(data)
       })

@@ -54,6 +54,10 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     })
 
     this._order = this.orderService.currentOrder$.subscribe( data => {
+      if (!data) {
+        this.order = null
+      }
+
       if ( data ) {
         if (!this.order) {
           this.input.nativeElement.focus();
@@ -91,7 +95,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   {   }
 
   ngOnInit() {
-
     const site = this.siteService.getAssignedSite()
     this.initForm();
     this.initSubscriptions()
@@ -155,24 +158,37 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     }
   }
 
+  getOrderObs() {
+    if (!this.order) {
+      const site = this.siteService.getAssignedSite()
+      return this.orderService.newOrderWithPayloadMethod(site, null).pipe(switchMap(data => {
+          this.order = data;
+          return of(data)
+        }
+      ))
+    }
+  }
+
   scan(barcode: string){
     if (!this.obs$) { this.obs$ = [] }
+
     this.obs$.push(this.addItemToOrder(barcode).pipe(
       switchMap(data => {
         return of(data)
       })
     ))
+
+    if (!this.order) {
+      return this.getOrderObs().pipe(switchMap(data => {
+        return forkJoin(this.obs$)
+      }))
+    }
+
     return  forkJoin(this.obs$)
   }
 
   addItemToOrder(barcode: string) {
     const site = this.siteService.getAssignedSite();
-    // if (!this.order) {
-    //   if (this.obs$) { this.obs$.shift() }
-    //   this.siteService.notify('No order assigned', 'Alert', 1000)
-    //   return of(null)
-    // }
-
     this.initForm()
     const item$ = this.menuItemService.getMenuItemByBarcode(site, barcode, this.order?.clientID);
     return  item$.pipe( switchMap( data => {
@@ -190,7 +206,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
         return of(data);
       })
     )
-
   }
 
   hideKeyboardTimeOut() {
@@ -207,8 +222,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     const barcode =  this.input.nativeElement.value
     this.action$ =  this.addItemToOrder(barcode)
   }
-
-
 
   get assignedItem() {
     let assignedItems

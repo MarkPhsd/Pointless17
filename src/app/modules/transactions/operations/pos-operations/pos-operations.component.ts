@@ -59,6 +59,9 @@ export class PosOperationsComponent implements OnInit {
   uiTransactions: TransactionUISettings;
   uiTransactions$: Observable<TransactionUISettings>;
 
+  scheduleDateStart  = new Date
+  scheduleDateEnd = new Date
+
   get isElectronApp() {
     return this.platFormService.isAppElectron
   }
@@ -94,6 +97,7 @@ export class PosOperationsComponent implements OnInit {
     this.refreshSales();
     this.refreshClosingCheck();
     this.initTransactionUISettings();
+    this.setSchedulePeriod()
   }
 
   initTransactionUISettings() {
@@ -165,6 +169,11 @@ export class PosOperationsComponent implements OnInit {
     StartDate = StartDate
     StartDate.setDate(StartDate.getDate() + NumberOfDays);
     return StartDate;
+  }
+  
+  setSchedulePeriod() { 
+    this.scheduleDateStart  =  this.addDates(new Date, 30) 
+    this.scheduleDateEnd = this.addDates(this.scheduleDateStart, 30)
   }
 
   refreshSales() {

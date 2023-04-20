@@ -48,9 +48,9 @@ export class PromptWalkThroughComponent implements OnInit {
 
   initPOSItemSubscription() {
     this._posItem = this.posOrderItemService.posOrderItem$.subscribe(data => {
+      console.log('working on:', data.productName)
       this.posItem = data;
     })
-
   }
 
   initSaveSubscription() {
@@ -64,6 +64,7 @@ export class PromptWalkThroughComponent implements OnInit {
   initPromptGroupSubscription() {
     try {
       this._promptGroup = this.promptGroupService.promptGroup$.subscribe(data => {
+        console.log('working with prompt:', data.name)
         this.promptGroup = data;
       })
     } catch (error) {

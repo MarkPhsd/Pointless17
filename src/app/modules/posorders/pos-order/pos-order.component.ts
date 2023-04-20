@@ -33,7 +33,6 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { Capacitor } from '@capacitor/core';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { truncate } from 'original-fs';
 
 @Component({
 selector: 'app-pos-order',
@@ -55,6 +54,7 @@ styleUrls: ['./pos-order.component.scss'],
 
 export class PosOrderComponent implements OnInit ,OnDestroy {
   get platForm() {  return Capacitor.getPlatform(); }
+  @ViewChild('lastImageDisplayView') lastImageDisplayView: TemplateRef<any>;
   @ViewChild('listViewType')   listViewType: TemplateRef<any>;
   @ViewChild('itemViewType')   itemViewType: TemplateRef<any>;
   @ViewChild('disEMVCardButton')   disEMVCardButton: TemplateRef<any>;
@@ -819,6 +819,23 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.printLabels(false)
   }
 
+  get isLastImageDisplayOn() {
+    // console.log('this.mainPanel', this.mainPanel)
+    // console.log('this.qrOrder', this.qrOrder)
+    // const qrView = (!this.qrOrder || this.qrOrder == undefined)
+    // console.log('qrView', qrView)
+    // console.log('this.mainPanel', this.mainPanel)
+    // console.log('this.orderMethodsService.lastItemAddedExists', this.orderMethodsService.lastItemAddedExists)
+    // if (this.mainPanel) {
+      // if (this.orderMethodsService.lastItemAddedExists) {
+        // console.log('display view')
+    return this.lastImageDisplayView
+      // }  
+    // }
+    console.log('dont display view')
+    return null
+  }
+
   //get item
   //print maybe
   //update inventory
@@ -832,89 +849,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   //   const site = this.siteService.getAssignedSite();
   //   let printerName = ''
 
-  //   this.menuItemService.getMenuItemByID(site, item.productID).pipe(
-  //     switchMap(menuItem => {
-  //       let printerName = ''
-  //       console.log('item Info', menuItem)
-  //       //if not found?
-  //       if ( !menuItem  || menuItem == 'No Records' ) {
-  //         console.log('no item type')
-  //         return EMPTY
-  //       }
-
-  //       const data = menuItem as IMenuItem
-  //       let  itemType     = data.itemType
-  //       console.log(itemType)
-  //       //if item type not assigned.
-  //       if (!itemType) {
-  //         console.log('no item type -setting as printed')
-  //         return this.orderItemService.setItemAsPrinted(site, item )
-  //       }
-
-  //       //if the item is not a label, and doesn't have a prep ticket ID then just set it as printed/
-  //       if (itemType.labelTypeID == 0 && itemType.prepTicketID == 0  ) {
-  //         console.log('no labeltype or prepticket -setting as printed')
-  //         return this.orderItemService.setItemAsPrinted(site, item )
-  //       }
-
-  //       console.log('itemType.printerLocation', itemType.printerLocation)
-  //       const printerLocations = itemType.printerLocation
-
-  //       if (!printerLocations) {
-  //         console.log('no printerLocations-setting as printed')
-  //         return this.orderItemService.setItemAsPrinted(site, item )
-  //       };
-
-  //       if (printerLocations) { printerName = printerLocations.printer };
-
-  //       if (!printerName) {
-  //         console.log('no printerName-setting as printed')
-  //         return this.orderItemService.setItemAsPrinted(site, item )
-  //       }
-
-  //       if (!item.printed) {
-  //         console.log('printerName', printerName)
-  //         data.itemType.printerName = printerName
-  //         return this.settingService.getSetting(site, data.itemType.labelTypeID)
-  //       }
-
-  //       return EMPTY
-
-  //     })).pipe(
-  //       switchMap( data => {
-
-  //         console.log(`print data ${data.itemType.printerName}`, data)
-  //         if (data && printerName) {
-  //           const content = this.renderingService.interpolateText(item, data.text)
-  //           const result  = this.printingService.printLabelElectron(content, printerName)
-  //           if (!item.printed && result) {
-  //             return this.orderItemService.setItemAsPrinted(site, item )
-  //           }
-  //         }
-
-  //         return EMPTY
-
-  //     })).pipe(
-  //       switchMap( data => {
-  //         if (data === 'success' ) {
-  //           return EMPTY
-  //         }
-  //       })
-  //     ).subscribe( data => {
-
-  //     })
-
-  // }
 
   returnMenuItem(item: IMenuItem): Observable<IMenuItem> {
     return
   }
-
-  // printTestLabelElectron(){
-  //   const content = this.renderingService.interpolateText(this.item, this.zplSetting.text)
-  //   this.printingService.printTestLabelElectron(content, this.printerName)
-  // }
-
 
   makePayment() {
     this.openOrderBar = false

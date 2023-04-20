@@ -494,10 +494,13 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   cancelItem(index: number, orderItem: PosOrderItem) {
+    console.log('cancel item')
     let payload = {} as payload
     payload.index = index;
     payload.item  = orderItem;
     this.outputDelete.emit(payload)
+    console.log('remove item should clear last item added')
+    this.orderMethodsService.updateLastItemAdded(null)
   }
 
   async addItemToOrder() {
@@ -596,7 +599,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   getItemSrc(item:IMenuItem) {
     if (!item?.urlImageMain) {
-      return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.jpg")
+      return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.png")
     } else {
       return this.awsBucket.getImageURLPath(this.bucketName, item.urlImageMain)
     }
@@ -604,7 +607,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   getItemSrcBasic(image: string) {
     if (!image) {
-      return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.jpg")
+      return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.png")
     } else {
       return this.awsBucket.getImageURLPath(this.bucketName, image)
     }
@@ -633,6 +636,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   swipeOutItem(){
+    console.log('swipe out')
     if (this.disableActions) {return}
     this.cancelItem(this.index,  this.orderItem)
   }

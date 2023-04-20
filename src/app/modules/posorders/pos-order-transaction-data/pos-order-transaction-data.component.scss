@@ -33,3 +33,11 @@ mat-card-subtitle {
   margin: 0px;
 }
 
+.grid-container {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+}
+
+.image-display { 
+  grid-column-end: 1 / 3;
+}

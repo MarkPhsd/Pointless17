@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
-import { Observable, Subject ,fromEvent, of ,switchMap} from 'rxjs';
+import { Observable, of ,switchMap} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProductCategory, ISite, TaxRate } from 'src/app/_interfaces';
 import { UseGroupsService, Taxes, UseGroupTax, UseGroups } from 'src/app/_services/menu/use-groups.service';
@@ -31,7 +31,10 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
   @Input() selectedFilterPlaceholder = 'Filter...';
   // event called when items are moved between boxes, returns state of both boxes and item moved
   @Output() itemsMoved: EventEmitter<IItemsMovedEvent> = new EventEmitter<IItemsMovedEvent>();
-
+  processSaving : boolean
+  action$: Observable<unknown>;
+  processRetrieving : boolean
+  saving$: Observable<unknown>;
   // array of items to display in left box
   @Input() set availables(items: Array<{}>) {
     this.availableItems = [...(items || []).map((item: {}, index: number) => ({
@@ -80,8 +83,11 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
   ngOnInit() {
     const site = this.siteService.getAssignedSite()
     this.taxes$ = this.taxService.getTaxRates(site);
-    // this.useGroupsList$ = this.initGroups(site)
-    this.resetUseGroups();
+    this.useGroupsList$ = this.useGroupService.getUseGroupListNoChildren(site).pipe(switchMap(data => { 
+      console.log('use group list', data)
+      return of(data)
+    }))
+    // this.resetUseGroups();
   }
 
   resetUseGroups() {
@@ -89,7 +95,6 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
     const site = this.siteService.getAssignedSite()
     const removeItems$ = this.useGroupService.resetUseGroups(site);
     this.useGroupsList$ = removeItems$.pipe(switchMap(data => {
-
       return of(data)
     }))
   }
@@ -106,12 +111,15 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
   refreshTaxAssignment(taxID: number) {
     const site   = this.siteService.getAssignedSite()
     const taxes$ = this.taxService.getTaxRateWithGroups(site, taxID)
-    taxes$.subscribe(data => {
+    this.processRetrieving = true
+    this.action$ =  taxes$.pipe(switchMap(data => {
+      this.processRetrieving = false
       if (data) {
         //then we have each group assisnged from the taxes.
-        this.assignSelectedAndAvalible(data.useGroupTaxes)
+        this.assignSelectedAndAvalible(data.useGroupTaxes);
+        return of(data)
       }
-    });
+    }));
 
   }
 
@@ -169,15 +177,11 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
         useGroups = selected.map(item => ({ id: 0, useGroupID: parseInt(item.value), taxID: taxID,  }));
         //push the list even if it's undefined. This way the list will be deleted if no items are assigned to it.
         const groups$ = this.useGroupTaxService.saveList(site, taxID, useGroups)
-        groups$.subscribe( {
-          next:  data => {
+        this.saving$ = groups$.pipe(switchMap(data => {
             this.matSnack.open(`${data}`, 'Result', {duration: 2000})
-          },
-            error: error => {
-              this.matSnack.open(`Error occured ${error}`, 'Error', {duration: 4000})
-            }
+            return of(data)
           }
-        )
+        ))
       }
     }
   }

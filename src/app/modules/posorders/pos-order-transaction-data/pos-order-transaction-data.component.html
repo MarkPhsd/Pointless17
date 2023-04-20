@@ -1,21 +1,35 @@
-<mat-card *ngIf="order">
-  <mat-card-subtitle>
-    <app-order-header
-      [mainPanel]="mainPanel"
-      [uiTransactionSettings]="uiTransactionSettings"
-      [isUserStaff]="isUserStaff"
-      [order]="order">
-    </app-order-header>
-  </mat-card-subtitle>
+<!-- {{orderPanelHeight}} <br>   -->
+<div class="grid-container">
 
-  <mat-card-content>
-    <div>
-      <app-order-total
-        [mainPanel]="mainPanel"
-        [purchaseOrderEnabled]="purchaseOrderEnabled"
-        [order]="order">
-      </app-order-total>
+  <div >
+    <mat-card *ngIf="order" 
+              (resized)="onResizedOrderPanel($event)">
+      <mat-card-subtitle>
+        <app-order-header
+          [mainPanel]="mainPanel"
+          [uiTransactionSettings]="uiTransactionSettings"
+          [isUserStaff]="isUserStaff"
+          [order]="order">
+        </app-order-header>
+      </mat-card-subtitle>
+    
+      <mat-card-content>
+        <div>
+          <app-order-total
+            [mainPanel]="mainPanel"
+            [purchaseOrderEnabled]="purchaseOrderEnabled"
+            [order]="order">
+          </app-order-total>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="image-display" image [style]="orderPanelHeight">
+    <div *ngIf="orderService.lastItemAddedExists">
+      <mat-card>
+        <ng-content [select]="image"></ng-content>
+      </mat-card>
     </div>
-  </mat-card-content>
-
-</mat-card>
+  </div>
+</div>

@@ -23,6 +23,7 @@ import { DatePipe } from '@angular/common';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 
 @Component({
   selector: 'pos-order-item-list',
@@ -135,6 +136,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                 private _bottomSheet            : MatBottomSheet,
                 private readonly datePipe       : DatePipe,
                 private orderService            : OrdersService,
+                private posOrderItemMethodsService: PosOrderItemMethodsService,
                 private posOrderItemService    : POSOrderItemService,
               )
   {
@@ -250,6 +252,17 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     columnDefs.push(currencyColumn);
 
+    let wholeSaleCostTotal = {headerName: 'Cost Total',    field: 'wholeSaleCost', sortable: true,
+        cellRenderer: this.agGridService.currencyCellRendererUSD,
+        width   : 100,
+        minWidth: 100,
+        maxWidth: 100,
+        flex    : 1,
+        editable: true,
+        singleClickEdit: true
+    }
+    columnDefs.push(wholeSaleCostTotal);
+
     let currencyTotalColumn = {headerName: 'Total',    field: 'total', sortable: true,
                 cellRenderer: this.agGridService.currencyCellRendererUSD,
                 width   : 100,
@@ -349,7 +362,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   }
 
   cellValueChanged(event) {
-    console.log(event.column)
     const colName = event?.column?.colId
 
     console.log(colName)
@@ -365,6 +377,9 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     if (colName === 'wholeSale') {
       item.wholeSale = event.value
     }
+    if (colName === 'wholeSaleCost') {
+      item.wholeSaleCost = event.value
+    }
 
     if (colName === 'total') {
       if (item.quantity == 0) {
@@ -374,20 +389,21 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       item.wholeSale = event.value / item.quantity
     }
 
-    this.action$ = this.updateValues(item)
+    this.action$ = this.updateValues(item, colName)
   }
 
-  updateValues(item: PosOrderItem) {
+  updateValues(item: PosOrderItem, colName: string) {
     const site = this.siteService.getAssignedSite();
-    return this.posOrderItemService.changeItemValues(site, item ).pipe(
+    return this.saveSub(item, colName)
+  }
+
+  saveSub(item: PosOrderItem, editField: string): Observable<IPOSOrder> { 
+    const order$ = this.posOrderItemMethodsService.saveSub(item, editField).pipe(
       switchMap(data => {
-        if (data) {
-          this.orderService.updateOrderSubscription(data)
-          return of(data)
-        }
-        return of(null)
-      })
-    )
+        return of(data)
+      }
+    ))
+    return order$
   }
 
   onSelectionChanged(event) {

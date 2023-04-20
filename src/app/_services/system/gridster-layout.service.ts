@@ -23,6 +23,7 @@ import { CardDashboardComponent } from 'src/app/modules/admin/reports/card-dashb
 import { MenuItemCardDashboardComponent } from 'src/app/modules/menu/menu-item-card/menu-item-card.component';
 import { SettingsService } from './settings.service';
 import { TiersWithPricesComponent } from 'src/app/modules/menu/tierMenu/tiers-with-prices/tiers-with-prices.component';
+import { LastImageDisplayComponent } from 'src/app/shared/widgets/last-image-display/last-image-display.component';
 export interface IComponent {
   id: string;
   componentRef: string;
@@ -122,7 +123,8 @@ export class GridsterLayoutService {
     { name: "ClientInfo"  , componentInstance: OrderHeaderDemographicsBoardComponent },
     { name: "OrderTotal"  , componentInstance: OrderTotalBoardComponent },
     { name: "Limits"      , componentInstance: LimitValuesCardComponent },
-
+    { name: "lastItemAdded" , componentInstance: LastImageDisplayComponent },
+    
     { name: "Iframe"      , componentInstance: IFrameComponent },
     { name: "YouTube"     , componentInstance: YoutubePlayerComponent },
     // { name: "youtube"       , componentInstance: YoutubePlayerComponent },
@@ -455,6 +457,13 @@ export class GridsterLayoutService {
     list.push(item);
 
     item = {} as WidgetModel;
+    item.name = 'lastItemAdded'
+    item.identifier = 'lastitemadded'
+    item.type = 'order'
+    item.icon = 'last_page'
+    list.push(item);
+
+    item = {} as WidgetModel;
     item.name = 'Limits'
     item.identifier = 'limits'
     item.type = 'order'
@@ -510,6 +519,9 @@ export class GridsterLayoutService {
       case 'limits' :
         this.applyItem(id, 'Limits', 'Limits', LimitValuesCardComponent );
          return
+      case 'lastitemadded' :
+        this.applyItem(id, 'lastItemAdded', 'LastItemAdded'  , LastImageDisplayComponent );
+        return
       case 'ordertotal' :
         this.applyItem(id, 'OrderTotal', 'OrderTotal', OrderTotalBoardComponent );
         return
@@ -556,6 +568,10 @@ export class GridsterLayoutService {
         properties.type = 'order'
         properties.cardValueType = 'limits'
       }
+      if (componentName.toLowerCase() === 'lastitemadded') {
+        properties.type = 'order'
+        properties.cardValueType = 'lastItemAdded'
+      }
       if (componentName.toLowerCase() === 'ordertotal') {
         properties.type = 'order'
         properties.cardValueType = 'OrderTotal'
@@ -565,6 +581,15 @@ export class GridsterLayoutService {
         properties.type = 'menu'
         properties.cardValueType = 'Product'
       }
+
+      if (componentName.toLowerCase() === 'lastItemAdded') {
+        properties.type = 'menu'
+        properties.cardValueType = 'Product'
+      }
+
+      // case 'limits' :
+      //   this.applyItem(id, 'lastItemAdded', 'Last Item Added'  , LastImageDisplayComponent );
+      //   return
 
       if (componentName.toLowerCase() === 'menu' || componentName.toLowerCase() === 'menu') {
         properties.type = 'menu'

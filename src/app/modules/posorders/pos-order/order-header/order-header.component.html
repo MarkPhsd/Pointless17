@@ -1,5 +1,6 @@
 <span *ngIf="order">
   <div class="container">
+
     <div>
       <div class="total-card">
         <h4>
@@ -28,13 +29,12 @@
         <div>
           <button  class="button" color="primary" mat-raised-button
                    (click)="sendOrder()">
-            <mat-icon>countertops</mat-icon>
+            <mat-icon>local_fire_department</mat-icon>
           </button>
         </div>
       </div>
 
       <div class="button-row" *ngIf="isUserStaff">
-
         <div>
           <split-entry-selector [order]="order"
                                 [isUserStaff]="isUserStaff"
@@ -50,11 +50,11 @@
               Price </value-from-list-selector>
           </div>
         </div>
-
       </div>
+
     </div>
   </div>
 </span>
-<div *ngIf="(action$ | async) as result"></div>
 
+<div *ngIf="(action$ | async) as result"></div>
 

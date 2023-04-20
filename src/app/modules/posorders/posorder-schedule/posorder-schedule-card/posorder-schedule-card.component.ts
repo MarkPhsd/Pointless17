@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
 import { IPOSOrder, IServiceType, ISite } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
+import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
@@ -27,6 +28,7 @@ export class POSOrderScheduleCardComponent implements OnInit, OnDestroy {
   constructor(
     private orderService      : OrdersService,
     private router:            Router,
+    private dateService      : DateHelperService,
    ) { }
 
   ngOnInit(): void {
@@ -41,6 +43,15 @@ export class POSOrderScheduleCardComponent implements OnInit, OnDestroy {
     }
   }
 
+  getOrderSchedule(order: IPOSOrder) { 
+
+    return null;
+    if (order && order.preferredScheduleDate ) {
+      return  this.dateService.format(order.preferredScheduleDate, 'mm/dd/yyyy');
+    }
+    console.log('get order schedule', order.preferredScheduleDate)
+    return null
+  }
   schedule() {
     this.router.navigate(['pos-order-schedule'])
   }

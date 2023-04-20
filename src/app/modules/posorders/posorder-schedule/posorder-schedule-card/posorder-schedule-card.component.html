@@ -12,7 +12,8 @@
       <div *ngIf="order?.preferredScheduleDate">Schedule</div>
 
       <div *ngIf="order.preferredScheduleDate && order.preferredScheduleDate != ''">
-        {{ order.preferredScheduleDate | date: 'shortDate' }}  {{ order.preferredScheduleDate | date: 'shortTime' }}
+        {{  getOrderSchedule(order) }}
+    
       </div>
       <!-- <div *ngIf="order?.preferredScheduleDate && order?.preferredScheduleDate.length>1"> {{ order?.preferredScheduleDate | date: 'short' }} </div> -->
 

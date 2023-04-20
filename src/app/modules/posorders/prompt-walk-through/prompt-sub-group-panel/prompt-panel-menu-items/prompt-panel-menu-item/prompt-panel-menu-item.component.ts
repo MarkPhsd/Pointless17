@@ -118,7 +118,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
   getItemSrc(prompt_Products) {
     if (!prompt_Products || !prompt_Products?.urlImageMain) {
-      return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.jpg")
+      return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.png")
     }
     return this.awsBucket.getImageURLPath(this.bucketName, this.promptMenuItem.prompt_Products?.urlImageMain)
   }

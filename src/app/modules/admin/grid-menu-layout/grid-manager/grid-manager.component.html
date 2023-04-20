@@ -123,9 +123,9 @@
                   </ul>
               </mat-expansion-panel>
 
-              <mat-expansion-panel [expanded]="accordionStep === 2 "
-                          (opened)="setStep(2)"
-                          hideToggle>
+              <mat-expansion-panel  [expanded]="accordionStep === 2 "
+                                    (opened)="setStep(2)"
+                                    hideToggle>
                 <mat-expansion-panel-header>
                 <mat-panel-title>
                   <mat-icon>stars</mat-icon>  Marketing
@@ -137,7 +137,7 @@
                         <a draggable="true" class="nav-link"
                             (dragstart)="onDrag($event, widget.identifier)">
                           <mat-icon>{{ widget.icon }}</mat-icon>
-                          {{ widget.name }}
+                          {{ widget.name | truncateText : 10}}
                         </a>
                       </div>
                     </li>

@@ -48,11 +48,30 @@ export class AWSBucketService {
 
   }
 
+  async  awsBucketOBS(): Promise<string> {
+
+    let bucket = localStorage.getItem('awsbucket')
+
+    if (!bucket || bucket === '') {
+      await this.getBucket();
+    }
+
+    bucket =  localStorage.getItem('awsbucket');
+    return bucket
+
+  }
+
   async  awsBucketURL(): Promise<string> {
     const  awsBucket = await this.awsBucket();
     return `https://${awsBucket}.s3.amazonaws.com/`
   }
 
+  awsBucketURLOBS(): Observable<string> {
+    return this.getAWSBucketObservable().pipe(switchMap(data => {
+      // console.log('awsBucketURLOBS', JSON.stringify(data))
+      return of(`https://${data.preassignedURL}.s3.amazonaws.com/`)
+    }))
+  }
 
   constructor(private http            : HttpClient,
               private siteService     : SitesService,

@@ -245,7 +245,7 @@
 <ng-template #voidActionView let-item>
   <div *ngIf="!qrOrder && (isAuthorized && item.completionDate)">
     <button mat-button
-            [disabled]="item.voidReason && item.voidReason != 0"
+            [disabled]="(item.voidReason && item.voidReason != 0 && item.voidAmount == item.amountPaid)"
             class="grid-item-button"
             color="warn"
             (click)="voidPayment(item)"  >

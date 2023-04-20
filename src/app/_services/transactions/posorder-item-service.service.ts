@@ -28,6 +28,7 @@ export interface ItemPostResults {
   menuItemWithPrice: IMenuItem
   message:           string;
   priceCategoryID   : number;
+  
  }
 
  export interface  InventoryResults {
@@ -471,6 +472,7 @@ export class POSOrderItemService {
     //   return
     // }
 
+    console.log('posOrderItem wholeSaleCost', posOrderItem.wholeSaleCost)
     const controller = "/POSOrderItems/";
 
     const endPoint = "changeTotalCost";
@@ -596,6 +598,8 @@ export class POSOrderItemService {
   }
 
   setItemAsPrinted( site: ISite, item: PosOrderItem ) : Observable<any> {
+
+    // console.log('setItemAsPrinted')
 
     const controller = "/POSOrderItems/";
 

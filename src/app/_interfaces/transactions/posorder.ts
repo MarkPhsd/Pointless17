@@ -270,6 +270,7 @@ export interface PosOrderItem {
   pizzaMultiplier: number;
   wholeSaleCost: number;
   rewardGroupApplied: number;
+  
 }
 //ItemPrepped,PrintLocation,Splitter as SplitGroupID,Gratuity,ProdSecondLanguage,productSortOrder,PizzaMultiplier, PizzaGroup, PriceTierID
 
@@ -456,6 +457,7 @@ export interface OperationWithAction {
   purchaseOrderPayment: IPOSPayment;
   resultMessage     : string;
   uiSetting         : TransactionUISettings
+  voidAmount:       number;
 }
 
 export interface IPaymentSearchModel {

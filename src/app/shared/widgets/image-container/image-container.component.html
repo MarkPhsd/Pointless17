@@ -1,0 +1,17 @@
+<div class="container" [style]="containerDimensions">
+
+  <div class="section header">
+    <ng-content [select]="header"></ng-content>
+  </div>
+
+  <div class="section image">
+    <img [src]="imageSource" 
+         class="image-container"
+          />
+  </div>
+
+  <div class="section footer">
+    <ng-content [select]="footer"></ng-content>
+  </div>
+
+</div>

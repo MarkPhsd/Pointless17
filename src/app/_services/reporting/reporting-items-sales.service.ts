@@ -121,6 +121,7 @@ export interface IReportingSearchModel {
   zrunID                  :     string;
   scheduleDateStart       :     string;
   scheduleDateEnd         :     string;
+  pendingTransactions: boolean;
   removeGiftCards: boolean;
   itemPrepped: number;
   itemPrinted: number;
@@ -166,16 +167,16 @@ export class ReportingItemsSalesService {
                private sitesService: SitesService) { }
 
   //Tax Sales Report Standard
-  putSalesTaxReport(site: ISite, startDate: string, endDate: string, zrunID: string): Observable<ITaxReport> {
+  putSalesTaxReport(site: ISite, filter: IReportingSearchModel): Observable<ITaxReport> {
 
     const controller = `/ReportItemSales/`
 
     const endPoint = `PutSalesTaxReport`
 
-    const filter ={} as IReportingSearchModel
-    filter.startDate = startDate
-    filter.endDate = endDate
-    filter.zrunID  = zrunID
+    // const filter ={} as IReportingSearchModel
+    // filter.startDate = startDate
+    // filter.endDate = endDate
+    // filter.zrunID  = zrunID
     const url = `${site.url}${controller}${endPoint}`
 
     return  this.http.put<any>(url, filter)

@@ -65,6 +65,7 @@ export class POSPaymentService {
 
   }
 
+
   makeStripePayment(site: ISite, payment: IPOSPayment, order: IPOSOrder): Observable<IPaymentResponse> {
 
     const payLoad  = { amount: payment.amountPaid, order, payment }

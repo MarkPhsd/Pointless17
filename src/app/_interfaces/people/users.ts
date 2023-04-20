@@ -31,6 +31,6 @@ export interface UserPreferences {
   swapMenuOrderPlacement: boolean;
   orderFilter: IPOSOrderSearchModel
   product: ProductSearchModel;
-  //
+  showAllOrders: boolean;
 }
 

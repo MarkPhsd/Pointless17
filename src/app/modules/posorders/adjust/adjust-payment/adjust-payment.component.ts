@@ -285,13 +285,18 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                   let item = {} as authorizationPOST
                   item.laneId  = this.terminalSettings.triposLaneID;
                   item.paymentType = paymentType;
-                  item.transactionId = this.payment.respcode;
+                  item.transactionId = this.payment.refNumber;
 
                   //the original transaction nuber is used if partial void.
                   if (this.voidAmount != this.resultAction.payment.amountPaid + this.resultAction.payment.voidAmount) {
                     item.transactionId = this.payment.refNumber;
                   }
 
+                  if (!this.voidAmount) { 
+                    this.voidAmount = this.resultAction.payment.amountPaid
+                  }
+
+                  this.resultAction.voidAmount = this.voidAmount  
                   item.transactionAmount = this.voidAmount.toString();
                   let process$ : Observable<TriposResult>;
 

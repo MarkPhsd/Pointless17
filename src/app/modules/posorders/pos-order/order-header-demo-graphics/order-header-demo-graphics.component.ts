@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output, OnChanges, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, debounce } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { ContactsService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -61,6 +61,7 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
   ngOnDestroy() {
     if (this._uiSettings) { this._uiSettings.unsubscribe()}
   }
+
   ngOnChanges(): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
@@ -72,11 +73,19 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
         name: [this.order.customerName],
       })
     }
-
+    this.subscribeOrderNameForm()
   }
+
+  subscribeOrderNameForm() {
+    if (this.orderNameForm) { 
+      this.orderNameForm.valueChanges.subscribe(data => { 
+        this.saveOrderName()
+      })
+    }
+  }
+
   removeClient() {
     // this.outPutRemoveClient.emit(true)
-
   }
 
   openClient() {
@@ -93,6 +102,7 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
     const orderName = this.orderNameForm.controls['name'].value;
     if (this.order) {
       this.orderService.setOrderName(this.order.id, orderName).subscribe( data=> {
+        console.log('saved', data)
       })
     }
   }

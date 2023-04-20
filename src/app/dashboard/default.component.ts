@@ -157,7 +157,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       if (data) {
         this.swapMenuWithOrder = data
       }
-      console.log(this.swapMenuWithOrder)
+      // console.log(this.swapMenuWithOrder)
     })
   }
 

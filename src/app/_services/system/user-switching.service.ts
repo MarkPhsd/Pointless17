@@ -228,7 +228,8 @@ export class UserSwitchingService implements  OnDestroy {
             }
 
       })).pipe(switchMap(data => {
-        if (data?.message === 'failed') { return of(null)}
+        // console.log('Sending user getting contact', data)
+        if (data?.message === 'failed') { return of(data)}
         return this.contactsService.getContact(site, data?.id)
 
       })).pipe(switchMap(data => {
@@ -237,11 +238,12 @@ export class UserSwitchingService implements  OnDestroy {
               user.message = 'failed';
               return of( user )
             }
-
             const item = localStorage.getItem('user')
             const user = JSON.parse(item) as IUser;
 
             if (data.clientType && data.clientType.jsonObject) {
+
+              // console.log('Sending user getting contact - getting auths')
             this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
             return of(user)
           }
@@ -251,7 +253,7 @@ export class UserSwitchingService implements  OnDestroy {
             if (user) {
               ///this is where we prompt the balance sheet
               if ( this.platformService.isApp()  )  {
-                // console.log('platform is app')
+                // console.log('platform is app getting balance sheet')
                 return this.promptBalanceSheet(user)
               }
               if ( !this.platformService.isApp() )  {
@@ -292,12 +294,16 @@ export class UserSwitchingService implements  OnDestroy {
       if (!currentUser.userPreferences.swapMenuOrderPlacement) {
         currentUser.userPreferences.swapMenuOrderPlacement = false;
       }
+      if (!currentUser.userPreferences.showAllOrders) { 
+        currentUser.userPreferences.showAllOrders = false;
+      }
     }
 
     if (!user.preferences) {
       currentUser.userPreferences =  {} as UserPreferences;
       currentUser.userPreferences.darkMode = false;
       currentUser.userPreferences.swapMenuOrderPlacement = false;
+      currentUser.userPreferences.showAllOrders = false;
       currentUser.preferences = JSON.stringify(currentUser.userPreferences);
     }
 
@@ -307,7 +313,7 @@ export class UserSwitchingService implements  OnDestroy {
       this.swapMenuWithOrder(false);
     }
 
-    user.authdata = window.btoa(user.username + ':' + user.password);
+    user.authdata            = window.btoa(user.username + ':' + user.password);
     currentUser.authdata     = user.authdata
     localStorage.setItem('user', JSON.stringify(currentUser))
     this.authenticationService.updateUser(currentUser)

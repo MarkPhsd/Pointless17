@@ -1,24 +1,32 @@
 <ng-template #loading><mat-spinner diameter="50"></mat-spinner></ng-template>
-
 <div class="grid-container" *ngIf="(useGroupsList$ | async) as useGroupList">
-
   <div class="type-list">
     <h4 class="text-center listbox-title">Taxes</h4>
-
     <div class="item">
       Select  a tax, then drag items in the left list to the right list to assign them to this tax rate.
     </div>
 
     <div *ngIf="(taxes$ | async) as list"  class="item">
-      <mat-button-toggle-group name="fontStyle" aria-label="Font Style" vertical >
+      <mat-button-toggle-group name="fontStyle" aria-label="Tax Selection" vertical >
         <mat-button-toggle (click)="setItemType(item)" *ngFor="let item of list" [value]="item.id">
            {{ item.name }} <mat-icon>{{item.icon}}</mat-icon>
         </mat-button-toggle>
       </mat-button-toggle-group>
     </div>
-    
-    <div class="item">
+    <div *ngIf="(saving$ | async) as saving; else saving"></div>
+    <div *ngIf="(action$ | async) as action; else retrieving"></div>
+    <ng-template #saving>
+      <span *ngIf="processRetrieving">
+        ...saving.
+      </span>
+    </ng-template>
+    <ng-template #retrieving>
+      <span *ngIf="processRetrieving">
+        ...retrieving.
+      </span>
+    </ng-template>
 
+    <div class="item">
       <mat-label>If new groups are added, you may need to reset them.</mat-label>
     </div>
 
@@ -27,13 +35,10 @@
       (click)='resetUseGroups()'>
       <mat-icon>setting</mat-icon>Reset Groups</button>
     </div>
-
   </div>
 
   <div>
-
     <div class="grid-dual-list" [formGroup]="listBoxForm">
-
       <div class="dualListLeft">
         <div class="drag-drop-container">
             <mat-form-field appearance="outline">

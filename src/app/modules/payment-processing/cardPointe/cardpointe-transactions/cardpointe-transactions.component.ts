@@ -17,6 +17,8 @@ import { IPOSPayment } from 'src/app/_interfaces';
   styleUrls: ['./cardpointe-transactions.component.scss']
 })
 export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
+  processingTransaction: boolean;
+  action$: Observable<any>;
   toggleData: boolean;
   sale$: Observable<any>;
   auth$: Observable<any>;
@@ -98,8 +100,14 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
   initFinalizer() {
     this._finalizeSale.subscribe(data => {
       if (!data) {return}
-      this.paymentMethodsService.processCardPointResponse( data, this.methodsService.payment,
-                                                            this.orderService.currentOrder)
+      this.processingTransaction = true
+      this.action$ = this.paymentMethodsService.processCardPointResponse( data, this.methodsService.payment,
+                                                            this.orderService.currentOrder).pipe(
+                                                              switchMap(data => {
+                                                                this.processingTransaction = false
+                                                                return of(data)
+                                                              })
+                                                            )
       this.methodsService.initValues();
       this.dialogRef.close(null)
     })

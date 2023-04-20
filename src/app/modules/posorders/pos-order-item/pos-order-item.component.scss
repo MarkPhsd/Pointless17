@@ -220,9 +220,11 @@ font-style: italic;
 
 .image {
   border-radius: 10px;
-  min-height: 50px;
-  max-height: 50px;
-  height: 50px;
+  // min-height: 50px;
+  max-height: 65px;
+  height: 65px;
+  object-fit: contain;
+  // height: 200px;
 }
 
 .grid-items-main-panel {

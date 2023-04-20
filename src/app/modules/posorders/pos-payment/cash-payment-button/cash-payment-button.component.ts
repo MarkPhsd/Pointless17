@@ -38,10 +38,7 @@ export class CashPaymentButtonComponent implements OnInit {
   action$: Observable<any>;
 
   constructor(
-    private uISettingsService: UISettingsService,
     private sitesService    : SitesService,
-    private dialog          : MatDialog,
-    private dsiProcess      : DSIProcessService,
     private orderService    : OrdersService,
     private paymentsMethodsService: PaymentsMethodsProcessService,
     private orderMethodsService: OrderMethodsService,
@@ -56,49 +53,32 @@ export class CashPaymentButtonComponent implements OnInit {
   applyCashPayment(amount: number) {
     const site = this.sitesService.getAssignedSite()
     this.posPayment = {} as IPOSPayment;
-    console.log('original order at apply cash', this.order)
     const order = this.order;
 
     if (this.posPayment) {
       this.action$ = this.paymentMethodService.getCashPaymentMethod(site, 'Cash').pipe(switchMap(method => {
-
         if (!method) {
-          this.sitesService.notify('Cash Payment not found.', 'close', 5000, 'red')
-          return of(null)
+          return this.sitesService.notifyObs('Cash Payment not found.', 'close', 5000, 'red')
         }
-
         return this.paymentsMethodsService.processCashPayment(site, this.posPayment, order, amount, method )
-
       })).pipe(switchMap( data => {
-
-        // console.log('process cash payment results', data);
-
         if (!data) {
-          this.sitesService.notify('Cash payment not successfull ', 'close', 5000, 'red')
-          return of(null)
+          return this.sitesService.notifyObs('Cash payment not successfull ', 'close', 5000, 'red')
         }
-
-        return of(data.order) // this.orderService.getOrder(site, order.id.toString(), false )
-
+        return of(data.order)
       })).pipe(switchMap(data => {
-
-        // console.log('data from getOrder', data, order)
         if (!order) {
-          this.sitesService.notify('Order not found ', 'close', 5000, 'red')
-          return of(null)
+          return this.sitesService.notifyObs('Order not found ', 'close', 5000, 'red')
         }
         this.orderService.updateOrderSubscription(data)
         this.router.navigate(['pos-payment']);
         return of(data)
-
       })),
       catchError(data => {
-
-        this.sitesService.notify('Error occured: ' + data.toString(), 'close', 5000, 'red')
-        return of(data)
-
+        return this.sitesService.notifyObs('Error occured: ' + data.toString(), 'close', 5000, 'red')
       })
     }
+
     if (!this.posPayment) {
       this.sitesService.notify('No payment assigned', 'Alert', 2000)
     }

@@ -522,7 +522,6 @@ export class OrderMethodsService implements OnDestroy {
         this.sendToPrep(order, true)
       }
       if (data.printLabelsOnclose) {
-        console.log('finalizeOrderProcesses printing labels')
         return this.printingService.printLabels(order, true)
       }
       return forkJoin([printLabels$, sendOrder$])
@@ -531,13 +530,13 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   finalizeOrder(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder): number {
-
     this.printingService.printJoinedLabels() ;
 
     if (!paymentResponse ) {
       this.siteService.notify('No payment response', 'close', 3000, 'red');
       return 0
     }
+
     if (!paymentResponse || !paymentResponse.payment) {
       this.siteService.notify('No payment in payment response', 'close', 3000, 'red');
       return 0
@@ -567,7 +566,6 @@ export class OrderMethodsService implements OnDestroy {
         return 1
       }
 
-      console.log('open change due  0.')
       return 0
     }
   }
@@ -695,7 +693,7 @@ export class OrderMethodsService implements OnDestroy {
       this.assignPOSItems = [];
       this.assignPOSItems.push(passAlongItem);
     }
-    // console.log('assignPOSItems3', this.assignPOSItems)
+
     order = this.validateOrder();
 
     if (order) {
@@ -1110,6 +1108,7 @@ export class OrderMethodsService implements OnDestroy {
     const site = this.siteService.getAssignedSite()
     if (!posItem || posItem.promptGroupID == 0 || !posItem.promptGroupID) { return }
     const prompt = this.promptGroupService.getPrompt(site, item.promptGroupID).subscribe ( prompt => {
+      console.log('openPromptWalkThrough', prompt, posItem)
       this.openPromptWalkThroughWithItem(prompt, posItem);
     })
   }
@@ -1125,9 +1124,12 @@ export class OrderMethodsService implements OnDestroy {
     })
   }
 
-  //, pricing:  priceList[]
+  updateLastItemAdded(item: IMenuItem) {
+    this.orderService.updateLastItemAdded(item)
+  }
+
  addedItemOptions(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem, priceCategoryID : number) {
-    // console.log('prompt', item?.promptGroupID)
+    this.updateLastItemAdded(item)
     const processItem    = {} as ProcessItem;
     processItem.item     = item;
     processItem.order    = order;
@@ -1257,6 +1259,8 @@ export class OrderMethodsService implements OnDestroy {
     if (prompt) {
       prompt.posOrderItem = posItem;
       this.promptGroupService.updatePromptGroup(prompt);
+      let item = posItem as unknown as PosOrderItem
+      this.posOrderItemService.updatePOSItemSubscription(item)
       const dialogRef = this.dialog.open(PromptWalkThroughComponent,
         { width:        '100%',
           minWidth:     '100%',
@@ -1336,6 +1340,7 @@ export class OrderMethodsService implements OnDestroy {
           if (item) {
             this.order.posOrderItems.splice(index, 1)
             this.orderService.updateOrderSubscription(item.order)
+            this.orderService.updateLastItemAdded(null)
           }
         })
       }

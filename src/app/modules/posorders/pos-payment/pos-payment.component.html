@@ -1,8 +1,8 @@
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(orderAction$ | async)"></div>
 <div *ngIf="(process$ | async) as process"></div>
-<div *ngIf="order  && uiTransactions">
 
+<div *ngIf="order  && uiTransactions">
   <div [class]="orderlayout">
     <div class="transaction-data">
       <div class="grid-header-item">
@@ -34,6 +34,9 @@
     </div>
 
     <div>
+
+      <ng-container [ngTemplateOutlet]="isProcessingPayment"></ng-container>
+
       <div  class="order-completed"
             *ngIf="(paymentsEqualTotal || order.completionDate)">
           <ng-container [ngTemplateOutlet]="receiptShowTemplate"></ng-container>
@@ -291,6 +294,7 @@
   </div>
 </ng-template>
 
+
 <ng-template #enterPointCashValueView>
   <div class="item-container keypad">
     <app-key-pad
@@ -475,4 +479,11 @@
       <app-receipt-view [hideExit]="true" [order]="order"></app-receipt-view>
     </mat-card-content>
   </mat-card>
+</ng-template>
+
+<ng-template #processingPayment>
+  <h4>
+    Processing...
+  </h4>
+  <mat-spinner [diameter]="50"></mat-spinner>
 </ng-template>

@@ -1,6 +1,14 @@
+<div class = "summary" *ngIf="summaryOnly && site">
+  <ng-content  select="[summary]"></ng-content> 
+  <div *ngIf="(sales$ | async) as sale; else loadingSummary"
+        class="grid">
+    <div class="grid-item totals_label">Net (pre-tax):</div>
+    <div class="grid-item tax">{{sale.netSales | currency }}  </div>
+  </div>
+</div>
 
-<div class="mat-card-container"
-     *ngIf="site && (sales$ | async) as sale; else loading">
+<div  class="mat-card-container"
+     *ngIf="!summaryOnly && site && (sales$ | async) as sale; else loading">
      <mat-card>
       <mat-card-title>
         <div class="grid">
@@ -26,7 +34,7 @@
         <div *ngIf="sale.resultsMessage"> <mat-icon>warning</mat-icon>{{sale.resultsMessage}} </div>
         <div class="grid" *ngIf="!sale.resultsMessage" >
           <div class="grid-item totals_label">Net (pre-tax):</div>
-          <div class="grid-item tax">{{sale.netSales | currency }} <br>  </div>
+          <div class="grid-item tax">{{sale.netSales | currency }}  </div>
 
           <div class="grid-item tax_label">Non-Taxable:</div>
           <div class="grid-item tax">{{sale.nonTaxableSalesTotal | currency}}</div>
@@ -83,7 +91,6 @@
 
 
       <mat-card-content *ngIf="!minimized">
-
         <div class="grid">
 
           <div class="grid-item discounts_label">Order $ Discounts:</div>
@@ -155,6 +162,10 @@
 
 <ng-template #loading>
   <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
+</ng-template>
+
+<ng-template #loadingSummary>
+ ..loading   <ng-content></ng-content>
 </ng-template>
 
 

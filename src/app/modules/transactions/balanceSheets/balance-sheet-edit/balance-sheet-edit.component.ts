@@ -15,6 +15,7 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'app-balance-sheet-edit',
@@ -131,6 +132,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 private sheetMethodsService     : BalanceSheetMethodsService,
                 private sendGridService         :  SendGridService,
                 private printingService         : PrintingService,
+                public platFormService     : PlatformService,
                 private siteService: SitesService,
               )
   {
@@ -265,6 +267,14 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
   updateItem(event) {
     this.balanceSheet$ = this._updateItem().pipe(switchMap(data => {
+      // this.router.navigate(['app-main-menu'])
+      return of(data)
+    }))
+  }
+
+  
+  updateItemExit(event){
+    this.balanceSheet$ = this._updateItem().pipe(switchMap(data => {
       this.router.navigate(['app-main-menu'])
       return of(data)
     }))
@@ -379,14 +389,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.fivesStart.disable()
   }
 
-  updateItemExit(event){
-    this._updateItem().pipe(switchMap(data => {
-      // this.router.navigate(['pos-orders'])
-      this.onCancel(null);
-      return of(data)
-    }))
-    this.location.back()
-  }
 
   deleteItem(event){
     this.sheetMethodsService.deleteItem(this.isAuthorized, this.sheet)
@@ -502,4 +504,8 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     }
     return this.balance
   }
+
+    async openCashDrawer(value: number) {
+      await this.sheetMethodsService.openDrawerOne()
+    }
 }

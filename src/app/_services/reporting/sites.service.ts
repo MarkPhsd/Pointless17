@@ -338,4 +338,9 @@ export class SitesService {
     );
   }
 
+  notifyObs(message: string, title: string, time: number, color?: string, vPOS?: string) : Observable<any> {
+    this.notify(message,title, time, color, vPOS)
+    return of(null)
+  }
+
 }

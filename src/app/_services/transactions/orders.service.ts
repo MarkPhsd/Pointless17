@@ -20,6 +20,7 @@ import { IPaymentMethod } from './payment-methods.service';
 import { UserAuthorizationService } from '../system/user-authorization.service';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { StoreCreditMethodsService } from '../storecredit/store-credit-methods.service';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 export interface POSOrdersPaged {
   paging : IPagedList
   results: IPOSOrder[]
@@ -75,9 +76,13 @@ export class OrdersService {
   private _viewOrderType      = new BehaviorSubject<number>(null);
   public viewOrderType$       = this._viewOrderType.asObservable();
 
+  posSearchModel  :IPOSOrderSearchModel
   private _posSearchModel     = new BehaviorSubject<IPOSOrderSearchModel>(null);
   public posSearchModel$      = this._posSearchModel.asObservable();
 
+  private _lastItemAdded     = new BehaviorSubject<IMenuItem>(null);
+  public lastItemAdded$      = this._lastItemAdded.asObservable();
+  lastItemAddedExists : boolean;
 
   private _splitGroupOrder     = new BehaviorSubject<IPOSOrder>(null);
   public splitGroupOrder$      = this._splitGroupOrder.asObservable();
@@ -144,6 +149,17 @@ export class OrdersService {
     this._printerLocation.next(value)
   }
 
+  updateLastItemAdded(item: IMenuItem) { 
+    this.lastItemAddedExists = false
+    // console.log('menuitem updating last', item?.name)
+    if (!item || !item.urlImageMain) {
+      this._lastItemAdded.next(null)
+      return;
+    }
+    this.lastItemAddedExists = true
+    this._lastItemAdded.next(item)
+  }
+
   updateOrderSubscriptionClearOrder(id: number) {
     if (id) {
       const site = this.siteService.getAssignedSite();
@@ -155,12 +171,14 @@ export class OrdersService {
   clearOrderSubscription() {
     localStorage.removeItem('orderSubscription')
     this.toolbarServiceUI.updateOrderBar(false)
+    this.updateLastItemAdded(null)
     this.updateOrderSubscription(null);
   }
 
   updateOrderSubscriptionLoginAction(order: IPOSOrder) {
     this.storeCreditMethodService.updateSearchModel(null)
     this.getCost(order)
+
     this._currentOrder.next(order);
     this.currentOrder = order;
     if (order == null) {
@@ -215,7 +233,6 @@ export class OrdersService {
 
     const devicename = localStorage.getItem('devicename')
     if (order?.deviceName === devicename) { return }
-
     this.orderClaimed = false;
     if (order && order.id ) {
       const order$ = this.claimOrder(site, order.id.toString(), order.history)
@@ -249,11 +266,40 @@ export class OrdersService {
   }
 
   updateOrderSearchModel(searchModel: IPOSOrderSearchModel) {
+    if (!searchModel) { 
+      this._posSearchModel.next(searchModel);
+      return ;
+    }
+    const user = this.userAuthorizationService.currentUser()
+    if (this.showAllOrders) { 
+      if (user && user.employeeID && user.employeeID != null) { 
+        searchModel.employeeID = 0 
+      }
+    }
+    if (!this.showAllOrders && this.userAuthorizationService.isStaff ) { 
+      if (user && user.employeeID  && user.employeeID != null) { 
+        searchModel.employeeID = user.employeeID
+      }
+    }
+    if (!this.showAllOrders && this.userAuthorizationService.isUser) { 
+      if (user && user.id && user.id != null) { 
+        searchModel.clientID = user.id
+      }
+    }
+    this.posSearchModel = searchModel
     this._posSearchModel.next(searchModel);
   }
 
   updateSplitGroup(data: IPOSOrder) {
     this._splitGroupOrder.next(data);
+  }
+
+  get showAllOrders() { 
+    let  user = this.userAuthorizationService.user
+    if ( user && user.userPreferences) {
+      return user.userPreferences.showAllOrders
+    }
+    return false
   }
 
   constructor(
@@ -985,7 +1031,7 @@ export class OrdersService {
   setActiveOrder(site, order: IPOSOrder) {
     if (order) {
       this.updateOrderSubscription(order)
-
+      this.updateLastItemAdded(null)
       this.toolbarServiceUI.updateOrderBar(true)
       if (!order.history && this.platFormService.isApp()) {
         if (!order.completionDate && !order.preferredScheduleDate) {

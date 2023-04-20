@@ -41,7 +41,7 @@
             ></app-edit-buttons-standard>
         </div>
       </div>
-
+     
       <mat-divider class="mat-dividers"></mat-divider>
 
     </mat-card-subtitle>
@@ -54,6 +54,12 @@
             <span *ngIf ="sheet.shiftStarted != 1">
               <button color="warn" mat-raised-button (click)="startShift()">Start Sheet</button>
             </span>
+            <div *ngIf="platFormService.isApp">
+              <button  mat-raised-button color="primary" (click)="openCashDrawer(1)">
+                <mat-icon>point_of_sale</mat-icon> Drawer  
+              </button>
+            </div>
+          
           </div>
 
           <div *ngIf="!sheet.endTime">

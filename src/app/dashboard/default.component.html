@@ -31,7 +31,6 @@
   </mat-drawer>
 
   <mat-drawer-content>
-
     <div *ngIf="departmentID && departmentID !=0"
         class="overlay">
       <app-department-menu
@@ -42,18 +41,15 @@
     <div  [@routeAnimations]="prepareRoute(outlet)" >
       <router-outlet #outlet="outlet"></router-outlet>
     </div>
-
   </mat-drawer-content>
 
   <mat-drawer
               position  = "end"
               [mode]    = "sidebarMode"
               [opened]  = "rightSideBarToggle" >
-
+              
     <ng-container [ngTemplateOutlet]="rightSideBar"></ng-container>
-
   </mat-drawer>
-
 </mat-drawer-container>
 
 <app-footer></app-footer>

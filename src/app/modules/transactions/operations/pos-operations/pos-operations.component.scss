@@ -1,5 +1,10 @@
 @import "/src/mixins.scss";
 
+mat-icon { 
+  @media print { 
+    visibility: hidden;
+  }
+}
 .mat-divider {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -9,6 +14,10 @@ button {
   margin:5px;
 }
 
+.summary { 
+  margin: 5px;
+  width: 300px;
+}
 .grid-sales-cards {
   --gap: 15px;
   display: grid;

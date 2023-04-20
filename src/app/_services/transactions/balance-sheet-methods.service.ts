@@ -90,9 +90,10 @@ export class BalanceSheetMethodsService {
     if (this.platformService.isAppElectron || this.platformService.androidApp) {
       const site     = this.sitesService.getAssignedSite()
       const deviceName = this.getDeviceName();
+
       return this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
         switchMap( data => {
-
+          // console.log('data from Prompt Balance Sheet', data)
           if (data && data.errorMessage) {
             this.sitesService.notify(`Balance sheet error. ${data.errorMessage}`, 'Close', 3000, 'red')
             return of({sheet: null, user: user})
@@ -101,12 +102,11 @@ export class BalanceSheetMethodsService {
              return of({sheet: null, user: user})
           }
           const item = {sheet: data, user: user};
-
           return of(item)
         }),
         catchError( e => {
-          console.log('no balance Sheet',deviceName)
-          this.sitesService.notify('Balance sheet error. User may not have employee assigned.', 'Close', 3000, 'red')
+          // console.log('no balance Sheet',deviceName)
+          this.sitesService.notify('Balance sheet error. User may not have employee assigned.' + e.toString(), 'Close', 3000, 'red')
           return of({sheet: null, user: user, err: e})
         })
       )
@@ -313,8 +313,6 @@ export class BalanceSheetMethodsService {
 
   openDrawerFromBalanceSheet(): Observable<IBalanceSheet> {
 
-
-
     let deviceName = localStorage.getItem('devicename');
 
     const electron = this.platformService.isAppElectron
@@ -327,32 +325,24 @@ export class BalanceSheetMethodsService {
     }
 
     const site = this.siteService.getAssignedSite()
-
-
     const item$ =  this.balanceSheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(switchMap(data => {
           if (!data) {
             this.siteService.notify('Balance sheet was not defined', 'close', 2000, 'yellow')
             return of(data)
           }
-
           if (data.drawerAB == 2) {
             this.openDrawerTwo()
           }
-
           if (data.drawerAB == 1 || data.drawerAB == 0 || !data.drawerAB) {
             this.openDrawerOne()
           }
-
           return of(data)
         }
       ), catchError(data => {
       this.siteService.notify('Balance sheet was not defined', 'close', 2000, 'yellow')
       return of(null)
     }))
-
-    console.log('returning balance sheet observable')
     return item$;
-
   }
 
   async  openDrawerOne() {
