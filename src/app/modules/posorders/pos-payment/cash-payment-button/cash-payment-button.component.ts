@@ -5,7 +5,6 @@ import { IPaymentMethod } from 'ngx-paypal';
 import { catchError, Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
-import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -20,6 +19,8 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 })
 export class CashPaymentButtonComponent implements OnInit {
 
+  themeClass = 'dark-theme-green';
+
   @Input() order: IPOSOrder;
   @Input() uiTransactions: TransactionUISettings;
   @Input() platForm: string;
@@ -29,7 +30,7 @@ export class CashPaymentButtonComponent implements OnInit {
   @Input() posPayment: IPOSPayment;
   @Input() isApp: boolean;
   @Input() devicename : string;
-
+  
   stripeEnabled: boolean;
   paymentMethod$: Observable<IPaymentMethod>;
   @Output() setStep = new EventEmitter()

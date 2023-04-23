@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.53.1",
+  "version": "1.53.5",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -97,6 +97,7 @@
     "ag-grid-angular": "^25.3.0",
     "ag-grid-community": "^25.3.0",
     "ag-grid-enterprise": "^25.3.0",
+    "angular-draggable-droppable": "^6.0.1",
     "angular-gridster2": "^13.1.1",
     "angular-resize-event": "^3.1.1",
     "angular-super-gallery": "^2.1.9",
@@ -165,6 +166,8 @@
     "print-js": "^1.6.0",
     "rxjs": "^7.5.4",
     "set-value": "^4.1.0",
+    "simple-keyboard": "^3.5.51",
+    "simple-keyboard-layouts": "^3.1.309",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "swiper": "^6.8.4",

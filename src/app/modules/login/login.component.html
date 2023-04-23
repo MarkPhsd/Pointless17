@@ -127,10 +127,16 @@
         <div class="center">
           <mat-card-subtitle>
             <div class="registration center">
-              <h5>Login with email or phone.
-            </h5>
-          </div>
+              <h5>Login with email or phone.</h5>
+            </div>
           </mat-card-subtitle>
+          
+          <app-keyboard-button
+              [smallDevice]="false"
+              [isApp]="true"
+              [isUserStaff]="true"
+            >
+          </app-keyboard-button>
           <div class="registration">
             <mat-divider></mat-divider>
           </div>
@@ -143,7 +149,7 @@
             <button mat-raised-button  (click)='registerUser()'>Register</button>
             <button mat-raised-button  (click)='forgetMe()'>Forget Me</button>
           </div>
-
+  
           <div class="registration">
             <mat-divider>         </mat-divider>
           </div>

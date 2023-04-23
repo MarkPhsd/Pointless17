@@ -1,4 +1,4 @@
-import { Component, QueryList,  ViewChildren,ChangeDetectorRef } from '@angular/core';
+import { Component, QueryList,  ViewChildren,ChangeDetectorRef, ElementRef, TemplateRef, ViewChild, OnDestroy, AfterViewInit, ViewContainerRef, AfterContentInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthenticationService, AWSBucketService, DevService } from './_services';
 import { IUser }  from 'src/app/_interfaces';
@@ -13,6 +13,9 @@ import { ElectronService } from 'ngx-electron';
 import { isDevMode } from '@angular/core';
 import { AppInitService } from './_services/system/app-init.service';
 import { Capacitor } from '@capacitor/core';
+import { UISettingsService } from './_services/system/settings/uisettings.service';
+import { InputTrackerService } from './_services/system/input-tracker.service';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
 // import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 
 LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
@@ -22,7 +25,15 @@ LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,Lice
   styleUrls: ['./app.component.scss'],
   animations: [ fadeInAnimation ],
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit{
+  
+  @ViewChild('keyboardRef', { read: ElementRef }) keyboardRef: ElementRef;
+  // @ViewChild('templateRef') templateRef: TemplateRef<any>;
+  @ViewChild('keyboardView') keyboardView: TemplateRef<any>;
+
+  keyboardPosition :any;// { x: number, y: number };
+
+
   get capPlatForm() {  return Capacitor.getPlatform(); }
   idleState = "NOT_STARTED";
   countdown?: number = null;
@@ -31,12 +42,13 @@ export class AppComponent {
   toggleTheme = new FormControl(false);
   user: IUser;
   _user: Subscription;
-
+  _keyboardVisible: Subscription;
+  keyboardVisible: boolean;
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
   appUrl : string;
   container: string;
-
+  keyboardDimensions = 'height:300px;width:700px'
   devMode = false;
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
 
@@ -59,14 +71,17 @@ export class AppComponent {
       private router:                Router,
       private titleService          :Title,
       private authenticationService: AuthenticationService,
+      private uiSettingsService: UISettingsService,
       private statusBar:             StatusBar,
       private cd: ChangeDetectorRef,
       private awsService:            AWSBucketService,
       private electronService      :  ElectronService,
       private appInitService       : AppInitService,
+      private inputTrackerService: InputTrackerService,
+      private viewContainerRef: ViewContainerRef
       // private ipcService          :  IPCService,
   ) {
-
+      // this.deletePosition();
       this.initSubscription();
       this.initStyle();
       this.initializeApp();
@@ -74,23 +89,83 @@ export class AppComponent {
       this.awsService.awsBucket();
       this.setTitle();
       this.devMode = isDevMode();
+      // this.uiSettingsService.updateToggleKeyboard()
       if (this.electronService.isElectronApp && !this.devMode) {
         // this.AuthService.logout();
       }
-      // console.log('is Electron Service', ipcService.isElectronApp)
-      // if (ipcService.isElectronApp) {
-      //   console.log(process.env);
-      //   console.log('Run in electron');
-      //   console.log('Electron ipcRenderer', this.ipcService.ipcRenderer);
-      //   console.log('NodeJS childProcess', this.ipcService.childProcess);
-      // }
-
       this.container = 'container-app'
       if (this.capPlatForm === 'web') { 
         this.container = 'container'
       }
-      
 
+      this.initKeyboardSubscriber()
+  }
+
+  ngAfterContentInit() {
+    if (this.isKeyBoardVisible) { 
+      this.viewContainerRef.createEmbeddedView(this.keyboardView);
+    }
+  }
+  // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
+  ngAfterViewInit() {
+    if (this.isKeyBoardVisible) { 
+      this.initSavedKeyboardLocation()
+    }
+  }
+  
+  initKeyboardSubscriber() {
+    this._keyboardVisible = this.uiSettingsService.toggleKeyboard$.subscribe(data => { 
+      this.keyboardVisible = data; 
+      if (data) {
+        const keyboardDimensions = localStorage.getItem('keyboardDimensions')
+        this.keyboardDimensions = 'height:500px;width:900px';
+        // if (keyboardDimensions) { 
+        //   const dimensions = JSON.parse(keyboardDimensions)
+        //   const height = dimensions?.height;
+        //   const width = dimensions?.width;
+        //   this.keyboardDimensions = `height:${height}px;width:${width}px;`
+        // }
+        this.initSavedKeyboardLocation()
+      }
+    })
+  }
+
+  initSavedKeyboardLocation() { 
+    if (!this.isKeyBoardVisible) {return}
+    const savedPosition = localStorage.getItem('keyboardPosition');
+    const position = JSON.parse(savedPosition)
+    this.keyboardPosition = position 
+    console.log('restored', position)
+  }
+
+  onResizeKeyboard(event) { 
+    if (!event) {return}
+    localStorage.setItem('keyboardDimensions', JSON.stringify(event))
+  }
+
+  onDragEnd(event: CdkDragEnd) {
+    // save the end position
+    const position = event.source.getFreeDragPosition();
+    localStorage.setItem('keyboardPosition', JSON.stringify(position));
+    console.log('position', position)
+  }
+
+  get isKeyBoardVisible() { 
+    if (this.keyboardVisible) {
+      return this.keyboardView
+    } 
+    return null;
+  }
+
+  ngOnDestroy() { 
+    if (this._keyboardVisible) { 
+      this._keyboardVisible.unsubscribe()
+    }
+  }
+
+
+  toggleDrag() { 
+    // this.toggleDrag
   }
 
   initializeApp() {

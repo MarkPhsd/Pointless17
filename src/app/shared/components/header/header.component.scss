@@ -12,14 +12,20 @@
 }
 
 :host .mat-menu-panel {
+  //changed 4/20/2023
   margin-top: 15px  !important;
+
+
   width     : 100%!important;
   min-width : 300px;
   overflow-x: hidden;
 }
 
 .mat-toolbar-android-no-user {
+  //changed 4/20/2023
   margin-top    : 5px  ;
+
+
   width         : 100%  ;
   min-width     : 300px ;
   height        : 45px  ;
@@ -34,8 +40,12 @@
 }
 
 .mat-toolbar-android {
-  padding-top   : 5px;
+  
+  //changed 4/20/2023
   margin-top    : 15px  ;
+  padding-top   : 5px;
+
+
   width         : 100%  ;
   min-width     : 300px ;
   height        : 45px  ;
@@ -163,6 +173,9 @@ button {
   justify-content : space-between;
   flex-direction  : row;
   flex-basis      : auto;
+
+
+  //changed 4/20/2023
   margin-top      : -15px;
 
   @include for-phone-only  {
@@ -177,7 +190,10 @@ button {
   display         : flex;
   justify-content : space-between;
   flex-direction  : row;
+
   flex-basis      : auto;
+  
+  //changed 4/20/2023
   margin-top      : 15px;
 
   @include for-phone-only  {
@@ -244,7 +260,7 @@ button {
   justify-content : space-between;
   flex-direction  : row;
   flex-basis      : auto;
-  // margin-top      : 35px;
+  margin-top      : 35px;
   padding-top     : 10px;
   @include for-phone-only  {
     margin-top: 5px;

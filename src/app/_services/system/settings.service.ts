@@ -404,7 +404,9 @@ export class SettingsService {
   getUITransactionSetting():  Observable<TransactionUISettings> {
 
     if (!this.userAuthorizationService.user) {  of(null)  }
+
     const user = this.userAuthorizationService.user;
+    
     if (!user || !user.roles ) {return  of(null) };
 
     const site =  this.siteService.getAssignedSite();
@@ -417,19 +419,46 @@ export class SettingsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    const options = { url: url, cacheMins: 60};
+    return this.getAppCahcURI(url) as Observable<TransactionUISettings>;
 
+  }
+
+  resetUITransactionSettings():  Observable<TransactionUISettings> {
+
+    const site =  this.siteService.getAssignedSite();
+
+    const controller = "/settings/"
+
+    const endPoint = 'ResetUITransactionSettings';
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<unknown>(url) as Observable<TransactionUISettings>;
+
+  }
+
+  getAppCahcURI(url) { 
     let appCache =  JSON.parse(localStorage.getItem('appCache')) as any;
     if (appCache) {
       if (appCache?.value && appCache?.boolean) {
         const uri = { url: url, cacheMins: appCache.value}
-        return  this.httpCache.get<TransactionUISettings>(uri)
+        console.log('getting url via cache' , uri)
+        return  this.httpCache.get<unknown>(uri)
       }
     }
+    return this.http.get<unknown>(url);
+  }
 
-    return this.http.get<TransactionUISettings>(url);
+  postAppCacheURI(url) { 
 
   }
+
+  putAppCachURI(url) { 
+
+  }
+
 
   getSettingBySetting(site: ISite, setting: ISetting):  Observable<ISetting> {
 

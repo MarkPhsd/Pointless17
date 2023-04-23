@@ -1,6 +1,26 @@
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
 
+.light-theme-green {
+  background-color: lightgreen;
+  color: black;
+}
+
+.light-theme-blue {
+  background-color: lightblue;
+  color: black;
+}
+
+.dark-theme-green {
+  background-color: #498049;
+  color: white;
+}
+
+.dark-theme-blue {
+  background-color: darkblue;
+  color: white;
+}
+
 .lowOpacity {
   opacity: 50;
 }

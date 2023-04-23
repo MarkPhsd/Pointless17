@@ -1,3 +1,4 @@
+<div *ngIf="(action$ | async) as action"></div>
 
 <ng-template #loading>... loading
   <mat-spinner [diameter]="25"></mat-spinner>
@@ -8,6 +9,8 @@
     <h4>
       <ng-content></ng-content>
     </h4>
+
+    <button mat-raised-button color="warn" (click)="resetTransactionSettings()">Reset Settings</button>
   </mat-card-subtitle>
 
   <mat-card-actions>
@@ -196,6 +199,21 @@
           <mat-label>Assign Barcode as Serial</mat-label>
         </mat-slide-toggle>
       </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="preventDuplicateBarcodes">
+          <mat-label>Prevent Duplicate Barcoded Items</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="scanIncreaseQuantity">
+          <mat-label>Increase Items Quantity on Duplicate Scan</mat-label>
+        </mat-slide-toggle>
+      </div>
+      
 
       <div class="toggle-fields">
         <mat-slide-toggle

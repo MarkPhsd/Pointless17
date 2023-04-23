@@ -121,18 +121,23 @@
               <ng-container [ngTemplateOutlet]="storeCreditPaybuttonView"></ng-container>
               <ng-container [ngTemplateOutlet]="wicEBTButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="triPOSPaymentButtonView"></ng-container>
-              <div *ngIf="!smallDevice">
+              <!-- <span *ngIf="!smallDevice"> -->
                 <ng-container [ngTemplateOutlet]="payButton"></ng-container>
-              </div>
- 
+                <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
+                <ng-container [ngTemplateOutlet]="cashPay5"></ng-container>
+                <ng-container [ngTemplateOutlet]="cashPay10"></ng-container>
+                <ng-container [ngTemplateOutlet]="cashPay20"></ng-container>
+                <ng-container [ngTemplateOutlet]="cashPay50"></ng-container>
+                <ng-container [ngTemplateOutlet]="cashPay100"></ng-container>
+              <!-- </span> -->
           </div>
         </div>
         
-        <div  *ngIf="mainPanel && uiTransactionSettings &&
+        <!-- <div  *ngIf="mainPanel && uiTransactionSettings &&
                     (!paymentsEqualTotal && !order.completionDate &&
                     order?.balanceRemaining != 0) " >
-            <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
-        </div>
+          
+        </div> -->
 
         <div *ngIf="!mainPanel && !uiTransactionSettings?.displayEditCardOnHeader">
           <ng-container [ngTemplateOutlet]="editCartButtons"></ng-container>
@@ -327,22 +332,90 @@
         [creditBalanceRemaining]="creditPaymentAmount"
         [paymentAmount] ="order.balanceRemaining"
         [isApp]         ="platFormService.isApp" >
+        <div>Exact Cash</div>
     </cash-payment-buttons>
   </div>
 </ng-template>
 
+<ng-template #cashPay100>
+  <div *ngIf="!smallDevice">
+    <cash-payment-buttons
+        [order]="order"
+        [uiTransactions]="uiTransactionSettings"
+        [platForm]="platForm"
+        [creditBalanceRemaining]="creditPaymentAmount"
+        [paymentAmount] ="100"
+        [isApp]         ="platFormService.isApp" >
+    </cash-payment-buttons>
+  </div>
+</ng-template>
+
+<ng-template #cashPay50>
+  <div *ngIf="!smallDevice">
+    <cash-payment-buttons
+        [order]="order"
+        [uiTransactions]="uiTransactionSettings"
+        [platForm]="platForm"
+        [creditBalanceRemaining]="creditPaymentAmount"
+        [paymentAmount] ="50"
+        [isApp]         ="platFormService.isApp" >
+    </cash-payment-buttons>
+  </div>
+</ng-template>
+
+<ng-template #cashPay20>
+  <div *ngIf="!smallDevice">
+    <cash-payment-buttons
+        [order]="order"
+        [uiTransactions]="uiTransactionSettings"
+        [platForm]="platForm"
+        [creditBalanceRemaining]="creditPaymentAmount"
+        [paymentAmount] ="20"
+        [isApp]         ="platFormService.isApp" >
+    </cash-payment-buttons>
+  </div>
+</ng-template>
+
+<ng-template #cashPay10>
+  <div *ngIf="!smallDevice">
+    <cash-payment-buttons
+        [order]="order"
+        [uiTransactions]="uiTransactionSettings"
+        [platForm]="platForm"
+        [creditBalanceRemaining]="creditPaymentAmount"
+        [paymentAmount] ="10"
+        [isApp]         ="platFormService.isApp" >
+    </cash-payment-buttons>
+  </div>
+</ng-template>
+
+
+<ng-template #cashPay5>
+  <div *ngIf="!smallDevice">
+    <cash-payment-buttons
+        [order]="order"
+        [uiTransactions]="uiTransactionSettings"
+        [platForm]="platForm"
+        [creditBalanceRemaining]="creditPaymentAmount"
+        [paymentAmount] ="5"
+        [isApp]         ="platFormService.isApp" >
+    </cash-payment-buttons>
+  </div>
+</ng-template>
+
+
 <ng-template #payButton>
   <button
       mat-raised-button
-      class="payment-buttons"
+      class="buttons "
       color="primary"
       aria-label="Check Out"
       (click)="makePayment()">
     <mat-icon>credit_card</mat-icon>
-    <br>
-    <span>
-      Pay Options
-    </span>
+     Pay
+     <div>
+      Options
+     </div> 
   </button>
 </ng-template>
 

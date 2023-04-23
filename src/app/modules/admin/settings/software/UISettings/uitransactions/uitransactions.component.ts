@@ -27,6 +27,7 @@ export class UITransactionsComponent implements OnInit {
   clientTypes$    : Observable<any>;
   clientTypes     : clientType[];
   vipCustomer$    : Observable<any>;
+  action$         : Observable<unknown>;
 
   constructor(
       private uISettingsService: UISettingsService,
@@ -56,22 +57,25 @@ export class UITransactionsComponent implements OnInit {
   initUITransactionSettings() {
     this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
       switchMap( data => {
-        this.inputForm = this.uISettingsService.initForm(this.inputForm);
-        if (data && data.text) {
-          this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
-          this.payPalEnabled = this.uiTransactions.payPalEnabled
-          this.inputForm.patchValue( this.uiTransactions)
-          this.getVipClient(this.uiTransactions.vipCustomerID)
-        } else {
-          this.uiTransactions  = {} as TransactionUISettings;
-          this.inputForm.patchValue( this.uiTransactions)
-          this.payPalEnabled = this.uiTransactions.payPalEnabled
-          this.vipCustomer$ = null;
-        }
+        this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+        this.initFormData(  this.uiTransactions )
         return of(data);
     }));
-
   }
+
+  initFormData(data: TransactionUISettings) { 
+    this.inputForm = this.uISettingsService.initForm(this.inputForm);
+      if (data && data) {
+        this.payPalEnabled = this.uiTransactions.payPalEnabled
+        this.inputForm.patchValue( this.uiTransactions)
+        this.getVipClient(this.uiTransactions.vipCustomerID)
+      } else {
+        this.uiTransactions  = {} as TransactionUISettings;
+        this.inputForm.patchValue( this.uiTransactions)
+        this.payPalEnabled = this.uiTransactions.payPalEnabled
+        this.vipCustomer$ = null;
+      }
+  } 
 
   updateSetting(){
     if (!this.validateForm(this.inputForm)) {
@@ -85,15 +89,23 @@ export class UITransactionsComponent implements OnInit {
       this.saving$ =  this.uISettingsService.saveConfig(this.inputForm, 'UITransactionSetting').pipe(
         switchMap(data => {
           this.uISettingsService.notify('Saved', 'Success')
-          this.uISettingsService.updateUITransactionSubscription(transaction);
-          // this.changesMade = false
+          this.uISettingsService.updateUISubscription(transaction);
           return of(data)
         }
       ))
     }
-
   }
 
+
+  resetTransactionSettings() { 
+    this.action$ = this.settingService.resetUITransactionSettings().pipe(switchMap(data => { 
+      this.initFormData(data)
+      this.uiTransactions = data;
+      this.uISettingsService.updateUISubscription(data);
+      return of(data)
+    }))
+  } 
+  
   getVipClient(id){
     if (id) {
       this.vipCustomer$ = this.clienTableSerivce.getClient(this.sitesService.getAssignedSite(), id)

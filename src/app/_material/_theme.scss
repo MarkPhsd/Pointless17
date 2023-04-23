@@ -8,11 +8,12 @@ $app-theme:   mat-light-theme($app-primary, $app-accent);
 $light-theme-primary: mat-palette($mat-indigo, 700, 300, 900);
 $light-theme-accent: mat-palette($mat-light-blue);
 $light-theme-warn: mat-palette($mat-deep-orange, A200);
+$light-theme-green: mat-palette($mat-light-green);
 
 $light-theme: mat-light-theme(
  $light-theme-primary,
- $light-theme-accent,
- $light-theme-warn
+  $light-theme-accent,
+  $light-theme-warn,
 );
 
 .light-theme {
@@ -32,3 +33,44 @@ $dark-theme: mat-dark-theme(
 .dark-theme {
     @include angular-material-theme($dark-theme);
 }
+
+// @import "~@angular/material/theming";
+// @include mat-core();
+
+
+
+
+// $app-primary: mat-palette($mat-indigo);
+// $app-accent:  mat-palette($mat-pink, A200, A100, A400);
+// $app-theme:   mat-light-theme($app-primary, $app-accent);
+
+// $light-theme-primary: mat-palette($mat-indigo, 700, 300, 900);
+// $light-theme-accent: mat-palette($mat-light-blue);
+// $light-theme-warn: mat-palette($mat-deep-orange, A200);
+// // $light-theme-cash: mat-palette($mat-cash);
+
+// $light-theme: mat-light-theme(
+//  $light-theme-primary,
+//  $light-theme-accent,
+//  $light-theme-warn,
+//  );
+//  //  $light-theme-cash
+
+// .light-theme {
+//     @include angular-material-theme($light-theme);
+// }
+
+// $dark-theme-primary: mat-palette($mat-blue-grey);
+// $dark-theme-accent: mat-palette($mat-amber, A200, A100, A400);
+// $dark-theme-warn: mat-palette($mat-deep-orange);
+// $dark-theme-cash: mat-palette($mat-cash);
+// $dark-theme: mat-dark-theme(
+//  $dark-theme-primary,
+//  $dark-theme-accent,
+//  $dark-theme-warn,
+//  $light-theme-cash
+// );
+
+// .dark-theme {
+//     @include angular-material-theme($dark-theme);
+// }

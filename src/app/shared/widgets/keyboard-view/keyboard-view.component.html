@@ -1,0 +1,12 @@
+
+<ng-container [ngTemplateOutlet]="keyboardView"></ng-container>
+
+<ng-template #keyboardView>
+  <div class="example-handle"  >
+  </div>
+  <app-keyboard
+    (keyboardValue)="keyboardValue"
+    (keyboardChange)="keyboardValue = $event"
+  ></app-keyboard>
+</ng-template>
+

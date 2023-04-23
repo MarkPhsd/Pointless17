@@ -143,6 +143,12 @@
           <wizard-progress-button></wizard-progress-button>
         </div>
 
+        <app-keyboard-button
+          [smallDevice]="smallDevice"
+          [isApp]="platFormService.isApp()"
+          [isUserStaff]="isUserStaff"
+        ></app-keyboard-button>
+
         <div  class="check-out-button" *ngIf="uiTransactionSetting && uiTransactionSetting?.displayEditCardOnHeader" >
           <ng-container [ngTemplateOutlet]="editCartButtons"></ng-container>
         </div>

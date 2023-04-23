@@ -162,9 +162,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.splashScreenStateService.stop();
     }, 1000);
-
   }
-
+  
   refreshUIHomePageSettings() {
     this.uiSettingService.getSetting('UIHomePageSettings').subscribe(data =>  {
       this.uiHomePageSetting = JSON.parse(data.text) as UIHomePageSettings

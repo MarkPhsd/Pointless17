@@ -71,7 +71,8 @@ export interface TransactionUISettings {
   prepOrderOnClose: boolean;
   printLabelsOnclose: boolean;
   enableExactChange: boolean;
-
+  preventDuplicateBarcodes: boolean;
+  scanIncreaseQuantity: boolean;
 }
 
 export interface StripeAPISettings {
@@ -198,9 +199,12 @@ export class UISettingsService {
     {id: 0, name: 'Both'}, {id: 1, name: 'Rec'}, {id: 2, name: 'Med'}
   ]
 
+  private _toggleKeyboard          = new BehaviorSubject<boolean>(null);
+  public  toggleKeyboard$          = this._toggleKeyboard.asObservable();
   //section cacluates the order panel so that all items are properly displayed and scrollable.
   private _totalOrderHeightVal   : number;
 
+  private toggleKeyboard: boolean
   private _totalOrderHeight          = new BehaviorSubject<number>(null);
   public  totalOrderHeight$          = this._totalOrderHeight.asObservable();
 
@@ -252,6 +256,24 @@ export class UISettingsService {
 
   private _StripeAPISettings         = new BehaviorSubject<StripeAPISettings>(null);
   public  stripeAPISettings$        = this._StripeAPISettings.asObservable();
+
+  private _relativeValue         = new BehaviorSubject<unknown>(null);
+  public  relativeValue$        = this._relativeValue.asObservable();
+
+  //.updateRelativeValue(value)
+
+  updateRelativeValue(value: unknown) { 
+    this._relativeValue.next(value)
+  }
+  updateToggleKeyboard()  {
+    this.toggleKeyboard = !this.toggleKeyboard
+    this._toggleKeyboard.next(this.toggleKeyboard)
+  }
+
+  updateSetKeyboard(value: boolean)  {
+    this.toggleKeyboard = value
+    this._toggleKeyboard.next(value)
+  }
 
   updateorderHeaderHeight(item: number, windowHeight: number) {
     this.windowHeight = windowHeight;
@@ -314,10 +336,6 @@ export class UISettingsService {
   updateHomePageSetting(ui: UIHomePageSettings) {
     this._homePageSetting.next(ui);
     this.uihomePageSetting = ui;
-  }
-
-  updateUITransactionSubscription(ui: TransactionUISettings) {
-    this._transactionUISettings.next(ui);
   }
 
   updateUISubscription(ui: TransactionUISettings) {
@@ -459,18 +477,18 @@ export class UISettingsService {
 
   saveConfig(fb: FormGroup, name: string): Observable<ISetting>  {
     const setting = fb.value;
-
     if (!setting || (!setting?.id || setting?.id === '')) {
       this.getSetting(name).pipe(
         switchMap(data => {
           console.log('setting', data)
           setting.id = data.id;
           return this.setSetting(setting, name)
-      })).pipe(
-        switchMap(data => {
-        // console.log('returning Pipe', data)
-        return this.setSetting(setting, name)
       }))
+      // .pipe(
+      //   switchMap(data => {
+      //     console.log('returning Pipe', data)
+      //     return this.setSetting(setting, name)
+      // }))
     }
     return this.setSetting(setting, name)
   }
@@ -702,6 +720,8 @@ export class UISettingsService {
       printLabelsOnclose: [],
       enableExactChange: [],
       enableGiftCards: [],
+      preventDuplicateBarcodes: [],
+      scanIncreaseQuantity: [],
      })
   }
 

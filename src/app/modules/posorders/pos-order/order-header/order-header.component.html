@@ -1,4 +1,5 @@
 <span *ngIf="order">
+
   <div class="container">
 
     <div>
@@ -27,7 +28,7 @@
                   (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>
         </div>
         <div>
-          <button  class="button" color="primary" mat-raised-button
+          <button  class="button" color="warn" mat-raised-button
                    (click)="sendOrder()">
             <mat-icon>local_fire_department</mat-icon>
           </button>

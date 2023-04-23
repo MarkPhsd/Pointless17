@@ -197,7 +197,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     this.uiSettingsService.getSetting('UITransactionSetting').subscribe(data => {
       if (data) {
         const config = JSON.parse(data.text)
-        this.uiSettingService.updateUITransactionSubscription(config)
+        this.uiSettingService.updateUISubscription(config)
       }
     })
   }

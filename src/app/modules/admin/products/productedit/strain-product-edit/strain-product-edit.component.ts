@@ -191,6 +191,13 @@ export class StrainProductEditComponent implements OnInit {
       const product$ = this.menuService.saveProduct(site, this.product);
       return product$.pipe(switchMap(
           data => {
+
+            if (data) {
+              if (data.errorMessage) { 
+                this.notifyEvent('Save did not succeed: ' + data.errorMessage, 'Success')
+                return of(data)
+              }
+            }
             this.product = data;
             this.notifyEvent('Item Updated', 'Success')
             this.message = 'Saved'

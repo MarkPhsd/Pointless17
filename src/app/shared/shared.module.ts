@@ -181,6 +181,14 @@ import { ScaleValueViewComponent } from './widgets/scale-value-view/scale-value-
 import { BalanceSheetReportComponent } from '../modules/admin/reports/balance-sheet-report/balance-sheet-report.component';
 import { ImageContainerComponent } from './widgets/image-container/image-container.component';
 import { LastImageDisplayComponent } from './widgets/last-image-display/last-image-display.component';
+import { KeyboardComponent } from './widgets/keyboard/keyboard.component';
+import { KeyboardViewComponent } from './widgets/keyboard-view/keyboard-view.component';
+import { FreeDraggingHandleDirective } from '../_directives/free-dragging-handle.directive';
+import { FreeDraggingDirective } from '../_directives/free-dragging.directive';
+import { NgControlAttributeDirective } from '../_directives/ng-control-attribute.directive';
+import { KeyboardButtonComponent } from './widgets/keyboard-button/keyboard-button.component';
+import { M22ResizableComponent } from './widgets/m22-resizable/m22-resizable.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -283,6 +291,7 @@ import { LastImageDisplayComponent } from './widgets/last-image-display/last-ima
     MenuTinyComponent,
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,
+    NgControlAttributeDirective,
     NumericDirective,
     OrderHeaderDemoGraphicsComponent,
     OrderTotalComponent,
@@ -368,11 +377,18 @@ import { LastImageDisplayComponent } from './widgets/last-image-display/last-ima
     ValueFromListSelectorComponent,
     CallUsSelectorComponent,
     LastImageDisplayComponent,
+    KeyboardComponent,
+    KeyboardViewComponent,
+    FreeDraggingDirective,
+    FreeDraggingHandleDirective,
+    KeyboardButtonComponent,
+    M22ResizableComponent,
   ],
 
   imports: [
     AppRoutingModule,
     DashBoardRoutingModule,
+    DragDropModule,
     AppMaterialModule,
     CommonModule,
     BrowserAnimationsModule,
@@ -392,6 +408,7 @@ import { LastImageDisplayComponent } from './widgets/last-image-display/last-ima
   ],
 
   exports: [
+    DragDropModule,
     SafeHtmlPipe,
     ArrayFilterPipe,
     ArraySortPipe,
@@ -449,6 +466,8 @@ import { LastImageDisplayComponent } from './widgets/last-image-display/last-ima
     FilterPipe,
     FooterComponent,
     FormSelectListComponent,
+    FreeDraggingDirective,
+    FreeDraggingHandleDirective,
     GenericIdSelectComponent,
     GenericNameSelectComponent,
     GridsterModule,
@@ -460,6 +479,9 @@ import { LastImageDisplayComponent } from './widgets/last-image-display/last-ima
     ItemSalesCardComponent,
     ImageSwiperComponent,
     KeyPadComponent,
+    KeyboardComponent,
+    KeyboardButtonComponent,
+    KeyboardViewComponent,
     LastImageDisplayComponent,
     LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
@@ -478,8 +500,10 @@ import { LastImageDisplayComponent } from './widgets/last-image-display/last-ima
     MenuMinimalComponent,
     MenuSearchBarComponent,
     MenuTinyComponent,
+    M22ResizableComponent,
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,
+    NgControlAttributeDirective,
     OrderHeaderDemoGraphicsComponent,
     OrderTotalComponent,
     OrderHeaderComponent,
@@ -552,6 +576,7 @@ import { LastImageDisplayComponent } from './widgets/last-image-display/last-ima
   providers: [
     { provide: GALLERY_CONFIG, useValue: { dots: true, imageSize: 'cover' } },
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
+    KeyboardComponent,
   ]
 
 })

@@ -1,0 +1,6 @@
+<ng-content></ng-content>
+<div class="m22-resizable-handle" cdkDrag 
+  (cdkDragStarted)="dragStarted()" 
+  (cdkDragEnded)="dragEnded($event)" 
+  (cdkDragMoved)="dragMoved($event)"></div>
+<div class="m22-resizable-triangle" *ngIf="sub$ | async"></div>

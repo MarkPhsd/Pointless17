@@ -1,12 +1,30 @@
-.buttons {
-  display: flex;
-  flex-direction: row;
-  row-gap: 10px;
-  margin-top: 10px;
-  margin-bottom: 5px;
+
+
+.light-theme-green {
+  background-color: lightgreen;
+  color: black;
+}
+
+.light-theme-blue {
+  background-color: lightblue;
+  color: black;
+}
+
+.dark-theme-green {
+  background-color: #498049;
+  color: white;
+}
+
+.dark-theme-blue {
+  background-color: darkblue;
+  color: white;
 }
 
 
+.buttons {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
 .item-container {
   margin-top: 10px;
   margin-left: 10px;
@@ -19,3 +37,5 @@
   justify-content:flex-start;
   width: 100%;
 }
+
+

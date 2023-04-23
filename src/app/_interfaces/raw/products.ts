@@ -205,5 +205,6 @@ export interface IProduct {
   typeName: string;
   brandName: string;
   departmentName: string;
+  errorMessage: string;
 }
 

@@ -583,8 +583,10 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   validateItem(item, barcode) {
+
+    if (!barcode) { return false}
     if (!item && !barcode) {
-      this.notifyEvent(`Item not found`, 'Alert');
+      this.notifyEvent(`Item not found 1`, 'Alert');
       return false;
     }
 
@@ -774,7 +776,8 @@ export class OrderMethodsService implements OnDestroy {
       }
       if (data?.message) {  this.notifyEvent(`Process Result: ${data?.message}`, 'Alert ')};
 
-      if (data && data.resultErrorDescription) {
+      if (data && data.resultErrorDescription && data.resultErrorDescription != null) {
+        console.log('data.Error', data.resultErrorDescription)
         // this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert');
         this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red');
         return;
@@ -796,12 +799,13 @@ export class OrderMethodsService implements OnDestroy {
           }
 
           if (order && order.posOrderItems.length == 1 ) {
-            console.log('this toggle service ui ')
+            // console.log('this toggle service ui ')
             this.toolbarServiceUI.updateOrderBar(true)
           }
         }
 
       } else {
+        console.log('data.Error 2 ', data)
         this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red');
         return;
       }

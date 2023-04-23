@@ -165,8 +165,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   get wicEBTButtonView() {
-    if ( (!this.paymentsEqualTotal && !this.order.completionDate && this.order?.balanceRemaining != 0)) {
-      return this.wicEBTButton
+    if ( (!this.paymentsEqualTotal && 
+          !this.order.completionDate && 
+          this.order?.balanceRemaining != 0)) {
+        if (this.order.wicTotal>0 || this.order.ebtTotal>0){ 
+          return this.wicEBTButton
+        }
     }
     return null;
   }
@@ -259,7 +263,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   gettransactionUISettingsSubscriber() {
     this.uiTransactionSetting$ = this.settingService.getUITransactionSetting().pipe(
       switchMap( data => {
-        this.uiSettingsService.updateUITransactionSubscription(data);
+        this.uiSettingsService.updateUISubscription(data);
         this.prepOrderOnClose = data?.prepOrderOnClose;
         return of(data)
       })
