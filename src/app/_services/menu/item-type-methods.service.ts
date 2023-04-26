@@ -25,7 +25,7 @@ export class ItemTypeMethodsService {
     return  this.useGroupsService.initGroups(site).pipe(
       switchMap( data => {
         const itemTypes = this.itemTypeService.getDefaultItemTypes();
-        return this.itemTypeService.initItemTypes(site, itemTypes);
+        return this.itemTypeService.initItemTypes(site, itemTypes)
       })
     )
   }

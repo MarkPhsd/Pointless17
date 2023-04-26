@@ -74,9 +74,6 @@ postMenusList(site: ISite, list: IDisplayMenu[]): Observable<IDisplayMenu[]> {
 
 }
 
-// /PostMenusList
-
-
 save(site: ISite,  price: IDisplayMenu): Observable<IDisplayMenu> {
   if (price.id) {
     return  this.put(site, price.id, price);

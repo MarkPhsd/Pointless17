@@ -22,7 +22,8 @@ export class EditSelectedItemsComponent implements OnInit {
   get species()       { return this.inputForm.get("species") as FormControl;}
   get brandID()       { return this.inputForm.get("brandID") as FormControl;}
   get active()        { return this.inputForm.get("active") as FormControl;}
-  get webProduct()       { return this.inputForm.get("webProduct") as FormControl;}
+  get webProduct()    { return this.inputForm.get("webProduct") as FormControl;}
+  get sortOrder()     { return this.inputForm.get("sortOrder") as FormControl;}
   get webWorkRequired()       { return this.inputForm.get("webWorkRequired") as FormControl;}
 
 
@@ -58,8 +59,6 @@ export class EditSelectedItemsComponent implements OnInit {
 }
 
   ngOnInit(): void {
-    console.log('')
-
     this.inputForm = this.fb.group( {
       categoryID:       [],
       departmentID:     [],
@@ -71,6 +70,7 @@ export class EditSelectedItemsComponent implements OnInit {
       active:           [],
       webProduct:       [],
       webWorkRequired:  [],
+      sortOrder: [],
     })
 
   }
@@ -115,7 +115,9 @@ export class EditSelectedItemsComponent implements OnInit {
 
       const selected = this.selected
       const promptGroupID = this.inputForm.controls['promptGroupID'].value;
-
+      const subCategoryID = this.inputForm.controls['promptGroupID'].value;
+      let value : any;
+      
       if (promptGroupID !=0 &&  promptGroupID != undefined) {
         // this.updateCategoryID(this.categoryID.value, this.selected)
         this.updateField(promptGroupID, this.selected, 'promptGroupID');
@@ -149,29 +151,31 @@ export class EditSelectedItemsComponent implements OnInit {
         // this.updateActive(this.active.value, this.selected)
         this.updateField(this.active.value, this.selected, 'active')
       }
-      if (this.webProduct.value != '' && this.webProduct.value != undefined) {
-        // this.updateWebProduct(this.webProduct.value, this.selected)
-        this.updateField(this.webProduct.value, this.selected, 'webProduct')
+
+      if (this.sortOrder.value != '' && this.sortOrder.value != undefined) {
+        // this.updateActive(this.active.value, this.selected)
+        this.updateField(this.sortOrder.value, this.selected, 'sortOrder')
       }
-      if (this.webWorkRequired.value != '' && this.webWorkRequired.value != undefined) {
-        this.updateField(this.webWorkRequired.value, this.selected, 'webWorkRequired')
-      }
-    }
+
+  }}
+
+  sortCategoriesSubCategoriesFirst() { 
+    const site   =  this.siteService.getAssignedSite();
+    const items$ =  this.menuService.sortCategoriesSubCategoriesFirst(site)
+    this.updates(items$)
   }
 
   updateField(id: number, listOfItems: any, name: string) {
     const site   =  this.siteService.getAssignedSite();
-    console.log(name, id, listOfItems);
     const items$ =  this.menuService.updateField(site, name, id, listOfItems)
     this.updates(items$)
   }
 
-  updates(item: any) {
-    item.subscribe( data => {
-      this.snack.open('items Updated', 'success')
-    }, err => {
-      this.snack.open(err, 'Failure')
-    })
+  updates(items$: any) {
+    this.action$ = items$.pipe(switchMap(data => {
+      this.siteService.notify('Items Updated', 'close', 3000, 'green')
+      return of(data)
+    }))
   }
 
 }

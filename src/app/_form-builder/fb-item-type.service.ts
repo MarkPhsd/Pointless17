@@ -44,6 +44,8 @@ export class FbItemTypeService {
       wicebt              : [''],
       requireWholeNumber  : [''],
       pricePrompt:          [''],
+      disablePriceCategory: [''],
+      disableSimplePrice: [''],
     })
     return inputForm
   }

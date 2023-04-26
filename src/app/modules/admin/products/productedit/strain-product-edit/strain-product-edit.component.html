@@ -120,14 +120,14 @@
                 Alt Language
               </app-value-fields>
           </div>
-
+      
           <div class="grid-item" >
             <div *ngIf="itemType &&  (itemType.useType && itemType.useType?.toLowerCase() === 'product')">
                 <div class="header">
                   <h4><mat-icon>price_change</mat-icon>Prices</h4>
                 </div>
-                <div *ngIf="itemType" class="grid-container-small">
-                  <div>
+                <div  class="grid-container-small">
+                  <div >
                     <ng-container [ngTemplateOutlet]="priceCategorySelector"></ng-container>
                   </div>
                </div>

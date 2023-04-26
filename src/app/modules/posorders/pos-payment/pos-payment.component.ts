@@ -237,6 +237,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         this.uiTransactions = data
       }
     )
+    
   }
 
   ngOnDestroy(): void {

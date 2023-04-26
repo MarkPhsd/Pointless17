@@ -1,5 +1,6 @@
 <div *ngIf="(action$ | async) as items"></div>
 <div *ngIf="serviceType && inputForm">
+  <!-- {{serviceType | json}} -->
 
   <mat-card class="mat-card">
     <mat-card-title>
@@ -59,6 +60,19 @@
           </div>
 
           <div>
+            <mat-label >Filter Type</mat-label>
+          </div>
+          <div>
+            <mat-form-field
+                appearance="outline">
+              <mat-select       formControlName ="filterType">
+                <mat-option [value]="0">Sales</mat-option>
+                <mat-option [value]="1">Purchase Orders Invoices</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
             <mat-label >Show Order Type</mat-label>
           </div>
           <div>
@@ -66,7 +80,8 @@
                   type             ="text"
                   formControlName  ="showOrderType"
                   class="form-control" >
-              <mat-hint> Not all transactions should be shown on the POS. Enabling shows on the POS.</mat-hint>
+              <mat-hint> Not all transactions should be shown on the POS. 
+                        Enabling shows on the POS.</mat-hint>
             </mat-checkbox>
           </div>
 
@@ -178,7 +193,7 @@
             </mat-form-field>
           </div>
 
-          <div>
+          <!-- <div>
             <mat-form-field appearance="outline">
               <mat-label >Filter Type </mat-label>
               <input matInput
@@ -187,7 +202,7 @@
                     class="form-control" >
               <mat-hint>Set zero for sales, 1 for Purchase Orders</mat-hint>
             </mat-form-field>
-          </div>
+          </div> -->
 
         </div>
 

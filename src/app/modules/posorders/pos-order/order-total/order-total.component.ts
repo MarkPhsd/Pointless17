@@ -18,7 +18,7 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
   @Input() mainPanel = false;
   @Input() disableActions: boolean;
   @Input() refreshTime = 1;
-
+  
   _uiSettings : Subscription;
   uiSettings  : UIHomePageSettings;
   transactionDataClass ="transaction-data"
@@ -27,6 +27,7 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
   @Input()  purchaseOrderEnabled: boolean;
 
   homePageSubscriber(){
+    
     try {
       this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
         this.uiSettings = data;

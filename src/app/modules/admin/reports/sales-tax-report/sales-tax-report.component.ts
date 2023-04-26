@@ -27,6 +27,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   sales: ITaxReport;
   sales$ : Observable<ITaxReport>;
   constructor(private reportingItemsSalesService: ReportingItemsSalesService) { }
+  processing: boolean;
 
   ngOnInit(): void {
     // this.refreshSales()
@@ -40,6 +41,8 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
 
   refreshSales() {
 
+    this.processing = true;
+
     let item = {startDate: null, endDate: null, zrunID: this.zrunID, 
                 pendingTransactions: this.pendingTransactions, 
                 scheduleDateEnd: this.scheduleDateEnd, 
@@ -50,6 +53,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
       this.reportingItemsSalesService.putSalesTaxReport
         (this.site, item ).pipe(switchMap(data => {
           this.sales = data;
+          this.processing = false;
           return of(data)
         }))
       return
@@ -60,6 +64,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
       this.reportingItemsSalesService.putSalesTaxReport
         (this.site, item ).pipe(switchMap(data => {
           this.sales = data;
+          this.processing = false;
           return of(data)
         }))
       return
@@ -69,6 +74,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
       this.reportingItemsSalesService.putSalesTaxReport
         (this.site, item).pipe(switchMap(data => {
           this.sales = data;
+          this.processing = false;
           return of(data)
       }))
   }

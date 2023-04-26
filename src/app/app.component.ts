@@ -16,6 +16,7 @@ import { Capacitor } from '@capacitor/core';
 import { UISettingsService } from './_services/system/settings/uisettings.service';
 import { InputTrackerService } from './_services/system/input-tracker.service';
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
+import { BalanceSheetMethodsService } from './_services/transactions/balance-sheet-methods.service';
 // import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 
 LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
@@ -78,6 +79,7 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
       private electronService      :  ElectronService,
       private appInitService       : AppInitService,
       private inputTrackerService: InputTrackerService,
+      private balanceSheetMethodsService: BalanceSheetMethodsService,
       private viewContainerRef: ViewContainerRef
       // private ipcService          :  IPCService,
   ) {
@@ -92,6 +94,7 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
       // this.uiSettingsService.updateToggleKeyboard()
       if (this.electronService.isElectronApp && !this.devMode) {
         // this.AuthService.logout();
+        this.balanceSheetMethodsService.startScaleService()
       }
       this.container = 'container-app'
       if (this.capPlatForm === 'web') { 
@@ -119,12 +122,6 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
       if (data) {
         const keyboardDimensions = localStorage.getItem('keyboardDimensions')
         this.keyboardDimensions = 'height:500px;width:900px';
-        // if (keyboardDimensions) { 
-        //   const dimensions = JSON.parse(keyboardDimensions)
-        //   const height = dimensions?.height;
-        //   const width = dimensions?.width;
-        //   this.keyboardDimensions = `height:${height}px;width:${width}px;`
-        // }
         this.initSavedKeyboardLocation()
       }
     })
@@ -135,7 +132,7 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
     const savedPosition = localStorage.getItem('keyboardPosition');
     const position = JSON.parse(savedPosition)
     this.keyboardPosition = position 
-    console.log('restored', position)
+    // console.log('restored', position)
   }
 
   onResizeKeyboard(event) { 
@@ -147,7 +144,7 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
     // save the end position
     const position = event.source.getFreeDragPosition();
     localStorage.setItem('keyboardPosition', JSON.stringify(position));
-    console.log('position', position)
+    // console.log('position', position)
   }
 
   get isKeyBoardVisible() { 
@@ -181,38 +178,6 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
 
     }
   }
-
-
-  // initIdleTracking() {
-  //   this.idle.setIdle(5); // how long can they be inactive before considered idle, in seconds
-  //   this.idle.setTimeout(5); // how long can they be idle before considered timed out, in seconds
-  //   this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES); // provide sources that will "interrupt" aka provide events indicating the user is active
-
-  //   // do something when the user becomes idle
-  //   this.idle.onIdleStart.subscribe(() => {
-  //     this.idleState = "IDLE";
-  //   });
-  //   // do something when the user is no longer idle
-  //   this.idle.onIdleEnd.subscribe(() => {
-  //     this.idleState = "NOT_IDLE";
-  //     console.log(`${this.idleState} ${new Date()}`)
-  //     this.countdown = null;
-  //     this.cd.detectChanges(); // how do i avoid this kludge?
-  //   });
-  //   // do something when the user has timed out
-  //   this.idle.onTimeout.subscribe(() => {
-  //     // this.logOut();
-  //   } );
-  //   // do something as the timeout countdown does its thing
-  //   this.idle.onTimeoutWarning.subscribe(seconds => {
-  //     this.countdown = seconds
-  //   });
-
-  //   // set keepalive parameters, omit if not using keepalive
-  //   // keepalive.interval(15); // will ping at this interval while not idle, in seconds
-  //   // keepalive.onPing.subscribe(() => this.lastPing = new Date()); // do something when it pings
-  // }
-
 
   setTitle() {
     const appTitle = this.titleService.getTitle();

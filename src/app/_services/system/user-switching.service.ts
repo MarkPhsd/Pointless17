@@ -149,10 +149,8 @@ export class UserSwitchingService implements  OnDestroy {
 
   pinEntryResults(pin: any) {
     //find employee
-
     const token =  localStorage.getItem('posToken')
     const site = this.siteService.getAssignedSite()
-
     return this.login(token, pin)
     //secret user
     // if (!this.user && !this.platformService.webMode) {
@@ -233,21 +231,26 @@ export class UserSwitchingService implements  OnDestroy {
         return this.contactsService.getContact(site, data?.id)
 
       })).pipe(switchMap(data => {
-            if ( !data ) {
+          if ( !data ) {
               const user = {} as IUser
               user.message = 'failed';
               return of( user )
             }
+
             const item = localStorage.getItem('user')
             const user = JSON.parse(item) as IUser;
 
+            // console.log('Sending user getting contact - getting auths', user)
             if (data.clientType && data.clientType.jsonObject) {
-
-              // console.log('Sending user getting contact - getting auths')
-            this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
+              this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
+            } else
+            { 
+              this.authenticationService.updateUserAuths(null)
+            }
+              
             return of(user)
           }
-        }
+
       )).pipe(switchMap(user =>
          {
             if (user) {

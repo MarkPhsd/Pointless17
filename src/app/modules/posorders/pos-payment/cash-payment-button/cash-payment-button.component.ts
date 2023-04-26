@@ -52,6 +52,11 @@ export class CashPaymentButtonComponent implements OnInit {
   }
 
   applyCashPayment(amount: number) {
+
+    if (amount == 0) { 
+      this.cashPayment()
+      return;
+    }
     const site = this.sitesService.getAssignedSite()
     this.posPayment = {} as IPOSPayment;
     const order = this.order;

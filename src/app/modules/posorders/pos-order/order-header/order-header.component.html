@@ -22,8 +22,8 @@
     </div>
 
     <div>
-      <div class="button-row" *ngIf="!qrOrder && !mainPanel">
-        <div>
+      <div class="button-row" *ngIf="!qrOrder ">
+        <div *ngIf="!mainPanel">
           <button  class="button" color="primary" mat-raised-button
                   (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>
         </div>

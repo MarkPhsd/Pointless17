@@ -584,9 +584,10 @@ export class OrderMethodsService implements OnDestroy {
 
   validateItem(item, barcode) {
 
-    if (!barcode) { return false}
+    
+
     if (!item && !barcode) {
-      this.notifyEvent(`Item not found 1`, 'Alert');
+      // this.notifyEvent(`Item not found.`, 'Alert');
       return false;
     }
 
@@ -676,6 +677,7 @@ export class OrderMethodsService implements OnDestroy {
                             rewardGroupApplied: number,
                             passAlongItem: PosOrderItem) : Observable<ItemPostResults> {
 
+
     const valid = this.validateUser();
     if (!valid) {
       this.notifyEvent(`Invalid user.`, 'Alert ')
@@ -686,6 +688,7 @@ export class OrderMethodsService implements OnDestroy {
     if (quantity === 0 ) { quantity = 1 };
 
     if (!this.validateItem(item, barcode)) {
+      // console.log('invalid item validateOrder')
       return of(null)
     }
 
@@ -698,6 +701,8 @@ export class OrderMethodsService implements OnDestroy {
 
     order = this.validateOrder();
 
+    console.log('process item validateOrder')
+    
     if (order) {
       const site       = this.siteService.getAssignedSite();
       if (barcode)  {

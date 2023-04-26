@@ -163,10 +163,10 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     console.log('init search Model')
     // this.initProductSearchModel(id, typeID)
     if (this.menuItem?.itemType?.id == 4) {
-      this.router.navigate(["/menuitems-infinite/", {categoryID: id }]);
+      this.router.navigate(["/menuitems-infinite/", {categoryID: id, hideSubCategoryItems: false }]);
     }
     if (this.menuItem?.itemType?.id == 5) {
-      this.router.navigate(["/menuitems-infinite/", {subCategoryID:id}]);
+      this.router.navigate(["/menuitems-infinite/", {subCategoryID:id, hideSubCategoryItems: false}]);
     }
     if (this.menuItem?.itemType?.id == 6) {
       this.router.navigate(["/menuitems-infinite/", {departmentID:id}]);

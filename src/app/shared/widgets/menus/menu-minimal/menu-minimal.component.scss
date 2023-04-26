@@ -16,13 +16,20 @@
   width: 100%;
 }
 
-
-
 .spinner-container {
   top: 50px;
 }
 
 .accordion {
+  width: 100%;
+  // max-width: 225px;
+  margin: auto;
+  line-height: 1.6em;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.accordion-submenu {
   width: 100%;
   // max-width: 225px;
   margin: auto;

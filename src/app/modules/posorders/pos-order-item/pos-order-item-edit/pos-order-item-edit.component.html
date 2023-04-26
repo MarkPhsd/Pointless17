@@ -75,9 +75,15 @@
                 color="primary"
                 (click)="onCancel()"><mat-icon>close</mat-icon>Cancel
         </button>
+        <!-- <app-keyboard-button [smallDevice]="false" [isApp]="true" [isUserStaff]="true"></app-keyboard-button> -->
       </div>
+
     </mat-card-actions>
   </mat-card>
+</div>
+
+<div *ngIf="editField == 'modifierNote'">
+  <app-keyboard [disableClose]= "true"> </app-keyboard>
 </div>
 
 <ng-template #fillValueView let-param>
@@ -87,6 +93,7 @@
               [decimals]            =  decimals
               [showInput]           = "true"
               [requireWholeNumber]  = "false"
+          
               (outPutReturnEnter)   = "savePriceChange($event)"
               (closeOnEnterPress)   = "onClose($event)">
        <ng-content select="name"></ng-content>

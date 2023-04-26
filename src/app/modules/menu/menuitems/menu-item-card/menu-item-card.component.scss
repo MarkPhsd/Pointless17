@@ -16,11 +16,21 @@ mat-card:active {
   transform: scale(1.03);
 }
 
+.category-open {
+  display: flex;
+  justify-content: center;
+  top: -15px;
+  padding: 0;
+  margin-top: -15px;
+  overflow: hidden;
+}
+
 .container {
   position: relative;
   height: 100%;
   min-height: 125px;
   max-height: 125px;
+  overflow: hidden;
 }
 
 .footer {
@@ -48,6 +58,7 @@ mat-card:active {
   //used to maintain the hieght for buttons compared to images.
   min-height  : 100px;
   max-height  : 100px;
+  overflow: hidden;
 }
 
 #advertisement {
@@ -67,7 +78,7 @@ mat-card:active {
 
   font-weight : 475;
   font-size   : 1em;
-  text-align  : left;
+  text-align  : center;
   width       : 100%;
   white-space : normal;
   overflow    : hidden;
@@ -88,12 +99,9 @@ mat-card:active {
   max-height: 100%;
   transition: box-shadow 400ms;
   border-radius: 5px;
-
-
-
   font-weight : 475;
   font-size   : 1em;
-  text-align  : left;
+  text-align  : center;
   width       : 100%;
   white-space : normal;
   overflow    : hidden;
@@ -216,8 +224,8 @@ mat-card:active {
 // }
 
 .item-name-center {
-  text-align: left;
-  justify-content: left;
+  text-align: center;
+  justify-content: center;
   min-height: 2.2em;
 }
 
@@ -292,8 +300,6 @@ button  {
   // box-shadow: 1px 1px 2px rgb(158, 82, 82), 0 0 25px rgb(76, 175, 76), 0 0 5px rgb(84, 116, 90);
   transform: scale(1.07);
 }
-
-
 
 .description-text  {
   object-fit: cover;

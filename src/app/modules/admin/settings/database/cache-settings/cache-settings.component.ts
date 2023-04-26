@@ -6,6 +6,7 @@ import { FormGroup } from '@angular/forms';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
 import { SystemService } from 'src/app/_services/system/system.service';
 import { AuthenticationService } from 'src/app/_services';
+import { Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-cache-settings',
@@ -20,7 +21,7 @@ export class CacheSettingsComponent implements OnInit {
   cacheForm         : FormGroup;
   currentCache      : ISetting;
   cacheSizeCurrent  : string;
-
+  cacheTimeSetting$ : Observable<ISetting>;
   cacheSize : number;
 
   constructor(
@@ -32,21 +33,23 @@ export class CacheSettingsComponent implements OnInit {
               )
     { }
 
-  async ngOnInit() {
-    this.currentCache = await this.settingsService.initAppCache();
-    await this.initCacheTime();
+  ngOnInit() {
+    this.initCacheTime();
     this.cacheSizeCurrent = this.systemService.getUsedLocalStorageSpace()
     const item = this.cacheSizeCurrent.replace('KB', '');
     this.cacheSize        = +item
   }
 
-  async initCacheTime(){
+  initCacheTime(){
     const site        = this.sitesService.getAssignedSite();
-    this.cacheTimeSetting = await this.settingsService.initCacheTime(site)
-    if (this.cacheTimeSetting) {
-      this.cacheForm  = this.fbSettingsService.initForm(this.cacheForm)
-      this.cacheForm  = this.fbSettingsService.intitFormData(this.cacheForm, this.cacheTimeSetting)
-    }
+    this.cacheTimeSetting$ =  this.settingsService.initCacheTimeObs(site).pipe(switchMap(data => { 
+      this.cacheTimeSetting = data;
+      if (this.cacheTimeSetting ) {
+        this.cacheForm  = this.fbSettingsService.initForm(this.cacheForm)
+        this.cacheForm  = this.fbSettingsService.intitFormData(this.cacheForm, data)
+      }
+      return of(data)
+    }))
   }
 
   deleteLocalStorage() {
@@ -58,6 +61,12 @@ export class CacheSettingsComponent implements OnInit {
     if (this.cacheTimeSetting && this.cacheForm) {
       const site = this.sitesService.getAssignedSite();
       this.cacheTimeSetting = this.cacheForm.value;
+      if (this.cacheTimeSetting.webEnabled) { 
+        this.cacheTimeSetting.webEnabled = 1
+      } else { 
+        this.cacheTimeSetting.webEnabled = 0
+      }
+      console.log(this.cacheTimeSetting)
       this.settingsService.putSetting(site, this.cacheTimeSetting.id, this.cacheTimeSetting ).subscribe( data => {
         this.cacheTimeSetting = data
         localStorage.setItem('appCache', JSON.stringify(data));

@@ -1,66 +1,79 @@
 <span *ngIf="inputForm" [formGroup]="inputForm">
+    <div>
+      <mat-slide-toggle name="enabled"
+                        formControlName="enabled">
+        <mat-label>Enabled</mat-label>
+      </mat-slide-toggle>
+    </div>
 
-                <div>
-                  <mat-slide-toggle name="enabled"
-                                    formControlName="enabled">
-                    <mat-label>Enabled</mat-label>
-                  </mat-slide-toggle>
-                </div>
+    <div>
+      <mat-slide-toggle
+                        name= "labelRequired"
+                        formControlName="labelRequired">
+        <mat-label>Requires Labels Print</mat-label>
+      </mat-slide-toggle>
+    </div>
 
-                <div>
-                  <mat-slide-toggle
-                                    name= "labelRequired"
-                                    formControlName="labelRequired">
-                    <mat-label>Requires Labels Print</mat-label>
-                  </mat-slide-toggle>
-                </div>
+    <div>
+      <mat-slide-toggle
+                        name= "requiresSerial"
+                        formControlName="requiresSerial">
+        <mat-label>Requires Serial</mat-label>
+      </mat-slide-toggle>
+    </div>
+    <div>
+      <mat-slide-toggle name= "weightedItem"
+                        formControlName="weightedItem">
+        <mat-label>Scale Weighted Item</mat-label>
+      </mat-slide-toggle>
+    </div>
 
-                <div>
-                  <mat-slide-toggle
-                                    name= "requiresSerial"
-                                    formControlName="requiresSerial">
-                    <mat-label>Requires Serial</mat-label>
-                  </mat-slide-toggle>
-                </div>
-                <div>
-                  <mat-slide-toggle name= "weightedItem"
-                                    formControlName="weightedItem">
-                    <mat-label>Scale Weighted Item</mat-label>
-                  </mat-slide-toggle>
-                </div>
+    <div class="toggle-footer">
+      <mat-slide-toggle name           = "expirationRequired"
+                        formControlName="expirationRequired">
+        <mat-label>Expiration Date Required</mat-label>
+      </mat-slide-toggle>
+    </div>
 
-                <div class="toggle-footer">
-                  <mat-slide-toggle name           = "expirationRequired"
-                                    formControlName="expirationRequired">
-                    <mat-label>Expiration Date Required</mat-label>
-                  </mat-slide-toggle>
-                </div>
+    <div class="toggle-footer">
+      <mat-slide-toggle name= "requireInStock"
+                        formControlName="requireInStock">
+        <mat-label>Requires Inventory for Sale</mat-label>
+      </mat-slide-toggle>
+    </div>
 
-                <div class="toggle-footer">
-                  <mat-slide-toggle name= "requireInStock"
-                                    formControlName="requireInStock">
-                    <mat-label>Requires Inventory for Sale</mat-label>
-                  </mat-slide-toggle>
-                </div>
+    <div class="toggle-footer">
+      <mat-slide-toggle name= "enableCustomNote"
+                        formControlName="enableCustomNote">
+        <mat-label>Display note field on product screen</mat-label>
+      </mat-slide-toggle>
+    </div>
 
-                <div class="toggle-footer">
-                  <mat-slide-toggle name= "enableCustomNote"
-                                    formControlName="enableCustomNote">
-                    <mat-label>Display note field on product screen</mat-label>
-                  </mat-slide-toggle>
-                </div>
+    <div class="toggle-footer">
+      <mat-slide-toggle name= "enableCustomNote"
+                        formControlName="requireWholeNumber">
+        <mat-label>Quantity Requires Whole Number</mat-label>
+      </mat-slide-toggle>
+    </div>
 
-                <div class="toggle-footer">
-                  <mat-slide-toggle name= "enableCustomNote"
-                                    formControlName="requireWholeNumber">
-                    <mat-label>Quantity Requires Whole Number</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-footer">
-                  <mat-slide-toggle name= "pricePrompt"
-                                    formControlName="pricePrompt">
-                    <mat-label>Prompt Price</mat-label>
-                  </mat-slide-toggle>
-                </div>
+    <div class="toggle-footer">
+      <mat-slide-toggle name= "pricePrompt"
+                        formControlName="pricePrompt">
+        <mat-label>Prompt Price</mat-label>
+      </mat-slide-toggle>
+    </div>
+    
+    <div class="toggle-footer">
+      <mat-slide-toggle name= "disablePriceCategory"
+                        formControlName="disablePriceCategory">
+        <mat-label>Disable Price Category</mat-label>
+      </mat-slide-toggle>
+    </div>  
+              
+    <div class="toggle-footer">
+      <mat-slide-toggle name= "disablePriceCategory"
+                        formControlName="disableSimplePrice">
+        <mat-label>Disable Simple Price</mat-label>
+      </mat-slide-toggle>
+    </div>  
   </span>

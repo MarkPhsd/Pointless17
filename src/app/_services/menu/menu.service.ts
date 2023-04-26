@@ -1,6 +1,6 @@
 import { Injectable, Input } from '@angular/core';
 import { AuthenticationService } from '../system/authentication.service';
-import { BehaviorSubject, EMPTY, Observable, Subject, throwError  } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, Subject, of, throwError  } from 'rxjs';
 import { IProduct, IProductCategory, ISite }  from 'src/app/_interfaces';
 import { IMenuItem } from '../../_interfaces/menu/menu-products';
 import { ProductSearchModel } from '../../_interfaces/search-models/product-search';
@@ -96,6 +96,7 @@ export interface IItemBasicB{
   providedIn: 'root'
 })
 export class MenuService {
+ 
 
   private _menuItemsData       = new BehaviorSubject<ProductSearchModel>(null);
   public  menuItemsData$       = this._menuItemsData.asObservable();
@@ -178,7 +179,6 @@ export class MenuService {
 
   // this.menuService.updateField('DepartmentID', id, listOfItems)
   updateField(site: ISite, fieldName: string,value: any, listofItems: any[] ) {
-
     const controller =  "/Products/"
     const endPoint = "UpdateFieldValue"
     const parameters = `?fieldName=${fieldName}&value=${value}`
@@ -187,6 +187,20 @@ export class MenuService {
     return  this.httpClient.put<any[]>(url, listofItems)
 
   }
+
+  sortCategoriesSubCategoriesFirst(site: ISite): Observable<any> {
+    const controller ="/products/"
+
+    const endPoint = `sortCategoriesSubCategoriesFirst`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.get<any>(url)
+
+  }
+
   // this.menuService.updateField('DepartmentID', id, listOfItems)
   deleteProducts(site: ISite,  listofItems: any[] ) {
 
@@ -440,16 +454,17 @@ export class MenuService {
 
 
   getGetCategoriesListActive(site: ISite, type: string, option: number):  Observable<IMenuItem[]>  {
-
     const controller =  '/MenuItems/'
 
-    const endPoint = 'GetGetCategoriesList'
+    const endPoint = 'getGetCategoriesListActive'
 
     const parameters = `?TypeofCategoryasName=${type}&activeOption=${option}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     const uri =  this.sitesService.getCacheURI(url)
+
+    console.log('getGetCategoriesListActive', uri)
 
     return  this.httpCache.get<any[]>(uri)
 
@@ -609,12 +624,8 @@ export class MenuService {
       }
     }
 
+    // console.log(url, productSearchModel)
     return  this.httpClient.post<any>(url, productSearchModel )
-    // if ( cacheTime  == 0 ) {
-
-    // }
-
-    // return this.httpCache.post<any>(uri, productSearchModel)
 
   }
 
@@ -794,7 +805,8 @@ export class MenuService {
 
   getMenuItemByIDLinked(site: ISite, id: any, priceLink : number): Observable<IMenuItem> {
 
-    if (!id)  { return EMPTY };
+    if (!priceLink || priceLink == null) { priceLink = 0}
+    if (!id)  { return of(null) };
 
     const controller =  '/MenuItems/'
 

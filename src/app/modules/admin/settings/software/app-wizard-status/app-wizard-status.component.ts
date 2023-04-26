@@ -2,8 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, of, switchMap } from 'rxjs';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { MenusService } from 'src/app/_services/system/menus.service';
 import { AppStatus, IAppWizardStatus, SystemInitializationService } from 'src/app/_services/system/settings/app-wizard.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-app-wizard-status',
@@ -15,9 +18,13 @@ export class AppWizardStatusComponent implements OnInit, OnDestroy {
   status: AppStatus;
   _appWizard: Subscription;
   inputForm: FormGroup;
-
+  action$: Observable<any>;
+  
   constructor(private fb: FormBuilder,
               private router: Router,
+              private userAuth: UserAuthorizationService,
+              private menuService: MenusService,
+              private siteService: SitesService,
               private dialogRef: MatDialogRef<AppWizardStatusComponent>,
               public appWizardService: SystemInitializationService) { }
 
@@ -41,20 +48,26 @@ export class AppWizardStatusComponent implements OnInit, OnDestroy {
     })
   }
 
+  initializeSideMenu() { 
+    const user = this.userAuth.user;
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.menuService.createMainMenu(user, site).pipe(switchMap(data => { 
+      this.siteService.notify('Menu Updated - you may need to restart the app to see the side menu.' , 'Close', 3000, 'green')
+      return of(data)
+    }))
+  }
   initForm() {
     return this.fb.group( {
       disableAppWizard: [],
       setupCompany: [],
-
+      initializeSideMenu: [],
       setupItemsTypes: [],
       configureGenericItemType: [],
       importProducts		: [],
-
       //requires 1st two
       addedTax			: [],
       associateItemTaxes	: [],
       setupItemTaxes		: [],
-
       setupPaymentTypes	: [],
       setupTransactionTypes: [],
       setupFirstItem		: [],

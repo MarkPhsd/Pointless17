@@ -2,7 +2,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription, switchMap,of } from 'rxjs';
 import { IPaymentSearchModel, IPOSPaymentsOptimzed } from 'src/app/_interfaces';
+import { AuthenticationService } from 'src/app/_services';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { UserTypeAuthService } from 'src/app/_services/system/user-type-auth.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { BalanceSheetService, CashDrop, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
@@ -21,8 +25,9 @@ export class BalanceSheetViewComponent implements OnInit {
   cashDrop: CashDrop;
   sheetType = 'other';
   balance   : any;
-
-  list$: Observable<IPOSPaymentsOptimzed>;
+  auths$ : Observable<IUserAuth_Properties>;
+  
+  list$  : Observable<IPOSPaymentsOptimzed>;
 
   initSubscriptions() {
     this._sheet      = this.sheetMethodsService.balanceSheet$.subscribe( data => {
@@ -51,7 +56,7 @@ export class BalanceSheetViewComponent implements OnInit {
     })
   }
 
-  constructor(
+  constructor(  private userAuth: AuthenticationService,
                 private sheetService  : BalanceSheetService,
                 private paymentService: POSPaymentService,
                 private siteService   : SitesService,
@@ -59,9 +64,13 @@ export class BalanceSheetViewComponent implements OnInit {
               )
   {   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.initSubscriptions()
     this.cashDrop = this.sheetMethodsService.cashDrop;
+    this.auths$ =  this.userAuth.userAuths$.pipe(switchMap(data => { 
+      // data.blindBalanceSheet
+      return of(data)
+    }))
   }
 
 

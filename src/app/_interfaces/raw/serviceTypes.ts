@@ -31,7 +31,7 @@ export interface IServiceType {
   requireNumOfGuests  : number;
   promptForOrderName  : number;
   filterType          : number;
-
+  // serviceFilterType   : number;
   assignOrderToCloser : boolean;
   assignCloserToOrder : boolean;
 

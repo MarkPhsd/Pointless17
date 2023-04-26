@@ -256,7 +256,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
             this.voidPayment = this.resultAction.payment;
 
             if (this.settings.dsiEMVNeteEpayEnabled) {
-              if (this.isDSIEmvPayment && this.voidPayment) {
+              if (this.settings.dsiEMVNeteEpayEnabled && this.voidPayment) {
                 this.voidDSIEmvPayment();
                 return ;
               }

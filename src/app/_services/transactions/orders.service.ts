@@ -178,28 +178,31 @@ export class OrdersService {
   updateOrderSubscriptionLoginAction(order: IPOSOrder) {
     this.storeCreditMethodService.updateSearchModel(null)
     this.getCost(order)
-
-    this._currentOrder.next(order);
     this.currentOrder = order;
+    this._currentOrder.next(order);
     if (order == null) {
       order = this.getStateOrder();
-      order = this.getCost(order)
+      order = this.getCost(order);
       if (order) {
         return;
       }
     }
+
   }
 
   getCost(order: IPOSOrder) {
-    if (order && order.cost) {
+    if (order ) {
       order.cost = 0
       if (order.posOrderItems && order.posOrderItems.length>0) {
         order.posOrderItems.forEach(data => {
-          const itemCost =  (+data.quantity * +data.wholeSale)
-          order.cost = itemCost + order.cost
+          if (data.wholeSaleCost) { 
+            order.cost = data.wholeSaleCost + order.cost
+          }
         })
       }
+      console.log('order cost', order?.cost)
     }
+
     return order
   }
 
@@ -428,7 +431,17 @@ export class OrdersService {
     return this.http.get<IPOSOrder[]>(url);
   }
 
+  forceCompleteOrder(site: ISite , id: number): Observable<IPOSOrder> {
+    const controller = "/POSOrders/"
 
+    const endPoint  = "forceCompleteOrder"
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder>(url);
+  }
   completeOrder(site: ISite , id: number): Observable<IPOSOrder> {
     const controller = "/POSOrders/"
 

@@ -26,6 +26,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   selectedIndex: number;
 
   get halfDollarEnd()     { return this.inputForm.get('halfDollarEnd') as FormControl; }
+  get dollarEnd()     { return this.inputForm.get('dollarEnd') as FormControl; }
   get quarterEnd()        { return this.inputForm.get('quarterEnd') as FormControl; }
   get dimeEnd()           { return this.inputForm.get('dimeEnd') as FormControl; }
   get nickelEnd()         { return this.inputForm.get('nickelEnd') as FormControl; }
@@ -47,10 +48,10 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   get twentiesStart()     { return this.inputForm.get('twentiesStart') as FormControl; }
   get tensStart()         { return this.inputForm.get('tensStart') as FormControl; }
   get dollarsStart()      { return this.inputForm.get('dollarsStart') as FormControl; }
+  get dollarStart()      { return this.inputForm.get('dollarStart') as FormControl; }
   get fivesStart()        { return this.inputForm.get('fivesStart') as FormControl; }
 
   get platForm()          { return Capacitor.getPlatform(); }
-
 
   balanceSheet$:   Observable<any>;
   searchForm      : FormGroup;
@@ -98,6 +99,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   initSubscriptions() {
     this.loading = true
     this._sheet = this.sheetMethodsService.balanceSheet$.subscribe( data => {
+      console.log('updating sheet data', data)
       this.sheet = data;
       if (data) {
         this.getSheetType(data)
@@ -141,6 +143,9 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
       this.selectedIndex = 1;
     }
     this.inputForm       = this.sheetMethodsService.initForm(this.inputForm);
+
+    let sheet = {} as IBalanceSheet
+    
   }
 
   ngOnInit() {
@@ -179,17 +184,29 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   newBalanceSheet() {
     //we have to initialize the balance sheet.
     //we should just be sending maybe the device, and the user.
+    console.log('new balance Sheet')
     this.balanceSheet$ = this.sheetMethodsService.getCurrentBalanceSheet().pipe(
       switchMap(data => {
-        this.sheet = data;
+        // this.sheet = data;
+        // console.log(data)
         this.getSheetType(data)
         return of(data)
     }))
   }
 
   getSheet(id: string) {
+    console.log('getSheet')
     this.balanceSheet$ = this.sheetMethodsService.getSheetObservable(id).pipe(switchMap(data => {
       this.getSheetType(data);
+      console.log(data)
+      this.sheet = data;
+      return of(data)
+    }))
+  }
+
+    _updateItem() {
+    return this.sheetMethodsService.updateSheet(this.inputForm, this.startShiftInt).pipe(switchMap(data => {
+      console.log('updating sheet data', data)
       this.sheet = data;
       return of(data)
     }))
@@ -272,7 +289,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     }))
   }
 
-  
   updateItemExit(event){
     this.balanceSheet$ = this._updateItem().pipe(switchMap(data => {
       this.router.navigate(['app-main-menu'])
@@ -280,12 +296,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     }))
   }
 
-  _updateItem() {
-    return this.sheetMethodsService.updateSheet(this.inputForm, this.startShiftInt).pipe(switchMap(data => {
-      this.sheet = data;
-      return of(data)
-    }))
-  }
+
 
   startShift() {
     this.startShiftInt = 1;
@@ -345,6 +356,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.tensEnd.enable()
     this.fivesEnd.enable()
     this.onesEnd.enable()
+    this.dollarEnd.enable()
   }
 
   setStartEnabled() {
@@ -358,6 +370,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.twentiesStart.enable()
     this.tensStart.enable()
     this.dollarsStart.enable()
+    this.dollarStart.enable()
     this.fivesStart.enable()
   }
 
@@ -372,6 +385,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.twentiesEnd.disable()
     this.tensEnd.disable()
     this.fivesEnd.disable()
+    this.dollarEnd.disable()
     this.onesEnd.disable()
   }
 
@@ -386,6 +400,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.twentiesStart.disable()
     this.tensStart.disable()
     this.dollarsStart.disable()
+    this.dollarStart.disable()
     this.fivesStart.disable()
   }
 
@@ -497,7 +512,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   getCurrentBalance() {
     const cashEnd    = this.getSummaryOfCashEnd();
     const cashStart  = this.getSummaryOfCashStart();
-    // console.log('cash start', cashEnd,cashStart)
     if (this.sheet) {
       const balance =  cashEnd + this.sheet.cashDropTotal  - cashStart - this.sheet.cashIn
       this.balance  = balance

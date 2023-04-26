@@ -433,6 +433,7 @@ constructor(
       this.currentPage         = 1
       const site               = this.siteService.getAssignedSite()
       const searchModel        = this.initProductSearchModel();
+      searchModel.hideSubCategoryItems = true
       this.startRow            = 1;
       this.endRow              = this.pageSize;
       this.listItems(searchModel)

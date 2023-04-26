@@ -1,11 +1,12 @@
 // input-tracker.service.ts
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { AbstractControl, FormControl } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InputTrackerService {
+
   private renderer: Renderer2;
   public _lastSelectedInput: FormControl | null = null;
   private inputControlsMap: Map<string, FormControl> = new Map();
@@ -23,6 +24,10 @@ export class InputTrackerService {
     this._lastSelectedInput = input;
   }
 
+  // setField(control: FormControl) {
+  //   this.inputControlsMap.set(id, control);
+  // }
+
   clearInput() { 
     if (this.lastSelectedInput) { 
       let input = this.lastSelectedInput
@@ -38,13 +43,34 @@ export class InputTrackerService {
   private listenForFocusEvents(): void {
     this.renderer.listen('document', 'focusin', (event: FocusEvent) => {
       const target = event.target as HTMLElement;
-      if (target.tagName === 'INPUT' && target.hasAttribute('data-ng-control-id')) {
+      const tagName = target.tagName;
+  
+      if (
+        (tagName === 'INPUT' || tagName === 'TEXTAREA') &&
+        target.hasAttribute('data-ng-control-id')
+      ) {
         const controlId = target.getAttribute('data-ng-control-id');
         const formControl = this.inputControlsMap.get(controlId);
+  
         if (formControl instanceof FormControl) {
           this.setLastSelectedInput(formControl);
         }
       }
     });
   }
+  
+  // private listenForFocusEvents(): void {
+  //   this.renderer.listen('document', 'focusin', (event: FocusEvent) => {
+  //     const target = event.target as HTMLElement;
+  //     if (target.tagName === 'INPUT' && target.hasAttribute('data-ng-control-id')) {
+  //       const controlId = target.getAttribute('data-ng-control-id');
+  //       const formControl = this.inputControlsMap.get(controlId);
+  //       console.log('controlID', controlId)
+  //       if (formControl instanceof FormControl) {
+  //         console.log('IS Field', controlId)
+  //         this.setLastSelectedInput(formControl);
+  //       }
+  //     }
+  //   });
+  // }
 }

@@ -9,12 +9,13 @@
       <div *ngIf="sheet.message">
         {{sheet.message }}
       </div>
-
+      
       <div class="header-grid">
         <div>
           <balance-sheet-header-view
             [sheetType]="sheetType"
             [sheet]    ="sheet">
+            sheet info
           </balance-sheet-header-view>
         </div>
 
@@ -70,7 +71,6 @@
               {{ ordersOpen }} order(s) are open. Close orders to close sheet.
             </span>
           </div>
-
 
         </div>
       </div>
@@ -206,13 +206,21 @@
                     Quarters
                 </cash-value-calc>
               </div>
-
+   
               <div>
                 <cash-value-calc
                   [formControlName]  = "'halfDollarStart'"
                     [inputForm]       = "inputForm"
                     [multiplier]      = ".50">
                     Half Dollars
+                </cash-value-calc>
+              </div>
+              <div>
+                <cash-value-calc
+                  [formControlName]  = "'dollarStart'"
+                    [inputForm]       = "inputForm"
+                    [multiplier]      = "1">
+                    Dollars Coin
                 </cash-value-calc>
               </div>
 
@@ -330,6 +338,16 @@
                     Half Dollars
                 </cash-value-calc>
               </div>
+
+              <!-- <div>
+                <cash-value-calc
+                    [formControlName] ="'dollarsEnd'"
+                    [inputForm]       = "inputForm"
+                    [multiplier]      = "1">
+                    Dollars Coin
+                </cash-value-calc>
+              </div> -->
+
 
             </div>
           </div>

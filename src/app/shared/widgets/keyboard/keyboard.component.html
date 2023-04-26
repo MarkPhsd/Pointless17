@@ -2,16 +2,12 @@
   <div *ngIf="trackerService?.lastSelectedInput" > 
   </div>
   <div *ngIf="!trackerService?.lastSelectedInput" > 
-    <mat-label>Select an input field to begin</mat-label>
+    <mat-label><ng-content></ng-content></mat-label>
   </div>
   <button class="button-margins" color="primary" mat-raised-button (click)="clearInput()" aria-label="clear">Clear Text</button>
-  <button class="button-margins" color='warn' mat-raised-button (click)="close()" aria-label="close"><mat-icon>exit</mat-icon>Close</button>
+  <button [disabled]="disableClose" class="button-margins" color='warn' mat-raised-button (click)="close()" aria-label="close"><mat-icon>exit</mat-icon>Close</button>
 </div>
 
 <div class="keyboard-layout" aria-label="keyboard" >
-	<!-- <input (input)="onInputChange($event)" 
-          class="input" 
-          [(value)]="value"  
-          placeholder="Tap on the virtual keyboard to start" /> -->
 	<div class="simple-keyboard"></div>
 </div>

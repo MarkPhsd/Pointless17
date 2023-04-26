@@ -49,6 +49,13 @@
        <prompt-group-select      [inputForm]="inputForm"    ></prompt-group-select>
       </div>
 
+      <mat-label>If you want a group of items to show up at the top of a list, you can put 0 or negative values here.</mat-label>
+      <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'sortOrder'">
+        Sort Order
+      </app-value-fields>
+
       <div>
 
         <div  class="mat-label" >

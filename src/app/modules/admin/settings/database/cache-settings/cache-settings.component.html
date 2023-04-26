@@ -3,11 +3,9 @@
 <div *ngIf="currentCache">
   Current cache:
   <mat-divider></mat-divider>
-    <!-- {{currentCache | json}}
-    : Status: {{currentCache.boolean}} Time (minutes) {{currentCache.value}} -->
 </div>
 
-<div *ngIf="cacheTimeSetting">
+<div *ngIf="(cacheTimeSetting$ | async) as cacheTimeSetting">
   <div *ngIf="cacheForm">
     <div [formGroup]="cacheForm">
       <div class="fields">
@@ -18,6 +16,7 @@
           <mat-label>Enable Cache</mat-label>
           </mat-slide-toggle>
       </div>
+
 
       <div class="fields">
         <mat-form-field class="example-form-field">
@@ -31,6 +30,17 @@
             >
         </mat-form-field>
       </div>
+
+      <div class="fields">
+        <!-- using webenabled as field until app cache converted to json -->
+        <mat-slide-toggle
+                  [(ngModel)] ="cacheTimeSetting.webEnabled"
+                  formControlName="webEnabled"
+                  (change)="updateCacheTime()">
+        <mat-label>Debug Mode</mat-label>
+        </mat-slide-toggle>
+    </div>
+
     </div>
   </div>
 

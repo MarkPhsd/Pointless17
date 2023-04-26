@@ -45,7 +45,6 @@ export class AuthenticationService {
     private _user               = new BehaviorSubject<IUser>(null);
     public  user$               = this._user.asObservable();
 
-
     private _userx              = new BehaviorSubject<IUser>(null);
     public  userx$              = this._userx.asObservable();
 

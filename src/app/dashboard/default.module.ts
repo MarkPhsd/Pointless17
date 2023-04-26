@@ -373,6 +373,7 @@ import { PrepPrintingServiceService } from '../_services/system/prep-printing-se
 import { TriposSettingsComponent } from '../modules/payment-processing/tri-pos-transactions/tripos-settings/tripos-settings.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { LinkedPriceSelectorComponent } from '../modules/admin/products/pricing/price-categories-edit/linked-price-selector/linked-price-selector.component';
+import { PriceCategoryMultiplePricesComponent } from '../modules/admin/products/pricing/price-categories-edit/price-category-multiple-prices/price-category-multiple-prices.component';
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
   useClass: LoggingInterceptor,
@@ -604,7 +605,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PackageListComponent,
     PackageSearchSelectorComponent,
 
-
+    PriceCategoryMultiplePricesComponent,
     POSSplitItemsComponent,
     PosSplitGroupsComponent,
     PrintGroupReceiptComponent,

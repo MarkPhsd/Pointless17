@@ -310,7 +310,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   listItems(id:number) {
     this.initProductSearchModel(id)
     if (this.itemTypeID == 4) {
-      this.router.navigate(["/menuitems-infinite/", {categoryID:id }]);
+      this.router.navigate(["/menuitems-infinite/", {categoryID:id,typeID:4, hideSubCategoryItems:true }]);
     }
     if (this.itemTypeID == 6) {
       this.router.navigate(["/menuitems-infinite/", {departmentID:id,typeID:4}]);
@@ -326,13 +326,15 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     let productSearchModel        = {} as ProductSearchModel;
 
     if (this.itemTypeID == 6) {
-     { productSearchModel.departmentID  = id.toString(); }
+        productSearchModel.hideSubCategoryItems = true;
+      { productSearchModel.departmentID  = id.toString(); }
     }
 
     if (this.itemTypeID == 4) {
+       productSearchModel.hideSubCategoryItems = false;
       { productSearchModel.categoryID  = id.toString(); }
     }
-
+    console.log('init Product Search Model categories',productSearchModel)
     productSearchModel.pageSize   = 25
     productSearchModel.pageNumber = 1
     this.menuService.updateMeunuItemData(productSearchModel)

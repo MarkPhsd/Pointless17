@@ -33,6 +33,12 @@
           </div>
         </div>
 
+        
+        <div class="grid-progress">
+          <div></div>
+          <div><button mat-button (click)="initializeSideMenu()">Initialize Side Menu</button></div>
+        </div>
+
         <div class="grid-progress">
           <div>
             <mat-checkbox
@@ -379,3 +385,4 @@
 <ng-template #loading>
   <mat-spinner diameter="50"></mat-spinner>
 </ng-template>
+<div *ngIf="(action$ | async) as action"></div>

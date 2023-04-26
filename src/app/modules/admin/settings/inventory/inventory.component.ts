@@ -41,6 +41,7 @@ export class InventoryComponent  {
       this.loading_initTypes = true ;
       this.itemTypeMethodsService.initalizeTypes().subscribe( {
         next: data => {
+          this.itemTypes = data;
           this.itemTypeMethodsService.notify(`Items initialized.`, 'Success', 2000)
           this.loading_initTypes = false;
         },

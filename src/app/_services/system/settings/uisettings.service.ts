@@ -160,7 +160,7 @@ export interface UIHomePageSettings {
   sideToolbarEnableBrand   : boolean;
   sideToolbarEnableType    : boolean;
   sideToolbarEnableCategory: boolean;
-
+  suppressMenuItems: boolean;
   scheduleSubMenu: boolean;
   staffscheduleSubMenu: boolean;
 
@@ -567,6 +567,7 @@ export class UISettingsService {
       timeOut: [],
       timeOutValue: [],
       displaySendButton: [],
+      suppressMenuItems: [],
      })
     return fb
   }

@@ -14,7 +14,6 @@
           <ng-container [ngTemplateOutlet]="largeScreenButtons"></ng-container>
         </div>
       </div>
-
     </mat-card-subtitle>
     <mat-card-content>
       <div
@@ -45,6 +44,7 @@
             ></textarea>
         </mat-form-field>
       </div>
+      <app-keyboard [disableClose]= "true"> </app-keyboard>
     </mat-card-actions>
 
   </mat-card>
@@ -53,19 +53,11 @@
 
 <ng-template #buttonDisplay>
   <div class="grid-list">
-    <!-- <button class="item-button" mat-raised-button (click)="reset()">
-        <h5>
-          <mat-icon>refresh</mat-icon>Start Over
-        </h5>
-    </button> -->
     <button class="item-button" mat-raised-button (click)="cancel()">
        <h5>
           <mat-icon>cancel</mat-icon>Cancel <br>
         </h5>
     </button>
-
-  <!-- <button class="item-button" mat-raised-button (click)="close()"><mat-icon>close</mat-icon>Close <br> Without Saving</button> -->
-
     <button class="item-button" mat-raised-button (click)="applyChoices()">
       <h5>
         <mat-icon>approval</mat-icon>Save & Close

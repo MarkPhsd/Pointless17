@@ -35,6 +35,7 @@ export class BalanceSheetReportComponent implements OnInit {
     this.sheets$ = this.balanceSheetService.searchBalanceSheets(site, search).pipe(
       switchMap(data => {
         // data.results
+          // data.results[0].
          return  of(data)
       }
     ))

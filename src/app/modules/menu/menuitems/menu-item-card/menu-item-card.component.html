@@ -29,6 +29,7 @@
     <ng-container #reviews *ngIf="menuItem"></ng-container>
     <div class="price-grid" *ngIf="isProduct">
       <ng-container [ngTemplateOutlet]="price"></ng-container>
+
       <div *ngIf="menuItem.itemType">
         <div *ngIf="isApp">
           <ng-container [ngTemplateOutlet]="openInNew"></ng-container>
@@ -38,12 +39,14 @@
         </div>
       </div>
     </div>
+    <div *ngIf="isCategory">
+      <ng-container [ngTemplateOutlet]="seeMoreInCategory"></ng-container>
+    </div>
   </div>
 
 </mat-card>
 
 <ng-template #menuButton>
-
   <div *ngIf="menuItem?.name != 'Load More' && ((isApp && !imageUrl) || !imageUrl)"
       class="product-name-only" >
       <button mat-button
@@ -123,6 +126,7 @@
       class="product-image"
       (click)="menuItemActionObs(false)"/>
   </div>
+
 </ng-template>
 
 <ng-template #buttonAddItem>
@@ -164,4 +168,15 @@
     </div>
   </div>
 
+</ng-template>
+
+<ng-template #seeMoreInCategory>
+  <div class="item-name-center">
+    more {{menuItem.name | truncateText : 8}}
+  </div>
+  <div class="category-open">
+    <button mat-button (click)="menuItemActionObs(false)"> 
+      <mat-icon >open_in_new</mat-icon>
+    </button>
+  </div>
 </ng-template>

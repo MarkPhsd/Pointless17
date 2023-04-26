@@ -5,9 +5,11 @@
             mat-raised-button 
             (click)="applyCashPayment(paymentAmount)">
             <ng-content></ng-content>
-            {{paymentAmount | currency}}
+            <span *ngIf="paymentAmount != 0">{{paymentAmount | currency}}</span>
     </button>
 </div>
+
+
 
 <span *ngIf="(action$ | async) as action">
 

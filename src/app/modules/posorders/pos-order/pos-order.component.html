@@ -123,6 +123,7 @@
               <ng-container [ngTemplateOutlet]="triPOSPaymentButtonView"></ng-container>
               <!-- <span *ngIf="!smallDevice"> -->
                 <ng-container [ngTemplateOutlet]="payButton"></ng-container>
+                <ng-container [ngTemplateOutlet]="cashPayCustom"></ng-container>
                 <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
                 <ng-container [ngTemplateOutlet]="cashPay5"></ng-container>
                 <ng-container [ngTemplateOutlet]="cashPay10"></ng-container>
@@ -321,6 +322,21 @@
       (setStep) ="setStep(1)">
     </stripe-card-pay-btn>
   <!-- </span> -->
+</ng-template>
+
+
+<ng-template #cashPayCustom>
+  <div *ngIf="!smallDevice">
+    <cash-payment-buttons
+        [order]="order"
+        [uiTransactions]="uiTransactionSettings"
+        [platForm]="platForm"
+        [creditBalanceRemaining]="0"
+        [paymentAmount] ="0"
+        [isApp]         ="platFormService.isApp" >
+        <div>Enter Cash <br> Amount</div>
+    </cash-payment-buttons>
+  </div>
 </ng-template>
 
 <ng-template #cashPayButtons>

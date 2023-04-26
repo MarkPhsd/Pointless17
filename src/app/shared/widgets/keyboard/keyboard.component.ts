@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Output, ViewEncapsulation } from "@angular/core";
+import { AfterViewInit, Component, Input, Output, ViewEncapsulation } from "@angular/core";
 import Keyboard from "simple-keyboard";
 import { InputTrackerService } from "src/app/_services/system/input-tracker.service";
 import { UISettingsService } from "src/app/_services/system/settings/uisettings.service";
@@ -12,6 +12,8 @@ import { UISettingsService } from "src/app/_services/system/settings/uisettings.
 
 export class KeyboardComponent implements AfterViewInit {
 
+    @Input() disableClose: boolean;
+    
     constructor(
       public trackerService: InputTrackerService,
       private uiSettingService: UISettingsService) {}
@@ -46,8 +48,10 @@ export class KeyboardComponent implements AfterViewInit {
     onChange = (input: string) => {
       this.value = input ;
       const anyControl = this.trackerService._lastSelectedInput;
-      anyControl.setValue(input.toString())
-      this.trackerService.setLastSelectedInput(anyControl)
+      if (input && input.toString()) { 
+        anyControl.setValue(input.toString())
+        this.trackerService.setLastSelectedInput(anyControl)
+      }
       // this.uiSettingService.updateRelativeValue(input)
     };
   

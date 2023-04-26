@@ -152,6 +152,8 @@ export interface CashDrop {
   id          : number;
   amount      : number;
   reportRunID : number;
+  dropTime: number;
+  clientID: number;
 }
 
 export interface BalanceSheetEmployee {

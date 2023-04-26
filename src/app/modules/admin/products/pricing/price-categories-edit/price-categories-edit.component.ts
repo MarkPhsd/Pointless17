@@ -196,6 +196,10 @@ export class PriceCategoriesEditComponent implements OnInit {
 
   }
 
+  get productPrice(): FormArray {
+    return this.inputForm.get('productPrices') as FormArray;
+  }
+
   addItems(inputForm: FormGroup, items: any[], arrayName: string) {
     if (!inputForm) { return }
     if (!items)     { return }

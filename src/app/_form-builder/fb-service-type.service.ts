@@ -48,7 +48,7 @@ export class FbServiceTypeService {
             orderMinimumTotal     : [''],
             scheduleInstructions  : [''],
             shippingInstructions  : [''],
-            filterType            : [''],
+            filterType            : [],
           }
         )
         return fb

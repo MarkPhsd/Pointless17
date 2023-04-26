@@ -51,6 +51,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       this.order = data
       this.gettriPOSTotalPayments();
       this.lastIncrementalAuth();
+      
     })
 
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
@@ -302,13 +303,16 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
    closeOrder() {
      if (this.order) {
      const site = this.siteService.getAssignedSite();
-     const result$ = this.orderService.completeOrder(site, this.order.id)
-     result$.subscribe(data=>  {
-       this.router.navigateByUrl('/pos-orders')
+     const result$ = this.orderService.forceCompleteOrder(site, this.order.id)
+     this.action$ = result$.pipe(switchMap(data =>  {
        this.paymentService.updatePaymentSubscription(null)
        this.orderService.updateOrderSubscription(null)
        this.toolBarUI.updateOrderBar(false)
-     })
+       return of(data)
+     })).pipe(switchMap(data => { 
+      this.router.navigateByUrl('/pos-orders')
+      return of(data)
+     }))
     }
    }
 

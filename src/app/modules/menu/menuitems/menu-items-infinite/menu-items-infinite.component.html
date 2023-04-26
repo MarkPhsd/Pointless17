@@ -1,11 +1,18 @@
 <div *ngIf="(style$ | async) as styles"></div>
-<div class="parent-container">
+<div *ngIf="(bucket$ | async) as bucket"></div>
+  <!-- <ng-container [ngTemplateOutlet]="isDebugMode"> </ng-container>
+  <ng-template #debugView>
+    Debug Mode<br>
+    {{ productSearchModelData | json}}
+  </ng-template>
+   -->
+<div class="parent-container" *ngIf="uiHomePage">
 
   <div *ngIf="(action$ | async)"></div>
 
   <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
 
-  <div *ngIf="value" class="loader">
+  <div *ngIf="value" class="loader">  
     <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
   </div>
      

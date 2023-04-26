@@ -1,6 +1,8 @@
 import { Component, Input, OnInit,OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, switchMap } from 'rxjs';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { BalanceSheetService, CashDrop, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 
@@ -18,7 +20,7 @@ export class BalanceSheetCalculationsViewComponent implements OnInit,OnDestroy {
   _sheet          : Subscription;
   drops: CashDrop[];
   dropTotal: number;
-
+  auths$ : Observable<IUserAuth_Properties>;
   initSubscriptions() {
     this._sheet = this.sheetMethodsService.balanceSheet$.subscribe( data => {
       this.sheet = data;
@@ -33,6 +35,7 @@ export class BalanceSheetCalculationsViewComponent implements OnInit,OnDestroy {
   }
   constructor( 
     private siteService: SitesService,
+    private userAuth: AuthenticationService,
     private sheetMethodsService     : BalanceSheetMethodsService,
     private sheetService            : BalanceSheetService,
     ) { }
@@ -40,6 +43,8 @@ export class BalanceSheetCalculationsViewComponent implements OnInit,OnDestroy {
   ngOnInit(): void {
     this.initSubscriptions();
     console.log('')
+
+    this.auths$ =  this.userAuth.userAuths$
   }
   ngOnDestroy() { 
     if (this._sheet) { 

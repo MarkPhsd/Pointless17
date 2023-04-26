@@ -3,7 +3,7 @@ import {Component,  HostListener, OnInit, AfterViewInit,OnDestroy,
 import {IMenuItem} from 'src/app/_interfaces/menu/menu-products';
 import {AWSBucketService, MenuService} from 'src/app/_services';
 import {ActivatedRoute, Router} from '@angular/router';
-import { Observable, of, Subscription, switchMap} from 'rxjs';
+import { catchError, Observable, of, Subscription, switchMap} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
@@ -13,6 +13,7 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { HttpClient } from '@angular/common/http';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
   selector: 'app-menu-items-infinite',
@@ -25,6 +26,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
   action$ : Observable<any>;
 
+  @ViewChild('debugView') debugView: TemplateRef<any>;
   @ViewChild('nextPage', {read: ElementRef, static:false}) elementView: ElementRef;
   // @ViewChild('scrollframe', {static: false}) scrollFrame: ElementRef;
   @ViewChildren('item') itemElements: QueryList<any>;
@@ -58,6 +60,8 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   currentPage       = 1 //paging component
   pageSize          = 25;
   itemsPerPage      = 35
+  uiHomePage  : UIHomePageSettings;
+  _uiHomePage: Subscription
 
   ordersListClass = 'orders-list'
   @Input() departmentID :   string;
@@ -66,6 +70,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   @Input() brandID       :  string;
   @Input() typeID        :  string;
   @Input() productName   :  string;
+  @Input() hideSubCategoryItems: boolean;
 
   bucketName        :   string;
   scrollingInfo     :   string;
@@ -83,32 +88,49 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   orderBar          : boolean;
   platForm          = this.getPlatForm()
   isApp             = false;
+  bucket$: Observable<string>;
 
   style$ : Observable<any>;
 
+
+
   getPlatForm() { return Capacitor.getPlatform(); }
 
-  initOrderBarSubscription() {
+  initSubscriptions() {
 
-    this.toolbarServiceUI.orderBar$.subscribe(data => {
-      this.orderBar = data
-      if (this.orderBar) {
-        this.grid = "grid-smaller"
-      }
-      if (!this.orderBar) {
-        this.grid = "grid"
-      }
-    })
+    try {
+      this.toolbarServiceUI.orderBar$.subscribe(data => {
+        this.orderBar = data
+        if (this.orderBar) {
+          this.grid = "grid-smaller"
+        }
+        if (!this.orderBar) {
+          this.grid = "grid"
+        }
+      })
+    } catch (error) {
+      
+    }
+
+    // try {
+    //   this._uiHomePage = 
+    //     this.uiHomePage = data;
+    //     console.log('home page data exists')
+    //   })
+    // } catch (error) {
+      
+    // }
   }
 
 constructor(private menuService        : MenuService,
               private awsBucketService : AWSBucketService,
               private router           : Router,
               public  route            : ActivatedRoute,
-              private siteService      : SitesService,
+              public siteService      : SitesService,
               private toolbarServiceUI : ToolBarUIService,
               private titleService     : Title,
               private platFormService  : PlatformService,
+              private uiSettingService: UISettingsService,
               private fb: FormBuilder,
               private httpClient: HttpClient,
       )
@@ -120,19 +142,6 @@ constructor(private menuService        : MenuService,
   initStyles() { 
     if (!this.isApp) { return }
     this.ordersListClass = 'orders-list c1'
-    // this.http.get('assets/htmlTemplates/receiptTemplateCreditPayments.html', {responseType: 'text'});
-    // const item$ =  this.httpClient.get('assets/htmlTemplates/scrollbarStyleWide.txt', {responseType: 'text'}).pipe(
-    //   switchMap(styles => { 
-    //     console.log('styles', styles)
-    //     const style     = document.createElement('style');
-    //     style.innerHTML = styles.toString();
-    //     document.head.appendChild(style);
-    //     return of(styles)
-    //   })
-    // )
-
-    // return item$
-
   }
 
   async ngOnInit()  {
@@ -155,7 +164,24 @@ constructor(private menuService        : MenuService,
     //sure if we should accept the model, or the parameter from the page.
 
     this.value      = 1;
-    this.bucketName =   await this.awsBucketService.awsBucket();
+    const homePage$ = this.uiSettingService.homePageSetting$;
+    const bucket$ =  this.awsBucketService.awsBucketURLOBS();
+    this.bucket$ = homePage$.pipe(switchMap(data => { 
+      this.uiHomePage = data;
+      return bucket$
+    })) .pipe(switchMap(data => { 
+        this.bucketName =  data
+        this.initComponent()
+        return of(data)
+    }),catchError(data => { 
+      this.initComponent()
+      return of(data)
+    }));
+
+  }
+
+  initComponent() { 
+    this.initSubscriptions();
     this.initSearchForm();
     this.initSearchProcess();
     this.initSearchFromModel();
@@ -165,7 +191,6 @@ constructor(private menuService        : MenuService,
     this.menuItems = [] as IMenuItem[]
     this.nextPage();
 
-    this.initOrderBarSubscription();
     this.setTitle();
   }
 
@@ -225,6 +250,10 @@ constructor(private menuService        : MenuService,
         this.brandID       = this.route.snapshot.paramMap.get('brandID');
         this.typeID        = this.route.snapshot.paramMap.get('typeID');
         this.productName   = this.route.snapshot.paramMap.get('productName');
+ 
+        if (this.route.snapshot.paramMap.get('hideSubCategoryItems')) { 
+          this.hideSubCategoryItems = this.route.snapshot.paramMap.get('hideSubCategoryItems') as unknown as boolean;
+        }
 
     } catch (error) {
       console.log('initSearchProcess Error', error)
@@ -234,7 +263,7 @@ constructor(private menuService        : MenuService,
   initSearchFromModel() {
     this._productSearchModel = this.menuService.menuItemsData$.subscribe( model => {
         this.initSearchProcess();
-        if (!model) { return }
+        if (!model) { model = {} as ProductSearchModel }
         this.subCategoryID = model.subCategoryID;
         this.departmentID = model.departmentID
         this.categoryID   = model.categoryID
@@ -267,7 +296,7 @@ constructor(private menuService        : MenuService,
         }
         model.webMode = this.menuService.isWebModeMenu
         model.active  = true;
-
+        
         this.productSearchModelData = model;
         this.searchDescription = `Results from ${ model.name}  ${categoryResults} ${departmentName}  ${itemTypeName}`
         return
@@ -302,7 +331,13 @@ constructor(private menuService        : MenuService,
         model.categoryID   = this.categoryID
         model.departmentID = this.departmentID
         model.subCategoryID = this.subCategoryID;
-
+      
+        if (this.uiHomePage && this.uiHomePage?.suppressMenuItems) {
+          if (this.route.snapshot.paramMap.get('hideSubCategoryItems')) { 
+            model.hideSubCategoryItems = this.route.snapshot.paramMap.get('hideSubCategoryItems') as unknown as boolean;
+          }
+        }
+    
         this.typeID       = this.route.snapshot.paramMap.get('typeID')
         if (this.typeID) {
           if (this.typeID) { model.itemTypeID     = this.typeID     }
@@ -316,6 +351,7 @@ constructor(private menuService        : MenuService,
       model.pageSize    = pageSize
       model.active      = true;
       const site        = this.siteService.getAssignedSite();
+      console.log('get results', this.hideSubCategoryItems, model)
       const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
       this.loading      = true
 
@@ -350,7 +386,6 @@ constructor(private menuService        : MenuService,
             this.value = 100;
           }
 
-
           if ( this.value != 100) {
             const lastItem = this.getNextMenuItem();
             this.loading = false;
@@ -381,6 +416,13 @@ constructor(private menuService        : MenuService,
     this.subCategoryID = this.route.snapshot.paramMap.get('subCategoryID');
     this.brandID       = this.route.snapshot.paramMap.get('brandID')
     this.typeID       = this.route.snapshot.paramMap.get('typeID')
+    model.hideSubCategoryItems = true;
+   
+    if (this.uiHomePage.suppressMenuItems) {
+      if (this.route.snapshot.paramMap.get('hideSubCategoryItems')) { 
+        model.hideSubCategoryItems = this.route.snapshot.paramMap.get('hideSubCategoryItems') as unknown as boolean;
+      }
+    }
 
     model.categoryID   = this.categoryID
     model.departmentID = this.departmentID
@@ -389,9 +431,21 @@ constructor(private menuService        : MenuService,
     if (this.typeID) {
       if (this.typeID) { model.itemTypeID     = this.typeID     }
     }
+
+
     if (this.brandID) {
       if (this.brandID) { model.brandID       = this.brandID     }
     }
+
+    if ( (!this.categoryID && this.categoryID != "0") || 
+         (!this.departmentID && this.departmentID != "0") || 
+         (!this.subCategoryID && this.subCategoryID != "0") || 
+         (!this.brandID && this.brandID != "0") )   { 
+      // this.typeID = "0"
+      // model.itemTypeID = "0"
+
+    }
+    model.itemTypeID = "0"
     return model;
 
   }
@@ -407,7 +461,7 @@ constructor(private menuService        : MenuService,
     if (model && !value)  {
       model = this.getListSearchModel(model)
     }
-
+    console.log('get results', this.hideSubCategoryItems, model)
     model.pageNumber  = pageNumber
     model.pageSize    = pageSize
     model.active      = true;
@@ -568,6 +622,11 @@ constructor(private menuService        : MenuService,
 
   }
 
-
+  get  isDebugMode() { 
+    if (this.siteService.debugMode) { 
+      return this.debugView
+    }
+    return true;
+  }
 }
 

@@ -1,4 +1,3 @@
-
 <div *ngIf="printType === 'balanceSheetFinal'">
   <h3>Balance Sheet</h3>
 </div>
@@ -17,12 +16,16 @@
   </balance-sheet-calculations-view>
 </div>
 
-<div *ngIf="printType === 'balanceSheetFinal'">
-  <h3>Payments:</h3>
-  <div *ngIf="(list$ | async) as list">
-    <credit-card-payments-print-list
-      [list]="list">
-    </credit-card-payments-print-list>
+<div *ngIf="(auths$ | async) as auths">
+  <div *ngIf="printType === 'balanceSheetFinal'">
+    <div *ngIf="!auths?.blindBalanceSheet">
+      <h3>Payments:</h3>
+      <div *ngIf="(list$ | async) as list">
+        <credit-card-payments-print-list
+          [list]="list">
+        </credit-card-payments-print-list>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -66,7 +69,6 @@
     <div>{{sheet.dollarsEnd | currency}}</div>
   </div>
 </div>
-
 
 <div *ngIf="printType === 'cashDrop'">
   <h1>Cash Drop</h1>

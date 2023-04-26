@@ -14,10 +14,13 @@
       {{sheet.overUnderTotal | currency}}
     </span>
   </div>
-
-  <div>Total Sales</div>  <div class="calculation"> {{sheet.salesTotal     | currency}} </div>
-  <div>Cash</div>         <div class="calculation"> {{sheet.cashIn         | currency}} </div>
-  <div>Credit</div>       <div class="calculation"> {{sheet.creditIn       | currency}} </div>
+ 
+  <div class="header-grid" *ngIf="(auths$ | async) as auths"> 
+    <div *ngIf="!auths?.blindBalanceSheet">Total Sales</div>  <div  *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{sheet.salesTotal     | currency}} </div>
+    <div *ngIf="!auths?.blindBalanceSheet">Cash</div>         <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{sheet.cashIn         | currency}} </div>
+    <div *ngIf="!auths?.blindBalanceSheet">Credit</div>       <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{sheet.creditIn       | currency}} </div>
+    <div>Remaing In Drawer </div> <div  class="calculation"> {{sheet.endedWith       | currency}} </div>
+  </div>
 
   <div class="item-span cashdrop-border" *ngIf="drops">
     <div class="title">Cash Drops</div>
@@ -26,6 +29,7 @@
       <div  class="cash-drop-grid">
           <div>{{item.id}}</div>
           <div  class="calculation">{{item.amount | currency}} </div>
+          <div  class="calculation">{{item.dropTime | date: ' h:mm:ss a'}} </div>
       </div>
     </div>
 

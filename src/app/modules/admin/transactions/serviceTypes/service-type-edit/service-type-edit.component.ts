@@ -17,11 +17,11 @@ import { catchError, of, switchMap, Observable } from 'rxjs';
 })
 export class ServiceTypeEditComponent implements OnInit {
 
-  id                     :any;
-  serviceType            :IServiceType;
-  bucketName             :string;
-  awsBucketURL           :string;
-  inputForm              :FormGroup;
+  id                     : number;
+  serviceType            : IServiceType;
+  bucketName             : string;
+  awsBucketURL           : string;
+  inputForm              : FormGroup;
   description            : string;
   action$                : Observable<any>;
 
@@ -29,42 +29,60 @@ export class ServiceTypeEditComponent implements OnInit {
     private serviceTypeService      : ServiceTypeService,
     private siteService             : SitesService,
     private snack                   : MatSnackBar,
-    private awsBucket               : AWSBucketService,
     private fbServiceTypeService    : FbServiceTypeService,
     private dialogRef: MatDialogRef<ServiceTypeEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
 
   {
+    this.id = 0
     if (data) {
       this.id = data
     }
-    this.initializeForm()
+    if (!data || data == 0) { 
+      this.id = 0
+    }
   }
 
-    async ngOnInit() {
-      this.bucketName =       await this.awsBucket.awsBucket();
-      this.awsBucketURL =     await this.awsBucket.awsBucketURL();
+     ngOnInit() {
+      this.initializeForm();
+      // this.bucketName =       await this.awsBucket.awsBucket();
+      // this.awsBucketURL =     await this.awsBucket.awsBucketURL();
     };
 
-    async initializeForm()  {
-
+    initializeForm()  {
+      
+      // console.log('this.id', this.id)
       this.initFormFields()
+      const site = this.siteService.getAssignedSite();
+      let service$ : Observable<unknown>;
 
-      if (this.inputForm && this.id) {
-        const site = this.siteService.getAssignedSite();
-        const serviceType$ = this.serviceTypeService.getType(site, this.id)
-
-        serviceType$.subscribe(
-           {next:  data => {
-              this.serviceType = data
-              this.id         = data.id
-              this.inputForm.patchValue(this.serviceType)
-            }, error: error => {
-              this.snack.open(`Issue. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
-            }
-          }
-        )
+      if (this.id == 0) {
+        // console.log('this id =0')
+        const service = {} as IServiceTypePOSPut;
+        service$  = this.serviceTypeService.postServiceType(site, service)
       }
+
+      if (this.id != 0) { 
+        // console.log('this id !0')
+        service$  = this.serviceTypeService.getType(site, this.id)  //as Observable<IServiceType>;
+      }
+
+      this.action$ = service$.pipe(switchMap(data => {
+            this.serviceType = {} as IServiceType;
+            console.log('data', data)
+            if (data) { 
+              this.serviceType = data as unknown as IServiceType;
+              this.id          = this.serviceType.id;
+            }
+            this.inputForm.patchValue(this.serviceType)
+            return of(data)
+          }
+        )),catchError( error => {
+          this.snack.open(`Issue. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
+          return of(error)
+        })
+      
+      // }
 
     };
 

@@ -400,8 +400,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginAction$ = this.userSwitchingService.login(userName, password).pipe(
       switchMap(result =>
         {
-
-          console.log('result of submit login', result);
+          
+          // console.log('result of submit login', result);
+          
 
           this.initForm();
           if (result && result.errorMessage) {

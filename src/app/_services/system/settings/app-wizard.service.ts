@@ -31,7 +31,7 @@ export interface IAppWizardStatus {
   firstSale: boolean;
   firstBalanceSheet: boolean;
   firstCloseOfDay: boolean;
-
+  initializeSideMenu: boolean;
   posTerminalSetup: boolean;
 }
 

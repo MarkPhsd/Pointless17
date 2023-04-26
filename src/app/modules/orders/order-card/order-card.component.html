@@ -9,7 +9,7 @@
       </div>
 
       <div class="orderType">
-          {{order.serviceType | truncateText : 15}}
+          {{order.serviceType | truncateText : 10}}
       </div>
 
       <div class="employee-name" *ngIf="!phoneDevice && (order.employeeName)">

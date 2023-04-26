@@ -125,7 +125,7 @@ export class PrintingService {
       timer = +50000
     }
 
-    console.log('label count', order.posOrderItems.length, newLabels)
+    // console.log('label count', order.posOrderItems.length, newLabels)
 
     let printCount = 0
     const printLabelList  = []
@@ -142,7 +142,7 @@ export class PrintingService {
               )
               printLabelList.push(item)
               printCount += 1
-              console.log('print label product:', item.productName)
+              // console.log('print label product:', item.productName)
             }
             if (!newLabels) {
               this.obs$.push(
@@ -155,7 +155,7 @@ export class PrintingService {
         }
       }
 
-      console.log('printLabelList', printLabelList)
+      // console.log('printLabelList', printLabelList)
       // console.log('fork join', printCount, printLabelList )
       if (printCount == 0) {return of(null)};
       return forkJoin(this.obs$)
@@ -450,7 +450,7 @@ export class PrintingService {
 
       printWindow.loadURL(contents)
       .then( e => {
-        console.log('result of load', e)
+        // console.log('result of load', e)
         if (options.silent) { printWindow.hide(); }
         if (!options) {  options = this.getdefaultOptions(printerName)  }
 
@@ -465,7 +465,7 @@ export class PrintingService {
         )
 
         }).catch( err => {
-          console.log('Print window Load URL error:', err, options)
+          // console.log('Print window Load URL error:', err, options)
           this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
           printWindow.close();
           printWindow = null;
@@ -513,70 +513,70 @@ export class PrintingService {
   }
 
 
-    getPrintContent(htmlContent: any, styles: any) {
-      const htmlHeader = `<!DOCTYPE html <html><head> ${styles}</head> <body>`
-      const htmlFooter = '</body> </html>'
-      const html = `${htmlHeader}  ${htmlContent} ${htmlFooter}`
-      const file = `$data:text/html;charset=UTF-8, ${encodeURIComponent(html)}`
-      return file
-    }
+  getPrintContent(htmlContent: any, styles: any) {
+    const htmlHeader = `<!DOCTYPE html <html><head> ${styles}</head> <body>`
+    const htmlFooter = '</body> </html>'
+    const html = `${htmlHeader}  ${htmlContent} ${htmlFooter}`
+    const file = `$data:text/html;charset=UTF-8, ${encodeURIComponent(html)}`
+    return file
+  }
 
-    savePDF(nativeElement: any, _this) {
-      if (!nativeElement) { return }
+  savePDF(nativeElement: any, _this) {
+    if (!nativeElement) { return }
 
-      {
-        try {
-          html2canvas(nativeElement).then(canvas => {
-            var pdf = new jsPDF('p', 'pt', [canvas.width +15 , canvas.height + 25]);
-            _this.canvas.nativeElement.src = canvas.toDataURL();
-            const content = canvas.toDataURL('image/png');
-            // let imageData = this.getBase64Image(this.canvas.nativeElement);
-            pdf.addImage(content, "JPG", 10, 10, canvas.width -15,   canvas.height -25);
-            pdf.save('pointlessOutput.pdf');
-          });
-        } catch (error) {
-          console.log(error)
-        }
-      }
-    }
-
-    getDefaultReceiptPrinter()
     {
-      console.log('')
-    }
-
-    printElectronReceipt(printerName: string, document) {
-      const prtContent  = document.getElementById('printsection');
-      const html = this.getPrintHTML(prtContent)
-      const contents = `data:text/html;charset=utf-8,  ${encodeURIComponent(html) }`
-      const options = {
-        silent: true,
-        printBackground: false,
-        deviceName: printerName
-      } as printOptions
-
-      this.printElectron( contents, printerName, options)
-    }
-
-    async printTestLabelElectron(contents: string, printerName: string) {
-      const fileName = `c:\\pointless\\print.txt`;
-      // this.snack.open(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Error')
-      const file = `file:///c://pointless//print.txt`
-      const options = {
-        silent: false,
-        printBackground: false,
-        deviceName: printerName
-      }  as printOptions
-
       try {
-        await  this.printElectron( contents, printerName, options )
-        return true;
+        html2canvas(nativeElement).then(canvas => {
+          var pdf = new jsPDF('p', 'pt', [canvas.width +15 , canvas.height + 25]);
+          _this.canvas.nativeElement.src = canvas.toDataURL();
+          const content = canvas.toDataURL('image/png');
+          // let imageData = this.getBase64Image(this.canvas.nativeElement);
+          pdf.addImage(content, "JPG", 10, 10, canvas.width -15,   canvas.height -25);
+          pdf.save('pointlessOutput.pdf');
+        });
       } catch (error) {
-        return false
+        console.log(error)
       }
+    }
+  }
 
+  getDefaultReceiptPrinter()
+  {
+    console.log('')
+  }
+
+  printElectronReceipt(printerName: string, document) {
+    const prtContent  = document.getElementById('printsection');
+    const html = this.getPrintHTML(prtContent)
+    const contents = `data:text/html;charset=utf-8,  ${encodeURIComponent(html) }`
+    const options = {
+      silent: true,
+      printBackground: false,
+      deviceName: printerName
+    } as printOptions
+
+    this.printElectron( contents, printerName, options)
+  }
+
+  async printTestLabelElectron(contents: string, printerName: string) {
+    const fileName = `c:\\pointless\\print.txt`;
+    // this.snack.open(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Error')
+    const file = `file:///c://pointless//print.txt`
+    const options = {
+      silent: false,
+      printBackground: false,
+      deviceName: printerName
+    }  as printOptions
+
+    try {
+      await  this.printElectron( contents, printerName, options )
+      return true;
+    } catch (error) {
       return false
     }
+
+    return false
+  }
 
   getPOSItem(site, id: number, history: boolean): Observable<IPurchaseOrderItem> {
     let posItem$: Observable<IPurchaseOrderItem>
@@ -589,7 +589,7 @@ export class PrintingService {
 
   printItemLabel(item: any, menuItem$: Observable<IMenuItem>, order: IPOSOrder, joinLabels: boolean ) {
     const site = this.siteService.getAssignedSite()
-    console.log('print item label', item)
+    // console.log('print item label', item)
     if (!menuItem$) {
       menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
     }
@@ -635,7 +635,7 @@ export class PrintingService {
       menuItem$ = of(item.menuItem)
     }
 
-    console.log('now printing label')
+    // console.log('now printing label')
     const printer$ = this.settingService.getDeviceSettings(this.orderService.posName).pipe(
       switchMap(data => {
         const item = JSON.parse(data.text) as ITerminalSettings;
@@ -648,8 +648,8 @@ export class PrintingService {
 
     const result$ =  printer$.pipe(
       switchMap(data => {
-        console.log('label printer', data.labelPrinter)
-        console.log('parameters', item,history,joinLabels);
+        // console.log('label printer', data.labelPrinter)
+        // console.log('parameters', item,history,joinLabels);
 
         if (!data ) {
           this.siteService.notify('No Printer assigned to label', 'Alert', 2000)
@@ -660,7 +660,7 @@ export class PrintingService {
       })).pipe(
         switchMap(data => {
           if ( !data || !data.itemType) {
-            console.log('no printer menu item')
+            // console.log('no printer menu item')
             return of(null)
           }
           this.menuItem = data;
@@ -670,17 +670,17 @@ export class PrintingService {
             if (history) {
               return of(null)
             }
-            console.log('setting item as printed')
+            // console.log('setting item as printed')
             return this.orderItemService.setItemAsPrinted(site, item )
           }
       })).pipe(
         switchMap( data => {
-          console.log('Set as Printed returned null - it shouldn not have.')
+          // console.log('Set as Printed returned null - it shouldn not have.')
           if (!data) { return of(null) }
           try {
             let field = 'productName';
             if (data[field]) {
-              console.log('not going to print label')
+              // console.log('not going to print label')
               return of(null)
             }
           } catch (error) {
@@ -714,13 +714,13 @@ export class PrintingService {
           switchMap( results => {
 
             if (!results) {
-              console.log('no results for lab, producer, data')
+              // console.log('no results for lab, producer, data')
               return of(null)
             }
             const data = results[2];
 
             if (!data) {
-              console.log('no results for forkJoin third element')
+              // console.log('no results for forkJoin third element')
               return of(null)
             }
 
@@ -750,8 +750,8 @@ export class PrintingService {
 
             const content = this.renderingService.interpolateText(item, data.text);
 
-            console.log('contents', content)
-            console.log('printer text', printer.text );
+            // console.log('contents', content)
+            // console.log('printer text', printer.text );
 
             if (printer.text) {
               const printerName = printer.text

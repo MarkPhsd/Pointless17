@@ -192,6 +192,12 @@ mat-card {
   margin: 10px;
 }
 
+.pay-buttons {
+  margin-left: 0px;
+  top: 15px;
+  position: relative;
+}
+
 .keypad {
   min-height: 400px;
   height: 400px;
@@ -201,7 +207,7 @@ mat-card {
   display         : flex;
   flex-direction  : row;
   flex-wrap       : wrap;
-  justify-content : space-around ;
+  justify-content : flex-start ;
   align-items     : baseline;
   align-content   : center;
   column-gap      : 5px;

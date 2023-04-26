@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient  } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap, } from 'rxjs';
 import { ISetting, ISite, IUser }   from 'src/app/_interfaces';
 import { SitesService } from '../reporting/sites.service';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
@@ -661,15 +661,21 @@ export class SettingsService {
   }
   ////////////////
 
+  initCacheTimeObs(site: ISite): Observable<ISetting> {
+    return this.getSettingByName(site, "CacheTime").pipe(
+      switchMap(data => {
+        if (data) { return of(data); }
+        let setting = {} as ISetting;
+        setting.name = "CacheTime";
+        setting.value = '10000';
+        setting.boolean = false;
+        return this.postSetting(site, setting);
+      }))
+  }
+
   //////////////////
   async initCacheTime(site: ISite): Promise<ISetting> {
-    const data = await this.getSettingByName(site,"CacheTime").pipe().toPromise()
-    if (data) { return data }
-    let setting = {} as ISetting;
-    setting.name = "CacheTime"
-    setting.value = '10000'
-    setting.boolean = false
-    return  await this.postSetting(site, setting).pipe().toPromise();
+    return await this.initCacheTimeObs(site).toPromise();
   }
 
   async initAppCache(): Promise<ISetting> {

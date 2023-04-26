@@ -72,7 +72,7 @@ export class ChangeDueComponent implements OnInit  {
       this.printing$ = this.processSendOrder(data.order)
     }
     this.initForm();
-
+    this.orderService.setScanner( )
   }
 
   printingCheck() { 

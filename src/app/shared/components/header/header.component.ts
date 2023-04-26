@@ -256,7 +256,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   getDeviceInfo() {
     const devicename = this.orderService.posName
-    console.log('get device info', devicename, this.isApp)
+    // console.log('get device info', devicename, this.isApp)
     if (devicename && this.isApp) {
       this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
         switchMap(data => {
@@ -413,7 +413,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   @HostListener("window:resize", [])
   updateItemsPerPage() {
     this.widthOfWindow = window.innerWidth;
-    console.log(this.widthOfWindow)
+    // console.log(this.widthOfWindow)
     this.showSearchForm = true
     this.smallDevice = false
     this.phoneDevice = false;
@@ -630,7 +630,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.openOrderBar = !this.openOrderBar
     this.toolbarUIService.updateOrderBar(this.openOrderBar)
 
-    console.log('toggleOpenOrderBar order bar update', this.openOrderBar)
+    // console.log('toggleOpenOrderBar order bar update', this.openOrderBar)
   }
 
   toggleSearchMenu() {

@@ -9,6 +9,7 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IonItem } from '@ionic/angular';
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 import { Observable, of, switchMap } from 'rxjs';
+import { InputTrackerService } from 'src/app/_services/system/input-tracker.service';
 
 @Component({
   selector: 'app-pos-order-item-edit',
@@ -35,6 +36,7 @@ export class PosOrderItemEditComponent  {
       private siteService         : SitesService,
       private _fb                 : FormBuilder,
       private menuService         : MenuService,
+      private inputTrackerService: InputTrackerService,
       private posOrderItemMethodsService: PosOrderItemMethodsService,
       private dialogRef           : MatDialogRef<PosOrderItemEditComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any
@@ -69,6 +71,7 @@ export class PosOrderItemEditComponent  {
         this.inputForm = this._fb.group({
           modifierNote: [this.posOrderItem.modifierNote],
         })
+        // this.inputTrackerService.setField(this.inputForm.controls['modifierNote'])
       }
 
       if (this.editField == 'quantity') {
@@ -140,7 +143,10 @@ export class PosOrderItemEditComponent  {
   saveChange(event) {
     const item = this.getItemValue();
     item.quantity = event;
-    this.action$ = this.saveSub(item, this.editField)
+    this.action$ = this.saveSub(item, this.editField).pipe(switchMap(data => { 
+      this.dialogRef.close();
+      return of(data)
+    }))
   }
 
   savePriceChange(event) {
@@ -157,7 +163,10 @@ export class PosOrderItemEditComponent  {
   save() {
     if (this.posOrderItem) {
       const item = this.getItemValue();
-      this.action$ = this.saveSub(item, this.editField)
+      this.action$ = this.saveSub(item, this.editField).pipe(switchMap(data => { 
+        this.dialogRef.close();
+        return of(data)
+      }))
     }
   }
 

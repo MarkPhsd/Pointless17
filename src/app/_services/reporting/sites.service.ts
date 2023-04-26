@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { BehaviorSubject, Observable, of, switchMap, } from 'rxjs';
-import { ISite, IUser }   from 'src/app/_interfaces';
+import { ISetting, ISite, IUser }   from 'src/app/_interfaces';
 
 import { InterceptorSkipHeader } from 'src/app/_http-interceptors/basic-auth.interceptor';
 
@@ -14,6 +14,8 @@ import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snac
   providedIn: 'root'
 })
 export class SitesService {
+
+
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   sites: ISite[];
   site: ISite;
@@ -50,6 +52,14 @@ export class SitesService {
 
     this.apiUrl   = this.appInitService.apiBaseUrl()
 
+  }
+
+  get debugMode() { 
+    // if (this.platformSevice.i)
+    let appCache =  JSON.parse(localStorage.getItem('appCache')) as unknown as ISetting;
+    if (appCache.webEnabled) { 
+      return true
+    }
   }
 
   getSites():  Observable<ISite[]> {

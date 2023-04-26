@@ -616,10 +616,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     //   }
     // })
 
-    // this.userIdle.onIdleStatusChanged().subscribe(count => {
-    //   console.log('onIdleStatusChanged event called',count);
-    //   this.userIdle.resetTimer();
-    // })
+    this.userIdle.onIdleStatusChanged().subscribe(count => {
+      // console.log('onIdleStatusChanged event called',count);
+      this.userIdle.resetTimer();
+    })
 
    // Start watching when user idle is starting.
    this.userIdle.onTimerStart().subscribe(count => console.log(count));
@@ -627,8 +627,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
    // Start watch when time is up.
    this.userIdle.onTimeout().subscribe(() =>
       {
-          console.log('Time is up!')
-        console.log('onTimeout event called')
+        //   console.log('Time is up!')
+        // console.log('onTimeout event called')
         if (this.platFormService.isApp()){
           if (this.uiSettings && this.uiSettings.timeOut) {
             this.userSwitchingService.clearLoggedInUser();

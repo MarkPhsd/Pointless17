@@ -28,11 +28,13 @@
         <div class="summary">
           <div class="grid-item">Sales Total</div>
           <div class="grid-item">+/-</div>
+          <div class="grid-item">In Drawer</div>
         </div>
 
         <div class="summary">
           <div class="grid-item number-format">{{summary.salesTotal | currency}}</div>
           <div class="grid-item number-format">{{summary.overUnderTotal | currency }}</div>
+          <div class="grid-item number-format">{{summary.endedWith | currency }}</div>
         </div>
       </div>
 

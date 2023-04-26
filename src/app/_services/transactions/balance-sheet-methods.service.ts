@@ -124,8 +124,10 @@ export class BalanceSheetMethodsService {
     const site = this.sitesService.getAssignedSite()
     return   this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
       switchMap(sheet => {
-        this.updateBalanceSheet(sheet)
         return  this.sheetService.getSheetCalculations(site, sheet)
+    })).pipe(switchMap(data => { 
+      this.updateBalanceSheet(data)
+      return of(data)
     }))
   }
 
@@ -154,10 +156,11 @@ export class BalanceSheetMethodsService {
     const site = this.sitesService.getAssignedSite()
     return this.sheetService.getSheet(site, id).pipe(
       switchMap(sheet => {
-        this.updateBalanceSheet(sheet)
-        return this.sheetService.getSheetCalculations(site, sheet)
-      })
-    )
+        return  this.sheetService.getSheetCalculations(site, sheet)
+    })).pipe(switchMap(data => { 
+      this.updateBalanceSheet(data)
+      return of(data)
+    }))
   }
 
   getDeviceName() {
@@ -298,7 +301,7 @@ export class BalanceSheetMethodsService {
       fiveHundredsStart:   ['', Validators.min(0)],
       twoHundredsStart:    ['', Validators.min(0)],
       tooniesEnd:          ['', Validators.min(0)],
-      tooniesStart:        ['', Validators.min(0)],
+      tooniesStart:        ['', Validators.min(0)]
     })
 
     return fb

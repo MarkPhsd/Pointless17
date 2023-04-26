@@ -421,6 +421,11 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
           width   = '455px'
         }
 
+        if (editField == 'modifierNote') {
+          height  = '100vh';
+          width   = '100vw'
+        }
+
         dialogRef = this.dialog.open(PosOrderItemEditComponent,
           { width     : width,
             minWidth  : '300px',
