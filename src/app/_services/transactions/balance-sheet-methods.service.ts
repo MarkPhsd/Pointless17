@@ -301,7 +301,8 @@ export class BalanceSheetMethodsService {
       fiveHundredsStart:   ['', Validators.min(0)],
       twoHundredsStart:    ['', Validators.min(0)],
       tooniesEnd:          ['', Validators.min(0)],
-      tooniesStart:        ['', Validators.min(0)]
+      tooniesStart:        ['', Validators.min(0)],
+      dollarsEnd:          ['', Validators.min(0)],
     })
 
     return fb

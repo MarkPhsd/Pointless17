@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { Observable, of, Subject, switchMap } from 'rxjs';
+import { catchError, Observable, of, Subject, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 
@@ -43,12 +43,27 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
 
     this.processing = true;
 
-    let item = {startDate: null, endDate: null, zrunID: this.zrunID, 
+    let item = {startDate: this.dateFrom, endDate: this.dateTo, zrunID: this.zrunID, 
                 pendingTransactions: this.pendingTransactions, 
                 scheduleDateEnd: this.scheduleDateEnd, 
                 scheduleDateStart: this.scheduleDateStart } as IReportingSearchModel;
 
-    if (this.scheduleDateEnd && this.scheduleDateStart) {
+    if (item.scheduleDateEnd && item.scheduleDateStart) {
+      console.log('performing schedule report')
+      this.sales$ =
+      this.reportingItemsSalesService.putSalesTaxReport
+        (this.site, item ).pipe(switchMap(data => {
+          this.sales = data;
+          this.processing = false;
+          return of(data)
+        })),catchError(data => { 
+          console.log('data error', data)
+          return of(data )
+        })
+      return
+    }
+
+    if (item.zrunID) {
       this.sales$ =
       this.reportingItemsSalesService.putSalesTaxReport
         (this.site, item ).pipe(switchMap(data => {
@@ -59,16 +74,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
       return
     }
 
-    if (this.zrunID) {
-      this.sales$ =
-      this.reportingItemsSalesService.putSalesTaxReport
-        (this.site, item ).pipe(switchMap(data => {
-          this.sales = data;
-          this.processing = false;
-          return of(data)
-        }))
-      return
-    }
+    console.log('performing range report')
   
     this.sales$ =
       this.reportingItemsSalesService.putSalesTaxReport

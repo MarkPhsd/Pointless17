@@ -153,7 +153,9 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     if (this.requireEnter) {
       const barcode  =  this.input.nativeElement.value;
       if (!this.scans) { this.scans = [] };
-      this.barcodeScanner$ =  this.scan(barcode);
+      this.barcodeScanner$ =  this.scan(barcode).pipe(switchMap(data => { 
+        return of(data)
+      }))
       this.initForm();
     }
   }
@@ -163,6 +165,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
       const site = this.siteService.getAssignedSite()
       return this.orderService.newOrderWithPayloadMethod(site, null).pipe(switchMap(data => {
           this.order = data;
+          this.initForm()
           return of(data)
         }
       ))
@@ -170,19 +173,13 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   }
 
   scan(barcode: string){
-    if (!this.obs$) { this.obs$ = [] }
+    if (!this.obs$) { this.obs$ = []  }
 
     this.obs$.push(this.addItemToOrder(barcode).pipe(
       switchMap(data => {
         return of(data)
       })
     ))
-
-    if (!this.order) {
-      return this.getOrderObs().pipe(switchMap(data => {
-        return forkJoin(this.obs$)
-      }))
-    }
 
     return  forkJoin(this.obs$)
   }
@@ -191,8 +188,9 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     const site = this.siteService.getAssignedSite();
     this.initForm()
     const item$ = this.menuItemService.getMenuItemByBarcode(site, barcode, this.order?.clientID);
-    return  item$.pipe( switchMap( data => {
-        if (this.obs$) {  this.obs$.shift() }
+
+    return   item$.pipe(switchMap( data => {
+      if (this.obs$) {  this.obs$.shift() }
         if ( !data ) {
           return this.orderMethodService.processItemPOSObservable( this.order, barcode, null, 1, this.input, 0, 0, this.assignedItem)
         } else

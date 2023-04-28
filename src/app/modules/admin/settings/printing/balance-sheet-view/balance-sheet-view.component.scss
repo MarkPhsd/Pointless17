@@ -5,7 +5,7 @@
   grid-template-columns: 20px 55px 70px 50px 65px 55px;
   @media print {
     font-size: 12pt;
-    font-weight: bold !important;
+   font-weight: bold;
     --gap: 3px;
     display: grid;
     gap: var(--gap);
@@ -18,7 +18,7 @@
   text-align: right;
   @media print {
     font-size: 12pt;
-    font-weight: bold !important;
+   font-weight: bold;
     justify-content: right;
     text-align: right;
  }
@@ -31,7 +31,7 @@
   grid-template-columns: 100px 100px;
   @media print {
     font-size: 12pt;
-   font-weight: bold !important;
+   font-weight: bold;
     --gap: 3px;
     display: grid;
     gap: var(--gap);
@@ -46,8 +46,8 @@
   @media print {
     display: grid;
     grid-template-columns: 100px 100px;
-    font-size: 12pt;
-    font-weight: bold !important;
+    font-size: 14pt;
+    font-weight: bold ;
     gap: 10px;
   }
 }

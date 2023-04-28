@@ -26,11 +26,11 @@ export class BalanceSheetCalculationsViewComponent implements OnInit,OnDestroy {
       this.sheet = data;
       this.drops = this.sheet.cashDrops;
       this.dropTotal = 0
-      console.log(this.drops)
+      // console.log(this.drops)
       this.drops.forEach(data => { 
         this.dropTotal = +data.amount + this.dropTotal
       })
-      console.log(this.drops)
+      // console.log(this.drops)
     })
   }
   constructor( 
@@ -42,7 +42,7 @@ export class BalanceSheetCalculationsViewComponent implements OnInit,OnDestroy {
 
   ngOnInit(): void {
     this.initSubscriptions();
-    console.log('')
+    // console.log('')
 
     this.auths$ =  this.userAuth.userAuths$
   }

@@ -37,6 +37,7 @@ import { IReportItemSaleSummary } from '../reporting/reporting-items-sales.servi
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UITransactionsComponent } from 'src/app/modules/admin/settings/software/UISettings/uitransactions/uitransactions.component';
 import { BalanceSheetMethodsService } from './balance-sheet-methods.service';
+import { PaymentReportCardComponent } from 'src/app/modules/admin/reports/payment-report/payment-report-card/payment-report-card.component';
 
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -533,7 +534,7 @@ export class OrderMethodsService implements OnDestroy {
     this.printingService.printJoinedLabels() ;
 
     if (!paymentResponse ) {
-      this.siteService.notify('No payment response', 'close', 3000, 'red');
+      this.siteService.notify(`No payment response `, 'close', 3000, 'red');
       return 0
     }
 
@@ -583,8 +584,6 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   validateItem(item, barcode) {
-
-    
 
     if (!item && !barcode) {
       // this.notifyEvent(`Item not found.`, 'Alert');
@@ -667,7 +666,7 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
-  processItemPOSObservable(
+    processItemPOSObservable(
                             order : IPOSOrder ,
                             barcode: string,
                             item: IMenuItem,

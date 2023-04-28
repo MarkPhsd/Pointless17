@@ -1,11 +1,7 @@
 <div class="values-container">
-  <!-- <ng-content></ng-content> -->
-
   <div *ngIf="inputForm && formControlName"
        [formGroup]="inputForm"  >
-    <!-- <ng-content></ng-content> -->
     <mat-form-field appearance="outline" class="grid-item">
-      <!-- <mat-label ><ng-content></ng-content></mat-label> -->
       <input matInput
               type               = "number"
               [formControlName]  = "formControlName"
@@ -14,12 +10,19 @@
     </mat-form-field>
   </div>
 
-  <div class="calc" *ngIf="inputForm && formControlName  && inputForm.get(formControlName).value != null">
+  <div>
     <div><ng-content></ng-content></div>
-    <div>{{inputForm.get(formControlName).value * multiplier | currency}}</div>
+
+    <div class="calc" *ngIf="inputForm && formControlName  && 
+                            inputForm.get(formControlName).value != null &&
+                            inputForm.get(formControlName).value != 0">
+      
+      <div>{{inputForm.get(formControlName).value * multiplier | currency}}</div>
+    </div>
+
+    <div class="calc" *ngIf="!inputForm || !formControlName || !inputForm.get(formControlName).value">
+      <div>{{0 * multiplier | currency}}</div>
+    </div>
   </div>
-  <div class="calc" *ngIf="!inputForm || !formControlName || !inputForm.get(formControlName).value">
-    <div><ng-content></ng-content></div>
-    <div>{{0 * multiplier | currency}}</div>
-  </div>
+
 </div>
