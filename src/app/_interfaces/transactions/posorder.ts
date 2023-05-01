@@ -88,6 +88,7 @@ export interface IPOSOrder {
   concentrateCount:      number;
   extractCount:          number;
   combinedCategory      :number;
+  solidCount            :number;
   quantity:              number;
   itemQuantity:          number;
   orderID:               number;
@@ -170,6 +171,7 @@ export interface ClientsPOSOrders {
   medPlantLimit: number;
   medFlowerLimit: number;
   combinedCategoryLimit: number;
+  solidCountLimit: number;
 }
 
 export interface ClientType {

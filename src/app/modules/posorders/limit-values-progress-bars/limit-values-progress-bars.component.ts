@@ -29,6 +29,7 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
   liquidCountRatio: number;
   seedCountRatio: number;
   concentrateCountRatio: number;
+  solidCountRatio: number;
   combinedCategoryRatio: number;
   last30Days$ : Observable<Last30DaysSales>;
   clientTypeName: string;
@@ -83,8 +84,6 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
   }
 
   getClientType() {
-
-
     const site = this.siteService.getAssignedSite();
     if (this.order && this.order.clients_POSOrders && this.order.clients_POSOrders.client_Type) {
       return of(this.order.clients_POSOrders.client_Type).pipe(switchMap(data => {
@@ -129,6 +128,7 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
     let liquidCountRatio = 28;
     let plantCountratio = 28
     let combinedCateogryRatio = 5;
+    let solidCountRatio = 28;
 
     if (this.clientType) {
       const type = this.clientType;
@@ -139,6 +139,7 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
       liquidCountRatio = type.limitLiquid;
       plantCountratio = type.limitPlants
       combinedCateogryRatio = type.limitCombinedCategory;
+      solidCountRatio = type.limitSolid ;
     }
 
     if (order) {
@@ -151,6 +152,7 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
         extractRatio          = type.limitExtract;
         seedCountRatio        = type.limitSeeds;
         liquidCountRatio      = type.limitLiquid;
+        solidCountRatio       = type.limitSolid;
         plantCountratio       = 28
         combinedCateogryRatio = type.limitCombinedCategory | 5;
 
@@ -180,6 +182,10 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
               combinedCateogryRatio = client.combinedCategoryLimit
             }
 
+            if (client.solidCountLimit && client.solidCountLimit != 0){
+              solidCountRatio = client.solidCountLimit
+            }
+
           }
         }
       }
@@ -202,9 +208,14 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
       if (order.combinedCategory  != 0) {
         this.combinedCateogryProgress       = ((order.combinedCategory / combinedCateogryRatio ) * 100).toFixed(0)
       }
+      if (order.solidCount  != 0) {
+        this.solidCountProgress       = ((order.solidCount / solidCountRatio ) * 100).toFixed(0)
+      }
+
 
       this.combinedCategoryRatio = combinedCateogryRatio;
       this.gramRatio = gramRatio;
+      this.solidCountRatio = solidCountRatio;
       this.extractRatio = extractRatio;//: number;
       this.liquidCountRatio = liquidCountRatio;//: number;
       this.seedCountRatio = seedCountRatio;//: number;

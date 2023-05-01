@@ -26,6 +26,7 @@
             || order?.extractCount != 0
             || order?.liquidCount != 0
             || order?.seedCount != 0
+            || order?.solidCount != 0
             || order?.combinedCategory != 0  )" >
 
       <app-progress-bar
@@ -62,11 +63,19 @@
       </app-progress-bar>
 
       <app-progress-bar
-          *ngIf="order.liquidCount != 0"
+          *ngIf="order.liquidCount != 0 "
           [value]="order.liquidCount"
-          [ratio]="28"
+          [ratio]="liquidCountRatio"
           [percentage]="liquidCountProgress">
           Liquid
+      </app-progress-bar>
+
+      <app-progress-bar
+          *ngIf="order.solidCount && order.solidCount != 0"
+          [value]="order.solidCount"
+          [ratio]="solidCountRatio"
+          [percentage]="solidCountProgress">
+          Solid
       </app-progress-bar>
 
       <app-progress-bar
