@@ -17,7 +17,7 @@
             <br>
             <mat-label class="h3"  color ="accent" *ngIf="payment.completionDate"> Change Due: <br> {{ changeDue | currency }}</mat-label>
           </div>
-          
+
           <div class="action-center">
             <mat-label>Scan to Start New Order</mat-label>
             <list-product-search-input></list-product-search-input>
@@ -49,11 +49,11 @@
           <mat-label class="h3"  color ="accent" *ngIf="payment.completionDate"> Change Due: <br> {{ changeDue | currency }}</mat-label>
         </div>
       </div>
-                
-      <div class="action-center">
+
+      <!-- <div class="action-center">
         <mat-label>Scan to Start New Order</mat-label>
         <list-product-search-input></list-product-search-input>
-      </div>
+      </div> -->
 
       <mat-card-actions>
         <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
