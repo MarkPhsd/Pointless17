@@ -165,10 +165,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   get wicEBTButtonView() {
-    if ( (!this.paymentsEqualTotal && 
-          !this.order.completionDate && 
+    if ( (!this.paymentsEqualTotal &&
+          !this.order.completionDate &&
           this.order?.balanceRemaining != 0)) {
-        if (this.order.wicTotal>0 || this.order.ebtTotal>0){ 
+        if (this.order.wicTotal>0 || this.order.ebtTotal>0){
           return this.wicEBTButton
         }
     }
@@ -184,6 +184,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   get triPOSPaymentButtonView() {
+    // console.log(this.devicename, this.uiTransactionSetting?.triposEnabled, this.order.balanceRemaining, this.order?.balanceRemaining != 0)
     if ( this.devicename &&
           this.uiTransactionSettings?.triposEnabled &&
           (this.order && this.order?.balanceRemaining != 0) ) {
@@ -834,7 +835,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       // if (this.orderMethodsService.lastItemAddedExists) {
         // console.log('display view')
     return this.lastImageDisplayView
-      // }  
+      // }
     // }
     console.log('dont display view')
     return null

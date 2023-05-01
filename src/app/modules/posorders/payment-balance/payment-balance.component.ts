@@ -5,7 +5,7 @@ import { timeStamp } from 'node:console';
 import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
 import { itemsAnimation } from 'src/app/_animations/list-animations';
 import { IPOSOrder, IPOSPayment, ISite, PosPayment } from 'src/app/_interfaces';
-import { OrdersService } from 'src/app/_services';
+import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -20,6 +20,7 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { CardPointMethodsService } from '../../payment-processing/services';
 import { TryCatch } from '@sentry/angular';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 
 @Component({
   selector: 'app-payment-balance',
@@ -45,13 +46,15 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   href          : string;
   totalAuthTriPOSPayments : number;
   incrementalAuth: PosPayment;
+  authData: IUserAuth_Properties;
+  authData$: Observable<IUserAuth_Properties>;
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
       this.gettriPOSTotalPayments();
       this.lastIncrementalAuth();
-      
+
     })
 
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
@@ -66,6 +69,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
               private paymentService: POSPaymentService,
               private paymentMethodService: PaymentMethodsService,
               private paymentMethodsProessService: PaymentsMethodsProcessService,
+              public authenticationService: AuthenticationService,
               public  userAuthorization: UserAuthorizationService,
               private productEditButtonService: ProductEditButtonService,
               private editDialog      : ProductEditButtonService,
@@ -97,8 +101,14 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     if (this.userAuthorization.user.roles === 'user') {
       this.isUser = true;
     }
-    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
 
+    // this.userAuthorization.
+    this.authData$ = this.authenticationService.userAuths$;
+    // this.authenticationService.userAuths$.subscribe(data => {
+    //   this.authData = data;
+    //   // data.voidPayment
+    // })
+    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager,employee')
 
     if (this.href.substring(0, 11 ) === '/pos-payment') {
       this.hidePrint = true;
@@ -309,7 +319,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
        this.orderService.updateOrderSubscription(null)
        this.toolBarUI.updateOrderBar(false)
        return of(data)
-     })).pipe(switchMap(data => { 
+     })).pipe(switchMap(data => {
       this.router.navigateByUrl('/pos-orders')
       return of(data)
      }))

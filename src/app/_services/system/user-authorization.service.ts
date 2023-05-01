@@ -17,8 +17,6 @@ export class UserAuthorizationService {
 
   setUser(user: IUser) {
     localStorage.setItem('user', JSON.stringify(user))
-    // const item = localStorage.getItem('user');
-    // return JSON.parse(item) as IUser;
   }
 
 

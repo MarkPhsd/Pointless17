@@ -44,7 +44,7 @@
 
       <div class="action-center" *ngIf="!order.completionDate &&
                                         ((order?.balanceRemaining != 0 || isZeroPaymentAllowed) &&
-                                         (order?.balanceRemaining < 0 || isNegativePaymentAllowed )) || 
+                                         (order?.balanceRemaining < 0 || isNegativePaymentAllowed )) ||
                                          order?.balanceRemaining != order.total
                                          ">
 
@@ -105,7 +105,7 @@
                       <div *ngIf="order && order.clientID">
                         <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
                       </div>
-                      
+
                       <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
                       <ng-container [ngTemplateOutlet]="cashPay5"></ng-container>
                       <ng-container [ngTemplateOutlet]="cashPay10"></ng-container>
@@ -258,7 +258,6 @@
             </div>
           </div>
         </div>
-
 
       <div  class="order-completed">
         <ng-container [ngTemplateOutlet]="splitItemsTemplate"></ng-container>

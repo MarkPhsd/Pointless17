@@ -1,3 +1,4 @@
+
 .mat-card-container {
   max-width: 375px;
   margin-top: 5px;
@@ -17,7 +18,7 @@ mat-card {
   margin: 10px;
 }
 
-.summary { 
+.summary {
   margin: 5px;
 }
 
@@ -36,6 +37,10 @@ mat-card {
   float         : left;
   align-items   : baseline;
   line-height   : 1em;
+  @media print {
+    font-size: 14pt;
+    font-weight: bold;
+  }
 }
 
 .field_bold {
@@ -54,6 +59,10 @@ mat-card {
   float: left;
   align-items: baseline;
   line-height: 1em;
+  @media print {
+    font-size: 14pt;
+    font-weight: bold;
+  }
   // text-align: right;
 }
 
@@ -69,6 +78,10 @@ mat-card {
   align-items: baseline;
   line-height: 1em;
   text-align: left;
+  @media print {
+    font-size: 14pt;
+    font-weight: bold;
+  }
 }
 
 .discounts_label{
@@ -82,6 +95,10 @@ mat-card {
   float: left;
   align-items: baseline;
   line-height: 1em;
+  @media print {
+    font-size: 14pt;
+    font-weight: bold;
+  }
 }
 
 .other_label {
@@ -96,6 +113,10 @@ mat-card {
   float: left;
   align-items: baseline;
   line-height: 1em;
+  @media print {
+    font-size: 14pt;
+    font-weight: bold;
+  }
 
 }
 
@@ -111,6 +132,10 @@ mat-card {
   align-items: baseline;
   line-height: 1em;
   text-align: right;
+  @media print {
+    font-size: 14pt;
+    font-weight: bold;
+  }
 }
 
 .tax{
@@ -125,6 +150,10 @@ mat-card {
   align-items: baseline;
   line-height: 1em;
   text-align: right;
+  @media print {
+    font-size: 14pt;
+    font-weight: bold;
+  }
 }
 
 .other {
@@ -138,6 +167,10 @@ mat-card {
   float: left;
   align-items: baseline;
   line-height: 1em;
+  @media print {
+    font-size: 14pt;
+    font-weight: bold;
+  }
 }
 
 .discounts {
@@ -156,6 +189,11 @@ mat-card {
 
 .grid-item {
   align-items: flex-end;
+
+  @media print {
+    font-size: 14pt;
+    font-weight: bold;
+  }
 }
 
 .grid {

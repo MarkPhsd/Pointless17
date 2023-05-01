@@ -215,7 +215,7 @@ export class TriPosTransactionsComponent implements OnInit {
   payAmount() {
     if (!this.validateTransaction()) { return }
     if (this.posPayment && this.terminalSettings.triposLaneID) {
- 
+
       const item = this.initTransaction(this.posPayment, this.terminalSettings);
       item.transactionId   = this.posPayment.refNumber;
       const site = this.siteService.getAssignedSite();
@@ -277,7 +277,7 @@ export class TriPosTransactionsComponent implements OnInit {
     if (trans & trans.processor && trans.process.expressResponseMessage) {
       this.errorMessage = this.errorMessage + ' ' + trans.process.expressResponseMessage
     }
-    
+
     this.siteService.notify(`Response not approved. Response given ${trans?.statusCode}. Reason: ${trans?._processor?.expressResponseMessage} ` , 'Failed', 3000)
   }
 
@@ -297,14 +297,40 @@ export class TriPosTransactionsComponent implements OnInit {
             return of (null)
           }
           return   this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
-      })).pipe(switchMap(data => {
+        })).pipe(switchMap(data => {
+          // return this.orderService.getOrder(site, this.order.id.toString(), false)
+          //return the current order. Error messsage should have been
+          if (!data || !data.payment) {
+            return of(this.order)
+          }
+
+          const payment = data.payment
+          const trans = data.trans
+          const order = data.order;
+
+          if (!data || !data.order) {
+            this.siteService.notify('Unknown error occurred.', 'close', 4000, 'red');
+            this.errorMessage = 'Unknown error occurred.'
+            return this.orderService.getOrder(site, this.order.id.toString(), false)
+          }
+
+          if (!this.paymentMethodsService.isTriPOSApproved(data.trans)) {
+            this.errorMessage = trans?.captureStatus;
+            return of(data.order)
+          }
+
           this.reset()
-          return this.orderService.getOrder(site, this.order.id.toString(), false)
-      })).pipe(switchMap(data => {
-          this.orderService.updateOrderSubscription(data);
           this.dialogRef.close(true)
-          return of(data)
+          return of(data.order)
+
       }))
+
+      //   .pipe(switchMap(data => {
+      //    this.reset()
+      //     this.orderService.updateOrderSubscription(data);
+      //     this.dialogRef.close(true)
+      //     return of(data)
+      // }))
     }
   }
 

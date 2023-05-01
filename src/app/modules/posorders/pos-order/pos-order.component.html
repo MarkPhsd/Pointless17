@@ -11,7 +11,7 @@
       <div>
         <div  [class]="gridheaderitem"
               (resized)="onResizedorderHeightPanel($event)">
-          
+
             <pos-order-transaction-data
               [uiTransactionSettings]="uiTransactionSettings"
               [purchaseOrderEnabled]="purchaseOrderEnabled"
@@ -121,23 +121,21 @@
               <ng-container [ngTemplateOutlet]="storeCreditPaybuttonView"></ng-container>
               <ng-container [ngTemplateOutlet]="wicEBTButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="triPOSPaymentButtonView"></ng-container>
-              <!-- <span *ngIf="!smallDevice"> -->
-                <ng-container [ngTemplateOutlet]="payButton"></ng-container>
-                <ng-container [ngTemplateOutlet]="cashPayCustom"></ng-container>
-                <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
-                <ng-container [ngTemplateOutlet]="cashPay5"></ng-container>
-                <ng-container [ngTemplateOutlet]="cashPay10"></ng-container>
-                <ng-container [ngTemplateOutlet]="cashPay20"></ng-container>
-                <ng-container [ngTemplateOutlet]="cashPay50"></ng-container>
-                <ng-container [ngTemplateOutlet]="cashPay100"></ng-container>
-              <!-- </span> -->
+              <ng-container [ngTemplateOutlet]="payButton"></ng-container>
+              <ng-container [ngTemplateOutlet]="cashPayCustom"></ng-container>
+              <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
+              <ng-container [ngTemplateOutlet]="cashPay5"></ng-container>
+              <ng-container [ngTemplateOutlet]="cashPay10"></ng-container>
+              <ng-container [ngTemplateOutlet]="cashPay20"></ng-container>
+              <ng-container [ngTemplateOutlet]="cashPay50"></ng-container>
+              <ng-container [ngTemplateOutlet]="cashPay100"></ng-container>
           </div>
         </div>
-        
+
         <!-- <div  *ngIf="mainPanel && uiTransactionSettings &&
                     (!paymentsEqualTotal && !order.completionDate &&
                     order?.balanceRemaining != 0) " >
-          
+
         </div> -->
 
         <div *ngIf="!mainPanel && !uiTransactionSettings?.displayEditCardOnHeader">
@@ -237,6 +235,7 @@
   <!-- <div *ngIf="devicename &&
     uiTransactionSettings?.triposEnabled &&
     (order && order?.balanceRemaining != 0)"> -->
+
     <app-tri-poscard-pay-btn
       [order]="order"
       [devicename]="devicename"
@@ -326,7 +325,7 @@
 
 
 <ng-template #cashPayCustom>
-  <div *ngIf="!smallDevice">
+  <div *ngIf="order?.balanceRemaining != 0">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -340,7 +339,7 @@
 </ng-template>
 
 <ng-template #cashPayButtons>
-  <div *ngIf="!smallDevice">
+  <div *ngIf="!smallDevice && order?.balanceRemaining != 0">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -354,7 +353,7 @@
 </ng-template>
 
 <ng-template #cashPay100>
-  <div *ngIf="!smallDevice">
+  <div *ngIf="!smallDevice && order?.balanceRemaining != 0">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -367,7 +366,7 @@
 </ng-template>
 
 <ng-template #cashPay50>
-  <div *ngIf="!smallDevice">
+  <div *ngIf="!smallDevice && order?.balanceRemaining != 0">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -380,7 +379,7 @@
 </ng-template>
 
 <ng-template #cashPay20>
-  <div *ngIf="!smallDevice">
+  <div *ngIf="!smallDevice && order?.balanceRemaining != 0">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -393,7 +392,7 @@
 </ng-template>
 
 <ng-template #cashPay10>
-  <div *ngIf="!smallDevice">
+  <div *ngIf="!smallDevice && order?.balanceRemaining != 0">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -407,7 +406,7 @@
 
 
 <ng-template #cashPay5>
-  <div *ngIf="!smallDevice">
+  <div *ngIf="!smallDevice && order?.balanceRemaining != 0">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -431,7 +430,7 @@
      Pay
      <div>
       Options
-     </div> 
+     </div>
   </button>
 </ng-template>
 

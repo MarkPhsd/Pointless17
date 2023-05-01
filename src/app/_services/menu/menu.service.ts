@@ -96,7 +96,7 @@ export interface IItemBasicB{
   providedIn: 'root'
 })
 export class MenuService {
- 
+
 
   private _menuItemsData       = new BehaviorSubject<ProductSearchModel>(null);
   public  menuItemsData$       = this._menuItemsData.asObservable();
@@ -464,7 +464,7 @@ export class MenuService {
 
     const uri =  this.sitesService.getCacheURI(url)
 
-    console.log('getGetCategoriesListActive', uri)
+    // console.log('getGetCategoriesListActive', uri)
 
     return  this.httpCache.get<any[]>(uri)
 

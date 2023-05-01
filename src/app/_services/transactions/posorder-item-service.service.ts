@@ -28,7 +28,7 @@ export interface ItemPostResults {
   menuItemWithPrice: IMenuItem
   message:           string;
   priceCategoryID   : number;
-  
+
  }
 
  export interface  InventoryResults {
@@ -60,6 +60,7 @@ export interface NewItem            {
   order: IPOSOrder;
   clientID: number;
   priceColumn: number;
+  assignedPOSItems:  PosOrderItem[];
 }
 export interface NewInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number, portionValue: string, packaging: string,  itemNote: string}
 export interface NewSerializedItem  { orderID: number, quantity: number, menuItem: Serial, barcode: string,  weight: number, portionValue: string, packaging:string,  itemNote: string}

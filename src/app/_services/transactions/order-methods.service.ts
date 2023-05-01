@@ -463,7 +463,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number,
-                   portionValue: string, packaging: string): Observable<ItemPostResults> {
+                   portionValue: string, packaging: string, assignedPOSItems: PosOrderItem[]): Observable<ItemPostResults> {
     if (!barcode) { return null;}
     if (!order) {const order = {} as IPOSOrder}
 
@@ -477,9 +477,13 @@ export class OrderMethodsService implements OnDestroy {
 
     const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging,
                       portionValue: portionValue, deviceName: deviceName, passAlongItem: passAlongItem,
-                      clientID: order.clientID , priceColumn : order.priceColumn } as NewItem;
+                      clientID: order.clientID , priceColumn : order.priceColumn, assignedPOSItems: assignedPOSItems } as NewItem;
 
-    return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem);
+    // console.log(newItem)
+    return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem).pipe(switchMap(data => {
+      // console.log('data', data)
+      return of(data)
+    }))
   }
 
   async addItemToOrder(order: IPOSOrder, item: IMenuItem, quantity: number) {
@@ -491,7 +495,7 @@ export class OrderMethodsService implements OnDestroy {
     if (passAlongItem && passAlongItem[0]) {
       passAlong = passAlongItem[0]
     }
-    return this.processItemPOSObservable(order, null, item, 1, null , 0, 0, passAlong )
+    return this.processItemPOSObservable(order, null, item, 1, null , 0, 0, passAlong, this.assignPOSItems )
   }
 
   sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean): Observable<any> {
@@ -626,16 +630,20 @@ export class OrderMethodsService implements OnDestroy {
     if (quantity === 0 ) { quantity = 1};
     if (!this.validateItem(item, barcode)) { return }
     let passAlongItem;
+
+    console.log('processAddItem assigned items', this.assignedPOSItem);
+
     if (this.assignedPOSItem) {  passAlongItem  = this.assignedPOSItem; };
 
     order = this.validateOrder();
 
     if (order) {
       const site       = this.siteService.getAssignedSite();
+      const passAlongItems = this.assignPOSItems;
 
       if (barcode)  {
         const addItem$ = this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,
-                                               input?.portionValue)
+                                               input?.portionValue, passAlongItems)
         this.processItemPostResults(addItem$)
         return false;
       }
@@ -654,7 +662,7 @@ export class OrderMethodsService implements OnDestroy {
           const deviceName  = localStorage.getItem('devicename')
           const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem,
                                 packaging: packaging, portionValue: portionValue, barcode: '',
-                                weight: 1, itemNote: itemNote, deviceName: deviceName } as NewItem
+                                weight: 1, itemNote: itemNote, deviceName: deviceName, assignedPOSItems: passAlongItems } as NewItem
           const addItem$    = this.posOrderItemService.postItem(site, newItem)
           this.processItemPostResults(addItem$)
           return true
@@ -666,7 +674,7 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
-    processItemPOSObservable(
+  processItemPOSObservable(
                             order : IPOSOrder ,
                             barcode: string,
                             item: IMenuItem,
@@ -674,7 +682,8 @@ export class OrderMethodsService implements OnDestroy {
                             input: any,
                             rewardAvailableID: number,
                             rewardGroupApplied: number,
-                            passAlongItem: PosOrderItem) : Observable<ItemPostResults> {
+                            passAlongItem: PosOrderItem,
+                            passAlongItems: PosOrderItem[]) : Observable<ItemPostResults> {
 
 
     const valid = this.validateUser();
@@ -687,25 +696,21 @@ export class OrderMethodsService implements OnDestroy {
     if (quantity === 0 ) { quantity = 1 };
 
     if (!this.validateItem(item, barcode)) {
-      // console.log('invalid item validateOrder')
       return of(null)
     }
 
-    if (this.assignedPOSItem && !passAlongItem) {  passAlongItem  = this.assignedPOSItem[0]; };
 
-    if(passAlongItem) {
-      this.assignPOSItems = [];
-      this.assignPOSItems.push(passAlongItem);
-    }
+    if (this.assignedPOSItem && !passAlongItem) {  passAlongItem  = this.assignedPOSItem[0]; };
 
     order = this.validateOrder();
 
-    console.log('process item validateOrder')
-    
     if (order) {
+
       const site       = this.siteService.getAssignedSite();
       if (barcode)  {
-        return this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,  input?.portionValue).pipe(switchMap(
+        return this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,
+                                    input?.portionValue,
+                                    passAlongItems).pipe(switchMap(
           data => {
             this.processItemPostResultsPipe(data)
             return of(data);
@@ -723,15 +728,20 @@ export class OrderMethodsService implements OnDestroy {
           itemNote         = input?.itemNote;
         }
 
+
         if (item) {
           const deviceName  = localStorage.getItem('devicename')
           const splitGroupID = this.splitEntryValue;
           let newItem     = { orderID: order.id, quantity: quantity, menuItem: item,
-                                passAlongItem: passAlongItem,
-                                packaging: packaging, portionValue: portionValue, barcode: '',
-                                weight: 1, itemNote: itemNote, deviceName: deviceName,
-                                rewardAvailableID: rewardAvailableID,
-                                rewardGroupApplied: rewardGroupApplied, clientID: order.clientID, splitGroupID: splitGroupID }
+                              passAlongItem: passAlongItem,
+                              packaging: packaging, portionValue: portionValue, barcode: '',
+                              weight: 1, itemNote: itemNote, deviceName: deviceName,
+                              rewardAvailableID: rewardAvailableID,
+                              rewardGroupApplied: rewardGroupApplied, clientID: order.clientID, splitGroupID: splitGroupID,
+                              assignedPOSItems: passAlongItems }
+
+          console.log('item', item)
+
           if (order.id == 0 || !order.id) {
             const orderPayload = this.orderService.getPayLoadDefaults(null)
             return this.orderService.postOrderWithPayload(site, orderPayload).pipe(
@@ -741,6 +751,8 @@ export class OrderMethodsService implements OnDestroy {
               })).pipe(
                 switchMap(data => {
                   this.processItemPostResultsPipe(data)
+
+
                   return of(data);
               })
             )
@@ -778,6 +790,10 @@ export class OrderMethodsService implements OnDestroy {
       if (data) {
 
       }
+
+      this.assignPOSItems = [];
+      // this.assignPOSItems.push(null);
+
       if (data?.message) {  this.notifyEvent(`Process Result: ${data?.message}`, 'Alert ')};
 
       if (data && data.resultErrorDescription && data.resultErrorDescription != null) {
@@ -858,7 +874,8 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   scanBarcodeAddItemObservable(barcode: string, quantity: number, input: any, passAlongItem: PosOrderItem[]) {
-    return this.processItemPOSObservable(this.order, barcode, null, quantity, input, 0, 0, passAlongItem[0]);
+    return this.processItemPOSObservable(this.order, barcode, null, quantity, input, 0, 0, passAlongItem[0],
+                                         passAlongItem);
  }
 
  promptSerial(menuItem: IMenuItem, id: number, editOverRide: boolean, serial: string): boolean {

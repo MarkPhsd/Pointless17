@@ -689,10 +689,15 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     exportDailySales() {
       const list = [] as  metrcSalesReport[];
       this.rowData.forEach(data => {
+
         let item = {} as metrcSalesReport;
+        if (!data.quantityTotal) {
+          console.log('no  quantityTotal', data )
+        }
+
         const clientType = data?.clientType.toString() as string;
         if (clientType.toLowerCase() === 'caregiver') {
-          console.log('item sale', data)
+          // console.log('item sale', data)
         }
 
         const dateFormat = data?.completeDate.slice(0, 10);
@@ -709,14 +714,26 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         item.oompb= data?.oompb;
         item.idMethod = '';
         item.packageLabel = data?.packageLabel;
-        item.quantityTotal= data?.quantityTotal.toFixed(2);
+
+        item.quantityTotal = '0'
+        if ( data?.quantityTotal) {
+          item.quantityTotal= data?.quantityTotal.toFixed(2);
+        }
         item.uom = data?.unitType;
         item.UTHC = '';
         item.UTHCC = '';
         item.UTHCUOM = '';
         item.UnitWeight = '';
         item.UWUOM = '';
-        item.netTotal = data?.netTotal.toFixed(2);
+
+        item.netTotal = '0';
+        if (data.netTotal) {
+          item.netTotal = data?.netTotal.toFixed(2);
+        }
+        if (!data.netTotal) {
+          console.log('no net total', data.id )
+        }
+
         item.orderID  = data?.orderID;
         item.Price= '0';
         item.ExciseTax = '0';

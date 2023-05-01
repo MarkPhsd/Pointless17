@@ -270,7 +270,6 @@ export interface PosOrderItem {
   pizzaMultiplier: number;
   wholeSaleCost: number;
   rewardGroupApplied: number;
-  
 }
 //ItemPrepped,PrintLocation,Splitter as SplitGroupID,Gratuity,ProdSecondLanguage,productSortOrder,PizzaMultiplier, PizzaGroup, PriceTierID
 

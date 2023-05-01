@@ -152,7 +152,9 @@ export class RewardsAvailibleComponent implements OnInit, OnDestroy {
           }
         }
 
-        return this.orderMethodsService.processItemPOSObservable( this.order, null, item, 1, null , this.rewardID, this.groupID, passAlongItem )
+        return this.orderMethodsService.processItemPOSObservable( this.order, null, item, 1, null ,
+                                                                  this.rewardID, this.groupID, passAlongItem,
+                                                                  this.orderMethodsService.assignPOSItems)
 
       })).pipe( switchMap(item => {
 

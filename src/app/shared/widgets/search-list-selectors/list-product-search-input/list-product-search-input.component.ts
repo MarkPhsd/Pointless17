@@ -153,7 +153,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     if (this.requireEnter) {
       const barcode  =  this.input.nativeElement.value;
       if (!this.scans) { this.scans = [] };
-      this.barcodeScanner$ =  this.scan(barcode).pipe(switchMap(data => { 
+      this.barcodeScanner$ =  this.scan(barcode).pipe(switchMap(data => {
         return of(data)
       }))
       this.initForm();
@@ -192,11 +192,14 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     return   item$.pipe(switchMap( data => {
       if (this.obs$) {  this.obs$.shift() }
         if ( !data ) {
-          return this.orderMethodService.processItemPOSObservable( this.order, barcode, null, 1, this.input, 0, 0, this.assignedItem)
+          return this.orderMethodService.processItemPOSObservable( this.order, barcode, null, 1, this.input, 0, 0,
+                                                                   this.assignedItem, this.orderMethodService.assignPOSItems)
         } else
         {
           if (data.length == 1 || data.length == 0) {
-            return this.orderMethodService.processItemPOSObservable(this.order, barcode, data[0], 1, this.input, 0, 0, this.assignedItem)
+            return this.orderMethodService.processItemPOSObservable(this.order, barcode, data[0], 1,
+                                                                    this.input, 0, 0, this.assignedItem,
+                                                                    this.orderMethodService.assignPOSItems)
           } else {
             this.listBarcodeItems(data, this.order)
           }

@@ -13,6 +13,12 @@
 @import '@angular/cdk/overlay-prebuilt.css';
 
 
+mat-button mat-raised-button mat-icon {
+  @media print {
+    display: none;
+  }
+}
+
 @mixin for-small-phone-only {
   @media (max-width: 500px) { @content; }
 }
@@ -525,7 +531,7 @@ mat-dialog-container {
   align-items: center;
 }
 
-.button-margins { 
+.button-margins {
   margin: 5px;
 }
 
@@ -579,7 +585,7 @@ mat-dialog-container {
 //   A700: #00c853,
 // );
 
-// .keyboard { 
+// .keyboard {
 //   z-index: 1000;
 //   height: calc(25vh + 75px);
 //   width: 75vw;

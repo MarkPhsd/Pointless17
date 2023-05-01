@@ -17,7 +17,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   styleUrls: ['./order-header.component.scss']
 })
 export class OrderHeaderComponent implements OnInit , OnChanges {
- 
+
   @Input() qrOrder: boolean;
   @Input() uiTransactionSettings  = {} as TransactionUISettings;
   @Input() mainPanel : boolean;
@@ -75,10 +75,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
   sendOrder() {
     this.action$ = this.orderMethodsService.sendToPrep(this.order, true).pipe(
       switchMap(data => {
-        // const confirm = window.confirm('Exit order?')
-        // if (confirm) {
-          this.clearOrder()
-        // }
+        this.clearOrder()
         return of(data)
       })
     )
