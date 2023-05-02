@@ -177,7 +177,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
 
     const addItem$ = this.addItemToOrder(barcode).pipe(switchMap(data => {
       if (this.obs$) {
-        console.log('shifting.', data)
         this.obs$.shift()
       }
       return of(data)
