@@ -175,22 +175,25 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   scan(barcode: string){
     if (!this.obs$) { this.obs$ = []  }
 
-    this.obs$.push(this.addItemToOrder(barcode).pipe(
-      switchMap(data => {
-        return of(data)
-      })
-    ))
+    const addItem$ = this.addItemToOrder(barcode).pipe(switchMap(data => {
+      if (this.obs$) {
+        console.log('shifting.', data)
+        this.obs$.shift()
+      }
+      return of(data)
+    }))
+
+    this.obs$.push(addItem$)
 
     return  forkJoin(this.obs$)
   }
 
-  addItemToOrder(barcode: string) {
+  addItemToOrder(barcode: string): Observable<unknown> {
     const site = this.siteService.getAssignedSite();
     this.initForm()
     const item$ = this.menuItemService.getMenuItemByBarcode(site, barcode, this.order?.clientID);
 
     return   item$.pipe(switchMap( data => {
-      if (this.obs$) {  this.obs$.shift() }
         if ( !data ) {
           return this.orderMethodService.processItemPOSObservable( this.order, barcode, null, 1, this.input, 0, 0,
                                                                    this.assignedItem, this.orderMethodService.assignPOSItems)
