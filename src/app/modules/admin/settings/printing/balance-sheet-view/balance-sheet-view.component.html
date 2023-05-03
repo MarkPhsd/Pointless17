@@ -33,37 +33,37 @@
   <h2>Remaining in Drawer</h2>
   <div class="balance-grid-summary">
     <div>Dollars</div>
-    <div>{{sheet.onesEnd | currency}}</div>
+    <div>{{sheet.onesEnd  | currency}}</div>
 
     <div>Five</div>
-    <div>{{sheet.fivesEnd | currency}}</div>
+    <div>{{sheet.fivesEnd * 5 | currency}}</div>
 
     <div>Ten</div>
-    <div>{{sheet.tensEnd | currency}}</div>
+    <div>{{sheet.tensEnd * 10 | currency}}</div>
 
     <div>Twenty</div>
     <div>{{sheet.twentiesEnd | currency}}</div>
 
     <div>Fifty</div>
-    <div>{{sheet.fiftiesEnd | currency}}</div>
+    <div>{{sheet.fiftiesEnd * 50 | currency}}</div>
 
     <div>Hundreds</div>
-    <div>{{sheet.hundredsEnd | currency}}</div>
+    <div>{{sheet.hundredsEnd * 100 | currency}}</div>
 
     <div>Penny</div>
-    <div>{{sheet.pennyEnd | currency}}</div>
+    <div>{{sheet.pennyEnd * .01 | currency}}</div>
 
     <div>Nickle</div>
-    <div>{{sheet.nickelEnd | currency}}</div>
+    <div>{{sheet.nickelEnd *.05 | currency}}</div>
 
     <div>Dime</div>
-    <div>{{sheet.dimeEnd | currency}}</div>
+    <div>{{sheet.dimeEnd * .1 | currency}}</div>
 
     <div>Quarter</div>
-    <div>{{sheet.quarterEnd | currency}}</div>
+    <div>{{sheet.quarterEnd  * .25  | currency}}</div>
 
     <div>Half</div>
-    <div>{{sheet.halfDollarEnd | currency}}</div>
+    <div>{{sheet.halfDollarEnd * .5 | currency}}</div>
 
     <div>Coin Dollar</div>
     <div>{{sheet.dollarsEnd | currency}}</div>

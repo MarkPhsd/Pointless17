@@ -168,7 +168,7 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
     if (! this.searchModel) {  this.searchModel = {} as BalanceSheetSearchModel }
     this.assignDateSettings();
     const search = this.searchModel;
-    console.log('refresh Search', search)
+    // console.log('refresh Search', search)
     this.sheetMethodsService.updateBalanceSearchModel( search )
     this.outputRefreshSearch.emit('true');
   }
@@ -256,19 +256,19 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
   subscribeToDatePicker()  {
     if (this.dateRangeForm) {
       this.dateRangeForm.get('start').valueChanges.subscribe(res=>{
-        console.log('res dateFrom', res)
+        // console.log('res dateFrom', res)
         if (!res) {return}
         this.dateFrom = res //this.dateRangeForm.get("start").value
       })
 
       this.dateRangeForm.get('end').valueChanges.subscribe(res=>{
-        console.log('res dateTo', res)
+        // console.log('res dateTo', res)
         if (!res) {return}
         this.dateTo = res
       })
 
       this.dateRangeForm.valueChanges.subscribe( res => {
-        console.log('res dateTo', res)
+        // console.log('res dateTo', res)
         this.dateFrom = this.dateRangeForm.get("start").value
         this.dateTo = this.dateRangeForm.get("end").value
 
@@ -280,14 +280,14 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
   }
 
   emitDatePickerData(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement) {
-    console.log(this.dateRangeForm.value);
+    // console.log(this.dateRangeForm.value);
     if (dateRangeStart && dateRangeEnd) {
       // if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("end").value) {
         // this.dateFrom = dateRangeStart.value //this.dateRangeForm.get("start").value
         // this.dateTo   = dateRangeEnd.value //this.dateRangeForm.get("end").value
         this.dateFrom = this.dateRangeForm.get("start").value
         this.dateTo   = this.dateRangeForm.get("end").value
-        console.log('res dateTo', this.dateTo, this.dateFrom)
+        // console.log('res dateTo', this.dateTo, this.dateFrom)
         this.refreshDateSearch()
       // }
     }

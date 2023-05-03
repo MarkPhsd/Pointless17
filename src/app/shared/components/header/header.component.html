@@ -9,7 +9,7 @@
       <div [class]="gridlayout">
 
         <div *ngIf="!smallDevice && isApp">
-          
+
           <button aria-label="back" mat-button
                   (click)="goBack()">
             <mat-icon aria-hidden="true">keyboard_arrow_left</mat-icon>
@@ -46,16 +46,15 @@
           </div>
         </div>
 
-        <div  *ngIf="!smallDevice" >
-          <button aria-label="location_on"
+        <div class="simple-row " *ngIf="!smallDevice" >
+          <api-status-display><mat-icon>network</mat-icon></api-status-display>
+
+          <button class="check-out-button" aria-label="location_on"
                   mat-button
                   (click)="siteSelector()">
             <mat-icon>location_on</mat-icon>
           </button>
-        </div>
 
-        <div>
-          <api-status-display></api-status-display>
         </div>
 
       </div>

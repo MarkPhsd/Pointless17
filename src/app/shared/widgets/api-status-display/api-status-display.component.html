@@ -1,9 +1,17 @@
 
-<div *ngIf="!connectedToApi && initApp"></div>
-
-<div class="margin" *ngIf="!connectedToApi && !initApp">
+<!-- <div *ngIf="!connectedToApi && initApp">
   <mat-icon color="warn">
     signal_wifi_statusbar_connected_no_internet_4
   </mat-icon>
-  <ng-content></ng-content>
-</div>
+</div> -->
+
+<ng-container [ngTemplateOutlet]="isError"></ng-container>
+
+<ng-template #connectionError>
+  <div class="margin">
+    <mat-icon color="warn">
+      signal_wifi_statusbar_connected_no_internet_4
+    </mat-icon>
+    <ng-content></ng-content>
+  </div>
+</ng-template>

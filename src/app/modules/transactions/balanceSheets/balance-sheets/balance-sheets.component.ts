@@ -7,7 +7,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
-import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap,filter,tap, catchError } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
@@ -328,34 +328,42 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   //ag-grid standard method.
-  getDataSource(params) {
-    return {
-      getRows: (params: IGetRowsParams) => {
-        const items$ = this.getRowData(params, params.startRow, params.endRow)
-        items$.subscribe(data =>
-          {
-              if (data.paging) {
-                const resp =  data.paging
-                this.isfirstpage   = resp.isFirstPage
-                this.islastpage    = resp.isFirstPage
-                this.currentPage   = resp.currentPage
-                this.numberOfPages = resp.pageCount
-                this.recordCount   = resp.recordCount
-              }
-              if (this.numberOfPages !=0 && this.numberOfPages) {
-                this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-              }
-              if (data.results) {
-                params.successCallback(data.results)
-                this.rowData = data.results
-              }
-            }, err => {
-              console.log(err)
-            }
-        );
-        }
-    };
-  }
+  // getDataSource(params) {
+  //   return {
+  //     getRows: (params: IGetRowsParams) => {
+  //       const items$ = this.getRowData(params, params.startRow, params.endRow)
+  //       items$.subscribe({
+  //         next: data =>
+  //         {
+  //           console.log('data')
+  //           if (data.toString() === "Not Authorized.") {
+  //             this.siteService.notify('Not authorized','Close', 3000, 'red')
+  //             return
+  //           }
+  //           if (data.paging) {
+  //             const resp =  data.paging
+  //             this.isfirstpage   = resp.isFirstPage
+  //             this.islastpage    = resp.isFirstPage
+  //             this.currentPage   = resp.currentPage
+  //             this.numberOfPages = resp.pageCount
+  //             this.recordCount   = resp.recordCount
+  //           }
+  //           if (this.numberOfPages !=0 && this.numberOfPages) {
+  //             this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
+  //           }
+  //           if (data.results) {
+  //             params.successCallback(data.results)
+  //             this.rowData = data.results
+  //           }
+  //         },
+  //         error: err => {
+  //             console.log(err)
+  //         }
+  //       }
+  //       );
+  //     }
+  //   };
+  // }
 
   //ag-grid standard method
   getRowData(params, startRow: number, endRow: number):  Observable<IBalanceSheetPagedResults>  {
@@ -388,6 +396,13 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit, OnDestroy 
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
       items$.subscribe(data =>
         {
+
+            console.log('data')
+            if (data.toString() === "Not Authorized.") {
+              this.siteService.notify('Not authorized for balance sheet audit.','Close', 3000, 'red')
+              return
+            }
+
             const resp         =  data.paging
             if (resp) {
               this.isfirstpage   = resp.isFirstPage

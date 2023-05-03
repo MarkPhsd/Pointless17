@@ -1,9 +1,12 @@
 <mat-card class="mat-card-view">
-  <mat-card-content>
-    <button mat-button
+  <mat-card-title>
+    <button class="button-margins" mat-button
             (click)="resetSearch()">
       Reset <mat-icon>refresh</mat-icon>
     </button>
+  </mat-card-title>
+  <mat-card-content>
+
 
     <div *ngIf="searchModel"
          class="keypad fields">

@@ -40,7 +40,7 @@
 }
 
 .mat-toolbar-android {
-  
+
   //changed 4/20/2023
   margin-top    : 15px  ;
   padding-top   : 5px;
@@ -168,6 +168,10 @@ button {
   width      : 50px;
 }
 
+.item-col-span {
+  column-span: 2;
+}
+
 .flex-sections-nouser {
   display         : flex;
   justify-content : space-between;
@@ -192,7 +196,7 @@ button {
   flex-direction  : row;
 
   flex-basis      : auto;
-  
+
   //changed 4/20/2023
   margin-top      : 15px;
 
@@ -213,6 +217,12 @@ button {
     align-content: center;
     justify-content: center;
   }
+}
+
+.simple-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
 .grid-margin {

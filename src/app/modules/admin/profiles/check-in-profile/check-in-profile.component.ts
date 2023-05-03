@@ -44,7 +44,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 
   statuses$   : Observable<IStatuses[]>;
   client$     : Observable<IClientTable>;
-  clientType$: Observable<clientType>; 
+  clientType$: Observable<clientType>;
   @Input() clientTable  : IClientTable;
   @Input() id           : string;
 
@@ -106,7 +106,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
               private clientTypeService:    ClientTypeService,
               private dateHelperService         : DateHelperService,
 
-              
+
               ) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin,manager');
@@ -149,25 +149,25 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 		})
   }
 
-  checkValidity(client: IClientTable, requiresLicenseValidation: boolean) { 
-   
+  checkValidity(client: IClientTable, requiresLicenseValidation: boolean) {
+
     if (!client) {return}
     let requires : boolean
     const typeID =  client.clientTypeID;
     const site = this.siteService.getAssignedSite()
-    this.clientType$   = this.clientTypeService.getClientTypeCached(site, typeID).pipe(switchMap(data => { 
+    this.clientType$   = this.clientTypeService.getClientTypeCached(site, typeID).pipe(switchMap(data => {
       const result =  this.orderMethodsService.validateCustomerForOrder(client,  requiresLicenseValidation, data.name)
-      this.accountDisabled = false 
+      this.accountDisabled = false
       this.validationMessage = '';
-      if (!result.valid)  { 
-        this.accountDisabled = true 
+      if (!result.valid)  {
+        this.accountDisabled = true
         this.validationMessage = result.resultMessage;
       }
       return of(data)
     }))
   }
 
- 
+
   initConfirmPassword()  {
 		this.confirmPassword = this.fb.group( {
 		  confirmPassword: ['']
@@ -294,7 +294,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
       this.inputForm.valueChanges.subscribe( data => {
         console.log(data)
         if (data && this.transactionUISettings &&   this.transactionUISettings.validateCustomerLicenseID) {
-          this.checkValidity(this.inputForm.value,  this.transactionUISettings.validateCustomerLicenseID) 
+          this.checkValidity(this.inputForm.value,  this.transactionUISettings.validateCustomerLicenseID)
         }
       })
     }
@@ -406,9 +406,17 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 
   postNewCheckIn() {
     if (!this.clientTable) { return }
-    return this.orderService.getNewDefaultCheckIn(this.siteService.getAssignedSite(), this.clientTable?.id).pipe( switchMap (
+
+    const site = this.siteService.getAssignedSite()
+    const payload = this.orderService.getPayLoadDefaults(null)
+    payload.order.clientID = this.clientTable.id;
+    const postOrder$ = this.orderService.postOrderWithPayload(site, payload)
+
+    //this.orderService.getNewDefaultCheckIn(this.siteService.getAssignedSite(), this.clientTable?.id)
+
+    return postOrder$.pipe( switchMap (
       data => {
-        console.log(data)
+        // console.log(data)
         if (!data) {
           this.siteService.notify(`Order was not submitted`, "Error", 2000, 'yellow' )
           return
@@ -458,7 +466,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
       )).pipe(
         switchMap( order => {
         this.orderService.updateOrderSubscription(order)
-        if (event) { 
+        if (event) {
           this.goBackToList();
         }
         return of(order)
@@ -538,9 +546,12 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 
   startOrder(event) {
     const site = this.siteService.getAssignedSite()
+
+
+
     const clientType$  = this.clientTypeService.getClientTypeCached(site, this.clientTable.clientTypeID)
     this.action$ =   clientType$.pipe(
-      switchMap( data => { 
+      switchMap( data => {
         if (!data) { return of(null)}
         const result = this.orderMethodsService.validateCustomerForOrder(this.clientTable, false, data?.name)
         if (!result.valid) {

@@ -51,11 +51,11 @@ export class LastImageDisplayComponent implements OnInit {
     const lastItem$ = this.orderService.lastItemAdded$;
 
     if (!this.platFormservice.isApp()) {
-      console.log('init Subscriptions ') 
+      // console.log('init Subscriptions ')
       this.initSubscriptionOrder(awsUrl$)
       return
     }
-    
+
     this.lastImage$ =  lastItem$.pipe(switchMap(data => {
        this.lastItem = data;
        return awsUrl$
@@ -72,37 +72,41 @@ export class LastImageDisplayComponent implements OnInit {
         return of(data)
       }
     ))
-  
+
   }
 
   //if this is the display then show the item absed on the update of the order
-  initSubscriptionOrder(awsUrl$: Observable<string>) { 
-    if (this.platFormservice.isApp()) { 
-      return
-    }
+  initSubscriptionOrder(awsUrl$: Observable<string>) {
+    if (this.platFormservice.isApp()) {return}
 
-    // console.log('subscribe order last image')
     const order$ = this.orderService.currentOrder$
 
     this.menuItem$ =  order$.pipe(switchMap(data => {
       this.order = data;
-      this.orderItems = data.posOrderItems;
+      this.orderItems = null;
+      if (data.posOrderItems) {
+        this.orderItems = data.posOrderItems;
+      }
       return awsUrl$
    })).pipe(switchMap(data => {
 
-       this.imageSource = null
-       if (!data) { return of(null) }
-       if (!this.lastItem) { return of(null)}
-       this.url = data;
+      if (!data) { return of(null)}
+
+      this.imageSource = null
+      if (!data) { return of(null) }
+      if (!this.lastItem) { return of(null)}
+      this.url = data;
 
       const lastItem =  this.orderItems[this.orderItems.length];
-      
+
       //  console.log('subscribe order last image', lastItem)
       if (!lastItem) { return of(null)}
       const site = this.sitesService.getAssignedSite()
       return  this.menuService.getMenuItemByID(site, lastItem.productID)
      }
-   )).pipe(switchMap(data => { 
+   )).pipe(switchMap(data => {
+    if (!data) { return of(null)}
+
     if (data && data.urlImageMain && this.url) {
       this.imageSource = `${this.url}${data.urlImageMain}`
     }

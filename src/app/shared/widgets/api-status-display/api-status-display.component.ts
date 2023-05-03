@@ -1,4 +1,4 @@
-import { Component, OnInit ,OnDestroy } from '@angular/core';
+import { Component, OnInit ,OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, Subscription,   } from 'rxjs';
 import { PollingService } from 'src/app/_services/system/polling.service';
 
@@ -9,6 +9,8 @@ import { PollingService } from 'src/app/_services/system/polling.service';
 })
 
 export class ApiStatusDisplayComponent implements OnInit, OnDestroy {
+
+  @ViewChild('connectionError') connectionError: TemplateRef<any>;
 
   poll$               : Observable<boolean>;
   _poll               : Subscription;
@@ -36,5 +38,12 @@ export class ApiStatusDisplayComponent implements OnInit, OnDestroy {
     if (this._poll) {
       this._poll.unsubscribe();
     }
+  }
+
+  get  isError() {
+    if (!this.connectedToApi) {
+     return this.connectionError
+    }
+    return null;
   }
 }
