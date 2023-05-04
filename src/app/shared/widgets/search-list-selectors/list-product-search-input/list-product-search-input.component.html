@@ -16,7 +16,14 @@
   </div>
 
  <div *ngIf="(action$ | async) as item"></div>
- <div *ngIf="(barcodeScanner$ | async) as scanner"></div>
+ <!-- <div *ngIf="(barcodeScanner$ | async) as scanner"></div> -->
+
+ <div *ngFor="let observable of observablesArray$ | async">
+  <ng-container *ngIf="observable | async as value">
+    <!-- {{ value }} -->
+  </ng-container>
+</div>
+
 <!--
  <div *ngFor="let item of scans">
     <div *ngIf="(addItemToOrder(item) | async)  as addItem">

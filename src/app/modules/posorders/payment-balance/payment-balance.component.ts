@@ -249,7 +249,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
         } catch (error) {
 
         }
-        item = this.paymentMethodsProessService.applyTripPOSResponseToPayment(data, item)
+        item = this.paymentMethodsProessService.applyTripPOSResponseToPayment(data, item, 0)
         item.id = 0;
         item.transactionIDRef  = transactionId;
         return this.paymentService.makePayment(site, item, this.order, amount, null)

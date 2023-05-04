@@ -75,7 +75,7 @@ export class TriPosTransactionsComponent implements OnInit {
 
   initForm() {
     this.inputForm = this.fb.group({
-      tipValue: []
+      itemName: []
     })
   }
 
@@ -83,7 +83,7 @@ export class TriPosTransactionsComponent implements OnInit {
     const i = 0;
   }
 
-  applyDropAmount(event) {
+  applyTipAmount(event) {
     this.tipValue = event;
   }
 
@@ -100,14 +100,29 @@ export class TriPosTransactionsComponent implements OnInit {
   setTransactionInfo() {
     const item = {} as authorizationPOST;
     item.laneId = this.terminalSettings.triposLaneID;
+
+    // console.log('form value', this.inputForm.value)
     if (!this.tipValue) {this.tipValue = '0'}
-    item.tipAmount     = this.tipValue;
+    // item.tipAmount     = this._tipValue;
+
     item.transactionId = this.posPayment.respcode;
-    item.transactionAmount = this.posPayment.amountPaid.toFixed(2).toString();
+    item.tipAmount = this.tipValue;
+    item.transactionAmount = (this.posPayment.amountPaid + +this.tipValue).toFixed(2).toString();
     item.ticketNumber = this.posPayment.id.toString();
     this.processing = true;
     this.errorMessage = ''
     return item;
+  }
+
+  get _tipValue() {
+
+    console.log('inputFormValue', this.inputForm.value)
+    if (this.inputForm) {
+     const value =  this.inputForm.controls['itemName'].value
+     this.tipValue = value;
+     return value;
+    }
+    return 0;
   }
 
   reverseAuthorization() {
@@ -126,7 +141,7 @@ export class TriPosTransactionsComponent implements OnInit {
       this.posPayment.amountPaid      = 0
       this.posPayment.amountReceived  = 0
       this.posPayment.respcode        = data.transactionId;
-      return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
+      return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order, 0)
     }
     )).pipe(switchMap(data => {
       this.initMessaging()
@@ -143,7 +158,8 @@ export class TriPosTransactionsComponent implements OnInit {
       const item = this.setTransactionInfo()
       const authorizationCompletion$ = this.methodsService.authorizationCompletion(site, item );
 
-      console.log('request', item)
+      // console.log('request', item)
+
       this.processing$ =  authorizationCompletion$.pipe(
         switchMap(data => {
           console.log('Complete Auth', data.transactionId, data)
@@ -153,7 +169,7 @@ export class TriPosTransactionsComponent implements OnInit {
             return of (null)
           }
           this.posPayment.saleType      = 1;
-          return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order);
+          return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order, +this.tipValue);
       }
       )).pipe(switchMap(data => {
         this.initMessaging();
@@ -178,13 +194,14 @@ export class TriPosTransactionsComponent implements OnInit {
   initTransaction( posPayment: IPOSPayment, terminal: ITerminalSettings) : authorizationPOST {
     const authorizationPOST = {} as authorizationPOST;
     if (!posPayment.tipAmount) { posPayment.tipAmount = 0}
-    authorizationPOST.transactionAmount = Math.abs(this.posPayment.amountPaid).toFixed(2).toString();
-    authorizationPOST.laneId            = terminal.triposLaneID;
+    if (this.tipValue) { posPayment.tipAmount = +this.tipValue}
 
+    authorizationPOST.transactionAmount = Math.abs(this.posPayment.amountPaid + posPayment.tipAmount ).toFixed(2).toString();
     if (!this.tipValue) {this.tipValue = '0'}
-    authorizationPOST.tipAmount = this.tipValue;
-
+    authorizationPOST.tipAmount = posPayment.tipAmount.toString();
+    authorizationPOST.laneId            = terminal.triposLaneID;
     authorizationPOST.ticketNumber      = this.posPayment.id.toString();
+    // console.log('authorization Post', authorizationPOST)
     return authorizationPOST;
   }
 
@@ -201,7 +218,7 @@ export class TriPosTransactionsComponent implements OnInit {
           this.displayErrors(data)
           return of (null)
         }
-        return this.paymentMethodsService.processAuthTriPOSResponse(data ,this.posPayment, this.order)
+        return this.paymentMethodsService.processAuthTriPOSResponse(data ,this.posPayment, this.order, +this.tipValue)
       })).pipe(switchMap(data => {
         this.reset()
         if (!data) { return of(null)}
@@ -233,7 +250,7 @@ export class TriPosTransactionsComponent implements OnInit {
               return of (null)
             }
             this.posPayment.saleType      = 1;
-            return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
+            return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order, +this.tipValue)
           }
         )).pipe(switchMap(data => {
           //return the current order. Error messsage should have been
@@ -296,7 +313,7 @@ export class TriPosTransactionsComponent implements OnInit {
             this.displayErrors(data)
             return of (null)
           }
-          return   this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order)
+          return   this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order, +this.tipValue)
         })).pipe(switchMap(data => {
           // return this.orderService.getOrder(site, this.order.id.toString(), false)
           //return the current order. Error messsage should have been

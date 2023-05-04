@@ -82,7 +82,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this.formattedValue = ''
     this.outPutValue.emit('')
 
-    console.log('updated display out put check entry', this.formatted)
+    // console.log('updated display out put check entry', this.formatted)
     this.outPutCheckEntry.emit(null)
     this.initForm()
   }
@@ -323,7 +323,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
     if (this.formatted && this.formatted.length > 1) {
       this.outPutValue.emit(this.formatted)
     }
-    console.log('updated display out put check entry', this.formatted)
+    // console.log('updated display out put check entry', this.formatted)
     this.outPutCheckEntry.emit(this.formatted)
   }
 

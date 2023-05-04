@@ -83,6 +83,12 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
     let response: IPaymentResponse;
     const balance$ =  this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet();
+    console.log(amount)
+    if (posPayment.tipAmount) {
+      amount = (amount - posPayment.tipAmount)
+    }
+
+    console.log(amount)
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
     return balance$.pipe(
         switchMap(data => {
@@ -386,14 +392,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return payment
   }
 
-  processTriPOSResponse(trans: any, payment: IPOSPayment, order: IPOSOrder): Observable<any> {
+  processTriPOSResponse(trans: any, payment: IPOSPayment, order: IPOSOrder, tipValue: number): Observable<any> {
 
     const site = this.sitesService.getAssignedSite();
     if (!this.isTriPOSApproved(trans)) {
       return of(null)
     }
 
-    payment   = this.applyTripPOSResponseToPayment(trans, payment);
+    payment   = this.applyTripPOSResponseToPayment(trans, payment, tipValue);
     payment   = this.applyAssociatedAuths(payment.tranType, payment, order);
     let paymentMethod    = {} as IPaymentMethod;
     let cardType = 'credit'
@@ -438,7 +444,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   }
 
-  processAuthTriPOSResponse(trans: any, payment: IPOSPayment, order: IPOSOrder): Observable<any> {
+  processAuthTriPOSResponse(trans: any, payment: IPOSPayment, order: IPOSOrder, tipValue: number): Observable<any> {
     const site = this.sitesService.getAssignedSite();
 
     if (!order) {
@@ -450,7 +456,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       return of(order)
     }
 
-    payment   = this.applyTripPOSResponseToPayment(trans, payment)
+    payment   = this.applyTripPOSResponseToPayment(trans, payment, tipValue)
     let paymentMethod    = {} as IPaymentMethod;
     let cardType = 'credit'
     if (trans?.cardLogo) {   cardType = trans?.cardLogo;  }
@@ -569,35 +575,40 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
 
-  applyTripPOSResponseToPayment(response: any, payment: IPOSPayment) {
+  applyTripPOSResponseToPayment(response: any, payment: IPOSPayment, tipValue: number) {
     // console.log('type', response._type, )
     // console.table(response)
-    if (response._type === 'authorizationResponse') {
-      payment.amountPaid      = response.approvedAmount;
-      payment.amountReceived  = response.approvedAmount;
-    }
 
     if (response._type != 'authorizationResponse') {
-      payment.amountPaid      = response.transactionAmount;
-      payment.amountReceived  = response.transactionAmount;
+      payment.amountPaid      = response.approvedAmount;
+      payment.amountReceived  = response.approvedAmount;
     }
 
     if (response._type === 'authorizationCompletionResponse') {
       payment.amountPaid      = response?.subTotalAmount;
       payment.amountReceived  = response?.subTotalAmount;
-      payment.tipAmount       = response?.tipAmount
+      if (+tipValue == (response.subTotalAmount - +tipValue)) {
+        payment.tipAmount       = tipValue;
+        payment.amountPaid      = response.subTotalAmount - +tipValue;;
+        payment.amountReceived  = response.subTotalAmount - +tipValue;;
+      }
     }
 
     if (response._type === 'saleResponse') {
       payment.amountPaid      = response?.approvedAmount;
       payment.amountReceived  = response?.approvedAmount;
+
+      if (+tipValue == (response.approvedAmount - +tipValue)) {
+        payment.tipAmount       = tipValue;
+        payment.amountPaid      = response.approvedAmount - +tipValue;;
+        payment.amountReceived  = response.approvedAmount - +tipValue;;
+      }
     }
 
     payment.account         = response.accountNumber;
     payment.accountNum      = response.accountNum;
     payment.approvalCode    = response.approvalNumber;
 
-    payment.tipAmount       = response.tipAmount;
     payment.captureStatus   = response.statusCode;
     payment.entryMethod     = response.entryMode;
     payment.entrymode       = response.paymentType;

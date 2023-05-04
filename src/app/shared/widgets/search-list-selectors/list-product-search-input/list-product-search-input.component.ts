@@ -4,7 +4,7 @@ import { Component,Output,OnInit,
           } from '@angular/core';
 import { MenuService, OrdersService } from 'src/app/_services';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap,filter,tap, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap,filter,tap, map, concatMap } from 'rxjs/operators';
 import { Subject ,fromEvent, Subscription, of, forkJoin, ReplaySubject } from 'rxjs';
 import { IPOSOrder,  } from 'src/app/_interfaces';
 import { Capacitor, Plugins } from '@capacitor/core';
@@ -13,8 +13,8 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
-import { Observable } from 'rxjs'
-
+import { Observable, BehaviorSubject } from 'rxjs';
+import { finalize, take } from 'rxjs/operators';
 // https://github.com/rednez/angular-user-idle
 const { Keyboard } = Plugins;
 
@@ -24,17 +24,19 @@ const { Keyboard } = Plugins;
   styleUrls: ['./list-product-search-input.component.scss']
 })
 export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
-  scans = [] as any[];
-  obs$ : Observable<any>[];
-  barcodeScanner$ : Observable<any>;
-  _scanners = new ReplaySubject <any>()
+  scans = [] as unknown[];
+  obs$ : Observable<unknown>[];
+  barcodeScanner$ : Observable<unknown>;
+  _scanners = new ReplaySubject <unknown>()
+  private observablesArraySubject = new BehaviorSubject<Observable<any>[]>([]);
+  public observablesArray$ = this.observablesArraySubject.asObservable();
 
   get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
-  action$: Observable<any>;
+  action$: Observable<unknown>;
 
-  searchPhrase:  Subject<any> = new Subject();
+  searchPhrase:  Subject<unknown> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
 
@@ -47,6 +49,26 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
 
   transactionUISettings:TransactionUISettings;
   requireEnter         : boolean;
+
+  addObservable(newObservable: Observable<any>): void {
+    const currentObservables = this.observablesArraySubject.getValue();
+
+    newObservable = newObservable.pipe(
+      take(1),
+      finalize(() => this.removeObservable(newObservable))
+    );
+
+    this.observablesArraySubject.next([...currentObservables, newObservable]);
+  }
+
+  removeObservable(observableToRemove: Observable<any>): void {
+    const currentObservables = this.observablesArraySubject.getValue();
+    const updatedObservables = currentObservables.filter(
+      observable => observable !== observableToRemove
+    );
+
+    this.observablesArraySubject.next(updatedObservables);
+  }
 
   initSubscriptions() {
     this.orderService.scanner$.subscribe(data =>  {
@@ -153,11 +175,9 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     if (this.requireEnter) {
       const barcode  =  this.input.nativeElement.value;
       if (!this.scans) { this.scans = [] };
-      this.barcodeScanner$ =  this.scan(barcode).pipe(switchMap(data => {
-        return of(data)
-      }))
-      this.initForm();
+      this.scan(barcode);
     }
+
   }
 
   getOrderObs() {
@@ -173,18 +193,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   }
 
   scan(barcode: string){
-    if (!this.obs$) { this.obs$ = []  }
-
-    const addItem$ = this.addItemToOrder(barcode).pipe(switchMap(data => {
-      if (this.obs$) {
-        this.obs$.shift()
-      }
-      return of(data)
-    }))
-
-    this.obs$.push(addItem$)
-
-    return  forkJoin(this.obs$)
+    this.addObservable(this.addItemToOrder(barcode))
   }
 
   addItemToOrder(barcode: string): Observable<unknown> {
@@ -201,7 +210,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
           if (data.length == 1 || data.length == 0) {
             return this.orderMethodService.processItemPOSObservable(this.order, barcode, data[0], 1,
                                                                     this.input, 0, 0, this.assignedItem,
-                                                                    this.orderMethodService.assignPOSItems)
+                                                                    this.orderMethodService.assignPOSItems);
           } else {
             this.listBarcodeItems(data, this.order)
           }
