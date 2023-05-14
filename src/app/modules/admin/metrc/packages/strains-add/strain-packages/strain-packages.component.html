@@ -1,9 +1,9 @@
 
 <div [formGroup]="packageForm"
      *ngIf="packageForm && package"
-     fxLayout="column" fxFlex fxFlexFill>
-  <div fxLayout="row" fxFlex fxFlexFill>
+      >
 
+  <div >
     <mat-card>
         <div id="inventoryMoveInstructions">Move inventory to location:</div>
         <div *ngIf="package">Taking in: {{ package.quantity }}  {{ package.unitOfMeasureName }} </div>
@@ -148,7 +148,8 @@
 
   </div>
 
-  <div *ngIf="inventoryAssignments" fxFlex fxFlexFill>
+  <!-- fxFlex fxFlexFill -->
+  <div *ngIf="inventoryAssignments">
     <mat-card class="package-list" >
       <div *ngFor="let item of inventoryAssignments ;let i = index">
         <app-metrc-individual-package

@@ -16,8 +16,7 @@
   </mat-card>
 
   <mat-card  *ngIf="!layoutService.designerMode" >
-    <!-- <div fxLayoutAlign="center center"
-        fxLayout="row"> -->
+
       <youtube-player
         [width]="chartWidth"
         [height]="chartHeight"
@@ -26,8 +25,6 @@
         (ready)="onReady($event)"
         [videoId]="url"
       ></youtube-player>
-    <!-- </div> -->
+
   </mat-card>
 </div>
-<!-- [style.width]="chartWidth"
-  [style.height]="chartHeight" -->

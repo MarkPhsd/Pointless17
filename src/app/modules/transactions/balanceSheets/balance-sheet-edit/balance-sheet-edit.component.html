@@ -9,7 +9,7 @@
       <div *ngIf="sheet.message">
         {{sheet.message }}
       </div>
-      
+
       <div class="header-grid">
         <div>
           <balance-sheet-header-view
@@ -42,7 +42,7 @@
             ></app-edit-buttons-standard>
         </div>
       </div>
-     
+
       <mat-divider class="mat-dividers"></mat-divider>
 
     </mat-card-subtitle>
@@ -57,10 +57,10 @@
             </span>
             <div *ngIf="platFormService.isApp">
               <button class="margins"  mat-raised-button color="primary" (click)="openCashDrawer(1)">
-                <mat-icon>point_of_sale</mat-icon> Drawer  
+                <mat-icon>point_of_sale</mat-icon> Drawer
               </button>
             </div>
-          
+
           </div>
 
           <div *ngIf="!sheet.endTime">
@@ -206,7 +206,7 @@
                     Quarters
                 </cash-value-calc>
               </div>
-   
+
               <div>
                 <cash-value-calc
                   [formControlName]  = "'halfDollarStart'"
@@ -341,7 +341,7 @@
 
               <div>
                 <cash-value-calc
-                    [formControlName] ="'dollarsEnd'"
+                    [formControlName] ="'dollarEnd'"
                     [inputForm]       = "inputForm"
                     [multiplier]      = "1">
                     Dollars Coin

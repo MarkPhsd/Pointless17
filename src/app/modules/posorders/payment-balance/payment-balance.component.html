@@ -15,7 +15,7 @@
         </app-order-header>
       </div>
       <div class="grid-items">
-        <div>
+        <div *ngIf="!qrOrder">
           <button  class="cart-button"
                    mat-raised-button
                    color="accent"

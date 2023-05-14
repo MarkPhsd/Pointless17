@@ -65,10 +65,12 @@
         <mat-card class='panel-card'
                   *ngIf="( (isUserStaff && platFormService.platForm !='web' )
                         || (isUserStaff) )">
-          <ul
+          <!-- <ul
             class="ul-pos-panel"
-            fxFlex fxLayout="row"
-            fxLayoutAlign="top center">
+            > -->
+            <ul
+              class="ul-pos-panel fx-row"
+              >
 
             <li *ngIf="employeeName && !smallDevice">
               <div class="pos-name">
@@ -108,7 +110,6 @@
             <li>
               <scale-value-view></scale-value-view>
             </li>
-
 
             <li *ngIf="platFormService.isApp() && userSwitching">
               <div class='search-input'>

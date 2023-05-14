@@ -1,7 +1,5 @@
 <div *ngIf="(closingProcedure$ | async) as closingProcedures"></div>
-
-
-<mat-card *ngIf="(uiTransactions$ | async) as uiTransactions">
+  <mat-card *ngIf="(uiTransactions$ | async) as uiTransactions">
 
   <mat-card-title></mat-card-title>
   <mat-card-subtitle>
@@ -121,51 +119,44 @@
   </mat-card>
 </div>
 
-<div class="container">
+<div class="container" *ngIf="(auths$ | async) as auths">
   <div  class="grid-sales-cards"
-        *ngIf="iBalanceSheet && localSite">
+        *ngIf="iBalanceSheet && localSite && !auths.blindClose ">
 
-    <div #printsection>
-      <mat-card class="summary">
+    <div class="summary">
+      <mat-card >
         <mat-card-content>
           <ng-container [ngTemplateOutlet]="pendingTransactions"></ng-container>
           <ng-container [ngTemplateOutlet]="futureTransactions"></ng-container>
+          <ng-container [ngTemplateOutlet]="viewMetrcNetSales"></ng-container>
         </mat-card-content>
       </mat-card>
-  
+    </div>
+
+    <div #printsection>
+
       <ng-container [ngTemplateOutlet]="taxReport"></ng-container>
-
       <ng-container [ngTemplateOutlet]="paymentReport"></ng-container>
-
       <ng-container [ngTemplateOutlet]="balanceSheetView"></ng-container>
 
       <div *ngIf="!printing">
         <ng-container [ngTemplateOutlet]="employeeOrdersByHourReport"></ng-container>
       </div>
 
-     <ng-container [ngTemplateOutlet]="salesByDevice"></ng-container>
-
+       <ng-container [ngTemplateOutlet]="salesByDevice"></ng-container>
       <ng-container [ngTemplateOutlet]="employeeReport"></ng-container>
-
-      <ng-container [ngTemplateOutlet]="giftCardReport"></ng-container> 
+      <ng-container [ngTemplateOutlet]="giftCardReport"></ng-container>
 
     </div>
 
     <div>
-
       <ng-container [ngTemplateOutlet]="itemSalesReport"></ng-container>
-
-      <ng-container [ngTemplateOutlet]="itemAdjustmentVoids"></ng-container> 
-
+      <ng-container [ngTemplateOutlet]="itemAdjustmentVoids"></ng-container>
     </div>
   </div>
 
-  <div
-      class="section-gap"
-      fxLayout="row"
-      fxLayoutAlign="space-between center"
-      flLayoutGap="20px">
-    <mat-card *ngIf="iBalanceSheet && iBalanceSheet.startTime" class="mat-card" fxFlex="100">
+    <mat-card *ngIf="iBalanceSheet && iBalanceSheet.startTime"
+          >
         <app-widget-card [dateFrom]  ="iBalanceSheet.startTime"
                          [dateTo]    ="iBalanceSheet.startTime"
                          [zrunID]    ="iBalanceSheet.id"
@@ -176,7 +167,6 @@
     </mat-card>
   </div>
 
-</div>
 
 <ng-template #balanceSheetView>
   <balance-sheet-report
@@ -188,7 +178,7 @@
 </ng-template>
 
 <ng-template #pendingTransactions>
-  <div class="summary" >
+  <!-- <div class="summary" > -->
     <sales-tax-report
           [site]="localSite"
           [dateFrom]="dateFrom"
@@ -196,15 +186,15 @@
           [pendingTransactions]="true"
           [summaryOnly]="true"
           [zrunID]="iBalanceSheet.id" >
-        <div summary>
+      <div summary>
           <mat-icon >receipt</mat-icon>  Pending Transactions
-        </div>
+      </div>
     </sales-tax-report>
-  </div>
+  <!-- </div> -->
 </ng-template>
 
 <ng-template #futureTransactions>
-  <div class="summary" *ngIf="scheduleDateStart && scheduleDateEnd">
+  <div *ngIf="scheduleDateStart && scheduleDateEnd">
     <sales-tax-report
           [site]="localSite"
           [scheduleDateStart]="scheduleDateStart"
@@ -231,6 +221,21 @@
         <mat-divider></mat-divider>
     </sales-tax-report>
   </div>
+</ng-template>
+
+
+<ng-template #metrcNetSalesSummary>
+  <app-metrc-summary
+      [site]    ="localSite"
+      [dateFrom]="dateFrom"
+      [dateTo]  ="dateTo"
+      [zrunID]  ="iBalanceSheet.id"
+      [type]    ="'metrcSummary'"
+      >
+    <div summary>
+      <mat-icon >receipt</mat-icon> METRC:
+    </div>
+  </app-metrc-summary>
 </ng-template>
 
 <ng-template #paymentReport>

@@ -30,7 +30,8 @@ export class RegisterAccountMainComponent implements OnInit {
   _uISettings: Subscription;
   loginForm: FormGroup;
   bucket: string;
-  uiHomePageSetting: UIHomePageSettings
+  uiHomePageSetting: UIHomePageSettings;
+
   initUIService() {
     this.uiSettings.getSetting('UIHomePageSettings').subscribe( data => {
         if (data) {
@@ -55,7 +56,7 @@ export class RegisterAccountMainComponent implements OnInit {
     if (this.authenticationService.userValue) {
       this.router.navigate(['/app-main-menu']);
     }
- 
+
   }
 
   goBack(){
@@ -76,7 +77,7 @@ export class RegisterAccountMainComponent implements OnInit {
     }
   )
   }
-  
+
   assingBackGround(image: string) {
     if (!image) {
       image = 'https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg'
@@ -86,7 +87,8 @@ export class RegisterAccountMainComponent implements OnInit {
     const i = 1
   }
 
-  async ngOnInit() {
+ ngOnInit() {
+    this.initUIService()
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
     });

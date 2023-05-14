@@ -1,7 +1,7 @@
 <div *ngIf="(menu$ | async) as menus" >
 
   <div *ngFor = "let menu of menus">
-     <div fxLayout="row" fxLayoutAlign="center center" *ngIf="menu.enabled">
+     <div *ngIf="menu.enabled">
         <mat-button-toggle
           class="button-toggle"
           type="button"

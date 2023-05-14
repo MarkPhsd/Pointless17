@@ -1,123 +1,110 @@
+<mat-card>
+  <mat-card-title>
+    <h1>Flat Tax Rate</h1>
+  </mat-card-title>
+  <mat-card-subtitle>
+    <div class="grid-header">
+      <div>
+        <mat-label>Enter the range and fee that will apply to this group of items. Associating this tax rate with more than one item type will group them all together.</mat-label>
+      </div>
 
+      <div>
+        <div>
+          <button  mat-raised-button
+                  class="button"
+                  color="primary"
+                  (click)="submitRate()">
+            <mat-icon>save</mat-icon>Save</button>
+        </div>
 
-    <!-- <div *ngFor="let addressGroup of form.get('address').controls;let i = index" [formGroup]="addressGroup"></div> -->
-    <!-- let addressGroup of inputForm.get('address').controls;let -->
-
-<!-- <div *ngIf="flatRateTax">
-  <div *ngFor="let item of flatRateTax.flatRateTaxValues">
-    {{item | json }}
-  </div>
-</div> -->
-<div class="header">Flat Tax Rate</div>
-<div class="instructions">Enter the range and fee that will apply to this group of items. Associating this tax rate with more than one item type will group them all together.</div>
-
-  <div [formGroup]="inputForm">
-
-
-
-     <div fxLayout="column" fxLayoutAlign="space-around start" >
-
-        <div fxFlex="row" fxLayoutAlign="space-around start" >
-
-          <div class="group-name">
-            <mat-form-field appearance="outline">
-
-              <mat-label>Group Name</mat-label>
-              <input matInput
-                      type             ="text"
-                      formControlName  ="name"
-                      class="form-control" >
-              </mat-form-field>
-          </div>
-
-          <div class="main-buttons">
-            <button  mat-raised-button
-                    class="button-assign add-range"
+        <div>
+          <button  mat-raised-button
                     color="primary"
-                    (click)="submitRate()"><mat-icon>save</mat-icon>Save</button>
+                    class="button"
+                    (click)="delete()">
+            <mat-icon>delete</mat-icon>Delete</button>
+        </div>
+      </div>
+
+
+    </div>
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <div [formGroup]="inputForm">
+
+        <div >
+          <mat-form-field appearance="outline">
+            <mat-label>Group Name</mat-label>
+            <input matInput
+                    type             ="text"
+                    formControlName  ="name"
+                    class="form-control" >
+            </mat-form-field>
+        </div>
+
+
+        <div  >
+            <mat-divider></mat-divider>
+            <mat-label>Ranges may have different fee values, the fee value is the total value for the order, not cumulative.</mat-label>
+
+            <div>
+              <button class="button"
+                      mat-raised-button
+                      color="primary"
+                      (click)="addTaxValueGroup()">
+                      <mat-icon>add</mat-icon>Range</button>
           </div>
-          <div class="main-buttons">
-            <button  mat-raised-button
-                     color="primary"
-                     class="button-assign add-range"
-                     (click)="delete()"><mat-icon>delete</mat-icon>Delete</button>
-          </div>
+        </div>
+
+        <div formArrayName="flatRateTaxValues" *ngFor="let f of flatRateTaxValues.controls; let i = index"  >
+            <div [formGroupName]="i" >
+
+                <div >
+                  <mat-form-field appearance="outline">
+                    <mat-label>Start Value</mat-label>
+                        <input matInput
+                        type                ="text"
+                        formControlName     ="rateStart"
+                        name                ="rateStart"
+                        class               ="form-control"
+                        (blur)="transformPriceAmount($event)" >
+                  </mat-form-field>
+                </div>
+
+                <div >
+                  <mat-form-field appearance="outline">
+                    <mat-label>End Value</mat-label>
+                        <input matInput
+                        type               ="text"
+                        formControlName    ="rateEnd"
+                        name               ="rateEnd"
+                        class              ="form-control"
+                        (blur)="transformPriceAmount($event)"
+                      >
+                  </mat-form-field>
+                </div>
+
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Fee</mat-label>
+                        <input matInput
+                        type               ="text"
+                        formControlName    ="fee"
+                        name               ="fee"
+                        class="form-control"
+                        (blur)="transformPriceAmount($event)" >
+                  </mat-form-field>
+                </div>
+
+                <button mat-raised-button
+                        color="primary"
+                        class="button"
+                        (click)="deleteTaxValue(i)" ><mat-icon>delete</mat-icon></button>
+            </div>
 
         </div>
 
-        <div fxLayout="row" fxLayoutAlign="start center" >
-          <mat-divider></mat-divider>
-          <div class="instructions">Ranges can have different fee values, the fee value is the total value for the order, not cumulative.</div>
-          <div>
-            <button class="button-assign add-range"
-                    mat-raised-button
-                    color="primary" (click)="addTaxValueGroup()"><mat-icon>add</mat-icon>Add Range</button>
-          </div>
-        </div>
-
-          <div formArrayName="flatRateTaxValues" *ngFor="let f of flatRateTaxValues.controls; let i = index"  >
-
-
-              <div [formGroupName]="i" fxLayout="row" fxLayoutAlign="start center">
-
-                  <div class="mat-form-field range-values">
-                    <mat-form-field appearance="outline">
-                      <mat-label>rateStart</mat-label>
-                          <input matInput
-                          type                ="text"
-                          formControlName     ="rateStart"
-                          name                ="rateStart"
-                          class               ="form-control"
-                          (blur)="transformPriceAmount($event)" >
-                    </mat-form-field>
-                  </div>
-
-                  <div class="mat-form-field range-values">
-                    <mat-form-field appearance="outline">
-                      <mat-label>rateEnd</mat-label>
-                          <input matInput
-                          type               ="text"
-                          formControlName    ="rateEnd"
-                          name               ="rateEnd"
-                          class              ="form-control"
-                          (blur)="transformPriceAmount($event)"
-                        >
-                    </mat-form-field>
-                  </div>
-
-                  <div class="mat-form-field range-values">
-                    <mat-form-field appearance="outline">
-                      <mat-label>Fee</mat-label>
-                          <input matInput
-                          type               ="text"
-                          formControlName    ="fee"
-                          name               ="fee"
-                          class="form-control"
-                          (blur)="transformPriceAmount($event)" >
-                    </mat-form-field>
-                  </div>
-
-                  <button mat-raised-button
-                          color="primary"
-                          class="button-assign"
-                          (click)="deleteTaxValue(i)" ><mat-icon>delete</mat-icon></button>
-              </div>
-
-          </div>
-
-
-  </div>
-</div>
-<!-- export interface FlatRateTax {
-  id:                 number;
-  name:               string;
-  flatRatesTaxValues:  FlatRatesTaxValue[];
-}
-
-export interface FlatRatesTaxValue {
-  id:                 number;
-  rateStart:          number;
-  rateEnd:            number;
-  fee:                number;
-  flatRateTaxID:      number; -->
-
+    </div>
+  </mat-card-content>
+</mat-card>

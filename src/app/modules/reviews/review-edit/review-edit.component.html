@@ -1,69 +1,47 @@
-
-<div fxLayout="row" fxLayoutAlign=" center" class="container"  >
-  <mat-card>
-
+  <mat-card class="centered-flex">
     <mat-card-title>
 
-      <div fxLayout="row" fxLayoutAlign=" center" >
+      <button mat-raised-button class="button" color="primary" (click)="saveItem()">Submit</button>
 
-        <div fxLayout="column" fxLayoutAlign="end">
-
-          <div fxLayout="row" fxLayoutAlign="space-evenly center">
-
-            <button mat-raised-button class="button" color="primary" (click)="saveItem()">Submit</button>
-
-            <div *ngIf="adminOptionsOn">
-              <button mat-raised-button class="button" color="primary" (click)="deleteItem()">Delete</button>
-            </div>
-
-            <button mat-raised-button class="button" color="primary" >Cancel</button>
-
-          </div>
-        </div>
-
+      <div *ngIf="adminOptionsOn">
+        <button mat-raised-button class="button" color="primary" (click)="deleteItem()">Delete</button>
       </div>
+
+      <button mat-raised-button class="button" color="primary" >Cancel</button>
 
     </mat-card-title>
 
     <mat-card-content id="mat-card">
-      <!-- <div *ngIf="reviewForm.controls.reviewNotes.errors?.required && reviewForm.controls.reviewNotes.touched" class="error">
-        <mat-icon color="warn">warning</mat-icon> Leave a review or cancel.
-      </div> -->
-
-      <!-- <star-rating [starType]="'svg'" [rating]=""></star-rating> -->
-
       <form [formGroup]="reviewForm"  id="reviewNotes"  (ngSubmit)="onSubmit()" >
 
-            <mat-label>Leave a review</mat-label>
+        <mat-label>Leave a review</mat-label>
 
-            <mat-form-field appearance="outline" id="review-field">
+        <mat-form-field appearance="outline" id="review-field">
 
-                <textarea matInput
-                      formControlName="reviewNotes"
-                      matInput
-                      cdkTextareaAutosize
-                      cdkAutosizeMinRows="5"
-                      cdkAutosizeMaxRows="5" >
-                </textarea>
+            <textarea matInput
+                  formControlName="reviewNotes"
+                  matInput
+                  cdkTextareaAutosize
+                  cdkAutosizeMinRows="5"
+                  cdkAutosizeMaxRows="5" >
+            </textarea>
 
-                <mat-icon >sentiment_very_satisfied</mat-icon>
-                <mat-hint>Leave your review!</mat-hint>
+            <mat-icon >sentiment_very_satisfied</mat-icon>
+            <mat-hint>Leave your review!</mat-hint>
 
-            </mat-form-field>
+        </mat-form-field>
 
-            <div *ngIf="adminOptionsOn">
+        <div *ngIf="adminOptionsOn">
 
-              <mat-checkbox class="example-margin" formControlName="activeReview">Checked</mat-checkbox>
-              <textarea matInput  formControlName="reviewResponse" >
-                </textarea>
+          <mat-checkbox class="example-margin" formControlName="activeReview">Checked</mat-checkbox>
+          <textarea matInput  formControlName="reviewResponse" >
+          </textarea>
 
-            </div>
+        </div>
 
       </form>
     </mat-card-content>
 
-
   </mat-card>
 
-</div>
 

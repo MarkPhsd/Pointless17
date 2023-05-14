@@ -189,6 +189,7 @@ import { NgControlAttributeDirective } from '../_directives/ng-control-attribute
 import { KeyboardButtonComponent } from './widgets/keyboard-button/keyboard-button.component';
 import { M22ResizableComponent } from './widgets/m22-resizable/m22-resizable.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MetrcSummaryComponent } from '../modules/admin/reports/metrc-summary/metrc-summary.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -289,6 +290,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MenuPriceSelectionComponent,
     MenuSearchBarComponent,
     MenuTinyComponent,
+    MetrcSummaryComponent,
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,
     NgControlAttributeDirective,
@@ -500,6 +502,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MenuMinimalComponent,
     MenuSearchBarComponent,
     MenuTinyComponent,
+    MetrcSummaryComponent,
     M22ResizableComponent,
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,

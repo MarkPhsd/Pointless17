@@ -1,0 +1,14 @@
+
+
+  <div>
+    <ng-content select="[summary]"></ng-content>
+  </div>
+  <div  class="grid" *ngIf="(metrcSummary$ | async) as sales; else loading">
+    <div >Net (pre-tax):</div>
+    <div class="totals">{{sales.netTotal | currency }}  </div>
+  </div>
+
+
+  <ng-template #loading>
+    ...loading METRC Net Total
+  </ng-template>

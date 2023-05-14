@@ -12,20 +12,22 @@
 }
 
 :host .mat-menu-panel {
-  //changed 4/20/2023
   margin-top: 15px  !important;
-
-
   width     : 100%!important;
   min-width : 300px;
   overflow-x: hidden;
 }
 
+.fx-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
 .mat-toolbar-android-no-user {
-  //changed 4/20/2023
   margin-top    : 5px  ;
-
-
   width         : 100%  ;
   min-width     : 300px ;
   height        : 45px  ;

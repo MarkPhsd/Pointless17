@@ -675,7 +675,12 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       }
       if (!this.searchModel.currentDay) {
         const fields = ['completeDate','clientType', 'oomp',  'oompb', 'value', 'packageLabel','quantityTotal','unitType','value', 'value', 'value', 'value', 'value', 'netTotal','orderID',
-        , 'value', 'value', 'value', , 'value', 'value' , 'value', 'value', 'value' ]
+                        , 'value', 'value', 'value', , 'value', 'value' , 'value', 'value', 'value' ]
+
+        const options = {} as UnparseConfig;
+        options.quotes = false;
+        options.header = false;
+        options.skipEmptyLines = true;
         this.gridApi.exportDataAsCsv({ columnKeys: fields, allColumns: false,
                                         fileName: 'metrc', skipColumnHeaders: true, suppressQuotes: true});
         return;
@@ -697,16 +702,9 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
         const clientType = data?.clientType.toString() as string;
         if (clientType.toLowerCase() === 'caregiver') {
-          // console.log('item sale', data)
         }
 
         const dateFormat = data?.completeDate.slice(0, 10);
-
-        // console.log('completionDate', data.completeDate)
-        // console.log('left', left)
-        // console.log('short date', this.datePipe.transform( data?.completeDate, 'shortDate'))
-        // console.log('mediumTime date', this.datePipe.transform( data?.completeDate, 'mediumTime'))
-        // const dateFormat =  this.datePipe.transform( data?.completeDate, 'shortDate');
         const mediumTime =  this.datePipe.transform( data?.completeDate, 'mediumTime');
         item.completeDate = `${dateFormat} ${mediumTime}`;
         item.clientType=  this.capitalizeFirstLetter(clientType);

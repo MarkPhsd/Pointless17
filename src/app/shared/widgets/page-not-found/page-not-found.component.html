@@ -1,29 +1,25 @@
-<div class="container bg">
-  <div class="row-height">
-   <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-      <div fxLayout="row"  fxlayoutGap="20px" class="stat-cards">
-          <mat-card fxFlex="100%">
-            <mat-card-title>
-              <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
-                <img [src]="logo" [alt]="company"  class="logo">
-                <h2>{{compName}} </h2>
-              </div>
-            </mat-card-title>
-            <mat-card-subtitle>
-              This page was not found.
-              <br>
-              But your journey has just begun.
-              <br>
-              Let us point the way.
-            </mat-card-subtitle>
-            <mat-card-content>
+  <mat-card class="centered centered-flex" >
+    <mat-card-title>
+      <div class="centered-flex">
+        <img [src]="logo" [alt]="company"  class="logo">
+        <h2>{{compName}} </h2>
+      </div>
+    </mat-card-title>
+    <mat-card-subtitle>
+      <div class="centered-flex">
+        This page was not found.
+        <br>
+        But your journey has just begun.
+        <br>
+        Let us point the way.
+      </div>
+    </mat-card-subtitle>
+    <mat-card-content>
 
-            </mat-card-content>
-            <mat-card>
-
-              <button mat-button (click)="goBack()"><mat-icon>self_improvement</mat-icon>Go Forth</button>
-            </mat-card>
-          </mat-card>
-    </div>
-  </div>
-</div>
+    </mat-card-content>
+    <mat-card>
+      <div class="centered-flex">
+        <button mat-button (click)="goBack()"><mat-icon>self_improvement</mat-icon>Go Forth</button>
+        </div>
+      <mat-card>
+  </mat-card>

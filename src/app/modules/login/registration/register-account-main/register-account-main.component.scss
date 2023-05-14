@@ -1,102 +1,107 @@
-body,
-html {
-  height: 100vh;
-  margin: 0;
-  overflow: hidden;
+// body,
+// html {
+//   height: 100vh;
+//   margin: 0;
+//   overflow: hidden;
+// }
+
+// .bg {
+//   /* The image used */
+//   background-image: url('https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg');
+
+//   /* Full height */
+//   height: 100vh;
+
+//   /* Center and scale the image nicely */
+//   background-position: center;
+//   background-repeat: no-repeat;
+//   background-size: cover;
+// }
+
+// mat-drawer-content {
+//     padding: 20px;
+// }
+
+// .center {
+//   width: 100vw;
+//   opacity: .8;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
+
+// button{
+//   margin:  2px 2px 2px 2px;
+// }
+
+// .logo {
+//   display: flex;
+//   justify-content: center;
+// }
+
+// .row-height {
+//   height: 100%;
+//   overflow-x: hidden;
+//   overflow-y: auto;
+// }
+
+// .login-form {
+//   min-width: 150px;
+//   max-width: 500px;
+//   width: 100%;
+// }
+
+// .example-label {
+//   display: table-cell;
+//   font-size: 14px;
+//   margin-left: 8px;
+//   min-width: 120px;
+// }
+
+// .example-button-row {
+//   display: table-cell;
+//   width: 490px;
+// }
+
+// .example-button-row .mat-button-base {
+//   margin: 8px 8px 8px 0;
+// }
+
+// .example-flex-container {
+//   display: flex;
+//   justify-content: space-between;
+//   flex-wrap: wrap;
+// }
+
+// .example-button-container {
+//   display: flex;
+//   justify-content: center;
+//   width: 120px;
+// }
+
+// h4 {
+//   margin-top: 0;
+//   margin-bottom: 5px;
+// }
+
+
+// #mat-card {
+//    border-radius: 5px;
+
+//   .mat-card-header{
+//     padding:5px;
+
+//   }
+//   .mat-card{
+//     padding:0;
+//   }
+
+//   .mat-card-content{
+//     padding:5px;
+//   }
+//  }
+
+mat-card {
+  min-height: 400px;
+  width: 400px;
 }
-
-.bg {
-  /* The image used */
-  background-image: url('https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg');
-
-  /* Full height */
-  height: 100vh;
-
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-mat-drawer-content {
-    padding: 20px;
-}
-
-.center {
-  width: 100vw;
-  opacity: .8;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-button{
-  margin:  2px 2px 2px 2px;
-}
-
-.logo {
-  display: flex;
-  justify-content: center;
-}
-
-.row-height {
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.login-form {
-  min-width: 150px;
-  max-width: 500px;
-  width: 100%;
-}
-
-.example-label {
-  display: table-cell;
-  font-size: 14px;
-  margin-left: 8px;
-  min-width: 120px;
-}
-
-.example-button-row {
-  display: table-cell;
-  width: 490px;
-}
-
-.example-button-row .mat-button-base {
-  margin: 8px 8px 8px 0;
-}
-
-.example-flex-container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.example-button-container {
-  display: flex;
-  justify-content: center;
-  width: 120px;
-}
-
-h4 {
-  margin-top: 0;
-  margin-bottom: 5px;
-}
-
-
-#mat-card {
-   border-radius: 5px;
-
-  .mat-card-header{
-    padding:5px;
-
-  }
-  .mat-card{
-    padding:0;
-  }
-
-  .mat-card-content{
-    padding:5px;
-  }
- }

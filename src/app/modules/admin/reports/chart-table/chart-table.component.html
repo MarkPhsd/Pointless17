@@ -7,9 +7,9 @@
 <div class ="header">
 	<mat-card>
     <div *ngIf="dataSource">
-      <table mat-table #outerSort="matSort" 
-             [dataSource]="dataSource" 
-             multiTemplateDataRows 
+      <table mat-table #outerSort="matSort"
+             [dataSource]="dataSource"
+             multiTemplateDataRows
              class="mat-elevation-z8" matSort>
 
         <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
@@ -42,10 +42,8 @@
 <br>
 <h2 >{{ this.siteName }}</h2>
 <div class="header">
-  <!-- fxFlex="100" -->
 	<mat-card >
 		<mat-table #outerSort="matSort" [dataSource]="sales" multiTemplateDataRows class="mat-elevation-z8" matSort>
-
 			<ng-container matColumnDef="{{column}}" *ngFor="let column of innerDisplayedColumns">
 				<th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </th>
 				<td mat-cell *matCellDef="let element"> {{element[column]}} </td>

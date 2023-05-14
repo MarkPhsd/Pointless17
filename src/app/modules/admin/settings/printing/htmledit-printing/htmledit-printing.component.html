@@ -3,230 +3,213 @@
   Loading...
 </div>
 <div *ngIf="(imageLabel$ | async) as image"></div>
-<div *ngIf="setting">
 
+<div *ngIf="setting">
   <div class="header-alignment">
     <mat-icon>design_services</mat-icon>
- </div>
-
-  <div class="header">
-      Designer
   </div>
 
-  <div  fxLayout="row" fxLayoutAlign="end end">
-    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="50"  fxLayoutGap="40px">
+  <div class="header">
+    Designer
+  </div>
 
-    </div>
-    <div fxLayout="column" fxLayoutAlign="end end" fxFlex="50"  fxLayoutGap="40px">
-      <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="50"  fxLayoutGap="10px">
-        <button mat-raised-button color="primary"  (click)="copy()"><mat-icon>file_copy</mat-icon>Copy</button>
-        <button mat-raised-button color="primary"  (click)="update()"><mat-icon>save</mat-icon>Save</button>
-        <button mat-raised-button color="primary"  (click)="delete()"><mat-icon>delete</mat-icon>Delete</button>
-        <button mat-raised-button color="primary"  (click)="onCancel()"><mat-icon>close</mat-icon>Close</button>
-      </div>
-    </div>
-   </div>
+  <div>
+    <button mat-raised-button color="primary"  (click)="copy()"><mat-icon>file_copy</mat-icon>Copy</button>
+    <button mat-raised-button color="primary"  (click)="update()"><mat-icon>save</mat-icon>Save</button>
+    <button mat-raised-button color="primary"  (click)="delete()"><mat-icon>delete</mat-icon>Delete</button>
+    <button mat-raised-button color="primary"  (click)="onCancel()"><mat-icon>close</mat-icon>Close</button>
+  </div>
 
   <div class="margin">
     <mat-divider></mat-divider>
   </div>
 
-  <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="40px">
+  <div class="grid-design-container">
+    <div [formGroup]="inputForm"
+        (ngSubmit)="update()"
+        *ngIf="inputForm">
+      <div *ngIf="isLabel">
+        <h4>ZPL Codes</h4>
+        <div>Enter codes designed to work with ZPL Printer.
+          For more info see Labelary. <a href="http://labelary.com/zpl.html" target="_blank">Labelary.</a>
+          and the <a href="http://labelary.com/viewer.html" target="_blank"> Labelary ZPL Designer.</a>
+        </div>
+      </div>
+      <div *ngIf="!isLabel">
+        <h4>HTML</h4>
+        <div>Print out use HTML to determine results.
+          Fields can be included that are specific to the section.
+          See documentation for field list.</div>
+      </div>
 
-    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="50"  fxLayoutGap="40px">
-        <div [formGroup]="inputForm"
-              (ngSubmit)="update()"
-              *ngIf="inputForm">
+      <br>
+      <div>Type: {{setting.description}}</div>
 
-            <div *ngIf="isLabel">
-              <h4>ZPL Codes</h4>
-              <div>Enter codes designed to work with ZPL Printer.
-                For more info see Labelary. <a href="http://labelary.com/zpl.html" target="_blank">Labelary.</a>
-                and the <a href="http://labelary.com/viewer.html" target="_blank"> Labelary ZPL Designer.</a>
-              </div>
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label >Name</mat-label>
+          <input matInput
+                type             ="text"
+                formControlName  ="name"
+                [(ngModel)]      ="setting.name"
+                class="form-control" >
+        </mat-form-field>
+      </div>
 
-            </div>
+      <div *ngIf="liveEditForm"
+            [formGroup]="liveEditForm">
+        <div class="instructions">
+          Live Edit
+        </div>
+        <div>
+          <mat-checkbox
+                type             ="checkbox"
+                formControlName  ="liveEdit"
+                class="form-control" >
+          </mat-checkbox>
+        </div>
 
-            <div *ngIf="!isLabel">
-              <h4>HTML</h4>
-              <div>Print out use HTML to determine results.
-                Fields can be included that are specific to the section.
-                See documentation for field list.</div>
-            </div>
+      </div>
+      <div *ngIf="!isLabel">
+        <mat-form-field appearance="outline">
+          <mat-label> {{setting.option9}}</mat-label>
+            <mat-select
+                type            ="text"
+                [(ngModel)]     ="setting.option9"
+                formControlName ="option9"
+                (selectionChange)="setPrinterWidthValue()">
 
-            <br>
-            <div>Type: {{setting.description}}</div>
+              <mat-option  [value]="58">
+                58MM
+              </mat-option>
+              <mat-option  [value]="80">
+                80MM
+              </mat-option>
+              <mat-option  [value]="850">
+                8.5in
+              </mat-option>
+            </mat-select>
 
-            <div>
-              <mat-form-field appearance="outline">
-                <mat-label >Name</mat-label>
-                <input matInput
-                      type             ="text"
-                      formControlName  ="name"
-                      [(ngModel)]      ="setting.name"
-                      class="form-control" >
-              </mat-form-field>
-            </div>
+        </mat-form-field>
+      </div>
 
-            <div *ngIf="liveEditForm"
-                 [formGroup]="liveEditForm">
-              <div class="instructions">
-                Live Edit
-              </div>
-              <div>
-                <mat-checkbox
-                      type             ="checkbox"
-                      formControlName  ="liveEdit"
-                      class="form-control" >
-                </mat-checkbox>
-              </div>
-
-            </div>
-            <div *ngIf="!isLabel">
-              <mat-form-field appearance="outline">
-                <mat-label> {{setting.option9}}</mat-label>
-                  <mat-select
-                      type            ="text"
-                      [(ngModel)]     ="setting.option9"
-                      formControlName ="option9"
-                      (selectionChange)="setPrinterWidthValue()">
-
-                    <mat-option  [value]="58">
-                      58MM
-                    </mat-option>
-                    <mat-option  [value]="80">
-                      80MM
-                    </mat-option>
-                    <mat-option  [value]="850">
-                      8.5in
-                    </mat-option>
-                  </mat-select>
-
-              </mat-form-field>
-            </div>
-
-            <mat-label>HTML Layout</mat-label>
-            <br>
-            <div *ngIf="!isLabel">
-              <mat-form-field appearance="outline" class="description">
-
-                <mat-label>Header</mat-label>
-                <textarea
-                          matInput
-                          type             ="text"
-                          formControlName  ="option6"
-                          [(ngModel)]      ="setting.option6"
-                          rows             ="10"
-                          cols             ="30"
-                    >
-                </textarea>
-              </mat-form-field>
-              <br>
-            </div>
-
+      <mat-label>HTML Layout</mat-label>
+      <br>
+          <div *ngIf="!isLabel">
             <mat-form-field appearance="outline" class="description">
-              <mat-label>Items</mat-label>
+
+              <mat-label>Header</mat-label>
               <textarea
                         matInput
                         type             ="text"
-                        formControlName  ="text"
-                        [(ngModel)]      ="setting.text"
+                        formControlName  ="option6"
+                        [(ngModel)]      ="setting.option6"
                         rows             ="10"
                         cols             ="30"
                   >
               </textarea>
             </mat-form-field>
             <br>
+          </div>
 
-            <div *ngIf="!isLabel">
-              <mat-form-field appearance="outline" class="description">
-                <mat-label>Order Total & Footer</mat-label>
-                <textarea
-                          matInput
-                          type             ="text"
-                          formControlName  ="option5"
-                          [(ngModel)]      ="setting.option5"
-                          rows             ="10"
-                          cols             ="30"
-                    >
-                </textarea>
-              </mat-form-field>
-              <br>
-            </div>
+          <mat-form-field appearance="outline" class="description">
+            <mat-label>Items</mat-label>
+            <textarea
+                      matInput
+                      type             ="text"
+                      formControlName  ="text"
+                      [(ngModel)]      ="setting.text"
+                      rows             ="10"
+                      cols             ="30"
+                >
+            </textarea>
+          </mat-form-field>
+          <br>
 
-            <div *ngIf="!isLabel">
-              <mat-form-field appearance="outline" class="description">
-                <mat-label>Cash Payments</mat-label>
-                <textarea
-                          matInput
-                          type             ="text"
-                          formControlName  ="option7"
-                          [(ngModel)]      ="setting.option7"
-                          rows             ="10"
-                          cols             ="30"
-                    >
-                </textarea>
-              </mat-form-field>
-              <br>
-            </div>
+          <div *ngIf="!isLabel">
+            <mat-form-field appearance="outline" class="description">
+              <mat-label>Order Total & Footer</mat-label>
+              <textarea
+                        matInput
+                        type             ="text"
+                        formControlName  ="option5"
+                        [(ngModel)]      ="setting.option5"
+                        rows             ="10"
+                        cols             ="30"
+                  >
+              </textarea>
+            </mat-form-field>
+            <br>
+          </div>
 
-            <div *ngIf="!isLabel">
-              <mat-form-field appearance="outline" class="description">
-                <mat-label>Credit Payments</mat-label>
-                <textarea
-                          matInput
-                          type             ="text"
-                          formControlName  ="option11"
-                          [(ngModel)]      ="setting.option11"
-                          rows             ="10"
-                          cols             ="30"
-                    >
-                </textarea>
-              </mat-form-field>
-              <br>
-            </div>
+          <div *ngIf="!isLabel">
+            <mat-form-field appearance="outline" class="description">
+              <mat-label>Cash Payments</mat-label>
+              <textarea
+                        matInput
+                        type             ="text"
+                        formControlName  ="option7"
+                        [(ngModel)]      ="setting.option7"
+                        rows             ="10"
+                        cols             ="30"
+                  >
+              </textarea>
+            </mat-form-field>
+            <br>
+          </div>
 
-            <div *ngIf="!isLabel">
-              <mat-form-field appearance="outline" class="description">
-                <mat-label>WIC EBT</mat-label>
-                <textarea
-                          matInput
-                          type             ="text"
-                          formControlName  ="option10"
-                          [(ngModel)]      ="setting.option10"
-                          rows             ="10"
-                          cols             ="30"
-                    >
-                </textarea>
-              </mat-form-field>
-              <br>
-            </div>
+          <div *ngIf="!isLabel">
+            <mat-form-field appearance="outline" class="description">
+              <mat-label>Credit Payments</mat-label>
+              <textarea
+                        matInput
+                        type             ="text"
+                        formControlName  ="option11"
+                        [(ngModel)]      ="setting.option11"
+                        rows             ="10"
+                        cols             ="30"
+                  >
+              </textarea>
+            </mat-form-field>
+            <br>
+          </div>
 
-            <div *ngIf="!isLabel">
-              <mat-form-field appearance="outline" class="description">
-                <mat-label>Footer</mat-label>
-                <textarea
-                          matInput
-                          type             ="text"
-                          formControlName  ="option8"
-                          [(ngModel)]      ="setting.option8"
-                          rows             ="10"
-                          cols             ="30"
-                    >
-                </textarea>
-              </mat-form-field>
-              <br>
-            </div>
-         </div>
+          <div *ngIf="!isLabel">
+            <mat-form-field appearance="outline" class="description">
+              <mat-label>WIC EBT</mat-label>
+              <textarea
+                        matInput
+                        type             ="text"
+                        formControlName  ="option10"
+                        [(ngModel)]      ="setting.option10"
+                        rows             ="10"
+                        cols             ="30"
+                  >
+              </textarea>
+            </mat-form-field>
+            <br>
+          </div>
+
+          <div *ngIf="!isLabel">
+            <mat-form-field appearance="outline" class="description">
+              <mat-label>Footer</mat-label>
+              <textarea
+                        matInput
+                        type             ="text"
+                        formControlName  ="option8"
+                        [(ngModel)]      ="setting.option8"
+                        rows             ="10"
+                        cols             ="30"
+                  >
+              </textarea>
+            </mat-form-field>
+            <br>
+          </div>
     </div>
-    <div fxLayout="column"
-         fxLayoutAlign="space-around center"
-         fxFlex="50"
-         fxLayoutGap="20px" >
+
+    <div>
       <h4>Design Layout</h4>
       <mat-card>
-        <div >
-
           <div *ngIf="!isLabel">
             <app-receipt-layout [headerText]="setting.option6"
                                 [itemText]="setting.text"
@@ -265,11 +248,8 @@
               <a #downloadLink></a>
             </div>
           </div>
-        </div>
       </mat-card>
-
     </div>
   </div>
-
 
 </div>

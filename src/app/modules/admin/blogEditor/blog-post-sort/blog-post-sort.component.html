@@ -1,13 +1,13 @@
 
 <div *ngIf="(save$ | async) as list"></div>
 
-
 <ng-template #saving>
   <mat-spinner [diameter]="50"></mat-spinner>
 </ng-template>
 
-<div fxFlex fxLayout="column start" *ngIf="blogs">
+<div *ngIf="blogs">
   <h5>Drag / Drop to Sort</h5>
+  <mat-label>Select a Category for Filtering</mat-label>
   <div class="drag-container">
     <div  class="drag-list "
           cdkDropList
@@ -17,8 +17,7 @@
       <div *ngFor="let item of blogs; let index = index;"
           class="pop"
           cdkDrag
-          (click)="assignItem(item, index)"
-        >
+          (click)="assignItem(item, index)" >
         <div>
           {{item?.name}}
         </div>

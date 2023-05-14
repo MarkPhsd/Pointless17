@@ -4,7 +4,7 @@
      [formGroup]="inputForm"
      class="grid-container" >
 
-  <div class="grid-container-3col" *ngIf="!itemType.disablePriceCategory" >
+  <div class="grid-container-3col" *ngIf="itemType && !itemType.disablePriceCategory" >
     <div *ngIf="!isInventory ">
       <app-price-category-search
           [isInventory]="isInventory"
@@ -13,8 +13,7 @@
           [inputForm]  ="inputForm"  >
       </app-price-category-search>
     </div>
-
-    <div>
+    <div *ngIf="!isInventory ">
       <button mat-button
               color="accent"
               (click)="openPriceCategory()">
@@ -26,7 +25,8 @@
         </div>
       </button>
     </div>
-    <div *ngIf="priceCategoryID  && priceCategoryID != 0">
+
+    <div *ngIf="!isInventory && (priceCategoryID  && priceCategoryID != 0)">
       <button mat-button
               color="warn"
               (click)="clearPriceCategory()">
@@ -44,15 +44,15 @@
       Price
     </app-value-fields>
 
-    <div *ngIf="!itemType.disableSimplePrice">
-      <button class="button" 
-              mat-raised-button 
+    <div *ngIf="!isInventory && !itemType.disableSimplePrice">
+      <button class="button"
+              mat-raised-button
               (click)="showMorePrices = !showMorePrices">
         Show More Prices
       </button>
     </div>
 
-    <div *ngIf="showMorePrices">
+    <div *ngIf="!isInventory && showMorePrices">
       <app-value-fields
           *ngIf="!isInventory && !itemType.disableSimplePrice"
           [fieldsClass]="'font-medium'"
@@ -75,7 +75,9 @@
           Price 3
         </app-value-fields>
     </div>
+
     <app-value-fields
+        *ngIf="!isInventory"
         [fieldsClass]="'font-medium'"
         [inputForm]= "inputForm"
         [fieldName]="'wholesale'">

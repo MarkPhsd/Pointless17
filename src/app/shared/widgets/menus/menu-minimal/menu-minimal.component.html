@@ -1,6 +1,7 @@
 
 <div *ngIf="(menus$ | async) as menus">
-  <div fxLayout="column"
+
+  <div
       class="row-class"
       *ngIf="isStaff && !displayCategories && menus">
 
@@ -30,7 +31,7 @@
   </div>
 </div>
 
-<div fxLayout="column" class="row-class"
+<div class="row-class"
       *ngIf="displayCategories">
   <div class="accordion  menu-header">
 

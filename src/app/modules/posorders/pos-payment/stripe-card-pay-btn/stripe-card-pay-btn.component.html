@@ -7,18 +7,16 @@
       <div><button class="payment-buttons" mat-raised-button (click)="addStripeTipPercent(18)">18 % Tip</button></div>
       <div><button class="payment-buttons" mat-raised-button (click)="addStripeTipPercent(20)">20 % Tip</button></div>
     </div>
-    <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-      <div>
-        <mat-form-field appearance="outline">
-            <input matInput
-              [(ngModel)]="stripeTipValue"
-              ngDefaultControl
-              type="text">
-            <mat-label>
-            Custom Tip Amount
-            </mat-label>
-        </mat-form-field>
-      </div>
+    <div>
+      <mat-form-field appearance="outline">
+          <input matInput
+            [(ngModel)]="stripeTipValue"
+            ngDefaultControl
+            type="text">
+          <mat-label>
+          Custom Tip Amount
+          </mat-label>
+      </mat-form-field>
     </div>
 
     <div  class="row-height">

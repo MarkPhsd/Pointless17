@@ -62,37 +62,28 @@
                             [pageSizeOptions]="pageSizeOptions"
                           ></mat-paginator>
           </div>
-
       </div>
 
       <form [formGroup]="inputForm" >
-        <div fxLayout="row" fxLayoutAlign="space-around center" >
-          <div  fxLayout="column">
-              <div  fxLayout="row">
-                <div  fxLayout="column">
-                  <h2>Edit Add</h2>
-                  <div>
-                    <mat-form-field appearance="outline">
-                      <mat-label >Name</mat-label>
-                      <input matInput
-                            type="text"
-                            formControlName="name"
-                            class="form-control" >
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <mat-divider></mat-divider>
-              <div  fxLayout="row">
-                  <button mat-raised-button class="form-button" color="primary" (click)="update()">Add / Edit</button>
-                  <button mat-raised-button class="form-button" color="primary" (click)="delete()">Delete</button>
-               </div>
+        <div class="centered-flex"  >
+          <h2>Edit Add</h2>
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label >Name</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="name"
+                    class="form-control" >
+            </mat-form-field>
           </div>
-
         </div>
 
+        <mat-divider></mat-divider>
+        <div >
+            <button mat-raised-button class="form-button" color="primary" (click)="update()">Add / Edit</button>
+            <button mat-raised-button class="form-button" color="primary" (click)="delete()">Delete</button>
+        </div>
       </form>
-
     </mat-card-content>
   </mat-card>
 

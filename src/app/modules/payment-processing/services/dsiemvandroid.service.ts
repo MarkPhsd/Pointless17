@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Transaction } from './../models/models'
 import { dsiemvandroid } from 'dsiemvandroidplugin';
+//https://npm.io/package/ngx-xml-to-json update forupgrade.
 import { NgxXml2jsonService } from 'ngx-xml2json';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';

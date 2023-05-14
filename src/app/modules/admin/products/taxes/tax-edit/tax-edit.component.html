@@ -1,13 +1,10 @@
-
-
 <mat-card>
   <mat-card-title>
     Tax Editor
   </mat-card-title>
   <mat-card-content>
     <div [formGroup]="inputForm">
-      <div fxLayout="column" fxLayoutAlign="space-around center" >
-
+      <div class="centered-flex" >
         <div>
           <mat-form-field appearance="outline">
           <mat-label>Nme</mat-label>
@@ -27,7 +24,6 @@
                     class="form-control" >
           </mat-form-field>
         </div>
-
         <div> Save this Rate in a specified tax column.</div>
         <div class="filterItem" >
 
@@ -42,9 +38,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-
-
-        <div fxLayout="row" fxLayoutAlign="space-between center"  >
+        <div class="centered-flex" >
            <button mat-raised-button
                   color="primary"
                   (click)="save()"><mat-icon>save</mat-icon></button>
@@ -54,9 +48,6 @@
         </div>
     </div>
   </div>
-
   </mat-card-content>
-
-
 </mat-card>
 

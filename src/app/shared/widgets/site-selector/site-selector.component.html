@@ -1,10 +1,9 @@
-<div class="canvas">
 
-  <mat-card>
+  <mat-card class="centered-flex">
     <h4> Pick your location!</h4>
   </mat-card>
 
-  <div class="container"
+  <div class="centered-flex"
        *ngIf="sites$; else loading">
 
     <mat-card *ngFor="let site of sites$ | async"
@@ -17,14 +16,12 @@
         </mat-card-title>
 
         <mat-card-content>
-          <div  fxLayoutGap fxLayoutAlign="center">
+          <div  class="centered=flex">
             <div *ngIf="site.imgName" >
               <img class="site-image" [src]="getImageURL(site.imgName)">
             </div>
-        </div>
-        <div fxLayout="column"
-             fxLayoutGap
-             fxLayoutAlign="space-around center">
+         </div>
+         <div  class="centered=flex">
           <div class="site-address" >
             {{site.address}}
           </div>
@@ -42,9 +39,7 @@
     </mat-card>
   </div>
 
-  <div  fxLayout="column"
-        fxLayoutGap
-        fxLayoutAlign="space-around center" >
+  <div class="centered-flex"  >
       <button mat-raised-button
               color="primary"
               class="big-button"

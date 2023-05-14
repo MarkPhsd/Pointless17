@@ -1,17 +1,14 @@
 <mat-card>
-
   <mat-card-title>
-    <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
+    <div class="centered-flex">
       Flower Menu
     </div>
   </mat-card-title>
 
   <mat-card-content>
-
     <div *ngIf="headers">
         <div class="headers"
              *ngFor="let header of headers">
-
           <div class="grid-item menu-items">
             <div class="headers">
               {{header}}

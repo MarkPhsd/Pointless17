@@ -35,6 +35,7 @@ import { RouteReuseService } from "src/app/_services/system/route-reuse.service"
 import { ClientTypeEditComponent } from "./clients/client-types/client-type-edit/client-type-edit.component";
 import { ClientTypeListComponent } from "./clients/client-types/client-type-list/client-type-list.component";
 import { CompanyEditComponent } from "./company-edit/company-edit.component";
+// import { MetrcSummaryComponent } from './reports/metrc-summary/metrc-summary.component';
 // import { ManifestStatusComponent } from "./inventory/manifest-status/manifest-status.component";
 // import { ManifestTypeComponent } from "./inventory/manifest-type/manifest-type.component";
 // import { MainfestEditorComponent } from "./inventory/manifests/mainfest-editor/mainfest-editor.component";
@@ -129,6 +130,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     // StoreCreditEditorComponent,
     // StoreCreditListComponent,
 
+  
   ],
 
   imports: [

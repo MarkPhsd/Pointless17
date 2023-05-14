@@ -1,15 +1,11 @@
 <mat-card *ngIf="product"
           class="mat-card-view">
   <mat-card-content>
-
-    <div fxLayout="column" fxLayoutAlign="space-around start" >
-      <div class="grid-container grids-container">
-        <button class="info-buttons"  mat-button color="accent" (click)="editWebProduct()"><mat-icon>web</mat-icon>Web Info</button>
-        <button class="info-buttons"  mat-button color="accent" (click)="editProduct()"><mat-icon>info</mat-icon>Item Edit</button>
-      </div>
+    <div class="grid-container grids-container">
+      <button class="info-buttons"  mat-button color="accent" (click)="editWebProduct()"><mat-icon>web</mat-icon>Web Info</button>
+      <button class="info-buttons"  mat-button color="accent" (click)="editProduct()"><mat-icon>info</mat-icon>Item Edit</button>
     </div>
 
-    <!-- aria-label="Font Style" -->
     <mat-button-toggle-group
           name="toggleLabelEvents"
           class="toggle-view"
@@ -72,8 +68,6 @@
         </div>
 
     </div>
-
-
   </mat-card-content>
 
 </mat-card>

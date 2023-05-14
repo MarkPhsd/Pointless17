@@ -114,7 +114,6 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     // this.initSeriesLabels();
     // this.initChart('values')
     // this.initSeries();
-
     //only works for product sales so far.
     if (this.cardValueType && this.reportItemSaleSummaries) {
 

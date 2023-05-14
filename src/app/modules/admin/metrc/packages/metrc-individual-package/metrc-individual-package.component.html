@@ -1,18 +1,12 @@
 <mat-card *ngIf="item" >
-
   <mat-card-title><div class="location-assignment"><h5>{{item.location}}</h5>
     <mat-icon>inventory</mat-icon></div>
   </mat-card-title>
-
   <mat-card-content>
-    <div  fxLayout="column"
-          fxLayoutAlign="start start"
-          fxFlex="80"
-          fxLayoutGap>
-
+    <div>
         <br>
-        <div *ngIf="item.price" class="location-assignment" > Price {{item.price}}</div>
-        <div *ngIf="item.cost" class="location-assignment" > Cost {{item.cost}}</div>
+        <div *ngIf="item.price" class="location-assignment" > Price {{item.price | currency}}</div>
+        <div *ngIf="item.cost" class="location-assignment" > Cost {{item.cost | currency}}</div>
         <br>
         <div class="location-assignment"> Qty {{item.packageQuantity}} {{item.unitConvertedtoName}}</div>
         <br>
@@ -29,5 +23,4 @@
 
     </div>
   </mat-card-content>
-
 </mat-card>

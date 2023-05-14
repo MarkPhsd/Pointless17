@@ -2,14 +2,12 @@
 <div *ngIf="(displayMenus$ | async) as list"></div>
 <div *ngIf="(saveSort$ | async) as item"></div>
 
-
 <ng-template #saving>
   <mat-spinner [diameter]="50"></mat-spinner>
 </ng-template>
 
 <button mat-button (click)="refreshList()"><mat-icon>refresh</mat-icon></button>
-
-<div fxFlex fxLayout="column start" >
+<div >
   <div
        *ngIf="displayMenus">
     <h5>Drag / Drop to Sort</h5>

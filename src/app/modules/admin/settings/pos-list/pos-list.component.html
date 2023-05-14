@@ -1,5 +1,4 @@
 <div id="header" >
-
   <h2>
     <mat-icon>computer</mat-icon>Terminal List
   </h2>
@@ -17,13 +16,9 @@
   <button mat-raised-button
           color="primary"
           (click)="clearPOS()">Clear device</button>
-
 </div>
 
-<div fxLayout="row" fxLayoutAlign="space-between center" flLayoutGap="20px">
-
-<mat-card fxFlex="100">
-
+<mat-card >
   <table mat-table #outerSort="matSort" [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort>
           <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -51,9 +46,7 @@
 
   </table>
 
-
   <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
 
 </mat-card>
 
-</div>

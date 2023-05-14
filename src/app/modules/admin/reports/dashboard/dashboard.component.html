@@ -1,4 +1,4 @@
-<div      class="container" >
+<div      class="container" *ngIf="(uiTransactions$ | async) as uiTransactions">
     <div  class="grid-buttons">
       <div>
         <app-widget-filter
@@ -45,9 +45,14 @@
     <div *ngIf="dateFrom && dateTo">
 
       <div class="grid-flow"
-          *ngIf="showValues && dateFrom && dateTo">
+           *ngIf="showValues && dateFrom && dateTo">
 
         <div  *ngFor="let site of sites$ | async">
+          <div class="summary">
+            <ng-container *ngTemplateOutlet="viewMetrcNetSales, context: {$implicit: site}">
+            </ng-container>
+          </div>
+
           <sales-tax-report
                   [site]="site"
                   [dateFrom]="dateFrom"
@@ -172,6 +177,18 @@
     </div>
 </div>
 
-
-
+<ng-template #metrcNetSalesSummary let-site>
+    <app-metrc-summary
+        [site]    ="site"
+        [dateFrom]="dateFrom"
+        [dateTo]  ="dateTo"
+        [type]    ="'metrcSummary'"
+        [counter]  ="count+1"
+        [notifier]="childNotifier"
+      >
+    <div summary>
+      <mat-icon >receipt</mat-icon> {{site?.name}} METRC:
+    </div>
+  </app-metrc-summary>
+</ng-template>
 

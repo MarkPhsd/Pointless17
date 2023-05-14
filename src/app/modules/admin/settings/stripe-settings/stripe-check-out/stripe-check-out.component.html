@@ -5,7 +5,7 @@
         <h3><ng-content></ng-content></h3>
         <h3>{{title}}</h3>
       </div>
-    
+
       <div>
         <button class="cancel-button"
                 mat-fab
@@ -14,12 +14,12 @@
           <mat-icon>close</mat-icon>
         </button>
       </div>
-      
+
     </div>
     <div></div>
 
     <div *ngIf="paymentForm && !paymentForm.controls['name'].value">Name on card is required.</div>
-    
+
 
   </mat-card-title>
 
@@ -29,7 +29,7 @@
     <div *ngIf="errorMessage"><mat-icon>alert</mat-icon>{{errorMessage}}</div>
     <div class="grid-header">
       <mat-divider></mat-divider>
-    
+
       <div *ngIf="elementsOptions
                   && cardOptions
                   && paymentForm
@@ -37,7 +37,7 @@
                   && stripeInstance; else loading"
           [formGroup]="paymentForm"
           class      ="container">
-               
+
           <div *ngIf="paymentForm.controls?.name.errors?.required && paymentForm.controls?.name.touched" class="error">
             <mat-icon color="warn">warning</mat-icon>  Name required.
           </div>
@@ -52,18 +52,8 @@
               required>
               Customer Name
           </app-value-fields>
-       
-          <!-- <app-value-fields
-              [enabled]    = "false"
-              [fieldType]  = "'number'"
-              [inputForm]  = "paymentForm"
-              [fieldName]  = "'amount'"
-              [fieldsClass]= "'fields-small'"
-              required>
-              Amount
-          </app-value-fields> -->
-          
-          <div fxLayout="row" fxLayoutAlign="center center" >
+
+          <div>
             <div class="grid-values">
               <div class="gratuity">Payment</div>
               <div class="gratuity"> {{amount | currency}} </div>
@@ -79,51 +69,51 @@
               <button mat-raised-button (click)="setAmount()">Set Amount</button>
             </div>
           </div>
-    
+
           <ng-container [ngTemplateOutlet]="ngxStripeComponent"></ng-container>
 
-          <ng-template #ngxStripeComponent> 
-            <div *ngIf="elementsOptions?.clientSecret as clientSecret ; else loading"> 
+          <ng-template #ngxStripeComponent>
+            <div *ngIf="elementsOptions?.clientSecret as clientSecret ; else loading">
               <div class="ngx-stripe">
-                  <ngx-stripe-payment 
+                  <ngx-stripe-payment
                     [options]="cardOptions"
                     [clientSecret]="elementsOptions?.clientSecret"
                     >
                   </ngx-stripe-payment>
               </div>
             </div>
-          </ng-template> 
+          </ng-template>
 
           <div *ngIf="token && token.card"
                 class="card-results-grid">
-      
+
             <div>Name</div>
             <div>
                 {{token?.card?.name}}
             </div>
-      
+
             <div>Brand</div>
             <div>
                 {{token?.card?.brand}}
             </div>
-      
+
             <div>Exp</div>
             <div>
               {{token?.card?.exp_year}}
             </div>
-      
+
             <div>Last 4</div>
             <div>
               {{token?.card?.lastr}}
             </div>
-      
+
           </div>
- 
+
       </div>
     </div>
     <div class="grid-header">
       <div></div>
-      
+
       <div >
         <button class="pay-button"
               mat-raised-button

@@ -2,8 +2,8 @@
       class="container">
   <mat-card>
     <mat-card-title>
-      <div fxLayout="row" fxLayoutAlign=" center" >
-        <div fxLayout="column" fxLayoutAlign="start start" fxFlex="25">
+      <div class="header-container"  >
+        <div>
           <h4>
             Edit Item: {{clientTable?.companyName}}
           </h4>
@@ -19,6 +19,7 @@
         </div>
       </div>
     </mat-card-title>
+
     <mat-card-content>
       <div [formGroup]="inputForm" >
         <div>
@@ -48,13 +49,12 @@
           </simple-tinymce>
       </div>
 
-      <div fxLayout="row" fxLayoutAlign="center none">
+      <div class="centered-flex">
         <app-widget-uploader   (messageOut)="received_Image($event)"
                                 [(fileNames)]="urlImageMain"
                                 >
         </app-widget-uploader>
       </div>
-
     </mat-card-content>
   </mat-card>
 </div>

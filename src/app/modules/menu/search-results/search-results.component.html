@@ -1,28 +1,23 @@
-<div fxLayout="column" fx-flex fx-layout-align="space-between">
 
-  <div fxLayout="row" fx-flex fx-layout-align="space-between">
+<form  [formGroup]="searchForm" id="searchForm" >
+  <mat-form-field appearance="outline">
+      <mat-label >Search Items</mat-label>
+        <input
+                #input
+                matInput
+                type="text"
+                id="searchProducts"
+                formControlName="searchProducts"
+                class="form-control"
+                [matAutocomplete]="auto">
+            <mat-autocomplete panelWidth="auto"
+                              #auto="matAutocomplete"
+                              [displayWith]="displayFn.bind(this)">
+      </mat-autocomplete>
+    </mat-form-field>
+</form>
 
-
-    <form  [formGroup]="searchForm" id="searchForm" >
-      <mat-form-field appearance="outline">
-          <mat-label >Search Items</mat-label>
-            <input
-                    #input
-                    matInput
-                    type="text"
-                    id="searchProducts"
-                    formControlName="searchProducts"
-                    class="form-control"
-                    [matAutocomplete]="auto">
-                <mat-autocomplete panelWidth="auto"
-                                  #auto="matAutocomplete"
-                                  [displayWith]="displayFn.bind(this)">
-          </mat-autocomplete>
-        </mat-form-field>
-    </form>
-  </div>
-
-  <mat-divider></mat-divider>
+<mat-divider></mat-divider>
 
 <ng-template #loading >
     <mat-spinner></mat-spinner>

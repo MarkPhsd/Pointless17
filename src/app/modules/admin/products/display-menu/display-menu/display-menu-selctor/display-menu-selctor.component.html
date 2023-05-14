@@ -19,7 +19,7 @@
               <div nbButton outline status='primary'
                   class="drag-drop-box"
                   *ngFor="let item of availableItems " cdkDrag>
-                  <div  fxLayoutAlign="space-between" fxLayoutWrap>
+                  <div>
                     <div>{{ item.name }}</div>
                     <div class="mat-button" mat-button (click)="openScheduleMenu(item)"><mat-icon>open_in_new</mat-icon></div>
                   </div>
@@ -30,15 +30,6 @@
 
       <div class="dualListRight">
         <div class="drag-drop-container">
-            <!-- <mat-form-field appearance="outline">
-              <mat-label>{{selectedText}}</mat-label>
-              <input matInput
-                    type="text"
-                    class="form-control"
-                    placeholder="{{selectedFilterPlaceholder}}"
-                    formControlName="selectedSearchInput"
-                    #selectedSearchInput />
-            </mat-form-field> -->
 
             <div cdkDropList #selects="cdkDropList"
                 [cdkDropListData] ="selectedItems"
@@ -49,7 +40,7 @@
                   class="drag-drop-box"
                   *ngFor="let item of selectedItems"
                   cdkDrag>
-                  <div  fxLayoutAlign="space-between" fxLayoutWrap>
+                  <div >
                     <div>{{ item.name }}</div>
                     <div class="mat-button" mat-button (click)="openScheduleMenu(item)"><mat-icon>open_in_new</mat-icon></div>
                   </div>

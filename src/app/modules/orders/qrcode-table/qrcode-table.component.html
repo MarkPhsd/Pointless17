@@ -1,130 +1,113 @@
-<div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-  <div class="grid-about">
-    <div>
-      <img class="pointless-logo"
-          onerror   = "this.src='../assets/images/logo.png'"
-          src       = '../assets/images/logo.png' >
+<div class="centered-flex">
+  <mat-card class="container">
+    <div class="grid-about">
+      <div>
+        <img class="pointless-logo"
+            onerror   = "this.src='../assets/images/logo.png'"
+            src       = '../assets/images/logo.png' >
+      </div>
+      <div>Powered By pointlesspos.com</div>
     </div>
-    <div>Powered By pointlesspos.com</div>
-  </div>
-</div>
 
-<mat-divider></mat-divider>
+    <mat-divider></mat-divider>
 
-<div class="bg row-height">
+    <div *ngIf="(uiHomePageSetting$ | async) as uiHomePageSetting">
+      <h3>{{uiHomePageSetting?.displayCompanyName}}</h3>
+      <app-logo [logoSize]="'large'" ></app-logo>
+    </div>
 
-  <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-    <div  class="login-window">
+    <div *ngIf="(action$ | async) as order">
 
-      <div *ngIf="(uiHomePageSetting$ | async) as uiHomePageSetting">
-        <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-          <h3>{{uiHomePageSetting?.displayCompanyName}}</h3>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-          <app-logo [logoSize]="'large'" ></app-logo>
-        </div>
+    </div>
+
+    <div class="order-message" *ngIf="goingToPay">
+      <mat-spinner [diameter]="50"></mat-spinner>
+      ...going to payment
+    </div>
+
+    <div class="message-grid"
+          *ngIf="(message$ | async) as message">
+      <div>
+        {{message?.message}}
       </div>
-
-      <div *ngIf="(action$ | async) as order">
-
+      <div *ngIf="message.result">
+        <button class="small-button" mat-raised-button (click)="cancelMessage()">Clear</button>
       </div>
+    </div>
 
-      <div class="order-message" *ngIf="goingToPay">
-        <mat-spinner [diameter]="50"></mat-spinner>
-        ...going to payment
-      </div>
+    <div class="sendingMessage" *ngIf="sendingMessage">
+      <mat-spinner [diameter]="50"></mat-spinner>
+      ...sending
+      <button mat-raised-button (click)="cancelMessage()"><mat-icon>cancel</mat-icon>Cancel</button>
+    </div>
 
-      <div class="message-grid"
-           *ngIf="(message$ | async) as message">
-        <div>
-          {{message?.message}}
-        </div>
-        <div *ngIf="message.result">
-          <button class="small-button" mat-raised-button (click)="cancelMessage()">Clear</button>
-        </div>
-      </div>
+    <div class="navigating order-message"
+          *ngIf="(order$ | async) as order; else loadingOrder">
 
-      <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-        <div class="sendingMessage" *ngIf="sendingMessage">
-          <mat-spinner [diameter]="50"></mat-spinner>
-          ...sending
-          <button mat-raised-button (click)="cancelMessage()"><mat-icon>cancel</mat-icon>Cancel</button>
-        </div>
-      </div>
+        <mat-card>
+          <mat-card-subtitle>
+            <div class="transaction-data" *ngIf="order" >
+              <div class="">Table   </div>
+              <div class=""> {{ order?.tableName }}</div>
+              <div class=""> User</div>
+              <div class="user-name"> {{ userAuth.user?.username }}</div>
+            </div>
 
-      <div class="navigating order-message"
-            *ngIf="(order$ | async) as order; else loadingOrder">
-
-          <mat-card>
-            <mat-card-subtitle>
-              <div class="transaction-data" *ngIf="order" >
-                <div class="">Table   </div>
-                <div class=""> {{ order?.tableName }}</div>
-                <div class=""> User</div>
-                <div class="user-name"> {{ userAuth.user?.username }}</div>
+            <div class="buttons-header">
+              <div *ngIf="order.balanceRemaining != 0">
+                <button mat-raised-button color="warn" (click)="requestService()">
+                  <mat-icon>hail</mat-icon>
+                  <br>Call Staff
+                </button>
               </div>
+              <div *ngIf="order.balanceRemaining != 0">
+                <button mat-raised-button color="primary" (click)="requestCheck()">
+                  <mat-icon>payment</mat-icon>
+                  <br>Get Check
+                </button>
+              </div>
+              <div *ngIf="order.balanceRemaining != 0">
+                <button mat-raised-button color="primary" (click)="payOrder()">
+                  <div *ngIf="!userAuth.user || userAuth.user?.username.toLowerCase() === 'temp'">
+                    Login to Pay
+                  </div>
 
-              <div class="buttons-header">
-                <div *ngIf="order.balanceRemaining != 0">
-                  <button mat-raised-button color="warn" (click)="requestService()">
-                    <mat-icon>hail</mat-icon>
-                    <br>Call Staff
-                  </button>
-                </div>
-                <div *ngIf="order.balanceRemaining != 0">
-                  <button mat-raised-button color="primary" (click)="requestCheck()">
+                  <div *ngIf="userAuth.user && userAuth.user?.username.toLowerCase() != 'temp'">
                     <mat-icon>payment</mat-icon>
-                    <br>Get Check
-                  </button>
-                </div>
-                <div *ngIf="order.balanceRemaining != 0">
-                  <button mat-raised-button color="primary" (click)="payOrder()">
-                    <div *ngIf="!userAuth.user || userAuth.user?.username.toLowerCase() === 'temp'">
-                      Login to Pay
-                    </div>
-
-                    <div *ngIf="userAuth.user && userAuth.user?.username.toLowerCase() != 'temp'">
-                      <mat-icon>payment</mat-icon>
-                      <br>Pay
-                    </div>
-                  </button>
-                </div>
+                    <br>Pay
+                  </div>
+                </button>
               </div>
+            </div>
 
-            </mat-card-subtitle>
-            <mat-card-content>
-              <app-order-total
-                [mainPanel]="false"
-                [qrOrder]="true"
-                [order]="order">
-              </app-order-total>
-              <h3>Order Balance : {{order.balanceRemaining | currency}}</h3>
-              <app-payment-balance
-                [mainPanel]="true"
-                [qrOrder]="true"
-                [order]="order">
-              </app-payment-balance>
-            </mat-card-content>
-          </mat-card>
+          </mat-card-subtitle>
+          <mat-card-content>
+            <app-order-total
+              [mainPanel]="false"
+              [qrOrder]="true"
+              [order]="order">
+            </app-order-total>
+            <h3>Order Balance : {{order.balanceRemaining | currency}}</h3>
+            <app-payment-balance
+              [mainPanel]="true"
+              [qrOrder]="true"
+              [order]="order">
+            </app-payment-balance>
+          </mat-card-content>
+        </mat-card>
 
-          <mat-card>
-            <pos-order-items
-                  [mainPanel]      ="true"
-                  [qrOrder]        ='true'
-                  [panelHeight]    ="orderItemsHeightStyle"
-                  [disableActions] ='true'
-                  [order]          ="order">
-            </pos-order-items>
-          </mat-card>
-      </div>
-
+        <mat-card>
+          <pos-order-items
+                [mainPanel]      ="true"
+                [qrOrder]        ='true'
+                [panelHeight]    ="orderItemsHeightStyle"
+                [disableActions] ='true'
+                [order]          ="order">
+          </pos-order-items>
+        </mat-card>
     </div>
-
-  </div>
-
+  </mat-card>
 </div>
-
-
 
 <ng-template #loadingOrder>
   <div class="loading">

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnChanges,  SimpleChange, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges,  SimpleChange, Input, TemplateRef } from '@angular/core';
 import { combineLatest, forkJoin, Observable, of, Subject, switchMap } from 'rxjs';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { ReportingService} from 'src/app/_services/reporting/reporting.service';
@@ -8,6 +8,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DatePipe } from '@angular/common'
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -16,27 +17,30 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 export class DashboardComponent implements OnChanges,OnInit  {
 
-  emailSending = false;
-  showValues = false;
-  email$                : Observable<any>;
-  count                 = 0;
+  emailSending           = false;
+  showValues             = false;
+  email$                 : Observable<any>;
+  count                  = 0;
   value                  = false;
-  childNotifier         : Subject<boolean> = new Subject<boolean>();
+  @ViewChild('metrcNetSalesSummary') metrcNetSalesSummary: TemplateRef<any>;
+  childNotifier          : Subject<boolean> = new Subject<boolean>();
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   //for charts
-  currentUser$          : Observable<IUser>;
-  currentUser           : IUser;
+  currentUser$           : Observable<IUser>;
+  currentUser            : IUser;
 
-  dataFromFilter        : string;
-  dataCounterFromFilter : string; //used to signal refresh of charts
-  dateFrom              : string;
-  dateTo                : string;
-  @Input() groupBy      ="date";
+  dataFromFilter         : string;
+  dataCounterFromFilter  : string; //used to signal refresh of charts
+  dateFrom               : string;
+  dateTo                 : string;
+  @Input() groupBy       ="date";
 
   localSite             : ISite;
   sites$                : Observable<ISite[]>;
   sitecount             = 0;
   observer              : any[];
+  uiTransactions: TransactionUISettings;
+  uiTransactions$: Observable<TransactionUISettings>;
 
   item                  : Item; //for routing
 
@@ -46,8 +50,8 @@ export class DashboardComponent implements OnChanges,OnInit  {
               private sendGridService     :   SendGridService,
               private sitesService    : SitesService,
               private siteService        : SitesService,
-              private matSnack           : MatSnackBar,
-              public datepipe: DatePipe
+              public datepipe: DatePipe,
+              private uISettingsService  : UISettingsService,
           ) {
   }
 
@@ -55,12 +59,26 @@ export class DashboardComponent implements OnChanges,OnInit  {
     this.initDateRange();
   }
 
+  initTransactionUISettings() {
+    this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
+    switchMap(data => {
+      if (data) {
+        this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+        return of(this.uiTransactions)
+      }
+      if (!data) {
+        this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+        return of(this.uiTransactions)
+      }
+  }))
+}
   notifyChild() {
     this.value = !this.value;
     this.childNotifier.next(this.value);
   }
 
   ngOnInit(): void {
+    this.initTransactionUISettings()
     this.refreshReports()
   };
 
@@ -87,6 +105,13 @@ export class DashboardComponent implements OnChanges,OnInit  {
   initDateRange(){
     this.reportingService.dateFrom = this.dateFrom;
     this.reportingService.dateTo = this.dateTo;
+  }
+
+  get viewMetrcNetSales() {
+    if (this.uiTransactions && (this.uiTransactions.recmedPricing || this.uiTransactions.enablMEDClients)) {
+      return this.metrcNetSalesSummary;
+    }
+    return null
   }
 
   //gets filterShared Component and displays the chart data

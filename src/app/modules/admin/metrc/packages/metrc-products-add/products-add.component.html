@@ -66,8 +66,7 @@
               <!-- <mat-icon color="warn">warning</mat-icon> Cost value required. -->
             </div>
 
-            <mat-card fxFlex
-                      fxFlexFill >
+            <mat-card>
 
               <div id="inventoryMoveInstructions">Move inventory to location:</div>
               <div *ngIf="package">Taking in: {{package.quantity}}  {{package.unitOfMeasureName}} </div>
@@ -156,7 +155,7 @@
                   </mat-form-field>
                 </div>
               </div>
-           
+
               <br>
 
               <div class="button-assign" *ngIf="baseUnitsRemaining != 0">
@@ -192,12 +191,13 @@
             </mat-card>
           </div>
 
+          <!-- fxFlex fxFlexFill     -->
           <div *ngIf="inventoryAssigments && !package.inventoryImported"
-                fxFlex fxFlexFill>
+            >
             <mat-card class="package-list" >
               <div *ngFor="let item of inventoryAssigments ;let i = index">
                 <app-metrc-individual-package
-                        
+
                         (outputEditAssignment)  ="editAssignment($event)"
                         (outputdeleteAssignment)="deleteAssignment($event)"
                         [item]                  ="item"

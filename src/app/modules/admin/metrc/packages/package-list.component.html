@@ -1,22 +1,9 @@
-<div fxLayout="column" fx-flex fx-layout-align="space-between"
+<div
       class="grid-container"
       [formGroup]="searchForm"
       *ngIf="searchForm" >
 
   <div class="grid-container-selectors">
-
-      <!-- <div class="grid-item">
-        <app-product-search-selector
-                  [formControlName] ="'itemName'"
-                  [searchForm]      ="searchForm"
-                  (outPutMethod)    ="refreshSearchPhrase($event)">
-          <div fieldDescription>
-          <mat-icon>search</mat-icon>
-            Search
-          </div>
-        </app-product-search-selector>
-      </div> -->
-
       <div class="grid-item">
         <search-debounce-input
                               [itemNameControl] = "'itemName'"
@@ -168,14 +155,6 @@
           (gridReady)          ="onGridReady($event)">
     </ag-grid-angular>
   </div>
-
-
-    <!-- <app-product-info-panel *ngIf="package"
-                            class="grid-list-item"
-                            [setProduct]="package"
-                            [id]="id">
-    </app-product-info-panel> -->
-
 </div>
 
 <div style="flex-grow:0">

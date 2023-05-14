@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransferDataService } from 'src/app/_services/transactions/transfer-data.service';
 import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
@@ -17,8 +17,9 @@ import { ICanCloseOrder } from 'src/app/_interfaces/transactions/transferData';
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { OrdersService } from 'src/app/_services';
+import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { HttpClient } from '@angular/common/http';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 
 @Component({
   selector: 'pos-operations',
@@ -29,6 +30,7 @@ export class PosOperationsComponent implements OnInit {
 
   closingProcedure$: Observable<any>
   @ViewChild('printsection') printsection: ElementRef;
+  @ViewChild('metrcNetSalesSummary') metrcNetSalesSummary: TemplateRef<any>;
   printAction$: Observable<any>
   styles: string;
   @Input() site    : ISite;
@@ -58,6 +60,8 @@ export class PosOperationsComponent implements OnInit {
   closingCheck$ : Observable<ICanCloseOrder>;
   uiTransactions: TransactionUISettings;
   uiTransactions$: Observable<TransactionUISettings>;
+  auths$: Observable<IUserAuth_Properties>;
+  auths: IUserAuth_Properties;
 
   scheduleDateStart  = new Date
   scheduleDateEnd = new Date
@@ -80,6 +84,7 @@ export class PosOperationsComponent implements OnInit {
     private uISettingsService  : UISettingsService,
     private orderService       : OrdersService,
     private httpClient: HttpClient,
+    private authenticationService: AuthenticationService,
   ) {
     if (!this.site) {
       this.site = this.siteService.getAssignedSite();
@@ -98,6 +103,20 @@ export class PosOperationsComponent implements OnInit {
     this.refreshClosingCheck();
     this.initTransactionUISettings();
     this.setSchedulePeriod()
+    this.initAuthentication()
+  }
+
+  initAuthentication() {
+    this.auths$ =  this.authenticationService.userAuths$.pipe(
+      switchMap(data => {
+      this.auths = data;
+      // data.blin
+      return of(data)
+    }));
+  }
+
+  get isBlindClose() {
+    return false
   }
 
   initTransactionUISettings() {
@@ -114,6 +133,13 @@ export class PosOperationsComponent implements OnInit {
     }))
   }
 
+
+  get viewMetrcNetSales() {
+    if (this.uiTransactions && (this.uiTransactions.recmedPricing || this.uiTransactions.enablMEDClients)) {
+      return this.metrcNetSalesSummary;
+    }
+    return null
+  }
   refreshClosingCheck() {
     const site = this.siteService.getAssignedSite();
     this.closingCheck$ = this.transferDataService.canCloseDay(site).pipe(
@@ -170,9 +196,9 @@ export class PosOperationsComponent implements OnInit {
     StartDate.setDate(StartDate.getDate() + NumberOfDays);
     return StartDate;
   }
-  
-  setSchedulePeriod() { 
-    this.scheduleDateStart  =  this.addDates(new Date, 30) 
+
+  setSchedulePeriod() {
+    this.scheduleDateStart  =  this.addDates(new Date, 30)
     this.scheduleDateEnd = this.addDates(this.scheduleDateStart, 30)
   }
 

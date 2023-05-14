@@ -52,6 +52,7 @@ export interface METRCSalesReportPaged {
   paging  : IPagedList
   exceptions : PointlessMetrcSales[]
   exceptionMessage: string;
+  netTotal: number;
 }
 
 @Injectable({
@@ -81,6 +82,21 @@ export class PointlessMETRCSalesService {
     return this.http.post<METRCSalesReportPaged>(url, searchModel);
 
   }
+
+  getSalesSummary(site: ISite, searchModel:PointlessMetrcSearchModel): Observable<METRCSalesReportPaged> {
+
+    const controller = '/METRCSalesReport/'
+
+    const endPoint = 'getSalesSummary'
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<METRCSalesReportPaged>(url, searchModel);
+
+  }
+
 
   getUnclosedSalesReport(site: ISite, searchModel:PointlessMetrcSearchModel): Observable<METRCSalesReportPaged> {
 

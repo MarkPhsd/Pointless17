@@ -3,7 +3,7 @@
 <div *ngIf="(menus$ | async) as menus" ></div>
 <div *ngIf="menus">
     <div *ngFor="let menu of menus">
-      <div fxLayout="row" fxLayoutAlign="center center">
+      <div>
           <mat-button-toggle
               class="button-toggle"
               type="button"
@@ -18,7 +18,6 @@
                 {{menu?.name.slice(0,3)}}..
               </div>
             </div>
-
           </mat-button-toggle>
       </div>
     </div>

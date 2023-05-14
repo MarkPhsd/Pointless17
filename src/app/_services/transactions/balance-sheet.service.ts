@@ -98,6 +98,7 @@ export interface IBalanceSheet {
   quarterEnd:           number;
   halfDollarEnd:        number;
   dollarsEnd:           number;
+  dollarEnd            : number;
   drawerAB:             number;
   cashTips:             number;
   giftCertificates:     number;

@@ -1,7 +1,7 @@
 @import "/src/mixins.scss";
 
-mat-icon { 
-  @media print { 
+mat-icon {
+  @media print {
     visibility: hidden;
   }
 }
@@ -14,10 +14,12 @@ button {
   margin:5px;
 }
 
-.summary { 
+.summary {
   margin: 5px;
-  width: 300px;
+  margin-left: 10px;
+  width: 350px;
 }
+
 .grid-sales-cards {
   --gap: 15px;
   display: grid;

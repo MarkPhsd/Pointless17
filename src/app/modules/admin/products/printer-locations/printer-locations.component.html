@@ -59,116 +59,106 @@
     </div>
   </div>
 
-  <form [formGroup]="locationForm" >
-    <div fxLayout="row" fxLayoutAlign="space-around center" >
-      <div  fxLayout="column">
-          <div *ngIf="location">
-            ID: {{location.id}}
-          </div>
-          <div  fxLayout="row">
-            <div  fxLayout="column">
+  <form [formGroup]="locationForm" class="centered-flex" >
 
-              <h2>Edit Add</h2>
-              <div>
-                <mat-form-field appearance="outline">
-                  <mat-label >Name</mat-label>
-                  <input matInput
-                        type="text"
-                        formControlName="name"
-                        class="form-control" >
-                </mat-form-field>
-              </div>
-
-              <div>
-                <mat-form-field appearance="outline">
-                  <mat-label >Printer</mat-label>
-                  <input matInput
-                        type="text"
-                        formControlName="printer"
-                        class="form-control" >
-                </mat-form-field>
-              </div>
-
-              <div>
-                <mat-form-field appearance="outline">
-                  <mat-label >Address</mat-label>
-                  <input matInput
-                        type="text"
-                        formControlName="address"
-                        class="form-control" >
-                </mat-form-field>
-              </div>
+      <div *ngIf="location">
+        ID: {{location.id}}
+      </div>
 
 
-              <ng-container [ngTemplateOutlet]="isElectronPrintingDesignTemplate">
-              </ng-container>
+      <h2>Edit Add</h2>
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label >Name</mat-label>
+          <input matInput
+                type="text"
+                formControlName="name"
+                class="form-control" >
+        </mat-form-field>
+      </div>
 
-              <ng-template #electronPrintingDesignTemplate>
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label >Printer</mat-label>
+          <input matInput
+                type="text"
+                formControlName="printer"
+                class="form-control" >
+        </mat-form-field>
+      </div>
 
-                <div *ngIf="receiptList">
-                  <div  *ngIf="receiptList as list">
-                    <mat-form-field appearance="outline">
-                      <mat-label>Receipt Types</mat-label>
-                        <mat-select
-                                  type                ="text"
-                                  formControlName    ='templateID'
-                                  >
-                            <div>
-                            <mat-option *ngFor="let item of list" [value]="item.id">
-                              {{ item.name }}
-                          </mat-option>
-                        </div>
-                      </mat-select>
-                    </mat-form-field>
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label >Address</mat-label>
+          <input matInput
+                type="text"
+                formControlName="address"
+                class="form-control" >
+        </mat-form-field>
+      </div>
 
-                  </div>
+
+      <ng-container [ngTemplateOutlet]="isElectronPrintingDesignTemplate">
+      </ng-container>
+
+      <ng-template #electronPrintingDesignTemplate>
+
+        <div *ngIf="receiptList">
+          <div  *ngIf="receiptList as list">
+            <mat-form-field appearance="outline">
+              <mat-label>Receipt Types</mat-label>
+                <mat-select
+                          type                ="text"
+                          formControlName    ='templateID'
+                          >
+                    <div>
+                    <mat-option *ngFor="let item of list" [value]="item.id">
+                      {{ item.name }}
+                  </mat-option>
                 </div>
-              </ng-template>
-
-              <ng-template #loadingReceiptTemplates>
-                ...loading receipt templates
-              </ng-template>
-
-            </div>
-          </div>
-
-          <mat-divider></mat-divider>
-
-          <div  fxLayout="row"  fxLayoutAlign="space-around center" >
-
-            <div>
-              <button mat-button color="primary" (click)="clearLocation()">
-                <mat-icon>clear</mat-icon>
-                Clear</button>
-            </div>
-
-            <div *ngIf="location && (location.id != 0 && location.id != undefined)">
-
-              <button  mat-button   color="primary" (click)="updateLocation()">
-                <mat-icon>save</mat-icon>
-                Save
-              </button>
-            </div>
-
-            <div *ngIf="!location || (location.id == 0 || location.id == undefined) ">
-
-              <button  mat-button  color="primary" (click)="addLocation()">
-                <mat-icon>add</mat-icon>
-                Add</button>
-            </div>
-
-            <div>
-              <button  mat-button  color="primary" (click)="delete()">
-                <mat-icon>delete</mat-icon>
-                Delete  <span *ngIf="location">{{location?.name}}</span> </button>
-            </div>
+              </mat-select>
+            </mat-form-field>
 
           </div>
+        </div>
+      </ng-template>
 
+      <ng-template #loadingReceiptTemplates>
+        ...loading receipt templates
+      </ng-template>
+
+    <mat-divider></mat-divider>
+
+    <div  >
+
+      <div>
+        <button mat-button color="primary" (click)="clearLocation()">
+          <mat-icon>clear</mat-icon>
+          Clear</button>
+      </div>
+
+      <div *ngIf="location && (location.id != 0 && location.id != undefined)">
+
+        <button  mat-button   color="primary" (click)="updateLocation()">
+          <mat-icon>save</mat-icon>
+          Save
+        </button>
+      </div>
+
+      <div *ngIf="!location || (location.id == 0 || location.id == undefined) ">
+
+        <button  mat-button  color="primary" (click)="addLocation()">
+          <mat-icon>add</mat-icon>
+          Add</button>
+      </div>
+
+      <div>
+        <button  mat-button  color="primary" (click)="delete()">
+          <mat-icon>delete</mat-icon>
+          Delete  <span *ngIf="location">{{location?.name}}</span> </button>
       </div>
 
     </div>
-
   </form>
 </div>
 

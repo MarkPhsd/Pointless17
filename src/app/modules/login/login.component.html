@@ -17,9 +17,6 @@
 
     <mat-card>
       <mat-card-title>
-        <div  *ngIf="platformService.isApp() && pinToken">
-
-        </div>
         <div (click)="setAPIAlt()">
             <div class="centered-flex">
               <div *ngIf="uiHomePageSetting && uiHomePageSetting.logoHomePage"
@@ -130,7 +127,7 @@
               <h5>Login with email or phone.</h5>
             </div>
           </mat-card-subtitle>
-          
+
           <app-keyboard-button
               [smallDevice]="false"
               [isApp]="true"
@@ -149,11 +146,11 @@
             <button mat-raised-button  (click)='registerUser()'>Register</button>
             <button mat-raised-button  (click)='forgetMe()'>Forget Me</button>
           </div>
-  
+
           <div class="registration">
             <mat-divider>         </mat-divider>
           </div>
-          <div class="registration" fxLayout="row" fxLayoutAlign="center center" class="row-height">
+          <div class="registration" class=" centered-flex">
             <div>Powered by <a href="https://pointlesspos.com">pointlesspos.com</a></div>
           </div>
         </div>

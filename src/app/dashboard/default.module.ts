@@ -587,6 +587,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     MenuItemsInfiniteComponent,
     MetrcSalesListComponent,
     METRCProductsAddComponent,
+
     MenuBoardComponent,
     MenuItemModalComponent,
     NewInventoryItemComponent,

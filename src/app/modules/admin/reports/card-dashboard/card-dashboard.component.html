@@ -2,9 +2,11 @@
 
     <div class="info-message" *ngIf="reportItemSaleSummaries &&
                                     (errorMessage && errorMessage.length>0)">
-      <mat-card  fxFlex="100">
+      <!-- fxFlex="100" -->
+      <mat-card  >
         <div *ngFor="let item of errorMessage">
-          <mat-label> <mat-icon>warn</mat-icon>   {{item}} </mat-label>
+          <mat-label> <mat-icon>warn</mat-icon>
+                      {{item}} </mat-label>
         </div>
       </mat-card>
     </div>
@@ -66,10 +68,10 @@
       </app-widget-card>
     </div>
     <ng-template #loading>
-      
+
       ...loading <mat-spinner [diameter]="50"></mat-spinner>
     </ng-template>
-    
+
   </div>
 
 

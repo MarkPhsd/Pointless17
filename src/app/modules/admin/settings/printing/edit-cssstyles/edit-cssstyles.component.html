@@ -3,18 +3,17 @@
 </div>
 
 <div *ngIf="setting">
-
   <div class="header-alignment">
     <mat-icon>design_services</mat-icon>
  </div>
 
   <div class="header">
-      Designer
+    Designer
   </div>
 
-  <div  fxLayout="row" fxLayoutAlign="end end">
-      <div fxLayout="column" fxLayoutAlign="end end" fxFlex="50"  fxLayoutGap="40px">
-        <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="50"  fxLayoutGap="10px">
+  <div  >
+    <div >
+        <div >
           <button mat-raised-button color="primary"  (click)="copy()"><mat-icon>file_copy</mat-icon>Copy</button>
           <button mat-raised-button color="primary"  (click)="resetDefault()"><mat-icon>upload</mat-icon>Reset</button>
           <button mat-raised-button color="primary"  (click)="update()"><mat-icon>save</mat-icon>Save</button>
@@ -69,39 +68,4 @@
     </div>
 
   </div>
-<!--
-  <div  fxLayout="column"
-        fxLayoutAlign="space-around center"
-        fxFlex="50"
-        fxLayoutGap="20px" >
-      <h4>Design Layout</h4>
-      <mat-card>
-      <div >
-        <div *ngIf="!isLabel">
-          <app-receipt-layout [headerText]="setting.option6"
-                              [itemText]="setting.text"
-                              [footerText]="setting.option5"
-                              [paymentsText]="setting.option7"
-                              [subFooterText]="setting.option8"
-                              [printerWidth]="setting.option9"
-                              [items]="items"
-                              [order]="order"
-                              [payments]="payments"
-                              [orderType]="orderTypes"
-                              [testdata]="true"
-                              [liveEdit]="true"
-                              [isLabel]="isLabel"
-                              [styles]="receiptStyles"
-                              [interpolatedHeaderTexts]  ="interpolatedHeaderTexts"
-                              [interpolatedItemTexts] ="interpolatedItemTexts"
-                              [interpolatedFooterTexts]  ="interpolatedFooterTexts"
-                              [interpolatedPaymentsTexts] ="interpolatedPaymentsTexts"
-                              [interpolatedSubFooterTexts] ="interpolatedSubFooterTexts"
-            ></app-receipt-layout>
-        </div>
-    </div>
-
-      </mat-card>
-  </div> -->
-
 </div>

@@ -1,83 +1,80 @@
 
-<div fxLayout="row" class="row-class">
-  <div fxLayout="column" class="row-class"
-       *ngIf="!displayCategories">
+<div class="row-class"
+      *ngIf="!displayCategories">
 
-    <ul id="accordion"
-        class="accordion">
-      <li class="menu-item" @fade *ngFor="let menu of menus; let i = index"
-          [class.active]="menu.active">
+  <ul id="accordion"
+      class="accordion">
+    <li class="menu-item" @fade *ngFor="let menu of menus; let i = index"
+        [class.active]="menu.active">
 
-        <div *ngIf="isAuthorized(menu)" >
-            <div class="menu"
-              (click)="toggle(menu, i)">
+      <div *ngIf="isAuthorized(menu)" >
+          <div class="menu"
+            (click)="toggle(menu, i)">
 
-              <div class="grid-toggle-tiny">
-                <div class="item-font" *ngIf="menu.icon">
-                  <mat-icon>{{menu.icon}}</mat-icon>
-                </div>
-                <div class="item-text" *ngIf="!tinyMenu">
-                  {{menu.name | truncateText : 20}}
-                </div>
+            <div class="grid-toggle-tiny">
+              <div class="item-font" *ngIf="menu.icon">
+                <mat-icon>{{menu.icon}}</mat-icon>
               </div>
-          </div>
-        </div>
-      </li>
-    </ul>
-
-  </div>
-
-  <div fxLayout="column" class="row-class"
-       *ngIf="displayCategories">
-
-    <div class=" accordion  menu-header">
-      <div class="grid-toggle-tiny">
-        <div class="item-font" *ngIf="menus[index].icon">
-          <mat-icon>{{menus[index].icon}}</mat-icon>
-        </div>
-        <div class="item-text" *ngIf="!tinyMenu">
-          {{menus[index].name  | truncateText : 20}}
+              <div class="item-text" *ngIf="!tinyMenu">
+                {{menu.name | truncateText : 20}}
+              </div>
+            </div>
         </div>
       </div>
-      <div *ngIf="!tinyMenu">
-        <mat-divider></mat-divider>
-      </div>
+    </li>
+  </ul>
 
-      <div class="menu-header-footer"></div>
-    </div>
-
-    <ul id="accordion"
-        class="accordion">
-      <li class="menu-item" @fade  *ngFor="let item of submenu" >
-        <!-- -->
-        <div class="menu" *ngIf="isAuthorized(item)" >
-          <a mat-list-item
-              routerLinkActive={{item.routerLinkActive}}
-              routerLink=      {{item.routerLink}}>
-              <div class="grid-toggle-tiny">
-                <div class="item-font" *ngIf="item.icon">
-                  <mat-icon>{{item.icon}}</mat-icon>
-                </div>
-                <div class="item-text" *ngIf="!tinyMenu">
-                  {{item.name | truncateText : 20}}
-                </div>
-              </div>
-          </a>
-        </div>
-      </li>
-      <li>
-        <div class="menu">
-          <a  mat-list-item
-                  (click)="resetMenu()">
-            <mat-icon>navigate_before</mat-icon>
-            Back
-          </a>
-        </div>
-      </li>
-    </ul>
-  </div>
 </div>
 
+<div  class="row-class"
+      *ngIf="displayCategories">
+
+  <div class=" accordion  menu-header">
+    <div class="grid-toggle-tiny">
+      <div class="item-font" *ngIf="menus[index].icon">
+        <mat-icon>{{menus[index].icon}}</mat-icon>
+      </div>
+      <div class="item-text" *ngIf="!tinyMenu">
+        {{menus[index].name  | truncateText : 20}}
+      </div>
+    </div>
+    <div *ngIf="!tinyMenu">
+      <mat-divider></mat-divider>
+    </div>
+
+    <div class="menu-header-footer"></div>
+  </div>
+
+  <ul id="accordion"
+      class="accordion">
+    <li class="menu-item" @fade  *ngFor="let item of submenu" >
+      <!-- -->
+      <div class="menu" *ngIf="isAuthorized(item)" >
+        <a mat-list-item
+            routerLinkActive={{item.routerLinkActive}}
+            routerLink=      {{item.routerLink}}>
+            <div class="grid-toggle-tiny">
+              <div class="item-font" *ngIf="item.icon">
+                <mat-icon>{{item.icon}}</mat-icon>
+              </div>
+              <div class="item-text" *ngIf="!tinyMenu">
+                {{item.name | truncateText : 20}}
+              </div>
+            </div>
+        </a>
+      </div>
+    </li>
+    <li>
+      <div class="menu">
+        <a  mat-list-item
+                (click)="resetMenu()">
+          <mat-icon>navigate_before</mat-icon>
+          Back
+        </a>
+      </div>
+    </li>
+  </ul>
+</div>
 
 <mat-menu #menu="matMenu"  @fade  *ngFor="let item of submenu" >
   <div  *ngIf="isAuthorized(item)" >
