@@ -3,18 +3,16 @@ import { Component,EventEmitter,Inject,Input,OnInit, Optional, Output } from '@a
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Capacitor} from '@capacitor/core';
 // import { dsiemvandroid } from 'dsiemvandroidplugin';
-import { NgxXml2jsonService } from 'ngx-xml2json';
+// import { NgxXml2jsonService } from 'ngx-xml2json';
 import { Observable,switchMap,of , Subscription} from 'rxjs';
 import { IPOSPayment } from 'src/app/_interfaces';
 import { TranResponse, Transaction } from './../../models/models';
 import { PointlessCCDSIEMVAndroidService } from './../../services/index';
-import {PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
-import {OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPOSOrder,} from 'src/app/_interfaces';
 import { OrdersService} from 'src/app/_services/transactions/orders.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
-import { T } from '@angular/cdk/keycodes';
 
 // https://www.npmjs.com/package/capacitor-plugin-permissions
 // https://capacitorjs.com/docs/v2/plugins/android
@@ -89,7 +87,7 @@ export class DsiEMVAndroidComponent implements OnInit {
     this.initTransactionUISettings()
   }
 
-    // 
+    //
   initTransactionUISettings() {
     this.uISettingsService.transactionUISettings$.subscribe( data => {
         this.uiTransactions = data
@@ -99,7 +97,7 @@ export class DsiEMVAndroidComponent implements OnInit {
 
 
   constructor(
-     private ngxXml2jsonService: NgxXml2jsonService,
+    //  private ngxXml2jsonService: NgxXml2jsonService,
      public dsiAndroidService: PointlessCCDSIEMVAndroidService,
      public paymentsMethodsProcessService: PaymentsMethodsProcessService,
      public orderMethodsService: OrderMethodsService,
@@ -382,7 +380,7 @@ export class DsiEMVAndroidComponent implements OnInit {
         const parser = new DOMParser();
         item.value =  item?.value.replace('#', '')
         const xml = parser.parseFromString(item.value, 'text/xml');
-        const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
+        const obj = {} as any; // this.ngxXml2jsonService.xmlToJson(xml) as any;
         console.log( 'getResponseobj', obj )
 
         if (item.value.substring(0, 5) === '<?xml' ) {
@@ -453,7 +451,7 @@ export class DsiEMVAndroidComponent implements OnInit {
           const parser = new DOMParser();
 
           const xml = parser.parseFromString(item.value, 'text/xml');
-          const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
+          const obj = {} as any; //this.ngxXml2jsonService.xmlToJson(xml) as any;
 
           return  obj
         }
@@ -495,7 +493,8 @@ export class DsiEMVAndroidComponent implements OnInit {
           const parser = new DOMParser();
           item.value =  item?.value.replace('#', '')
           const xml = parser.parseFromString(item.value, 'text/xml');
-          const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
+          // const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
+          const obj = {} as any;
           // console.log('cmdResponse', obj?.RStream?.CmdResponse)
           // console.log('cmdResponse', obj?.RStream?.CmdResponse.TextResponse)
           this.tranResponse  = obj?.TranResponse;
@@ -574,7 +573,7 @@ export class DsiEMVAndroidComponent implements OnInit {
         // const item = await dsiemvandroid.processSale(this.transaction);
         await  this.checkResponse();
         if (this.textResponse.toLowerCase() === 'approved') {
-          await this.paymentsMethodsProcessService.processCreditCardResponse(this.response, this.payment, 
+          await this.paymentsMethodsProcessService.processCreditCardResponse(this.response, this.payment,
                                                 this.orderMethodsService.order);
           if (this.dialogRef) {
             this.dialogRef.close()
