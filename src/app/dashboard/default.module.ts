@@ -785,7 +785,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       CdkTableModule,
       // DxReportViewerModule,
       // DxReportDesignerModule,
-
       FormsModule,
       HammerModule,
       IonicModule.forRoot(),

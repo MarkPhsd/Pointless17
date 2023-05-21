@@ -5,7 +5,6 @@ import { Printer } from '@ionic-native/printer/ngx';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { DefaultModule } from './dashboard/default.module';
@@ -138,7 +137,6 @@ export  function init_app(appLoadService: AppInitService) {
   imports: [
     IonicModule.forRoot(),
     AgGridModule.withComponents([AgGridImageFormatterComponent,AgGridToggleComponent]),
-
     UserIdleModule.forRoot({idle: 10, timeout: 100, ping: 120}),
     AppRoutingModule,
     AppMaterialModule,
@@ -149,7 +147,6 @@ export  function init_app(appLoadService: AppInitService) {
     DefaultModule,
     DynamicModule,
     EditorModule,
-    FlexLayoutModule,
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
