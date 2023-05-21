@@ -1,8 +1,7 @@
-import { AfterViewInit, Component, Input, Output, ViewEncapsulation } from "@angular/core";
+import { AfterViewInit, Component, Input, OnInit, Output, ViewEncapsulation } from "@angular/core";
 import Keyboard from "simple-keyboard";
 import { InputTrackerService } from "src/app/_services/system/input-tracker.service";
 import { UISettingsService } from "src/app/_services/system/settings/uisettings.service";
-
 @Component({
   selector: 'app-keyboard',
   encapsulation: ViewEncapsulation.None,
@@ -10,16 +9,28 @@ import { UISettingsService } from "src/app/_services/system/settings/uisettings.
   styleUrls: ['./keyboard.component.scss']
 })
 
-export class KeyboardComponent implements AfterViewInit {
+export class KeyboardComponent implements OnInit, AfterViewInit {
 
     @Input() disableClose: boolean;
-    
+    @Input()  value = "";
+
     constructor(
-      public trackerService: InputTrackerService,
+      public  trackerService: InputTrackerService,
       private uiSettingService: UISettingsService) {}
 
-    value = "";
     keyboard: Keyboard;
+
+    ngOnInit() {
+      this.trackerService._fieldValue$.subscribe(data => {
+        // this.value = ''
+        console.log('data changed', data)
+        if (this.keyboard) {
+          this.value = data;
+          this.keyboard.setInput(data);
+        }
+        console.log('field changed');
+      })
+    }
 
     ngAfterViewInit() {
       try {
@@ -28,67 +39,65 @@ export class KeyboardComponent implements AfterViewInit {
           onKeyPress: button => this.onKeyPress(button)
         });
       } catch (error) {
-        console.log('Error Initializing Keyboard', error)
+        console.log('Error Initializing Keyboard', error);
       }
     }
 
-    clearText() { 
-      if (this.trackerService.lastSelectedInput) { 
+    clearText() {
+      if (this.trackerService.lastSelectedInput) {
         let input = this.trackerService.lastSelectedInput;
         // this.value = ''
-        input.setValue('')
-        this.trackerService.setLastSelectedInput(input)
+        input.setValue('');
+        this.trackerService.setLastSelectedInput(input);
       }
     }
 
-    close() { 
-      this.uiSettingService.updateSetKeyboard(false)
+    close() {
+      this.uiSettingService.updateSetKeyboard(false);
     }
-  
+
     onChange = (input: string) => {
       this.value = input ;
       const anyControl = this.trackerService._lastSelectedInput;
-      if (input && input.toString()) { 
+      if (input && input.toString()) {
         anyControl.setValue(input.toString())
         this.trackerService.setLastSelectedInput(anyControl)
       }
       // this.uiSettingService.updateRelativeValue(input)
+      console.log('onChange change', input)
     };
-  
+
     onKeyPress = (button: string) => {
-      console.log("Button pressed", button);
-      console.log('value', this.value)
+      console.log("Button pressed; value ", button, this.value);
       /**
        * If you want to handle the shift and caps lock buttons
-       */
+      */
       if (button === "{shift}" || button === "{lock}") this.handleShift();
-
     };
 
     clearInput() {
-      // this.value =''
-      this.trackerService.clearInput()
-      this.value =''
-      // console.log('onInputChange', event.target.value)
+      this.trackerService.clearInput();
+      this.value = '';
       this.keyboard.setInput('');
-      this.keyboard.clearInput()
+      this.keyboard.clearInput();
     };
-  
+
     onInputChange = (event: any) => {
       console.log('onInputChange', event.target.value)
+      // this.value = ''
       this.keyboard.setInput(event.target.value);
     };
-  
+
     handleShift = () => {
       let currentLayout = this.keyboard.options.layoutName;
       let shiftToggle = currentLayout === "default" ? "shift" : "default";
-  
       this.keyboard.setOptions({
         layoutName: shiftToggle
       });
     };
+
   }
-  
+
   // keyboard: Keyboard;
   // keyboardLayouts: any;
   // layouts: Array<object>;

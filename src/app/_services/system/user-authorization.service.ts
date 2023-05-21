@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IUser } from 'src/app/_interfaces';
+import { ClientTableService } from '../people/client-table.service';
+import { SitesService } from '../reporting/sites.service';
 // https://dev.to/rdegges/please-stop-using-local-storage-1i04
 @Injectable({
   providedIn: 'root'
@@ -7,6 +9,8 @@ import { IUser } from 'src/app/_interfaces';
 export class UserAuthorizationService {
 
   constructor(
+      private siteService: SitesService,
+      private clientTableService: ClientTableService,
       )
   { }
 
@@ -17,8 +21,12 @@ export class UserAuthorizationService {
 
   setUser(user: IUser) {
     localStorage.setItem('user', JSON.stringify(user))
+    const site =  this.siteService.getAssignedSite()
+    this.clientTableService.putPreference(site, user.userPreferences, user.id).subscribe(data => {
+      console.log('pref', user.userPreferences);
+      console.log('saved')
+    })
   }
-
 
   get user() {
     const item = localStorage.getItem('user');

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { EMPTY, Observable, } from 'rxjs';
-import { IClientTable, ISite, IUserProfile,employee, FlowVendor, ImportFlowVendorResults }   from  'src/app/_interfaces';
+import { EMPTY, Observable, of, } from 'rxjs';
+import { IClientTable, ISite, IUserProfile,employee, FlowVendor, ImportFlowVendorResults, UserPreferences }   from  'src/app/_interfaces';
 import { IDriversLicense } from 'src/app/_interfaces/people/drivers-license';
 import { IEmployeeClient } from './employee-service.service';
 import { IItemBasic } from '..';
@@ -96,6 +96,22 @@ export class ClientTableService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.http.put<IClientTable>(url , client)
+
+  };
+
+  putPreference(site: ISite, preference: UserPreferences, id: number): Observable<IClientTable> {
+
+    if (id == 0) {return of(null)}
+
+    const controller =  "/ClientTable/"
+
+    const endPoint = `putPreference`
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.put<IClientTable>(url , preference)
 
   };
 

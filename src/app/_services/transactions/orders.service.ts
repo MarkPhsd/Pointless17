@@ -149,7 +149,7 @@ export class OrdersService {
     this._printerLocation.next(value)
   }
 
-  updateLastItemAdded(item: IMenuItem) { 
+  updateLastItemAdded(item: IMenuItem) {
     this.lastItemAddedExists = false
     // console.log('menuitem updating last', item?.name)
     if (!item || !item.urlImageMain) {
@@ -195,7 +195,7 @@ export class OrdersService {
       order.cost = 0
       if (order.posOrderItems && order.posOrderItems.length>0) {
         order.posOrderItems.forEach(data => {
-          if (data.wholeSaleCost) { 
+          if (data.wholeSaleCost) {
             order.cost = data.wholeSaleCost + order.cost
           }
         })
@@ -269,23 +269,23 @@ export class OrdersService {
   }
 
   updateOrderSearchModel(searchModel: IPOSOrderSearchModel) {
-    if (!searchModel) { 
+    if (!searchModel) {
       this._posSearchModel.next(searchModel);
       return ;
     }
     const user = this.userAuthorizationService.currentUser()
-    if (this.showAllOrders) { 
-      if (user && user.employeeID && user.employeeID != null) { 
-        searchModel.employeeID = 0 
+    if (this.showAllOrders) {
+      if (user && user.employeeID && user.employeeID != null) {
+        searchModel.employeeID = 0
       }
     }
-    if (!this.showAllOrders && this.userAuthorizationService.isStaff ) { 
-      if (user && user.employeeID  && user.employeeID != null) { 
+    if (!this.showAllOrders && this.userAuthorizationService.isStaff ) {
+      if (user && user.employeeID  && user.employeeID != null) {
         searchModel.employeeID = user.employeeID
       }
     }
-    if (!this.showAllOrders && this.userAuthorizationService.isUser) { 
-      if (user && user.id && user.id != null) { 
+    if (!this.showAllOrders && this.userAuthorizationService.isUser) {
+      if (user && user.id && user.id != null) {
         searchModel.clientID = user.id
       }
     }
@@ -297,7 +297,7 @@ export class OrdersService {
     this._splitGroupOrder.next(data);
   }
 
-  get showAllOrders() { 
+  get showAllOrders() {
     let  user = this.userAuthorizationService.user
     if ( user && user.userPreferences) {
       return user.userPreferences.showAllOrders
@@ -680,7 +680,20 @@ export class OrdersService {
     const parameters = ``
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.post<IPOSOrder>(url, orderPayload);
+    return this.http.post<IPOSOrder>(url, orderPayload).pipe( switchMap (
+      data => {
+        if (!data) {
+          this.siteService.notify(`Order was not submitted`, "Error", 2000, 'yellow' )
+          return of(null)
+        }
+        if (data.id == 0 && data.resultMessage){
+          this.siteService.notify(`Order was not submitted ${JSON.stringify(data.resultMessage)}`, "Error", 2000, 'yellow' )
+          return of(null)
+        }
+        this.siteService.notify(`Order Submitted Order # ${data.id}`, "Posted", 3000, 'green')
+        return of(data)
+      })
+    )
 
   }
 

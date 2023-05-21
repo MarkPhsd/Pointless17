@@ -1,7 +1,7 @@
 // input-tracker.service.ts
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
-import { AbstractControl, FormControl } from '@angular/forms';
-
+import { FormControl } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,6 +10,11 @@ export class InputTrackerService {
   private renderer: Renderer2;
   public _lastSelectedInput: FormControl | null = null;
   private inputControlsMap: Map<string, FormControl> = new Map();
+
+  public _fieldChanged        = new BehaviorSubject<boolean>(null);
+  public _fieldChanged$         = this._fieldChanged.asObservable();
+  public _fieldValue        = new BehaviorSubject<string>(null);
+  public _fieldValue$         = this._fieldValue.asObservable();
 
   constructor(private rendererFactory: RendererFactory2) {
     this.renderer = rendererFactory.createRenderer(null, null);
@@ -24,12 +29,8 @@ export class InputTrackerService {
     this._lastSelectedInput = input;
   }
 
-  // setField(control: FormControl) {
-  //   this.inputControlsMap.set(id, control);
-  // }
-
-  clearInput() { 
-    if (this.lastSelectedInput) { 
+  clearInput() {
+    if (this.lastSelectedInput) {
       let input = this.lastSelectedInput
       input.setValue('');
       this.setLastSelectedInput(input)
@@ -44,21 +45,22 @@ export class InputTrackerService {
     this.renderer.listen('document', 'focusin', (event: FocusEvent) => {
       const target = event.target as HTMLElement;
       const tagName = target.tagName;
-  
       if (
         (tagName === 'INPUT' || tagName === 'TEXTAREA') &&
         target.hasAttribute('data-ng-control-id')
       ) {
         const controlId = target.getAttribute('data-ng-control-id');
         const formControl = this.inputControlsMap.get(controlId);
-  
+        this._fieldChanged.next(true);
         if (formControl instanceof FormControl) {
+          // console.log('Next Control Value', formControl.value)
+          this._fieldValue.next(formControl.value)
           this.setLastSelectedInput(formControl);
         }
       }
     });
   }
-  
+
   // private listenForFocusEvents(): void {
   //   this.renderer.listen('document', 'focusin', (event: FocusEvent) => {
   //     const target = event.target as HTMLElement;

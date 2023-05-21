@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FilterComponent } from './widgets/filter/filter.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FlexLayoutModule } from '@angular/flex-layout';
+// import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppMaterialModule } from '../app-material.module';
 import { RouterModule } from '@angular/router';
 import { AreaComponent } from '../modules/admin/reports/area/area.component';
@@ -190,6 +190,7 @@ import { KeyboardButtonComponent } from './widgets/keyboard-button/keyboard-butt
 import { M22ResizableComponent } from './widgets/m22-resizable/m22-resizable.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MetrcSummaryComponent } from '../modules/admin/reports/metrc-summary/metrc-summary.component';
+import { InstructionDirective } from '../_directives/instruction.directive';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -270,6 +271,7 @@ import { MetrcSummaryComponent } from '../modules/admin/reports/metrc-summary/me
     ItemSalesCardComponent,
     ImageSwiperComponent,
     ImageContainerComponent,
+    InstructionDirective,
     KeyPadComponent,
     Label1by8Component,
     LimitValuesProgressBarsComponent,
@@ -395,7 +397,7 @@ import { MetrcSummaryComponent } from '../modules/admin/reports/metrc-summary/me
     CommonModule,
     BrowserAnimationsModule,
     HighchartsChartModule,
-    FlexLayoutModule,
+    // FlexLayoutModule,
     FormsModule,
     GalleryModule,
     HammerModule,
@@ -477,6 +479,7 @@ import { MetrcSummaryComponent } from '../modules/admin/reports/metrc-summary/me
     IonicGeoLocationComponent,
     IonicSwipeToDeleteComponent,
     ImageContainerComponent,
+    InstructionDirective,
     ItemTypeSortComponent,
     ItemSalesCardComponent,
     ImageSwiperComponent,

@@ -1,4 +1,4 @@
-import {Component,  OnInit, OnDestroy, AfterViewInit, HostListener, TemplateRef, ViewChild,
+import {Component,  OnInit, OnDestroy, AfterViewInit, HostListener, TemplateRef, ViewChild, ChangeDetectorRef, QueryList, ViewChildren,
   }  from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
 import { OrderFilterPanelComponent } from '../order-filter-panel/order-filter-panel.component';
@@ -8,8 +8,9 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
-import { IPOSOrder, IPOSOrderSearchModel, ISite, IUser } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSOrderSearchModel, ISite, IUser, UserPreferences } from 'src/app/_interfaces';
 import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
+import { InstructionDirective } from 'src/app/_directives/instruction.directive';
 
 @Component({
   selector: 'app-orders-main',
@@ -17,11 +18,12 @@ import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/men
   styleUrls: ['./orders-main.component.scss'],
 })
 
-export class OrdersMainComponent implements OnInit, OnDestroy {
+export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('orderCard')    orderCard: TemplateRef<any>;
   @ViewChild('orderList')    orderList: TemplateRef<any>;
   @ViewChild('orderPanel')   orderPanel: TemplateRef<any>;
   @ViewChild('orderPrep')    orderPrep: TemplateRef<any>;
+  @ViewChildren(InstructionDirective) instructionDirectives: QueryList<InstructionDirective>;
 
   @ViewChild('ordersSelectedView')    ordersSelectedView: TemplateRef<any>;
   mergeOrders: boolean;
@@ -51,10 +53,10 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
 
   searchModel: IPOSOrderSearchModel;
   _searchModel: Subscription;
- 
+
   scheduleDateStart: string;
   scheduleDateEnd: string;
-
+  showAllOrderInstructions = []  as string[];
   interval
   setPrepInterval() {
     // if (this.viewType == 3) {
@@ -91,7 +93,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
         this.searchModel = data;
         this.scheduleDateStart= null;
         this.scheduleDateEnd  = null;
-        if (this.searchModel.scheduleDate_From && this.searchModel.scheduleDate_To) { 
+        if (this.searchModel.scheduleDate_From && this.searchModel.scheduleDate_To) {
           this.scheduleDateStart = this.searchModel.scheduleDate_From;
           this.scheduleDateEnd   = this.searchModel.scheduleDate_To;
         }
@@ -127,7 +129,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     public  userAuthorization : UserAuthorizationService,
     private authenticationService: AuthenticationService,
     private printerService   : PrinterLocationsService,
-
+    private changeDetectorRef: ChangeDetectorRef,
     private orderService     : OrdersService)
   {
     this.initAuthorization();
@@ -137,18 +139,60 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this._user = this.authenticationService.user$.subscribe(data => {
-      this.user = data;
-    })
     this.site = this.siteService.getAssignedSite();
     this.displayPanel(null)
     this.initSubscriptions();
     this.printerLocations$ = this.printerService.getLocations()
   }
 
+  ngAfterViewInit() {
+    this._user = this.authenticationService.user$.subscribe(data => {
+      this.user = data;
+      this.showAllOrderInstructions = [] as string[];
+      this.showAllOrderInstructions.push[''];
+      this.showAllOrderInstructions.push[''];
+      this.showAllOrderInstructions.push[''];
+      let item = 'Press Show All Orders. This toggles showing all open orders versus just yours.';
+      this.showAllOrderInstructions[0] = item;
+      item = 'Press search to find open and closed orders, as well as use other filters.';
+      this.showAllOrderInstructions[1] = item;
+      this.initInstructions(this.user.userPreferences as UserPreferences)
+    })
+  }
+
+  initInstructions(auth: UserPreferences) {
+    // console.log('init inistructions, ', auth)
+    if (!auth.firstTime_notifyShowAllOrders) {
+      this.showInstruction(0)
+    } else {
+      this.showAllOrderInstructions[0] = ''
+    }
+    if (!auth.firstTime_FilterOrderInstruction) {
+      // console.log('show order filter instructions')
+      this.showInstruction(1)
+    } else {
+      this.showAllOrderInstructions[1] = ''
+    }
+  }
+
+  showInstruction(index: number) {
+    // this.showAllOrderInstructions[0] = 'Press Show All Orders, to toggle showing all orders or just yours.';
+    this.changeDetectorRef.detectChanges()
+    if (!this.instructionDirectives) {
+      console.log('no directive active', index)
+      return
+    }
+    const directive = this.instructionDirectives.toArray()[index];
+    if (directive) {
+      directive.showInstruction();
+    }
+  }
+
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
+    this.hideInstruction(0)
+    this.hideInstruction(1)
     clearInterval(this.interval)
     this.destroySubscriptions()
   }
@@ -185,7 +229,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     } else {
       this.gridcontainer = 'grid-container'
     }
-    console.log(this.gridcontainer)
     this.viewType = 1;
   }
 
@@ -221,7 +264,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     this.posOrdersSelectedList.push(order)
     const key = "id"
     this.posOrdersSelectedList =  [...new Map(this.posOrdersSelectedList.map(item =>[item[key], item])).values()]
-    console.log(this.posOrdersSelectedList)
   }
 
   removeFromList(i) {
@@ -248,6 +290,12 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     return this.orderCard
   }
 
+  searchBtn(event) {
+    this.updateFilterInstruction();
+    this.hideInstruction(1)
+    this.displayPanel(event)
+  }
+
   displayPanel(event)  {
     const show =  localStorage.getItem('OrderFilterPanelVisible')
     if (show === 'false') {
@@ -264,9 +312,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     if (!this.mergeOrders) {
       this.gridcontainer = 'grid-container'
     }
-
     localStorage.setItem('OrderFilterPanelVisible', 'false')
-
   }
 
   hideFilterPanel(event) {
@@ -278,7 +324,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
         this.gridcontainer = 'grid-container-merge'
       }
     }
-
     if (!event) {
       if (!this.mergeOrders) {
         this.gridcontainer = 'grid-container'
@@ -287,7 +332,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     }
     this.displayPanel(event)
   }
-
 
   initAuthorization() {
     this.isAuthorized = this.userAuthorization.isManagement;
@@ -338,7 +382,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
       this.orderService.updateViewOrderType(this.viewType)
       return
     }
-
   }
 
   setViewType(value) {
@@ -347,15 +390,40 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     this.setPrepInterval()
   }
 
-  toggleShowAllOrders() { 
-     let  user = this.userAuthorization.user
-     if ( user && user.userPreferences) {
-        user.userPreferences.showAllOrders = !user.userPreferences.showAllOrders ;
-     }
-     this.userAuthorization.setUser(user)
-     this.orderService.updateOrderSearchModel(this.orderService.posSearchModel)
+  toggleShowAllOrders() {
+    let  user = this.userAuthorization.user
+    if ( user && user.userPreferences) {
+      user.userPreferences.showAllOrders = !user.userPreferences.showAllOrders ;
+    }
+    if (!user.userPreferences.firstTime_notifyShowAllOrders) {
+      this.showAllOrderInstructions[0] = ''
+      this.hideInstruction(0)
+      user.userPreferences.firstTime_notifyShowAllOrders = true;
+    }
+    this.authenticationService.updateUser(user)
+    this.userAuthorization.setUser(user)
+    this.orderService.updateOrderSearchModel(this.orderService.posSearchModel)
   }
 
+  updateFilterInstruction() {
+    let  user = this.userAuthorization.user
+    if (!user.userPreferences.firstTime_FilterOrderInstruction) {
+      this.showAllOrderInstructions[1] = ''
+      user.userPreferences.firstTime_FilterOrderInstruction = true;
+      this.userAuthorization.setUser(user)
+      this.authenticationService.updateUser(user)
+    }
+    this.orderService.updateOrderSearchModel(this.orderService.posSearchModel)
+  }
 
+  hideInstruction(index: number) {
+    if (!this.instructionDirectives) {
+      console.log('no directive')
+      return }
+    const directive = this.instructionDirectives.toArray()[0];
+    if (directive) {
+      directive.hideInstruction();
+    }
+  }
 
 }

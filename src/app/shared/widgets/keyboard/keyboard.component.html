@@ -1,11 +1,26 @@
 <div class="menu" aria-label="menu">
-  <div *ngIf="trackerService?.lastSelectedInput" > 
+  <div *ngIf="trackerService?.lastSelectedInput" >
+    <!-- {{trackerService?.lastSelectedInput.value | json}}
+    <br>
+    current value {{value}} -->
   </div>
-  <div *ngIf="!trackerService?.lastSelectedInput" > 
+  <div *ngIf="!trackerService?.lastSelectedInput" >
     <mat-label><ng-content></ng-content></mat-label>
   </div>
-  <button class="button-margins" color="primary" mat-raised-button (click)="clearInput()" aria-label="clear">Clear Text</button>
-  <button [disabled]="disableClose" class="button-margins" color='warn' mat-raised-button (click)="close()" aria-label="close"><mat-icon>exit</mat-icon>Close</button>
+  <button class="button-margins"
+          color="primary"
+          mat-raised-button
+          (click)="clearInput()"
+          aria-label="clear">Clear Text
+  </button>
+  <button [disabled]="disableClose"
+          class="button-margins"
+          color='warn'
+          mat-raised-button
+          (click)="close()"
+          aria-label="close">
+    <mat-icon>exit</mat-icon>Close
+  </button>
 </div>
 
 <div class="keyboard-layout" aria-label="keyboard" >

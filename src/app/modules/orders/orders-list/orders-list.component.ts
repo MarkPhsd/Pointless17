@@ -347,7 +347,9 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   }
 
   //ag-grid standard method
-  async onGridReady(params: any) {
+  // async
+  onGridReady(params: any) {
+    console.log('on grid ready')
     if (params == undefined) { return }
     if (params)  {
       this.params  = params

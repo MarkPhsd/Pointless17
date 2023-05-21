@@ -61,6 +61,8 @@ export interface IUserAuth_Properties {
   allowNegativeTransaction: boolean;
   allowZeroTransaction: boolean;
   allowSuspendTransaction: boolean;
+
+  defaultViewAllOrders: boolean;
 }
 
 @Injectable({

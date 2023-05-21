@@ -77,9 +77,9 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
   }
 
   subscribeOrderNameForm() {
-    if (this.orderNameForm) { 
-      this.orderNameForm.valueChanges.subscribe(data => { 
-        this.saveOrderName()
+    if (this.orderNameForm) {
+      this.orderNameForm.valueChanges.subscribe(data => {
+        this.saveOrderName(data.name)
       })
     }
   }
@@ -98,11 +98,15 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
     }
   }
 
-  saveOrderName() {
-    const orderName = this.orderNameForm.controls['name'].value;
+  saveOrderName(orderName) {
+    // console.log(this.orderNameForm.value)
+    // const orderName = this.orderNameForm.controls['name'].value;
     if (this.order) {
-      this.orderService.setOrderName(this.order.id, orderName).subscribe( data=> {
-        console.log('saved', data)
+      console.log(orderName)
+      this.orderService.setOrderName(this.order.id, orderName).subscribe( data => {
+        // this.orderNameForm = this.fb.group({
+        //   name: [orderName],
+        // })
       })
     }
   }

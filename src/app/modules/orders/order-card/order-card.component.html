@@ -37,15 +37,18 @@
           </div>
         </div>
 
-        <div class="field-center" *ngIf="!phoneDevice || (phoneDevice && order?.customerName) || order.tableName">
-          <div class="order-name" >
+        <div class="field-center" *ngIf="!phoneDevice || (phoneDevice && order?.customerName)
+                                         || order.tableName">
+          <div class="order-name">
             <div *ngIf="smallDevice">
-              <span *ngIf="order?.customerName"> {{ order?.customerName.trim() | truncateText : 15}}</span> 
-              <span *ngIf="order?.tableName">{{order?.tableName.trim()}}</span> 
+              <span *ngIf="order?.customerName"> {{ order?.customerName.trim() | truncateText : 15}}</span>
+              <span *ngIf="order?.tableName">{{order?.tableName.trim()}}</span>
             </div>
             <div *ngIf="!smallDevice">
-              <span *ngIf="order?.customerName"> {{ order?.customerName.trim() | truncateText : 12}}</span> 
-              <span *ngIf="order?.tableName">{{order?.tableName.trim()}}</span> 
+              <!-- <span *ngIf="order?.clientID"> {{ clientNameOfOrder | truncateText : 12}}</span> -->
+
+              <span *ngIf="order?.customerName"> {{ order?.customerName.trim() | truncateText : 12}}</span>
+              <span *ngIf="order?.tableName">{{order?.tableName.trim()}}</span>
             </div>
           </div>
         </div>

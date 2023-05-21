@@ -32,5 +32,10 @@ export interface UserPreferences {
   orderFilter: IPOSOrderSearchModel
   product: ProductSearchModel;
   showAllOrders: boolean;
+
+  firstTime_notifyShowAllOrders: boolean;
+  firstTime_FilterOrderInstruction: boolean;
+
+
 }
 

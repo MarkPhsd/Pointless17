@@ -1,11 +1,13 @@
-  <mat-progress-bar color="'warn"
-                      mode="determinate"
-                      [value]="percentageValue"
-                      aria-label="Rating"
-                    >
-  </mat-progress-bar>
-  <div class="info">
-     {{ value }} of <ng-content></ng-content> {{ratio}} reached : {{ percentageValue}}%
+
+<mat-progress-bar color="'warn"
+  mode="determinate"
+  [value]="percentageValue"
+  aria-label="Rating">
+</mat-progress-bar>
+
+<div class="info">
+     {{ value }} of <ng-content></ng-content>
+     {{ratio}} reached : {{ percentageValue}}%
   </div>
 
 

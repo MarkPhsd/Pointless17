@@ -320,7 +320,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.employees$      = this.orderService.getActiveEmployees(site)
   }
 
-  initOrderSearch(searchModel: IPOSOrderSearchModel) {
+  updateOrderSearch(searchModel: IPOSOrderSearchModel) {
     this.orderService.updateOrderSearchModel( searchModel )
   }
 
@@ -339,7 +339,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     }
     if (search.greaterThanZero) {
       this.toggleOrdersGreaterThanZero =  search.greaterThanZero.toString()
-    }     
+    }
     if (search.closedOpenAllOrders) {
       this.toggleOpenClosedAll         =  search.closedOpenAllOrders.toString()
     }
@@ -351,7 +351,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   orderSearch(searchPhrase) {
     if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel }
     this.searchModel.orderID = parseInt( searchPhrase)
-    this.initOrderSearch(this.searchModel)
+    this.updateOrderSearch(this.searchModel)
   }
 
   refreshSearch() {
@@ -364,7 +364,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     search.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
     search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
     search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
-
+    search.pageNumber          = 1;
     if (this.toggleScheduleDateRangeFilter) {
       if (this.scheduleDateForm && this.scheduleDateForm.get("start").value && this.scheduleDateForm.get("end").value ) {
         this.scheduleDateFrom = this.scheduleDateForm.get("start").value;
@@ -384,7 +384,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       search.printLocation      = this.printLocation;
       search.prepStatus         = 1;
     }
-    this.initOrderSearch(search);
+    this.updateOrderSearch(search);
     return of('')
   }
 
@@ -397,13 +397,11 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     search.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
     search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
     search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
-
     if (search.closedOpenAllOrders == 2) {
       search.scheduleDate_From = null;
       search.scheduleDate_To = null;
     }
-
-    this.initOrderSearch(search)
+    this.updateOrderSearch(search)
   }
 
   setServiceType(event) {
@@ -489,10 +487,10 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       end: new Date()
     })
   }
-    
+
   subscribeToCompletionDatePicker() {
     const form = this.subscribeToDateRangeData(this.completionDateForm)
-    if (!form) {return} 
+    if (!form) {return}
     form.valueChanges.subscribe( res=> {
       if (form.get("start").value &&
           form.get("start").value) {
@@ -503,7 +501,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   subscribeToScheduledDatePicker() {
     const form = this.subscribeToDateRangeData(this.scheduleDateForm)
-    if (!form) {return} 
+    if (!form) {return}
     form.valueChanges.subscribe( res=> {
       if (form.get("start").value &&
           form.get("start").value) {
@@ -533,7 +531,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       if (!this.completionDateForm.get("start").value || !this.completionDateForm.get("end").value) {
         this.dateFrom = this.completionDateForm.get("start").value
         this.dateTo =  this.completionDateForm.get("end").value
-        console.log('emitDatePickerData') 
+        console.log('emitDatePickerData')
         this.refreshCompletionDateSearch()
       }
     }

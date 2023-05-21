@@ -244,10 +244,10 @@ export class UserSwitchingService implements  OnDestroy {
             if (data.clientType && data.clientType.jsonObject) {
               this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
             } else
-            { 
+            {
               this.authenticationService.updateUserAuths(null)
             }
-              
+
             return of(user)
           }
 
@@ -297,14 +297,14 @@ export class UserSwitchingService implements  OnDestroy {
       if (!currentUser.userPreferences.swapMenuOrderPlacement) {
         currentUser.userPreferences.swapMenuOrderPlacement = false;
       }
-      if (!currentUser.userPreferences.showAllOrders) { 
+      if (!currentUser.userPreferences.showAllOrders) {
         currentUser.userPreferences.showAllOrders = false;
       }
     }
 
     if (!user.preferences) {
-      currentUser.userPreferences =  {} as UserPreferences;
-      currentUser.userPreferences.darkMode = false;
+      currentUser.userPreferences               =  {} as UserPreferences;
+      currentUser.userPreferences.darkMode      = false;
       currentUser.userPreferences.swapMenuOrderPlacement = false;
       currentUser.userPreferences.showAllOrders = false;
       currentUser.preferences = JSON.stringify(currentUser.userPreferences);
@@ -324,6 +324,8 @@ export class UserSwitchingService implements  OnDestroy {
     return currentUser
 
   }
+
+
 
   setUserAuth(userAuth: string) {
     localStorage.setItem('userAuth', userAuth)

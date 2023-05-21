@@ -378,7 +378,6 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
               unique  =  this.refreshImages(unique)
               params.successCallback(unique)
             }
-
           }
         );
       }
@@ -440,6 +439,7 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
     if(!e) {
       return
     }
+    console.log('post new checkin')
     this.postNewCheckIn(e.rowData.id);
   }
 
@@ -505,11 +505,11 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   postNewCheckIn(clientID:number) {
-
-    let order: IPOSOrder;
-    const order$ = this.orderService.getNewDefaultCheckIn(this.siteService.getAssignedSite(), clientID)
-    this.action$ = order$
-
+    const site = this.siteService.getAssignedSite()
+    const payload = this.orderService.getPayLoadDefaults(null)
+    payload.order.clientID = clientID;
+    const postOrder$ = this.orderService.postOrderWithPayload(site, payload)
+    this.action$ = postOrder$
   }
 
   async getCountOfPendingOrdersByClient(clientId: number): Promise<any> {

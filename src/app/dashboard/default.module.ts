@@ -1,7 +1,6 @@
 import { NgModule, ClassProvider } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { RouteReuseStrategy, RouterModule } from '@angular/router';
@@ -786,7 +785,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       CdkTableModule,
       // DxReportViewerModule,
       // DxReportDesignerModule,
-      FlexLayoutModule,
+
       FormsModule,
       HammerModule,
       IonicModule.forRoot(),

@@ -61,10 +61,21 @@ export class AuthenticationService {
     }
 
     updateUser(user: IUser) {
-      this._user.next(user)
-      if (user) {
-        localStorage.setItem('user', JSON.stringify(user));
+      if (!user ){
+        this._user.next(null)
+        this.siteSerivce._user.next(null)
+        return
       }
+      if (!user.userPreferences) {
+        user.userPreferences = {} as UserPreferences;
+      }
+      if ( !user.userPreferences.firstTime_FilterOrderInstruction) {
+         user.userPreferences.firstTime_FilterOrderInstruction = false
+      }
+      if ( !user.userPreferences.firstTime_notifyShowAllOrders) {
+        user.userPreferences.firstTime_notifyShowAllOrders = false
+      }
+      this._user.next(user)
       this.siteSerivce._user.next(user)
     }
 
@@ -74,6 +85,14 @@ export class AuthenticationService {
 
     updateUserX(user: IUser) {
       this._userx.next(user)
+      try {
+        if (user.preferences) {
+          const pref = JSON.parse(user.preferences) as UserPreferences
+          user.userPreferences = pref;
+        }
+      } catch (error) {
+
+      }
       localStorage.setItem('userx', JSON.stringify(user));
     }
 
@@ -196,11 +215,7 @@ export class AuthenticationService {
       localStorage.removeItem('user');
       localStorage.removeItem('userx');
       localStorage.removeItem('userAuth')
-      // localStorage.removeItem('site')
       localStorage.removeItem('orderSubscription');
-      // localStorage.removeItem('loginAction')
-      // https://localhost:44309  /api
-      // localStorage.removeItem('storedApiUrl')
       this.updateUser(null);
       this.updateUserX(null);
     }

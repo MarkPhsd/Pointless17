@@ -11,9 +11,9 @@ import { UISettingsService } from 'src/app/_services/system/settings/uisettings.
 export class KeyboardViewComponent implements OnInit,OnDestroy,AfterViewInit {
   @ViewChild('keyboardView')  keyboardView: TemplateRef<any>;
 
-  keyboardValue: number | string; 
+  keyboardValue: number | string;
   keyboardVisible: boolean;
-  _keyboardVisible: Subscription; 
+  _keyboardVisible: Subscription;
 
   constructor(
     private changeDetect: ChangeDetectorRef,
@@ -21,31 +21,31 @@ export class KeyboardViewComponent implements OnInit,OnDestroy,AfterViewInit {
 
   ngOnInit(): void {
     const i = 0;
-    this._keyboardVisible = this.uiSettingService.toggleKeyboard$.subscribe(data => { 
-      console.log('change occured')
+    this._keyboardVisible = this.uiSettingService.toggleKeyboard$.subscribe(data => {
+      // console.log('change occured')
       this.isKeyboardVisible;
       this.keyboardVisible = data;
       // this.changeDetect.detectChanges()
     })
   }
 
-  ngAfterViewInit() { 
+  ngAfterViewInit() {
     const i = 0;
-    this._keyboardVisible = this.uiSettingService.toggleKeyboard$.subscribe(data => { 
+    this._keyboardVisible = this.uiSettingService.toggleKeyboard$.subscribe(data => {
       this.isKeyboardVisible;
       this.keyboardVisible = data;
     })
   }
 
-  get isKeyboardVisible() { 
-    if (this.keyboardVisible) { 
+  get isKeyboardVisible() {
+    if (this.keyboardVisible) {
       return this.keyboardView
     }
     return null
   }
 
-  ngOnDestroy() { 
-    if (this._keyboardVisible) { 
+  ngOnDestroy() {
+    if (this._keyboardVisible) {
       this._keyboardVisible.unsubscribe()
     }
   }

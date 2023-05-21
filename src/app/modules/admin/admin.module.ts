@@ -2,7 +2,6 @@ import { CdkTableModule } from "@angular/cdk/table";
 import { CommonModule, DatePipe } from "@angular/common";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { ClassProvider, CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HammerModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -130,7 +129,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     // StoreCreditEditorComponent,
     // StoreCreditListComponent,
 
-  
+
   ],
 
   imports: [
@@ -141,7 +140,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     BrowserAnimationsModule,
     CommonModule,
     CdkTableModule,
-    FlexLayoutModule,
     FormsModule,
     HammerModule,
     IonicModule.forRoot(),

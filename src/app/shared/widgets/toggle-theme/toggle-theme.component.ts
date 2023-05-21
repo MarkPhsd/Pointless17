@@ -66,9 +66,6 @@ export class ToggleThemeComponent{
       let user = this.userAuthorizationService.user;
       user.preferences = JSON.stringify(pref)
       user.userPreferences = pref;
-
-      console.log('user', user.preferences)
-
       this.userSwitchingService.setUserInfo(user, this.userAuthorizationService.user.password);
       this.userSwitchingService.swapMenuWithOrder(user.userPreferences.swapMenuOrderPlacement);
 

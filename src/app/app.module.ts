@@ -134,11 +134,11 @@ export  function init_app(appLoadService: AppInitService) {
     SplashLoadingComponent,
     ResizeDirective,
   ],
-  
+
   imports: [
     IonicModule.forRoot(),
     AgGridModule.withComponents([AgGridImageFormatterComponent,AgGridToggleComponent]),
-    // NgIdleModule.forRoot(),
+
     UserIdleModule.forRoot({idle: 10, timeout: 100, ping: 120}),
     AppRoutingModule,
     AppMaterialModule,

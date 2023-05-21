@@ -2,13 +2,12 @@
 <ng-container [ngTemplateOutlet]="keyboardView"></ng-container>
 
 <ng-template #keyboardView>
-  <div class="example-handle"  >
+  <div class="example-handle">
   </div>
   <app-keyboard
-    (keyboardValue)="keyboardValue"
-    (keyboardChange)="keyboardValue = $event"
-  >
-   Select field to edit.
+                (keyboardValue)="keyboardValue"
+                (keyboardChange)="keyboardValue = $event" >
+    Select field to edit.
   </app-keyboard>
 </ng-template>
 

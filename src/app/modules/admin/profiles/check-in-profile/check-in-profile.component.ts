@@ -403,45 +403,18 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     })
   }
 
-
   postNewCheckIn() {
     if (!this.clientTable) { return }
-
     const site = this.siteService.getAssignedSite()
     const payload = this.orderService.getPayLoadDefaults(null)
     payload.order.clientID = this.clientTable.id;
     const postOrder$ = this.orderService.postOrderWithPayload(site, payload)
-
-    //this.orderService.getNewDefaultCheckIn(this.siteService.getAssignedSite(), this.clientTable?.id)
-
-    return postOrder$.pipe( switchMap (
-      data => {
-        // console.log(data)
-        if (!data) {
-          this.siteService.notify(`Order was not submitted`, "Error", 2000, 'yellow' )
-          return
-        }
-        if (data.id == 0 && data.resultMessage){
-          this.siteService.notify(`Order was not submitted ${JSON.stringify(data.resultMessage)}`, "Error", 2000, 'yellow' )
-          return
-        }
-        this.siteService.notify(`Order Submitted Order # ${data.id}`, "Posted", 3000, 'green')
-        return of(data)
-      })
-    )
+    return postOrder$
   }
-
-  // ,
-  //     catchError => {
-  //       console.log(catchError  )
-  //       this.siteService.notify(`Order was not submitted ${catchError.toString()}`, "Error", 2000, 'red' )
-  //       return of(null)
-  //     }
 
   updateUser(event): void {
     const site = this.siteService.getAssignedSite();
     let result = ''
-    console.log(this.inputForm.value)
     const client$ = this.clientTableService.saveClient(site, this.inputForm.value);
 
     this.action$ = client$.pipe(
@@ -546,9 +519,6 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 
   startOrder(event) {
     const site = this.siteService.getAssignedSite()
-
-
-
     const clientType$  = this.clientTypeService.getClientTypeCached(site, this.clientTable.clientTypeID)
     this.action$ =   clientType$.pipe(
       switchMap( data => {

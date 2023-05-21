@@ -64,25 +64,19 @@ export class ClientSearchSelectorComponent implements OnInit, AfterViewInit  {
             }
           })
       )
-      .subscribe();
+    .subscribe();
   }
 
   refreshSearch(search: any){
-    if (search) {
-      this.searchPhrase.next( search )
-    }
+    if (search) {this.searchPhrase.next( search )}
   }
 
   searchItems(name: string) {
-    if (name) {
-      this.searchPhrase.next(name);
-    }
+    if (name) { this.searchPhrase.next(name); }
   }
 
   selectItem(item: IUserProfile){
-    if (item) {
-      this.itemSelect.emit(item)
-    }
+    if (item) { this.itemSelect.emit(item) }
   }
 
   displayFn(item) {
