@@ -5,7 +5,7 @@ import { Capacitor, Plugins } from '@capacitor/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 // import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { Observable, Subscription } from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 const { BluetoothSerial } = Plugins;
 
 @
@@ -19,7 +19,7 @@ export class BtBlueToothScannerComponent implements OnInit,OnDestroy {
 
   @Input() toolbarScanner: boolean;
 
-  inputForm:  FormGroup;
+  inputForm:  UntypedFormGroup;
   get platForm() {  return Capacitor.getPlatform(); }
   scanningOn: boolean;
   data      : string;

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProductPrice } from 'src/app/_interfaces/menu/price-categories';
@@ -12,11 +12,11 @@ import { ProductPrice } from 'src/app/_interfaces/menu/price-categories';
 export class UnitTypePromptComponent implements OnInit {
 
   productPrice: ProductPrice;
-  inputForm:    FormGroup;
+  inputForm:    UntypedFormGroup;
   @Output() itemSelect  = new EventEmitter();
 
   constructor(
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     private _snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<UnitTypePromptComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)

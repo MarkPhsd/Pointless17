@@ -10,7 +10,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter,tap } from 'rxjs/operators';
 import { Observable, fromEvent, Subscription } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
@@ -29,8 +29,8 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
     @ViewChild('input', {static: true}) input: ElementRef;
     @Output() itemSelect  = new EventEmitter();
     value : string;
-    get itemName() { return this.searchForm.get("itemName") as FormControl;}
-    searchForm: FormGroup;
+    get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
+    searchForm: UntypedFormGroup;
 
     @Output() outputRefreshSearch :   EventEmitter<any> = new EventEmitter();
     get platForm()         {  return Capacitor.getPlatform(); }
@@ -40,7 +40,7 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
     printerName          : string;
     printQuantity        : number;
 
-    dateRangeForm        : FormGroup;
+    dateRangeForm        : UntypedFormGroup;
     dateFrom             : Date;
     dateTo               : Date;
 
@@ -52,7 +52,7 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
     togglePreAuth                  = "0";
     toggleTypeEmployee             = "0"
     toggleIsCashCredit             =  0
-    printForm          : FormGroup;
+    printForm          : UntypedFormGroup;
     user               = {} as IUser;
 
     // searchModel   = {} as IPOSOrderSearchModel;
@@ -95,7 +95,7 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       private serviceTypes         : ServiceTypeService,
       private matSnack             : MatSnackBar,
       private userAuthorization    : UserAuthorizationService,
-      private fb:                    FormBuilder,
+      private fb:                    UntypedFormBuilder,
       )
     {
       this.initForm();
@@ -284,9 +284,9 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
     }
 
     async initDateForm() {
-      this.dateRangeForm = new FormGroup({
-        start: new FormControl(),
-        end: new FormControl()
+      this.dateRangeForm = new UntypedFormGroup({
+        start: new UntypedFormControl(),
+        end: new UntypedFormControl()
       });
 
       let today = new Date();

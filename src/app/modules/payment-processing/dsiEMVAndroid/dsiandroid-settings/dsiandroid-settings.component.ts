@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { Observable, of , switchMap} from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
@@ -21,7 +21,7 @@ export class DSIAndroidSettingsComponent implements OnInit {
   // transaction: Transaction;
   transaction$: Observable<Transaction>;
   deviceName : string;
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   blueToothDeviceList: any;
   dsiDeviceList: any;
   viewSelectDeviceList: boolean;
@@ -31,7 +31,7 @@ export class DSIAndroidSettingsComponent implements OnInit {
 
   terminalSettingInfo: ITerminalSettings;
 
-  constructor(private fb                  : FormBuilder,
+  constructor(private fb                  : UntypedFormBuilder,
               private settingsService     : SettingsService,
               private siteService         : SitesService,
               public  dsiAndroidService: PointlessCCDSIEMVAndroidService) { }

@@ -1,6 +1,6 @@
 import { isNull } from '@angular/compiler/src/output/output_ast';
 import { Component, Inject, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder, FormControl, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { merge, Observable, of, Subject } from 'rxjs';
@@ -20,8 +20,8 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 export class PriceTierEditComponent implements OnInit {
 
   weightProfile$          : Observable<WeightProfile[]>;
-  weightSelectForm        : FormGroup;
-  inputForm               : FormGroup;
+  weightSelectForm        : UntypedFormGroup;
+  inputForm               : UntypedFormGroup;
   priceTier               : PriceTiers;
   priceTierPrice          : PriceTierPrice;
   weightProfile           : WeightProfile[];
@@ -38,8 +38,8 @@ export class PriceTierEditComponent implements OnInit {
   // get retail()   { return this.inputForm.get("name")   as FormControl;}
   // get quantity() { return this.inputForm.get("flatQuantity") as FormControl;}
 
-  get priceTierPrices() : FormArray {
-    return this.inputForm.get('priceTierPrices') as FormArray;
+  get priceTierPrices() : UntypedFormArray {
+    return this.inputForm.get('priceTierPrices') as UntypedFormArray;
   }
 
   changesUnsubscribe = new Subject();
@@ -65,7 +65,7 @@ export class PriceTierEditComponent implements OnInit {
   }
 
   constructor(  private _snackBar   : MatSnackBar,
-    private fb                      : FormBuilder,
+    private fb                      : UntypedFormBuilder,
     private siteService             : SitesService,
     private fbPriceTierService      : FbPriceTierService,
     private dialogRef               : MatDialogRef<PriceTierEditComponent>,
@@ -158,7 +158,7 @@ export class PriceTierEditComponent implements OnInit {
   }
 
   //this should be moved to service.
-  addItems(inputForm: FormGroup, items: any[], arrayName: string) {
+  addItems(inputForm: UntypedFormGroup, items: any[], arrayName: string) {
     if (!inputForm) { return }
     if (!items)     { return }
     let pricing = this.priceTierPrices;
@@ -177,7 +177,7 @@ export class PriceTierEditComponent implements OnInit {
   }
 
   addPrice(price: PriceTierPrice) {
-    let pricesArray = this.inputForm.controls['priceTierPrices'] as FormArray;
+    let pricesArray = this.inputForm.controls['priceTierPrices'] as UntypedFormArray;
     let pricing = this.priceTier.priceTierPrices;
 
     if (!price) {
@@ -192,7 +192,7 @@ export class PriceTierEditComponent implements OnInit {
   }
 
   addPricesWithWeightProfiles(): PriceTiers {
-    let pricesArray = this.inputForm.controls['priceTierPrices'] as FormArray;
+    let pricesArray = this.inputForm.controls['priceTierPrices'] as UntypedFormArray;
     this.priceTier  =   this.priceTierMethods.addPricesWithWeightProfiles
                         (this.priceTier,pricesArray)
     return this.priceTier;
@@ -282,7 +282,7 @@ export class PriceTierEditComponent implements OnInit {
 
   getPriceWithProfile(profile,index: number):PriceTierPrice {
     const prof           = profile as WeightProfile
-    const arrayControl   = this.inputForm.controls['priceTierPrices'] as FormArray;
+    const arrayControl   = this.inputForm.controls['priceTierPrices'] as UntypedFormArray;
     const item           = arrayControl.at(index);
     let price            = item.value as PriceTierPrice
     price                = this.priceTierMethods.setPriceWeightProfile(this.priceTier, price, prof)
@@ -291,7 +291,7 @@ export class PriceTierEditComponent implements OnInit {
 
   setItemvalue(item, i) {
     if (item) {
-      let prices = this.inputForm.controls['priceTierPrices'] as FormArray;
+      let prices = this.inputForm.controls['priceTierPrices'] as UntypedFormArray;
       prices.at(i).patchValue(item)
     }
   }
@@ -345,7 +345,7 @@ export class PriceTierEditComponent implements OnInit {
   }
 
   // const retail          = priceTierPrice.retail;
-  refreshPrice(priceTierPriceControl: FormGroup, i : number) {
+  refreshPrice(priceTierPriceControl: UntypedFormGroup, i : number) {
     const priceTierPrice        = priceTierPriceControl.value as PriceTierPrice;
     const quantity              = priceTierPrice.flatQuantity;
     const endPrice              = this.endPriceValue[i];

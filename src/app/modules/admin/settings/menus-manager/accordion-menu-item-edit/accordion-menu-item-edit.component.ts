@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Inject, OnDestroy, EventEmitter, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FbNavMenuService } from 'src/app/_form-builder/fb-nav-menu.service';
 import { AccordionMenu}  from 'src/app/_interfaces/index';
@@ -29,7 +29,7 @@ export class AccordionMenuItemEditComponent implements OnInit, OnDestroy {//, On
 
   _accordionMenu          : Subscription;
    accordionMenu          : AccordionMenu;
-  inputForm               : FormGroup;
+  inputForm               : UntypedFormGroup;
   active                  : boolean;
   menuGroupID             : number;
 

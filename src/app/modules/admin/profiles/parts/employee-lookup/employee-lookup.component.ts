@@ -2,7 +2,7 @@ import { Component, OnInit, Input , EventEmitter, Output, ViewChild, ElementRef,
 
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
-import { FormBuilder, FormControl, FormGroup,  } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,10 +20,10 @@ export class EmployeeLookupComponent implements OnInit, AfterViewInit, OnChanges
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() outPutItemSelect  = new EventEmitter();
 
-  @Input() inputForm:         FormGroup;
+  @Input() inputForm:         UntypedFormGroup;
   @Input() client             : IClientTable;
-  searchForm:                 FormGroup;
-  @Input() searchField:       FormControl;
+  searchForm:                 UntypedFormGroup;
+  @Input() searchField:       UntypedFormControl;
   @Input() id                 : number;
   @Input() name:              string;
   searchPhrase:               Subject<any> = new Subject();
@@ -31,7 +31,7 @@ export class EmployeeLookupComponent implements OnInit, AfterViewInit, OnChanges
   site:                       ISite;
   employeeName                : string;
 
-  get lookupControl()   { return this.inputForm.get("employeeID") as FormControl};
+  get lookupControl()   { return this.inputForm.get("employeeID") as UntypedFormControl};
 
   employees$                   : Observable<EmployeeSearchResults>;
   employee                     : employee[]
@@ -54,7 +54,7 @@ export class EmployeeLookupComponent implements OnInit, AfterViewInit, OnChanges
   }
 
   constructor(  private employeeService: EmployeeService,
-                private fb             : FormBuilder,
+                private fb             : UntypedFormBuilder,
                 private router         : Router,
                 public  route           : ActivatedRoute,
                 private siteService    : SitesService,

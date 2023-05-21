@@ -1,6 +1,6 @@
 import { O } from '@angular/cdk/keycodes';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
@@ -13,13 +13,13 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class EmailEntryComponent implements OnInit {
 
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   order: IPOSOrder;
   email$: Observable<Component>;
   message: string;
 
   constructor(
-      private fb: FormBuilder,
+      private fb: UntypedFormBuilder,
       private orderMethodService: OrderMethodsService,
       private dialogRef: MatDialogRef<EmailEntryComponent>,
       @Inject(MAT_DIALOG_DATA) public data: IPOSOrder

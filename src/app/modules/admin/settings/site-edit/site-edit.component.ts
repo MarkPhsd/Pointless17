@@ -1,7 +1,7 @@
 import { Component, OnInit,  ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable} from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,7 +18,7 @@ import { SiteEditFormComponent } from './site-edit-form/site-edit-form.component
 
 export class SiteEditComponent implements OnInit {
 
-  sitesForm: FormGroup;
+  sitesForm: UntypedFormGroup;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -39,7 +39,7 @@ export class SiteEditComponent implements OnInit {
 
   constructor(
             private _snackBar: MatSnackBar,
-            private fb          : FormBuilder,
+            private fb          : UntypedFormBuilder,
             private sitesService: SitesService,
             private dialog      : MatDialog,
   )

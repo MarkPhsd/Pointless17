@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { Observable,switchMap,of } from 'rxjs';
 import { SystemService } from 'src/app/_services/system/system.service';
@@ -17,7 +17,7 @@ export class EmailSettingsComponent implements OnInit {
   testEmail$: Observable<any>;
   message: any;
 
-  @Input() inputForm          : FormGroup;
+  @Input() inputForm          : UntypedFormGroup;
 
   constructor(
     private systemService   : SystemService,

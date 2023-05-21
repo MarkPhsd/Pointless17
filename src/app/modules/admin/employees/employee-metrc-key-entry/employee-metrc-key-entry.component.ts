@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { employee } from 'src/app/_interfaces';
@@ -13,11 +13,11 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class EmployeeMetrcKeyEntryComponent  {
 
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   employee:  employee;
 
   constructor(private employeeService: EmployeeService,
-              private fb             : FormBuilder,
+              private fb             : UntypedFormBuilder,
               private siteService    : SitesService,
               private _snackBar      : MatSnackBar,
               private dialogRef      : MatDialogRef<EmployeeMetrcKeyEntryComponent>,

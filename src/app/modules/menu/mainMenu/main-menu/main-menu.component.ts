@@ -5,7 +5,7 @@ import { IPOSOrder, ISite } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { MenuService } from 'src/app/_services';
 import { PollingService } from 'src/app/_services/system/polling.service';
@@ -20,7 +20,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class MainMenuComponent implements OnInit  {
 
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
   panelHeightValue = 100;
   panelHeightSize : string;
   smallDevice =false;
@@ -72,7 +72,7 @@ export class MainMenuComponent implements OnInit  {
     private router: Router,
     private menuService: MenuService,
     private orderMethodsService: OrderMethodsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
   ) {
   }
 

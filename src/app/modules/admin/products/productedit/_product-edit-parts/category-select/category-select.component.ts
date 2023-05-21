@@ -3,7 +3,7 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable, of,switchMap } from 'rxjs';
 import { MenuService } from 'src/app/_services';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-category-select',
@@ -15,7 +15,7 @@ export class CategorySelectComponent implements OnInit {
 
   @Input() fieldName = 'categoryID'
   @Input() type      = 'category'
-  @Input() inputForm :    FormGroup;
+  @Input() inputForm :    UntypedFormGroup;
   categories$        :    Observable<IMenuItem[]>;
   @Output() outputCategoryID   :      EventEmitter<any> = new EventEmitter();
 

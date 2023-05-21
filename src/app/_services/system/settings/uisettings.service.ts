@@ -1,5 +1,5 @@
 import { Injectable} from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
 import { ISetting, IUser } from 'src/app/_interfaces';
@@ -355,7 +355,7 @@ export class UISettingsService {
   }
 
   constructor(
-      private _fb            : FormBuilder,
+      private _fb            : UntypedFormBuilder,
       private siteService    : SitesService,
       private matSnack       : MatSnackBar,
       private userAuthorizationService     : UserAuthorizationService,
@@ -475,7 +475,7 @@ export class UISettingsService {
     return this.settingsService.getDSIEMVSettings()
   }
 
-  saveConfig(fb: FormGroup, name: string): Observable<ISetting>  {
+  saveConfig(fb: UntypedFormGroup, name: string): Observable<ISetting>  {
     const setting = fb.value;
     if (!setting || (!setting?.id || setting?.id === '')) {
       this.getSetting(name).pipe(
@@ -519,7 +519,7 @@ export class UISettingsService {
     return this.settingsService.putSetting(site, setting.id, setting)
   }
 
-  initHomePageForm(fb: FormGroup): FormGroup {
+  initHomePageForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
       id                    : [''],
       brandsEnabled         : [''],
@@ -574,7 +574,7 @@ export class UISettingsService {
 
 
 
-  initStripeAPISettingsForm(config: any, fb: FormGroup): FormGroup {
+  initStripeAPISettingsForm(config: any, fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
       id               : [''],
       apiSecret        : [''],
@@ -587,7 +587,7 @@ export class UISettingsService {
     return fb
   }
 
-  initEmailModel(config: any, fb: FormGroup): FormGroup {
+  initEmailModel(config: any, fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
       id     : [''],
       name     : [''],
@@ -612,7 +612,7 @@ export class UISettingsService {
     return fb
   }
 
-  initDSIEMVSettingsForm(config: any, fb: FormGroup): FormGroup {
+  initDSIEMVSettingsForm(config: any, fb: UntypedFormGroup): UntypedFormGroup {
     if (!config) { return this.initDSIEMVForm(fb)};
     fb = this._fb.group({
       id               : [config.id],
@@ -634,7 +634,7 @@ export class UISettingsService {
   }
 
 
-  initDSIEMVForm(fb: FormGroup): FormGroup {
+  initDSIEMVForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
       id        : [''],
       MerchantID: [''],
@@ -655,7 +655,7 @@ export class UISettingsService {
     return fb
   }
 
-  initHomePageSettingsForm(config: any, fb: FormGroup): FormGroup {
+  initHomePageSettingsForm(config: any, fb: UntypedFormGroup): UntypedFormGroup {
     if (!config) { return this.initHomePageForm(fb) }
     fb = this.initHomePageForm(fb);
     console.log('init Home Page', config)
@@ -663,7 +663,7 @@ export class UISettingsService {
     return fb
   }
 
-  initForm(fb: FormGroup): FormGroup {
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
     return this._fb.group({
       id                     : [],
       displayNotes           : [],
@@ -726,20 +726,20 @@ export class UISettingsService {
      })
   }
 
-  initUITransactionsForm(config: TransactionUISettings, fb: FormGroup): FormGroup {
+  initUITransactionsForm(config: TransactionUISettings, fb: UntypedFormGroup): UntypedFormGroup {
     fb = this.initForm(fb);
     fb.patchValue(config)
     return fb
   }
 
-  setFormValue(      inputForm: FormGroup,
+  setFormValue(      inputForm: UntypedFormGroup,
                      setting: ISetting,
                      name: string): Observable<ISetting> {
     inputForm = this.initForm(inputForm);
     return  this.initConfig(setting, name)
   }
 
-  initForms_Sub(inputForm: FormGroup, name: string, config: any): FormGroup {
+  initForms_Sub(inputForm: UntypedFormGroup, name: string, config: any): UntypedFormGroup {
     if (name == 'UITransactionSetting') {
       return this.initUITransactionsForm(config, inputForm);
     }

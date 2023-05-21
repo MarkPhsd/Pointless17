@@ -3,7 +3,7 @@ import { Component,  Output, OnInit, AfterViewInit,
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subject ,fromEvent } from 'rxjs';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -31,7 +31,7 @@ export class UnitTypeListComponent implements OnInit, AfterViewInit {
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
   searchPhrase:         Subject<any> = new Subject();
-  get searchItemValue() { return this.searchForm.get("searchItems") as FormControl;}
+  get searchItemValue() { return this.searchForm.get("searchItems") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
   unitTypeID: number;
@@ -77,8 +77,8 @@ export class UnitTypeListComponent implements OnInit, AfterViewInit {
   isLastpage              : boolean;
 
     //search form filters
-  public searchForm: FormGroup;
-  inputForm        : FormGroup;
+  public searchForm: UntypedFormGroup;
+  inputForm        : UntypedFormGroup;
 
   selected        : any[];
   selectedRows    : any;
@@ -88,7 +88,7 @@ export class UnitTypeListComponent implements OnInit, AfterViewInit {
   constructor(  private _snackBar   : MatSnackBar,
     private router                  : Router,
     private agGridService           : AgGridService,
-    private fb                      : FormBuilder,
+    private fb                      : UntypedFormBuilder,
     private siteService             : SitesService,
     private productEditButtonService: ProductEditButtonService,
     private agGridFormatingService  : AgGridFormatingService,

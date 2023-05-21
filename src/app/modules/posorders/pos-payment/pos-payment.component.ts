@@ -6,7 +6,7 @@ import { Component,
          ViewChild,
          TemplateRef,
          ChangeDetectorRef} from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
@@ -63,9 +63,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   serviceType     :   IServiceType;
   _searchModel    :   Subscription;
   searchModel     :   IPaymentSearchModel;
-  paymentAmountForm : FormGroup;
-  pointValueForm  :   FormGroup
-  checkNumberForm :   FormGroup
+  paymentAmountForm : UntypedFormGroup;
+  pointValueForm  :   UntypedFormGroup
+  checkNumberForm :   UntypedFormGroup
   _order          :   Subscription;
   showInput       =   true // initialize keypad open
   stepSelection   = 1;
@@ -175,7 +175,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
               private changeDetectorRef: ChangeDetectorRef,
               private printingservice: PrintingService,
               private router          : Router,
-              private fb              : FormBuilder) { }
+              private fb              : UntypedFormBuilder) { }
 
   ngOnInit(): void {
     this.initTransactionUISettings();

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { switchMap, of, Observable, catchError } from 'rxjs';
@@ -17,7 +17,7 @@ export class BlogPostEditComponent implements OnInit {
 
   blog                : IBlog;
   action$             : Observable<any>;
-  inputForm           : FormGroup;
+  inputForm           : UntypedFormGroup;
   message             =  ""
   performingAction    = false;
   group               : string;
@@ -30,7 +30,7 @@ export class BlogPostEditComponent implements OnInit {
 
   errrMessage: string;
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
               private blogService: BlogService,
               private siteService: SitesService,
               private _snackBar: MatSnackBar,

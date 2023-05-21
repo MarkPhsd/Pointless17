@@ -4,7 +4,7 @@ import { Component,Output,OnInit,
    } from '@angular/core';
 import { OrdersService } from 'src/app/_services';
 import { IProductSearchResults } from 'src/app/_services/menu/menu.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap, map } from 'rxjs/operators';
 import { Subject ,fromEvent, Subscription } from 'rxjs';
 import { IPOSOrder,  } from 'src/app/_interfaces';
@@ -28,10 +28,10 @@ export class StoreCreditSearchComponent implements OnInit,OnDestroy {
   @Output() outPutResults  = new EventEmitter();
 
   searchPhrase:  Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
-  searchForm          : FormGroup;
+  searchForm          : UntypedFormGroup;
   keyboardOption      = false;
   keyboardDisplayOn   = false;
   toggleButton        = 'toggle-buttons-wide';
@@ -58,7 +58,7 @@ export class StoreCreditSearchComponent implements OnInit,OnDestroy {
   }
 
   constructor(
-    private fb                       : FormBuilder,
+    private fb                       : UntypedFormBuilder,
     private orderService             : OrdersService,
     private sitesService             : SitesService,
     private storeCreditMethodsService: StoreCreditMethodsService,

@@ -1,5 +1,5 @@
 import { Component, OnInit,Input } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, UntypedFormBuilder, FormControl, UntypedFormGroup } from '@angular/forms';
 import { ProductPrice } from 'src/app/_interfaces';
 
 @Component({
@@ -9,10 +9,10 @@ import { ProductPrice } from 'src/app/_interfaces';
 })
 export class PriceCategoryMultiplePricesComponent implements OnInit {
 
-  @Input() inputForm: FormGroup ;
+  @Input() inputForm: UntypedFormGroup ;
 
   constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
     ) {
  
   }

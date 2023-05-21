@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,9 +23,9 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 })
 export class EmployeeEditComponent implements OnInit {
 
-  inputForm   : FormGroup;
-  clientForm  : FormGroup;
-  confirmPassword: FormGroup;
+  inputForm   : UntypedFormGroup;
+  clientForm  : UntypedFormGroup;
+  confirmPassword: UntypedFormGroup;
   bucketName  :  string;
   awsBucketURL:  string;
 
@@ -55,7 +55,7 @@ export class EmployeeEditComponent implements OnInit {
   constructor(
               private router: Router,
               public  route: ActivatedRoute,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               private sanitizer : DomSanitizer,
               private awsBucket: AWSBucketService,
               private _snackBar: MatSnackBar,

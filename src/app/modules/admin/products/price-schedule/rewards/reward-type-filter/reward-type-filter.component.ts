@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CheckboxRequiredValidator, FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { CheckboxRequiredValidator, FormArray, FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule,  DiscountInfo } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
@@ -55,7 +55,7 @@ import { trigger, transition,  animate, animation, style, state, keyframes, quer
 
 export class RewardTypeFilterComponent  implements OnInit {
 
-  @Input() inputForm : FormGroup;
+  @Input() inputForm : UntypedFormGroup;
   @Input() item      : IPriceSchedule;
 
   itemTypes$         : Observable<IItemTypesList[]>;

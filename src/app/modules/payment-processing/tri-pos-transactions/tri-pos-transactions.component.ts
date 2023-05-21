@@ -10,7 +10,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-tri-pos-transactions',
@@ -31,7 +31,7 @@ export class TriPosTransactionsComponent implements OnInit {
   tipValue: string;
   processing: boolean;
   errorMessage: string;
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   uiTransaction: TransactionUISettings
 
   constructor(  public methodsService : TriPOSMethodService,
@@ -42,7 +42,7 @@ export class TriPosTransactionsComponent implements OnInit {
     private siteService         : SitesService,
     private orderService        : OrdersService,
     private setingsServerice: SettingsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
 
     @Optional() private dialogRef  : MatDialogRef<TriPosTransactionsComponent>,

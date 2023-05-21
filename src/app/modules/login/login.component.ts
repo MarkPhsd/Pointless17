@@ -1,7 +1,7 @@
 ﻿import { CompanyService, AuthenticationService, AWSBucketService, ThemesService, OrdersService} from 'src/app/_services';
 import { ICompany, IPOSOrder, IUser, IUserProfile }  from 'src/app/_interfaces';
 import { Component, Inject, Input, OnDestroy, OnInit, Optional, Renderer2, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { fadeInAnimation } from 'src/app/_animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   id         : any;
   dialogOpen: boolean;
   isApp     : boolean;
-  loginForm : FormGroup;
+  loginForm : UntypedFormGroup;
   amI21     : any;
   errorMessage: string;
   counter   =0;
@@ -105,7 +105,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-        private fb                   : FormBuilder,
+        private fb                   : UntypedFormBuilder,
         private route                : ActivatedRoute,
         private router               : Router,
         private _renderer            : Renderer2,
@@ -306,7 +306,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   changePassword(){ this.router.navigate(['/resetpassword']);}
 
-  validateForm(inputForm: FormGroup) : boolean {
+  validateForm(inputForm: UntypedFormGroup) : boolean {
     try {
       if (inputForm.invalid) {
         this.userSwitchingService.updateLoginStatus(3)

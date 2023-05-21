@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
 import { IUser }  from 'src/app/_interfaces';
 import { fadeInAnimation } from 'src/app/_animations';
@@ -12,7 +12,7 @@ import { fadeInAnimation } from 'src/app/_animations';
 })
 export class ChangepasswordComponent implements OnInit {
 
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   loading   = false;
   submitted = false;
   returnUrl : string;
@@ -23,7 +23,7 @@ export class ChangepasswordComponent implements OnInit {
   @Input() user: IUser;
 
   constructor(
-      private formBuilder: FormBuilder,
+      private formBuilder: UntypedFormBuilder,
       private route: ActivatedRoute,
       private router: Router,
       private authenticationService: AuthenticationService

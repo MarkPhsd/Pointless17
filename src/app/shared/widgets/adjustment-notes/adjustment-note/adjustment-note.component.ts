@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Inject} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable} from 'rxjs';
-import { FormBuilder,  FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSort } from '@angular/material/sort';
@@ -26,13 +26,13 @@ export class InventoryAdjustmentNoteComponent implements OnInit {
   adjustmentReason:         AdjustmentReason;
   adjustmentType:           string;
   inventoryAssignment:      IInventoryAssignment;
-  inputForm:                FormGroup;
-  get f():                  FormGroup  { return this.inputForm as FormGroup};
+  inputForm:                UntypedFormGroup;
+  get f():                  UntypedFormGroup  { return this.inputForm as UntypedFormGroup};
   id: any;
 
   constructor(
                 private _snackBar: MatSnackBar,
-                private fb: FormBuilder,
+                private fb: UntypedFormBuilder,
                 public route: ActivatedRoute,
                 private adjustmentReasonsService: AdjustmentReasonsService,
                 private siteService: SitesService,

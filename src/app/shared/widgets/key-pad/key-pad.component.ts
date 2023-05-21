@@ -1,5 +1,5 @@
 import { Component, OnInit,OnChanges, EventEmitter, Output, Input, ElementRef, ViewChild, ChangeDetectionStrategy, SimpleChange } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 
@@ -28,7 +28,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   @Input() value          = '';
   @Input() instruction    = 'Enter Value';
   @Input() inputTypeValue = 'password';
-  @Input() inputForm      : FormGroup;
+  @Input() inputForm      : UntypedFormGroup;
   @Input() showInput      = false;
   @Input() formatted      : any;
   @Input() fieldName      : string;
@@ -44,7 +44,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   @Input() decimals       = 0;
   @Input() requireWholeNumber: boolean;
 
-  constructor(  private fb: FormBuilder) {
+  constructor(  private fb: UntypedFormBuilder) {
     if (this.formatted) {
       if (this.inputTypeValue.toLowerCase() === 'decimal')
       { this.showDoubleZero = true}
@@ -90,7 +90,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   initForm() {
     this._initForm();
     if (this.inputForm && this.fieldName) {
-      this.inputForm.addControl( this.fieldName,new FormControl([]) );
+      this.inputForm.addControl( this.fieldName,new UntypedFormControl([]) );
       this.formSubscriber()
       this.inputForm.controls[this.fieldName].valueChanges.subscribe(data => {
         if (data == '' || data == undefined) {

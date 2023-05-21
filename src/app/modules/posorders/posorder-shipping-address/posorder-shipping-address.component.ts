@@ -1,5 +1,5 @@
 import { Component, OnInit, Input,OnDestroy, EventEmitter, Output } from '@angular/core';
-import { FormGroup,FormBuilder } from '@angular/forms';
+import { UntypedFormGroup,UntypedFormBuilder } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { IPOSOrder, IServiceType, ISite } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
@@ -14,7 +14,7 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
 })
 export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
 
-  @Input() inputForm            : FormGroup;
+  @Input() inputForm            : UntypedFormGroup;
   @Input() serviceType          : IServiceType;
   @Input() serviceTypes$        : Observable<IServiceType[]>;
   @Input() serviceType$         : Observable<IServiceType>;
@@ -34,7 +34,7 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
     private serviceTypeService: ServiceTypeService,
     private sitesService      : SitesService,
     public  platFormService   : PlatformService,
-    private fb :                FormBuilder ) { }
+    private fb :                UntypedFormBuilder ) { }
 
   ngOnInit(): void {
     this.initSubscriptions();

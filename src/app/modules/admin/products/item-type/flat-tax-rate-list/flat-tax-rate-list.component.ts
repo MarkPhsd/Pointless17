@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs'
 import { FlatRateService } from 'src/app/_services/map-routing/flat-rate.service';
 import { FlatRateTax } from 'src/app/_services/menu/item-type.service';
@@ -12,7 +12,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class FlatTaxRateListComponent {
 
-  @Input()  inputForm:      FormGroup;
+  @Input()  inputForm:      UntypedFormGroup;
   items$:                   Observable<FlatRateTax[]>;
   items:    FlatRateTax[]
 

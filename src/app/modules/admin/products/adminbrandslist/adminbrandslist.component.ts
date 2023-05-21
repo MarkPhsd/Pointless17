@@ -16,7 +16,7 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
@@ -35,7 +35,7 @@ export class AdminbrandslistComponent implements OnInit, AfterViewInit {
   @Output() itemSelect  = new EventEmitter();
 
   searchPhrase:         Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get("name") as FormControl;}
+  get itemName() { return this.searchForm.get("name") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
   // //search with debounce
@@ -48,7 +48,7 @@ export class AdminbrandslistComponent implements OnInit, AfterViewInit {
     )
   )
 
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -116,7 +116,7 @@ export class AdminbrandslistComponent implements OnInit, AfterViewInit {
               private awsService             : AWSBucketService,
               private agGridFormatingService : AgGridFormatingService,
               private _snackBar              : MatSnackBar,
-              private fb                     : FormBuilder,
+              private fb                     : UntypedFormBuilder,
              ) {
 
   }

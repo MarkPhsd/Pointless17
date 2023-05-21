@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'price-category-conversions',
@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class PriceCategoryConversionsComponent  {
   @Input() showMore = false;
-  @Input() inputForm: FormGroup;
+  @Input() inputForm: UntypedFormGroup;
   @Input() formGroupName: any;
   constructor() { }
 

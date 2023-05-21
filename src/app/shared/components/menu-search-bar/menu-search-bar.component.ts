@@ -7,7 +7,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProductSearchResults } from 'src/app/_services/menu/menu.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, FormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { ClientSearchModel, ClientSearchResults, IPOSOrder, IProduct, IUserProfile } from 'src/app/_interfaces';
@@ -64,7 +64,7 @@ productTypes$    : Observable<any[]>;
 multifilter      = false;
 tinyMode         = false;
 //search form filters
-searchForm       : FormGroup;
+searchForm       : UntypedFormGroup;
 categoryID       : number;
 productTypeSearch: any;
 productTypeID    : number;
@@ -150,7 +150,7 @@ initSubscriptions() {
 
 constructor(
     private menuService:            MenuService,
-    private fb:                     FormBuilder,
+    private fb:                     UntypedFormBuilder,
     private siteService:            SitesService,
     private itemTypeService:        ItemTypeService,
     private contactsService:        ContactsService,

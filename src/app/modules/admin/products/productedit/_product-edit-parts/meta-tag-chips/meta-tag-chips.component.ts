@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, ViewChild, AfterViewInit, Output, OnInit, EventEmitter} from '@angular/core';
 import { COMMA, ENTER} from '@angular/cdk/keycodes';
-import { FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import { MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
 import { MatChipInputEvent} from '@angular/material/chips';
 import { fromEvent, Observable, Subject} from 'rxjs';
@@ -19,13 +19,13 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
 
   get f()   { return this.inputForm;}
-  get metaTags()  { return this.inputForm.get("metaTags") as FormControl;}
+  get metaTags()  { return this.inputForm.get("metaTags") as UntypedFormControl;}
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @ViewChild('metaTag') metaTag: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete ;
   // @Output() itemSelect  = new EventEmitter();
-  @Input()  inputForm  :        FormGroup;
+  @Input()  inputForm  :        UntypedFormGroup;
   @Input()  metaTagList:        string;
   @Input()  product    :        IProduct;
 
@@ -67,7 +67,7 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
   constructor(private menuService: MenuService,
             private sitesService: SitesService,
             private metaTagService: MetaTagsService,
-            private _fb: FormBuilder)
+            private _fb: UntypedFormBuilder)
   {
     this.inputForm = this._fb.group({ metaTags: [''] })
     const list = this.metaTagService

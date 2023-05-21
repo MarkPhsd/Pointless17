@@ -5,7 +5,7 @@ import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { employeeBreak, EmployeeClock } from 'src/app/_interfaces/people/employeeClock';
 import { Observable, of , map, switchMap, catchError } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 
 
@@ -19,14 +19,14 @@ export class EmployeeClockEditComponent implements OnInit {
   action$:  Observable<any>;
   clock$: Observable<EmployeeClock>;
   clock: EmployeeClock;
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   breaks: employeeBreak[];
   message: string;
 
   constructor(
       private employeeClockService: EmployeeClockService,
       private siteService: SitesService, 
-      private fb: FormBuilder, 
+      private fb: UntypedFormBuilder, 
       private dataHelper: DateHelperService,
       private fbProductsService: FbProductsService,
       private dialogRef: MatDialogRef<EmployeeClockEditComponent>,

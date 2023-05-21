@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Inject, OnInit, Optional, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -19,7 +19,7 @@ export class FastUserSwitchComponent implements OnInit {
   public _pinCode            = new BehaviorSubject<string>(null);
   public pinCode$            = this._pinCode.asObservable();
 
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   request  : string;
   requestData: any;
   loginAction: any;
@@ -33,7 +33,7 @@ export class FastUserSwitchComponent implements OnInit {
     private userSwitchingService   : UserSwitchingService,
     private authenticationService  : AuthenticationService,
     private router                 : Router,
-    private fb                     : FormBuilder,
+    private fb                     : UntypedFormBuilder,
     private _snackBar              : MatSnackBar,
     public  platformService        : PlatformService,
     @Optional()  dialogRef         : MatDialogRef<FastUserSwitchComponent>,

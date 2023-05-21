@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IServiceType } from 'src/app/_interfaces';
@@ -18,11 +18,11 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 export class OrderTypeSelectionComponent implements OnInit {
 
   @Output() outputOrderTypes      :   EventEmitter<any> = new EventEmitter();
-  @Input()  inputForm             :   FormGroup;
+  @Input()  inputForm             :   UntypedFormGroup;
 
   allOrderTypes     : boolean;
   orderTypelist     = [] as IItemBasic[];
-  orderTypesForm    : FormGroup;
+  orderTypesForm    : UntypedFormGroup;
   serviceTypes      : IServiceType[];
   savedOrderTypes   : any[];
   orderArray        : any[];

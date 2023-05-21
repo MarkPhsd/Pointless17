@@ -2,7 +2,7 @@ import { Component,  Inject, OnInit,
 } from '@angular/core';
 import { AWSBucketService, ContactsService,   } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { tap } from 'rxjs/operators';
 import { ClientTypeService, IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { clientType, IUserProfile } from 'src/app/_interfaces';
@@ -24,8 +24,8 @@ export class StoreCreditEditorComponent implements OnInit {
   id                     :any;
   bucketName             :string;
   awsBucketURL           :string;
-  inputForm              :FormGroup;
-  jsonObjectForm         : FormGroup;
+  inputForm              :UntypedFormGroup;
+  jsonObjectForm         : UntypedFormGroup;
   storeCredit            : StoreCredit;
   client$   : Observable<IUserProfile>;
 

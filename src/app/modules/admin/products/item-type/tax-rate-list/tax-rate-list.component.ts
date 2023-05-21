@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable  } from 'rxjs';
 import {  TaxRate }  from 'src/app/_interfaces';
 import { TaxesService } from 'src/app/_services/menu/taxes.service';
@@ -14,7 +14,7 @@ export class TaxRateListComponent implements OnInit {
 
 
   @Input()  formControl:    string;
-  @Input()  inputForm:      FormGroup;
+  @Input()  inputForm:      UntypedFormGroup;
   items$:                   Observable<TaxRate[]>;
   items:  TaxRate[]
   constructor(private flatRateService: TaxesService,

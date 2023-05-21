@@ -1,6 +1,6 @@
 import { Component,  Inject,   Input,   OnInit,} from '@angular/core';
 import { ActivatedRoute,  } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService, MenuService,  } from 'src/app/_services';
 import { ISite } from 'src/app/_interfaces/site';
@@ -25,16 +25,16 @@ export class StrainsAddComponent implements OnInit {
   productionBatchNumber:  string;
   facilityLicenseNumber:  string;
 
-  get f():                FormGroup  { return this.packageForm as FormGroup};
-  get hasImportedControl(){ return this.packageForm.get("hasImported") as FormControl;}
-  get activeControl()     { return this.packageForm.get("active") as FormControl;}
+  get f():                UntypedFormGroup  { return this.packageForm as UntypedFormGroup};
+  get hasImportedControl(){ return this.packageForm.get("hasImported") as UntypedFormControl;}
+  get activeControl()     { return this.packageForm.get("active") as UntypedFormControl;}
 
-  priceForm     :         FormGroup;
-  packageForm:            FormGroup;
+  priceForm     :         UntypedFormGroup;
+  packageForm:            UntypedFormGroup;
   bucketName:             string;
   awsBucketURL:           string;
 
-  locationFormArray:      FormGroup;
+  locationFormArray:      UntypedFormGroup;
   id:                     any;
   package:                METRCPackage
   package$:               Observable<METRCPackage>;
@@ -54,7 +54,7 @@ export class StrainsAddComponent implements OnInit {
   constructor(
           private conversionService: ConversionsService,
           public route: ActivatedRoute,
-          public fb: FormBuilder,
+          public fb: UntypedFormBuilder,
           private awsBucket: AWSBucketService,
           private _snackBar: MatSnackBar,
           private siteService: SitesService,
@@ -208,7 +208,7 @@ export class StrainsAddComponent implements OnInit {
     })
   }
 
-  setProductNameEmpty(inputForm: FormGroup) {
+  setProductNameEmpty(inputForm: UntypedFormGroup) {
     const item = {productName: '', productID: 0}
     inputForm.patchValue(item)
   }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, Input,  OnInit,} from '@angular/core';
 import { AWSBucketService, MenuService } from 'src/app/_services';
-import { FormBuilder, FormGroup, FormControl,  } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, UntypedFormControl,  } from '@angular/forms';
 import { ActivatedRoute,  } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -28,25 +28,25 @@ import { employee } from 'src/app/_interfaces';
 
 export class ProducteditComponent implements  OnInit  {
 
-  productForm: FormGroup;
+  productForm: UntypedFormGroup;
   itemTags   : string;
 
   get f()             { return this.productForm;}
-  get fullProductName(){return this.productForm.get("fullProductName") as FormControl;}
-  get name()          { return this.productForm.get("name") as FormControl;}
-  get metaTags()      { return this.productForm.get("metaTags") as FormControl;}
-  get msrp()          { return this.productForm.get("msrp") as FormControl;}
-  get retail()        { return this.productForm.get("retail") as FormControl;}
-  get priceCategory() { return this.productForm.get("priceCategory") as FormControl;}
-  get brandID()       { return this.productForm.get("brandID") as FormControl;}
-  get taxLookUp()     { return this.productForm.get("taxLookUp") as FormControl;}
-  get tax2()          { return this.productForm.get("tax2") as FormControl;}
-  get tax3()          { return this.productForm.get("tax3") as FormControl;}
-  get taxable()       { return this.productForm.get("taxable") as FormControl;}
-  get categoryID()    { return this.productForm.get("categoryID") as FormControl;}
-  get subCategoryID() { return this.productForm.get("subCategoryID") as FormControl;}
-  get departmentID()  { return this.productForm.get("departmentID") as FormControl;}
-  get prodModifierType()  { return this.productForm.get("prodModifierType") as FormControl;}
+  get fullProductName(){return this.productForm.get("fullProductName") as UntypedFormControl;}
+  get name()          { return this.productForm.get("name") as UntypedFormControl;}
+  get metaTags()      { return this.productForm.get("metaTags") as UntypedFormControl;}
+  get msrp()          { return this.productForm.get("msrp") as UntypedFormControl;}
+  get retail()        { return this.productForm.get("retail") as UntypedFormControl;}
+  get priceCategory() { return this.productForm.get("priceCategory") as UntypedFormControl;}
+  get brandID()       { return this.productForm.get("brandID") as UntypedFormControl;}
+  get taxLookUp()     { return this.productForm.get("taxLookUp") as UntypedFormControl;}
+  get tax2()          { return this.productForm.get("tax2") as UntypedFormControl;}
+  get tax3()          { return this.productForm.get("tax3") as UntypedFormControl;}
+  get taxable()       { return this.productForm.get("taxable") as UntypedFormControl;}
+  get categoryID()    { return this.productForm.get("categoryID") as UntypedFormControl;}
+  get subCategoryID() { return this.productForm.get("subCategoryID") as UntypedFormControl;}
+  get departmentID()  { return this.productForm.get("departmentID") as UntypedFormControl;}
+  get prodModifierType()  { return this.productForm.get("prodModifierType") as UntypedFormControl;}
   // get urlImageOther_ctl() { return this.productForm.get("departmentID") as FormControl;}
   // get urlImageMain_ctl()  { return this.productForm.get("departmentID") as FormControl;}
   priceCategories:        PriceCategories;
@@ -83,7 +83,7 @@ export class ProducteditComponent implements  OnInit  {
 
   constructor(private menuService: MenuService,
               public  route: ActivatedRoute,
-              public  fb: FormBuilder,
+              public  fb: UntypedFormBuilder,
               private sanitizer : DomSanitizer,
               private awsBucket: AWSBucketService,
               private _snackBar: MatSnackBar,

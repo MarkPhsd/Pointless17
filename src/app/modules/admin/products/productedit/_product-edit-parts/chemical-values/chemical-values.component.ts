@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-chemical-values',
@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class ChemicalValuesComponent implements OnInit {
 
-  @Input() inputForm: FormGroup
+  @Input() inputForm: UntypedFormGroup
   @Input() inventoryItem: boolean;
   
   // thc:   any;

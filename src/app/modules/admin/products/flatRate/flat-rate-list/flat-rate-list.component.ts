@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subject ,fromEvent } from 'rxjs';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import "ag-grid-community/dist/styles/ag-grid.css";
@@ -50,7 +50,7 @@ export class FlatRateListComponent implements OnInit {
   constructor(  private _snackBar: MatSnackBar,
                 private router: Router,
                 private agGridService: AgGridService,
-                private fb: FormBuilder,
+                private fb: UntypedFormBuilder,
                 private siteService: SitesService,
                 private dialog: MatDialog,
                 private flatRateService: FlatRateService,) {}

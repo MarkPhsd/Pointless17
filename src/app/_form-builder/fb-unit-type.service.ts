@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { UnitType } from '../_interfaces/menu/price-categories';
 
 @Injectable({
@@ -7,14 +7,14 @@ import { UnitType } from '../_interfaces/menu/price-categories';
 })
 export class FbUnitTypeService {
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: UntypedFormBuilder) { }
 
-  intitFormData(inputForm: FormGroup, data: UnitType) {
+  intitFormData(inputForm: UntypedFormGroup, data: UnitType) {
     inputForm.patchValue(data)
     return inputForm
   }
 
-  initForm(fb: FormGroup): FormGroup {
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
     return this.fb.group({
       id:               [''],
       name:             [''],

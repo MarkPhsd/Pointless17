@@ -5,7 +5,7 @@ import { ISite }   from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { SitesService } from '../reporting/sites.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 export interface IPaymentMethod {
   id:              number;
@@ -37,7 +37,7 @@ export class PaymentMethodsService {
     private _SnackBar: MatSnackBar,
     private httpCache: HttpClientCacheService,
     private siteService: SitesService,
-    private _fb: FormBuilder,
+    private _fb: UntypedFormBuilder,
             )
   {
 
@@ -209,7 +209,7 @@ export class PaymentMethodsService {
     }
   }
 
-  initForm(fb: FormGroup): FormGroup {
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
     // const serializedDate = new Date(user?.dob)
          fb = this._fb.group({
             id:              [''], //

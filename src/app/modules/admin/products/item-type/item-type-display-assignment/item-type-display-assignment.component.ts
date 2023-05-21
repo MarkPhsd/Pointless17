@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
 import { Observable} from 'rxjs';
@@ -59,13 +59,13 @@ export class ItemTypeDisplayAssignmentComponent implements OnInit {
 
   availableItems: Array<IListBoxItem> = [];
   selectedItems : Array<IListBoxItem> = [];
-  listBoxForm   : FormGroup;
+  listBoxForm   : UntypedFormGroup;
 
   constructor(
     private itemTypeService: ItemTypeService,
     private siteService: SitesService,
     private itemTypeDisplayService: ItemTypeDisplayAssignmentService,
-    public fb: FormBuilder) {
+    public fb: UntypedFormBuilder) {
     this.listBoxForm = this.fb.group({
       availableSearchInput: [''],
       selectedSearchInput: [''],

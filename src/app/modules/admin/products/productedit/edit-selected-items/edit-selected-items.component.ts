@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, Observable, of, switchMap } from 'rxjs';
@@ -14,17 +14,17 @@ import { ProducteditComponent } from '../productedit.component';
 })
 export class EditSelectedItemsComponent implements OnInit {
   action$   : Observable<any>;
-  inputForm : FormGroup;
-  get subCategoryID()    { return this.inputForm.get("subCategoryID") as FormControl;}
-  get categoryID()    { return this.inputForm.get("categoryID") as FormControl;}
-  get departmentID()  { return this.inputForm.get("departmentID") as FormControl;}
-  get itemTypeID()    { return this.inputForm.get("prodModifierType") as FormControl;}
-  get species()       { return this.inputForm.get("species") as FormControl;}
-  get brandID()       { return this.inputForm.get("brandID") as FormControl;}
-  get active()        { return this.inputForm.get("active") as FormControl;}
-  get webProduct()    { return this.inputForm.get("webProduct") as FormControl;}
-  get sortOrder()     { return this.inputForm.get("sortOrder") as FormControl;}
-  get webWorkRequired()       { return this.inputForm.get("webWorkRequired") as FormControl;}
+  inputForm : UntypedFormGroup;
+  get subCategoryID()    { return this.inputForm.get("subCategoryID") as UntypedFormControl;}
+  get categoryID()    { return this.inputForm.get("categoryID") as UntypedFormControl;}
+  get departmentID()  { return this.inputForm.get("departmentID") as UntypedFormControl;}
+  get itemTypeID()    { return this.inputForm.get("prodModifierType") as UntypedFormControl;}
+  get species()       { return this.inputForm.get("species") as UntypedFormControl;}
+  get brandID()       { return this.inputForm.get("brandID") as UntypedFormControl;}
+  get active()        { return this.inputForm.get("active") as UntypedFormControl;}
+  get webProduct()    { return this.inputForm.get("webProduct") as UntypedFormControl;}
+  get sortOrder()     { return this.inputForm.get("sortOrder") as UntypedFormControl;}
+  get webWorkRequired()       { return this.inputForm.get("webWorkRequired") as UntypedFormControl;}
 
 
   // constructor(
@@ -33,7 +33,7 @@ export class EditSelectedItemsComponent implements OnInit {
 
   constructor(
       private menuService: MenuService,
-      public fb: FormBuilder,
+      public fb: UntypedFormBuilder,
       private snack: MatSnackBar,
       private siteService: SitesService,
       private dialogRef: MatDialogRef<ProducteditComponent>,

@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap, catchError } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
@@ -38,9 +38,9 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit, OnDestroy 
   @Output() itemSelect  = new EventEmitter();
 
   searchPhrase:         Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
-  dateRange        : FormGroup;
+  dateRange        : UntypedFormGroup;
 
   // //search with debounce
   searchItems$              : Subject<BalanceSheetSearchModel> = new Subject();
@@ -80,8 +80,8 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit, OnDestroy 
   value             : any;
   // //This is for the filter Section//
   //search form filters
-  searchForm      : FormGroup;
-  inputForm       : FormGroup;
+  searchForm      : UntypedFormGroup;
+  inputForm       : UntypedFormGroup;
 
   selected        : any[];
   selectedRows    : any;
@@ -103,7 +103,7 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit, OnDestroy 
   constructor(  private _snackBar               : MatSnackBar,
                 private balanceSheetService     : BalanceSheetService,
                 private agGridService           : AgGridService,
-                private fb                      : FormBuilder,
+                private fb                      : UntypedFormBuilder,
                 private siteService             : SitesService,
                 private productEditButtonService: ProductEditButtonService,
                 private agGridFormatingService  : AgGridFormatingService,
@@ -145,9 +145,9 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit, OnDestroy 
     this.searchForm = this.fb.group({
       itemName : ['']
     })
-    this.dateRange = new FormGroup({
-      start: new FormControl(),
-      end: new FormControl()
+    this.dateRange = new UntypedFormGroup({
+      start: new UntypedFormControl(),
+      end: new UntypedFormControl()
     });
   }
 

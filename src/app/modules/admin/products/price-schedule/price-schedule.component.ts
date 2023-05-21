@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, UntypedFormGroup, FormArray } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
@@ -25,8 +25,8 @@ export class PriceScheduleComponent {
 
   @Output() outPutToggleSideBar:      EventEmitter<any> = new EventEmitter();
 
-  inputForm:            FormGroup;
-  selectClientForm:     FormGroup;
+  inputForm:            UntypedFormGroup;
+  selectClientForm:     UntypedFormGroup;
   saveNotification:     boolean;
   clientTypes:          ClientTypes;
   dateFrame:            DateFrame;
@@ -176,7 +176,7 @@ export class PriceScheduleComponent {
     this.router.navigate(['price-schedule'])
   }
 
-  getPriceSchedule(data: FormGroup): IPriceSchedule {
+  getPriceSchedule(data: UntypedFormGroup): IPriceSchedule {
     if (data) {
        if (data.valid) {
         let  priceSchedule = data.value as IPriceSchedule;

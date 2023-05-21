@@ -1,5 +1,5 @@
 import { Component, OnInit , Input} from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { IPOSOrder, IServiceType, ISite } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
 export class PosOrderNotesComponent implements OnInit {
 
   @Input() order    : IPOSOrder;
-  @Input() inputForm: FormGroup;
+  @Input() inputForm: UntypedFormGroup;
   serviceType$      : Observable<IServiceType>;
   @Input() serviceType: IServiceType;
 

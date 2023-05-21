@@ -1,6 +1,6 @@
 import { Component,  Input, Output, OnInit,  ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup,  FormControl} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup,  UntypedFormControl} from '@angular/forms';
 import { ISite } from 'src/app/_interfaces/site';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -18,10 +18,10 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
 
-  @Input()  searchForm:       FormGroup;
+  @Input()  searchForm:       UntypedFormGroup;
   @Input()  itemType:         number; //removed default 1
   @Input()  metrcCategoryName : string;
-  @Input()  searchField:      FormControl;
+  @Input()  searchField:      UntypedFormControl;
   @Input()  productName:      string;
   @Input()  doNotPassName     :string;
   @Input()  formControlName = 'productName';
@@ -62,7 +62,7 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
   constructor(
     public route: ActivatedRoute,
     private menuService: MenuService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private siteService: SitesService,
     )
   {

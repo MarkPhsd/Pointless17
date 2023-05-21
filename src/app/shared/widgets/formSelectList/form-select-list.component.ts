@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output , OnChanges} from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -11,12 +11,12 @@ export class FormSelectListComponent implements OnInit , OnChanges{
   @Input()  list            : any[];
   @Input()  list$           : Observable<any[]>;
   @Input()  formFieldName   : string;
-  @Input()  searchForm      : FormGroup;
+  @Input()  searchForm      : UntypedFormGroup;
   @Input()  showActiveInactive: boolean;
   @Input()  formValue       : any;
   @Output() selectionChange       = new EventEmitter();
   @Output() selectionChangeValue = new EventEmitter();
-  inputField: FormControl;
+  inputField: UntypedFormControl;
 
   itemList: any[];
   constructor() { }
@@ -24,7 +24,7 @@ export class FormSelectListComponent implements OnInit , OnChanges{
   ngOnInit(): void {
     const i = 0
     if (this.searchForm) {
-      this.inputField = this.searchForm.controls[this.formFieldName] as FormControl;
+      this.inputField = this.searchForm.controls[this.formFieldName] as UntypedFormControl;
     }
   }
 

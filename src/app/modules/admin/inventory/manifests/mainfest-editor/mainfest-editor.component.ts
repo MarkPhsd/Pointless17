@@ -1,5 +1,5 @@
 import { Component, OnInit,OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subscription, switchMap } from 'rxjs';
@@ -17,7 +17,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class MainfestEditorComponent implements OnInit,OnDestroy {
 
-  inputForm         : FormGroup;
+  inputForm         : UntypedFormGroup;
   currentManifest   : InventoryManifest;
   currentManifest$  : Subscription;
   inventoryItems    : IInventoryAssignment[];
@@ -85,7 +85,7 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
   }
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private siteService:SitesService,
     private matSnack: MatSnackBar,
     private manifestTypeService: ManifestTypesService,

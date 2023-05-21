@@ -1,5 +1,5 @@
 import { Component, OnInit,Input, Inject,EventEmitter , Output} from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -16,7 +16,7 @@ export class TipEntryComponent implements OnInit  {
   uiTransactions: TransactionUISettings
   uiTransactions$ : Observable<TransactionUISettings>;
 
-  inputForm             : FormGroup;
+  inputForm             : UntypedFormGroup;
   @Input()  paymentMethod: IPaymentMethod;
   @Input()  order        : IPOSOrder;
   @Input()  payment      : IPOSPayment;
@@ -27,7 +27,7 @@ export class TipEntryComponent implements OnInit  {
 
   constructor(
               private snackBar : MatSnackBar,
-              private fb       : FormBuilder,
+              private fb       : UntypedFormBuilder,
               private router   : Router,
               private uISettingsService: UISettingsService,
 

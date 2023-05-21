@@ -2,7 +2,7 @@ import { OnInit,  Component } from '@angular/core';
 import { ISetting,  } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
 import { SystemService } from 'src/app/_services/system/system.service';
 import { AuthenticationService } from 'src/app/_services';
@@ -18,7 +18,7 @@ export class CacheSettingsComponent implements OnInit {
   cacheTime         :    string;
   cacheEnabled      :    boolean;
   cacheTimeSetting  = {} as  ISetting;
-  cacheForm         : FormGroup;
+  cacheForm         : UntypedFormGroup;
   currentCache      : ISetting;
   cacheSizeCurrent  : string;
   cacheTimeSetting$ : Observable<ISetting>;

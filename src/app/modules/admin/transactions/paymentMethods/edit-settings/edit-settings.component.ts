@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -12,7 +12,7 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 })
 export class EditSettingsComponent implements OnInit {
 
-  @Input() inputForm        : FormGroup;
+  @Input() inputForm        : UntypedFormGroup;
   @Input() setting          : ISetting;
   @Input() settingName      : string;
   @Input() settingFieldName : string;
@@ -24,7 +24,7 @@ export class EditSettingsComponent implements OnInit {
       private settingService: SettingsService,
       private sitesService  : SitesService,
       private fbSettingsService: FbSettingsService,
-      private fb: FormBuilder
+      private fb: UntypedFormBuilder
   ) {
 
   }

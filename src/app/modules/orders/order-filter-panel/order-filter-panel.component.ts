@@ -13,7 +13,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Plugins } from '@capacitor/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -46,14 +46,14 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   toggleSuspendedOrders          = "0";
   toggleOrdersGreaterThanZero    = "0";
   toggleTypeEmployee             = "0"
-  printForm          : FormGroup;
+  printForm          : UntypedFormGroup;
   user               = {} as IUser;
 
-  completionDateForm     : FormGroup;
+  completionDateForm     : UntypedFormGroup;
   dateFrom          : any;
   dateTo            : any;
 
-  scheduleDateForm  : FormGroup;
+  scheduleDateForm  : UntypedFormGroup;
   scheduleDateFrom  : any;
   scheduleDateTo    : any;
 
@@ -64,7 +64,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   _searchModel     :   Subscription;
   searchModel      :   IPOSOrderSearchModel;
-  searchForm       : FormGroup;
+  searchForm       : UntypedFormGroup;
   searchPhrase     : Subject<any> = new Subject();
   value            : string;
   smallDevice      = false;
@@ -87,7 +87,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   @Output() outPutHidePanel = new EventEmitter();
 
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
   searchItems$              : Subject<IPOSOrderSearchModel[]> = new Subject();
@@ -184,7 +184,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       private serviceTypes    : ServiceTypeService,
       private settingService  : SettingsService,
       private matSnack        : MatSnackBar,
-      private fb              : FormBuilder,
+      private fb              : UntypedFormBuilder,
       private userAuthorization  : UserAuthorizationService,
       private dateHelper: DateHelperService,
       private _bottomSheet    : MatBottomSheet
@@ -478,7 +478,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.searchModel.scheduleDate_To   = this.scheduleDateForm.get("end").value;
   }
 
-  getFormRangeInitial(inputForm: FormGroup) {
+  getFormRangeInitial(inputForm: UntypedFormGroup) {
     const today = new Date();
     const month = today.getMonth();
     const year = today.getFullYear();
@@ -510,7 +510,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     })
   }
 
-  subscribeToDateRangeData(form: FormGroup) {
+  subscribeToDateRangeData(form: UntypedFormGroup) {
     if (form) {
       form.get('start').valueChanges.subscribe( res=> {
         if (!res) {return}

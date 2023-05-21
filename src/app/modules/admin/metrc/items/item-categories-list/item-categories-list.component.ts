@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subject  } from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { GridApi } from 'ag-grid-community';
 import "ag-grid-community/dist/styles/ag-grid.css";
@@ -53,7 +53,7 @@ export class ItemCategoriesListComponent implements OnInit {
 
   get platForm() {  return Capacitor.getPlatform(); }
   //This is for the search Section//
-  public searchForm: FormGroup;
+  public searchForm: UntypedFormGroup;
   // get searchItemsValue() { return this.searchForm.get("controlSearchItems") as FormControl;}
   private readonly onDestroy = new Subject<void>();
   search: string;
@@ -81,7 +81,7 @@ export class ItemCategoriesListComponent implements OnInit {
   constructor(  private _snackBar: MatSnackBar,
       private router: Router,
       private agGridService: AgGridService,
-      private fb: FormBuilder,
+      private fb: UntypedFormBuilder,
       private metrcItemsCategoriesService: MetrcItemsCategoriesService,
       private dialog: MatDialog,
       private sitesService: SitesService,

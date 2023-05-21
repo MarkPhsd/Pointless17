@@ -1,6 +1,6 @@
 import { Component, Inject,  OnInit,} from '@angular/core';
 import { MenuService } from 'src/app/_services';
-import { FormBuilder, FormControl, FormGroup,} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IProduct } from 'src/app/_interfaces/raw/products';
 import { Observable, of } from 'rxjs';
@@ -25,8 +25,8 @@ import { SearchModel } from 'src/app/_services/system/paging.service';
 })
 export class StrainProductEditComponent implements OnInit {
 
-  productForm: FormGroup;
-  unitSearchForm: FormGroup;
+  productForm: UntypedFormGroup;
+  unitSearchForm: UntypedFormGroup;
   get f() { return this.productForm;}
   action$             :  Observable<any>;
   performingAction    : boolean;
@@ -39,12 +39,12 @@ export class StrainProductEditComponent implements OnInit {
   result:                 any;
   priceCategoryID:        number;
   itemType                = {} as IItemType;
-  get brandID()       { return this.productForm.get("brandID") as FormControl;}
+  get brandID()       { return this.productForm.get("brandID") as UntypedFormControl;}
   urlImageMain: string;
 
   constructor(private menuService: MenuService,
               public route: ActivatedRoute,
-              public fb: FormBuilder,
+              public fb: UntypedFormBuilder,
               private _snackBar: MatSnackBar,
               private itemTypeService  : ItemTypeService,
               private priceCategoryService: PriceCategoriesService,

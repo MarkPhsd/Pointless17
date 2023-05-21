@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
@@ -78,7 +78,7 @@ export class StoreCreditMethodsService {
 
   constructor(
     private httpClient         : HttpClient,
-    private fb                 : FormBuilder,
+    private fb                 : UntypedFormBuilder,
     private _snackBar          : MatSnackBar,
     private dialog             : MatDialog,
     private sitesService: SitesService,
@@ -95,7 +95,7 @@ updateSearchModel(item: IStoreCreditSearchModel){
   this._searchModel.next(item)
 }
 
-getStoreCreditForm(inputForm:FormGroup): FormGroup {
+getStoreCreditForm(inputForm:UntypedFormGroup): UntypedFormGroup {
     inputForm =   this.fb.group({
     id:             [''],
     number:         [''],

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ScaleService, ScaleSetup } from 'src/app/_services/system/scale-service.service';
 
 @Component({
@@ -8,12 +8,12 @@ import { ScaleService, ScaleSetup } from 'src/app/_services/system/scale-service
   styleUrls: ['./scale-settings.component.scss']
 })
 export class ScaleSettingsComponent implements OnInit {
-  inputForm  : FormGroup;
+  inputForm  : UntypedFormGroup;
   scaleSetup = {} as ScaleSetup
 
   constructor(
       private scaleService: ScaleService,
-      private fb: FormBuilder
+      private fb: UntypedFormBuilder
     ) { }
 
   ngOnInit(): void {

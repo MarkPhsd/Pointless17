@@ -7,7 +7,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { Observable,  Subscription, switchMap } from 'rxjs';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -20,7 +20,7 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 })
 export class PosPaymentEditComponent implements OnInit, OnDestroy {
 
-  inputForm       : FormGroup;
+  inputForm       : UntypedFormGroup;
 
   paymentMethod$  : Observable<IPaymentMethod>;
   paymenthMethods$: Observable<IPaymentMethod[]>;

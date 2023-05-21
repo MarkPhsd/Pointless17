@@ -1,7 +1,7 @@
 import { ObserversModule } from '@angular/cdk/observers';
 import { AfterViewInit, Component, ElementRef,  HostListener,
          Input, OnInit, Output, EventEmitter, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
@@ -42,7 +42,7 @@ export interface payload{
 })
 export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   itemEdit: boolean;
 
   interface = {}
@@ -218,7 +218,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                 private printingService    : PrintingService,
                 public  userAuthService    : UserAuthorizationService,
 
-                private fb: FormBuilder,
+                private fb: UntypedFormBuilder,
               )
   {
   }

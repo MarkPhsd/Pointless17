@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 @Component({
   selector: 'app-profile-roles',
   templateUrl: './profile-roles.component.html',
@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
 export class ProfileRolesComponent  {
 
   @Input() isAuthorized: boolean;
-  @Input() inputForm   : FormGroup;
+  @Input() inputForm   : UntypedFormGroup;
   constructor() { }
 
 

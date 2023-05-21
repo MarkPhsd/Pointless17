@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable,switchMap,of, catchError } from 'rxjs';
 import { ExportDataService } from 'src/app/_services/data/export-data.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -10,7 +10,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
   styleUrls: ['./export-data.component.scss']
 })
 export class ExportDataComponent implements OnInit {
-  inputForm   : FormGroup;
+  inputForm   : UntypedFormGroup;
   name: string;
   schemaValue: any;
   exporting$: Observable<any>;
@@ -18,7 +18,7 @@ export class ExportDataComponent implements OnInit {
   message   = ''
   schema$: Observable<any>;
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private siteService: SitesService,
     public exportDataService: ExportDataService) { }
 

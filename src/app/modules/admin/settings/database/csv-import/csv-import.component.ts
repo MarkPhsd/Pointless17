@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild, } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 import { combineLatest, Observable,  switchMap } from 'rxjs';
 import { FakeProductsService } from 'src/app/_services/data/fake-products.service';
@@ -24,7 +24,7 @@ export interface NamesCities {
 export class CSVImportComponent implements OnInit, OnDestroy {
 
   public timerInterval:any;
-  inputForm   : FormGroup;
+  inputForm   : UntypedFormGroup;
   headerValues= true;
   csvRecords  : any;
   header      = false;
@@ -51,7 +51,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     private fakeContactService  : FakeContactsService,
     private fakeInventoryService: FakeInventoryService,
     public exportDataService    : ExportDataService,
-    private fb                  : FormBuilder,
+    private fb                  : UntypedFormBuilder,
     private siteService:          SitesService,
     private clientTableService: ClientTableService,
     private menuService         : MenuService,

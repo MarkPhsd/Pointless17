@@ -2,7 +2,7 @@ import { Component,  Inject,  Input, OnInit, TemplateRef, ViewChild } from '@ang
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of, switchMap,  } from 'rxjs';
 import { IItemBasic } from 'src/app/_services';
-import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, UntypedFormArray, FormControl } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PriceCategories, IPriceCategory2,
@@ -49,7 +49,7 @@ export class PriceCategoriesEditComponent implements OnInit {
   ] as IItemBasic[];
 
   @Input() priceCategory  :  PriceCategories;
-  inputForm               :  FormGroup;
+  inputForm               :  UntypedFormGroup;
   showMore                :  boolean;
   showTime                :  boolean;
   showWeightPrices        :  boolean;
@@ -61,8 +61,8 @@ export class PriceCategoriesEditComponent implements OnInit {
   toggleSearchSize        = [] as  boolean[];
   saving                  : boolean;
   toggle                  : any;
-  get productPrices() : FormArray {
-    return this.inputForm.get('productPrices') as FormArray;
+  get productPrices() : UntypedFormArray {
+    return this.inputForm.get('productPrices') as UntypedFormArray;
   }
 
   action$                 : Observable<any>;
@@ -81,7 +81,7 @@ export class PriceCategoriesEditComponent implements OnInit {
   recOption = this.uiSettingsService.pricingRecMed;
 
   constructor(  private _snackBar   : MatSnackBar,
-    private fb                      : FormBuilder,
+    private fb                      : UntypedFormBuilder,
     private siteService             : SitesService,
     private priceCategoryService    : PriceCategoriesService,
     private priceCategoryItemService: PriceCategoryItemService,
@@ -196,11 +196,11 @@ export class PriceCategoriesEditComponent implements OnInit {
 
   }
 
-  get productPrice(): FormArray {
-    return this.inputForm.get('productPrices') as FormArray;
+  get productPrice(): UntypedFormArray {
+    return this.inputForm.get('productPrices') as UntypedFormArray;
   }
 
-  addItems(inputForm: FormGroup, items: any[], arrayName: string) {
+  addItems(inputForm: UntypedFormGroup, items: any[], arrayName: string) {
     if (!inputForm) { return }
     if (!items)     { return }
     let pricing = this.productPrices;
@@ -391,7 +391,7 @@ export class PriceCategoriesEditComponent implements OnInit {
   }
 
   removeItem(i) {
-    let pricing = this.inputForm.controls['productPrices'] as FormArray;
+    let pricing = this.inputForm.controls['productPrices'] as UntypedFormArray;
     pricing.removeAt(i)
   }
 
@@ -406,7 +406,7 @@ export class PriceCategoriesEditComponent implements OnInit {
 
   clearSize(index) {
     const unitTypeID = 0
-    let pricing = this.inputForm.controls['productPrices'] as FormArray;
+    let pricing = this.inputForm.controls['productPrices'] as UntypedFormArray;
     let lines = pricing.value;
     let line =  pricing.value[index] as ProductPrice;
 
@@ -428,7 +428,7 @@ export class PriceCategoriesEditComponent implements OnInit {
     const unitName   = event.unitName
     const unitType   = event.unitType;
 
-    let pricing = this.inputForm.controls['productPrices'] as FormArray;
+    let pricing = this.inputForm.controls['productPrices'] as UntypedFormArray;
 
     let lines = pricing.value;
     let line =  pricing.value[index] as ProductPrice;

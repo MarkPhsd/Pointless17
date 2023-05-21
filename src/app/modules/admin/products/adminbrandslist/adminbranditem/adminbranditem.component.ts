@@ -3,7 +3,7 @@ import { AWSBucketService, ContactsService, MenuService } from 'src/app/_service
 import { IClientTable, IUserProfile }  from 'src/app/_interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DevService } from 'src/app/_services/system/dev-service.service';
-import { FormBuilder, FormGroup, FormControl, FormArray, Validator } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, FormControl, FormArray, Validator } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
@@ -19,7 +19,7 @@ import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
 
 export class AdminbranditemComponent implements OnInit {
 
-  inputForm  : FormGroup;
+  inputForm  : UntypedFormGroup;
   client$      : Observable<IClientTable>;
   clientTable: IClientTable;
 
@@ -37,7 +37,7 @@ export class AdminbranditemComponent implements OnInit {
   childNotifier : Subject<boolean> = new Subject<boolean>();
 
   constructor(public contactService: ContactsService,
-        public fb: FormBuilder,
+        public fb: UntypedFormBuilder,
         private router: Router,
         public route: ActivatedRoute,
         private devService: DevService,

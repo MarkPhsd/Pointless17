@@ -5,7 +5,7 @@ import { catchError, of, switchMap , Observable} from 'rxjs';
 import { CdkDragDrop, moveItemInArray,  } from '@angular/cdk/drag-drop';
 import { IPriceSearchModel } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'price-schedule-sort',
@@ -15,7 +15,7 @@ import { FormGroup } from '@angular/forms';
 export class PriceScheduleSortComponent implements OnInit   {
 
   action$ : Observable<any>;
-  @Input() inputForm       : FormGroup;
+  @Input() inputForm       : UntypedFormGroup;
   priceSchedules           : IPriceSearchModel[];
   priceSchedule            : IPriceSearchModel;
   index                    : number;

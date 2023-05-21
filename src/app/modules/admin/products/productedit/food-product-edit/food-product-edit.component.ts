@@ -1,5 +1,5 @@
 import { Component, OnInit , Input} from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'food-product-edit',
@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class FoodProductEditComponent {
 
-  @Input() inputForm: FormGroup
+  @Input() inputForm: UntypedFormGroup
   constructor() { }
 
 

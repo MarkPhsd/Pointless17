@@ -25,7 +25,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { TriposResult } from 'src/app/_services/tripos/triposModels';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-adjust-payment',
@@ -50,7 +50,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   terminalSettings: ITerminalSettings;
   deviceSettings$ : Observable<any>;
   toggleVoid: boolean;
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   voidAmount: number;
 
   initSubscriptions() {
@@ -75,7 +75,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                 private orderService          : OrdersService,
                 private matSnackBar           : MatSnackBar,
                 private storeCreditService    : StoreCreditService,
-                private fb: FormBuilder,
+                private fb: UntypedFormBuilder,
                 private cardPointMethdsService: CardPointMethodsService,
                 private triPOSMethodService   : TriPOSMethodService,
                 private userAuthorization     : UserAuthorizationService,

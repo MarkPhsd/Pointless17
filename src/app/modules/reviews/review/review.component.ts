@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -17,14 +17,14 @@ import { ReviewsService } from 'src/app/_services/people/reviews.service';
 })
 export class ReviewComponent implements OnInit {
 
-  reviewForm: FormGroup
+  reviewForm: UntypedFormGroup
 
   review: Review;
 
   user: IUserProfile;
 
-  get reviewNotes() { return this.reviewForm.get("review") as FormControl; }
-  get ratingValue() { return this.reviewForm.get("review") as FormControl;}
+  get reviewNotes() { return this.reviewForm.get("review") as UntypedFormControl; }
+  get ratingValue() { return this.reviewForm.get("review") as UntypedFormControl;}
 
   canDelete: boolean;
   // get taxable() { return this.productForm.get("taxable") as FormControl;}
@@ -32,7 +32,7 @@ export class ReviewComponent implements OnInit {
 
   constructor(private http: HttpClient,
               private reviewService: ReviewsService,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               public route: ActivatedRoute,
               private _snackBar: MatSnackBar,
               private authenticationService: AuthenticationService,

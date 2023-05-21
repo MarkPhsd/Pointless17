@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { clientType } from 'src/app/_interfaces';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
@@ -15,7 +15,7 @@ export class StatusLookupComponent {
   @Input() style    : string;
   @Input() statusID: number;
   @Input() statuses$: Observable<any>;
-  @Input() inputForm:    FormGroup;
+  @Input() inputForm:    UntypedFormGroup;
 
   constructor(   private siteService: SitesService,
                  private statusTypeService: StatusTypeService,) {

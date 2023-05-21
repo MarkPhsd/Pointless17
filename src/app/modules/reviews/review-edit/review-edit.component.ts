@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -19,7 +19,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class ReviewEditComponent implements OnInit {
 
-  reviewForm: FormGroup
+  reviewForm: UntypedFormGroup
 
   @Input() product: IProduct;
   @Input() client: IClientTable;
@@ -33,7 +33,7 @@ export class ReviewEditComponent implements OnInit {
 
   user: IUserProfile;
 
-  get reviewNotes() { return this.reviewForm.get("reviewNotes") as FormControl;}
+  get reviewNotes() { return this.reviewForm.get("reviewNotes") as UntypedFormControl;}
 
   adminOptionsOn: boolean;
   // get taxable() { return this.productForm.get("taxable") as FormControl;}
@@ -41,7 +41,7 @@ export class ReviewEditComponent implements OnInit {
 
   constructor(private http: HttpClient,
               private reviewService: ReviewsService,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               public route: ActivatedRoute,
               private _snackBar: MatSnackBar,
               private authenticationService: AuthenticationService,

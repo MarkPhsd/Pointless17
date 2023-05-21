@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PriceScheduleMenuGroupService } from 'src/app/_services/menu/price-schedule-menu-group.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -13,12 +13,12 @@ import { PriceMenuGroup, PriceMenuGroupItem, PSMenuGroupPaged, PSSearchModel, PS
 export class PSMenuGroupEditComponent implements OnInit {
 
   priceMenuGroup: PriceMenuGroup;
-  inputForm     : FormGroup;
+  inputForm     : UntypedFormGroup;
   description   : string;
 
   constructor(
     private priceScheduleMenuGroupService: PriceScheduleMenuGroupService,
-    private fb                      : FormBuilder,
+    private fb                      : UntypedFormBuilder,
     private siteService             : SitesService,
     private dialogRef: MatDialogRef<PSMenuGroupEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number,
@@ -45,7 +45,7 @@ export class PSMenuGroupEditComponent implements OnInit {
     console.log('')
   }
 
-  initForm(): FormGroup {
+  initForm(): UntypedFormGroup {
     this.inputForm = this.fb.group( {
       id      :    [],
       name:        [],

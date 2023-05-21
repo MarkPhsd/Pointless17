@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { IPOSOrder, IServiceType, ISite, ServiceType } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
@@ -15,7 +15,7 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
 })
 export class POSOrderServiceTypeComponent implements OnDestroy  {
 
-  inputForm            : FormGroup;
+  inputForm            : UntypedFormGroup;
   serviceTypes$        : Observable<IServiceType[]>;
   order                : IPOSOrder;
   _order               : Subscription;

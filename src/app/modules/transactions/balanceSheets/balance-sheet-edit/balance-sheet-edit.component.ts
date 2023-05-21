@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
 import { Observable, of, Subscription, switchMap, switchMapTo } from 'rxjs';
 import { Capacitor, } from '@capacitor/core';
@@ -25,42 +25,42 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   selectedIndex: number;
 
-  get halfDollarEnd()     { return this.inputForm.get('halfDollarEnd') as FormControl; }
-  get dollarEnd()     { return this.inputForm.get('dollarEnd') as FormControl; }
-  get dollarsEnd()     { return this.inputForm.get('dollarsEnd') as FormControl; }
+  get halfDollarEnd()     { return this.inputForm.get('halfDollarEnd') as UntypedFormControl; }
+  get dollarEnd()     { return this.inputForm.get('dollarEnd') as UntypedFormControl; }
+  get dollarsEnd()     { return this.inputForm.get('dollarsEnd') as UntypedFormControl; }
 
 
-  get quarterEnd()        { return this.inputForm.get('quarterEnd') as FormControl; }
-  get dimeEnd()           { return this.inputForm.get('dimeEnd') as FormControl; }
-  get nickelEnd()         { return this.inputForm.get('nickelEnd') as FormControl; }
-  get pennyEnd()          { return this.inputForm.get('pennyEnd') as FormControl; }
-  get hundredsEnd()       { return this.inputForm.get('hundredsEnd') as FormControl; }
-  get fiftiesEnd()        { return this.inputForm.get('fiftiesEnd') as FormControl; }
-  get twentiesEnd()       { return this.inputForm.get('twentiesEnd') as FormControl; }
-  get tensEnd()           { return this.inputForm.get('tensEnd') as FormControl; }
-  get fivesEnd()          { return this.inputForm.get('fivesEnd') as FormControl; }
-  get onesEnd()           { return this.inputForm.get('onesEnd') as FormControl; }
+  get quarterEnd()        { return this.inputForm.get('quarterEnd') as UntypedFormControl; }
+  get dimeEnd()           { return this.inputForm.get('dimeEnd') as UntypedFormControl; }
+  get nickelEnd()         { return this.inputForm.get('nickelEnd') as UntypedFormControl; }
+  get pennyEnd()          { return this.inputForm.get('pennyEnd') as UntypedFormControl; }
+  get hundredsEnd()       { return this.inputForm.get('hundredsEnd') as UntypedFormControl; }
+  get fiftiesEnd()        { return this.inputForm.get('fiftiesEnd') as UntypedFormControl; }
+  get twentiesEnd()       { return this.inputForm.get('twentiesEnd') as UntypedFormControl; }
+  get tensEnd()           { return this.inputForm.get('tensEnd') as UntypedFormControl; }
+  get fivesEnd()          { return this.inputForm.get('fivesEnd') as UntypedFormControl; }
+  get onesEnd()           { return this.inputForm.get('onesEnd') as UntypedFormControl; }
 
-  get halfDollarStart()   { return this.inputForm.get('halfDollarStart') as FormControl; }
-  get quarterStart()      { return this.inputForm.get('quarterStart') as FormControl; }
-  get dimeStart()         { return this.inputForm.get('dimeStart') as FormControl; }
-  get nickelStart()       { return this.inputForm.get('nickelStart') as FormControl; }
-  get pennyStart()        { return this.inputForm.get('pennyStart') as FormControl; }
-  get hundredsStart()     { return this.inputForm.get('hundredsStart') as FormControl; }
-  get fiftiesStart()      { return this.inputForm.get('fiftiesStart') as FormControl; }
-  get twentiesStart()     { return this.inputForm.get('twentiesStart') as FormControl; }
-  get tensStart()         { return this.inputForm.get('tensStart') as FormControl; }
-  get dollarsStart()      { return this.inputForm.get('dollarsStart') as FormControl; }
-  get dollarStart()      { return this.inputForm.get('dollarStart') as FormControl; }
-  get fivesStart()        { return this.inputForm.get('fivesStart') as FormControl; }
+  get halfDollarStart()   { return this.inputForm.get('halfDollarStart') as UntypedFormControl; }
+  get quarterStart()      { return this.inputForm.get('quarterStart') as UntypedFormControl; }
+  get dimeStart()         { return this.inputForm.get('dimeStart') as UntypedFormControl; }
+  get nickelStart()       { return this.inputForm.get('nickelStart') as UntypedFormControl; }
+  get pennyStart()        { return this.inputForm.get('pennyStart') as UntypedFormControl; }
+  get hundredsStart()     { return this.inputForm.get('hundredsStart') as UntypedFormControl; }
+  get fiftiesStart()      { return this.inputForm.get('fiftiesStart') as UntypedFormControl; }
+  get twentiesStart()     { return this.inputForm.get('twentiesStart') as UntypedFormControl; }
+  get tensStart()         { return this.inputForm.get('tensStart') as UntypedFormControl; }
+  get dollarsStart()      { return this.inputForm.get('dollarsStart') as UntypedFormControl; }
+  get dollarStart()      { return this.inputForm.get('dollarStart') as UntypedFormControl; }
+  get fivesStart()        { return this.inputForm.get('fivesStart') as UntypedFormControl; }
 
   get platForm()          { return Capacitor.getPlatform(); }
 
   balanceSheet$:   Observable<any>;
-  searchForm      : FormGroup;
-  depositAmountForm: FormGroup;
-  dropAmountForm   : FormGroup;
-  inputForm       : FormGroup;
+  searchForm      : UntypedFormGroup;
+  depositAmountForm: UntypedFormGroup;
+  dropAmountForm   : UntypedFormGroup;
+  inputForm       : UntypedFormGroup;
   urlPath         : string;
 
   id              : string;
@@ -132,7 +132,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 private route                   : ActivatedRoute,
                 private authenticationService   : AuthenticationService,
                 private router                  : Router,
-                private fb                      : FormBuilder,
+                private fb                      : UntypedFormBuilder,
                 private toolbarUIService        : ToolBarUIService,
                 private sheetMethodsService     : BalanceSheetMethodsService,
                 private sendGridService         :  SendGridService,

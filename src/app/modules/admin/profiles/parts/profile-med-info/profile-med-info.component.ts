@@ -1,5 +1,5 @@
 import { Component, OnInit,Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
 import { ClientType, IClientTable } from 'src/app/_interfaces';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
@@ -12,7 +12,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class ProfileMedInfoComponent implements OnInit {
 
-  @Input() inputForm : FormGroup;
+  @Input() inputForm : UntypedFormGroup;
   @Input() isAuthorized: boolean;
   @Input() isStaff: boolean;
   @Input() client: IClientTable;
@@ -57,7 +57,7 @@ export class ProfileMedInfoComponent implements OnInit {
 
   }
 
-  setMedType(form: FormGroup, clientType: ClientType) { 
+  setMedType(form: UntypedFormGroup, clientType: ClientType) { 
     if (clientType &&  form && clientType.name && (clientType.name.toLowerCase() === 'patient' || 
                                                    clientType.name.toLowerCase() === 'caregiver' )) { 
       form.patchValue({patientRecOption: true})

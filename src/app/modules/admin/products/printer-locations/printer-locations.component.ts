@@ -1,7 +1,7 @@
 import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject, TemplateRef, ComponentFactoryResolver} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of, switchMap} from 'rxjs';
-import { FormBuilder,  FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { InventoryLocationsService , IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -22,7 +22,7 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
   @ViewChild('electronPrintingTemplate') electronPrintingTemplate: TemplateRef<any>;
   @ViewChild('electronPrintingDesignTemplate') electronPrintingDesignTemplate: TemplateRef<any>;
 
-  locationForm: FormGroup;
+  locationForm: UntypedFormGroup;
   action$: Observable<any>;
   locationTable$ : Observable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -48,7 +48,7 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
 
   constructor(
             private _snackBar: MatSnackBar,
-            private fb: FormBuilder,
+            private fb: UntypedFormBuilder,
             private settingService: SettingsService,
             private printerLocationsService: PrinterLocationsService,
             private siteService: SitesService,

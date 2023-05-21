@@ -1,7 +1,7 @@
 import { Component, OnInit, Input , EventEmitter, Output} from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable, of, switchMap } from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { IItemType } from 'src/app/_services/menu/item-type.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { PriceCategories, IPriceCategoryPaged } from 'src/app/_interfaces/menu/price-categories';
@@ -19,16 +19,16 @@ export class PriceCategorySelectComponent implements OnInit {
   isOpenPrice: boolean;
   showMorePrices: boolean;
   @Output() itemSelect  = new EventEmitter();
-  @Input() inputForm:      FormGroup;
+  @Input() inputForm:      UntypedFormGroup;
   @Input() priceCategoryID: number;
   @Input() itemType     = {} as IItemType;
   priceCategory         :   PriceCategories;
   @Input()  isInventory : boolean;
   priceCategoriesPaged$ :   Observable<IPriceCategoryPaged>;
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
   constructor(
                private sitesService: SitesService,
-               private fb: FormBuilder,
+               private fb: UntypedFormBuilder,
                private priceCategoryService: PriceCategoriesService,
                private menuPricingService: PriceCategoriesService,) {
           }

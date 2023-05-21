@@ -1,5 +1,5 @@
 import { Component, OnInit ,Input, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +19,7 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 export class EditCSSStylesComponent implements OnInit {
 
   @Input()  setting : ISetting;
-  inputForm         : FormGroup;
+  inputForm         : UntypedFormGroup;
   id                : string;
 
   receiptText = '';

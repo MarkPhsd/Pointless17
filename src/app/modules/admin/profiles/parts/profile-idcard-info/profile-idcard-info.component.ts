@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-profile-idcard-info',
@@ -7,7 +7,7 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./profile-idcard-info.component.scss']
 })
 export class ProfileIDCardInfoComponent implements OnInit {
-  @Input() inputForm : FormGroup;
+  @Input() inputForm : UntypedFormGroup;
   @Input() isAuthorized: boolean;
 
   constructor() { }

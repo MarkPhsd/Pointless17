@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, filter, tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription,  of } from 'rxjs';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
@@ -36,7 +36,7 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
   sortList: boolean;
 
   searchPhrase               :  Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
   //search with debounce
@@ -75,9 +75,9 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
   islastpage              : boolean;
 
   //This is for the filter Section//
-  fieldsForm      : FormGroup;
-  searchForm      : FormGroup;
-  inputForm       : FormGroup;
+  fieldsForm      : UntypedFormGroup;
+  searchForm      : UntypedFormGroup;
+  inputForm       : UntypedFormGroup;
   name            : string
   allDates        : boolean;
   allEligible     : boolean;
@@ -114,7 +114,7 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
           private priceScheduleService    : PriceScheduleService,
           private priceScheduleDataService:PriceScheduleDataService,
           private router                  : Router,
-          private fb                      : FormBuilder,
+          private fb                      : UntypedFormBuilder,
           private siteService             : SitesService,
           private productEditButtonService: ProductEditButtonService,
           private awsService              : AWSBucketService,

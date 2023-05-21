@@ -1,5 +1,5 @@
 import { Component, OnInit, Input , EventEmitter, Output} from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule, ClientType, DateFrame,DiscountInfo,
   TimeFrame, WeekDay
@@ -18,14 +18,14 @@ export class TimeScheduleComponent implements OnInit {
   // priceSchedule$              :      Observable<IPriceSchedule>
   // @Output() outputWeekdays    :      EventEmitter<any> = new EventEmitter();
   // @Output() outputAllWeekdays :      EventEmitter<any> = new EventEmitter();
-  @Input()  inputForm         :      FormGroup;
+  @Input()  inputForm         :      UntypedFormGroup;
   @Input()  weekDay           :      WeekDay;
   @Input()  item              :      IPriceSchedule;
 
   timeFrameAlways             :      boolean;
 
-  get timeFrames() : FormArray {
-    return this.inputForm.get('timeFrames') as FormArray;
+  get timeFrames() : UntypedFormArray {
+    return this.inputForm.get('timeFrames') as UntypedFormArray;
   }
 
   _priceSchedule              : Subscription;

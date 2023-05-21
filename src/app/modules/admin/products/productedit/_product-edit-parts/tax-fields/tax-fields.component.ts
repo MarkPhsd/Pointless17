@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { TaxesService } from 'src/app/_services/menu/taxes.service';
 import { IProduct, TaxRate } from 'src/app/_interfaces';
 import { MenuService } from 'src/app/_services';
@@ -14,7 +14,7 @@ import { MenuService } from 'src/app/_services';
 
 export class TaxFieldsComponent implements OnInit {
 
- @Input()  inputForm:   FormGroup;
+ @Input()  inputForm:   UntypedFormGroup;
  @Input()  product:     IProduct;
  @Input()  taxable:     any;
 

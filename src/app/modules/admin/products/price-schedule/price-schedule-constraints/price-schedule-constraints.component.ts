@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 
@@ -11,7 +11,7 @@ import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 export class PriceScheduleConstraintsComponent implements OnInit {
 
   @Output() outputOrderTypes : EventEmitter<any> = new EventEmitter();
-  @Input() inputForm         : FormGroup;
+  @Input() inputForm         : UntypedFormGroup;
   @Input() item              : IPriceSchedule;
 
   constructor(

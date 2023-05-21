@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { AdjustmentReasonsComponent } from 'src/app/shared/widgets/adjustment-reasons/adjustment-reasons.component';
@@ -15,7 +15,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class ManifestEditorHeaderComponent implements OnInit {
 
-  @Input()  inputForm         : FormGroup;
+  @Input()  inputForm         : UntypedFormGroup;
   @Output() outPutSave      = new EventEmitter<any>();
   @Output() outPutSaveExit  = new EventEmitter<any>();
   @Output() outPutDispatchManifest  = new EventEmitter<any>();
@@ -78,7 +78,7 @@ export class ManifestEditorHeaderComponent implements OnInit {
   }
 
   constructor(
-    private fb              : FormBuilder,
+    private fb              : UntypedFormBuilder,
     private sitesService    : SitesService,
     private manifestService : ManifestInventoryService,
     private dialogRef       : MatDialogRef<ManifestEditorHeaderComponent>,

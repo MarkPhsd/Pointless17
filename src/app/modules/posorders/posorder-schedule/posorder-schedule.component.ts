@@ -1,5 +1,5 @@
 import { Component, OnInit, Input,OnDestroy } from '@angular/core';
-import { FormGroup,FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup,UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, IServiceType,  } from 'src/app/_interfaces';
@@ -16,8 +16,8 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
 export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   @Input() serviceType          : IServiceType;
   action$: Observable<any>;
-  inputFormNotes       : FormGroup;
-  inputForm            : FormGroup;
+  inputFormNotes       : UntypedFormGroup;
+  inputForm            : UntypedFormGroup;
   order                : IPOSOrder;
   _order               : Subscription;
   errorMessage: string;
@@ -46,7 +46,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   constructor(
     private orderService      : OrdersService,
     private router            : Router,
-    private fb :                FormBuilder,
+    private fb :                UntypedFormBuilder,
     private siteService :      SitesService,
     private matSnack          : MatSnackBar,
     private serviceTypeService: ServiceTypeService,

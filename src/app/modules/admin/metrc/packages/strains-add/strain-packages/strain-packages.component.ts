@@ -1,6 +1,6 @@
 import { Component,   Input,  OnInit,  Output, EventEmitter} from '@angular/core';
 import { ActivatedRoute,  } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray, UntypedFormControl} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable,  } from 'rxjs';
 import { CurrencyPipe } from '@angular/common';
@@ -24,18 +24,18 @@ import { ReversePipe } from 'ngx-pipes';
 
 export class StrainPackagesComponent implements OnInit {
 
-  get _jointWeightValue() {return this.packageForm.get("jointWeightValue") as FormControl;}
+  get _jointWeightValue() {return this.packageForm.get("jointWeightValue") as UntypedFormControl;}
   @Output()outputPackage         : EventEmitter<any> = new EventEmitter();
   @Output()outoutClosePackage    : EventEmitter<any> = new EventEmitter();
   @Input() package               : METRCPackage;
   @Input() menuItem              : IMenuItem;
-  @Input() packageForm           : FormGroup;
-  @Input() priceForm     :         FormGroup;
+  @Input() packageForm           : UntypedFormGroup;
+  @Input() priceForm     :         UntypedFormGroup;
   @Input() facility              = {} as IItemFacilitiyBasic
   @Input() facilityLicenseNumber : string;
   inventoryLocationID            : number ;
 
-  get f():                FormGroup  { return this.packageForm as FormGroup};
+  get f():                UntypedFormGroup  { return this.packageForm as UntypedFormGroup};
 
   //move to inventory
   conversionName        = '';
@@ -65,7 +65,7 @@ export class StrainPackagesComponent implements OnInit {
   inventoryLocations:      IInventoryLocation[];
   inventoryLocation:       IInventoryLocation;
 
-  get assignInventoryArray(): FormArray { return this.packageForm.get('assignInventoryArray') as FormArray}
+  get assignInventoryArray(): UntypedFormArray { return this.packageForm.get('assignInventoryArray') as UntypedFormArray}
 
   processUnitCount       = true;
   processJointWeight     = true;
@@ -74,7 +74,7 @@ export class StrainPackagesComponent implements OnInit {
   constructor(
     private conversionService: ConversionsService,
     public  route: ActivatedRoute,
-    public  fb: FormBuilder,
+    public  fb: UntypedFormBuilder,
     private _snackBar: MatSnackBar,
     private siteService: SitesService,
     private metrcPackagesService: MetrcPackagesService,
@@ -377,7 +377,7 @@ export class StrainPackagesComponent implements OnInit {
     this.getAvailableUnits(false)
   }
 
-  initPackageEntryForm(form: FormGroup){
+  initPackageEntryForm(form: UntypedFormGroup){
     form = this.fb.group({
       conversionName:                   [ ''],
       inputQuantity:                    [ ''], //[ Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)] ],
@@ -392,7 +392,7 @@ export class StrainPackagesComponent implements OnInit {
     this.cost                = 0;
   }
 
-  refreshPackageEntryForm(inv: IInventoryAssignment, form: FormGroup){
+  refreshPackageEntryForm(inv: IInventoryAssignment, form: UntypedFormGroup){
     try {
       form = this.fb.group({
         conversionName:                   [ inv.unitConvertedtoName, Validators.required],

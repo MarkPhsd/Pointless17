@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Inject, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
@@ -19,9 +19,9 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect                     = new EventEmitter();
 
-  inputForm         : FormGroup;
+  inputForm         : UntypedFormGroup;
   searchPhrase      :  Subject<any> = new Subject();
-  get serialCode() { return this.inputForm.get("serial") as FormControl;}
+  get serialCode() { return this.inputForm.get("serial") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
   id           : number;
@@ -33,7 +33,7 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
   constructor(private orderMethodService          : OrderMethodsService,
               private orderService                : OrdersService,
               private snackBar                    : MatSnackBar,
-              private fb                          : FormBuilder,
+              private fb                          : UntypedFormBuilder,
               private dialogRef                   : MatDialogRef<RequiresSerialComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
       )

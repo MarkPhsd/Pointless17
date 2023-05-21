@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-quantiy-selector',
@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class QuantiySelectorComponent {
 
-  @Input() inputForm     : FormGroup;
+  @Input() inputForm     : UntypedFormGroup;
   @Output() outPutValue  = new  EventEmitter();
   quantity               = 1;
 

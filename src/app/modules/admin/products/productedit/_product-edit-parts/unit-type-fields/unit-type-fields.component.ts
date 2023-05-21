@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
@@ -13,7 +13,7 @@ import { SearchModel } from 'src/app/_services/system/paging.service';
 })
 export class UnitTypeFieldsComponent implements OnInit {
 
-  @Input() inputForm: FormGroup
+  @Input() inputForm: UntypedFormGroup
 
   unitTypes$: Observable<UnitType[]>;
   unitTypes: UnitType[];

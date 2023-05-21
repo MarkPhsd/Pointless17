@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { TaxRate } from '../_interfaces';
 
 @Injectable({
@@ -7,15 +7,15 @@ import { TaxRate } from '../_interfaces';
 })
 export class FBTaxesService {
 
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: UntypedFormBuilder) { }
 
-  get FlatRateTaxValues(): FormArray  {
-    return this.inputForm.get('flatRateTaxValues') as FormArray;
+  get FlatRateTaxValues(): UntypedFormArray  {
+    return this.inputForm.get('flatRateTaxValues') as UntypedFormArray;
   }
 
-  initForm(inputForm: FormGroup) {
+  initForm(inputForm: UntypedFormGroup) {
 
     inputForm = this.fb.group( {
       id:                 [''],
@@ -27,7 +27,7 @@ export class FBTaxesService {
 
   }
 
-  intitFormData(inputForm: FormGroup,data: TaxRate) {
+  intitFormData(inputForm: UntypedFormGroup,data: TaxRate) {
     inputForm.patchValue(data)
   }
 

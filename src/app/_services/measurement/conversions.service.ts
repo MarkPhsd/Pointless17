@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IInventoryAssignment } from '../inventory/inventory-assignment.service';
 
@@ -24,7 +24,7 @@ export class ConversionsService {
 
   // COMPONENTS = [{'name': 'AdminbranditemComponent', 'selector': 'app-adminbranditem'},
   constructor(private _snackBar: MatSnackBar,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
   ) { }
 
   getGramsConversions(): IUnitConversion[] {
@@ -72,7 +72,7 @@ export class ConversionsService {
     return null;
   }
 
-  editAssignment(inventoryAssignment: IInventoryAssignment, form: FormGroup): boolean {
+  editAssignment(inventoryAssignment: IInventoryAssignment, form: UntypedFormGroup): boolean {
     if (inventoryAssignment) {
       const inv = inventoryAssignment
       if (inv) {
@@ -127,7 +127,7 @@ export class ConversionsService {
     return false;
   }
 
-  refreshPackageEnryForm(inv: IInventoryAssignment, form: FormGroup){
+  refreshPackageEnryForm(inv: IInventoryAssignment, form: UntypedFormGroup){
     try {
       form = this.fb.group({
         conversionName:                   [ inv.unitConvertedtoName, Validators.required],
@@ -142,7 +142,7 @@ export class ConversionsService {
     }
   }
 
-  initPackageEntryForm(form: FormGroup){
+  initPackageEntryForm(form: UntypedFormGroup){
     form = this.fb.group({
       conversionName:                   [ ''],
       inputQuantity:                    [ ''], //[ Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)] ],

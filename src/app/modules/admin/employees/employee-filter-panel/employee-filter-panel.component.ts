@@ -3,7 +3,7 @@ import { employee, IUser, jobTypes } from 'src/app/_interfaces';
 import {IItemBasic } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EmployeeSearchModel, EmployeeService} from 'src/app/_services/people/employee-service.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -21,8 +21,8 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
   @ViewChild('input', {static: true}) input: ElementRef;
 
   value : string;
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
-  searchForm: FormGroup;
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
+  searchForm: UntypedFormGroup;
 
   @Output() outputRefreshSearch :   EventEmitter<any> = new EventEmitter();
   get platForm()         {  return Capacitor.getPlatform(); }
@@ -36,7 +36,7 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
   selectedjobTypeID           : number;
   selectedType                : number;
   toggleTerminated             = "1"
-  printForm          : FormGroup;
+  printForm          : UntypedFormGroup;
   user               = {} as IUser;
   employees$        :   Observable<IItemBasic[]>;
   searchModel       = {} as   EmployeeSearchModel;
@@ -46,7 +46,7 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
   isAdmin      : boolean;
   isAuthorized : boolean;
   isStaff      : boolean;
-  filterForm   : FormGroup;
+  filterForm   : UntypedFormGroup;
   // calDate: IDatePicker;
   dateFrom     : Date;
   dateTo       : Date;
@@ -78,7 +78,7 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
 
   constructor(
       private employeeService         : EmployeeService,
-      private fb                      : FormBuilder,
+      private fb                      : UntypedFormBuilder,
       private siteService             : SitesService,
       private userAuthorization       : UserAuthorizationService,
       private jobTypeService          : JobTypesService,

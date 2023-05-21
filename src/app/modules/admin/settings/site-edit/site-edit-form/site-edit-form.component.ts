@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
@@ -19,11 +19,11 @@ export class SiteEditFormComponent implements OnInit {
   id: number;
   metrcEnabled = true;
 
-  sitesForm: FormGroup;
+  sitesForm: UntypedFormGroup;
 
   constructor(
     private _snackBar   : MatSnackBar,
-    private fb          : FormBuilder,
+    private fb          : UntypedFormBuilder,
     private sitesService: SitesService,
     private dialogRef   : MatDialogRef<SiteEditFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number

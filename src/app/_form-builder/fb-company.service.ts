@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ICompany } from '../_interfaces';
 
 import { SitesService } from '../_services/reporting/sites.service';
@@ -12,9 +12,9 @@ export class FbCompanyService {
 
   company: ICompany;
 
-  constructor(private _fb: FormBuilder) { }
+  constructor(private _fb: UntypedFormBuilder) { }
 
-  initForm(fb: FormGroup): FormGroup {
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
       compName:     [''],
       compCorpName: [''],

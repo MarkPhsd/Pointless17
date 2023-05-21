@@ -4,7 +4,7 @@ import { DashboardModel  } from 'src/app/modules/admin/grid-menu-layout/grid-mod
 import { GridManagerEditComponent } from '../grid-manager-edit/grid-manager-edit.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
 import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
@@ -23,7 +23,7 @@ export class GridManagerComponent implements OnInit, OnDestroy {
   modal: boolean;
   accordionStep = 3;
   matToolbarColor = 'primary';
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   allowDesign: boolean;
   hideMenu   : boolean;
 
@@ -33,7 +33,7 @@ export class GridManagerComponent implements OnInit, OnDestroy {
               private dialog             : MatDialog,
               private router             : Router,
               public  layoutService: GridsterLayoutService,
-              private fb                 : FormBuilder,
+              private fb                 : UntypedFormBuilder,
               private auth               : AuthenticationService,
               private navigationService  : NavigationService,
               private _renderer          : Renderer2,

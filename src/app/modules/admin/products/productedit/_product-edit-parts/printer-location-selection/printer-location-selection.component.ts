@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { IProduct } from 'src/app/_interfaces';
 import { ItemType } from 'src/app/_interfaces/menu/menu-products';
@@ -13,7 +13,7 @@ export class PrinterLocationSelectionComponent  {
 
   @Input() product: IProduct
   @Input() itemType: ItemType;
-  @Input() inputForm: FormGroup;
+  @Input() inputForm: UntypedFormGroup;
 
   printerID: number;
   printerLocations$ : Observable<any>;

@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,7 +28,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 
 export class CheckInProfileComponent implements OnInit, OnDestroy {
 
-  selectForm: FormGroup;
+  selectForm: UntypedFormGroup;
   dateRangeList =
   [
     {name:'Last 90 days', value: '90'},
@@ -37,7 +37,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     {name: 'Last 10  days',value: '10'},
     {name: 'Open Orders', value: 'open'}
   ]
-  inputForm   :  FormGroup;
+  inputForm   :  UntypedFormGroup;
   bucketName  :  string;
   awsBucketURL:  string;
   profile     :  IUserProfile;
@@ -62,7 +62,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   _searchModel     :   Subscription;
   searchModel      :   IPOSOrderSearchModel;
 
-  dateRangeForm     : FormGroup;
+  dateRangeForm     : UntypedFormGroup;
   dateFrom          : any;
   dateTo            : any;
   isUser            : boolean;
@@ -71,8 +71,8 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   enableMEDClients: boolean;
   validationMessage = ''
 
-  clientForm  : FormGroup;
-  confirmPassword: FormGroup;
+  clientForm  : UntypedFormGroup;
+  confirmPassword: UntypedFormGroup;
   passwordsMatch      = true;
 
   password1
@@ -99,7 +99,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
               private orderService        : OrdersService,
               private siteService         : SitesService,
               private fbContactsService   : FbContactsService,
-              private fb                  : FormBuilder,
+              private fb                  : UntypedFormBuilder,
               private userAuthorization   : UserAuthorizationService,
               private uiSettingsService   : UISettingsService,
               private orderMethodsService : OrderMethodsService,
@@ -306,9 +306,9 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
       this.searchModel.completionDate_From = null;
       this.searchModel.completionDate_To = null;
     }
-    this.dateRangeForm = new FormGroup({
-      start: new FormControl(),
-      end: new FormControl()
+    this.dateRangeForm = new UntypedFormGroup({
+      start: new UntypedFormControl(),
+      end: new UntypedFormControl()
     });
     const today = new Date();
     const month = today.getMonth();

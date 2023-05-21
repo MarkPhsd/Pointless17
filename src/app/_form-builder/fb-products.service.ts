@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { IProduct } from '../_interfaces';
 
 @Injectable({
@@ -8,13 +8,13 @@ import { IProduct } from '../_interfaces';
 
 export class FbProductsService {
 
-  constructor(private _fb: FormBuilder) { }
+  constructor(private _fb: UntypedFormBuilder) { }
 
   setOnlineDescription(product: IProduct, value: string) {
     product.onlineShortDescription = value
   }
 
-    setProductValues(product: IProduct, inputForm: FormGroup): IProduct {
+    setProductValues(product: IProduct, inputForm: UntypedFormGroup): IProduct {
     if (inputForm.valid) {
       //first we set the value of the product from the form.
       //then we can set values that aren't filled. we can do this in the api or on the app?
@@ -24,7 +24,7 @@ export class FbProductsService {
     }
   }
 
-  initForm(fb: FormGroup): FormGroup {
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
         id:                           [''],
         name:                         [''],

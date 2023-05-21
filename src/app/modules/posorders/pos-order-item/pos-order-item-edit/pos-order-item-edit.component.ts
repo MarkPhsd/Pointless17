@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Inject, Input, Output, } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MenuService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
@@ -20,7 +20,7 @@ export class PosOrderItemEditComponent  {
 
   @Input() purchaseOrderEnabled: boolean;
   @Output() closeOnEnterPress = new EventEmitter();
-  inputForm   : FormGroup;
+  inputForm   : UntypedFormGroup;
   posOrderItem: PosOrderItem;
   editField   = 'modifierNote'
   instructions: 'Make changes'
@@ -34,7 +34,7 @@ export class PosOrderItemEditComponent  {
       private posOrderItemService : POSOrderItemService,
       private orderService        : OrdersService,
       private siteService         : SitesService,
-      private _fb                 : FormBuilder,
+      private _fb                 : UntypedFormBuilder,
       private menuService         : MenuService,
       private inputTrackerService: InputTrackerService,
       private posOrderItemMethodsService: PosOrderItemMethodsService,

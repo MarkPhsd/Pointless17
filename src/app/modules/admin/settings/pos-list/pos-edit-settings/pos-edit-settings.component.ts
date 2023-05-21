@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit,  ViewChild, AfterViewInit, Input, TemplateRef , Inject} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeviceDetectorService } from 'ngx-device-detector';
@@ -23,7 +23,7 @@ import { TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.serv
 })
 export class PosEditSettingsComponent implements OnInit {
   @ViewChild('androidPrintingTemplate') androidPrintingTemplate: TemplateRef<any>;
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   setting  : any;
   terminal : ITerminalSettings;
   saving$  : Observable<ISetting>;
@@ -43,7 +43,7 @@ export class PosEditSettingsComponent implements OnInit {
 
   constructor(
     private _snackBar           : MatSnackBar,
-    private fb                  : FormBuilder,
+    private fb                  : UntypedFormBuilder,
     private sitesService        : SitesService,
     private settingsService     : SettingsService,
     public  deviceService       : DeviceDetectorService,

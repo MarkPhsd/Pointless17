@@ -1,5 +1,5 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subject } from 'rxjs';
 import {  IServiceType, ISite } from 'src/app/_interfaces';
@@ -18,7 +18,7 @@ export class OrderItemsListComponent implements OnInit, OnChanges {
 
   childNotifier : Subject<boolean> = new Subject<boolean>();
   //required for filter component.
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   dateFrom: Date;
   dateTo: Date;
 
@@ -50,7 +50,7 @@ export class OrderItemsListComponent implements OnInit, OnChanges {
   sites$:  Observable<ISite[]>;
 
   dispatchers$: Observable<IItemBasic[]>;
-  employeeID: FormControl;
+  employeeID: UntypedFormControl;
 
   site: ISite;
 
@@ -60,7 +60,7 @@ export class OrderItemsListComponent implements OnInit, OnChanges {
                 private employeeService: EmployeeService,
                 private reportingItemsSalesService: ReportingItemsSalesService,
                 private siteService: SitesService,
-                private fb: FormBuilder,
+                private fb: UntypedFormBuilder,
               )
   {
 

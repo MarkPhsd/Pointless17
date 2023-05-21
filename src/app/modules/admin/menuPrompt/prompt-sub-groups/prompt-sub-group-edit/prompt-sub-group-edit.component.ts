@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -15,7 +15,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class PromptSubGroupEditComponent implements OnInit {
 
-  inputForm : FormGroup;
+  inputForm : UntypedFormGroup;
   @Input()   prompt         : PromptSubGroups;
   id:        any;
 
@@ -24,7 +24,7 @@ export class PromptSubGroupEditComponent implements OnInit {
 
   constructor(
     public        route: ActivatedRoute,
-    public           fb: FormBuilder,
+    public           fb: UntypedFormBuilder,
     private _snackBar  : MatSnackBar,
     private siteService: SitesService,
     private promptService: PromptSubGroupsService,

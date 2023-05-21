@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { clientType, ClientType, IClientTable, IUserProfile } from 'src/app/_interfaces';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
@@ -16,7 +16,7 @@ export class ProfileDemographicsComponent implements OnInit, OnDestroy {
   _uiTransactionSettings: Subscription;
   uiTransactionSettings : TransactionUISettings;
 
-  @Input() inputForm    : FormGroup;
+  @Input() inputForm    : UntypedFormGroup;
   @Input() isAuthorized : boolean;
   @Input() isStaff      : boolean;
   @Input() client       : IClientTable;

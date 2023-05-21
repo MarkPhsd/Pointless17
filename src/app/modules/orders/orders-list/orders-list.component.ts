@@ -4,7 +4,7 @@ import { Component, Output, OnInit,
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService, OrdersService, POSOrdersPaged} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Observable, Subject ,Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -80,8 +80,8 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   value             : any;
   // //This is for the filter Section//
   //search form filters
-  searchForm       : FormGroup;
-  inputForm        : FormGroup;
+  searchForm       : UntypedFormGroup;
+  inputForm        : UntypedFormGroup;
 
   selected        : any[];
   selectedRows    : any;

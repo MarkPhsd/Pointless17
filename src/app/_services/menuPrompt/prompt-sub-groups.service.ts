@@ -6,7 +6,7 @@ import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-c
 import { IPagedList } from '../system/paging.service';
 import { ISite } from 'src/app/_interfaces';
 import { IPromptGroup, PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 export interface MenuSubPromptSearchModel {
   name:                         string;
@@ -39,10 +39,10 @@ export class  PromptSubGroupsService {
     private http      : HttpClient,
     private httpCache : HttpClientCacheService,
     private auth      : AuthenticationService,
-    private fb        : FormBuilder,
+    private fb        : UntypedFormBuilder,
   ) { }
 
-  initForm(inputForm: FormGroup) {
+  initForm(inputForm: UntypedFormGroup) {
 
     inputForm = this.fb.group({
       id             : [],

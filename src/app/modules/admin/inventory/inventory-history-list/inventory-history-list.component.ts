@@ -9,7 +9,7 @@ import { ProducteditComponent } from '../../products/productedit/productedit.com
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISetting } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ElectronService } from 'ngx-electron';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -45,7 +45,7 @@ export class InventoryHistoryListComponent implements OnInit, OnDestroy {
   @Input() printerName         : string;
 
   labelSetting    : ISetting;
-  printForm       : FormGroup;
+  printForm       : UntypedFormGroup;
   printQuantity   = 1;
   labelList$      : Observable<ISetting[]>;
   labelID         : number;
@@ -70,7 +70,7 @@ export class InventoryHistoryListComponent implements OnInit, OnDestroy {
        private inventoryAssignmentService: InventoryAssignmentService,
        private siteService       : SitesService,
        private settingService    : SettingsService,
-       private fb                : FormBuilder,
+       private fb                : UntypedFormBuilder,
        private electronService   : ElectronService,
        private renderingService  : RenderingService,
        private printingService   : PrintingService,

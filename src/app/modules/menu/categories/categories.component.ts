@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { trigger, transition, animate, style, query, stagger } from '@angular/animations';
 import { Capacitor, Plugins } from '@capacitor/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent,of } from 'rxjs';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -124,9 +124,9 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   endRow           : number;
   loading          : boolean;
   endOfRecords     : boolean;
-  searchForm       : FormGroup;
+  searchForm       : UntypedFormGroup;
   searchPhrase     :         Subject<any> = new Subject();
-  get itemName()   { return this.searchForm.get("itemName") as FormControl;}
+  get itemName()   { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
   placeHolderImage   : String = "assets/images/placeholderimage.png"
   bucket$:    Observable<any>;

@@ -3,7 +3,7 @@ import { Component, OnInit, Input , EventEmitter,
 import { ClientSearchModel, ClientSearchResults, ISite, IUserProfile } from 'src/app/_interfaces';
 import { ContactsService  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormBuilder, FormControl, FormGroup,  } from '@angular/forms';
+import { UntypedFormBuilder, FormControl, UntypedFormGroup,  } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 @Component({
@@ -18,8 +18,8 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
   @Output() itemSelect      = new EventEmitter();
   itemNameInput             : string; //for clear button
   @Input() formFieldClass     = 'formFieldClass-standard'
-  @Input() inputForm:         FormGroup;
-  @Input() searchForm:        FormGroup;
+  @Input() inputForm:         UntypedFormGroup;
+  @Input() searchForm:        UntypedFormGroup;
   @Input() id               : any;
   @Input() disableDelete    : boolean;
   @Input() fieldName        = 'brandID';
@@ -65,7 +65,7 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
   }
 
   constructor(  private contactsService: ContactsService,
-                private fb             : FormBuilder,
+                private fb             : UntypedFormBuilder,
                 private siteService    : SitesService,
                ) {
   }
@@ -178,7 +178,7 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
   }
 
 
-  setValues(form: FormGroup, fieldName: string, data: any) {
+  setValues(form: UntypedFormGroup, fieldName: string, data: any) {
     if (fieldName == 'yearsOld') {
       const  item =  { yearsOld: data  }
       form.patchValue( item )

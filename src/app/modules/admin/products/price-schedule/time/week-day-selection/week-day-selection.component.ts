@@ -1,5 +1,5 @@
 import { Component, OnInit, Input , EventEmitter, Output} from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { IPriceSchedule, ClientType, DateFrame, DiscountInfo,
   TimeFrame, WeekDay
 } from 'src/app/_interfaces/menu/price-schedule';
@@ -15,7 +15,7 @@ export class WeekDaySelectionComponent implements OnInit {
 
   @Output() outputWeekdays    :      EventEmitter<any> = new EventEmitter();
   @Output() outputAllWeekdays :      EventEmitter<any> = new EventEmitter();
-  @Input()  inputForm         :      FormGroup;
+  @Input()  inputForm         :      UntypedFormGroup;
   @Input()  weekDay           :      WeekDay;
   @Input()  allWeekdaysDays   :      boolean;
   @Input()  item              :      IPriceSchedule;

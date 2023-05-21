@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuButtonProperties, MBMenuButtonsService, mb_MenuButton } from 'src/app/_services/system/mb-menu-buttons.service';
@@ -13,13 +13,13 @@ export class FunctionGroupButtonEditComponent implements OnInit,OnChanges {
   @Output() outPutUpdateButtons = new EventEmitter();
   @Output() outSaveButton = new EventEmitter();
   @Input() menuButton   : mb_MenuButton;
-  @Input() inputForm    : FormGroup;
-  propForm              : FormGroup;
+  @Input() inputForm    : UntypedFormGroup;
+  propForm              : UntypedFormGroup;
 
   constructor(
     private _snackBar   : MatSnackBar,
     private siteService : SitesService,
-    private fb          : FormBuilder,
+    private fb          : UntypedFormBuilder,
     private menuService : MBMenuButtonsService) { }
 
   ngOnInit(): void {

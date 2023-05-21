@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter,
         HostBinding, Renderer2, HostListener, OnDestroy, OnChanges, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder,FormGroup } from '@angular/forms';
+import { UntypedFormBuilder,UntypedFormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CompanyService,AuthenticationService, OrdersService, MessageService, } from 'src/app/_services';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
@@ -67,7 +67,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   isAPIOnline$:   Observable<any>;
   site:           ISite;
   sitePickerWidth = 50;
-  searchForm          : FormGroup;
+  searchForm          : UntypedFormGroup;
 
   phoneDevice         : boolean;
   smallDevice         :   boolean;
@@ -210,7 +210,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private floorPlanSevice       : FloorPlanService,
               private settingsService       : SettingsService,
               public uiSettings            : UISettingsService,
-              private fb                    : FormBuilder ) {
+              private fb                    : UntypedFormBuilder ) {
   }
 
   ngOnChanges() {

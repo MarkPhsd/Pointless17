@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit,Output } from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
-import { FormGroup , FormBuilder } from '@angular/forms';
+import { UntypedFormGroup , UntypedFormBuilder } from '@angular/forms';
 import {  MenuPromptSearchModel, PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 
@@ -13,14 +13,14 @@ import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 export class PromptGroupSelectComponent implements OnInit {
 
   @Input() productTypeID  : number;
-  @Input() inputForm      : FormGroup;
+  @Input() inputForm      : UntypedFormGroup;
   @Output() outputProductTypeID   :      EventEmitter<any> = new EventEmitter();
 
   promptResults$           : Observable<IPromptGroup[]>;
 
   constructor(private promptGroupservice: PromptGroupService,
               private siteService: SitesService,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               )
         { }
 

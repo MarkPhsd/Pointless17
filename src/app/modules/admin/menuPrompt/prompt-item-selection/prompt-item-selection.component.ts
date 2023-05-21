@@ -1,5 +1,5 @@
 import { Component, OnInit, Input ,OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PromptSubGroups, PromptMenuItem } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptMenuItemsService } from 'src/app/_services/menuPrompt/prompt-menu-items.service';
@@ -14,7 +14,7 @@ import { Location } from '@angular/common';
 })
 export class PromptItemSelectionComponent implements OnInit,OnDestroy {
 
-  inputForm         : FormGroup;
+  inputForm         : UntypedFormGroup;
   @Input()   prompt : PromptSubGroups;
   id                : any;
   promptMenuItems   : PromptMenuItem[];

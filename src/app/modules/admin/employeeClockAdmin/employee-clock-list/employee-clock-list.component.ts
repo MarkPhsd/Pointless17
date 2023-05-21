@@ -1,7 +1,7 @@
 import { Component,   OnInit,
   ViewChild ,ElementRef, AfterViewInit, HostListener, OnDestroy } from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -40,9 +40,9 @@ export class EmployeeClockListComponent implements OnInit {
 
   @ViewChild('input', {static: true}) input: ElementRef;
   searchPhrase:         Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
-  dateRange        : FormGroup;
+  dateRange        : UntypedFormGroup;
 
 
    //AgGrid
@@ -69,8 +69,8 @@ export class EmployeeClockListComponent implements OnInit {
    value             : any;
    // //This is for the filter Section//
    //search form filters
-   searchForm:        FormGroup;
-   inputForm        : FormGroup;
+   searchForm:        UntypedFormGroup;
+   inputForm        : UntypedFormGroup;
    jobTypeID     : number;
    selected        : any[];
    selectedRows    : any;
@@ -98,7 +98,7 @@ export class EmployeeClockListComponent implements OnInit {
   constructor(  
     private _snackBar               : MatSnackBar,
     private employeeClockService    : EmployeeClockService,
-    private fb                      : FormBuilder,
+    private fb                      : UntypedFormBuilder,
     private productEditButtonService: ProductEditButtonService,
     private siteService             : SitesService,
     private agGridFormatingService  : AgGridFormatingService,

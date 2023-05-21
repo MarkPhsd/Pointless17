@@ -1,5 +1,5 @@
 import { Component, OnInit,NgZone  } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
@@ -16,7 +16,7 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 })
 export class ApiStoredValueComponent implements OnInit {
 
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   currentAPIUrl  : any;
   version        : any;
   message        : string;
@@ -27,7 +27,7 @@ export class ApiStoredValueComponent implements OnInit {
   constructor(
       private router               : Router,
       public  platFormService      : PlatformService,
-      private fb                   : FormBuilder,
+      private fb                   : UntypedFormBuilder,
       private authenticationService: AuthenticationService,
       private appInitService       : AppInitService,
       public  electronService      : ElectronService,

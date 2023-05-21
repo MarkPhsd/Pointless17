@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, forwardRef,OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -17,12 +17,12 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class CashValueCalcComponent implements OnInit, OnChanges {
 
   internalValue: string | undefined;
-  get formControlItem()     { return this.inputForm.get(this.formControlName) as FormControl; }
+  get formControlItem()     { return this.inputForm.get(this.formControlName) as UntypedFormControl; }
 
   @Input() cashValue  : number;
   @Input() multiplier : number;
   @Input() formControlName : string;
-  @Input() inputForm  : FormGroup;
+  @Input() inputForm  : UntypedFormGroup;
 
   propagateChange = (_: any) => { }; // ControlValueAccessor
 

@@ -1,5 +1,5 @@
 import { Component,  Input} from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { IProduct } from 'src/app/_interfaces';
 
 @Component({
@@ -10,7 +10,7 @@ import { IProduct } from 'src/app/_interfaces';
 
 export class CannabisItemEditComponent   {
   @Input() product: IProduct
-  @Input() inputForm: FormGroup
+  @Input() inputForm: UntypedFormGroup
   constructor() { }
 
 }

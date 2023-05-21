@@ -1,5 +1,5 @@
 import { Component, ElementRef, forwardRef, Input, ViewChild,  AfterViewInit, Renderer2 } from '@angular/core';
-import { FormArrayName, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormArrayName, UntypedFormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component({
   selector: 'app-value-fields',
   templateUrl: './value-fields.component.html',
@@ -7,7 +7,7 @@ import { FormArrayName, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 
 export class ValueFieldsComponent implements  AfterViewInit  {
-  @Input() inputForm    : FormGroup
+  @Input() inputForm    : UntypedFormGroup
   @Input() formArray    : FormArrayName
   @Input() fieldName    : string;
   @Input() fieldDescription: string;

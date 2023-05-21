@@ -1,7 +1,7 @@
 import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, switchMap , of} from 'rxjs';
-import { FormBuilder,  FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { InventoryLocationsService , IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -21,7 +21,7 @@ export class AdjustmentReasonsComponent implements OnInit {
   filter = 1;
   filterDescription = 'Items'
 
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -44,7 +44,7 @@ export class AdjustmentReasonsComponent implements OnInit {
 
   constructor(
             private _snackBar: MatSnackBar,
-            private fb: FormBuilder,
+            private fb: UntypedFormBuilder,
             private adjustmentReasonsService: AdjustmentReasonsService,
             private siteService: SitesService,
             private dialogRef: MatDialogRef<AdjustmentReasonsComponent>,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { catchError, Observable, of, switchMap } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
@@ -14,7 +14,7 @@ export class UIHomePageSettingsComponent implements OnInit {
   backgroundImage: string;
   logoHomePage: string;
   tinyLogo    :     string;
-  inputForm   : FormGroup;
+  inputForm   : UntypedFormGroup;
   uiSettings  : ISetting;
   uiSettings$ : Observable<ISetting>;
   uiHomePage$ : Observable<any>

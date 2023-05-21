@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent, IListBoxItemB } from 'src/app/_interfaces/dual-lists';
 import { Observable, Subject ,fromEvent, of ,switchMap, map} from 'rxjs';
@@ -68,13 +68,13 @@ export class AdminDisplayMenuSelctorComponent implements OnInit {
 
   availableItems   : Array<IListBoxItemB>  = [];
   selectedItems    : Array<IListBoxItemB> = [];
-  listBoxForm      : FormGroup;
+  listBoxForm      : UntypedFormGroup;
 
   constructor(
     private siteService         : SitesService,
     private router: Router,
     private priceScheduleService: PriceScheduleService,
-    public  fb                  : FormBuilder
+    public  fb                  : UntypedFormBuilder
     ) {
 
   }

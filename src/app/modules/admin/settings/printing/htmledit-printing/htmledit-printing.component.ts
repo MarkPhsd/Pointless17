@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { ISetting } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -33,8 +33,8 @@ export class HTMLEditPrintingComponent implements OnInit {
   @ViewChild('printsection') printsection: ElementRef;
   @Input() setting: ISetting;
   setting$        : Observable<ISetting>;
-  inputForm       : FormGroup;
-  liveEditForm    : FormGroup;
+  inputForm       : UntypedFormGroup;
+  liveEditForm    : UntypedFormGroup;
   liveEdit        : boolean;
 
   receiptText = '';
@@ -82,7 +82,7 @@ export class HTMLEditPrintingComponent implements OnInit {
               public  route            : ActivatedRoute,
               private renderingService : RenderingService,
               private fakeData         : FakeDataService,
-              private fb               : FormBuilder,
+              private fb               : UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) public data: any
               )
   {

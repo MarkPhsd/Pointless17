@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PaymentMethod } from '@stripe/stripe-js';
 import { of, switchMap,catchError,Observable } from 'rxjs';
@@ -19,11 +19,11 @@ import { DeviceInfoService } from  './../../services/index';
 export class CardPointSettingsComponent implements OnInit {
 
   deviceName : string;
-  inputForm : FormGroup;
+  inputForm : UntypedFormGroup;
   methodType$: Observable<IPaymentMethod>;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private siteService: SitesService,
     private settingsService: SettingsService,
     private matSnackBar         : MatSnackBar,

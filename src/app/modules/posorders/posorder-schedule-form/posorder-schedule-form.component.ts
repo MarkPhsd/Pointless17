@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit,Output,Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { IPOSOrder, IServiceType } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -16,7 +16,7 @@ export class POSOrderScheduleFormComponent implements OnInit {
 
   @Output() OutPutSaveShippingTime = new EventEmitter();
   @Input() order     : IPOSOrder;
-  @Input() inptuForm : FormGroup;
+  @Input() inptuForm : UntypedFormGroup;
   scheduledDate       : string;
   serviceType$        : Observable<IServiceType>;
   @Input()  serviceType       : IServiceType;

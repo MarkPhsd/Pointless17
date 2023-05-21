@@ -12,7 +12,7 @@ import { IStoreCreditSearchModel, StoreCredit, StoreCreditMethodsService, StoreC
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { values } from 'lodash';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
@@ -45,7 +45,7 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
   _issueItem          : Subscription;
   posIssueItem        : PosOrderItem;
   purchaseOrderItem  : IPurchaseOrderItem;
-  inputForm           : FormGroup;
+  inputForm           : UntypedFormGroup;
   keyInstruction = 'Enter Value';
 
   get currentView() {
@@ -107,7 +107,7 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private orderMethodService       : OrderMethodsService,
     private storeCreditMethodService : StoreCreditMethodsService,
     private orderService             : OrdersService,

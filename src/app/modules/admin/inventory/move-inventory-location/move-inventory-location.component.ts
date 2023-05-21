@@ -7,7 +7,7 @@ import { ISite } from 'src/app/_interfaces/site';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ThisReceiver } from '@angular/compiler';
 
 @Component({
@@ -22,7 +22,7 @@ export class MoveInventoryLocationComponent implements OnInit {
   inventoryAssignment:       IInventoryAssignment;
   inventoryLocations:        IInventoryLocation[];
   inventoryAssignment$:      Observable<IInventoryAssignment>;
-  searchForm:                FormGroup;
+  searchForm:                UntypedFormGroup;
   quantityMoving:            number;
   locations$:                Observable<IInventoryLocation[]>;
   inventoryLocation:         IInventoryLocation;
@@ -34,7 +34,7 @@ export class MoveInventoryLocationComponent implements OnInit {
   constructor(private _snackBar: MatSnackBar,
               private siteService: SitesService,
               public route: ActivatedRoute,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               private inventoryAssignmentService: InventoryAssignmentService,
               private inventoryLocationsService: InventoryLocationsService,
               private dialogRef: MatDialogRef<MoveInventoryLocationComponent>,

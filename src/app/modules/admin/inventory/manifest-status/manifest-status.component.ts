@@ -1,7 +1,7 @@
 import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable} from 'rxjs';
-import { FormBuilder,  FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -18,7 +18,7 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 })
 export class ManifestStatusComponent implements OnInit {
 
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   location  : ManifestStatus  ;
 
   selected: any;
@@ -50,7 +50,7 @@ export class ManifestStatusComponent implements OnInit {
 
   constructor(
               private _snackBar            : MatSnackBar,
-              private fb                   : FormBuilder,
+              private fb                   : UntypedFormBuilder,
               private manifestStatusService: ManifestStatusService,
               private agGridFormatingService  : AgGridFormatingService,
     )

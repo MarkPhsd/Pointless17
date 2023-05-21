@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit,Input, Output  } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -18,11 +18,11 @@ export class DefaultReceiptSelectorComponent implements OnInit {
   @Input()  receiptList       : any;
   @Output() outPutReceiptName : EventEmitter<any> = new EventEmitter();
 
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   item$: Observable<ISetting>;
 
   constructor(
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               private siteService: SitesService) { }
 
   ngOnInit() {

@@ -1,7 +1,7 @@
 import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable} from 'rxjs';
-import { FormBuilder,  FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { InventoryLocationsService , IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,7 +18,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export class InventoryLocationsComponent implements OnInit, AfterViewInit, OnChanges {
 
-  locationForm: FormGroup;
+  locationForm: UntypedFormGroup;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -40,7 +40,7 @@ export class InventoryLocationsComponent implements OnInit, AfterViewInit, OnCha
 
   constructor(
             private _snackBar: MatSnackBar,
-            private fb: FormBuilder,
+            private fb: UntypedFormBuilder,
             private inventoryLocationsService: InventoryLocationsService,
   )
   {  }

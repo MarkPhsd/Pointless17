@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of, switchMap } from 'rxjs';
 import { IDisplayMenu } from 'src/app/_interfaces/menu/price-schedule';
@@ -15,7 +15,7 @@ import { CdkDragDrop, moveItemInArray,  } from '@angular/cdk/drag-drop';
 export class DisplayMenuSortComponent implements OnInit {
 
   action$ : Observable<any>;
-  @Input() inputForm       : FormGroup;
+  @Input() inputForm       : UntypedFormGroup;
   displayMenus           : IDisplayMenu[];
   displayMenu            : IDisplayMenu;
   index                    : number;

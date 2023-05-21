@@ -3,7 +3,7 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable, of,switchMap } from 'rxjs';
 import { MenuService } from 'src/app/_services';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-department-select',
@@ -12,7 +12,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class DepartmentSelectComponent implements OnInit {
 
-  @Input()  inputForm:    FormGroup;
+  @Input()  inputForm:    UntypedFormGroup;
   @Output() outputDepartmentID   :      EventEmitter<any> = new EventEmitter();
 
   departments$:           Observable<IMenuItem[]>;

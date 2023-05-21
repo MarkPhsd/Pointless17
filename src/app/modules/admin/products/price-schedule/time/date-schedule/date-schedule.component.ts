@@ -1,5 +1,5 @@
 import { Component, OnInit, Input , EventEmitter, Output} from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormArray, FormBuilder, UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule, ClientType, DateFrame, DiscountInfo ,
   TimeFrame, WeekDay
@@ -17,15 +17,15 @@ import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-
 })
 export class DateScheduleComponent implements OnInit {
 
-  range = new FormGroup({
-    start: new FormControl(),
-    end: new FormControl()
+  range = new UntypedFormGroup({
+    start: new UntypedFormControl(),
+    end: new UntypedFormControl()
   });
 
   // priceSchedule$              :      Observable<IPriceSchedule>
   // @Output() outputWeekdays    :      EventEmitter<any> = new EventEmitter();
   // @Output() outputAllWeekdays :      EventEmitter<any> = new EventEmitter();
-  @Input()  inputForm         :      FormGroup;
+  @Input()  inputForm         :      UntypedFormGroup;
   @Input()  item              :      IPriceSchedule;
 
   // @Input()  dateFrames        :      DateFrame[];
@@ -33,8 +33,8 @@ export class DateScheduleComponent implements OnInit {
 
   allDates: boolean;
 
-  get dateFrames() : FormArray {
-    return this.inputForm.get('dateFrames') as FormArray;
+  get dateFrames() : UntypedFormArray {
+    return this.inputForm.get('dateFrames') as UntypedFormArray;
   }
 
   _priceSchedule              : Subscription;

@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable, } from 'rxjs';
 import { employee, IClientTable, ISite, IUserProfile } from 'src/app/_interfaces';
 import { IItemBasic } from '../menu/menu.service';
 import { IPagedList } from '../system/paging.service';
-import { FormBuilder, FormGroup, } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, } from '@angular/forms';
 
 export interface EmployeeSearchResults {
  results: employee[];
@@ -63,7 +63,7 @@ export class EmployeeService {
 
   constructor( private http: HttpClient,
                private auth: AuthenticationService,
-               private _fb:   FormBuilder ) { }
+               private _fb:   UntypedFormBuilder ) { }
 
 
   delete(site: ISite, id: number) : Observable<employee> {
@@ -235,7 +235,7 @@ export class EmployeeService {
 // </div>
 // , [Validators.required, Validators.maxLength(10), Validators.minLength(4)]
 // , [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]
-  initForm(fb: FormGroup): FormGroup {
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
       id:                        [''],
       firstName:                 [''],

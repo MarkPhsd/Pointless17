@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'price-schedule-menu-options',
@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class PriceScheduleMenuOptionsComponent implements OnInit {
 
-  @Input() inputForm: FormGroup;
+  @Input() inputForm: UntypedFormGroup;
   constructor() { }
 
   ngOnInit(): void {

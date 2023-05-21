@@ -1,7 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subject  } from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { GridApi } from 'ag-grid-community';
 import "ag-grid-community/dist/styles/ag-grid.css";
@@ -45,7 +45,7 @@ export class FacilitiesListComponent {
   importing: boolean;
 
   //This is for the search Section//
-  public searchForm: FormGroup;
+  public searchForm: UntypedFormGroup;
   private readonly onDestroy = new Subject<void>();
   search: string;
   mETRCFacilities$: Observable<METRCFacilities[]>;
@@ -59,7 +59,7 @@ export class FacilitiesListComponent {
 
   constructor(  private _snackBar: MatSnackBar,
                 private router: Router,
-                private fb: FormBuilder,
+                private fb: UntypedFormBuilder,
                 private siteService: SitesService,
                 private metrcFacilitiesService: MetrcFacilitiesService,
 	              public  route: ActivatedRoute,

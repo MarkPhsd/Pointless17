@@ -10,7 +10,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Plugins } from '@capacitor/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -36,27 +36,27 @@ export class MainfestFilterComponent implements OnInit, OnDestroy {
 
   selectedType       : number;
   user               = {} as IUser;
-  paidDateForm      : FormGroup;
-  inputForm         : FormGroup;
-  dateRangeForm     : FormGroup;
+  paidDateForm      : UntypedFormGroup;
+  inputForm         : UntypedFormGroup;
+  dateRangeForm     : UntypedFormGroup;
   dateFrom          : any;
   dateTo            : any;
 
-  scheduleDateForm  : FormGroup;
+  scheduleDateForm  : UntypedFormGroup;
   scheduleDateFrom  : any;
   scheduleDateTo    : any;
 
-  sendDateForm      : FormGroup;
+  sendDateForm      : UntypedFormGroup;
   sendDateFrom      : any;
   sendDateTo        : any;
 
-  acceptedDateForm  : FormGroup;
+  acceptedDateForm  : UntypedFormGroup;
   acceptedDateFrom  : any;
   acceptedDateTo    : any;
 
   _searchModel     : Subscription;
   searchModel      : ManifestSearchModel;
-  searchForm       : FormGroup;
+  searchForm       : UntypedFormGroup;
   searchPhrase     : Subject<any> = new Subject();
   value            : string;
   smallDevice      = false;
@@ -89,7 +89,7 @@ export class MainfestFilterComponent implements OnInit, OnDestroy {
 
   @Output() outPutHidePanel = new EventEmitter();
 
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
   searchItems$              : Subject<IPOSOrderSearchModel[]> = new Subject();
@@ -143,7 +143,7 @@ export class MainfestFilterComponent implements OnInit, OnDestroy {
       public  route              : ActivatedRoute,
       private siteService        : SitesService,
       private matSnack           : MatSnackBar,
-      private fb                 : FormBuilder,
+      private fb                 : UntypedFormBuilder,
       private userAuthorization  : UserAuthorizationService,
       private _bottomSheet       : MatBottomSheet,
       private dateHelperService  : DateHelperService,
@@ -318,21 +318,21 @@ export class MainfestFilterComponent implements OnInit, OnDestroy {
   }
 
   initDateForm() {
-    this.scheduleDateForm = new FormGroup({
-      start: new FormControl(),
-      end: new FormControl()
+    this.scheduleDateForm = new UntypedFormGroup({
+      start: new UntypedFormControl(),
+      end: new UntypedFormControl()
     });
-    this.sendDateForm = new FormGroup({
-      start: new FormControl(),
-      end: new FormControl()
+    this.sendDateForm = new UntypedFormGroup({
+      start: new UntypedFormControl(),
+      end: new UntypedFormControl()
     });
-    this.acceptedDateForm = new FormGroup({
-      start: new FormControl(),
-      end: new FormControl()
+    this.acceptedDateForm = new UntypedFormGroup({
+      start: new UntypedFormControl(),
+      end: new UntypedFormControl()
     });
-    this.paidDateForm = new FormGroup({
-      start: new FormControl(),
-      end: new FormControl()
+    this.paidDateForm = new UntypedFormGroup({
+      start: new UntypedFormControl(),
+      end: new UntypedFormControl()
     });
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormGroupDirective,FormControl ,NgForm, FormBuilder} from '@angular/forms';
+import { UntypedFormGroup, FormGroupDirective,UntypedFormControl ,NgForm, UntypedFormBuilder} from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Observable, switchMap, of } from 'rxjs';
 import { clientType, ISetting } from 'src/app/_interfaces';
@@ -15,8 +15,8 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
   styleUrls: ['./uitransactions.component.scss'],
 })
 export class UITransactionsComponent implements OnInit {
-  testForm        : FormGroup;
-  inputForm       : FormGroup;
+  testForm        : UntypedFormGroup;
+  inputForm       : UntypedFormGroup;
   uiSettings      : ISetting
   uiSettings$     : Observable<ISetting>;
   message         : string;
@@ -35,7 +35,7 @@ export class UITransactionsComponent implements OnInit {
       private clientTypeService: ClientTypeService,
       private sitesService     : SitesService,
       private clienTableSerivce: ClientTableService,
-      private fb: FormBuilder,
+      private fb: UntypedFormBuilder,
   ) {
   }
 
@@ -120,7 +120,7 @@ export class UITransactionsComponent implements OnInit {
     this.getVipClient(this.inputForm.value)
   }
 
-  validateForm(form: FormGroup) {
+  validateForm(form: UntypedFormGroup) {
     if (!this.inputForm.value) {
       this.uISettingsService.notify('Form has no value.', 'Problem Occured')
       return false;
@@ -151,7 +151,7 @@ export class UITransactionsComponent implements OnInit {
 }
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(control: UntypedFormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }

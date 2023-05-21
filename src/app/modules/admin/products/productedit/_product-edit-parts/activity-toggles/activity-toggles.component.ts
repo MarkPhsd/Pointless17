@@ -1,5 +1,5 @@
 import { Component, Input, OnInit} from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-activity-toggles',
@@ -7,7 +7,7 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./activity-toggles.component.scss']
 })
 export class ActivityTogglesComponent implements OnInit {
-  @Input()  inputForm:      FormGroup;
+  @Input()  inputForm:      UntypedFormGroup;
   constructor() { }
 
   ngOnInit(): void {

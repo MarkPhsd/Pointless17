@@ -8,7 +8,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MetrcSalesService } from 'src/app/_services/metrc/metrc-sales.service';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { METRCSalesReportPaged, PointlessMetrcSales, PointlessMETRCSalesService, PointlessMetrcSearchModel } from 'src/app/_services/metrc/pointless-metrcsales.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
@@ -98,9 +98,9 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
    exceptionMessage: string;
    value             : any;
    totalRecordCount: number;
-   searchForm      : FormGroup;
-   inputForm       : FormGroup;
-   dateRange       : FormGroup;
+   searchForm      : UntypedFormGroup;
+   inputForm       : UntypedFormGroup;
+   dateRange       : UntypedFormGroup;
    selected        : any[];
    selectedRows    : any;
    agtheme         = 'ag-theme-material';
@@ -164,7 +164,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     private readonly datePipe: DatePipe,
     private agGridService: AgGridService,
     private userAuthorization       : UserAuthorizationService,
-    private fb                      : FormBuilder,
+    private fb                      : UntypedFormBuilder,
     private siteService: SitesService,
     private agGridFormatingService  : AgGridFormatingService,
     private reportingServices: ReportingService,
@@ -196,9 +196,9 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     this.searchForm = this.fb.group({
       itemName : ['']
     })
-    this.dateRange = new FormGroup({
-      startDate: new FormControl(),
-      endDate: new FormControl()
+    this.dateRange = new UntypedFormGroup({
+      startDate: new UntypedFormControl(),
+      endDate: new UntypedFormControl()
     });
   }
 

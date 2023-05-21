@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services';
 
 @Component({
@@ -8,7 +8,7 @@ import { IItemBasic } from 'src/app/_services';
   styleUrls: ['./linked-price-selector.component.scss']
 })
 export class LinkedPriceSelectorComponent implements OnInit {
-  @Input() inputForm: FormGroup;
+  @Input() inputForm: UntypedFormGroup;
   @Input() fieldName: string;
   list: IItemBasic[];
 

@@ -2,7 +2,7 @@ import { Component,  Inject, OnInit,
 } from '@angular/core';
 import { AWSBucketService,  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { jobTypes } from 'src/app/_interfaces';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -18,7 +18,7 @@ import { JobTypesService } from 'src/app/_services/people/job-types.service';
 })
 export class JobTypesEditComponent implements OnInit {
   message: string;
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   jobType: jobTypes;
   action$ : Observable<any>;
   id: number;
@@ -31,7 +31,7 @@ export class JobTypesEditComponent implements OnInit {
     private awsBucket               : AWSBucketService,
     public  fbClientTypesService    : FbClientTypesService,
     public  userAuthService         : UserAuthorizationService,
-    private fb                      : FormBuilder,
+    private fb                      : UntypedFormBuilder,
     private dialogRef: MatDialogRef<JobTypesEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
 

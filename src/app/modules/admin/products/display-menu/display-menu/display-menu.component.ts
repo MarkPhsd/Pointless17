@@ -5,7 +5,7 @@ import { IDisplayMenu } from 'src/app/_interfaces/menu/price-schedule';
 import { DisplayMenuService } from 'src/app/_services/menu/display-menu.service';
 import { Observable, switchMap, of, ignoreElements, catchError} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormBuilder, FormControl, FormGroup, Validators,} from '@angular/forms';
+import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators,} from '@angular/forms';
 import { IListBoxItemB } from 'src/app/_interfaces/dual-lists';
 import { Router } from '@angular/router';
 
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 })
 export class AdminDisplayMenuComponent  {
 
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   id: number;
   displayMenu: IDisplayMenu;
   action$: Observable<any>;
@@ -29,7 +29,7 @@ export class AdminDisplayMenuComponent  {
   description: string;
   ccs: string;
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
               private displayMenuService: DisplayMenuService,
               private siteService: SitesService,
               private _snackBar: MatSnackBar,

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,7 +23,7 @@ export class ProfileEditorComponent implements OnInit {
   constructor(
     private router: Router,
     public route: ActivatedRoute,
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     private clientTableService: ClientTableService,
     private sanitizer : DomSanitizer,
     private _snackBar: MatSnackBar,

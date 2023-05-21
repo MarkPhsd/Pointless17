@@ -4,7 +4,7 @@ import { ClientSearchModel, ClientSearchResults, Item,  IUserProfile, }  from 's
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService, OrdersService,AWSBucketService } from 'src/app/_services';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -37,9 +37,9 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
     dataSource:                 any;
     item:                       Item; //for routing
     id:                         string;
-    searchForm              :   FormGroup;
+    searchForm              :   UntypedFormGroup;
     searchPhrase            :   Subject<any> = new Subject();
-    get itemName() { return this.searchForm.get("itemName") as FormControl;}
+    get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
     private readonly onDestroy = new Subject<void>();
 
     // //search with debounce
@@ -120,7 +120,7 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
                 private cd: ChangeDetectorRef,
                 private route: ActivatedRoute,
                 private router: Router,
-                private fb: FormBuilder,
+                private fb: UntypedFormBuilder,
                 private orderService: OrdersService,
                 private _snackBar: MatSnackBar,
                 private siteService: SitesService,

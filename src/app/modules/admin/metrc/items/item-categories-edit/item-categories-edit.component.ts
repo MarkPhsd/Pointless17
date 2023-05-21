@@ -8,7 +8,7 @@ import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items
 
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FormBuilder, FormGroup} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import { ConversionsService } from 'src/app/_services/measurement/conversions.service';
 
 import {
@@ -33,13 +33,13 @@ export class ItemCategoriesEditComponent implements OnInit {
   category$: Observable<METRCItemsCategories>;
   category: METRCItemsCategories;
 
-  public inputForm: FormGroup;
+  public inputForm: UntypedFormGroup;
 
   constructor(
     private conversionService: ConversionsService,
     private metrcItemsCategoriesService: MetrcItemsCategoriesService,
     public route: ActivatedRoute,
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     private dialogRef: MatDialogRef<METRCItemsCategories>,
     @Inject(MAT_DIALOG_DATA) public data: any
     )

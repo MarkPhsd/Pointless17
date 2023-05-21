@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ISetting } from '../_interfaces';
 
 @Injectable({
@@ -7,9 +7,9 @@ import { ISetting } from '../_interfaces';
 })
 export class FbSettingsService {
 
-  constructor(private _fb: FormBuilder) { }
+  constructor(private _fb: UntypedFormBuilder) { }
 
-  initForm(fb: FormGroup): FormGroup {
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
         id:           [''],
         name:         [''],
@@ -40,7 +40,7 @@ export class FbSettingsService {
     return fb;
   }
 
-  intitFormData(inputForm: FormGroup, data: ISetting) {
+  intitFormData(inputForm: UntypedFormGroup, data: ISetting) {
     inputForm.patchValue(data)
     return inputForm
   }

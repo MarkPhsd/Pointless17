@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
@@ -17,10 +17,10 @@ export class AppWizardStatusComponent implements OnInit, OnDestroy {
 
   status: AppStatus;
   _appWizard: Subscription;
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   action$: Observable<any>;
   
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
               private router: Router,
               private userAuth: UserAuthorizationService,
               private menuService: MenusService,

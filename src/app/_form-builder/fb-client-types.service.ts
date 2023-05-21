@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { tap } from 'rxjs/operators';
 
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
@@ -10,13 +10,13 @@ import { SitesService } from '../_services/reporting/sites.service';
 })
 export class FbClientTypesService {
 
-  constructor(private _fb: FormBuilder,
+  constructor(private _fb: UntypedFormBuilder,
     private siteService: SitesService,
     private clientTypeService: ClientTypeService,
   ) { }
 
 
-  initUserAuthForm(fb: FormGroup): FormGroup {
+  initUserAuthForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
 
       voidOrder            : [],
@@ -74,7 +74,7 @@ export class FbClientTypesService {
 
   }
 
-  initForm(fb: FormGroup): FormGroup {
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
 
          fb = this._fb.group({
             id: [],
@@ -99,7 +99,7 @@ export class FbClientTypesService {
         return fb
     }
 
-    async  fillForm(id: number, form: FormGroup): Promise<any> {
+    async  fillForm(id: number, form: UntypedFormGroup): Promise<any> {
 
       const site =  this.siteService.getAssignedSite();
 

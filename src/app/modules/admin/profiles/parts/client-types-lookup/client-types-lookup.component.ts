@@ -1,5 +1,5 @@
 import { Component, forwardRef, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ControlValueAccessor, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, UntypedFormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, of , switchMap} from 'rxjs';
 import { clientType } from 'src/app/_interfaces';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
@@ -28,7 +28,7 @@ export class ClientTypesLookupComponent implements OnInit {
   @Input() style           : string;
   @Input() clientTypeID    : number;
   @Input() clientTypes$    : Observable<clientType[]>;
-  @Input() inputForm       : FormGroup;
+  @Input() inputForm       : UntypedFormGroup;
   @Input() formControlName = 'clientTypeID';
 
   myFilter   : any;

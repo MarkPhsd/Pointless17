@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { Subscription } from 'rxjs';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
@@ -48,7 +48,7 @@ export class PriceScheduleInfoComponent implements OnInit, OnChanges, AfterViewI
   animationCounter: number;
 
   @Input()  item:                IPriceSchedule;
-  @Input()  inputForm:           FormGroup;
+  @Input()  inputForm:           UntypedFormGroup;
   @Input()  hideDelete:          boolean;
 
   _priceSchedule      : Subscription;
@@ -67,48 +67,48 @@ export class PriceScheduleInfoComponent implements OnInit, OnChanges, AfterViewI
     })
   }
 
-  get requiredCategories() : FormArray {
-    return this.inputForm.get('requiredCategories') as FormArray;
+  get requiredCategories() : UntypedFormArray {
+    return this.inputForm.get('requiredCategories') as UntypedFormArray;
   }
 
-  get requiredItems() : FormArray {
-    return this.inputForm.get('requiredItems') as FormArray;
+  get requiredItems() : UntypedFormArray {
+    return this.inputForm.get('requiredItems') as UntypedFormArray;
   }
 
-  get requiredItemTypes() : FormArray {
-    return this.inputForm.get('requiredItemTypes') as FormArray;
+  get requiredItemTypes() : UntypedFormArray {
+    return this.inputForm.get('requiredItemTypes') as UntypedFormArray;
   }
 
-  get requiredBrands() : FormArray {
-    return this.inputForm.get('requiredBrands') as FormArray;
+  get requiredBrands() : UntypedFormArray {
+    return this.inputForm.get('requiredBrands') as UntypedFormArray;
   }
 
-  get categoryDiscounts() : FormArray {
-    return this.inputForm.get('categoryDiscounts') as FormArray;
+  get categoryDiscounts() : UntypedFormArray {
+    return this.inputForm.get('categoryDiscounts') as UntypedFormArray;
   }
 
-  get itemDiscounts() : FormArray {
-    return this.inputForm.get('itemDiscounts') as FormArray;
+  get itemDiscounts() : UntypedFormArray {
+    return this.inputForm.get('itemDiscounts') as UntypedFormArray;
   }
 
-  get itemTypeDiscounts() : FormArray {
-    return this.inputForm.get('itemTypeDiscounts') as FormArray;
+  get itemTypeDiscounts() : UntypedFormArray {
+    return this.inputForm.get('itemTypeDiscounts') as UntypedFormArray;
   }
 
-  get brandDiscounts() : FormArray {
-    return this.inputForm.get('brandDiscounts') as FormArray;
+  get brandDiscounts() : UntypedFormArray {
+    return this.inputForm.get('brandDiscounts') as UntypedFormArray;
   }
 
-  get timeFrames() : FormArray {
-    return this.inputForm.get('timeFrames') as FormArray;
+  get timeFrames() : UntypedFormArray {
+    return this.inputForm.get('timeFrames') as UntypedFormArray;
   }
 
-  get orderTypes() : FormArray {
-    return this.inputForm.get('orderTypes') as FormArray;
+  get orderTypes() : UntypedFormArray {
+    return this.inputForm.get('orderTypes') as UntypedFormArray;
   }
 
-  get clientTypes() : FormArray {
-    return this.inputForm.get('clientTypes') as FormArray;
+  get clientTypes() : UntypedFormArray {
+    return this.inputForm.get('clientTypes') as UntypedFormArray;
   }
 
   constructor(

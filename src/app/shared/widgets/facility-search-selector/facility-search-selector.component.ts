@@ -1,6 +1,6 @@
 import { Component,  Inject,  Input, Output, OnInit, Optional, ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormArray, UntypedFormControl} from '@angular/forms';
 import { ISite } from 'src/app/_interfaces/site';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
@@ -17,8 +17,8 @@ export class FacilitySearchSelectorComponent implements OnInit, AfterViewInit  {
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new               EventEmitter();
 
-  @Input()  searchForm:                     FormGroup;
-  @Input()  searchField:                    FormControl;
+  @Input()  searchForm:                     UntypedFormGroup;
+  @Input()  searchField:                    UntypedFormControl;
   @Input()  item:                           IItemFacilitiyBasic;
 
   searchPhrase:         Subject<any> = new Subject();
@@ -49,7 +49,7 @@ export class FacilitySearchSelectorComponent implements OnInit, AfterViewInit  {
   constructor(
     private router: Router,
     public route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private siteService: SitesService,
     private metrcFacilitiesService: MetrcFacilitiesService
     )

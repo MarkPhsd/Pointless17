@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-profile-billing-address',
@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class ProfileBillingAddressComponent  {
 
-  @Input() inputForm: FormGroup
+  @Input() inputForm: UntypedFormGroup
   constructor() { }
 
 }

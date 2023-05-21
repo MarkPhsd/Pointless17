@@ -1,7 +1,7 @@
 import { Component,  Inject,  Input, Output, OnInit, Optional,
   ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -30,7 +30,7 @@ export class BlogListEditComponent implements OnInit {
   searchModel: ISearchBlogs;
 
   searchPhrase:         Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
   gridDimensions = "height: 90%; min-height:600px"
@@ -71,8 +71,8 @@ export class BlogListEditComponent implements OnInit {
   islastpage              :boolean;
 
   //search form filters
-  searchForm:        FormGroup;
-  inputForm        : FormGroup;
+  searchForm:        UntypedFormGroup;
+  inputForm        : UntypedFormGroup;
   buttonVisible   : boolean;
   selected        : any[];
   selectedRows    : any;
@@ -88,7 +88,7 @@ export class BlogListEditComponent implements OnInit {
 
   groups = this.blogService.groups;
   constructor( private siteService           : SitesService,
-              private fb                     : FormBuilder,
+              private fb                     : UntypedFormBuilder,
               private _snackBar              : MatSnackBar,
               private agGridFormatingService : AgGridFormatingService,
               private blogService     : BlogService,

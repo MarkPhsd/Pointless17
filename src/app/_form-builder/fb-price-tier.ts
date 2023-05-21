@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { PriceTierPrice,PriceTiers } from 'src/app/_interfaces/menu/price-categories';
 
 @Injectable({
@@ -9,13 +9,13 @@ import { PriceTierPrice,PriceTiers } from 'src/app/_interfaces/menu/price-catego
 
 export class FbPriceTierService {
 
-  constructor(private fb: FormBuilder) { }
-  intitFormData(inputForm: FormGroup, data: PriceTiers) {
+  constructor(private fb: UntypedFormBuilder) { }
+  intitFormData(inputForm: UntypedFormGroup, data: PriceTiers) {
     inputForm.patchValue(data)
     return inputForm
   }
 
-  initForm(fb: FormGroup): FormGroup {
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this.fb.group({
       id:                           [''],
       webEnabled:                   [''],
@@ -26,9 +26,9 @@ export class FbPriceTierService {
     return fb
   }
 
-  addPrice(inputForm: FormGroup, arrayType: PriceTierPrice) {
+  addPrice(inputForm: UntypedFormGroup, arrayType: PriceTierPrice) {
     if (!inputForm) { return }
-    const control = inputForm.get('priceTierPrices') as FormArray;
+    const control = inputForm.get('priceTierPrices') as UntypedFormArray;
     if (!control)   { return }
     control.push(this.fb.control(arrayType))
   }

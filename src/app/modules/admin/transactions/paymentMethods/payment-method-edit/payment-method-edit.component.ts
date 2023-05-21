@@ -3,7 +3,7 @@ import { Component,  Inject,  Input, Output, OnInit, Optional,
 import { Router } from '@angular/router';
 import { AWSBucketService, ContactsService, MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import {  FormGroup } from '@angular/forms';
+import {  UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { tap } from 'rxjs/operators';
@@ -22,7 +22,7 @@ export class PaymentMethodEditComponent  implements OnInit {
   paymentMethod          :IPaymentMethod;
   bucketName             :string;
   awsBucketURL           :string;
-  inputForm              :FormGroup;
+  inputForm              :UntypedFormGroup;
   instructions: string;
 
   constructor(

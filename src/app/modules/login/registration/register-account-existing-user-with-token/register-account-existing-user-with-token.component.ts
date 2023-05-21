@@ -1,7 +1,7 @@
 import { AuthenticationService, IUserExists} from 'src/app/_services';
 import { ICompany, IUser }  from 'src/app/_interfaces';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -29,7 +29,7 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
   id         : any;
 
   bucket: string;
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   @Input() userName: string;
 
   userExists: IUserExists;
@@ -53,7 +53,7 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
   )
   }
   constructor(
-      private fb: FormBuilder,
+      private fb: UntypedFormBuilder,
       private route: ActivatedRoute,
       private router: Router,
       private _snackBar: MatSnackBar,

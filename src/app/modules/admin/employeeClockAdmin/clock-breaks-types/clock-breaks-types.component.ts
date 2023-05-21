@@ -1,7 +1,7 @@
 import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject, TemplateRef, ComponentFactoryResolver} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of, switchMap} from 'rxjs';
-import { FormBuilder,  FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -21,7 +21,7 @@ export class ClockBreaksTypesComponent implements OnInit {
   // <!-- { "name": "15 Minute Break", "id": 303, "type": null, "optionBoolean": false } -->
      
   columnsToDisplay = ['id', 'name', 'optionBoolean', 'edit'];
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   action$: Observable<any>;
   locationTable$ : Observable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -35,7 +35,7 @@ export class ClockBreaksTypesComponent implements OnInit {
 
   constructor(
     private _snackBar: MatSnackBar,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private settingService: SettingsService,
     private employeeClockService: EmployeeClockService,
     private siteService: SitesService,

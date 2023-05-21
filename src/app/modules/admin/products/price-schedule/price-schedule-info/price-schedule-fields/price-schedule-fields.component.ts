@@ -1,5 +1,5 @@
 import { Component, OnInit, Input,  } from '@angular/core';
-import { FormArray,  FormBuilder,  FormGroup, FormGroupName } from '@angular/forms';
+import { UntypedFormArray,  FormBuilder,  UntypedFormGroup, FormGroupName } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
@@ -19,11 +19,11 @@ export class PriceScheduleFieldsComponent implements OnInit {
 
 
   andOrGroup =  ['And', 'Or','1','2','3','4','5','6']
-  @Input() inputForm        : FormGroup;
+  @Input() inputForm        : UntypedFormGroup;
   @Input() arrayTypeName    : string;
   @Input() andOrOption      = true;
   @Input() data             : any;
-  @Input() formArray        : FormArray;
+  @Input() formArray        : UntypedFormArray;
   @Input() hideDelete       = false;
   @Input() item  : IPriceSchedule;
 
@@ -99,9 +99,9 @@ export class PriceScheduleFieldsComponent implements OnInit {
     }
   }
 
-  get arrayType() : FormArray {
+  get arrayType() : UntypedFormArray {
     if (this.arrayTypeName) {
-      return this.inputForm.get(this.arrayTypeName) as FormArray;
+      return this.inputForm.get(this.arrayTypeName) as UntypedFormArray;
     }
   }
 

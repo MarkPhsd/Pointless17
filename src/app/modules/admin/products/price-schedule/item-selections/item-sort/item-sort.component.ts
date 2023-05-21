@@ -5,7 +5,7 @@ import { catchError, of, switchMap , Observable} from 'rxjs';
 import { CdkDragDrop, moveItemInArray,  } from '@angular/cdk/drag-drop';
 import { DiscountInfo, IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 
@@ -18,7 +18,7 @@ export class ItemSortComponent  {
 
   action$ : Observable<any>;
   priceSchedule            : IPriceSchedule;
-  @Input() inputForm       : FormGroup;
+  @Input() inputForm       : UntypedFormGroup;
   discountInfos            : DiscountInfo[];
   discountInfo             : DiscountInfo;
 

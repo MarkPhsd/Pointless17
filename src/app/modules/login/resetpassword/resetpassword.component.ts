@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
 import { IUser }  from 'src/app/_interfaces';
 import { Observable} from 'rxjs'
@@ -12,7 +12,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 })
 export class ResetpasswordComponent implements OnInit {
 
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   loading = false;
   submitted = false;
   returnUrl: string;
@@ -35,7 +35,7 @@ export class ResetpasswordComponent implements OnInit {
   }
 
   constructor(
-      private formBuilder: FormBuilder,
+      private formBuilder: UntypedFormBuilder,
       private uiSettings: UISettingsService,
       private route: ActivatedRoute,
       private router: Router,

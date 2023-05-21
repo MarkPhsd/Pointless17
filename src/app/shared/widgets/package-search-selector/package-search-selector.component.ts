@@ -1,6 +1,6 @@
 import { Component,   Input, Output, OnInit, Optional, ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { ActivatedRoute,  } from '@angular/router';
-import { FormBuilder, FormGroup,  FormControl} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup,  UntypedFormControl} from '@angular/forms';
 import { ISite } from 'src/app/_interfaces/site';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -17,10 +17,10 @@ import { METRCPackage, PackageFilter }  from 'src/app/_interfaces/metrcs/package
 export class PackageSearchSelectorComponent implements OnInit {
 
   @ViewChild('input', {static: true}) input: ElementRef;
-  @Input()  searchForm:  FormGroup;
+  @Input()  searchForm:  UntypedFormGroup;
   @Input()  itemType     =1;
   @Output() itemSelect   = new EventEmitter();
-  searchField        : FormControl;
+  searchField        : UntypedFormControl;
 
   ProductName        :  string;
   searchFilter       :  Subject<any> = new Subject();
@@ -32,7 +32,7 @@ export class PackageSearchSelectorComponent implements OnInit {
   constructor(
     public route: ActivatedRoute,
     private metrcPackagesService: MetrcPackagesService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private siteService: SitesService,
     )
   {

@@ -2,7 +2,7 @@ import { Component, OnInit, Input , EventEmitter,
   Output, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
   import { IProduct, ISite }  from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormBuilder, FormControl, FormGroup,  } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -21,8 +21,8 @@ export class ProductSearchSelector2Component implements OnInit, AfterViewInit {
 
   itemNameInput: string; //for clear button
   @Input() formFieldClass     = 'formFieldClass-standard'
-  @Input() inputForm:         FormGroup;
-  @Input() searchForm:        FormGroup;
+  @Input() inputForm:         UntypedFormGroup;
+  @Input() searchForm:        UntypedFormGroup;
   @Input() id                : any;
   @Input() productLookupField: string;
   @Input() description       : string;
@@ -32,7 +32,7 @@ export class ProductSearchSelector2Component implements OnInit, AfterViewInit {
   site:                       ISite;
   menuItem: IMenuItem;
 
-  get productLookupControl()   { return this.inputForm.get(this.productLookupField) as FormControl};
+  get productLookupControl()   { return this.inputForm.get(this.productLookupField) as UntypedFormControl};
 
   products$                   : Observable<ProductSearchModel>;
   products                    : IProduct[]
@@ -67,7 +67,7 @@ export class ProductSearchSelector2Component implements OnInit, AfterViewInit {
   }
 
   constructor(  private menuService : MenuService,
-                private fb             : FormBuilder,
+                private fb             : UntypedFormBuilder,
                 private siteService    : SitesService,
                ) {
   }

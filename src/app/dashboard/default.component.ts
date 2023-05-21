@@ -4,7 +4,7 @@ import { Component, HostBinding, OnInit, AfterViewInit,
          ElementRef,
          ViewChild,
          TemplateRef} from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, Observable, of, Subscription,switchMap } from 'rxjs';
 import { fader } from 'src/app/_animations/route-animations';
@@ -45,7 +45,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("footer") footer: ElementRef;
   departmentID     =0
   get platForm() {  return Capacitor.getPlatform(); }
-  toggleControl     = new FormControl(false);
+  toggleControl     = new UntypedFormControl(false);
   isSafari        : any;
   posts           : any;
   pages = new      Array(10);

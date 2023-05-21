@@ -1,5 +1,5 @@
 import { Component, OnInit, Input , EventEmitter, Output} from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule, ClientType, DateFrame, DiscountInfo,
   TimeFrame, WeekDay
@@ -20,7 +20,7 @@ export class SearchPanelComponent implements OnInit {
   @Input() requiredCategories: DiscountInfo[] = [];
   @Input() requiredItems:      DiscountInfo[] = [];
 
-  @Input() inputForm: FormGroup;
+  @Input() inputForm: UntypedFormGroup;
   @Input() item     : IPriceSchedule;
 
   constructor() { }

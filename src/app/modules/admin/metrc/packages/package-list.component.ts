@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, AfterViewInit, ViewChild, Input, } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { fromEvent, Observable, of, Subject  } from 'rxjs';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import  {GridApi, IGetRowsParams, } from '@ag-grid-community/all-modules';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
@@ -46,14 +46,14 @@ export class PackageListComponent implements OnInit {
   gridlist = "grid-list"
 
   //needed for search component
-  searchForm:    FormGroup;
+  searchForm:    UntypedFormGroup;
   get itemName() {
     if (this.searchForm) {
-      return this.searchForm.get("itemName") as FormControl;
+      return this.searchForm.get("itemName") as UntypedFormControl;
     }
   }
-  get hasImportedControl() { return this.searchForm.get("hasImported") as FormControl;}
-  get activeControl() { return this.searchForm.get("active") as FormControl;}
+  get hasImportedControl() { return this.searchForm.get("hasImported") as UntypedFormControl;}
+  get activeControl() { return this.searchForm.get("active") as UntypedFormControl;}
 
   get PaginationPageSize(): number {return this.pageSize;  }
   get gridAPI(): GridApi {  return this.gridApi;  }
@@ -138,7 +138,7 @@ export class PackageListComponent implements OnInit {
 
   constructor(  private _snackBar: MatSnackBar,
                 private router: Router,
-                private fb: FormBuilder,
+                private fb: UntypedFormBuilder,
                 private dialog: MatDialog,
                 private agGridService         : AgGridService,
                 private agGridFormatingService: AgGridFormatingService,

@@ -7,7 +7,7 @@ import { IMenuButtonGroups, MBMenuButtonsService, mb_MenuButton } from 'src/app/
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Subscription, switchMap } from 'rxjs';
 import { IUser } from 'src/app/_interfaces';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-function-group-edit',
@@ -23,7 +23,7 @@ index            : number;
 
 user              : IUser;
 _user             : Subscription;
-inputForm         : FormGroup;
+inputForm         : UntypedFormGroup;
 initSubscription() {
   this._user = this.authenticationService.user$.subscribe( data => {
     this.user = data
@@ -36,7 +36,7 @@ constructor(
     public route                 : ActivatedRoute,
     private authenticationService: AuthenticationService,
     private router: Router,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private _snackBar            : MatSnackBar){
 }
 

@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, } from '@angular/core';
 import { FbItemTypeService } from 'src/app/_form-builder/fb-item-type.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
-import { FormBuilder, FormControl, FormGroup,} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,} from '@angular/forms';
 import { ActivatedRoute,  } from '@angular/router';
 import { MatSnackBar} from '@angular/material/snack-bar';
 import { Observable,  } from 'rxjs';
@@ -20,7 +20,7 @@ import { IItemBasic, MenuService } from 'src/app/_services';
   styleUrls: ['./item-type-editor.component.scss']
 })
 export class ItemTypeEditorComponent implements OnInit  {
-  searchForm:                FormGroup;
+  searchForm:                UntypedFormGroup;
 
   wicEBTList        = [{id: 0, name: 'NONE'},{id: 1, name: 'WIC'},{id: 2, name: 'EBT'},{id: 2, name: 'WIC and EBT'}]
   taxesSetting      = [{id: 0, name: 'Never'},{id: 1, name: 'Taxable'},{id: 2, name: 'According To Transaction'}]
@@ -29,7 +29,7 @@ export class ItemTypeEditorComponent implements OnInit  {
   itemType          : IItemType;
   id                : any;
   selected          : any;
-  inputForm         : FormGroup;
+  inputForm         : UntypedFormGroup;
   itemType$         : Observable<IItemType>;
   selectedItemsCount: number;
   itemType_PackageTypes = this.itemTypeService.packageType;
@@ -54,7 +54,7 @@ export class ItemTypeEditorComponent implements OnInit  {
   metrcCategories$ : Observable<METRCItemsCategories[]>;
 
   constructor(
-      private fb: FormBuilder,
+      private fb: UntypedFormBuilder,
       private fbItemTypeService: FbItemTypeService,
       private itemTypeService: ItemTypeService,
       private menuService: MenuService,
@@ -116,7 +116,7 @@ export class ItemTypeEditorComponent implements OnInit  {
     this.initSearchForm();
   }
 
-  initializeForm(id: any, form: FormGroup)  {
+  initializeForm(id: any, form: UntypedFormGroup)  {
     if (form && id) {
       const site = this.siteService.getAssignedSite();
       this.itemType$ = this.itemTypeService.getItemType(site, id)
@@ -174,18 +174,18 @@ export class ItemTypeEditorComponent implements OnInit  {
     }
   }
 
-  validateAllFormFields(formGroup: FormGroup) {         //{1}
+  validateAllFormFields(formGroup: UntypedFormGroup) {         //{1}
     Object.keys(formGroup.controls).forEach(field => {  //{2}
       const control = formGroup.get(field);             //{3}
-      if (control instanceof FormControl) {             //{4}
+      if (control instanceof UntypedFormControl) {             //{4}
         control.markAsTouched({ onlySelf: true });
-      } else if (control instanceof FormGroup) {        //{5}
+      } else if (control instanceof UntypedFormGroup) {        //{5}
         this.validateAllFormFields(control);            //{6}
       }
     });
   }
 
-  initFormFields(): FormGroup {
+  initFormFields(): UntypedFormGroup {
     this.inputForm  = this.fbItemTypeService.initForm(this.inputForm);
     return this.inputForm;
   }

@@ -3,7 +3,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISite } from 'src/app/_interfaces';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { PriceCategories } from 'src/app/_interfaces/menu/price-categories';
-import { FormBuilder, FormControl, FormGroup,  } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Subject ,fromEvent } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -18,9 +18,9 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect       = new EventEmitter();
   @Input() isInventory      : boolean;
-  @Input() inputForm        : FormGroup;
-  @Input() searchForm:        FormGroup;
-  @Input() searchField:       FormControl;
+  @Input() inputForm        : UntypedFormGroup;
+  @Input() searchForm:        UntypedFormGroup;
+  @Input() searchField:       UntypedFormControl;
   @Input() id               : number;
   @Input() name:              string;
   @Input() doNotPassName      :string;
@@ -53,7 +53,7 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
 
   get priceCategoryControl()  {
     const field = this.getField()
-    return this.inputForm.get(field) as FormControl
+    return this.inputForm.get(field) as UntypedFormControl
   };
 
   getField() {
@@ -66,7 +66,7 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
   constructor(
     public route           : ActivatedRoute,
     private priceCategories: PriceCategoriesService,
-    private fb             : FormBuilder,
+    private fb             : UntypedFormBuilder,
     private siteService    : SitesService,
     )
   {

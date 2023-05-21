@@ -13,7 +13,7 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { MatDialog } from '@angular/material/dialog';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Capacitor,  } from '@capacitor/core';
 import { Router } from '@angular/router';
 @Component({
@@ -26,10 +26,10 @@ export class FunctionGroupListComponent implements OnInit {
   gridDimensions  : any;
   menuButtonGroups: IMenuButtonGroups[];
   menuButtonGroup : IMenuButtonGroups;
-  searchForm      : FormGroup;
+  searchForm      : UntypedFormGroup;
   get itemName() {
     if (this.searchForm) {
-      return this.searchForm.get("itemName") as FormControl;
+      return this.searchForm.get("itemName") as UntypedFormControl;
     }
   }
 
@@ -55,7 +55,7 @@ export class FunctionGroupListComponent implements OnInit {
   recordCount             = 0;
   isfirstpage            : boolean;
   islastpage             : boolean;
-  inputForm              : FormGroup;
+  inputForm              : UntypedFormGroup;
   agtheme                = 'ag-theme-material';
   editOff       : boolean;
   buttonName    : string;
@@ -67,7 +67,7 @@ export class FunctionGroupListComponent implements OnInit {
   constructor(
               private _snackBar              : MatSnackBar,
               private agGridService          : AgGridService,
-              private fb                     : FormBuilder,
+              private fb                     : UntypedFormBuilder,
               private siteService            : SitesService,
               private productEditButtonService: ProductEditButtonService,
               private agGridFormatingService : AgGridFormatingService,

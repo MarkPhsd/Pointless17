@@ -1,6 +1,6 @@
 import { Component,  Inject,  Input, Output,OnChanges, OnInit, Optional, ViewChild ,ElementRef,
   AfterViewInit, EventEmitter } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
@@ -28,7 +28,7 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
   @Output() itemSelect  = new EventEmitter();
 
   searchPhrase:         Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
   searchItems$              : Subject<IProductSearchResults[]> = new Subject();
@@ -40,8 +40,8 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
     )
   )
 
-  @Input()  searchForm: FormGroup;
-  @Input()  inputForm : FormGroup;
+  @Input()  searchForm: UntypedFormGroup;
+  @Input()  inputForm : UntypedFormGroup;
   @Input()  item      : IPriceSchedule;
   lastSelectedItem    : DiscountInfo;
   itemDiscounts       : DiscountInfo[] = [];
@@ -77,8 +77,8 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
   //AgGrid
   agtheme = 'ag-theme-material';
 
-  get itemDiscountsControl() : FormArray {
-    return this.inputForm.get('discountItems') as FormArray;
+  get itemDiscountsControl() : UntypedFormArray {
+    return this.inputForm.get('discountItems') as UntypedFormArray;
   }
 
   _priceSchedule              : Subscription;
@@ -95,7 +95,7 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
   constructor(
     private menuService             : MenuService,
     private siteService             : SitesService,
-    private fb                      : FormBuilder,
+    private fb                      : UntypedFormBuilder,
     private agGridService           : AgGridFormatingService,
     private fbPriceScheduleService  : FbPriceScheduleService,
     private priceScheduleDataService: PriceScheduleDataService,
@@ -359,7 +359,7 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
     this.selected = selected
   }
 
-  removeItemFB(inputForm: FormGroup, item: DiscountInfo, index: number) {
+  removeItemFB(inputForm: UntypedFormGroup, item: DiscountInfo, index: number) {
     if (!inputForm || !item) {return}
     this.item.requiredItems = this.itemDiscounts;
     let i = 0

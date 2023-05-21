@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FbItemTypeService } from 'src/app/_form-builder/fb-item-type.service';
 import { FlatRateTaxValue, FlatRateTax } from 'src/app/_services/menu/item-type.service';
-import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { MatSnackBar} from '@angular/material/snack-bar';
@@ -25,10 +25,10 @@ export class TaxEditComponent {
   id:                any;
   taxRate:           TaxRate;
   taxes$:            Observable<TaxRate>;
-  inputForm:         FormGroup;
+  inputForm:         UntypedFormGroup;
 
   constructor(
-      private fb: FormBuilder,
+      private fb: UntypedFormBuilder,
       private taxesService: TaxesService,
       private router: Router,
       public route: ActivatedRoute,
@@ -69,7 +69,7 @@ export class TaxEditComponent {
     }
   }
 
-  initializeForm(id: any, form: FormGroup)  {
+  initializeForm(id: any, form: UntypedFormGroup)  {
     if (form && this.id) {
       const site = this.siteService.getAssignedSite();
       this.taxes$ = this.taxesService.getTaxRate(site,id)

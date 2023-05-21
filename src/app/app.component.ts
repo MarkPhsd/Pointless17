@@ -3,7 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { AuthenticationService, AWSBucketService, DevService } from './_services';
 import { IUser }  from 'src/app/_interfaces';
 import { fadeInAnimation } from './_animations';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { Platform, IonRouterOutlet, ToastController } from '@ionic/angular';
 import { LicenseManager} from "ag-grid-enterprise";
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -40,7 +40,7 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
   countdown?: number = null;
   lastPing?: Date = null;
 
-  toggleTheme = new FormControl(false);
+  toggleTheme = new UntypedFormControl(false);
   user: IUser;
   _user: Subscription;
   _keyboardVisible: Subscription;

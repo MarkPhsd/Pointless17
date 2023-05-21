@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
@@ -59,7 +59,7 @@ export class SendGridService {
 
   constructor(
     private http: HttpClient,
-    private _fb: FormBuilder,
+    private _fb: UntypedFormBuilder,
     private matSnack : MatSnackBar,
     private siteService: SitesService,
   )

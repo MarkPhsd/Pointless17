@@ -3,7 +3,7 @@ import { Component,Output,OnInit,
           EventEmitter,OnDestroy, AfterViewInit,
           } from '@angular/core';
 import { MenuService, OrdersService } from 'src/app/_services';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap, map, concatMap } from 'rxjs/operators';
 import { Subject ,fromEvent, Subscription, of, forkJoin, ReplaySubject } from 'rxjs';
 import { IPOSOrder,  } from 'src/app/_interfaces';
@@ -37,10 +37,10 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   action$: Observable<unknown>;
 
   searchPhrase:  Subject<unknown> = new Subject();
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
-  searchForm          : FormGroup;
+  searchForm          : UntypedFormGroup;
   keyboardOption      = false;
   keyboardDisplayOn   = false;
   toggleButton        = 'toggle-buttons-wide';
@@ -106,7 +106,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   }
 
   constructor(
-    private fb             :        FormBuilder,
+    private fb             :        UntypedFormBuilder,
     private orderService   :        OrdersService,
     private menuItemService :       MenuService,
     private orderMethodService    : OrderMethodsService,

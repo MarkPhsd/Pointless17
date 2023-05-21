@@ -1,5 +1,5 @@
 import { Component, OnInit,Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { IItemType } from 'src/app/_services/menu/item-type.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { IItemType } from 'src/app/_services/menu/item-type.service';
 })
 export class ItemTypeTogglesEditComponent implements OnInit {
 
-  @Input() inputForm: FormGroup;
+  @Input() inputForm: UntypedFormGroup;
   @Input() itemType: IItemType;
 
   constructor() { }

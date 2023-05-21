@@ -1,6 +1,6 @@
 // input-tracker.service.ts
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
@@ -8,8 +8,8 @@ import { BehaviorSubject } from 'rxjs';
 export class InputTrackerService {
 
   private renderer: Renderer2;
-  public _lastSelectedInput: FormControl | null = null;
-  private inputControlsMap: Map<string, FormControl> = new Map();
+  public _lastSelectedInput: UntypedFormControl | null = null;
+  private inputControlsMap: Map<string, UntypedFormControl> = new Map();
 
   public _fieldChanged        = new BehaviorSubject<boolean>(null);
   public _fieldChanged$         = this._fieldChanged.asObservable();
@@ -21,11 +21,11 @@ export class InputTrackerService {
     this.listenForFocusEvents();
   }
 
-  get lastSelectedInput(): FormControl | null {
+  get lastSelectedInput(): UntypedFormControl | null {
     return this._lastSelectedInput;
   }
 
-  setLastSelectedInput(input: FormControl): void {
+  setLastSelectedInput(input: UntypedFormControl): void {
     this._lastSelectedInput = input;
   }
 
@@ -37,7 +37,7 @@ export class InputTrackerService {
     }
   }
 
-  registerFormControl(id: string, control: FormControl): void {
+  registerFormControl(id: string, control: UntypedFormControl): void {
     this.inputControlsMap.set(id, control);
   }
 
@@ -52,7 +52,7 @@ export class InputTrackerService {
         const controlId = target.getAttribute('data-ng-control-id');
         const formControl = this.inputControlsMap.get(controlId);
         this._fieldChanged.next(true);
-        if (formControl instanceof FormControl) {
+        if (formControl instanceof UntypedFormControl) {
           // console.log('Next Control Value', formControl.value)
           this._fieldValue.next(formControl.value)
           this.setLastSelectedInput(formControl);

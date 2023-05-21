@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { IPriceSchedule, PriceAdjustScheduleTypes } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -14,7 +14,7 @@ import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-
 export class DiscountOptionsComponent implements OnInit, OnChanges {
 
   @Input()  item:                IPriceSchedule;
-  @Input()  inputForm:           FormGroup;
+  @Input()  inputForm:           UntypedFormGroup;
   name    : string;
   active  : boolean;
   autoApplyRewards: boolean;

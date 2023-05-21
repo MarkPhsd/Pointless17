@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output, HostListener } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
 import { map, Observable, of, switchMap} from 'rxjs';
@@ -95,7 +95,7 @@ export class POSSplitItemsComponent implements OnInit {
 
     availableItems: Array<IListBoxItem> = [];
     selectedItems : Array<IListBoxItem> = [];
-    listBoxForm   : FormGroup;
+    listBoxForm   : UntypedFormGroup;
 
     filterGroup(item: PosOrderItem, groupValue: number) {
       if (!item.splitGroupID) return false;
@@ -115,7 +115,7 @@ export class POSSplitItemsComponent implements OnInit {
       private orderService: OrdersService,
       public printingService: PrintingService,
       private matSnack   : MatSnackBar,
-      public fb: FormBuilder) {
+      public fb: UntypedFormBuilder) {
       this.listBoxForm = this.fb.group({
         availableSearchInput: [''],
         selectedSearchInput:  [''],

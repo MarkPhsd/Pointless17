@@ -10,7 +10,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { ElectronService } from 'ngx-electron';
 import { IPagedList } from 'src/app/_services/system/paging.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -114,9 +114,9 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
   startRow    : number;
   endRow      : number;
 
-  searchForm       : FormGroup;
+  searchForm       : UntypedFormGroup;
   searchPhrase     :         Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
   placeHolderImage   : String = "assets/images/placeholderimage.png"
 
@@ -165,7 +165,7 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
 
   constructor(
       private platformService: PlatformService,
-      private fb             : FormBuilder,
+      private fb             : UntypedFormBuilder,
       private router         : Router,
       private siteService    : SitesService,
       private contactsService: ContactsService,

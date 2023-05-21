@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, OnInit, ViewChild, Output, HostListener } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of, Subject, Subscription  } from 'rxjs';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { InventoryAssignmentService, IInventoryAssignment, InventoryFilter, InventorySearchResultsPaged, InventoryStatusList } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ISite, IUserProfile } from 'src/app/_interfaces';
@@ -38,7 +38,7 @@ export class ManifestsComponent implements OnInit {
   item:                 string;
   search:               string;
   searchPhrase:         Subject<any> = new Subject();
-  public searchForm: FormGroup;
+  public searchForm: UntypedFormGroup;
   inventoryManifests$             : Subject<InventoryManifest[]> = new Subject();
 
   @ViewChild('input', {static: true}) input: ElementRef;
@@ -47,7 +47,7 @@ export class ManifestsComponent implements OnInit {
   get itemName() {
     if (!this.searchForm) { this.initForm()}
     if (this.searchForm) {
-      return this.searchForm.get("itemName") as FormControl;
+      return this.searchForm.get("itemName") as UntypedFormControl;
     }
   }
 
@@ -93,7 +93,7 @@ export class ManifestsComponent implements OnInit {
   )
 
   //search form filters
-  inputForm        : FormGroup;
+  inputForm        : UntypedFormGroup;
   productTypeID    : number;
   typeID           : number;
   brandID          : number;
@@ -119,14 +119,14 @@ export class ManifestsComponent implements OnInit {
   inventoryLocation:    IInventoryLocation;
   inventoryLocationID:  number;
 
-  get searchProductsValue() { return this.searchForm.get("searchProducts") as FormControl;}
-  get selectedSiteValue()   { return this.searchForm.get("selectedSiteID") as FormControl;}
+  get searchProductsValue() { return this.searchForm.get("searchProducts") as UntypedFormControl;}
+  get selectedSiteValue()   { return this.searchForm.get("selectedSiteID") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
   constructor(private _snackBar: MatSnackBar,
               private inventoryAssignmentService: InventoryAssignmentService,
               private inventoryManifestService: ManifestInventoryService,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               private siteService: SitesService,
               private locationService: InventoryLocationsService,
               private inventoryEditButon     : InventoryEditButtonService,

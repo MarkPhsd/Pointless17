@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'activity-toggles-metrc',
@@ -7,7 +7,7 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./activity-toggles-metrc.component.scss']
 })
 export class ActivityTogglesMetrcComponent  {
-  @Input()  inputForm:      FormGroup;
+  @Input()  inputForm:      UntypedFormGroup;
   constructor() { }
 
 

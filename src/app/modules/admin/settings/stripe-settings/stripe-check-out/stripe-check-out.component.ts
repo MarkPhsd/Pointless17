@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild , OnDestroy, Input, Output,EventEmitter, Inject, TemplateRef, Optional, ElementRef} from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { StripeService, StripeCardComponent, StripeInstance, StripePaymentElementComponent } from 'ngx-stripe';
 import {
   StripeCardElementOptions,
@@ -39,7 +39,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
   order  : IPOSOrder;
   _order : Subscription;
 
-  paymentForm      : FormGroup;
+  paymentForm      : UntypedFormGroup;
   stripeCardValid  = false;
   result: any;
   token: any;
@@ -164,7 +164,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
                 @Inject(MAT_DIALOG_DATA) public data: any,
                 private uISettingsService: UISettingsService,
                 private matSnack         : MatSnackBar,
-                private fb               : FormBuilder,
+                private fb               : UntypedFormBuilder,
                 private stripeService    : StripeService,
                 private orderService     : OrdersService,
                 private posPaymentService   : POSPaymentService,

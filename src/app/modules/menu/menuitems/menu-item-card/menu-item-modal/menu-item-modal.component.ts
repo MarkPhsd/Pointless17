@@ -4,7 +4,7 @@ import { IMenuItem  }  from 'src/app/_interfaces/menu/menu-products';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, Subject, Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Gallery, GalleryItem, ImageItem } from '@ngx-gallery/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog'
@@ -26,10 +26,10 @@ export class MenuItemModalComponent implements OnInit, OnDestroy {
 
   @Input() fileName: string;
   get platForm() {  return Capacitor.getPlatform(); }
-  get fQuantity() { return this.productForm.get("quantity") as FormControl;}
-  get formProduct() { return this.productForm as FormGroup;}
+  get fQuantity() { return this.productForm.get("quantity") as UntypedFormControl;}
+  get formProduct() { return this.productForm as UntypedFormGroup;}
   get f() { return this.productForm;}
-  productForm:            FormGroup;
+  productForm:            UntypedFormGroup;
   quantity:               number;
   id:                     string;
 
@@ -53,7 +53,7 @@ export class MenuItemModalComponent implements OnInit, OnDestroy {
         private sanitizer         : DomSanitizer,
         private orderService      : OrdersService,
         private _snackBar         : MatSnackBar,
-        private fb                : FormBuilder,
+        private fb                : UntypedFormBuilder,
         public gallery            : Gallery,
         private siteService       : SitesService,
         private brandService      : ClientTableService,

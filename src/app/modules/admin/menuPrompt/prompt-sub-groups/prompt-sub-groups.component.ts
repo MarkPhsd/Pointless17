@@ -6,7 +6,7 @@ import { AWSBucketService} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -36,7 +36,7 @@ export class PromptSubGroupsComponent implements OnInit, AfterViewInit {
 
   searchModel : MenuPromptSearchModel;
   searchPhrase:         Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
   // //search with debounce
@@ -76,8 +76,8 @@ export class PromptSubGroupsComponent implements OnInit, AfterViewInit {
   islastpage              :boolean;
 
   //search form filters
-  searchForm      : FormGroup;
-  inputForm       : FormGroup;
+  searchForm      : UntypedFormGroup;
+  inputForm       : UntypedFormGroup;
 
   selected        : any[];
   selectedRows    : any;
@@ -99,7 +99,7 @@ export class PromptSubGroupsComponent implements OnInit, AfterViewInit {
                 private promptService          : PromptSubGroupsService,
                 private promptGroupservice     : PromptGroupService,
                 private agGridService          : AgGridService,
-                private fb                     : FormBuilder,
+                private fb                     : UntypedFormBuilder,
                 private siteService            : SitesService,
                 private productEditButtonService: ProductEditButtonService,
                 private agGridFormatingService : AgGridFormatingService,

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { IInventoryAssignment } from '../_services/inventory/inventory-assignment.service';
 @Injectable({
   providedIn: 'root'
 })
 export class FbInventoryService {
-  constructor(private _fb: FormBuilder) { }
+  constructor(private _fb: UntypedFormBuilder) { }
 
-  initForm(fb: FormGroup): FormGroup {
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
       id:                    [],
       manifestID            :[],
@@ -94,7 +94,7 @@ export class FbInventoryService {
     return fb;
   }
 
-  setItemValues(item: IInventoryAssignment, inputForm: FormGroup): IInventoryAssignment {
+  setItemValues(item: IInventoryAssignment, inputForm: UntypedFormGroup): IInventoryAssignment {
     if (inputForm.valid) {
       //first we set the value of the product from the form.
       //then we can set values that aren't filled. we can do this in the api or on the app?
@@ -103,7 +103,7 @@ export class FbInventoryService {
     }
   }
 
-  intitFormData(inputForm: FormGroup, data: IInventoryAssignment) {
+  intitFormData(inputForm: UntypedFormGroup, data: IInventoryAssignment) {
     inputForm.patchValue(data)
     return inputForm
   }

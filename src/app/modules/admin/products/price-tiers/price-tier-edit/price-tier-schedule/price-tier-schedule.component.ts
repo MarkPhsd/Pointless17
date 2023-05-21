@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormGroupDirective } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, FormGroupDirective } from '@angular/forms';
 
 @Component({
   selector: 'price-tier-schedule',
@@ -9,13 +9,13 @@ import { FormBuilder, FormGroup, FormGroupDirective } from '@angular/forms';
 export class PriceTierScheduleComponent implements OnInit {
 
   @Input() showTime = false;
-  @Input() inputForm: FormGroup;
+  @Input() inputForm: UntypedFormGroup;
   @Input() formGroupName: any;
 
-  childForm: FormGroup;
+  childForm: UntypedFormGroup;
 
   constructor(
-    private _fb: FormBuilder,
+    private _fb: UntypedFormBuilder,
     private parentF: FormGroupDirective) { }
 
   ngOnInit() {

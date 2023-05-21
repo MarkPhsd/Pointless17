@@ -4,7 +4,7 @@ import { IMenuItem,   }  from 'src/app/_interfaces/menu/menu-products';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, Subject, Subscription } from 'rxjs';
 import { DomSanitizer, Title } from '@angular/platform-browser';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location} from '@angular/common';
 import { IClientTable, IPOSOrder, IUserProfile } from 'src/app/_interfaces';
@@ -34,10 +34,10 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     @Input() fileName: string;
     @Output() outputExitForm = new EventEmitter<any>();
 
-    get fQuantity() { return this.productForm.get("quantity") as FormControl;}
-    get formProduct() { return this.productForm as FormGroup;}
+    get fQuantity() { return this.productForm.get("quantity") as UntypedFormControl;}
+    get formProduct() { return this.productForm as UntypedFormGroup;}
     get f() { return this.productForm;}
-    productForm:            FormGroup;
+    productForm:            UntypedFormGroup;
     quantity:               number;
     id:                     string;
     action$  : Observable<any>;
@@ -73,7 +73,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
           private sanitizer         : DomSanitizer,
           private orderService      : OrdersService,
           private _snackBar         : MatSnackBar,
-          private fb                : FormBuilder,
+          private fb                : UntypedFormBuilder,
           private siteService       : SitesService,
           private brandService      : ClientTableService,
           private location          : Location,

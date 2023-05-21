@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { GridsterDataService } from 'src/app/_services/gridster/gridster-data.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -25,14 +25,14 @@ export class GridManagerEditComponent implements OnInit {
                       "saturation","color","luminosity" ]
   types = ['Menu', 'Report', 'Seating/Table Layout', 'Order']
   id          : number;
-  inputForm   : FormGroup;
+  inputForm   : UntypedFormGroup;
   bucketName  : string;
   awsBucketURL: string;
 
   dashboardModel : DashboardModel;
   dashboardModel$: Observable<DashboardModel>;
 
-  inputProperties: FormGroup;
+  inputProperties: UntypedFormGroup;
   dashBoardProperties: DashBoardProperties;
   backgroundColor: string;
   opacity: number;
@@ -45,7 +45,7 @@ export class GridManagerEditComponent implements OnInit {
               private dialogRef          : MatDialogRef<GridManagerEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private dialog             : MatDialog,
-              private fb                 : FormBuilder,
+              private fb                 : UntypedFormBuilder,
 
   ) {
 

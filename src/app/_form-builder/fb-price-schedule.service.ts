@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, UntypedFormArray } from '@angular/forms';
 import { IPriceSchedule, DateFrame, TimeFrame, OrderType, DiscountInfo  } from '../_interfaces/menu/price-schedule';
 import { DatePipe } from '@angular/common';
 import { PriceScheduleDataService } from '../_services/menu/price-schedule-data.service';
@@ -25,12 +25,12 @@ import { PriceScheduleDataService } from '../_services/menu/price-schedule-data.
 export class FbPriceScheduleService {
 
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
              private datePipe: DatePipe,
               private priceScheduledataService: PriceScheduleDataService,
       ) { }
 
-  getFormValue(item: IPriceSchedule, inputForm: FormGroup): IPriceSchedule {
+  getFormValue(item: IPriceSchedule, inputForm: UntypedFormGroup): IPriceSchedule {
 
     if (inputForm.valid) {
       item = inputForm.value;
@@ -40,7 +40,7 @@ export class FbPriceScheduleService {
     return item
   }
 
-  setValues(item: IPriceSchedule, inputForm: FormGroup): FormGroup {
+  setValues(item: IPriceSchedule, inputForm: UntypedFormGroup): UntypedFormGroup {
 
     if (inputForm.valid) {
       inputForm.patchValue(item);
@@ -52,7 +52,7 @@ export class FbPriceScheduleService {
   }
 
 
-  initSearchForm(form: FormGroup) {
+  initSearchForm(form: UntypedFormGroup) {
     form = this.fb.group( {
       itemName        : [''],//  [this.itemName],
       allDates        : [''],//  [this.allDates],
@@ -67,7 +67,7 @@ export class FbPriceScheduleService {
 
   }
   // ClientType, IPriceSchedule, WeekDay , DateFrame, TimeFrame, OrderType, DiscountOption
-  initForm(inputForm: FormGroup): FormGroup {
+  initForm(inputForm: UntypedFormGroup): UntypedFormGroup {
     inputForm = this.fb.group({
       id             : [''],
       allEligible:     [true],
@@ -122,28 +122,28 @@ export class FbPriceScheduleService {
 
   }
 
-  setClientTypeValues(inputForm: FormGroup, items: any) {
+  setClientTypeValues(inputForm: UntypedFormGroup, items: any) {
     this.setArrayValue(inputForm, items, 'clientTypes', 'clientTypeID')
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
-  setOrderTypeValues(inputForm: FormGroup, items: any) {
+  setOrderTypeValues(inputForm: UntypedFormGroup, items: any) {
     this.setArrayValue(inputForm, items, 'orderTypes', 'orderTypeID')
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
   //set fields
-  setValue(inputForm: FormGroup, fieldName: string, value: any) {
+  setValue(inputForm: UntypedFormGroup, fieldName: string, value: any) {
     inputForm.setValue({
       fieldName: value
     });
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
-  setArrayValue(inputForm: FormGroup, items: any, controlName: string, itemName: string) {
+  setArrayValue(inputForm: UntypedFormGroup, items: any, controlName: string, itemName: string) {
     if (!inputForm) { return }
     if (items) {
       try {
-        const control = inputForm.get(controlName) as FormArray;
+        const control = inputForm.get(controlName) as UntypedFormArray;
         if (!control)   { return }
         if (control) {
           control.clear();
@@ -175,7 +175,7 @@ export class FbPriceScheduleService {
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
-  initFormData(inputForm: FormGroup, priceSchedule: IPriceSchedule) {
+  initFormData(inputForm: UntypedFormGroup, priceSchedule: IPriceSchedule) {
 
     inputForm.patchValue(priceSchedule)
     this.updateDiscountInfos(inputForm, priceSchedule)
@@ -188,7 +188,7 @@ export class FbPriceScheduleService {
 
   }
 
-  updateDiscountInfos(inputForm: FormGroup, priceSchedule: IPriceSchedule) {
+  updateDiscountInfos(inputForm: UntypedFormGroup, priceSchedule: IPriceSchedule) {
     this.addRequiredBrands(inputForm, priceSchedule.requiredBrands)
     this.addRequiredCategories(inputForm, priceSchedule.requiredCategories)
     this.addRequiredItemTypes(inputForm, priceSchedule.requiredItemTypes)
@@ -201,37 +201,37 @@ export class FbPriceScheduleService {
   }
 
 
-  addDiscountCategories(inputForm: FormGroup, info: DiscountInfo[]) {
+  addDiscountCategories(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues( inputForm, info, 'categoryDiscounts' )
   }
-  addDiscountItemTypes(inputForm: FormGroup, info: DiscountInfo[]) {
+  addDiscountItemTypes(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues(inputForm, info, "itemTypeDiscounts")
   }
-  addDiscountItems(inputForm: FormGroup, info: DiscountInfo[]) {
+  addDiscountItems(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues(inputForm, info, "itemDiscounts")
   }
-  addDiscountBrands(inputForm: FormGroup, info: DiscountInfo[]) {
+  addDiscountBrands(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues(inputForm, info,  "brandDiscounts")
   }
 
-  addRequiredCategories(inputForm: FormGroup, info: DiscountInfo[]) {
+  addRequiredCategories(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues( inputForm, info, 'requiredCategories' )
   }
-  addRequiredItemTypes(inputForm: FormGroup, info: DiscountInfo[]) {
+  addRequiredItemTypes(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues(inputForm, info,  "requiredItemTypes")
   }
-  addRequiredItems(inputForm: FormGroup, info: DiscountInfo[]) {
+  addRequiredItems(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues(inputForm, info, "requiredItems")
   }
-  addRequiredBrands(inputForm: FormGroup, info: DiscountInfo[]) {
+  addRequiredBrands(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues(inputForm, info ,  "requiredBrands")
   }
 
-  setDiscountInfoValues(inputForm: FormGroup, items: DiscountInfo[], formArrayName: string) {
+  setDiscountInfoValues(inputForm: UntypedFormGroup, items: DiscountInfo[], formArrayName: string) {
     if (!inputForm) { return }
     if (items) {
       try {
-        const control = inputForm.get(formArrayName) as FormArray;
+        const control = inputForm.get(formArrayName) as UntypedFormArray;
         if (!control)  { return }
         if (control) { control.clear(); }
 
@@ -255,7 +255,7 @@ export class FbPriceScheduleService {
   addArray(inputForm, controlName: string, array: any[]) {
     if (!inputForm) { return }
     try {
-      const control = inputForm.get(controlName) as FormArray;
+      const control = inputForm.get(controlName) as UntypedFormArray;
       control.clear()
       array.forEach( data =>  {
         control.push(this.fb.control(data))
@@ -267,35 +267,35 @@ export class FbPriceScheduleService {
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
-  addDiscountCategory(inputForm: FormGroup, info: DiscountInfo) {
+  addDiscountCategory(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, "categoryDiscounts")
   }
-  addDiscountItemType(inputForm: FormGroup, info: DiscountInfo) {
+  addDiscountItemType(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, "itemTypeDiscounts")
   }
-  addDiscountItem(inputForm: FormGroup, info: DiscountInfo) {
+  addDiscountItem(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, "itemDiscounts")
   }
-  addDiscountBrand(inputForm: FormGroup, info: DiscountInfo) {
+  addDiscountBrand(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, "brandDiscounts")
   }
-  addRequiredCategory(inputForm: FormGroup, info: DiscountInfo) {
+  addRequiredCategory(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, "requiredCategories")
   }
-  addRequiredItemType(inputForm: FormGroup, info: DiscountInfo) {
+  addRequiredItemType(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, "requiredItemTypes")
   }
-  addRequiredItem(inputForm: FormGroup, info: DiscountInfo) {
+  addRequiredItem(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, "requiredItems")
   }
-  addRequiredBrand(inputForm: FormGroup, info: DiscountInfo) {
+  addRequiredBrand(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, "requiredBrands")
   }
 
-  addDiscountInfo(inputForm: FormGroup, info: DiscountInfo, controlName: string) {
+  addDiscountInfo(inputForm: UntypedFormGroup, info: DiscountInfo, controlName: string) {
 
     if (!inputForm) { return }
-    const control = inputForm.get(controlName) as FormArray;
+    const control = inputForm.get(controlName) as UntypedFormArray;
     if (!control)  { return }
 
     if (info) {
@@ -332,11 +332,11 @@ export class FbPriceScheduleService {
   // }
 
 
-  addClientTypes(inputForm: FormGroup, items: any[]) {
+  addClientTypes(inputForm: UntypedFormGroup, items: any[]) {
     // this.addArray(inputForm, 'clientTypes', clientTypes)
 
     if (!inputForm) { return }
-    const control = inputForm.get('clientTypes') as FormArray;
+    const control = inputForm.get('clientTypes') as UntypedFormArray;
     if (!control)  { return }
     if (control) { control.clear(); }
     if (items) {
@@ -353,11 +353,11 @@ export class FbPriceScheduleService {
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
-  addOrderTypes(inputForm: FormGroup, items: OrderType[]) {
+  addOrderTypes(inputForm: UntypedFormGroup, items: OrderType[]) {
     // this.addArray(inputForm, 'clientTypes', clientTypes)
 
     if (!inputForm) { return }
-    const control = inputForm.get('orderTypes') as FormArray;
+    const control = inputForm.get('orderTypes') as UntypedFormArray;
     if (!control)  { return }
     control.clear()
     if (!items) { return }
@@ -375,10 +375,10 @@ export class FbPriceScheduleService {
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
-  addTimeRanges(inputForm: FormGroup, items: TimeFrame[]) {
+  addTimeRanges(inputForm: UntypedFormGroup, items: TimeFrame[]) {
     try {
       if (!inputForm) { return }
-      const control = inputForm.get('timeFrames') as FormArray;
+      const control = inputForm.get('timeFrames') as UntypedFormArray;
       if (!control)   { return }
       control.clear()
       if (!items) { return }
@@ -398,10 +398,10 @@ export class FbPriceScheduleService {
   }
 
 
-  addDateRanges(inputForm: FormGroup, items: DateFrame[]) {
+  addDateRanges(inputForm: UntypedFormGroup, items: DateFrame[]) {
     try {
       if (!inputForm) { return }
-      const control = inputForm.get('dateFrames') as FormArray;
+      const control = inputForm.get('dateFrames') as UntypedFormArray;
       if (!control)   { return }
       control.clear()
       if (!items) { return }
@@ -421,12 +421,12 @@ export class FbPriceScheduleService {
   }
 
   // WeekDay[]
-  setWeekDayArray(inputForm: FormGroup, items: any[]) {
+  setWeekDayArray(inputForm: UntypedFormGroup, items: any[]) {
     //clean this up later, not too much importance, but could be more reduced.
     // this.setArrayValue(inputForm, items, 'weekDays', 'name')
     if (!inputForm) { return }
     try {
-      const control = inputForm.get('weekDays') as FormArray;
+      const control = inputForm.get('weekDays') as UntypedFormArray;
       if (!control)   { return }
       control.clear();
       if (!items) { return }
@@ -443,9 +443,9 @@ export class FbPriceScheduleService {
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
-  addTimeRange(inputForm: FormGroup, timeFrame: TimeFrame) {
+  addTimeRange(inputForm: UntypedFormGroup, timeFrame: TimeFrame) {
     if (!inputForm) { return }
-    const control = inputForm.get('timeFrames') as FormArray;
+    const control = inputForm.get('timeFrames') as UntypedFormArray;
     if (!control)   { return }
 
     control.push(this.fb.group({
@@ -456,10 +456,10 @@ export class FbPriceScheduleService {
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
-  addDateRange(inputForm: FormGroup, dateFrame: DateFrame) {
+  addDateRange(inputForm: UntypedFormGroup, dateFrame: DateFrame) {
     try {
       if (!inputForm) { return }
-      const control  = inputForm.get('dateFrames') as FormArray;
+      const control  = inputForm.get('dateFrames') as UntypedFormArray;
       if (!control)   { return }
       const pipe = new DatePipe('en-US');
       if (dateFrame){
@@ -494,39 +494,39 @@ export class FbPriceScheduleService {
     })
   }
 
-  deleteFrame(i: number, inputForm: FormGroup) {
+  deleteFrame(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, 'timeFrames')
   }
-  deleteDateFrame(i: number, inputForm: FormGroup) {
+  deleteDateFrame(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, 'dateFrames')
   }
-  deleteBrand(i: number, inputForm: FormGroup) {
+  deleteBrand(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, 'requiredBrands')
   }
-  deleteCategory(i: number, inputForm: FormGroup) {
+  deleteCategory(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, 'requiredCategories')
   }
-  deleteItem(i: number, inputForm: FormGroup) {
+  deleteItem(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, 'requiredItems')
   }
-  deleteItemType(i: number, inputForm: FormGroup) {
+  deleteItemType(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, 'requiredItemTypes')
   }
-  deleteDiscountBrand(i: number, inputForm: FormGroup) {
+  deleteDiscountBrand(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, 'brandDiscounts')
   }
-  deleteDiscountCategory(i: number, inputForm: FormGroup) {
+  deleteDiscountCategory(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, 'categoryDiscounts')
   }
-  deleteDiscountItem(i: number, inputForm: FormGroup) {
+  deleteDiscountItem(i: number, inputForm: UntypedFormGroup) {
     console.log('delete Item Discounts')
     this.deleteArrayItem(i, inputForm, 'itemDiscounts')
   }
-  deleteDiscountItemType(i: number, inputForm: FormGroup) {
+  deleteDiscountItemType(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, 'itemTypesDiscounts')
   }
-  deleteArrayItem(i: number, inputForm: FormGroup, controlName: string) {
-    const control = inputForm.get(controlName) as FormArray;
+  deleteArrayItem(i: number, inputForm: UntypedFormGroup, controlName: string) {
+    const control = inputForm.get(controlName) as UntypedFormArray;
     control.removeAt(i)
     // console.log(inputForm.value)
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)

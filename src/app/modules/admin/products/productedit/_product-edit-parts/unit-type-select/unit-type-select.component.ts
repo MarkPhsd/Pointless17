@@ -1,6 +1,6 @@
 import { Component, OnInit, Input , EventEmitter, Output, ViewChild, ElementRef, AfterViewInit, } from '@angular/core';
 import {  IProduct, ISite, ProductPrice,  } from 'src/app/_interfaces';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, of } from 'rxjs';
 import { ActivatedRoute,  } from '@angular/router';
@@ -22,23 +22,23 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
   unitTypes                   : UnitType[]
   @Input()  index             : number;
   @Input()  outputType        = ''
-  formfieldValue: FormGroup;
+  formfieldValue: UntypedFormGroup;
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
   itemNameInput: string; //for clear button
-  @Input() inputForm:         FormGroup;
-  @Input() searchForm:        FormGroup;
-  @Input() formGroupName: FormGroup
+  @Input() inputForm:         UntypedFormGroup;
+  @Input() searchForm:        UntypedFormGroup;
+  @Input() formGroupName: UntypedFormGroup
   // @Input() formGroupName: string
-  @Input() searchField:       FormControl;
+  @Input() searchField:       UntypedFormControl;
   @Input() id                 : number;
   @Input() name:              string;
   searchPhrase:               Subject<any> = new Subject();
   item:                       UnitType;
   site:                       ISite;
 
-  get searchControl()   { return this.inputForm.get("searchField") as FormControl};
+  get searchControl()   { return this.inputForm.get("searchField") as UntypedFormControl};
   @Input()  formFieldClass = 'mat-form-field form-background'
 
   results$ = this.searchPhrase.pipe(
@@ -77,7 +77,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
   }
 
   constructor(  private unitTypesService : UnitTypesService,
-                private fb               : FormBuilder,
+                private fb               : UntypedFormBuilder,
                 public  route            : ActivatedRoute,
                 private siteService      : SitesService,
                ) {

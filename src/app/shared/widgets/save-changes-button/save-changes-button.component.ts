@@ -1,5 +1,5 @@
 import { Component, OnInit,Input,Output, EventEmitter} from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 
 @Component({
@@ -9,7 +9,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class SaveChangesButtonComponent implements OnInit{
 
-  @Input() inputForm: FormGroup;
+  @Input() inputForm: UntypedFormGroup;
   @Output() updateSetting = new EventEmitter<any>();
   firstChange: boolean;
   changesMade: boolean;

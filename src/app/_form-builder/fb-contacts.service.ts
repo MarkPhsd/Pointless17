@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -7,14 +7,14 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 export class FbContactsService {
 
-  constructor(private _fb: FormBuilder) { }
+  constructor(private _fb: UntypedFormBuilder) { }
 
   //Usage
   // sampleFormControl = new FormControl('', [
   //     validateInput
   // ]);
 
-  validateLicenseType(c: FormControl){ //Dual Pattern Check
+  validateLicenseType(c: UntypedFormControl){ //Dual Pattern Check
     let oldPattern = '^[0-9]{2}-[0-9]{3}-[0-9]{3}-[A-Za-z]{2}$'; // Regular Expression 1
     let newPattern = '^\d{7}$'; // Regular Expression 2
     try {
@@ -25,7 +25,7 @@ export class FbContactsService {
     }
   }
 
-  initForm(fb: FormGroup): FormGroup {
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
 
     const oompPattern = "^[0-9]{2}-[0-9]{3}-[0-9]{3}-[A-Za-z]{2}$"
 

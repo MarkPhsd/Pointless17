@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { MenuService } from 'src/app/_services';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-species-list',
@@ -11,7 +11,7 @@ import { FormGroup } from '@angular/forms';
 
 export class SpeciesListComponent  {
 
-  @Input()  inputForm:   FormGroup;
+  @Input()  inputForm:   UntypedFormGroup;
 
   speciesTypes:     any[];
   speciesType:      string;

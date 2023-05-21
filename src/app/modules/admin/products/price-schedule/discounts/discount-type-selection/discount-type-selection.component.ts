@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { IPriceSchedule, PriceAdjustScheduleTypes } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -13,7 +13,7 @@ import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-
 })
 export class DiscountTypeSelectionComponent implements OnInit {
 
-  @Input()  inputForm        :   FormGroup;
+  @Input()  inputForm        :   UntypedFormGroup;
 
   priceAdjustScheduleTypes$  :   Observable<PriceAdjustScheduleTypes[]>;
   allItems                   :   boolean;
@@ -21,8 +21,8 @@ export class DiscountTypeSelectionComponent implements OnInit {
   selectedAdjustScheduleTypes:   PriceAdjustScheduleTypes;
   value: number;
 
-  get discountOptions() : FormArray {
-    return this.inputForm.get('discountOptions') as FormArray;
+  get discountOptions() : UntypedFormArray {
+    return this.inputForm.get('discountOptions') as UntypedFormArray;
   }
 
   _priceSchedule              : Subscription;

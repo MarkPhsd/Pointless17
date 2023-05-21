@@ -6,7 +6,7 @@ import { AWSBucketService} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, FormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -71,7 +71,7 @@ export class PromptSubGroupAssociationComponent implements OnInit {
 
   availableItems: Array<IListBoxItem> = [];
   selectedItems : Array<IListBoxItem> = [];
-  listBoxForm   : FormGroup;
+  listBoxForm   : UntypedFormGroup;
 
   //search with debounce: also requires AfterViewInit()
   @ViewChild('input', {static: true}) input: ElementRef;
@@ -96,7 +96,7 @@ export class PromptSubGroupAssociationComponent implements OnInit {
   constructor(  private _snackBar              : MatSnackBar,
                 private promptSubService       : PromptSubGroupsService,
                 private promptGroupService     : PromptGroupService,
-                private fb                     : FormBuilder,
+                private fb                     : UntypedFormBuilder,
                 private siteService            : SitesService,
                 )
   {

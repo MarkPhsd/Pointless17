@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService,} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
@@ -34,10 +34,10 @@ export class StoreCreditListComponent implements OnInit {
   gridlist = "grid-list"
   editOff = false;
     //needed for search component
-  searchForm:    FormGroup;
+  searchForm:    UntypedFormGroup;
   get itemName() {
     if (this.searchForm) {
-      return this.searchForm.get("itemName") as FormControl;
+      return this.searchForm.get("itemName") as UntypedFormControl;
     }
   }
 
@@ -89,7 +89,7 @@ export class StoreCreditListComponent implements OnInit {
     private storeCreditService     : StoreCreditService,
     private storeCreditMethodsService: StoreCreditMethodsService,
     private agGridService          : AgGridService,
-    private fb                     : FormBuilder,
+    private fb                     : UntypedFormBuilder,
     private siteService            : SitesService,
     private productEditButtonService: ProductEditButtonService,
     private agGridFormatingService : AgGridFormatingService,

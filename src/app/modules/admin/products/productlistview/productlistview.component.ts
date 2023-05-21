@@ -10,7 +10,7 @@ import { IItemBasicB, IProductSearchResultsPaged } from 'src/app/_services/menu/
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
@@ -50,10 +50,10 @@ buttonName: string; //if edit off then it's 'Assign'
 gridlist = "grid-list"
 
 //needed for search component
-searchForm:    FormGroup;
+searchForm:    UntypedFormGroup;
 get itemName() {
   if (this.searchForm) {
-    return this.searchForm.get("itemName") as FormControl;
+    return this.searchForm.get("itemName") as UntypedFormControl;
   }
 }
 
@@ -97,7 +97,7 @@ viewOptions$     = of(
 )
 action$         : Observable<any>;
 //search form filters
-inputForm        : FormGroup;
+inputForm        : UntypedFormGroup;
 categoryID       : number;
 subCategoryID    : number;
 productTypeSearch: number;
@@ -144,7 +144,7 @@ constructor(  private _snackBar              : MatSnackBar,
               private itemTypeService        : ItemTypeService,
               private contactsService        :  ContactsService,
               private agGridService          : AgGridService,
-              private fb                     : FormBuilder,
+              private fb                     : UntypedFormBuilder,
               private siteService            : SitesService,
               private productEditButtonService: ProductEditButtonService,
               private agGridFormatingService : AgGridFormatingService,

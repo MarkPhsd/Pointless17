@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
@@ -13,7 +13,7 @@ import { StripeAPISettings, UISettingsService } from 'src/app/_services/system/s
 export class StripeSettingsComponent implements OnInit {
 
   stripeEnabled    : boolean;
-  inputForm  : FormGroup;
+  inputForm  : UntypedFormGroup;
   uiSettings : ISetting;
   uiSettings$: Observable<ISetting>;
   stripeAPISettings = {} as StripeAPISettings;

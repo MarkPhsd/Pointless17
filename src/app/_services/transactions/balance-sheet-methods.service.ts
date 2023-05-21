@@ -6,7 +6,7 @@ import { SitesService } from '../reporting/sites.service';
 import { BalanceSheetSearchModel, BalanceSheetService, CashDrop, IBalanceSheet } from './balance-sheet.service';
 import { Capacitor } from '@capacitor/core';
 import { catchError, switchMap } from 'rxjs/operators';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -41,7 +41,7 @@ export class BalanceSheetMethodsService {
     private posOrderService                : OrdersService,
     private sitesService                   : SitesService,
     private sheetService                   : BalanceSheetService,
-    private _fb                            : FormBuilder,
+    private _fb                            : UntypedFormBuilder,
     private _snackBar                      : MatSnackBar,
     private router                         : Router,
     private location                       : Location,
@@ -171,7 +171,7 @@ export class BalanceSheetMethodsService {
     return deviceName;
   }
 
-  updateSheet(inputForm: FormGroup, startShiftInt: number): Observable<any> {
+  updateSheet(inputForm: UntypedFormGroup, startShiftInt: number): Observable<any> {
     const site = this.sitesService.getAssignedSite();
     if (inputForm.valid) {
 
@@ -225,7 +225,7 @@ export class BalanceSheetMethodsService {
   }
 
 
-  initForm(fb: FormGroup) : FormGroup {
+  initForm(fb: UntypedFormGroup) : UntypedFormGroup {
 
     fb = this._fb.group({
       id:                  [''],

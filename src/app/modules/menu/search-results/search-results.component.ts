@@ -1,6 +1,6 @@
 import { Component,  Inject,  Input, Output, OnInit, Optional,OnDestroy ,
   ViewChild ,ElementRef, AfterViewInit, EventEmitter, SimpleChange } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AWSBucketService, MenuService, MessageService, OrdersService } from 'src/app/_services';
@@ -28,7 +28,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy,AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   dataSource: any;
   columnsToDisplay = ['name'];
-  public searchForm: FormGroup;
+  public searchForm: UntypedFormGroup;
 
 
   search: string;
@@ -39,7 +39,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy,AfterViewInit {
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
   searchPhrase:         Subject<any> = new Subject();
-  get searchProductsValue() { return this.searchForm.get("searchProducts") as FormControl;}
+  get searchProductsValue() { return this.searchForm.get("searchProducts") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
   //search with debounce
@@ -77,7 +77,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy,AfterViewInit {
               private router: Router,
               public route: ActivatedRoute,
               private menuService: MenuService,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               private messageService: MessageService,
               private siteService: SitesService,
       ) {

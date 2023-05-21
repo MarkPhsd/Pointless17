@@ -5,7 +5,7 @@ import { ActivatedRoute, } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProduct, ISetting } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ElectronService } from 'ngx-electron';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -31,7 +31,7 @@ export class ProductInfoPanelComponent implements OnInit {
 
   toggleLabelEvents: string;
   labelSetting    : ISetting;
-  printForm       : FormGroup;
+  printForm       : UntypedFormGroup;
   printQuantity   = 1;
   labelList$      : Observable<ISetting[]>;
   labelID         : number;
@@ -44,7 +44,7 @@ export class ProductInfoPanelComponent implements OnInit {
        public route              : ActivatedRoute,
        private menuService       : MenuService,
        private siteService       : SitesService,
-       private fb                : FormBuilder,
+       private fb                : UntypedFormBuilder,
        private electronService   : ElectronService,
        private renderingService  : RenderingService,
        private printingService   : PrintingService,

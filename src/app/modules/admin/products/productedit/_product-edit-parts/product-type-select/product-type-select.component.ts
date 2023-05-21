@@ -3,7 +3,7 @@ import { IItemBasic, IItemBasicB } from 'src/app/_services';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
-import { FormGroup ,FormControl, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup ,FormControl, UntypedFormBuilder } from '@angular/forms';
 import { IProduct } from 'src/app/_interfaces';
 
 @Component({
@@ -14,7 +14,7 @@ import { IProduct } from 'src/app/_interfaces';
 export class ProductTypeSelectComponent implements OnInit {
 
   @Input() itemTypeID     : number;
-  @Input() inputForm      : FormGroup;
+  @Input() inputForm      : UntypedFormGroup;
 
   productTypes$           : Observable<IItemBasicB[]>;
 
@@ -22,7 +22,7 @@ export class ProductTypeSelectComponent implements OnInit {
 
   constructor(private itemTypeService: ItemTypeService,
               private siteService: SitesService,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               )
         { }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { AccordionMenu, MenuGroup, SubMenu }  from 'src/app/_interfaces/index';
 
 @Injectable({
@@ -7,9 +7,9 @@ import { AccordionMenu, MenuGroup, SubMenu }  from 'src/app/_interfaces/index';
 })
 export class FbNavMenuService {
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: UntypedFormBuilder) { }
 
-  initAccordionForm(inputForm: FormGroup) {
+  initAccordionForm(inputForm: UntypedFormGroup) {
     inputForm = this.fb.group( {
       id:                    [''],
       name:                  [''],
@@ -27,7 +27,7 @@ export class FbNavMenuService {
 
   }
 
-  initMenuGroupForm(inputForm: FormGroup) {
+  initMenuGroupForm(inputForm: UntypedFormGroup) {
 
     inputForm = this.fb.group( {
       id:                    [''],
@@ -39,7 +39,7 @@ export class FbNavMenuService {
 
   }
 
-  initSubMenuForm(inputForm: FormGroup) {
+  initSubMenuForm(inputForm: UntypedFormGroup) {
 
     inputForm = this.fb.group( {
       id:                    [''],
@@ -60,7 +60,7 @@ export class FbNavMenuService {
     return inputForm
   }
 
-  intitFormData(inputForm: FormGroup, data: any) {
+  intitFormData(inputForm: UntypedFormGroup, data: any) {
     inputForm.patchValue(data)
   }
 

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
 import { IClientTable } from 'src/app/_interfaces';
@@ -14,9 +14,9 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 })
 export class PasswordValidationComponent implements OnInit {
 
-  inputForm   : FormGroup;
-  clientForm  : FormGroup;
-  confirmPassword: FormGroup;
+  inputForm   : UntypedFormGroup;
+  clientForm  : UntypedFormGroup;
+  confirmPassword: UntypedFormGroup;
 
   @Input() client     : IClientTable;
   isAuthorized        : boolean ;
@@ -27,7 +27,7 @@ export class PasswordValidationComponent implements OnInit {
 
   constructor(
       private siteService           : SitesService,
-      private fb                    : FormBuilder,
+      private fb                    : UntypedFormBuilder,
       private clientTableService    : ClientTableService,
       private fbContactsService     : FbContactsService,
       private userAuthorization     : UserAuthorizationService,

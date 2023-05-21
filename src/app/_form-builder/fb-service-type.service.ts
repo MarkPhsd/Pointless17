@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { tap } from 'rxjs/operators';
 import { IServiceType } from '../_interfaces';
 import { SitesService } from '../_services/reporting/sites.service';
@@ -12,12 +12,12 @@ export class FbServiceTypeService {
 
   serviceType: IServiceType;
 
-  constructor(private _fb: FormBuilder,
+  constructor(private _fb: UntypedFormBuilder,
     private siteService: SitesService,
     private serviceTypeService: ServiceTypeService,
   ) { }
 
-  initForm(fb: FormGroup): FormGroup {
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
     // const serializedDate = new Date(user?.dob)
          fb = this._fb.group({
             id:                    [''], //
@@ -54,7 +54,7 @@ export class FbServiceTypeService {
         return fb
     }
 
-    async  fillForm(id: number, form: FormGroup): Promise<any> {
+    async  fillForm(id: number, form: UntypedFormGroup): Promise<any> {
 
       const site =  this.siteService.getAssignedSite();
 

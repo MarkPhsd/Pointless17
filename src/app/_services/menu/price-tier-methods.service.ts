@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {  FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {  UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 // import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
 // import { MatSnackBar } from '@angular/material/snack-bar';
@@ -38,7 +38,7 @@ export class PriceTierMethodsService {
   ] as WeightProfile[]
 
   constructor(
-    private _fb                     : FormBuilder,
+    private _fb                     : UntypedFormBuilder,
     private siteService             : SitesService,
     private priceTierService        : PriceTierService,
     private priceTierPriceService   : PriceTierPriceService,
@@ -50,12 +50,12 @@ export class PriceTierMethodsService {
     return this.weightProfile;
   }
 
-  initPriceTierPriceForm(inputForm: FormGroup): FormGroup {
+  initPriceTierPriceForm(inputForm: UntypedFormGroup): UntypedFormGroup {
     inputForm  =  this.initalizeForm(inputForm)
     return inputForm
   }
 
-  addArrayForm(): FormGroup {
+  addArrayForm(): UntypedFormGroup {
     let inputForm = this._fb.group({})
     inputForm  =  this.initalizeForm(inputForm)
     return inputForm
@@ -89,8 +89,8 @@ export class PriceTierMethodsService {
   }
 
 
-  loopPrices(inputForm: FormGroup) {
-    let prices = inputForm.controls['priceTierPrices'] as FormArray;
+  loopPrices(inputForm: UntypedFormGroup) {
+    let prices = inputForm.controls['priceTierPrices'] as UntypedFormArray;
     console.log(prices)
     if (prices) {
       const pricesCount = prices.length
@@ -169,7 +169,7 @@ export class PriceTierMethodsService {
     return EMPTY;
   }
 
-  addPricesWithWeightProfiles(priceTier: PriceTiers, pricesArray: FormArray): PriceTiers {
+  addPricesWithWeightProfiles(priceTier: PriceTiers, pricesArray: UntypedFormArray): PriceTiers {
     this.weightProfile.forEach( profile => {
       let price = {} as PriceTierPrice
       price     = this.assignWeightValues(priceTier, price, profile)
@@ -207,7 +207,7 @@ export class PriceTierMethodsService {
     }
   }
 
-  addPriceToArray(priceTier: PriceTiers,  price: PriceTierPrice, pricesArray:FormArray ) {
+  addPriceToArray(priceTier: PriceTiers,  price: PriceTierPrice, pricesArray:UntypedFormArray ) {
     if (!price) {
       price =  {} as PriceTierPrice;
       price.productPriceID = priceTier.id;

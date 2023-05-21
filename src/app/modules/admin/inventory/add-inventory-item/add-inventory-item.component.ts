@@ -7,7 +7,7 @@ import { ISite } from 'src/app/_interfaces/site';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FbInventoryService } from 'src/app/_form-builder/fb-inventory.service';
 import { MenuService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
@@ -23,11 +23,11 @@ import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 })
 export class AddInventoryItemComponent implements OnInit, OnDestroy    {
 
-  inputForm:                 FormGroup;
+  inputForm:                 UntypedFormGroup;
   id:                        any;
   site:                      ISite;
   item:                      IInventoryAssignment;
-  searchForm:                FormGroup;
+  searchForm:                UntypedFormGroup;
   quantityMoving:            number;
   inventoryLocation:         IInventoryLocation;
   itemType: ItemType;
@@ -70,7 +70,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     private inventoryLocationsService: InventoryLocationsService,
     private scaleService        : ScaleService,
     private dialog              : MatDialog,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private itemtypeService: ItemTypeService,
     private dialogRef: MatDialogRef<AddInventoryItemComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)

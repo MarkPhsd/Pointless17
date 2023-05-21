@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { clientType } from 'src/app/_interfaces';
 import { ClientType, IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
@@ -17,11 +17,11 @@ import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.
 export class ClientTypeSelectionComponent implements OnInit {
 
   @Output() outputClientTypes    :      EventEmitter<any> = new EventEmitter();
-  @Input()  inputForm            :      FormGroup;
+  @Input()  inputForm            :      UntypedFormGroup;
 
   allEligible        : boolean;
   clientTypeList     = [] as IItemBasic[];
-  orderTypesForm     : FormGroup;
+  orderTypesForm     : UntypedFormGroup;
   clientTypes        : clientType[];
   savedClientTypes   : any[];
   clientArray        : any[];

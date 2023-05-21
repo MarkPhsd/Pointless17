@@ -1,6 +1,6 @@
 // ng-control-attribute.directive.ts
 import { Directive, ElementRef, OnInit } from '@angular/core';
-import { FormControl, NgControl } from '@angular/forms';
+import { UntypedFormControl, NgControl } from '@angular/forms';
 import { InputTrackerService } from '../_services/system/input-tracker.service';
 
 @Directive({
@@ -20,7 +20,7 @@ export class NgControlAttributeDirective implements OnInit {
       this.ngControl.control['__ngControlId__'] = uniqueId;
   
       // Register the FormControl instance with the InputTrackerService
-      this.inputTrackerService.registerFormControl(uniqueId, this.ngControl.control as FormControl);
+      this.inputTrackerService.registerFormControl(uniqueId, this.ngControl.control as UntypedFormControl);
       
     } catch (error) {
       // console.log('error in Attribute Directive', error)      

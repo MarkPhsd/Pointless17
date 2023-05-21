@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, Inject, Output,EventEmitter} from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FbNavMenuService } from 'src/app/_form-builder/fb-nav-menu.service';
 import { AccordionMenu, SubMenu }  from 'src/app/_interfaces/index';
@@ -24,14 +24,14 @@ export class MenuGroupItemEditComponent implements OnInit, OnChanges {
   @Input() item$          : Observable<SubMenu>;
   @Input() item           : SubMenu;
   @Input() id             : number;
-  inputForm               : FormGroup;
+  inputForm               : UntypedFormGroup;
   minimized               : boolean;
   accordionID             : number;
   menugroupID: number;
 
   constructor(
     private fbNavService: FbNavMenuService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private siteService            : SitesService,
     private _snackBar              : MatSnackBar,
     private menusService           : MenusService,

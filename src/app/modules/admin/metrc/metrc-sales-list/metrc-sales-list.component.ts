@@ -5,7 +5,7 @@ import { GridApi } from 'ag-grid-community';
 import { Observable, Subject } from 'rxjs';
 import { IMETRCSales } from 'src/app/_interfaces/transactions/metrc-sales';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { employee, IServiceType, ISite } from 'src/app/_interfaces';
 import { ReportingService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -35,7 +35,7 @@ export class MetrcSalesListComponent implements OnInit {
   // columnDefs = [];
   // defaultColDef;
   // frameworkComponents: any;
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
 
   childNotifier : Subject<boolean> = new Subject<boolean>();
   //required for filter component.
@@ -59,7 +59,7 @@ export class MetrcSalesListComponent implements OnInit {
   employees$:    Observable<employee[]>;
   drivers$:      Observable<employee[]>;
   dispatchers$:  Observable<employee[]>;
-  employeeID:    FormControl;
+  employeeID:    UntypedFormControl;
 
   sites$: Observable<ISite[]>;
   site: ISite;

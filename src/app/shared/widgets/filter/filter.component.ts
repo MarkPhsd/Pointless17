@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, HostListener, Input, OnChanges } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ReportingService,DashboardService,AuthenticationService } from 'src/app/_services';
 
 export const MY_FORMATS = {
@@ -28,12 +28,12 @@ interface IDaterange {
   })
 
 export class FilterComponent implements OnInit,OnChanges {
-  dateRangeForm        : FormGroup;
+  dateRangeForm        : UntypedFormGroup;
   dateFrom             : Date;
   dateTo               : Date;
   smallDevice: boolean;
 
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   calDate: IDatePicker;
   counter: number;
 
@@ -66,7 +66,7 @@ export class FilterComponent implements OnInit,OnChanges {
   }
 
   constructor(
-      public fb: FormBuilder,
+      public fb: UntypedFormBuilder,
       private reportingService: ReportingService,
       )
   {  }
@@ -96,9 +96,9 @@ export class FilterComponent implements OnInit,OnChanges {
 
   initDateForm() {
 
-    this.dateRangeForm = new FormGroup({
-      start: new FormControl(),
-      end: new FormControl()
+    this.dateRangeForm = new UntypedFormGroup({
+      start: new UntypedFormControl(),
+      end: new UntypedFormControl()
     });
 
     let today = new Date();

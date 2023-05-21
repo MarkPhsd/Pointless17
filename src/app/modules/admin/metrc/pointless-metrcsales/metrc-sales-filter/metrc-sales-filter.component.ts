@@ -5,7 +5,7 @@ import { IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EmployeeService} from 'src/app/_services/people/employee-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -22,8 +22,8 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
   value : string;
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
-  searchForm: FormGroup;
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
+  searchForm: UntypedFormGroup;
 
   @Output()  outputClearExceptions : EventEmitter<any> = new EventEmitter();
   @Output() outputCurrentDay :   EventEmitter<any> = new EventEmitter();
@@ -40,14 +40,14 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
   selectedType                : number;
   toggleOpenClosedAll            = "1";
   toggleEmployeeDeviceAll        = "0"
-  printForm     : FormGroup;
+  printForm     : UntypedFormGroup;
   user          = {} as IUser;
   employees$    : Observable<IItemBasic[]>;
   searchModel   = {} as   PointlessMetrcSearchModel;
-  dateRangeForm : FormGroup;
+  dateRangeForm : UntypedFormGroup;
   _searchModel  : Subscription;
   isAuthorized  : boolean;
-  filterForm    : FormGroup;
+  filterForm    : UntypedFormGroup;
   dateFrom      : Date;
   dateTo        : Date;
   dateRange     : string;
@@ -65,7 +65,7 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
   }
 
   constructor(  private _snackBar               : MatSnackBar,
-                private fb                      : FormBuilder,
+                private fb                      : UntypedFormBuilder,
                 private siteService             : SitesService,
                 private userAuthorization       : UserAuthorizationService,
                 private employeeService         : EmployeeService,
@@ -234,9 +234,9 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
 
   initDateForm() {
     console.log('init Date Form')
-    this.dateRangeForm = new FormGroup({
-      startDate: new FormControl(),
-      endDate  : new FormControl()
+    this.dateRangeForm = new UntypedFormGroup({
+      startDate: new UntypedFormControl(),
+      endDate  : new UntypedFormControl()
     });
 
     let today = new Date();

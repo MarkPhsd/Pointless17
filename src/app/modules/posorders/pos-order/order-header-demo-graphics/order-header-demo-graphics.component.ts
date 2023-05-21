@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output, OnChanges, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription, debounce } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
@@ -15,7 +15,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 })
 export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDestroy  {
 
-  orderNameForm: FormGroup;
+  orderNameForm: UntypedFormGroup;
 
   @Input()  canRemoveClient = false;
   @Input()  order           : IPOSOrder;
@@ -39,7 +39,7 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
   constructor(private router: Router,
               private siteService: SitesService,
               private contactService: ContactsService,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               private uiSettingsService: UISettingsService,
               private userAuthorization: UserAuthorizationService,
               private orderService: OrdersService)

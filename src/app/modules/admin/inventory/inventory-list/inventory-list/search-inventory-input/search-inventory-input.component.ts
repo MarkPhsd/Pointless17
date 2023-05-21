@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { IProductSearchResults } from 'src/app/_services';
@@ -14,13 +14,13 @@ export class SearchInventoryInputComponent implements OnInit,AfterViewInit {
   itemNameInput: string;
   @Output() outPutMethod   = new EventEmitter();
   @Output() itemSelect     = new EventEmitter();
-  @Input()  searchForm:    FormGroup;
+  @Input()  searchForm:    UntypedFormGroup;
   @Input()  itemNameControl : string;
   //search with debounce: also requires AfterViewInit()
   @ViewChild('input', {static: true}) input: ElementRef;
 
   searchPhrase:      Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
 
   private readonly onDestroy = new Subject<void>();
   // //search with debounce

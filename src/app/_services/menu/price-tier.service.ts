@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, FormGroup } from '@angular/forms';
 import { EMPTY, Observable } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { IPriceTierPaged, PriceTiers } from 'src/app/_interfaces/menu/price-categories';
@@ -18,7 +18,7 @@ export class PriceTierService {
 
   constructor( private http: HttpClient,
     private auth: AuthenticationService,
-    private _fb: FormBuilder,
+    private _fb: UntypedFormBuilder,
    )
   { }
 

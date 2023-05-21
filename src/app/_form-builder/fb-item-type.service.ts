@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { IItemType } from '../_services/menu/item-type.service';
 
 @Injectable({
@@ -7,9 +7,9 @@ import { IItemType } from '../_services/menu/item-type.service';
 })
 export class FbItemTypeService {
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: UntypedFormBuilder) { }
 
-  initForm(inputForm: FormGroup) {
+  initForm(inputForm: UntypedFormGroup) {
     inputForm = this.fb.group( {
       id:                   [''],
       name:                 ['', Validators.required],
@@ -50,7 +50,7 @@ export class FbItemTypeService {
     return inputForm
   }
 
-  intitFormData(inputForm: FormGroup,data: IItemType) {
+  intitFormData(inputForm: UntypedFormGroup,data: IItemType) {
     inputForm.patchValue(data)
   }
 

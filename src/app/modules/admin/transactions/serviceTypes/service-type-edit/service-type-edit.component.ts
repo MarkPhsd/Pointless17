@@ -2,7 +2,7 @@
 import { Component,  Inject, OnInit } from '@angular/core';
 import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { IServiceType, IServiceTypePOSPut } from 'src/app/_interfaces';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -21,7 +21,7 @@ export class ServiceTypeEditComponent implements OnInit {
   serviceType            : IServiceType;
   bucketName             : string;
   awsBucketURL           : string;
-  inputForm              : FormGroup;
+  inputForm              : UntypedFormGroup;
   description            : string;
   action$                : Observable<any>;
 

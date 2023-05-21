@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { EMPTY, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { ISite } from 'src/app/_interfaces';
@@ -17,7 +17,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class MetrcInventoryPropertiesComponent implements OnInit {
 
-  @Input() inputForm   :      FormGroup;
+  @Input() inputForm   :      UntypedFormGroup;
   @Input() package     :      METRCPackage;
   @Output() outputMenuItem    = new EventEmitter<any>();
   @Output() outputVendor      = new EventEmitter<any>();
@@ -114,7 +114,7 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
     }
   }
 
-  setProductNameEmpty(inputForm: FormGroup) {
+  setProductNameEmpty(inputForm: UntypedFormGroup) {
     inputForm.patchValue({
       productName: [''],
       productID:  ['']

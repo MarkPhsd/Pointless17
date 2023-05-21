@@ -1,6 +1,6 @@
 import { Component,  Inject,  Input, OnInit} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder,  FormGroup } from '@angular/forms';
+import { UntypedFormBuilder,  UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import {  UnitType,  } from 'src/app/_interfaces/menu/price-categories';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
@@ -16,7 +16,7 @@ import { Observable, of, switchMap} from 'rxjs';
 export class UnitTypeEditComponent implements OnInit {
 
   @Input() unitType       : UnitType;
-  inputForm               : FormGroup;
+  inputForm               : UntypedFormGroup;
   showMore                :  boolean;
   showTime                :  boolean;
   showConversions         :  boolean;
@@ -31,7 +31,7 @@ export class UnitTypeEditComponent implements OnInit {
 
   constructor(
     private _snackBar   : MatSnackBar,
-    private fb                      : FormBuilder,
+    private fb                      : UntypedFormBuilder,
     private siteService             : SitesService,
     private dialog                  : MatDialog,
     private fbPriceCategory         : FbUnitTypeService,

@@ -7,7 +7,7 @@ import { ISite } from 'src/app/_interfaces/site';
 import { ActivatedRoute } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FbInventoryService } from 'src/app/_form-builder/fb-inventory.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
@@ -21,13 +21,13 @@ import { switchMap } from 'rxjs/operators';
 
 export class NewInventoryItemComponent implements OnInit {
 
-  inputForm:                 FormGroup;
+  inputForm:                 UntypedFormGroup;
   id:                        any;
   site:                      ISite;
   item:                      IInventoryAssignment;
   inventoryLocations:        IInventoryLocation[];
   inventoryAssignment$:      Observable<IInventoryAssignment>;
-  searchForm:                FormGroup;
+  searchForm:                UntypedFormGroup;
   quantityMoving:            number;
   locations$ :           Observable<IInventoryLocation[]>;
   locations:             IInventoryLocation[];
@@ -39,7 +39,7 @@ export class NewInventoryItemComponent implements OnInit {
     private _snackBar    : MatSnackBar,
     private siteService  : SitesService,
     public  route        : ActivatedRoute,
-    private fb           : FormBuilder,
+    private fb           : UntypedFormBuilder,
     private fbInventory  : FbInventoryService,
     private inventoryAssignmentService: InventoryAssignmentService,
     private menuService  : MenuService,

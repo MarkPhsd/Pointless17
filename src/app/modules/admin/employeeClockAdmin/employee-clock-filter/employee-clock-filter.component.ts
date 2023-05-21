@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { IItemBasic, OrdersService } from 'src/app/_services';
@@ -17,7 +17,7 @@ export class EmployeeClockFilterComponent implements OnInit {
   @Output() outputRefreshSearch :   EventEmitter<any> = new EventEmitter();
   
   pageSize = 25;
-  dateRangeForm: FormGroup;
+  dateRangeForm: UntypedFormGroup;
   dateTo: string;
   dateFrom: string;
   employees$       :   Observable<IItemBasic[]>;
@@ -29,7 +29,7 @@ export class EmployeeClockFilterComponent implements OnInit {
     private siteService     : SitesService,
     private employeeService: EmployeeService,
     private router: Router,
-            private fb: FormBuilder,
+            private fb: UntypedFormBuilder,
             ) { }
 
   ngOnInit(): void {

@@ -3,7 +3,7 @@ import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, switchMap, } from 'rxjs';
 
 import { ISite } from 'src/app/_interfaces';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, FormGroup } from '@angular/forms';
 import { ElectronService } from 'ngx-electron';
 import { SitesService } from '../reporting/sites.service';
 import { PlatformService } from '../system/platform.service';
@@ -214,7 +214,7 @@ export class BalanceSheetService {
     private platFormService: PlatformService,
     private siteService: SitesService,
     private http: HttpClient,
-    private _fb: FormBuilder,
+    private _fb: UntypedFormBuilder,
   )
   {
   }

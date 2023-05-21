@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { StripeService } from 'ngx-stripe';
@@ -34,7 +34,7 @@ export class StripePaymentService {
 
   constructor(
     private http: HttpClient,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private stripeService: StripeService,
     private siteService: SitesService,
   ) {}

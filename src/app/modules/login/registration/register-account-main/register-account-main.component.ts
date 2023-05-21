@@ -1,7 +1,7 @@
 import { AuthenticationService} from 'src/app/_services';
 import { ICompany }  from 'src/app/_interfaces';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -28,7 +28,7 @@ export class RegisterAccountMainComponent implements OnInit {
   companyName: string;
   id         : any;
   _uISettings: Subscription;
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   bucket: string;
   uiHomePageSetting: UIHomePageSettings;
 
@@ -45,7 +45,7 @@ export class RegisterAccountMainComponent implements OnInit {
   get f() { return this.loginForm.controls; }
 
   constructor(
-      private fb: FormBuilder,
+      private fb: UntypedFormBuilder,
       private route: ActivatedRoute,
       private uiSettings: UISettingsService,
       private router: Router,

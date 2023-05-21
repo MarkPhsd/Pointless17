@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FbItemTypeService } from 'src/app/_form-builder/fb-item-type.service';
 import { FlatRateTaxValue, FlatRateTax, IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
-import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, FormControl, Validators, UntypedFormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { MatSnackBar} from '@angular/material/snack-bar';
@@ -28,13 +28,13 @@ export class FlatRateEditComponent  {
 
   flatRateTax$:      Observable<FlatRateTax>;
 
-  inputForm:         FormGroup;
-  get flatRateTaxValues(): FormArray  {
-    return this.inputForm.get('flatRateTaxValues') as FormArray;
+  inputForm:         UntypedFormGroup;
+  get flatRateTaxValues(): UntypedFormArray  {
+    return this.inputForm.get('flatRateTaxValues') as UntypedFormArray;
   }
 
   constructor(
-      private fb: FormBuilder,
+      private fb: UntypedFormBuilder,
       private fbFlatRateService: FBFlatRateService,
       private flatRateService: FlatRateService,
       private router: Router,
@@ -91,8 +91,8 @@ export class FlatRateEditComponent  {
 
   }
 
-  addTaxValueGroup(): FormArray {
-      const add = this.inputForm.get('flatRateTaxValues') as FormArray;
+  addTaxValueGroup(): UntypedFormArray {
+      const add = this.inputForm.get('flatRateTaxValues') as UntypedFormArray;
       add.push(this.fb.group({
             id:                 [''],
             rateStart:          [''],
@@ -104,9 +104,9 @@ export class FlatRateEditComponent  {
       return add
   }
 
-  refreshValueGroup(flatRateTaxValues: FlatRateTaxValue): FormArray {
+  refreshValueGroup(flatRateTaxValues: FlatRateTaxValue): UntypedFormArray {
     this.addTaxValueGroup();
-    const add = this.inputForm.get('flatRateTaxValues') as FormArray;
+    const add = this.inputForm.get('flatRateTaxValues') as UntypedFormArray;
     add.push(this.fb.group({
           id:                 [flatRateTaxValues.id],
           rateStart:          [flatRateTaxValues.rateStart],
@@ -120,11 +120,11 @@ export class FlatRateEditComponent  {
 
   deleteTaxGroup(index: number) {
     console.log(index)
-    const add = this.inputForm.get('flatRateTaxValues') as FormArray;
+    const add = this.inputForm.get('flatRateTaxValues') as UntypedFormArray;
     add.removeAt(index)
   }
 
-  initializeForm(id: any, form: FormGroup)  {
+  initializeForm(id: any, form: UntypedFormGroup)  {
 
     if (form && this.id) {
 
@@ -147,7 +147,7 @@ export class FlatRateEditComponent  {
     }
    };
 
-  initFormFields():FormGroup {
+  initFormFields():UntypedFormGroup {
     this.inputForm  = this.fbFlatRateService.initForm(this.inputForm);
     return this.inputForm;
   }
@@ -161,7 +161,7 @@ export class FlatRateEditComponent  {
 
     addRate() {
     // this.fbFlatRateService.addFlatTaxRate()
-      const add = this.inputForm.get('flatRatesTaxValues') as FormArray;
+      const add = this.inputForm.get('flatRatesTaxValues') as UntypedFormArray;
 
       add.push(this.fb.group({
             id:                 [''],
@@ -188,7 +188,7 @@ export class FlatRateEditComponent  {
 
     deleteTaxValue(i: any) {
       console.log(i)
-      const add = this.inputForm.get('flatRateTaxValues') as FormArray;
+      const add = this.inputForm.get('flatRateTaxValues') as UntypedFormArray;
       if (this.flatRateTax.flatRateTaxValues[i]) {
         this.deleteRate(this.flatRateTax.flatRateTaxValues[i])
       }

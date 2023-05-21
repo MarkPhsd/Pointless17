@@ -3,7 +3,7 @@ import { Component, Output, OnInit,
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subject ,fromEvent } from 'rxjs';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -31,7 +31,7 @@ export class PriceCategoriesComponent implements OnInit, AfterViewInit {
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
   searchPhrase:         Subject<any> = new Subject();
-  get searchProductsValue() { return this.searchForm.get("searchItems") as FormControl;}
+  get searchProductsValue() { return this.searchForm.get("searchItems") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
   priceCategoryid: number;
@@ -79,8 +79,8 @@ export class PriceCategoriesComponent implements OnInit, AfterViewInit {
   isLastpage              :boolean;
 
     //search form filters
-  public searchForm: FormGroup;
-  inputForm        : FormGroup;
+  public searchForm: UntypedFormGroup;
+  inputForm        : UntypedFormGroup;
   // categoryID       : number;
   // productTypeSearch: number;
   // productTypeID    : number;
@@ -95,7 +95,7 @@ export class PriceCategoriesComponent implements OnInit, AfterViewInit {
   constructor(  private _snackBar   : MatSnackBar,
     private router                  : Router,
     private agGridService           : AgGridService,
-    private fb                      : FormBuilder,
+    private fb                      : UntypedFormBuilder,
     private siteService             : SitesService,
     private productEditButtonService: ProductEditButtonService,
     private agGridFormatingService  : AgGridFormatingService,

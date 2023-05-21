@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class ExitLabelSelectionComponent  {
 
-  @Input()  inputForm: FormGroup;
+  @Input()  inputForm: UntypedFormGroup;
   @Input()  fieldName: string;
   @Input()  list$    : Observable<any>;
   @Output() outputItem = new EventEmitter<any>();

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-web-enabled',
@@ -8,7 +8,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 })
 export class WebEnabledComponent implements OnInit {
 
-  @Input() inputForm: FormGroup;
+  @Input() inputForm: UntypedFormGroup;
 
   constructor() { }
 

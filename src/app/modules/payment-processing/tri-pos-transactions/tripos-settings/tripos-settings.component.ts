@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
@@ -12,12 +12,12 @@ export class TriposSettingsComponent implements OnInit {
 
   action$: Observable<any>;
   jsonData: any;
-  inputForm: FormGroup
+  inputForm: UntypedFormGroup
   @Input() laneID: number;
   
   constructor(private triposMethodService: TriPOSMethodService,
               private siteService: SitesService,
-              private fb: FormBuilder) { }
+              private fb: UntypedFormBuilder) { }
 
   ngOnInit(): void {
     const i = 0

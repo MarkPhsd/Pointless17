@@ -1,5 +1,5 @@
 import { Component, OnInit,Input, Inject, ChangeDetectorRef } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -30,7 +30,7 @@ export class ChangeDueComponent implements OnInit  {
 
   printing$ : Observable<any>;
   action$   : Observable<any>;
-  inputForm             : FormGroup;
+  inputForm             : UntypedFormGroup;
   @Input() paymentMethod: IPaymentMethod;
   @Input() order        : IPOSOrder;
   @Input() payment      : IPOSPayment;
@@ -48,7 +48,7 @@ export class ChangeDueComponent implements OnInit  {
               private orderService:  OrdersService,
               private toolbarServiceUI: ToolBarUIService,
               private snackBar : MatSnackBar,
-              private fb       : FormBuilder,
+              private fb       : UntypedFormBuilder,
               private router   : Router,
                private uISettingsService: UISettingsService,
               private printingService: PrintingService,

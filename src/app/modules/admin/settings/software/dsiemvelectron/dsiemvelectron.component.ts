@@ -1,6 +1,6 @@
 import { T } from '@angular/cdk/keycodes';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ElectronService } from 'ngx-electron';
 import { catchError, Observable, of, switchMap } from 'rxjs';
@@ -17,14 +17,14 @@ import { DSIEMVSettings, UISettingsService } from 'src/app/_services/system/sett
   styleUrls: ['./dsiemvelectron.component.scss']
 })
 export class DSIEMVElectronComponent implements OnInit {
-  amountForm : FormGroup;
-  inputForm  : FormGroup;
+  amountForm : UntypedFormGroup;
+  inputForm  : UntypedFormGroup;
   uiSettings : ISetting;
   uiSettings$: Observable<ISetting>;
   uiISettingJSON = {} as DSIEMVSettings;
   responseMessage: string;
   isElectron: boolean
-  pathForm  : FormGroup;
+  pathForm  : UntypedFormGroup;
   responseObject: any;
   cmdResponse: RStream;
   tranResponse: TranResponse;
@@ -38,7 +38,7 @@ export class DSIEMVElectronComponent implements OnInit {
   constructor(private uISettingsService: UISettingsService,
               private dsiEMVService:     DSIEMVTransactionsService,
               private dsiProcess        : DSIProcessService,
-              private fb                : FormBuilder,
+              private fb                : UntypedFormBuilder,
               private matSnack          : MatSnackBar,
               private settingsService   : SettingsService,
               private siteService       : SitesService,

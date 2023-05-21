@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -34,7 +34,7 @@ export class PaymentMethodListComponent implements OnInit, AfterViewInit {
   product               : IPaymentMethod;
   id                    : number;
 
-  get searchItemsValue() { return this.searchForm.get("searchItems") as FormControl;}
+  get searchItemsValue() { return this.searchForm.get("searchItems") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
   //search with debounce
@@ -79,8 +79,8 @@ export class PaymentMethodListComponent implements OnInit, AfterViewInit {
 
   //AgGrid
   //This is for the filter Section/
-  searchForm      : FormGroup;
-  inputForm       : FormGroup;
+  searchForm      : UntypedFormGroup;
+  inputForm       : UntypedFormGroup;
   selected        : any[];
   selectedRows    : any;
   agtheme         = 'ag-theme-material';
@@ -89,7 +89,7 @@ export class PaymentMethodListComponent implements OnInit, AfterViewInit {
   constructor(
             private paymentMethodService      : PaymentMethodsService,
             private _snackBar               : MatSnackBar,
-            private fb                      : FormBuilder,
+            private fb                      : UntypedFormBuilder,
             private siteService             : SitesService,
             private productEditButtonService: ProductEditButtonService,
             private agGridFormatingService  : AgGridFormatingService,

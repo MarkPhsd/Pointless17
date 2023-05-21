@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DashBoardComponentProperties, DashboardContentModel, DashboardModel } from '../grid-models';
@@ -33,7 +33,7 @@ export class GridComponentPropertiesComponent implements OnInit {
   message : string[];
   productName: string;
   dashBoardContent: DashboardContentModel;
-  inputForm       : FormGroup;
+  inputForm       : UntypedFormGroup;
   rangeTypes      = ['year', 'month', 'date', 'week', 'hour','currentDay']
   cardValueTypesTemp = []
   cardValueTypes  = [
@@ -115,7 +115,7 @@ export class GridComponentPropertiesComponent implements OnInit {
     private menuService        : MenuService,
     private priceScheduleService: PriceScheduleService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb                 : FormBuilder,
+    private fb                 : UntypedFormBuilder,
     private _snackBar          : MatSnackBar,) {
     if (data) {
       this.dashBoardContent = data;
@@ -375,7 +375,7 @@ export class GridComponentPropertiesComponent implements OnInit {
     this.updateDashBoard(dashBoard)
   };
 
-  updateCard(form: FormGroup): DashboardContentModel {
+  updateCard(form: UntypedFormGroup): DashboardContentModel {
     const site = this.siteService.getAssignedSite();
     if (!form) {return  }
     const id              = this.dashBoardContent.id;

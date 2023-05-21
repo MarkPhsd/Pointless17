@@ -10,7 +10,7 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { Title } from '@angular/platform-browser';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { HttpClient } from '@angular/common/http';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -32,7 +32,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   @ViewChildren('item') itemElements: QueryList<any>;
   smallDevice: boolean;
   @ViewChild('searchSelector') searchSelector: TemplateRef<any>;
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
   scrollContainer:   any;
   isNearBottom   :   any;
   webMode        :  boolean;
@@ -131,7 +131,7 @@ constructor(private menuService        : MenuService,
               private titleService     : Title,
               private platFormService  : PlatformService,
               private uiSettingService: UISettingsService,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               private httpClient: HttpClient,
       )
   {

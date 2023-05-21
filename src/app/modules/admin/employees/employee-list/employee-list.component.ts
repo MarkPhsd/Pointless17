@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService,  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -46,9 +46,9 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
   @ViewChild('input', {static: true}) input: ElementRef;
 
   searchPhrase:         Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
-  dateRange        : FormGroup;
+  dateRange        : UntypedFormGroup;
 
   // //search with debounce
   searchItems$              : Subject<BalanceSheetSearchModel> = new Subject();
@@ -88,8 +88,8 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
   value             : any;
   // //This is for the filter Section//
   //search form filters
-  searchForm:        FormGroup;
-  inputForm        : FormGroup;
+  searchForm:        UntypedFormGroup;
+  inputForm        : UntypedFormGroup;
   jobTypeID     : number;
   selected        : any[];
   selectedRows    : any;
@@ -114,7 +114,7 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
 
   constructor(  private _snackBar               : MatSnackBar,
                 private employeeService         : EmployeeService,
-                private fb                      : FormBuilder,
+                private fb                      : UntypedFormBuilder,
                 private productEditButtonService: ProductEditButtonService,
                 private siteService             : SitesService,
                 private agGridFormatingService  : AgGridFormatingService,
@@ -156,9 +156,9 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     this.searchForm = this.fb.group({
       itemName : ['']
     })
-    this.dateRange = new FormGroup({
-      start: new FormControl(),
-      end: new FormControl()
+    this.dateRange = new UntypedFormGroup({
+      start: new UntypedFormControl(),
+      end: new UntypedFormControl()
     });
   }
 

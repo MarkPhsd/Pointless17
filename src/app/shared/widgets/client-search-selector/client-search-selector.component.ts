@@ -1,6 +1,6 @@
 import { Component,  Inject,  Input, Output, OnInit, Optional, ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormArray, UntypedFormControl} from '@angular/forms';
 import { ISite } from 'src/app/_interfaces/site';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
@@ -18,9 +18,9 @@ export class ClientSearchSelectorComponent implements OnInit, AfterViewInit  {
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
   // @Input()  wideOrderBar      : boolean;
-  @Input()  searchForm:       FormGroup;
+  @Input()  searchForm:       UntypedFormGroup;
   @Input()  itemType:         number; //removed default 1
-  @Input()  searchField:      FormControl;
+  @Input()  searchField:      UntypedFormControl;
   @Input()  searchEntry:      string;
 
   searchPhrase:               Subject<any> = new Subject();
@@ -38,7 +38,7 @@ export class ClientSearchSelectorComponent implements OnInit, AfterViewInit  {
   constructor(
     public route: ActivatedRoute,
     private contactsService: ContactsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private siteService: SitesService,
     )
   {

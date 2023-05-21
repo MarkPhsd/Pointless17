@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subscription, } from 'rxjs';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IItemBasic } from 'src/app/_services';
@@ -24,11 +24,11 @@ export class DashboardClientTypeSelectionComponent implements OnInit, OnDestroy 
   @Output() outputClientTypesJSON:      EventEmitter<any> = new EventEmitter();
   @Output() outputClientTypes    :      EventEmitter<any> = new EventEmitter();
 
-  @Input()  inputForm            :      FormGroup;
+  @Input()  inputForm            :      UntypedFormGroup;
   @Input() dashboardModel:  DashboardModel;
   allEligible        : boolean;
   clientTypeList     = [] as IItemBasic[];
-  orderTypesForm     : FormGroup;
+  orderTypesForm     : UntypedFormGroup;
   clientTypes        : ClientType[];
   savedClientTypes   : any[];
   clientArray        : any[];

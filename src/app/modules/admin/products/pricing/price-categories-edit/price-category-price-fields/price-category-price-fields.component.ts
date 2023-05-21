@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'price-category-price-fields',
@@ -9,14 +9,14 @@ import { FormArray, FormGroup } from '@angular/forms';
 export class PriceCategoryPriceFieldsComponent  {
 
   @Input() showMore = false;
-  @Input() inputForm: FormGroup;
+  @Input() inputForm: UntypedFormGroup;
   @Input() formGroupName: any;
-  @Input() formArrayName: FormArray;
+  @Input() formArrayName: UntypedFormArray;
   @Input() index: number;
   @Input() item: any;
 
-  get productPrices() : FormArray {
-    return this.inputForm.get('productPrices') as FormArray;
+  get productPrices() : UntypedFormArray {
+    return this.inputForm.get('productPrices') as UntypedFormArray;
   }
 
   constructor() { }
