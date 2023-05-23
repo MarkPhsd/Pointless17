@@ -2,12 +2,11 @@ import { Component,   OnInit,
   ViewChild ,ElementRef, AfterViewInit, HostListener, OnDestroy } from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
+import { Observable, Subject  } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+// import "ag-grid-community/dist/styles/ag-grid.css";
+// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -15,7 +14,7 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { EmployeeClockService,EmployeeClockResults,EmployeeClockSearchModel } from 'src/app/_services/employeeClock/employee-clock.service';
-import { employeeBreak, EmployeeClock } from 'src/app/_interfaces/people/employeeClock';
+import {  EmployeeClock } from 'src/app/_interfaces/people/employeeClock';
 import { Capacitor,  } from '@capacitor/core';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 

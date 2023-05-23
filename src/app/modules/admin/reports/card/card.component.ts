@@ -7,7 +7,7 @@ import HC_exporting from 'highcharts/modules/exporting';
 import numeral, { validate } from 'numeral';
 import { Observable, Subject, Subscription, switchMap } from 'rxjs';
 import { ISalesPayments, ISite }  from 'src/app/_interfaces';
-import { ReportingService } from 'src/app/_services';
+import { ReportingService, rowValue } from 'src/app/_services';
 import { IReportingSearchModel, IReportItemSaleSummary, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { IPaymentSalesSearchModel, PaymentSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -100,11 +100,11 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
   constructor(private  sitesService      : SitesService,
               private  reportingService  : ReportingService,
               public   route             : ActivatedRoute,
-              public balanceSheetService : BalanceSheetService,
-              private salesPaymentService: SalesPaymentsService,
-              public  layoutService      : GridsterLayoutService,
-              private datePipe           : DatePipe,
-              private reportingItemsSalesService: ReportingItemsSalesService
+              public   balanceSheetService : BalanceSheetService,
+              private  salesPaymentService: SalesPaymentsService,
+              public   layoutService      : GridsterLayoutService,
+              private  datePipe           : DatePipe,
+              private  reportingItemsSalesService: ReportingItemsSalesService
       ) {
   }
 
@@ -116,13 +116,9 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     // this.initSeries();
     //only works for product sales so far.
     if (this.cardValueType && this.reportItemSaleSummaries) {
-
       const xAxis = this.initSeriesLabels();
-
       let options = this.initChart('values');
-
       this.refreshProductSales();
-
       if (options) {
 
         if (!this.chartWidth) { this.chartWidth = '1200'}
@@ -149,19 +145,14 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
           opposite: false
         }
 
-        options.xAxis = xAxis;
+        options.xAxis  = xAxis;
+        options.chart  = chart // { chart };
+        options.series = this.chartData
 
-        options.chart = chart // { chart };
-
-        options.series =   this.chartData
-
-        const sort =  {  dataSorting: {
-                          enabled: true
-                          }
-                      }
+        const sort =  { dataSorting: {
+                        enabled: true}}
 
         options.series.sort = sort;
-
         this.chartOptions = options;
       }
       return
@@ -210,9 +201,6 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     if (!this.sites) {
       this.sitesService.getSites().subscribe( data => {
           this.sites  = data;
-          // console.log('refreshSitesData 2', data)
-          // const sites = [...new Set(data)]
-          // console.log ('refresh sites 3', sites)
           this.refresh();
         }
       )
@@ -302,11 +290,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
 
     if (this.isProductSalesType(this.cardValueType)) {
       this.chartCategories = this.itemNames;
-      // console.log(this.itemNames)
-      // console.log(this.chartCategories)
-
       this.xAxis = this.getXAxis(this.chartCategories);
-
       return this.xAxis;
     }
 
@@ -371,7 +355,6 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
       this.xAxis = xAxis;
       return this.xAxis;
     }
-
   }
 
   updateChartSites(dateFrom: string, dateTo: string, sites: ISite[]) {
@@ -416,14 +399,12 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     if (this.groupBy.toLowerCase() === 'month') {
       if (this.dateFrom && this.dateTo) {
         if(!this.dataSeriesValues) {
-
           if (this.rangeValue) {
             const  d  = new Date(this.dateFrom)
             let dataSeriesValues = this.reportingService.getMonthSeriesValueByCount(d, this.rangeValue, true)
             this.dataSeriesValues = dataSeriesValues
             return dataSeriesValues;
           }
-
           let dataSeriesValues =  this.reportingService.getMonthWithDatesSeries(this.dateFrom, this.dateTo)
           this.dataSeriesValues = dataSeriesValues
           return dataSeriesValues;
@@ -455,12 +436,10 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     if (!productList) { return }
     const salesList = reportItemSaleSummaries.results;
     let siteSales = [] as ProductSale[];
-
     salesList.forEach(saleTotal => {
       const item = {name:saleTotal.productName,value:saleTotal.itemTotal} as ProductSale
       siteSales.push(item)
     })
-
     this.setChartProductSalesData(site.name, siteSales)
   }
 
@@ -479,11 +458,9 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     newSeries = newSeries.slice(0,550);
     //reset the product names to the top 50 because
     //there can be multple locations, and the average number of product
-    //names willl have to be associated with the total products.
+    //names will have to be associated with the total products.
     //call initArrays which will restruture the report based on this adjusted list
-
     newSeries.forEach(data => { this.itemNames.push( data.name) })
-
     if (!this.chartData) { this.chartData = []}
       this.chartData.push ( { name: name, data: newSeries }
     )
@@ -543,7 +520,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
                 try {
                   const item = sales.filter( item => {})
                 } catch (error) {
-                  // console.log(sales)
+                  console.log(sales)
                   return
                 }
                 const item = sales.filter( item =>  { if( item.dateHour === data.date)  { return item } } );
@@ -560,6 +537,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
             )
             this.setChartDateSeriesData(site.name, dataSeriesValues)
           }
+
           if (this.groupBy.toLowerCase() === 'date') {
             let dataSeriesValues =  this.reportingService.getDateSeriesWithValue(this.dateFrom, this.dateTo)
             site.salesData  = sales;
@@ -572,7 +550,6 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
                 } catch (error) {
                   // console.log(sales)
                 }
-
                 const item = sales.filter( item =>
                   {
                     const  dt2 = new Date(item.dateCompleted);
@@ -672,6 +649,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
             this.chartOptions = { series:  this.chartData }
             dataSeriesValues = [];
           }
+
         }
       }
       )
@@ -689,8 +667,8 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
           if (summary.resultMessage === 'failed') { return }
           const sales = summary.paymentSummary;
             if (!sales || sales == null) { return }
-            //first take the sales of each employee so run a filter on the sales and filter for each employee.
-            //get list of employees that have sold.
+            // first take the sales of each employee so run a filter on the sales and filter for each employee.
+            // get list of employees that have sold.
             // const uniqueArr = [... new Set(students.map(data => data.name))]
             const employeesList = [... new Set(sales.map(t => t.employeeName)) ]
             employeesList.forEach( employee => {this.applyEmployeeSeries(employee,sales, this.groupBy) })
@@ -761,7 +739,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     this.initDateSeries()
   }
 
-  initMonthSeries() {
+  initMonthSeries(): rowValue[] {
     try {
       if (!this.chartCategories) {
         if (this.groupBy == "month") {
@@ -774,7 +752,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     }
   }
 
-  initDateSeries() {
+  initDateSeries(): rowValue[] {
     try {
       if (!this.chartCategories) {
         if (this.groupBy == "date") {

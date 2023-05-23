@@ -41,139 +41,153 @@
     </ng-template>
 
     <br> <mat-divider  class="section-gap"></mat-divider> <br>
+    <div *ngIf="sites$ | async as sites">
+      <div *ngIf="dateFrom && dateTo">
 
-    <div *ngIf="dateFrom && dateTo">
+        <div class="grid-flow"
+            *ngIf="showValues && dateFrom && dateTo">
 
-      <div class="grid-flow"
-           *ngIf="showValues && dateFrom && dateTo">
+          <div  *ngFor="let site of sites">
+            <div class="summary">
+              <ng-container *ngTemplateOutlet="viewMetrcNetSales, context: {$implicit: site}">
+              </ng-container>
+            </div>
 
-        <div  *ngFor="let site of sites$ | async">
-          <div class="summary">
-            <ng-container *ngTemplateOutlet="viewMetrcNetSales, context: {$implicit: site}">
-            </ng-container>
+            <sales-tax-report
+                    [site]="site"
+                    [dateFrom]="dateFrom"
+                    [dateTo]="dateTo"
+                    [minimized]="'true'"
+                    [notifier]="childNotifier">
+              <div header>
+                <mat-icon >summarize</mat-icon> Sales - {{site.name}}
+              </div>
+              <mat-icon>summarize</mat-icon> Sales - {{site.name}}
+            </sales-tax-report>
+
+            <payment-report
+                    [site]    ="site"
+                    [dateFrom]="dateFrom"
+                    [dateTo]  ="dateTo"
+                    [notifier]="childNotifier">
+              <div header>
+                <mat-icon >summarize</mat-icon> Payments - {{site.name}}
+              </div>
+              <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
+            </payment-report>
+
+            <payment-report
+                    [groupBy]="'deviceName'"
+                    [site]    ="site"
+                    [dateFrom]="dateFrom"
+                    [dateTo]  ="dateTo"
+                    [notifier]="childNotifier">
+              <div header>
+                <mat-icon >summarize</mat-icon> Devices - {{site.name}}
+              </div>
+              <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
+            </payment-report>
+
+            <div>
+              <item-sales-card
+                    [site]="site"
+                    [dateFrom]="dateFrom"
+                    [dateTo]="dateTo"
+                    [removeGiftCard]="true"
+                    [viewType] = "'sales'"
+                    [groupBy]="'category'">
+                  <div class="header">
+                    <mat-icon>menu</mat-icon>  Category Sales
+                    <mat-divider></mat-divider>
+                  </div>
+              </item-sales-card>
+            </div>
+
+            <div>
+              <item-sales-card
+                    [site]="site"
+                    [dateFrom]="dateFrom"
+                    [dateTo]="dateTo"
+                    [removeGiftCard]="true"
+                    [viewType] = "'sales'"
+                    [groupBy]="'items'">
+                  <div class="header">
+                    <mat-icon>menu</mat-icon> Item Sales
+                    <mat-divider></mat-divider>
+                  </div>
+              </item-sales-card>
+            </div>
+
+            <div>
+              <item-sales-card
+                    [site]="site"
+                    [dateFrom]="dateFrom"
+                    [dateTo]="dateTo"
+                    [removeGiftCard]="true"
+                    [groupBy]  = "'void'"
+                    [viewType] = "'adjustment'"
+                    >
+
+                  <div class="header">
+                    <mat-icon>menu</mat-icon>  Item Voids
+                    <mat-divider></mat-divider>
+                  </div>
+              </item-sales-card>
+            </div>
+
           </div>
+        </div>
 
-          <sales-tax-report
-                  [site]="site"
-                  [dateFrom]="dateFrom"
-                  [dateTo]="dateTo"
-                  [minimized]="'true'"
-                  [notifier]="childNotifier">
-                  <mat-icon>summarize</mat-icon> Sales - {{site.name}}
-          </sales-tax-report>
+        <div class="grid-charts">
+            <div>
+              <app-widget-card
+                [dateFrom] ="dateFrom"
+                [dateTo]   ="dateTo"
+                groupBy    ="date"
+                chartName  ="ByDate"
+                [sites]    ="sites"
+                [counter]  ="count+1"
+              ></app-widget-card>
+            </div>
 
-          <payment-report
-                  [site]    ="site"
-                  [dateFrom]="dateFrom"
-                  [dateTo]  ="dateTo"
-                  [notifier]="childNotifier">
-            <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
-          </payment-report>
+            <div>
+              <app-widget-card
+                [dateFrom]="dateFrom"
+                [dateTo]   ="dateFrom"
+                groupBy    ="hour"
+                chartName  ="Hourly"
+                [sites]    ="sites"
+                [counter]  ="count+1"
+                [notifier]="childNotifier"
+              ></app-widget-card>
+            </div>
 
-          <payment-report
-                  [groupBy]="'deviceName'"
-                  [site]    ="site"
-                  [dateFrom]="dateFrom"
-                  [dateTo]  ="dateTo"
-                  [notifier]="childNotifier">
-            <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
-          </payment-report>
+            <div>
+              <app-widget-card
+                [dateFrom] ="dateFrom"
+                [dateTo]   ="dateTo"
+                groupBy    ="orderemployeecount"
+                chartName  ="Employee Order Count"
+                [sites]    ="sites"
+                [counter]  ="count+1"
+                [notifier]="childNotifier"
+                ></app-widget-card>
+            </div>
 
-          <div>
-            <item-sales-card
-                  [site]="site"
-                  [dateFrom]="dateFrom"
-                  [dateTo]="dateTo"
-                  [removeGiftCard]="true"
-                  [viewType] = "'sales'"
-                  [groupBy]="'category'">
-                <div class="header">
-                  <mat-icon>menu</mat-icon>  Category Sales
-                  <mat-divider></mat-divider>
-                </div>
-            </item-sales-card>
-          </div>
-
-          <div>
-            <item-sales-card
-                  [site]="site"
-                  [dateFrom]="dateFrom"
-                  [dateTo]="dateTo"
-                  [removeGiftCard]="true"
-                  [viewType] = "'sales'"
-                  [groupBy]="'items'">
-                <div class="header">
-                  <mat-icon>menu</mat-icon> Item Sales
-                  <mat-divider></mat-divider>
-                </div>
-            </item-sales-card>
-          </div>
-
-          <div>
-            <item-sales-card
-                  [site]="site"
-                  [dateFrom]="dateFrom"
-                  [dateTo]="dateTo"
-                  [removeGiftCard]="true"
-                  [groupBy]  = "'void'"
-                  [viewType] = "'adjustment'"
-                  >
-
-                <div class="header">
-                  <mat-icon>menu</mat-icon>  Item Voids
-                  <mat-divider></mat-divider>
-                </div>
-            </item-sales-card>
-          </div>
+            <div>
+              <app-widget-card
+                [dateFrom] ="dateFrom"
+                [dateTo]   ="dateTo"
+                groupBy    ="orderemployeesales"
+                chartName  ="Employee Order Sales"
+                [sites]    ="sites"
+                [counter]  ="count+1"
+                [notifier]="childNotifier"
+              ></app-widget-card>
+            </div>
 
         </div>
       </div>
-
-      <div class="grid-charts">
-          <div>
-            <app-widget-card
-              [dateFrom] ="dateFrom"
-              [dateTo]   ="dateTo"
-              groupBy    ="date"
-              chartName  ="ByDate"
-              [counter]  ="count+1"
-            ></app-widget-card>
-          </div>
-
-          <div>
-            <app-widget-card
-              [dateFrom]="dateFrom"
-              [dateTo]   ="dateFrom"
-              groupBy    ="hour"
-              chartName  ="Hourly"
-              [counter]  ="count+1"
-              [notifier]="childNotifier"
-            ></app-widget-card>
-          </div>
-
-          <div>
-            <app-widget-card
-              [dateFrom] ="dateFrom"
-              [dateTo]   ="dateTo"
-              groupBy    ="orderemployeecount"
-              chartName  ="Employee Order Count"
-              [counter]  ="count+1"
-              [notifier]="childNotifier"
-              ></app-widget-card>
-          </div>
-
-          <div>
-            <app-widget-card
-              [dateFrom] ="dateFrom"
-              [dateTo]   ="dateTo"
-              groupBy    ="orderemployeesales"
-              chartName  ="Employee Order Sales"
-              [counter]  ="count+1"
-              [notifier]="childNotifier"
-            ></app-widget-card>
-          </div>
-
-        </div>
     </div>
 </div>
 

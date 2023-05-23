@@ -9,8 +9,8 @@ import { InventoryLocationsService } from 'src/app/_services/inventory/inventory
 import { IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { IGetRowsParams,  GridApi,  } from '@ag-grid-community/all-modules';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+// import "ag-grid-community/dist/styles/ag-grid.css";
+// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
 import { Capacitor,  } from '@capacitor/core';

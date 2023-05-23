@@ -136,7 +136,8 @@ export  function init_app(appLoadService: AppInitService) {
 
   imports: [
     IonicModule.forRoot(),
-    AgGridModule.withComponents([AgGridImageFormatterComponent,AgGridToggleComponent]),
+    AgGridModule,
+    // AgGridModule.withComponents([AgGridImageFormatterComponent,AgGridToggleComponent]),
     UserIdleModule.forRoot({idle: 10, timeout: 100, ping: 120}),
     AppRoutingModule,
     AppMaterialModule,

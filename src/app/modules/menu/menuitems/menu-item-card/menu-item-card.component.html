@@ -98,13 +98,6 @@
     </div>
 </ng-template>
 
-<ng-template #productImage>
-  <img  *ngIf="!isCategory"
-        [src]="imageUrl"
-        onerror   = "this.src='assets/images/placeholderimage.png'"
-        class="product-image"
-        (click)="menuItemActionObs(true)"/>
-</ng-template>
 
 <ng-template #price>
   <div id="price">
@@ -118,12 +111,21 @@
   </div>
 </ng-template>
 
+<ng-template #productImage>
+  <!-- isCategory {{isCategory}} - {{imageUrl}} -->
+  <img  *ngIf     ="!isCategory"
+        [src]     ="imageUrl"
+        onerror   = "this.src='assets/images/placeholderimage.png'"
+        class="product-image"
+        (click)="menuItemActionObs(true)"/>
+</ng-template>
+
 <ng-template #categoryImage>
   <div class="round-container">
-    <img  *ngIf="isCategory"
-      [src]="imageUrl"
+    <img  *ngIf ="isCategory"
+      [src]     ="imageUrl"
       onerror   = "this.src='assets/images/placeholderimage.png'"
-      class="product-image"
+      class     ="product-image"
       (click)="menuItemActionObs(false)"/>
   </div>
 
@@ -175,7 +177,7 @@
      {{menuItem.name | truncateText : 8}}
   </div> -->
   <div class="category-open">
-    <button mat-button (click)="menuItemActionObs(false)"> 
+    <button mat-button (click)="menuItemActionObs(false)">
       <mat-icon >open_in_new</mat-icon>
     </button>
   </div>

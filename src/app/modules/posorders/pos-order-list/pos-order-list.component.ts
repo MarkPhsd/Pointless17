@@ -5,8 +5,8 @@ import { IPOSOrder,IPOSOrderSearchModel } from 'src/app/_interfaces/transactions
 import { Observable } from 'rxjs';
 import { GridApi} from 'ag-grid-community';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+// import "ag-grid-community/dist/styles/ag-grid.css";
+// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 
 @Component({

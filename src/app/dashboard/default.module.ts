@@ -775,7 +775,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
    ],
 
    imports: [
-      AgGridModule.withComponents([ButtonRendererComponent,AgIconFormatterComponent, AgGridToggleComponent,AgGridImageFormatterComponent]),
+      // AgGridModule.withComponents([ButtonRendererComponent,AgIconFormatterComponent, AgGridToggleComponent,AgGridImageFormatterComponent]),
+      AgGridModule,
       DashBoardRoutingModule,
       AngularResizeEventModule,
       AppRoutingModule,

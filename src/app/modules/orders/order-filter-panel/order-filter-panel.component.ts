@@ -4,7 +4,7 @@ import {Component, OnDestroy,
   ViewChild, ElementRef,
   }  from '@angular/core';
 import { IServiceType, IUser,  } from 'src/app/_interfaces';
-import { IPOSOrderSearchModel,  } from 'src/app/_interfaces/transactions/posorder';
+import { IPOSOrder, IPOSOrderSearchModel,  } from 'src/app/_interfaces/transactions/posorder';
 import { IItemBasic,} from 'src/app/_services';
 import { OrdersService } from 'src/app/_services';
 import { ActivatedRoute, Router} from '@angular/router';
@@ -360,23 +360,16 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       this.searchModel.employeeID    = 0
     }
 
-    const search               = this.searchModel;
+    let search               = this.searchModel;
     search.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
     search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
     search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
     search.pageNumber          = 1;
     if (this.toggleScheduleDateRangeFilter) {
-      if (this.scheduleDateForm && this.scheduleDateForm.get("start").value && this.scheduleDateForm.get("end").value ) {
-        this.scheduleDateFrom = this.scheduleDateForm.get("start").value;
-        this.scheduleDateTo  = this.scheduleDateForm.get("end").value;
-        if (this.scheduleDateTo && this.scheduleDateFrom) {
-          const start  = this.dateHelper.format(this.scheduleDateFrom, 'short')
-          const end = this.dateHelper.format(this.scheduleDateTo, 'short')
-          this.searchModel.scheduleDate_From = start
-          this.searchModel.scheduleDate_To  = end
-        }
-      }
+      search = this.getScheduleDateSearch(search)
     }
+
+    search = this.getCompletionDateSearch(search);
 
     search.printLocation       = 0;
     search.prepStatus          = 1;
@@ -531,7 +524,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       if (!this.completionDateForm.get("start").value || !this.completionDateForm.get("end").value) {
         this.dateFrom = this.completionDateForm.get("start").value
         this.dateTo =  this.completionDateForm.get("end").value
-        console.log('emitDatePickerData')
+        // console.log('emitDatePickerData')
         this.refreshCompletionDateSearch()
       }
     }
@@ -549,20 +542,44 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   refreshCompletionDateSearch() {
     if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
-      this.dateFrom = this.completionDateForm.get("start").value
-      this.dateTo   = this.completionDateForm.get("end").value
-      if (!this.completionDateForm || !this.dateFrom || !this.dateTo) {
-        this.searchModel.completionDate_From = '';
-        this.searchModel.completionDate_To   = '';
-        this.refreshSearch()
-        return
+    this.searchModel = this.getCompletionDateSearch(this.searchModel)
+    this.refreshSearch()
+  }
+
+  getCompletionDateSearch(searchModel: IPOSOrderSearchModel): IPOSOrderSearchModel {
+
+    if (!this.completionDateForm ) {
+      searchModel.completionDate_From = '';
+      searchModel.completionDate_To   = '';
+      return searchModel
+    }
+    if (!this.completionDateForm.get("start").value || !this.completionDateForm.get("end").value) {
+      searchModel.completionDate_From = '';
+      searchModel.completionDate_To   = '';
+      return searchModel
+    }
+
+    const dateFrom = this.completionDateForm.get("start").value
+    const dateTo   = this.completionDateForm.get("end").value
+    const start  = this.dateHelper.format(dateFrom, 'short')
+    const end = this.dateHelper.format(dateTo, 'short')
+    searchModel.completionDate_From = start
+    searchModel.completionDate_To   = end
+    return searchModel
+  }
+
+  getScheduleDateSearch(search: IPOSOrderSearchModel) : IPOSOrderSearchModel {
+    if (this.scheduleDateForm && this.scheduleDateForm.get("start").value && this.scheduleDateForm.get("end").value ) {
+      this.scheduleDateFrom = this.scheduleDateForm.get("start").value;
+      this.scheduleDateTo  = this.scheduleDateForm.get("end").value;
+      if (this.scheduleDateTo && this.scheduleDateFrom) {
+        const start  = this.dateHelper.format(this.scheduleDateFrom, 'short')
+        const end = this.dateHelper.format(this.scheduleDateTo, 'short')
+        this.searchModel.scheduleDate_From = start
+        this.searchModel.scheduleDate_To  = end
       }
-      const start  = this.dateHelper.format(this.dateFrom, 'short')
-      const end = this.dateHelper.format(this.dateTo, 'short')
-      this.searchModel.completionDate_From = start
-      this.searchModel.completionDate_To   = end
-      console.log(this.searchModel)
-      this.refreshSearch()
+    }
+    return search
   }
 
 

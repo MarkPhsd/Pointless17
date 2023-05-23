@@ -121,11 +121,15 @@ export class AWSBucketService {
   }
 
   getImageURLPath(bucket: string, imageName: string ): string {
+    console.log('bucket', bucket)
+    let path = ''
     if (imageName) {
-      return   encodeURI(`https://${bucket}.s3.amazonaws.com/${imageName}`);
+       path =   encodeURI(`https://${bucket}.s3.amazonaws.com/${imageName}`);
     } else {
-      return   encodeURI(`https://${bucket}.s3.amazonaws.com/placeholderproduct.png`);
+       path =  encodeURI(`https://${bucket}.s3.amazonaws.com/placeholderproduct.png`);
     }
+    console.log('path', path)
+    return path;
   }
 
   getPlaceHolderImage(): string {

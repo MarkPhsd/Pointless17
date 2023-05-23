@@ -126,9 +126,14 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
       if (this.isApp) {
         return
       }
-      return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.png")
+      const image = this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.png")
+      return image
     } else {
-      return this.awsBucket.getImageURLFromNameArray(this.bucketName, item.urlImageMain)
+      const imageName =  item.urlImageMain.split(",")
+      const image =`${this.bucketName}${imageName[0]}`
+      // const image2 =  this.awsBucket.getImageURLFromNameArray(this.bucketName, item.urlImageMain)
+      // console.log('image 2', image)
+      return image
     }
   }
 

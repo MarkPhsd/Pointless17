@@ -1,8 +1,8 @@
 import { Component,   OnInit,} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subject  } from 'rxjs';
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+// import "ag-grid-community/dist/styles/ag-grid.css";
+// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import {  GridApi } from '@ag-grid-community/all-modules';
 // import {AgGridAngular} from 'ag-grid-angular';

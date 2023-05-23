@@ -10,12 +10,12 @@ import { Observable, Subject ,Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+// import "ag-grid-community/dist/styles/ag-grid.css";
+// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { IPOSOrder, IPOSOrderSearchModel } from 'src/app/_interfaces';
-import 'ag-grid-community/dist/styles/ag-theme-material.css';
+// import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -348,9 +348,12 @@ export class OrdersListComponent implements OnInit,OnDestroy {
 
   //ag-grid standard method
   // async
-  onGridReady(params: any) {
-    console.log('on grid ready')
-    if (params == undefined) { return }
+  async  onGridReady(params: any) {
+    console.log('on grid ready', params)
+    if (params == undefined) {
+      console.log('params undefined')
+      return
+    }
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
@@ -360,12 +363,16 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       params.startRow = 1
       params.endRow = this.pageSize;
     }
+
     let datasource =  {
+
       getRows: (params: IGetRowsParams) => {
+      console.log('on grid output 3')
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
       this.message = '...loading'
       items$.subscribe(data =>
         {
+            console.log('on grid output 4', data.paging, data.results)
             if (!data || !data.paging) { return }
             const resp         =  data.paging
             if (resp) {
@@ -390,8 +397,15 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       }
     };
 
-    if (!datasource)   { return }
-    if (!this.gridApi) { return }
+    if (!datasource)   {
+        console.log('no data source')
+        return
+    }
+    if (!this.gridApi) {
+      console.log('no API')
+      return
+    }
+    // console.log('set Data Source')
     this.gridApi.setDatasource(datasource);
     this.autoSizeAll(true)
   }

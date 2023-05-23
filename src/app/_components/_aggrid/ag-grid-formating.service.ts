@@ -8,8 +8,6 @@ import { ButtonRendererComponent } from '../btn-renderer.component';
 })
 export class AgGridFormatingService {
 
-
-
 constructor(private _snackbar: MatSnackBar) { }
 
 initFrameworkComponents() {

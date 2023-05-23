@@ -16,7 +16,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { SplashScreenStateService } from 'src/app/_services/system/splash-screen-state.service';
 import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
-import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY } from '@angular/cdk/overlay/overlay-directives';
+// import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY } from '@angular/cdk/overlay/overlay-directives';
 
 @Component({
     selector   : 'login-dashboard',
@@ -163,7 +163,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.splashScreenStateService.stop();
     }, 1000);
   }
-  
+
   refreshUIHomePageSettings() {
     this.uiSettingService.getSetting('UIHomePageSettings').subscribe(data =>  {
       this.uiHomePageSetting = JSON.parse(data.text) as UIHomePageSettings
@@ -400,9 +400,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginAction$ = this.userSwitchingService.login(userName, password).pipe(
       switchMap(result =>
         {
-          
+
           // console.log('result of submit login', result);
-          
+
 
           this.initForm();
           if (result && result.errorMessage) {

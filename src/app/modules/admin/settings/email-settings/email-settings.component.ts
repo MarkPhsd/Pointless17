@@ -43,15 +43,15 @@ export class EmailSettingsComponent implements OnInit {
         this._snackbar.open('Email From not set in Manager Email Section Below. Please input email for Sales Reports', 'Alert')
       }
 
-      console.log("email interference.")
+      // console.log("email interference.")
       const item$ = this.sendGridService.sendSMTPTest(emailTo, emailName)
       this.testEmail$ = item$.pipe(
             switchMap(data => {
-              this.message = 'Please check your email.'
+              this.message = 'Please check your email.' + data.toString()
+              this._snackbar.open('Please check your email. ' + data.toString(), 'Alert')
               return of(data)
             })
           )
-      this._snackbar.open('Please check your email', 'Alert')
 
     }
   }

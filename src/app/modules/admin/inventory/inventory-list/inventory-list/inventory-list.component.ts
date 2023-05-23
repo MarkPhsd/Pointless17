@@ -2,7 +2,6 @@ import { Component, ElementRef, EventEmitter, OnInit, ViewChild, Output, HostLis
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of, Subject, Subscription, switchMap  } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { InventoryAssignmentService, IInventoryAssignment, InventoryFilter, InventorySearchResultsPaged } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ClientSearchModel, ISite, IUserProfile, OperationWithAction } from 'src/app/_interfaces';
@@ -10,15 +9,13 @@ import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items
 import { InventoryLocationsService } from 'src/app/_services/inventory/inventory-locations.service';
 import { MatDialog } from '@angular/material/dialog';
 import { IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
-import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { IGetRowsParams,  GridApi,  } from '@ag-grid-community/all-modules';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
+
 import {
   METRCItemsCategories,
 } from 'src/app/_interfaces/metrcs/items';
+
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
 import { Capacitor,  } from '@capacitor/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
@@ -26,9 +23,7 @@ import { AWSBucketService, ContactsService, IItemBasicB, MenuService } from 'src
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
-import { MainfestEditorComponent } from '../../manifests/mainfest-editor/mainfest-editor.component';
 import { AgIconFormatterComponent } from 'src/app/_components/_aggrid/ag-icon-formatter/ag-icon-formatter.component';
-import { ManifestMethodsService } from 'src/app/_services/inventory/manifest-methods.service';
 import { AdjustPaymentComponent } from 'src/app/modules/posorders/adjust/adjust-payment/adjust-payment.component';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { AdjustmentReasonsComponent } from 'src/app/shared/widgets/adjustment-reasons/adjustment-reasons.component';
@@ -135,7 +130,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   selected        : any[];
   selectedRows    : any;
-  agtheme         = 'ag-theme-material';
+  agtheme         =  'ag-theme-alpine';
+  // 'ag-theme-material';
   gridDimensions
   urlPath:        string;
   value           : any;
@@ -314,7 +310,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   }
 
   refreshSearchOut(event) {
-    console.log('resfresh')
+    // console.log('resfresh')
     this.refreshSearch();
   }
 
@@ -758,7 +754,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     selectedRows.forEach(function (selectedRow, index) {
     if (index >= maxToShow) { return; }
     if (index > 0) {  selectedRowsString += ', ';  }
-      console.log('selected Row', selectedRow)
+      // console.log('selected Row', selectedRow)
       selected.push(selectedRow)
       selectedRowsString += selectedRow.name;
     });
@@ -910,7 +906,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     items.forEach( inv => {
       const item = inv  as IInventoryAssignment;
       if (item) {
-        console.log(item?.manifestID, item.manifestID)
+        // console.log(item?.manifestID, item.manifestID)
         if (item.manifestID != null && item.manifestID != 0) {
           this.notifyEvent('You have selected items already assigned to a manifest. Please reselect items.', 'Alert')
           result = false
@@ -1136,8 +1132,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     //locations.filter
     const site = this.siteService.getAssignedSite();
     if (this.locations){
-      console.log('selection', selection.value);
-      console.log('selection', this.selected);
+      // console.log('selection', selection.value);
+      // console.log('selection', this.selected);
       const item = this.locations.filter( data => { return data.id === selection?.value } )
       this.selected.forEach(data => {
         data.location = item[0].name;
@@ -1166,7 +1162,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
         action.action   = 4;
         action.manifest  = manifest;
         action.id        = manifest.id
-        console.log('adjust payment component')
+        // console.log('adjust payment component')
         dialogRef = this.dialog.open(AdjustPaymentComponent,
           { width:        '450px',
             minWidth:     '450px',

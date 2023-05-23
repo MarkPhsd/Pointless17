@@ -1,10 +1,23 @@
 // @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+@use "~ag-grid-community/styles" as ag;
+@include ag.grid-styles((
+  themes: (alpine, alpine-dark, ag-theme-material),
+));
+
 @import '../node_modules/material-icons/iconfont/material-icons.scss';
 @import '~material-icons/iconfont/material-icons.css';
 @import "./app/_material/theme";
 @import '~@mdi/font/css/materialdesignicons.css';
 @import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
-@import "../node_modules/ag-grid-community/dist/styles/ag-theme-material.css";
+
+// @import "../node_modules/ag-grid-community/dist/styles/ag-theme-material.css";
+// @import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
+
+// @import 'ag-grid-community/dist/styles/ag-grid.css';
+// @import 'ag-grid-community/dist/styles/ag-theme-material.css';
+// @import '@ag-grid-community/all-modules/dist/styles/ag-theme-alpine/sass/ag-theme-alpine.scss';
+
 
 @import '~@ionic/angular/css/core.css';
 @import '~@ionic/angular/css/normalize.css';

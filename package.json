@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.57.2",
+  "version": "1.57.9",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -39,8 +39,10 @@
   "dependencies": {
     "@ag-grid-community/all-modules": "^25.3.0",
     "@ag-grid-community/core": "^25.3.0",
+    "@ag-grid-community/styles": "^29.3.5",
     "@ag-grid-enterprise/core": "^25.3.0",
     "@angular-devkit/core": "^14.2.11",
+    "@angular-devkit/schematics": "^14.2.2",
     "@angular/animations": "^14.3.0",
     "@angular/cdk": "^14.2.7",
     "@angular/common": "^14.3.0",
@@ -93,9 +95,9 @@
     "@types/swiper": "^6.0.0",
     "@types/underscore": "^1.11.2",
     "@types/winreg": "^1.2.31",
-    "ag-grid-angular": "^25.3.0",
-    "ag-grid-community": "^25.3.0",
-    "ag-grid-enterprise": "^25.3.0",
+    "ag-grid-angular": "^29.3.5",
+    "ag-grid-community": "^29.3.5",
+    "ag-grid-enterprise": "^29.3.5",
     "angular-draggable-droppable": "^6.0.1",
     "angular-gridster2": "^13.1.1",
     "angular-resize-event": "^3.1.1",
@@ -154,6 +156,7 @@
     "ngx-pipes": "^3.0.0",
     "ngx-stripe": "^13.2.1",
     "ngx-stripe-payment": "^0.0.0",
+    "ngx-xml2json": "^1.0.2",
     "node-key-sender": "^1.0.11",
     "node-prune": "^1.0.2",
     "npm": "^7.24.2",
@@ -161,7 +164,7 @@
     "numeral": "^2.0.6",
     "os-browserify": "^0.3.0",
     "path": "^0.12.7",
-    "pointless-room-layout": "^0.15.9",
+    "pointless-room-layout": "^14.1.1",
     "print-js": "^1.6.0",
     "rxjs": "^7.5.4",
     "set-value": "^4.1.0",
@@ -180,7 +183,7 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-builders/custom-webpack": "^13.1.0",
+    "@angular-builders/custom-webpack": "^14.1.0",
     "@angular-devkit/build-angular": "^14.2.11",
     "@angular-eslint/builder": "1.2.0",
     "@angular-eslint/eslint-plugin": "1.2.0",

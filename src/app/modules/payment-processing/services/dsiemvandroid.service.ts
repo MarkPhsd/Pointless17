@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Transaction } from './../models/models'
 import { dsiemvandroid } from 'dsiemvandroidplugin';
 //https://npm.io/package/ngx-xml-to-json update forupgrade.
-// import { NgxXml2jsonService } from 'ngx-xml2json';
+
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISetting } from 'src/app/_interfaces';
 import { Observable, of, switchMap } from 'rxjs';
-
+import { NgxXml2jsonService } from 'ngx-xml2json';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +16,7 @@ export class PointlessCCDSIEMVAndroidService {
   public saving: boolean;
 
   constructor(
-    // private jsonService   : NgxXml2jsonService,
+    private jsonService   : NgxXml2jsonService,
     private settingService: SettingsService,
     private siteService   : SitesService,
   ) { }
@@ -140,9 +140,9 @@ export class PointlessCCDSIEMVAndroidService {
       const parser = new DOMParser();
       results.value = results.value.replace('#', '')
       const xml = parser.parseFromString(results.value, 'text/xml');
-      // const obj = this.jsonService.xmlToJson(xml) as any;
-      // return obj;
-      return null
+      const obj = this.jsonService.xmlToJson(xml) as any;
+      return obj;
+
     } catch (error) {
       return error
     }

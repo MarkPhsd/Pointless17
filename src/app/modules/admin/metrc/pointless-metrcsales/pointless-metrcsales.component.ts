@@ -1,11 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
-import { IMETRCSales } from 'src/app/_interfaces/transactions/metrc-sales';
-import { employee, IPOSOrder, IServiceType, ISite } from 'src/app/_interfaces';
+
+import {  IPOSOrder, ISite } from 'src/app/_interfaces';
 import { OrdersService, ReportingService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MetrcSalesService } from 'src/app/_services/metrc/metrc-sales.service';
+
 import { Capacitor, Plugins } from '@capacitor/core';
 import { METRCSalesReportPaged, PointlessMetrcSales, PointlessMETRCSalesService, PointlessMetrcSearchModel } from 'src/app/_services/metrc/pointless-metrcsales.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
@@ -15,11 +15,11 @@ import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+// import "ag-grid-community/dist/styles/ag-grid.css";
+// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import 'ag-grid-community/dist/styles/ag-theme-material.css';
+// import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IPagedList } from 'src/app/_services/system/paging.service';
 import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';

@@ -3,7 +3,7 @@ import { Component,EventEmitter,Inject,Input,OnInit, Optional, Output } from '@a
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Capacitor} from '@capacitor/core';
 // import { dsiemvandroid } from 'dsiemvandroidplugin';
-// import { NgxXml2jsonService } from 'ngx-xml2json';
+import { NgxXml2jsonService } from 'ngx-xml2json';
 import { Observable,switchMap,of , Subscription} from 'rxjs';
 import { IPOSPayment } from 'src/app/_interfaces';
 import { TranResponse, Transaction } from './../../models/models';
@@ -97,7 +97,7 @@ export class DsiEMVAndroidComponent implements OnInit {
 
 
   constructor(
-    //  private ngxXml2jsonService: NgxXml2jsonService,
+     private ngxXml2jsonService: NgxXml2jsonService,
      public dsiAndroidService: PointlessCCDSIEMVAndroidService,
      public paymentsMethodsProcessService: PaymentsMethodsProcessService,
      public orderMethodsService: OrderMethodsService,
@@ -451,7 +451,7 @@ export class DsiEMVAndroidComponent implements OnInit {
           const parser = new DOMParser();
 
           const xml = parser.parseFromString(item.value, 'text/xml');
-          const obj = {} as any; //this.ngxXml2jsonService.xmlToJson(xml) as any;
+          const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
 
           return  obj
         }
@@ -493,8 +493,8 @@ export class DsiEMVAndroidComponent implements OnInit {
           const parser = new DOMParser();
           item.value =  item?.value.replace('#', '')
           const xml = parser.parseFromString(item.value, 'text/xml');
-          // const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
-          const obj = {} as any;
+          const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
+          // const obj = {} as any;
           // console.log('cmdResponse', obj?.RStream?.CmdResponse)
           // console.log('cmdResponse', obj?.RStream?.CmdResponse.TextResponse)
           this.tranResponse  = obj?.TranResponse;

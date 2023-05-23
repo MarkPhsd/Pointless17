@@ -9,10 +9,10 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+// import "ag-grid-community/dist/styles/ag-grid.css";
+// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
-import 'ag-grid-community/dist/styles/ag-theme-material.css';
+// import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { PriceTierService } from 'src/app/_services/menu/price-tier.service';
 import { SearchModel } from 'src/app/_services/system/paging.service';
 import { IPriceTierPaged, PriceTiers } from 'src/app/_interfaces/menu/price-categories';

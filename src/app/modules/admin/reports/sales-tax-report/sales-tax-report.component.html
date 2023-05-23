@@ -1,5 +1,5 @@
 <div class = "summary" *ngIf="summaryOnly && site">
-  <ng-content  select="[summary]"></ng-content> 
+  <ng-content  select="[summary]"></ng-content>
   <div *ngIf="(sales$ | async) as sale; else loadingSummary"
         class="grid">
     <div class="grid-item totals_label">Net (pre-tax):</div>
@@ -14,7 +14,7 @@
         <mat-card-title>
           <div class="grid">
             <div  class="totals_label">
-              <h4> <ng-content></ng-content> </h4>
+              <h4>   <ng-content  select="[header]"></ng-content> </h4>
             </div>
             <div>
               <button mat-raised (click)="downloadCSV()">

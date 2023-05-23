@@ -123,17 +123,17 @@
   <div  class="grid-sales-cards"
         *ngIf="iBalanceSheet && localSite && !auths.blindClose ">
 
-    <div class="summary">
-      <mat-card >
-        <mat-card-content>
-          <ng-container [ngTemplateOutlet]="pendingTransactions"></ng-container>
-          <ng-container [ngTemplateOutlet]="futureTransactions"></ng-container>
-          <ng-container [ngTemplateOutlet]="viewMetrcNetSales"></ng-container>
-        </mat-card-content>
-      </mat-card>
-    </div>
+    <span #printsection>
 
-    <div #printsection>
+      <div class="summary">
+        <mat-card  >
+          <mat-card-content>
+            <ng-container [ngTemplateOutlet]="pendingTransactions"></ng-container>
+            <ng-container [ngTemplateOutlet]="futureTransactions"></ng-container>
+            <ng-container [ngTemplateOutlet]="viewMetrcNetSales"></ng-container>
+          </mat-card-content>
+        </mat-card>
+      </div>
 
       <ng-container [ngTemplateOutlet]="taxReport"></ng-container>
       <ng-container [ngTemplateOutlet]="paymentReport"></ng-container>
@@ -143,11 +143,11 @@
         <ng-container [ngTemplateOutlet]="employeeOrdersByHourReport"></ng-container>
       </div>
 
-       <ng-container [ngTemplateOutlet]="salesByDevice"></ng-container>
+      <ng-container [ngTemplateOutlet]="salesByDevice"></ng-container>
       <ng-container [ngTemplateOutlet]="employeeReport"></ng-container>
       <ng-container [ngTemplateOutlet]="giftCardReport"></ng-container>
 
-    </div>
+    </span>
 
     <div>
       <ng-container [ngTemplateOutlet]="itemSalesReport"></ng-container>

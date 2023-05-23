@@ -1,13 +1,10 @@
 import { Component,  Inject,  OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable ,switchMap,of  } from 'rxjs';
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+// import "ag-grid-community/dist/styles/ag-grid.css";
+// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ActivatedRoute, Router } from '@angular/router';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
-
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { DomSanitizer } from '@angular/platform-browser';
 import { UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import { ConversionsService } from 'src/app/_services/measurement/conversions.service';
 
