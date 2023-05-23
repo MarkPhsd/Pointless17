@@ -5,7 +5,7 @@ import { IUser }  from 'src/app/_interfaces';
 import { fadeInAnimation } from './_animations';
 import { UntypedFormControl } from '@angular/forms';
 import { Platform, IonRouterOutlet, ToastController } from '@ionic/angular';
-import { LicenseManager} from "ag-grid-enterprise";
+// import { LicenseManager} from "ag-grid-enterprise";
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
@@ -19,7 +19,7 @@ import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { BalanceSheetMethodsService } from './_services/transactions/balance-sheet-methods.service';
 // import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 
-LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
+// LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -27,7 +27,7 @@ LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,Lice
   animations: [ fadeInAnimation ],
 })
 export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit{
-  
+
   @ViewChild('keyboardRef', { read: ElementRef }) keyboardRef: ElementRef;
   // @ViewChild('templateRef') templateRef: TemplateRef<any>;
   @ViewChild('keyboardView') keyboardView: TemplateRef<any>;
@@ -97,7 +97,7 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
         this.balanceSheetMethodsService.startScaleService()
       }
       this.container = 'container-app'
-      if (this.capPlatForm === 'web') { 
+      if (this.capPlatForm === 'web') {
         this.container = 'container'
       }
 
@@ -105,20 +105,20 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
   }
 
   ngAfterContentInit() {
-    if (this.isKeyBoardVisible) { 
+    if (this.isKeyBoardVisible) {
       this.viewContainerRef.createEmbeddedView(this.keyboardView);
     }
   }
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngAfterViewInit() {
-    if (this.isKeyBoardVisible) { 
+    if (this.isKeyBoardVisible) {
       this.initSavedKeyboardLocation()
     }
   }
-  
+
   initKeyboardSubscriber() {
-    this._keyboardVisible = this.uiSettingsService.toggleKeyboard$.subscribe(data => { 
-      this.keyboardVisible = data; 
+    this._keyboardVisible = this.uiSettingsService.toggleKeyboard$.subscribe(data => {
+      this.keyboardVisible = data;
       if (data) {
         const keyboardDimensions = localStorage.getItem('keyboardDimensions')
         this.keyboardDimensions = 'height:500px;width:900px';
@@ -127,15 +127,15 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
     })
   }
 
-  initSavedKeyboardLocation() { 
+  initSavedKeyboardLocation() {
     if (!this.isKeyBoardVisible) {return}
     const savedPosition = localStorage.getItem('keyboardPosition');
     const position = JSON.parse(savedPosition)
-    this.keyboardPosition = position 
+    this.keyboardPosition = position
     // console.log('restored', position)
   }
 
-  onResizeKeyboard(event) { 
+  onResizeKeyboard(event) {
     if (!event) {return}
     localStorage.setItem('keyboardDimensions', JSON.stringify(event))
   }
@@ -147,21 +147,21 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
     // console.log('position', position)
   }
 
-  get isKeyBoardVisible() { 
+  get isKeyBoardVisible() {
     if (this.keyboardVisible) {
       return this.keyboardView
-    } 
+    }
     return null;
   }
 
-  ngOnDestroy() { 
-    if (this._keyboardVisible) { 
+  ngOnDestroy() {
+    if (this._keyboardVisible) {
       this._keyboardVisible.unsubscribe()
     }
   }
 
 
-  toggleDrag() { 
+  toggleDrag() {
     // this.toggleDrag
   }
 
