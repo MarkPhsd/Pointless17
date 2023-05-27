@@ -6,7 +6,8 @@
 	"webDir": "dist/CCSApp",
 	"plugins": {
 		"SplashScreen": {
-			"launchShowDuration": 0
+			"launchShowDuration": 0,
+      "launchAutoHide": true
 		},
 		"Keyboard": {
 			"resize": "body",
@@ -21,13 +22,13 @@
 			"FadeSplashScreenDuration": "300",
 			"SplashShowOnlyFirstTime": "false",
 			"SplashScreen": "screen",
-			"SplashScreenDelay": "3000"
+			"SplashScreenDelay": "1000"
 		}
 	},
 	"server": {
 		"hostname": "Pointless",
 		"iosScheme": "ionic",
 		"androidScheme": "http",
-		"url": "http://192.168.0.6:4200"
+		"url": "https://pointlesspos.web.app"
 	}
 }

@@ -42,101 +42,101 @@
 
     <br> <mat-divider  class="section-gap"></mat-divider> <br>
     <div *ngIf="sites$ | async as sites">
-      <div *ngIf="dateFrom && dateTo">
 
-        <div class="grid-flow"
-            *ngIf="showValues && dateFrom && dateTo">
-
+      <div class="grid-flow"
+          *ngIf="showValues && dateFrom && dateTo">
           <div  *ngFor="let site of sites">
             <div class="summary">
               <ng-container *ngTemplateOutlet="viewMetrcNetSales, context: {$implicit: site}">
               </ng-container>
             </div>
 
-            <sales-tax-report
-                    [site]="site"
-                    [dateFrom]="dateFrom"
-                    [dateTo]="dateTo"
-                    [minimized]="'true'"
-                    [notifier]="childNotifier">
-              <div header>
-                <mat-icon >summarize</mat-icon> Sales - {{site.name}}
-              </div>
-              <mat-icon>summarize</mat-icon> Sales - {{site.name}}
-            </sales-tax-report>
-
-            <payment-report
-                    [site]    ="site"
-                    [dateFrom]="dateFrom"
-                    [dateTo]  ="dateTo"
-                    [notifier]="childNotifier">
-              <div header>
-                <mat-icon >summarize</mat-icon> Payments - {{site.name}}
-              </div>
-              <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
-            </payment-report>
-
-            <payment-report
-                    [groupBy]="'deviceName'"
-                    [site]    ="site"
-                    [dateFrom]="dateFrom"
-                    [dateTo]  ="dateTo"
-                    [notifier]="childNotifier">
-              <div header>
-                <mat-icon >summarize</mat-icon> Devices - {{site.name}}
-              </div>
-              <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
-            </payment-report>
-
-            <div>
-              <item-sales-card
-                    [site]="site"
-                    [dateFrom]="dateFrom"
-                    [dateTo]="dateTo"
-                    [removeGiftCard]="true"
-                    [viewType] = "'sales'"
-                    [groupBy]="'category'">
-                  <div class="header">
-                    <mat-icon>menu</mat-icon>  Category Sales
-                    <mat-divider></mat-divider>
-                  </div>
-              </item-sales-card>
+          <sales-tax-report
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [minimized]="'true'"
+                  [notifier]="childNotifier">
+            <div header>
+              <mat-icon >summarize</mat-icon> Sales - {{site.name}}
             </div>
+            <mat-icon>summarize</mat-icon> Sales - {{site.name}}
+          </sales-tax-report>
 
-            <div>
-              <item-sales-card
-                    [site]="site"
-                    [dateFrom]="dateFrom"
-                    [dateTo]="dateTo"
-                    [removeGiftCard]="true"
-                    [viewType] = "'sales'"
-                    [groupBy]="'items'">
-                  <div class="header">
-                    <mat-icon>menu</mat-icon> Item Sales
-                    <mat-divider></mat-divider>
-                  </div>
-              </item-sales-card>
+          <payment-report
+                  [site]    ="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]  ="dateTo"
+                  [notifier]="childNotifier">
+            <div header>
+              <mat-icon >summarize</mat-icon> Payments - {{site.name}}
             </div>
+            <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
+          </payment-report>
 
-            <div>
-              <item-sales-card
-                    [site]="site"
-                    [dateFrom]="dateFrom"
-                    [dateTo]="dateTo"
-                    [removeGiftCard]="true"
-                    [groupBy]  = "'void'"
-                    [viewType] = "'adjustment'"
-                    >
-
-                  <div class="header">
-                    <mat-icon>menu</mat-icon>  Item Voids
-                    <mat-divider></mat-divider>
-                  </div>
-              </item-sales-card>
+          <payment-report
+                  [groupBy]="'deviceName'"
+                  [site]    ="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]  ="dateTo"
+                  [notifier]="childNotifier">
+            <div header>
+              <mat-icon >summarize</mat-icon> Devices - {{site.name}}
             </div>
+            <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
+          </payment-report>
 
+          <div>
+            <item-sales-card
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [viewType] = "'sales'"
+                  [groupBy]="'category'">
+                <div class="header">
+                  <mat-icon>menu</mat-icon>  Category Sales
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
           </div>
+
+          <div>
+            <item-sales-card
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [viewType] = "'sales'"
+                  [groupBy]="'items'">
+                <div class="header">
+                  <mat-icon>menu</mat-icon> Item Sales
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
+          </div>
+
+          <div>
+            <item-sales-card
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [groupBy]  = "'void'"
+                  [viewType] = "'adjustment'"
+                  >
+
+                <div class="header">
+                  <mat-icon>menu</mat-icon>  Item Voids
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
+          </div>
+
         </div>
+      </div>
+      <div *ngIf="dateFrom && dateTo">
+
 
         <div class="grid-charts">
             <div>

@@ -101,7 +101,7 @@ export class AppInitService  {
       if ( isApp ) {
         if (!data ) {
           if (!this.platformService.androidApp && !this.platformService.isAppElectron){
-            this._snackbar.open('Using demo data', 'Alert', {duration: 3000} )
+            this._snackbar.open('Using demo data', 'Close', {duration: 3000} )
           }
           this.apiUrl           = "https://pointlessposdemo.com/api"
           this.useAppGate       = false;
@@ -118,9 +118,6 @@ export class AppInitService  {
         }
 
       }
-
-    // this.settingService.setDeviceSettings
-    // }
   }
 
 

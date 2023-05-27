@@ -1,4 +1,3 @@
-import { ObserversModule } from '@angular/cdk/observers';
 import { AfterViewInit, Component, ElementRef,  HostListener,
          Input, OnInit, Output, EventEmitter, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -12,28 +11,24 @@ import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPurchaseOrderItem } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
-import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
-import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
 import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
 import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
-import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { MenuItemModalComponent } from '../../menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
 import { PosOrderItemEditComponent } from './pos-order-item-edit/pos-order-item-edit.component';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
-
 export interface payload{
   index : number;
   item  : PosOrderItem;
 }
-
 @Component({
   selector: 'pos-order-item',
   templateUrl: './pos-order-item.component.html',
@@ -44,7 +39,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   inputForm: UntypedFormGroup;
   itemEdit: boolean;
-
   interface = {}
   payload: payload;
 

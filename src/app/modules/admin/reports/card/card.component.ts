@@ -8,7 +8,7 @@ import numeral, { validate } from 'numeral';
 import { Observable, Subject, Subscription, switchMap } from 'rxjs';
 import { ISalesPayments, ISite }  from 'src/app/_interfaces';
 import { ReportingService, rowValue } from 'src/app/_services';
-import { IReportingSearchModel, IReportItemSaleSummary, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
+import { IReportItemSaleSummary, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { IPaymentSalesSearchModel, PaymentSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
@@ -104,7 +104,6 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
               private  salesPaymentService: SalesPaymentsService,
               public   layoutService      : GridsterLayoutService,
               private  datePipe           : DatePipe,
-              private  reportingItemsSalesService: ReportingItemsSalesService
       ) {
   }
 
@@ -345,6 +344,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
       let dataSeriesValues =  this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
       dataSeriesValues.forEach(data => { if (data) { categories.push(data.date) }  })
       if (categories) { this.chartCategories = categories; }
+
       const xAxis = {
         labels    : { enabled: true },
         categories: categories,
@@ -500,14 +500,10 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
 
   updateChartSitesSales(dateFrom: string, dateTo: string, sites: ISite[]) {
     if (!this.isMultiSiteReport()) { return }
-    // console.log('updateChartSiteSales')
     this.initSeriesLabels();
     this.initChart('values')
-    // let dataSeriesValues =  this.initLocalSeries();
-    // if (!this.dataSeriesValues) { return }
     let dataSeriesValues = [] as any[]
     this.sales = []
-
     for (let site of sites) {
       let sales$ =  this.reportingService.getSales(site, dateFrom, dateTo, this.groupBy)
       sales$.subscribe( sales => {
@@ -619,7 +615,6 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
                 try {
                   const item = sales.filter( item => {})
                 } catch (error) {
-                  // console.log(sales)
                   return
                 }
                 const item = sales.filter( item =>  { if( item.dateHour === data.date)  { return item } } );
@@ -671,7 +666,8 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
             // get list of employees that have sold.
             // const uniqueArr = [... new Set(students.map(data => data.name))]
             const employeesList = [... new Set(sales.map(t => t.employeeName)) ]
-            employeesList.forEach( employee => {this.applyEmployeeSeries(employee,sales, this.groupBy) })
+            employeesList.forEach( employeeName => {this.applyEmployeeSeries(employeeName, sales, this.groupBy) })
+            console.log("employee list", summary)
           }
         )
       }

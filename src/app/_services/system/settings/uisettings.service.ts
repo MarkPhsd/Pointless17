@@ -73,6 +73,7 @@ export interface TransactionUISettings {
   enableExactChange: boolean;
   preventDuplicateBarcodes: boolean;
   scanIncreaseQuantity: boolean;
+  mixMatchTierPricing: boolean;
 }
 
 export interface StripeAPISettings {
@@ -262,7 +263,7 @@ export class UISettingsService {
 
   //.updateRelativeValue(value)
 
-  updateRelativeValue(value: unknown) { 
+  updateRelativeValue(value: unknown) {
     this._relativeValue.next(value)
   }
   updateToggleKeyboard()  {
@@ -723,6 +724,7 @@ export class UISettingsService {
       enableGiftCards: [],
       preventDuplicateBarcodes: [],
       scanIncreaseQuantity: [],
+      mixMatchTierPricing: [],
      })
   }
 

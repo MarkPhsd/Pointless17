@@ -1,10 +1,11 @@
-import { Component, QueryList,  ViewChildren,ChangeDetectorRef, ElementRef, TemplateRef, ViewChild, OnDestroy, AfterViewInit, ViewContainerRef, AfterContentInit } from '@angular/core';
+import { Component, QueryList,  ViewChildren,ChangeDetectorRef, ElementRef,
+         TemplateRef, ViewChild, OnDestroy, AfterViewInit, ViewContainerRef, AfterContentInit, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthenticationService, AWSBucketService, DevService } from './_services';
 import { IUser }  from 'src/app/_interfaces';
 import { fadeInAnimation } from './_animations';
 import { UntypedFormControl } from '@angular/forms';
-import { Platform, IonRouterOutlet, ToastController } from '@ionic/angular';
+import { Platform, IonRouterOutlet } from '@ionic/angular';
 // import { LicenseManager} from "ag-grid-enterprise";
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Subscription } from 'rxjs';
@@ -18,6 +19,8 @@ import { InputTrackerService } from './_services/system/input-tracker.service';
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { BalanceSheetMethodsService } from './_services/transactions/balance-sheet-methods.service';
 // import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
+import { PlatformService } from './_services/system/platform.service';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 // LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
 @Component({
@@ -26,14 +29,13 @@ import { BalanceSheetMethodsService } from './_services/transactions/balance-she
   styleUrls: ['./app.component.scss'],
   animations: [ fadeInAnimation ],
 })
-export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit{
+export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterContentInit{
 
   @ViewChild('keyboardRef', { read: ElementRef }) keyboardRef: ElementRef;
   // @ViewChild('templateRef') templateRef: TemplateRef<any>;
   @ViewChild('keyboardView') keyboardView: TemplateRef<any>;
 
   keyboardPosition :any;// { x: number, y: number };
-
 
   get capPlatForm() {  return Capacitor.getPlatform(); }
   idleState = "NOT_STARTED";
@@ -48,7 +50,6 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
   appUrl : string;
-  container: string;
   keyboardDimensions = 'height:300px;width:700px'
   devMode = false;
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
@@ -69,21 +70,22 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
   // private idle: Idle,
   constructor(
       private platForm              : Platform,
+      private platFormService       : PlatformService,
       private router:                Router,
       private titleService          :Title,
       private authenticationService: AuthenticationService,
       private uiSettingsService: UISettingsService,
       private statusBar:             StatusBar,
-      private cd: ChangeDetectorRef,
-      private awsService:            AWSBucketService,
-      private electronService      :  ElectronService,
+      private cd                   : ChangeDetectorRef,
+      private awsService           : AWSBucketService,
+      private electronService      : ElectronService,
       private appInitService       : AppInitService,
       private inputTrackerService: InputTrackerService,
       private balanceSheetMethodsService: BalanceSheetMethodsService,
       private viewContainerRef: ViewContainerRef
-      // private ipcService          :  IPCService,
   ) {
-      // this.deletePosition();
+
+      console.log('app initialized')
       this.initSubscription();
       this.initStyle();
       this.initializeApp();
@@ -91,17 +93,20 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
       this.awsService.awsBucket();
       this.setTitle();
       this.devMode = isDevMode();
-      // this.uiSettingsService.updateToggleKeyboard()
+
       if (this.electronService.isElectronApp && !this.devMode) {
-        // this.AuthService.logout();
         this.balanceSheetMethodsService.startScaleService()
       }
-      this.container = 'container-app'
-      if (this.capPlatForm === 'web') {
-        this.container = 'container'
-      }
 
-      this.initKeyboardSubscriber()
+      this.initKeyboardSubscriber();
+  }
+
+  async ngOnInit() {
+    try {
+      await SplashScreen.hide()
+    } catch (error) {
+      console.log('splash screen hide error' + error.toString())
+    }
   }
 
   ngAfterContentInit() {
@@ -109,7 +114,7 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
       this.viewContainerRef.createEmbeddedView(this.keyboardView);
     }
   }
-  // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
+
   ngAfterViewInit() {
     if (this.isKeyBoardVisible) {
       this.initSavedKeyboardLocation()
@@ -132,7 +137,6 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
     const savedPosition = localStorage.getItem('keyboardPosition');
     const position = JSON.parse(savedPosition)
     this.keyboardPosition = position
-    // console.log('restored', position)
   }
 
   onResizeKeyboard(event) {
@@ -141,10 +145,8 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
   }
 
   onDragEnd(event: CdkDragEnd) {
-    // save the end position
     const position = event.source.getFreeDragPosition();
     localStorage.setItem('keyboardPosition', JSON.stringify(position));
-    // console.log('position', position)
   }
 
   get isKeyBoardVisible() {
@@ -209,7 +211,6 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
     return data;
   }
 
-
   logout() {
     this.authenticationService.logout();
   }
@@ -225,12 +226,6 @@ export class AppComponent implements OnDestroy , AfterViewInit, AfterContentInit
             // this.platform.exitApp(); // Exit from app
             navigator['app'].exitApp(); // work in ionic 4
           } else {
-            // const toast = await this.toastController.create({
-            //   message: 'Press back again to exit App.',
-            //   duration: 2000,
-            //   position: 'middle'
-            // });
-            // toast.present();
             this.lastTimeBackPress = new Date().getTime();
           }
         }

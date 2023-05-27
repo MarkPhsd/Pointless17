@@ -20,6 +20,7 @@ export interface IReportItemSales {
   productName:             string;
   serialNumber:            string;
   employee:                string;
+  employeeName:            string;
   posName:                 string;
   zRunID:                  string;
   balanceSheetID:          number;

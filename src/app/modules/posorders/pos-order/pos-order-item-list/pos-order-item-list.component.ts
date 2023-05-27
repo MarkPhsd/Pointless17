@@ -8,11 +8,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import {  switchMap } from 'rxjs/operators';
 import { Observable, of, Subject ,Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-// import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { IPOSOrder,  PosOrderItem } from 'src/app/_interfaces';
@@ -21,7 +17,6 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { DatePipe } from '@angular/common';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
-import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 
