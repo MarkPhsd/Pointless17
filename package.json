@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.57.8",
+  "version": "1.58.1",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -97,6 +97,7 @@
     "@types/winreg": "^1.2.31",
     "ag-grid-angular": "^29.3.5",
     "ag-grid-community": "^29.3.5",
+    "ag-grid-enterprise": "^25.3.0",
     "angular-draggable-droppable": "^6.0.1",
     "angular-gridster2": "^13.1.1",
     "angular-resize-event": "^3.1.1",

@@ -6,7 +6,7 @@ import { IUser }  from 'src/app/_interfaces';
 import { fadeInAnimation } from './_animations';
 import { UntypedFormControl } from '@angular/forms';
 import { Platform, IonRouterOutlet } from '@ionic/angular';
-// import { LicenseManager} from "ag-grid-enterprise";
+import { LicenseManager} from "ag-grid-enterprise";
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
@@ -22,7 +22,7 @@ import { BalanceSheetMethodsService } from './_services/transactions/balance-she
 import { PlatformService } from './_services/system/platform.service';
 import { SplashScreen } from '@capacitor/splash-screen';
 
-// LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
+LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

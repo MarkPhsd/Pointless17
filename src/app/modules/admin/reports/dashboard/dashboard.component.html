@@ -149,8 +149,8 @@
             <button mat-flat-button color="primary" (click)="showView(5)">Item Voids</button>
           </div>
 
-          <ng-container [ngTemplateOutlet]="categorySalesView"></ng-container>
-          <ng-template #categorySales>
+          <ng-container *ngTemplateOutlet="categorySalesView,context: {$implicit: site}"></ng-container>
+          <ng-template #categorySales let-site>
             <div>
               <item-sales-card
                     [site]="site"
@@ -167,8 +167,8 @@
             </div>
           </ng-template>
 
-          <ng-container [ngTemplateOutlet]="taxedCategorySalesView"></ng-container>
-          <ng-template #taxedCategorySales>
+          <ng-container *ngTemplateOutlet="taxedCategorySalesView,context: {$implicit: site}"></ng-container>
+          <ng-template #taxedCategorySales let-site>
             <div>
               <item-sales-card
                     [site]="site"
@@ -186,8 +186,8 @@
             </div>
           </ng-template>
 
-          <ng-container [ngTemplateOutlet]="nonTaxedCategorySalesView"></ng-container>
-          <ng-template #nonTaxedCategorySales>
+          <ng-container *ngTemplateOutlet="nonTaxedCategorySalesView,context: {$implicit: site}"></ng-container>
+          <ng-template #nonTaxedCategorySales let-site>
             <div>
               <item-sales-card
                     [site]="site"
@@ -205,8 +205,8 @@
             </div>
           </ng-template>
 
-          <ng-container [ngTemplateOutlet]="itemSalesView"></ng-container>
-          <ng-template #itemSales>
+          <ng-container *ngTemplateOutlet="itemSalesView,context: {$implicit: site}"></ng-container>
+          <ng-template #itemSales let-site>
             <div>
               <item-sales-card
                     [site]="site"
@@ -223,8 +223,8 @@
             </div>
           </ng-template>
 
-          <ng-container [ngTemplateOutlet]="itemVoidsView"></ng-container>
-          <ng-template #itemVoids>
+          <ng-container *ngTemplateOutlet="itemVoidsView,context: {$implicit: site}"></ng-container>
+          <ng-template #itemVoids let-site>
             <div>
               <item-sales-card
                     [site]="site"
