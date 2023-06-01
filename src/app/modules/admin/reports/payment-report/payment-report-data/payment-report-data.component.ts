@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { IPaymentSalesSummary } from 'src/app/_services/reporting/sales-payments.service';
 
@@ -21,6 +22,7 @@ export class PaymentReportDataComponent implements OnInit {
   @Input() sales   : IPaymentSalesSummary;
 
   constructor(
+    private popOutService: ProductEditButtonService,
     private reportingItemsSalesService: ReportingItemsSalesService)
      { }
 
@@ -31,5 +33,11 @@ export class PaymentReportDataComponent implements OnInit {
   downloadCSV() {
     if (!this.sales) { return }
     this.reportingItemsSalesService.downloadFile(this.sales.paymentSummary, 'PaymentReport')
+  }
+
+  dataGridView() {
+    this.popOutService.openDynamicGrid(
+      {data:this.sales.paymentSummary, name: 'PaymentSummary'}
+    )
   }
 }

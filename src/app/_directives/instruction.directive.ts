@@ -41,11 +41,11 @@ export class InstructionDirective {
     let textNode = this.renderer.createText(this.instructionText);
     this.renderer.appendChild(this.instructionDiv, textNode);
     this.renderer.appendChild(this.instructionDiv, this.closeButton);
+    // this.instr
   }
 
   // Expose a method to show the instruction
   showInstruction() {
-    console.log('rendering instructions')
     this.renderer.setStyle(this.instructionDiv, 'display', 'block');
     this.adjustPosition();
   }

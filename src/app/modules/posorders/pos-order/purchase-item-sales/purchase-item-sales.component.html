@@ -1,0 +1,29 @@
+<!-- {{order?.service?.filterType}} -->
+<ng-content></ng-content>
+<div *ngIf="(itemHistorySales$ | async) as items; else loading">
+  <div class="grid-items">
+    <div>Vendor</div>
+    <div>Cost</div>
+    <div>QTY</div>
+    <div>Date</div>
+  </div>
+  <div *ngFor="let item of items">
+    <div class="grid-items" >
+      <div>
+        <app-client-info [clientID]="item?.clientID"> </app-client-info>
+      </div>
+      <div>{{item?.cost | currency}}</div>
+      <div>{{item?.quantity }}</div>
+      <div>{{item?.orderDate | date: 'MM/dd/yy' }}</div>
+    </div>
+  </div>
+</div>
+<div *ngIf="loadingMessage">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</div>
+
+<ng-template #loading>
+
+
+</ng-template>
+

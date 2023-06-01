@@ -1,7 +1,8 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, of, Subject, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
-import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSalesService, IReportItemSaleSummary, POSItemSerachModel } from 'src/app/_services/reporting/reporting-items-sales.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSalesService, IReportItemSaleSummary, POSItemSearchModel } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
@@ -32,6 +33,7 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
   @Input() groupBy  : string;
   @Input() reportName: string;
   @Input() removeGiftCard= true;
+  @Input() taxFilter = 0;
 
   adjustments$:  Observable<unknown>;
   action$ :  Observable<unknown>;
@@ -44,6 +46,7 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
   constructor(
     private reportingItemsSalesService: ReportingItemsSalesService,
     private orderMethodsService: OrderMethodsService,
+    private popOutService: ProductEditButtonService,
     private siteSerivce: SitesService,)
      { }
 
@@ -97,6 +100,7 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     searchModel.zrunID            = this.zrunID;
     searchModel.scheduleDateStart = this.scheduleDateStart
     searchModel.scheduleDateEnd   = this.scheduleDateEnd;
+    searchModel.taxFilter         = this.taxFilter;
 
     if (this.site) {
       this.sales$ = this.reportingItemsSalesService.groupItemSales(this.site, searchModel).pipe(switchMap(data => {
@@ -107,6 +111,11 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     return
   }
 
+  dataGridView() {
+    this.popOutService.openDynamicGrid(
+      {data: this.sales.results, name: 'IReportItemSales'}
+    )
+  }
 
   sortUser(list) {
     if (this.sales) {
@@ -140,7 +149,7 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
   }
 
   getAdustmentReport() {
-    const searchModel = {} as POSItemSerachModel;
+    const searchModel = {} as POSItemSearchModel;
     searchModel.completionDate_From         = this.dateFrom;
     searchModel.completionDate_To           = this.dateTo;
     searchModel.zrunID                      = this.zrunID;

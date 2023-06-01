@@ -84,7 +84,10 @@ export class OrderMethodsService implements OnDestroy {
 
   private _assingedPOSItems = new BehaviorSubject<PosOrderItem[]>(null);
   public  assignedPOSItems$ = this._assingedPOSItems.asObservable();
-  public assignPOSItems    : PosOrderItem[];
+  public  assignPOSItems       : PosOrderItem[];
+
+  private _lastSelectedItem = new BehaviorSubject<PosOrderItem>(null);
+  public  lastSelectedItem$ = this._lastSelectedItem.asObservable();
 
   private _posIssuePurchaseItem   = new BehaviorSubject<IPurchaseOrderItem>(null);
   public  posIssuePurchaseItem$ = this._posIssuePurchaseItem.asObservable();
@@ -100,6 +103,11 @@ export class OrderMethodsService implements OnDestroy {
   updatePaymentMethodStep(item: IPaymentMethod) {
     this._posPaymentStepSelection.next(item)
   }
+
+  updateLastItemSelected(item: PosOrderItem) {
+    this._lastSelectedItem.next(item)
+  }
+
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(order => {

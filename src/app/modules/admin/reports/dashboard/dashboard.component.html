@@ -1,55 +1,106 @@
 <div      class="container" *ngIf="(uiTransactions$ | async) as uiTransactions">
-    <div  class="grid-buttons">
-      <div>
-        <app-widget-filter
-          (messageOut)="receiveData($event)">
-        </app-widget-filter>
-      </div>
 
-      <div>
-        <button mat-raised-button (click)="email()">
-          Email <mat-icon>email</mat-icon>
-        </button>
-      </div>
-
-      <div>
-        <button mat-raised-button (click)="showValues=!showValues">
-          <span *ngIf="showValues">
-            <mat-icon color="primary">analytics</mat-icon>Hide List Reports
-          </span>
-          <span *ngIf="!showValues">
-            <mat-icon color="primary">analytics</mat-icon>Show List Reports
-          </span>
-        </button>
-      </div>
-
-      <div>
-        <button mat-raised-button (click)="refreshReports()">
-          Refresh Reports
-        </button>
-      </div>
-
-    </div>
+    <ng-container [ngTemplateOutlet]="headerView"></ng-container>
 
     <div *ngIf="(email$ | async) as email; else emailing"></div>
 
-    <ng-template #emailing>
-      <div class="emailing" *ngIf="emailSending">
-        <mat-spinner [diameter]="50"></mat-spinner>
-        ...emailing
-      </div>
-    </ng-template>
+    <ng-container *ngTemplateOutlet="customReport"></ng-container>
 
     <br> <mat-divider  class="section-gap"></mat-divider> <br>
-    <div *ngIf="sites$ | async as sites">
 
-      <div class="grid-flow"
-          *ngIf="showValues && dateFrom && dateTo">
-          <div  *ngFor="let site of sites">
-            <div class="summary">
-              <ng-container *ngTemplateOutlet="viewMetrcNetSales, context: {$implicit: site}">
-              </ng-container>
-            </div>
+    <ng-container *ngTemplateOutlet="siteReports"></ng-container>
+
+</div>
+
+<ng-template #headerView>
+  <div  class="grid-buttons">
+    <div>
+      <app-widget-filter
+        (messageOut)="receiveData($event)">
+      </app-widget-filter>
+    </div>
+
+    <div>
+      <button mat-raised-button (click)="email()">
+        Email <mat-icon>email</mat-icon>
+      </button>
+    </div>
+
+    <div>
+      <button mat-raised-button (click)="toggleShowValues()">
+        <span *ngIf="showValues">
+          <mat-icon color="primary">analytics</mat-icon>Hide List Reports
+        </span>
+        <span *ngIf="!showValues">
+          <mat-icon color="primary">analytics</mat-icon>Show List Reports
+        </span>
+      </button>
+    </div>
+
+    <div>
+      <button mat-raised-button (click)="refreshReports()">
+        Refresh Reports
+      </button>
+    </div>
+
+    <div>
+      <app-mat-select [list]="reportList"
+                      [fieldName]="'field'"
+                      (outputItem)="selectReport($event)">
+          Select Report
+      </app-mat-select>
+    </div>
+  </div>
+</ng-template>
+<ng-template #emailing>
+  <div class="emailing" *ngIf="emailSending">
+    <mat-spinner [diameter]="50"></mat-spinner>
+    ...emailing
+  </div>
+</ng-template>
+
+<ng-template #metrcNetSalesSummary let-site>
+    <app-metrc-summary
+        [site]    ="site"
+        [dateFrom]="dateFrom"
+        [dateTo]  ="dateTo"
+        [type]    ="'metrcSummary'"
+        [counter]  ="count+1"
+        [notifier]="childNotifier"
+      >
+    <div summary>
+      <mat-icon >receipt</mat-icon> {{site?.name}} METRC:
+    </div>
+  </app-metrc-summary>
+</ng-template>
+
+<ng-template #customReportView>
+  <div>
+    <button mat-raised-button (click)="clearCustomData()"> Clear </button>
+  </div>
+
+  <div *ngIf="(dynamicData$ | async) as data; else loadingData">
+    <dynamic-ag-grid [dataInterface]="'ReOrderList'"
+                     [data]="data">
+    </dynamic-ag-grid>
+  </div>
+
+  <ng-template #loadingData>
+    ...loading data.
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </ng-template>
+</ng-template>
+
+<ng-template #siteReports>
+
+  <div *ngIf="sites$ | async as sites">
+    <div class="grid-flow"
+        *ngIf="showValues && dateFrom && dateTo">
+        <div  *ngFor="let site of sites">
+          <div class="summary">
+            <ng-container *ngTemplateOutlet="viewMetrcNetSales, context: {$implicit: site}">
+            </ng-container>
+          </div>
 
           <sales-tax-report
                   [site]="site"
@@ -85,124 +136,166 @@
             </div>
             <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
           </payment-report>
-
           <div>
-            <item-sales-card
-                  [site]="site"
-                  [dateFrom]="dateFrom"
-                  [dateTo]="dateTo"
-                  [removeGiftCard]="true"
-                  [viewType] = "'sales'"
-                  [groupBy]="'category'">
-                <div class="header">
-                  <mat-icon>menu</mat-icon>  Category Sales
-                  <mat-divider></mat-divider>
-                </div>
-            </item-sales-card>
+            <button mat-flat-button color="primary" (click)="showView(0)">Show All Details</button>
+            <button mat-flat-button color="primary" (click)="showView(1)">Category Sales</button>
+          </div>
+          <div>
+            <button mat-flat-button color="primary" (click)="showView(2)">Taxed Sales</button>
+            <button mat-flat-button color="primary" (click)="showView(3)">Non Taxed Sales</button>
+          </div>
+          <div>
+            <button mat-flat-button color="primary" (click)="showView(4)">Item Sales</button>
+            <button mat-flat-button color="primary" (click)="showView(5)">Item Voids</button>
           </div>
 
-          <div>
-            <item-sales-card
-                  [site]="site"
-                  [dateFrom]="dateFrom"
-                  [dateTo]="dateTo"
-                  [removeGiftCard]="true"
-                  [viewType] = "'sales'"
-                  [groupBy]="'items'">
-                <div class="header">
-                  <mat-icon>menu</mat-icon> Item Sales
-                  <mat-divider></mat-divider>
-                </div>
-            </item-sales-card>
-          </div>
-
-          <div>
-            <item-sales-card
-                  [site]="site"
-                  [dateFrom]="dateFrom"
-                  [dateTo]="dateTo"
-                  [removeGiftCard]="true"
-                  [groupBy]  = "'void'"
-                  [viewType] = "'adjustment'"
-                  >
-
-                <div class="header">
-                  <mat-icon>menu</mat-icon>  Item Voids
-                  <mat-divider></mat-divider>
-                </div>
-            </item-sales-card>
-          </div>
-
-        </div>
-      </div>
-      <div *ngIf="dateFrom && dateTo">
-
-
-        <div class="grid-charts">
+          <ng-container [ngTemplateOutlet]="categorySalesView"></ng-container>
+          <ng-template #categorySales>
             <div>
-              <app-widget-card
-                [dateFrom] ="dateFrom"
-                [dateTo]   ="dateTo"
-                groupBy    ="date"
-                chartName  ="ByDate"
-                [sites]    ="sites"
-                [counter]  ="count+1"
-              ></app-widget-card>
+              <item-sales-card
+                    [site]="site"
+                    [dateFrom]="dateFrom"
+                    [dateTo]="dateTo"
+                    [removeGiftCard]="true"
+                    [viewType] = "'sales'"
+                    [groupBy]="'category'">
+                  <div class="header">
+                    <mat-icon>menu</mat-icon>  Category Sales
+                    <mat-divider></mat-divider>
+                  </div>
+              </item-sales-card>
             </div>
+          </ng-template>
 
+          <ng-container [ngTemplateOutlet]="taxedCategorySalesView"></ng-container>
+          <ng-template #taxedCategorySales>
             <div>
-              <app-widget-card
-                [dateFrom]="dateFrom"
-                [dateTo]   ="dateFrom"
-                groupBy    ="hour"
-                chartName  ="Hourly"
-                [sites]    ="sites"
-                [counter]  ="count+1"
-                [notifier]="childNotifier"
-              ></app-widget-card>
+              <item-sales-card
+                    [site]="site"
+                    [dateFrom]="dateFrom"
+                    [dateTo]="dateTo"
+                    [removeGiftCard]="true"
+                    [viewType] = "'sales'"
+                    [taxFilter]="2"
+                    [groupBy]="'category'">
+                  <div class="header">
+                    <mat-icon>menu</mat-icon> Taxed Category Sales
+                    <mat-divider></mat-divider>
+                  </div>
+              </item-sales-card>
             </div>
+          </ng-template>
 
+          <ng-container [ngTemplateOutlet]="nonTaxedCategorySalesView"></ng-container>
+          <ng-template #nonTaxedCategorySales>
             <div>
-              <app-widget-card
-                [dateFrom] ="dateFrom"
-                [dateTo]   ="dateTo"
-                groupBy    ="orderemployeecount"
-                chartName  ="Employee Order Count"
-                [sites]    ="sites"
-                [counter]  ="count+1"
-                [notifier]="childNotifier"
-                ></app-widget-card>
+              <item-sales-card
+                    [site]="site"
+                    [dateFrom]="dateFrom"
+                    [dateTo]="dateTo"
+                    [removeGiftCard]="true"
+                    [viewType] = "'sales'"
+                    [taxFilter]="1"
+                    [groupBy]="'category'">
+                  <div class="header">
+                    <mat-icon>menu</mat-icon> Non Taxed Category Sales
+                    <mat-divider></mat-divider>
+                  </div>
+              </item-sales-card>
             </div>
+          </ng-template>
 
+          <ng-container [ngTemplateOutlet]="itemSalesView"></ng-container>
+          <ng-template #itemSales>
             <div>
-              <app-widget-card
-                [dateFrom] ="dateFrom"
-                [dateTo]   ="dateTo"
-                groupBy    ="orderemployeesales"
-                chartName  ="Employee Order Sales"
-                [sites]    ="sites"
-                [counter]  ="count+1"
-                [notifier]="childNotifier"
-              ></app-widget-card>
+              <item-sales-card
+                    [site]="site"
+                    [dateFrom]="dateFrom"
+                    [dateTo]="dateTo"
+                    [removeGiftCard]="true"
+                    [viewType] = "'sales'"
+                    [groupBy]="'items'">
+                  <div class="header">
+                    <mat-icon>menu</mat-icon> Item Sales
+                    <mat-divider></mat-divider>
+                  </div>
+              </item-sales-card>
             </div>
+          </ng-template>
 
-        </div>
+          <ng-container [ngTemplateOutlet]="itemVoidsView"></ng-container>
+          <ng-template #itemVoids>
+            <div>
+              <item-sales-card
+                    [site]="site"
+                    [dateFrom]="dateFrom"
+                    [dateTo]="dateTo"
+                    [removeGiftCard]="true"
+                    [groupBy]  = "'void'"
+                    [viewType] = "'adjustment'"
+                    >
+                  <div class="header">
+                    <mat-icon>menu</mat-icon>  Item Voids
+                    <mat-divider></mat-divider>
+                  </div>
+              </item-sales-card>
+            </div>
+          </ng-template>
+
       </div>
     </div>
-</div>
 
-<ng-template #metrcNetSalesSummary let-site>
-    <app-metrc-summary
-        [site]    ="site"
-        [dateFrom]="dateFrom"
-        [dateTo]  ="dateTo"
-        [type]    ="'metrcSummary'"
-        [counter]  ="count+1"
-        [notifier]="childNotifier"
-      >
-    <div summary>
-      <mat-icon >receipt</mat-icon> {{site?.name}} METRC:
+    <div *ngIf="dateFrom && dateTo">
+      <div class="grid-charts">
+          <div>
+            <app-widget-card
+              [dateFrom] ="dateFrom"
+              [dateTo]   ="dateTo"
+              groupBy    ="date"
+              chartName  ="ByDate"
+              [sites]    ="sites"
+              [counter]  ="count+1"
+            ></app-widget-card>
+          </div>
+
+          <div>
+            <app-widget-card
+              [dateFrom]="dateFrom"
+              [dateTo]   ="dateFrom"
+              groupBy    ="hour"
+              chartName  ="Hourly"
+              [sites]    ="sites"
+              [counter]  ="count+1"
+              [notifier]="childNotifier"
+            ></app-widget-card>
+          </div>
+
+          <div>
+            <app-widget-card
+              [dateFrom] ="dateFrom"
+              [dateTo]   ="dateTo"
+              groupBy    ="orderemployeecount"
+              chartName  ="Employee Order Count"
+              [sites]    ="sites"
+              [counter]  ="count+1"
+              [notifier]="childNotifier"
+              ></app-widget-card>
+          </div>
+
+          <div>
+            <app-widget-card
+              [dateFrom] ="dateFrom"
+              [dateTo]   ="dateTo"
+              groupBy    ="orderemployeesales"
+              chartName  ="Employee Order Sales"
+              [sites]    ="sites"
+              [counter]  ="count+1"
+              [notifier]="childNotifier"
+            ></app-widget-card>
+          </div>
+
+      </div>
     </div>
-  </app-metrc-summary>
+  </div>
+
 </ng-template>
-

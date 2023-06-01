@@ -127,6 +127,26 @@
   }
 }
 
+.grid-po-helper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.po-info {
+  width: 395px;
+  height: 225px;
+  overflow-y: auto;
+  overflow-x: auto;
+  margin:5px;
+}
+.po-info-sales {
+  width: 320px;
+  height: 225px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin:5px;
+}
 
 
 .grid-buttons {

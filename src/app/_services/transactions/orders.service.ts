@@ -21,9 +21,15 @@ import { UserAuthorizationService } from '../system/user-authorization.service';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { StoreCreditMethodsService } from '../storecredit/store-credit-methods.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { POOrderImport } from '../data/fake-products.service';
 export interface POSOrdersPaged {
   paging : IPagedList
   results: IPOSOrder[]
+}
+
+export interface importPuchase {
+  order: IPOSOrder;
+  items: any;
 }
 
 export interface OrderPayload {
@@ -56,8 +62,6 @@ export interface OrderActionResult {
 
 export class OrdersService {
 
-
-
   public toggleChangeOrderType: boolean;
 
   get platForm() {  return Capacitor.getPlatform(); }
@@ -89,7 +93,6 @@ export class OrdersService {
 
   private _posOrders          = new BehaviorSubject<IPOSOrder[]>(null);
   public posOrders$           = this._posOrders.asObservable();
-
 
   printOrder: IPOSOrder ;
 
@@ -538,6 +541,25 @@ export class OrdersService {
 
     return  this.http.post<IOrdersPaged>(url, sheet )
   }
+
+  importPurchaseOrderCSV(site: ISite, order: IPOSOrder,  items: POOrderImport[]): Observable<IPOSOrder> {
+
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "importPurchaseOrderCSV";
+
+    const parameters = ``
+    const url = `${site.url}${controller}${endPoint}${parameters}`;
+
+    // // const import = {order, items};
+    let  itemsImport = {} as importPuchase;
+    itemsImport.order = order;
+    itemsImport.items = items;
+
+    return  this.http.post<IPOSOrder>(url, itemsImport );
+
+  }
+
 
   claimOrder(site: ISite, id: string, history: boolean):  Observable<any>  {
 

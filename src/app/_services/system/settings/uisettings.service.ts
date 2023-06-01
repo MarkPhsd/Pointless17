@@ -74,6 +74,7 @@ export interface TransactionUISettings {
   preventDuplicateBarcodes: boolean;
   scanIncreaseQuantity: boolean;
   mixMatchTierPricing: boolean;
+  toggleUserOrAllOrders: boolean;
 }
 
 export interface StripeAPISettings {
@@ -725,6 +726,7 @@ export class UISettingsService {
       preventDuplicateBarcodes: [],
       scanIncreaseQuantity: [],
       mixMatchTierPricing: [],
+      toggleUserOrAllOrders: [],
      })
   }
 

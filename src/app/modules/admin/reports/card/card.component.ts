@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
 import numeral, { validate } from 'numeral';
-import { Observable, Subject, Subscription, switchMap } from 'rxjs';
+import { Observable, Subject, Subscription, of, switchMap } from 'rxjs';
 import { ISalesPayments, ISite }  from 'src/app/_interfaces';
 import { ReportingService, rowValue } from 'src/app/_services';
 import { IReportItemSaleSummary, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
@@ -489,6 +489,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
 
   validateSalesValue(sales) {
     try {
+      if (!sales) { return }
       const item = sales.filter( item => {})
       return true;
     } catch (error) {
@@ -505,18 +506,20 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     let dataSeriesValues = [] as any[]
     this.sales = []
     for (let site of sites) {
-      let sales$ =  this.reportingService.getSales(site, dateFrom, dateTo, this.groupBy)
+      let sales$ =  this.reportingService.getSales(site, dateFrom, dateTo,
+                                                    this.groupBy, +this.zrunID)
       sales$.subscribe( sales => {
-
+        if (!sales) { return }
         this.sales.push(sales)
         if  (sales) {
           if ( this.groupBy === 'hour' ) {
+
             let dataSeriesValues = this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
             dataSeriesValues.forEach( (data, index) => {
                 try {
                   const item = sales.filter( item => {})
                 } catch (error) {
-                  console.log(sales)
+
                   return
                 }
                 const item = sales.filter( item =>  { if( item.dateHour === data.date)  { return item } } );
@@ -539,6 +542,8 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
             site.salesData  = sales;
             // we have to filter and compare dates
             //the dates have to be convered to strings to compare
+            if (!sales) { return }
+
             dataSeriesValues.forEach( (data, index) => {
                 const  dt1 = new Date(data.date);
                 try {
@@ -581,6 +586,8 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
             }
 
             site.salesData  = sales;
+            if (!sales) { return }
+
             if (!dataSeriesValues) { return }
             if (this.validateSalesValue(sales)) {
               dataSeriesValues.forEach( (data, index) => {
@@ -635,6 +642,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
 
           if ( this.groupBy === 'scrub' ) {
             site.salesData  = sales
+            if (!sales) { return }
             site.salesData.forEach( dateValue =>  {
               dataSeriesValues.push(
                 [dateValue.dateHour , dateValue.amountPaid]
@@ -659,6 +667,9 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
       for (let site of sites) {
         const sales$ = this.refreshSales(site);
         sales$.subscribe( summary => {
+
+          if (!summary) { return }
+
           if (summary.resultMessage === 'failed') { return }
           const sales = summary.paymentSummary;
             if (!sales || sales == null) { return }
@@ -667,7 +678,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
             // const uniqueArr = [... new Set(students.map(data => data.name))]
             const employeesList = [... new Set(sales.map(t => t.employeeName)) ]
             employeesList.forEach( employeeName => {this.applyEmployeeSeries(employeeName, sales, this.groupBy) })
-            console.log("employee list", summary)
+
           }
         )
       }
@@ -676,6 +687,8 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
 
   applyEmployeeSeries(employeName: string, sales: PaymentSummary[], groupBy: string) {
     let dataSeriesValues =  this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
+    if (!sales) { return }
+
     dataSeriesValues.forEach( (data, index) => {
         const item = sales.filter( item =>
           { if( item.dateHour === data.date && employeName === item.employeeName) { return item }}

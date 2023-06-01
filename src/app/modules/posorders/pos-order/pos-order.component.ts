@@ -68,6 +68,11 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @ViewChild('payButton')   payButton: TemplateRef<any>;
   @ViewChild('stripePayButton')   stripePayButton: TemplateRef<any>;
 
+  //purchaseItemSales
+  @ViewChild('purchaseItemSales') purchaseItemSales: TemplateRef<any>;
+  @ViewChild('importPurchaseOrder')   importPurchaseOrder: TemplateRef<any>;
+  @ViewChild('purchaseItemHistory') purchaseItemHistory: TemplateRef<any>;
+
   action$: Observable<any>;
   deleteOrder$: Observable<any>;
   printLabels$:  Observable<any>;
@@ -151,12 +156,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   uiTransactionSetting$: Observable<TransactionUISettings>;
   uiTransactionSetting : TransactionUISettings;
 
-  // @ViewChild('houseAccountButton')   houseAccountButton: TemplateRef<any>;
-  // @ViewChild('storeCreditPaybutton')   storeCreditPaybutton: TemplateRef<any>;
-  // @ViewChild('wicEBTButton')   wicEBTButton: TemplateRef<any>;
-  // @ViewChild('triPOSPaymentButton')   triPOSPaymentButton: TemplateRef<any>;
-  // @ViewChild('payButton')   payButton: TemplateRef<any>;
-
   get stripePayButtonView() {
     if ( this.order && this.order.balanceRemaining != 0 && !this.platFormService.isApp() ) {
       return this.stripePayButton
@@ -174,7 +173,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
     return null;
   }
-
 
   get storeCreditPaybuttonView() {
     if ( this.order && this.order.clientID &&  (!this.paymentsEqualTotal && !this.order.completionDate && this.order?.balanceRemaining != 0)) {
@@ -249,7 +247,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     });
   }
 
-
   initAssignedItemsSubscriber() {
     this._items = this.orderMethodService.assignedPOSItems$.subscribe(data => {
       this.assignedItems = data;
@@ -259,7 +256,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.refundItemsAvalible = false;
     })
   }
-
 
   gettransactionUISettingsSubscriber() {
     this.uiTransactionSetting$ = this.settingService.getUITransactionSetting().pipe(
@@ -272,7 +268,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   homePageSettingSubscriber() {
-    this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
+    this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe( data => {
       this.uiSettings = data;
       if (data) {
         if (data.outGoingCustomerSupportEmail) {
@@ -318,8 +314,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       }
     })
   }
+
   onResizedorderHeightPanel(event: ResizedEvent) {
-    // console.log('order header event', event)
     this.uiSettingsService.updateorderHeaderHeight(event.newRect.height, this.windowHeight) //this.orderHeightPanel.nativeElement.offsetHeight)
     this.resizePanel()
   }
@@ -335,7 +331,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   onResizedorderCustomerPanel(event: ResizedEvent) {
-    // console.log('onResizedorderCustomerPanel',  event.newRect.height )
     this.uiSettingsService.updatecustomerOrderHeight(event.newRect.height,this.windowHeight) //(this.orderCustomerPanel.nativeElement.offsetHeight)
     this.resizePanel()
   }
@@ -366,7 +361,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   initPurchaseOrderOption(id: number) {
     if (!id) { return }
     if (this.userAuthorization.isManagement) {
-
       const site = this.siteService.getAssignedSite()
       this.serviceType$ = this.serviceTypeService.getType (site,id).pipe(
         switchMap(data => {
@@ -423,9 +417,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     return this._creditPaymentAmount;
   }
 
-
   constructor(
-
               private paymentsMethodsService: PaymentsMethodsProcessService,
               private renderer          : Renderer2,
               public platFormService    : PlatformService,
@@ -458,7 +450,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.mainPanel = true
     }
     this.refreshOrder();
-
   }
 
   @HostListener("window:resize", [])
@@ -469,7 +460,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.gridRight       = 'grid-order-header ';
     this.orderlayout     = 'order-layout-empty';
     this.resizePanel();
-
     this.windowHeight = window.innerHeight;
     this.gridheaderitem  = 'grid-header-item'
 
@@ -504,6 +494,31 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.listView = event;
   }
 
+  get purchaseOrderItemView() {
+    if (!this.smallDevice && !this.mainPanel) { return null }
+    if (this.order && this.order.service && (this.order.service.filterType == 1 || this.order.service.name.toLowerCase() === 'purchase order')) {
+      return this.purchaseItemSales;
+    }
+    return null
+  }
+
+  //purchaseItemHistory
+  get purchaseItemHistoryView() {
+    if (!this.smallDevice &&  !this.mainPanel) { return null }
+    if (this.order && this.order.service && (this.order.service.filterType == 1 || this.order.service.name.toLowerCase() === 'purchase order')) {
+      return this.purchaseItemHistory;
+    }
+    return null
+  }
+
+  get importPurchaseOrderView() {
+    if (!this.smallDevice &&  !this.mainPanel) { return null }
+    if (this.order && this.order.service && (this.order.service.filterType == 1 || this.order.service.name.toLowerCase() === 'purchase order')) {
+      return this.importPurchaseOrder;
+    }
+    return null
+  }
+
   get getListViewType() {
     if (this.listView) {
       return this.listViewType
@@ -523,10 +538,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
             this.uiSettingsService.updatePOSDevice(posDevice)
             this.posDevice = posDevice;
             this.enableExitLabel = posDevice.enableExitLabel;
-
             return of(posDevice)
           } catch (error) {
-
              this.siteService.notify('Error setting device info.' + error, 'Close', 5000, 'yellow')
           }
           return of(null)
@@ -540,7 +553,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.initAuthorization();
     this.gettransactionUISettingsSubscriber();
     this.updateItemsPerPage();
-    this.bucketName     =   await this.awsBucket.awsBucket();
+    this.bucketName     = await this.awsBucket.awsBucket();
     this.awsBucketURL   = await this.awsBucket.awsBucketURL();
     this.sidePanelWidth = this.el.nativeElement.offsetWidth;
     this.initSubscriptions();
@@ -564,7 +577,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.isUser  = this.userAuthorization.isUserAuthorized('user');
     if (this.isUser) {
     }
-    // if (this.userAuthorization.)
   }
 
   openClient() {
@@ -611,10 +623,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   makeManifest(event) {
     const site = this.siteService.getAssignedSite()
     const action$ = this.serviceTypeService.getType(site, this.order.serviceTypeID).pipe(switchMap(data => {
-
       if (data.filterType == 1 || data.filterType == -1) {
         const manifest = {} as InventoryManifest
-
         manifest.description = this.order.id.toString()
         manifest.type = this.order.serviceType
         manifest.sourceSiteID = site.id
@@ -705,8 +715,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   refundItem(event) {
     if (this.assignedItems) {
-      // console.log(this.assignedItems)
-      // console.log('what is happening.')
       this.productEditButtonService.openRefundItemDialog(this.assignedItems)
     }
   }
@@ -717,7 +725,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   deleteOrder(event) {
     this.deleteOrder$ = this.orderMethodService.deleteOrder(this.order.id, false).pipe(switchMap(data => {
-
       return of(data)
     }))
   }
@@ -731,7 +738,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (this._uiSettings) { this._uiSettings.unsubscribe()}
     if (this._uiTransactionSettings) { this._uiTransactionSettings.unsubscribe()}
     this.uiTransactionSetting$  = null;
-
     if (this.bottomSheet$) {
       this.bottomSheet$ = null;
     }
@@ -744,7 +750,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   removeDiscount(event) {
-
     const result = window.confirm('Are you sure you want to remove the discounts?');
     if (result) { return };
     if (this.order) {
@@ -763,7 +768,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.order.suspendedOrder = false;
       this.orderService.putOrder(site, this.order).subscribe( data => {
         this.notifyEvent('This suspension is removed', 'Success')
-        // this.router.navigateByUrl('/pos-orders')
       })
     };
   }
@@ -796,7 +800,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
-
   houseAccountPayment() {
     this.action$ =  this.orderMethodService.suspendOrder(this.order)
   }
@@ -809,7 +812,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   printLabels(newLabels: boolean) {
     this.printLabels$ = this.printingService.printLabels(this.order , newLabels).pipe(
         switchMap(data => {
-
           this.printingService.printJoinedLabels();
           return of(data)
         }
@@ -853,7 +855,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   //   const site = this.siteService.getAssignedSite();
   //   let printerName = ''
-
 
   returnMenuItem(item: IMenuItem): Observable<IMenuItem> {
     return

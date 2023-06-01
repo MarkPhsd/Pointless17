@@ -10,5 +10,6 @@ export interface ISalesReportingFilter {
   groupBy: string
   startDate: string;
   endDate  : string;
+  zrunID: number;
 }
 

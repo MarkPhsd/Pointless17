@@ -1,5 +1,5 @@
 <div *ngIf="(closingProcedure$ | async) as closingProcedures"></div>
-  <mat-card *ngIf="(uiTransactions$ | async) as uiTransactions">
+<mat-card *ngIf="(uiTransactions$ | async) as uiTransactions">
 
   <mat-card-title></mat-card-title>
   <mat-card-subtitle>
@@ -41,6 +41,7 @@
     <span *ngIf="runningClose">
       <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
     </span>
+
     <span *ngIf="balanceSheetsClosed">
       {{balanceSheetsClosed}}.
     </span>
@@ -120,11 +121,16 @@
 </div>
 
 <div class="container" *ngIf="(auths$ | async) as auths">
+  <div *ngIf="auths.blindClose" class="grid-sales-cards">
+    <mat-card>
+      Blind Close Enabled.
+    </mat-card>
+  </div>
+
   <div  class="grid-sales-cards"
         *ngIf="iBalanceSheet && localSite && !auths.blindClose ">
 
     <span #printsection>
-
       <div class="summary">
         <mat-card  >
           <mat-card-content>
@@ -155,8 +161,19 @@
     </div>
   </div>
 
-    <mat-card *ngIf="iBalanceSheet && iBalanceSheet.startTime"
-          >
+    <mat-card *ngIf="iBalanceSheet && iBalanceSheet.startTime && (auths && !auths.blindClose)">
+
+        <div>
+          <app-widget-card
+            [dateFrom] ="iBalanceSheet.startTime"
+            [dateTo]   ="iBalanceSheet.startTime"
+            [zrunID]    ="iBalanceSheet.id"
+            groupBy    ="hour"
+            chartName  ="Hourly"
+            [site]      ='localSite'
+          ></app-widget-card>
+        </div>
+
         <app-widget-card [dateFrom]  ="iBalanceSheet.startTime"
                          [dateTo]    ="iBalanceSheet.startTime"
                          [zrunID]    ="iBalanceSheet.id"
@@ -165,8 +182,7 @@
                          chartName   ="Employee Order Count"
           ></app-widget-card>
     </mat-card>
-  </div>
-
+</div>
 
 <ng-template #balanceSheetView>
   <balance-sheet-report

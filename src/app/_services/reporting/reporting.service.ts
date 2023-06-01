@@ -5,8 +5,9 @@ import { ISalesPayments, ISalesReportingOrdersSummary, IUser, ISite, ISalesRepor
 import { AppInitService } from '../system/app-init.service';
 import { IDateRange, ReportDateHelpersService } from './report-date-helpers.service';
 import { formatDate, DatePipe } from '@angular/common';
-import { IReportItemSales, IReportItemSaleSummary } from './reporting-items-sales.service';
+import { IReportItemSales, IReportItemSaleSummary, ItemPOMetrics, POSItemSearchModel } from './reporting-items-sales.service';
 import { DateHelperService } from './date-helper.service';
+import { MenuItem } from 'electron';
 
 // this.symbolSearchService.getSymbolData('xl')
 // .switchMap(stock => {
@@ -22,7 +23,14 @@ import { DateHelperService } from './date-helper.service';
 //   },
 //   err => this.sharedService.handleError
 // );
-
+export interface HistoricalSalesPurchaseOrderMetrcs {
+  lastWeek : number;
+  lastMonth : number;
+  lastYear : number;
+  lastYearMonth : number;
+  lastYearSameWeekTotal : number;
+  thisMonthsTotal: number;
+ }
 export interface rowValue {
   date: string;
   value: number;
@@ -33,6 +41,7 @@ export interface rowValue {
   providedIn: 'root'
 })
 export class ReportingService {
+
 
   ///salespayments?DateFrom=4/1/2019&DateTo=5/1/2019&GroupBy=Date
   Parameter   = ''
@@ -326,7 +335,8 @@ export class ReportingService {
     return  this.http.get<any[]>(`${site.url}${parameters}`)
   };
 
-  getSales(site: ISite, dateFrom: string, dateTo: string, groupBY: string): Observable<ISalesPayments[]> {
+  getSales(site: ISite, dateFrom: string, dateTo: string, groupBY: string,
+             zrunID?: number): Observable<ISalesPayments[]> {
     const controller = `/SalesPayments/`
 
     const endPoint = `getSalesSummary`
@@ -335,11 +345,15 @@ export class ReportingService {
     filter.startDate = dateFrom
     filter.endDate = dateTo
     filter.groupBy = groupBY
+    filter.zrunID = zrunID
 
     const url = `${site.url}${controller}${endPoint}`
 
     return  this.http.post<ISalesReportingOrdersSummary[]>(url, filter )
   };
+
+
+
 
   getDataSeriesValues(salesValues: any): any[] {
     this.salesPayments = salesValues;
@@ -439,6 +453,48 @@ export class ReportingService {
 
   };
 
+  getMetrcsForPO(site: ISite, search : POSItemSearchModel): Observable<HistoricalSalesPurchaseOrderMetrcs> {
+
+    const controller = `/ReportItemSales/`
+
+    const endPoint = `getMetrcsForPO`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`;
+
+    return  this.http.put<HistoricalSalesPurchaseOrderMetrcs>(url, search);
+
+  }
+
+  getReOrderList(site: ISite): Observable<MenuItem[]> {
+    // https://localhost:44309/api/ReportItemSales/GetReOrderList
+    const controller = `/Products/`
+
+    const endPoint = `GetReOrderList`
+
+    let filter = {} as any
+
+    const url = `${site.url}${controller}${endPoint}`
+
+    return  this.http.post<MenuItem[]>(url, filter );
+
+  }
+
+  getPurchaseOrderHelper(site: ISite, search : POSItemSearchModel): Observable<IReportItemSales[]> {
+
+    const controller = `/ReportItemSales/`
+
+    const endPoint = `getPurchaseOrderHistory`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`;
+
+    return  this.http.put<IReportItemSales[]>(url, search);
+
+  }
+
   ///Product Sales////
   listofProductsInSales(sales:  IReportItemSales[]): string[] {
     let itemNames = [] as string[]
@@ -458,5 +514,6 @@ export class ReportingService {
     itemNames =  [...new Set(itemNames)]
     return itemNames
   }
+
 
 }

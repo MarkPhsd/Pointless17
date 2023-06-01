@@ -64,6 +64,14 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
     }
   }
 
+  get isSale() {
+    if (this.order && this.order.service && (this.order.service.filterType == 1 || this.order.service.name.toLowerCase() === 'purchase order')) {
+      return false
+    }
+    return true
+
+
+  }
   reSendOrder() {
     this.action$ = this.orderMethodsService.sendToPrep(this.order, true).pipe(
       switchMap(data => {

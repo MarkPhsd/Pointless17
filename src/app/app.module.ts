@@ -27,7 +27,7 @@ import { AgGridModule } from 'ag-grid-angular'
 import { CategoriesAlternateComponent } from './modules/menu/categories/categories-alternate/categories-alternate.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Router, RouteReuseStrategy } from '@angular/router';
+import { Router, RouteReuseStrategy, RouterModule } from '@angular/router';
 import '@capacitor-community/camera-preview';
 import '@capacitor-community/barcode-scanner';
 import { BarcodeScannerComponent } from './shared/widgets/barcode-scanner/barcode-scanner.component';
@@ -58,7 +58,7 @@ import { OrderHeaderDemographicsBoardComponent } from './modules/posorders/pos-o
 import { LimitValuesCardComponent } from './modules/posorders/limit-values-card/limit-values-card.component';
 import { GridcomponentPropertiesDesignComponent } from './modules/admin/grid-menu-layout/grid-component-properties/gridcomponent-properties-design/gridcomponent-properties-design.component';
 // import { ClientTypeSelectionComponent } from './modules/admin/grid-menu-layout/client-type-selection/client-type-selection.component';
-import { DashBoardRoutingModule } from './dash-board-routing.module';
+
 import * as Sentry from "@sentry/angular";
 import { BrowserTracing } from "@sentry/tracing";
 import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-loading.component';
@@ -67,7 +67,7 @@ import {  UserIdleModule } from 'angular-user-idle';
 import { DragAndDropModule } from 'angular-draggable-droppable';
 import { M22ResizableComponent } from './shared/widgets/m22-resizable/m22-resizable.component';
 import { ResizeDirective } from './_directives/resize.directive';
-
+import { DashBoardRoutingModule } from './dash-board-routing.module';
 // Sentry.init({
 //   dsn: "https://ba163a19cdcf43ca80217e835d0f06bc@o1342227.ingest.sentry.io/6616061",
 //   integrations: [
@@ -154,8 +154,22 @@ export  function init_app(appLoadService: AppInitService) {
     LayoutModule,
     NGXMaterialModule,
     NgxElectronModule,
-    SharedModule,
     DragAndDropModule,
+    DashBoardRoutingModule,
+    SharedModule,
+    // RouterModule.forRoot([
+    //     {
+    //       path: 'lazy',
+    //       loadChildren: () => import('./dash-board-routing.module').then((m) => m.DashBoardRoutingModule),
+    //     },
+    //     {
+    //       path: 'lazy',
+    //       loadChildren: () => import('./shared/shared.module').then((m) => m.SharedModule),
+    //     },
+
+    //   ]
+    // )
+
   ],
 
   exports: [

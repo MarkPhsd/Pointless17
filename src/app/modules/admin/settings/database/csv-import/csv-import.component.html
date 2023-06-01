@@ -21,21 +21,24 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-    <div class="grid-item"
-          *ngIf="exportDataService.schemas$ && inputForm">
-        <form-select-list [searchForm]      = "inputForm"
-                          [formFieldName]   ="'name'"
-                          [list$]           = "exportDataService.schemas$"
-                          [showActiveInactive]="false"
-                          (selectionChange) = "selectScheme($event)">
-        <div>Schema Type Selection</div>
-        </form-select-list>
+
+    <div *ngIf="!purchaseOrderImport">
+      <div class="grid-item"
+              *ngIf="exportDataService.schemas$ && inputForm">
+            <form-select-list [searchForm]      = "inputForm"
+                              [formFieldName]   ="'name'"
+                              [list$]           = "exportDataService.schemas$"
+                              [showActiveInactive]="false"
+                              (selectionChange) = "selectScheme($event)">
+            <div>Schema Type Selection</div>
+            </form-select-list>
+        </div>
     </div>
+
 
     <div class="fields">
       <mat-slide-toggle
-                [(ngModel)]="headerValues"
-              >
+                [(ngModel)]="headerValues" >
       <mat-label>Ignore Headers in CSV</mat-label>
       </mat-slide-toggle>
     </div>
@@ -87,9 +90,6 @@
         </div>
       </div>
     </div>
-
-
   </mat-card-content>
-
 </mat-card>
 

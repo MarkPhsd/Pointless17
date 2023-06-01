@@ -50,6 +50,7 @@ import { BlogPostEditComponent } from 'src/app/modules/admin/blogEditor/blog-pos
 import { JobTypesEditComponent } from 'src/app/modules/admin/clients/jobs/job-types-edit/job-types-edit.component';
 import { EmployeeClockEditComponent } from 'src/app/modules/admin/employeeClockAdmin/employee-clock-edit/employee-clock-edit.component';
 import { TriPosTransactionsComponent } from 'src/app/modules/payment-processing/tri-pos-transactions/tri-pos-transactions.component';
+import { DynamicAgGridComponent } from 'src/app/shared/widgets/dynamic-ag-grid/dynamic-ag-grid.component';
 
 @Injectable({
   providedIn: 'root'
@@ -85,6 +86,22 @@ export class ProductEditButtonService {
       },
     )
     return dialogRef;
+  }
+
+  openDynamicGrid(data: any) {
+    let dialogRef: any;
+    const site = this.siteService.getAssignedSite();
+
+    dialogRef = this.dialog.open(DynamicAgGridComponent,
+      { width:        '825px',
+        minWidth:     '90%',
+        maxWidth:      '90%',
+        height:       '625px',
+        minHeight:    '625px',
+        data:  data
+      },
+    )
+    return dialogRef
   }
 
   openNewItemSelector() {

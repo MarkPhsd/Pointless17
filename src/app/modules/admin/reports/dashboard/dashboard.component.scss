@@ -23,23 +23,16 @@ mat-drawer {
 button {
   margin: 5px;
 }
+
 .emailing {
   width: 100px;
 }
+
 .grid-buttons {
   display: flex;
   gap: 10px;
   justify-content: left;
   flex-direction: row;
-
-  // @include for-tablet-landscape-up {
-  //    grid-template-columns: 225px  repeat( auto-fit, minmax(100px, 1fr) );
-  // }
-
-  // @include for-phone-only {
-  //   grid-template-columns: 225px  repeat( auto-fit, minmax(100px, 1fr) );
-  // }
-
 }
 
 .grid-flow {
@@ -64,7 +57,6 @@ button {
     grid-template-columns: repeat( auto-fit, minmax(400px, 1fr) );
   }
 }
-
 
 mat-drawer-container {
   height: 100%;

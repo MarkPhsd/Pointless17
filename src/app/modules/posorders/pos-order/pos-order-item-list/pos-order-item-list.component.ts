@@ -19,6 +19,7 @@ import { DatePipe } from '@angular/common';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'pos-order-item-list',
@@ -101,13 +102,10 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   @Input() height = "84vh"
 
   initSubscriptions() {
-
     let clientID: number;
-
     if (this.userAuthorization.user && this.userAuthorization.user.roles === 'user') {
       clientID = this.userAuthorization.user.id;
     }
-
     this.currentOrderSusbcriber();
   }
 
@@ -116,7 +114,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       data => {
       this.order = data
       this.refreshSearch()
-      console.log('pos', data.posOrderItems)
       return of(data.posOrderItems)
     })
 
@@ -133,15 +130,16 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                 private orderService            : OrdersService,
                 private posOrderItemMethodsService: PosOrderItemMethodsService,
                 private posOrderItemService    : POSOrderItemService,
+                private orderMethodsService: OrderMethodsService,
               )
   {
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.initSubscriptions();
     this.initAgGrid(this.pageSize);
-    this.urlPath            = await this.awsService.awsBucketURL();
-    this.rowSelection       = 'multiple'
+    // this.urlPath            = await this.awsService.awsBucketURL();
+    this.rowSelection       = 'single'
     this.initAuthorization();
     this.initClasses();
   };
@@ -175,11 +173,11 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
 
   @HostListener("window:resize", [])
   updateItemsPerPage() {
-      this.smallDevice = false
-      if (window.innerWidth < 768) {
-        this.smallDevice = true
-      }
-      this.initClasses();
+    this.smallDevice = false
+    if (window.innerWidth < 768) {
+      this.smallDevice = true
+    }
+    this.initClasses();
   }
 
   //ag-grid standard formating for ag-grid.
@@ -315,17 +313,13 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   //ag-grid standard method
   async onGridReady(params: any) {
 
-    console.log('calling params', params);
     if (!params) { return };
-
     this.params = params;
     params.startRow = 1;
     params.endRow = 1000;
 
-    // console.log(this.order.posOrderItems);
-
     if (!this.order || !this.order.posOrderItems)   {
-      console.log('exiting')
+      // console.log('exiting')
       return
     }
 
@@ -359,8 +353,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   cellValueChanged(event) {
     const colName = event?.column?.colId
 
-    console.log(colName)
-    console.log(event.data)
     const item = event.data as PosOrderItem
 
     if (colName === 'unitPrice') {
@@ -401,19 +393,34 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     return order$
   }
 
+  itemSelected(event) {
+    // console.log(event)
+  }
+
+  assignItem(index: number){
+    if (this.order != undefined) {
+      const item =  this.order.posOrderItems[index]
+      const result = this.orderMethodsService.updateLastItemSelected(item);
+    }
+  }
+
   onSelectionChanged(event) {
 
     let selectedRows       = this.gridApi.getSelectedRows();
     let selectedRowsString = '';
     let maxToShow          = this.pageSize;
     let selected           = []
+    let selectedIndex = 0;
 
     selectedRows.forEach(function (selectedRow, index) {
+      selectedIndex = index;
       if (index >= maxToShow) { return; }
       if (index > 0) {  selectedRowsString += ', ';  }
         selected.push(selectedRow.id)
         selectedRowsString += selectedRow.name;
     });
+
+    this.orderMethodsService.updateLastItemSelected(selectedRows[0]);
 
     if (selectedRows.length > maxToShow) {
       let othersCount = selectedRows.length - maxToShow;
@@ -426,8 +433,9 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       const item = selectedRows[0];
       this.id = item.id;
       const history = item.history
-      // this.editItemWithId(item)
     }
+
+    // console.log('item selected', event)
   }
 
   getItem(id: number, history: boolean) {

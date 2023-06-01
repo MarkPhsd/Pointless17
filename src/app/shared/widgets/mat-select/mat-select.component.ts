@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -8,6 +8,9 @@ import { Observable } from 'rxjs';
   styleUrls: ['./mat-select.component.scss']
 })
 export class MatSelectComponent {
+
+  @ViewChild('formView')      formView: TemplateRef<any>;
+
   @Input()  style = ''
   @Input()  class='mat-form-field'
   @Input()  inputForm: UntypedFormGroup;
@@ -17,7 +20,23 @@ export class MatSelectComponent {
   @Output() outputItem = new EventEmitter<any>();
   @Input() hideClear: boolean;
 
-  constructor() { }
+  constructor(private fb: FormBuilder) { }
+
+  ngOnInit() {
+
+    if (!this.inputForm)  {
+      this.inputForm = this.fb.group({
+        fieldName: 'field'
+      })
+    }
+  }
+
+  get isFormView() {
+    if (this.inputForm) {
+      return this.formView
+    }
+    return null;
+  }
 
   setOutPut(event) {
     console.log('item output', event)

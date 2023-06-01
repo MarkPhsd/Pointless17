@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { catchError, Observable, of, Subject, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 
 @Component({
@@ -26,7 +27,10 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   @Input() pendingTransactions: boolean;
   sales: ITaxReport;
   sales$ : Observable<ITaxReport>;
-  constructor(private reportingItemsSalesService: ReportingItemsSalesService) { }
+
+  constructor(
+    private popOutService: ProductEditButtonService,
+    private reportingItemsSalesService: ReportingItemsSalesService) { }
   processing: boolean;
 
   ngOnInit(): void {
@@ -43,9 +47,9 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
 
     this.processing = true;
 
-    let item = {startDate: this.dateFrom, endDate: this.dateTo, zrunID: this.zrunID, 
-                pendingTransactions: this.pendingTransactions, 
-                scheduleDateEnd: this.scheduleDateEnd, 
+    let item = {startDate: this.dateFrom, endDate: this.dateTo, zrunID: this.zrunID,
+                pendingTransactions: this.pendingTransactions,
+                scheduleDateEnd: this.scheduleDateEnd,
                 scheduleDateStart: this.scheduleDateStart } as IReportingSearchModel;
 
     if (item.scheduleDateEnd && item.scheduleDateStart) {
@@ -56,7 +60,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
           this.sales = data;
           this.processing = false;
           return of(data)
-        })),catchError(data => { 
+        })),catchError(data => {
           console.log('data error', data)
           return of(data )
         })
@@ -74,8 +78,8 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
       return
     }
 
-    console.log('performing range report')
-  
+    // console.log('performing range report')
+
     this.sales$ =
       this.reportingItemsSalesService.putSalesTaxReport
         (this.site, item).pipe(switchMap(data => {
@@ -83,6 +87,12 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
           this.processing = false;
           return of(data)
       }))
+  }
+
+  dataGridView() {
+    this.popOutService.openDynamicGrid(
+      {data: this.sales, name: 'ITaxReport'}
+    )
   }
 
   downloadCSV() {

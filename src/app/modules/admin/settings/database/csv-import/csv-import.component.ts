@@ -1,15 +1,15 @@
-import { Component, OnDestroy, OnInit, ViewChild, } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild,Input } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 import { combineLatest, Observable,  switchMap } from 'rxjs';
-import { FakeProductsService } from 'src/app/_services/data/fake-products.service';
+import { FakeProductsService, POOrderImport } from 'src/app/_services/data/fake-products.service';
 import { FakeContactsService } from 'src/app/_services/data/fake-contacts.service';
 import { FakeInventoryService } from 'src/app/_services/data/fake-inventory.service';
 import { ExportDataService } from 'src/app/_services/data/export-data.service';
-import { ImportProductResults, MenuService } from 'src/app/_services';
+import { ImportProductResults, MenuService, OrdersService } from 'src/app/_services';
 import { FlowPrice, FlowProducts, FlowStrain, ImportFlowPriceResults, ImportFlowProductResults, ImportFlowStainsResults } from 'src/app/_interfaces/import_interfaces/productflow';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FlowVendor, ImportFlowVendorResults, IProduct } from 'src/app/_interfaces';
+import { FlowVendor, ImportFlowVendorResults, IPOSOrder, IProduct } from 'src/app/_interfaces';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { FlowInventory, ImportFlowInventoryResults } from 'src/app/_interfaces/import_interfaces/inventory-flow';
 export interface NamesCities {
@@ -22,7 +22,8 @@ export interface NamesCities {
   styleUrls: ['./csv-import.component.scss']
 })
 export class CSVImportComponent implements OnInit, OnDestroy {
-
+  @Input() purchaseOrderImport : boolean;
+  @Input() order: IPOSOrder;
   public timerInterval:any;
   inputForm   : UntypedFormGroup;
   headerValues= true;
@@ -55,6 +56,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     private siteService:          SitesService,
     private clientTableService: ClientTableService,
     private menuService         : MenuService,
+    private orderService        : OrdersService,
     private ngxCsvParser        : NgxCsvParser) { }
 
   @ViewChild('fileDropRef') fileImportInput: any;
@@ -62,6 +64,12 @@ export class CSVImportComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const i = 0;
     this.initForm()
+
+    if (this.purchaseOrderImport) {
+      this.getProgressCount(false)
+      return;
+    }
+
     this.getProgress()
     this.getProgressCount(true)
   }
@@ -82,6 +90,8 @@ export class CSVImportComponent implements OnInit, OnDestroy {
 
   fileChangeListener($event: any): void {
 
+
+
     // this.resetFileInfo();
     const files = $event.srcElement.files;
     clearInterval(this.timerInterval)
@@ -91,6 +101,12 @@ export class CSVImportComponent implements OnInit, OnDestroy {
           this.csvRecords = result;
           this.itemCount = this.csvRecords.length
           this.resultsMessage = null;
+          if (this.purchaseOrderImport) {
+            // console.log('will it import?')
+            this.importPurchaseOrder();
+            // this.getSchemaType();
+            return;
+          }
           this.resetProgressIndicator();
           this.getSchemaType();
         },
@@ -146,6 +162,12 @@ export class CSVImportComponent implements OnInit, OnDestroy {
   getSchemaType(): any {
     let items = [] as any;
     let name = 'filename'
+
+    if (this.purchaseOrderImport) {
+      items = this.fakeProductsService.getOrderRecords(10);
+      name = 'Import Purchase Order'
+      return ;
+    }
 
     if (this.schemaValue == 1) {
       items = this.fakeProductsService.getRecords(10);
@@ -218,6 +240,13 @@ export class CSVImportComponent implements OnInit, OnDestroy {
 
   importFiles() {
 
+    console.log('import files')
+    if (this.purchaseOrderImport) {
+      this.getProgressCount(false)
+      this.importPurchaseOrder();
+      return;
+    }
+
     if (this.schemaValue == 1) {
       this.importProducts()
     }
@@ -287,7 +316,6 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     }
   }
 
-
   importFlowStrains(){
     const items =  this.csvRecords  as FlowStrain[];
     if (!items) { this.resultsMessage  = 'No files read'}
@@ -306,6 +334,27 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     }
   }
 
+  importPurchaseOrder() {
+
+    if (!this.order) {return }
+    console.log('importPurchaseOrder order', this.order)
+
+    const items =  this.csvRecords  as POOrderImport[];
+    if (!items) { this.resultsMessage  = 'No files read'}
+    console.log('items', items)
+    this.resultsMessage = 'Processing.'
+    const site  = this.siteService.getAssignedSite()
+    this.importing = true;
+    if (items) {
+      this.orderService.importPurchaseOrderCSV(site, this.order, items).subscribe(data => {
+        this.orderService.updateOrder(data)
+        this.orderService.updateOrderSubscription(data)
+        this.importing = false;
+        this.csvRecords = 'Import complete.';
+        this.fileImportInput.nativeElement.value = "";
+      })
+    }
+  }
   importProducts(){
     const items =  this.csvRecords  as IProduct[];
     if (!items) { this.resultsMessage  = 'No files read'}

@@ -1,0 +1,38 @@
+
+<div class="grid-item">
+  <button mat-button
+          class="assign-button"
+          (click)="onExportToCsv()">
+    <mat-icon>download</mat-icon>
+    Download
+  </button>
+</div>
+
+<ag-grid-angular
+    #agGrid
+    id                   ="myGrid"
+    style                ="height: 500px; width: 100%"
+    class                ="'ag-theme-material'"
+    [rowData]            ="data"
+    [defaultColDef]      ="defaultColDef"
+    [columnDefs]         ="columnDefs"
+    [gridOptions]        ="gridOptions"
+    [groupIncludeTotalFooter]="true"
+    (gridReady)         ="onGridReady($event)"
+   >
+</ag-grid-angular>
+
+<!-- <ag-grid-angular
+    #agGrid
+    style="width: 100%; height: 75vh;"
+    id="mySearchGrid"
+    class="ag-theme-material"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [rowSelection]="rowSelection"
+    [rowData]="itemTypes$ | async "
+    [frameworkComponents]="frameworkComponents"
+    (gridReady)="onGridReady($event)"
+    (selectionChanged)="onSelectionChanged($event)"
+    >
+</ag-grid-angular> -->

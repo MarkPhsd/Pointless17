@@ -1,0 +1,28 @@
+<!-- {{order?.service?.filterType}} -->
+<ng-content></ng-content>
+<span *ngIf="product">
+  {{product?.productName}}
+  <!-- {{product | json}} -->
+</span>
+<div *ngIf="(itemHistorySales$ | async) as item; else loading">
+  <div class="grid-items" >
+    <div>This Month</div>
+    <div>{{item?.thisMonthsTotal}}</div>
+    <div>Last Week</div>
+    <div>{{item?.lastWeek }}</div>
+    <div>Last Month</div>
+    <div>{{item?.lastMonth }}</div>
+    <div>Last Year Same Week</div>
+    <div>{{item?.lastYearSameWeekTotal}}</div>
+    <div>Last Year-Month</div>
+    <div>{{item?.lastYearMonth }}</div>
+  </div>
+</div>
+<div *ngIf="loadingMessage">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</div>
+<ng-template #loading>
+  <!-- {{loadingMessage}} -->
+
+</ng-template>
+

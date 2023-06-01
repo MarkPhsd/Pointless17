@@ -6,7 +6,7 @@
       <div class="total-card">
         <h4>
           <span  *ngIf="!isOrderClaimed && order.id" > <mat-icon color="warn">lock</mat-icon>
-          </span> Order {{order?.id | truncateRight: 5}} {{order?.serviceType | truncateText: 8}}
+          </span> Order {{order?.id | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
         </h4>
       </div>
       <div class="total-card">
@@ -27,7 +27,7 @@
           <button  class="button" color="primary" mat-raised-button
                   (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>
         </div>
-        <div>
+        <div *ngIf="isSale">
           <button  class="button" color="warn" mat-raised-button
                    (click)="sendOrder()">
             <mat-icon>local_fire_department</mat-icon>
@@ -35,7 +35,7 @@
         </div>
       </div>
 
-      <div class="button-row" *ngIf="isUserStaff">
+      <div class="button-row" *ngIf="isUserStaff && isSale">
         <div>
           <split-entry-selector [order]="order"
                                 [isUserStaff]="isUserStaff"
@@ -44,7 +44,7 @@
         </div>
 
         <div>
-          <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption" >
+          <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption && isSale" >
             <value-from-list-selector
                 [value] ="order.priceColumn"
                 (assignValue)="assignPriceColumn($event)">

@@ -132,16 +132,17 @@
           </div>
         </div>
 
-        <!-- <div  *ngIf="mainPanel && uiTransactionSettings &&
-                    (!paymentsEqualTotal && !order.completionDate &&
-                    order?.balanceRemaining != 0) " >
-
-        </div> -->
+        <!-- {{uiTransactionSettings?.displayEditCardOnHeader}} -->
 
         <div *ngIf="!mainPanel && !uiTransactionSettings?.displayEditCardOnHeader">
           <ng-container [ngTemplateOutlet]="editCartButtons"></ng-container>
         </div>
 
+        <div class="grid-po-helper">
+          <ng-container [ngTemplateOutlet]="purchaseOrderItemView"></ng-container>
+          <ng-container [ngTemplateOutlet]="purchaseItemHistoryView"></ng-container>
+          <ng-container [ngTemplateOutlet]="importPurchaseOrderView"></ng-container>
+        </div>
       </div>
 
     </div>
@@ -325,7 +326,7 @@
 
 
 <ng-template #cashPayCustom>
-  <div *ngIf="order?.balanceRemaining != 0">
+  <div *ngIf="order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -339,7 +340,7 @@
 </ng-template>
 
 <ng-template #cashPayButtons>
-  <div *ngIf="!smallDevice && order?.balanceRemaining != 0">
+  <div *ngIf="!smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -353,7 +354,7 @@
 </ng-template>
 
 <ng-template #cashPay100>
-  <div *ngIf="!smallDevice && order?.balanceRemaining != 0">
+  <div *ngIf="!smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -366,7 +367,7 @@
 </ng-template>
 
 <ng-template #cashPay50>
-  <div *ngIf="!smallDevice && order?.balanceRemaining != 0">
+  <div *ngIf="!smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -379,7 +380,7 @@
 </ng-template>
 
 <ng-template #cashPay20>
-  <div *ngIf="!smallDevice && order?.balanceRemaining != 0">
+  <div *ngIf="!smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -392,7 +393,7 @@
 </ng-template>
 
 <ng-template #cashPay10>
-  <div *ngIf="!smallDevice && order?.balanceRemaining != 0">
+  <div *ngIf="!smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -406,7 +407,7 @@
 
 
 <ng-template #cashPay5>
-  <div *ngIf="!smallDevice && order?.balanceRemaining != 0">
+  <div *ngIf="!smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -436,4 +437,23 @@
 
 <ng-template #lastImageDisplayView>
   <last-image-display></last-image-display>
+</ng-template>
+
+<ng-template #purchaseItemSales>
+  <mat-card class="po-info">
+    <purchase-item-sales [order]="order">Purchase History</purchase-item-sales>
+  </mat-card>
+</ng-template>
+
+<ng-template #purchaseItemHistory>
+  <mat-card class="po-info-sales">
+    <purchase-item-cost-history [order]="order">Sales History</purchase-item-cost-history>
+  </mat-card>
+</ng-template>
+
+<ng-template #importPurchaseOrder>
+
+  <app-csv-import [order]="order" [purchaseOrderImport]="true">
+  </app-csv-import>
+
 </ng-template>

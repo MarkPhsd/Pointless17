@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
-import { IProduct, IUserProfile } from 'src/app/_interfaces';
+import { IProduct, IUserProfile, PosOrderItem } from 'src/app/_interfaces';
 import { faker } from '@faker-js/faker';
 
+export interface POOrderImport {
+  productName: string;
+  barcode: string;
+  quantity: number;
+  cost: number;
+  unitName: string;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -17,6 +24,20 @@ export class FakeProductsService {
        products.push(item)
     }
     return products
+  }
+
+  getOrderRecords(count: number) {
+    const items = [] as POOrderImport[];
+    for (var i = 1; i < count; i +=1){
+       const item = this.getProduct();
+       const po = {} as POOrderImport
+       po.productName = item.name;
+       po.cost = item.wholesale;
+       po.quantity = 1;
+       po.barcode = item.barcode;
+       po.unitName = 'unit'
+    }
+    return items
   }
 
   getProduct(): IProduct {

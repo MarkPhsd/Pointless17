@@ -17,6 +17,7 @@
         [gridOptions]        ="gridOptions"
         [rowSelection]       ="rowSelection"
         [frameworkComponents]="frameworkComponents"
+        (selected)           ="itemSelected($event)"
         (selectionChanged)   ="onSelectionChanged($event)"
         (cellValueChanged)   ='cellValueChanged($event)'
         (gridReady)          ="onGridReady($event)">

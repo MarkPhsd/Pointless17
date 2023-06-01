@@ -373,6 +373,10 @@ import { TriposSettingsComponent } from '../modules/payment-processing/tri-pos-t
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { LinkedPriceSelectorComponent } from '../modules/admin/products/pricing/price-categories-edit/linked-price-selector/linked-price-selector.component';
 import { PriceCategoryMultiplePricesComponent } from '../modules/admin/products/pricing/price-categories-edit/price-category-multiple-prices/price-category-multiple-prices.component';
+import { PurchaseItemSalesComponent } from '../modules/posorders/pos-order/purchase-item-sales/purchase-item-sales.component';
+import { PurchaseItemCostHistoryComponent } from '../modules/posorders/pos-order/purchase-item-cost-history/purchase-item-cost-history.component';
+import { ClientInfoComponent } from '../modules/posorders/client-info/client-info.component';
+
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
   useClass: LoggingInterceptor,
@@ -414,8 +418,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     CategorieslistviewComponent,
     CashPaymentButtonComponent,
     CheckInProfileComponent,
+    ClientInfoComponent,
     ClientTypeSelectionComponent,
-
     CloseDayValidationComponent,
     CreditCardPaymentsPrintListComponent,
 
@@ -463,7 +467,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PaymentMethodEditComponent,
     PayPalTransactionComponent,
     PosOrderItemListComponent,
-
+    PurchaseItemSalesComponent,
+    PurchaseItemCostHistoryComponent,
     PriceCategoriesEditComponent,
     PriceCategoryPriceFieldsComponent,
     PriceCategoryConversionsComponent,
@@ -776,7 +781,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
    imports: [
       // AgGridModule.withComponents([ButtonRendererComponent,AgIconFormatterComponent, AgGridToggleComponent,AgGridImageFormatterComponent]),
-      AgGridModule,
+
       DashBoardRoutingModule,
       AngularResizeEventModule,
       AppRoutingModule,
@@ -802,7 +807,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ],
 
   exports: [
-    AgGridModule,
+
     AdjustItemComponent,
     BrowserAnimationsModule,
     RouterModule,

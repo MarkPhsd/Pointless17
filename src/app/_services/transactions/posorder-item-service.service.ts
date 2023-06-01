@@ -119,7 +119,6 @@ export class POSOrderItemService {
 
   get platForm() {  return Capacitor.getPlatform(); }
 
-
   private _posOrderItem       = new BehaviorSubject<PosOrderItem>(null);
   public posOrderItem$        = this._posOrderItem.asObservable();
   isApp : boolean

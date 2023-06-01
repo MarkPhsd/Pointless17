@@ -9,6 +9,8 @@
 .grid-container-selectors {
   display: flex;
   flex-wrap: wrap;
+  flex-direction: row;
+
 }
 
 .grid-list-item {

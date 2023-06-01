@@ -4,7 +4,6 @@ import { POSOrderItemService } from './posorder-item-service.service';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { SitesService } from '../reporting/sites.service';
 import { Observable, of, switchMap } from 'rxjs';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -13,10 +12,9 @@ export class PosOrderItemMethodsService {
   constructor(private orderService: OrdersService,
               private siteService: SitesService,
               private posOrderItemService: POSOrderItemService) {
-
         }
 
-  saveSub(item: PosOrderItem, editField: string): Observable<IPOSOrder> { 
+  saveSub(item: PosOrderItem, editField: string): Observable<IPOSOrder> {
     const site = this.siteService.getAssignedSite();
     let obs$: Observable<IPOSOrder>;
 

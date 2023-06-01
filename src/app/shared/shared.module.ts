@@ -191,6 +191,8 @@ import { M22ResizableComponent } from './widgets/m22-resizable/m22-resizable.com
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MetrcSummaryComponent } from '../modules/admin/reports/metrc-summary/metrc-summary.component';
 import { InstructionDirective } from '../_directives/instruction.directive';
+import { DynamicAgGridComponent } from './widgets/dynamic-ag-grid/dynamic-ag-grid.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -250,6 +252,7 @@ import { InstructionDirective } from '../_directives/instruction.directive';
     DSIEMVElectronComponent,
     DsiEMVPaymentComponent,
     DepartmentMenuComponent,
+    DynamicAgGridComponent,
     EmailSettingsComponent,
     EmailEntryComponent,
     ExitLabelSelectionComponent,
@@ -390,6 +393,7 @@ import { InstructionDirective } from '../_directives/instruction.directive';
   ],
 
   imports: [
+    AgGridModule,
     AppRoutingModule,
     DashBoardRoutingModule,
     DragDropModule,
@@ -412,6 +416,7 @@ import { InstructionDirective } from '../_directives/instruction.directive';
   ],
 
   exports: [
+    AgGridModule,
     DragDropModule,
     SafeHtmlPipe,
     ArrayFilterPipe,
@@ -463,6 +468,7 @@ import { InstructionDirective } from '../_directives/instruction.directive';
     DSIEMVElectronComponent,
     DsiEMVPaymentComponent,
     DepartmentMenuComponent,
+    DynamicAgGridComponent,
     EditButtonsStandardComponent,
     FacilitySearchSelectorComponent,
     FastUserSwitchComponent,

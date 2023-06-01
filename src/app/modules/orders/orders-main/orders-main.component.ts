@@ -8,9 +8,10 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
-import { IPOSOrder, IPOSOrderSearchModel, ISite, IUser, UserPreferences } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSOrderSearchModel, ISetting, ISite, IUser, UserPreferences } from 'src/app/_interfaces';
 import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 import { InstructionDirective } from 'src/app/_directives/instruction.directive';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
   selector: 'app-orders-main',
@@ -54,6 +55,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   searchModel: IPOSOrderSearchModel;
   _searchModel: Subscription;
 
+  _UITransaction: Subscription;
+  uiTransactions  = {} as TransactionUISettings;
+  uiTransactions$  : Observable<ISetting>;
   scheduleDateStart: string;
   scheduleDateEnd: string;
   showAllOrderInstructions = []  as string[];
@@ -80,6 +84,14 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this._printLocation = this.orderService.printerLocation$.subscribe( data => {
       if (data) {
         this.printLocation = data;
+      }
+    })
+  }
+
+  initUITransactionsSubscriber() {
+    this._UITransaction = this.uISettingsService.transactionUISettings$.subscribe( data => {
+      if (data) {
+        this.uiTransactions = data;
       }
     })
   }
@@ -130,6 +142,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     private authenticationService: AuthenticationService,
     private printerService   : PrinterLocationsService,
     private changeDetectorRef: ChangeDetectorRef,
+    private uISettingsService: UISettingsService,
     private orderService     : OrdersService)
   {
     this.initAuthorization();
@@ -152,9 +165,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
       this.showAllOrderInstructions.push[''];
       this.showAllOrderInstructions.push[''];
       this.showAllOrderInstructions.push[''];
-      let item = 'Press Show All Orders. This toggles showing all open orders versus just yours.';
+      let item = 'Press search to find open and closed orders, as well as use other filters.';
       this.showAllOrderInstructions[0] = item;
-      item = 'Press search to find open and closed orders, as well as use other filters.';
+      item = 'Press Show All Orders. This toggles showing all open orders versus just yours.';
       this.showAllOrderInstructions[1] = item;
       this.initInstructions(this.user.userPreferences as UserPreferences)
     })
@@ -292,7 +305,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
   searchBtn(event) {
     this.updateFilterInstruction();
-    this.hideInstruction(1)
+    this.hideInstruction(0)
     this.displayPanel(event)
   }
 
@@ -419,8 +432,11 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   hideInstruction(index: number) {
     if (!this.instructionDirectives) {
       console.log('no directive')
-      return }
-    const directive = this.instructionDirectives.toArray()[0];
+      return
+    }
+    const directive = this.instructionDirectives.toArray()[index];
+    console.log('directive list ',  this.instructionDirectives.toArray())
+    console.log('directive', directive, index)
     if (directive) {
       directive.hideInstruction();
     }

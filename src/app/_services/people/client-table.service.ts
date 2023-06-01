@@ -16,6 +16,7 @@ export interface NamesCities {
 })
 export class ClientTableService {
 
+
   constructor( private http: HttpClient, private auth: AuthenticationService) { }
 
   pageNumber = 1;
@@ -214,6 +215,19 @@ export class ClientTableService {
     return this.http.post<any>(url, list)
 
   };
+
+
+  GetNewClientsOverDateCount(site: ISite, numberOfdays: number): Observable<IItemBasic> {
+    const controller ="/ClientTable/"
+
+    const endPoint = `GetNewClientsOverDateCount`
+
+    const parameters = `?number=${numberOfdays}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url)
+  }
 
   //namesList As List(Of String), cities As List(Of String)
   randomizeClientInfo(site, namesCities: NamesCities): Observable<IUserProfile> {
