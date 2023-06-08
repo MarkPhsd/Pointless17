@@ -278,6 +278,8 @@
         }
       }
     }
+
+
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {

@@ -1,8 +1,7 @@
 <div *ngIf="(break$ | async) as break"></div>
 <div class="container">
   <ng-container [ngTemplateOutlet]="displayResults"></ng-container>
-</div>  
-
+</div>
 
 <ng-template #onDisplayOnly>
   <div *ngIf="(clock$ | async) as result">
@@ -14,7 +13,6 @@
       </div>
       <div *ngIf="!isOnBreak">
         <mat-label >
-  
         </mat-label>
       </div>
     </div>
@@ -25,13 +23,10 @@
       Off Clock
     </mat-label> -->
   <!-- </div> -->
-  
 </ng-template>
-
 
 <ng-template #clockInOutEditor>
   <div *ngIf="(clock$ | async) as result; else clockInButton">
-    
     <div *ngIf="result">
       <div>
         <button mat-raised-button (click)="clockOut()">

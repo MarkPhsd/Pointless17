@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Observable, of, switchMap } from 'rxjs';
 import { IPOSPaymentsOptimzed,Result,Summary,Paging } from 'src/app/_interfaces';
 
 @Component({
@@ -10,28 +11,40 @@ import { IPOSPaymentsOptimzed,Result,Summary,Paging } from 'src/app/_interfaces'
 export class CreditCardPaymentsPrintListComponent implements OnInit {
 
   @Input() list: IPOSPaymentsOptimzed;
-
+  @Input() autoPrint: boolean;
+  @Output() renderComplete = new EventEmitter<any>()
   results:      Result[];
   paging:       Paging;
   summary:      Summary;
   errorMessage: null;
+  styles$: Observable<any>;
 
   constructor(private httpClient: HttpClient) { }
 
-  async  ngOnInit() {
-
-    const styles = await this.httpClient.get('assets/htmlTemplates/balancesheetStyles.txt', {responseType: 'text'}).pipe().toPromise()
-    // console.log('styles', styles)
-    const style = document.createElement('style');
-    style.innerHTML = styles;
-    document.head.appendChild(style);
-
+   ngOnInit() {
+    this.styles$ =  this.httpClient.get('assets/htmlTemplates/balancesheetStyles.txt', {responseType: 'text'}).pipe(switchMap(data => {
+      // console.log('styles', styles)
+      const style = document.createElement('style');
+      style.innerHTML = data;
+      document.head.appendChild(style);
+      return of(data)
+    })).pipe(switchMap(data => {
+      this.renderComplete.emit(true);
+      return of(data)
+    }))
   }
 
+  ngAfterViewInit() {
+    this.renderComplete.emit('credit-card-payments')
+  }
 }
 
 
 
+
+function AfterViewInit() {
+  throw new Error('Function not implemented.');
+}
 // amountPaid:       number;
 // balanceRemaining: number;
 // tipAmount:        number;

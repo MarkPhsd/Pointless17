@@ -15,7 +15,8 @@
         </app-order-header>
       </div>
       <div class="grid-items">
-        <div *ngIf="!qrOrder">
+
+        <div *ngIf="!qrOrder && (!deviceInfo || !deviceInfo?.phoneDevice)">
           <button  class="cart-button"
                    mat-raised-button
                    color="accent"
@@ -30,8 +31,8 @@
             </div>
           </button>
         </div>
-        <div>
-          <button  class="cart-button"
+        <!-- <div> -->
+          <!-- <button  class="cart-button"
                    mat-raised-button
                    color="warn"
                    (click)="exitOrder()">
@@ -43,8 +44,8 @@
                 <mat-label class="no-margins-label">Exit</mat-label>
               </div>
             </div>
-          </button>
-        </div>
+          </button> -->
+        <!-- </div> -->
       </div>
     </div>
 

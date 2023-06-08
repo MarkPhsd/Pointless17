@@ -1,0 +1,56 @@
+
+
+<h4>Sorting the data..</h4>
+<mat-label style="margin:5px;padding:10px">Select the fields you wish to order by, you can sort the list again after you have exported it.
+</mat-label>
+
+<div>
+
+  <div>
+    <mat-label style="margin:5px;padding:10px">Group By List</mat-label>
+  </div>
+  <button  style="margin:5px;padding:10px"
+            mat-raised-button (click)="addAll()">
+            Add All
+  </button>
+  <div class="ps-flex-group">
+
+    <div>
+      <h2>Field List</h2>
+      <mat-button-toggle-group
+            style        = "width:200px"
+            name         = "type"
+            vertical >
+        <mat-button-toggle
+              style="height:50px;"
+              *ngFor="let item of allFields"
+              type="button"
+              [value]="item"
+              (click)="addItem(item)"
+              id="item">
+          <mat-icon>add</mat-icon>{{item.name}}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    <div>
+      <h2>Currently Assigned</h2>
+      <mat-button-toggle-group
+            style =      "width:200px"
+            name         = "type"
+            vertical >
+        <mat-button-toggle
+              style="height:50px;"
+              *ngFor="let item of report.orderBy"
+              [value]="item"
+              (click)="deleteItem(item)"
+              id="item">
+          <mat-icon>delete</mat-icon>{{item.name}}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div>
+      <!-- {{ report.orderBy | json}} -->
+    </div>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 /**
  * Helper interface for listbox items
  */
- export interface IListBoxItem {
+export interface IListBoxItem {
   value: string;
   text: string;
   groupID: number;
@@ -10,6 +10,14 @@
 export interface IListBoxItemB {
   id: string;
   name: string;
+}
+
+export interface IListBoxItemC {
+  value: string;
+  text: string;
+  groupID: number;
+  type: string;
+  fieldTypeAggregate: string;
 }
 /**
 * Helper interface to emit event when

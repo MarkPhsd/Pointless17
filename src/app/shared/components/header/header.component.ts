@@ -417,12 +417,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.showSearchForm = true
     this.smallDevice = false
     this.phoneDevice = false;
+
     if (window.innerWidth >= 1200) {
       this.sitePickerWidth = 33
     } else if (window.innerWidth >= 992) {
       this.sitePickerWidth = 33
     }
-
 
     if (811 >= window.innerWidth ) {
       this.showSearchForm = false
@@ -432,6 +432,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (500 >= window.innerWidth) {
       this.phoneDevice = true;
     }
+
+    this.authenticationService.updateDeviceInfo({smallDevice: this.smallDevice, phoneDevice: this.phoneDevice});
     this.refreshUserBar(this.user)
   }
 
@@ -442,6 +444,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (811 >= window.innerWidth ) {
       this.smallDevice = true
     }
+
+    if (600 >= window.innerWidth ) {
+      this.phoneDevice = true
+    }
+
+    this.authenticationService.updateDeviceInfo({phoneDevice: this.phoneDevice, smallDevice: this.smallDevice})
 
     if (this.platFormService.androidApp) {
       this.mattoolbar = 'mat-toolbar-android'
@@ -456,7 +464,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       this.userSwitching = false;
     }
-
   }
 
   getUserInfo() {

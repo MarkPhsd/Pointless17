@@ -38,11 +38,25 @@
           <mat-icon>view</mat-icon>
           View Cart
         </div>
+
         <div *ngIf="order && !order.history">
-          <mat-icon>edit</mat-icon>
-          Edit Cart
+
+          <div *ngIf="deviceInfo && deviceInfo.phoneDevice && order">
+            <mat-icon
+                matBadge="{{ order.itemCount }}"
+                matBadgeColor="accent"
+                matBadgePosition="before">
+                shopping_cart
+            </mat-icon>
+            Edit Cart
+          </div>
+
+          <div *ngIf="!deviceInfo || !deviceInfo.phoneDevice">
+            <mat-icon>edit</mat-icon>Edit Cart
+          </div>
+
         </div>
-      
+
       </button>
     </div>
 
@@ -59,7 +73,7 @@
         <span *ngIf="order.history">
           Payments
         </span>
-      
+
       </button>
     </div>
 

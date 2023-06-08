@@ -15,12 +15,37 @@
       </button>
     </div>
 
-    <div *ngIf="isUserStaff && order ">
-      <button
+    <div *ngIf="(deviceInfo && !deviceInfo.phoneDevice)">
+      <div *ngIf="isUserStaff && order ">
+        <button
+                mat-raised-button
+                color="primary"
+                (click)="toggleOpenOrderBar()" >
+
+            <mat-icon
+              *ngIf="!openOrderBar"
+              matBadge="{{ order.itemCount }}"
+              matBadgeColor="accent"
+              matBadgePosition="before">
+              shopping_cart
+            </mat-icon>
+
+            <mat-icon
+              *ngIf="openOrderBar"
+              matBadge="{{ order.itemCount }}"
+              matBadgeColor="accent"
+              matBadgePosition="before">
+              close_fullscreen
+            </mat-icon>
+
+        </button>
+      </div>
+
+      <div *ngIf="!isUserStaff && order">
+        <button
               mat-raised-button
               color="primary"
               (click)="toggleOpenOrderBar()" >
-
           <mat-icon
             *ngIf="!openOrderBar"
             matBadge="{{ order.itemCount }}"
@@ -36,31 +61,9 @@
             matBadgePosition="before">
             close_fullscreen
           </mat-icon>
-
-      </button>
+        </button>
+      </div>
     </div>
 
-    <div *ngIf="!isUserStaff && order ">
-      <button
-            mat-raised-button
-            color="primary"
-            (click)="toggleOpenOrderBar()" >
-        <mat-icon
-          *ngIf="!openOrderBar"
-          matBadge="{{ order.itemCount }}"
-          matBadgeColor="accent"
-          matBadgePosition="before">
-          shopping_cart
-        </mat-icon>
-
-        <mat-icon
-          *ngIf="openOrderBar"
-          matBadge="{{ order.itemCount }}"
-          matBadgeColor="accent"
-          matBadgePosition="before">
-          close_fullscreen
-        </mat-icon>
-      </button>
-    </div>
 
 </div>

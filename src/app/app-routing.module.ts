@@ -132,14 +132,14 @@ import { JobTypesListComponent } from './modules/admin/clients/jobs/job-types-li
 import { EmployeeClockListComponent } from './modules/admin/employeeClockAdmin/employee-clock-list/employee-clock-list.component';
 import { ClockBreaksTypesComponent } from './modules/admin/employeeClockAdmin/clock-breaks-types/clock-breaks-types.component';
 import { PointlessMETRCSalesComponent } from './modules/admin/metrc/pointless-metrcsales/pointless-metrcsales.component';
+import { DesignerListComponent } from './modules/admin/report-designer/designer/designer-list/designer-list.component';
+import { DesignerEditorComponent } from './modules/admin/report-designer/designer/designer-editor/designer-editor.component';
 
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
 
     { path: 'printerslist',  component: InstalledPrintersComponent, data: { title: 'Print Settings', animation: 'isLeft'} },
-
     { path: 'blog-post-list',  component: BlogPostListComponent, data: { title: 'BlogPosts', animation: 'isLeft'} },
-
     //  data : { title: 'Menu Board Layout', animation: 'isLeft'},
     //  { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
     { path: 'menu-board',  component: GridManagerComponent,
@@ -166,6 +166,10 @@ const routes: Routes = [
         //     ]
         // },
         //
+        { path: 'ps-designer-list', component: DesignerListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+        { path: 'ps-report-editor', component: DesignerEditorComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+
+        //pointless reporting
 
         { path: 'report-designer', component: DevxReportDesignerComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
         { path: 'report-viewer'  , component: ReportViewerComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },

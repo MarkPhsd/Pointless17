@@ -25,7 +25,7 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
   @Input() paymentAmount: number;
   stripeEnabled: boolean;
   paymentMethod$: Observable<IPaymentMethod>;
-  @Output() setStep = new EventEmitter()
+
   stepSelection: number;
   paymentMethod: IPaymentMethod;
   @Input() devicename : string;

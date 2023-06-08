@@ -148,7 +148,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.inputForm       = this.sheetMethodsService.initForm(this.inputForm);
 
     let sheet = {} as IBalanceSheet
-    
+
   }
 
   ngOnInit() {
@@ -307,13 +307,23 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   closeSheet() {
-    this.printingService.updatePrintView(2);
-    this.action$ = this.sendGridService.sendBalanceSheet(this.sheet.id).pipe(
+    // this.printingService.updatePrintView(2);
+
+    const print$ = this._print(null)
+    this.action$ =
+    print$.pipe(
       switchMap( data => {
-        if (!data) { return of(null) }
+        // return of(null)
+        return this.sendGridService.sendBalanceSheet(this.sheet.id)
+    })).pipe(
+      switchMap( data => {
+        // return of(null)
+        // if (!data) { return of(null) }
         return  this.sheetMethodsService.closeSheet(this.sheet)
-    })).pipe(switchMap( data => {
-      return of (data)
+    })).pipe(
+      switchMap( data => {
+        // return of(null)
+        return of (data)
     }))
   }
 
@@ -415,20 +425,27 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   print(event){
+    this.balanceSheet$ = this._print(event)
+  }
+
+  _print(event): Observable<any> {
     this.printingService.updatePrintView(2);
-    this.balanceSheet$ = this.sheetMethodsService.updateSheet(this.inputForm, this.startShiftInt).pipe(
+    return this.sheetMethodsService.updateSheet(this.inputForm, this.startShiftInt).pipe(
       switchMap(data => {
-        this.printingService.previewReceipt()
-        return of(data)
+        if (!data) { return of(null)}
+        return this.printingService.previewReceipt(true)
       }
-    ))
+    )).pipe(
+      switchMap(result => {
+        return of(result)
+    }));
   }
 
   printEndingValues(event){
     this.printingService.updatePrintView(3);
     this.balanceSheet$ = this.sheetMethodsService.updateSheet(this.inputForm, this.startShiftInt).pipe(
       switchMap(data => {
-        this.printingService.previewReceipt()
+        this.printingService.previewReceipt(true)
         return of(data)
       }
     ))

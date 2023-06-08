@@ -4,7 +4,6 @@ import { Component, OnInit, Input, OnChanges,  SimpleChanges, OnDestroy } from '
 import { ActivatedRoute } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
-import numeral, { validate } from 'numeral';
 import { Observable, Subject, Subscription, of, switchMap } from 'rxjs';
 import { ISalesPayments, ISite }  from 'src/app/_interfaces';
 import { ReportingService, rowValue } from 'src/app/_services';
@@ -13,7 +12,6 @@ import { IPaymentSalesSearchModel, PaymentSummary, SalesPaymentsService } from '
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
 import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
-
 export interface ProductSale {
   name: string;
   value: number;
@@ -666,21 +664,17 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
       this.initSeriesLabels();
       for (let site of sites) {
         const sales$ = this.refreshSales(site);
-        sales$.subscribe( summary => {
-
-          if (!summary) { return }
-
-          if (summary.resultMessage === 'failed') { return }
-          const sales = summary.paymentSummary;
-            if (!sales || sales == null) { return }
-            // first take the sales of each employee so run a filter on the sales and filter for each employee.
-            // get list of employees that have sold.
-            // const uniqueArr = [... new Set(students.map(data => data.name))]
-            const employeesList = [... new Set(sales.map(t => t.employeeName)) ]
-            employeesList.forEach( employeeName => {this.applyEmployeeSeries(employeeName, sales, this.groupBy) })
-
-          }
-        )
+        if (sales$ != undefined ) {
+          sales$.subscribe( summary => {
+            if (!summary) { return }
+            if (summary.resultMessage === 'failed') { return }
+            const sales = summary.paymentSummary;
+              if (!sales || sales == null) { return }
+              const employeesList = [... new Set(sales.map(t => t.employeeName)) ]
+              employeesList.forEach( employeeName => {this.applyEmployeeSeries(employeeName, sales, this.groupBy) })
+            }
+          )
+        }
       }
     }
   }

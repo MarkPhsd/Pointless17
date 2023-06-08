@@ -1,10 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, HostListener, OnDestroy } from '@angular/core';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { DeviceInfo } from 'ngx-device-detector';
 import { Subscription } from 'rxjs';
 import { IPOSOrder, IUser } from 'src/app/_interfaces';
-import { OrdersService } from 'src/app/_services';
+import { AuthenticationService, IDeviceInfo, OrdersService } from 'src/app/_services';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { PosOrderItemsComponent } from 'src/app/modules/posorders/pos-order/pos-order-items/pos-order-items.component';
 
 @Component({
   selector: 'app-footer',
@@ -17,7 +20,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   outlet              : TemplateRef<any>;
   phoneDevice : boolean;
   smallDevice: boolean;
-  
+
   isStaff             =   false;
 
   isAdmin             =   false;
@@ -31,18 +34,20 @@ export class FooterComponent implements OnInit, OnDestroy {
   _order        :   Subscription;
   order         :   IPOSOrder;
 
+  deviceInfo      : IDeviceInfo;
   currentOrderSusbcriber() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
     })
   }
 
-
   constructor(
     public  toolbarUIService  : ToolBarUIService,
     private orderService      : OrdersService,
     private  navigationService: NavigationService,
-    public printingService        : PrintingService,
+    public printingService    : PrintingService,
+    private bottomSheet       : MatBottomSheet,
+    private authenticationService: AuthenticationService,
   ) { }
 
   ngOnInit(): void {
@@ -50,6 +55,8 @@ export class FooterComponent implements OnInit, OnDestroy {
     const i = 0
     this.currentOrderSusbcriber();
     this.getUserInfo();
+
+    this.deviceInfo = this.authenticationService.deviceInfo;
   }
 
   ngOnDestroy(): void {
@@ -72,7 +79,9 @@ export class FooterComponent implements OnInit, OnDestroy {
       this.phoneDevice = true
       this.outlet = this.footerMenu
     };
-    
+
+    this.authenticationService.updateDeviceInfo({phoneDevice: this.phoneDevice, smallDevice: this.smallDevice})
+    this.deviceInfo = this.authenticationService.deviceInfo;
   }
 
   getUserInfo() {
@@ -99,9 +108,9 @@ export class FooterComponent implements OnInit, OnDestroy {
       this.isAdmin          = true
     }
 
-    if (user.roles === 'manager' || user.roles === 'admin' || user.roles === 'employee' ) { 
+    if (user.roles === 'manager' || user.roles === 'admin' || user.roles === 'employee' ) {
       this.isStaff = true
-    }  
+    }
 
   }
 
@@ -120,23 +129,27 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   smallDeviceLimiter() {
-    if (this.smallDevice) { 
-      this.toolbarUIService.updateOrderBar(false) 
+    if (this.smallDevice) {
+      this.toolbarUIService.updateOrderBar(false)
     }
-    if (this.phoneDevice) { 
-      this.toolbarUIService.updateOrderBar(false) 
-      this.toolbarUIService.updateSearchBarSideBar(false) 
+    if (this.phoneDevice) {
+      this.toolbarUIService.updateOrderBar(false)
+      this.toolbarUIService.updateSearchBarSideBar(false)
     }
   }
 
   toggleOpenOrderBar() {
     this.navigationService.toggleOpenOrderBar(this.isStaff)
+    if (this.order) {
+      this.orderService.updateBottomSheetOpen(true)
+      this.bottomSheet.open(PosOrderItemsComponent)
+    }
   }
 
   makePayment() {
     let path =''
-    if (this.order) { 
-      if (this.order.tableName && this.order.tableName.length>0) { 
+    if (this.order) {
+      if (this.order.tableName && this.order.tableName.length>0) {
         path = 'pos-payment'
       }
     }

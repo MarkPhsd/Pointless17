@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, } from '@angular/core';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
 let apiLoaded = false;
-
 export interface playerConfig {
   controls: number;
   mute    : number;

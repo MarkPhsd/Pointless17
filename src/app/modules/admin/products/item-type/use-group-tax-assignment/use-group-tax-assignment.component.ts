@@ -5,7 +5,7 @@ import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
 import { Observable, of ,switchMap} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProductCategory, ISite, TaxRate } from 'src/app/_interfaces';
-import { UseGroupsService, Taxes, UseGroupTax, UseGroups } from 'src/app/_services/menu/use-groups.service';
+import { UseGroupsService, UseGroups } from 'src/app/_services/menu/use-groups.service';
 import { UseGroupTaxesService } from 'src/app/_services/menu/use-group-taxes.service';
 import { TaxesService, UseGroupTaxAssigned, UseGroupTaxAssignedList } from 'src/app/_services/menu/taxes.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -83,11 +83,10 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
   ngOnInit() {
     const site = this.siteService.getAssignedSite()
     this.taxes$ = this.taxService.getTaxRates(site);
-    this.useGroupsList$ = this.useGroupService.getUseGroupListNoChildren(site).pipe(switchMap(data => { 
+    this.useGroupsList$ = this.useGroupService.getUseGroupListNoChildren(site).pipe(switchMap(data => {
       console.log('use group list', data)
       return of(data)
     }))
-    // this.resetUseGroups();
   }
 
   resetUseGroups() {

@@ -121,14 +121,14 @@ export class AWSBucketService {
   }
 
   getImageURLPath(bucket: string, imageName: string ): string {
-    console.log('bucket', bucket)
+    // console.log('bucket', bucket)
     let path = ''
     if (imageName) {
        path =   encodeURI(`https://${bucket}.s3.amazonaws.com/${imageName}`);
     } else {
        path =  encodeURI(`https://${bucket}.s3.amazonaws.com/placeholderproduct.png`);
     }
-    console.log('path', path)
+    // console.log('path', path)
     return path;
   }
 

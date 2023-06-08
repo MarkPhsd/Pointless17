@@ -1,4 +1,4 @@
-import { Component, Input,OnDestroy,OnInit  } from '@angular/core';
+import { Component, EventEmitter, Input,OnDestroy,OnInit, Output  } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -15,10 +15,11 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
   styleUrls: ['./balance-sheet-header-view.component.scss']
 })
 export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
-
+  @Input() autoPrint : boolean;
   @Input() sheet: any;
   @Input() sheetType = '';
   @Input() disableAuditButton: boolean;
+  @Output() renderComplete = new EventEmitter<any>();
 
   employees$      :   Observable<IItemBasic[]>;
   paymentMethod$  :   Observable<IPaymentMethod[]>;
@@ -61,16 +62,17 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
   }
 
   initValues() {
-    this.balanceSheetMethodsService.getOrdersOpen( this.sheet.id ).subscribe( data => {
-      this.ordersOpen = (data.count).toString()
-      this.balanceSheetMethodsService.updateOpenOrders(data.count)
-    })
+    if (this.sheet) {
+      this.balanceSheetMethodsService.getOrdersOpen( this.sheet.id ).subscribe( data => {
+        this.ordersOpen = (data.count).toString()
+        this.balanceSheetMethodsService.updateOpenOrders(data.count)
+      })
 
-    this.balanceSheetMethodsService.getOrderCount( this.sheet ).subscribe( data => {
-      console.log('get orders closed', data)
-      this.ordersCount = (data.count).toString();
-      this.balanceSheetMethodsService.updateOrderCount(data.count)
-    })
+      this.balanceSheetMethodsService.getOrderCount( this.sheet ).subscribe( data => {
+        this.ordersCount = (data.count).toString();
+        this.balanceSheetMethodsService.updateOrderCount(data.count)
+      })
+    }
   }
 
   ngOnDestroy() {
@@ -114,6 +116,10 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
       this.router.navigate(['/pos-payments'])
       this._bottomSheet.dismiss()
     }
+  }
+
+  renderCompleted(event) {
+    this.renderComplete.emit('balance-sheet-header-view')
   }
 
 }

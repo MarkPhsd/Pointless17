@@ -143,12 +143,21 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
   @HostListener("window:resize", [])
   updateScreenSize() {
+
     this.tinyMenu = false
+
     this.gridtoggletiny = "grid-toggle-tiny"
-    if (window.innerWidth < 599 || this.smallMenu) {
+
+    // if (window.innerWidth < 599 || this.smallMenu) {
+    //   this.tinyMenu = true
+    //   this.gridtoggletiny = "grid-toggle-collapsed"
+    // }
+
+    if (this.smallMenu) {
       this.tinyMenu = true
       this.gridtoggletiny = "grid-toggle-collapsed"
     }
+
   }
 
   ngOnInit() {

@@ -1,0 +1,150 @@
+
+  <mat-card>
+    <mat-card-title>
+      <div class="ps-flex-group">
+        <div>
+          <pgReporting-edit-bar
+            (save)="save()"
+            (delete)="delete()"
+            (copy)="copy()">
+          </pgReporting-edit-bar>
+        </div>
+        <div>
+          <button mat-raised-button (click)="reportList()"><mat-icon>list</mat-icon>Reports</button>
+        </div>
+      </div>
+
+    </mat-card-title>
+
+    <mat-card-content>
+      <div *ngIf="report; else loading">
+        <div *ngIf="inputForm"
+            [formGroup]="inputForm">
+
+            <mat-tab-group style="height:700px">
+              <mat-tab label="Description">
+                <div class="ps-flex-group-column" style="width:800px">
+
+                  <div>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Name</mat-label>
+                        <input matInput
+                              type="text"
+                              [formControlName]="'name'">
+                    </mat-form-field>
+                  </div>
+
+                  <div>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Dasdboard</mat-label>
+                        <input matInput
+                              type="text"
+                              [formControlName]="'dashBoard'">
+                    </mat-form-field>
+                  </div>
+                  <div>
+                    <mat-form-field appearance="outline" style="width:400px;">
+                      <mat-label>Description</mat-label>
+                        <input matInput
+                              type="text"
+                              [formControlName]="'description'">
+                    </mat-form-field>
+                  </div>
+
+                  <div *ngIf="reportTypesForm && reportTypes">
+                    <pgReporting-mat-selector
+                      [list]        = "reportTypes"
+                      [fieldName]   = "'reportTypes'"
+                      [inputForm]   = "reportTypesForm"
+                      (selectItem)  = "setReportType($event)">
+                      <div label>
+                        <mat-label>
+                          Report Type
+                        </mat-label>
+                      </div>
+                    </pgReporting-mat-selector>
+                  </div>
+
+                  <div *ngIf="chartTypes">
+                    <pgReporting-mat-selector
+                      [list]     ="chartTypes"
+                      [fieldName]= "'chartType'"
+                      [inputForm]= "inputForm"
+                      (setItem)  = "setChartType($event)">
+                      <div label>
+                        <mat-label>
+                          Chart Type
+                        </mat-label>
+                      </div>
+                    </pgReporting-mat-selector>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Field Selector">
+                <psReporting-field-selector></psReporting-field-selector>
+              </mat-tab>
+
+              <mat-tab label="Field Value Aggregation">
+                <pgReporting-field-list-type-assigner>
+                </pgReporting-field-list-type-assigner>
+              </mat-tab>
+
+              <mat-tab label="Filter">
+                <pgReporting-filter-builder></pgReporting-filter-builder>
+              </mat-tab>
+
+              <mat-tab label="Grouping">
+                <psReporting-report-group-selector></psReporting-report-group-selector>
+              </mat-tab>
+
+              <mat-tab label="Ordering">
+                <psReporting-sort-selector></psReporting-sort-selector>
+              </mat-tab>
+
+              <mat-tab label="Data">
+                <div style="margin:5px;padding:10px;">
+                  <h2>SQL Statement</h2>
+                  {{ getSQLStatement() }}
+                  <br><br>
+                  <h2>JSON Data</h2>
+                  {{report | json}}
+                </div>
+
+                <div>
+                  <button mat-raised-button color="primary" (click)="getData()">Get Data</button>
+                </div>
+
+                <div>
+                  <ng-container [ngTemplateOutlet]="dynamicData"></ng-container>
+                </div>
+
+              </mat-tab>
+
+
+
+            </mat-tab-group>
+
+        </div>
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+
+
+
+<div *ngIf="(fieldList$ | async) as list"></div>
+
+<ng-template #loading>
+  ...saving
+  <mat-spinner [diameter]="50"></mat-spinner>
+</ng-template>
+<div *ngIf="(action$ | async) as report"></div>
+
+<ng-template #dynamicData>
+  <div *ngIf="(dynamicData$ | async) as data">
+    <dynamic-ag-grid [dataInterface]="'ReOrderList'"
+                     [data]="data">
+    </dynamic-ag-grid>
+  </div>
+</ng-template>

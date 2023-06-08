@@ -12,7 +12,6 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class TaxRateListComponent implements OnInit {
 
-
   @Input()  formControl:    string;
   @Input()  inputForm:      UntypedFormGroup;
   items$:                   Observable<TaxRate[]>;

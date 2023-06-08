@@ -3,9 +3,12 @@
   <div>
     <ng-content select="[summary]"></ng-content>
   </div>
-  <div  class="grid" *ngIf="(metrcSummary$ | async) as sales; else loading">
-    <div >Net (pre-tax):</div>
-    <div class="totals">{{sales.netTotal | currency }}  </div>
+  <div   *ngIf="(metrcSummary$ | async) as sales; else loading">
+    <div class="grid">
+      <div >Net (pre-tax):</div>
+      <div class="totals">{{sales.netTotal | currency }}  </div>
+    </div>
+    <div class="totals" *ngIf="sales && sales.exceptionMessage">{{sales?.exceptionMessage}}</div>
   </div>
 
 

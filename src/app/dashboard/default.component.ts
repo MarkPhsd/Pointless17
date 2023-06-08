@@ -528,19 +528,21 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   refreshToolBarType() {
     if (window.innerHeight >= 750) {
+      console.log('toolbar tiny true')
       this.toolbarTiny = true
     } else {
+      console.log('toolbar tiny false')
       this.toolbarTiny = false
     }
-      if (window.innerWidth > 811) {
-        this.sidebarMode = 'side'
-        this.smallDevice = false;
-        this.siteService.smallDevice = false
-      } else {
-        this.sidebarMode = 'side'
-        this.smallDevice = true;
-        this.siteService.smallDevice = true
-      }
+    if (window.innerWidth > 811) {
+      this.sidebarMode = 'side'
+      this.smallDevice = false;
+      this.siteService.smallDevice = false
+    } else {
+      this.sidebarMode = 'side'
+      this.smallDevice = true;
+      this.siteService.smallDevice = true
+    }
 
     if (window.innerWidth <=600) {
       this.phoneDevice = true
@@ -549,6 +551,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       this.phoneDevice = false
       this.siteService.phoneDevice = false
     }
+    // this.autthen
   }
 
   renderTheme() {
@@ -579,7 +582,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     return outletMessage && outletMessage.activatedRouteData && outletMessage.activatedRouteData['animation']
   }
 
-
   initIdle() {
   ////Idle Work
     if (!this.uiSettings) {
@@ -595,9 +597,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     if (timeout == 0) { timeout = 100};
 
     this.userIdle.startWatching();
-
     const config = {timeout: timeout, idle: 10, ping: 300}
-
     this.userIdle.setConfigValues(config);
 
     // // Start watching when user idle is starting.
@@ -617,7 +617,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     // })
 
     this.userIdle.onIdleStatusChanged().subscribe(count => {
-      // console.log('onIdleStatusChanged event called',count);
       this.userIdle.resetTimer();
     })
 
@@ -627,8 +626,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
    // Start watch when time is up.
    this.userIdle.onTimeout().subscribe(() =>
       {
-        //   console.log('Time is up!')
-        // console.log('onTimeout event called')
         if (this.platFormService.isApp()){
           if (this.uiSettings && this.uiSettings.timeOut) {
             this.userSwitchingService.clearLoggedInUser();

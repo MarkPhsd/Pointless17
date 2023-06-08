@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { UserSwitchingService } from './user-switching.service';
+import { AuthenticationService } from '..';
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +48,7 @@ export class ToolBarUIService {
   public searchBar : boolean;
   public orderBar  : boolean;
 
-  constructor( private router: Router) {
+  constructor( private router: Router, private authenticationService: AuthenticationService) {
     this.mainMenuSideBar = false;
     this.searchBar = false;
   }
@@ -98,6 +99,13 @@ export class ToolBarUIService {
   }
 
   updateOrderBar(value: boolean) {
+
+    const deviceInfo = this.authenticationService.deviceInfo;
+    console.log('device info update order bar', deviceInfo)
+    if (deviceInfo && deviceInfo.phoneDevice) {
+      return;
+    }
+
     if (this.router.url == '/currentorder;mainPanel=true') {
       this.orderBar = false
       this._orderBar.next(false)

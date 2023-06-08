@@ -1,0 +1,6 @@
+<div class="ps-grid-items ps-edit-bar">
+  <button style="width:100px" *ngIf="!hideAdd" color="primary" mat-raised-button (click)="addEvent()" ><mat-icon>add</mat-icon>Add</button>
+  <button style="width:100px" *ngIf="!hideSave" color="primary"  mat-raised-button (click)="saveEvent()" ><mat-icon>save</mat-icon>Save</button>
+  <button style="width:100px" *ngIf="!hideCopy" color="primary" mat-raised-button (click)="copyEvent()"><mat-icon >content_copy</mat-icon>Copy</button>
+  <button style="width:100px" *ngIf="!hideDelete" mat-raised-button color='warn' (click)="deleteEvent()"><mat-icon>delete</mat-icon>Delete</button>
+</div>

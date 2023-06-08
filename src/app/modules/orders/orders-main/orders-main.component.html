@@ -124,7 +124,8 @@
       <div *ngFor="let order of posOrdersSelectedList; let i = index">
         <div><button mat-raised-button (click)="removeFromList(i)" aria-label="trash">
                {{order.id}}<mat-icon>delete</mat-icon>
-              </button></div>
+              </button>
+        </div>
       </div>
    </div>
   </div>

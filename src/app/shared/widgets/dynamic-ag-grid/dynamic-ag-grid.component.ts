@@ -1,11 +1,10 @@
 import { AfterViewInit, Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GridApi, Optional } from 'ag-grid-community';
-import { MenuItem } from 'electron';
-import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-import { IReportItemSales, ITaxReport, ITaxReportOptimized, ReportItemSalesOptimized } from 'src/app/_services/reporting/reporting-items-sales.service';
-import { PaymentSummary } from 'src/app/_services/reporting/sales-payments.service';
-import { AgGridService } from 'src/app/_services/system/ag-grid-service';
+// import { MenuItem } from 'electron';
+// import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
+// import { ReportItemSalesOptimized } from 'src/app/_services/reporting/reporting-items-sales.service';
+// import { PaymentSummary } from 'src/app/_services/reporting/sales-payments.service';
 
 @Component({
   selector: 'dynamic-ag-grid',
@@ -46,13 +45,13 @@ export class DynamicAgGridComponent implements  AfterViewInit {
     // console.log(dataGrid)
     if (this.dataInterface === 'ReOrderList' ||
         this.dataInterface === 'MenuItem') {
-      intefaceType = anObject[0] as MenuItem
+      intefaceType = anObject[0] // as MenuItem
     }
 
     if (this.dataInterface === 'ItemSales' ||
         this.dataInterface === 'IReportItemSales') {
           console.log(anObject[0])
-      intefaceType = anObject[0] as ReportItemSalesOptimized
+      intefaceType = anObject[0] // as ReportItemSalesOptimized
     }
 
     if (this.dataInterface === 'SalesTax' ||
@@ -61,7 +60,7 @@ export class DynamicAgGridComponent implements  AfterViewInit {
     }
 
     if (this.dataInterface === 'PaymentSummary') {
-      intefaceType = anObject[0] as PaymentSummary
+      intefaceType = anObject[0] // as PaymentSummary
     }
 
     console.log('data', this.dataInterface, anObject, intefaceType)
@@ -79,7 +78,6 @@ export class DynamicAgGridComponent implements  AfterViewInit {
   }
 
   constructor(
-    private agGridFormatingService: AgGridFormatingService,
     @Optional() private dialogRef: MatDialogRef<DynamicAgGridComponent>,
     @Inject(MAT_DIALOG_DATA) public gridData: any,
 

@@ -12,6 +12,7 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { MenuService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -78,6 +79,8 @@ export class DashboardComponent implements OnChanges,OnInit  {
 
   item                  : Item; //for routing
 
+  displayReports = 'financials'
+
   constructor(
               private authentication  : AuthenticationService,
               private reportingService: ReportingService,
@@ -86,16 +89,23 @@ export class DashboardComponent implements OnChanges,OnInit  {
               private siteService        : SitesService,
               private menuService: MenuService,
               public datepipe: DatePipe,
+              private router: Router,
               private clientTableService: ClientTableService,
               private uISettingsService  : UISettingsService,
           ) {
+  }
+
+  toggleReports(type) {
+    this.displayReports = type;
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     this.initDateRange();
 
   }
-
+  navDesigner() {
+    this.router.navigate(['ps-designer-list'])
+  }
   toggleShowValues() {
 
     this.showValues= !this.showValues

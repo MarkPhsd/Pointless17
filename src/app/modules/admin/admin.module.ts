@@ -158,11 +158,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     BrowserAnimationsModule,
     RouterModule,
     HammerModule,
-
-
     // SimpleTinyComponent,
-
-
   ],
 
   providers: [

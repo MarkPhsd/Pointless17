@@ -13,6 +13,7 @@ import { ReportingService } from 'src/app/_services/';
 import { UserService } from 'src/app/_services/';
 import { MenuService } from 'src/app/_services/';
 import { AuthenticationService } from 'src/app/_services/';
+
 import { ContactsService, OrdersService, TextMessagingService, ThemesService } from 'src/app/_services';
 import { LoggingInterceptor } from 'src/app/_http-interceptors/loggin.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -376,6 +377,7 @@ import { PriceCategoryMultiplePricesComponent } from '../modules/admin/products/
 import { PurchaseItemSalesComponent } from '../modules/posorders/pos-order/purchase-item-sales/purchase-item-sales.component';
 import { PurchaseItemCostHistoryComponent } from '../modules/posorders/pos-order/purchase-item-cost-history/purchase-item-cost-history.component';
 import { ClientInfoComponent } from '../modules/posorders/client-info/client-info.component';
+// import { PointlessReportingLibModule } from 'projects/pointess-reporting-lib/src/public-api';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -777,11 +779,11 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
     DateScheduleComponent,
     TimeScheduleComponent,
+
+    //
    ],
 
    imports: [
-      // AgGridModule.withComponents([ButtonRendererComponent,AgIconFormatterComponent, AgGridToggleComponent,AgGridImageFormatterComponent]),
-
       DashBoardRoutingModule,
       AngularResizeEventModule,
       AppRoutingModule,
@@ -789,8 +791,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       BrowserAnimationsModule,
       CommonModule,
       CdkTableModule,
-      // DxReportViewerModule,
-      // DxReportDesignerModule,
       FormsModule,
       HammerModule,
       IonicModule.forRoot(),
@@ -804,6 +804,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       NgxCsvParserModule,
       NgxPayPalModule,
       NgxJsonViewerModule,
+
     ],
 
   exports: [
@@ -814,6 +815,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     HammerModule,
     NgxPayPalModule,
     NgxJsonViewerModule,
+
     // NumericDirective,
     // RoomLayout,
   ],

@@ -1,28 +1,30 @@
-<div *ngIf="list && list.results.length >0">
-  <div class="grid-items">
-    <div>#</div>
-    <div>Order </div>
-    <div>Date</div>
-    <div>Type</div>
-    <div class="item-value">Paid</div>
-    <div class="item-value">Grat</div>
-  </div>
-  <div *ngFor="let item of list.results; let i = index"  class="grid-items">
-    <div>{{i+1}}</div>
-    <div *ngIf="item.orderID">{{item?.orderID.toString().substr(-5)}}</div>
-    <div>{{item?.completionDate | date: 'shortDate' }} {{item?.completionDate | date: 'shortTime' }}</div>
-    <div>{{item?.paymentMethod?.name}}</div>
-    <div class="item-value">{{item?.amountPaid | currency}}</div>
-    <div class="item-value">{{item?.tipAmount  | currency}}</div>
-  </div>
+<div *ngIf="( styles$ | async) as styles">
+  <div *ngIf="list && list.results.length >0">
+    <div class="grid-items">
+      <div>#</div>
+      <div>Order </div>
+      <div>Date</div>
+      <div>Type</div>
+      <div class="item-value">Paid</div>
+      <div class="item-value">Grat</div>
+    </div>
+    <div *ngFor="let item of list.results; let i = index"  class="grid-items">
+      <div>{{i+1}}</div>
+      <div *ngIf="item.orderID">{{item?.orderID.toString().substr(-5)}}</div>
+      <div>{{item?.completionDate | date: 'shortDate' }} {{item?.completionDate | date: 'shortTime' }}</div>
+      <div>{{item?.paymentMethod?.name}}</div>
+      <div class="item-value">{{item?.amountPaid | currency}}</div>
+      <div class="item-value">{{item?.tipAmount  | currency}}</div>
+    </div>
 
-  <div class="grid-summary">
-    <div>Total</div>
-    <div>Gratuity</div>
-  </div>
+    <div class="grid-summary">
+      <div>Total</div>
+      <div>Gratuity</div>
+    </div>
 
-  <div class="grid-summary">
-   <div> {{list.summary?.amountPaid | currency}}</div>
-    <div>{{list.summary?.tipAmount | currency}}</div>
+    <div class="grid-summary">
+    <div> {{list.summary?.amountPaid | currency}}</div>
+      <div>{{list.summary?.tipAmount | currency}}</div>
+    </div>
   </div>
 </div>

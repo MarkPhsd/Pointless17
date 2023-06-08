@@ -1,0 +1,115 @@
+<mat-card>
+  <mat-card-title>Where Conditions</mat-card-title>
+  <mat-card-content *ngIf="whereForm &&  allFields"
+                    [formGroup]="whereForm">
+    <div class="ps-flex-group">
+
+      <div>
+        <div>
+          <mat-label>Where List</mat-label>
+        </div>
+        <div class="ps-flex-group">
+          <div>
+            <mat-button-toggle-group
+                  style =      "width:200px"
+                  name         = "type"
+                  vertical >
+              <mat-button-toggle
+                    style="height:50px;"
+                    *ngFor="let item of report.where"
+                    type="button"
+                    [value]="item"
+                    (click)="editSelection(item)"
+                    id="item">
+                <mat-icon>edit</mat-icon>{{item.name}} -- {{item?.andOrGroupNumber}}
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+          <div>
+            <mat-button-toggle-group
+                  style =      "width:50px"
+                  name         = "type"
+                  vertical >
+              <mat-button-toggle
+                    style="height:50px;"
+                    *ngFor="let item of report.where"
+                    type="button"
+                    [value]="item"
+                    (click)="deleteItem(item)"
+                    id="item">
+                <mat-icon>delete</mat-icon>
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </div>
+      </div>
+
+      <div class="ps-flex-group-column">
+        <div  class="ps-item-margin">
+          <pgReporting-field-value-selector
+            [list]="allFields"
+            [fieldName]="'name'"
+            [inputForm]="whereForm"
+            (setItem)="setWhereFieldValue($event)">
+          </pgReporting-field-value-selector>
+        </div>
+        <div  class="ps-item-margin">
+          <pgReporting-mat-selector
+              [list]="whereSelector"
+              [fieldName]="'whereType'"
+              [inputForm]="whereForm">
+            Where Type
+          </pgReporting-mat-selector>
+        </div>
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Condition</mat-label>
+              <input matInput
+                    type="text"
+                    [formControlName]="'whereCondition'">
+          </mat-form-field>
+        </div>
+        <div class="ps-item-margin">
+          <pgReporting-mat-selector
+              [list]="andOrList"
+              [fieldName]="'andOr'"
+              [inputForm]="whereForm">
+            And / Or
+          </pgReporting-mat-selector>
+        </div>
+        <div class="ps-item-margin">
+          <mat-form-field appearance="outline">
+            <mat-label>Group Number</mat-label>
+              <input matInput
+                    type="number"
+                    [formControlName]="'andOrGroupNumber'">
+          </mat-form-field>
+        </div>
+
+        <div class="ps-item-margin">
+          <pgReporting-mat-selector
+              [list]="andOrList"
+              [fieldName]="'andOrGroup'"
+              [inputForm]="whereForm"
+              [defaultValue]="'and'">
+            And / Or - For next Group
+          </pgReporting-mat-selector>
+        </div>
+        <div class="ps-flex-group">
+          <div style="margin:5px">
+            <button mat-raised-button (click)="addWhereCondition()">Add / Edit</button>
+          </div>
+          <div style="margin:5px">
+            <button mat-raised-button (click)="initForm()">Clear</button>
+          </div>
+        </div>
+      </div>
+      <div style="max-width:400px;height:800px;overflow-x:auto">
+        <h4>Where Conditions</h4>
+        <div>
+          {{ getWhereConditions() }}
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

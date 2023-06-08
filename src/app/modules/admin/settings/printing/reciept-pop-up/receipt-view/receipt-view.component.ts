@@ -105,21 +105,11 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
     this.groupID = this.printingService.currentGroupID
     this.printingService.printView$.subscribe(data => {
-        if (!data) {
-          this.printingService._printView.next(1);
-        }
-
+        if (!data) { this.printingService._printView.next(1); }
         this.printView = data;
-        if (!this.printView) {
-          this.printView = 1;
-        }
-        if (this.printView == 1) {
-          this.setOrderPrintView()
-        }
-        if (this.printView == 2) {
-          // this.setOrderPrintView()
-        }
-
+        if (!this.printView) {this.printView = 1; }
+        if (this.printView == 1) { this.setOrderPrintView()}
+        if (this.printView == 2) { }// this.setOrderPrintView()
         this.refreshView$ =  this.refreshViewObservable()
       }
     )
@@ -186,12 +176,20 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
           })).pipe(
       switchMap(data => {
         return of(data)
-          }),catchError(e => {
+        }),catchError(e => {
             // console.log('e4' , e)
             this.siteService.notify('Error receipt view' + e, 'Alert', 2000)
             return of(null)
       }))
 
+  }
+
+  printViewCompleted(event) {
+    console.log('print View Completed Fired')
+    if (this.autoPrint) {
+      this.print();
+      this.exit()
+    }
   }
 
   getDefaultPrinterOb(): Observable<any> {
@@ -370,7 +368,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
     let  prtContent = document.getElementById('printsection');
 
-    console.log(prtContent  )
     if ( prtContent == null) { return }
     if ( !prtContent )       { return }
     const content        = `${ prtContent.innerHTML }`

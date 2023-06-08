@@ -4,6 +4,7 @@
 </div>
 
 <div *ngIf="(posDevice$ | async) as device"></div>
+
 <mat-drawer-container>
 
   <mat-drawer
@@ -12,6 +13,7 @@
         [mode]   ="sidebarMode"
         [opened] ="leftSideBarToggle">
 
+    <!-- system menu bar -->
     <div *ngIf="swapMenuWithOrder">
       <ng-container [ngTemplateOutlet]="leftSideBar"></ng-container>
     </div>
@@ -31,7 +33,7 @@
   </mat-drawer>
 
   <mat-drawer-content>
-    
+
     <div *ngIf="departmentID && departmentID !=0"
         class="overlay">
       <app-department-menu
@@ -49,7 +51,6 @@
               position  = "end"
               [mode]    = "sidebarMode"
               [opened]  = "rightSideBarToggle" >
-              
     <ng-container [ngTemplateOutlet]="rightSideBar"></ng-container>
   </mat-drawer>
 </mat-drawer-container>

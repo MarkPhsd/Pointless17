@@ -4,7 +4,7 @@
 
     <div *ngIf="(email$ | async) as email; else emailing"></div>
 
-    <ng-container *ngTemplateOutlet="customReport"></ng-container>
+    <ng-container [ngTemplateOutlet]="customReport"></ng-container>
 
     <br> <mat-divider  class="section-gap"></mat-divider> <br>
 
@@ -13,7 +13,7 @@
 </div>
 
 <ng-template #headerView>
-  <div  class="grid-buttons">
+  <div class="ps-flex-group">
     <div>
       <app-widget-filter
         (messageOut)="receiveData($event)">
@@ -21,13 +21,15 @@
     </div>
 
     <div>
-      <button mat-raised-button (click)="email()">
+      <button mat-raised-button
+              (click)="email()">
         Email <mat-icon>email</mat-icon>
       </button>
     </div>
 
     <div>
-      <button mat-raised-button (click)="toggleShowValues()">
+      <button mat-raised-button
+              (click)="toggleShowValues()">
         <span *ngIf="showValues">
           <mat-icon color="primary">analytics</mat-icon>Hide List Reports
         </span>
@@ -38,11 +40,54 @@
     </div>
 
     <div>
-      <button mat-raised-button (click)="refreshReports()">
+      <button mat-raised-button
+              (click)="refreshReports()">
         Refresh Reports
       </button>
     </div>
 
+    <div>
+      <button mat-raised-button
+              (click)="navDesigner()">
+          <mat-icon>design</mat-icon>Design
+      </button>
+    </div>
+  </div>
+
+  <div class="topics">
+    <h3><mat-icon>list</mat-icon>Report Types</h3>
+    <div class="ps-flex-group">
+      <div>
+        <button mat-flat-button style="width:205px;height:50px"color="primary" (click)="toggleReports('financials')">
+        <mat-icon>money</mat-icon>Financials</button>
+      </div>
+      <div>
+        <button mat-flat-button style="width:205px;height:50px"color="primary" (click)="toggleReports('items')">
+        <mat-icon>products</mat-icon>Products & Services</button>
+      </div>
+      <div>
+        <button mat-flat-button style="width:205px;height:50px"color="primary" (click)="toggleReports('output')">
+        <mat-icon>inventory</mat-icon>Inventory & Menu</button>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+  </div>
+
+  <div *ngIf="displayReports == 'items'">
+    <div class="ps-flex-group">
+      <button mat-flat-button  style="width:150px;height:50px" color="primary" (click)="showView(0)">Show All Details</button>
+      <button mat-flat-button  style="width:150px;height:50px" color="primary" (click)="showView(1)">Category Sales</button>
+
+      <button mat-flat-button  style="width:150px;height:50px"color="primary" (click)="showView(2)">Taxed Sales</button>
+      <button mat-flat-button  style="width:150px;height:50px"color="primary" (click)="showView(3)">Non Taxed Sales</button>
+
+      <button mat-flat-button  style="width:150px;height:50px"color="warn" (click)="showView(4)">Item Sales</button>
+      <button mat-flat-button  style="width:150px;height:50px"color="warn" (click)="showView(5)">Item Voids</button>
+    </div>
+  </div>
+
+  <div [hidden]="displayReports != 'output' ">
+    <h3>Output Reports</h3>
     <div>
       <app-mat-select [list]="reportList"
                       [fieldName]="'field'"
@@ -51,12 +96,18 @@
       </app-mat-select>
     </div>
   </div>
+
 </ng-template>
+
 <ng-template #emailing>
   <div class="emailing" *ngIf="emailSending">
     <mat-spinner [diameter]="50"></mat-spinner>
     ...emailing
   </div>
+</ng-template>
+
+<ng-template #reportDesigner>
+  <!-- <psReporting-designer-list></psReporting-designer-list> -->
 </ng-template>
 
 <ng-template #metrcNetSalesSummary let-site>
@@ -75,20 +126,22 @@
 </ng-template>
 
 <ng-template #customReportView>
-  <div>
-    <button mat-raised-button (click)="clearCustomData()"> Clear </button>
-  </div>
+  <div [hidden]="displayReports != 'output' ">
+    <div>
+      <button mat-raised-button (click)="clearCustomData()"> Clear </button>
+    </div>
 
-  <div *ngIf="(dynamicData$ | async) as data; else loadingData">
-    <dynamic-ag-grid [dataInterface]="'ReOrderList'"
-                     [data]="data">
-    </dynamic-ag-grid>
-  </div>
+    <div *ngIf="(dynamicData$ | async) as data; else loadingData">
+      <dynamic-ag-grid [dataInterface]="'ReOrderList'"
+                      [data]="data">
+      </dynamic-ag-grid>
+    </div>
 
-  <ng-template #loadingData>
-    ...loading data.
-    <mat-spinner [diameter]="50"></mat-spinner>
-  </ng-template>
+    <ng-template #loadingData>
+      ...loading data.
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </ng-template>
+  </div>
 </ng-template>
 
 <ng-template #siteReports>
@@ -97,150 +150,143 @@
     <div class="grid-flow"
         *ngIf="showValues && dateFrom && dateTo">
         <div  *ngFor="let site of sites">
-          <div class="summary">
-            <ng-container *ngTemplateOutlet="viewMetrcNetSales, context: {$implicit: site}">
-            </ng-container>
+
+          <div [hidden]="displayReports != 'financials'">
+            <div class="summary">
+              <ng-container *ngTemplateOutlet="viewMetrcNetSales, context: {$implicit: site}">
+              </ng-container>
+            </div>
+
+            <sales-tax-report
+                    [site]="site"
+                    [dateFrom]="dateFrom"
+                    [dateTo]="dateTo"
+                    [minimized]="'true'"
+                    [notifier]="childNotifier">
+              <div header>
+                <mat-icon >summarize</mat-icon> Sales - {{site.name}}
+              </div>
+              <mat-icon>summarize</mat-icon> Sales - {{site.name}}
+            </sales-tax-report>
+
+            <payment-report
+                    [site]    ="site"
+                    [dateFrom]="dateFrom"
+                    [dateTo]  ="dateTo"
+                    [notifier]="childNotifier">
+              <div header>
+                <mat-icon >summarize</mat-icon> Payments - {{site.name}}
+              </div>
+              <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
+            </payment-report>
+
+            <payment-report
+                    [groupBy]="'deviceName'"
+                    [site]    ="site"
+                    [dateFrom]="dateFrom"
+                    [dateTo]  ="dateTo"
+                    [notifier]="childNotifier">
+              <div header>
+                <mat-icon >summarize</mat-icon> Devices - {{site.name}}
+              </div>
+              <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
+            </payment-report>
           </div>
 
-          <sales-tax-report
-                  [site]="site"
-                  [dateFrom]="dateFrom"
-                  [dateTo]="dateTo"
-                  [minimized]="'true'"
-                  [notifier]="childNotifier">
-            <div header>
-              <mat-icon >summarize</mat-icon> Sales - {{site.name}}
-            </div>
-            <mat-icon>summarize</mat-icon> Sales - {{site.name}}
-          </sales-tax-report>
+          <div [hidden]="displayReports != 'items'">
+            <ng-container *ngTemplateOutlet="categorySalesView,context: {$implicit: site}"></ng-container>
+            <ng-template #categorySales let-site>
+              <div>
+                <item-sales-card
+                      [site]="site"
+                      [dateFrom]="dateFrom"
+                      [dateTo]="dateTo"
+                      [removeGiftCard]="true"
+                      [viewType] = "'sales'"
+                      [groupBy]="'category'">
+                    <div class="header">
+                      <mat-icon>menu</mat-icon>  Category Sales
+                      <mat-divider></mat-divider>
+                    </div>
+                </item-sales-card>
+              </div>
+            </ng-template>
 
-          <payment-report
-                  [site]    ="site"
-                  [dateFrom]="dateFrom"
-                  [dateTo]  ="dateTo"
-                  [notifier]="childNotifier">
-            <div header>
-              <mat-icon >summarize</mat-icon> Payments - {{site.name}}
-            </div>
-            <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
-          </payment-report>
+            <ng-container *ngTemplateOutlet="taxedCategorySalesView,context: {$implicit: site}"></ng-container>
+            <ng-template #taxedCategorySales let-site>
+              <div>
+                <item-sales-card
+                      [site]="site"
+                      [dateFrom]="dateFrom"
+                      [dateTo]="dateTo"
+                      [removeGiftCard]="true"
+                      [viewType] = "'sales'"
+                      [taxFilter]="2"
+                      [groupBy]="'category'">
+                    <div class="header">
+                      <mat-icon>menu</mat-icon> Taxed Category Sales
+                      <mat-divider></mat-divider>
+                    </div>
+                </item-sales-card>
+              </div>
+            </ng-template>
 
-          <payment-report
-                  [groupBy]="'deviceName'"
-                  [site]    ="site"
-                  [dateFrom]="dateFrom"
-                  [dateTo]  ="dateTo"
-                  [notifier]="childNotifier">
-            <div header>
-              <mat-icon >summarize</mat-icon> Devices - {{site.name}}
-            </div>
-            <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
-          </payment-report>
-          <div>
-            <button mat-flat-button color="primary" (click)="showView(0)">Show All Details</button>
-            <button mat-flat-button color="primary" (click)="showView(1)">Category Sales</button>
+            <ng-container *ngTemplateOutlet="nonTaxedCategorySalesView,context: {$implicit: site}"></ng-container>
+            <ng-template #nonTaxedCategorySales let-site>
+              <div>
+                <item-sales-card
+                      [site]="site"
+                      [dateFrom]="dateFrom"
+                      [dateTo]="dateTo"
+                      [removeGiftCard]="true"
+                      [viewType] = "'sales'"
+                      [taxFilter]="1"
+                      [groupBy]="'category'">
+                    <div class="header">
+                      <mat-icon>menu</mat-icon> Non Taxed Category Sales
+                      <mat-divider></mat-divider>
+                    </div>
+                </item-sales-card>
+              </div>
+            </ng-template>
+
+            <ng-container *ngTemplateOutlet="itemSalesView,context: {$implicit: site}"></ng-container>
+            <ng-template #itemSales let-site>
+              <div>
+                <item-sales-card
+                      [site]="site"
+                      [dateFrom]="dateFrom"
+                      [dateTo]="dateTo"
+                      [removeGiftCard]="true"
+                      [viewType] = "'sales'"
+                      [groupBy]="'items'">
+                    <div class="header">
+                      <mat-icon>menu</mat-icon> Item Sales
+                      <mat-divider></mat-divider>
+                    </div>
+                </item-sales-card>
+              </div>
+            </ng-template>
+
+            <ng-container *ngTemplateOutlet="itemVoidsView,context: {$implicit: site}"></ng-container>
+            <ng-template #itemVoids let-site>
+              <div>
+                <item-sales-card
+                      [site]="site"
+                      [dateFrom]="dateFrom"
+                      [dateTo]="dateTo"
+                      [removeGiftCard]="true"
+                      [groupBy]  = "'void'"
+                      [viewType] = "'adjustment'"
+                      >
+                    <div class="header">
+                      <mat-icon>menu</mat-icon>  Item Voids
+                      <mat-divider></mat-divider>
+                    </div>
+                </item-sales-card>
+              </div>
+            </ng-template>
           </div>
-          <div>
-            <button mat-flat-button color="primary" (click)="showView(2)">Taxed Sales</button>
-            <button mat-flat-button color="primary" (click)="showView(3)">Non Taxed Sales</button>
-          </div>
-          <div>
-            <button mat-flat-button color="primary" (click)="showView(4)">Item Sales</button>
-            <button mat-flat-button color="primary" (click)="showView(5)">Item Voids</button>
-          </div>
-
-          <ng-container *ngTemplateOutlet="categorySalesView,context: {$implicit: site}"></ng-container>
-          <ng-template #categorySales let-site>
-            <div>
-              <item-sales-card
-                    [site]="site"
-                    [dateFrom]="dateFrom"
-                    [dateTo]="dateTo"
-                    [removeGiftCard]="true"
-                    [viewType] = "'sales'"
-                    [groupBy]="'category'">
-                  <div class="header">
-                    <mat-icon>menu</mat-icon>  Category Sales
-                    <mat-divider></mat-divider>
-                  </div>
-              </item-sales-card>
-            </div>
-          </ng-template>
-
-          <ng-container *ngTemplateOutlet="taxedCategorySalesView,context: {$implicit: site}"></ng-container>
-          <ng-template #taxedCategorySales let-site>
-            <div>
-              <item-sales-card
-                    [site]="site"
-                    [dateFrom]="dateFrom"
-                    [dateTo]="dateTo"
-                    [removeGiftCard]="true"
-                    [viewType] = "'sales'"
-                    [taxFilter]="2"
-                    [groupBy]="'category'">
-                  <div class="header">
-                    <mat-icon>menu</mat-icon> Taxed Category Sales
-                    <mat-divider></mat-divider>
-                  </div>
-              </item-sales-card>
-            </div>
-          </ng-template>
-
-          <ng-container *ngTemplateOutlet="nonTaxedCategorySalesView,context: {$implicit: site}"></ng-container>
-          <ng-template #nonTaxedCategorySales let-site>
-            <div>
-              <item-sales-card
-                    [site]="site"
-                    [dateFrom]="dateFrom"
-                    [dateTo]="dateTo"
-                    [removeGiftCard]="true"
-                    [viewType] = "'sales'"
-                    [taxFilter]="1"
-                    [groupBy]="'category'">
-                  <div class="header">
-                    <mat-icon>menu</mat-icon> Non Taxed Category Sales
-                    <mat-divider></mat-divider>
-                  </div>
-              </item-sales-card>
-            </div>
-          </ng-template>
-
-          <ng-container *ngTemplateOutlet="itemSalesView,context: {$implicit: site}"></ng-container>
-          <ng-template #itemSales let-site>
-            <div>
-              <item-sales-card
-                    [site]="site"
-                    [dateFrom]="dateFrom"
-                    [dateTo]="dateTo"
-                    [removeGiftCard]="true"
-                    [viewType] = "'sales'"
-                    [groupBy]="'items'">
-                  <div class="header">
-                    <mat-icon>menu</mat-icon> Item Sales
-                    <mat-divider></mat-divider>
-                  </div>
-              </item-sales-card>
-            </div>
-          </ng-template>
-
-          <ng-container *ngTemplateOutlet="itemVoidsView,context: {$implicit: site}"></ng-container>
-          <ng-template #itemVoids let-site>
-            <div>
-              <item-sales-card
-                    [site]="site"
-                    [dateFrom]="dateFrom"
-                    [dateTo]="dateTo"
-                    [removeGiftCard]="true"
-                    [groupBy]  = "'void'"
-                    [viewType] = "'adjustment'"
-                    >
-                  <div class="header">
-                    <mat-icon>menu</mat-icon>  Item Voids
-                    <mat-divider></mat-divider>
-                  </div>
-              </item-sales-card>
-            </div>
-          </ng-template>
 
       </div>
     </div>

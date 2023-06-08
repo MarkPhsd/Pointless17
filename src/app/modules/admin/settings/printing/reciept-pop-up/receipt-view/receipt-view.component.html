@@ -53,7 +53,9 @@
   <balance-sheet-view
       id="printsection"
       [printType]="'balanceSheetFinal'"
-      [disableAuditButton]="true">
+      [disableAuditButton]="true"
+      [autoPrint]="autoPrint"
+      (renderComplete)="printViewCompleted('balance-sheet-view')">
   </balance-sheet-view>
 </ng-template>
 

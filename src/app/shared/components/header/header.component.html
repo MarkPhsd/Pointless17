@@ -103,7 +103,7 @@
               <ng-container [ngTemplateOutlet]="barcodeScanner"></ng-container>
             </li>
 
-            <li *ngIf="!phoneDevice">
+            <li *ngIf="!phoneDevice || !smallDevice">
               <list-product-search-input></list-product-search-input>
             </li>
 

@@ -5,7 +5,7 @@ import { timeStamp } from 'node:console';
 import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
 import { itemsAnimation } from 'src/app/_animations/list-animations';
 import { IPOSOrder, IPOSPayment, ISite, PosPayment } from 'src/app/_interfaces';
-import { AuthenticationService, OrdersService } from 'src/app/_services';
+import { AuthenticationService, IDeviceInfo, OrdersService } from 'src/app/_services';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -49,6 +49,8 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   authData: IUserAuth_Properties;
   authData$: Observable<IUserAuth_Properties>;
 
+  deviceInfo: IDeviceInfo;
+
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
@@ -79,7 +81,6 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
               private matSnackBar   : MatSnackBar,
               public  printingService: PrintingService,
               private settingsService: SettingsService,
-              private changeDetect: ChangeDetectorRef,
               private toolbarUIService  : ToolBarUIService,
               private router: Router) {
    }
@@ -114,6 +115,8 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       this.hidePrint = true;
       return;
     }
+
+    this.deviceInfo = this.authenticationService.deviceInfo;
   }
 
   editCart() {

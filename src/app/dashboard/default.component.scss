@@ -30,6 +30,24 @@ app-sticky-header {
   overflow: hidden;
 }
 
+mat-drawer-content {
+  padding-top: -5px;
+  overflow: hidden;
+
+  @media (max-width: 815px) {
+    height: calc(100% - 215px );
+  }
+
+  @media (max-width: 768px) {
+    height: calc(100% - 215px );
+  }
+
+  @include for-phone-only  {
+    height: calc(100% - 215px );
+  }
+
+}
+
 mat-drawer-container {
   padding-top: -5px;
   overflow: hidden;
@@ -98,8 +116,9 @@ mat-sidebar {
   width: 190px;
   box-shadow: 3px 0 6px rgba(0,0,0,.24);
   @include for-phone-only  {
-    width: 55px;
+    width: 200px;
     box-shadow: 3px 0 6px rgba(0,0,0,.24);
+    height: 80vh -200px;
   }
 }
 

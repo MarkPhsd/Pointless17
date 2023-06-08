@@ -1,0 +1,44 @@
+<div *ngIf="(getItem$ | async) as report"></div>
+<div *ngIf="(addReport$ | async) as report"></div>
+<div *ngIf="(listReports$ | async) as list"></div>
+
+<div class="ps-flex-group">
+  <div>
+    <pgReporting-edit-bar
+      [hideSave]="true"
+      [hideDelete]="true"
+      [hideCopy]="true"
+      (add)="addReport()"
+      (delete)="deleteReport()"
+      (copy)="copyReport()">
+    </pgReporting-edit-bar>
+  </div>
+  <div>
+    <button mat-raised-button (click)="listReports()">Refresh</button>
+  </div>
+</div>
+
+<div *ngIf="(action$ | async) as report; else loading">
+  <ng-container [ngTemplateOutlet]="isGridView"></ng-container>
+</div>
+
+<ng-template #gridView>
+  <ag-grid-angular
+    #agGrid
+    id                   ="myGrid"
+    style                ="height: 500px; width: 100%"
+    class                ="'ag-theme-material'"
+    [rowData]            ="data"
+    [defaultColDef]      ="defaultColDef"
+    [frameworkComponents]="frameworkComponents"
+    [columnDefs]         ="columnDefs"
+    [gridOptions]        ="gridOptions"
+    (onSelectionChange)  ='onSelectionChange($event)'
+    (gridReady)          ="onGridReady($event)">
+  </ag-grid-angular>
+</ng-template>
+
+<ng-template #loading>
+  ...loading
+  <mat-spinner [diameter]="50"></mat-spinner>
+</ng-template>

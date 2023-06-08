@@ -35,6 +35,10 @@ export interface IUserExists {
 // Public Property type As String
 // Public Property message As String
 
+export interface IDeviceInfo {
+  phoneDevice: boolean;
+  smallDevice: boolean;
+}
 @Injectable({ providedIn: 'root' })
 
 export class AuthenticationService {
@@ -52,6 +56,8 @@ export class AuthenticationService {
     _userAuths           = new BehaviorSubject<IUserAuth_Properties>(null);
     public  userAuths$   = this._userAuths.asObservable();
 
+
+    _deviceInfo: IDeviceInfo;
     updateUserAuths(userAuths : IUserAuth_Properties ) {
       this._userAuths.next(userAuths)
       if (userAuths) {
@@ -59,6 +65,15 @@ export class AuthenticationService {
         localStorage.setItem('userAuth', JSON.stringify(userAuths));
       }
     }
+
+    updateDeviceInfo(item: IDeviceInfo) {
+      this._deviceInfo = item
+    }
+
+    get deviceInfo(): IDeviceInfo {
+      return this._deviceInfo;
+    }
+
 
     updateUser(user: IUser) {
       if (!user ){
@@ -109,7 +124,6 @@ export class AuthenticationService {
       this.apiUrl = this.appInitService.apiBaseUrl()
       const userx = JSON.parse(JSON.parse(localStorage.getItem('userx'))) as IUser;
       const user  = JSON.parse(localStorage.getItem('user')) as IUser;
-
       const userAuth = JSON.parse(localStorage.getItem('userAuth'));
       this.updateUserAuths(userAuth)
       this.updateUser(user);
@@ -186,11 +200,6 @@ export class AuthenticationService {
 
     openLoginDialog() {
       let width    = '455px'
-      // if (this.smallDevice) {
-
-      // }
-      console.log('dialog open')
-
       let dialogRef: any;
       dialogRef = this.dialog.open(LoginComponent,
         { width    : width,
@@ -200,9 +209,7 @@ export class AuthenticationService {
           data:    'openLogin'
         },
       )
-
       return dialogRef;
-
     }
 
     clearSubscriptions() {

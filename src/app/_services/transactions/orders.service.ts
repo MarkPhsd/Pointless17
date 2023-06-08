@@ -712,7 +712,7 @@ export class OrdersService {
           this.siteService.notify(`Order was not submitted ${JSON.stringify(data.resultMessage)}`, "Error", 2000, 'yellow' )
           return of(null)
         }
-        this.siteService.notify(`Order Submitted Order # ${data.id}`, "Posted", 3000, 'green')
+        // this.siteService.notify(`Order Submitted Order # ${data.id}`, "Posted", 3000, 'green')
         return of(data)
       })
     )
@@ -1035,11 +1035,14 @@ export class OrdersService {
   }
 
   navToMenu() {
+    // determine device type so weknow how to respond
+    //if it's a phone. then we can go to the menu.
     if (this.router.url != '/app-main-menu'){
       if (this.router.url.substring(0, '/menuitems-infinite'.length) != '/menuitems-infinite') {
          this.router.navigate(['/app-main-menu']);
         return
       }
+
     }
   }
 
@@ -1078,9 +1081,12 @@ export class OrdersService {
 
   setActiveOrder(site, order: IPOSOrder) {
     if (order) {
+      //determine device type so we know how to respond.
+
       this.updateOrderSubscription(order)
       this.updateLastItemAdded(null)
       this.toolbarServiceUI.updateOrderBar(true)
+
       if (!order.history && this.platFormService.isApp()) {
         if (!order.completionDate && !order.preferredScheduleDate) {
           this.toolbarServiceUI.showSearchSideBar()

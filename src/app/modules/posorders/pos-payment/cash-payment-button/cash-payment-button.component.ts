@@ -30,10 +30,10 @@ export class CashPaymentButtonComponent implements OnInit {
   @Input() posPayment: IPOSPayment;
   @Input() isApp: boolean;
   @Input() devicename : string;
-  
+
   stripeEnabled: boolean;
   paymentMethod$: Observable<IPaymentMethod>;
-  @Output() setStep = new EventEmitter()
+
   stepSelection: number;
   paymentMethod: IPaymentMethod;
   action$: Observable<any>;
@@ -53,7 +53,7 @@ export class CashPaymentButtonComponent implements OnInit {
 
   applyCashPayment(amount: number) {
 
-    if (amount == 0) { 
+    if (amount == 0) {
       this.cashPayment()
       return;
     }

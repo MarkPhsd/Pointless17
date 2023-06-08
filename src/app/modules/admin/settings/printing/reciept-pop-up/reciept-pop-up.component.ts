@@ -15,7 +15,7 @@ export class RecieptPopUpComponent implements OnInit {
   @Input() order    : IPOSOrder;
 
   printOptions = {} as printOptions;
-  
+
   items             : any[];
   orders            : any;
   payments          : any[];
@@ -31,6 +31,7 @@ export class RecieptPopUpComponent implements OnInit {
     )
   {
     if (data)  {
+      this.autoPrint = data?.autoPrint;
       this.options = data
     }
   }
@@ -40,6 +41,7 @@ export class RecieptPopUpComponent implements OnInit {
   }
 
   exit(event) {
+    console.log('auto closing receipt pop up')
     this.dialogRef.close();
   }
 }

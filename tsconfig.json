@@ -21,6 +21,18 @@
     "importHelpers": true,
     "emitDecoratorMetadata": true,
     "target": "es2020",
+    "paths": {
+      "PointlessReporting": [
+        "dist/pointless-reporting",
+        "dist/pointless-reporting"
+      ],
+      "PointlessReportingLib": [
+        "dist/pointless-reporting-lib"
+      ],
+      "pointessReportingLib": [
+        "dist/pointess-reporting-lib"
+      ]
+    },
     "module": "es2020",
     "types": ["node",  ],
     "lib": [

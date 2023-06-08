@@ -4,6 +4,8 @@
 
 <div *ngIf="printType === 'balanceSheetFinal'">
   <balance-sheet-header-view
+    [autoPrint]="autoPrint"
+    (renderComplete)="renderCompleted($event)"
     [disableAuditButton]="true"
     [sheetType]="sheetType"
     [sheet]="sheet">
@@ -12,6 +14,8 @@
 
 <div *ngIf="printType === 'balanceSheetFinal'">
   <balance-sheet-calculations-view
+    [autoPrint]="autoPrint"
+    (renderComplete)="renderCompleted($event)"
     [sheet]="sheet">
   </balance-sheet-calculations-view>
 </div>
@@ -22,6 +26,8 @@
       <h3>Payments:</h3>
       <div *ngIf="(list$ | async) as list">
         <credit-card-payments-print-list
+          [autoPrint]="autoPrint"
+          (renderComplete)="renderCompleted($event)"
           [list]="list">
         </credit-card-payments-print-list>
       </div>

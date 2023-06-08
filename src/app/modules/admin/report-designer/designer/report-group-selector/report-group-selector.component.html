@@ -1,0 +1,61 @@
+
+
+
+<h4>Group by will apply when you have assigned the fields.</h4>
+<mat-label  class="ps-general-padding">If you are aggregating fields, then select each one of the
+  fields on the list provided. You must group by each field that is not an aggregate.
+</mat-label  >
+<mat-label class="ps-general-padding">
+  Group by selector should be a list of all the fields
+  that are not aggregete fields.
+</mat-label>
+<div>
+
+  <div>
+    <mat-label>Group By List</mat-label>
+  </div>
+  <div class="ps-general-padding">
+    <button  mat-raised-button (click)="addAll()">
+      <mat-icon>add</mat-icon>Add All
+    </button>
+  </div>
+  <div class="ps-flex-group">
+
+    <div>
+      <h2>Field List</h2>
+      <mat-button-toggle-group
+            style        = "width:200px"
+            name         = "type"
+            vertical >
+        <mat-button-toggle
+              style="height:50px;"
+              *ngFor="let item of allFields"
+              type="button"
+              [value]="item"
+              (click)="addItem(item)"
+              id="item">
+          <mat-icon>add</mat-icon>{{item.name}}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    <div>
+      <h2>Currently Assigned</h2>
+      <mat-button-toggle-group
+            style =      "width:200px"
+            name         = "type"
+            vertical >
+        <mat-button-toggle
+              style="height:50px;"
+              *ngFor="let item of report.groups"
+              type="button"
+              [value]="item"
+              (click)="deleteItem(item)"
+              id="item">
+          <mat-icon>delete</mat-icon>{{item.name}}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+  </div>
+</div>

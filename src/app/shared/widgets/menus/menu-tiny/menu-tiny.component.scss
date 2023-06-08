@@ -16,7 +16,6 @@
   width: 100%;
 }
 
-
 .spinner-container {
   top: 50px;
 }
@@ -29,7 +28,6 @@ ul {
   width: 100%;
 }
 
-
 .accordion {
   width: 100%;
   margin: auto;
@@ -40,11 +38,16 @@ ul {
 
 .accordion-submenu {
   width: 100%;
-  // max-width: 225px;
   margin: auto;
   line-height: 1.6em;
   border-radius: 4px;
   overflow-x: hidden;
+
+  @include for-phone-only {
+    max-height: 200px;
+    overflow-x: auto;
+  }
+
 }
 
 .accordion .menu {
@@ -79,7 +82,14 @@ ul {
   bottom: 0px;
   left: 0;
   max-height: 275px;
-  // overflow-x: auto;
+
+  @include for-phone-only  {
+    width: 55px;
+    box-shadow: 3px 0 6px rgba(0,0,0,.24);
+    height: 35px;
+    bottom: 105px;
+  }
+
 }
 
 .submenu-position  {
@@ -94,22 +104,26 @@ ul {
   position: fixed;
   bottom: 55px;
   left: 0;
+
+  @include for-phone-only  {
+    bottom: 135px;
+  }
 }
 
 .grid-toggle-tiny {
   height: 50px;
   grid-template-columns: minmax(45px, 50px) 140px;
 
-  @include for-phone-only {
-    grid-template-columns: minmax(45px, 50px);
-  }
+  // @include for-phone-only {
+  //   grid-template-columns: minmax(45px, 50px);
+  // }
 }
 
 .grid-toggle-collapsed {
   height: 50px;
-  @include for-phone-only {
-    grid-template-columns: minmax(45px, 50px);
-  }
+  // @include for-phone-only {
+  //   grid-template-columns: minmax(45px, 50px);
+  // }
 }
 
 .menu-item {

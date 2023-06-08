@@ -193,6 +193,22 @@ import { MetrcSummaryComponent } from '../modules/admin/reports/metrc-summary/me
 import { InstructionDirective } from '../_directives/instruction.directive';
 import { DynamicAgGridComponent } from './widgets/dynamic-ag-grid/dynamic-ag-grid.component';
 import { AgGridModule } from 'ag-grid-angular';
+import { PagingInfoComponent } from './widgets/paging-info/paging-info.component';
+import { AggregateSelectorComponent } from '../modules/admin/report-designer/designer/aggregate-selector/aggregate-selector.component';
+import { AndOrSelectorComponent } from '../modules/admin/report-designer/designer/and-or-selector/and-or-selector.component';
+import { DesignerEditorComponent } from '../modules/admin/report-designer/designer/designer-editor/designer-editor.component';
+import { DesignerListComponent } from '../modules/admin/report-designer/designer/designer-list/designer-list.component';
+import { FieldTypeSelectorComponent } from '../modules/admin/report-designer/designer/field-type-selector/field-type-selector.component';
+import { FieldSelectorComponent } from '../modules/admin/report-designer/designer/field-selector/field-selector.component';
+import { FieldValueSelectorComponent } from '../modules/admin/report-designer/designer/field-value-selector/field-value-selector.component';
+import { FilterBuilderComponent } from '../modules/admin/report-designer/designer/filter-builder/filter-builder.component';
+import { GroupByTypesComponent } from '../modules/admin/report-designer/designer/group-by-types/group-by-types.component';
+import { ReportGroupSelectorComponent } from '../modules/admin/report-designer/designer/report-group-selector/report-group-selector.component';
+import { ReportTypesComponent } from '../modules/admin/report-designer/designer/report-types/report-types.component';
+import { SortSelectorComponent } from '../modules/admin/report-designer/designer/sort-selector/sort-selector.component';
+import { EditBarComponent } from '../modules/admin/report-designer/widgets/edit-bar/edit-bar.component';
+import { MatSelectorComponent } from '../modules/admin/report-designer/widgets/mat-selector/mat-selector.component';
+import { FieldListTypeAssignerComponent } from '../modules/admin/report-designer/designer/field-list-type-assigner/field-list-type-assigner.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -304,6 +320,7 @@ import { AgGridModule } from 'ag-grid-angular';
     OrderTotalComponent,
     OrderHeaderComponent,
     QROrderComponent,
+    PagingInfoComponent,
     PagerBlobComponent,
     PageNotFoundComponent,
     PaymentBalanceComponent,
@@ -390,6 +407,23 @@ import { AgGridModule } from 'ag-grid-angular';
     FreeDraggingHandleDirective,
     KeyboardButtonComponent,
     M22ResizableComponent,
+
+
+    AggregateSelectorComponent,
+    AndOrSelectorComponent,
+    DesignerEditorComponent,
+    DesignerListComponent,
+    FieldTypeSelectorComponent,
+    FieldSelectorComponent,
+    FieldValueSelectorComponent,
+    FieldListTypeAssignerComponent,
+    FilterBuilderComponent,
+    GroupByTypesComponent,
+    ReportGroupSelectorComponent,
+    ReportTypesComponent,
+    SortSelectorComponent,
+    MatSelectorComponent,
+    EditBarComponent
   ],
 
   imports: [
@@ -409,7 +443,6 @@ import { AgGridModule } from 'ag-grid-angular';
     ColorPickerModule,
     GridsterModule,
     RouterModule,
-    ReactiveFormsModule,
     ReactiveFormsModule,
     SwiperModule,
     YouTubePlayerModule,
@@ -521,6 +554,7 @@ import { AgGridModule } from 'ag-grid-angular';
     OrderHeaderComponent,
     QROrderComponent,
     QRCodeTableComponent,
+    PagingInfoComponent,
     PageNotFoundComponent,
     PaymentBalanceComponent,
     PaymentReportDataComponent,
@@ -583,6 +617,22 @@ import { AgGridModule } from 'ag-grid-angular';
     SimpleTinyComponent,
     NumericDirective,
     ValueFromListSelectorComponent,
+
+    AggregateSelectorComponent,
+    AndOrSelectorComponent,
+    DesignerEditorComponent,
+    DesignerListComponent,
+    FieldTypeSelectorComponent,
+    FieldSelectorComponent,
+    FieldValueSelectorComponent,
+    FilterBuilderComponent,
+    FieldListTypeAssignerComponent,
+    GroupByTypesComponent,
+    ReportGroupSelectorComponent,
+    ReportTypesComponent,
+    SortSelectorComponent,
+    MatSelectorComponent,
+    EditBarComponent
   ],
 
   providers: [

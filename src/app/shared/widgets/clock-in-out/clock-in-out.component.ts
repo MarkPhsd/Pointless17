@@ -18,7 +18,7 @@ export class ClockInOutComponent implements OnInit {
   @ViewChild('onDisplayOnly')      onDisplayOnly: TemplateRef<any>;
   @ViewChild('clockInOutEditor')   clockInOutEditor: TemplateRef<any>;
 
-  clock$ : Observable<any>;
+  clock$ : Observable<any> | undefined;
   clock: EmployeeClock;
   break$ : Observable<any>;
   isOnBreak$: Observable<any>;

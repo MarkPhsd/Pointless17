@@ -1,0 +1,57 @@
+<mat-card>
+  <mat-card-subtitle>
+    <div class="ps-general-padding">
+      <mat-label>This section is when you want aggregate values in a list.</mat-label>
+    </div>
+    <div class="ps-general-padding">
+      <mat-label>Select a field from the list and then assign the aggregate type. If you are doing a
+        group by report then you must assign each field an aggregate type, except the fields that are
+        part of the group by selection.</mat-label>
+      </div>
+  </mat-card-subtitle>
+  <mat-card-content>
+
+    <div class="ps-flex-group">
+      <div>
+        <div>
+          <mat-label>Field List</mat-label>
+        </div>
+
+        <!-- [(ngModel)]  = "itemSelected"
+        (change)     = "changeSelection()" -->
+
+        <mat-button-toggle-group
+              style =      "width:200px"
+              name         = "type"
+              vertical >
+          <mat-button-toggle
+                style="height:50px;"
+                *ngFor="let item of fields"
+                type="button"
+                [value]="item"
+                (click)="initForm(item)"
+                id="item">
+            {{item.name}}
+            <span *ngIf="item.fieldTypeAggregate">
+              - {{item.fieldTypeAggregate}}
+            </span>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+      <div>
+        <div>
+            <psReporting-field-type-selector
+                [list]      ="aggregates"
+                [inputForm] ="formFieldAggregate"
+                [fieldName] ="'fieldTypeAggregate'"
+                (selectItem)="setItem($event)">
+            </psReporting-field-type-selector>
+        </div>
+        <div *ngIf="aggregateFunction">
+          {{ aggregateFunction?.description }}
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+
+</mat-card>

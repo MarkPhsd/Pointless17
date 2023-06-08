@@ -1,6 +1,6 @@
 import { Component, OnInit, Output,OnDestroy, EventEmitter, HostListener, Input  } from '@angular/core';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
-import { AuthenticationService, OrdersService} from 'src/app/_services';
+import { AuthenticationService, IDeviceInfo, OrdersService} from 'src/app/_services';
 import { catchError, delay, delayWhen, finalize,  repeatWhen, retryWhen, switchMap, tap } from 'rxjs/operators';
 import { Observable, of, Subject , Subscription, throwError, timer } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -44,6 +44,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   @Input() hideAddNewOrder     = false
 
   href: string;
+  deviceInfo : IDeviceInfo;
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -82,6 +83,9 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     this.assignCurrentOrder();
     this.refreshOrderCheck();
     this.updateItemsPerPage();
+
+    this.deviceInfo = this.authenticationService.deviceInfo
+
   }
 
   ngOnDestroy() {
@@ -125,6 +129,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   addNewOrder() {
     const site = this.siteService.getAssignedSite();
+
      this.actionOrder$ = this.orderService.newOrderWithPayloadMethod(site, null).pipe(
       switchMap(data => {
         return of(data)
@@ -231,6 +236,8 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   }
 
   toggleOpenOrderBar() {
+
+
     if (this.router.url.substring(0, 28 ) === '/currentorder;mainPanel=true') {
       console.log('order bar setting false')
       this.openOrderBar = false

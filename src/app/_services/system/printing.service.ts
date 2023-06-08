@@ -962,14 +962,14 @@ export class PrintingService {
     this.previewReceipt()
   }
 
-  previewReceipt() {
+  previewReceipt(autoPrint?: boolean) {
     //get device settings;
     if (this.uiSettingsService.posDeviceInfo) {
       if (this.platFormService.androidApp) {
         const device = this.uiSettingsService.posDeviceInfo;
         this.printingAndroidService.printAndroidPOSReceipt( this.orderService.currentOrder,
                                                             null, device.btPrinter );
-        return;
+        return of(null)
       }
     }
     //if android
@@ -978,20 +978,23 @@ export class PrintingService {
     if (this.uiSettingsService.posDeviceInfo) {
       if (this.platFormService.androidApp) {
         const device = this.uiSettingsService.posDeviceInfo;
-        this.printSub(device.receiptPrinter)
-        return;
+        if (autoPrint) {
+          console.log('auto printing')
+          return this.printAuto(device.receiptPrinter, autoPrint)
+        }
+        this.printSub(device.receiptPrinter, autoPrint)
       }
     }
 
-    this.printSub(null);
-
+    this.printSub(null, autoPrint);
+    return of(null)
   };
 
-  printSub(printerName: string) {
+  printSub(printerName: string, autoPrint?: boolean) {
     const dialogRef = this.dialog.open(RecieptPopUpComponent,
       { width: '425px',
         height: '90vh',
-        data: {autoPrint: true, printerName: printerName}
+        data: {autoPrint: autoPrint, printerName: printerName}
       },
     )
     dialogRef.afterClosed().subscribe(result => {
@@ -1008,7 +1011,18 @@ export class PrintingService {
     });
   }
 
+  printAuto(printerName: string, autoPrint?: boolean) {
+    const dialogRef = this.dialog.open(RecieptPopUpComponent,
+      { width: '425px',
+        height: '90vh',
+        data: {autoPrint: autoPrint, printerName: printerName}
+      },
+    )
+    return dialogRef.afterClosed()
+  }
 }
+
+
   // async applyStyles(site: ISite): Promise<ISetting> {
   //   const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
   //   const receiptStyle = await receiptStyle$.pipe().toPromise()
