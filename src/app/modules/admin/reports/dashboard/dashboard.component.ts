@@ -7,9 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DatePipe } from '@angular/common'
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { MenuService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { Router } from '@angular/router';
@@ -30,7 +28,9 @@ export class DashboardComponent implements OnChanges,OnInit  {
     {id: 3, visible: false },
     {id: 4, visible: false },
     {id: 5, visible: false },
-    {id: 6, visible: false }
+    {id: 6, visible: false },
+    {id: 7, visible: false },
+    {id: 8, visible: false }
   ]
 
   reportList = [
@@ -43,12 +43,14 @@ export class DashboardComponent implements OnChanges,OnInit  {
   ]
 
   @ViewChild('customReportView')      customReportView: TemplateRef<any>;
-
   @ViewChild('categorySales')      categorySales: TemplateRef<any>;
   @ViewChild('taxedCategorySales')      taxedCategorySales: TemplateRef<any>;
   @ViewChild('nonTaxedCategorySales')      nonTaxedCategorySales: TemplateRef<any>;
   @ViewChild('itemSales')      itemSales: TemplateRef<any>;
   @ViewChild('itemVoids')      itemVoids: TemplateRef<any>;
+
+  @ViewChild('paymentVoids')      paymentVoids: TemplateRef<any>;
+  @ViewChild('paymentRefunds')    paymentRefunds: TemplateRef<any>;
 
 
   emailSending           = false;
@@ -63,22 +65,18 @@ export class DashboardComponent implements OnChanges,OnInit  {
   //for charts
   currentUser$           : Observable<IUser>;
   currentUser            : IUser;
-
   dataFromFilter         : string;
   dataCounterFromFilter  : string; //used to signal refresh of charts
   dateFrom               : string;
   dateTo                 : string;
   @Input() groupBy       ="date";
-
   localSite             : ISite;
   sites$                : Observable<ISite[]>;
   sitecount             = 0;
   observer              : any[];
   uiTransactions: TransactionUISettings;
   uiTransactions$: Observable<TransactionUISettings>;
-
   item                  : Item; //for routing
-
   displayReports = 'financials'
 
   constructor(
@@ -103,16 +101,15 @@ export class DashboardComponent implements OnChanges,OnInit  {
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     this.initDateRange();
-
   }
+
   navDesigner() {
     this.router.navigate(['ps-designer-list'])
   }
-  toggleShowValues() {
 
+  toggleShowValues() {
     this.showValues= !this.showValues
     this._showValues(this.showValues)
-
   }
 
   _showValues(result: boolean) {
@@ -127,27 +124,26 @@ export class DashboardComponent implements OnChanges,OnInit  {
     switchMap(data => {
       if (data) {
         this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
-        return of(this.uiTransactions)
-      }
-      if (!data) {
-        this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
-        return of(this.uiTransactions)
-      }
-  }))
-}
+          return of(this.uiTransactions)
+        }
+        if (!data) {
+          this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+          return of(this.uiTransactions)
+        }
+    }))
+  }
+
   notifyChild() {
     this.value = !this.value;
     this.childNotifier.next(this.value);
   }
 
   ngOnInit(): void {
-
     const showValues = localStorage.getItem('showValues')
     this.showValues = false;
     if (showValues == 'true') {
       this.showValues = true
     }
-
     this.initTransactionUISettings()
     this.refreshReports()
   };
@@ -205,11 +201,9 @@ export class DashboardComponent implements OnChanges,OnInit  {
   };
 
   _email() {
-
     this.emailSending = true;
     const site = this.siteService.getAssignedSite();
     const list = this.siteService.getSites();
-
     return  list.pipe(
       switchMap( data => {
           const reports$ = []
@@ -222,22 +216,11 @@ export class DashboardComponent implements OnChanges,OnInit  {
         }
       )
     )
-
-
-    // return this.sendGridService.sendSalesReport(site,0, this.dateFrom, this.dateTo).pipe(
-    //   switchMap( data => {
-    //     this.emailSending = false;
-    //     this.matSnack.open('Email Sent', 'Success', {duration: 1500})
-    //     return of(data)
-    //   }
-    // ));
-
   }
 
   email() {
     this.email$ = this._email()
   }
-
 
   get customReport() {
     if (this.loadDynamicData) {
@@ -295,6 +278,7 @@ export class DashboardComponent implements OnChanges,OnInit  {
     }
     return null
   }
+
   get taxedCategorySalesView() {
     const filteredData = this.reportsListView.filter(data => data.id === 2 && data.visible);
     if (filteredData.length > 0) {
@@ -302,6 +286,7 @@ export class DashboardComponent implements OnChanges,OnInit  {
     }
     return null
   }
+
   get nonTaxedCategorySalesView() {
     const filteredData = this.reportsListView.filter(data => data.id === 3 && data.visible);
     if (filteredData.length > 0) {
@@ -309,6 +294,7 @@ export class DashboardComponent implements OnChanges,OnInit  {
     }
     return null
   }
+
   get itemSalesView() {
     const filteredData = this.reportsListView.filter(data => data.id === 4 && data.visible);
     if (filteredData.length > 0) {
@@ -316,6 +302,7 @@ export class DashboardComponent implements OnChanges,OnInit  {
     }
     return null
   }
+
   get itemVoidsView() {
     const filteredData = this.reportsListView.filter(data => data.id === 5 && data.visible);
     if (filteredData.length > 0) {
@@ -324,8 +311,23 @@ export class DashboardComponent implements OnChanges,OnInit  {
     return null
   }
 
-  reOrderListReport(site: ISite) {
+  get paymentRefundsView() {
+    const filteredData = this.reportsListView.filter(data => data.id === 7 && data.visible);
+    if (filteredData.length > 0) {
+      return this.paymentRefunds
+    }
+    return null
+  }
 
+  get paymentVoidsView() {
+    const filteredData = this.reportsListView.filter(data => data.id === 8 && data.visible);
+    if (filteredData.length > 0) {
+      return this.paymentVoids
+    }
+    return null
+  }
+
+  reOrderListReport(site: ISite) {
     this.dynamicData$ = this.reportingService.getReOrderList(site)
     this.loadDynamicData = true
   }

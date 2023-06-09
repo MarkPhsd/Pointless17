@@ -1,126 +1,137 @@
 <div *ngIf="sales.resultMessage != 'success'">
-    <div  class="totals_label">
-     <h4> <ng-content></ng-content> </h4>
-   </div>
-    {{sales.resultMessage}}
-  </div>
-
-  <div *ngIf="sales.paymentSummary as payments">
-    <div  class="mat-card-container"
-          *ngIf="sales.resultMessage != 'failed'">
-
-      <mat-card  *ngIf="payments">
-        <mat-card-title>
-          <div class="grid">
-            <div  class="totals_label">
-              <h4> <ng-content></ng-content> </h4>
-              <button mat-raised (click)="downloadCSV()">
-                <mat-icon>download</mat-icon></button>
-                <button mat-raised (click)="dataGridView()">
-                  <mat-icon>open_in_full</mat-icon></button>
-            </div>
-          </div>
-
-          <div class="grid">
-            <div class="header-labels">
-              {{sales.paymentSummary[0].startDate | date: 'short'}}
-            </div>
-            <div  class="header-labels">
-              {{sales.paymentSummary[0].endDate | date: 'short'}}
-            </div>
-          </div>
-
-        </mat-card-title>
-
-        <mat-card-content>
-          <div  class="grid-headerfooter"
-               *ngIf="payments && groupBy && (groupBy.toLowerCase() === 'devicename' ||
-                                   groupBy.toLowerCase() === 'paymentMethod'.toLowerCase() ||
-                                   groupBy.toLowerCase() === 'employee'.toLowerCase())">
-
-              <div *ngIf="groupBy.toLowerCase()  === 'employee'" class="grid-item">Staff </div>
-              <div *ngIf="groupBy.toLowerCase()  === 'employee'" class="totals">Amount</div>
-              <div *ngIf="groupBy.toLowerCase()  === 'employee'" class="totals">Avg</div>
-              <div *ngIf="groupBy.toLowerCase()  === 'employee'" class="totals">Count</div>
-              <div *ngIf="groupBy.toLowerCase() === 'employee'" class="totals">Tip</div>
-
-              <div *ngIf="groupBy === 'paymentMethod'" class="grid-item">Method</div>
-              <div *ngIf="groupBy === 'paymentMethod'" class="totals">Amount</div>
-              <div *ngIf="groupBy === 'paymentMethod'" class="totals">Avg</div>
-              <div *ngIf="groupBy === 'paymentMethod'" class="totals">Count</div>
-              <div *ngIf="groupBy === 'paymentMethod'" class="totals">Tip</div>
-          </div>
-
-          <div  class="grid-order-employeecount"
-                *ngIf="payments && groupBy && groupBy === 'orderemployeecount'">
-              <div class="grid-item">Staff</div>
-              <div class="grid-item">Hour</div>
-              <div class="grid-item">Count</div>
-              <div class="grid-item">Total</div>
-              <div class="grid-item">Avg</div>
-          </div>
-
-          <div  class="grid-voids"
-                *ngIf="payments && !groupBy">
-              <div class="grid-item">Method</div>
-              <div class="grid-item">Reason</div>
-              <div class="grid-item">Employee</div>
-              <div class="grid-item">Order</div>
-              <div class="grid-item">Amount </div>
-          </div>
-
-          <div class="mat-divider">
-          </div>
-
-          <app-payment-report-card
-              [payments] ="payments"
-              [type]     ="type"
-              [groupBy]  ="groupBy">
-          </app-payment-report-card>
-
-          <mat-divider></mat-divider>
-        </mat-card-content>
-
-        <mat-card-footer>
-
-          <div class="grid-footer-payments" *ngIf="groupBy && (groupBy === 'paymentMethod')">
-            <div class="grid-items">
-              Credit Total
-            </div>
-            <div class="totals">
-              {{sales.creditTotal | currency }}
-            </div>
-            <div class="totals" >
-            </div>
-            <div class="totals">
-            </div>
-          </div>
-
-          <div class="grid-footer-payments"
-               *ngIf="payments">
-            <div class="grid-item">-----</div>
-            <div class="totals">Total</div>
-            <div class="totals">Avg</div>
-            <div class="totals">Count</div>
-          </div>
-
-          <div class="grid-footer-payments">
-            <div class="grid-item">
-              Total
-            </div>
-            <div class="totals">
-              {{sales.total | currency }}
-            </div>
-            <div class="totals" *ngIf=" sales.count != 0">
-              {{sales.total / sales.count | currency }}
-            </div>
-            <div class="totals">
-              {{sales.count }}
-            </div>
-          </div>
-
-        </mat-card-footer>
-      </mat-card>
-
+  <mat-card>
+      <div  class="totals_label">
+      <h4> <ng-content></ng-content> </h4>
     </div>
+    {{sales.resultMessage}}
+  </mat-card>
+</div>
+
+<div *ngIf="sales.resultMessage == '' && sales.count == 0 ">
+  <mat-card>
+    <div  class="totals_label">
+      <h4> <ng-content></ng-content> </h4>
+    </div>
+    {{type}} count is 0.
+  </mat-card>
+</div>
+
+<div *ngIf="sales.paymentSummary as payments">
+  <div  class="mat-card-container"
+        *ngIf="sales.resultMessage != 'failed'">
+
+    <mat-card  *ngIf="payments">
+      <mat-card-title>
+        <div class="grid">
+          <div  class="totals_label">
+            <h4> <ng-content></ng-content> </h4>
+            <button mat-raised (click)="downloadCSV()">
+              <mat-icon>download</mat-icon></button>
+              <button mat-raised (click)="dataGridView()">
+                <mat-icon>open_in_full</mat-icon></button>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="header-labels">
+            {{sales.paymentSummary[0].startDate | date: 'short'}}
+          </div>
+          <div  class="header-labels">
+            {{sales.paymentSummary[0].endDate | date: 'short'}}
+          </div>
+        </div>
+
+      </mat-card-title>
+
+      <mat-card-content>
+        <div  class="grid-headerfooter"
+              *ngIf="payments && groupBy && (groupBy.toLowerCase() === 'devicename' ||
+                                  groupBy.toLowerCase() === 'paymentMethod'.toLowerCase() ||
+                                  groupBy.toLowerCase() === 'employee'.toLowerCase())">
+
+            <div *ngIf="groupBy.toLowerCase()  === 'employee'" class="grid-item">Staff </div>
+            <div *ngIf="groupBy.toLowerCase()  === 'employee'" class="totals">Amount</div>
+            <div *ngIf="groupBy.toLowerCase()  === 'employee'" class="totals">Avg</div>
+            <div *ngIf="groupBy.toLowerCase()  === 'employee'" class="totals">Count</div>
+            <div *ngIf="groupBy.toLowerCase() === 'employee'" class="totals">Tip</div>
+
+            <div *ngIf="groupBy === 'paymentMethod'" class="grid-item">Method</div>
+            <div *ngIf="groupBy === 'paymentMethod'" class="totals">Amount</div>
+            <div *ngIf="groupBy === 'paymentMethod'" class="totals">Avg</div>
+            <div *ngIf="groupBy === 'paymentMethod'" class="totals">Count</div>
+            <div *ngIf="groupBy === 'paymentMethod'" class="totals">Tip</div>
+        </div>
+
+        <div  class="grid-order-employeecount"
+              *ngIf="payments && groupBy && groupBy === 'orderemployeecount'">
+            <div class="grid-item">Staff</div>
+            <div class="grid-item">Hour</div>
+            <div class="grid-item">Count</div>
+            <div class="grid-item">Total</div>
+            <div class="grid-item">Avg</div>
+        </div>
+
+        <div  class="grid-voids"
+              *ngIf="payments && !groupBy">
+            <div class="grid-item">Method</div>
+            <div class="grid-item">Reason</div>
+            <div class="grid-item">Employee</div>
+            <div class="grid-item">Order</div>
+            <div class="grid-item">Amount </div>
+        </div>
+
+        <div class="mat-divider">
+        </div>
+
+        <app-payment-report-card
+            [payments] ="payments"
+            [type]     ="type"
+            [groupBy]  ="groupBy">
+        </app-payment-report-card>
+
+        <mat-divider></mat-divider>
+      </mat-card-content>
+
+      <mat-card-footer>
+
+        <div class="grid-footer-payments" *ngIf="groupBy && (groupBy === 'paymentMethod')">
+          <div class="grid-items">
+            Credit Total
+          </div>
+          <div class="totals">
+            {{sales.creditTotal | currency }}
+          </div>
+          <div class="totals" >
+          </div>
+          <div class="totals">
+          </div>
+        </div>
+
+        <div class="grid-footer-payments"
+              *ngIf="payments">
+          <div class="grid-item">-----</div>
+          <div class="totals">Total</div>
+          <div class="totals">Avg</div>
+          <div class="totals">Count</div>
+        </div>
+
+        <div class="grid-footer-payments">
+          <div class="grid-item">
+            Total
+          </div>
+          <div class="totals">
+            {{sales.total | currency }}
+          </div>
+          <div class="totals" *ngIf=" sales.count != 0">
+            {{sales.total / sales.count | currency }}
+          </div>
+          <div class="totals">
+            {{sales.count }}
+          </div>
+        </div>
+
+      </mat-card-footer>
+    </mat-card>
+
   </div>
+</div>

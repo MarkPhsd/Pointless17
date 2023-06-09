@@ -16,7 +16,9 @@ mat-card:hover {
   position: relative;
   z-index: 100;
   top: 10px;
+  right: 0px;
   margin-bottom: -35px;
+  opacity: .5;
 }
 mat-card:active {
   box-shadow: 1px 1px 2px black, 0 0 25px rgb(33, 43, 33), 0 0 5px darkblue;

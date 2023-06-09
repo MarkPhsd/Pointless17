@@ -69,6 +69,13 @@
         <button mat-flat-button style="width:205px;height:50px"color="primary" (click)="toggleReports('output')">
         <mat-icon>inventory</mat-icon>Inventory & Menu</button>
       </div>
+      <div>
+        <button mat-flat-button style="width:205px;height:50px"color="primary"
+                (click)="toggleReports('audit')">
+        <mat-icon>inventory</mat-icon>Audit</button>
+      </div>
+
+
     </div>
     <mat-divider></mat-divider>
   </div>
@@ -82,7 +89,6 @@
       <button mat-flat-button  style="width:150px;height:50px"color="primary" (click)="showView(3)">Non Taxed Sales</button>
 
       <button mat-flat-button  style="width:150px;height:50px"color="primary" (click)="showView(4)">Item Sales</button>
-      <button mat-flat-button  style="width:150px;height:50px"color="warn" (click)="showView(5)">Item Voids</button>
     </div>
   </div>
 
@@ -94,6 +100,17 @@
                       (outputItem)="selectReport($event)">
           Select Report
       </app-mat-select>
+    </div>
+  </div>
+
+  <div [hidden]="displayReports != 'audit' ">
+    <div>
+      <button mat-flat-button  style="width:150px;height:50px"color="warn"
+              (click)="showView(8)">Payment Voids</button>
+      <button mat-flat-button  style="width:150px;height:50px"color="warn"
+              (click)="showView(7)">Payment Refunds</button>
+      <button mat-flat-button  style="width:150px;height:50px"color="warn"
+              (click)="showView(5)">Item Voids</button>
     </div>
   </div>
 
@@ -180,7 +197,7 @@
               <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
             </payment-report>
 
-            <ng-container *ngTemplateOutlet="balanceSheetView, 
+            <ng-container *ngTemplateOutlet="balanceSheetView,
                                             context: {$implicit: {site: site}}">
             </ng-container>
 
@@ -205,6 +222,64 @@
               <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
             </payment-report>
 
+          </div>
+
+          <div [hidden]="displayReports != 'audit'">
+
+            <ng-container *ngTemplateOutlet="paymentVoidsView,context:
+                          {$implicit: site}"></ng-container>
+            <ng-template #paymentVoids let-site>
+              <payment-report
+                      [groupBy]="'deviceName'"
+                      [site]    ="site"
+                      [dateFrom]="dateFrom"
+                      [dateTo]  ="dateTo"
+                      [notifier]="childNotifier"
+                      [type]="'voids'"
+                      >
+                <div header>
+                  <mat-icon >summarize</mat-icon> Void Payments {{site.name}}
+                </div>
+                <mat-icon>credit_card</mat-icon> Void Payments {{site.name}}
+              </payment-report>
+            </ng-template>
+
+            <ng-container *ngTemplateOutlet="paymentRefundsView,context:
+                                            {$implicit: site}"></ng-container>
+            <ng-template #paymentRefunds let-site>
+              <payment-report
+                      [groupBy]="'deviceName'"
+                      [site]    ="site"
+                      [dateFrom]="dateFrom"
+                      [dateTo]  ="dateTo"
+                      [notifier]="childNotifier"
+                      [type]="'refunds'"
+                      >
+                <div header>
+                  <mat-icon >summarize</mat-icon> Refund Payments {{site.name}}
+                </div>
+                <mat-icon>credit_card</mat-icon> Refund Payments {{site.name}}
+              </payment-report>
+            </ng-template>
+
+            <ng-container *ngTemplateOutlet="itemVoidsView,context: {$implicit: site}"></ng-container>
+            <ng-template #itemVoids let-site>
+              <div>
+                <item-sales-card
+                      [site]="site"
+                      [dateFrom]="dateFrom"
+                      [dateTo]="dateTo"
+                      [removeGiftCard]="true"
+                      [groupBy]  = "'void'"
+                      [viewType] = "'adjustment'"
+                      >
+                    <div class="header">
+                      <mat-icon>menu</mat-icon>  Item Voids
+                      <mat-divider></mat-divider>
+                    </div>
+                </item-sales-card>
+              </div>
+            </ng-template>
           </div>
 
           <div [hidden]="displayReports != 'items'">
@@ -283,24 +358,7 @@
               </div>
             </ng-template>
 
-            <ng-container *ngTemplateOutlet="itemVoidsView,context: {$implicit: site}"></ng-container>
-            <ng-template #itemVoids let-site>
-              <div>
-                <item-sales-card
-                      [site]="site"
-                      [dateFrom]="dateFrom"
-                      [dateTo]="dateTo"
-                      [removeGiftCard]="true"
-                      [groupBy]  = "'void'"
-                      [viewType] = "'adjustment'"
-                      >
-                    <div class="header">
-                      <mat-icon>menu</mat-icon>  Item Voids
-                      <mat-divider></mat-divider>
-                    </div>
-                </item-sales-card>
-              </div>
-            </ng-template>
+
           </div>
 
       </div>

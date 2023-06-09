@@ -34,9 +34,18 @@ export class PaymentReportComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.voids$ = null;
     this.refunds$ = null;
-    this.refreshSales();
+    this.sales$ = null;
+    if (this.type != 'refunds' && this.type != 'voids') {
+      this.refreshSales();
+    }
     if (this.type === 'sales') {
       this.refreshRefunds();
+      this.refreshVoids();
+    }
+    if (this.type == 'refunds') {
+      this.refreshRefunds();
+    }
+    if (this.type == 'voids') {
       this.refreshVoids();
     }
   }
