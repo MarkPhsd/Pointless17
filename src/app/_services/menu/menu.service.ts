@@ -461,10 +461,13 @@ export class MenuService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
+    // const uri =  this.sitesService.getCacheURI(url)
+
     const uri =  this.sitesService.getCacheURI(url)
 
     // console.log('getGetCategoriesListActive', uri)
 
+    // return this.httpClient.get<IMenuItem[]>(url)
     return  this.httpCache.get<any[]>(uri)
 
   }

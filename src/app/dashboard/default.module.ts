@@ -377,8 +377,9 @@ import { PriceCategoryMultiplePricesComponent } from '../modules/admin/products/
 import { PurchaseItemSalesComponent } from '../modules/posorders/pos-order/purchase-item-sales/purchase-item-sales.component';
 import { PurchaseItemCostHistoryComponent } from '../modules/posorders/pos-order/purchase-item-cost-history/purchase-item-cost-history.component';
 import { ClientInfoComponent } from '../modules/posorders/client-info/client-info.component';
+import { NgxColorsModule } from 'ngx-colors';
 // import { PointlessReportingLibModule } from 'projects/pointess-reporting-lib/src/public-api';
-
+// import { ColorPickerModule } from 'ngx-color-picker';
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
   useClass: LoggingInterceptor,
@@ -804,7 +805,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       NgxCsvParserModule,
       NgxPayPalModule,
       NgxJsonViewerModule,
-
+      NgxColorsModule,
     ],
 
   exports: [
@@ -815,7 +816,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     HammerModule,
     NgxPayPalModule,
     NgxJsonViewerModule,
-
+    NgxColorsModule,
+    // ColorPickerModule,
     // NumericDirective,
     // RoomLayout,
   ],

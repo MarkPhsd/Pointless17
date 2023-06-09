@@ -3,7 +3,7 @@ import {Component, OnDestroy,
   EventEmitter, Output,
   ViewChild, ElementRef,
   }  from '@angular/core';
-import { IServiceType, IUser,  } from 'src/app/_interfaces';
+import { IServiceType, ISetting, IUser,  } from 'src/app/_interfaces';
 import { IPOSOrder, IPOSOrderSearchModel,  } from 'src/app/_interfaces/transactions/posorder';
 import { IItemBasic,} from 'src/app/_services';
 import { OrdersService } from 'src/app/_services';
@@ -21,6 +21,7 @@ import { NewOrderTypeComponent } from '../../posorders/components/new-order-type
 import { IPrinterLocation } from 'src/app/_services/menu/printer-locations.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 const { Keyboard } = Plugins;
 
 @Component({
@@ -99,6 +100,10 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     )
   )
 
+  uiTransactions  = {} as TransactionUISettings;
+  uiTransactions$  : Observable<ISetting>;
+  _UITransaction: Subscription;
+
   searchDates:      Subject<any> = new Subject();
   searchDate$  : Subject<IPOSOrderSearchModel[]> = new Subject();
   _searchDate$ = this.searchDates.pipe(
@@ -112,6 +117,13 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     )
   )
 
+  initUITransactionsSubscriber() {
+    this._UITransaction = this.uISettingsService.transactionUISettings$.subscribe( data => {
+      if (data) {
+        this.uiTransactions = data;
+      }
+    })
+  }
   initTerminalSettingSubscriber() {
     this.settingService.terminalSettings$.subscribe(data => {
       this.terminalSetting = data;
@@ -162,6 +174,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.initPrintLocationSubscriber();
     this.initViewTypeSubscriber();
     this.initSearchSubscriber();
+    this.initUITransactionsSubscriber()
   }
 
   ngOnDestroy(): void {
@@ -187,7 +200,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       private fb              : UntypedFormBuilder,
       private userAuthorization  : UserAuthorizationService,
       private dateHelper: DateHelperService,
-      private _bottomSheet    : MatBottomSheet
+      private _bottomSheet    : MatBottomSheet,
+      private uISettingsService: UISettingsService,
   )
   {
 
@@ -332,6 +346,10 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       search.greaterThanZero      = 0
       search.closedOpenAllOrders  = 1;
       this.searchModel = search;
+    }
+
+    if (this.uiTransactions && !this.uiTransactions.toggleUserOrAllOrders) {
+      this.searchModel.employeeID = 0;
     }
 
     if (search.suspendedOrder) {
@@ -486,7 +504,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     if (!form) {return}
     form.valueChanges.subscribe( res=> {
       if (form.get("start").value &&
-          form.get("start").value) {
+          form.get("end").value) {
             this.refreshCompletionDateSearch()
       }
     })
@@ -497,7 +515,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     if (!form) {return}
     form.valueChanges.subscribe( res=> {
       if (form.get("start").value &&
-          form.get("start").value) {
+          form.get("end").value) {
             this.refreshScheduledDateSearch()
       }
     })
@@ -524,8 +542,9 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       if (!this.completionDateForm.get("start").value || !this.completionDateForm.get("end").value) {
         this.dateFrom = this.completionDateForm.get("start").value
         this.dateTo =  this.completionDateForm.get("end").value
-        // console.log('emitDatePickerData')
-        this.refreshCompletionDateSearch()
+        if (this.dateFrom && this.dateTo) {
+          this.refreshCompletionDateSearch()
+        }
       }
     }
   }
@@ -535,14 +554,16 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       if (!this.scheduleDateForm.get("start").value || !this.scheduleDateForm.get("end").value) {
         this.scheduleDateFrom = this.scheduleDateForm.get("start").value
         this.scheduleDateTo =  this.scheduleDateForm.get("end").value;
-        this.refreshScheduledDateSearch()
+        if (this.scheduleDateForm && this.scheduleDateTo) {
+          this.refreshScheduledDateSearch()
+        }
       }
     }
   }
 
   refreshCompletionDateSearch() {
     if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
-    this.searchModel = this.getCompletionDateSearch(this.searchModel)
+    // this.searchModel = this.getCompletionDateSearch(this.searchModel)
     this.refreshSearch()
   }
 
@@ -582,14 +603,11 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     return search
   }
 
-
   refreshScheduledDateSearch() {
       if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
 
       this.scheduleDateTo = this.scheduleDateForm.get("start").value
       this.scheduleDateFrom  = this.scheduleDateForm.get("end").value
-      console.log(this.scheduleDateTo, this.scheduleDateFrom)
-      console.log('this.searchModel',this.searchModel)
 
       if (!this.scheduleDateForm || !this.scheduleDateFrom  || !this.scheduleDateTo) {
         this.searchModel.scheduleDate_From = '';
@@ -600,8 +618,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
       this.searchModel.scheduleDate_From = this.scheduleDateFrom.toLocaleDateString()
       this.searchModel.scheduleDate_To   = this.scheduleDateTo.toLocaleDateString()
-      console.log(this.scheduleDateTo, this.scheduleDateFrom)
-      console.log('this.searchModel',this.searchModel)
+
       this.refreshSearch()
   }
 

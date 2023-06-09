@@ -109,16 +109,16 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
         }
       })
     } catch (error) {
-      
+
     }
 
     // try {
-    //   this._uiHomePage = 
+    //   this._uiHomePage =
     //     this.uiHomePage = data;
     //     console.log('home page data exists')
     //   })
     // } catch (error) {
-      
+
     // }
   }
 
@@ -139,12 +139,12 @@ constructor(private menuService        : MenuService,
     this.initStyles();
   }
 
-  initStyles() { 
+  initStyles() {
     if (!this.isApp) { return }
     this.ordersListClass = 'orders-list c1'
   }
 
-  async ngOnInit()  {
+  ngOnInit()  {
     //this is called on page refresh, or sending the person the link to this page.
     //this should be called.
     //the parameters can all be used, however they shouldn't/
@@ -166,21 +166,22 @@ constructor(private menuService        : MenuService,
     this.value      = 1;
     const homePage$ = this.uiSettingService.homePageSetting$;
     const bucket$ =  this.awsBucketService.awsBucketURLOBS();
-    this.bucket$ = homePage$.pipe(switchMap(data => { 
+
+    this.bucket$ = homePage$.pipe(switchMap(data => {
       this.uiHomePage = data;
       return bucket$
-    })) .pipe(switchMap(data => { 
+    })) .pipe(switchMap(data => {
         this.bucketName =  data
         this.initComponent()
         return of(data)
-    }),catchError(data => { 
+    }),catchError(data => {
       this.initComponent()
       return of(data)
     }));
 
   }
 
-  initComponent() { 
+  initComponent() {
     this.initSubscriptions();
     this.initSearchForm();
     this.initSearchProcess();
@@ -250,8 +251,8 @@ constructor(private menuService        : MenuService,
         this.brandID       = this.route.snapshot.paramMap.get('brandID');
         this.typeID        = this.route.snapshot.paramMap.get('typeID');
         this.productName   = this.route.snapshot.paramMap.get('productName');
- 
-        if (this.route.snapshot.paramMap.get('hideSubCategoryItems')) { 
+
+        if (this.route.snapshot.paramMap.get('hideSubCategoryItems')) {
           this.hideSubCategoryItems = this.route.snapshot.paramMap.get('hideSubCategoryItems') as unknown as boolean;
         }
 
@@ -296,7 +297,7 @@ constructor(private menuService        : MenuService,
         }
         model.webMode = this.menuService.isWebModeMenu
         model.active  = true;
-        
+
         this.productSearchModelData = model;
         this.searchDescription = `Results from ${ model.name}  ${categoryResults} ${departmentName}  ${itemTypeName}`
         return
@@ -331,13 +332,13 @@ constructor(private menuService        : MenuService,
         model.categoryID   = this.categoryID
         model.departmentID = this.departmentID
         model.subCategoryID = this.subCategoryID;
-      
+
         if (this.uiHomePage && this.uiHomePage?.suppressMenuItems) {
-          if (this.route.snapshot.paramMap.get('hideSubCategoryItems')) { 
+          if (this.route.snapshot.paramMap.get('hideSubCategoryItems')) {
             model.hideSubCategoryItems = this.route.snapshot.paramMap.get('hideSubCategoryItems') as unknown as boolean;
           }
         }
-    
+
         this.typeID       = this.route.snapshot.paramMap.get('typeID')
         if (this.typeID) {
           if (this.typeID) { model.itemTypeID     = this.typeID     }
@@ -417,9 +418,9 @@ constructor(private menuService        : MenuService,
     this.brandID       = this.route.snapshot.paramMap.get('brandID')
     this.typeID       = this.route.snapshot.paramMap.get('typeID')
     model.hideSubCategoryItems = true;
-   
-    if (this.uiHomePage.suppressMenuItems) {
-      if (this.route.snapshot.paramMap.get('hideSubCategoryItems')) { 
+
+    if (this.uiHomePage && this.uiHomePage.suppressMenuItems) {
+      if (this.route.snapshot.paramMap.get('hideSubCategoryItems')) {
         model.hideSubCategoryItems = this.route.snapshot.paramMap.get('hideSubCategoryItems') as unknown as boolean;
       }
     }
@@ -437,10 +438,10 @@ constructor(private menuService        : MenuService,
       if (this.brandID) { model.brandID       = this.brandID     }
     }
 
-    if ( (!this.categoryID && this.categoryID != "0") || 
-         (!this.departmentID && this.departmentID != "0") || 
-         (!this.subCategoryID && this.subCategoryID != "0") || 
-         (!this.brandID && this.brandID != "0") )   { 
+    if ( (!this.categoryID && this.categoryID != "0") ||
+         (!this.departmentID && this.departmentID != "0") ||
+         (!this.subCategoryID && this.subCategoryID != "0") ||
+         (!this.brandID && this.brandID != "0") )   {
       // this.typeID = "0"
       // model.itemTypeID = "0"
 
@@ -622,8 +623,8 @@ constructor(private menuService        : MenuService,
 
   }
 
-  get  isDebugMode() { 
-    if (this.siteService.debugMode) { 
+  get  isDebugMode() {
+    if (this.siteService.debugMode) {
       return this.debugView
     }
     return true;

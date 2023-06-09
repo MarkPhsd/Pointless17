@@ -158,6 +158,20 @@ export class AuthenticationService {
       }
       return false
     }
+    public get isAdmin(): boolean {
+      try {
+        if  (this.userValue  != null) {
+          if  (this.userValue &&
+          (this.userValue.roles === 'admin' )) {
+            return true
+          }
+        }
+      } catch (error) {
+        console.log('error', error)
+      }
+      return false
+    }
+
 
     public get userxValue(): IUser {
       if ( !this._userx.value ) {

@@ -731,7 +731,7 @@ constructor(  private _snackBar              : MatSnackBar,
     if(!id) {
       return
     }
-    this.productEditButtonService.openProductDialog(id);
+    this.action$ = this.productEditButtonService.openProductDialogObs(id);
   }
 
   editProduct(e){
@@ -739,7 +739,6 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   assignItem(e){
-    console.log('promp sub group', e.rowData.id)
     if (this.promptSubGroup) {
       this.outputPromptItem.emit(e.rowData.id)
     }

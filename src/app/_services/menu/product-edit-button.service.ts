@@ -26,8 +26,8 @@ import { PromptGroupEditComponent } from 'src/app/modules/admin/menuPrompt/promp
 import { PromptSubGroupEditComponent } from 'src/app/modules/admin/menuPrompt/prompt-sub-groups/prompt-sub-group-edit/prompt-sub-group-edit.component';
 import { PriceTierEditComponent } from 'src/app/modules/admin/products/price-tiers/price-tier-edit/price-tier-edit.component';
 import { PSMenuGroupEditComponent } from 'src/app/modules/admin/products/price-schedule-menu-groups/psmenu-group-edit/psmenu-group-edit.component';
-import { concatMap, map } from 'rxjs/operators';
-import { Observable,  } from 'rxjs';
+import { concatMap, map, switchMap } from 'rxjs/operators';
+import { Observable, of,  } from 'rxjs';
 import { UnitTypePromptComponent } from 'src/app/modules/admin/products/pricing/price-categories-edit/unit-type-prompt/unit-type-prompt.component';
 import { EmployeeMetrcKeyEntryComponent } from 'src/app/modules/admin/employees/employee-metrc-key-entry/employee-metrc-key-entry.component';
 import { StripeCheckOutComponent } from 'src/app/modules/admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
@@ -149,6 +149,26 @@ export class ProductEditButtonService {
     this.openProductEditor(product.id,  product.prodModifierType)
   }
 
+  openProductDialogObs(id: any) {
+    const site = this.siteService.getAssignedSite();
+    return this.menuService.getProduct(site, id).pipe(switchMap(product => { 
+        if (product) {
+          if (!product.prodModifierType) {
+            product.prodModifierType = 1
+            return this.menuService.putProduct(site, product.id, product)
+          }
+        } else {
+          product.id = 0
+          product.prodModifierType = 1
+        }
+        return of(product)
+      }
+    )).pipe(switchMap(product => { 
+      if (!product) {return of(null)  }
+      this.openProductEditor(product.id,  product.prodModifierType);
+      return of(product)
+    }))
+  }
 
   openClockEditor(id: any) {
     let dialogRef: any;

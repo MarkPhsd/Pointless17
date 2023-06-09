@@ -17,6 +17,7 @@ import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { UnitTypeMethodsService } from 'src/app/_services/menu/unit-type-methods.service';
 import { SearchModel } from 'src/app/_services/system/paging.service';
+import { IMenuItem, menuButtonJSON } from 'src/app/_interfaces/menu/menu-products';
 
 @Component({
   selector: 'app-strain-product-edit',
@@ -41,6 +42,7 @@ export class StrainProductEditComponent implements OnInit {
   itemType                = {} as IItemType;
   get brandID()       { return this.productForm.get("brandID") as UntypedFormControl;}
   urlImageMain: string;
+  productJSONObject: menuButtonJSON;
 
   constructor(private menuService: MenuService,
               public route: ActivatedRoute,
@@ -60,8 +62,9 @@ export class StrainProductEditComponent implements OnInit {
   {
     if (data) {
       if (data.product) {
-        this.product = data.product
+        this.product = data.product as IProduct
         if (this.product.id) {
+          this.initMenuButtonJson(this.product)
           this.id = this.product.id.toString();
           if (this.product && data.itemType && data.itemType.id) {
             if (!this.product.prodModifierType ) {
@@ -77,6 +80,28 @@ export class StrainProductEditComponent implements OnInit {
     } else {
       this.id = this.route.snapshot.paramMap.get('id');
     }
+  }
+
+  initMenuButtonJson(product: IProduct) { 
+    console.log('init product', product)
+    if (product && !product.json) { 
+      this.productJSONObject  = {}  as menuButtonJSON;
+      this.productJSONObject.buttonColor = '#F8F8F8';
+      this.productJSONObject.backColor = '#F8F8F8';
+      // this.productJSONObject.enableButtonColor = '#F8F8F8';
+      
+      return
+    }
+    if (product.json) { 
+      this.productJSONObject = JSON.parse(product.json)
+    }
+  }
+
+  get JSONAsString() { 
+    if (this.product) { 
+      return JSON.stringify(this.productJSONObject);
+    }
+    return ''
   }
 
   ngOnInit() {
@@ -140,6 +165,7 @@ export class StrainProductEditComponent implements OnInit {
       this.performingAction= true;
       this.product.name = this.product.name + ' Copy'
       this.message = ''
+      this.product.json = this.JSONAsString;
       this.action$ = this.menuService.postProduct(site, this.product).pipe(
         switchMap(data => {
           this.product = data;
@@ -188,10 +214,12 @@ export class StrainProductEditComponent implements OnInit {
       if (!this.product.webProduct) {  this.product.webProduct = 0    }
       this.message = ""
       this.performingAction= true;
+      this.product.json = this.JSONAsString;
+      console.log(this.product.json)
       const product$ = this.menuService.saveProduct(site, this.product);
       return product$.pipe(switchMap(
           data => {
-
+            console.log('save results')
             if (data) {
               if (data.errorMessage) { 
                 this.notifyEvent('Save did not succeed: ' + data.errorMessage, 'Success')

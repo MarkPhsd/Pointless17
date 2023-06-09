@@ -33,9 +33,9 @@
         <span *ngIf="showValues">
           <mat-icon color="primary">analytics</mat-icon>Hide List Reports
         </span>
-        <span *ngIf="!showValues">
+        <!-- <span *ngIf="!showValues">
           <mat-icon color="primary">analytics</mat-icon>Show List Reports
-        </span>
+        </span> -->
       </button>
     </div>
 
@@ -81,7 +81,7 @@
       <button mat-flat-button  style="width:150px;height:50px"color="primary" (click)="showView(2)">Taxed Sales</button>
       <button mat-flat-button  style="width:150px;height:50px"color="primary" (click)="showView(3)">Non Taxed Sales</button>
 
-      <button mat-flat-button  style="width:150px;height:50px"color="warn" (click)="showView(4)">Item Sales</button>
+      <button mat-flat-button  style="width:150px;height:50px"color="primary" (click)="showView(4)">Item Sales</button>
       <button mat-flat-button  style="width:150px;height:50px"color="warn" (click)="showView(5)">Item Voids</button>
     </div>
   </div>
@@ -180,6 +180,19 @@
               <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
             </payment-report>
 
+            <ng-container *ngTemplateOutlet="balanceSheetView, 
+                                            context: {$implicit: {site: site}}">
+            </ng-container>
+
+            <ng-template #balanceSheetView>
+              <balance-sheet-report
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  >
+              </balance-sheet-report>
+            </ng-template>
+
             <payment-report
                     [groupBy]="'deviceName'"
                     [site]    ="site"
@@ -191,9 +204,11 @@
               </div>
               <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
             </payment-report>
+
           </div>
 
           <div [hidden]="displayReports != 'items'">
+            <h3>{{site?.name}}</h3>
             <ng-container *ngTemplateOutlet="categorySalesView,context: {$implicit: site}"></ng-container>
             <ng-template #categorySales let-site>
               <div>

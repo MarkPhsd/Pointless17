@@ -108,11 +108,17 @@ export interface IMenuItem {
   prodSecondLanguage: string;
   dateMade                : string;
   testDate                : string;
-  labID: number;
+  labID     : number;
   producerID: number;
+  producer  : IClientTable;
+  lab       : IClientTable;
+  json      : string;
+  menuButtonJSON: menuButtonJSON;
+}
 
-  producer: IClientTable;
-  lab     : IClientTable;
+export interface menuButtonJSON { 
+  backColor: string;
+  buttonColor: string;
 }
 
 //also in itemtype service - should consolidate

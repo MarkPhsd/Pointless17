@@ -41,7 +41,7 @@
         </button>
       </div>
 
-      <div *ngIf="!isUserStaff && order">
+      <div *ngIf="!isUserStaff && order && (deviceInfo && !deviceInfo.phoneDevice)">
         <button
               mat-raised-button
               color="primary"

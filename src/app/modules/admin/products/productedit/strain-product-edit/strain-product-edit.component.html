@@ -146,6 +146,9 @@
                     (messageOut) ="received_URLMainImage($event)"
                     (imageUrl)   ="updateUrlImageMain($event)">
                 </app-widget-uploader>
+
+                <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
+                
             </div>
 
           </div>
@@ -241,6 +244,17 @@
     </div>
   </mat-card>
 </div>
+
+<ng-template #buttonColorPicker>
+  <div *ngIf="productJSONObject">
+    <h3>Button Color Picker</h3>
+    <ngx-colors ngx-colors-trigger [(ngModel)]="productJSONObject.buttonColor"></ngx-colors>
+    <mat-form-field>
+      <input matInput [(ngModel)]="productJSONObject.buttonColor">
+    </mat-form-field>
+    <!-- {{productJSONObject.buttonColor}} -->
+  </div>
+</ng-template>
 
 <ng-template #priceCategorySelector>
   <app-price-category-select

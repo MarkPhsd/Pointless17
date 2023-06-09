@@ -23,8 +23,6 @@ export class UserAuthorizationService {
     localStorage.setItem('user', JSON.stringify(user))
     const site =  this.siteService.getAssignedSite()
     this.clientTableService.putPreference(site, user.userPreferences, user.id).subscribe(data => {
-      console.log('pref', user.userPreferences);
-      console.log('saved')
     })
   }
 

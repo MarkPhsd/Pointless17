@@ -1,5 +1,5 @@
 <div *ngIf="sheets$ | async as sheets; else loading" class="container">
-
+  
   <mat-card>
     <mat-card-title>
       <h4>Balance Sheets</h4>
@@ -11,10 +11,14 @@
         <div class="grid-item">User</div>
         <div class="grid-item">Total</div>
         <div class="grid-item">+/-</div>
+
         <div class="grid-item">Device</div>
+        <div class="grid-item">Opened</div>
+        <div class="grid-item">Closed</div>
       </div>
       <mat-divider></mat-divider>
       <br>
+
       <div *ngFor="let item of sheets.results">
         <ng-container
             [ngTemplateOutlet]="reportView"
@@ -49,14 +53,16 @@
 
 <ng-template #reportView let-item>
   <div class="header">
-    <div class="grid-item text-format">{{ item.startTime | date: 'M/d/yy' }}</div>
-    <div class="grid-item number-format">{{item.id}}</div>
+    <div class="grid-item text-format">{{ item?.startTime | date: 'M/d/yy' }}</div>
+    <div class="grid-item number-format">{{item?.id}}</div>
     <div class="grid-item text-format">{{item?.balanceSheetEmployee?.lastName | truncateText : 5}}, {{item?.balanceSheetEmployee?.lastName.slice(0)}}</div>
-    <div class="grid-item number-format">{{item.salesTotal | currency}}</div>
-    <div class="grid-item number-format">{{item.overUnderTotal | currency }}</div>
+    <div class="grid-item number-format">{{item?.salesTotal | currency}}</div>
+    <div class="grid-item number-format">{{item?.overUnderTotal | currency }}</div>
+
+    <div class="grid-item text-format">{{item?.deviceName  }}</div>
     <div></div>
-    <div></div>
-    <div class="grid-item text-format">{{item.deviceName  }}</div>
+    <div class="grid-item col-span-2 ">{{item?.startTime | date : 'hh:mm ampm'}}</div>
+    <div class="grid-item col-span-2">{{item?.endTime |  date : 'hh:mm ampm' }}</div>
   </div>
 
 </ng-template>

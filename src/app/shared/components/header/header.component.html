@@ -5,173 +5,193 @@
              [color]="matToolbarColor">
   <mat-toolbar-row>
 
-    <div [class]="flexsections">
-      <div [class]="gridlayout">
+    <!-- <div [class]="gridlayout">
 
-        <div *ngIf="!smallDevice && isApp">
-
-          <button aria-label="back" mat-button
-                  (click)="goBack()">
-            <mat-icon aria-hidden="true">keyboard_arrow_left</mat-icon>
-          </button>
-        </div>
-
-        <div class="logo" *ngIf="!isApp" >
-          <app-logo [logoSize]="'small'" ></app-logo>
-        </div>
-
-        <div *ngIf="(isUserStaff || isAdmin) ">
-          <button aria-label="menu"
-                  mat-button
-                  (click)="toggleSideBar()">
-            <mat-icon>{{menuBar}}</mat-icon>
-          </button>
-        </div>
-
-        <ng-container *ngTemplateOutlet="showSearchMenuView"></ng-container>
-
-        <div>
-          <button aria-label="home"
-                  mat-button
-                  (click)="goHome()">
-            <mat-icon >home</mat-icon>
-          </button>
-        </div>
-
-        <div *ngIf="!smallDevice" >
-          <div class="site-name" *ngIf="site && site.name && site.name != undefined">
-            <div *ngIf="site?.name.toLowerCase() != 'local'">
-              <h2 > {{ site?.name.toUpperCase() | truncateText : 8 }} </h2>
-            </div>
-          </div>
-        </div>
-
-        <div class="simple-row " *ngIf="!smallDevice" >
-          <api-status-display><mat-icon>network</mat-icon></api-status-display>
-
-          <button class="check-out-button" aria-label="location_on"
-                  mat-button
-                  (click)="siteSelector()">
-            <mat-icon>location_on</mat-icon>
-          </button>
-
-        </div>
-
+      <div class="simple-row">
+      <div [class]="flexsections"> -->
+      <ng-container [ngTemplateOutlet]="backButtonView"></ng-container>
+      <ng-container [ngTemplateOutlet]="logoView"></ng-container>
+      <ng-container [ngTemplateOutlet]="menuBarView"></ng-container>
+      <ng-container *ngTemplateOutlet="showSearchMenuView"></ng-container>
+      <ng-container [ngTemplateOutlet]="goHomeView"></ng-container>
+      <ng-container [ngTemplateOutlet]="currentSite"></ng-container>
+      <ng-container [ngTemplateOutlet]="networkStatus"></ng-container>
+      <ng-container [ngTemplateOutlet]="siteSelectorView"></ng-container>
+      <div *ngIf="!isUserStaff || phoneDevice">
+        <ng-container [ngTemplateOutlet]="userActionsPhoneDevice"></ng-container>
       </div>
-
-      <div class="grid-flow"
-           *ngIf="!phoneDevice">
-
-        <mat-card class='panel-card'
-                  *ngIf="( (isUserStaff && platFormService.platForm !='web' )
-                        || (isUserStaff) )">
-          <!-- <ul
-            class="ul-pos-panel"
-            > -->
-            <ul
-              class="ul-pos-panel fx-row"
-              >
-
-            <li *ngIf="employeeName && !smallDevice">
-              <div class="pos-name">
-                <h2>  {{employeeName.toUpperCase() | truncateText : 8}} </h2>
-              </div>
-            </li>
-
-            <li *ngIf="!smallDevice">
-              <div class="pos-name"
-                    *ngIf="(orderService && orderService.posName && showSearchForm) "
-                    id="pos-name">
-                <h2 > | {{ orderService?.posName.substr(0, 5) }} | </h2>
-              </div>
-            </li>
-
-            <li *ngIf="!smallDevice">
-              <div class='search-input'>
-                <button mat-button
-                        color="accent"
-                        aria-label="POS"
-                        (click)="navPOSOrders()">
-                  <mat-icon>point_of_sale</mat-icon>
-                </button>
-              </div>
-            </li>
-
-            <ng-container [ngTemplateOutlet]="isfloorPlan"></ng-container>
-
-            <li *ngIf="platFormService.androidApp">
-              <ng-container [ngTemplateOutlet]="barcodeScanner"></ng-container>
-            </li>
-
-            <li *ngIf="!phoneDevice || !smallDevice">
-              <list-product-search-input></list-product-search-input>
-            </li>
-
-            <li>
-              <scale-value-view></scale-value-view>
-            </li>
-
-            <li *ngIf="platFormService.isApp() && userSwitching">
-              <div class='search-input'>
-                <button mat-button
-                        aria-label="transfer_within_a_station"
-                        color="accent"
-                        (click)="switchUser()">
-                  <mat-icon>transfer_within_a_station</mat-icon>
-                </button>
-              </div>
-            </li>
-
-             <li *ngIf="!userSwitching">
-              <ng-container [ngTemplateOutlet]="menuButtonContainer"></ng-container>
-            </li>
-
-          </ul>
-        </mat-card>
-
-      </div>
-
-      <div *ngIf="!smallDevice && !isUserStaff" [class]="gridlayout">
-        <div>
-          <app-company-info-header [isUser]="!isUserStaff"></app-company-info-header>
-        </div>
-      </div>
-
-      <div [class]="gridlayout">
-
-        <div *ngIf="!smallDevice && isAdmin">
-          <clock-in-out [displayOnly]="true"></clock-in-out>
-          <wizard-progress-button></wizard-progress-button>
-        </div>
-
-        <app-keyboard-button
-          [smallDevice]="smallDevice"
-          [isApp]="platFormService.isApp()"
-          [isUserStaff]="isUserStaff"
-        ></app-keyboard-button>
-
-        <div  class="check-out-button" *ngIf="uiTransactionSetting && uiTransactionSetting?.displayEditCardOnHeader" >
-          <ng-container [ngTemplateOutlet]="editCartButtons"></ng-container>
-        </div>
-
-        <div *ngIf="!smallDevice"
-              class="cart-button" >
-          <app-cart-button> </app-cart-button>
-        </div>
-
-        <div *ngIf="smallDevice">
-          <ng-container [ngTemplateOutlet]="userActionsSmallDevice"></ng-container>
-        </div>
-
-        <div>
-          <ng-container [ngTemplateOutlet]="userInfoScreen"></ng-container>
-        </div>
-
-      </div>
-    </div>
+      <!-- </div>
+      </div> -->
+      <!-- <ng-container  [ngTemplateOutlet]="userSwitchingButtonView" ></ng-container> -->
+      <ng-container [ngTemplateOutlet]="posPanel"></ng-container>
+      <ng-container [ngTemplateOutlet]="companyHeader"></ng-container>
+      <!-- <div [class]="gridlayout"> -->
+      <ng-container [ngTemplateOutlet]="wizard"></ng-container>
+      <ng-container [ngTemplateOutlet]="clockIn"></ng-container>
+      <ng-container [ngTemplateOutlet]="keyboardButton"></ng-container>
+      <ng-container [ngTemplateOutlet]="editCartButtons"></ng-container>
+    <!-- </div> -->
+    <!-- </div> -->
+      <ng-container [ngTemplateOutlet]="appCart"></ng-container>
+      <ng-container [ngTemplateOutlet]="userInfoScreen"></ng-container>
 
   </mat-toolbar-row>
 </mat-toolbar>
+
+<ng-template #backButtonView>
+  <div *ngIf="!smallDevice && isApp">
+    <button aria-label="back" mat-button
+            (click)="goBack()">
+      <mat-icon aria-hidden="true">keyboard_arrow_left</mat-icon>
+    </button>
+</div>
+</ng-template>
+
+<ng-template #logoView>
+  <div class="logo" *ngIf="!isApp" >
+  <app-logo [logoSize]="'small'" ></app-logo>
+  </div>
+</ng-template>
+
+<ng-template #menuBarView>
+  <div *ngIf="(isUserStaff || isAdmin) ">
+    <button aria-label="menu"
+            mat-button
+            (click)="toggleSideBar()">
+      <mat-icon>{{menuBar}}</mat-icon>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #goHomeView>
+  <div>
+    <button aria-label="home"
+            mat-button
+            (click)="goHome()">
+      <mat-icon >home</mat-icon>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #posPanel>
+  <div class="grid-flow"
+       *ngIf="!phoneDevice">
+    <mat-card class='panel-card'
+            *ngIf="( (isUserStaff && platFormService.platForm !='web' )
+                  || (isUserStaff) )">
+      <ul class="ul-pos-panel fx-row" >
+        
+        <li *ngIf="employeeName && !smallDevice">
+          <div class="pos-name">
+            <h2>  {{employeeName.toUpperCase() | truncateText : 8}} </h2>
+          </div>
+        </li>
+
+        <li *ngIf="!smallDevice">
+          <div class="pos-name"
+                *ngIf="(orderService && orderService.posName && showSearchForm) "
+                id="pos-name">
+            <h2 > | {{ orderService?.posName.substr(0, 5) }} | </h2>
+          </div>
+        </li>
+
+        <li *ngIf="!smallDevice">
+          <div class='search-input'>
+            <button mat-button
+                    color="accent"
+                    aria-label="POS"
+                    (click)="navPOSOrders()">
+              <mat-icon>point_of_sale</mat-icon>
+            </button>
+          </div>
+        </li>
+
+        <ng-container [ngTemplateOutlet]="isfloorPlan"></ng-container>
+
+        <li *ngIf="platFormService.androidApp">
+          <ng-container [ngTemplateOutlet]="barcodeScanner"></ng-container>
+        </li>
+
+        <li *ngIf="!phoneDevice || !smallDevice">
+          <list-product-search-input></list-product-search-input>
+        </li>
+
+        <li>
+          <scale-value-view></scale-value-view>
+        </li>
+
+        <!--  -->
+        <li *ngIf="platFormService.isApp() && userSwitching">
+          <ng-container  [ngTemplateOutlet]="userSwitchingButtonView"></ng-container>
+        </li>
+
+        <li *ngIf="!userSwitching" >
+          <!-- <ng-container [ngTemplateOutlet]="menuButtonContainer"></ng-container> -->
+          <ng-container [ngTemplateOutlet]="userLoginOptionView"></ng-container>
+        </li>
+
+      </ul>
+    </mat-card>
+  </div>
+</ng-template>
+
+<ng-template #userSwitchingButtonView>
+  <!-- <div class='search-input'> -->
+    <button mat-button
+            aria-label="transfer_within_a_station"
+            color="accent"
+            (click)="switchUser()">
+      <mat-icon>transfer_within_a_station</mat-icon>
+    </button>
+  <!-- </div> -->
+</ng-template>
+
+<ng-template #currentSite>
+  <div *ngIf="!smallDevice && !phoneDevice" >
+    <div class="site-name" *ngIf="site && site.name && site.name != undefined">
+      <div *ngIf="site?.name.toLowerCase() != 'local'">
+        <h2 > {{ site?.name.toUpperCase() | truncateText : 8 }} </h2>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #siteSelectorView>
+  <!-- <div class="simple-row" > -->
+    <button aria-label="location_on"
+            mat-button
+            (click)="siteSelector()">
+      <mat-icon>location_on</mat-icon>
+    </button>
+  <!-- </div> -->
+</ng-template>
+
+<ng-template #networkStatus>
+  <api-status-display><mat-icon>network</mat-icon></api-status-display>
+</ng-template>
+
+<ng-template #companyHeader>
+  <div *ngIf="(!phoneDevice && !smallDevice) && !isUserStaff" [class]="gridlayout">
+    <div>
+      <app-company-info-header [isUser]="!isUserStaff"></app-company-info-header>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #appCart>
+  <div *ngIf="!smallDevice && !phoneDevice"
+        class="cart-button" >
+      <app-cart-button> </app-cart-button>
+  </div>
+</ng-template>
+
+<ng-template #keyboardButton>
+  <app-keyboard-button
+    [smallDevice]="smallDevice"
+    [isApp]="platFormService.isApp()"
+    [isUserStaff]="isUserStaff"
+  ></app-keyboard-button>
+</ng-template>
 
 <ng-template #floorPlanTemplate>
   <li>
@@ -200,8 +220,9 @@
     </button>
   </div>
 
-  <div *ngIf="user && userSwitching">
-    <ng-container [ngTemplateOutlet]="menuButtonContainer"></ng-container>
+  <!--  && userSwitching -->
+  <div *ngIf="user">
+    <ng-container [ngTemplateOutlet]="menuButtonContainer">  </ng-container>
   </div>
 </ng-template>
 
@@ -220,15 +241,28 @@
   </div>
 </ng-template>
 
-<ng-template #menuButtonContainer>
 
+<ng-template #wizard>
+  <span *ngIf="!smallDevice && !phoneDevice && isAdmin">
+  <wizard-progress-button></wizard-progress-button>
+  </span>
+</ng-template>
+
+<ng-template #clockIn>
+  <span *ngIf="!smallDevice && !phoneDevice && isAdmin">
+     <clock-in-out [displayOnly]="true"></clock-in-out>
+  </span>
+</ng-template>
+
+
+<ng-template #menuButtonContainer>
+  <ng-content></ng-content>
   <button aria-label="user menu"
           mat-raised-button
           [matMenuTriggerFor]="menu"
           #menuTrigger="matMenuTrigger"
           (click)="menuTrigger.openMenu()" >
     <mat-icon *ngIf="mailCount == 0 || !mailCount">person</mat-icon>
-
     <mat-icon
         *ngIf="mailCount && mailCount != 0"
         matBadge="{{ mailCount }}"
@@ -344,15 +378,17 @@
 </ng-template>
 
 <ng-template #editCartButtons>
-  <pos-check-out-buttons
-    [order]="order"
-    [phoneDevice]="phoneDevice"
-    [smallDevice]="smallDevice"
-    [isStaff]="isUserStaff"
-    [uiSettings]="homePageSetings"
-    [mainPanel]="false"
-    >
-  </pos-check-out-buttons>
+  <div  class="check-out-button" *ngIf="uiTransactionSetting && uiTransactionSetting?.displayEditCardOnHeader" >
+    <pos-check-out-buttons
+      [order]="order"
+      [phoneDevice]="phoneDevice"
+      [smallDevice]="smallDevice"
+      [isStaff]="isUserStaff"
+      [uiSettings]="homePageSetings"
+      [mainPanel]="false"
+      >
+    </pos-check-out-buttons>
+  </div>
 </ng-template>
 
 <ng-template #loadingDevice>

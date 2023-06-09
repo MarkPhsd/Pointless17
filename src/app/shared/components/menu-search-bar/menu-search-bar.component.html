@@ -104,6 +104,7 @@
                   [textLength]      = "21"
                   [list]            = "list"
                   [materialIcons]   = 'true'
+                  [type]            ="'menuItem'"
                   >
               </app-mat-toggle-selector>
             </div>
@@ -127,7 +128,7 @@
             <app-mat-toggle-selector
                 *ngIf="(clientSearchResults$ | async) as listbrands"
                 [mouseOver]      = "false"
-                [showIcon]       ="showIcon"
+                [showIcon]       = "showIcon"
                 [textLength]     = "21"
                 [toggleDimensions]="toggleCatHeight"
                 (setItem)        = "refreshTypeSearch($event)"
@@ -164,6 +165,7 @@
                   (outPutItem)      = "refreshCategorySearch($event)"
                   [textLength]      = "21"
                   [id]              = "productTypeID"
+             
                   [list]            = "list">
               </app-mat-toggle-selector>
             </div>

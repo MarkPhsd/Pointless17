@@ -8,7 +8,6 @@
       *ngIf="toggleVertical && list; else loading">
     <div [style.height]="toggleStyleHeight">
       <mat-button-toggle-group
-
           name         = "type"
           [(ngModel)]  = "id"
           (change)     = "changeSelection()"
@@ -27,34 +26,30 @@
         <div [class]="toggleHeight" [style.height]="styleHeight">
           <div [style.height]="styleHeight">
             <mat-button-toggle
-                  *ngFor="let item of list"
-                  type="button"
-                  [value]="item"
-                  (click)="setItem(item)"
-                  id="item.id">
+                      *ngFor="let item of list"
+                      type="button"
+                      [value]="item"
+                      [style.background-color]="item?.menuButtonJSON?.buttonColor"
+                      (click)="setItem(item)"
+                      id="item.id">
 
-                <div class="grid-toggle-tiny">
-                  <div class="item-font"
-                        *ngIf="showIcon && item.icon && item.icon != ''">
-
-                    <span *ngIf="materialIcons">
-                      <mat-icon>{{item.icon}}</mat-icon>
-                    </span>
-                    <span *ngIf="!materialIcons"
-                        [class]="'mdi ' + item.icon">
-                    </span>
-
-                  </div>
-
-                  <div class="item-text"
-                      *ngIf="((item.icon === '' || !item.icon) && tinyMenu )
-                              || !tinyMenu">
-                    {{item[fieldName] | truncateText : textLength}}
-                  </div>
-                </div>
-
+                    <div class="grid-toggle-tiny">
+                      <div class="item-font"
+                            *ngIf="showIcon && item.icon && item.icon != ''">
+                        <span *ngIf="materialIcons">
+                          <mat-icon>{{item.icon}}</mat-icon>
+                        </span>
+                        <span *ngIf="!materialIcons"
+                            [class]="'mdi ' + item.icon">
+                        </span>
+                      </div>
+                      <div class="item-text"
+                          *ngIf="((item.icon === '' || !item.icon) && tinyMenu )
+                                  || !tinyMenu">
+                        {{item[fieldName] | truncateText : textLength}}
+                      </div>
+                    </div>
             </mat-button-toggle>
-
             <mat-menu
                       class="mat-menu-panel"
                       [overlapTrigger]="true"

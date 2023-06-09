@@ -206,5 +206,6 @@ export interface IProduct {
   brandName: string;
   departmentName: string;
   errorMessage: string;
+  json: string;
 }
 

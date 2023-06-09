@@ -63,6 +63,10 @@
 
 }
 
+.col-span-2 {
+  // column-span: 2;
+  grid-row:  span 2;
+}
 .summary {
   max-width: 350px;
   display              : grid;

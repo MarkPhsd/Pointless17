@@ -37,6 +37,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('userActions')       userActions: TemplateRef<any>;
   @ViewChild('searchMenuView')       searchMenuView: TemplateRef<any>;
   @ViewChild('floorPlanTemplate') floorPlanTemplate: TemplateRef<any>;
+  @ViewChild('menuButtonContainer') menuButtonContainer: TemplateRef<any>;
+
+
   @Output() outPutToggleSideBar:      EventEmitter<any> = new EventEmitter();
   @Output() outPutToggleSearchBar:    EventEmitter<any> = new EventEmitter();
   openOrderBar:                      boolean;
@@ -224,10 +227,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.initUIService();
     this.initSearchObservable();
     this.messageService.sendMessage('show');
-
     this.platFormService.getPlatForm();
     this.initSubscriptions();
-
     this.getUserInfo();
     this.refreshScannerOption()
     this.searchForm = this.fb.group( {  searchProducts: '' });
@@ -236,10 +237,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.initCompany();
     this.mediaWatcher()
     this.initSite();
-    this.updateItemsPerPage();
+    this.updateScreenSize();
     this.pollingService.poll();
     this.initUserOrder();
-    this.updateScreenSize();
     this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(this.site);
   }
 
@@ -248,7 +248,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   get showSearchMenuView() {
-    if (this.smallDevice) {
+    if (this.smallDevice || this.phoneDevice) {
       return null
     }
     return this.searchMenuView;
@@ -256,22 +256,18 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   getDeviceInfo() {
     const devicename = this.orderService.posName
-    // console.log('get device info', devicename, this.isApp)
     if (devicename && this.isApp) {
       this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
         switchMap(data => {
-          // console.log('device', data)
           try {
             const posDevice = JSON.parse(data.text) as ITerminalSettings;
             this.uiSettings.updatePOSDevice(posDevice)
             this.terminalSetting = data;
-            // console.log('device', posDevice)
             if (this.platformService.isAppElectron) {
               if (posDevice && posDevice.electronZoom && posDevice.electronZoom != '0') {
                 this.uiSettings.electronZoom(posDevice.electronZoom)
               }
             }
-
             return of(posDevice)
           } catch (error) {
             this.siteService.notify('Error setting device info.' + error, 'Close', 5000, 'yellow')
@@ -290,7 +286,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   initUIService() {
-
     this.uiHomePageSetting$ =  this.uiSettings.getSetting('UIHomePageSettings').pipe(
       switchMap( data => {
         if (data) {
@@ -323,7 +318,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   refreshUserBar(user: IUser) {
     if (!user) {
       this.flexsections = 'flex-sections-nouser'
-      // this.flexsections = 'flex-sections'
       return
     }
     if (user && user?.roles === 'user') {
@@ -334,7 +328,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.flexsections = 'flex-sections'
       return
     }
-
   }
 
   //if there is a current order for this user, then we can assign it here.
@@ -397,59 +390,30 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   get userInfoScreen() {
-    if (!this.smallDevice) {
+    // console.log('user info screen', this.smallDevice, this.phoneDevice)
+    if (this.phoneDevice || this.smallDevice)  {return  null}
+    return this.userActions
+    // if (!this.smallDevice && !this.phoneDevice) {
+    //   return this.userActions
+    // }
+    // return null
+  }
+
+
+  get userActionsPhoneDevice() {
+    // console.log('userActionsPhoneDevice', this.smallDevice, this.phoneDevice)
+    if (this.phoneDevice || this.smallDevice) {
       return this.userActions
     }
     return null
   }
 
-  get userActionsSmallDevice() {
-    if (this.smallDevice) {
-      return this.userActions
-    }
-    return null
-  }
 
-  @HostListener("window:resize", [])
-  updateItemsPerPage() {
-    this.widthOfWindow = window.innerWidth;
-    // console.log(this.widthOfWindow)
-    this.showSearchForm = true
-    this.smallDevice = false
-    this.phoneDevice = false;
-
-    if (window.innerWidth >= 1200) {
-      this.sitePickerWidth = 33
-    } else if (window.innerWidth >= 992) {
-      this.sitePickerWidth = 33
-    }
-
-    if (811 >= window.innerWidth ) {
-      this.showSearchForm = false
-      this.sitePickerWidth = 75
-      this.smallDevice = true
-    }
-    if (500 >= window.innerWidth) {
-      this.phoneDevice = true;
-    }
-
-    this.authenticationService.updateDeviceInfo({smallDevice: this.smallDevice, phoneDevice: this.phoneDevice});
-    this.refreshUserBar(this.user)
-  }
 
   @HostListener("window:resize", [])
   updateScreenSize() {
     this.widthOfWindow = window.innerWidth;
-    this.smallDevice = false
-    if (811 >= window.innerWidth ) {
-      this.smallDevice = true
-    }
-
-    if (600 >= window.innerWidth ) {
-      this.phoneDevice = true
-    }
-
-    this.authenticationService.updateDeviceInfo({phoneDevice: this.phoneDevice, smallDevice: this.smallDevice})
+    this.updateDeviceInfo();
 
     if (this.platFormService.androidApp) {
       this.mattoolbar = 'mat-toolbar-android'
@@ -464,6 +428,42 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       this.userSwitching = false;
     }
+
+    this.widthOfWindow = window.innerWidth;
+    this.showSearchForm = true
+
+    if (window.innerWidth >= 1200) {
+      this.sitePickerWidth = 33
+    } else if (window.innerWidth >= 992) {
+      this.sitePickerWidth = 33
+    }
+
+    if (811 >= window.innerWidth ) {
+      this.showSearchForm = false
+      this.sitePickerWidth = 75
+    }
+    this.refreshUserBar(this.user)
+  }
+
+  updateDeviceInfo() {
+    this.smallDevice = false
+    this.phoneDevice = false;
+    if (811 >= window.innerWidth ) {
+      this.smallDevice = true
+    }
+    if (500 >= window.innerWidth ) {
+      this.smallDevice = false;
+      this.phoneDevice = true
+    }
+    this.authenticationService.updateDeviceInfo({phoneDevice: this.phoneDevice, smallDevice: this.smallDevice})
+  }
+
+  get userLoginOptionView() {
+    if (this.phoneDevice || this.smallDevice) {
+      return this.userActions
+    }
+    return this.menuButtonContainer
+
   }
 
   getUserInfo() {

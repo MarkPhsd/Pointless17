@@ -8,25 +8,29 @@
 }
 
 .grid-flow {
-  display: grid;
-  gap    : 15px;
-  grid-template-columns: repeat( auto-fit, minmax(55px, 1fr) );
-  grid-auto-flow: row;
-  margin-right: 30px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  // width: 100px;
+  // display: grid;
+  // gap    : 15px;
+  // grid-template-columns: repeat( auto-fit, minmax(55px, 1fr) );
+  // grid-auto-flow: row;
+  // margin-right: 30px;
 
-  @include horizontal-tablet {
-    display: flex;
-    flex-direction: row;
-    margin-right: 5px;
-    justify-content: center;
-  }
+  // @include horizontal-tablet {
+  //   display: flex;
+  //   flex-direction: row;
+  //   margin-right: 5px;
+  //   justify-content: center;
+  // }
 
-  @include for-phone-only {
-    display: flex;
-    flex-direction: row;
-    margin-right: 5px;
-    justify-content: center;
-  }
+  // @include for-phone-only {
+  //   display: flex;
+  //   flex-direction: row;
+  //   margin-right: 5px;
+  //   justify-content: center;
+  // }
 }
 
 button {

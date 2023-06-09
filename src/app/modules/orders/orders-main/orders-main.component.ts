@@ -105,6 +105,11 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
         this.searchModel = data;
         this.scheduleDateStart= null;
         this.scheduleDateEnd  = null;
+
+        if (this.uiTransactions && !this.uiTransactions.toggleUserOrAllOrders) {
+          this.searchModel.employeeID = 0;
+        }
+
         if (this.searchModel.scheduleDate_From && this.searchModel.scheduleDate_To) {
           this.scheduleDateStart = this.searchModel.scheduleDate_From;
           this.scheduleDateEnd   = this.searchModel.scheduleDate_To;
@@ -132,6 +137,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this._viewType) {this._viewType.unsubscribe()}
     if (this._searchModel) { this._searchModel.unsubscribe()}
     if (this._user) {this._user.unsubscribe()}
+    if (this._UITransaction) { this._UITransaction.unsubscribe() }
   }
 
   constructor (
@@ -192,7 +198,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     // this.showAllOrderInstructions[0] = 'Press Show All Orders, to toggle showing all orders or just yours.';
     this.changeDetectorRef.detectChanges()
     if (!this.instructionDirectives) {
-      console.log('no directive active', index)
+
       return
     }
     const directive = this.instructionDirectives.toArray()[index];
@@ -249,7 +255,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     const site =     this.siteService.getAssignedSite()
     const list = []
     this.posOrdersSelectedList.forEach(data => { list.push(data.id) })
-
     this.action$ = this.orderService.mergeOrders(site, list).pipe(switchMap(data => {
       this.orderService.updateOrderSubscription(data)
       this.cancelMerge()
@@ -283,7 +288,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     try {
       this.posOrdersSelectedList.splice(i,1)
     } catch (error) {
-      console.log('eerror', error)
+      console.log('Error', error)
     }
   }
 
@@ -431,12 +436,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
   hideInstruction(index: number) {
     if (!this.instructionDirectives) {
-      console.log('no directive')
       return
     }
     const directive = this.instructionDirectives.toArray()[index];
-    console.log('directive list ',  this.instructionDirectives.toArray())
-    console.log('directive', directive, index)
     if (directive) {
       directive.hideInstruction();
     }

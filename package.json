@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.59.4",
+  "version": "1.59.8",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -144,6 +144,7 @@
     "ng-dynamic-component": "^10.1.0",
     "ng-gallery": "^5.0.0",
     "ngx-color-picker": "^12.0.1",
+    "ngx-colors": "^3.5.2",
     "ngx-csv-parser": "^1.1.1",
     "ngx-device-detector": "^2.1.1",
     "ngx-electron": "^2.2.0",

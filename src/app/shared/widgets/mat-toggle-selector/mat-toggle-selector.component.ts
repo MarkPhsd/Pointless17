@@ -1,6 +1,7 @@
 import { Component, OnInit,Output, Input, EventEmitter, HostListener, ViewChild, OnChanges} from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { IMenuItem, menuButtonJSON } from 'src/app/_interfaces/menu/menu-products';
 @Component({
   selector: 'app-mat-toggle-selector',
   templateUrl: './mat-toggle-selector.component.html',
@@ -31,6 +32,7 @@ export class MatToggleSelectorComponent implements OnChanges {
   @Input()  toggleHeight      ='toggle-buttons-height-size-medium'
   @Input()  useMatMenu        : boolean;
   @Input()  toggleVertical    = true;
+  @Input()  type: string;
   // @Input()  sideBar : boolean;
   departmentID: number;
   subscribed : boolean;
@@ -47,15 +49,11 @@ export class MatToggleSelectorComponent implements OnChanges {
   }
 
   ngOnChanges(): void {
-    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-    //Add '${implements OnChanges}' to the class.
     this.refresh();
   }
 
   refresh() {
-
     if (this.toggleButtonClass) { this.toggleButtonClass = 'toggle-button'}
-
     try {
       if (this.list$) {
         this.list$.subscribe(data => {
@@ -78,9 +76,23 @@ export class MatToggleSelectorComponent implements OnChanges {
 
   sortList(list) {
     try {
+      this.convertJSONList(list)
       return list.sort((a, b) => a.name.localeCompare(b.name));
     } catch (error) {
       return list
+    }
+  }
+  convertJSONList(list: IMenuItem[]) { 
+    if (this.type =='menuItem') {
+      list = list as unknown as IMenuItem[]
+      list.forEach(data => { 
+        if (data.json && data.json != '') { 
+          data.menuButtonJSON = JSON.parse(data.json)
+          console.log(data.menuButtonJSON)
+        }
+        if (!data.json) { data.menuButtonJSON = {}  as menuButtonJSON}
+      })
+      this.list = list;
     }
   }
 
@@ -89,15 +101,12 @@ export class MatToggleSelectorComponent implements OnChanges {
   }
 
   setItem(item) {
-
     if (!item) { return }
-
     if (this.useMatMenu) {
       this.departmentID = item.id;
       this.openMenu()
       return
     }
-
     this.outPutItem.emit(item)
   }
 

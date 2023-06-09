@@ -3,7 +3,7 @@ import {Component, HostListener, OnInit, OnDestroy,
 import { IPOSOrder,IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
 import { OrdersService, POSOrdersPaged } from 'src/app/_services';
 import { ActivatedRoute} from '@angular/router';
-import { Observable, Subscription} from 'rxjs';
+import { Observable, Subscription, of, switchMap} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ISite } from 'src/app/_interfaces';
@@ -24,6 +24,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   isNearBottom        :   any;
   @Input() cardStyle = 'block';
   @Input() site: ISite;
+  results$: Observable<any>;
 
   // productSearchModel
   array               = [];
@@ -256,58 +257,67 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
       results$    = this.orderService.getOrderBySearchPaged(site, model) //.pipe(share());
     }
 
-    this.loading      = true
 
-    results$.subscribe(data => {
+      this.loading      = true
+      this.endOfRecords = false;
+      this.results$ = results$.pipe(switchMap(data => {
+        console.log('processing', data)
 
-      if (!this.orders)  { this.orders = [] as IPOSOrder[] }
-      this.currentPage += 1;
+        if (!this.orders)  {
+          this.loading = false
+          this.endOfRecords = true
+          this.orders = [] as IPOSOrder[]
+        }
+          this.currentPage += 1;
 
-      if (!data || !data.results) {
-        this.loading = false;
-        this.endOfRecords = true
-        return
-      }
-
-      if (data.results.length == 0 || data == null) {
-        this.value = 100;
-        this.loading = false;
-        this.endOfRecords = true
-        return
-      }
-
-      this.itemsPerPage = this.itemsPerPage + data.results.length;
-
-      if (reset) {
-        this.orders  = [] as IPOSOrder[]
-      }
-
-      if (data.results) {
-        this.loading      = false
-        this.orders = this.orders.concat(data.results)
-        this.orders.sort
-        this.orders = this.getUniqueItems(this.orders)
-
-        this.totalRecords = data.paging.totalRecordCount;
-        if ( this.orders.length == this.totalRecords ) {
-          this.endOfRecords = true;
+        if (!data || !data.results) {
           this.loading = false;
+          this.endOfRecords = true
+          return
+        }
+
+        console.log('processing', data, data.results.length)
+
+        if (data.results.length == 0 || data == null) {
           this.value = 100;
+          this.loading = false;
+          this.endOfRecords = true
+          return
         }
-        this.value = ((this.orders.length / this.totalRecords ) * 100).toFixed(0)
-        this.loading      = false
 
-        return
-      }
+        this.itemsPerPage = this.itemsPerPage + data.results.length;
 
-      this.pagingInfo = data.paging
-      if (data) {
-          this.endOfRecords = true;
+        if (reset) {
+          this.orders  = [] as IPOSOrder[]
+        }
+
+        if (data.results) {
           this.loading      = false
-          this.value        = 100;
+          this.orders = this.orders.concat(data.results)
+          this.orders.sort
+          this.orders = this.getUniqueItems(this.orders)
+
+          this.totalRecords = data.paging.totalRecordCount;
+          if ( this.orders.length == this.totalRecords ) {
+            this.endOfRecords = true;
+            this.loading = false;
+            this.value = 100;
+          }
+          this.value = ((this.orders.length / this.totalRecords ) * 100).toFixed(0)
+          this.loading      = false
+
+          return of(data)
         }
+        this.loading = false
+        this.pagingInfo = data.paging
+        if (data) {
+            this.endOfRecords = true;
+            this.loading      = false
+            this.value        = 100;
+        }
+        return of(data)
       }
-    )
+    ))
   };
 
 

@@ -10,7 +10,6 @@
         <span *ngIf="!smallDevice || (!smallDevice && hidePanel)">
           <button mat-button (click)="searchBtn($event)">
             <mat-icon>search</mat-icon>Search
-            <!-- <ng-container [ngTemplateOutlet]="filterInstructionsView"></ng-container> -->
           </button>
         </span>
       </span>
@@ -48,9 +47,7 @@
           (outPutHidePanel)="hideFilterPanel($event)">
       </app-order-filter-panel>
     </div>
-
   </div>
-
 </div>
 
 <ng-template #orderPrep>

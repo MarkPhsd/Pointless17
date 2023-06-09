@@ -96,6 +96,8 @@ export class DashboardComponent implements OnChanges,OnInit  {
   }
 
   toggleReports(type) {
+    this._showValues(true)
+    this.showValues = true;
     this.displayReports = type;
   }
 
@@ -109,12 +111,17 @@ export class DashboardComponent implements OnChanges,OnInit  {
   toggleShowValues() {
 
     this.showValues= !this.showValues
+    this._showValues(this.showValues)
+
+  }
+
+  _showValues(result: boolean) {
     localStorage.setItem('showValues', 'false')
     if (this.showValues) {
       localStorage.setItem('showValues', 'true')
     }
-
   }
+
   initTransactionUISettings() {
     this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
     switchMap(data => {
@@ -179,7 +186,7 @@ export class DashboardComponent implements OnChanges,OnInit  {
 
   //gets filterShared Component and displays the chart data
   receiveData(event) {
-    console.log('event', event)
+    // console.log('event', event)
     this.dateFrom = "" // data[0]
     this.dateTo = ""
     this.dataFromFilter = event
@@ -192,6 +199,8 @@ export class DashboardComponent implements OnChanges,OnInit  {
     if (this.dateFrom && this.dateTo) {
       this.dataCounterFromFilter = data[2];
       this.initDateRange()
+      console.log("refresh report")
+      this.refreshReports()
     }
   };
 

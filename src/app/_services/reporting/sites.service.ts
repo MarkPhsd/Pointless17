@@ -294,8 +294,6 @@ export class SitesService {
 
     const  cache = this.getCurrentCache();
 
-    // console.log('cache info', cache)
-
     if (cache == null) {  return  { url: url, cacheMins: 0 }   }
 
     return { url: url, cacheMins: cache }

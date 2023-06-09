@@ -528,10 +528,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   refreshToolBarType() {
     if (window.innerHeight >= 750) {
-      console.log('toolbar tiny true')
+      // console.log('toolbar tiny true')
       this.toolbarTiny = true
     } else {
-      console.log('toolbar tiny false')
+      // console.log('toolbar tiny false')
       this.toolbarTiny = false
     }
     if (window.innerWidth > 811) {

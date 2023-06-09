@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, OnDestroy, Output,EventEmitter} from '@angular/core';
-import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
-import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
+import { Component, Input, OnInit, OnDestroy, Output,EventEmitter, ElementRef, ViewChild, TemplateRef} from '@angular/core';
+import { IMenuItem, menuButtonJSON }  from 'src/app/_interfaces/menu/menu-products';
+import { AWSBucketService, AuthenticationService, MenuService, OrdersService } from 'src/app/_services';
 import { ActivatedRoute, Router,  } from '@angular/router';
 import * as _  from "lodash";
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
@@ -11,6 +11,7 @@ import { Capacitor } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
 // https://stackoverflow.com/questions/54687522/best-practice-in-angular-material-to-reuse-component-in-dialog
 export interface DialogData {
@@ -25,6 +26,7 @@ export interface DialogData {
 })
 export class MenuItemCardComponent implements OnInit, OnDestroy {
 
+  @ViewChild('editItemView') editItemView :  TemplateRef<any>;
   @Output() outPutLoadMore = new EventEmitter()
   @Input() id        : number;
   @Input() retail    : number;
@@ -37,7 +39,8 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   order              : IPOSOrder;
 
   action$          : Observable<any>;
-
+  menuButtonJSON   : menuButtonJSON;
+  buttonColor = ''
   isApp     = false;
   isProduct : boolean;
 
@@ -51,6 +54,8 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     private orderMethodService: OrderMethodsService,
     private platFormService   : PlatformService,
     private menuService: MenuService,
+    private authenticationService: AuthenticationService,
+    private productEditButtonService: ProductEditButtonService,
     private router: Router,
     )
   {
@@ -62,8 +67,20 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     if (!this.menuItem) {return }
     this.isProduct = this.getIsNonProduct(this.menuItem)
     this.imageUrl  = this.getItemSrc(this.menuItem)
+
+    this.getMenuItemObject(this.menuItem)
+
   };
 
+  getMenuItemObject(menuItem: IMenuItem) { 
+    if (menuItem && menuItem.json ) { 
+      const item = JSON.parse(menuItem.json) as menuButtonJSON;
+      this.menuButtonJSON = item
+      if (this.menuButtonJSON.buttonColor) { 
+        this.buttonColor = `background-color:${this.menuButtonJSON.buttonColor};`
+      }
+    }
+  }
   get isDiscountItem() {
     const menuItem = this.menuItem;
     if (menuItem && menuItem.itemType && menuItem.itemType.type == 'discounts') {
@@ -72,6 +89,17 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  editItem() { 
+    if (!this.menuItem) { return }
+    this.action$ = this.productEditButtonService.openProductDialogObs(this.menuItem.id);
+  }
+
+  get enableEditItem() { 
+    if (this.authenticationService.isAdmin) { 
+        return this.editItemView
+    }
+    return null;
+  }
   getIsNonProduct(menuItem: IMenuItem): boolean {
     if (!menuItem) { return false}
     if (menuItem) {
