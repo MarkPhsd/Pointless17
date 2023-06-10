@@ -42,8 +42,10 @@
                 <div  class="grid-flow">
                   <div *ngFor="let item of categories; let i = index">
 
-                      <div  *ngIf="item.id != -1">
-                        <div class="text">{{item.name  | truncateText: 15  }}</div>
+                      <div  *ngIf="item.id != -1" class="grid-display-device"  (click)= "listItems(item.id)">
+
+                        <div class="text">{{item.name  | truncateText: textLength  }}</div>
+
                         <div class="grid-item">
                           <img
                               loading   = "lazy"

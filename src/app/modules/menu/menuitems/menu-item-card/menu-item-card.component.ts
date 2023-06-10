@@ -34,15 +34,16 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   @Input() imageUrl  : string;
   @Input() menuItem  : IMenuItem;
   @Input() bucketName: string;
+  @Input() class     = 'grid-item'
   placeHolderImage   : String = "assets/images/placeholderimage.png"
   _order             : Subscription;
   order              : IPOSOrder;
-
   action$          : Observable<any>;
   menuButtonJSON   : menuButtonJSON;
   buttonColor = ''
   isApp     = false;
   isProduct : boolean;
+  matCardClass = 'mat-card-grid'
 
   getPlatForm() {  return Capacitor.getPlatform(); }
 
@@ -67,16 +68,23 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     if (!this.menuItem) {return }
     this.isProduct = this.getIsNonProduct(this.menuItem)
     this.imageUrl  = this.getItemSrc(this.menuItem)
-
     this.getMenuItemObject(this.menuItem)
-
+    this.initLayout()
   };
 
-  getMenuItemObject(menuItem: IMenuItem) { 
-    if (menuItem && menuItem.json ) { 
+  initLayout() {
+    // this.matCardClass = this.class
+    // if (this.class === 'row-item') {
+    // }
+    // if (this.class === 'grid-item') {
+    //   this.matCardClass= 'mat-card-grid'
+    // }
+  }
+  getMenuItemObject(menuItem: IMenuItem) {
+    if (menuItem && menuItem.json ) {
       const item = JSON.parse(menuItem.json) as menuButtonJSON;
       this.menuButtonJSON = item
-      if (this.menuButtonJSON.buttonColor) { 
+      if (this.menuButtonJSON.buttonColor) {
         this.buttonColor = `background-color:${this.menuButtonJSON.buttonColor};`
       }
     }
@@ -89,13 +97,13 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  editItem() { 
+  editItem() {
     if (!this.menuItem) { return }
     this.action$ = this.productEditButtonService.openProductDialogObs(this.menuItem.id);
   }
 
-  get enableEditItem() { 
-    if (this.authenticationService.isAdmin) { 
+  get enableEditItem() {
+    if (this.authenticationService.isAdmin) {
         return this.editItemView
     }
     return null;

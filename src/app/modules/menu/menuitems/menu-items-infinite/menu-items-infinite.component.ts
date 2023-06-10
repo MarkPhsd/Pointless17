@@ -32,6 +32,8 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   @ViewChildren('item') itemElements: QueryList<any>;
   smallDevice: boolean;
   @ViewChild('searchSelector') searchSelector: TemplateRef<any>;
+  @ViewChild('gridFlowOptionView') gridFlowOptionView: TemplateRef<any>;
+
   searchForm: UntypedFormGroup;
   scrollContainer:   any;
   isNearBottom   :   any;
@@ -63,7 +65,8 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   uiHomePage  : UIHomePageSettings;
   _uiHomePage: Subscription
 
-  ordersListClass = 'orders-list'
+  //grid-flow scroller
+
   @Input() departmentID :   string;
   @Input() categoryID:      string;
   @Input() subCategoryID :  string;
@@ -92,7 +95,9 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
   style$ : Observable<any>;
 
-
+  ordersListClass = 'grid-flow scroller'
+  infiniteClassList = 'grid-flow scroller'
+  infiniteItemClass = 'grid-item';
 
   getPlatForm() { return Capacitor.getPlatform(); }
 
@@ -141,7 +146,20 @@ constructor(private menuService        : MenuService,
 
   initStyles() {
     if (!this.isApp) { return }
-    this.ordersListClass = 'orders-list c1'
+    this.ordersListClass = 'orders-list c1';
+  }
+
+  toggleListView() {
+
+    if (this.infiniteClassList === 'grid-flow scroller') {
+      this.infiniteClassList = 'grid-flow-single'
+      this.ordersListClass = 'grid-flow-single'
+      // this.infiniteItemClass =  'mat-card-grid'
+    } else {
+      this.infiniteClassList  = 'grid-flow scroller'
+      this.ordersListClass = 'grid-flow scroller'
+    }
+    // this.infiniteItemClass = 'mat-card-row'
   }
 
   ngOnInit()  {
@@ -198,6 +216,13 @@ constructor(private menuService        : MenuService,
   get isSearchSelectorOn() {
     if (this.smallDevice) {
       return this.searchSelector
+    }
+    return null;
+  }
+
+  get isgridFlowOptionOn() {
+    if (this.smallDevice) {
+      return this.gridFlowOptionView
     }
     return null;
   }

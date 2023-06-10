@@ -19,6 +19,8 @@ export class MatSelectorComponent implements OnInit {
     @Input() defaultValue: string = ''
     @ViewChild('formView')      formView: TemplateRef<any> | undefined;
 
+    emptyItem = { id: 0, name: ''}
+
     constructor() { }
 
     ngOnInit(): void {

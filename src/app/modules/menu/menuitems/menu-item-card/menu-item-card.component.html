@@ -1,48 +1,53 @@
 <div *ngIf="(action$  | async) as action"></div>
+<!-- {{class}} / {{infiniteItemClass}} -->
+
 <ng-container [ngTemplateOutlet]="enableEditItem"></ng-container>
 
-<mat-card  *ngIf="menuItem" [style]="buttonColor">
-    <div class="container" >
-      <div class="image-container">
-        <ng-container [ngTemplateOutlet]="menuButton"></ng-container>
+<mat-card  *ngIf="menuItem"
+           [style]="buttonColor"
+           [class]="matCardClass">
 
-        <div *ngIf="!isDiscountItem && imageUrl" >
-          <ng-container [ngTemplateOutlet]="productImage"></ng-container>
-          <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>
-          <div class="item-name-center"
-                *ngIf="!isDiscountItem && imageUrl" >
-            {{ menuItem.name  | truncateText: 30   }}
-            <div *ngIf="menuItem?.prodSecondLanguage">
-              {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}
-            </div>
+   <div class="container" >
+    <div class="image-container">
+      <ng-container [ngTemplateOutlet]="menuButton"></ng-container>
+      <div *ngIf="!isDiscountItem && imageUrl" >
+        <ng-container [ngTemplateOutlet]="productImage"></ng-container>
+        <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>
+        <div class="item-name-center"
+              *ngIf="!isDiscountItem && imageUrl" >
+          {{ menuItem.name  | truncateText: 30   }}
+          <div *ngIf="menuItem?.prodSecondLanguage">
+            {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}
           </div>
         </div>
-      </div>
-
-      <span *ngIf="menuItem?.id != -1">
-        <div  class="product-name" *ngIf="!menuItem.itemType" >
-          Type Required.
-        </div>
-      </span>
-    </div>
-    <div class="footer">
-      <ng-container #reviews *ngIf="menuItem"></ng-container>
-      <div class="price-grid" *ngIf="isProduct">
-        <ng-container [ngTemplateOutlet]="price"></ng-container>
-
-        <div *ngIf="menuItem.itemType">
-          <div *ngIf="isApp">
-            <ng-container [ngTemplateOutlet]="openInNew"></ng-container>
-          </div>
-          <div *ngIf="!isApp && !isCategory">
-            <ng-container [ngTemplateOutlet]="buttonAddItem"></ng-container>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="isCategory">
-        <ng-container [ngTemplateOutlet]="seeMoreInCategory"></ng-container>
       </div>
     </div>
+
+    <span *ngIf="menuItem?.id != -1">
+      <div  class="product-name" *ngIf="!menuItem.itemType" >
+        Type Required.
+      </div>
+    </span>
+  </div>
+
+  <div class="footer">
+    <ng-container #reviews *ngIf="menuItem"></ng-container>
+    <div class="price-grid" *ngIf="isProduct">
+      <ng-container [ngTemplateOutlet]="price"></ng-container>
+
+      <div *ngIf="menuItem.itemType">
+        <div *ngIf="isApp">
+          <ng-container [ngTemplateOutlet]="openInNew"></ng-container>
+        </div>
+        <div *ngIf="!isApp && !isCategory">
+          <ng-container [ngTemplateOutlet]="buttonAddItem"></ng-container>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isCategory">
+      <ng-container [ngTemplateOutlet]="seeMoreInCategory"></ng-container>
+    </div>
+  </div>
 </mat-card>
 
 <ng-template #editItemView>
@@ -53,7 +58,7 @@
         (click)="editItem()" >
       <mat-icon  color="primary">info</mat-icon>
     </button>
-  </div> 
+  </div>
 </ng-template>
 
 <ng-template #menuButton>

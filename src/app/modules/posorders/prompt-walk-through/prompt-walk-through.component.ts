@@ -193,15 +193,16 @@ export class PromptWalkThroughComponent implements OnInit {
 
 
   get  largeScreenButtons(){
-    if (!this.phoneDevice) {
+    if (this.phoneDevice) {
       return this.buttonDisplay;
     }
   }
 
   get smallScreenButtons() {
-    if (this.phoneDevice) {
-      return this.buttonDisplay;
-    }
+    // if (this.phoneDevice) {
+    //   return this.buttonDisplay;
+    // }
+    return null;
   }
 
   // @ViewChild('largeDisplay')    largeDisplay: TemplateRef<any>;

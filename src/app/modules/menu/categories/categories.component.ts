@@ -4,7 +4,7 @@ import {  Component, ElementRef,AfterViewInit,
   ViewChild,
   Input
   } from '@angular/core';
-import { AWSBucketService, IProductSearchResults, MenuService} from 'src/app/_services';
+import { AWSBucketService, AuthenticationService, IProductSearchResults, MenuService} from 'src/app/_services';
 import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { trigger, transition, animate, style, query, stagger } from '@angular/animations';
@@ -116,7 +116,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
-
+  textLength = 15;
   @Input()         panelHeightValue = 300;
   panelHeightStyle= ''
   currentPage      : number;
@@ -182,6 +182,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
                 private router:          Router,
                 private siteService:     SitesService,
                 private platFormService :PlatformService,
+                private authSevice: AuthenticationService,
    )
   {
     this.isApp = this.platFormService.isApp();
@@ -193,6 +194,9 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     this.getBucket()
     this.init();
     this.setPanelSyle();
+    if (this.authSevice && this.authSevice.deviceInfo && this.authSevice.deviceInfo.phoneDevice) {
+      this.textLength = 24
+    }
   }
 
   getPlaceHolder() {

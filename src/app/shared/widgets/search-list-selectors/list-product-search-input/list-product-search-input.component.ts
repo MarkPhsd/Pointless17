@@ -28,6 +28,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   obs$ : Observable<unknown>[];
   barcodeScanner$ : Observable<unknown>;
   _scanners = new ReplaySubject <unknown>()
+
   private observablesArraySubject = new BehaviorSubject<Observable<any>[]>([]);
   public observablesArray$ = this.observablesArraySubject.asObservable();
 
@@ -52,12 +53,10 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
 
   addObservable(newObservable: Observable<any>): void {
     const currentObservables = this.observablesArraySubject.getValue();
-
     newObservable = newObservable.pipe(
       take(1),
       finalize(() => this.removeObservable(newObservable))
     );
-
     this.observablesArraySubject.next([...currentObservables, newObservable]);
   }
 
@@ -66,7 +65,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     const updatedObservables = currentObservables.filter(
       observable => observable !== observableToRemove
     );
-
     this.observablesArraySubject.next(updatedObservables);
   }
 
@@ -177,7 +175,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
       if (!this.scans) { this.scans = [] };
       this.scan(barcode);
     }
-
   }
 
   getOrderObs() {

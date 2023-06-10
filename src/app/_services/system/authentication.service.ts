@@ -56,7 +56,6 @@ export class AuthenticationService {
     _userAuths           = new BehaviorSubject<IUserAuth_Properties>(null);
     public  userAuths$   = this._userAuths.asObservable();
 
-
     _deviceInfo: IDeviceInfo;
     updateUserAuths(userAuths : IUserAuth_Properties ) {
       this._userAuths.next(userAuths)

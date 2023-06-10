@@ -18,12 +18,11 @@ export class MatSelectComponent {
   @Input()  list$    : Observable<any>;
   @Input()  list     : any[]
   @Output() outputItem = new EventEmitter<any>();
-  @Input() hideClear: boolean;
+  @Input()  hideClear: boolean;
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-
     if (!this.inputForm)  {
       this.inputForm = this.fb.group({
         fieldName: 'field'
@@ -39,12 +38,10 @@ export class MatSelectComponent {
   }
 
   setOutPut(event) {
-    console.log('item output', event)
     this.outputItem.emit(event)
   }
 
   setItemOutPut(item) {
-    console.log('item output', item)
     this.outputItem.emit(item)
   }
 }

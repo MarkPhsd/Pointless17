@@ -15,7 +15,8 @@
                 type="text"
                 [formControlName] ="fieldName"
                 (selectionChange)="setItem($event.value)" >
-            <mat-option value="" *ngIf="!hideClear">
+
+            <mat-option value="emptyItem" *ngIf="!hideClear">
               Clear
             </mat-option>
 

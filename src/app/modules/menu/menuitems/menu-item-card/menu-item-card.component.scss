@@ -1,18 +1,36 @@
 @import "/src/mixins.scss";
+
 mat-card {
+  // padding: 3px;
+  // object-fit: cover;
+  // overflow-y: hidden;
+  // overflow-x: hidden;
+  // z-index: 99;
+  // // height: 100%;
+
   padding: 3px;
   object-fit: cover;
   height: 100%;
   overflow-y: hidden;
   overflow-x: hidden;
-  max-width: 200px;
+  // max-width: 200px;
   z-index: 99;
 }
+
+.mat-card-row {
+  max-width: 100%;
+  max-height: 150px;
+}
+
+.mat-card-grid {
+  // max-width: 200px;
+}
+
 mat-card:hover {
   transform: scale(1.03);
 }
 
-.edit-button { 
+.edit-button {
   position: relative;
   z-index: 100;
   top: 10px;
@@ -20,6 +38,7 @@ mat-card:hover {
   margin-bottom: -35px;
   opacity: .5;
 }
+
 mat-card:active {
   box-shadow: 1px 1px 2px black, 0 0 25px rgb(33, 43, 33), 0 0 5px darkblue;
   transform: scale(1.03);
@@ -28,9 +47,7 @@ mat-card:active {
 .category-open {
   display: flex;
   justify-content: center;
-  // top: -15px;
   padding: 0;
-  // margin-top: -15px;
   overflow: hidden;
 }
 
@@ -42,11 +59,17 @@ mat-card:active {
   overflow: hidden;
 }
 
+.grid-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
 .footer {
   margin-top: 1px;
   height: 45px;
 }
-
 
 .text-max-width {
   max-width: 200px;
@@ -64,35 +87,38 @@ mat-card:active {
   white-space:normal;
   overflow: hidden;
   text-transform: capitalize;
-  //used to maintain the hieght for buttons compared to images.
+  //used to maintain the height for buttons compared to images.
   min-height  : 100px;
   max-height  : 100px;
   overflow: hidden;
 }
 
 #advertisement {
-  font-weight: 200;
-  font-size: 0.7em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-transform: capitalize;
+    font-weight: 200;
+    font-size: 0.7em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: capitalize;
 }
 
 .product-name-only {
-  object-fit: cover;
-  max-height: 100%;
-  transition: box-shadow 400ms;
-  border-radius: 5px;
+    object-fit: cover;
+    max-height: 100%;
+    transition: box-shadow 400ms;
+    border-radius: 5px;
+    font-weight : 475;
+    font-size   : 1em;
+    text-align  : center;
+    width       : 100%;
+    white-space : normal;
+    overflow    : hidden;
+    text-overflow: ellipsis;
+    text-transform: capitalize;
 
-  font-weight : 475;
-  font-size   : 1em;
-  text-align  : center;
-  width       : 100%;
-  white-space : normal;
-  overflow    : hidden;
-  text-overflow: ellipsis;
-  text-transform: capitalize;
+    @include for-phone-only {
+      font-size   : 1.5em;
+    }
  }
 
 .image-container {
@@ -116,13 +142,11 @@ mat-card:active {
   overflow    : hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;
-
   max-height: 85px;
   min-height: 85px;
 }
 
 .product-name {
-
   grid-gap    : 5px;
   font-weight : 425;
   font-size   : .9em;
@@ -225,13 +249,6 @@ mat-card:active {
   float:         left;
 }
 
-// .grid-flow {
-//   --gap: 20px;
-//   display: grid;
-//   gap: var(--gap);
-//   grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
-// }
-
 .item-name-center {
   text-align: center;
   justify-content: center;
@@ -246,32 +263,15 @@ mat-card:active {
   min-height: .1rem;
 }
 
-
-
 .price-grid {
   --gap: 2px;
   display: flex;
   justify-content: space-between;
   padding-left: 2px;
   padding-right: 2px;
-
-  // position: absolute;
-  // bottom: 0;
 }
 
-.grid-item {
-  // align-items: flex-end;
-  // max-height: 150px;
-  // min-height: 150px;
-  // height:     150px;
-  // overflow-x: scroll;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-
-}
 
 button  {
   margin-right: 1px;
@@ -280,25 +280,10 @@ button  {
 }
 
 .category-img {
-  // border-radius: 50%;
-  // margin-top: 3px;
-  // transition: box-shadow 400ms;
-  // max-height: 100px;
-  // aspect-ratio: 1;
-
-  // border-color: brown !important;
-  // border: 1px solid #000;
   height: 65px;
   width: 15vh;
-
   border-radius: 50%;
   margin-top: 3px;
-  // @include for-phone-only  {
-  //   min-width: 12vh;
-  //   min-height: 12vh;
-  //   border-radius: 50%;
-  // }
-
 }
 
 .category-img:hover {
@@ -306,7 +291,6 @@ button  {
 }
 
 .category-img:active:hover {
-  // box-shadow: 1px 1px 2px rgb(158, 82, 82), 0 0 25px rgb(76, 175, 76), 0 0 5px rgb(84, 116, 90);
   transform: scale(1.07);
 }
 

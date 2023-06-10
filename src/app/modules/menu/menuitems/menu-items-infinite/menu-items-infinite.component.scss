@@ -9,6 +9,23 @@
   overflow-x: hidden;
 }
 
+.grid-flow-single {
+  --gap: 5px;
+  margin-top: 2px;
+  margin-right: 2px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 1fr;
+  overflow-y: visible;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  // flex-wrap: wrap;
+  gap: 10px;
+}
+
 .grid-flow {
 
   --gap: 5px;
@@ -38,10 +55,9 @@
     grid-template-columns: repeat( auto-fill, minmax(115px, 1fr) );
     overflow-y: visible;
   }
-
 }
 
-.grid-flow-app-margins { 
+.grid-flow-app-margins {
   padding-right: 50px;
 }
 
@@ -65,6 +81,10 @@
   margin: 5px;
 }
 
+.orders-list-single {
+
+}
+
 .orders-list {
 
   overflow-x: hidden;
@@ -76,28 +96,24 @@
     overflow-x: hidden;
     overflow-y: auto;
     height: 85vh;
-    // padding: 3px;
   }
 
   @include for-phone-only {
     overflow-x: hidden;
     overflow-y: auto;
     height: 65vh;
-    // padding: 3px;
   }
 
   @include for-tablet-landscape-up {
     overflow-x: hidden;
     overflow-y: auto;
     height: 85vh;
-    // padding: 3px;
   }
 
   @include horizontal-tablet  {
     overflow-x: hidden;
     overflow-y: auto;
     height: 75vh;
-    // padding: 3px;
   }
 
 }

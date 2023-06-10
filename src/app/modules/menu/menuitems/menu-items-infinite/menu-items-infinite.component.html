@@ -1,17 +1,17 @@
 <div *ngIf="(style$ | async) as styles"></div>
 <div *ngIf="(bucket$ | async) as bucket"></div>
-  <!-- <ng-container [ngTemplateOutlet]="isDebugMode"> </ng-container>
-  <ng-template #debugView>
-    Debug Mode<br>
-    {{ productSearchModelData | json}}
-  </ng-template>
-   -->
 
 <div class="parent-container" *ngIf="uiHomePage">
 
   <div *ngIf="(action$ | async)"></div>
 
-  <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
+  <div class="flex-row">
+    <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
+    <ng-container [ngTemplateOutlet]="isgridFlowOptionOn"></ng-container>
+  </div>
+  <div *ngIf="smallDevice">
+    <mat-divider></mat-divider>
+  </div>
 
   <div *ngIf="value" class="loader">
     <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
@@ -19,7 +19,6 @@
 
       <div class="orders-container">
         <div  *ngIf="menuItems"
-
               [class]="ordersListClass"
               infiniteScroll
               [infiniteScrollDistance]="2"
@@ -28,7 +27,8 @@
               (scrolledUp)="onScrollUp()"
               [scrollWindow]="false">
 
-          <div class="grid-flow scroller">
+          <!-- <div [class]="infiniteClassList"> -->
+          <!-- <div class="grid-flow scroller"> -->
             <div *ngFor="let menuItem of menuItems; let i = index">
               <app-menu-item-card
                                 [id]        ="menuItem.id"
@@ -36,12 +36,12 @@
                                 [name]      ="menuItem.name"
                                 [menuItem]  ="menuItem"
                                 [bucketName]="bucketName"
-                                class       ="grid-item"
+                                [class]     ="infiniteItemClass"
                                 (outPutLoadMore)  ='moveNext($event)'
               ></app-menu-item-card>
             </div>
+          <!-- </div> -->
 
-          </div>
         </div>
       </div>
 
@@ -56,6 +56,14 @@
   </div>
 
 </div>
+<ng-template #gridFlowOptionView>
+  <div *ngIf="infiniteClassList == 'grid-flow scroller'">
+    <button style="height:50px" mat-button (click)="toggleListView()"><mat-icon>list</mat-icon></button>
+  </div>
+  <div *ngIf="infiniteClassList != 'grid-flow scroller'">
+    <button style="height:50px" mat-button (click)="toggleListView()"><mat-icon>grid_view</mat-icon></button>
+  </div>
+</ng-template>
 
 <ng-template #searchSelector>
   <div *ngIf="searchForm">
@@ -65,6 +73,6 @@
        (outPutMethod)="refreshSearch($event)">
       <div #fieldDescription>Search Items</div>
     </search-debounce-input>
-    <mat-divider></mat-divider>
+
   </div>
 </ng-template>

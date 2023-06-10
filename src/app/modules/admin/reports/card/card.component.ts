@@ -4,10 +4,10 @@ import { Component, OnInit, Input, OnChanges,  SimpleChanges, OnDestroy } from '
 import { ActivatedRoute } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
-import { Observable, Subject, Subscription, of, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription, finalize, forkJoin, of, switchMap, take } from 'rxjs';
 import { ISalesPayments, ISite }  from 'src/app/_interfaces';
 import { ReportingService, rowValue } from 'src/app/_services';
-import { IReportItemSaleSummary, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
+import { IReportItemSaleSummary} from 'src/app/_services/reporting/reporting-items-sales.service';
 import { IPaymentSalesSearchModel, PaymentSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
@@ -27,6 +27,10 @@ export interface ProductSale {
 //https://stackblitz.com/edit/angular-highchart-add-series?file=src%2Fapp%2Fapp.component.ts
 export class CardComponent  implements OnInit , OnChanges, OnDestroy{
   // export class CardComponent  implements OnInit  {
+
+  private observablesArraySubject = new BehaviorSubject<Observable<any>[]>([]);
+  public observablesArray$ = this.observablesArraySubject.asObservable();
+
   @Input() notifier   : Subject<boolean>
   value               : boolean;
   tempVal             : boolean;
@@ -59,7 +63,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
   @Input() salesSummary : IReportItemSaleSummary;
   @Input() reportItemSaleSummaries: IReportItemSaleSummary[]
   reportType: string;
-  sales = []
+  sales                  = []
   lastCounter: number;
   showData: boolean;
   //instance of highchart
@@ -68,7 +72,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
   chart           : Highcharts.Chart;
   chartOptions    : any;
   chartCategories : any[];
-  // dataSeriesValues: any[];
+
   options         : any;
   //data
   sites$          : Observable<ISite[]>
@@ -84,14 +88,37 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     scrollPositionX : -10
   }
 
+  _changeNotifier: Subscription
+
   sitesErrorMessage: string;
   _sites: Subscription;
+
+  initNotifierSubscription() {
+    this._changeNotifier = this.notifier.asObservable().subscribe(data => {
+      this.refresh();
+    })
+  }
+  addObservable(newObservable: Observable<any>): void {
+    const currentObservables = this.observablesArraySubject.getValue();
+    newObservable = newObservable.pipe(
+      take(1),
+      finalize(() => this.removeObservable(newObservable))
+    );
+    this.observablesArraySubject.next([...currentObservables, newObservable]);
+  }
+
+  removeObservable(observableToRemove: Observable<any>): void {
+    const currentObservables = this.observablesArraySubject.getValue();
+    const updatedObservables = currentObservables.filter(
+      observable => observable !== observableToRemove
+    );
+    this.observablesArraySubject.next(updatedObservables);
+  }
 
   initSubscriptions() {
     if (this.sites) {return}
     this.sitesService.sites$.subscribe(data => {
       this.sites = data;
-      // this.sites = [...new Set(data)]
     })
   }
 
@@ -119,7 +146,6 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
       if (options) {
 
         if (!this.chartWidth) { this.chartWidth = '1200'}
-
         const scrollablePlot = {
           minWidth        : +this.chartWidth,
           opacity         : 0,
@@ -158,43 +184,48 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     this.initSubscriptions();
     this.refreshSitesData()
     this.initChart('Values');
-    if (this.cardValueType) { this.initDates() };
-    if (!this.cardValueType) {this.initDates() };
-    this.refreshChart();
+    this.initDates()
+    this.initNotifierSubscription();
+    this.refresh()
   };
 
-  ngOnChanges() {
-    this.refresh();
+  refresh() {
+    this.getCountVersion();
+    if (this.sites && this.dateFrom && this.dateTo && this.groupBy) {
+      this.initSeriesLabels();
+      this.initChart('values')
+      this.initSeries();
+      this.updateChartSites(this.dateFrom, this.dateTo, this.sites);
+    }
   }
+
+  ngOnChanges() {
+
+
+  }
+
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
     if (this._sites) { this._sites.unsubscribe()}
   }
 
   refreshChart() {
     this.reportType = this.cardValueType;
-    const reportType = this.reportType;
-
     if ((!this.dateFrom || !this.dateTo) && !this.reportType) {
       if (!this.groupBy) {this.groupBy = 'hour'}
       this.getStartEndFromZRun().subscribe(data => {
+        this.refresh()
       })
+      return;
     }
-
     this.refreshSitesData();
   }
 
   refreshSitesData() {
-    if (this.sites || this.site) {
-      if (!this.sites) {
-        this.sites = []
-        this.sites.push(this.site)
-      }
+    if (!this.sites && this.site) {
+      this.sites = []
+      this.sites.push(this.site)
       this.refresh();
-      return;
     }
-
     if (!this.sites) {
       this.sitesService.getSites().subscribe( data => {
           this.sites  = data;
@@ -245,15 +276,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
 
   getCountVersion() {  }
 
-  refresh() {
-    this.getCountVersion();
-    if (this.sites && this.dateFrom && this.dateTo && this.groupBy) {
-      this.initSeriesLabels();
-      this.initChart('values')
-      this.initSeries();
-      this.updateChartSites(this.dateFrom, this.dateTo, this.sites);
-    }
-  }
+
 
   isProductSalesType(type) {
     if (!this.cardValueType) { return false }
@@ -366,6 +389,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     searchModel.endDate   = this.dateTo;
     searchModel.groupBy   = this.groupBy;
     searchModel.zrunID    = this.zrunID;
+    console.log('refresh Card Payment sales')
     const sales$  = this.salesPaymentService.getPaymentSales(site, searchModel);
     return sales$
   }
@@ -500,161 +524,155 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
   updateChartSitesSales(dateFrom: string, dateTo: string, sites: ISite[]) {
     if (!this.isMultiSiteReport()) { return }
     this.initSeriesLabels();
-    this.initChart('values')
+    this.initChart('values');
     let dataSeriesValues = [] as any[]
     this.sales = []
+
     for (let site of sites) {
       let sales$ =  this.reportingService.getSales(site, dateFrom, dateTo,
                                                     this.groupBy, +this.zrunID)
-      sales$.subscribe( sales => {
-        if (!sales) { return }
-        this.sales.push(sales)
-        if  (sales) {
-          if ( this.groupBy === 'hour' ) {
+      const results$ = sales$.pipe(switchMap(sales => {
+        this.processSiteSales(sales, site, dataSeriesValues)
+        return of(sales)
+      }))
+      this.addObservable(results$)
+    }
+  }
 
-            let dataSeriesValues = this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
-            dataSeriesValues.forEach( (data, index) => {
+  processSiteSales(sales: ISalesPayments[], site: ISite, dataSeriesValues: any) {
+    {
+      if (!sales) { return }
+      this.sales.push(sales)
+
+      if  (sales) {
+        if ( this.groupBy === 'hour' ) {
+          let dataSeriesValues = this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
+          dataSeriesValues.forEach( (data, index) => {
+            const item = sales.filter( item =>  { if( item.dateHour === data.date)  { return item } } );
+              if (item && item.length>0) {
+                let value = 0;
                 try {
-                  const item = sales.filter( item => {})
+                  if ( item[0].amountPaid) { value = item[0].amountPaid }
                 } catch (error) {
-
-                  return
                 }
-                const item = sales.filter( item =>  { if( item.dateHour === data.date)  { return item } } );
-                if (item && item.length>0) {
-                  let value = 0;
-                  try {
-                    if ( item[0].amountPaid) { value = item[0].amountPaid }
-                  } catch (error) {
-                  }
-                  const row = { date: item[0].dateHour, value:  value ,  year: 0, month: 0 }
-                  dataSeriesValues[index] = row
-                }
+                const row = { date: item[0].dateHour, value:  value ,  year: 0, month: 0 }
+                dataSeriesValues[index] = row
               }
-            )
-            this.setChartDateSeriesData(site.name, dataSeriesValues)
+            }
+          )
+          this.setChartDateSeriesData(site.name, dataSeriesValues)
+        }
+
+        if (this.groupBy.toLowerCase() === 'date') {
+          let dataSeriesValues =  this.reportingService.getDateSeriesWithValue(this.dateFrom, this.dateTo)
+          site.salesData  = sales;
+          // we have to filter and compare dates the dates have to be convered to strings to compare
+          dataSeriesValues.forEach( (data, index) => {
+              const  dt1 = new Date(data.date);
+              const item = this.getItemSalesByDate(sales, dt1)
+              if (item && dt1) {
+                const date = this.reportingService.getDateString(dt1.toDateString())
+                let value = 0;
+                if ( item[0] && item[0].amountPaid) { value = item[0].amountPaid }
+                const row = { date: date, value: value,  year: 0, month: 0 }
+                dataSeriesValues[index] = row
+              }
+          })
+          this.setChartDateSeriesData(site.name, dataSeriesValues)
+        }
+
+        if (this.groupBy.toLowerCase() === 'month') {
+
+          if (!this.rangeValue) {
+            dataSeriesValues = this.reportingService.getMonthWithDatesSeries(this.dateFrom, this.dateTo)
           }
 
-          if (this.groupBy.toLowerCase() === 'date') {
-            let dataSeriesValues =  this.reportingService.getDateSeriesWithValue(this.dateFrom, this.dateTo)
-            site.salesData  = sales;
-            // we have to filter and compare dates
-            //the dates have to be convered to strings to compare
-            if (!sales) { return }
+          if (this.rangeValue) {
+            const  d  = new Date(this.dateFrom)
+            dataSeriesValues = this.reportingService.getMonthSeriesValueByCount(d, this.rangeValue, true)
+          }
 
+          site.salesData  = sales;
+          if (!sales) { return }
+
+          if (!dataSeriesValues) { return }
+          if (this.validateSalesValue(sales)) {
             dataSeriesValues.forEach( (data, index) => {
-                const  dt1 = new Date(data.date);
-                try {
-                  const item = sales.filter( item => {})
-                } catch (error) {
-                  // console.log(sales)
-                }
-                const item = sales.filter( item =>
-                  {
-                    const  dt2 = new Date(item.dateCompleted);
-                    if( dt2.toString() === dt1.toString())
-                    { return item }
+                const item = sales.filter( item =>  {
+                  // console.log(item.month, item.year,data.year, data.month)
+                  if( item.month == data.month && item.year == data.year)  {
+                    return item
+                  }
                   }
                 );
-
-                if (item && dt1) {
-                  const date = this.reportingService.getDateString(dt1.toDateString())
-                  let value = 0;
-                  try {
-                    if ( item[0].amountPaid) { value = item[0].amountPaid }
-                    if (!item[0].amountPaid) { value = item[0].amountPaid }
-                  } catch (error) {
-                  }
-                  const row = { date: date, value: value,  year: 0, month: 0 }
-                  dataSeriesValues[index] = row
-                }
-            })
-            this.setChartDateSeriesData(site.name, dataSeriesValues)
-          }
-
-          if (this.groupBy.toLowerCase() === 'month') {
-
-            if (!this.rangeValue) {
-              dataSeriesValues = this.reportingService.getMonthWithDatesSeries(this.dateFrom, this.dateTo)
-            }
-
-            if (this.rangeValue) {
-              const  d  = new Date(this.dateFrom)
-              dataSeriesValues = this.reportingService.getMonthSeriesValueByCount(d, this.rangeValue, true)
-            }
-
-            site.salesData  = sales;
-            if (!sales) { return }
-
-            if (!dataSeriesValues) { return }
-            if (this.validateSalesValue(sales)) {
-              dataSeriesValues.forEach( (data, index) => {
-                  const item = sales.filter( item =>  {
-                    // console.log(item.month, item.year,data.year, data.month)
-                    if( item.month == data.month && item.year == data.year)  {
-                      return item
-                    }
-                    }
-                  );
-                  if (item && item.length>0) {
-                    let value = 0;
-                    try {
-                      // console.log('item from loop for month', item)
-                      if ( item[0].amountPaid) { value = item[0].amountPaid }
-                    } catch (error) {
-                      console.log(error)
-                    }
-                    const row = { date: item[0].dateHour, value:  value }
-                    dataSeriesValues[index] = row
-                  }
-                }
-
-              )
-            }
-            this.setChartDateSeriesData(site.name, dataSeriesValues)
-          }
-
-          if (this.groupBy.toLowerCase() === 'year') {
-            let dataSeriesValues = this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
-            dataSeriesValues.forEach( (data, index) => {
-                try {
-                  const item = sales.filter( item => {})
-                } catch (error) {
-                  return
-                }
-                const item = sales.filter( item =>  { if( item.dateHour === data.date)  { return item } } );
                 if (item && item.length>0) {
                   let value = 0;
                   try {
+                    // console.log('item from loop for month', item)
                     if ( item[0].amountPaid) { value = item[0].amountPaid }
                   } catch (error) {
                     console.log(error)
                   }
-                  const row = { date: item[0].dateHour, value:  value, year: 0, month: 0 }
+                  const row = { date: item[0].dateHour, value:  value }
                   dataSeriesValues[index] = row
                 }
               }
+
             )
-            this.setChartDateSeriesData(site.name, dataSeriesValues)
           }
-
-          if ( this.groupBy === 'scrub' ) {
-            site.salesData  = sales
-            if (!sales) { return }
-            site.salesData.forEach( dateValue =>  {
-              dataSeriesValues.push(
-                [dateValue.dateHour , dateValue.amountPaid]
-              )
-            })
-            this.chartData.push ( { name: site.name, data: dataSeriesValues } )
-            this.chartOptions = { series:  this.chartData }
-            dataSeriesValues = [];
-          }
-
+          this.setChartDateSeriesData(site.name, dataSeriesValues)
         }
+
+        if (this.groupBy.toLowerCase() === 'year') {
+          let dataSeriesValues = this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
+          dataSeriesValues.forEach( (data, index) => {
+              try {
+                const item = sales.filter( item => {})
+              } catch (error) {
+                return
+              }
+              const item = sales.filter( item =>  { if( item.dateHour === data.date)  { return item } } );
+              if (item && item.length>0) {
+                let value = 0;
+                try {
+                  if ( item[0].amountPaid) { value = item[0].amountPaid }
+                } catch (error) {
+                  console.log(error)
+                }
+                const row = { date: item[0].dateHour, value:  value, year: 0, month: 0 }
+                dataSeriesValues[index] = row
+              }
+            }
+          )
+          this.setChartDateSeriesData(site.name, dataSeriesValues)
+        }
+
+        // if ( this.groupBy === 'scrub' ) {
+        //   site.salesData  = sales
+        //   if (!sales) { return }
+        //   site.salesData.forEach( dateValue =>  {
+        //     dataSeriesValues.push(
+        //       [dateValue.dateHour , dateValue.amountPaid]
+        //     )
+        //   })
+        //   this.chartData.push ( { name: site.name, data: dataSeriesValues } )
+        //   this.chartOptions = { series:  this.chartData }
+        //   dataSeriesValues = [];
+        // }
+
       }
-      )
     }
+    return dataSeriesValues;
+  }
+
+  getItemSalesByDate(sales: ISalesPayments[], dt1: any) {
+    return sales.filter( item =>
+      {
+        const  dt2 = new Date(item.dateCompleted);
+        if( dt2.toString() === dt1.toString())
+        { return item }
+      }
+    );
   }
 
   updateChartMetrics(sites: ISite[]) {
@@ -664,17 +682,18 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
       this.initSeriesLabels();
       for (let site of sites) {
         const sales$ = this.refreshSales(site);
-        if (sales$ != undefined ) {
-          sales$.subscribe( summary => {
-            if (!summary) { return }
-            if (summary.resultMessage === 'failed') { return }
-            const sales = summary.paymentSummary;
-              if (!sales || sales == null) { return }
-              const employeesList = [... new Set(sales.map(t => t.employeeName)) ]
-              employeesList.forEach( employeeName => {this.applyEmployeeSeries(employeeName, sales, this.groupBy) })
-            }
-          )
-        }
+
+        sales$.subscribe( summary => {
+          console.log('update chart metrcs')
+          if (!summary) { return }
+          if (summary.resultMessage === 'failed') { return }
+          const sales = summary.paymentSummary;
+            if (!sales || sales == null) { return }
+            const employeesList = [... new Set(sales.map(t => t.employeeName)) ]
+            employeesList.forEach( employeeName => {this.applyEmployeeSeries(employeeName, sales, this.groupBy) })
+          }
+        )
+
       }
     }
   }

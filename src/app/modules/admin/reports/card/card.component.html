@@ -1,9 +1,12 @@
 <mat-card>
+  <!-- Date Range: {{dateFrom}} - {{dateTo}}
+  {{sites | json}}
+   -->
   <div class="container">
     <div class="warning"  *ngIf="sitesErrorMessage">
       <mat-icon>alerts</mat-icon> {{sitesErrorMessage}}
     </div>
-    
+
     <button mat-button (click)="showData = !showData"><mat-icon>data</mat-icon>Show Raw Data</button>
     <div *ngIf="showData" class="data-view"> {{this.chartOptions  | json}}</div>
 
@@ -23,3 +26,8 @@
 
   </div>
 </mat-card>
+
+<div *ngFor="let observable of observablesArray$ | async">
+  <ng-container *ngIf="observable | async as value">
+  </ng-container>
+</div>

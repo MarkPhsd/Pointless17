@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
+import { AuthenticationService } from 'src/app/_services';
 
 @Component({
   selector: 'mat-date-range',
@@ -8,13 +9,25 @@ import { UntypedFormGroup } from '@angular/forms';
 })
 export class MatDateRangeComponent {
 
+  @ViewChild('desktopTemplate') desktopTemplate: TemplateRef<any>;
+  @ViewChild('touchTemplate') touchTemplate: TemplateRef<any>;
+
   @Input() inputForm: UntypedFormGroup;
   @Output() outputDateRange  = new EventEmitter();
+  @Input() hideRefresh: boolean;
 
-  constructor() { }
+  constructor(public authService: AuthenticationService) { }
 
   emitDatePickerData() {
     this.outputDateRange.emit(true)
+  }
+
+  get magPickerView() {
+    if (this.authService.deviceInfo && (this.authService.deviceInfo.smallDevice ||
+                                        this.authService.deviceInfo.phoneDevice)) {
+      return this.touchTemplate
+    }
+    return this.desktopTemplate
   }
 
 }

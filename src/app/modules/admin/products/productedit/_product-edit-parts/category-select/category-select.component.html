@@ -3,12 +3,12 @@
      class="items-grid">
 
      <div *ngIf="(categories$ | async) as list; else loading">
-        <mat-form-field class="category-list" appearance="outline">
+        <mat-form-field class="category-list"
+                        appearance="outline">
           <mat-label> {{type}} </mat-label>
           <mat-select
                       type="number"
                       [formControlName] = "fieldName"
-
                       (selectionChange)="getCategory($event)" >
               <mat-option [value]="0">
                 Clear

@@ -1,6 +1,6 @@
-<ng-container [ngTemplateOutlet]="isFormView"></ng-container>
+<!-- <ng-container [ngTemplateOutlet]="isFormView"></ng-container>
 
-<ng-template #formView>
+<ng-template #formView> -->
   <div [formGroup]="inputForm"
         *ngIf="inputForm"
         class="grid-container">
@@ -16,6 +16,7 @@
                 type="number"
                 [formControlName] ="fieldName"
                 (selectionChange)="setItemOutPut($event.value)" >
+
             <mat-option value="" *ngIf="!hideClear">
               Clear
             </mat-option>
@@ -41,7 +42,7 @@
       </mat-form-field>
 
   </div>
-</ng-template>
+<!-- </ng-template> -->
 
  <ng-template #loading>
    ...loading <ng-content></ng-content>

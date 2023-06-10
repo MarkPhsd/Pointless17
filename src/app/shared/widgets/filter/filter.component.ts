@@ -28,7 +28,7 @@ interface IDaterange {
   })
 
 export class FilterComponent implements OnInit,OnChanges {
-  dateRangeForm        : UntypedFormGroup;
+  @Input() dateRangeForm        : UntypedFormGroup;
   dateFrom             : Date;
   dateTo               : Date;
   smallDevice: boolean;
@@ -37,6 +37,7 @@ export class FilterComponent implements OnInit,OnChanges {
   calDate: IDatePicker;
   counter: number;
 
+  @Input() hideRefresh: boolean;
   @Input()  dateRange: string;
   @Output() messageOut = new EventEmitter<string>();
   @Output() counterOut = new EventEmitter<number>();
@@ -58,7 +59,7 @@ export class FilterComponent implements OnInit,OnChanges {
       if (!this.dateRange)  { this.initDateForm }
       this.dateRangeForm =  this.fb.group({
         start: [dtFrom],
-        end  : [dtTo] // new Date()
+        end  : [dtTo]
       })
 
     }
@@ -74,13 +75,9 @@ export class FilterComponent implements OnInit,OnChanges {
   ngOnInit() {
     this.counter =0;
     this.initDateForm()
-    // if (this.dateRange) {
-    //   this.initDateForm();
-    //   //filt out some time.
-    //   return
-    // }
     this.setFilterDateToday()
     this.updateDateRangeResize();
+    this.subscribeToDatePicker();
   }
 
   ngOnChanges() {
@@ -95,17 +92,17 @@ export class FilterComponent implements OnInit,OnChanges {
   }
 
   initDateForm() {
-
-    this.dateRangeForm = new UntypedFormGroup({
-      start: new UntypedFormControl(),
-      end: new UntypedFormControl()
-    });
+    if (!this.dateRangeForm) {
+      this.dateRangeForm = new UntypedFormGroup({
+        start: new UntypedFormControl(),
+        end: new UntypedFormControl()
+      });
+    }
 
     let today = new Date();
     const month = today.getMonth();
     const year = today.getFullYear();
     today = new Date(today.getTime() + (1000 * 60 * 60 * 24));
-
     this.dateRangeForm =  this.fb.group({
       start: new Date(year, month, 1),
       end: today // new Date()
@@ -114,27 +111,18 @@ export class FilterComponent implements OnInit,OnChanges {
       start: [],
       end: [], // new Date()
     })
-
-    this.subscribeToDatePicker();
-
+    // this.subscribeToDatePicker()
   }
 
   subscribeToDatePicker()
     {
       if (this.dateRangeForm) {
-        this.dateRangeForm.get('start').valueChanges.subscribe(res=>{
-          if (!res) {return}
-          this.dateFrom = res //this.dateRangeForm.get("start").value
-        })
-
-        this.dateRangeForm.get('end').valueChanges.subscribe(res=>{
-          if (!res) {return}
-          this.dateTo = res
-        })
-
-        this.dateRangeForm.valueChanges.subscribe(res=>{
-          if (this.dateRangeForm.get("start").value && this.dateRangeForm.get("end").value) {
-            // this.refreshDateSearch()
+        this.dateRangeForm.valueChanges.subscribe( res => {
+          console.log('changed')
+          if (this.dateRangeForm.get("start").value &&
+              this.dateRangeForm.get("end").value) {
+              console.log('refreshed')
+            this.setData()
           }
         })
       }
@@ -142,11 +130,17 @@ export class FilterComponent implements OnInit,OnChanges {
 
 
     refreshDateSearch() {
-      if (this.dateRangeForm && this.dateRangeForm.get("start").value && this.dateRangeForm.get("end").value) {
-        this.dateFrom = this.dateRangeForm.get("start").value
-        this.dateTo   = this.dateRangeForm.get("end").value
-        this.counter =  1 + this.counter
-        this.messageOut.emit( this.dateFrom.toLocaleDateString() + ":" + this.dateTo.toLocaleDateString() + ':' + this.counter );
-      }
+      if (this.dateRangeForm && this.dateRangeForm.get("start").value &&
+          this.dateRangeForm.get("end").value) {
+        this.setData()
+       }
+    }
+
+    setData() {
+      this.dateFrom = this.dateRangeForm.get("start").value
+      this.dateTo   = this.dateRangeForm.get("end").value
+      this.counter =  1 + this.counter;
+
+      this.messageOut.emit( this.dateFrom.toLocaleDateString() + ":" + this.dateTo.toLocaleDateString() + ':' + this.counter );
     }
 }
