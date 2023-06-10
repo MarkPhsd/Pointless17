@@ -1,4 +1,4 @@
-<div *ngIf="sales.resultMessage != 'success'">
+<div  class="mat-card-container" *ngIf="sales.resultMessage != 'success'">
   <mat-card>
       <div  class="totals_label">
       <h4> <ng-content></ng-content> </h4>
@@ -7,7 +7,7 @@
   </mat-card>
 </div>
 
-<div *ngIf="sales.resultMessage == '' && sales.count == 0 ">
+<div  class="mat-card-container" *ngIf="sales.resultMessage == '' && sales.count == 0 ">
   <mat-card>
     <div  class="totals_label">
       <h4> <ng-content></ng-content> </h4>

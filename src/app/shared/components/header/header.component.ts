@@ -603,27 +603,22 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   toggleSideBar() {
-
     if (this.userSwitchingService.swapMenuWithOrderBoolean) {
       if (this.openOrderBar) {
         this.toolbarUIService.updateOrderBar(false)
         this.toolbarUIService.updateToolBarSideBar(true)
         return;
       }
-
       this.toolbarUIService.updateleftSideBarToggle(false)
       this.openOrderBar     = false
       this.toolbarUIService.switchToolBarSideBar()
       return;
     }
-
     if (this.searchSideBar) {
       this.searchSideBar = !this.searchSideBar;
     }
-
     this.openOrderBar     = !this.openOrderBar
     this.toolbarUIService.switchToolBarSideBar()
-
   }
 
   toggleOpenOrderBar() {

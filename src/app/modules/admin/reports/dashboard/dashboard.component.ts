@@ -87,8 +87,8 @@ export class DashboardComponent implements OnChanges,OnInit  {
   email$                 : Observable<any>;
   count                  = 0;
   value                  = false;
-  @ViewChild('metrcNetSalesSummary') metrcNetSalesSummary: TemplateRef<any>;
   childNotifier          : Subject<boolean> = new Subject<boolean>();
+  @ViewChild('metrcNetSalesSummary') metrcNetSalesSummary: TemplateRef<any>;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   //for charts

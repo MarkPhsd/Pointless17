@@ -17,6 +17,7 @@ import { ISite } from 'src/app/_interfaces';
 })
 export class OrderCardsComponent implements OnInit,OnDestroy {
 
+  action$: Observable<any>;
   @ViewChild('nextPage', {read: ElementRef, static:false}) elementView: ElementRef;
   @ViewChildren('item') itemElements: QueryList<any>;
   @Output() orderOutPut = new EventEmitter()
@@ -236,6 +237,20 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
         }
       }
     )
+  }
+
+  setActiveOrderObs(order) {
+    const site  = this.siteService.getAssignedSite();
+    const order$ =  this.orderService.getOrder(site, order.id, order.history )
+    this.action$ =  order$.pipe(switchMap(data =>
+      {
+        if (data) {
+          this.orderOutPut.emit(data)
+          this.orderService.setActiveOrder(site, data)
+        }
+        return of(data)
+      }
+    ))
   }
 
   addToList(pageSize: number, pageNumber: number, reset : boolean)  {

@@ -29,7 +29,7 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 })
 
 export class MenuMinimalComponent implements OnInit, OnDestroy {
-
+  gridtoggletiny:    string;
   accordionMenu$:    Observable<AccordionMenu[]>;
   @Input()           options;
   @Input() menus:    AccordionMenu[];
@@ -93,9 +93,9 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
         if (!data) { return of(null) }
         this.config = this.mergeConfig(this.options);
         if (data)
-        
+
         try {
-          if (data.toString() === 'no menu') { 
+          if (data.toString() === 'no menu') {
             if (this.user && this.user?.roles === 'admin') {
               this.siteService.notify('No Menu Found. Please do system check.', 'Alert', 2000)
             }
@@ -113,10 +113,10 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
           if (this.menus) {
             // this.toggle(this.menus[0], 0)
           }
-            
+
         } catch (error) {
         }
-         
+
         return of(this.menus)
       }
     ))
@@ -147,11 +147,12 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   @HostListener("window:resize", [])
   updateScreenSize() {
     this.tinyMenu = false
-    if (window.innerWidth < 599 || this.smallMenu) {
+    this.gridtoggletiny = "grid-toggle-tiny"
+    if ( this.smallMenu) {
       this.tinyMenu = true
+      this.gridtoggletiny = "grid-toggle-collapsed"
     }
   }
-
 
   ngOnInit() {
     this.isStaff = this.userAuthorizationService.isUserAuthorized('employee,manager,admin')
@@ -179,7 +180,6 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
     if (!this.user.roles) {return};
 
     const menuCheck$ = this.menusService.mainMenuExists(site);
-    // console.log('menu minimal init')
     menuCheck$.pipe(
       switchMap( data => {
         if (!data || !data.result) {
@@ -191,7 +191,6 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
       })
     ).pipe(
       switchMap(data => {
-        // console.log('menu minimal menu group', data)
         this.refreshMenu(this.user)
         return of(data)
       }
@@ -211,20 +210,41 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
     this.router.navigate([url]);
   }
 
+  hideMenu() {
+    this.toolbarUIService.updateToolBarSideBar(false)
+  }
+
+  navigateMenu(routerLink: string) {
+    this.router.navigate([routerLink]);
+    if (this.authenticationService?.deviceInfo?.phoneDevice) {
+      console.log('hide menu')
+      this.hideMenu()
+    }
+    // if (this.tinyMenu) {
+    // }
+  }
+
   toggle(menu: AccordionMenu, index: number) {
     try {
       this.displayCategories = true
       this.index = index;
+
       if (!this.config.multi) {
         this.menus.filter(
           (menu, i) => i !== index && menu.active
         ).forEach(menu => menu.active = !menu.active);
       }
+
       this.menus[index].active = !this.menus[index].active;
       this.submenu  = this.menus[index].submenus
+
       if (menu.routerLink) {
         this.routerNavigation(menu.routerLink)
+        if (this.authenticationService?.deviceInfo?.phoneDevice && this.submenu.length == 0){
+          this.hideMenu()
+        }
       }
+
     } catch (error) {
       console.log(error)
     }

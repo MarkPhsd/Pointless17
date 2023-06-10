@@ -118,7 +118,6 @@ mat-card {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-
 }
 
 .grid-item-button {
@@ -128,17 +127,6 @@ mat-card {
   height: 75px;
 }
 
-img {
-  width: 15vh;
-  height: 15vh;
-  border-radius: 50%;
-  margin-top: 3px;
-  @include for-phone-only  {
-    min-width: 12vh;
-    min-height: 12vh;
-    // border-radius: 50%;
-  }
-}
 
 .grid-display-device {
   @include for-phone-only  {
@@ -157,3 +145,40 @@ img:active:hover {
   transform: scale(1.07);
 }
 
+.circle-dome {
+  position: relative;
+  top: 0;
+  left: 0;
+  display: block;
+  background: black;
+  border-radius: 50%;
+  margin: 0;
+  background: radial-gradient(circle at 100px 100px, #5cabff, #000);
+  z-index: 100;
+  width: 15vh;
+  height: 15vh;
+  opacity: .25;
+  @include for-phone-only  {
+    min-width: 12vh;
+    min-height: 12vh;
+  }
+}
+
+img {
+  width: 15vh;
+  height: 15vh;
+  border-radius: 50%;
+  margin-top: 3px;
+  z-index: 99;
+  @include for-phone-only  {
+    min-width: 12vh;
+    min-height: 12vh;
+    // border-radius: 50%;
+  }
+}
+
+.item-image {
+  position: relative;
+  top: 0;
+  left: 0;
+}

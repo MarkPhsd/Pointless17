@@ -3,6 +3,7 @@
   <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
 </div>
 
+<div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(results$ | async) as results"></div>
 
 <div>
@@ -21,7 +22,7 @@
           <ng-container *ngFor="let order of orders; let i = index">
             <div *ngIf="order.id && order.id != 0">
               <app-order-card
-                (click)="setActiveOrder(order)"
+                (click)="setActiveOrderObs(order)"
                 [order]="order"
               ></app-order-card>
             </div>
@@ -44,7 +45,7 @@
         <div  class='grid-flow-panel'  *ngIf="cardStyle === 'panel' && orders">
           <ng-container *ngFor="let order of orders; let i = index">
             <app-order-panel
-              (click)="setActiveOrder(order)"
+              (click)="setActiveOrderObs(order)"
               [order]="order"
             ></app-order-panel>
           </ng-container>

@@ -288,6 +288,20 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     this.router.navigate([url]);
   }
 
+  hideMenu() {
+    this.toolbarUIService.updateToolBarSideBar(false)
+  }
+
+  navigateMenu(routerLink: string) {
+    this.router.navigate([routerLink]);
+    if (this.authenticationService?.deviceInfo?.phoneDevice) {
+      console.log('hide menu')
+      this.hideMenu()
+    }
+    // if (this.tinyMenu) {
+    // }
+  }
+
   toggle(menu: AccordionMenu, index: number) {
     this._toggle(menu, index, false)
   }
@@ -307,6 +321,11 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
       if (!toggleOn) {
         if (menu.routerLink) {
           this.routerNavigation(menu.routerLink)
+
+          if (this.authenticationService?.deviceInfo?.phoneDevice && this.submenu.length == 0){
+            this.hideMenu()
+          }
+
         }
       }
     } catch (error) {

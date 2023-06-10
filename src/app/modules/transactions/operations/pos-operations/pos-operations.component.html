@@ -141,7 +141,8 @@
         </mat-card>
       </div>
 
-      <ng-container [ngTemplateOutlet]="taxReport"></ng-container>
+       <ng-container [ngTemplateOutlet]="taxReport"></ng-container>
+
       <ng-container [ngTemplateOutlet]="paymentReport"></ng-container>
       <ng-container [ngTemplateOutlet]="balanceSheetView"></ng-container>
 
@@ -161,18 +162,17 @@
     </div>
   </div>
 
-    <mat-card *ngIf="iBalanceSheet && iBalanceSheet.startTime && (auths && !auths.blindClose)">
+    <mat-card *ngIf="iBalanceSheet && iBalanceSheet.startTime &&
+                      (auths && !auths.blindClose)">
 
-        <div>
-          <app-widget-card
-            [dateFrom] ="iBalanceSheet.startTime"
-            [dateTo]   ="iBalanceSheet.startTime"
-            [zrunID]    ="iBalanceSheet.id"
-            groupBy    ="hour"
-            chartName  ="Hourly"
-            [site]      ='localSite'
-          ></app-widget-card>
-        </div>
+        <app-widget-card   [dateFrom]  ="iBalanceSheet.startTime"
+                            [dateTo]   ="iBalanceSheet.startTime"
+                            [zrunID]   ="iBalanceSheet.id"
+                            groupBy    ="hour"
+                            chartName  ="Hourly"
+                            [site]     ='localSite'
+                            [notifier] ="childNotifier"
+        ></app-widget-card>
 
         <app-widget-card [dateFrom]  ="iBalanceSheet.startTime"
                          [dateTo]    ="iBalanceSheet.startTime"
@@ -216,15 +216,13 @@
           [scheduleDateStart]="scheduleDateStart"
           [scheduleDateEnd]="scheduleDateEnd"
           [pendingTransactions]="true"
-          [summaryOnly]="true"
-         >
+          [summaryOnly]="true" >
           <div summary>
              <mat-icon >receipt</mat-icon> Next 30 Days
           </div>
     </sales-tax-report>
   </div>
 </ng-template>
-
 
 <ng-template #taxReport>
   <div>
@@ -238,7 +236,6 @@
     </sales-tax-report>
   </div>
 </ng-template>
-
 
 <ng-template #metrcNetSalesSummary>
   <app-metrc-summary

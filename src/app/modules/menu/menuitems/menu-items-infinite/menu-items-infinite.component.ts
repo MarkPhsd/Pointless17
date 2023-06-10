@@ -147,19 +147,32 @@ constructor(private menuService        : MenuService,
   initStyles() {
     if (!this.isApp) { return }
     this.ordersListClass = 'orders-list c1';
+    this.mobileView;
   }
 
   toggleListView() {
-
     if (this.infiniteClassList === 'grid-flow scroller') {
       this.infiniteClassList = 'grid-flow-single'
       this.ordersListClass = 'grid-flow-single'
-      // this.infiniteItemClass =  'mat-card-grid'
     } else {
       this.infiniteClassList  = 'grid-flow scroller'
       this.ordersListClass = 'grid-flow scroller'
     }
-    // this.infiniteItemClass = 'mat-card-row'
+  }
+
+  saveMobileView() {
+    const item = {ordersListClass: this.ordersListClass,
+      infiniteClassList: this.infiniteClassList
+    }
+    localStorage.setItem('MobileMenuItemLayout', JSON.stringify(item))
+  }
+
+  get mobileView() {
+    const item = localStorage.getItem('MobileMenuItemLayout')
+    if (!item) {return null}
+    const view = JSON.parse(item);
+    this.infiniteClassList = view?.infiniteClassList;
+    this.ordersListClass = view?.ordersListClass;
   }
 
   ngOnInit()  {

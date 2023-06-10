@@ -1082,14 +1082,19 @@ export class OrdersService {
   setActiveOrder(site, order: IPOSOrder) {
     if (order) {
       //determine device type so we know how to respond.
+      console.log('set active order',!this.authorizationService?.deviceInfo?.phoneDevice)
+      if (!this.authorizationService?.deviceInfo?.phoneDevice) {
+        this.toolbarServiceUI.updateOrderBar(true)
+      }
 
       this.updateOrderSubscription(order)
       this.updateLastItemAdded(null)
-      this.toolbarServiceUI.updateOrderBar(true)
 
       if (!order.history && this.platFormService.isApp()) {
         if (!order.completionDate && !order.preferredScheduleDate) {
-          this.toolbarServiceUI.showSearchSideBar()
+          if (!this.authorizationService?.deviceInfo?.phoneDevice) {
+            this.toolbarServiceUI.showSearchSideBar()
+          }
           return
         }
       }

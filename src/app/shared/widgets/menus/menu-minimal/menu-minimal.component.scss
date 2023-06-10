@@ -146,3 +146,20 @@ li {
 .item-font {
   // color: wheat
 }
+
+
+.grid-toggle-tiny {
+  height: 50px;
+  grid-template-columns: minmax(45px, 50px) 140px;
+
+  // @include for-phone-only {
+  //   grid-template-columns: minmax(45px, 50px);
+  // }
+}
+
+.grid-toggle-collapsed {
+  height: 50px;
+  // @include for-phone-only {
+  //   grid-template-columns: minmax(45px, 50px);
+  // }
+}

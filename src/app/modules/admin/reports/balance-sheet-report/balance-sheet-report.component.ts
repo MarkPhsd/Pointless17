@@ -25,21 +25,30 @@ export class BalanceSheetReportComponent implements OnInit {
               private siteSevice: SitesService) { }
 
   ngOnInit(): void {
-    const i = 0;
 
+
+  }
+  ngOnChanges() {
+    this.refreshData();
+  }
+
+  refreshData() {
+    const i = 0;
     const search = {} as BalanceSheetSearchModel;
     const site = this.siteSevice.getAssignedSite()
-    search.zRunID = +this.zrunID
-    search.completionDate_From = this.dateFrom;
-    search.completionDate_To = this.dateTo;
+    if (this.zrunID){
+      search.zRunID = +this.zrunID
+    }
+    if (this.dateFrom && this.dateTo) {
+      search.completionDate_From = this.dateFrom;
+      search.completionDate_To = this.dateTo;
+    }
+    console.log('search', search)
     this.sheets$ = this.balanceSheetService.searchBalanceSheets(site, search).pipe(
       switchMap(data => {
-        // data.results
-          // data.results[0].
          return  of(data)
       }
     ))
-
   }
 
 }

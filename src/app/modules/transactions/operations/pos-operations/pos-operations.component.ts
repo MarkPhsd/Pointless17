@@ -39,6 +39,9 @@ export class PosOperationsComponent implements OnInit {
   dateFrom: any;
   dateTo  : any;
 
+  value                  = false;
+  childNotifier          : Subject<boolean> = new Subject<boolean>();
+
   printerName: string;
   printing   : boolean;
 
@@ -102,8 +105,9 @@ export class PosOperationsComponent implements OnInit {
     this.refreshSales();
     this.refreshClosingCheck();
     this.initTransactionUISettings();
-    this.setSchedulePeriod()
-    this.initAuthentication()
+    this.setSchedulePeriod();
+    this.initAuthentication();
+    this.notifyChild();
   }
 
   initAuthentication() {
@@ -307,6 +311,12 @@ export class PosOperationsComponent implements OnInit {
       )
     )
   }
+
+  notifyChild() {
+    this.value = !this.value;
+    this.childNotifier.next(this.value);
+  }
+
 
   ordersWindow() {
     this.router.navigateByUrl('/pos-orders')

@@ -1,9 +1,10 @@
-  <!-- <div *ngIf="(accordionMenu$ | async) as menu; else loading"></div> -->
+
 <ng-template #loading>
   <div class="spinner-container">
     <mat-spinner></mat-spinner>
   </div>
 </ng-template>
+
 
 <div class="container">
   <div class="row-class"
@@ -22,7 +23,7 @@
             <div  class="item-icon" *ngIf="menu.icon">
               <mat-icon>{{ menu.icon }}</mat-icon>
             </div>
-            <div  class ="item-name" *ngIf="!tinyMenu">
+            <div  class ="item-name" *ngIf="gridtoggletiny != 'grid-toggle-collapsed'">
               {{menu?.name | truncateText : 20}}
             </div>
           </div>
@@ -46,15 +47,17 @@
               <div *ngIf="isAuthorized(item.userType)" >
               <div *ngIf="!item.minimized">
                   <div class="menu" >
-                    <button mat-menu-item
+                    <!-- <button mat-menu-item
                             color=""
                             routerLinkActive={{item.routerLinkActive}}
-                            routerLink=      {{item.routerLink}}>
+                            routerLink=      {{item.routerLink}}> -->
+                  <button mat-menu-item
+                            (click)="navigateMenu(item.routerLink)">
                       <div [class]="gridtoggletiny">
                         <div class="item-font" *ngIf="item.icon">
                           <mat-icon>{{item.icon}}</mat-icon>
                         </div>
-                        <div class="item-font" *ngIf="!tinyMenu">
+                        <div class="item-font" *ngIf="gridtoggletiny != 'grid-toggle-collapsed'">
                           {{item.name | truncateText : 20}}
                         </div>
                       </div>
@@ -89,13 +92,12 @@
                 <div *ngIf="item.minimized">
                   <div *ngIf="isAuthorized(item?.userType)">
                     <button mat-menu-item
-                            routerLinkActive={{item?.routerLinkActive}}
-                            routerLink      = {{item?.routerLink}}>
+                            (click)="navigateMenu(item.routerLink)">
                       <div class="grid-toggle-tiny">
                         <div class="item-font" *ngIf="item.icon">
                           <mat-icon>{{item.icon}}</mat-icon>
                         </div>
-                        <div class="item-font" *ngIf="!tinyMenu">
+                        <div class="item-font" *ngIf="gridtoggletiny != 'grid-toggle-collapsed'">
                           {{item.name | truncateText : 20}}
                         </div>
                       </div>

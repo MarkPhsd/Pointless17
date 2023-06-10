@@ -56,12 +56,13 @@
   </div>
 
 </div>
+
 <ng-template #gridFlowOptionView>
   <div *ngIf="infiniteClassList == 'grid-flow scroller'">
-    <button style="height:50px" mat-button (click)="toggleListView()"><mat-icon>list</mat-icon></button>
+    <button style="height:50px" mat-button (click)="toggleListView()"><mat-icon>grid_view</mat-icon></button>
   </div>
   <div *ngIf="infiniteClassList != 'grid-flow scroller'">
-    <button style="height:50px" mat-button (click)="toggleListView()"><mat-icon>grid_view</mat-icon></button>
+    <button style="height:50px" mat-button (click)="toggleListView()"><mat-icon>list</mat-icon></button>
   </div>
 </ng-template>
 
@@ -73,6 +74,5 @@
        (outPutMethod)="refreshSearch($event)">
       <div #fieldDescription>Search Items</div>
     </search-debounce-input>
-
   </div>
 </ng-template>
