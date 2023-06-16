@@ -150,13 +150,10 @@
     </ng-template>
   </div>
 
-
   <div [hidden]="displayReports != 'output'">
     <ng-container [ngTemplateOutlet]="reportDesignerOutPutView" ></ng-container>
-
     <ng-template #reportDesigner>
       <h3>Output Reports</h3>
-
       <div *ngIf="reportDesignerForm">
         <app-mat-select [list]     ="reportList"
                         [inputForm]="reportDesignerForm"
@@ -207,6 +204,14 @@
 
   <div class="grid-flow" *ngIf="sites && showValues && dateFrom && dateTo">
     <div  *ngFor="let site of sites">
+      <div style="margin-left:15px;width:350px;">
+        <div style="text-align: center;">
+            <h4 color='primary' ><mat-icon color='primary'>store</mat-icon>
+            <span style="margin-left:15px" color='primary'>{{site.name}}</span> </h4>
+            <mat-divider></mat-divider>
+        </div>
+      </div>
+
       <div [hidden]="displayReports != 'financials'">
         <div class="summary">
           <ng-container *ngTemplateOutlet="viewMetrcNetSales, context: {$implicit: site}">
@@ -225,6 +230,7 @@
           <mat-icon>summarize</mat-icon> Sales - {{site.name}}
         </sales-tax-report>
 
+
         <payment-report
                 [site]    ="site"
                 [dateFrom]="dateFrom"
@@ -234,6 +240,18 @@
             <mat-icon >summarize</mat-icon> Payments - {{site.name}}
           </div>
           <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
+        </payment-report>
+
+        <payment-report
+                [groupBy]="'service'"
+                [site]    ="site"
+                [dateFrom]="dateFrom"
+                [dateTo]  ="dateTo"
+                [notifier]="childNotifier">
+          <div header>
+            <mat-icon >summarize</mat-icon> Sale Type - {{site.name}}
+          </div>
+          <mat-icon>credit_card</mat-icon> Sale Type - {{site.name}}
         </payment-report>
 
         <ng-container *ngTemplateOutlet="balanceSheetView,

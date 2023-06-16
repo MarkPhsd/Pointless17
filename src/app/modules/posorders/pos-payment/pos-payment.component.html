@@ -2,276 +2,276 @@
 <div *ngIf="(orderAction$ | async)"></div>
 <div *ngIf="(process$ | async) as process"></div>
 
-<div *ngIf="order  && uiTransactions">
-  <div [class]="orderlayout">
-    <div class="transaction-data">
-      <div class="grid-header-item">
-        <app-payment-balance
-          [uiTransactions]="uiTransactions"
-          [mainPanel]="true"
-          [order]="order">
-        </app-payment-balance>
-      </div>
+<div *ngIf="(paymentMethods$ | async) as methods">
+  <!-- {{methods | json}} -->
 
-      <div class="grid-header-item"
-           *ngIf="!isUser">
-        <app-order-header-demo-graphics
-            [canRemoveClient]="'false'"
-            [order]          ="order">
-        </app-order-header-demo-graphics>
-      </div>
-
-      <div  class="grid-header-item">
-        <mat-card *ngIf="splitByItem">
-          <ng-container [ngTemplateOutlet]="splitItemorders"></ng-container>
-        </mat-card>
-      </div>
-
-      <div *ngIf="serviceIsScheduled" class="grid-header-item">
-        <posorder-schedule-card>
-        </posorder-schedule-card>
-      </div>
-    </div>
-
-    <div>
-
-      <ng-container [ngTemplateOutlet]="isProcessingPayment"></ng-container>
-
-      <div  class="order-completed"
-            *ngIf="(paymentsEqualTotal || order.completionDate)">
-          <ng-container [ngTemplateOutlet]="receiptShowTemplate"></ng-container>
-      </div>
-
-      <div class="action-center" *ngIf="!order.completionDate &&
-                                        ((order?.balanceRemaining != 0 || isZeroPaymentAllowed) &&
-                                         (order?.balanceRemaining < 0 || isNegativePaymentAllowed )) ||
-                                         order?.balanceRemaining != order.total
-                                         ">
-
-        <div *ngIf="!splitByItem">
-          <h4>Payment Amount: {{paymentAmount | currency}}</h4>
-        </div>
-        <div *ngIf="!splitByItem">
-          <button class="splitbutton"
-                  mat-raised-button
-                  color="primary"
-                  (click)="changeAmount()">
-            <mat-icon>edit</mat-icon>Change <br>Amount
-          </button>
+  <div *ngIf="order  && uiTransactions">
+    <div [class]="orderlayout">
+      <div class="transaction-data">
+        <div class="grid-header-item">
+          <app-payment-balance
+            [uiTransactions]="uiTransactions"
+            [mainPanel]="true"
+            [order]="order">
+          </app-payment-balance>
         </div>
 
-        <div  *ngIf="!paymentsEqualTotal">
-          <button class="splitbutton"
-                  mat-raised-button
-                  color="primary"
-                  (click)="splitByItem = !splitByItem">
-            <span *ngIf="splitByItem">
-              <mat-icon>credit_card</mat-icon> Payment <br> Methods
-            </span>
-            <span *ngIf="!splitByItem">
-              <mat-icon>call_split</mat-icon>  Split By <br>  Items
-            </span>
-          </button>
+        <div class="grid-header-item"
+            *ngIf="!isUser">
+          <app-order-header-demo-graphics
+              [canRemoveClient]="'false'"
+              [order]          ="order">
+          </app-order-header-demo-graphics>
+        </div>
+
+        <div  class="grid-header-item">
+          <mat-card *ngIf="splitByItem">
+            <ng-container [ngTemplateOutlet]="splitItemorders"></ng-container>
+          </mat-card>
+        </div>
+
+        <div *ngIf="serviceIsScheduled" class="grid-header-item">
+          <posorder-schedule-card>
+          </posorder-schedule-card>
         </div>
       </div>
 
-      <div *ngIf="!order.completionDate && !splitByItem && !paymentsEqualTotal && paymentIsReady
-                  &&  (order?.balanceRemaining != 0 || isNegativePaymentAllowed || isZeroPaymentAllowed ) ">
+      <div>
 
-        <div *ngIf="(saleProcess$ |async) as saleProcess">  </div>
+        <ng-container [ngTemplateOutlet]="isProcessingPayment"></ng-container>
 
-          <div class="grid-header-item" *ngIf="stepSelection == 1 || stepSelection  == 0">
-            <div>
-              <ng-container [ngTemplateOutlet]="wicEBTButton"></ng-container>
-              <mat-card>
-                <mat-card-content>
-                  <div class="">
-                    <div class="action-center"  *ngIf="(!order.completionDate &&
-                                                       (
-                                                        (order?.balanceRemaining != 0 || isNegativePaymentAllowed || isZeroPaymentAllowed )
-                                                     || (order?.balanceRemaining < 0 || isNegativePaymentAllowed )
-                                                        ) &&
-                                                      !splitByItem)">
+        <div  class="order-completed"
+              *ngIf="(paymentsEqualTotal || order.completionDate)">
+            <ng-container [ngTemplateOutlet]="receiptShowTemplate"></ng-container>
+        </div>
 
-                      <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="paypalButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="cardPointeButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="stripePayButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="triposPayButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="giftCardPayButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
+        <div class="action-center" *ngIf="!order.completionDate &&
+                                          ((order?.balanceRemaining != 0 || isZeroPaymentAllowed) &&
+                                          (order?.balanceRemaining < 0 || isNegativePaymentAllowed )) ||
+                                          order?.balanceRemaining != order.total
+                                          ">
 
-                      <div *ngIf="order && order.clientID">
+          <div *ngIf="!splitByItem && !paymentsEqualTotal">
+            <h4>Payment Amount: {{paymentAmount | currency}}</h4>
+          </div>
+          <div style="margin-left: 5px" *ngIf="!splitByItem  && !paymentsEqualTotal">
+            <button class="splitbutton"
+                    mat-raised-button
+                    color="primary"
+                    (click)="changeAmount()">
+              <mat-icon>edit</mat-icon>Change <br>Amount
+            </button>
+          </div>
+
+          <div  *ngIf="!paymentsEqualTotal">
+            <button class="splitbutton"
+                    mat-raised-button
+                    color="primary"
+                    (click)="splitByItem = !splitByItem">
+              <span *ngIf="splitByItem">
+                <mat-icon>credit_card</mat-icon> Payment <br> Methods
+              </span>
+              <span *ngIf="!splitByItem">
+                <mat-icon>call_split</mat-icon>  Split By <br>  Items
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="!order.completionDate && !splitByItem && !paymentsEqualTotal && paymentIsReady
+                    &&  (order?.balanceRemaining != 0 || isNegativePaymentAllowed || isZeroPaymentAllowed ) ">
+
+          <div *ngIf="(saleProcess$ |async) as saleProcess">  </div>
+
+            <div class="grid-header-item" *ngIf="stepSelection == 1 || stepSelection  == 0">
+              <div>
+                <ng-container [ngTemplateOutlet]="wicEBTButton"></ng-container>
+                <mat-card>
+                  <mat-card-content>
+                    <div class="">
+                      <div class="action-center"  *ngIf="(!order.completionDate &&
+                                                        (
+                                                          (order?.balanceRemaining != 0 || isNegativePaymentAllowed || isZeroPaymentAllowed )
+                                                      || (order?.balanceRemaining < 0 || isNegativePaymentAllowed )
+                                                          ) &&
+                                                        !splitByItem)">
+
+                        <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="paypalButton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="cardPointeButton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="stripePayButton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="triposPayButton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="giftCardPayButton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
                         <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
+                        <ng-container [ngTemplateOutlet]="cashPay5"></ng-container>
+                        <ng-container [ngTemplateOutlet]="cashPay10"></ng-container>
+                        <ng-container [ngTemplateOutlet]="cashPay20"></ng-container>
+                        <ng-container [ngTemplateOutlet]="cashPay50"></ng-container>
+                        <ng-container [ngTemplateOutlet]="cashPay100"></ng-container>
                       </div>
+                    </div>
 
-                      <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
-                      <ng-container [ngTemplateOutlet]="cashPay5"></ng-container>
-                      <ng-container [ngTemplateOutlet]="cashPay10"></ng-container>
-                      <ng-container [ngTemplateOutlet]="cashPay20"></ng-container>
-                      <ng-container [ngTemplateOutlet]="cashPay50"></ng-container>
-                      <ng-container [ngTemplateOutlet]="cashPay100"></ng-container>
+                    <!-- <div class="item-container" *ngIf="isApp">
+                      <ng-container [ngTemplateOutlet]="cashPaymentButtons"></ng-container>
+                    </div> -->
+
+                  </mat-card-content>
+                </mat-card>
+              </div>
+              <div *ngIf="paymentMethods.length>0">
+                <mat-card class="payment-dimensions">
+                  <app-mat-toggle-selector
+                      [styleHeight]      = "'calc(70vh - 300px)'"
+                      class              = "card-height"
+                      [list]             = "paymentMethods"
+                      [hideAllOption]    = "'true'"
+                      [toggleDimensions] = "'toggle-group-tall'"
+                      [buttonDimensions] = "'button-dimensions-tall'"
+                      (outPutItem)       = "getPaymentMethod($event)">
+                    <div *ngIf="groupPaymentGroupID != 0">
+                      Apply Payment Amount
+                    </div>
+                    <div *ngIf="groupPaymentGroupID == 0">
+                      Enter Partial Payments
+                    </div>
+                  </app-mat-toggle-selector>
+                </mat-card>
+              </div>
+            </div>
+
+            <div class="grid-header-item" *ngIf="stepSelection == 2">
+              <mat-card class="card-dimensions">
+                <mat-card-content>
+                  <div class="item-container"  *ngIf="paymentMethod">
+                    <div>
+                      <h4>
+                        {{paymentMethod.name}} |
+                        Order Balance : {{order.balanceRemaining | currency}}
+                      </h4>
                     </div>
                   </div>
 
-                  <!-- <div class="item-container" *ngIf="isApp">
-                    <ng-container [ngTemplateOutlet]="cashPaymentButtons"></ng-container>
-                  </div> -->
+                  <div class="item-container item-buttons-container">
+                    <span class ="action-buttons">
+                      <button mat-button (click)="goToPaymentMethod()" >
+                        Start Over
+                        <mat-icon>back</mat-icon>
+                      </button>
+                    </span>
+                    <span>
+                      <button mat-button
+                              (click)="initCheckForm()">Clear <mat-icon>refresh</mat-icon>
+                      </button>
+                    </span>
+                  </div>
+                  <ng-container [ngTemplateOutlet]="enterCheckNumberView"></ng-container>
+                </mat-card-content>
+              </mat-card>
+            </div>
+
+            <div class="grid-header-item" *ngIf="stepSelection == 4">
+              <mat-card class="card-dimensions">
+                <mat-card-content>
+                  <div class="item-container"
+                              *ngIf="paymentMethod">
+                    <div>
+                      <h4>
+                        {{paymentMethod?.name}} | Order Balance : {{order?.balanceRemaining | currency}}
+                      </h4>
+                      <h5>
+                        <div *ngIf="order && order.clients_POSOrders">
+                          Point Cash Value {{order.clients_POSOrders.loyaltyPointValue | currency}}
+                        </div>
+                      </h5>
+                    </div>
+                  </div>
+                  <ng-container [ngTemplateOutlet]="enterPointCashValueView"></ng-container>
+                </mat-card-content>
+              </mat-card>
+            </div>
+
+            <div class="grid-header-item" *ngIf="stepSelection == 3">
+              <mat-card class="card-dimensions">
+                <mat-card-content>
+                  <div class="item-container"
+                        *ngIf="paymentMethod">
+                    <div>
+                      <h4>
+                        {{paymentMethod?.name}} | Order Balance : {{order?.balanceRemaining | currency}}
+
+                        <div *ngIf="changeDueComing && changeDueComing != 0">
+                          <div *ngIf="changeDueComing > 0">
+                            Expected Due: {{changeDueComing | currency}}
+                          </div>
+                          <div *ngIf="changeDueComing < 0">
+                            Owes: {{changeDueComing | currency}}
+                          </div>
+                        </div>
+
+                        <span *ngIf="paymentMethod.name === 'check'">
+                            {{posPayment?.checkNumber}}
+                        </span>
+                      </h4>
+                    </div>
+                  </div>
+
+                <div class="item-container item-buttons-container">
+                    <div>
+                      <button  mat-raised-button  class="payment-buttons" (click)="goToPaymentMethod()" >
+                        Start Over
+                        <mat-icon>back</mat-icon>
+                      </button>
+                    </div>
+                    <div>
+                      <button  mat-raised-button  class="payment-buttons" (click)="initPaymentForm()">
+                        Clear <mat-icon>refresh</mat-icon></button>
+                    </div>
+                    <div >
+                      <button  mat-raised-button  class="payment-buttons" (click)="applyBalance()">
+                        Pay Balance
+                        <mat-icon>credit_card</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div *ngIf="platFormService.isApp">
+                    <ng-container [ngTemplateOutlet]="applyPaymentAmountView"></ng-container>
+                  </div>
 
                 </mat-card-content>
               </mat-card>
             </div>
-            <div>
-              <mat-card class="payment-dimensions">
-                <app-mat-toggle-selector
-                    [styleHeight]      = "'calc(70vh - 300px)'"
-                    class              = "card-height"
-                    [list]             = "paymentMethods"
-                    [hideAllOption]    = "'true'"
-                    [toggleDimensions] = "'toggle-group-tall'"
-                    [buttonDimensions] = "'button-dimensions-tall'"
-                    (outPutItem)       = "getPaymentMethod($event)">
-                  <div *ngIf="groupPaymentGroupID != 0">
-                    Apply Payment Amount
-                  </div>
-                  <div *ngIf="groupPaymentGroupID == 0">
-                    Enter Partial Payments
-                  </div>
-                </app-mat-toggle-selector>
-              </mat-card>
-            </div>
-          </div>
 
-          <div class="grid-header-item" *ngIf="stepSelection == 2">
-            <mat-card class="card-dimensions">
-              <mat-card-content>
-                <div class="item-container"  *ngIf="paymentMethod">
-                  <div>
-                    <h4>
-                      {{paymentMethod.name}} |
-                      Order Balance : {{order.balanceRemaining | currency}}
-                    </h4>
-                  </div>
+            <div *ngIf="paymentMethods">
+              <div *ngFor="let item of paymentMethods">
+                <div *ngIf="item?.id  == paymentMethod?.id &&  item?.instructions">
+                  <h3>{{item?.name}}</h3>
+                  <mat-hint>
+                    <div [innerHTML]="item?.instructions" ></div>
+                  </mat-hint>
+                  <mat-divider></mat-divider>
                 </div>
-
-                <div class="item-container item-buttons-container">
-                  <span class ="action-buttons">
-                    <button mat-button (click)="goToPaymentMethod()" >
-                      Start Over
-                      <mat-icon>back</mat-icon>
-                    </button>
-                  </span>
-                  <span>
-                    <button mat-button
-                            (click)="initCheckForm()">Clear <mat-icon>refresh</mat-icon>
-                    </button>
-                  </span>
-                </div>
-                <ng-container [ngTemplateOutlet]="enterCheckNumberView"></ng-container>
-              </mat-card-content>
-            </mat-card>
-          </div>
-
-          <div class="grid-header-item" *ngIf="stepSelection == 4">
-            <mat-card class="card-dimensions">
-              <mat-card-content>
-                <div class="item-container"
-                            *ngIf="paymentMethod">
-                  <div>
-                    <h4>
-                      {{paymentMethod?.name}} | Order Balance : {{order?.balanceRemaining | currency}}
-                    </h4>
-                    <h5>
-                      <div *ngIf="order && order.clients_POSOrders">
-                        Point Cash Value {{order.clients_POSOrders.loyaltyPointValue | currency}}
-                      </div>
-                    </h5>
-                  </div>
-                </div>
-                <ng-container [ngTemplateOutlet]="enterPointCashValueView"></ng-container>
-              </mat-card-content>
-            </mat-card>
-          </div>
-
-          <div class="grid-header-item" *ngIf="stepSelection == 3">
-            <mat-card class="card-dimensions">
-              <mat-card-content>
-                <div class="item-container"
-                      *ngIf="paymentMethod">
-                  <div>
-                    <h4>
-                      {{paymentMethod?.name}} | Order Balance : {{order?.balanceRemaining | currency}}
-
-                      <div *ngIf="changeDueComing && changeDueComing != 0">
-                        <div *ngIf="changeDueComing > 0">
-                          Expected Due: {{changeDueComing | currency}}
-                        </div>
-                        <div *ngIf="changeDueComing < 0">
-                          Owes: {{changeDueComing | currency}}
-                        </div>
-                      </div>
-
-                      <span *ngIf="paymentMethod.name === 'check'">
-                          {{posPayment?.checkNumber}}
-                      </span>
-                    </h4>
-                  </div>
-                </div>
-
-              <div class="item-container item-buttons-container">
-                  <div>
-                    <button  mat-raised-button  class="payment-buttons" (click)="goToPaymentMethod()" >
-                      Start Over
-                      <mat-icon>back</mat-icon>
-                    </button>
-                  </div>
-                  <div>
-                    <button  mat-raised-button  class="payment-buttons" (click)="initPaymentForm()">
-                      Clear <mat-icon>refresh</mat-icon></button>
-                  </div>
-                  <div >
-                    <button  mat-raised-button  class="payment-buttons" (click)="applyBalance()">
-                      Pay Balance
-                      <mat-icon>credit_card</mat-icon>
-                    </button>
-                  </div>
-                </div>
-
-                <div *ngIf="platFormService.isApp">
-                  <ng-container [ngTemplateOutlet]="applyPaymentAmountView"></ng-container>
-                </div>
-
-              </mat-card-content>
-            </mat-card>
-          </div>
-
-          <div *ngIf="(paymentMethods$ | async) as paymentMethods">
-            <div *ngFor="let item of paymentMethods">
-              <div *ngIf="item?.id  == paymentMethod?.id &&  item?.instructions">
-                <h3>{{item?.name}}</h3>
-                <mat-hint>
-                  <div [innerHTML]="item?.instructions" ></div>
-                </mat-hint>
-                <mat-divider></mat-divider>
               </div>
             </div>
           </div>
+
+        <div  class="order-completed">
+          <ng-container [ngTemplateOutlet]="splitItemsTemplate"></ng-container>
         </div>
 
-      <div  class="order-completed">
-        <ng-container [ngTemplateOutlet]="splitItemsTemplate"></ng-container>
-      </div>
-
-      <div *ngIf="!splitByItem && !paymentsEqualTotal &&
-                  !paymentIsReady">
-        <div class="message" *ngIf="message">
-          <mat-icon  color="warn">warning</mat-icon>
-          <mat-label color="warn">{{message}}</mat-label>
+        <div *ngIf="!splitByItem && !paymentsEqualTotal &&
+                    !paymentIsReady">
+          <div class="message" *ngIf="message">
+            <mat-icon  color="warn">warning</mat-icon>
+            <mat-label color="warn">{{message}}</mat-label>
+          </div>
+          <pos-order-schedule [serviceType]="serviceType"></pos-order-schedule>
         </div>
-        <pos-order-schedule [serviceType]="serviceType"></pos-order-schedule>
-      </div>
 
+      </div>
     </div>
   </div>
 </div>
@@ -305,7 +305,6 @@
   </div>
 </ng-template>
 
-
 <ng-template #enterPointCashValueView>
   <div class="item-container keypad">
     <app-key-pad
@@ -320,23 +319,8 @@
   </div>
 </ng-template>
 
-<!-- <ng-template #cashPaymentButtons>
-  <div class="margin-bottom">
-    <cash-payment-buttons
-        [order]         ="order"
-        [uiTransactions]="uiTransactions"
-        [posPayment]    ="posPayment"
-        [platForm]      ="platForm"
-        [creditBalanceRemaining]="creditPaymentAmount"
-        [stripeTipValue]="stripeTipValue"
-        [paymentAmount] ="paymentAmount"
-        [isApp]="platFormService.isApp()" >
-    </cash-payment-buttons>
-   </div>
-</ng-template> -->
-
 <ng-template #cashPayButtons>
-  <div *ngIf="!smallDevice">
+  <ng-container class="pay-buttons" *ngIf="!smallDevice && isApp">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactions"
@@ -346,11 +330,11 @@
         [isApp]         ="platFormService.isApp" >
       <div>Exact Cash</div>
     </cash-payment-buttons>
-  </div>
+  </ng-container>
 </ng-template>
 
 <ng-template #cashPay100>
-  <div class="pay-buttons" *ngIf="!smallDevice">
+  <ng-container class="pay-buttons" *ngIf="!smallDevice && isApp">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactions"
@@ -359,11 +343,11 @@
         [paymentAmount] ="100"
         [isApp]         ="platFormService.isApp" >
     </cash-payment-buttons>
-  </div>
+  </ng-container>
 </ng-template>
 
 <ng-template #cashPay50>
-  <div class="pay-buttons" *ngIf="!smallDevice">
+  <ng-container class="pay-buttons" *ngIf="!smallDevice && isApp">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactions"
@@ -372,11 +356,11 @@
         [paymentAmount] ="50"
         [isApp]         ="platFormService.isApp" >
     </cash-payment-buttons>
-  </div>
+  </ng-container>
 </ng-template>
 
 <ng-template #cashPay20>
-  <div class="pay-buttons" *ngIf="!smallDevice">
+  <ng-container class="pay-buttons" *ngIf="!smallDevice && isApp">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactions"
@@ -385,11 +369,11 @@
         [paymentAmount] ="20"
         [isApp]         ="platFormService.isApp" >
     </cash-payment-buttons>
-  </div>
+  </ng-container>
 </ng-template>
 
 <ng-template #cashPay10>
-  <div class="pay-buttons" *ngIf="!smallDevice">
+  <ng-container class="pay-buttons" *ngIf="!smallDevice && isApp">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactions"
@@ -398,12 +382,12 @@
         [paymentAmount] ="10"
         [isApp]         ="platFormService.isApp" >
     </cash-payment-buttons>
-  </div>
+  </ng-container>
 </ng-template>
 
 
 <ng-template #cashPay5>
-  <div class="pay-buttons" *ngIf="!smallDevice">
+  <div class="pay-buttons" *ngIf="!smallDevice && isApp">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactions"
@@ -542,15 +526,17 @@
 </ng-template>
 
 <ng-template #storeCreditPaybutton>
-  <store-credit-info
-    [order]        ="order"
-    [clientID]     ="order?.clientID"
-    [accountNumber]="order?.clients_POSOrders?.accountNumber"
-    [userName]     ="order?.clients_POSOrders?.userName"
-    [showPayment]  ="true"
-    [showIssueMoney]="false"
-    [showBalance] = "false"
-  ></store-credit-info>
+  <ng-container *ngIf="order && order.clientID">
+    <store-credit-info
+      [order]        ="order"
+      [clientID]     ="order?.clientID"
+      [accountNumber]="order?.clients_POSOrders?.accountNumber"
+      [userName]     ="order?.clients_POSOrders?.userName"
+      [showPayment]  ="true"
+      [showIssueMoney]="false"
+      [showBalance] = "false"
+    ></store-credit-info>
+  </ng-container>
 </ng-template>
 
 <ng-template #wicEBTButton>

@@ -275,36 +275,38 @@
 </ng-template>
 
 <ng-template #adjustmentOptionsView>
+  <div *ngIf="isStaff">
+    <button aria-label="user menu"
+            mat-raised-button
+            [matMenuTriggerFor]="menu"
+            #menuTrigger="matMenuTrigger"
+            (click)="menuTrigger.openMenu()" >
+      <mat-icon >tune</mat-icon>
+      Adjustment
+    </button>
 
-  <button aria-label="user menu"
-          mat-raised-button
-          [matMenuTriggerFor]="menu"
-          #menuTrigger="matMenuTrigger"
-          (click)="menuTrigger.openMenu()" >
-    <mat-icon >tune</mat-icon>
-    Adjustment
-  </button>
-  <mat-menu class="mat-menu-panel"
-            [overlapTrigger]="false"
-            #menu="matMenu">
+    <mat-menu class="mat-menu-panel"
+              [overlapTrigger]="false"
+              #menu="matMenu">
 
-    <span (mouseleave)="menuTrigger.closeMenu()">
+      <span (mouseleave)="menuTrigger.closeMenu()">
 
-      <div>
-        <ng-container [ngTemplateOutlet]="refundOrderButton"></ng-container>
-      </div>
+        <div>
+          <ng-container [ngTemplateOutlet]="refundOrderButton"></ng-container>
+        </div>
 
-      <div>
-        <ng-container [ngTemplateOutlet]="voidOrderButton"></ng-container>
-      </div>
+        <div>
+          <ng-container [ngTemplateOutlet]="voidOrderButton"></ng-container>
+        </div>
 
-      <div>
-        <ng-container [ngTemplateOutlet]="deleteOrderView"></ng-container>
-      </div>
+        <div>
+          <ng-container [ngTemplateOutlet]="deleteOrderView"></ng-container>
+        </div>
 
-    </span>
-  </mat-menu>
-
+      </span>
+    </mat-menu>
+      
+</div>
 </ng-template>
 
 <ng-template #cancelButton>

@@ -21,7 +21,7 @@ export class PosOrderPriceScheduleInfoComponent implements OnInit,OnChanges,OnDe
   showSchedules = false;
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe(order => {
+    this._order = this.ordermethodsService.currentOrder$.subscribe(order => {
       this.order = order;
       this.processOrder(order);
     })

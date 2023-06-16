@@ -28,7 +28,7 @@ export class PosOrderScheduleDescriptionComponent implements OnInit,OnChanges,On
   site: ISite;
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe(order => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe(order => {
       this.order = order;
       this.processItemsInSchedule(this.scheduleID, order);
     })
@@ -43,7 +43,7 @@ export class PosOrderScheduleDescriptionComponent implements OnInit,OnChanges,On
   }
 
   constructor( private priceScheduleService: PriceScheduleService,
-               private ordermethodsService : OrderMethodsService,
+               private orderMethodsService : OrderMethodsService,
                private orderService        : OrdersService,
                private siteService         : SitesService)
   { }

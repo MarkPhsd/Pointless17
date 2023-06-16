@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >ConversionsService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >ConversionsService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -93,10 +100,19 @@
                                 <a href="#getConversionItemByValue" >getConversionItemByValue</a>
                             </li>
                             <li>
+                                <a href="#getConversionQuantities" >getConversionQuantities</a>
+                            </li>
+                            <li>
                                 <a href="#getGramsConversions" >getGramsConversions</a>
                             </li>
                             <li>
                                 <a href="#initPackageEntryForm" >initPackageEntryForm</a>
+                            </li>
+                            <li>
+                                <a href="#jointsExceedAvalible" >jointsExceedAvalible</a>
+                            </li>
+                            <li>
+                                <a href="#notifyEvent" >notifyEvent</a>
                             </li>
                             <li>
                                 <a href="#refreshPackageEnryForm" >refreshPackageEnryForm</a>
@@ -113,18 +129,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(fb: <a href="https://angular.io/api/forms/FormBuilder" target="_blank">FormBuilder</a>)</code>
+<code>constructor(_snackBar: MatSnackBar, fb: UntypedFormBuilder)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/_services/measurement/conversions.service.ts:22</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/_services/measurement/conversions.service.ts:23</a></div>
                             </td>
                         </tr>
 
@@ -142,10 +158,22 @@
                                         </thead>
                                         <tbody>
                                                 <tr>
+                                                        <td>_snackBar</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatSnackBar</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
                                                         <td>fb</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/forms/FormBuilder" target="_blank" >FormBuilder</a></code>
+                                                                    <code>UntypedFormBuilder</code>
                                                         </td>
                                                   
                                                     <td>
@@ -162,7 +190,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -180,15 +208,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>editAssignment(inventoryAssignment: <a href="../interfaces/IInventoryAssignment.html" target="_self">IInventoryAssignment</a>, form: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>editAssignment(inventoryAssignment: <a href="../interfaces/IInventoryAssignment.html" target="_self">IInventoryAssignment</a>, form: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="83"
-                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:83</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="75"
+                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:75</a></div>
                 </td>
             </tr>
 
@@ -198,6 +226,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -222,7 +251,7 @@
                                 <tr>
                                     <td>form</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -267,8 +296,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="139"
-                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:139</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="156"
+                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:156</a></div>
                 </td>
             </tr>
 
@@ -278,6 +307,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -347,8 +377,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="58"
-                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:58</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="54"
+                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:54</a></div>
                 </td>
             </tr>
 
@@ -358,6 +388,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -439,8 +470,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="49"
-                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:49</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="48"
+                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:48</a></div>
                 </td>
             </tr>
 
@@ -450,6 +481,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -507,8 +539,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="75"
-                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:75</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="67"
+                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:67</a></div>
                 </td>
             </tr>
 
@@ -518,6 +550,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -559,6 +592,111 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="getConversionQuantities"></a>
+                    <span class="name">
+                        <span ><b>getConversionQuantities</b></span>
+                        <a href="#getConversionQuantities"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getConversionQuantities(inventoryAssignment: <a href="../interfaces/IInventoryAssignment.html" target="_self">IInventoryAssignment</a>, unitsConverted: <a href="../interfaces/IUnitsConverted.html" target="_self">IUnitsConverted</a>, inputQuantity: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, jointWeight: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="94"
+                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:94</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>inventoryAssignment</td>
+                                    <td>
+                                                <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >IInventoryAssignment</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>unitsConverted</td>
+                                    <td>
+                                                <code><a href="../interfaces/IUnitsConverted.html" target="_self" >IUnitsConverted</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>inputQuantity</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>jointWeight</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >IInventoryAssignment</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="getGramsConversions"></a>
                     <span class="name">
                         <span ><b>getGramsConversions</b></span>
@@ -575,8 +713,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="29"
-                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:29</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="30"
+                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:30</a></div>
                 </td>
             </tr>
 
@@ -605,15 +743,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>initPackageEntryForm(form: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>initPackageEntryForm(form: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="127"
-                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:127</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="145"
+                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:145</a></div>
                 </td>
             </tr>
 
@@ -623,6 +761,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -635,7 +774,181 @@
                                 <tr>
                                     <td>form</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="jointsExceedAvalible"></a>
+                    <span class="name">
+                        <span ><b>jointsExceedAvalible</b></span>
+                        <a href="#jointsExceedAvalible"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>jointsExceedAvalible(jointWeight: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputQuantity: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, unitsConverted: <a href="../interfaces/IUnitsConverted.html" target="_self">IUnitsConverted</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="115"
+                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:115</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>jointWeight</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>inputQuantity</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>unitsConverted</td>
+                                    <td>
+                                                <code><a href="../interfaces/IUnitsConverted.html" target="_self" >IUnitsConverted</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="notifyEvent"></a>
+                    <span class="name">
+                        <span ><b>notifyEvent</b></span>
+                        <a href="#notifyEvent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>notifyEvent(message: <a href="../s/s.html" target="_self">string</a>, action: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="206"
+                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:206</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>message</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
                                     </td>
 
                                     <td>
@@ -673,15 +986,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>refreshPackageEnryForm(inv: <a href="../interfaces/IInventoryAssignment.html" target="_self">IInventoryAssignment</a>, form: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>refreshPackageEnryForm(inv: <a href="../interfaces/IInventoryAssignment.html" target="_self">IInventoryAssignment</a>, form: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="111"
-                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:111</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="130"
+                            class="link-to-prism">src/app/_services/measurement/conversions.service.ts:130</a></div>
                 </td>
             </tr>
 
@@ -691,6 +1004,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -715,7 +1029,7 @@
                                 <tr>
                                     <td>form</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -745,9 +1059,10 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
-import { FormBuilder, FormGroup, Validators } from &#x27;@angular/forms&#x27;;
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from &#x27;@angular/forms&#x27;;
+import { MatSnackBar } from &#x27;@angular/material/snack-bar&#x27;;
 import { IInventoryAssignment } from &#x27;../inventory/inventory-assignment.service&#x27;;
 
 export interface IUnitConversion {
@@ -770,13 +1085,12 @@ export interface IUnitsConverted {
 export class ConversionsService {
 
   // COMPONENTS &#x3D; [{&#x27;name&#x27;: &#x27;AdminbranditemComponent&#x27;, &#x27;selector&#x27;: &#x27;app-adminbranditem&#x27;},
-  constructor(
-              private fb: FormBuilder,
+  constructor(private _snackBar: MatSnackBar,
+              private fb: UntypedFormBuilder,
   ) { }
 
   getGramsConversions(): IUnitConversion[] {
     //  let unitConversion &#x3D; {} as  IUnitConversion
-
     const unitConversion  &#x3D; [
       {name: &#x27;Half Gram&#x27;,   value: .5},
       {name: &#x27;Grams&#x27;,       value:  1},
@@ -786,38 +1100,30 @@ export class ConversionsService {
       {name: &#x27;Half Ounces&#x27;, value:  14},
       {name: &#x27;Ounces&#x27;,      value:  28},
       {name: &#x27;Joints&#x27;,      value:  1},
-      {name: &#x27;lbs&#x27;,         value:  453.592},
+      {name: &#x27;Pounds&#x27;,      value:  453.592},
       {name: &#x27;KiloGrams&#x27;,   value:  1000},
       {name: &#x27;Each&#x27;,        value:  1}
     ]
-
     return unitConversion
   }
 
   getConversionItemByName(name: any): IUnitConversion {
-
     let unit &#x3D; {} as IUnitConversion
-
     const units &#x3D;  this.getGramsConversions()
     return units.find(unit &#x3D;&gt; name &#x3D;&#x3D;&#x3D; unit.name)
-
   }
 
   getBaseUnitsConvertedTo(unitsConverted: IUnitsConverted, baseUnitsRemaining: number, inputQuantity: number): number {
-
     if (unitsConverted) {
-
       unitsConverted.unitOutPutQuantity &#x3D; baseUnitsRemaining
-
       if (unitsConverted.unitConvertTo) {
         // const quantity &#x3D; (+baseUnitsRemaining / + unitsConverted.unitConvertTo.value ) - + inputQuantity
         const quantity  &#x3D; baseUnitsRemaining - inputQuantity
-        return parseInt(quantity.toFixed(2))
+        console.log(&#x27;quantity.toFixed(2)&#x27;, quantity.toFixed(2))
+        return +quantity.toFixed(2)
       }
-
     }
     return 0
-
   }
 
   getConversionItemByValue(value: number):  IUnitConversion {
@@ -828,35 +1134,62 @@ export class ConversionsService {
     return null;
   }
 
-  editAssignment(inventoryAssignment: IInventoryAssignment, form: FormGroup): boolean {
-
+  editAssignment(inventoryAssignment: IInventoryAssignment, form: UntypedFormGroup): boolean {
     if (inventoryAssignment) {
       const inv &#x3D; inventoryAssignment
-
       if (inv) {
-
         try {
-
           //assign the values to the form .
-          if (!inv.cost) { inv.cost &#x3D;0 }
-          if (!inv.price) { inv.price &#x3D;0 }
+          if (!inv.cost)        { inv.cost   &#x3D; 0 }
+          if (!inv.price)       { inv.price &#x3D; 0 }
           if (!inv.jointWeight) { inv.jointWeight &#x3D; 1 }
-
           return true
-
         } catch (error) {
           console.log(error)
           return false
         }
-
       }
-   }
-
+    }
    return false;
-
   }
 
-  refreshPackageEnryForm(inv: IInventoryAssignment, form: FormGroup){
+  getConversionQuantities(inventoryAssignment: IInventoryAssignment, unitsConverted: IUnitsConverted, inputQuantity: number, jointWeight: number): IInventoryAssignment {
+    if (unitsConverted.unitConvertTo.name.toLowerCase() &#x3D;&#x3D; &#x27;joints&#x27;) {
+      if ( this.jointsExceedAvalible(jointWeight, inputQuantity, unitsConverted) ) {
+        this.notifyEvent(&#x27;Quantity or weight or joints exceed remaining quantity.&#x27;, &#x27;Error&#x27;)
+        return
+      }
+      inventoryAssignment.jointWeight           &#x3D; jointWeight
+      inventoryAssignment.packageQuantity       &#x3D; inputQuantity
+      inventoryAssignment.packageCountRemaining &#x3D; inventoryAssignment.packageQuantity
+      inventoryAssignment.baseQuantityRemaining &#x3D; inputQuantity * inventoryAssignment.unitMulitplier * jointWeight
+      inventoryAssignment.baseQuantity          &#x3D; inventoryAssignment.baseQuantityRemaining
+    } else {
+      inventoryAssignment.jointWeight           &#x3D; jointWeight;
+      inventoryAssignment.packageQuantity       &#x3D; inputQuantity
+      inventoryAssignment.packageCountRemaining &#x3D; inventoryAssignment.packageQuantity
+      inventoryAssignment.baseQuantity          &#x3D; inputQuantity * inventoryAssignment.unitMulitplier
+      inventoryAssignment.baseQuantityRemaining &#x3D; inventoryAssignment.baseQuantity
+    }
+    return inventoryAssignment;
+  }
+
+  jointsExceedAvalible(jointWeight: number, inputQuantity: number, unitsConverted: IUnitsConverted): boolean {
+    if (inputQuantity &amp;&amp; unitsConverted) {
+      if (unitsConverted.unitOutPutQuantity &#x3D;&#x3D; null ||
+          unitsConverted.unitOutPutQuantity &#x3D;&#x3D; undefined ||
+          unitsConverted.unitOutPutQuantity &#x3D;&#x3D; 0 ) {
+        return false
+      }
+    }
+    const requestedQuantity &#x3D; jointWeight * inputQuantity;
+    const remaining         &#x3D; unitsConverted.unitOutPutQuantity;
+    if (requestedQuantity &#x3D;&#x3D; remaining) { return false; }
+    if (requestedQuantity &gt; remaining)  { return true;  }
+    return false;
+  }
+
+  refreshPackageEnryForm(inv: IInventoryAssignment, form: UntypedFormGroup){
     try {
       form &#x3D; this.fb.group({
         conversionName:                   [ inv.unitConvertedtoName, Validators.required],
@@ -866,13 +1199,12 @@ export class ConversionsService {
         price:                            [ inv.price],
         jointWeight:                      [ inv.jointWeight],
       })
-
     } catch (error) {
       console.log(error)
     }
   }
 
-  initPackageEntryForm(form: FormGroup){
+  initPackageEntryForm(form: UntypedFormGroup){
     form &#x3D; this.fb.group({
       conversionName:                   [ &#x27;&#x27;],
       inputQuantity:                    [ &#x27;&#x27;], //[ Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)] ],
@@ -882,7 +1214,6 @@ export class ConversionsService {
       jointWeight:                      [ &#x27;&#x27;],
     })
   }
-
 
   getAvailibleQuantityByUnitType(conversion: IUnitsConverted, jointWeight: number,): IUnitsConverted {
     //gets the total Possible of Quantity based on the number of jointWeight. So
@@ -902,22 +1233,15 @@ export class ConversionsService {
     //if they aren&#x27;t grams, then we need to downgrade to grams
     //so if the base quantity is 3.5 and the unit type is Ounces
     //then we multiple OunceValue * 3.5
-
     const unitConversion &#x3D; conversion
 
-    if (!conversion) {
-      console.log(&#x27;This conversion value does not exist&#x27;)
-    }
-
+    if (!conversion) { console.log(&#x27;This conversion value does not exist&#x27;) }
     console.log(&#x27;method: getAvailibleQuantityByUnitType&#x27;)
-
     if (unitConversion.unitConvertFrom) {
       console.log(&#x27;unitConversion.unitConvertFrom.value&#x27;, unitConversion.unitConvertFrom.value)
       console.log(&#x27;Get Avalible Quantity BaseQuantity&#x27;  , unitConversion.baseQuantity)
       const gramsCount &#x3D; unitConversion.baseQuantity * unitConversion.unitConvertFrom.value
-
       if (unitConversion.unitConvertTo) {
-
         //allthough JointWeight may not be zero - it&#x27;s always set to 1, we check both the jointweight and the ConvertedTo.Name to
         //see if we should be converting based on a joint.
         if (unitConversion.unitConvertTo.name.toLocaleLowerCase() &#x3D;&#x3D;&#x3D; &#x27;Joints&#x27; &amp;&amp; jointWeight !&#x3D; 0) {
@@ -925,25 +1249,27 @@ export class ConversionsService {
           console.log(&#x27;Unit Convert to :&#x27; +  unitConversion.unitConvertTo.value + &#x27; jointWeight &#x27; + jointWeight)
           unitConversion.unitConvertTo.value &#x3D; jointWeight
         }
-
         //now that we are in grams we can divide by the unit we want to convert to
         if (unitConversion.unitConvertTo.value !&#x3D; 0) {
-          console.log(&#x27;const outPutValue &#x3D; gramsCount / unitConversion.unitConvertTo.value&#x27;, gramsCount / unitConversion.unitConvertTo.value)
-          const outPutValue &#x3D; gramsCount / unitConversion.unitConvertTo.value
-          unitConversion.unitOutPutQuantity &#x3D; parseInt(outPutValue.toFixed(2))
+          const outPutValue &#x3D; +(gramsCount / unitConversion.unitConvertTo.value).toFixed(2)
+          console.log(&#x27;const outPutValue &#x3D; gramsCount / unitConversion.unitConvertTo.value&#x27;, outPutValue)
+          unitConversion.unitOutPutQuantity &#x3D; +outPutValue.toFixed(2)
+          console.log(&#x27;unitConversion.unitOutPutQuantity &#x27;, unitConversion.unitOutPutQuantity )
         }
-
         if (unitConversion.unitConvertTo.value !&#x3D; 0) {
           const remainder               &#x3D;  gramsCount % unitConversion.unitConvertTo.value
           unitConversion.ouputRemainder &#x3D;  remainder // parseInt(remainder.toFixed(2))
         }
-
         return unitConversion
       }
-
     }
+  }
 
-
+  notifyEvent(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+      verticalPosition: &#x27;top&#x27;
+    });
   }
 
 }
@@ -971,14 +1297,15 @@ export class ConversionsService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -990,6 +1317,15 @@ export class ConversionsService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -999,8 +1335,8 @@ export class ConversionsService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

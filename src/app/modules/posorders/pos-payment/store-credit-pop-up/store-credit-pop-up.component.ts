@@ -10,6 +10,7 @@ import { Subscription, Observable } from 'rxjs';
 import { IPOSOrder,  } from 'src/app/_interfaces';
 import { IStoreCreditSearchModel, StoreCreditMethodsService, StoreCreditResultsPaged } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-store-credit-pop-up',
@@ -34,13 +35,14 @@ export class StoreCreditPopUpComponent implements OnInit,OnDestroy {
   method: string
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
     })
   }
 
   constructor(
     private orderService             : OrdersService,
+    public orderMethodsService       : OrderMethodsService,
     private storeCreditMethodsService: StoreCreditMethodsService,
     private dialogRef                : MatDialogRef<StoreCreditPopUpComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)

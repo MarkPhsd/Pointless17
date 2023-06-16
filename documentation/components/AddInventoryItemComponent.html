@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -35,32 +35,37 @@
 
 
 <ol class="breadcrumb">
-  <li>Components</li>
-  <li
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
   >
   AddInventoryItemComponent</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
-        <li >
-            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
         </li>
-        <li >
-            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
         </li>
-        <li >
-            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
     <h3>File</h3>
 </p>
 <p class="comment">
@@ -74,14 +79,16 @@
         <h3>Implements</h3>
     </p>
     <p class="comment">
-                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+                <code>OnInit</code>
+                    <code><a href="../miscellaneous/variables.html#s" target="_self" >OnDestroy</a></code>
     </p>
 
 
-<section>
+<section data-compodoc="block-metadata">
     <h3>Metadata</h3>
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover metadata">
         <tbody>
+
 
 
 
@@ -97,6 +104,8 @@
                 <td class="col-md-3">selector</td>
                 <td class="col-md-9"><code>app-add-inventory-item</code></td>
             </tr>
+
+
 
             <tr>
                 <td class="col-md-3">styleUrls</td>
@@ -121,7 +130,7 @@
     </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -134,8 +143,15 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                <a href="#_scaleInfo" >_scaleInfo</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
                                     <span class="modifier">Public</span>
                                 <a href="#data" >data</a>
+                            </li>
+                            <li>
+                                <a href="#displayWeight" >displayWeight</a>
                             </li>
                             <li>
                                 <a href="#facility" >facility</a>
@@ -150,7 +166,13 @@
                                 <a href="#inputForm" >inputForm</a>
                             </li>
                             <li>
+                                <a href="#inventoryAssignment" >inventoryAssignment</a>
+                            </li>
+                            <li>
                                 <a href="#inventoryAssignment$" >inventoryAssignment$</a>
+                            </li>
+                            <li>
+                                <a href="#inventoryAssignments" >inventoryAssignments</a>
                             </li>
                             <li>
                                 <a href="#inventoryLocation" >inventoryLocation</a>
@@ -162,7 +184,16 @@
                                 <a href="#inventoryLocations" >inventoryLocations</a>
                             </li>
                             <li>
+                                <a href="#inventoryLocations$" >inventoryLocations$</a>
+                            </li>
+                            <li>
                                 <a href="#item" >item</a>
+                            </li>
+                            <li>
+                                <a href="#itemType" >itemType</a>
+                            </li>
+                            <li>
+                                <a href="#itemType$" >itemType$</a>
                             </li>
                             <li>
                                 <a href="#locations$" >locations$</a>
@@ -179,6 +210,18 @@
                             <li>
                                     <span class="modifier">Public</span>
                                 <a href="#route" >route</a>
+                            </li>
+                            <li>
+                                <a href="#scaleInfo" >scaleInfo</a>
+                            </li>
+                            <li>
+                                <a href="#scaleName" >scaleName</a>
+                            </li>
+                            <li>
+                                <a href="#scaleSetup" >scaleSetup</a>
+                            </li>
+                            <li>
+                                <a href="#scaleValue" >scaleValue</a>
                             </li>
                             <li>
                                 <a href="#searchForm" >searchForm</a>
@@ -199,16 +242,31 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                <a href="#applyQuantity" >applyQuantity</a>
+                            </li>
+                            <li>
+                                <a href="#applyWeightQuantity" >applyWeightQuantity</a>
+                            </li>
+                            <li>
                                 <a href="#deleteItem" >deleteItem</a>
+                            </li>
+                            <li>
+                                <a href="#getItem" >getItem</a>
                             </li>
                             <li>
                                 <a href="#getLocationAssignment" >getLocationAssignment</a>
                             </li>
                             <li>
-                                <a href="#getStrain" >getStrain</a>
+                                <a href="#getVendor" >getVendor</a>
                             </li>
                             <li>
-                                <a href="#getVendor" >getVendor</a>
+                                <a href="#initSearchForm" >initSearchForm</a>
+                            </li>
+                            <li>
+                                <a href="#initSubscriptions" >initSubscriptions</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy" >ngOnDestroy</a>
                             </li>
                             <li>
                                 <a href="#ngOnInit" >ngOnInit</a>
@@ -223,12 +281,14 @@
                                 <a href="#onCancel" >onCancel</a>
                             </li>
                             <li>
-                                    <span class="modifier">Async</span>
-                                <a href="#updateItem" >updateItem</a>
+                                <a href="#openInventoryDialog" >openInventoryDialog</a>
                             </li>
                             <li>
-                                    <span class="modifier">Async</span>
-                                <a href="#updateItemExit" >updateItemExit</a>
+                                    <span class="modifier">Private</span>
+                                <a href="#updateInventory" >updateInventory</a>
+                            </li>
+                            <li>
+                                <a href="#updateItem" >updateItem</a>
                             </li>
                         </ul>
                     </td>
@@ -242,18 +302,18 @@
     </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(_snackBar: MatSnackBar, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, route: <a href="https://angular.io/api/router/ActivatedRoute" target="_blank">ActivatedRoute</a>, menuService: <a href="../injectables/MenuService.html" target="_self">MenuService</a>, fb: <a href="https://angular.io/api/forms/FormBuilder" target="_blank">FormBuilder</a>, fbInventory: <a href="../injectables/FbInventoryService.html" target="_self">FbInventoryService</a>, inventoryAssignmentService: <a href="../injectables/InventoryAssignmentService.html" target="_self">InventoryAssignmentService</a>, inventoryLocationsService: <a href="../injectables/InventoryLocationsService.html" target="_self">InventoryLocationsService</a>, dialogRef: <a href="../components/AddInventoryItemComponent.html" target="_self">MatDialogRef&lt;AddInventoryItemComponent&gt;</a>, data: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+<code>constructor(_snackBar: MatSnackBar, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, route: ActivatedRoute, menuService: <a href="../injectables/MenuService.html" target="_self">MenuService</a>, fbInventory: <a href="../injectables/FbInventoryService.html" target="_self">FbInventoryService</a>, inventoryAssignmentService: <a href="../injectables/InventoryAssignmentService.html" target="_self">InventoryAssignmentService</a>, inventoryLocationsService: <a href="../injectables/InventoryLocationsService.html" target="_self">InventoryLocationsService</a>, scaleService: <a href="../injectables/ScaleService.html" target="_self">ScaleService</a>, dialog: MatDialog, fb: UntypedFormBuilder, itemtypeService: <a href="../injectables/ItemTypeService.html" target="_self">ItemTypeService</a>, dialogRef: <a href="../components/AddInventoryItemComponent.html" target="_self">MatDialogRef&lt;AddInventoryItemComponent&gt;</a>, data: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:36</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:62</a></div>
                             </td>
                         </tr>
 
@@ -298,7 +358,7 @@
                                                         <td>route</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/router/ActivatedRoute" target="_blank" >ActivatedRoute</a></code>
+                                                                    <code>ActivatedRoute</code>
                                                         </td>
                                                   
                                                     <td>
@@ -311,18 +371,6 @@
                                                   
                                                         <td>
                                                                         <code><a href="../injectables/MenuService.html" target="_self" >MenuService</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
-                                                        <td>fb</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="https://angular.io/api/forms/FormBuilder" target="_blank" >FormBuilder</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -367,6 +415,54 @@
                                                     
                                                 </tr>
                                                 <tr>
+                                                        <td>scaleService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ScaleService.html" target="_self" >ScaleService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dialog</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatDialog</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>fb</td>
+                                                  
+                                                        <td>
+                                                                    <code>UntypedFormBuilder</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>itemtypeService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ItemTypeService.html" target="_self" >ItemTypeService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
                                                         <td>dialogRef</td>
                                                   
                                                         <td>
@@ -403,11 +499,113 @@
 
 
 
-    <section>
+    <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applyQuantity"></a>
+                    <span class="name">
+                        <span ><b>applyQuantity</b></span>
+                        <a href="#applyQuantity"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>applyQuantity(event)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="134"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:134</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applyWeightQuantity"></a>
+                    <span class="name">
+                        <span ><b>applyWeightQuantity</b></span>
+                        <a href="#applyWeightQuantity"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>applyWeightQuantity()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="128"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:128</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -428,8 +626,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="140"
-                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:140</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="182"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:182</a></div>
                 </td>
             </tr>
 
@@ -439,6 +637,72 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getItem"></a>
+                    <span class="name">
+                        <span ><b>getItem</b></span>
+                        <a href="#getItem"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getItem(event)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="197"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:197</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -492,8 +756,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="176"
-                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:176</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="224"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:224</a></div>
                 </td>
             </tr>
 
@@ -503,6 +767,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -540,24 +805,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getStrain"></a>
+                    <a name="getVendor"></a>
                     <span class="name">
-                        <span ><b>getStrain</b></span>
-                        <a href="#getStrain"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>getVendor</b></span>
+                        <a href="#getVendor"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getStrain(event)</code>
+<code>getVendor(event)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="155"
-                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:155</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="216"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:216</a></div>
                 </td>
             </tr>
 
@@ -567,6 +832,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -604,24 +870,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getVendor"></a>
+                    <a name="initSearchForm"></a>
                     <span class="name">
-                        <span ><b>getVendor</b></span>
-                        <a href="#getVendor"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>initSearchForm</b></span>
+                        <a href="#initSearchForm"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getVendor(event)</code>
+<code>initSearchForm()</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="167"
-                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:167</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="122"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:122</a></div>
                 </td>
             </tr>
 
@@ -629,36 +895,83 @@
             <tr>
                 <td class="col-md-4">
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>event</td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
                     </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initSubscriptions"></a>
+                    <span class="name">
+                        <span ><b>initSubscriptions</b></span>
+                        <a href="#initSubscriptions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initSubscriptions()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="57"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:57</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
                     <div class="io-description">
-                        
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngOnDestroy</b></span>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="116"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:116</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
                     </div>
                 </td>
             </tr>
@@ -684,8 +997,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="63"
-                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:63</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="86"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:86</a></div>
                 </td>
             </tr>
 
@@ -721,8 +1034,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="190"
-                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:190</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="244"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:244</a></div>
                 </td>
             </tr>
 
@@ -732,6 +1045,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -801,8 +1115,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="118"
-                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:118</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="173"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:173</a></div>
                 </td>
             </tr>
 
@@ -812,6 +1126,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -858,15 +1173,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>onCancel(event)</code>
+<code>onCancel(event, openEditor)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="185"
-                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:185</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="235"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:235</a></div>
                 </td>
             </tr>
 
@@ -876,6 +1191,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -886,6 +1202,167 @@
                             <tbody>
                                 <tr>
                                     <td>event</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>openEditor</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openInventoryDialog"></a>
+                    <span class="name">
+                        <span ><b>openInventoryDialog</b></span>
+                        <a href="#openInventoryDialog"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openInventoryDialog(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="252"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:252</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateInventory"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>updateInventory</b></span>
+                        <a href="#updateInventory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateInventory(item$: <a href="../interfaces/IInventoryAssignment.html" target="_self">Observable&lt;IInventoryAssignment&gt;</a>, exit: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="162"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:162</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>item$</td>
+                                    <td>
+                                                <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >Observable&lt;IInventoryAssignment&gt;</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>exit</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
 
                                     <td>
                                         No
@@ -915,7 +1392,6 @@
                 <td class="col-md-4">
                     <a name="updateItem"></a>
                     <span class="name">
-                        <span class="modifier">Async</span>
                         <span ><b>updateItem</b></span>
                         <a href="#updateItem"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -923,16 +1399,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>updateItem(event)</code>
+<code>updateItem(event, exit)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="91"
-                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:91</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="140"
+                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:140</a></div>
                 </td>
             </tr>
 
@@ -942,72 +1417,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>event</td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Promise&lt;boolean&gt;</a></code>
-
-                    </div>
-                    <div class="io-description">
                         
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="updateItemExit"></a>
-                    <span class="name">
-                        <span class="modifier">Async</span>
-                        <span ><b>updateItemExit</b></span>
-                        <a href="#updateItemExit"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>updateItemExit(event)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="132"
-                            class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:132</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1025,13 +1435,22 @@
 
 
                                 </tr>
+                                <tr>
+                                    <td>exit</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
                     </div>
                     <div class="io-description">
@@ -1042,7 +1461,7 @@
         </tbody>
     </table>
 </section>
-    <section>
+    <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
@@ -1051,8 +1470,35 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="_scaleInfo"></a>
+                    <span class="name">
+                        <span ><b>_scaleInfo</b></span>
+                        <a href="#_scaleInfo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Subscription</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:40</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="data"></a>
                     <span class="name">
+                            <span class="modifier"></span>
                             <span class="modifier">Public</span>
                         <span ><b>data</b></span>
                         <a href="#data"><span class="icon ion-ios-link"></span></a>
@@ -1076,7 +1522,33 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:48</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="76" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:76</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="displayWeight"></a>
+                    <span class="name">
+                        <span ><b>displayWeight</b></span>
+                        <a href="#displayWeight"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:42</a></div>
                         </td>
                     </tr>
 
@@ -1102,7 +1574,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:35</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:54</a></div>
                         </td>
                     </tr>
 
@@ -1128,7 +1600,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:33</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:52</a></div>
                         </td>
                     </tr>
 
@@ -1154,7 +1626,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:23</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:27</a></div>
                         </td>
                     </tr>
 
@@ -1174,13 +1646,39 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                        <i>Type : </i>    <code>UntypedFormGroup</code>
 
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:22</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:26</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="inventoryAssignment"></a>
+                    <span class="name">
+                        <span ><b>inventoryAssignment</b></span>
+                        <a href="#inventoryAssignment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >IInventoryAssignment</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:44</a></div>
                         </td>
                     </tr>
 
@@ -1206,7 +1704,33 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:27</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:45</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="inventoryAssignments"></a>
+                    <span class="name">
+                        <span ><b>inventoryAssignments</b></span>
+                        <a href="#inventoryAssignments"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >IInventoryAssignment[]</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:46</a></div>
                         </td>
                     </tr>
 
@@ -1232,7 +1756,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:31</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:32</a></div>
                         </td>
                     </tr>
 
@@ -1258,7 +1782,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:32</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:51</a></div>
                         </td>
                     </tr>
 
@@ -1284,7 +1808,33 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:26</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:47</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="inventoryLocations$"></a>
+                    <span class="name">
+                        <span ><b>inventoryLocations$</b></span>
+                        <a href="#inventoryLocations$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IInventoryLocation.html" target="_self" >Observable&lt;IInventoryLocation[]&gt;</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:49</a></div>
                         </td>
                     </tr>
 
@@ -1310,7 +1860,59 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:25</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:29</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="itemType"></a>
+                    <span class="name">
+                        <span ><b>itemType</b></span>
+                        <a href="#itemType"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/ItemType.html" target="_self" >ItemType</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:33</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="itemType$"></a>
+                    <span class="name">
+                        <span ><b>itemType$</b></span>
+                        <a href="#itemType$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ItemType&gt;</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:34</a></div>
                         </td>
                     </tr>
 
@@ -1336,7 +1938,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:30</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:48</a></div>
                         </td>
                     </tr>
 
@@ -1362,7 +1964,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:34</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:53</a></div>
                         </td>
                     </tr>
 
@@ -1393,7 +1995,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:36</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:55</a></div>
                         </td>
                     </tr>
 
@@ -1419,7 +2021,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:29</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:31</a></div>
                         </td>
                     </tr>
 
@@ -1440,13 +2042,117 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="https://angular.io/api/router/ActivatedRoute" target="_blank" >ActivatedRoute</a></code>
+                        <i>Type : </i>    <code>ActivatedRoute</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:66</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="scaleInfo"></a>
+                    <span class="name">
+                        <span ><b>scaleInfo</b></span>
+                        <a href="#scaleInfo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/ScaleInfo.html" target="_self" >ScaleInfo</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:39</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="scaleName"></a>
+                    <span class="name">
+                        <span ><b>scaleName</b></span>
+                        <a href="#scaleName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:36</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="scaleSetup"></a>
+                    <span class="name">
+                        <span ><b>scaleSetup</b></span>
+                        <a href="#scaleSetup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/ScaleSetup.html" target="_self" >ScaleSetup</a></code>
 
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
                                 <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="scaleValue"></a>
+                    <span class="name">
+                        <span ><b>scaleValue</b></span>
+                        <a href="#scaleValue"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:37</a></div>
                         </td>
                     </tr>
 
@@ -1466,13 +2172,13 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                        <i>Type : </i>    <code>UntypedFormGroup</code>
 
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:28</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:30</a></div>
                         </td>
                     </tr>
 
@@ -1498,7 +2204,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:24</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component.ts:28</a></div>
                         </td>
                     </tr>
 
@@ -1510,175 +2216,223 @@
 </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component,  Inject,  Input,  OnInit, Optional, } from &#x27;@angular/core&#x27;;
-import { MatDialogRef, MAT_DIALOG_DATA} from &#x27;@angular/material/dialog&#x27;;
-import { Observable } from &#x27;rxjs&#x27;;
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component,  Inject,  Input,  OnDestroy,  OnInit, Optional, } from &#x27;@angular/core&#x27;;
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from &#x27;@angular/material/dialog&#x27;;
+import { Observable, of, Subscription, switchMap } from &#x27;rxjs&#x27;;
 import { InventoryLocationsService, IInventoryLocation } from &#x27;src/app/_services/inventory/inventory-locations.service&#x27;;
 import { InventoryAssignmentService, IInventoryAssignment, Serial } from &#x27;src/app/_services/inventory/inventory-assignment.service&#x27;;
 import { ISite } from &#x27;src/app/_interfaces/site&#x27;;
 import { ActivatedRoute, Router } from &#x27;@angular/router&#x27;;
 import { SitesService } from &#x27;src/app/_services/reporting/sites.service&#x27;;
 import { MatSnackBar } from &#x27;@angular/material/snack-bar&#x27;;
-import { FormBuilder, FormGroup } from &#x27;@angular/forms&#x27;;
+import { UntypedFormBuilder, UntypedFormGroup } from &#x27;@angular/forms&#x27;;
 import { FbInventoryService } from &#x27;src/app/_form-builder/fb-inventory.service&#x27;;
 import { MenuService } from &#x27;src/app/_services&#x27;;
 import { IMenuItem } from &#x27;src/app/_interfaces/menu/menu-products&#x27;;
+import { ScaleInfo, ScaleService, ScaleSetup } from &#x27;src/app/_services/system/scale-service.service&#x27;;
+import { NewInventoryItemComponent } from &#x27;../new-inventory-item/new-inventory-item.component&#x27;;
+import { ItemType } from &#x27;src/app/_interfaces/menu/price-schedule&#x27;;
+import { ItemTypeService } from &#x27;src/app/_services/menu/item-type.service&#x27;;
 
 @Component({
   selector: &#x27;app-add-inventory-item&#x27;,
   templateUrl: &#x27;./add-inventory-item.component.html&#x27;,
   styleUrls: [&#x27;./add-inventory-item.component.scss&#x27;]
 })
-export class AddInventoryItemComponent implements OnInit {
+export class AddInventoryItemComponent implements OnInit, OnDestroy    {
 
-  inputForm:                 FormGroup;
+  inputForm:                 UntypedFormGroup;
   id:                        any;
   site:                      ISite;
   item:                      IInventoryAssignment;
-  inventoryLocations:        IInventoryLocation[];
-  inventoryAssignment$:      Observable&lt;IInventoryAssignment&gt;;
-  searchForm:                FormGroup;
+  searchForm:                UntypedFormGroup;
   quantityMoving:            number;
-  locations$:           Observable&lt;IInventoryLocation[]&gt;;
   inventoryLocation:         IInventoryLocation;
+  itemType: ItemType;
+  itemType$:Observable&lt;ItemType&gt;;
+
+  scaleName           :   any;
+  scaleValue          :   any;
+
+  scaleInfo           : ScaleInfo;
+  _scaleInfo          : Subscription;
+  scaleSetup          : ScaleSetup;
+  displayWeight       : string;
+
+  inventoryAssignment   : IInventoryAssignment;
+  inventoryAssignment$  : Observable&lt;IInventoryAssignment&gt;;
+  inventoryAssignments  : IInventoryAssignment[];
+  inventoryLocations    : IInventoryLocation[];
+  locations$            : Observable&lt;IInventoryLocation[]&gt;;
+  inventoryLocations$   : Observable&lt;IInventoryLocation[]&gt;;
+
   inventoryLocationID:       number;
   facilityLicenseNumber:     string;
   menuItem:                  IMenuItem;
   facility:                  any;
   productName               &#x3D; &quot;&quot;;
 
+  initSubscriptions() {
+    this._scaleInfo &#x3D; this.scaleService.scaleInfo$.subscribe( data &#x3D;&gt; {
+      this.scaleInfo &#x3D; data
+    })
+
+  }
   constructor(
     private _snackBar: MatSnackBar,
     private siteService: SitesService,
     public  route: ActivatedRoute,
     private menuService: MenuService,
-    private fb: FormBuilder,
     private fbInventory: FbInventoryService,
     private inventoryAssignmentService: InventoryAssignmentService,
     private inventoryLocationsService: InventoryLocationsService,
+    private scaleService        : ScaleService,
+    private dialog              : MatDialog,
+    private fb: UntypedFormBuilder,
+    private itemtypeService: ItemTypeService,
     private dialogRef: MatDialogRef&lt;AddInventoryItemComponent&gt;,
     @Inject(MAT_DIALOG_DATA) public data: any)
   {
-
     if (data) {
-
       this.id &#x3D; data.id
-
     } else {
-
       this.id &#x3D; this.route.snapshot.paramMap.get(&#x27;id&#x27;);
-
     }
     this.item &#x3D; {} as IInventoryAssignment
   }
 
   ngOnInit() {
+    this.initSubscriptions()
+    const site &#x3D; this.siteService.getAssignedSite();
+    this.locations$ &#x3D; this.inventoryLocationsService.getLocations().pipe(switchMap(data &#x3D;&gt; {
+      this.inventoryLocations &#x3D; data;
+      return of(data)
+    }))
 
-    try {
-      this.locations$ &#x3D; this.inventoryLocationsService.getLocations();
-      this.site &#x3D;  this.siteService.getAssignedSite();
+    this.inventoryLocations$ &#x3D; this.locations$;
+    this.site &#x3D;  this.siteService.getAssignedSite();
 
+    this.inputForm &#x3D; this.fbInventory.initForm(this.inputForm)
+    this.initSearchForm();
+    if (this.id !&#x3D;0) {
+      this.inventoryAssignment$ &#x3D; this.inventoryAssignmentService.getInventoryAssignment(this.site, this.id)
+      this.inventoryAssignment$.subscribe( data&#x3D;&gt; {
+        this.item &#x3D; data
+        this.itemType$ &#x3D; this.itemtypeService.getItemType(site, this.item.itemTypeID);
+        this.inputForm &#x3D; this.fbInventory.initForm(this.inputForm)
+        this.inputForm &#x3D; this.fbInventory.intitFormData(this.inputForm, data)
+        this.productName &#x3D; this.item.productName
+      })
 
-      this.inputForm &#x3D; this.fbInventory.initForm(this.inputForm)
-
-      if (this.id !&#x3D;0) {
-        this.inventoryAssignment$ &#x3D; this.inventoryAssignmentService.getInventoryAssignment(this.site, this.id)
-        this.inventoryAssignment$.subscribe( data&#x3D;&gt; {
-          this.item &#x3D; data
-          this.inputForm &#x3D; this.fbInventory.initForm(this.inputForm)
-          this.inputForm &#x3D; this.fbInventory.intitFormData(this.inputForm, data)
-          this.productName &#x3D; this.item.productName
-
-        })
-
-      }
-
-    } catch (error) {
-      console.log(error)
+      this.locations$.subscribe(data &#x3D;&gt; {
+        this.inventoryLocations &#x3D; data;
+      })
     }
-
 
   }
 
-  async updateItem(event): Promise&lt;boolean&gt; {
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add &#x27;implements OnDestroy&#x27; to the class.
+    if( this._scaleInfo) { this._scaleInfo.unsubscribe()}
+  }
 
+  initSearchForm() {
+    this.searchForm &#x3D; this.fb.group( {
+      productName: []
+    })
+  }
+
+  applyWeightQuantity() {
+    // if (!this.scaleValue || !this.inputForm) {  return }
+    const value &#x3D; { packageQuantity : this.scaleInfo.value};
+    this.inputForm.patchValue(value)
+  }
+
+  applyQuantity(event) {
+    if (!this.scaleValue &amp;&amp; this.inputForm &amp;&amp; event) {  return }
+    const value &#x3D; { packageQuantity: event};
+    this.inputForm.patchValue(value)
+  }
+
+  updateItem(event, exit) {
     if (this.inputForm) {
       if (this.inputForm.valid) {
+        const packageQuantity &#x3D; this.inputForm.controls[&#x27;packageQuantity&#x27;].value
+        const baseQuantity &#x3D; { baseQuantity: packageQuantity}
+        this.inputForm.patchValue(baseQuantity)
+
         if (this.id !&#x3D; 0) {
-
-          this.item   &#x3D; this.fbInventory.setItemValues(this.item, this.inputForm)
-          const item$ &#x3D; this.inventoryAssignmentService.editInventory(this.site,this.item.id, this.item)
-          const item  &#x3D; await item$.pipe().toPromise()
-          this.notifySave(item)
-          return
-
+          let item &#x3D; this.inventoryAssignmentService.setItemValues(this.inputForm, this.item)
+          const item$ &#x3D; this.inventoryAssignmentService.editInventory(this.site,this.item.id, item)
+          this.updateInventory(item$,exit)
         }
 
         if (this.id &#x3D;&#x3D; 0) {
-
-          this.item   &#x3D; this.fbInventory.setItemValues(this.item, this.inputForm)
+          let item &#x3D; this.inventoryAssignmentService.setItemValues(this.inputForm, this.item)
           const item$ &#x3D; this.inventoryAssignmentService.addInventoryItem(this.site, this.item)
-          const item  &#x3D; await item$.pipe().toPromise()
-          this.notifySave(item)
-          return
-
+          this.updateInventory(item$, exit)
         }
       }
     }
   }
 
+  private updateInventory(item$: Observable&lt;IInventoryAssignment&gt;, exit: boolean) {
+    item$.subscribe(data &#x3D;&gt; {
+      this.notifySave(data)
+      this.inventoryAssignment &#x3D; data;
+      if (exit) {
+        this.onCancel(true, true)
+      }
+      return
+    })
+  }
+
   notifySave(item) {
-
-
     if (item) {
       this.notifyEvent(&#x27;Inventory info updated.&#x27;, &#x27;Success&#x27;)
       return
     }
-
-    console.log(&#x27;updateitem failed&#x27;)
     this.notifyEvent(&#x27;Inventory info not  updated.&#x27;, &#x27;failed&#x27;)
     return  false
-
-  }
-
-  async updateItemExit(event) {
-    const result &#x3D; await this.updateItem(null)
-    console.log(&#x27;result&#x27;, result)
-    if (result) {
-      this.onCancel(event)
-    }
   }
 
   deleteItem(event) {
     const site &#x3D; this.siteService.getAssignedSite();
     const delete$ &#x3D; this.inventoryAssignmentService.deleteInventory(site, this.item.id)
-    delete$.subscribe(data &#x3D;&gt; {
-        this.notifyEvent(&#x27;Item Deleted. &#x27;, &#x27;Success&#x27;)
-        return
-      }, catchError &#x3D;&gt; {
-        this.notifyEvent(&#x27;Item did not delete. &#x27;, &#x27;Failed&#x27;)
-        return
+    delete$.subscribe(
+      {next: data &#x3D;&gt; {
+          this.notifyEvent(&#x27;Item Deleted. &#x27;, &#x27;Success&#x27;)
+          return
+        }, error: error &#x3D;&gt; {
+          this.notifyEvent(&#x60;Item did not delete. ${error}&#x60; , &#x27;Failed&#x27;)
+          return
+        }
       }
     )
-
-    // this.notifyEvent(&#x27;Not implemented. Please disable item from sales&#x27;, &#x27;Failed&#x27;)
   }
 
-  getStrain(event) {
-    const itemStrain &#x3D; event
-    if (itemStrain) {
-      if (itemStrain.id) {
-        this.menuService.getMenuItemByID(this.site, itemStrain.id).subscribe(data &#x3D;&gt; {
+  getItem(event) {
+    const item &#x3D; event
+    if (item &amp;&amp; item.id) {
+      // console.log(&#x27;get item&#x27;)
+      this.menuService.getMenuItemByID(this.site, item.id).subscribe(data &#x3D;&gt; {
           this.menuItem &#x3D; data
-          }
-        )
-      }
+          // console.log(&#x27;get item2&#x27;)
+          this.item &#x3D; this.inventoryAssignmentService.assignProductToInventory(data, item)
+          // console.log(&#x27;get item3&#x27;)
+          this.item &#x3D; this.inventoryAssignmentService.assignChemicals(data, item)
+          // console.log(&#x27;get item4&#x27;)
+          this.inputForm &#x3D; this.fbInventory.intitFormData(this.inputForm, item)
+          // console.log(&#x27;get item5&#x27;)
+          this.initSearchForm();
+        }
+      )
     }
   }
 
   getVendor(event) {
-
     const facility &#x3D; event
     if (facility) {
       this.facilityLicenseNumber &#x3D; &#x60;${facility.displayName} &#x60;
@@ -1687,191 +2441,295 @@ export class AddInventoryItemComponent implements OnInit {
   }
 
   getLocationAssignment(id): IInventoryLocation {
-    this.inventoryLocation &#x3D; this.inventoryLocations.find(data &#x3D;&gt;
-      id &#x3D;&#x3D; data.id
-    )
-    return this.inventoryLocation
+    if (this.inventoryLocations) {
+      const item &#x3D;  this.inventoryLocations.find(data &#x3D;&gt; id &#x3D;&#x3D; data.id  )
+      if (item) {
+        this.inputForm.patchValue( {locationID: item.id, location: item.name })
+        return item
+      }
+      return null
+    }
   }
 
-
-
-  onCancel(event) {
-    this.dialogRef.close();
+  onCancel(event, openEditor) {
+    if (this.inventoryAssignment) {
+      this.openInventoryDialog(this.inventoryAssignment.id)
+      this.dialogRef.close(this.inventoryAssignment);
+      return
+    }
+    this.dialogRef.close(event);
   }
-
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-      duration: 2000,
+      duration: 1000,
       verticalPosition: &#x27;top&#x27;
     });
   }
 
+   ///move to inventoryAssignemtnService
+   openInventoryDialog(id: number) {
+    const dialogRef &#x3D; this.dialog.open(NewInventoryItemComponent,
+      { width:        &#x27;800px&#x27;,
+        minWidth:     &#x27;800px&#x27;,
+        height:       &#x27;750px&#x27;,
+        minHeight:    &#x27;750px&#x27;,
+        data : {id: id}
+      },
+    )
+  }
 
 }
 </code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-templateData">
-        <pre class="line-numbers"><code class="language-html">
-&lt;div class&#x3D;&quot;body&quot;  *ngIf&#x3D;&quot;item&quot;&gt;
-
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;body&quot;
+     *ngIf&#x3D;&quot;item&quot;&gt;
   &lt;mat-card class&#x3D;&quot;strain-card&quot;&gt;
-
     &lt;mat-card-title&gt;
-
       &lt;div&gt;&lt;h3&gt;Item: {{item.productName}} &lt;/h3&gt;&lt;/div&gt;
       &lt;div&gt;&lt;h3&gt;Label:{{item.label}}       &lt;/h3&gt;&lt;/div&gt;
-
     &lt;/mat-card-title&gt;
 
     &lt;mat-card-subtitle&gt;
-      &lt;div fxLayout&#x3D;&quot;row&quot; fxLayoutAlign&#x3D;&quot; center&quot; &gt;
 
-        &lt;div fxLayout&#x3D;&quot;column&quot; fxLayoutAlign&#x3D;&quot;start start&quot; fxFlex&#x3D;&quot;66&quot;&gt;
-
-          &lt;div class&#x3D;&quot;subtitle grid-container-headers&quot;&gt;
-            &lt;div class&#x3D;&quot;item-label&quot;&gt;Type&lt;/div&gt;
-            &lt;div class&#x3D;&quot;item-info&quot;&gt; {{item.packageType}} &lt;/div&gt;
-            &lt;div class&#x3D;&quot;item-label&quot;&gt;Intake Category &lt;/div&gt;
-            &lt;div class&#x3D;&quot;item-info&quot;&gt; {{item.productCategoryName}} &lt;/div&gt;
-            &lt;div class&#x3D;&quot;item-label&quot;&gt;Vendor Code&lt;/div&gt;
-            &lt;div class&#x3D;&quot;item-info&quot;&gt; {{item.facilityLicenseNumber}} &lt;/div&gt;
-          &lt;/div&gt;
-
+      &lt;div class&#x3D;&quot;header-container&quot;&gt;
+        &lt;div class&#x3D;&quot;subtitle grid-container-headers&quot;&gt;
+          &lt;div class&#x3D;&quot;item-label&quot;&gt;SKU&lt;/div&gt;
+          &lt;div class&#x3D;&quot;item-info&quot;&gt; {{item.sku}} &lt;/div&gt;
+          &lt;div class&#x3D;&quot;item-label&quot;&gt;Type&lt;/div&gt;
+          &lt;div class&#x3D;&quot;item-info&quot;&gt; {{item.packageType}} &lt;/div&gt;
+          &lt;div class&#x3D;&quot;item-label&quot;&gt;Intake Category &lt;/div&gt;
+          &lt;div class&#x3D;&quot;item-info&quot;&gt; {{item.productCategoryName}} &lt;/div&gt;
+          &lt;div class&#x3D;&quot;item-label&quot;&gt;Vendor Code&lt;/div&gt;
+          &lt;div class&#x3D;&quot;item-info&quot;&gt; {{item.facilityLicenseNumber}} &lt;/div&gt;
         &lt;/div&gt;
 
-        &lt;div class&#x3D;&quot;button-margins&quot;&gt;
-
+        &lt;div&gt;
           &lt;app-edit-buttons-standard
-                (outputeupdateItem)     &#x3D;&quot;updateItem($event)&quot;
-                (outputupdateItemExit)  &#x3D;&quot;updateItemExit($event)&quot;
+                (outputeupdateItem)     &#x3D;&quot;updateItem($event, false)&quot;
+                (outputupdateItemExit)  &#x3D;&quot;updateItem($event, true)&quot;
                 (outputupdatedeleteItem)&#x3D;&quot;deleteItem($event)&quot;
-                (outputupdateonCancel)  &#x3D;&quot;onCancel($event)&quot;
+                (outputupdateonCancel)  &#x3D;&quot;onCancel($event, false)&quot;
           &gt;&lt;/app-edit-buttons-standard&gt;
         &lt;/div&gt;
 
       &lt;/div&gt;
 
     &lt;mat-divider&gt;&lt;/mat-divider&gt;
-
     &lt;/mat-card-subtitle&gt;
+      &lt;mat-card-content  &gt;
+        &lt;div class&#x3D;&quot;content-container&quot;&gt;
+          &lt;div class&#x3D;&quot;item-input&quot;&gt;
+            &lt;app-product-search-selector
+                class         &#x3D; &quot;fields&quot;
+                [itemType]    &#x3D; 1
+                [productName] &#x3D; &quot;productName&quot;
+                [searchForm]  &#x3D; &quot;searchForm&quot;
+                (itemSelect)  &#x3D; &quot;getItem($event)&quot;&gt;
+              &gt;
+            &lt;/app-product-search-selector&gt;
+          &lt;/div&gt;
 
-      &lt;mat-card-content &gt;
+          &lt;div [formGroup]&#x3D;&quot;inputForm&quot;
+              *ngIf&#x3D;&quot;menuItem&quot;
+              class&#x3D;&quot;grid-container&quot;&gt;
 
-          &lt;div [formGroup]&#x3D;&quot;inputForm&quot;&gt;
-            &lt;div fxLayout&#x3D;&quot;row&quot;
-                  fxFlex
+              &lt;!-- useGroups {{menuItem.itemType?.useGroups?.name.toLowerCase()}} &lt;br&gt;
+              type  {{menuItem.itemType?.type?.toLowerCase()}} --&gt;
+            &lt;div *ngIf&#x3D;&quot;menuItem.itemType.useGroups.name.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;cannabis&#x27;&quot;&gt;
+              &lt;app-facility-search-selector
+                  [item]&#x3D;&quot;facility&quot;
+                  [searchForm]&#x3D;&quot;inputForm&quot;
+                  (itemSelect)&#x3D;&quot;getVendor($event)&quot;&gt;
+              &lt;/app-facility-search-selector&gt;
+            &lt;/div&gt;
 
-                  fxLayoutGap&#x3D;15
-                  fxLayoutAlign&#x3D;&quot;center start&quot;&gt;
+            &lt;div *ngIf&#x3D;&quot;menuItem.itemType.useGroups.name.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;cannabis&#x27;&quot;&gt;
+              &lt;mat-form-field appearance&#x3D;&quot;outline&quot; &gt;
+                &lt;mat-label&gt;Test Date&lt;/mat-label&gt;
+                &lt;input  matInput
+                        type&#x3D;&quot;text&quot;
+                        formControlName&#x3D;&quot;testDate&quot;
+                        name&#x3D;&quot;testDate&quot;
+                        [matDatepicker]&#x3D;&quot;picker&quot;&gt;
+                &lt;mat-datepicker-toggle matSuffix [for]&#x3D;&quot;picker&quot;&gt;&lt;/mat-datepicker-toggle&gt;
+                &lt;mat-datepicker #picker&gt;&lt;/mat-datepicker&gt;
+              &lt;/mat-form-field&gt;
+            &lt;/div&gt;
 
-                &lt;div  fxLayout&#x3D;&quot;column&quot;
-                      fxLayoutAlign&#x3D;&quot;start start&quot;
-                      fxFlex&#x3D;&quot;40&quot;
-                      fxLayoutGap&#x3D;15
-                      class&#x3D;&quot;fields&quot;
-               &gt;
+            &lt;div *ngIf&#x3D;&quot;menuItem.itemType.useGroups.name.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;cannabis&#x27;&quot;&gt;
+              &lt;app-value-fields
+                    [inputForm]&#x3D;&quot;inputForm&quot;
+                    [fieldName]&#x3D;&quot;&#x27;testedBy&#x27;&quot;&gt;
+                  Tested By
+              &lt;/app-value-fields&gt;
+            &lt;/div&gt;
 
-                    &lt;app-product-search-selector
-                        class&#x3D;&quot;fields&quot;
-                        [itemType]&#x3D;1
-                        [productName]&#x3D;&quot;productName&quot;
-                        [searchForm]&#x3D;&quot;inputForm&quot;
-                        (itemSelect)&#x3D;&quot;getStrain($event)&quot;&gt;
-                        &gt;
-                    &lt;/app-product-search-selector&gt;
+            &lt;div *ngIf&#x3D;&quot;menuItem.itemType.useGroups.name.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;cannabis&#x27;&quot;&gt;
+              &lt;app-value-fields
+                  [inputForm]&#x3D;&quot;inputForm&quot;
+                  [fieldName]&#x3D;&quot;&#x27;testLotNumber&#x27;&quot;&gt;
+                Test Lot #
+              &lt;/app-value-fields&gt;
+            &lt;/div&gt;
 
-                    &lt;app-facility-search-selector
-                        class&#x3D;&quot;fields&quot;
-                        [item]&#x3D;&quot;facility&quot;
-                        [searchForm]&#x3D;&quot;inputForm&quot;
-                        (itemSelect)&#x3D;&quot;getVendor($event)&quot;&gt;
-                        &gt;
-                    &lt;/app-facility-search-selector&gt;
-
-                    &lt;mat-form-field appearance&#x3D;&quot;outline&quot;  class&#x3D;&quot;fields&quot; &gt;
-                      &lt;mat-label&gt;Expiration&lt;/mat-label&gt;
-                      &lt;input matInput
+            &lt;div&gt;
+              &lt;mat-form-field appearance&#x3D;&quot;outline&quot; &gt;
+                &lt;mat-label&gt;Expiration&lt;/mat-label&gt;
+                &lt;input  matInput
                         type&#x3D;&quot;text&quot;
                         formControlName&#x3D;&quot;expiration&quot;
                         name&#x3D;&quot;expiration&quot;
                         [matDatepicker]&#x3D;&quot;picker&quot;&gt;
-                        &lt;mat-datepicker-toggle matSuffix [for]&#x3D;&quot;picker&quot;&gt;&lt;/mat-datepicker-toggle&gt;
-                        &lt;mat-datepicker #picker&gt;&lt;/mat-datepicker&gt;
-                    &lt;/mat-form-field&gt;
-
-                    &lt;mat-form-field appearance&#x3D;&quot;outline&quot;  class&#x3D;&quot;fields&quot; &gt;
-                      &lt;mat-label &gt; Category Type&lt;/mat-label&gt;
-                      &lt;input matInput
-                          type&#x3D;&quot;text&quot;
-                          formControlName&#x3D;&quot;productCategoryName&quot;
-                        &gt;
-                    &lt;/mat-form-field&gt;
-
-                &lt;/div&gt;
-
-                &lt;div  fxLayout&#x3D;&quot;column&quot;
-                      fxLayoutAlign&#x3D;&quot;start start&quot;
-                      fxFlex&#x3D;&quot;40&quot;
-                      fxLayoutGap&#x3D;15
-                      class&#x3D;&quot;fields&quot;
-                  &gt;
-
-                  &lt;div class&#x3D;&quot;grid-container-fields&quot;&gt;
-
-                    &lt;div&gt;
-                      &lt;mat-form-field appearance&#x3D;&quot;outline&quot; class&#x3D;&quot;price-values fields&quot;&gt;
-                        &lt;mat-label &gt; Quantity&lt;/mat-label&gt;
-                        &lt;input matInput
-                            type&#x3D;&quot;text&quot;
-                            formControlName&#x3D;&quot;packageQuantity&quot;
-                          &gt;
-                      &lt;/mat-form-field&gt;
-                    &lt;/div&gt;
-
-                    &lt;div&gt;
-                      &lt;mat-form-field  appearance&#x3D;&quot;outline&quot; class&#x3D;&quot;price-values fields&quot;&gt;
-                      &lt;mat-label &gt;Cost&lt;/mat-label&gt;
-                      &lt;input  matInput
-                          type           &#x3D;&quot;text&quot;
-                          formControlName&#x3D;&quot;cost&quot;
-                          name           &#x3D;&quot;cost&quot;
-                          class          &#x3D;&quot;price-values&quot;
-                          &gt;
-                      &lt;/mat-form-field&gt;
-                    &lt;/div&gt;
-
-                    &lt;div&gt;
-                      &lt;mat-form-field  appearance&#x3D;&quot;outline&quot; class&#x3D;&quot;price-values fields&quot;&gt;
-                        &lt;mat-label &gt;Price&lt;/mat-label&gt;
-                        &lt;input  matInput
-                            type           &#x3D;&quot;text&quot;
-                            formControlName&#x3D;&quot;price&quot;
-                            name           &#x3D;&quot;price&quot;
-                            class          &#x3D;&quot;price-values&quot;
-                            &gt;
-                      &lt;/mat-form-field&gt;
-                    &lt;/div&gt;
-
-                  &lt;/div&gt;
-
-
-                &lt;/div&gt;
+                &lt;mat-datepicker-toggle matSuffix [for]&#x3D;&quot;picker&quot;&gt;&lt;/mat-datepicker-toggle&gt;
+                &lt;mat-datepicker #picker&gt;&lt;/mat-datepicker&gt;
+              &lt;/mat-form-field&gt;
             &lt;/div&gt;
+
+            &lt;div&gt;
+              &lt;app-value-fields
+                    [inputForm]&#x3D;&quot;inputForm&quot;
+                    [fieldName]&#x3D;&quot;&#x27;invoiceCode&#x27;&quot;&gt;
+                    Vendor Invoice #
+              &lt;/app-value-fields&gt;
+            &lt;/div&gt;
+
+            &lt;div *ngIf&#x3D;&quot;menuItem.itemType.useGroups.name.toLowerCase()  &#x3D;&#x3D;&#x3D; &#x27;cannabis&#x27;&quot;&gt;
+                &lt;app-value-fields
+                      [inputForm]&#x3D;&quot;inputForm&quot;
+                      [fieldName]&#x3D;&quot;&#x27;productCategoryName&#x27;&quot;&gt;
+                      Category Type
+                &lt;/app-value-fields&gt;
+            &lt;/div&gt;
+
+            &lt;div&gt;
+              &lt;mat-form-field appearance&#x3D;&quot;outline&quot; &gt;
+                &lt;mat-label&gt;Locations&lt;/mat-label&gt;
+                &lt;mat-select
+                            type               &#x3D;&quot;text&quot;
+                            [(ngModel)]        &#x3D;&quot;inventoryLocationID&quot;
+                            formControlName    &#x3D;&quot;locationID&quot;
+                            (selectionChange)  &#x3D;&quot;getLocationAssignment($event.value)&quot;
+                    &gt;
+                  &lt;div *ngIf&#x3D;&quot;(inventoryLocations$ | async) as list&quot;&gt;
+                    &lt;mat-option *ngFor&#x3D;&quot;let item of list&quot; [value]&#x3D;&quot;item.id&quot;&gt;
+                      {{item.name}}
+                    &lt;/mat-option&gt;
+                  &lt;/div&gt;
+                &lt;/mat-select&gt;
+              &lt;/mat-form-field&gt;
+            &lt;/div&gt;
+
+            &lt;div&gt;
+              &lt;app-value-fields
+                    [inputForm]&#x3D;&quot;inputForm&quot;
+                    [fieldName]&#x3D;&quot;&#x27;price&#x27;&quot;&gt;
+                    Price
+              &lt;/app-value-fields&gt;
+            &lt;/div&gt;
+
+            &lt;div&gt;
+              &lt;app-value-fields
+                    [inputForm]&#x3D;&quot;inputForm&quot;
+                    [fieldName]&#x3D;&quot;&#x27;cost&#x27;&quot;&gt;
+                Cost
+              &lt;/app-value-fields&gt;
+            &lt;/div&gt;
+
+            &lt;div&gt;
+              &lt;app-value-fields
+                    [inputForm]&#x3D;&quot;inputForm&quot;
+                    [fieldName]&#x3D;&quot;&#x27;unitOfMeasureName&#x27;&quot;&gt;
+                Unit of Measure
+              &lt;/app-value-fields&gt;
+            &lt;/div&gt;
+
+            &lt;div&gt;
+                &lt;app-value-fields
+                      [inputForm]&#x3D;&quot;inputForm&quot;
+                      [fieldName]&#x3D;&quot;&#x27;packageQuantity&#x27;&quot;&gt;
+                  Package Quantity
+                &lt;/app-value-fields&gt;
+
+                &lt;span *ngIf&#x3D;&quot;scaleInfo&quot;&gt;
+                  {{scaleInfo.value}} {{scaleInfo.mode}}
+                  &lt;span&gt;&lt;button mat-raised-button (click)&#x3D;&quot;applyWeightQuantity()&quot;&gt;
+                    Apply Weight
+                  &lt;/button&gt;&lt;/span&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+
+            &lt;div&gt;
+              &lt;mat-slide-toggle
+                      name&#x3D;&quot;notAvalibleForSale&quot;
+                      class&#x3D;&quot;mat-label&quot;
+                      formControlName&#x3D;&quot;notAvalibleForSale&quot;&gt;
+                &lt;mat-label class&#x3D;&quot;mat-label&quot;&gt;Disable&lt;/mat-label&gt;
+              &lt;/mat-slide-toggle&gt;
+            &lt;/div&gt;
+
           &lt;/div&gt;
+
+          &lt;mat-label
+                *ngIf&#x3D;&quot;menuItem &amp;&amp; menuItem?.itemType?.useGroups?.name.toLowerCase() !&#x3D; &#x27;cannabis&#x27;&quot;&gt;
+            Case Information - only for whole case / split case options
+          &lt;/mat-label&gt;
+          &lt;div
+                *ngIf&#x3D;&quot;inputForm &amp;&amp; menuItem &amp;&amp;  menuItem?.itemType?.useGroups?.name.toLowerCase() !&#x3D; &#x27;cannabis&#x27;&quot;
+                class&#x3D;&quot;grid-container&quot;&gt;
+            &lt;div&gt;
+              &lt;app-value-fields
+                [inputForm]&#x3D;&quot;inputForm&quot;
+                [fieldName]&#x3D;&quot;&#x27;caseQuantity&#x27;&quot;&gt;
+                Case Quantity
+              &lt;/app-value-fields&gt;
+            &lt;/div&gt;
+
+            &lt;div&gt;
+              &lt;app-value-fields
+                [inputForm]&#x3D;&quot;inputForm&quot;
+                [fieldName]&#x3D;&quot;&#x27;casePrice&#x27;&quot;&gt;
+                Case Price
+              &lt;/app-value-fields&gt;
+            &lt;/div&gt;
+
+            &lt;div&gt;
+              &lt;app-value-fields
+                [inputForm]&#x3D;&quot;inputForm&quot;
+                [fieldName]&#x3D;&quot;&#x27;itemSku&#x27;&quot;&gt;
+                Item Sku
+              &lt;/app-value-fields&gt;
+            &lt;/div&gt;
+
+            &lt;div *ngIf&#x3D;&quot;(itemType$| async) as itemType&quot;&gt;
+              &lt;app-price-category-select
+                [itemType]        &#x3D;&quot;itemType&quot;
+                [priceCategoryID] &#x3D;&quot;item.priceCategoryID&quot;
+                [inputForm]       &#x3D;&quot;inputForm&quot; &gt;
+              &lt;/app-price-category-select&gt;
+            &lt;/div&gt;
+
+          &lt;/div&gt;
+        &lt;/div&gt;
       &lt;/mat-card-content&gt;
     &lt;/mat-card&gt;
 
   &lt;/div&gt;
+
+
+
+  &lt;!--  --&gt;
 </code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-styleData">
+    <div class="tab-pane fade " id="styleData">
                 <p class="comment">
                     <code>./add-inventory-item.component.scss</code>
                 </p>
                 <pre class="line-numbers"><code class="language-scss">// body{ overflow-x: hidden;}
+@import &quot;/src/mixins.scss&quot;;
 
 :host {
   display: flex;
@@ -1883,102 +2741,33 @@ export class AddInventoryItemComponent implements OnInit {
   margin-top: 4px;
 }
 
+.header-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(375px, 1fr) );
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
+}
+
 .chemicalInput {
   width: 50px;
 }
 
-mat-raised-button {
-  margin: 5rem 5rem 2rem 2rem;
-  padding: 1rem 1rem 1rem 1rem;
-}
-
-.item-info {
-  font-size: .9em;
-}
-
-mat-card{
-  padding: 5px 5px 5px 5px;
-  margin:  3px 3px 3px 3px;
-}
-
-.example-tab-icon {
-  margin-right: 8px;
-}
-
-simple-tinymce {
-  padding:5px;
-}
-
-h1 {
-  font-size: 1.5em;
-  text-decoration: underline;
-}
-
-.range-description {
-  margin-top: 1.5em;
-  margin-right: 1em;
-}
-
-.custom-card {
-  background-color: gray;
-  padding: 25px;
-  margin-bottom: 25px;
-}
-
-
-#inventoryMoveInstructions {
-  font-weight: 600;
-}
-
-.inventoryLocationControls {
-  float: right;
-}
-
-.inventoryControlLabels {
-  text-align:  left;
-}
-
-#inventoryAssignLocationsButton {
-  float: right;
-}
-
-.cancel-assignment {
-  float: right;
-}
-
-::ng-deep .mat-form-field-wrapper{
-   margin-bottom: -1.5em;
-   margin-left: 4px;
-   margin-right: 4px;
-}
-
-::ng-deep .mat-datepicker-content .mat-calendar
-{
-  zoom: 0.85;
-}
-
-::ng-deep  .md-datepicker-input-container {
-  width: 50px;
-}
-
-mat-form-field {
-  font-size: .8em;
-  margin: 4px 4px 4px 4px;
-}
-
-.assignment-header {
-  font-size: 1.2;
-  font-weight: 400;
-  margin-left: 5px;
-}
-
-.fields {
-  margin: 4px 4px 4px 4px;
+.grid-item-span {
+  column-span: 2;
 }
 
 .grid-container {
-  display: flex;
-  // grid-template-columns:  350px 350px ;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 5px;
 }
 
@@ -1993,8 +2782,8 @@ mat-form-field {
 }
 
 .item-input {
-  max-width: 75px;
-  width: 50px;
+  max-width: 200px;
+  width: 200px;
 }
 
 .range-description {
@@ -2010,9 +2799,18 @@ mat-form-field {
   gap: 2px;
 }
 
+.content-container { 
+  max-height: 500px;
+  overflow-y: auto;
+}
+
 .button-assign {
   float: left;
   margin: 2px 2px 2px 2px;
+}
+
+.button { 
+  margin: 3px;
 }
 
 .btn-edit-pacakge {
@@ -2049,12 +2847,10 @@ mat-form-field {
 
 .inventory-card {
   min-width: 200px;
-  // overflow: hidden;
 }
 
 .inlineControls {
-  // float: left;
-  width: 50px
+  width: 50px;
 }
 
 .package-list {
@@ -2067,7 +2863,7 @@ mat-form-field {
 </code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-tree">
+    <div class="tab-pane fade " id="tree">
         <div id="tree-container"></div>
         <div class="tree-legend">
             <div class="title">
@@ -2092,9 +2888,9 @@ mat-form-field {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="body"  *ngIf="item">  <mat-card class="strain-card">    <mat-card-title>      <div><h3>Item: {{item.productName}} </h3></div>      <div><h3>Label:{{item.label}}       </h3></div>    </mat-card-title>    <mat-card-subtitle>      <div fxLayout="row" fxLayoutAlign=" center" >        <div fxLayout="column" fxLayoutAlign="start start" fxFlex="66">          <div class="subtitle grid-container-headers">            <div class="item-label">Type</div>            <div class="item-info"> {{item.packageType}} </div>            <div class="item-label">Intake Category </div>            <div class="item-info"> {{item.productCategoryName}} </div>            <div class="item-label">Vendor Code</div>            <div class="item-info"> {{item.facilityLicenseNumber}} </div>          </div>        </div>        <div class="button-margins">          <app-edit-buttons-standard                (outputeupdateItem)     ="updateItem($event)"                (outputupdateItemExit)  ="updateItemExit($event)"                (outputupdatedeleteItem)="deleteItem($event)"                (outputupdateonCancel)  ="onCancel($event)"          ></app-edit-buttons-standard>        </div>      </div>    <mat-divider></mat-divider>    </mat-card-subtitle>      <mat-card-content >          <div [formGroup]="inputForm">            <div fxLayout="row"                  fxFlex                  fxLayoutGap=15                  fxLayoutAlign="center start">                <div  fxLayout="column"                      fxLayoutAlign="start start"                      fxFlex="40"                      fxLayoutGap=15                      class="fields"               >                    <app-product-search-selector                        class="fields"                        [itemType]=1                        [productName]="productName"                        [searchForm]="inputForm"                        (itemSelect)="getStrain($event)">                        >                    </app-product-search-selector>                    <app-facility-search-selector                        class="fields"                        [item]="facility"                        [searchForm]="inputForm"                        (itemSelect)="getVendor($event)">                        >                    </app-facility-search-selector>                    <mat-form-field appearance="outline"  class="fields" >                      <mat-label>Expiration</mat-label>                      <input matInput                        type="text"                        formControlName="expiration"                        name="expiration"                        [matDatepicker]="picker">                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>                        <mat-datepicker #picker></mat-datepicker>                    </mat-form-field>                    <mat-form-field appearance="outline"  class="fields" >                      <mat-label > Category Type</mat-label>                      <input matInput                          type="text"                          formControlName="productCategoryName"                        >                    </mat-form-field>                </div>                <div  fxLayout="column"                      fxLayoutAlign="start start"                      fxFlex="40"                      fxLayoutGap=15                      class="fields"                  >                  <div class="grid-container-fields">                    <div>                      <mat-form-field appearance="outline" class="price-values fields">                        <mat-label > Quantity</mat-label>                        <input matInput                            type="text"                            formControlName="packageQuantity"                          >                      </mat-form-field>                    </div>                    <div>                      <mat-form-field  appearance="outline" class="price-values fields">                      <mat-label >Cost</mat-label>                      <input  matInput                          type           ="text"                          formControlName="cost"                          name           ="cost"                          class          ="price-values"                          >                      </mat-form-field>                    </div>                    <div>                      <mat-form-field  appearance="outline" class="price-values fields">                        <mat-label >Price</mat-label>                        <input  matInput                            type           ="text"                            formControlName="price"                            name           ="price"                            class          ="price-values"                            >                      </mat-form-field>                    </div>                  </div>                </div>            </div>          </div>      </mat-card-content>    </mat-card>  </div></div>'
-    var COMPONENTS = [{'name': 'AccordionComponent', 'selector': 'app-accordion'},{'name': 'AccordionMenuItemEditComponent', 'selector': 'app-accordion-menu-item-edit'},{'name': 'AddInventoryItemComponent', 'selector': 'app-add-inventory-item'},{'name': 'AddItemByTypeComponent', 'selector': 'app-add-item-by-type'},{'name': 'AdjustItemComponent', 'selector': 'app-adjust-item'},{'name': 'AdjustItemNoteComponent', 'selector': 'app-adjust-item-note'},{'name': 'AdjustItemPriceChangeComponent', 'selector': 'app-adjust-item-price-change'},{'name': 'AdjustItemVoidReasonsComponent', 'selector': 'app-adjust-item-void-reasons'},{'name': 'AdjustmentReasonsComponent', 'selector': 'app-adjustment-reasons'},{'name': 'AdminbranditemComponent', 'selector': 'app-adminbranditem'},{'name': 'AdminbrandslistComponent', 'selector': 'app-adminbrandslist'},{'name': 'AdminComponent', 'selector': 'app-admin'},{'name': 'AgGridImageFormatterComponent', 'selector': 'app-ag-grid-image-formatter'},{'name': 'AgGridTestComponent', 'selector': 'app-ag-grid-test'},{'name': 'AgGridToggleComponent', 'selector': 'app-ag-grid-toggle'},{'name': 'AgPaginationComponent', 'selector': 'app-ag-pagination'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AppGateComponent', 'selector': 'app-app-gate'},{'name': 'AreaComponent', 'selector': 'app-widget-area'},{'name': 'AuditPanelComponent', 'selector': 'app-audit-panel'},{'name': 'BarcodeScannerComponent', 'selector': 'app-barcode-scanner'},{'name': 'BrandslistComponent', 'selector': 'app-brandslist'},{'name': 'BrandTypeSelectComponent', 'selector': 'app-brand-type-select'},{'name': 'BtBlueToothScannerComponent', 'selector': 'app-bt-blue-tooth-scanner'},{'name': 'BtPOSPrinterComponent', 'selector': 'app-bt-posprinter'},{'name': 'ButtonComponent', 'selector': 'storybook-button'},{'name': 'ButtonRendererComponent', 'selector': 'app-button-renderer'},{'name': 'CacheSettingsComponent', 'selector': 'app-cache-settings'},{'name': 'CannabisItemEditComponent', 'selector': 'app-cannabis-item-edit'},{'name': 'CardComponent', 'selector': 'app-widget-card'},{'name': 'CartButtonComponent', 'selector': 'app-cart-button'},{'name': 'CashDiscountItemProductEditComponent', 'selector': 'app-cash-discount-item-product-edit'},{'name': 'CashDiscountOrderProductEditComponent', 'selector': 'app-cash-discount-order-product-edit'},{'name': 'CategoriesAlternateComponent', 'selector': 'app-categories-alternate'},{'name': 'CategoriesComponent', 'selector': 'app-categories'},{'name': 'CategorieslistviewComponent', 'selector': 'app-categorieslistview'},{'name': 'CategoryScrollComponent', 'selector': 'app-category-scroll'},{'name': 'CategorySelectComponent', 'selector': 'app-category-select'},{'name': 'ChangepasswordComponent', 'selector': 'app-changepassword'},{'name': 'ChartTableComponent', 'selector': 'app-widget-chart-table'},{'name': 'CheckInProfileComponent', 'selector': 'app-check-in-profile'},{'name': 'ChemicalSpinnersComponent', 'selector': 'app-chemical-spinners'},{'name': 'ChemicalValuesComponent', 'selector': 'app-chemical-values'},{'name': 'ChipsDisplayComponent', 'selector': 'app-chips-display'},{'name': 'ClientSearchSelectorComponent', 'selector': 'app-client-search-selector'},{'name': 'ClientTypeEditComponent', 'selector': 'app-client-type-edit'},{'name': 'ClientTypeListComponent', 'selector': 'app-client-type-list'},{'name': 'ClientTypeSelectionComponent', 'selector': 'app-client-type-selection'},{'name': 'ClientTypesLookupComponent', 'selector': 'app-client-types-lookup'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'DatabaseSchemaComponent', 'selector': 'app-database-schema'},{'name': 'DateScheduleComponent', 'selector': 'app-date-schedule'},{'name': 'DefaultComponent', 'selector': 'app-default'},{'name': 'DemographicsComponent', 'selector': 'app-demographics'},{'name': 'DepartmentSelectComponent', 'selector': 'app-department-select'},{'name': 'DiscountOptionsComponent', 'selector': 'app-discount-options'},{'name': 'DiscountTypeSelectionComponent', 'selector': 'app-discount-type-selection'},{'name': 'DsiEMVPaymentComponent', 'selector': 'app-dsi-emvpayment'},{'name': 'EachProductEditComponent', 'selector': 'app-each-product-edit'},{'name': 'EditButtonsStandardComponent', 'selector': 'app-edit-buttons-standard'},{'name': 'EditSelectedItemsComponent', 'selector': 'app-edit-selected-items'},{'name': 'FacilitiesListComponent', 'selector': 'app-facilities-list'},{'name': 'FacilitySearchSelectorComponent', 'selector': 'app-facility-search-selector'},{'name': 'FilterComponent', 'selector': 'app-widget-filter'},{'name': 'FlatRateEditComponent', 'selector': 'app-flat-rate-edit'},{'name': 'FlatRateListComponent', 'selector': 'app-flat-rate-list'},{'name': 'FlatTaxRateListComponent', 'selector': 'app-flat-tax-rate-list'},{'name': 'FoodProductEditComponent', 'selector': 'app-food-product-edit'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'FormSelectListComponent', 'selector': 'app-form-select-list'},{'name': 'GenericIdSelectComponent', 'selector': 'app-generic-id-select'},{'name': 'GenericNameSelectComponent', 'selector': 'app-generic-name-select'},{'name': 'GiftCardProductEditComponent', 'selector': 'app-gift-card-product-edit'},{'name': 'GoogleMapsComponent', 'selector': 'app-google-maps'},{'name': 'HammerCardComponent', 'selector': 'app-hammer-card'},{'name': 'HeaderComponent', 'selector': 'storybook-header'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HTMLEditPrintingComponent', 'selector': 'app-htmledit-printing'},{'name': 'ImageCaptureComponent', 'selector': 'app-image-capture'},{'name': 'InstalledPrintersComponent', 'selector': 'app-installed-printers'},{'name': 'InventoryAdjustmentNoteComponent', 'selector': 'app-adjustment-note'},{'name': 'InventoryComponent', 'selector': 'app-inventory-settings'},{'name': 'InventoryHistoryItemComponent', 'selector': 'app-inventory-history-item'},{'name': 'InventoryHistoryListComponent', 'selector': 'app-inventory-history-list'},{'name': 'InventoryListComponent', 'selector': 'app-inventory-list'},{'name': 'InventoryListToolTipComponent', 'selector': 'app-inventory-list-tool-tip'},{'name': 'InventoryLocationsComponent', 'selector': 'app-inventory-locations'},{'name': 'IonicGeoLocationComponent', 'selector': 'app-ionic-geo-location'},{'name': 'ItemCategoriesEditComponent', 'selector': 'app-item-categories-edit'},{'name': 'ItemCategoriesListComponent', 'selector': 'app-item-categories-list'},{'name': 'ItemPercentageDiscountProductEditComponent', 'selector': 'app-item-percentage-discount-product-edit'},{'name': 'ItemTypeCategoryAssignmentComponent', 'selector': 'app-item-type-category-assignment'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'ItemTypeDisplayAssignmentComponent', 'selector': 'app-item-type-display-assignment'},{'name': 'ItemTypeEditorComponent', 'selector': 'app-item-type-editor'},{'name': 'ItemTypeSortComponent', 'selector': 'app-item-type-sort'},{'name': 'Label1by8Component', 'selector': 'app-label1by8'},{'name': 'LabelViewSelectorComponent', 'selector': 'app-label-view-selector'},{'name': 'LimitValuesProgressBarsComponent', 'selector': 'app-limit-values-progress-bars'},{'name': 'LiquorProductEditComponent', 'selector': 'app-liquor-product-edit'},{'name': 'ListPrintersElectronComponent', 'selector': 'app-list-printers-electron'},{'name': 'ListProductSearchInputComponent', 'selector': 'app-list-product-search-input'},{'name': 'LoginComponent', 'selector': 'login-dashboard'},{'name': 'MainMenuComponent', 'selector': 'app-main-menu'},{'name': 'MatSpinnerOverlayComponent', 'selector': 'app-mat-spinner-overlay'},{'name': 'MatToggleSelectorComponent', 'selector': 'app-mat-toggle-selector'},{'name': 'MenuCardCategoriesComponent', 'selector': 'app-menu-card-categories'},{'name': 'MenuCompactComponent', 'selector': 'app-menu-compact'},{'name': 'MenuGroupItemEditComponent', 'selector': 'app-menu-group-item-edit'},{'name': 'MenuItemCardComponent', 'selector': 'app-menu-item-card'},{'name': 'MenuitemComponent', 'selector': 'app-menuitem'},{'name': 'MenuItemGalleryComponent', 'selector': 'app-menu-item-gallery'},{'name': 'MenuItemModalComponent', 'selector': 'app-menu-item-modal'},{'name': 'MenuitemsComponent', 'selector': 'app-menuitems'},{'name': 'MenuItemsInfiniteComponent', 'selector': 'app-menu-items-infinite'},{'name': 'MenuManagerComponent', 'selector': 'app-menu-manager'},{'name': 'MenuMinimalComponent', 'selector': 'app-menu-minimal'},{'name': 'MenuSearchBarComponent', 'selector': 'app-menu-search-bar'},{'name': 'MenuTinyComponent', 'selector': 'app-menu-tiny'},{'name': 'MessagesToUserComponent', 'selector': 'app-messages-to-user'},{'name': 'MetaTagChipsComponent', 'selector': 'app-meta-tag-chips'},{'name': 'MetrcIndividualPackageComponent', 'selector': 'app-metrc-individual-package'},{'name': 'MetrcInventoryPropertiesComponent', 'selector': 'app-metrc-inventory-properties'},{'name': 'METRCProductsAddComponent', 'selector': 'app-products-add'},{'name': 'MetrcSalesListComponent', 'selector': 'app-metrc-sales-list'},{'name': 'ModifierProductEditComponent', 'selector': 'app-modifier-product-edit'},{'name': 'MoveInventoryLocationComponent', 'selector': 'app-move-inventory-location'},{'name': 'NewInventoryItemComponent', 'selector': 'app-new-inventory-item'},{'name': 'OrderBarComponent', 'selector': 'app-order-bar'},{'name': 'OrderCardComponent', 'selector': 'app-order-card'},{'name': 'OrderFilterPanelComponent', 'selector': 'app-order-filter-panel'},{'name': 'OrderItemListComponent', 'selector': 'app-order-item-list'},{'name': 'OrderItemsListComponent', 'selector': 'app-order-items-list'},{'name': 'OrderPercentageDiscountProductEditComponent', 'selector': 'app-order-percentage-discount-product-edit'},{'name': 'OrdersFilterComponent', 'selector': 'app-orders-filter'},{'name': 'OrdersMainComponent', 'selector': 'app-orders-main'},{'name': 'OrderTypeSelectionComponent', 'selector': 'app-order-type-selection'},{'name': 'PackageActionsComponent', 'selector': 'app-package-actions'},{'name': 'PackageListComponent', 'selector': 'app-package-list'},{'name': 'PackageSearchSelectorComponent', 'selector': 'app-package-search-selector'},{'name': 'PageComponent', 'selector': 'storybook-page'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PagerBlobComponent', 'selector': 'pager-blob'},{'name': 'PieComponent', 'selector': 'app-widget-pie'},{'name': 'PosListComponent', 'selector': 'app-pos-list'},{'name': 'PosOrderComponent', 'selector': 'app-pos-order'},{'name': 'PosOrderItemComponent', 'selector': 'app-pos-order-item'},{'name': 'PosOrderListComponent', 'selector': 'app-pos-order-list'},{'name': 'PosOrdersComponent', 'selector': 'app-pos-orders'},{'name': 'PosPaymentComponent', 'selector': 'app-pos-payment'},{'name': 'PosPaymentsComponent', 'selector': 'app-pos-payments'},{'name': 'PriceCategoriesComponent', 'selector': 'app-price-categories'},{'name': 'PriceCategoriesEditComponent', 'selector': 'app-price-categories-edit'},{'name': 'PriceCategorySearchComponent', 'selector': 'app-price-category-search'},{'name': 'PriceCategorySelectComponent', 'selector': 'app-price-category-select'},{'name': 'PriceLinesComponent', 'selector': 'app-price-lines'},{'name': 'PriceScheduleComponent', 'selector': 'app-price-schedule'},{'name': 'PriceScheduleConstraintsComponent', 'selector': 'app-price-schedule-constraints'},{'name': 'PriceScheduleFieldsComponent', 'selector': 'app-price-schedule-fields'},{'name': 'PriceScheduleInfoComponent', 'selector': 'app-price-schedule-info'},{'name': 'PriceScheduleListComponent', 'selector': 'app-price-schedule-list'},{'name': 'PriceTiersComponent', 'selector': 'app-price-tiers'},{'name': 'ProducteditComponent', 'selector': 'app-productedit'},{'name': 'ProductInfoPanelComponent', 'selector': 'app-product-info-panel'},{'name': 'ProductlistviewComponent', 'selector': 'app-productlistview'},{'name': 'ProductSearchSelectorComponent', 'selector': 'app-product-search-selector'},{'name': 'ProductTypeSelectComponent', 'selector': 'app-product-type-select'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'ProfileEditorComponent', 'selector': 'app-profile-editor'},{'name': 'ProfileListComponent', 'selector': 'app-profile-list'},{'name': 'ProfileLookupComponent', 'selector': 'app-profile-lookup'},{'name': 'ProgressBarComponent', 'selector': 'app-progress-bar'},{'name': 'ProgressUploaderComponent', 'selector': 'app-progress'},{'name': 'ReceiptLayoutComponent', 'selector': 'app-receipt-layout'},{'name': 'RegisterAccountExistingUserComponent', 'selector': 'app-register-account-existing-user'},{'name': 'RegisterAccountExistingUserWithTokenComponent', 'selector': 'app-register-account-existing-user-with-token'},{'name': 'RegisterAccountMainComponent', 'selector': 'app-register-account-main'},{'name': 'ReportsComponent', 'selector': 'app-reports'},{'name': 'ResetpasswordComponent', 'selector': 'app-resetpassword'},{'name': 'ReviewComponent', 'selector': 'app-review'},{'name': 'ReviewEditComponent', 'selector': 'app-review-edit'},{'name': 'ReviewsComponent', 'selector': 'app-reviews'},{'name': 'RewardTypeFilterComponent', 'selector': 'app-reward-type-filter'},{'name': 'RewardTypeResultsSelectorComponent', 'selector': 'app-reward-type-panel'},{'name': 'RouteDispatchComponent', 'selector': 'app-route-dispatch'},{'name': 'RouteDispatchDetailsComponent', 'selector': 'app-route-dispatch-details'},{'name': 'RouteDispatchDetailsEditComponent', 'selector': 'app-route-dispatch-details-edit'},{'name': 'RouteDispatchEditComponent', 'selector': 'app-route-dispatch-edit'},{'name': 'RouteDispatchesComponent', 'selector': 'app-route-dispatches'},{'name': 'SalesTaxReportComponent', 'selector': 'app-sales-tax-report'},{'name': 'ScaleReaderComponent', 'selector': 'app-scale-reader'},{'name': 'SearchPanelComponent', 'selector': 'app-search-panel'},{'name': 'SearchResultsComponent', 'selector': 'app-search-results'},{'name': 'ServiceTypeEditComponent', 'selector': 'app-service-type-edit'},{'name': 'ServiceTypeListComponent', 'selector': 'app-service-type-list'},{'name': 'SettingsComponent', 'selector': 'app-settings'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'SimpleTinyComponent', 'selector': 'simple-tinymce'},{'name': 'SiteEditComponent', 'selector': 'app-site-edit'},{'name': 'SitepointsComponent', 'selector': 'app-sitepoints'},{'name': 'SitepurchasesComponent', 'selector': 'app-sitepurchases'},{'name': 'SitesComponent', 'selector': 'app-sites'},{'name': 'SiteSelectorComponent', 'selector': 'app-site-selector'},{'name': 'SmokeProductEditComponent', 'selector': 'app-smoke-product-edit'},{'name': 'SoftwareComponent', 'selector': 'app-software'},{'name': 'SpeciesListComponent', 'selector': 'app-species-list'},{'name': 'StatusLookupComponent', 'selector': 'app-status-lookup'},{'name': 'StickyHeaderComponent', 'selector': 'app-sticky-header'},{'name': 'StrainPackagesComponent', 'selector': 'app-strain-packages'},{'name': 'StrainProductEditComponent', 'selector': 'app-strain-product-edit'},{'name': 'StrainsAddComponent', 'selector': 'app-strains-add'},{'name': 'SubMenuItemEditComponent', 'selector': 'app-sub-menu-item-edit'},{'name': 'SummarycardComponent', 'selector': 'app-summarycard'},{'name': 'TaxEditComponent', 'selector': 'app-tax-edit'},{'name': 'TaxFieldsComponent', 'selector': 'app-tax-fields'},{'name': 'TaxListComponent', 'selector': 'app-tax-list'},{'name': 'TaxRateListComponent', 'selector': 'app-tax-rate-list'},{'name': 'TierItemsComponent', 'selector': 'app-tier-items'},{'name': 'TierMenuComponent', 'selector': 'app-tier-menu'},{'name': 'TierPricesComponent', 'selector': 'app-tier-prices'},{'name': 'TiersCardComponent', 'selector': 'app-tiers-card'},{'name': 'TimeScheduleComponent', 'selector': 'app-time-schedule'},{'name': 'TvHappyHoursComponent', 'selector': 'app-tv-happy-hours'},{'name': 'TvPriceSpecialsComponent', 'selector': 'app-tv-price-specials'},{'name': 'TvPriceTierMenuItemsComponent', 'selector': 'app-tv-price-tier-menu-items'},{'name': 'TvPriceTiersComponent', 'selector': 'app-tv-price-tiers'},{'name': 'TypeFilterComponent', 'selector': 'app-type-filter'},{'name': 'TypeResultsSelectorComponent', 'selector': 'app-type-results-selector'},{'name': 'UnitTypeEditComponent', 'selector': 'app-unit-type-edit'},{'name': 'UnitTypeFieldsComponent', 'selector': 'app-unit-type-fields'},{'name': 'UnitTypeListComponent', 'selector': 'unit-types'},{'name': 'UploaderComponent', 'selector': 'app-widget-uploader'},{'name': 'UseGroupTaxAssignmentComponent', 'selector': 'app-use-group-tax-assignment'},{'name': 'UsermessagesComponent', 'selector': 'app-usermessages'},{'name': 'ValueFieldsComponent', 'selector': 'app-value-fields'},{'name': 'ValueSpinnerComponent', 'selector': 'app-value-spinner'},{'name': 'WebEnabledComponent', 'selector': 'app-web-enabled'},{'name': 'WeekDaySelectionComponent', 'selector': 'app-week-day-selection'},{'name': 'WeightedFoodProductEditComponent', 'selector': 'app-weighted-food-product-edit'},{'name': 'WishlistComponent', 'selector': 'app-wishlist'}];
-    var DIRECTIVES = [{'name': 'AutofocusDirective', 'selector': '[appAutoFocusInput]'},{'name': 'CurrencyFormatterDirective', 'selector': '[currencyFormatter]'},{'name': 'DndDirective', 'selector': '[appDnd]'},{'name': 'Events', 'selector': '[Events]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'ScrollableDirective', 'selector': '[appScrollable]'},{'name': 'StickyHeaderDirective', 'selector': '[stickyHeaderDirective]'}];
+        var COMPONENT_TEMPLATE = '<div><div class="body"     *ngIf="item">  <mat-card class="strain-card">    <mat-card-title>      <div><h3>Item: {{item.productName}} </h3></div>      <div><h3>Label:{{item.label}}       </h3></div>    </mat-card-title>    <mat-card-subtitle>      <div class="header-container">        <div class="subtitle grid-container-headers">          <div class="item-label">SKU</div>          <div class="item-info"> {{item.sku}} </div>          <div class="item-label">Type</div>          <div class="item-info"> {{item.packageType}} </div>          <div class="item-label">Intake Category </div>          <div class="item-info"> {{item.productCategoryName}} </div>          <div class="item-label">Vendor Code</div>          <div class="item-info"> {{item.facilityLicenseNumber}} </div>        </div>        <div>          <app-edit-buttons-standard                (outputeupdateItem)     ="updateItem($event, false)"                (outputupdateItemExit)  ="updateItem($event, true)"                (outputupdatedeleteItem)="deleteItem($event)"                (outputupdateonCancel)  ="onCancel($event, false)"          ></app-edit-buttons-standard>        </div>      </div>    <mat-divider></mat-divider>    </mat-card-subtitle>      <mat-card-content  >        <div class="content-container">          <div class="item-input">            <app-product-search-selector                class         = "fields"                [itemType]    = 1                [productName] = "productName"                [searchForm]  = "searchForm"                (itemSelect)  = "getItem($event)">              >            </app-product-search-selector>          </div>          <div [formGroup]="inputForm"              *ngIf="menuItem"              class="grid-container">              <!-- useGroups {{menuItem.itemType?.useGroups?.name.toLowerCase()}} <br>              type  {{menuItem.itemType?.type?.toLowerCase()}} -->            <div *ngIf="menuItem.itemType.useGroups.name.toLowerCase() === \'cannabis\'">              <app-facility-search-selector                  [item]="facility"                  [searchForm]="inputForm"                  (itemSelect)="getVendor($event)">              </app-facility-search-selector>            </div>            <div *ngIf="menuItem.itemType.useGroups.name.toLowerCase() === \'cannabis\'">              <mat-form-field appearance="outline" >                <mat-label>Test Date</mat-label>                <input  matInput                        type="text"                        formControlName="testDate"                        name="testDate"                        [matDatepicker]="picker">                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>                <mat-datepicker #picker></mat-datepicker>              </mat-form-field>            </div>            <div *ngIf="menuItem.itemType.useGroups.name.toLowerCase() === \'cannabis\'">              <app-value-fields                    [inputForm]="inputForm"                    [fieldName]="\'testedBy\'">                  Tested By              </app-value-fields>            </div>            <div *ngIf="menuItem.itemType.useGroups.name.toLowerCase() === \'cannabis\'">              <app-value-fields                  [inputForm]="inputForm"                  [fieldName]="\'testLotNumber\'">                Test Lot #              </app-value-fields>            </div>            <div>              <mat-form-field appearance="outline" >                <mat-label>Expiration</mat-label>                <input  matInput                        type="text"                        formControlName="expiration"                        name="expiration"                        [matDatepicker]="picker">                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>                <mat-datepicker #picker></mat-datepicker>              </mat-form-field>            </div>            <div>              <app-value-fields                    [inputForm]="inputForm"                    [fieldName]="\'invoiceCode\'">                    Vendor Invoice #              </app-value-fields>            </div>            <div *ngIf="menuItem.itemType.useGroups.name.toLowerCase()  === \'cannabis\'">                <app-value-fields                      [inputForm]="inputForm"                      [fieldName]="\'productCategoryName\'">                      Category Type                </app-value-fields>            </div>            <div>              <mat-form-field appearance="outline" >                <mat-label>Locations</mat-label>                <mat-select                            type               ="text"                            [(ngModel)]        ="inventoryLocationID"                            formControlName    ="locationID"                            (selectionChange)  ="getLocationAssignment($event.value)"                    >                  <div *ngIf="(inventoryLocations$ | async) as list">                    <mat-option *ngFor="let item of list" [value]="item.id">                      {{item.name}}                    </mat-option>                  </div>                </mat-select>              </mat-form-field>            </div>            <div>              <app-value-fields                    [inputForm]="inputForm"                    [fieldName]="\'price\'">                    Price              </app-value-fields>            </div>            <div>              <app-value-fields                    [inputForm]="inputForm"                    [fieldName]="\'cost\'">                Cost              </app-value-fields>            </div>            <div>              <app-value-fields                    [inputForm]="inputForm"                    [fieldName]="\'unitOfMeasureName\'">                Unit of Measure              </app-value-fields>            </div>            <div>                <app-value-fields                      [inputForm]="inputForm"                      [fieldName]="\'packageQuantity\'">                  Package Quantity                </app-value-fields>                <span *ngIf="scaleInfo">                  {{scaleInfo.value}} {{scaleInfo.mode}}                  <span><button mat-raised-button (click)="applyWeightQuantity()">                    Apply Weight                  </button></span>                </span>            </div>            <div>              <mat-slide-toggle                      name="notAvalibleForSale"                      class="mat-label"                      formControlName="notAvalibleForSale">                <mat-label class="mat-label">Disable</mat-label>              </mat-slide-toggle>            </div>          </div>          <mat-label                *ngIf="menuItem && menuItem?.itemType?.useGroups?.name.toLowerCase() != \'cannabis\'">            Case Information - only for whole case / split case options          </mat-label>          <div                *ngIf="inputForm && menuItem &&  menuItem?.itemType?.useGroups?.name.toLowerCase() != \'cannabis\'"                class="grid-container">            <div>              <app-value-fields                [inputForm]="inputForm"                [fieldName]="\'caseQuantity\'">                Case Quantity              </app-value-fields>            </div>            <div>              <app-value-fields                [inputForm]="inputForm"                [fieldName]="\'casePrice\'">                Case Price              </app-value-fields>            </div>            <div>              <app-value-fields                [inputForm]="inputForm"                [fieldName]="\'itemSku\'">                Item Sku              </app-value-fields>            </div>            <div *ngIf="(itemType$| async) as itemType">              <app-price-category-select                [itemType]        ="itemType"                [priceCategoryID] ="item.priceCategoryID"                [inputForm]       ="inputForm" >              </app-price-category-select>            </div>          </div>        </div>      </mat-card-content>    </mat-card>  </div>  <!--  --></div>'
+    var COMPONENTS = [{'name': 'AccordionComponent', 'selector': 'app-accordion'},{'name': 'AccordionMenuItemEditComponent', 'selector': 'app-accordion-menu-item-edit'},{'name': 'ActivityTogglesComponent', 'selector': 'app-activity-toggles'},{'name': 'ActivityTogglesMetrcComponent', 'selector': 'activity-toggles-metrc'},{'name': 'AddInventoryItemComponent', 'selector': 'app-add-inventory-item'},{'name': 'AddItemByTypeComponent', 'selector': 'app-add-item-by-type'},{'name': 'AdjustItemComponent', 'selector': 'app-adjust-item'},{'name': 'AdjustItemNoteComponent', 'selector': 'app-adjust-item-note'},{'name': 'AdjustItemPriceChangeComponent', 'selector': 'app-adjust-item-price-change'},{'name': 'AdjustItemVoidReasonsComponent', 'selector': 'app-adjust-item-void-reasons'},{'name': 'AdjustmentReasonsComponent', 'selector': 'app-adjustment-reasons'},{'name': 'AdjustPaymentComponent', 'selector': 'app-adjust-payment'},{'name': 'AdminbranditemComponent', 'selector': 'app-adminbranditem'},{'name': 'AdminbrandslistComponent', 'selector': 'app-adminbrandslist'},{'name': 'AdminComponent', 'selector': 'app-admin'},{'name': 'AdminDisplayMenuComponent', 'selector': 'Admin-display-menu'},{'name': 'AdminDisplayMenuListComponent', 'selector': 'admin-display-menu-list'},{'name': 'AdminDisplayMenuSelctorComponent', 'selector': 'display-menu-selctor'},{'name': 'AggregateSelectorComponent', 'selector': 'psReporting-aggregate-selector'},{'name': 'AgGridImageFormatterComponent', 'selector': 'app-ag-grid-image-formatter'},{'name': 'AgGridTestComponent', 'selector': 'app-ag-grid-test'},{'name': 'AgGridToggleComponent', 'selector': 'app-ag-grid-toggle'},{'name': 'AgIconFormatterComponent', 'selector': 'app-ag-icon-formatter'},{'name': 'AgPaginationComponent', 'selector': 'app-ag-pagination'},{'name': 'AndOrSelectorComponent', 'selector': 'psReporting-and-or-selector'},{'name': 'APISettingComponent', 'selector': 'app-apisetting'},{'name': 'ApiStatusDisplayComponent', 'selector': 'api-status-display'},{'name': 'ApiStoredValueComponent', 'selector': 'api-stored-value'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AppGateComponent', 'selector': 'app-app-gate'},{'name': 'AppWizardProgressButtonComponent', 'selector': 'wizard-progress-button'},{'name': 'AppWizardStatusComponent', 'selector': 'app-app-wizard-status'},{'name': 'AreaComponent', 'selector': 'app-widget-area'},{'name': 'AuditPanelComponent', 'selector': 'app-audit-panel'},{'name': 'BackgroundCoverComponent', 'selector': 'app-background-cover'},{'name': 'BalanceSheetCalculationsViewComponent', 'selector': 'balance-sheet-calculations-view'},{'name': 'BalanceSheetEditComponent', 'selector': 'app-balance-sheet-edit'},{'name': 'BalanceSheetEmployeeSalesComponent', 'selector': 'balance-sheet-employee-sales'},{'name': 'BalanceSheetFilterComponent', 'selector': 'balance-sheet-filter'},{'name': 'BalanceSheetHeaderViewComponent', 'selector': 'balance-sheet-header-view'},{'name': 'BalanceSheetQuickViewComponent', 'selector': 'balance-sheet-quick-view'},{'name': 'BalanceSheetReportComponent', 'selector': 'balance-sheet-report'},{'name': 'BalanceSheetsComponent', 'selector': 'app-balance-sheets'},{'name': 'BalanceSheetViewComponent', 'selector': 'balance-sheet-view'},{'name': 'BarcodeScannerComponent', 'selector': 'app-barcode-scanner'},{'name': 'BlogListEditComponent', 'selector': 'app-blog-list-edit'},{'name': 'BlogPostComponent', 'selector': 'app-blog-post'},{'name': 'BlogPostEditComponent', 'selector': 'app-blog-post-edit'},{'name': 'BlogPostListComponent', 'selector': 'blog-post-list'},{'name': 'BlogPostSortComponent', 'selector': 'blog-post-sort'},{'name': 'BrandslistComponent', 'selector': 'app-brandslist'},{'name': 'BrandTypeSelectComponent', 'selector': 'app-brand-type-select'},{'name': 'BtBlueToothScannerComponent', 'selector': 'app-bt-blue-tooth-scanner'},{'name': 'BtPOSPrinterComponent', 'selector': 'app-bt-posprinter'},{'name': 'ButtonComponent', 'selector': 'storybook-button'},{'name': 'ButtonRendererComponent', 'selector': 'app-button-renderer'},{'name': 'ButtonRendererComponent', 'selector': 'btn-cell-renderer'},{'name': 'CacheSettingsComponent', 'selector': 'app-cache-settings'},{'name': 'CallUsSelectorComponent', 'selector': 'call-us-selector'},{'name': 'CannabisItemEditComponent', 'selector': 'cannabis-item-edit'},{'name': 'CardComponent', 'selector': 'app-widget-card'},{'name': 'CardDashboardComponent', 'selector': 'app-card-dashboard'},{'name': 'CardPointeCardPayBtnComponent', 'selector': 'card-pointe-card-pay-btn'},{'name': 'CardpointeTransactionsComponent', 'selector': 'app-cardpointe-transactions'},{'name': 'CardPointIDTECHAndroidComponent', 'selector': 'app-card-point-idtechandroid'},{'name': 'CardPointSettingsComponent', 'selector': 'card-point-settings'},{'name': 'CartButtonComponent', 'selector': 'app-cart-button'},{'name': 'CashDrawerSettingsComponent', 'selector': 'app-cash-drawer-settings'},{'name': 'CashPaymentButtonComponent', 'selector': 'cash-payment-buttons'},{'name': 'CashValueCalcComponent', 'selector': 'cash-value-calc'},{'name': 'CategoriesAlternateComponent', 'selector': 'app-categories-alternate'},{'name': 'CategoriesComponent', 'selector': 'app-categories'},{'name': 'CategorieslistviewComponent', 'selector': 'app-categorieslistview'},{'name': 'CategoryItemsBoardComponent', 'selector': 'app-category-items-board'},{'name': 'CategoryItemsBoardItemComponent', 'selector': 'category-items-board-item'},{'name': 'CategoryScrollComponent', 'selector': 'app-category-scroll'},{'name': 'CategorySelectComponent', 'selector': 'app-category-select'},{'name': 'CategorySelectListFilterComponent', 'selector': 'category-select-list-filter'},{'name': 'ChangeDueComponent', 'selector': 'app-balance-due'},{'name': 'ChangepasswordComponent', 'selector': 'app-changepassword'},{'name': 'ChartTableComponent', 'selector': 'app-widget-chart-table'},{'name': 'CheckInProfileComponent', 'selector': 'app-check-in-profile'},{'name': 'ChemicalSpinnersComponent', 'selector': 'app-chemical-spinners'},{'name': 'ChemicalValuesComponent', 'selector': 'app-chemical-values'},{'name': 'ChipsDisplayComponent', 'selector': 'app-chips-display'},{'name': 'ClientInfoComponent', 'selector': 'app-client-info'},{'name': 'ClientSearchSelectorComponent', 'selector': 'app-client-search-selector'},{'name': 'ClientTypeEditComponent', 'selector': 'app-client-type-edit'},{'name': 'ClientTypeListComponent', 'selector': 'app-client-type-list'},{'name': 'ClientTypeSelectionComponent', 'selector': 'app-client-type-selection'},{'name': 'ClientTypesLookupComponent', 'selector': 'app-client-types-lookup'},{'name': 'ClockBreaksTypesComponent', 'selector': 'clock-breaks-types'},{'name': 'ClockInOutComponent', 'selector': 'clock-in-out'},{'name': 'CloseDayValidationComponent', 'selector': 'close-day-validation'},{'name': 'CompanyEditComponent', 'selector': 'company-edit'},{'name': 'CompanyInfoHeaderComponent', 'selector': 'app-company-info-header'},{'name': 'CpVIVO3300Component', 'selector': 'app-cp-vivo3300'},{'name': 'CreditCardPaymentsPrintListComponent', 'selector': 'credit-card-payments-print-list'},{'name': 'CSVImportComponent', 'selector': 'app-csv-import'},{'name': 'DailyReportComponent', 'selector': 'app-daily-report'},{'name': 'DashboardClientTypeSelectionComponent', 'selector': 'dashboard-client-type-selection'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'DashboardMenuComponent', 'selector': 'app-dashboard-menu'},{'name': 'DatabaseSchemaComponent', 'selector': 'app-database-schema'},{'name': 'DateScheduleComponent', 'selector': 'app-date-schedule'},{'name': 'DefaultComponent', 'selector': 'app-default'},{'name': 'DefaultReceiptSelectorComponent', 'selector': 'default-receipt-selector'},{'name': 'DemographicsComponent', 'selector': 'app-demographics'},{'name': 'DepartmentMenuComponent', 'selector': 'app-department-menu'},{'name': 'DepartmentSelectComponent', 'selector': 'app-department-select'},{'name': 'DesignerEditorComponent', 'selector': 'psReporting-designer-editor'},{'name': 'DesignerListComponent', 'selector': 'ps-designer-list'},{'name': 'DeviceInfoComponent', 'selector': 'app-device-info'},{'name': 'DevxReportDesignerComponent', 'selector': 'app-devx-report-designer'},{'name': 'DiscountOptionsComponent', 'selector': 'app-discount-options'},{'name': 'DiscountTypeSelectionComponent', 'selector': 'app-discount-type-selection'},{'name': 'DisplayMenuListComponent', 'selector': 'display-menu-list'},{'name': 'DisplayMenuMainComponent', 'selector': 'display-menu-main'},{'name': 'DisplayMenuMenuComponent', 'selector': 'display-menu-menu'},{'name': 'DisplayMenuSortComponent', 'selector': 'display-menu-sort'},{'name': 'DisplayMenuTitleComponent', 'selector': 'display-menu-title'},{'name': 'DsiAndroidResultsComponent', 'selector': 'pointlesscc-dsi-android-results'},{'name': 'DSIAndroidSettingsComponent', 'selector': 'pointlesscc-dsiandroid-settings'},{'name': 'DsiEMVAndroidComponent', 'selector': 'pointlesscc-dsi-emvandroid'},{'name': 'DSIEMVAndroidPayBtnComponent', 'selector': 'dsiemvandroid-pay-btn'},{'name': 'DsiEMVCardPayBtnComponent', 'selector': 'dsi-emvcard-pay-btn'},{'name': 'DSIEMVElectronComponent', 'selector': 'app-dsiemvelectron'},{'name': 'DsiEMVPaymentComponent', 'selector': 'app-dsi-emvpayment'},{'name': 'DSIEMVTransactionComponent', 'selector': 'app-dsiemvtransaction'},{'name': 'DynamicAgGridComponent', 'selector': 'dynamic-ag-grid'},{'name': 'EditBarComponent', 'selector': 'pgReporting-edit-bar'},{'name': 'EditButtonsStandardComponent', 'selector': 'app-edit-buttons-standard'},{'name': 'EditCSSStylesComponent', 'selector': 'app-edit-cssstyles'},{'name': 'EditSelectedItemsComponent', 'selector': 'app-edit-selected-items'},{'name': 'EditSettingsComponent', 'selector': 'app-edit-settings'},{'name': 'ElectronZoomControlComponent', 'selector': 'electron-zoom-control'},{'name': 'EmailEntryComponent', 'selector': 'app-email-entry'},{'name': 'EmailSettingsComponent', 'selector': 'app-email-settings'},{'name': 'EmployeeClockEditComponent', 'selector': 'app-employee-clock-edit'},{'name': 'EmployeeClockFilterComponent', 'selector': 'employee-clock-filter'},{'name': 'EmployeeClockListComponent', 'selector': 'app-employee-clock-list'},{'name': 'EmployeeDetailsPanelComponent', 'selector': 'app-employee-details-panel'},{'name': 'EmployeeEditComponent', 'selector': 'employee-edit'},{'name': 'EmployeeFilterPanelComponent', 'selector': 'employee-filter-panel'},{'name': 'EmployeeListComponent', 'selector': 'employee-list'},{'name': 'EmployeeLookupComponent', 'selector': 'employee-lookup'},{'name': 'EmployeeMetrcKeyEntryComponent', 'selector': 'app-employee-metrc-key-entry'},{'name': 'ExitLabelSelectionComponent', 'selector': 'exit-label-selection'},{'name': 'ExportDataComponent', 'selector': 'app-export-data'},{'name': 'FacilitiesListComponent', 'selector': 'app-facilities-list'},{'name': 'FacilitySearchSelectorComponent', 'selector': 'app-facility-search-selector'},{'name': 'FastUserSwitchComponent', 'selector': 'app-fast-user-switch'},{'name': 'FieldListTypeAssignerComponent', 'selector': 'pgReporting-field-list-type-assigner'},{'name': 'FieldSelectorComponent', 'selector': 'psReporting-field-selector'},{'name': 'FieldTypeSelectorComponent', 'selector': 'psReporting-field-type-selector'},{'name': 'FieldValueSelectorComponent', 'selector': 'pgReporting-field-value-selector'},{'name': 'FilterBuilderComponent', 'selector': 'pgReporting-filter-builder'},{'name': 'FilterComponent', 'selector': 'app-widget-filter'},{'name': 'FlatRateEditComponent', 'selector': 'app-flat-rate-edit'},{'name': 'FlatRateListComponent', 'selector': 'app-flat-rate-list'},{'name': 'FlatTaxRateListComponent', 'selector': 'app-flat-tax-rate-list'},{'name': 'FloorPlanComponent', 'selector': 'app-floor-plan'},{'name': 'FoodProductEditComponent', 'selector': 'food-product-edit'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'FormSelectListComponent', 'selector': 'form-select-list'},{'name': 'FunctionGroupButtonEditComponent', 'selector': 'function-group-button-edit'},{'name': 'FunctionGroupEditComponent', 'selector': 'app-function-group-edit'},{'name': 'FunctionGroupListComponent', 'selector': 'app-function-group-list'},{'name': 'GenericIdSelectComponent', 'selector': 'app-generic-id-select'},{'name': 'GenericNameSelectComponent', 'selector': 'app-generic-name-select'},{'name': 'GiftCardPayBtnComponent', 'selector': 'gift-card-pay-btn'},{'name': 'GoogleMapsComponent', 'selector': 'app-google-maps'},{'name': 'GridComponentPropertiesComponent', 'selector': 'app-grid-component-properties'},{'name': 'GridcomponentPropertiesDesignComponent', 'selector': 'gridcomponent-properties-design'},{'name': 'GridDesignerInfoComponent', 'selector': 'grid-designer-info'},{'name': 'GridManagerComponent', 'selector': 'menu-manager'},{'name': 'GridManagerEditComponent', 'selector': 'app-grid-manager-edit'},{'name': 'GridMenuLayoutComponent', 'selector': 'grid-menu-layout'},{'name': 'GridSettingsComponent', 'selector': 'app-grid-settings'},{'name': 'GroupByTypesComponent', 'selector': 'psReporting-group-by-types'},{'name': 'HammerCardComponent', 'selector': 'app-hammer-card'},{'name': 'HeaderComponent', 'selector': 'storybook-header'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HouseAccountPayBtnComponent', 'selector': 'app-house-account-pay-btn'},{'name': 'HTMLEditPrintingComponent', 'selector': 'app-htmledit-printing'},{'name': 'IFrameComponent', 'selector': 'app-i-frame'},{'name': 'ImageCaptureComponent', 'selector': 'app-image-capture'},{'name': 'ImageContainerComponent', 'selector': 'image-container'},{'name': 'ImageSwiperComponent', 'selector': 'app-image-swiper'},{'name': 'InstalledPrintersComponent', 'selector': 'app-installed-printers'},{'name': 'InventoryAdjustmentNoteComponent', 'selector': 'app-adjustment-note'},{'name': 'InventoryComponent', 'selector': 'app-inventory-settings'},{'name': 'InventoryCountsViewComponent', 'selector': 'inventory-counts-view'},{'name': 'InventoryHeaderValuesComponent', 'selector': 'app-inventory-header-values'},{'name': 'InventoryHistoryItemComponent', 'selector': 'app-inventory-history-item'},{'name': 'InventoryHistoryListComponent', 'selector': 'app-inventory-history-list'},{'name': 'InventoryListComponent', 'selector': 'app-inventory-list'},{'name': 'InventoryListToolTipComponent', 'selector': 'app-inventory-list-tool-tip'},{'name': 'InventoryLocationsComponent', 'selector': 'app-inventory-locations'},{'name': 'IonicGeoLocationComponent', 'selector': 'app-ionic-geo-location'},{'name': 'IonicSwipeToDeleteComponent', 'selector': 'app-ionic-swipe-to-delete'},{'name': 'ItemCategoriesEditComponent', 'selector': 'app-item-categories-edit'},{'name': 'ItemCategoriesListComponent', 'selector': 'app-item-categories-list'},{'name': 'ItemSalesCardComponent', 'selector': 'item-sales-card'},{'name': 'ItemSortComponent', 'selector': 'app-item-sort'},{'name': 'ItemTypeCategoryAssignmentComponent', 'selector': 'app-item-type-category-assignment'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'ItemTypeDisplayAssignmentComponent', 'selector': 'app-item-type-display-assignment'},{'name': 'ItemTypeEditorComponent', 'selector': 'app-item-type-editor'},{'name': 'ItemTypeSortComponent', 'selector': 'app-item-type-sort'},{'name': 'ItemTypeTogglesEditComponent', 'selector': 'item-type-toggles-edit'},{'name': 'JobTypesEditComponent', 'selector': 'app-job-types-edit'},{'name': 'JobTypesListComponent', 'selector': 'app-job-type-list'},{'name': 'KeyboardButtonComponent', 'selector': 'app-keyboard-button'},{'name': 'KeyboardComponent', 'selector': 'app-keyboard'},{'name': 'KeyboardViewComponent', 'selector': 'app-keyboard-view'},{'name': 'KeyPadComponent', 'selector': 'app-key-pad'},{'name': 'Label1by8Component', 'selector': 'app-label1by8'},{'name': 'LabelViewSelectorComponent', 'selector': 'app-label-view-selector'},{'name': 'LastImageDisplayComponent', 'selector': 'last-image-display'},{'name': 'LimitValuesCardComponent', 'selector': 'app-limit-values-card'},{'name': 'LimitValuesProgressBarsComponent', 'selector': 'limit-values-progress-bars'},{'name': 'LinkedPriceSelectorComponent', 'selector': 'linked-price-selector'},{'name': 'LiquorProductEditComponent', 'selector': 'liquor-product-edit'},{'name': 'ListPrintersElectronComponent', 'selector': 'app-list-printers-electron'},{'name': 'ListProductSearchInputComponent', 'selector': 'list-product-search-input'},{'name': 'LoginComponent', 'selector': 'login-dashboard'},{'name': 'LogoComponent', 'selector': 'app-logo'},{'name': 'M22ResizableComponent', 'selector': '[m22Resizable]'},{'name': 'MainfestEditorComponent', 'selector': 'app-mainfest-editor'},{'name': 'MainfestFilterComponent', 'selector': 'app-mainfest-filter'},{'name': 'MainMenuComponent', 'selector': 'app-main-menu'},{'name': 'ManifestEditorHeaderComponent', 'selector': 'app-manifest-editor-header'},{'name': 'ManifestsComponent', 'selector': 'app-manifests'},{'name': 'ManifestStatusComponent', 'selector': 'app-manifest-status'},{'name': 'ManifestTypeComponent', 'selector': 'app-manifest-type'},{'name': 'MatDateRangeComponent', 'selector': 'mat-date-range'},{'name': 'MatMenuBasicComponent', 'selector': 'mat-menu-basic'},{'name': 'MatSelectComponent', 'selector': 'app-mat-select'},{'name': 'MatSelectNGModelComponent', 'selector': 'mat-select-ngmodel'},{'name': 'MatSelectorComponent', 'selector': 'pgReporting-mat-selector'},{'name': 'MatSpinnerOverlayComponent', 'selector': 'app-mat-spinner-overlay'},{'name': 'MatToggleSelectorComponent', 'selector': 'app-mat-toggle-selector'},{'name': 'MenuBoardComponent', 'selector': 'app-menu-board'},{'name': 'MenuCardCategoriesComponent', 'selector': 'app-menu-card-categories'},{'name': 'MenuCompactComponent', 'selector': 'app-menu-compact'},{'name': 'MenuGroupItemEditComponent', 'selector': 'app-menu-group-item-edit'},{'name': 'MenuItemCardComponent', 'selector': 'app-menu-item-card'},{'name': 'MenuItemCardDashboardComponent', 'selector': 'menu-item-card-dashboard'},{'name': 'MenuitemComponent', 'selector': 'app-menuitem'},{'name': 'MenuItemExtendedPricesComponent', 'selector': 'menu-item-extended-prices'},{'name': 'MenuItemGalleryComponent', 'selector': 'app-menu-item-gallery'},{'name': 'MenuItemModalComponent', 'selector': 'app-menu-item-modal'},{'name': 'MenuItemProductCountComponent', 'selector': 'menu-item-product-count'},{'name': 'MenuItemsInfiniteComponent', 'selector': 'menu-items-infinite'},{'name': 'MenuManagerComponent', 'selector': 'app-menu-manager'},{'name': 'MenuMinimalComponent', 'selector': 'app-menu-minimal'},{'name': 'MenuPriceSelectionComponent', 'selector': 'app-menu-price-selection'},{'name': 'MenuSearchBarComponent', 'selector': 'app-menu-search-bar'},{'name': 'MenuTinyComponent', 'selector': 'app-menu-tiny'},{'name': 'MessagesToUserComponent', 'selector': 'app-messages-to-user'},{'name': 'MetaTagChipsComponent', 'selector': 'app-meta-tag-chips'},{'name': 'MetrcIndividualPackageComponent', 'selector': 'app-metrc-individual-package'},{'name': 'MetrcIntakeHeaderComponent', 'selector': 'metrc-intake-header'},{'name': 'MetrcInventoryPropertiesComponent', 'selector': 'metrc-inventory-properties'},{'name': 'METRCProductsAddComponent', 'selector': 'app-products-add'},{'name': 'MetrcSalesFilterComponent', 'selector': 'metrc-sales-filter'},{'name': 'MetrcSalesListComponent', 'selector': 'app-metrc-sales-list'},{'name': 'MetrcSummaryComponent', 'selector': 'app-metrc-summary'},{'name': 'MoveInventoryLocationComponent', 'selector': 'app-move-inventory-location'},{'name': 'MyThingComponent', 'selector': 'my-thing'},{'name': 'NewInventoryItemComponent', 'selector': 'app-new-inventory-item'},{'name': 'NewOrderTypeComponent', 'selector': 'new-order-type'},{'name': 'OptionsSelectFilterComponent', 'selector': 'options-select-filter'},{'name': 'OrderBarComponent', 'selector': 'app-order-bar'},{'name': 'OrderCardComponent', 'selector': 'app-order-card'},{'name': 'OrderCardsComponent', 'selector': 'app-order-cards'},{'name': 'OrderFilterPanelComponent', 'selector': 'app-order-filter-panel'},{'name': 'OrderHeaderComponent', 'selector': 'app-order-header'},{'name': 'OrderHeaderDemographicsBoardComponent', 'selector': 'app-order-header-demographics-board'},{'name': 'OrderHeaderDemoGraphicsComponent', 'selector': 'app-order-header-demo-graphics'},{'name': 'OrderItemListComponent', 'selector': 'app-order-item-list'},{'name': 'OrderItemsListComponent', 'selector': 'app-order-items-list'},{'name': 'OrderPanelComponent', 'selector': 'app-order-panel'},{'name': 'OrderPercentageDiscountProductEditComponent', 'selector': 'app-order-percentage-discount-product-edit'},{'name': 'OrderPrepComponent', 'selector': 'app-order-prep'},{'name': 'OrdersListComponent', 'selector': 'app-orders-list'},{'name': 'OrdersMainComponent', 'selector': 'app-orders-main'},{'name': 'OrderTotalBoardComponent', 'selector': 'app-order-total-board'},{'name': 'OrderTotalComponent', 'selector': 'app-order-total'},{'name': 'OrderTypeSelectionComponent', 'selector': 'app-order-type-selection'},{'name': 'OverLayComponent', 'selector': 'app-over-lay'},{'name': 'PackageListComponent', 'selector': 'app-package-list'},{'name': 'PackageSearchSelectorComponent', 'selector': 'app-package-search-selector'},{'name': 'PageComponent', 'selector': 'storybook-page'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PagerBlobComponent', 'selector': 'pager-blob'},{'name': 'PagingInfoComponent', 'selector': 'app-paging-info'},{'name': 'PasswordValidationComponent', 'selector': 'app-password-validation'},{'name': 'PaymentBalanceComponent', 'selector': 'app-payment-balance'},{'name': 'PaymentMethodEditComponent', 'selector': 'app-payment-method-edit'},{'name': 'PaymentMethodListComponent', 'selector': 'app-payment-method-list'},{'name': 'PaymentMethodSettingsComponent', 'selector': 'payment-method-settings'},{'name': 'PaymentReportCardComponent', 'selector': 'app-payment-report-card'},{'name': 'PaymentReportComponent', 'selector': 'payment-report'},{'name': 'PaymentReportDataComponent', 'selector': 'app-payment-report-data'},{'name': 'PaypalCardPayBtnComponent', 'selector': 'paypal-card-pay-btn'},{'name': 'PayPalTransactionComponent', 'selector': 'app-pay-pal-transaction'},{'name': 'PieComponent', 'selector': 'app-widget-pie'},{'name': 'PointlessMETRCSalesComponent', 'selector': 'app-pointless-metrcsales'},{'name': 'PosCheckOutButtonsComponent', 'selector': 'pos-check-out-buttons'},{'name': 'PosEditSettingsComponent', 'selector': 'app-pos-edit-settings'},{'name': 'PosListComponent', 'selector': 'app-pos-list'},{'name': 'PosOperationsComponent', 'selector': 'pos-operations'},{'name': 'PosOrderBoardComponent', 'selector': 'app-pos-order-board'},{'name': 'PosOrderComponent', 'selector': 'app-pos-order'},{'name': 'PosOrderFunctionButtonsComponent', 'selector': 'pos-order-function-buttons'},{'name': 'PosOrderItemComponent', 'selector': 'pos-order-item'},{'name': 'PosOrderItemEditComponent', 'selector': 'app-pos-order-item-edit'},{'name': 'PosOrderItemListComponent', 'selector': 'pos-order-item-list'},{'name': 'PosOrderItemsComponent', 'selector': 'pos-order-items'},{'name': 'PosOrderListComponent', 'selector': 'app-pos-order-list'},{'name': 'PosOrderNotesComponent', 'selector': 'pos-order-notes'},{'name': 'PosOrderPriceScheduleInfoComponent', 'selector': 'pos-order-price-schedule-info'},{'name': 'POSOrderScheduleCardComponent', 'selector': 'posorder-schedule-card'},{'name': 'POSOrderScheduleComponent', 'selector': 'pos-order-schedule'},{'name': 'PosOrderScheduleDescriptionComponent', 'selector': 'pos-order-schedule-description'},{'name': 'POSOrderScheduleFormComponent', 'selector': 'app-posorder-schedule-form'},{'name': 'POSOrderServiceTypeComponent', 'selector': 'posorder-service-type'},{'name': 'POSOrderShippingAddressComponent', 'selector': 'posorder-shipping-address'},{'name': 'PosOrderTransactionDataComponent', 'selector': 'pos-order-transaction-data'},{'name': 'PosPaymentComponent', 'selector': 'app-pos-payment'},{'name': 'PosPaymentEditComponent', 'selector': 'pos-payment-edit'},{'name': 'POSPaymentsComponent', 'selector': 'app-pospayments'},{'name': 'PosPaymentsFilterComponent', 'selector': 'app-pos-payments-filter'},{'name': 'PosSplitGroupsComponent', 'selector': 'pos-split-groups'},{'name': 'POSSplitItemsComponent', 'selector': 'app-possplit-items'},{'name': 'PrepContainerComponent', 'selector': 'app-prep-container'},{'name': 'PrepOrderComponent', 'selector': 'app-prep-order'},{'name': 'PrepOrderFilterComponent', 'selector': 'app-prep-order-filter'},{'name': 'PrepOrderItemComponent', 'selector': 'app-prep-order-item'},{'name': 'PriceCategoriesComponent', 'selector': 'app-price-categories'},{'name': 'PriceCategoriesEditComponent', 'selector': 'app-price-categories-edit'},{'name': 'PriceCategoryConversionsComponent', 'selector': 'price-category-conversions'},{'name': 'PriceCategoryMultiplePricesComponent', 'selector': 'price-category-multiple-prices'},{'name': 'PriceCategoryPriceFieldsComponent', 'selector': 'price-category-price-fields'},{'name': 'PriceCategorySearchComponent', 'selector': 'app-price-category-search'},{'name': 'PriceCategorySelectComponent', 'selector': 'app-price-category-select'},{'name': 'PriceCategoryTimeFiltersComponent', 'selector': 'price-category-time-filters'},{'name': 'PriceLinesComponent', 'selector': 'app-price-lines'},{'name': 'PriceOptionsComponent', 'selector': 'app-price-options'},{'name': 'PriceScheduleComponent', 'selector': 'app-price-schedule'},{'name': 'PriceScheduleConstraintsComponent', 'selector': 'app-price-schedule-constraints'},{'name': 'PriceScheduleFieldsComponent', 'selector': 'app-price-schedule-fields'},{'name': 'PriceScheduleInfoComponent', 'selector': 'app-price-schedule-info'},{'name': 'PriceScheduleListComponent', 'selector': 'app-price-schedule-list'},{'name': 'PriceScheduleMenuItemsComponent', 'selector': 'price-schedule-menu-items'},{'name': 'PriceScheduleMenuListComponent', 'selector': 'price-schedule-menu-list'},{'name': 'PriceScheduleMenuOptionsComponent', 'selector': 'price-schedule-menu-options'},{'name': 'PriceScheduleSortComponent', 'selector': 'price-schedule-sort'},{'name': 'PriceTierEditComponent', 'selector': 'app-price-tier-edit'},{'name': 'PriceTierLineEditComponent', 'selector': 'app-price-tier-line-edit'},{'name': 'PriceTierScheduleComponent', 'selector': 'price-tier-schedule'},{'name': 'PriceTiersComponent', 'selector': 'price-tiers-list'},{'name': 'PrinterLocationsComponent', 'selector': 'app-printer-locations'},{'name': 'PrinterLocationSelectionComponent', 'selector': 'app-printer-location-selection'},{'name': 'PrintGroupReceiptComponent', 'selector': 'print-group-receipt'},{'name': 'PrintTemplateComponent', 'selector': 'app-print-template'},{'name': 'PrintTemplatePopUpComponent', 'selector': 'app-print-template-pop-up'},{'name': 'ProducteditComponent', 'selector': 'app-productedit'},{'name': 'ProductFilterComponent', 'selector': 'app-product-filter'},{'name': 'ProductInfoPanelComponent', 'selector': 'app-product-info-panel'},{'name': 'ProductListByBarcodeComponent', 'selector': 'app-product-list-by-barcode'},{'name': 'ProductlistviewComponent', 'selector': 'app-productlistview'},{'name': 'ProductSearchSelector2Component', 'selector': 'product-search-selector2'},{'name': 'ProductSearchSelectorComponent', 'selector': 'app-product-search-selector'},{'name': 'ProductTypeSelectComponent', 'selector': 'product-type-select'},{'name': 'ProfileBillingAddressComponent', 'selector': 'app-profile-billing-address'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'ProfileDemographicsComponent', 'selector': 'app-profile-demographics'},{'name': 'ProfileEditorComponent', 'selector': 'app-profile-editor'},{'name': 'ProfileIDCardInfoComponent', 'selector': 'app-profile-idcard-info'},{'name': 'ProfileListComponent', 'selector': 'app-profile-list'},{'name': 'ProfileLookupComponent', 'selector': 'app-profile-lookup'},{'name': 'ProfileMedInfoComponent', 'selector': 'profile-med-info'},{'name': 'ProfileRolesComponent', 'selector': 'app-profile-roles'},{'name': 'ProfileShippingAddressComponent', 'selector': 'app-profile-shipping-address'},{'name': 'ProgressBarComponent', 'selector': 'app-progress-bar'},{'name': 'ProgressUploaderComponent', 'selector': 'app-progress'},{'name': 'PromptGroupEditComponent', 'selector': 'app-prompt-group-edit'},{'name': 'PromptGroupsComponent', 'selector': 'prompt-groups'},{'name': 'PromptGroupSelectComponent', 'selector': 'prompt-group-select'},{'name': 'PromptInfoPanelComponent', 'selector': 'prompt-info-panel'},{'name': 'PromptItemSelectionComponent', 'selector': 'prompt-item-selection'},{'name': 'PromptItemsSelectedComponent', 'selector': 'prompt-items-selected'},{'name': 'PromptKitsComponent', 'selector': 'prompt-kits'},{'name': 'PromptPanelMenuItemComponent', 'selector': 'prompt-panel-menu-item'},{'name': 'PromptPanelMenuItemsComponent', 'selector': 'prompt-panel-menu-items'},{'name': 'PromptSelectedItemsComponent', 'selector': 'prompt-selected-items'},{'name': 'PromptSubGroupAssociationComponent', 'selector': 'prompt-associations'},{'name': 'PromptSubGroupEditComponent', 'selector': 'app-prompt-sub-group-edit'},{'name': 'PromptSubGroupPanelComponent', 'selector': 'prompt-sub-group-panel'},{'name': 'PromptSubGroupsComponent', 'selector': 'prompt-sub-groups'},{'name': 'PromptWalkThroughComponent', 'selector': 'app-prompt-walk-through'},{'name': 'PSMenuGroupEditComponent', 'selector': 'app-psmenu-group-edit'},{'name': 'PSMenuGroupListComponent', 'selector': 'psmenu-group-list'},{'name': 'PurchaseItemCostHistoryComponent', 'selector': 'purchase-item-cost-history'},{'name': 'PurchaseItemSalesComponent', 'selector': 'purchase-item-sales'},{'name': 'QRCodeTableComponent', 'selector': 'qr-order'},{'name': 'QROrderComponent', 'selector': 'app-qrorder'},{'name': 'QuantiySelectorComponent', 'selector': 'app-quantiy-selector'},{'name': 'QuickPayButtonsComponent', 'selector': 'quick-pay-buttons'},{'name': 'ReceiptLayoutComponent', 'selector': 'app-receipt-layout'},{'name': 'ReceiptViewComponent', 'selector': 'app-receipt-view'},{'name': 'RecieptPopUpComponent', 'selector': 'app-reciept-pop-up'},{'name': 'RegisterAccountExistingUserWithTokenComponent', 'selector': 'app-register-account-existing-user-with-token'},{'name': 'RegisterAccountMainComponent', 'selector': 'app-register-account-main'},{'name': 'ReportGroupSelectorComponent', 'selector': 'psReporting-report-group-selector'},{'name': 'ReportsComponent', 'selector': 'app-reports'},{'name': 'ReportSelectorComponent', 'selector': 'psReporting-report-selector'},{'name': 'ReportTypesComponent', 'selector': 'ps-report-types'},{'name': 'ReportViewerComponent', 'selector': 'app-report-viewer'},{'name': 'RequestMessageComponent', 'selector': 'app-request-message'},{'name': 'RequestMessagesComponent', 'selector': 'app-request-messages'},{'name': 'RequiresSerialComponent', 'selector': 'app-requires-serial'},{'name': 'ResetpasswordComponent', 'selector': 'app-resetpassword'},{'name': 'RetailProductEditComponent', 'selector': 'retail-product-edit'},{'name': 'ReviewComponent', 'selector': 'app-review'},{'name': 'ReviewEditComponent', 'selector': 'app-review-edit'},{'name': 'ReviewsComponent', 'selector': 'app-reviews'},{'name': 'RewardsAvailibleComponent', 'selector': 'app-rewards-availible'},{'name': 'RewardTypeFilterComponent', 'selector': 'app-reward-type-filter'},{'name': 'RewardTypeResultsSelectorComponent', 'selector': 'app-reward-type-panel'},{'name': 'RouteDispatchComponent', 'selector': 'app-route-dispatch'},{'name': 'RouteDispatchDetailsComponent', 'selector': 'app-route-dispatch-details'},{'name': 'RouteDispatchDetailsEditComponent', 'selector': 'app-route-dispatch-details-edit'},{'name': 'RouteDispatchEditComponent', 'selector': 'app-route-dispatch-edit'},{'name': 'RouteDispatchesComponent', 'selector': 'app-route-dispatches'},{'name': 'SalesTaxReportComponent', 'selector': 'sales-tax-report'},{'name': 'SaveChangesButtonComponent', 'selector': 'save-changes-button'},{'name': 'ScaleReaderComponent', 'selector': 'app-scale-reader'},{'name': 'ScaleSettingsComponent', 'selector': 'app-scale-settings'},{'name': 'ScaleValueViewComponent', 'selector': 'scale-value-view'},{'name': 'ScheduledMenuContainerComponent', 'selector': 'scheduled-menu-container'},{'name': 'ScheduledMenuHeaderComponent', 'selector': 'scheduled-menu-header'},{'name': 'ScheduledMenuImageComponent', 'selector': 'scheduled-menu-image'},{'name': 'ScheduledMenuItemComponent', 'selector': 'scheduled-menu-item'},{'name': 'ScheduledMenuItemsComponent', 'selector': 'scheduled-menu-items'},{'name': 'ScheduledMenuListComponent', 'selector': 'scheduled-menu-list'},{'name': 'SearchDebounceInputComponent', 'selector': 'search-debounce-input'},{'name': 'SearchInventoryInputComponent', 'selector': 'search-inventory-input'},{'name': 'SearchPanelComponent', 'selector': 'app-search-panel'},{'name': 'SearchResultsComponent', 'selector': 'app-search-results'},{'name': 'ServiceTypeEditComponent', 'selector': 'app-service-type-edit'},{'name': 'ServiceTypeListComponent', 'selector': 'app-service-type-list'},{'name': 'SettingsComponent', 'selector': 'app-settings'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'SimpleTinyComponent', 'selector': 'simple-tinymce'},{'name': 'SiteEditComponent', 'selector': 'app-site-edit'},{'name': 'SiteEditFormComponent', 'selector': 'app-site-edit-form'},{'name': 'SiteFooterComponent', 'selector': 'app-site-footer'},{'name': 'SitepointsComponent', 'selector': 'app-sitepoints'},{'name': 'SitepurchasesComponent', 'selector': 'app-sitepurchases'},{'name': 'SitesComponent', 'selector': 'app-sites'},{'name': 'SiteSelectorComponent', 'selector': 'app-site-selector'},{'name': 'SoftwareComponent', 'selector': 'app-software-settings'},{'name': 'SortSelectorComponent', 'selector': 'psReporting-sort-selector'},{'name': 'SpeciesListComponent', 'selector': 'app-species-list'},{'name': 'SplashLoadingComponent', 'selector': 'app-splash-loading'},{'name': 'SplitEntrySelectorComponent', 'selector': 'split-entry-selector'},{'name': 'StatusLookupComponent', 'selector': 'app-status-lookup'},{'name': 'StickyHeaderComponent', 'selector': 'app-sticky-header'},{'name': 'StoreCreditEditorComponent', 'selector': 'app-store-credit-editor'},{'name': 'StoreCreditInfoComponent', 'selector': 'store-credit-info'},{'name': 'StoreCreditIssueComponent', 'selector': 'app-store-credit-issue'},{'name': 'StoreCreditListComponent', 'selector': 'app-store-credit-list'},{'name': 'StoreCreditPopUpComponent', 'selector': 'app-store-credit-pop-up'},{'name': 'StoreCreditSearchComponent', 'selector': 'store-credit-search'},{'name': 'StrainBoardComponent', 'selector': 'app-strain-board'},{'name': 'StrainCardComponent', 'selector': 'app-strain-card'},{'name': 'StrainIndicatorComponent', 'selector': 'app-strain-indicator'},{'name': 'StrainPackagesComponent', 'selector': 'app-strain-packages'},{'name': 'StrainProductEditComponent', 'selector': 'app-strain-product-edit'},{'name': 'StrainsAddComponent', 'selector': 'app-strains-add'},{'name': 'StripeCardPayBtnComponent', 'selector': 'stripe-card-pay-btn'},{'name': 'StripeCheckOutComponent', 'selector': 'stripe-check-out'},{'name': 'StripeSettingsComponent', 'selector': 'app-stripe-settings'},{'name': 'SummarycardComponent', 'selector': 'app-summarycard'},{'name': 'TagChipsProductsComponent', 'selector': 'tag-chips-products'},{'name': 'TaxEditComponent', 'selector': 'app-tax-edit'},{'name': 'TaxFieldsComponent', 'selector': 'app-tax-fields'},{'name': 'TaxListComponent', 'selector': 'app-tax-list'},{'name': 'TaxRateListComponent', 'selector': 'app-tax-rate-list'},{'name': 'ThreeCXFabComponent', 'selector': 'app-three-cxfab'},{'name': 'TierItemsComponent', 'selector': 'app-tier-items'},{'name': 'TierMenuComponent', 'selector': 'app-tier-menu'},{'name': 'TierPriceLineComponent', 'selector': 'tier-price-line'},{'name': 'TierPricesComponent', 'selector': 'app-tier-prices'},{'name': 'TiersCardComponent', 'selector': 'app-tiers-card'},{'name': 'TiersWithPricesComponent', 'selector': 'tiers-with-prices'},{'name': 'TimeScheduleComponent', 'selector': 'app-time-schedule'},{'name': 'TipEntryComponent', 'selector': 'tip-entry-amount'},{'name': 'ToggleThemeComponent', 'selector': 'app-toggle-theme'},{'name': 'TriPOSCardPayBtnComponent', 'selector': 'app-tri-poscard-pay-btn'},{'name': 'TriposSettingsComponent', 'selector': 'app-tripos-settings'},{'name': 'TriPosTransactionsComponent', 'selector': 'app-tri-pos-transactions'},{'name': 'TvPriceSpecialsComponent', 'selector': 'app-tv-price-specials'},{'name': 'TvPriceTierMenuItemsComponent', 'selector': 'app-tv-price-tier-menu-items'},{'name': 'TVPriceTiersComponent', 'selector': 'app-tvprice-tiers'},{'name': 'TypeBoardComponent', 'selector': 'app-type-board'},{'name': 'TypeBoardItemsComponent', 'selector': 'app-type-board-items'},{'name': 'TypeFilterComponent', 'selector': 'app-type-filter'},{'name': 'TypeResultsSelectorComponent', 'selector': 'app-type-results-selector'},{'name': 'UIHomePageSettingsComponent', 'selector': 'uihome-page-settings'},{'name': 'UITransactionsComponent', 'selector': 'app-uitransactions'},{'name': 'UnitTypeEditComponent', 'selector': 'app-unit-type-edit'},{'name': 'UnitTypeFieldsComponent', 'selector': 'app-unit-type-fields'},{'name': 'UnitTypeListComponent', 'selector': 'unit-types'},{'name': 'UnitTypePromptComponent', 'selector': 'app-unit-type-prompt'},{'name': 'UnitTypeSelectComponent', 'selector': 'unit-type-select'},{'name': 'UploaderComponent', 'selector': 'app-widget-uploader'},{'name': 'UseGroupTaxAssignmentComponent', 'selector': 'app-use-group-tax-assignment'},{'name': 'UsermessagesComponent', 'selector': 'app-usermessages'},{'name': 'ValueFieldsComponent', 'selector': 'app-value-fields'},{'name': 'ValueFromListSelectorComponent', 'selector': 'value-from-list-selector'},{'name': 'ValueSpinnerComponent', 'selector': 'app-value-spinner'},{'name': 'WebEnabledComponent', 'selector': 'app-web-enabled'},{'name': 'WeekDaySelectionComponent', 'selector': 'app-week-day-selection'},{'name': 'WicEBTCardPayBtnComponent', 'selector': 'wic-ebtcard-pay-btn'},{'name': 'WishlistComponent', 'selector': 'app-wishlist'},{'name': 'YoutubePlayerComponent', 'selector': 'app-youtube-player'},{'name': 'ZoomFloorPlanComponent', 'selector': 'zoom-floor-plan'}];
+    var DIRECTIVES = [{'name': 'AppPasswordMaskDirective', 'selector': '[appAppPasswordMask]'},{'name': 'AutofocusDirective', 'selector': '[appAutoFocusInput]'},{'name': 'CurrencyFormatterDirective', 'selector': '[currencyFormatter]'},{'name': 'DefaultImageDirective', 'selector': 'img[default]'},{'name': 'DisableControlDirective', 'selector': '[disableControl]'},{'name': 'DndDirective', 'selector': '[appDnd]'},{'name': 'Events', 'selector': '[Events]'},{'name': 'FreeDraggingDirective', 'selector': '[appFreeDragging]'},{'name': 'FreeDraggingHandleDirective', 'selector': '[appFreeDraggingHandle]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'InstructionDirective', 'selector': '[appInstruction]'},{'name': 'NgControlAttributeDirective', 'selector': '[formControlName],[formControl]'},{'name': 'NumericDirective', 'selector': '[numeric]'},{'name': 'ResizeDirective', 'selector': '[resize]'},{'name': 'ScrollableDirective', 'selector': '[appScrollable]'},{'name': 'ScrollbarThemeDirectiveDirective', 'selector': '[appScrollbarThemeDirective]'},{'name': 'StickyHeaderDirective', 'selector': '[stickyHeaderDirective]'},{'name': 'UserAuthorizedDirective', 'selector': '[userAuthorized]'}];
     var ACTUAL_COMPONENT = {'name': 'AddInventoryItemComponent'};
 </script>
 <script src="../js/tree.js"></script>
@@ -2108,14 +2904,16 @@ mat-form-field {
 
 
 
-                   
+
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -2127,6 +2925,15 @@ mat-form-field {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
@@ -2136,8 +2943,8 @@ mat-form-field {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

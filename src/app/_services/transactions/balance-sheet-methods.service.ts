@@ -125,7 +125,7 @@ export class BalanceSheetMethodsService {
     return   this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
       switchMap(sheet => {
         return  this.sheetService.getSheetCalculations(site, sheet)
-    })).pipe(switchMap(data => { 
+    })).pipe(switchMap(data => {
       this.updateBalanceSheet(data)
       return of(data)
     }))
@@ -157,7 +157,7 @@ export class BalanceSheetMethodsService {
     return this.sheetService.getSheet(site, id).pipe(
       switchMap(sheet => {
         return  this.sheetService.getSheetCalculations(site, sheet)
-    })).pipe(switchMap(data => { 
+    })).pipe(switchMap(data => {
       this.updateBalanceSheet(data)
       return of(data)
     }))
@@ -318,10 +318,17 @@ export class BalanceSheetMethodsService {
   openDrawerFromBalanceSheet(): Observable<IBalanceSheet> {
 
     let deviceName = localStorage.getItem('devicename');
-
     const electron = this.platformService.isAppElectron
+    const android = this.platformService.isApp()
 
-    if (!deviceName && electron) {
+    console.log('openDrawerFromBalanceSheet', android, electron)
+    //if we are doing online sales, no balance sheet is used.
+    if (!android && !electron) {
+      return of(null)
+    }
+
+    //then if is app
+    if (!deviceName) {
       this.siteService.notify('Please start a balance sheet. This message will appear until one is started.', 'close', 2000, 'yellow')
       console.log('returning no balance sheet observable, opening drawer');
       this.openDrawerOne()
@@ -350,13 +357,13 @@ export class BalanceSheetMethodsService {
   }
 
   async  openDrawerOne() {
-    console.log('open cash drawer one')
+    // console.log('open cash drawer one')
     const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
     const response        = await emvTransactions.openCashDrawerOne()
   }
 
   async  openDrawerTwo() {
-    console.log('open cash drawer one')
+    // console.log('open cash drawer one')
     const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
     const response        = await emvTransactions.openCashDraweTwo()
   }

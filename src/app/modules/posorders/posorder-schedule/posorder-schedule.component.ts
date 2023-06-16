@@ -5,9 +5,10 @@ import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, IServiceType,  } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { DatePipe } from '@angular/common'
+// import { DatePipe } from '@angular/common'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 @Component({
   selector   : 'pos-order-schedule',
   templateUrl: './posorder-schedule.component.html',
@@ -28,7 +29,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   scheduledDate: string;
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.pipe(
+    this._order = this.orderMethodsService.currentOrder$.pipe(
       switchMap( data => {
       if (data) {
         this.order =  data
@@ -45,12 +46,14 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
 
   constructor(
     private orderService      : OrdersService,
+    public orderMethodsService: OrderMethodsService,
     private router            : Router,
     private fb :                UntypedFormBuilder,
     private siteService :      SitesService,
     private matSnack          : MatSnackBar,
     private serviceTypeService: ServiceTypeService,
-    public datepipe: DatePipe)
+    // public datepipe: DatePipe
+    )
   { }
 
   ngOnInit(): void {
@@ -133,7 +136,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
 
         const site = this.siteService.getAssignedSite();
         this.orderService.putOrder(site, this.order).subscribe(data => {
-          this.orderService.updateOrderSubscription(data)
+          this.orderMethodsService.updateOrderSubscription(data)
           if (this.selectedIndex == 2) { 
             this.selectedIndex = 3;
           }
@@ -149,7 +152,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   saveOrderMemo() {
     const site = this.siteService.getAssignedSite();
     this.orderService.putOrder(site, this.order).subscribe(data => {
-      this.orderService.updateOrderSubscription(data)
+      this.orderMethodsService.updateOrderSubscription(data)
       this.router.navigate(['pos-payment'])
     })
   }
@@ -184,7 +187,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     const site = this.siteService.getAssignedSite();
     this.orderService.putOrder(site, order).subscribe(
       {next: data => {
-        this.orderService.updateOrderSubscription(data)
+        this.orderMethodsService.updateOrderSubscription(data)
         this.processingUpdate = false;
         this.updateSelectedIndex(2)
       }, error: err =>{
@@ -198,7 +201,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     const site = this.siteService.getAssignedSite();
     this.order.preferredScheduleDate = event;
     this.action$ = this.orderService.putOrder(site, this.order).pipe(switchMap(data => {
-      this.orderService.updateOrderSubscription(data)
+      this.orderMethodsService.updateOrderSubscription(data)
       return of(data)
     }))
     this.updateSelectedIndex(3)

@@ -7,6 +7,7 @@ import { Observable, Subscription, of, switchMap} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ISite } from 'src/app/_interfaces';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 // import { share } from 'rxjs/operators';
 
@@ -94,7 +95,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   printLocation   : number;
 
   initViewSubscriber() {
-    this._viewType = this.orderService.viewOrderType$.subscribe(data => {
+    this._viewType = this.orderMethodsService.viewOrderType$.subscribe(data => {
       this.viewType = data;
     })
   }
@@ -108,6 +109,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
   constructor(
     private orderService: OrdersService,
+    public orderMethodsService: OrderMethodsService,
     public route: ActivatedRoute,
     private siteService: SitesService,
     private toolbarServiceUI : ToolBarUIService,
@@ -143,7 +145,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   initSubscriptions() {
     this.initViewSubscriber()
     try {
-      this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
+      this._searchModel = this.orderMethodsService.posSearchModel$.subscribe( data => {
         this.searchModel = data
         this.orders = [] as  IPOSOrder[];
         this.currentPage = 1
@@ -223,7 +225,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
   async newOrder(){
     const site = this.siteService.getAssignedSite();
-    await this.orderService.newDefaultOrder(site);
+    await this.orderMethodsService.newDefaultOrder(site);
   }
 
   setActiveOrder(order) {
@@ -233,7 +235,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
       {
         if (data) {
           this.orderOutPut.emit(data)
-          this.orderService.setActiveOrder(site, data)
+          this.orderMethodsService.setActiveOrder(site, data)
         }
       }
     )
@@ -246,7 +248,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
       {
         if (data) {
           this.orderOutPut.emit(data)
-          this.orderService.setActiveOrder(site, data)
+          this.orderMethodsService.setActiveOrder(site, data)
         }
         return of(data)
       }
@@ -276,7 +278,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
       this.loading      = true
       this.endOfRecords = false;
       this.results$ = results$.pipe(switchMap(data => {
-        console.log('processing', data)
+        // console.log('processing', data)
 
         if (!this.orders)  {
           this.loading = false

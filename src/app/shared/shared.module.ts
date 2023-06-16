@@ -423,7 +423,8 @@ import { FieldListTypeAssignerComponent } from '../modules/admin/report-designer
     ReportTypesComponent,
     SortSelectorComponent,
     MatSelectorComponent,
-    EditBarComponent
+    EditBarComponent,
+
   ],
 
   imports: [
@@ -566,7 +567,7 @@ import { FieldListTypeAssignerComponent } from '../modules/admin/report-designer
     PrinterLocationSelectionComponent,
     PrinterLocationsComponent,
     PriceScheduleMenuListComponent,
-
+    
     ProfileMedInfoComponent,
     PaymentReportComponent,
     PosOrderItemComponent,

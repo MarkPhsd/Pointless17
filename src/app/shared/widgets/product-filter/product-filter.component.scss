@@ -1,0 +1,52 @@
+@import "/src/mixins.scss";
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: left;
+  width: 250px;
+  text-align: left;
+}
+
+.flex-column-nw {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: left;
+  text-align: left;
+}
+
+mat-icon {
+  top:5px;
+  margin-left: 5px;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.results {
+  overflow-x: hidden;
+  overflow-y: auto ;
+  height: calc(100vh - 80px);
+}
+
+.stick-panel-top {
+  position :sticky;
+  top: 0;
+  max-height: 800px;
+
+  // padding-right: 10px;
+  // overflow-x: visible;
+  // position: fixed;
+  // right: 0px;
+  // max-width: 350px;
+  // width: 350px;
+}
+
+h4 h5 {
+  maring-bottom: 5px;
+}

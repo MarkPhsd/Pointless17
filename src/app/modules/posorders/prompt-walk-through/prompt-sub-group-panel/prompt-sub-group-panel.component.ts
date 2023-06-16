@@ -7,6 +7,7 @@ import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-wa
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { Subscription } from 'rxjs';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'prompt-sub-group-panel',
@@ -33,7 +34,7 @@ export class PromptSubGroupPanelComponent implements OnInit, OnDestroy {
 
   intSubscriptions() {
 
-    this._order = this.orderService.currentOrder$.subscribe(data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe(data => {
       this.order = data;
     })
 
@@ -69,6 +70,7 @@ export class PromptSubGroupPanelComponent implements OnInit, OnDestroy {
   constructor(
     private sitesService             : SitesService,
     private orderService             : OrdersService,
+    public orderMethodsService       : OrderMethodsService,
     private promptGroupService       : PromptGroupService,
     private posOrderItemService      : POSOrderItemService,
     private promptWalkService        : PromptWalkThroughService,

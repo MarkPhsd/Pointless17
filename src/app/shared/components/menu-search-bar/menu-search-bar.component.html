@@ -16,22 +16,18 @@
       </search-debounce-input>
     </div>
 
+    <ng-container [ngTemplateOutlet]="filter"></ng-container>
+
     <ng-container [ngTemplateOutlet]="isDisplaySubMenuOn"></ng-container>
 
     <ng-template #displaySubMenu>
-      <!-- <div *ngIf="!hideMenu"> -->
         <price-schedule-menu-list></price-schedule-menu-list>
-      <!-- </div> -->
-      <!-- <button mat-button (click)="hideMenu = !hideMenu">
-        <div *ngIf="hideMenu">Show Menu</div>
-        <div *ngIf="!hideMenu">Hide Menu</div>
-      </button> -->
     </ng-template>
 
     <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container>
 
     <ng-template #displayMenu>
-      <!-- <display-menu-menu></display-menu-menu> -->
+      <display-menu-menu></display-menu-menu>
     </ng-template>
 
     <div  *ngIf="!isApp && (!smallDevice && !tinyDepartmentFilter)"
@@ -41,22 +37,9 @@
                 (click)="toggleKeyboard()">
                 <mat-icon>keyboard</mat-icon></button>
       </div>
-      <div *ngIf="multifilter">
-        <button mat-button
-                (click)="clearAll()">
-          <span *ngIf="!smallDevice">
-          </span>
-          <mat-icon>refresh</mat-icon>
-        </button>
-      </div>
-      <div>
-        <button  mat-button
-                (click)="multifilter = !multifilter">
-          <span [class]="'mdi mdi-filter'"></span>
-        </button>
-      </div>
     </div>
-    <div *ngIf="isApp"
+
+    <div *ngIf="isApp || (!smallDevice && !isApp)"
          class="search-buttons">
       <div>
         <button mat-button
@@ -64,19 +47,9 @@
           <mat-icon>refresh</mat-icon>
         </button>
       </div>
-      <div >
-        <button  mat-button
-                (click)="multifilter = !multifilter">
-          <span *ngIf="!smallDevice">
-            Filter
-          </span>
-          <span [class]="'mdi mdi-filter'"></span>
-        </button>
-      </div>
     </div>
 
     <div *ngIf="uiHomePage &&  uiHomePage.sideToolbarEnableCategory">
-
       <mat-accordion multi>
         <mat-expansion-panel
              [expanded]="accordionStep == 0"
@@ -165,7 +138,7 @@
                   (outPutItem)      = "refreshCategorySearch($event)"
                   [textLength]      = "21"
                   [id]              = "productTypeID"
-             
+
                   [list]            = "list">
               </app-mat-toggle-selector>
             </div>
@@ -195,4 +168,12 @@
 </mat-sidenav-container>
 
 
+
+<ng-template #filter>
+  <ng-container >
+    <button mat-button color="accent" (click)="gotoFilter()"   >
+      <mat-icon>manage_search</mat-icon>Filter
+    </button>
+  </ng-container>
+</ng-template>
 

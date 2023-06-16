@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -42,24 +42,31 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Interfaces</li>
-  <li
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
   >
   IIsOnline</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -70,7 +77,7 @@
 
 
 
-        <section>
+        <section data-compodoc="block-index">
             <h3 id="index">Index</h3>
             <table class="table table-sm table-bordered index-table">
                 <tbody>
@@ -97,7 +104,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-properties">
                 <h3 id="inputs">Properties</h3>
                     <table class="table table-sm table-bordered">
                         <tbody>
@@ -136,28 +143,31 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, Output,OnDestroy, EventEmitter, HostBinding, Renderer2, HostListener } from &#x27;@angular/core&#x27;;
-import { FormBuilder, FormControl, FormGroup } from &#x27;@angular/forms&#x27;;
-import { OverlayContainer } from &#x27;@angular/cdk/overlay&#x27;;
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, Output, EventEmitter,
+        HostBinding, Renderer2, HostListener, OnDestroy, OnChanges, TemplateRef, ViewChild } from &#x27;@angular/core&#x27;;
+import { UntypedFormBuilder,UntypedFormGroup } from &#x27;@angular/forms&#x27;;
 import { MatDialog } from &#x27;@angular/material/dialog&#x27;;
-import { CompanyService,AuthenticationService, OrdersService, MenuService, MessageService, UserService} from &#x27;src/app/_services&#x27;;
-import { ICompany, IPOSOrder, ISite }  from &#x27;src/app/_interfaces&#x27;;
+import { CompanyService,AuthenticationService, OrdersService, MessageService, } from &#x27;src/app/_services&#x27;;
+import { UserSwitchingService } from &#x27;src/app/_services/system/user-switching.service&#x27;;
+import { ICompany, IPOSOrder, ISite, IUser, IUserProfile,  }  from &#x27;src/app/_interfaces&#x27;;
 import { MatSlideToggle } from &#x27;@angular/material/slide-toggle&#x27;;
-import { Router } from &#x27;@angular/router&#x27;;
-import { BreakpointObserver, BreakpointState } from &#x27;@angular/cdk/layout&#x27;;
-import { SettingsService } from &#x27;src/app/_services/system/settings.service&#x27;;
-import { Observable, of, Subject, Subscription, throwError, timer } from &#x27;rxjs&#x27;;
-import { catchError, delay, delayWhen, finalize, first, map, repeatWhen, retryWhen, tap } from &#x27;rxjs/operators&#x27;;
+import { Observable, of, Subject, Subscription,switchMap   } from &#x27;rxjs&#x27;;
 import { SitesService } from &#x27;src/app/_services/reporting/sites.service&#x27;;
 import { SiteSelectorComponent } from &#x27;../../widgets/site-selector/site-selector.component&#x27;;
-// https://blog.bitsrc.io/6-ways-to-unsubscribe-from-observables-in-angular-ab912819a78f
-import {Location} from &#x27;@angular/common&#x27;;
-import { Capacitor, Plugins } from &#x27;@capacitor/core&#x27;;
+import { Location} from &#x27;@angular/common&#x27;;
 import { ToolBarUIService } from &#x27;src/app/_services/system/tool-bar-ui.service&#x27;;
-import { UserAuthorizationService } from &#x27;src/app/_services/system/user-authorization.service&#x27;;
-import { ElectronService } from &#x27;ngx-electron&#x27;;
-import { ScaleInfo, ScaleService } from &#x27;src/app/_services/system/scale-service.service&#x27;;
+import { ScaleInfo, ScaleService, ScaleSetup } from &#x27;src/app/_services/system/scale-service.service&#x27;;
+import { NavigationService } from &#x27;src/app/_services/system/navigation.service&#x27;;
+import { BreakpointObserver, BreakpointState } from &#x27;@angular/cdk/layout&#x27;;
+import { PlatformService } from &#x27;src/app/_services/system/platform.service&#x27;;
+import { PollingService } from &#x27;src/app/_services/system/polling.service&#x27;;
+import { Router } from &#x27;@angular/router&#x27;;
+import { IFloorPlan } from &#x27;pointless-room-layout/src/app/app.component&#x27;;
+import { FloorPlanService } from &#x27;src/app/_services/floor-plan.service&#x27;;
+import { TransactionUISettings, UIHomePageSettings, UISettingsService } from &#x27;src/app/_services/system/settings/uisettings.service&#x27;;
+import { ITerminalSettings, SettingsService } from &#x27;src/app/_services/system/settings.service&#x27;;
+import { OrderMethodsService } from &#x27;src/app/_services/transactions/order-methods.service&#x27;;
 
 interface IIsOnline {
   result: string;
@@ -169,27 +179,33 @@ interface IIsOnline {
   styleUrls: [&#x27;./header.component.scss&#x27;]
 })
 
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
+  @ViewChild(&#x27;clockInOut&#x27;)      clockInOut: TemplateRef&lt;any&gt;;
+  @ViewChild(&#x27;userActions&#x27;)       userActions: TemplateRef&lt;any&gt;;
+  @ViewChild(&#x27;searchMenuView&#x27;)       searchMenuView: TemplateRef&lt;any&gt;;
+  @ViewChild(&#x27;floorPlanTemplate&#x27;) floorPlanTemplate: TemplateRef&lt;any&gt;;
+  @ViewChild(&#x27;menuButtonContainer&#x27;) menuButtonContainer: TemplateRef&lt;any&gt;;
+
 
   @Output() outPutToggleSideBar:      EventEmitter&lt;any&gt; &#x3D; new EventEmitter();
-  @Output() outPutToggleSearchBar:      EventEmitter&lt;any&gt; &#x3D; new EventEmitter();
+  @Output() outPutToggleSearchBar:    EventEmitter&lt;any&gt; &#x3D; new EventEmitter();
   openOrderBar:                      boolean;
-  @HostBinding(&#x27;class&#x27;) className &#x3D; &#x27;&#x27;;
+  @HostBinding(&#x27;class&#x27;)      className &#x3D; &#x27;&#x27;;
+  mattoolbar                 &#x3D;&#x27;mat-toolbar&#x27;
 
-  apiStatus: string;
-
-  // get searchProductsValue() { return this.searchForm.get(&quot;searchProducts&quot;) as FormControl;}
-  // searchForm: FormGroup;
+  gridlayout        &#x3D; &#x27;grid-flow grid-margin&#x27;
+  gridlayoutNoStaff &#x3D; &#x27;grid-flow grid-margin-nostaff&#x27;
 
   company                    &#x3D; {} as ICompany;
   compName:                  string;
   userName:                  string;
   userRoles:                 string;
+  employeeName  :            string;
   source:                    MatSlideToggle
   orderBarSource:            MatSlideToggle
   checked:                   boolean;
   timerID:                   any;
-  //Theme Control
+
   toggleTheme              : string;
   id:                        any;
   company$:                  Observable&lt;ICompany&gt;;
@@ -201,95 +217,286 @@ export class HeaderComponent implements OnInit {
   isAPIOnline$:   Observable&lt;any&gt;;
   site:           ISite;
   sitePickerWidth &#x3D; 50;
-  searchForm    : FormGroup;
+  searchForm          : UntypedFormGroup;
 
-  scannerEnabled: boolean;
-  private toolBar   :  boolean;
-  platForm:     string;
-  isApp         : boolean;
+  phoneDevice         : boolean;
+  smallDevice         :   boolean;
+  scannerEnabled      : boolean;
+  private toolBar     :  boolean;
 
-  _order              :   Subscription;
-  order               :   IPOSOrder;
   showPOSFunctions    &#x3D;   false;
-  showTableLayout     &#x3D;   false;
-  isAppElectron       &#x3D;   false;
   scaleName           :   any;
   scaleValue          :   any;
-  isElectronServiceInitiated : boolean;
 
-  scaleInfo           &#x3D;{} as ScaleInfo;
+  isUserStaff         &#x3D;   false;
+  isManager           :     boolean;
+  isAdmin             &#x3D;   false;
+  isUser              &#x3D;   false;
+
+  _transactionUI      :   Subscription;
+  _order              :   Subscription;
+  order               :   IPOSOrder;
+
+  _orderBar           : Subscription;
+  orderBar            : boolean;
+
+  _order$             : Observable&lt;IPOSOrder&gt;;
+  order$              : Subject&lt;Observable&lt;IPOSOrder&gt;&gt; &#x3D; new Subject();
+
+  scaleInfo           : ScaleInfo;
   _scaleInfo          : Subscription;
+  scaleSetup          : ScaleSetup;
+  displayWeight       : string;
 
-  initSubscriptions() {
-    this._order &#x3D; this.orderService.currentOrder$.subscribe( data &#x3D;&gt; {
-      this.order &#x3D; data
+  _openOrderBar       : Subscription;
+
+  user                : IUser;
+  _user               : Subscription;
+
+  searchSideBar       : any;
+  _searchSideBar      : Subscription;
+
+  _mainMenuSideBar:   Subscription;
+  userSwitching &#x3D; true;
+  public widthOfWindow: number;
+  message: string;
+  menuBar    &#x3D; &#x27;menu&#x27;
+  searchBar  &#x3D; &#x27;search&#x27;;
+  flexsections &#x3D; &#x27;flex-sections&#x27;
+  matToolbarColor &#x3D; &#x27;primary&#x27;;
+
+  siteName        : string;
+  bucket          &#x3D; &#x27;&#x27;;
+  homePageSetings : UIHomePageSettings;
+  uiTransactionSetting  : TransactionUISettings;
+  uiTransactionSetting$ : Observable&lt;TransactionUISettings&gt;;
+  uiHomePageSetting$    : Observable&lt;UIHomePageSettings&gt;;
+  floorPlans$     : Observable&lt;IFloorPlan[]&gt;;
+  posDevice$      : Observable&lt;ITerminalSettings&gt;;
+  terminalSetting : any;
+
+  mailCount  &#x3D; 0;
+
+  _site: Subscription;
+  initSiteSubscriber() {
+    this._site &#x3D; this.siteService.site$.subscribe( data &#x3D;&gt; {
+      this.site &#x3D; data
     })
-
-    this._scaleInfo &#x3D; this.scaleService.scaleInfo$.subscribe( data &#x3D;&gt; {
-      this.scaleInfo &#x3D; data;
-    })
-
   }
 
-  constructor(private authenticationService:  AuthenticationService,
-              private dialog:                 MatDialog,
-              private overlay:                OverlayContainer,
-              private companyService:         CompanyService,
-              private _renderer:              Renderer2,
-              public orderService:            OrdersService,
-              private router:                 Router,
-              private messageService:         MessageService,
-              private settingsService:        SettingsService,
-              public breakpointObserver:      BreakpointObserver,
-              private siteService:            SitesService,
-              private toolbarUIService:       ToolBarUIService,
-              private location:               Location,
-              private userService         :   UserService,
-              private userAuthorization   :   UserAuthorizationService,
-              private electronService     : ElectronService,
-              private scaleService        : ScaleService,
-              private fb              :       FormBuilder ) {
+  initOrderSubscriber() {
+    this._order &#x3D; this.orderMethodsService.currentOrder$.subscribe( data &#x3D;&gt; {
+      this.order &#x3D; data
+    })
+  }
 
+  initOrderBarSubscriber() {
+    this._openOrderBar &#x3D; this.toolbarUIService.orderBar$.subscribe( data &#x3D;&gt; {
+      this.openOrderBar &#x3D; data;
+    })
+  }
+  initUserSubscriber() {
+    this._user &#x3D; this.authenticationService.user$.subscribe( data &#x3D;&gt; {
+      this.user  &#x3D; data
+      this.getUserInfo()
+    })
+  }
 
-    this.initSearchObservable();
-    this.messageService.sendMessage(&#x27;show&#x27;)
-
-    userService.getProfile().subscribe(user &#x3D;&gt; {
-      if (user) {
-        // this.userAuthorization.isUserAuthorized(user.roles)
-        if (user.roles &#x3D;&#x3D; &#x27;admin&#x27; || user.roles &#x3D;&#x3D; &#x27;manager&#x27; || user.roles &#x3D;&#x3D; &#x27;employee&#x27;) {
-          this.showPOSFunctions &#x3D; true;
-          this.userName&#x3D; user.userName
-          this.userRoles &#x3D; user.roles
-        }
-      } else {
-        this.userName &#x3D; &#x27;no user&#x27;
+  initToobarServiceUI() {
+    this._searchSideBar &#x3D; this.toolbarUIService.searchSideBar$.subscribe( data &#x3D;&gt; {
+      if (data) {
+        this.searchBar &#x3D; &#x27;search_off&#x27;
+      }
+      if (!data) {
+        this.searchBar &#x3D; &#x27;search&#x27;
       }
     })
   }
 
-  async  ngOnInit() {
-    this.initSubscriptions();
-    this.refreshScannerOption()
-    this.searchForm &#x3D; this.fb.group( {
-      searchProducts: &#x27;&#x27;
-    });
+  initMainToolbarUI() {
+    this._mainMenuSideBar &#x3D; this.toolbarUIService.mainMenuSideBar$.subscribe( data &#x3D;&gt; {
+      if (data) {
+        this.menuBar &#x3D; &#x27;menu_open&#x27;
+      }
+      if (!data) {
+        this.menuBar &#x3D; &#x27;menu&#x27;
+      }
+    })
+  }
 
+  getUITransactionsSettings() {
+    this._transactionUI &#x3D; this.uiSettings.transactionUISettings$.subscribe( data &#x3D;&gt; {
+      if (data) {
+        this.uiTransactionSetting &#x3D; data;
+      }
+    });
+  }
+
+  initSubscriptions() {
+    this.initOrderSubscriber()
+    this.initOrderBarSubscriber();
+    this.initUserSubscriber();
+    this.initToobarServiceUI() ;
+    this.initMainToolbarUI();
+    this.initSiteSubscriber();
+  }
+
+  constructor(private authenticationService : AuthenticationService,
+              private userSwitchingService  : UserSwitchingService,
+              private pollingService        : PollingService,
+              private dialog:                 MatDialog,
+              public  platformService       : PlatformService,
+              private companyService:         CompanyService,
+              private _renderer:              Renderer2,
+              public  orderService:           OrdersService,
+              public orderMethodsService: OrderMethodsService,
+              private messageService:         MessageService,
+              public  breakpointObserver:     BreakpointObserver,
+              private siteService:            SitesService,
+              public  toolbarUIService:       ToolBarUIService,
+              private location:               Location,
+              private navigationService     : NavigationService,
+              public  platFormService       : PlatformService,
+              private router                : Router,
+              private floorPlanSevice       : FloorPlanService,
+              public uiSettings            : UISettingsService,
+              private fb                    : UntypedFormBuilder ) {
+  }
+
+  ngOnChanges() {
+    this.getUserInfo();
+  }
+
+  ngOnInit() {
+    this.site &#x3D;  this.siteService.getAssignedSite();
+    this.getDeviceInfo();
+    this.getUITransactionsSettings();
+    this.initUIService();
+    this.initSearchObservable();
+    this.messageService.sendMessage(&#x27;show&#x27;);
+    this.platFormService.getPlatForm();
+    this.initSubscriptions();
+    this.getUserInfo();
+    this.refreshScannerOption()
+    this.searchForm &#x3D; this.fb.group( {  searchProducts: &#x27;&#x27; });
     this.renderTheme();
     this.refreshTheme()
-    this.initUser();
+    this.initCompany();
     this.mediaWatcher()
     this.initSite();
+    this.updateScreenSize();
+    this.pollingService.poll();
+    this.initUserOrder();
+    this.floorPlans$ &#x3D; this.floorPlanSevice.listFloorPlansNames(this.site);
+  }
 
+  get isApp() {
+    return this.platFormService.isApp()
+  }
+
+  get showSearchMenuView() {
+    if (this.smallDevice || this.phoneDevice) {
+      return null
+    }
+    return this.searchMenuView;
+  }
+
+  getDeviceInfo() {
+    const devicename &#x3D; localStorage.getItem(&#x27;devicename&#x27;)
+    if (devicename &amp;&amp; this.isApp) {
+      this.posDevice$ &#x3D; this.uiSettings.getPOSDeviceSettings(devicename).pipe(
+        switchMap(data &#x3D;&gt; {
+          try {
+            const posDevice &#x3D; JSON.parse(data.text) as ITerminalSettings;
+            this.uiSettings.updatePOSDevice(posDevice)
+            this.terminalSetting &#x3D; data;
+            if (this.platformService.isAppElectron) {
+              if (posDevice &amp;&amp; posDevice.electronZoom &amp;&amp; posDevice.electronZoom !&#x3D; &#x27;0&#x27;) {
+                this.uiSettings.electronZoom(posDevice.electronZoom)
+              }
+            }
+            return of(posDevice)
+          } catch (error) {
+            this.siteService.notify(&#x27;Error setting device info.&#x27; + error, &#x27;Close&#x27;, 5000, &#x27;yellow&#x27;)
+          }
+          return of(null)
+        }
+      ))
+    }
+  }
+
+  get isClockInOutOn() {
+    if (this.isUserStaff)  {
+      return this.clockInOut
+    }
+    return null;
+  }
+
+  initUIService() {
+    this.uiHomePageSetting$ &#x3D;  this.uiSettings.getSetting(&#x27;UIHomePageSettings&#x27;).pipe(
+      switchMap( data &#x3D;&gt; {
+        if (data) {
+          this.homePageSetings  &#x3D; JSON.parse(data.text) as UIHomePageSettings;
+          this.uiSettings.updateHomePageSetting(this.homePageSetings)
+          return of(this.homePageSetings)
+        }
+        return of(null)
+      }
+    ))
+
+    this.uiSettings.homePageSetting$.subscribe(data &#x3D;&gt; {
+        if (data) {
+          this.homePageSetings &#x3D; data
+        }
+      }
+    )
+  }
+
+  ngOnDestroy() {
+    if (this._searchSideBar) { this._searchSideBar.unsubscribe()}
+    if (this._openOrderBar) {  this._openOrderBar.unsubscribe(); }
+    if (this._scaleInfo) {this._scaleInfo.unsubscribe(); }
+    if (this._order) { this._order.unsubscribe(); }
+    if (this._user) {this._user.unsubscribe();}
+    if ( this._mainMenuSideBar) { this._mainMenuSideBar.unsubscribe()}
+    if (this._site) {this._site.unsubscribe()}
+  }
+
+  refreshUserBar(user: IUser) {
+    if (!user) {
+      this.flexsections &#x3D; &#x27;flex-sections-nouser&#x27;
+      return
+    }
+    if (user &amp;&amp; user?.roles &#x3D;&#x3D;&#x3D; &#x27;user&#x27;) {
+      this.flexsections &#x3D; &#x27;flex-sections-user&#x27;
+      return
+    }
+    if (user) {
+      this.flexsections &#x3D; &#x27;flex-sections&#x27;
+      return
+    }
+  }
+
+  //if there is a current order for this user, then we can assign it here.
+  initUserOrder(){
+    if (this.user &amp;&amp; (!this.order || (!this.order.id || this.order.id &#x3D;&#x3D; 0)) ) {
+      const userProfile &#x3D; {} as IUserProfile;
+      userProfile.id &#x3D; this.user?.id;
+      userProfile.roles &#x3D; this.user?.roles;
+      this.userSwitchingService.assignCurrentOrder(userProfile)
+    }
   }
 
   refreshScannerOption() {
     this.scannerEnabled &#x3D; false
-    this.platForm &#x3D;  Capacitor.getPlatform();
-    if (this.platForm !&#x3D; &#x27;web&#x27;) {
+    if (this.platFormService.isApp()) {
       this.scannerEnabled &#x3D; true;
-      this.isApp &#x3D; true
+
     }
+  }
+
+  emailMailCount(event) {
+    this.mailCount &#x3D; event
   }
 
   refreshTheme() {
@@ -305,26 +512,184 @@ export class HeaderComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
-    //this.router.navigate(this.routeInterceptorService.previousUrl);
+    this.smallDeviceLimiter
+    const hasHistory &#x3D; this.router.navigated;
+    if (hasHistory) {
+      this.location.back();
+    }
   }
 
-  @HostListener(&quot;window:resize&quot;, []) updateItemsPerPage() {
+  smallDeviceLimiter() {
+    if (this.smallDevice) { this.toolbarUIService.updateOrderBar(false) }
+  }
+
+  // get istableLayout() {
+  //   if (this.isUserStaff) {
+  //     this.floorPlans$ &#x3D; this.floorPlanSevice.listFloorPlansNames(site);
+  //   }
+  // }
+
+  get isfloorPlan() {
+    if (this.isUserStaff || this.isAdmin) {
+      return this.floorPlanTemplate
+    }
+    return null;
+  }
+
+  get userInfoScreen() {
+    // console.log(&#x27;user info screen&#x27;, this.smallDevice, this.phoneDevice)
+    if (this.phoneDevice || this.smallDevice)  {return  null}
+    return this.userActions
+    // if (!this.smallDevice &amp;&amp; !this.phoneDevice) {
+    //   return this.userActions
+    // }
+    // return null
+  }
+
+
+  get userActionsPhoneDevice() {
+    // console.log(&#x27;userActionsPhoneDevice&#x27;, this.smallDevice, this.phoneDevice)
+    if (this.phoneDevice || this.smallDevice) {
+      return this.userActions
+    }
+    return null
+  }
+
+
+
+  @HostListener(&quot;window:resize&quot;, [])
+  updateScreenSize() {
+    this.widthOfWindow &#x3D; window.innerWidth;
+    this.updateDeviceInfo();
+
+    if (this.platFormService.androidApp) {
+      this.mattoolbar &#x3D; &#x27;mat-toolbar-android&#x27;
+    }
+
+    if (this.platFormService.androidApp &amp;&amp; !this.user) {
+      this.mattoolbar &#x3D; &#x27;mat-toolbar-android-no-user&#x27;
+    }
+
+    if ( this.widthOfWindow &gt;&#x3D; 1025 ) {
+      this.userSwitching &#x3D; true;
+    } else {
+      this.userSwitching &#x3D; false;
+    }
+
+    this.widthOfWindow &#x3D; window.innerWidth;
     this.showSearchForm &#x3D; true
+
     if (window.innerWidth &gt;&#x3D; 1200) {
       this.sitePickerWidth &#x3D; 33
     } else if (window.innerWidth &gt;&#x3D; 992) {
       this.sitePickerWidth &#x3D; 33
-    } else if (window.innerWidth  &gt;&#x3D; 768) {
-      this.sitePickerWidth &#x3D; 75
-    } else if (window.innerWidth &lt; 768) {
+    }
+
+    if (811 &gt;&#x3D; window.innerWidth ) {
       this.showSearchForm &#x3D; false
       this.sitePickerWidth &#x3D; 75
     }
+    this.refreshUserBar(this.user)
+  }
+
+  updateDeviceInfo() {
+    this.smallDevice &#x3D; false
+    this.phoneDevice &#x3D; false;
+    if (811 &gt;&#x3D; window.innerWidth ) {
+      this.smallDevice &#x3D; true
+    }
+    if (500 &gt;&#x3D; window.innerWidth ) {
+      this.smallDevice &#x3D; false;
+      this.phoneDevice &#x3D; true
+    }
+    this.authenticationService.updateDeviceInfo({phoneDevice: this.phoneDevice, smallDevice: this.smallDevice})
+  }
+
+  get userLoginOptionView() {
+    if (this.phoneDevice || this.smallDevice) {
+      return this.userActions
+    }
+    return this.menuButtonContainer
+
+  }
+
+  getUserInfo() {
+    this.initUserInfo();
+    let user: IUser;
+
+    if (this.user) { user &#x3D; this.user  }
+    if (!this.user) {
+       user &#x3D; JSON.parse(localStorage.getItem(&#x27;user&#x27;)) as IUser;
+    }
+
+    this.refreshUserBar(user)
+    this.isAdmin      &#x3D; false;
+
+    this.isManager    &#x3D; false
+    this.showPOSFunctions &#x3D; false;
+
+    if (!user) {  return null }
+    this.userName     &#x3D; user.username;
+
+    if (!user.roles) {
+      return
+    }
+
+    this.userRoles    &#x3D; user?.roles.toLowerCase();
+    if (user.firstName) {
+      this.employeeName &#x3D; &#x60;${user?.lastName}, ${user?.firstName.substring(1,1)}&#x60;
+    }
+
+    this.isUser &#x3D; false;
+    if (user?.roles &#x3D;&#x3D;&#x3D; &#x27;user&#x27;) {
+      this.isUser &#x3D; true;
+    }
+
+    if (user?.roles &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;) {
+      this.showPOSFunctions &#x3D; true;
+      this.isAdmin          &#x3D; true
+      this.isUserStaff      &#x3D; true
+    }
+
+    if (user?.roles &#x3D;&#x3D;&#x3D; &#x27;employee&#x27;) {
+      this.isUserStaff      &#x3D; true
+      this.showPOSFunctions &#x3D; true;
+    }
+
+    if (user?.roles &#x3D;&#x3D;&#x3D; &#x27;manager&#x27;) {
+      this.isManager        &#x3D; true
+      this.showPOSFunctions &#x3D; true;
+      this.isUserStaff      &#x3D; true
+    }
+
+    if (this.isUserStaff) {
+      this.gridlayout &#x3D; this.gridlayout
+    }
+
+    if (!this.isUserStaff) {
+      this.gridlayout &#x3D; this.gridlayoutNoStaff
+    }
+  }
+
+  initUserInfo() {
+    this.userName         &#x3D; &#x27;&#x27;;
+    this.userRoles        &#x3D; &#x27;&#x27;;
+    this.showPOSFunctions &#x3D; false;
+    this.isAdmin          &#x3D; false;
+    this.isUserStaff      &#x3D; false;
+    this.employeeName     &#x3D; &#x27;&#x27;;
   }
 
   initSite() {
     this.site &#x3D; this.siteService.getAssignedSite();
+    if (this.site.name) {
+      if (this.site.name &#x3D;&#x3D; undefined || this.site.name &#x3D;&#x3D;&#x3D; &#x27;undefined&#x27;) {
+        this.site.name &#x3D; &#x27;&#x27;
+        return
+      }
+      this.site.name &#x3D; this.site.name.trim()
+      this.siteName &#x3D; this.site.name.trim()
+    }
   }
 
   mediaWatcher(){
@@ -345,21 +710,10 @@ export class HeaderComponent implements OnInit {
     };
   }
 
-  initUser() {
-    this.companyService.getCompany()
-      .pipe(first())
-      .subscribe(data &#x3D;&gt;
-      {
-          this.company  &#x3D; data
-          localStorage.setItem(&#x27;company/compName&#x27;, JSON.stringify(this.company.compName))
-          localStorage.setItem(&#x27;company/phone&#x27;, JSON.stringify(this.company.phone))
-          localStorage.setItem(&#x27;company/address&#x27;, JSON.stringify(this.company.compAddress1))
-          this.compName &#x3D; this.company.compCity
-          this.compName &#x3D; data.compName
-      }, error &#x3D;&gt; {
-        this.apiStatus &#x3D; &quot;system offline.&quot;
-      });
-      this.userName &#x3D;  JSON.parse(localStorage.getItem(&#x27;username&#x27;));
+  initCompany() {
+    const site     &#x3D;   this.siteService.getAssignedSite();
+    this.company$  &#x3D;   this.companyService.getCompany(site)
+    this.initSite();
   }
 
   initSearchObservable() {
@@ -372,29 +726,75 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  deviceInfo() {
+    if (!this.terminalSetting) { return }
+    const dialog &#x3D; this.uiSettings.openEditPOSDevice(this.terminalSetting)
+    dialog.afterClosed().subscribe(data &#x3D;&gt; {
+      this.getDeviceInfo()
+    })
+  }
+
   goHome() {
-    this.router.navigateByUrl(&#x27;/&#x27;, { skipLocationChange: true }).then(() &#x3D;&gt; {
-      this.router.navigate([&#x27;/app-main-menu&#x27;]);
-    });
+    this.smallDeviceLimiter();
+    this.navigationService.navHome();
+  }
+
+  navPOSOrders() {
+    this.smallDeviceLimiter();
+    this.navigationService.navPOSOrders()
+  }
+
+  navTableService() {
+    this.smallDeviceLimiter();
+    this.navigationService.navTableService()
   }
 
   toggleSideBar() {
-    this.outPutToggleSideBar.emit(!this.openOrderBar)
+    if (this.userSwitchingService.swapMenuWithOrderBoolean) {
+      if (this.openOrderBar) {
+        this.toolbarUIService.updateOrderBar(false)
+        this.toolbarUIService.updateToolBarSideBar(true)
+        return;
+      }
+      this.toolbarUIService.updateleftSideBarToggle(false)
+      this.openOrderBar     &#x3D; false
+      this.toolbarUIService.switchToolBarSideBar()
+      return;
+    }
+    if (this.searchSideBar) {
+      this.searchSideBar &#x3D; !this.searchSideBar;
+    }
+    this.openOrderBar     &#x3D; !this.openOrderBar
     this.toolbarUIService.switchToolBarSideBar()
-    return
+  }
+
+  toggleOpenOrderBar() {
+    if (this.router.url.substring(0, 28 ) &#x3D;&#x3D;&#x3D; &#x27;/currentorder;mainPanel&#x3D;true&#x27;) {
+      ///
+      // console.log(&#x27;toggleOpenOrderBar order bar update&#x27;, this.openOrderBar)
+      this.openOrderBar &#x3D; false
+      this.toolbarUIService.updateOrderBar(this.openOrderBar)
+      return;
+    }
+    this.openOrderBar &#x3D; !this.openOrderBar
+    this.toolbarUIService.updateOrderBar(this.openOrderBar)
+
+    // console.log(&#x27;toggleOpenOrderBar order bar update&#x27;, this.openOrderBar)
   }
 
   toggleSearchMenu() {
+    this.smallDeviceLimiter();
     this.toolbarUIService.switchSearchBarSideBar()
   }
 
   toggleOrderBar(event) {
-    this.openOrderBar &#x3D; !this.openOrderBar
+    if (this.openOrderBar){ this.smallDeviceLimiter();    }
     this.toolbarUIService.updateOrderBar(this.openOrderBar)
   }
 
   logout() {
-    this.authenticationService.logout();
+    this.userSwitchingService.clearLoggedInUser();
+    this.smallDeviceLimiter();
   }
 
   renderTheme() {
@@ -408,29 +808,8 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  switchTheme() {
-    if (this.toggleTheme &#x3D;&#x3D;&#x3D; &#x27;dark-theme&#x27; ) {
-      localStorage.setItem(&#x27;angularTheme&#x27;, &#x27;light-theme&#x27;)
-    } else {
-      localStorage.setItem(&#x27;angularTheme&#x27;, &#x27;dark-theme&#x27;)
-    }
-    this.renderTheme();
-  }
-
-  async checkOnlineStatus() {
-    this.company$  &#x3D; this.companyService.getCompany()
-        .pipe(
-          repeatWhen(notifications &#x3D;&gt; notifications.pipe(delay(1000)),
-        ),
-        catchError((err: any) &#x3D;&gt; {
-           this.apiStatus &#x3D; &quot;--Offline--&quot;
-          return throwError(err);
-        }
-      )
-    )
-  }
-
   siteSelector() {
+    this.toolbarUIService.updateDepartmentMenu(0);
     const dialogRef &#x3D; this.dialog.open( SiteSelectorComponent,
       { width:     &#x27;350&#x27;,
         height:    &#x27;90vh&#x27;,
@@ -438,12 +817,19 @@ export class HeaderComponent implements OnInit {
     )
     dialogRef.afterClosed().subscribe(result &#x3D;&gt; {
       this.initSite();
-      console.log(&#x27;The dialog was closed&#x27;);
     });
   }
 
-  readScale() {
-    this.scaleService.ngOnInit();
+  // readScale() {
+  //   this.scaleService.readScale();
+  // }
+
+  switchUser() {
+    this.userSwitchingService.openPIN({request: &#x27;switchUser&#x27;})
+  }
+
+  assingBackGround(image: string) {
+    if (!image) { return }
   }
 
 }
@@ -453,14 +839,15 @@ export class HeaderComponent implements OnInit {
 </div>
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -472,6 +859,15 @@ export class HeaderComponent implements OnInit {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
@@ -481,8 +877,8 @@ export class HeaderComponent implements OnInit {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

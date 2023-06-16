@@ -22,6 +22,8 @@ import { IPrinterLocation } from 'src/app/_services/menu/printer-locations.servi
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 const { Keyboard } = Plugins;
 
 @Component({
@@ -134,7 +136,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   initStatusSubscriber() {
-    this._prepStatus = this.orderService.prepStatus$.subscribe( data => {
+    this._prepStatus = this.printingService.prepStatus$.subscribe( data => {
       if (!data) {
         this.prepStatus = 1
       }
@@ -145,7 +147,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   initPrintLocationSubscriber() {
-    this._printLocation = this.orderService.printerLocation$.subscribe( data => {
+    this._printLocation = this.printingService.printerLocation$.subscribe( data => {
       if (data) {
         this.printLocation = data;
       }
@@ -153,14 +155,14 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   initViewTypeSubscriber() {
-    this._viewType = this.orderService.viewOrderType$.subscribe(data => {
+    this._viewType = this.orderMethodsService.viewOrderType$.subscribe(data => {
       this.viewType = data;
     })
   }
 
   initSearchSubscriber() {
     try {
-      this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
+      this._searchModel = this.orderMethodsService.posSearchModel$.subscribe( data => {
         this.searchModel = data
         this.initFilter(data)
       })
@@ -193,6 +195,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       private orderService    : OrdersService,
       private router          : Router,
       public  route           : ActivatedRoute,
+      private printingService : PrintingService,
       private siteService     : SitesService,
       private serviceTypes    : ServiceTypeService,
       private settingService  : SettingsService,
@@ -202,13 +205,14 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       private dateHelper: DateHelperService,
       private _bottomSheet    : MatBottomSheet,
       private uISettingsService: UISettingsService,
+      public orderMethodsService: OrderMethodsService,
   )
   {
 
     this.initSubscriptions();
     if ( this.terminalSetting) {
       if (this.terminalSetting.resetOrdersFilter) {
-        this.orderService.updateOrderSearchModel(null)
+        this.orderMethodsService.updateOrderSearchModel(null)
       }
     }
   }
@@ -320,7 +324,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   clearOrder() {
-    this.orderService.updateOrderSubscription(null);
+    this.orderMethodsService.updateOrderSubscription(null);
   }
 
   initEmployeeList(){
@@ -335,7 +339,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   updateOrderSearch(searchModel: IPOSOrderSearchModel) {
-    this.orderService.updateOrderSearchModel( searchModel )
+    this.orderMethodsService.updateOrderSearchModel( searchModel )
   }
 
   //check
@@ -431,12 +435,12 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   async newOrder(){
     const site = this.siteService.getAssignedSite();
-    await this.orderService.newDefaultOrder(site);
+    await this.orderMethodsService.newDefaultOrder(site);
   }
 
   newOrderWithPayload(){
     const site = this.siteService.getAssignedSite();
-    this.orderService.newOrderWithPayload(site, this.orderServiceType)
+    this.orderMethodsService.newOrderWithPayload(site, this.orderServiceType)
   }
 
   newOrderOptions() {

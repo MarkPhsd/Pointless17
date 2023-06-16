@@ -24,6 +24,8 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { IPagedList } from 'src/app/_services/system/paging.service';
 import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { UnparseConfig } from 'ngx-papaparse';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 
 // const fields = ['completeDate','clientType', 'oomp',  'oompb', 'value', 'packageLabel','quantityTotal','unitType',  'value', 'value', 'value', 'value', 'value', 'netTotal','orderID',
 //         , 'value', 'value', 'value', , 'value', 'value' , 'value', 'value', 'value' ]
@@ -168,7 +170,9 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     private siteService: SitesService,
     private agGridFormatingService  : AgGridFormatingService,
     private reportingServices: ReportingService,
+    public orderMethodsService: OrderMethodsService,
     private orderService: OrdersService,
+    private dateHelperService: DateHelperService,
     private pointlessMetrcSalesReport: PointlessMETRCSalesService,
     private reportingItemsSalesService: ReportingItemsSalesService,
     ) {
@@ -606,7 +610,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     this.order$  = order$.pipe(
       switchMap(data =>
       {
-        this.orderService.setActiveOrder(site, data)
+        this.orderMethodsService.setActiveOrder(site, data)
         return of(data)
       }
     ))
@@ -682,7 +686,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         options.header = false;
         options.skipEmptyLines = true;
         this.gridApi.exportDataAsCsv({ columnKeys: fields, allColumns: false,
-                                        fileName: 'metrc', skipColumnHeaders: true, suppressQuotes: true});
+                                        fileName: 'metrc' + this.dateFrom, skipColumnHeaders: true, suppressQuotes: true});
         return;
       }
     }
@@ -748,7 +752,9 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       options.quotes = false;
       options.header = false;
       options.skipEmptyLines = true;
-      this.reportingItemsSalesService.downloadPapa(list, 'METRCSalesReport', options)
+      const date  = new Date()
+      const dateString = this.dateHelperService.format(date.toString(), "MM/dd/yyyy");
+      this.reportingItemsSalesService.downloadPapa(list, `METRCSalesReport ${dateString}` , options)
     }
 
     setSite(id: any) {

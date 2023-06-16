@@ -1,0 +1,2013 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >FloorPlanService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_services/floor-plan.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#pageNumber" >pageNumber</a>
+                            </li>
+                            <li>
+                                <a href="#pageSize" >pageSize</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#alterColor" >alterColor</a>
+                            </li>
+                            <li>
+                                <a href="#alterObjectColor" >alterObjectColor</a>
+                            </li>
+                            <li>
+                                <a href="#clearTable" >clearTable</a>
+                            </li>
+                            <li>
+                                <a href="#delete" >delete</a>
+                            </li>
+                            <li>
+                                <a href="#deleteFloorPlans" >deleteFloorPlans</a>
+                            </li>
+                            <li>
+                                <a href="#getFloorPlan" >getFloorPlan</a>
+                            </li>
+                            <li>
+                                <a href="#getFloorPlanNoBackup" >getFloorPlanNoBackup</a>
+                            </li>
+                            <li>
+                                <a href="#getFloorPlanNoBackupCached" >getFloorPlanNoBackupCached</a>
+                            </li>
+                            <li>
+                                <a href="#listFloorPlansNames" >listFloorPlansNames</a>
+                            </li>
+                            <li>
+                                <a href="#postFloorPlan" >postFloorPlan</a>
+                            </li>
+                            <li>
+                                <a href="#pushUUIDToReset" >pushUUIDToReset</a>
+                            </li>
+                            <li>
+                                <a href="#putFloorPlan" >putFloorPlan</a>
+                            </li>
+                            <li>
+                                <a href="#replaceJSONText" >replaceJSONText</a>
+                            </li>
+                            <li>
+                                <a href="#restoreBackup" >restoreBackup</a>
+                            </li>
+                            <li>
+                                <a href="#saveBackup" >saveBackup</a>
+                            </li>
+                            <li>
+                                <a href="#saveFloorPlan" >saveFloorPlan</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(http: HttpClient, httpCache: <a href="../injectables/HttpClientCacheService.html" target="_self">HttpClientCacheService</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/_services/floor-plan.service.ts:24</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                    <code>HttpClient</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>httpCache</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/HttpClientCacheService.html" target="_self" >HttpClientCacheService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>auth</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthenticationService.html" target="_self" >AuthenticationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="alterColor"></a>
+                    <span class="name">
+                        <span ><b>alterColor</b></span>
+                        <a href="#alterColor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>alterColor(color, obj, stroke)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="287"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:287</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>color</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>obj</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>stroke</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="alterObjectColor"></a>
+                    <span class="name">
+                        <span ><b>alterObjectColor</b></span>
+                        <a href="#alterObjectColor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>alterObjectColor(uuID: <a href="../s/s.html" target="_self">string</a>, color: <a href="../s/s.html" target="_self">string</a>, view: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="223"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:223</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>uuID</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>color</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>view</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="clearTable"></a>
+                    <span class="name">
+                        <span ><b>clearTable</b></span>
+                        <a href="#clearTable"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>clearTable(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, floorPlanID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, orderID: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="211"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:211</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>floorPlanID</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>orderID</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="delete"></a>
+                    <span class="name">
+                        <span ><b>delete</b></span>
+                        <a href="#delete"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>delete(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="142"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:142</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IFloorPlan.html" target="_self" >Observable&lt;IFloorPlan&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteFloorPlans"></a>
+                    <span class="name">
+                        <span ><b>deleteFloorPlans</b></span>
+                        <a href="#deleteFloorPlans"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteFloorPlans(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, items: <a href="../interfaces/IFloorPlan.html" target="_self">IFloorPlan[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="156"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:156</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>items</td>
+                                    <td>
+                                                <code><a href="../interfaces/IFloorPlan.html" target="_self" >IFloorPlan[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IFloorPlan.html" target="_self" >Observable&lt;IFloorPlan&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFloorPlan"></a>
+                    <span class="name">
+                        <span ><b>getFloorPlan</b></span>
+                        <a href="#getFloorPlan"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getFloorPlan(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="68"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:68</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IFloorPlan.html" target="_self" >Observable&lt;IFloorPlan&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFloorPlanNoBackup"></a>
+                    <span class="name">
+                        <span ><b>getFloorPlanNoBackup</b></span>
+                        <a href="#getFloorPlanNoBackup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getFloorPlanNoBackup(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="81"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:81</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IFloorPlan.html" target="_self" >Observable&lt;IFloorPlan&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFloorPlanNoBackupCached"></a>
+                    <span class="name">
+                        <span ><b>getFloorPlanNoBackupCached</b></span>
+                        <a href="#getFloorPlanNoBackupCached"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getFloorPlanNoBackupCached(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="95"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:95</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IFloorPlan.html" target="_self" >Observable&lt;IFloorPlan&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="listFloorPlansNames"></a>
+                    <span class="name">
+                        <span ><b>listFloorPlansNames</b></span>
+                        <a href="#listFloorPlansNames"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>listFloorPlansNames(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="128"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:128</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IFloorPlan.html" target="_self" >Observable&lt;IFloorPlan[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postFloorPlan"></a>
+                    <span class="name">
+                        <span ><b>postFloorPlan</b></span>
+                        <a href="#postFloorPlan"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postFloorPlan(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/IFloorPlan.html" target="_self">IFloorPlan</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="170"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:170</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/IFloorPlan.html" target="_self" >IFloorPlan</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IFloorPlan.html" target="_self" >Observable&lt;IFloorPlan&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pushUUIDToReset"></a>
+                    <span class="name">
+                        <span ><b>pushUUIDToReset</b></span>
+                        <a href="#pushUUIDToReset"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>pushUUIDToReset(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, uuID: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="114"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:114</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>uuID</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="putFloorPlan"></a>
+                    <span class="name">
+                        <span ><b>putFloorPlan</b></span>
+                        <a href="#putFloorPlan"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>putFloorPlan(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, item: <a href="../interfaces/IFloorPlan.html" target="_self">IFloorPlan</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="184"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:184</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/IFloorPlan.html" target="_self" >IFloorPlan</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IFloorPlan.html" target="_self" >Observable&lt;IFloorPlan&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="replaceJSONText"></a>
+                    <span class="name">
+                        <span ><b>replaceJSONText</b></span>
+                        <a href="#replaceJSONText"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>replaceJSONText(template: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="49"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:49</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>template</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="restoreBackup"></a>
+                    <span class="name">
+                        <span ><b>restoreBackup</b></span>
+                        <a href="#restoreBackup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>restoreBackup(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="33"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:33</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="saveBackup"></a>
+                    <span class="name">
+                        <span ><b>saveBackup</b></span>
+                        <a href="#saveBackup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>saveBackup(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/IFloorPlan.html" target="_self">IFloorPlan</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="57"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:57</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/IFloorPlan.html" target="_self" >IFloorPlan</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="saveFloorPlan"></a>
+                    <span class="name">
+                        <span ><b>saveFloorPlan</b></span>
+                        <a href="#saveFloorPlan"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>saveFloorPlan(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/IFloorPlan.html" target="_self">IFloorPlan</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="199"
+                            class="link-to-prism">src/app/_services/floor-plan.service.ts:199</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/IFloorPlan.html" target="_self" >IFloorPlan</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IFloorPlan.html" target="_self" >Observable&lt;IFloorPlan&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pageNumber"></a>
+                    <span class="name">
+                        <span ><b>pageNumber</b></span>
+                        <a href="#pageNumber"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>1</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/_services/floor-plan.service.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pageSize"></a>
+                    <span class="name">
+                        <span ><b>pageSize</b></span>
+                        <a href="#pageSize"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>50</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/_services/floor-plan.service.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { HttpClient } from &#x27;@angular/common/http&#x27;;
+import { Injectable } from &#x27;@angular/core&#x27;;
+import { Observable, of, switchMap } from &#x27;rxjs&#x27;;
+import { HttpClientCacheService, HttpOptions } from &#x27;../_http-interceptors/http-client-cache.service&#x27;;
+import { ISite } from &#x27;../_interfaces&#x27;;
+import { AuthenticationService } from &#x27;./system/authentication.service&#x27;;
+
+export interface IFloorPlan {
+  id            : number;
+  name          : string;
+  template      : any;
+  sort          : number;
+  enabled       : boolean;
+  image         : string;
+  height        : number;
+  width         : number;
+  templateBackup: string;
+  UUIDList      : string;
+}
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class FloorPlanService {
+
+  constructor( private http: HttpClient,
+              private httpCache: HttpClientCacheService,
+               private auth: AuthenticationService) { }
+
+  pageNumber &#x3D; 1;
+  pageSize  &#x3D; 50;
+
+  restoreBackup(site: ISite, id: number) {
+    if (!id) {
+      return
+    }
+    const backup$ &#x3D; this.getFloorPlan(site,id)
+
+    return backup$.pipe(
+      switchMap(data &#x3D;&gt; {
+        const backup &#x3D; data.templateBackup
+        data.template &#x3D; backup
+        return this.putFloorPlan(site, data.id , data)
+      })
+    )
+
+  }
+
+  replaceJSONText(template: any) {
+    template &#x3D; JSON.stringify(template) as string
+    template &#x3D; template.replace(/(^&quot;|&quot;$)/g, &#x27;&#x27;);
+    template &#x3D; template.replaceAll(&#x27;\\&#x27;, &#x27;&#x27;);
+    return template
+  }
+
+
+  saveBackup(site: ISite, item: IFloorPlan ) {
+
+    if (!item.template) {
+      return of(&#x27;no template to save&#x27;);
+    }
+
+    item.templateBackup &#x3D; item.template;
+    return this.putFloorPlan(site, item.id , item)
+
+  }
+
+  getFloorPlan(site: ISite, id: number) : Observable&lt;IFloorPlan&gt; {
+
+    const controller &#x3D;  &quot;/floorplans/&quot;
+
+    const endPoint &#x3D; &#x60;getFloorPlan&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.get&lt;IFloorPlan&gt;(url)
+
+  }
+  getFloorPlanNoBackup(site: ISite, id: number) : Observable&lt;IFloorPlan&gt; {
+
+    const controller &#x3D;  &quot;/floorplans/&quot;
+
+    const endPoint &#x3D; &#x60;getFloorPlanNoBackup&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.get&lt;IFloorPlan&gt;(url)
+
+  }
+
+  getFloorPlanNoBackupCached(site: ISite, id: number) : Observable&lt;IFloorPlan&gt; {
+
+    const controller &#x3D;  &quot;/floorplans/&quot;
+
+    const endPoint &#x3D; &#x60;getFloorPlanNoBackup&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const options &#x3D; {url: url, cacheMins: 5} as HttpOptions
+    return  this.httpCache.get&lt;IFloorPlan&gt;( options)
+
+  }
+
+  // url: string
+	// body?: any
+	// cacheMins?: number
+
+  pushUUIDToReset(site: ISite, id: number, uuID: string) : Observable&lt;any&gt; {
+
+    const controller &#x3D;  &quot;/floorplans/&quot;
+
+    const endPoint &#x3D; &#x60;PushUUIDToReset&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&amp;uuID&#x3D;${uuID}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.get&lt;any&gt;(url)
+
+  }
+
+  listFloorPlansNames(site: ISite) : Observable&lt;IFloorPlan[]&gt; {
+
+    const controller &#x3D;  &quot;/floorplans/&quot;
+
+    const endPoint &#x3D; &#x60;ListFloorPlansNames&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.get&lt;IFloorPlan[]&gt;(url)
+
+  }
+
+  delete(site: ISite, id: number) : Observable&lt;IFloorPlan&gt; {
+
+    const controller &#x3D;  &quot;/floorplans/&quot;
+
+    const endPoint &#x3D; &#x60;deleteFloorPlan&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.delete&lt;IFloorPlan&gt;(url)
+
+  }
+
+  deleteFloorPlans(site: ISite, items: IFloorPlan[]) : Observable&lt;IFloorPlan&gt; {
+
+    const controller &#x3D;  &quot;/floorplans/&quot;
+
+    const endPoint &#x3D; &#x60;deleteFloorPlans&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.put&lt;IFloorPlan&gt;(url, items)
+
+  }
+
+  postFloorPlan(site: ISite, item: IFloorPlan): Observable&lt;IFloorPlan&gt; {
+
+    const controller &#x3D;  &quot;/floorplans/&quot;
+
+    const endPoint &#x3D; &#x60;postFloorPlan&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.post&lt;IFloorPlan&gt;(url , item)
+
+  };
+
+  putFloorPlan(site: ISite, id: any, item: IFloorPlan): Observable&lt;IFloorPlan&gt; {
+
+    const controller &#x3D;  &quot;/floorplans/&quot;
+
+    const endPoint &#x3D; &#x60;PutFloorPlan&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.put&lt;IFloorPlan&gt;(url , item)
+
+  };
+
+
+  saveFloorPlan(site: ISite, item: IFloorPlan): Observable&lt;IFloorPlan&gt;  {
+
+    if (!item.id ) {
+      // console.log(&#x27;postFloorPlan&#x27;, item);
+      return this.postFloorPlan(site,item)
+    }
+    if (item.id) {
+      // console.log(&#x27;putFloorPlan&#x27;, item);
+      return this.putFloorPlan(site,item.id, item)
+    }
+  }
+
+  clearTable(site: ISite, floorPlanID: number, orderID: string ) : Observable&lt;any&gt;  {
+    const controller &#x3D;  &quot;/floorplans/&quot;
+
+    const endPoint &#x3D; &#x60;clearTable&#x60;
+
+    const parameters &#x3D; &#x60;?floorPlanID&#x3D;${floorPlanID}&amp;orderID&#x3D;${orderID}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.get&lt;any&gt;(url)
+  }
+
+  alterObjectColor(uuID: string, color: string, view: any) {
+    if (view) {
+      // console.log(view)
+      // console.log(JSON.parse(view))
+      // view &#x3D; JSON.parse(view);
+      if (view.objects) {
+          view. objects.forEach(data &#x3D;&gt; {
+            if (data &amp;&amp; data?.type  &amp;&amp; (data?.type &#x3D;&#x3D;&#x3D; &#x27;group&#x27; ) ) {
+              const itemValue &#x3D; data?.name.split(&quot;;&quot;)
+              // console.log(data?.name, uuID);
+              // console.log(&#x27;itemValue&#x27;, itemValue)
+              if (itemValue.length&gt;0){
+                const itemUUID &#x3D; itemValue[0];
+                if (uuID &#x3D;&#x3D;&#x3D; itemUUID ) {
+                      // console.log(&#x27;itemValue&#x27;, itemValue)
+                      let stroke &#x3D; 5
+                      if (color &#x3D;&#x3D;&#x3D; &#x27;red&#x27; || color &#x3D;&#x3D;&#x3D;  &#x27;rgb(200,10,10)&#x27;) {
+                        data.backgroundColor &#x3D; color;
+                        data.borderColor &#x3D;  color
+                        let stroke &#x3D; 8
+                      }
+
+                      if (color &#x3D;&#x3D;&#x3D; &#x27;green&#x27; || color &#x3D;&#x3D;&#x3D;  &#x27;rgb(10,10,200)&#x27;) {
+                        data.backgroundColor &#x3D; color;
+                        data.borderColor &#x3D;  color
+                        let stroke &#x3D; 5
+                      }
+
+                      if (color &#x3D;&#x3D;&#x3D; &#x27;yellow&#x27; || color &#x3D;&#x3D;&#x3D;  &#x27;rgb(10,10,200)&#x27;) {
+                        data.backgroundColor &#x3D; color;
+                        data.borderColor &#x3D;  color
+                        let stroke &#x3D; 5
+                      }
+
+                      if (data?.backgroundColor &#x3D;&#x3D;&#x3D; &#x27;purple&#x27; ||
+                          data?.backgroundColor &#x3D;&#x3D;&#x3D; &#x27;rgba(255,100,171,0.25)&#x27;) {
+                        // console.log(&#x27;name successful setting color&#x27;, name, data?.backgroundColor, color);
+                        data.backgroundColor &#x3D; color;
+                        data.borderColor &#x3D;  color
+                        data.stroke &#x3D; color
+                        data.strokeWidth &#x3D; stroke
+                      }
+
+                      if (data?.backgroundColor &#x3D;&#x3D;&#x3D; &#x27;purple&#x27; ||
+                          data?.backgroundColor &#x3D;&#x3D;&#x3D; &#x27;rgba(255,100,171,0.25)&#x27;) {
+                        // console.log(&#x27;name successful setting color 2&#x27;, name, data?.backgroundColor, color);
+                        data.backgroundColor &#x3D; color;
+                        data.borderColor &#x3D;  color
+                        data.stroke &#x3D; color
+                        data.strokeWidth &#x3D; stroke
+                      }
+
+                      this.alterColor(color, data, stroke -3 )
+                  //   }
+                  // }
+                };
+              }
+            }
+          })
+        }
+      }
+      return view;
+  }
+
+  alterColor(color, obj, stroke) {
+    obj.borderColor &#x3D;  color
+    obj.stroke &#x3D; color
+    obj.strokeWidth &#x3D; stroke
+    if (obj.objects &amp;&amp; obj.objects.length &gt; 0 ) {
+        obj.objects.forEach(item &#x3D;&gt; {
+          this.alterColor(color, item, stroke)
+      })
+    }
+    return obj
+  }
+
+
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'FloorPlanService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

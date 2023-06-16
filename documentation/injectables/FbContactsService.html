@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >FbContactsService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >FbContactsService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -78,11 +85,10 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                    <span class="modifier">Async</span>
-                                <a href="#fillForm" >fillForm</a>
+                                <a href="#initForm" >initForm</a>
                             </li>
                             <li>
-                                <a href="#initForm" >initForm</a>
+                                <a href="#validateLicenseType" >validateLicenseType</a>
                             </li>
                         </ul>
                     </td>
@@ -96,18 +102,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(_fb: <a href="https://angular.io/api/forms/FormBuilder" target="_blank">FormBuilder</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, clientTableService: <a href="../injectables/ClientTableService.html" target="_self">ClientTableService</a>)</code>
+<code>constructor(_fb: UntypedFormBuilder)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/app/_form-builder/fb-contacts.service.ts:11</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="8" class="link-to-prism">src/app/_form-builder/fb-contacts.service.ts:8</a></div>
                             </td>
                         </tr>
 
@@ -128,31 +134,7 @@
                                                         <td>_fb</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/forms/FormBuilder" target="_blank" >FormBuilder</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
-                                                        <td>siteService</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="../injectables/SitesService.html" target="_self" >SitesService</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
-                                                        <td>clientTableService</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="../injectables/ClientTableService.html" target="_self" >ClientTableService</a></code>
+                                                                    <code>UntypedFormBuilder</code>
                                                         </td>
                                                   
                                                     <td>
@@ -169,93 +151,11 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
     </h3>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="fillForm"></a>
-                    <span class="name">
-                        <span class="modifier">Async</span>
-                        <span ><b>fillForm</b></span>
-                        <a href="#fillForm"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>fillForm(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, userForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="149"
-                            class="link-to-prism">src/app/_form-builder/fb-contacts.service.ts:149</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>id</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>userForm</td>
-                                    <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Promise&lt;any&gt;</a></code>
-
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -269,15 +169,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>initForm(fb: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>initForm(fb: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="16"
-                            class="link-to-prism">src/app/_form-builder/fb-contacts.service.ts:16</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="28"
+                            class="link-to-prism">src/app/_form-builder/fb-contacts.service.ts:28</a></div>
                 </td>
             </tr>
 
@@ -287,6 +187,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -299,7 +200,7 @@
                                 <tr>
                                     <td>fb</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -314,7 +215,76 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                        <b>Returns : </b>    <code>UntypedFormGroup</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="validateLicenseType"></a>
+                    <span class="name">
+                        <span ><b>validateLicenseType</b></span>
+                        <a href="#validateLicenseType"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>validateLicenseType(c: UntypedFormControl)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="17"
+                            class="link-to-prism">src/app/_form-builder/fb-contacts.service.ts:17</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>c</td>
+                                    <td>
+                                            <code>UntypedFormControl</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >{ checkValidAddress: boolean; }</a></code>
 
                     </div>
                     <div class="io-description">
@@ -329,75 +299,73 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ReturnStatement } from &#x27;@angular/compiler&#x27;;
-import { Injectable } from &#x27;@angular/core&#x27;;
-import { FormBuilder, FormGroup } from &#x27;@angular/forms&#x27;;
-import { tap } from &#x27;rxjs/operators&#x27;;
-import { ClientTableService } from &#x27;../_services/people/client-table.service&#x27;;
-import { SitesService } from &#x27;../_services/reporting/sites.service&#x27;;
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from &#x27;@angular/forms&#x27;;
 
 @Injectable({
   providedIn: &#x27;root&#x27;
 })
+
 export class FbContactsService {
-  constructor(private _fb: FormBuilder,
-              private siteService: SitesService,
-              private clientTableService: ClientTableService) { }
 
-  initForm(fb: FormGroup): FormGroup {
- // const serializedDate &#x3D; new Date(user?.dob)
-      fb &#x3D; this._fb.group({
+  constructor(private _fb: UntypedFormBuilder) { }
+
+  //Usage
+  // sampleFormControl &#x3D; new FormControl(&#x27;&#x27;, [
+  //     validateInput
+  // ]);
+
+  validateLicenseType(c: UntypedFormControl){ //Dual Pattern Check
+    let oldPattern &#x3D; &#x27;^[0-9]{2}-[0-9]{3}-[0-9]{3}-[A-Za-z]{2}$&#x27;; // Regular Expression 1
+    let newPattern &#x3D; &#x27;^\d{7}$&#x27;; // Regular Expression 2
+    try {
+      if (!c.value) { return null}
+      return (c.value.match(oldPattern) || c.value.match(newPattern)? null :{checkValidAddress : true});
+    } catch (error) {
+      return null;
+    }
+  }
+
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
+
+    const oompPattern &#x3D; &quot;^[0-9]{2}-[0-9]{3}-[0-9]{3}-[A-Za-z]{2}$&quot;
+
+    fb &#x3D; this._fb.group({
         id: [&#x27;&#x27;], //                       number;
-
         companyName: [&#x27;&#x27;], //              string;
-        firstName: [&#x27;&#x27;], //                string;
+        firstName: [&#x27;&#x27; ], //                string;
         lastName: [&#x27;&#x27;], //                 string;
-
-        email: [&#x27;&#x27;], //                    string;
-
+        email: [&#x27;&#x27;, Validators.email], //                    string;
         accountNumber: [&#x27;&#x27;], //            string;
-
         shippingAddress2: [&#x27;&#x27;], //         string;
         shippingAddress: [&#x27;&#x27;], //          string;
         city: [&#x27;&#x27;], //                     string;
         state: [&#x27;&#x27;], //                    string;
         zip: [&#x27;&#x27;], //                      string;
-
         billingAddress: [&#x27;&#x27;], //           string;
         billingAddress2: [&#x27;&#x27;], //          string;
         billingCity: [&#x27;&#x27;], //              string;
         billingState: [&#x27;&#x27;], //             string;
         billingZIp: [&#x27;&#x27;], //               string;
-
         dlAddress: [&#x27;&#x27;], //                string;
         dlAddress2: [&#x27;&#x27;], //               string;
         dlCity: [&#x27;&#x27;], //                   string;
         dlState: [&#x27;&#x27;], //                  string;
         dlZip: [&#x27;&#x27;], //                    string;
-
-        dlExp: [&#x27;&#x27;], //                    string;
-
+        dlLicenseEXP: [&#x27;&#x27;], //                    string;
         clientTypeID: [0], //             number;
-
         priceTier: [&#x27;&#x27;], //                number;
-
         taxSales: [&#x27;&#x27;], //                 number;
-
         dob: [&#x27;&#x27;], //                      string;
         followUp: [&#x27;&#x27;], //                 string;
         initialDate: [&#x27;&#x27;], //              string;
-
         loyaltyPoints: [&#x27;&#x27;], //            number;
         loyaltyPurchaseCount: [&#x27;&#x27;], //     number;
-
         totalPurchases: [&#x27;&#x27;], //           number;
         currentPurchases: [&#x27;&#x27;], //         number;
-
         notes: [&#x27;&#x27;], //                    string;
-
         status: [0], //                   number;
-
         fax: [&#x27;&#x27;], //                      string;
         webSite: [&#x27;&#x27;], //                  string;
         logon: [&#x27;&#x27;], //                    string;
@@ -416,7 +384,6 @@ export class FbContactsService {
         suffix: [&#x27;&#x27;], //                   string;
         country: [&#x27;&#x27;], //                  string;
         defaultDiscount: [&#x27;&#x27;], //          number;
-
         rep: [&#x27;&#x27;], //                      number;
         isDeleted: [&#x27;&#x27;], //                boolean;
         homePhone: [&#x27;&#x27;], //                string;
@@ -464,30 +431,33 @@ export class FbContactsService {
         tipDefault: [&#x27;&#x27;], //               number;
         versionNumber: [&#x27;&#x27;], //            string;
         lastModified: [&#x27;&#x27;], //             string;
+        insTertiaryNum: [&#x27;&#x27;], //
         clientUUID: [&#x27;&#x27;], //               string;
         gramCountMonthly: [&#x27;&#x27;], //         number;
         uid: [&#x27;&#x27;], //                      string;
         apiPassword: [&#x27;&#x27;], //              string;
-        roles: [&#x27;&#x27;], //                    string;
-        onlineDescriptionImage: [&#x27;&#x27;], //   string;
-        onlineDescription: [&#x27;&#x27;], //        string;
-        onlineDescriptionTag: [&#x27;&#x27;], //     string;
-        employeeID: [&#x27;&#x27;], //               number;
-
+        apiUserName: [&#x27;&#x27;], //              string;
+        userName: [&#x27;&#x27;], //              string;
+        roles:                      [&#x27;&#x27;], //                    string;
+        onlineDescriptionImage:     [&#x27;&#x27;], //   string;
+        onlineDescription:          [&#x27;&#x27;], //        string;
+        onlineDescriptionTag      : [&#x27;&#x27;], //     string;
+        employeeID                : [&#x27;&#x27;], //               number;
+        med                       : [&#x27;&#x27;],
+        dlNumber                  : [&#x27;&#x27;],
+        accountDisabled           : [&#x27;&#x27;],
+        accountLocked             : [&#x27;&#x27;],
+        accountDelay              : [&#x27;&#x27;],
+        medTempLicense            : [&#x27;&#x27;],
+        medPhysicianApproved:       [&#x27;&#x27;], //
+        medLicenseNumber:           [&#x27;&#x27;, this.validateLicenseType], //
+        medPlantLimit:              [&#x27;&#x27;], //
+        medGramLimit:               [&#x27;&#x27;], //
+        medPrescriptionExpiration:  [&#x27;&#x27;], //
+        medConcentrateLimit :       [&#x27;&#x27;], //
+        patientRecOption:           [&#x27;&#x27;], //
       })
     return fb
-  }
-
-  async  fillForm(id: number, userForm: FormGroup): Promise&lt;any&gt; {
-
-    const site &#x3D;  this.siteService.getAssignedSite();
-
-    this.clientTableService.getClient(site, id).pipe(
-      tap(data &#x3D;&gt; {
-        userForm.patchValue(data)
-        return  data
-      })
-    );
   }
 
 }
@@ -502,14 +472,15 @@ export class FbContactsService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -521,6 +492,15 @@ export class FbContactsService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -530,8 +510,8 @@ export class FbContactsService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

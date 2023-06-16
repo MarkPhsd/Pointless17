@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >DlParserService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >DlParserService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -92,6 +99,9 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                <a href="#checkIfIDisValid" >checkIfIDisValid</a>
+                            </li>
+                            <li>
                                 <a href="#parseDriverLicense" >parseDriverLicense</a>
                             </li>
                         </ul>
@@ -106,18 +116,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+<code>constructor(http: HttpClient, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="144" class="link-to-prism">src/app/_services/people/dl-parser.service.ts:144</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="150" class="link-to-prism">src/app/_services/people/dl-parser.service.ts:150</a></div>
                             </td>
                         </tr>
 
@@ -138,7 +148,7 @@
                                                         <td>http</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                                    <code>HttpClient</code>
                                                         </td>
                                                   
                                                     <td>
@@ -167,7 +177,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -176,24 +186,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="parseDriverLicense"></a>
+                    <a name="checkIfIDisValid"></a>
                     <span class="name">
-                        <span ><b>parseDriverLicense</b></span>
-                        <a href="#parseDriverLicense"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>checkIfIDisValid</b></span>
+                        <a href="#checkIfIDisValid"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>parseDriverLicense(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, text: <a href="../s/s.html" target="_self">string</a>)</code>
+<code>checkIfIDisValid(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, text: <a href="../s/s.html" target="_self">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="149"
-                            class="link-to-prism">src/app/_services/people/dl-parser.service.ts:149</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="172"
+                            class="link-to-prism">src/app/_services/people/dl-parser.service.ts:172</a></div>
                 </td>
             </tr>
 
@@ -203,6 +213,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -242,7 +253,88 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IDriverLicenseResults&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;DLScanResults&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseDriverLicense"></a>
+                    <span class="name">
+                        <span ><b>parseDriverLicense</b></span>
+                        <a href="#parseDriverLicense"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>parseDriverLicense(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, text: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="155"
+                            class="link-to-prism">src/app/_services/people/dl-parser.service.ts:155</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>text</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;DLScanResults&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -253,7 +345,7 @@
         </tbody>
     </table>
 </section>
-            <section>
+            <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
@@ -357,7 +449,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/app/_services/people/dl-parser.service.ts:69</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="75" class="link-to-prism">src/app/_services/people/dl-parser.service.ts:75</a></div>
                         </td>
                     </tr>
 
@@ -369,7 +461,7 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
 import { HttpClient } from &#x27;@angular/common/http&#x27;;
 import { AuthenticationService } from &#x27;src/app/_services/system/authentication.service&#x27;;
@@ -381,6 +473,12 @@ export interface DriverData {
   DriverDataString: string;
 }
 
+export interface DLScanResults {
+  id: number;
+  message: string;
+  errorMessage: string;
+  result: boolean;
+}
 // Generated by https://quicktype.io
 
 export interface IDriverLicenseResults {
@@ -518,7 +616,7 @@ DLAbbrDesMap &#x3D; {
 constructor( private http: HttpClient, private auth: AuthenticationService) { }
 
 // https://ccsposdemo.ddns.net:4443/api/dlParser/parsedlData
-parseDriverLicense(site: ISite,text: string): Observable&lt;IDriverLicenseResults&gt; {
+parseDriverLicense(site: ISite,text: string): Observable&lt;DLScanResults&gt; {
 
     const  controller &#x3D;  &quot;/DLParser/&quot;
 
@@ -528,9 +626,30 @@ parseDriverLicense(site: ISite,text: string): Observable&lt;IDriverLicenseResult
 
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
-    return  this.http.post&lt;any&gt;(url, {DriverDataString: text})
+    const content &#x3D; {DriverDataString: text};
+
+    return  this.http.post&lt;any&gt;(url, content)
 
   };
+
+  // https://ccsposdemo.ddns.net:4443/api/dlParser/parsedlData
+checkIfIDisValid(site: ISite,text: string): Observable&lt;DLScanResults&gt; {
+
+  const  controller &#x3D;  &quot;/DLParser/&quot;
+
+  const endPoint &#x3D; &quot;CheckIfIDisValid&quot;
+
+  const parameters &#x3D; &#x27;&#x27;
+
+  const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+  const content &#x3D; {DriverDataString: text};
+  console.log(&#x27;validate customer&#x27;, content)
+  console.log(&#x27;validate url&#x27;, url)
+  return  this.http.post&lt;any&gt;(url, content)
+
+};
+
 
 }
 </code></pre>
@@ -544,14 +663,15 @@ parseDriverLicense(site: ISite,text: string): Observable&lt;IDriverLicenseResult
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -563,6 +683,15 @@ parseDriverLicense(site: ISite,text: string): Observable&lt;IDriverLicenseResult
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -572,8 +701,8 @@ parseDriverLicense(site: ISite,text: string): Observable&lt;IDriverLicenseResult
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

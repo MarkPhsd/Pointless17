@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >FbProductsService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >FbProductsService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -98,13 +105,13 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(_fb: <a href="https://angular.io/api/forms/FormBuilder" target="_blank">FormBuilder</a>)</code>
+<code>constructor(_fb: UntypedFormBuilder)</code>
                     </td>
                 </tr>
                         <tr>
@@ -130,7 +137,7 @@
                                                         <td>_fb</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/forms/FormBuilder" target="_blank" >FormBuilder</a></code>
+                                                                    <code>UntypedFormBuilder</code>
                                                         </td>
                                                   
                                                     <td>
@@ -147,7 +154,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -165,7 +172,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>initForm(fb: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>initForm(fb: UntypedFormGroup)</code>
                 </td>
             </tr>
 
@@ -183,6 +190,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -195,7 +203,7 @@
                                 <tr>
                                     <td>fb</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -210,7 +218,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                        <b>Returns : </b>    <code>UntypedFormGroup</code>
 
                     </div>
                     <div class="io-description">
@@ -251,6 +259,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -313,7 +322,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>setProductValues(product: <a href="../interfaces/IProduct.html" target="_self">IProduct</a>, inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>setProductValues(product: <a href="../interfaces/IProduct.html" target="_self">IProduct</a>, inputForm: UntypedFormGroup)</code>
                 </td>
             </tr>
 
@@ -331,6 +340,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -355,7 +365,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -385,9 +395,9 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
-import { FormBuilder, FormGroup } from &#x27;@angular/forms&#x27;;
+import { UntypedFormBuilder, UntypedFormGroup } from &#x27;@angular/forms&#x27;;
 import { IProduct } from &#x27;../_interfaces&#x27;;
 
 @Injectable({
@@ -396,25 +406,24 @@ import { IProduct } from &#x27;../_interfaces&#x27;;
 
 export class FbProductsService {
 
-  constructor(private _fb: FormBuilder) { }
+  constructor(private _fb: UntypedFormBuilder) { }
 
   setOnlineDescription(product: IProduct, value: string) {
     product.onlineShortDescription &#x3D; value
   }
 
-  setProductValues(product: IProduct, inputForm: FormGroup): IProduct {
+    setProductValues(product: IProduct, inputForm: UntypedFormGroup): IProduct {
     if (inputForm.valid) {
       //first we set the value of the product from the form.
       //then we can set values that aren&#x27;t filled. we can do this in the api or on the app?
       product                 &#x3D; inputForm.value;
-
+      product.barCodeID       &#x3D; product.barcode
       return product
     }
   }
 
-  initForm(fb: FormGroup): FormGroup {
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb &#x3D; this._fb.group({
-
         id:                           [&#x27;&#x27;],
         name:                         [&#x27;&#x27;],
         sku:                          [&#x27;&#x27;],
@@ -462,6 +471,7 @@ export class FbProductsService {
         productPartCategoriesID:      [&#x27;&#x27;],
         doNotDelete:                  [&#x27;&#x27;],
         barcode:                      [&#x27;&#x27;],
+        barcodeid:                    [&#x27;&#x27;],
         doNotDiscount:                [&#x27;&#x27;],
         revenueCenter:                [&#x27;&#x27;],
         componentID:                  [&#x27;&#x27;],
@@ -503,6 +513,7 @@ export class FbProductsService {
         menuButtonPic:                [&#x27;&#x27;],
         menuButtonColor:              [&#x27;&#x27;],
         itemCommission1:              [&#x27;&#x27;],
+        icon            :             [&#x27;&#x27;],
         modifierButton:               [&#x27;&#x27;],
         modifierButtonAltPrice:       [&#x27;&#x27;],
         modifierButtonMultiplier:     [&#x27;&#x27;],
@@ -561,11 +572,11 @@ export class FbProductsService {
         giftCardType:                 [&#x27;&#x27;],
         preferredCaseMargin:          [&#x27;&#x27;],
         preferredMargin:              [&#x27;&#x27;],
-        gramCount:                    [&#x27;&#x27;],
+        gramCount:                    [1],
         webProduct:                   [&#x27;&#x27;],
         maxDiscounts:                 [&#x27;&#x27;],
         testDate:                     [&#x27;&#x27;],
-        gramCountMultiplier:          [&#x27;&#x27;],
+        gramCountMultiplier:          [1],
         groupID:                      [&#x27;&#x27;],
         barcodeLength:                [&#x27;&#x27;],
         packager:                     [&#x27;&#x27;],
@@ -606,12 +617,20 @@ export class FbProductsService {
         isUsed:                       [&#x27;&#x27;],
         strainName:                   [&#x27;&#x27;],
         strainID:                     [&#x27;&#x27;],
-        workWorkRequired:             [&#x27;&#x27;],
+        webWorkRequired:              [&#x27;&#x27;],
         lastEdited:                   [&#x27;&#x27;],
+        abv:                          [&#x27;&#x27;],
+        promptGroupID:                [&#x27;&#x27;],
+        active:                       [&#x27;&#x27;],
+        glutenFree                 :  [&#x27;&#x27;],
+        terpenes                   :  [&#x27;&#x27;],
+        childProof             :   [&#x27;&#x27;],
+        mGCBD                  :   [&#x27;&#x27;],
+        mGTHC                  :   [&#x27;&#x27;],
+        parLevel               :   [&#x27;&#x27;],
+        slug                   :   [&#x27;&#x27;],
       })
-
       return fb;
-
     }
 }
 </code></pre>
@@ -625,14 +644,15 @@ export class FbProductsService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -644,6 +664,15 @@ export class FbProductsService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -653,8 +682,8 @@ export class FbProductsService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

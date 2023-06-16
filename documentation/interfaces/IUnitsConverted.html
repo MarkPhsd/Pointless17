@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -42,24 +42,31 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Interfaces</li>
-  <li
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
   >
   IUnitsConverted</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -70,7 +77,7 @@
 
 
 
-        <section>
+        <section data-compodoc="block-index">
             <h3 id="index">Index</h3>
             <table class="table table-sm table-bordered index-table">
                 <tbody>
@@ -127,7 +134,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-properties">
                 <h3 id="inputs">Properties</h3>
                     <table class="table table-sm table-bordered">
                         <tbody>
@@ -331,9 +338,10 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
-import { FormBuilder, FormGroup, Validators } from &#x27;@angular/forms&#x27;;
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from &#x27;@angular/forms&#x27;;
+import { MatSnackBar } from &#x27;@angular/material/snack-bar&#x27;;
 import { IInventoryAssignment } from &#x27;../inventory/inventory-assignment.service&#x27;;
 
 export interface IUnitConversion {
@@ -356,13 +364,12 @@ export interface IUnitsConverted {
 export class ConversionsService {
 
   // COMPONENTS &#x3D; [{&#x27;name&#x27;: &#x27;AdminbranditemComponent&#x27;, &#x27;selector&#x27;: &#x27;app-adminbranditem&#x27;},
-  constructor(
-              private fb: FormBuilder,
+  constructor(private _snackBar: MatSnackBar,
+              private fb: UntypedFormBuilder,
   ) { }
 
   getGramsConversions(): IUnitConversion[] {
     //  let unitConversion &#x3D; {} as  IUnitConversion
-
     const unitConversion  &#x3D; [
       {name: &#x27;Half Gram&#x27;,   value: .5},
       {name: &#x27;Grams&#x27;,       value:  1},
@@ -372,38 +379,30 @@ export class ConversionsService {
       {name: &#x27;Half Ounces&#x27;, value:  14},
       {name: &#x27;Ounces&#x27;,      value:  28},
       {name: &#x27;Joints&#x27;,      value:  1},
-      {name: &#x27;lbs&#x27;,         value:  453.592},
+      {name: &#x27;Pounds&#x27;,      value:  453.592},
       {name: &#x27;KiloGrams&#x27;,   value:  1000},
       {name: &#x27;Each&#x27;,        value:  1}
     ]
-
     return unitConversion
   }
 
   getConversionItemByName(name: any): IUnitConversion {
-
     let unit &#x3D; {} as IUnitConversion
-
     const units &#x3D;  this.getGramsConversions()
     return units.find(unit &#x3D;&gt; name &#x3D;&#x3D;&#x3D; unit.name)
-
   }
 
   getBaseUnitsConvertedTo(unitsConverted: IUnitsConverted, baseUnitsRemaining: number, inputQuantity: number): number {
-
     if (unitsConverted) {
-
       unitsConverted.unitOutPutQuantity &#x3D; baseUnitsRemaining
-
       if (unitsConverted.unitConvertTo) {
         // const quantity &#x3D; (+baseUnitsRemaining / + unitsConverted.unitConvertTo.value ) - + inputQuantity
         const quantity  &#x3D; baseUnitsRemaining - inputQuantity
-        return parseInt(quantity.toFixed(2))
+        console.log(&#x27;quantity.toFixed(2)&#x27;, quantity.toFixed(2))
+        return +quantity.toFixed(2)
       }
-
     }
     return 0
-
   }
 
   getConversionItemByValue(value: number):  IUnitConversion {
@@ -414,35 +413,62 @@ export class ConversionsService {
     return null;
   }
 
-  editAssignment(inventoryAssignment: IInventoryAssignment, form: FormGroup): boolean {
-
+  editAssignment(inventoryAssignment: IInventoryAssignment, form: UntypedFormGroup): boolean {
     if (inventoryAssignment) {
       const inv &#x3D; inventoryAssignment
-
       if (inv) {
-
         try {
-
           //assign the values to the form .
-          if (!inv.cost) { inv.cost &#x3D;0 }
-          if (!inv.price) { inv.price &#x3D;0 }
+          if (!inv.cost)        { inv.cost   &#x3D; 0 }
+          if (!inv.price)       { inv.price &#x3D; 0 }
           if (!inv.jointWeight) { inv.jointWeight &#x3D; 1 }
-
           return true
-
         } catch (error) {
           console.log(error)
           return false
         }
-
       }
-   }
-
+    }
    return false;
-
   }
 
-  refreshPackageEnryForm(inv: IInventoryAssignment, form: FormGroup){
+  getConversionQuantities(inventoryAssignment: IInventoryAssignment, unitsConverted: IUnitsConverted, inputQuantity: number, jointWeight: number): IInventoryAssignment {
+    if (unitsConverted.unitConvertTo.name.toLowerCase() &#x3D;&#x3D; &#x27;joints&#x27;) {
+      if ( this.jointsExceedAvalible(jointWeight, inputQuantity, unitsConverted) ) {
+        this.notifyEvent(&#x27;Quantity or weight or joints exceed remaining quantity.&#x27;, &#x27;Error&#x27;)
+        return
+      }
+      inventoryAssignment.jointWeight           &#x3D; jointWeight
+      inventoryAssignment.packageQuantity       &#x3D; inputQuantity
+      inventoryAssignment.packageCountRemaining &#x3D; inventoryAssignment.packageQuantity
+      inventoryAssignment.baseQuantityRemaining &#x3D; inputQuantity * inventoryAssignment.unitMulitplier * jointWeight
+      inventoryAssignment.baseQuantity          &#x3D; inventoryAssignment.baseQuantityRemaining
+    } else {
+      inventoryAssignment.jointWeight           &#x3D; jointWeight;
+      inventoryAssignment.packageQuantity       &#x3D; inputQuantity
+      inventoryAssignment.packageCountRemaining &#x3D; inventoryAssignment.packageQuantity
+      inventoryAssignment.baseQuantity          &#x3D; inputQuantity * inventoryAssignment.unitMulitplier
+      inventoryAssignment.baseQuantityRemaining &#x3D; inventoryAssignment.baseQuantity
+    }
+    return inventoryAssignment;
+  }
+
+  jointsExceedAvalible(jointWeight: number, inputQuantity: number, unitsConverted: IUnitsConverted): boolean {
+    if (inputQuantity &amp;&amp; unitsConverted) {
+      if (unitsConverted.unitOutPutQuantity &#x3D;&#x3D; null ||
+          unitsConverted.unitOutPutQuantity &#x3D;&#x3D; undefined ||
+          unitsConverted.unitOutPutQuantity &#x3D;&#x3D; 0 ) {
+        return false
+      }
+    }
+    const requestedQuantity &#x3D; jointWeight * inputQuantity;
+    const remaining         &#x3D; unitsConverted.unitOutPutQuantity;
+    if (requestedQuantity &#x3D;&#x3D; remaining) { return false; }
+    if (requestedQuantity &gt; remaining)  { return true;  }
+    return false;
+  }
+
+  refreshPackageEnryForm(inv: IInventoryAssignment, form: UntypedFormGroup){
     try {
       form &#x3D; this.fb.group({
         conversionName:                   [ inv.unitConvertedtoName, Validators.required],
@@ -452,13 +478,12 @@ export class ConversionsService {
         price:                            [ inv.price],
         jointWeight:                      [ inv.jointWeight],
       })
-
     } catch (error) {
       console.log(error)
     }
   }
 
-  initPackageEntryForm(form: FormGroup){
+  initPackageEntryForm(form: UntypedFormGroup){
     form &#x3D; this.fb.group({
       conversionName:                   [ &#x27;&#x27;],
       inputQuantity:                    [ &#x27;&#x27;], //[ Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)] ],
@@ -468,7 +493,6 @@ export class ConversionsService {
       jointWeight:                      [ &#x27;&#x27;],
     })
   }
-
 
   getAvailibleQuantityByUnitType(conversion: IUnitsConverted, jointWeight: number,): IUnitsConverted {
     //gets the total Possible of Quantity based on the number of jointWeight. So
@@ -488,22 +512,15 @@ export class ConversionsService {
     //if they aren&#x27;t grams, then we need to downgrade to grams
     //so if the base quantity is 3.5 and the unit type is Ounces
     //then we multiple OunceValue * 3.5
-
     const unitConversion &#x3D; conversion
 
-    if (!conversion) {
-      console.log(&#x27;This conversion value does not exist&#x27;)
-    }
-
+    if (!conversion) { console.log(&#x27;This conversion value does not exist&#x27;) }
     console.log(&#x27;method: getAvailibleQuantityByUnitType&#x27;)
-
     if (unitConversion.unitConvertFrom) {
       console.log(&#x27;unitConversion.unitConvertFrom.value&#x27;, unitConversion.unitConvertFrom.value)
       console.log(&#x27;Get Avalible Quantity BaseQuantity&#x27;  , unitConversion.baseQuantity)
       const gramsCount &#x3D; unitConversion.baseQuantity * unitConversion.unitConvertFrom.value
-
       if (unitConversion.unitConvertTo) {
-
         //allthough JointWeight may not be zero - it&#x27;s always set to 1, we check both the jointweight and the ConvertedTo.Name to
         //see if we should be converting based on a joint.
         if (unitConversion.unitConvertTo.name.toLocaleLowerCase() &#x3D;&#x3D;&#x3D; &#x27;Joints&#x27; &amp;&amp; jointWeight !&#x3D; 0) {
@@ -511,25 +528,27 @@ export class ConversionsService {
           console.log(&#x27;Unit Convert to :&#x27; +  unitConversion.unitConvertTo.value + &#x27; jointWeight &#x27; + jointWeight)
           unitConversion.unitConvertTo.value &#x3D; jointWeight
         }
-
         //now that we are in grams we can divide by the unit we want to convert to
         if (unitConversion.unitConvertTo.value !&#x3D; 0) {
-          console.log(&#x27;const outPutValue &#x3D; gramsCount / unitConversion.unitConvertTo.value&#x27;, gramsCount / unitConversion.unitConvertTo.value)
-          const outPutValue &#x3D; gramsCount / unitConversion.unitConvertTo.value
-          unitConversion.unitOutPutQuantity &#x3D; parseInt(outPutValue.toFixed(2))
+          const outPutValue &#x3D; +(gramsCount / unitConversion.unitConvertTo.value).toFixed(2)
+          console.log(&#x27;const outPutValue &#x3D; gramsCount / unitConversion.unitConvertTo.value&#x27;, outPutValue)
+          unitConversion.unitOutPutQuantity &#x3D; +outPutValue.toFixed(2)
+          console.log(&#x27;unitConversion.unitOutPutQuantity &#x27;, unitConversion.unitOutPutQuantity )
         }
-
         if (unitConversion.unitConvertTo.value !&#x3D; 0) {
           const remainder               &#x3D;  gramsCount % unitConversion.unitConvertTo.value
           unitConversion.ouputRemainder &#x3D;  remainder // parseInt(remainder.toFixed(2))
         }
-
         return unitConversion
       }
-
     }
+  }
 
-
+  notifyEvent(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+      verticalPosition: &#x27;top&#x27;
+    });
   }
 
 }
@@ -551,14 +570,15 @@ export class ConversionsService {
 </div>
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -570,6 +590,15 @@ export class ConversionsService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
@@ -579,8 +608,8 @@ export class ConversionsService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

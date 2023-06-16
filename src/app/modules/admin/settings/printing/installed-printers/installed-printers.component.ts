@@ -19,6 +19,7 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IItemBasic, OrdersService } from 'src/app/_services';
 import { IPCService } from 'src/app/_services/system/ipc.service';
 import { Router } from '@angular/router';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 // https://github.com/Ans0n-Ti0/esc-pos-encoder-ionic-demo
 // https://github.com/tojocky/node-printer
@@ -126,7 +127,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   terminal : ITerminalSettings;
   terminalSetting : ISetting;
   terminalSetting$: Observable<ISetting>;
-  deviceName: string;
+  deviceName = localStorage.getItem('devicename')
 
   constructor(
               private printingService       : PrintingService,
@@ -141,6 +142,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
               private platFormService       : PlatformService,
               private icpService            : IPCService,
               public  orderService          : OrdersService,
+              public orderMethodsService: OrderMethodsService,
               private router: Router,
 
   ) {
@@ -151,7 +153,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     this.printOptions = {} as printOptions;
     this.platForm = this.platFormService.platForm;
     this.isElectronApp = this.icpService.isElectronApp;
-    this.deviceName = this.orderService.posName
+ 
 
     this.electronLabelPrinter$ = this.getElectronLabelPrinter();
     this.getElectronPrinterAssignent().subscribe(data => {
@@ -457,7 +459,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     //passorder info to new method PrintAndroidReceipt.'
     //save selected printer to local storage
     //set saved printer name /bt id to selection on load.
-    const order = this.orderService.currentOrder
+    const order = this.orderMethodsService.currentOrder
     let payment = null
     if (order.posPayments) {
        payment = order.posPayments[0]

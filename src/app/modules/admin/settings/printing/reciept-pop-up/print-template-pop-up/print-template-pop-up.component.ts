@@ -3,6 +3,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { OrdersService } from 'src/app/_services';
+import { PrintingService } from 'src/app/_services/system/printing.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-print-template-pop-up',
@@ -25,13 +27,15 @@ export class PrintTemplatePopUpComponent implements OnInit, OnDestroy {
 
   constructor(private dialogRef: MatDialogRef<PrintTemplatePopUpComponent>,
               private orderService: OrdersService,
+              private printingService: PrintingService,
+              private orderMethodsService: OrderMethodsService,
               @Inject(MAT_DIALOG_DATA) public data: any
               )
   {
     if (data) {
       this.printOrders = data as IPrintOrders[];
       this.printOrder  = this.printOrders[this.index]
-      this.orderService._printOrder.next(this.printOrder)
+      this.printingService._printOrder.next(this.printOrder)
       this.currentView = this.printTemplate;
     }
   }
@@ -52,7 +56,7 @@ export class PrintTemplatePopUpComponent implements OnInit, OnDestroy {
     this.hideTemplate = true
     this.currentView = null;
     this.printOrder = this.printOrders[this.index+1]
-    this.orderService._printOrder.next(this.printOrder)
+    this.printingService._printOrder.next(this.printOrder)
     this.currentView = this.printTemplate;
     this.hideTemplate = false
     this.index = this.index + 1;

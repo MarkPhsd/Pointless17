@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.60.8",
+  "version": "1.63.2",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -31,7 +31,7 @@
     "e2e": "ng e2e",
     "compodoc": "./node_modules/.bin/compodoc -p tsconfig.json -w -s",
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
-    "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
+    "compdoc": "compodoc -p ./tsconfig.json -e json -d .",
     "storybook": "npm run docs:json && start-storybook -p 6006",
     "build-storybook": "npm run docs:json && build-storybook"
   },
@@ -222,6 +222,8 @@
     "cordova-plugin-splashscreen": "6.0.0",
     "cordova-plugin-statusbar": "3.0.0",
     "cordova-plugin-whitelist": "^1.3.4",
+    "d3-graphviz": "^5.0.2",
+    "dependency-cruiser": "^13.0.3",
     "electron": "^11.0.0",
     "electron-builder": "22.13.1",
     "electron-log": "^4.4.0",
@@ -241,6 +243,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-prettier": "^3.3.1",
+    "graphviz": "^0.0.9",
     "jasmine-core": "4.0.0",
     "jasmine-spec-reporter": "7.0.0",
     "jest": "^27.5.1",

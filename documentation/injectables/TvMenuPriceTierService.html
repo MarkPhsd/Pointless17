@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >TvMenuPriceTierService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >TvMenuPriceTierService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,10 +71,37 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_tier" >_tier</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_tierFlowerMenu" >_tierFlowerMenu</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#tier$" >tier$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#tierFlowerMenu$" >tierFlowerMenu$</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
 
                 <tr>
                     <td class="col-md-4">
@@ -81,7 +115,19 @@
                                 <a href="#getFlowers" >getFlowers</a>
                             </li>
                             <li>
+                                <a href="#getPriceTierByID" >getPriceTierByID</a>
+                            </li>
+                            <li>
                                 <a href="#getTVMenuPriceTiers" >getTVMenuPriceTiers</a>
+                            </li>
+                            <li>
+                                <a href="#gGetEighthMenu" >gGetEighthMenu</a>
+                            </li>
+                            <li>
+                                <a href="#updateTier" >updateTier</a>
+                            </li>
+                            <li>
+                                <a href="#updateTierFlowerMenu" >updateTierFlowerMenu</a>
                             </li>
                         </ul>
                     </td>
@@ -95,18 +141,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+<code>constructor(http: HttpClient, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/_services/menu/tv-menu-price-tier.service.ts:48</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="85" class="link-to-prism">src/app/_services/menu/tv-menu-price-tier.service.ts:85</a></div>
                             </td>
                         </tr>
 
@@ -127,7 +173,7 @@
                                                         <td>http</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                                    <code>HttpClient</code>
                                                         </td>
                                                   
                                                     <td>
@@ -156,7 +202,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -181,8 +227,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="68"
-                            class="link-to-prism">src/app/_services/menu/tv-menu-price-tier.service.ts:68</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="106"
+                            class="link-to-prism">src/app/_services/menu/tv-menu-price-tier.service.ts:106</a></div>
                 </td>
             </tr>
 
@@ -192,6 +238,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -233,6 +280,87 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="getPriceTierByID"></a>
+                    <span class="name">
+                        <span ><b>getPriceTierByID</b></span>
+                        <a href="#getPriceTierByID"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPriceTierByID(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="134"
+                            class="link-to-prism">src/app/_services/menu/tv-menu-price-tier.service.ts:134</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ITVMenuPriceTiers&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="getTVMenuPriceTiers"></a>
                     <span class="name">
                         <span ><b>getTVMenuPriceTiers</b></span>
@@ -249,8 +377,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="54"
-                            class="link-to-prism">src/app/_services/menu/tv-menu-price-tier.service.ts:54</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="92"
+                            class="link-to-prism">src/app/_services/menu/tv-menu-price-tier.service.ts:92</a></div>
                 </td>
             </tr>
 
@@ -260,6 +388,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -297,15 +426,332 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gGetEighthMenu"></a>
+                    <span class="name">
+                        <span ><b>gGetEighthMenu</b></span>
+                        <a href="#gGetEighthMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>gGetEighthMenu(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="120"
+                            class="link-to-prism">src/app/_services/menu/tv-menu-price-tier.service.ts:120</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IEighthMenu.html" target="_self" >Observable&lt;IEighthMenu[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateTier"></a>
+                    <span class="name">
+                        <span ><b>updateTier</b></span>
+                        <a href="#updateTier"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateTier(tier: <a href="../interfaces/ITVMenuPriceTiers.html" target="_self">ITVMenuPriceTiers</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="79"
+                            class="link-to-prism">src/app/_services/menu/tv-menu-price-tier.service.ts:79</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>tier</td>
+                                    <td>
+                                                <code><a href="../interfaces/ITVMenuPriceTiers.html" target="_self" >ITVMenuPriceTiers</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateTierFlowerMenu"></a>
+                    <span class="name">
+                        <span ><b>updateTierFlowerMenu</b></span>
+                        <a href="#updateTierFlowerMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateTierFlowerMenu(tier: <a href="../interfaces/IFlowerMenu.html" target="_self">IFlowerMenu</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="83"
+                            class="link-to-prism">src/app/_services/menu/tv-menu-price-tier.service.ts:83</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>tier</td>
+                                    <td>
+                                                <code><a href="../interfaces/IFlowerMenu.html" target="_self" >IFlowerMenu</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_tier"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>_tier</b></span>
+                        <a href="#_tier"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new BehaviorSubject&lt;ITVMenuPriceTiers&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="73" class="link-to-prism">src/app/_services/menu/tv-menu-price-tier.service.ts:73</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_tierFlowerMenu"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>_tierFlowerMenu</b></span>
+                        <a href="#_tierFlowerMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new BehaviorSubject&lt;IFlowerMenu&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="76" class="link-to-prism">src/app/_services/menu/tv-menu-price-tier.service.ts:76</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="tier$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>tier$</b></span>
+                        <a href="#tier$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._tier.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/_services/menu/tv-menu-price-tier.service.ts:74</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="tierFlowerMenu$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>tierFlowerMenu$</b></span>
+                        <a href="#tierFlowerMenu$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._tierFlowerMenu.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="77" class="link-to-prism">src/app/_services/menu/tv-menu-price-tier.service.ts:77</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
 </section>
 
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { HttpClient } from &#x27;@angular/common/http&#x27;;
 import { Injectable } from &#x27;@angular/core&#x27;;
-import { Observable } from &#x27;rxjs&#x27;;
+import { BehaviorSubject, Observable } from &#x27;rxjs&#x27;;
 import { ISite, UnitType } from &#x27;src/app/_interfaces&#x27;;
 import { AuthenticationService } from &#x27;..&#x27;;
 import { SitesService } from &#x27;../reporting/sites.service&#x27;;
@@ -340,16 +786,54 @@ export interface TVMenuPriceTierItem {
 }
 
 export interface IFlowerMenu {
-  id:        number;
-  flower:    string;
-  priceTier: string;
+  id         : number;
+  flower     : string;
+  priceTier  : string;
+  priceTierID: number;
+  thc   : string;
+  strain: string;
+  shelf : string;
+  eighth: number;
+  count : number;
 }
 
+// Generated by https://quicktype.io
+
+export interface IEighthMenu {
+  name:          string;
+  thc:           string;
+  species:       string;
+  standardPrice: number;
+  shelf:         string;
+  productID:     number;
+  rate1:         number;
+  rate2:         number;
+  rate3:         number;
+  rate4:         number;
+  rate5:         number;
+  count        : number;
+
+}
 
 @Injectable({
   providedIn: &#x27;root&#x27;
 })
 export class TvMenuPriceTierService {
+
+  private _tier &#x3D; new BehaviorSubject&lt;ITVMenuPriceTiers&gt;(null);
+  public tier$  &#x3D; this._tier.asObservable();
+
+  private _tierFlowerMenu &#x3D; new BehaviorSubject&lt;IFlowerMenu&gt;(null);
+  public tierFlowerMenu$  &#x3D; this._tierFlowerMenu.asObservable();
+
+  updateTier(tier: ITVMenuPriceTiers){
+    this._tier.next(tier)
+  }
+
+  updateTierFlowerMenu(tier: IFlowerMenu){
+    this._tierFlowerMenu.next(tier)
+  }
+
 
   constructor( private http: HttpClient,
                private auth: AuthenticationService,
@@ -383,6 +867,34 @@ export class TvMenuPriceTierService {
 
   }
 
+gGetEighthMenu(site: ISite):  Observable&lt;IEighthMenu[]&gt;  {
+
+    const controller &#x3D;  &#x60;/TVMenuPriceTiers/&#x60;
+
+    const endPoint &#x3D; &#x60;getEighthMenu&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.get&lt;IEighthMenu[]&gt;(url)
+
+  }
+
+  getPriceTierByID(site: ISite, id: number):  Observable&lt;ITVMenuPriceTiers&gt;  {
+
+    const controller &#x3D;  &#x60;/TVMenuPriceTiers/&#x60;
+
+    const endPoint &#x3D; &#x60;GetFlowers?id&#x3D;${id}&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.get&lt;ITVMenuPriceTiers&gt;(url)
+
+  }
+
 }
 </code></pre>
     </div>
@@ -395,14 +907,15 @@ export class TvMenuPriceTierService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -414,6 +927,15 @@ export class TvMenuPriceTierService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -423,8 +945,8 @@ export class TvMenuPriceTierService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

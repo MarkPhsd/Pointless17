@@ -7,6 +7,7 @@ import { ContactsService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-order-header-demo-graphics',
@@ -42,7 +43,9 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
               private fb: UntypedFormBuilder,
               private uiSettingsService: UISettingsService,
               private userAuthorization: UserAuthorizationService,
-              private orderService: OrdersService)
+              private orderService: OrdersService,
+              public orderMethodsService: OrderMethodsService,
+            )
                { }
 
   ngOnInit(): void {
@@ -148,7 +151,7 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
         }
       }
       this.orderService.putOrder(site, this.order).subscribe(data => {
-        this.orderService.updateOrderSubscription(data)
+        this.orderMethodsService.updateOrderSubscription(data)
       })
     }
   }
@@ -159,7 +162,7 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
       this.order.clientID = 0
       this.order.customerName = ''
       this.orderService.putOrder(site, this.order).subscribe(data => {
-        this.orderService.updateOrderSubscription(data)
+        this.orderMethodsService.updateOrderSubscription(data)
       })
    }
   }

@@ -1,12 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
-import { AuthenticationService, MenuService, OrdersService, TextMessagingService } from 'src/app/_services';
+import { AuthenticationService, MenuService, OrderPayload, OrdersService, TextMessagingService } from 'src/app/_services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { BehaviorSubject, catchError, forkJoin, Observable, of, Subscription, switchMap } from 'rxjs';
-import { IClientTable, IPaymentResponse, IPOSOrder, IPurchaseOrderItem, PaymentMethod, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
+import { BehaviorSubject, catchError,Observable, of, Subscription, switchMap } from 'rxjs';
+import { IClientTable, IPaymentResponse, IPOSOrder, IPOSOrderSearchModel, IPOSPayment, IPurchaseOrderItem, IServiceType, PaymentMethod, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
@@ -24,27 +24,23 @@ import { PriceCategoriesService } from '../menu/price-categories.service';
 import { StoreCreditIssueComponent } from 'src/app/modules/posorders/pos-order/store-credit-issue/store-credit-issue.component';
 import { IPaymentMethod } from './payment-methods.service';
 import { PlatformService } from '../system/platform.service';
-import { ClientTableService } from '../people/client-table.service';
 import { SendGridService } from '../twilio/send-grid.service';
-import { TransactionUISettings, UISettingsService } from '../system/settings/uisettings.service';
+import { UISettingsService } from '../system/settings/uisettings.service';
 import { ProductListByBarcodeComponent } from 'src/app/modules/menu/product-list-by-barcode/product-list-by-barcode.component';
 import { ToolBarUIService } from '../system/tool-bar-ui.service';
 import { FloorPlanService } from '../floor-plan.service';
-import { OrderHeaderComponent } from 'src/app/modules/posorders/pos-order/order-header/order-header.component';
-import { PrintingService } from '../system/printing.service';
 import { PrepPrintingServiceService } from '../system/prep-printing-service.service';
 import { IReportItemSaleSummary } from '../reporting/reporting-items-sales.service';
-import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { UITransactionsComponent } from 'src/app/modules/admin/settings/software/UISettings/uitransactions/uitransactions.component';
+import { AbstractControl,  ValidationErrors, ValidatorFn } from '@angular/forms';
 import { BalanceSheetMethodsService } from './balance-sheet-methods.service';
-import { PaymentReportCardComponent } from 'src/app/modules/admin/reports/payment-report/payment-report-card/payment-report-card.component';
+import { ServiceTypeService } from './service-type-service.service';
+import { StoreCreditMethodsService } from '../storecredit/store-credit-methods.service';
 
 export interface ProcessItem {
   order   : IPOSOrder;
   item    : IMenuItem;
   posItem : IPurchaseOrderItem;
 }
-
 export class DateValidators {
   static greaterThan(startControl: AbstractControl): ValidatorFn {
     return (endControl: AbstractControl): ValidationErrors | null => {
@@ -66,15 +62,10 @@ export class DateValidators {
 })
 export class OrderMethodsService implements OnDestroy {
 
+  public toggleChangeOrderType: boolean;
+
   private _posPaymentStepSelection     = new BehaviorSubject<IPaymentMethod>(null);
   public posPaymentStepSelection$      = this._posPaymentStepSelection.asObservable();
-
-  private _printingFinalizer      = new BehaviorSubject<boolean>(null);
-  public  printingFinalizer$      = this._printingFinalizer.asObservable();
-
-  public order                    : IPOSOrder;
-  _order                          : Subscription;
-  subscriptionInitialized         : boolean;
 
   private itemProcessSection      = 0
   private _itemProcessSection     = new BehaviorSubject<number>(null);
@@ -100,6 +91,241 @@ export class OrderMethodsService implements OnDestroy {
 
   priceCategoryID: number;
 
+  ////////////
+
+  private _currentOrder       = new BehaviorSubject<IPOSOrder>(null);
+  public currentOrder$        = this._currentOrder.asObservable();
+  public currentOrder         = {} as IPOSOrder
+
+  public order                    : IPOSOrder;
+  _order                          : Subscription;
+  subscriptionInitialized         : boolean;
+
+  private _posOrders          = new BehaviorSubject<IPOSOrder[]>(null);
+  public posOrders$           = this._posOrders.asObservable();
+
+  //applies to order filter for POS
+  private _viewOrderType      = new BehaviorSubject<number>(null);
+  public viewOrderType$       = this._viewOrderType.asObservable();
+
+  ///order Service
+  posSearchModel  :IPOSOrderSearchModel
+  private _posSearchModel     = new BehaviorSubject<IPOSOrderSearchModel>(null);
+  public posSearchModel$      = this._posSearchModel.asObservable();
+
+  private _lastItemAdded     = new BehaviorSubject<IMenuItem>(null);
+  public lastItemAdded$      = this._lastItemAdded.asObservable();
+  lastItemAddedExists : boolean;
+
+  private _splitGroupOrder     = new BehaviorSubject<IPOSOrder>(null);
+  public splitGroupOrder$      = this._splitGroupOrder.asObservable();
+
+ 
+  public _scanner             = new BehaviorSubject<boolean>(null);
+  public scanner$             = this._scanner.asObservable();
+
+  private _templateOrder       = new BehaviorSubject<IPOSOrder>(null);
+  public templateOrder$        = this._templateOrder.asObservable();
+  public templateOrder         = {} as IPOSOrder
+
+  private _bottomSheetOpen    = new BehaviorSubject<boolean>(null);
+  public bottomSheetOpen$     = this._bottomSheetOpen.asObservable();
+
+  selectedPayment             : IPOSPayment;
+
+  isApp                       = false;
+  private orderClaimed                : boolean;
+
+  getCurrentOrder() {
+    if (!this.currentOrder) {
+      this.currentOrder = this.getStateOrder();
+    }
+    return this.currentOrder;
+  }
+
+  get IsOrderClaimed() { return this.orderClaimed};
+
+  updateTemplateOrder(order: IPOSOrder) {
+    order = this.getCost(order)
+    this._templateOrder.next(order)
+  }
+
+  getSelectedPayment() {
+    const payment = this.selectedPayment ;
+    this.selectedPayment = null
+    return of(payment);
+  }
+
+  updateBottomSheetOpen(open: boolean) {
+    this._bottomSheetOpen.next(open);
+  }
+
+  updateViewOrderType(value: number) {
+    this._viewOrderType.next(value)
+  }
+
+
+  // updateLastItemAdded(item: IMenuItem) {
+  //   this.orderService.updateLastItemAdded(item)
+  // }
+
+  updateLastItemAdded(item: IMenuItem) {
+    this.lastItemAddedExists = false
+    // console.log('menuitem updating last', item?.name)
+    if (!item || !item.urlImageMain) {
+      this._lastItemAdded.next(null)
+      return;
+    }
+    this.lastItemAddedExists = true
+    this._lastItemAdded.next(item)
+  }
+
+  updateOrderSubscriptionClearOrder(id: number) {
+    if (id) {
+      const site = this.siteService.getAssignedSite();
+      this.orderService.releaseOrder(site, id).subscribe()
+    }
+    this.clearOrderSubscription()
+  }
+
+  clearOrderSubscription() {
+    localStorage.removeItem('orderSubscription')
+    this.toolbarServiceUI.updateOrderBar(false)
+    this.updateLastItemAdded(null)
+    this.updateOrderSubscription(null);
+  }
+
+  updateOrderSubscriptionLoginAction(order: IPOSOrder) {
+    this.storeCreditMethodService.updateSearchModel(null)
+    this.getCost(order)
+    this.currentOrder = order;
+    this._currentOrder.next(order);
+    if (order == null) {
+      order = this.getStateOrder();
+      order = this.getCost(order);
+      if (order) {
+        return;
+      }
+    }
+  }
+
+  getCost(order: IPOSOrder) {
+    if (order ) {
+      order.cost = 0
+      if (order.posOrderItems && order.posOrderItems.length>0) {
+        order.posOrderItems.forEach(data => {
+          if (data.wholeSaleCost) {
+            order.cost = data.wholeSaleCost + order.cost
+          }
+        })
+      }
+      // console.log('order cost', order?.cost)
+    }
+    return order
+  }
+
+  updateOrder(order: IPOSOrder) {
+    try {
+      this.currentOrder = order;
+      this._currentOrder.next(order);
+      this.setStateOrder(order);
+      this._scanner.next(true)
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  setScanner() {
+    this._scanner.next(true)
+  }
+
+  updateOrderSubscription(order: IPOSOrder) {
+    this.updateOrder(order);
+    if (order == null) {
+      order = this.getStateOrder();
+      if (order) {
+        this.toolbarServiceUI.updateOrderBar(false)
+        return;
+      }
+      if (!order) {
+        this.toolbarServiceUI.updateOrderBar(false);
+      }
+    }
+
+    this.storeCreditMethodService.updateSearchModel(null);
+    this.setScanner()
+    const site = this.siteService.getAssignedSite();
+    const devicename = localStorage.getItem('devicename')
+    if (order?.deviceName === devicename) { return }
+    this.orderClaimed = false;
+    if (order && order.id ) {
+      const order$ = this.orderService.claimOrder(site, order.id.toString(), order.history)
+      if (!order$) {
+        this.orderClaimed = false;
+        return
+      }
+      order$.subscribe(result => {
+        this.orderClaimed = true;
+      });
+    }
+  }
+
+  setStateOrder(order) {
+    order = this.getCost(order);
+    const orderJson = JSON.stringify(order);
+    localStorage.setItem('orderSubscription', orderJson);
+  }
+
+  getStateOrder(){
+    try {
+      let stringorder = localStorage.getItem('orderSubscription');
+      let order = JSON.parse(stringorder) as IPOSOrder;
+      if (order) {
+        order = this.getCost(order)
+      }
+      return order;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  updateOrderSearchModel(searchModel: IPOSOrderSearchModel) {
+    if (!searchModel) {
+      this._posSearchModel.next(searchModel);
+      return ;
+    }
+    const user = this.userAuthorization.currentUser()
+    if (this.showAllOrders) {
+      if (user && user.employeeID && user.employeeID != null) {
+        searchModel.employeeID = 0
+      }
+    }
+    if (!this.showAllOrders && this.userAuthorization.isStaff ) {
+      if (user && user.employeeID  && user.employeeID != null) {
+        searchModel.employeeID = user.employeeID
+      }
+    }
+    if (!this.showAllOrders && this.userAuthorization.isUser) {
+      if (user && user.id && user.id != null) {
+        searchModel.clientID = user.id
+      }
+    }
+    this.posSearchModel = searchModel
+    this._posSearchModel.next(searchModel);
+  }
+
+  updateSplitGroup(data: IPOSOrder) {
+    this._splitGroupOrder.next(data);
+  }
+
+  get showAllOrders() {
+    let  user = this.userAuthorization.user
+    if ( user && user.userPreferences) {
+      return user.userPreferences.showAllOrders
+    }
+    return false
+  }////////////
+
   updatePaymentMethodStep(item: IPaymentMethod) {
     this._posPaymentStepSelection.next(item)
   }
@@ -108,16 +334,15 @@ export class OrderMethodsService implements OnDestroy {
     this._lastSelectedItem.next(item)
   }
 
-
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe(order => {
+    this._order = this.currentOrder$.subscribe(order => {
       this.order = order;
       this.clearAssignedItems();
     })
   }
 
   initItemProcess(){
-    this.orderService.updateOrderSubscription(this.order);
+    this.updateOrderSubscription(this.order);
     this.processItem = null;
     this._itemProcessSection.next(0)
   }
@@ -189,47 +414,70 @@ export class OrderMethodsService implements OnDestroy {
 
   constructor(public route                    : ActivatedRoute,
               private dialog                  : MatDialog,
+              public  authenticationService    : AuthenticationService,
               private siteService             : SitesService,
-              private orderService            : OrdersService,
-              private clientTableService      : ClientTableService,
-              private _snackBar               : MatSnackBar,
-              private posOrderItemService     : POSOrderItemService,
+              // private balanceSheetMethodsService    : BalanceSheetMethodsService,
               private editDialog              : ProductEditButtonService,
-              private promptGroupService      : PromptGroupService,
-              private userAuthorization       : UserAuthorizationService,
+              private floorPlanService        : FloorPlanService,
               private menuService             : MenuService,
               private priceCategoriesService  : PriceCategoriesService,
               private platFormService         : PlatformService,
               private sendGridService         : SendGridService,
-              private router                  : Router,
+              private orderService            : OrdersService,
+              private posOrderItemService     : POSOrderItemService,
               private promptWalkService       : PromptWalkThroughService,
-              private uiSettingService        : UISettingsService,
+              private promptGroupService      : PromptGroupService,
+              private router                  : Router,
               private textMessagingService    : TextMessagingService,
               private toolbarServiceUI        : ToolBarUIService,
-              public  authenticationService    : AuthenticationService,
-              private floorPlanService        : FloorPlanService,
-              private printingService         : PrintingService,
-              private balanceSheetMethodsService    : BalanceSheetMethodsService,
-              private prepPrintingService: PrepPrintingServiceService,
+              private uiSettingService        : UISettingsService,
+              private userAuthorization       : UserAuthorizationService,
+              private _snackBar               : MatSnackBar,
+              private storeCreditMethodService: StoreCreditMethodsService,
 
              ) {
+    this.isApp = this.platFormService.isApp()
+    const order = this.getStateOrder();
+    if (order) {
+      this.updateOrderSubscription(order)
+    }
     this.initSubscriptions();
-
   }
 
   ngOnDestroy(): void {
     if (this._order){ this._order.unsubscribe()}
   }
 
+  setPOSName(name: string): boolean {
+    if (name.length) {
+      if (name.length <= 5) {
+        localStorage.setItem(`devicename`, name)
+        if (localStorage.getItem(`devicename`) === name  ) {
+          return true
+        } else {
+          return false
+        }
+      }
+    } else {
+      localStorage.removeItem('devicename');
+      return false
+    }
+  }
+
+  get posName(): string {
+    const item = localStorage.getItem(`devicename`)
+    return item
+  };
+
   async doesOrderExist(site: ISite) {
     if (!this.subscriptionInitialized) { this.initSubscriptions(); }
     if (!this.order || (this.order.id === undefined)) {
 
-      const order$ = this.orderService.newOrderWithPayloadMethod(site, null);
+      const order$ = this.newOrderWithPayloadMethod(site, null);
       const order  = await order$.pipe().toPromise();
       if (order) {
         this.order = order;
-        this.orderService.updateOrderSubscription(this.order);
+        this.updateOrderSubscription(this.order);
         return true;
       }
     }
@@ -237,13 +485,12 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   doesOrderExistObs(site: ISite): Observable<IPOSOrder> {
-
     if (!this.subscriptionInitialized) { this.initSubscriptions(); }
     if (!this.order || (this.order.id === undefined)) {
-      const order$ = this.orderService.newOrderWithPayloadMethod(site, null);
+      const order$ = this.newOrderWithPayloadMethod(site, null);
       return  order$.pipe(switchMap(data => {
         this.order = data;
-        this.orderService.updateOrderSubscription(this.order);
+        this.updateOrderSubscription(this.order);
         return of(data)
       }),
       catchError(err => {
@@ -268,7 +515,7 @@ export class OrderMethodsService implements OnDestroy {
     return this.doesOrderExistObs(site).pipe(
       switchMap(order => {
         this.order = order;
-        this.orderService.updateOrderSubscription(order)
+        this.updateOrderSubscription(order)
         const newItem     =  { orderID: order.id, itemID: itemID, quantity: quantity, menuItem: menuItem, price: price };
         return this.posOrderItemService.putItem(site, newItem);
       })
@@ -277,7 +524,7 @@ export class OrderMethodsService implements OnDestroy {
         console.log('data', data.posItem)
         if (data.order) {
           this.order = data.order
-          this.orderService.updateOrderSubscription(data.order)
+          this.updateOrderSubscription(data.order)
           this.updateProcess()
           return of(data)
         } else {
@@ -291,9 +538,8 @@ export class OrderMethodsService implements OnDestroy {
       console.log('error occured', err)
       return of(err)
     }))
-
-
   }
+
   ///1. List item. 2. Add Item 3. View Sub Groups of Items.   //either move to s
   menuItemAction(order: IPOSOrder, item: IMenuItem, add: boolean) {
     const searchResults = this.updateMenuSearchModel(item)
@@ -311,9 +557,9 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   ///1. List item. 2. Add Item 3. View Sub Groups of Items.   //either move to s
-  menuItemActionObs(order: IPOSOrder, item: IMenuItem, add: boolean, passAlongItem: PosOrderItem[]): Observable<ItemPostResults> {
+  menuItemActionObs(order: IPOSOrder, item: IMenuItem, add: boolean,
+                    passAlongItem: PosOrderItem[]): Observable<ItemPostResults> {
     const searchResults = this.updateMenuSearchModel(item)
-
     if (add) {
       if (item && (item.itemType.requireInStock == true))  {
         this.listItem(item.id);
@@ -321,7 +567,6 @@ export class OrderMethodsService implements OnDestroy {
       }
       return  this.addItemToOrderObs(order, item, 1, 0, passAlongItem)
     }
-
     this.listItem(item.id);
     return of(null)
   }
@@ -344,37 +589,34 @@ export class OrderMethodsService implements OnDestroy {
   updateMenuSearchModel(item: IMenuItem) : boolean {
     if (!item) {   return false }
     const model =  {} as ProductSearchModel;
-
     if (item?.itemType?.name?.toLowerCase() == 'category') {
       model.categoryID   = item.categoryID.toString()
-      this.menuService.updateMeunuItemData(model)
+      this.menuService.updateSearchModel(model)
       this.router.navigate(["/menuitems-infinite/", {categoryID:item.id }])
       return true
     }
 
     if (item?.prodModifierType == 4) {
       model.subCategory  = item.id.toString()
-      this.menuService.updateMeunuItemData(model)
+      this.menuService.updateSearchModel(model)
       this.router.navigate(["/menuitems-infinite/", {categoryID:item.id }])
       return true
     }
 
     if (item?.prodModifierType == 5) {
       model.subCategory  = item.id.toString()
-      this.menuService.updateMeunuItemData(model)
+      this.menuService.updateSearchModel(model)
       this.router.navigate(["/menuitems-infinite/", {subCategoryID:item.id }])
       return true
     }
 
     if (item?.prodModifierType == 6) {
       model.departmentID = item.id.toString()
-      this.menuService.updateMeunuItemData(model)
+      this.menuService.updateSearchModel(model)
       this.router.navigate(["/menuitems-infinite/", {departmentID:item.id }])
       return true
     }
-
     return false
-
   }
 
   getPopUpWidth(defaultSize: string) {
@@ -392,13 +634,11 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   openPopupItem() {
-
     const deviceSize = this.getPopUpWidth('90vw')
     let panelClass= ''
     if (deviceSize=='90vw') {
     }
     panelClass = 'custom-dialog-container';
-
     const dialogRef = this.dialog.open(MenuItemModalComponent,
       {
         width:        deviceSize,
@@ -408,7 +648,6 @@ export class OrderMethodsService implements OnDestroy {
         panelClass:   panelClass
       },
     )
-
     dialogRef.afterClosed().subscribe(result => {
       return result;
     });
@@ -417,7 +656,6 @@ export class OrderMethodsService implements OnDestroy {
   listItem(id:number) {
     this.router.navigate(["/menuitem/", {id:id}]);
   }
-
 
   emailOrderByEntry(order: IPOSOrder) {
     this.editDialog.emailOrderEntry( order)
@@ -472,6 +710,7 @@ export class OrderMethodsService implements OnDestroy {
 
   scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number,
                    portionValue: string, packaging: string, assignedPOSItems: PosOrderItem[]): Observable<ItemPostResults> {
+
     if (!barcode) { return null;}
     if (!order) {const order = {} as IPOSOrder}
 
@@ -503,85 +742,35 @@ export class OrderMethodsService implements OnDestroy {
     if (passAlongItem && passAlongItem[0]) {
       passAlong = passAlongItem[0]
     }
-    return this.processItemPOSObservable(order, null, item, 1, null , 0, 0, passAlong, this.assignPOSItems )
+    return this.processItemPOSObservable(order, null, item, 1, null , 0, 0,
+                                          passAlong, this.assignPOSItems )
   }
 
-  sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean): Observable<any> {
-    if (order) {
-      const site = this.siteService.getAssignedSite()
-      const item$ = this.prepPrintingService.printLocations(order,printUnPrintedOnly).pipe(
-        switchMap( data => {
-          return  this.prepPrintUnPrintedItems(order.id)
-        })
-        ,catchError( data => {
-          this.siteService.notify('Error printing templates' + data.toString(), 'close', 5000, 'red')
-          return of(data)
-      }))
-      return item$;
-    }
-    return of(null)
-  }
+  
 
-  finalizeOrderProcesses(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder) {
-    this._printingFinalizer.next(true)
-    let printLabels$ : Observable<any>;
-    let sendOrder$   : Observable<any>;
+  // refreshOrder(id: number, history) {
+  //   if (this.order) {
+  //     const site = this.siteService.getAssignedSite();
+  //     const order$ = this.orderService.getOrder(site, this.order.id.toString() ,
+  //                                                this.order.history)
 
-    return this.uiSettingService.transactionUISettings$.pipe(switchMap(data => {
-      printLabels$ = of(null);
-      sendOrder$  = of(null);
+  //     order$.subscribe( data => {
+  //         this.updateOrderSubscription(data)
+  //     })
+  //   }
+  // }
 
-      if (data.prepOrderOnClose) {
-        this.sendToPrep(order, true)
-      }
-      if (data.printLabelsOnclose) {
-        return this.printingService.printLabels(order, true)
-      }
-      return forkJoin([printLabels$, sendOrder$])
-    }))
-
-  }
-
-  finalizeOrder(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder): number {
-    this.printingService.printJoinedLabels() ;
-
-    if (!paymentResponse ) {
-      this.siteService.notify(`No payment response `, 'close', 3000, 'red');
-      return 0
-    }
-
-    if (!paymentResponse || !paymentResponse.payment) {
-      this.siteService.notify('No payment in payment response', 'close', 3000, 'red');
-      return 0
-    }
-
-    const payment = paymentResponse.payment;
-
-    if (order && !order.balanceRemaining) { order.balanceRemaining = 0}
-
-    if (payment && paymentMethod) {
-
-      if (paymentMethod.isCreditCard) {
-        if (this.platFormService.isApp()) {
-          this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
-        }
-        return 1
-      }
-
-      if (paymentMethod.isCash) {
-        this.balanceSheetMethodsService.openDrawerFromBalanceSheet()
-      }
-
-      if (payment.amountReceived >= payment.amountPaid || order.balanceRemaining == 0) {
-        if (this.platFormService.isApp()) {
-          this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
-        }
-        return 1
-      }
-
-      return 0
+  refreshOrder(id: number) {
+    if (this.order) {
+      const site = this.siteService.getAssignedSite();
+      const order$ = this.orderService.getOrder(site, id.toString() , this.order.history)
+      // const source = timer(5000, 3000);
+      order$.subscribe( data => {
+          this.updateOrderSubscription(data)
+      })
     }
   }
+
 
   validateUser(): boolean {
     const valid = this.userAuthorization.validateUser()
@@ -616,7 +805,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   validateOrder(): IPOSOrder {
-    let order = this.orderService.getCurrentOrder();
+    let order = this.getCurrentOrder();
 
     if (!order || order == null) {
       order = {} as IPOSOrder
@@ -707,7 +896,6 @@ export class OrderMethodsService implements OnDestroy {
       return of(null)
     }
 
-
     if (this.assignedPOSItem && !passAlongItem) {  passAlongItem  = this.assignedPOSItem[0]; };
 
     order = this.validateOrder();
@@ -748,19 +936,20 @@ export class OrderMethodsService implements OnDestroy {
                               rewardGroupApplied: rewardGroupApplied, clientID: order.clientID, splitGroupID: splitGroupID,
                               assignedPOSItems: passAlongItems }
 
-          console.log('item', item)
-
           if (order.id == 0 || !order.id) {
-            const orderPayload = this.orderService.getPayLoadDefaults(null)
+            const orderPayload = this.getPayLoadDefaults(null)
             return this.orderService.postOrderWithPayload(site, orderPayload).pipe(
               switchMap(data => {
+                console.log('post order', data)
+                if (!data) {
+                  this.siteService.notify('No order started. There might be something wrong.', 'Close', 2000)
+                  return of(null)
+                }
                 newItem.orderID = data.id;
                 return this.posOrderItemService.postItem(site, newItem)
               })).pipe(
                 switchMap(data => {
                   this.processItemPostResultsPipe(data)
-
-
                   return of(data);
               })
             )
@@ -796,7 +985,6 @@ export class OrderMethodsService implements OnDestroy {
   processItemPostResultsPipe(data) {
       // console.log('processItemPostResults', data);
       if (data) {
-
       }
 
       this.assignPOSItems = [];
@@ -812,7 +1000,7 @@ export class OrderMethodsService implements OnDestroy {
       }
 
       if (data.order) {
-        this.orderService.updateOrderSubscription(data.order);
+        this.updateOrderSubscription(data.order);
         this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem, data.priceCategoryID);
 
         if (this.siteService.phoneDevice) {
@@ -852,6 +1040,7 @@ export class OrderMethodsService implements OnDestroy {
     this.toolbarServiceUI.resetOrderBar(true)
   }
 
+
   notification(message: string, title: string)  {
     if (this.openDialogsExist()) {
       this._snackBar.open(message, title, {
@@ -886,6 +1075,205 @@ export class OrderMethodsService implements OnDestroy {
                                          passAlongItem);
  }
 
+   newOrderWithPayloadMethod(site: ISite, serviceType: IServiceType): Observable<any> {
+    console.log('new order with payload')
+
+    if (!site) { return of(null) }
+    if (!this.userAuthorization.user) {
+      this.siteService.notify('user required', 'Alert', 1000)
+      return of(null)
+    }
+    const orderPayload = this.getPayLoadDefaults(serviceType)
+    let order: any;
+    const order$ = this.orderService.postOrderWithPayload(site, orderPayload);
+    
+    return order$.pipe(
+      switchMap( data => {
+        order = data
+        this.processOrderResult(order, site)
+        return this.navToDefaultCategory()
+      })).pipe(switchMap( item => { 
+        this.processOrderResult(order, site, item?.id)
+        return of(order)
+      }),
+        catchError(data => {
+        this.siteService.notify(`Order not started. ${data}`, 'Alert', 2000, 'red')
+        return of(data)
+      }))
+  
+  }
+
+  newOrderWithPayloadObs(site: ISite, serviceType: IServiceType) {
+    console.log('new order with payload')
+    let order: any
+    const order$ = this.newOrderWithPayloadMethod(site, serviceType )
+    return order$.pipe(
+          switchMap( data => {
+            order = data
+            this.processOrderResult(order, site)
+            return this.navToDefaultCategory()
+          })).pipe(switchMap( item => { 
+            this.processOrderResult(order, site, item?.id)
+            return of(order)
+          }),
+          catchError(data => {
+          this.siteService.notify(`Order not started. ${data}`, 'Alert', 2000, 'red')
+          return of(data)
+        }))
+  }
+
+
+  //////////////////async await functions.
+  newDefaultOrder(site: ISite)  {
+    if (!site)        {  return }
+    this.newOrderWithPayload(site, null);
+  }
+
+  newOrderWithPayload(site: ISite, serviceType: IServiceType) {
+    console.log('new order with payload')
+    const order$ = this.newOrderWithPayloadMethod(site, serviceType )
+    let order: IPOSOrder;
+
+    return order$.pipe(
+      switchMap(data =>
+        {
+          order = data;
+          return  this.navToDefaultCategory()
+        }
+      )).pipe(switchMap( data => {
+        this.processOrderResult(order, site,  data?.id)
+        return of(data)
+    }))
+  }
+
+  // error:  catchError => {
+  //   this.notifyEvent(`Error submitting Order # ${catchError}`, "Posted")
+  // }
+
+  newOrderFromTable(site: ISite, serviceType: IServiceType, uuID: string, floorPlanID: number, name: string): Observable<IPOSOrder> {
+    if (!site) { return }
+    let orderPayload = this.getPayLoadDefaults(serviceType)
+    if (!orderPayload.order) {
+      orderPayload.order = {} as IPOSOrder
+    }
+    orderPayload.order.tableUUID = uuID;
+    orderPayload.order.floorPlanID = floorPlanID;
+    orderPayload.order.customerName = name;
+    orderPayload.order.tableName = name;
+    return  this.orderService.postOrderWithPayload(site, orderPayload)
+  }
+
+  processOrderResult(order: IPOSOrder, site: ISite, categoryID?: number ) {
+    if (order.resultMessage != undefined) {
+      this.siteService.notify(`Error submitting Order ${order.resultMessage}`, "Posted", 2000)
+      return
+    }
+    this.setActiveOrder(site, order)
+
+    console.log('processsorderresult', categoryID)
+    if (categoryID) { 
+      this.navToCategory(categoryID)
+    }
+    if (!categoryID) { 
+      this.navToMenu();
+    }
+  }
+
+  setActiveOrder(site, order: IPOSOrder) {
+    if (order) {
+      //determine device type so we know how to respond.
+      // console.log('set active order',!this.authenticationService?.deviceInfo?.phoneDevice)
+      if (!this.authenticationService?.deviceInfo?.phoneDevice) {
+        this.toolbarServiceUI.updateOrderBar(true)
+      }
+
+      this.updateOrderSubscription(order)
+      this.updateLastItemAdded(null)
+
+      if (!order.history && this.platFormService.isApp()) {
+        if (!order.completionDate && !order.preferredScheduleDate) {
+          if (!this.authenticationService?.deviceInfo?.phoneDevice) {
+            this.toolbarServiceUI.showSearchSideBar()
+          }
+          return
+        }
+      }
+    }
+  }
+
+  getPayLoadDefaults(serviceType: IServiceType): OrderPayload {
+    const orderPayload = {} as OrderPayload;
+    orderPayload.client = null;
+    orderPayload.serviceType = serviceType;
+    orderPayload.deviceName = this.devicename;
+    const order = {} as IPOSOrder;
+    order.deviceName =  orderPayload.deviceName;
+    order.employeeID = +this.getEmployeeID();
+    orderPayload.order = order
+    return orderPayload
+  }
+
+  getEmployeeID(): number {
+    const id = +this.authenticationService?.userValue?.id;
+    // const id = localStorage.getItem('employeeIDLogin')  ;
+    // console.log('employeeIDLogin', id)
+    if (id) {
+      return +id
+    }
+    return  0
+  }
+
+  navToDefaultCategory(): Observable<IMenuItem> {
+
+    return this.uiSettingService.transactionUISettings$.pipe(switchMap(data => {
+      console.log('transaction ui settings', data)
+      const site = this.siteService.getAssignedSite()
+      if (data && data.defaultNewOrderCategoryID) {
+        return this.menuService.getMenuItemByID(site, data.defaultNewOrderCategoryID)
+      }
+      console.log('no default categoryID')
+      return of(null)
+    })).pipe(switchMap(data => { 
+      ///nav to category 
+      if (!data) {
+        console.log('no category')
+        return of(null)
+      }
+    
+      if (data) { 
+        this.router.navigate(["/menuitems-infinite/", {categoryID:data.id}]);
+      }
+      return of(data)
+    }))
+  }
+
+
+ navToMenu() {
+    // determine device type so weknow how to respond
+    //if it's a phone. then we can go to the menu.
+    if (this.router.url != '/app-main-menu'){
+      if (this.router.url.substring(0, '/menuitems-infinite'.length) != '/menuitems-infinite') {
+         this.router.navigate(['/app-main-menu']);
+        return
+      }
+    }
+  }
+
+  navToCategory(categoryID: number) { 
+    this.router.navigate(["/menuitems-infinite/", {categoryID:categoryID}]);
+  }
+
+  get devicename(): string {
+    try {
+      if (localStorage.getItem('devicename')) {
+        return localStorage.getItem('devicename')
+      }
+    } catch (error) {
+
+      return '';
+    }
+  }
+
  promptSerial(menuItem: IMenuItem, id: number, editOverRide: boolean, serial: string): boolean {
 
     if (id) {
@@ -904,7 +1292,7 @@ export class OrderMethodsService implements OnDestroy {
         dialogRef.afterClosed().subscribe(data => {
           if (data && data.order) {
             this.order = data.order
-            this.orderService.updateOrderSubscription(this.order)
+            this.updateOrderSubscription(this.order)
           }
           if (data && data.result)  { this.updateProcess (); }
           if (!data || !data.result) {
@@ -969,7 +1357,6 @@ export class OrderMethodsService implements OnDestroy {
     return true;
   }
 
-
   openProductsByBarcodeList(items: IMenuItem[], order: IPOSOrder) {
     const  newItem = { item: items, order: order}
     const dialogRef = this.dialog.open(ProductListByBarcodeComponent,
@@ -1008,7 +1395,7 @@ export class OrderMethodsService implements OnDestroy {
           this.siteService.notify('Item must be voided', 'Notice', 1500, 'yellow')
         }
         if (result && result.order) {
-          this.orderService.updateOrderSubscription(result.order);
+          this.updateOrderSubscription(result.order);
           this.initItemProcess();
         }
       })
@@ -1103,7 +1490,7 @@ export class OrderMethodsService implements OnDestroy {
 
     // localStorage.setItem('orderSubscription', null);
     localStorage.removeItem('orderSubscription')
-    this.orderService.updateOrderSubscription(null);
+    this.updateOrderSubscription(null);
     this.splitEntryValue = 0;
     if (this.userAuthorization.user.roles = 'user') {
       this.router.navigate(['/app-main-menu']);
@@ -1130,12 +1517,15 @@ export class OrderMethodsService implements OnDestroy {
       const result$ = this.orderService.completeOrder(site, order.id)
       result$.subscribe(data=>  {
         this.notifyEvent(`Order Paid for`, 'Order Completed')
-        this.orderService.updateOrderSubscription(data)
-        // this.printingService.previewReceipt()
+        this.updateOrderSubscription(data)
+    
       }
     )
    }
   }
+
+
+
 
   openPromptWalkThrough(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
@@ -1157,9 +1547,7 @@ export class OrderMethodsService implements OnDestroy {
     })
   }
 
-  updateLastItemAdded(item: IMenuItem) {
-    this.orderService.updateLastItemAdded(item)
-  }
+
 
  addedItemOptions(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem, priceCategoryID : number) {
     this.updateLastItemAdded(item)
@@ -1179,7 +1567,7 @@ export class OrderMethodsService implements OnDestroy {
     let process = this.itemProcessSection;
 
     if (!this.processItem) {
-      this.orderService.updateOrderSubscription(this.order)
+      this.updateOrderSubscription(this.order)
       return
     }
 
@@ -1232,7 +1620,7 @@ export class OrderMethodsService implements OnDestroy {
         break;
       }
       case 6: {
-        this.orderService.updateOrderSubscription(this.order);
+        this.updateOrderSubscription(this.order);
         break;
       }
       case 7: {
@@ -1316,46 +1704,17 @@ export class OrderMethodsService implements OnDestroy {
     return;
   }
 
-  processResults(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod) {
-    let result = 0
-    if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
-      if (paymentResponse.orderCompleted) {
-        result =  this.finalizeOrder(paymentResponse, paymentMethod, paymentResponse.order)
-      } else {
-      }
-    }
-
-    if (paymentResponse.paymentSuccess || paymentResponse.responseMessage.toLowerCase() === 'success') {
-      this.orderService.updateOrderSubscription(paymentResponse.order)
-      this.siteService.notify(`Payment succeeded: ${paymentResponse.responseMessage}`, 'Success', 1000)
-    } else {
-      this.siteService.notify(`Payment failed because: ${paymentResponse.responseMessage}`, 'Something unexpected happened.',3000)
-    }
-
-  }
-
-  refreshOrder(id: number) {
-    if (this.order) {
-      const site = this.siteService.getAssignedSite();
-      const order$ = this.orderService.getOrder(site, id.toString() , this.order.history)
-      // const source = timer(5000, 3000);
-      order$.subscribe( data => {
-          this.orderService.updateOrderSubscription(data)
-      })
-    }
-  }
-
   refreshOrderOBS(id: number, history: boolean) {
     if (id) {
       const site = this.siteService.getAssignedSite();
       const order$ = this.orderService.getOrder(site, this.order.id.toString() , this.order.history)
       // const source = timer(5000, 3000);
      return order$.pipe(switchMap(data => {
-          this.orderService.updateOrderSubscription(data)
+          this.updateOrderSubscription(data)
           return of(data)
       }))
     }
-    this.orderService.updateOrderSubscription(null)
+    this.updateOrderSubscription(null)
     return of(null)
   }
 
@@ -1372,8 +1731,8 @@ export class OrderMethodsService implements OnDestroy {
         this.posOrderItemService.deletePOSOrderItem(site, orderItem.id).subscribe( item=> {
           if (item) {
             this.order.posOrderItems.splice(index, 1)
-            this.orderService.updateOrderSubscription(item.order)
-            this.orderService.updateLastItemAdded(null)
+            this.updateOrderSubscription(item.order)
+            this.updateLastItemAdded(null)
           }
         })
       }
@@ -1389,7 +1748,7 @@ export class OrderMethodsService implements OnDestroy {
           if (item) {
             // this.notifyEvent('Item Prepped!', "Success")
             this.order.posOrderItems.splice(index, 1, item)
-            this.orderService.updateOrderSubscription(this.order)
+            this.updateOrderSubscription(this.order)
           }
         })
       }
@@ -1432,23 +1791,7 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
-  prepPrintUnPrintedItems(id: number) {
-    if (id) {
-      const site = this.siteService.getAssignedSite()
-      return  this.posOrderItemService.setUnPrintedItemsAsPrinted(site, id).pipe(
-        switchMap(data => {
-          return this.orderService.getOrder(site, id.toString(), false)
-        })).pipe(
-          switchMap( order => {
-          if (order) {
-            this.orderService.updateOrderSubscription(order)
-            return of(order)
-          }
-      }));
-    }
 
-    return of(null)
-  }
 
   prepPrintUnPrintedItem(index: number, orderItem: PosOrderItem) {
     if (orderItem) {
@@ -1458,7 +1801,7 @@ export class OrderMethodsService implements OnDestroy {
         this.posOrderItemService.setItemPrep(site,orderItem).subscribe( item => {
           if (item) {
             this.order.posOrderItems.splice(index, 1, item)
-            this.orderService.updateOrderSubscription(this.order)
+            this.updateOrderSubscription(this.order)
           }
         })
       }
@@ -1559,7 +1902,7 @@ export class OrderMethodsService implements OnDestroy {
       // console.log('get login actions 2', action)
       return this.orderService.getOrder(site, action.id, false).pipe(
         switchMap(order => {
-          this.orderService.updateOrderSubscriptionLoginAction(order)
+          this.updateOrderSubscriptionLoginAction(order)
           localStorage.removeItem('loginAction')
           this.router.navigate(['pos-payment'])
           return of(order)

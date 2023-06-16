@@ -7,6 +7,7 @@ import { IPOSOrder,  ProductPrice } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-menu-price-selection',
@@ -28,6 +29,7 @@ export class MenuPriceSelectionComponent  implements OnInit, OnDestroy {
           public  route: ActivatedRoute,
           private siteService: SitesService,
           private orderService: OrdersService,
+          private orderMethodsService: OrderMethodsService,
           private matSnackBar: MatSnackBar,
           @Inject(MAT_DIALOG_DATA) public data: any,
           )
@@ -58,7 +60,7 @@ export class MenuPriceSelectionComponent  implements OnInit, OnDestroy {
   }
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe(data=> {
+    this._order = this.orderMethodsService.currentOrder$.subscribe(data=> {
       this.order = data;
     })
   }
@@ -69,7 +71,7 @@ export class MenuPriceSelectionComponent  implements OnInit, OnDestroy {
       const site = this.siteService.getAssignedSite();
       const orderID = this.order.id
       const order = await this.orderService.getOrder(site, orderID.toString(), false).pipe().toPromise();
-      this.orderService.updateOrderSubscription(order)
+      this.orderMethodsService.updateOrderSubscription(order)
     }
   }
 

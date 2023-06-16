@@ -64,7 +64,7 @@ export class ScheduledMenuItemsComponent implements OnInit {
   }
 
   async menuItemAction(menuItem) {
-    const order =  this.orderService.currentOrder
+    const order =  this.orderMethodsService.currentOrder
     console.log('order', order)
     if (this.isApp) {
       this.orderMethodsService.menuItemAction(order, menuItem, true )

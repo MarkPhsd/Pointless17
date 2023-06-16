@@ -10,6 +10,7 @@ import { IonItem } from '@ionic/angular';
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 import { Observable, of, switchMap } from 'rxjs';
 import { InputTrackerService } from 'src/app/_services/system/input-tracker.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-pos-order-item-edit',
@@ -31,12 +32,9 @@ export class PosOrderItemEditComponent  {
   action$: Observable<IPOSOrder>;
 
   constructor(
-      private posOrderItemService : POSOrderItemService,
-      private orderService        : OrdersService,
+      private orderMethodsService : OrderMethodsService,
       private siteService         : SitesService,
       private _fb                 : UntypedFormBuilder,
-      private menuService         : MenuService,
-      private inputTrackerService: InputTrackerService,
       private posOrderItemMethodsService: PosOrderItemMethodsService,
       private dialogRef           : MatDialogRef<PosOrderItemEditComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any
@@ -143,7 +141,7 @@ export class PosOrderItemEditComponent  {
   saveChange(event) {
     const item = this.getItemValue();
     item.quantity = event;
-    this.action$ = this.saveSub(item, this.editField).pipe(switchMap(data => { 
+    this.action$ = this.saveSub(item, this.editField).pipe(switchMap(data => {
       this.dialogRef.close();
       return of(data)
     }))
@@ -163,14 +161,14 @@ export class PosOrderItemEditComponent  {
   save() {
     if (this.posOrderItem) {
       const item = this.getItemValue();
-      this.action$ = this.saveSub(item, this.editField).pipe(switchMap(data => { 
+      this.action$ = this.saveSub(item, this.editField).pipe(switchMap(data => {
         this.dialogRef.close();
         return of(data)
       }))
     }
   }
 
-  saveSub(item: PosOrderItem, editField: string): Observable<IPOSOrder> { 
+  saveSub(item: PosOrderItem, editField: string): Observable<IPOSOrder> {
     const order$ = this.posOrderItemMethodsService.saveSub(item, editField).pipe(
       switchMap(data => {
         this.onCancel();
@@ -247,7 +245,7 @@ export class PosOrderItemEditComponent  {
   }
 
   onCancel() {
-    this.orderService._scanner.next(true)
+    this.orderMethodsService._scanner.next(true)
     this.dialogRef.close();
     this.closeOnEnterPress.emit('true')
   }

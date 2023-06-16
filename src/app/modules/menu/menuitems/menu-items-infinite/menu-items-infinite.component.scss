@@ -1,7 +1,7 @@
 @import "/src/mixins.scss";
 
 .parent-container {
-  overflow: hidden;
+  overflow: auto;
   height: 100%;
 }
 
@@ -15,19 +15,27 @@
   margin-right: 2px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: 1fr;
+  grid-template-columns:  repeat( auto-fill, minmax(400px, 1fr) );;
   overflow-y: visible;
+}
+
+.horizontal-view {
+  display: grid;
+  grid-template-columns: repeat( auto-fill, minmax(250px, 1fr) );
+  max-height: 175px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .flex-row {
   display: flex;
   flex-direction: row;
-  // flex-wrap: wrap;
   gap: 10px;
 }
 
 .grid-flow {
-
   --gap: 5px;
   margin-top: 2px;
   margin-right: 2px;
@@ -66,13 +74,11 @@
 }
 
 .grid-item {
-  // align-items: flex-end;
   max-height: 150px;
   min-height: 150px;
   height:     150px;
   overflow-x: scroll;
 }
-
 
 .orders-container {
   overflow-x: hidden;
@@ -152,12 +158,13 @@
 }
 
 .loader {
+  margin-top: 10px;
   margin-bottom: 15px;
 }
 
 .floating-info {
   position: fixed;
-  top     : 150px;
+  top     : 350px;
   z-index : 100;
   padding-right: 10px;
   overflow-x: visible;

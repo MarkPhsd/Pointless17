@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-order-total',
@@ -56,7 +57,7 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
   }
 
   orderSubscriber() {
-    this._order = this.orderService.currentOrder$.subscribe(data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe(data => {
       this.cost = 0;
       if (data) {
         this.order = data;
@@ -67,6 +68,7 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
   constructor(
       private uiSettingsService   : UISettingsService,
       private orderService        : OrdersService,
+      private orderMethodsService : OrderMethodsService,
       public  route               : ActivatedRoute) {
     const outPut = this.route.snapshot.paramMap.get('mainPanel');
     if (outPut) {

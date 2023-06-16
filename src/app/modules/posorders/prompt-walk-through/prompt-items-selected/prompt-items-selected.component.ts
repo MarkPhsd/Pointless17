@@ -10,6 +10,7 @@ import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { OrdersService } from 'src/app/_services/transactions/orders.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'prompt-items-selected',
@@ -38,7 +39,7 @@ export class PromptItemsSelectedComponent implements OnInit {
   _total            : Subscription
 
   intSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe(data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe(data => {
       this.order = data;
     })
 
@@ -70,6 +71,7 @@ export class PromptItemsSelectedComponent implements OnInit {
   constructor(
      private promptGroupService        : PromptGroupService,
      private orderService              : OrdersService,
+     public orderMethodsService: OrderMethodsService,
      private promptWalkService        : PromptWalkThroughService,
      private posOrderItemService      : POSOrderItemService,
      private awsBucket                : AWSBucketService,

@@ -155,7 +155,7 @@
       <div class="label-image-grid"  *ngIf="(mainPanel && !bottomSheetOpen) && !prepScreen">
           <ng-container [ngTemplateOutlet]="isDisplayMenuItemOn"></ng-container>
       </div>
-
+      <!-- {{showEdit}} -->
       <div (click)="assignItem()"
            class="menu-buttons"
            *ngIf="!disableActions && !prepScreen" >

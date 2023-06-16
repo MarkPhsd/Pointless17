@@ -7,7 +7,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
-import { MenuService } from 'src/app/_services';
+import { AuthenticationService, MenuService } from 'src/app/_services';
 import { PollingService } from 'src/app/_services/system/polling.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
@@ -36,6 +36,7 @@ export class MainMenuComponent implements OnInit  {
   @ViewChild('searchSelector') searchSelector: TemplateRef<any>;
   @ViewChild('viewOverlay')    viewOverlay: TemplateRef<any>;
   @ViewChild('displayMenu')    displayMenu: TemplateRef<any>;
+
 
   homePageSetings: UIHomePageSettings;
   smoke   = "./assets/video/smoke.mp4"
@@ -69,6 +70,7 @@ export class MainMenuComponent implements OnInit  {
     private uiSettings: UISettingsService,
     private userAuthorizationService: UserAuthorizationService,
     private siteService: SitesService,
+
     private router: Router,
     private menuService: MenuService,
     private orderMethodsService: OrderMethodsService,
@@ -137,7 +139,10 @@ export class MainMenuComponent implements OnInit  {
     if (this.userAuthorizationService.user) {
       this.orderAction$ = this.orderMethodsService.getLoginActions()
     }
+
+    // this.initFilterOption()
   }
+
 
   @HostListener("window:resize", [])
   updateItemsPerPage() {
@@ -232,7 +237,7 @@ export class MainMenuComponent implements OnInit  {
 		productSearchModel.barcode    = productSearchModel.name
 		productSearchModel.pageSize   = 50
 		productSearchModel.pageNumber = 1
-		this.menuService.updateMeunuItemData(productSearchModel)
+		this.menuService.updateSearchModel(productSearchModel)
 		return productSearchModel
 
   }

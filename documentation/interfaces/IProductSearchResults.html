@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -42,24 +42,31 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Interfaces</li>
-  <li
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
   >
   IProductSearchResults</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -70,7 +77,7 @@
 
 
 
-        <section>
+        <section data-compodoc="block-index">
             <h3 id="index">Index</h3>
             <table class="table table-sm table-bordered index-table">
                 <tbody>
@@ -82,6 +89,12 @@
                     <tr>
                         <td class="col-md-4">
                             <ul class="index-list">
+                                <li>
+                                        <a href="#active" 
+>
+                                            active
+                                        </a>
+                                </li>
                                 <li>
                                         <a href="#barcode" 
 >
@@ -131,6 +144,12 @@
                                         </a>
                                 </li>
                                 <li>
+                                        <a href="#type" 
+>
+                                            type
+                                        </a>
+                                </li>
+                                <li>
                                         <a href="#urlImageMain" 
 >
                                             urlImageMain
@@ -145,8 +164,41 @@
 
 
 
-            <section>
+            <section data-compodoc="block-properties">
                 <h3 id="inputs">Properties</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="active"></a>
+                                        <span class="name "><b>active</b>
+                                            <a href="#active">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>active:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                                 <tr>
@@ -415,6 +467,39 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
+                                        <a name="type"></a>
+                                        <span class="name "><b>type</b>
+                                            <a href="#type">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>type:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
                                         <a name="urlImageMain"></a>
                                         <span class="name "><b>urlImageMain</b>
                                             <a href="#urlImageMain">
@@ -448,21 +533,60 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Input } from &#x27;@angular/core&#x27;;
-
 import { AuthenticationService } from &#x27;../system/authentication.service&#x27;;
-import { BehaviorSubject, Observable, Subject, throwError  } from &#x27;rxjs&#x27;;
-import { IProduct, IProductCategory, ISite, MenuItem }  from &#x27;src/app/_interfaces&#x27;;
+import { BehaviorSubject, EMPTY, Observable, Subject, of, throwError  } from &#x27;rxjs&#x27;;
+import { IProduct, IProductCategory, ISite }  from &#x27;src/app/_interfaces&#x27;;
 import { IMenuItem } from &#x27;../../_interfaces/menu/menu-products&#x27;;
 import { ProductSearchModel } from &#x27;../../_interfaces/search-models/product-search&#x27;;
 import { HttpClient, HttpHeaders } from &#x27;@angular/common/http&#x27;;
 import { HttpClientCacheService } from &#x27;src/app/_http-interceptors/http-client-cache.service&#x27;;
 import { SitesService } from &#x27;../reporting/sites.service&#x27;;
 import { IPagedList } from &#x27;../system/paging.service&#x27;;
+import { DiscountInfo } from &#x27;src/app/_interfaces/menu/price-schedule&#x27;;
+import { FlowPrice, FlowProducts, FlowStrain, ImportFlowPriceResults, ImportFlowProductResults, ImportFlowStainsResults } from &#x27;src/app/_interfaces/import_interfaces/productflow&#x27;;
+import { FlowInventory, ImportFlowInventoryResults } from &#x27;src/app/_interfaces/import_interfaces/inventory-flow&#x27;;
+import { IInventoryAssignment } from &#x27;../inventory/inventory-assignment.service&#x27;;
+import { UserAuthorizationService } from &#x27;../system/user-authorization.service&#x27;;
+import { PlatformService } from &#x27;../system/platform.service&#x27;;
+import { FormBuilder, UntypedFormArray, UntypedFormGroup } from &#x27;@angular/forms&#x27;;
 
 // import { HttpClientService } from &#x27;src/app/_http-interceptors/http-client.service&#x27;;
-
+// Generated by https://quicktype.io
+export interface ImportProductResults {
+  listNotAdded: IProduct[];
+  listAdded   : IProduct[]
+}
+export interface IDepartmentList {
+  categories:             Category[];
+  id:                     number;
+  name:                   string;
+  metaTags:               string | string;
+  description:            string | string;
+  onlineDescription:      string | string;
+  onlineShortDescription: string | string;
+  urlImageOther:          string | string;
+  urlImageMain:           string;
+  prodModifierType:       number;
+  icon:                   string | string;
+  slug                :   string;
+}
+export interface Category {
+  menuItem:               any[];
+  itemCount:              null;
+  id:                     number;
+  name:                   string;
+  metaTags:               string;
+  metaDescription:        string;
+  onlineDescription:      string;
+  onlineShortDescription: string;
+  urlImageOther:          string;
+  urlImageMain:           string;
+  prodModifierType:       number;
+  departmentID:           number;
+  icon:                   string;
+}
 export interface IProductSearchResults {
    id          : number;
    name        : string
@@ -473,28 +597,27 @@ export interface IProductSearchResults {
    urlImageMain: string;
    productCount: number;
    barcode     : string;
+   type        : string;
+   active      : boolean;
 }
-
 export interface IProductSearchResultsPaged {
   results: IProductSearchResults[]
   paging: IPagedList
 }
-
 export interface IMenuItemsResultsPaged {
   results: IMenuItem[]
   paging: IPagedList
 }
-
 export interface IItemBasic{
   name: string;
   id  : number;
 }
-
 export interface IItemBasicB{
   name: string;
   id  : number;
   type: string;
   icon: string
+  image: string;
 }
 
 @Injectable({
@@ -502,15 +625,27 @@ export interface IItemBasicB{
 })
 export class MenuService {
 
-  private _menuItemsData       &#x3D; new BehaviorSubject&lt;ProductSearchModel&gt;(null);
-  public  menuItemsData$       &#x3D; this._menuItemsData.asObservable();
+  public searchModel: ProductSearchModel
+  private _searchModel       &#x3D; new BehaviorSubject&lt;ProductSearchModel&gt;(null);
+  public  searchModel$       &#x3D; this._searchModel.asObservable();
+
+  public searchFilter: ProductSearchModel
+  // private _searchFilter       &#x3D; new BehaviorSubject&lt;ProductSearchModel&gt;(null);
+  public  searchFilter$       &#x3D; this._searchModel.asObservable();
+
+  private _currentMeuItem      &#x3D; new BehaviorSubject&lt;IMenuItem&gt;(null);
+  public currentMeuItem$       &#x3D; this._currentMeuItem.asObservable();
 
   site: ISite;
+  isStaff           &#x3D; false;
   constructor(
-              private httpCache: HttpClientCacheService,
-              private httpClient: HttpClient,
-              private sitesService: SitesService,
-              private auth: AuthenticationService,) {
+              private httpCache               : HttpClientCacheService,
+              private httpClient              : HttpClient,
+              private sitesService            : SitesService,
+              private userAuthorizationService: UserAuthorizationService,
+              private platFormService         : PlatformService,
+              private auth                    : AuthenticationService,
+              private fb: FormBuilder,) {
   }
 
   httpOptions: { headers; observe; } &#x3D; {
@@ -519,7 +654,6 @@ export class MenuService {
     }),
     observe: &#x27;response&#x27;
   };
-
 
   @Input() currentPage   &#x3D; 1;
   @Input() lastPage:     number;
@@ -532,8 +666,50 @@ export class MenuService {
   endpoint &#x3D;  &quot;&quot;
   public searchIsLoaded &#x3D; new Subject&lt;any&gt;();
 
-  updateMeunuItemData(items: ProductSearchModel) {
-    this._menuItemsData.next(items);
+  get isWebModeMenu(){
+    if (!this.platFormService.isApp() &amp;&amp; !this.userAuthorizationService.isStaff) {
+      return true ;
+    }
+    return false
+  }
+
+  updateSearchFilter(search: ProductSearchModel) {
+    this.searchModel &#x3D; search;
+    this.searchFilter &#x3D; search;
+    this._searchModel.next(search)
+  }
+
+  updateSearchModel(item: ProductSearchModel) {
+    if (!item) {
+      item &#x3D; this.initSearchModel();
+      this._searchModel.next(item);
+      return;
+    }
+    this._searchModel.next(item);
+  }
+
+  initSearchModel() {
+    const item &#x3D; {} as ProductSearchModel;
+    item.listTypeID &#x3D; [] as number[];
+    item.listPublisherID  &#x3D; [] as number[];;
+    item.listArtistID  &#x3D; [] as number[];
+    item.listBrandID  &#x3D; [] as number[];
+    item.listDepartmentID  &#x3D; [] as number[];
+    item.listCategoryID &#x3D; [] as number[];
+    item.listSubCategoryID  &#x3D; [] as number[];
+    item.listSpecies  &#x3D; [] as number[];
+    item.listSize &#x3D; [] as number[];
+    item.hideSubCategoryItems &#x3D; false;
+    item.pageNumber &#x3D; 1;
+    item.pageSize &#x3D; 50;
+    if (this.userAuthorizationService.isStaff) {
+      item.webMode &#x3D; true;
+    }
+    return item ;
+  }
+
+  updateCurrentMenuItem(menuItem: IMenuItem) {
+    this._currentMeuItem.next(menuItem);
   }
 
   showSearch(value:any)
@@ -543,27 +719,63 @@ export class MenuService {
 
   clearSearch()
   {
-    this.searchIsLoaded.next();
+    this.searchIsLoaded.next(null);
   }
 
   getsearchIsLoaded(): Observable&lt;any&gt; {
     return this.searchIsLoaded.asObservable();
   }
 
-  // this.menuService.updateField(&#x27;DepartmentID&#x27;, id, listOfItems)
-  updateField(site: ISite, fieldName: string,value: any, listofItems: any[] ) {
+  setAllItemsActive(site: ISite): Observable&lt;unknown&gt; {
 
-    const controller &#x3D;  &quot;/Products/&quot;
+    const controller &#x3D;&quot;/MenuItems/&quot;
 
-    const endPoint &#x3D; &quot;UpdateFieldValue&quot;
+    const endPoint &#x3D; &#x60;setAllItemsActive&#x60;
 
-    const parameters &#x3D; &#x60;?fieldName&#x3D;${fieldName}&amp;value&#x3D;${value}&#x60;
+    const parameters &#x3D; &#x60;&#x60;
 
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
-    const uri &#x3D;  this.sitesService.getCacheURI(url)
+    return this.httpClient.get&lt;any&gt;(url)
 
+  }
+
+  // this.menuService.updateField(&#x27;DepartmentID&#x27;, id, listOfItems)
+  updateField(site: ISite, fieldName: string,value: any, listofItems: any[] ) {
+    const controller &#x3D;  &quot;/Products/&quot;
+    const endPoint &#x3D; &quot;UpdateFieldValue&quot;
+    const parameters &#x3D; &#x60;?fieldName&#x3D;${fieldName}&amp;value&#x3D;${value}&#x60;
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+    const uri &#x3D;  this.sitesService.getCacheURI(url)
     return  this.httpClient.put&lt;any[]&gt;(url, listofItems)
+
+  }
+
+  sortCategoriesSubCategoriesFirst(site: ISite): Observable&lt;any&gt; {
+    const controller &#x3D;&quot;/products/&quot;
+
+    const endPoint &#x3D; &#x60;sortCategoriesSubCategoriesFirst&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.get&lt;any&gt;(url)
+
+  }
+
+  // this.menuService.updateField(&#x27;DepartmentID&#x27;, id, listOfItems)
+  deleteProducts(site: ISite,  listofItems: any[] ) {
+
+    const controller &#x3D;&quot;/products/&quot;
+
+    const endPoint &#x3D; &#x60;deleteProducts&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;any&gt;(url, listofItems)
 
   }
 
@@ -596,8 +808,24 @@ export class MenuService {
 
     return  this.httpClient.get&lt;IMenuItem[]&gt;(uri)
 
+  };
+
+  getMenuItemsBySchedule(site: ISite, id: number): Observable&lt;DiscountInfo[]&gt; {
+
+    const controller &#x3D; &#x27;/MenuItems/&#x27;
+
+    const endPoint &#x3D; &#x27;GetMenuItemsBySchedule&#x27;
+
+    const parameters &#x3D;&#x60;?id&#x3D;${id}&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const cache &#x3D;  this.sitesService.getCacheURI(uri)
+
+    return  this.httpCache.get&lt;DiscountInfo[]&gt;(cache)
 
   };
+
 
   getMenuItemsByPage(site: ISite, pageNumber: number, pageSize: number): Observable&lt;IMenuItem[]&gt; {
 
@@ -605,11 +833,9 @@ export class MenuService {
 
     const endPoint &#x3D; &#x27;GetMenuItemsByPage&#x27;
 
-    const parameters &#x3D; &#x27;?pagenumber&#x3D;${pageNumber}&amp;pageSize&#x3D;${pageSize}&#x27;
+    const parameters &#x3D; &#x60;?pagenumber&#x3D;${pageNumber}&amp;pageSize&#x3D;${pageSize}&#x60;
 
     const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
-
-    // return  this.httpClient.get&lt;IMenuItem[]&gt;(uri);
 
     const url &#x3D; { url: uri, cacheMins: 0}
 
@@ -661,6 +887,55 @@ export class MenuService {
     const uri &#x3D;  this.sitesService.getCacheURI(url)
 
     return  this.httpCache.get&lt;any[]&gt;(uri)
+
+  };
+
+
+  getInventoryValues(site: ISite): Observable&lt;any&gt; {
+
+    const post &#x3D; {count: &#x27;0&#x27;};
+
+    const controller &#x3D;  &quot;/Products/&quot;
+
+    const endPoint   &#x3D; &quot;GetInventoryValues&quot;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.httpClient.post&lt;any&gt;(url, post);
+
+  };
+
+  getDepartmentValues(site: ISite): Observable&lt;any&gt; {
+
+    const post &#x3D; {count: &#x27;0&#x27;};
+
+    const controller &#x3D;  &quot;/Products/&quot;
+
+    const endPoint   &#x3D; &quot;GetDepartmentValues&quot;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.httpClient.post&lt;any&gt;(url, post);
+
+  };
+
+  getCategoryValues(site: ISite): Observable&lt;any&gt; {
+
+    const post &#x3D; {count: &#x27;0&#x27;};
+
+    const controller &#x3D;  &quot;/Products/&quot;
+
+    const endPoint   &#x3D; &quot;GetCategoryValues&quot;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.httpClient.post&lt;any&gt;(url, post);
 
   };
 
@@ -722,15 +997,10 @@ export class MenuService {
 
     return  this.httpCache.get&lt;any[]&gt;(uri )
 
-    // return  this.httpClient.get&lt;IProductCategory[]&gt;(url)
-
-    // const uri &#x3D; {url: url, cacheMins: 1 }
-
-    // return  this.httpCache.get&lt;IProductCategory[]&gt;(uri)
-
   };
 
-  getBasicLists(site: ISite, type: string):  Observable&lt;IMenuItem[]&gt;  {
+  //active only
+  getGetCategoriesList(site: ISite, type: string):  Observable&lt;IMenuItem[]&gt;  {
 
     const controller &#x3D;  &#x27;/MenuItems/&#x27;
 
@@ -744,24 +1014,119 @@ export class MenuService {
 
     return  this.httpCache.get&lt;any[]&gt;(uri)
 
-    // return  this.httpClient.get&lt;IMenuItem[]&gt;(uri)
+  }
 
-    // const url &#x3D; { url: uri, cacheMins: 1 }
 
-    // return  this.httpCache.get&lt;IMenuItem[]&gt;(url)
+  getGetCategoriesListActive(site: ISite, type: string, option: number):  Observable&lt;IMenuItem[]&gt;  {
+    const controller &#x3D;  &#x27;/MenuItems/&#x27;
+
+    const endPoint &#x3D; &#x27;getGetCategoriesListActive&#x27;
+
+    const parameters &#x3D; &#x60;?TypeofCategoryasName&#x3D;${type}&amp;activeOption&#x3D;${option}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    // const uri &#x3D;  this.sitesService.getCacheURI(url)
+
+    const uri &#x3D;  this.sitesService.getCacheURI(url)
+
+    // console.log(&#x27;getGetCategoriesListActive&#x27;, uri)
+
+    // return this.httpClient.get&lt;IMenuItem[]&gt;(url)
+    return  this.httpCache.get&lt;any[]&gt;(uri)
+
+  }
+
+  getGetCategoriesListByID(site: ISite, type: string, id: number):  Observable&lt;IMenuItem[]&gt;  {
+
+    const controller &#x3D;  &#x27;/MenuItems/&#x27;
+
+    const endPoint &#x3D; &#x27;getGetCategoriesListByID&#x27;
+
+    const parameters &#x3D; &#x60;?TypeofCategoryasName&#x3D;${type}&amp;id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const uri &#x3D;  this.sitesService.getCacheURI(url)
+
+    return  this.httpCache.get&lt;any[]&gt;(uri)
+
+  }
+
+  getGetCategoriesListAll(site: ISite, type: string):  Observable&lt;IMenuItem[]&gt;  {
+
+    const controller &#x3D;  &#x27;/MenuItems/&#x27;
+
+    const endPoint &#x3D; &#x27;GetGetCategoriesListAll&#x27;
+
+    const parameters &#x3D; &#x60;?TypeofCategoryasName&#x3D;${type}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    // const uri &#x3D;  this.sitesService.getCacheURI(url)
+
+    return  this.httpClient.get&lt;any[]&gt;(url)
+
+  }
+
+  getGetDepartmentList(site: ISite):  Observable&lt;IDepartmentList[]&gt;  {
+    // https://localhost:44309/api/MenuCategories/GetDepartment?id&#x3D;1488
+    const controller &#x3D;  &#x27;/MenuCategories/&#x27;
+
+    const endPoint &#x3D; &#x27;GetDepartments&#x27;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const uri &#x3D;  this.sitesService.getCacheURI(url)
+
+    return  this.httpCache.get&lt;IDepartmentList[]&gt;(uri)
+
+  }
+
+  getGetDepartment(site: ISite,id: any):  Observable&lt;IDepartmentList[]&gt;  {
+
+    const controller &#x3D;  &#x27;/MenuCategories/&#x27;
+
+    const endPoint &#x3D; &#x27;GetDepartment&#x27;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const uri &#x3D;  this.sitesService.getCacheURI(url)
+
+    return  this.httpCache.get&lt;IDepartmentList[]&gt;(uri)
 
   }
 
   getListOfCategories(site: ISite):  Observable&lt;IMenuItem[]&gt;  {
-    return this.getBasicLists(site, &#x60;category&#x60;);
+    return this.getGetCategoriesListActive(site, &#x60;category&#x60;, 0);
   }
 
   getListOfDepartments(site: ISite):  Observable&lt;IMenuItem[]&gt;  {
-    return this.getBasicLists(site, &#x60;department&#x60;);
+    return this.getGetCategoriesListActive(site, &#x60;department&#x60;, 0);
   }
 
   getListOfSubCategories(site: ISite):  Observable&lt;IMenuItem[]&gt;  {
-    return this.getBasicLists(site, &#x60;subcategory&#x60;);
+    return this.getGetCategoriesListActive(site, &#x60;subcategory&#x60;, 0);
+  }
+
+  getListOfSubCategoriesByCategory(site: ISite, id: number):  Observable&lt;IMenuItem[]&gt;  {
+    return this.getGetCategoriesListByID(site, &#x60;subcategory&#x60;, id);
+  }
+
+  getListOfCategoriesAll(site: ISite):  Observable&lt;IMenuItem[]&gt;  {
+    return this.getGetCategoriesListAll(site, &#x60;category&#x60;);
+  }
+
+  getListOfDepartmentsAll(site: ISite):  Observable&lt;IMenuItem[]&gt;  {
+    return this.getGetCategoriesListAll(site, &#x60;department&#x60;);
+  }
+
+  getListOfSubCategoriesAll(site: ISite):  Observable&lt;IMenuItem[]&gt;  {
+    return this.getGetCategoriesListAll(site, &#x60;subcategory&#x60;);
   }
 
   getCategoryAsyncList(site: ISite): Observable&lt;IProductCategory[]&gt; {
@@ -798,14 +1163,7 @@ export class MenuService {
 
     const uri &#x3D;  this.sitesService.getCacheURI(url)
 
-    return  this.httpClient.post&lt;any[]&gt;(url, productSearchModel )
-
-    // return this.httpClient.post&lt;IMenuItem[]&gt;(uri, productSearchModel)
-
-    // const url &#x3D; { url: uri, cacheMins: 1, body: productSearchModel}
-
-    // return this.httpCache.post&lt;IMenuItem[]&gt;(url)
-
+    return this.httpCache.post&lt;IMenuItem[]&gt;(uri, productSearchModel)
   }
 
    //for customer menu
@@ -821,14 +1179,20 @@ export class MenuService {
 
     const uri &#x3D;  this.sitesService.getCacheURI(url)
 
-    const cacheTime &#x3D; this.sitesService.getCurrentCache()
-    if ( cacheTime  &#x3D;&#x3D; 0 ) {
-      return  this.httpClient.post&lt;any&gt;(url, productSearchModel )
+    const cacheTime &#x3D; this.sitesService.getCurrentCache();
+
+    let appCache &#x3D;  JSON.parse(localStorage.getItem(&#x27;appCache&#x27;)) as any;
+    // console.log(&#x27;appCache getMenuItemsBySearchPaged&#x27;, appCache);
+
+    if (appCache) {
+      if (appCache?.value &amp;&amp; appCache?.boolean) {
+        const uri &#x3D; { url: url, cacheMins: appCache.value}
+        return this.httpCache.post&lt;any&gt;(uri, productSearchModel)
+      }
     }
-    return this.httpCache.post&lt;any&gt;(uri, productSearchModel)
 
-
-
+    // console.log(url, productSearchModel)
+    return  this.httpClient.post&lt;any&gt;(url, productSearchModel )
 
   }
 
@@ -846,10 +1210,6 @@ export class MenuService {
 
     return this.httpClient.post&lt;IProductSearchResultsPaged&gt;(url, productSearchModel)
 
-    const uri &#x3D; { url: url, cacheMins: 10, body: productSearchModel}
-
-    // return this.httpCache.post&lt;IProductSearchResults[]&gt;(uri)
-
   }
 
   getProductsBySearchForListsPaging(site: ISite, productSearchModel: ProductSearchModel): Observable&lt;IProductSearchResultsPaged&gt; {
@@ -866,6 +1226,43 @@ export class MenuService {
 
   }
 
+  getItemBasicBySearch(site: ISite, productSearchModel: ProductSearchModel): Observable&lt;IItemBasic[]&gt; {
+
+    const controller &#x3D;  &quot;/MenuItems/&quot;
+
+    const endPoint &#x3D; &quot;GetItemBasicBySearch&quot;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;IItemBasic[]&gt;(url, productSearchModel)
+
+  }
+
+
+  getItemBasicImage(site: ISite, id: number ): Observable&lt;IItemBasicB&gt; {
+
+    const controller &#x3D;  &quot;/MenuItems/&quot;
+
+    const endPoint &#x3D; &quot;GetItemBasicImage&quot;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const uri &#x3D; { url: url, cacheMins: 480}
+
+    const cacheTime &#x3D; this.sitesService.getCurrentCache()
+    if ( cacheTime  &#x3D;&#x3D; 0 ) {
+      return  this.httpCache.get&lt;IItemBasicB&gt;(uri)
+    }
+
+    return this.httpClient.get&lt;IItemBasicB&gt;(url)
+
+
+  }
+
   getItemsNameBySearch(site: ISite, name: string, type: number): Observable&lt;IItemBasic[]&gt; {
 
     const controller &#x3D;  &quot;/MenuItems/&quot;
@@ -878,12 +1275,11 @@ export class MenuService {
 
     return this.httpClient.get&lt;IItemBasic[]&gt;(uri)
 
-    const url &#x3D; { url: uri, cacheMins: 0}
+    // const url &#x3D; { url: uri, cacheMins: 0}
 
-    return this.httpCache.get&lt;IItemBasic[]&gt;(url)
+    // return this.httpCache.get&lt;IItemBasic[]&gt;(url)
 
   }
-
 
   getProductListSearch(site: ISite, search:string): Observable&lt;IMenuItem[]&gt; {
 
@@ -904,13 +1300,6 @@ export class MenuService {
     const uri &#x3D;  this.sitesService.getCacheURI(url)
 
     return  this.httpCache.get&lt;any[]&gt;(uri)
-
-    // return this.httpClient.post&lt;IMenuItem[]&gt;(uri, productSearchModel)
-
-    // console.log(&#x27;getProductListSearch&#x27;)
-    // const url &#x3D; { url: uri, cacheMins: 1, body: productSearchModel}
-
-    // return this.httpCache.post&lt;IMenuItem[]&gt;(url)
 
   }
 
@@ -940,15 +1329,14 @@ export class MenuService {
 
     const endPoint &#x3D; &#x60;GetMenuItemByID&#x60;
 
-    const parameters &#x3D; &#x60;?ID&#x3D;${id}&#x60;
+    const parameters &#x3D; &#x60;?ID&#x3D;${id}&amp;quantity&#x3D;${1}&#x60;
 
     const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
     return  this.httpClient.get&lt;IMenuItem&gt;(uri)
-//
-    const url &#x3D; { url: uri, cacheMins: 0}
-
-    return this.httpCache.get&lt;IMenuItem&gt;(url)
+    // //
+    //     const url &#x3D; { url: uri, cacheMins: 0}
+    //     return this.httpCache.get&lt;IMenuItem&gt;(url)
 
   };
 
@@ -964,17 +1352,11 @@ export class MenuService {
 
     return  this.httpClient.get&lt;IProduct&gt;(url)
 
-    // const uri &#x3D;  this.sitesService.getCacheURI(url)
-
-    // return  this.httpCache.get&lt;any&gt;(uri)
-
-    // const url &#x3D; { url: uri, cacheMins: 0}
-
-    // return  this.httpClient.get&lt;IProduct&gt;(url)
-
   };
 
   getMenuItemByID(site: ISite, id: any): Observable&lt;IMenuItem&gt; {
+
+    if (!id)  { return EMPTY };
 
     const controller &#x3D;  &#x27;/MenuItems/&#x27;
 
@@ -985,25 +1367,37 @@ export class MenuService {
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
     return  this.httpClient.get&lt;IMenuItem&gt;(url)
-
-    const uri &#x3D;  this.sitesService.getCacheURI(url)
-
-    return  this.httpCache.get&lt;any&gt;(uri)
-
-
-    // const url &#x3D; { url: uri, cacheMins: 0}
-
-    // return  this.httpClient.get&lt;IMenuItem&gt;(uri  )
-
   };
 
-  getMenuItemByBarcode(site: ISite, barcode:any): Observable&lt;IMenuItem[]&gt; {
+
+  getMenuItemByIDLinked(site: ISite, id: any, priceLink : number): Observable&lt;IMenuItem&gt; {
+
+    if (!priceLink || priceLink &#x3D;&#x3D; null) { priceLink &#x3D; 0}
+    if (!id)  { return of(null) };
+
+    const controller &#x3D;  &#x27;/MenuItems/&#x27;
+
+    const endPoint &#x3D; &#x27;getMenuItemByIDLinked&#x27;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&amp;quantity&#x3D;1&amp;priceLink&#x3D;${priceLink}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.httpClient.get&lt;IMenuItem&gt;(url)
+  };
+
+
+  getMenuItemByBarcode(site: ISite, barcode:any, clientID: number): Observable&lt;IMenuItem[]&gt; {
+
+    if (!clientID || clientID &#x3D;&#x3D; null || clientID &#x3D;&#x3D; undefined) {
+      clientID &#x3D; 0;
+    }
 
     const controller &#x3D;&quot;/MenuItems/&quot;
 
     const endPoint &#x3D; &#x60;GetMenuItemByBarcode&#x60;
 
-    const parameters &#x3D; &#x60;?barcode&#x3D;${barcode}&amp;quantity&#x3D;1&#x60;
+    const parameters &#x3D; &#x60;?barcode&#x3D;${barcode}&amp;quantity&#x3D;1&amp;clientID&#x3D;${clientID}&#x60;
 
     const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
@@ -1015,13 +1409,13 @@ export class MenuService {
 
    saveProduct(site: ISite, product:IProduct): Observable&lt;IProduct&gt; {
 
-    if (product.id) {
+    if (product.id &amp;&amp; product.id !&#x3D; 0) {
       return  this.putProduct(site, product.id, product);
 
     } else {
       return this.postProduct(site, product);
-
     }
+
   }
 
    postProduct(site: ISite, product: IProduct): Observable&lt;IProduct&gt; {
@@ -1053,7 +1447,6 @@ export class MenuService {
       return  this.httpClient.put&lt;any&gt;(url, product)
 
     }
-
   };
 
   getSpeciesType(): IItemBasic[] {
@@ -1069,9 +1462,185 @@ export class MenuService {
     }
   }
 
+  getPackagingMaterialArray(menuItem: IMenuItem): string[] {
+    if (menuItem.itemType &amp;&amp; menuItem.itemType.packagingMaterial) {
+      return menuItem.itemType.packagingMaterial.split(&#x27;,&#x27;)
+    }
+    return null
+  }
+
+  getModiferPrices(menuItem: IMenuItem) {
+    if (menuItem &amp;&amp; menuItem.priceCategories &amp;&amp; menuItem.priceCategories.productPrices &amp;&amp; menuItem.priceCategories.productPrices) {
+      const items &#x3D; menuItem.priceCategories.productPrices;
+      if ( items.length&gt;0 ) {
+
+         items.filter(prices &#x3D;&gt; { return prices.priceType &#x3D;&#x3D; 2})
+         let list &#x3D;  items.filter( prices &#x3D;&gt;{ return prices.priceType &#x3D;&#x3D; 2;})
+         if (list.length&gt;0){
+           menuItem.retail &#x3D; list[0].retail;
+           menuItem.unitTypeID &#x3D; list[0].unitTypeID;
+           menuItem.productPrice &#x3D; list[0];
+           return menuItem
+        }
+      }
+    }
+    return menuItem;
+  }
+
+  getPricesFromProductPrices(menuItem: IMenuItem) {
+    if (menuItem.priceCategories &amp;&amp; menuItem.priceCategories.productPrices &amp;&amp; menuItem.priceCategories.productPrices) {
+      const items &#x3D; menuItem.priceCategories.productPrices;
+      if ( items.length&gt;0 ) {
+         items.filter(prices &#x3D;&gt; { return prices.priceType &#x3D;&#x3D; 2})
+         let list &#x3D;  items.filter( prices &#x3D;&gt;{ return prices.priceType &#x3D;&#x3D; 2;})
+         if (list.length&gt;0){
+           menuItem.retail &#x3D; list[0].retail;
+           menuItem.unitTypeID &#x3D; list[0].unitTypeID;
+           menuItem.productPrice &#x3D; list[0];
+           menuItem.priceCategories.productPrices &#x3D; list;
+           return menuItem
+        }
+      }
+    }
+    return menuItem;
+  }
 
   private handleError(error: any) {
     return throwError(error);
+  }
+
+  importFlowProducts(site: ISite, list: FlowProducts[]): Observable&lt;ImportFlowProductResults&gt; {
+
+    const controller &#x3D;&quot;/products/&quot;
+
+    const endPoint &#x3D; &#x60;ImportFlowProducts&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;any&gt;(url, list)
+
+  };
+
+
+  getImportCountProgress(site: ISite): Observable&lt;any&gt; {
+
+    const controller &#x3D;&quot;/products/&quot;
+
+    const endPoint &#x3D; &#x60;GetImportCountProgress&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.get&lt;any&gt;(url)
+
+  };
+
+  importProducts(site: ISite, list: IProduct[]): Observable&lt;ImportProductResults&gt; {
+
+    const controller &#x3D;&quot;/products/&quot;
+
+    const endPoint &#x3D; &#x60;ImportProducts&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;any&gt;(url, list)
+
+  };
+
+  importFlowStrains(site: ISite, list: FlowStrain[]): Observable&lt;ImportFlowStainsResults&gt; {
+
+    const controller &#x3D;&quot;/products/&quot;
+
+    const endPoint &#x3D; &#x60;ImportFlowStrains&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;any&gt;(url, list)
+
+  };
+
+
+  importFlowPrices(site: ISite, list: FlowPrice[]): Observable&lt;ImportFlowPriceResults&gt; {
+
+    const controller &#x3D;&quot;/priceCategories/&quot;
+
+    const endPoint &#x3D; &#x60;ImportFlowPrices&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;any&gt;(url, list)
+
+  };
+
+
+  importFlowInventory(site: ISite, list: FlowInventory[]): Observable&lt;ImportFlowInventoryResults&gt; {
+
+    const controller &#x3D;&quot;/InventoryAssignments/&quot;
+
+    const endPoint &#x3D; &#x60;ImportFlowInventory&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;any&gt;(url, list)
+
+  };
+
+  importInventory(site: ISite, list: IInventoryAssignment[]): Observable&lt;any&gt; {
+
+    const controller &#x3D;&quot;/InventoryAssignments/&quot;
+
+    const endPoint &#x3D; &#x60;ImportFlowInventory&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;any&gt;(url, list)
+
+  };
+
+  resetProgressIndicator(site: ISite): Observable&lt;any&gt; {
+
+    const controller &#x3D;&quot;/products/&quot;
+
+    const endPoint &#x3D; &#x60;ResetProgressImport&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.get&lt;any&gt;(url)
+
+  };
+
+  addSearchFilter(inputForm: UntypedFormGroup, items: any[],
+                  types: string) {
+    if (!inputForm) { return }
+    const control &#x3D; inputForm.get(types) as UntypedFormArray;
+    if (!control)  { return }
+    if (control) { control.clear(); }
+    if (items) {
+      items.forEach( item &#x3D;&gt;  {
+          control.push(this.fb.group({
+            id:   [item.id], //    number;
+            name: [item.name]
+          }))
+        }
+      )
+      return
+    }
+    // this.updatePriceSchedule(inputForm.value)
   }
 }
 
@@ -1081,14 +1650,15 @@ export class MenuService {
 </div>
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -1100,6 +1670,15 @@ export class MenuService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
@@ -1109,8 +1688,8 @@ export class MenuService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

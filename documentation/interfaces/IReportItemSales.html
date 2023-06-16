@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -42,24 +42,31 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Interfaces</li>
-  <li
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
   >
   IReportItemSales</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -70,7 +77,7 @@
 
 
 
-        <section>
+        <section data-compodoc="block-index">
             <h3 id="index">Index</h3>
             <table class="table table-sm table-bordered index-table">
                 <tbody>
@@ -113,6 +120,12 @@
                                         </a>
                                 </li>
                                 <li>
+                                        <a href="#client" 
+>
+                                            client
+                                        </a>
+                                </li>
+                                <li>
                                         <a href="#clientID" 
 >
                                             clientID
@@ -128,6 +141,12 @@
                                         <a href="#completionDateShort" 
 >
                                             completionDateShort
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#cost" 
+>
+                                            cost
                                         </a>
                                 </li>
                                 <li>
@@ -161,6 +180,12 @@
                                         </a>
                                 </li>
                                 <li>
+                                        <a href="#employeeName" 
+>
+                                            employeeName
+                                        </a>
+                                </li>
+                                <li>
                                         <a href="#giftCardType" 
 >
                                             giftCardType
@@ -179,9 +204,21 @@
                                         </a>
                                 </li>
                                 <li>
+                                        <a href="#itemCost" 
+>
+                                            itemCost
+                                        </a>
+                                </li>
+                                <li>
                                         <a href="#itemPercentageDiscount" 
 >
                                             itemPercentageDiscount
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#itemPrepped" 
+>
+                                            itemPrepped
                                         </a>
                                 </li>
                                 <li>
@@ -230,6 +267,12 @@
                                         <a href="#posName" 
 >
                                             posName
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#printed" 
+>
+                                            printed
                                         </a>
                                 </li>
                                 <li>
@@ -311,6 +354,12 @@
                                         </a>
                                 </li>
                                 <li>
+                                        <a href="#voidReason" 
+>
+                                            voidReason
+                                        </a>
+                                </li>
+                                <li>
                                         <a href="#weightedItem" 
 >
                                             weightedItem
@@ -331,7 +380,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-properties">
                 <h3 id="inputs">Properties</h3>
                     <table class="table table-sm table-bordered">
                         <tbody>
@@ -502,6 +551,39 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
+                                        <a name="client"></a>
+                                        <span class="name "><b>client</b>
+                                            <a href="#client">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>client:         <code><a href="../interfaces/ClientsPOSOrders.html" target="_self" >ClientsPOSOrders</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../interfaces/ClientsPOSOrders.html" target="_self" >ClientsPOSOrders</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
                                         <a name="clientID"></a>
                                         <span class="name "><b>clientID</b>
                                             <a href="#clientID">
@@ -587,6 +669,39 @@
                                     <tr>
                                         <td class="col-md-4">
                                             <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="cost"></a>
+                                        <span class="name "><b>cost</b>
+                                            <a href="#cost">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>cost:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
 
                                         </td>
                                     </tr>
@@ -766,6 +881,39 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
+                                        <a name="employeeName"></a>
+                                        <span class="name "><b>employeeName</b>
+                                            <a href="#employeeName">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>employeeName:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
                                         <a name="giftCardType"></a>
                                         <span class="name "><b>giftCardType</b>
                                             <a href="#giftCardType">
@@ -865,6 +1013,39 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
+                                        <a name="itemCost"></a>
+                                        <span class="name "><b>itemCost</b>
+                                            <a href="#itemCost">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>itemCost:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
                                         <a name="itemPercentageDiscount"></a>
                                         <span class="name "><b>itemPercentageDiscount</b>
                                             <a href="#itemPercentageDiscount">
@@ -884,6 +1065,39 @@
                                     <tr>
                                         <td class="col-md-4">
                                             <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="itemPrepped"></a>
+                                        <span class="name "><b>itemPrepped</b>
+                                            <a href="#itemPrepped">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>itemPrepped:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
 
                                         </td>
                                     </tr>
@@ -1140,6 +1354,39 @@
                                 <tr>
                                     <td class="col-md-4">
                                         <code>posName:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="printed"></a>
+                                        <span class="name "><b>printed</b>
+                                            <a href="#printed">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>printed:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
 </code>
                                     </td>
                                 </tr>
@@ -1591,6 +1838,39 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
+                                        <a name="voidReason"></a>
+                                        <span class="name "><b>voidReason</b>
+                                            <a href="#voidReason">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>voidReason:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
                                         <a name="weightedItem"></a>
                                         <span class="name "><b>weightedItem</b>
                                             <a href="#weightedItem">
@@ -1657,21 +1937,50 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
 import { HttpClient } from &#x27;@angular/common/http&#x27;;
 import { AuthenticationService } from &#x27;src/app/_services/system/authentication.service&#x27;;
-import { Observable, } from &#x27;rxjs&#x27;;
-import { ISite }   from &#x27;src/app/_interfaces&#x27;;
+import { Observable, of, } from &#x27;rxjs&#x27;;
+import { ClientsPOSOrders, IClientTable, ISite }   from &#x27;src/app/_interfaces&#x27;;
 import { SitesService } from &#x27;./sites.service&#x27;;
+import { saveAs } from &#x27;file-saver&#x27;
+import { Papa, UnparseConfig } from &#x27;ngx-papaparse&#x27;;
+// Generated by https://quicktype.io
+// Generated by https://quicktype.io
 
-// Generated by https://quicktype.io
-// Generated by https://quicktype.io
+export interface IReportItemSaleSummary {
+  results: IReportItemSales[];
+  summary: IReportItemSales;
+  resultMessage: string;
+  site         : ISite;
+}
+
+export interface  ReportItemSalesOptimized {
+  productName:             string;
+  itemTotal:               number;
+  taxTotal1:               number;
+  taxTotal2:               number;
+  taxTotal3:               number;
+  cRV:                     number;
+  cost                   : number;
+  quantity:                number;
+  unitPrice:               number;
+  orderCashDiscount: number;
+  itemCashDiscounts: number;
+  itemPercentageDiscount: number;
+  pointDiscount: number;
+  employee:                string;
+  completionDateShort:     string;
+  department: string;
+  category: string
+}
 
 export interface IReportItemSales {
   productName:             string;
   serialNumber:            string;
   employee:                string;
+  employeeName:            string;
   posName:                 string;
   zRunID:                  string;
   balanceSheetID:          number;
@@ -1709,7 +2018,53 @@ export interface IReportItemSales {
   department:              string;
   weightedItem:            number;
   siteID:                  number;
+  cost                   : number;
+  itemCost               : number;
+  voidReason    : string;
+  printed       : string;
+  itemPrepped   : string;
+  client        : ClientsPOSOrders;
+}
 
+export interface ItemPOMetrics {
+   quantity: number;
+   cost: number;
+   net : number;
+   vendorName : string;
+}
+
+export interface POSItemSearchModel {
+  completionDate_From : string;
+  completionDate_To : string;
+  orderDate_From : string;
+  orderDate_To : string;
+  serviceTypes : string[]
+  serviceType : string;
+  serviceTypeID : number
+  closedOpenAllOrders : number;
+  employeeID : number
+  scheduleDate_From : string;
+  ccheduleDate_To : string;
+  pageSize : number
+  pageNumber : number
+  pageCount : number
+  currentPage : number
+  lastPage : number
+  useNameInAllFieldsForSearch : Boolean
+  routeID : number
+  routeDetailID : number
+  greaterThanZero : number
+  orderID : number
+  clientID :number;
+  orderBy : number
+  prepStatus :number;
+  printLocation :number;
+  history : boolean;
+  zrunID : string;
+  reportRunID :number;
+  showVoids: boolean;
+  barcode: string;
+  productName: string;
 }
 
 export interface IReportingSearchModel {
@@ -1729,10 +2084,19 @@ export interface IReportingSearchModel {
   groupByProduct:               boolean;
   groupByCategory:              boolean;
   groupByDepartment:            boolean;
+  groupByType                 : boolean;
   groupByDate:                  boolean;
   weightedItem:                 boolean;
   productsOnly:                 boolean;
   discountsOnly:                boolean;
+  zrunID                  :     string;
+  scheduleDateStart       :     string;
+  scheduleDateEnd         :     string;
+  pendingTransactions: boolean;
+  removeGiftCards: boolean;
+  itemPrepped: number;
+  itemPrinted: number;
+  taxFilter: number;
 }
 
 // Generated by https://quicktype.io
@@ -1750,11 +2114,35 @@ export interface ITaxReport {
   itemCashDiscount:         number;
   orderPercentDiscount:     number;
   itemLoyaltyPointDiscount: number;
-  cRV:                      number;
+  crv:                      number;
   startDate:                string;
   endDate:                  string;
   giftCardIssuances:        number;
   paidOuts:                 number;
+  resultsMessage          : string;
+  productName              : string;
+  itemType                : string;
+  category                : string;
+  department              : string;
+  scheduleDate            : string;
+  completed:boolean
+}
+
+export interface ITaxReportOptimized {
+  nonTaxableSalesTotal:     number;
+  taxTotal1:                number;
+  taxTotal2:                number;
+  taxTotal3:                number;
+  grossSales:               number;
+  netSales:                 number;
+  itemTotal:                number;
+  crv:                      number;
+  giftCardIssuances:        number;
+  paidOuts:                 number;
+  productName              : string;
+  itemType                : string;
+  category                : string;
+  department              : string;
 }
 
 
@@ -1763,29 +2151,115 @@ export interface ITaxReport {
 })
 export class ReportingItemsSalesService {
 
+
   constructor( private http: HttpClient, private auth: AuthenticationService,
+               private papa: Papa,
                private sitesService: SitesService) { }
 
   //Tax Sales Report Standard
-  putSalesTaxReport(site: ISite, startDate: string, endDate: string): Observable&lt;ITaxReport&gt; {
+  putSalesTaxReport(site: ISite, filter: IReportingSearchModel): Observable&lt;ITaxReport&gt; {
 
     const controller &#x3D; &#x60;/ReportItemSales/&#x60;
 
     const endPoint &#x3D; &#x60;PutSalesTaxReport&#x60;
 
-    const filter &#x3D;{} as IReportingSearchModel
-    filter.startDate &#x3D; startDate
-    filter.endDate &#x3D; endDate
-
+    // const filter &#x3D;{} as IReportingSearchModel
+    // filter.startDate &#x3D; startDate
+    // filter.endDate &#x3D; endDate
+    // filter.zrunID  &#x3D; zrunID
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
 
     return  this.http.put&lt;any&gt;(url, filter)
 
   };
 
-  searchItemReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable&lt;IReportItemSales&gt; {
 
-    const  headers &#x3D; {  observe: &#x27;headers&#x27; }
+  listAdjustedItems(site: ISite, searchModel: POSItemSearchModel): Observable&lt;unknown&gt; {
+
+    const controller &#x3D; &#x60;/ReportItemSales/&#x60;
+
+    const endPoint &#x3D; &#x60;ListAdjustedItems&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+    console.log(searchModel)
+    return  this.http.post&lt;unknown&gt;(url, searchModel )
+  }
+
+  getItemSalesReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable&lt;IReportItemSales[]&gt; {
+
+    IReportingSearchModel.productsOnly &#x3D; true;
+
+    const controller &#x3D; &#x60;/ReportItemSales/&#x60;
+
+    const endPoint &#x3D; &#x60;getItemSalesReport&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+    return  this.http.put&lt;IReportItemSales[]&gt;(url, IReportingSearchModel )
+
+  }
+
+  getGifCardIssueReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable&lt;IReportItemSales[]&gt; {
+
+    IReportingSearchModel.productsOnly &#x3D; true;
+
+    IReportingSearchModel.removeGiftCards &#x3D; true;
+
+    const controller &#x3D; &#x60;/ReportItemSales/&#x60;
+
+    const endPoint &#x3D; &#x60;getItemSalesReport&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+    return  this.http.put&lt;IReportItemSales[]&gt;(url, IReportingSearchModel )
+
+  }
+
+  getCategorySalesReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable&lt;IReportItemSales[]&gt; {
+
+    IReportingSearchModel.productsOnly &#x3D; true;
+
+    const controller &#x3D; &#x60;/ReportItemSales/&#x60;
+
+    const endPoint &#x3D; &#x60;getCategorySalesReport&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+    return  this.http.put&lt;IReportItemSales[]&gt;(url, IReportingSearchModel )
+
+  }
+
+  getDepartmentSalesReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable&lt;IReportItemSales[]&gt; {
+
+    IReportingSearchModel.productsOnly &#x3D; true;
+
+    const controller &#x3D; &#x60;/ReportItemSales/&#x60;
+
+    const endPoint &#x3D; &#x60;getDepartmentSalesReport&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+    return  this.http.put&lt;IReportItemSales[]&gt;(url, IReportingSearchModel )
+
+}
+
+  getTypeSalesReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable&lt;IReportItemSales[]&gt; {
+
+    IReportingSearchModel.productsOnly &#x3D; true;
+
+    const controller &#x3D; &#x60;/ReportItemSales/&#x60;
+
+    const endPoint &#x3D; &#x60;getTypeSalesReport&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+    return  this.http.put&lt;IReportItemSales[]&gt;(url, IReportingSearchModel )
+
+  }
+
+  searchItemReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable&lt;IReportItemSales[]&gt; {
+
+    IReportingSearchModel.productsOnly &#x3D; true;
 
     const controller &#x3D; &#x60;/ReportItemSales/&#x60;
 
@@ -1793,13 +2267,19 @@ export class ReportingItemsSalesService {
 
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
 
-    return  this.http.put&lt;any&gt;(url, IReportingSearchModel, {headers} )
+    return  this.http.put&lt;IReportItemSales[]&gt;(url, IReportingSearchModel )
 
   }
 
-  groupItemSales(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable&lt;IReportItemSales&gt; {
+  //https://localhost:44309/api/ReportItemSales/GroupItemSales
+  //https://ccsposdemo.ddns.net:4444/api/ReportItemSales/GroupItemSales
+  //{ &quot;startdate&quot;: &quot;07/01/2018&quot;, &quot;enddate&quot;: &quot;12/10/2020&quot;, &quot;groupByProduct&quot;: &quot;true&quot; }
+  groupItemSales(site: ISite, searchModel: IReportingSearchModel): Observable&lt;IReportItemSaleSummary&gt; {
 
-    const  headers &#x3D; {  observe: &#x27;headers&#x27; }
+    // console.log(searchModel)
+    if (!site || !site.url) { return of(null)}
+
+    searchModel.productsOnly &#x3D; true;
 
     const controller &#x3D; &#x60;/ReportItemSales/&#x60;
 
@@ -1807,9 +2287,53 @@ export class ReportingItemsSalesService {
 
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
 
-    return  this.http.put&lt;any&gt;(url, IReportingSearchModel, {headers} )
+    return  this.http.put&lt;IReportItemSaleSummary&gt;(url, searchModel)
 
   }
+
+  downloadFile(data: any, fileName: string) {
+
+    const replacer &#x3D; (key, value) &#x3D;&gt; value &#x3D;&#x3D;&#x3D; null ? &#x27;&#x27; : value; // specify how you want to handle null values here
+    let header
+    if (data[0]) {
+      header &#x3D; Object.keys(data[0]);
+      let csv &#x3D; data.map(row &#x3D;&gt; header.map(fieldName &#x3D;&gt; JSON.stringify(row[fieldName], replacer)).join(&#x27;,&#x27;));
+
+      if (header) {
+        csv.unshift(header.join(&#x27;,&#x27;));
+      }
+
+      let csvArray &#x3D; csv.join(&#x27;\r\n&#x27;);
+
+      var blob &#x3D; new Blob([csvArray], {type: &#x27;text/csv&#x27; })
+      saveAs(blob, &#x60;${fileName}.csv&#x60;);
+    }
+  }
+    downloadFileOptions(data: any, fileName: string, removeHeader: boolean) {
+      const replacer &#x3D; (key, value) &#x3D;&gt; value &#x3D;&#x3D;&#x3D; null ? &#x27;&#x27; : value; // specify how you want to handle null values here
+      let header
+      if (data[0]) {
+        header &#x3D; Object.keys(data[0]);
+        let csv &#x3D; data.map(row &#x3D;&gt; header.map(fieldName &#x3D;&gt; JSON.stringify(row[fieldName], replacer)).join(&#x27;,&#x27;));
+
+        if (removeHeader) {
+          csv.unshift(header.join(&#x27;,&#x27;));
+        }
+
+        let csvArray &#x3D; csv.join(&#x27;\r\n&#x27;);
+
+        var blob &#x3D; new Blob([csvArray], {type: &#x27;text/csv&#x27; })
+        saveAs(blob, &#x60;${fileName}.csv&#x60;);
+      }
+    }
+
+    downloadPapa(data: any, fileName: string, options?: UnparseConfig) {
+
+      var csv &#x3D; this.papa.unparse(data,options);
+      var blob &#x3D; new Blob([csv], {type: &#x27;text/csv;charset&#x3D;utf-8;&#x27;});
+      saveAs(blob, &#x60;${fileName}.csv&#x60;);
+
+    }
 
 
 }
@@ -1818,14 +2342,15 @@ export class ReportingItemsSalesService {
 </div>
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -1837,6 +2362,15 @@ export class ReportingItemsSalesService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
@@ -1846,8 +2380,8 @@ export class ReportingItemsSalesService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

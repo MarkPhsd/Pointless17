@@ -76,7 +76,7 @@ export class CashPaymentButtonComponent implements OnInit {
         if (!order) {
           return this.sitesService.notifyObs('Order not found ', 'close', 5000, 'red')
         }
-        this.orderService.updateOrderSubscription(data)
+        this.orderMethodsService.updateOrderSubscription(data)
         this.router.navigate(['pos-payment']);
         return of(data)
       })),

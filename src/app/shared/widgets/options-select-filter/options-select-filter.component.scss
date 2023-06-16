@@ -1,0 +1,14 @@
+.list {
+  max-height: 300px;
+  overflow-y: hidden;
+  overflow-x: auto;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+  align-items: flex-start;
+}
+
+.radio-button{
+  margin: 5px;
+}

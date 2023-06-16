@@ -1,0 +1,1396 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >PromptWalkThroughService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_services/menuPrompt/prompt-walk-through.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_accordionStep" >_accordionStep</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_orderPromptGroup" >_orderPromptGroup</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_promptTotal" >_promptTotal</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_savePromptSelection" >_savePromptSelection</a>
+                            </li>
+                            <li>
+                                <a href="#accordionStep" >accordionStep</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#accordionStep$" >accordionStep$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#orderPromptGroup$" >orderPromptGroup$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#promptTotal$" >promptTotal$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#savePromptSelection$" >savePromptSelection$</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#canItemBeAdded" >canItemBeAdded</a>
+                            </li>
+                            <li>
+                                <a href="#getPromptTotal" >getPromptTotal</a>
+                            </li>
+                            <li>
+                                <a href="#initPromptWalkThrough" >initPromptWalkThrough</a>
+                            </li>
+                            <li>
+                                <a href="#nextStep" >nextStep</a>
+                            </li>
+                            <li>
+                                <a href="#previousStep" >previousStep</a>
+                            </li>
+                            <li>
+                                <a href="#setQuantityCheck" >setQuantityCheck</a>
+                            </li>
+                            <li>
+                                <a href="#updateAccordionStep" >updateAccordionStep</a>
+                            </li>
+                            <li>
+                                <a href="#updatePromptGroup" >updatePromptGroup</a>
+                            </li>
+                            <li>
+                                <a href="#updateSavePromptSelection" >updateSavePromptSelection</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(orderService: <a href="../injectables/OrdersService.html" target="_self">OrdersService</a>, OrderItemService: <a href="../injectables/POSOrderItemService.html" target="_self">POSOrderItemService</a>, promptSubService: <a href="../injectables/PromptGroupService.html" target="_self">PromptGroupService</a>, promptSubGroupService: <a href="../injectables/PromptSubGroupsService.html" target="_self">PromptSubGroupsService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="82" class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:82</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>orderService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/OrdersService.html" target="_self" >OrdersService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>OrderItemService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/POSOrderItemService.html" target="_self" >POSOrderItemService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>promptSubService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/PromptGroupService.html" target="_self" >PromptGroupService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>promptSubGroupService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/PromptSubGroupsService.html" target="_self" >PromptSubGroupsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="canItemBeAdded"></a>
+                    <span class="name">
+                        <span ><b>canItemBeAdded</b></span>
+                        <a href="#canItemBeAdded"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>canItemBeAdded(orderPromptGroup: <a href="../interfaces/IPromptGroup.html" target="_self">IPromptGroup</a>, index: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, subGroupInfo: <a href="../interfaces/PromptSubGroups.html" target="_self">PromptSubGroups</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="92"
+                            class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:92</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>orderPromptGroup</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPromptGroup.html" target="_self" >IPromptGroup</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>index</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>subGroupInfo</td>
+                                    <td>
+                                                <code><a href="../interfaces/PromptSubGroups.html" target="_self" >PromptSubGroups</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IPromptGroup.html" target="_self" >IPromptGroup</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPromptTotal"></a>
+                    <span class="name">
+                        <span ><b>getPromptTotal</b></span>
+                        <a href="#getPromptTotal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPromptTotal(prompt: <a href="../interfaces/IPromptGroup.html" target="_self">IPromptGroup</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="178"
+                            class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:178</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>prompt</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPromptGroup.html" target="_self" >IPromptGroup</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initPromptWalkThrough"></a>
+                    <span class="name">
+                        <span ><b>initPromptWalkThrough</b></span>
+                        <a href="#initPromptWalkThrough"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initPromptWalkThrough(order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>, promptGroup: <a href="../interfaces/IPromptGroup.html" target="_self">IPromptGroup</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="172"
+                            class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:172</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>order</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPOSOrder.html" target="_self" >IPOSOrder</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>promptGroup</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPromptGroup.html" target="_self" >IPromptGroup</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IPromptGroup.html" target="_self" >IPromptGroup</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="nextStep"></a>
+                    <span class="name">
+                        <span ><b>nextStep</b></span>
+                        <a href="#nextStep"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>nextStep()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="72"
+                            class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:72</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="previousStep"></a>
+                    <span class="name">
+                        <span ><b>previousStep</b></span>
+                        <a href="#previousStep"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>previousStep()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="78"
+                            class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:78</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setQuantityCheck"></a>
+                    <span class="name">
+                        <span ><b>setQuantityCheck</b></span>
+                        <a href="#setQuantityCheck"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setQuantityCheck(prompt: <a href="../interfaces/PromptSubGroups.html" target="_self">PromptSubGroups</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="127"
+                            class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:127</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>prompt</td>
+                                    <td>
+                                                <code><a href="../interfaces/PromptSubGroups.html" target="_self" >PromptSubGroups</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/PromptSubGroups.html" target="_self" >PromptSubGroups</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateAccordionStep"></a>
+                    <span class="name">
+                        <span ><b>updateAccordionStep</b></span>
+                        <a href="#updateAccordionStep"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateAccordionStep(number)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="67"
+                            class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:67</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>number</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updatePromptGroup"></a>
+                    <span class="name">
+                        <span ><b>updatePromptGroup</b></span>
+                        <a href="#updatePromptGroup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updatePromptGroup(orderPromptGroup: <a href="../interfaces/IPromptGroup.html" target="_self">IPromptGroup</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="57"
+                            class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:57</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>orderPromptGroup</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPromptGroup.html" target="_self" >IPromptGroup</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateSavePromptSelection"></a>
+                    <span class="name">
+                        <span ><b>updateSavePromptSelection</b></span>
+                        <a href="#updateSavePromptSelection"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateSavePromptSelection(result: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="53"
+                            class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:53</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>result</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_accordionStep"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>_accordionStep</b></span>
+                        <a href="#_accordionStep"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new BehaviorSubject&lt;number&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:49</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_orderPromptGroup"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>_orderPromptGroup</b></span>
+                        <a href="#_orderPromptGroup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new BehaviorSubject&lt;IPromptGroup&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:43</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_promptTotal"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>_promptTotal</b></span>
+                        <a href="#_promptTotal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new BehaviorSubject&lt;number&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:46</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_savePromptSelection"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>_savePromptSelection</b></span>
+                        <a href="#_savePromptSelection"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new BehaviorSubject&lt;boolean&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:40</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="accordionStep"></a>
+                    <span class="name">
+                        <span ><b>accordionStep</b></span>
+                        <a href="#accordionStep"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:51</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="accordionStep$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>accordionStep$</b></span>
+                        <a href="#accordionStep$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._accordionStep.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:50</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="orderPromptGroup$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>orderPromptGroup$</b></span>
+                        <a href="#orderPromptGroup$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._orderPromptGroup.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:44</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="promptTotal$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>promptTotal$</b></span>
+                        <a href="#promptTotal$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._promptTotal.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:47</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="savePromptSelection$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>savePromptSelection$</b></span>
+                        <a href="#savePromptSelection$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._savePromptSelection.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/_services/menuPrompt/prompt-walk-through.service.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { BehaviorSubject } from &#x27;rxjs&#x27;;
+import { IPOSOrder } from &#x27;src/app/_interfaces&#x27;;
+import { IPromptGroup, PromptSubGroups } from &#x27;src/app/_interfaces/menu/prompt-groups&#x27;;
+import { OrdersService } from &#x27;..&#x27;;
+import { POSOrderItemService } from &#x27;../transactions/posorder-item-service.service&#x27;;
+import { PromptGroupService } from &#x27;./prompt-group.service&#x27;;
+import { PromptSubGroupsService } from &#x27;./prompt-sub-groups.service&#x27;;
+
+// export interface OrderPromptGroup {
+// 	orderID      : number;
+// 	promptGroupID: number;
+//   orderItem    : IPOSOrderItem;
+//   mainMenuItem : IMenuItem;
+// 	prompts	     : OrderPromptSubGroups[];
+// }
+
+// export interface OrderPromptSubGroups {
+// 	 promptSubGroupID : number;
+// 	 items  		      : IMenuItem[];
+// 	 minQuantity      : number;
+// 	 maxQuantity      : number;
+// 	 itemsSelected    : MenuItemsSelected[];
+// 	 quantityMet      : boolean;
+// }
+
+// export interface MenuItemsSelected {
+// 	 menuItem         : IMenuItem;
+// 	 unitTypeID       : number;
+// 	 quantity         : number;
+// 	 price            : number;
+// 	 orderPromptGroup : OrderPromptGroup[];s
+// }
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class PromptWalkThroughService {
+
+  private _savePromptSelection       &#x3D; new BehaviorSubject&lt;boolean&gt;(null);
+  public  savePromptSelection$        &#x3D; this._savePromptSelection.asObservable();
+
+  private _orderPromptGroup    &#x3D; new BehaviorSubject&lt;IPromptGroup&gt;(null);
+  public orderPromptGroup$     &#x3D; this._orderPromptGroup.asObservable();
+
+  private _promptTotal         &#x3D; new BehaviorSubject&lt;number&gt;(null);
+  public  promptTotal$         &#x3D; this._promptTotal.asObservable();
+
+  private _accordionStep         &#x3D; new BehaviorSubject&lt;number&gt;(null);
+  public  accordionStep$         &#x3D; this._accordionStep.asObservable();
+  accordionStep : number;
+
+  updateSavePromptSelection(result: boolean) {
+    this._savePromptSelection.next(result)
+  }
+
+  updatePromptGroup(orderPromptGroup:  IPromptGroup) {
+     this._orderPromptGroup.next(orderPromptGroup);
+     if (!orderPromptGroup) {
+      this._promptTotal.next(0)
+     } else {
+      const total &#x3D;  this.getPromptTotal(orderPromptGroup)
+      this._promptTotal.next(total)
+    }
+  }
+
+  updateAccordionStep(number) {
+    this.accordionStep &#x3D; number;
+    this._accordionStep.next(number)
+  }
+
+  nextStep() {
+    if (!this.accordionStep) { this.accordionStep }
+    this.accordionStep ++;
+    this._accordionStep.next(this.accordionStep)
+  }
+
+  previousStep() {
+    if (!this.accordionStep) { this.accordionStep &#x3D; 0 }
+    this.accordionStep --;
+    this._accordionStep.next(this.accordionStep)
+  }
+
+  constructor(private orderService         : OrdersService,
+              private OrderItemService     : POSOrderItemService,
+              private promptSubService     : PromptGroupService,
+              private promptSubGroupService: PromptSubGroupsService
+              ) {
+    this._accordionStep.next(0)
+  }
+
+  canItemBeAdded(orderPromptGroup: IPromptGroup,
+                 index: number, subGroupInfo : PromptSubGroups): IPromptGroup {
+
+    let prompt &#x3D; orderPromptGroup.selected_PromptSubGroups[index].promptSubGroups
+
+    //&amp;&amp; subGroupInfo &amp;&amp; prompt.promptSubGroupID &#x3D;&#x3D; subGroupInfo.id
+    if (prompt) {
+      prompt.quantityMet &#x3D; false;
+
+      // if (!this.accordionStep) {
+      //   console.log(&#x27;sets accordion setup 1&#x27;)
+      //   this._accordionStep.next(orderPromptGroup.currentAccordionStep);
+      //   orderPromptGroup.currentAccordionStep &#x3D; 0;
+      // }
+
+      if (!prompt?.itemsSelected) {
+        return orderPromptGroup;
+      }
+
+      prompt &#x3D; this.setQuantityCheck(prompt)
+
+      if (prompt.minQuantity || prompt.maxQuantityMet) {
+        orderPromptGroup.currentAccordionStep ++;
+        this._accordionStep.next(orderPromptGroup.currentAccordionStep);
+        console.log(&#x27;increment&#x27;, orderPromptGroup.currentAccordionStep)
+      }
+
+      orderPromptGroup.selected_PromptSubGroups[index].promptSubGroups &#x3D; prompt;
+
+    }
+
+    this.updatePromptGroup(orderPromptGroup);
+    return orderPromptGroup;
+  }
+
+  setQuantityCheck(prompt: PromptSubGroups) {
+
+    if ( prompt.itemsSelected &amp;&amp;
+          prompt.itemsSelected.length &gt;&#x3D; prompt.maxQuantity) {
+
+      if ( prompt.maxQuantity !&#x3D; 0 ) {
+        prompt.maxQuantityMet &#x3D; true;
+        prompt.quantityMet &#x3D; true
+        return prompt;
+      }
+
+    }
+
+    prompt.maxQuantityMet &#x3D; false;
+    if ( prompt.itemsSelected &amp;&amp;
+          prompt.itemsSelected.length !&#x3D; 0 &amp;&amp;
+          prompt.minQuantity !&#x3D; 0 &amp;&amp;
+          prompt.minQuantity &gt;&#x3D; prompt.itemsSelected.length ) {
+
+      if ( prompt.minQuantity !&#x3D; 0 ) {
+        prompt.quantityMet &#x3D; true
+        return prompt;
+      }
+
+    }
+
+    if ( prompt.itemsSelected &amp;&amp;
+          prompt.itemsSelected.length !&#x3D; 0 &amp;&amp;
+          prompt.moveOnQuantity !&#x3D; 0 &amp;&amp;
+          prompt.moveOnQuantity &gt;&#x3D; prompt.itemsSelected.length ) {
+
+      if ( prompt.moveOnQuantity !&#x3D; 0 ) {
+        console.log(&#x27;move on quantity reached.&#x27;)
+        prompt.quantityMet &#x3D; true
+        return prompt;
+      }
+
+    }
+
+    return prompt;
+
+  }
+
+  ///this process initalizes the object  orderPromptGroup {
+  ///then subscribes to it. so that it can be used
+  initPromptWalkThrough(order: IPOSOrder, promptGroup: IPromptGroup): IPromptGroup {
+    let orderPromptGroup &#x3D;  promptGroup
+    orderPromptGroup.orderID &#x3D; order.id
+    return orderPromptGroup
+  }
+
+  getPromptTotal(prompt: IPromptGroup): number {
+    let total &#x3D; 0 ;
+    if (prompt) {
+      if (prompt.selected_PromptSubGroups) {
+        prompt.selected_PromptSubGroups.forEach(data &#x3D;&gt; {
+          if (data.promptSubGroups &amp;&amp; data.promptSubGroups.itemsSelected) {
+            data.promptSubGroups.itemsSelected.forEach( items &#x3D;&gt; {
+              total &#x3D; ( (items.price *100 * items.quantity)/100) + total
+            })
+          }
+        })
+      }
+    }
+
+    return total;
+  }
+
+}
+
+// promptSubGroupID : number;
+// items  		      : IMenuItem[];
+// minQuantity      : number;
+// maxQuantity      : number;
+// itemsSelected    : MenuItemsSelected[];
+// quantityMet      : boolean;
+
+
+// export interface SelectedPromptSubGroup {
+//   promptGroupsID:    number;
+//   promptSubGroupsID: number;
+//   id:                number;
+//   sortOrder:         number;
+//   promptSubGroups:   PromptSubGroups;
+// }
+
+// export interface PromptSubGroups {
+//   id:              number;
+//   name:            string;
+//   minQuantity:     number;
+//   maxQuantity:     number;
+//   moveOnQuantity:  number;
+//   created:         string;
+//   lastEdited:      string;
+//   instructions:    string;
+//   image:           string;
+//   promptMenuItems: PromptMenuItem[];
+// }
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'PromptWalkThroughService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

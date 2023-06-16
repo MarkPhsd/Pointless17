@@ -27,7 +27,7 @@
           <button  class="button" color="primary" mat-raised-button
                   (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>
         </div>
-        <div *ngIf="isSale">
+        <div *ngIf="isSale && isUserStaff">
           <button  class="button" color="warn" mat-raised-button
                    (click)="sendOrder()">
             <mat-icon>local_fire_department</mat-icon>
@@ -43,8 +43,8 @@
           </split-entry-selector>
         </div>
 
-        <div>
-          <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption && isSale" >
+        <div >
+          <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption && isSale && isUserStaff" >
             <value-from-list-selector
                 [value] ="order.priceColumn"
                 (assignValue)="assignPriceColumn($event)">

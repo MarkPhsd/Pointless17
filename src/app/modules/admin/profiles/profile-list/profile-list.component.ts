@@ -17,6 +17,7 @@ import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 // import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-profile-list',
@@ -119,6 +120,7 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(private contactService: ContactsService,
                 private cd: ChangeDetectorRef,
                 private route: ActivatedRoute,
+                public orderMethodsService: OrderMethodsService,
                 private router: Router,
                 private fb: UntypedFormBuilder,
                 private orderService: OrdersService,
@@ -506,7 +508,7 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   postNewCheckIn(clientID:number) {
     const site = this.siteService.getAssignedSite()
-    const payload = this.orderService.getPayLoadDefaults(null)
+    const payload = this.orderMethodsService.getPayLoadDefaults(null)
     payload.order.clientID = clientID;
     const postOrder$ = this.orderService.postOrderWithPayload(site, payload)
     this.action$ = postOrder$

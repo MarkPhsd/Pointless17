@@ -110,7 +110,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   }
 
   currentOrderSusbcriber() {
-    this._order = this.orderService.currentOrder$.subscribe(
+    this._order = this.orderMethodsService.currentOrder$.subscribe(
       data => {
       this.order = data
       this.refreshSearch()

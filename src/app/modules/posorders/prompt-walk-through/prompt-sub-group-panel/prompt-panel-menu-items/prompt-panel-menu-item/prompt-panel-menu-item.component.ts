@@ -14,6 +14,7 @@ import { OrdersService } from 'src/app/_services/transactions/orders.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
 import { Observable } from 'rxjs';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 interface itemOption {
   name: string;
   quantity: number;
@@ -57,7 +58,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
   removeItem$: Observable<MenuItemsSelected>;
 
   intSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe(data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe(data => {
       this.order = data;
     })
 
@@ -84,6 +85,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
   constructor(
      private promptGroupService        : PromptGroupService,
      private orderService              : OrdersService,
+     public orderMethodsService       : OrderMethodsService,
      private promptWalkService        : PromptWalkThroughService,
      private posOrderItemService      : POSOrderItemService,
      private siteService              : SitesService,

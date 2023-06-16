@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >PriceScheduleService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >PriceScheduleService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -76,6 +83,14 @@
                 <tr>
                     <td class="col-md-4">
                         <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_priceSchedule" >_priceSchedule</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#priceSchedule$" >priceSchedule$</a>
+                            </li>
                             <li>
                                 <a href="#site" >site</a>
                             </li>
@@ -95,6 +110,9 @@
                                 <a href="#delete" >delete</a>
                             </li>
                             <li>
+                                <a href="#deleteItemDiscountSelected" >deleteItemDiscountSelected</a>
+                            </li>
+                            <li>
                                 <a href="#deleteList" >deleteList</a>
                             </li>
                             <li>
@@ -104,22 +122,43 @@
                                 <a href="#getListBySearch" >getListBySearch</a>
                             </li>
                             <li>
+                                <a href="#getMenuList" >getMenuList</a>
+                            </li>
+                            <li>
                                 <a href="#getPriceAdjustList" >getPriceAdjustList</a>
                             </li>
                             <li>
                                 <a href="#getPriceSchedule" >getPriceSchedule</a>
                             </li>
                             <li>
+                                <a href="#getPriceScheduleFull" >getPriceScheduleFull</a>
+                            </li>
+                            <li>
                                 <a href="#getRestrictionsList" >getRestrictionsList</a>
                             </li>
                             <li>
+                                <a href="#getScheduleMenuItems" >getScheduleMenuItems</a>
+                            </li>
+                            <li>
+                                <a href="#getSimpleMenuList" >getSimpleMenuList</a>
+                            </li>
+                            <li>
                                 <a href="#post" >post</a>
+                            </li>
+                            <li>
+                                <a href="#postItemList" >postItemList</a>
+                            </li>
+                            <li>
+                                <a href="#postSchedulesList" >postSchedulesList</a>
                             </li>
                             <li>
                                 <a href="#put" >put</a>
                             </li>
                             <li>
                                 <a href="#save" >save</a>
+                            </li>
+                            <li>
+                                <a href="#updateItemPriceSchedule" >updateItemPriceSchedule</a>
                             </li>
                         </ul>
                     </td>
@@ -133,18 +172,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(httpCache: <a href="../injectables/HttpClientCacheService.html" target="_self">HttpClientCacheService</a>, httpClient: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, sitesService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+<code>constructor(httpCache: <a href="../injectables/HttpClientCacheService.html" target="_self">HttpClientCacheService</a>, httpClient: HttpClient, sitesService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:22</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:27</a></div>
                             </td>
                         </tr>
 
@@ -177,7 +216,7 @@
                                                         <td>httpClient</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                                    <code>HttpClient</code>
                                                         </td>
                                                   
                                                     <td>
@@ -218,7 +257,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -243,8 +282,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="31"
-                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:31</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="36"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:36</a></div>
                 </td>
             </tr>
 
@@ -254,6 +293,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -307,6 +347,87 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="deleteItemDiscountSelected"></a>
+                    <span class="name">
+                        <span ><b>deleteItemDiscountSelected</b></span>
+                        <a href="#deleteItemDiscountSelected"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteItemDiscountSelected(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="50"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:50</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/DiscountInfo.html" target="_self" >Observable&lt;DiscountInfo&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="deleteList"></a>
                     <span class="name">
                         <span ><b>deleteList</b></span>
@@ -323,8 +444,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="45"
-                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:45</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="64"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:64</a></div>
                 </td>
             </tr>
 
@@ -334,6 +455,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -403,8 +525,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="59"
-                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:59</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="78"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:78</a></div>
                 </td>
             </tr>
 
@@ -414,6 +536,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -471,8 +594,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="75"
-                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:75</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="148"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:148</a></div>
                 </td>
             </tr>
 
@@ -482,6 +605,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -535,6 +659,75 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="getMenuList"></a>
+                    <span class="name">
+                        <span ><b>getMenuList</b></span>
+                        <a href="#getMenuList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMenuList(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="112"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:112</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;PS_SearchResultsPaged&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="getPriceAdjustList"></a>
                     <span class="name">
                         <span ><b>getPriceAdjustList</b></span>
@@ -551,8 +744,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="147"
-                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:147</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="270"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:270</a></div>
                 </td>
             </tr>
 
@@ -562,6 +755,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -619,8 +813,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="91"
-                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:91</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="164"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:164</a></div>
                 </td>
             </tr>
 
@@ -630,6 +824,88 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IPriceSchedule&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPriceScheduleFull"></a>
+                    <span class="name">
+                        <span ><b>getPriceScheduleFull</b></span>
+                        <a href="#getPriceScheduleFull"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPriceScheduleFull(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="180"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:180</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -699,8 +975,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="161"
-                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:161</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="284"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:284</a></div>
                 </td>
             </tr>
 
@@ -710,6 +986,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -751,6 +1028,156 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="getScheduleMenuItems"></a>
+                    <span class="name">
+                        <span ><b>getScheduleMenuItems</b></span>
+                        <a href="#getScheduleMenuItems"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getScheduleMenuItems(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="94"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:94</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/DiscountInfo.html" target="_self" >Observable&lt;DiscountInfo[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getSimpleMenuList"></a>
+                    <span class="name">
+                        <span ><b>getSimpleMenuList</b></span>
+                        <a href="#getSimpleMenuList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getSimpleMenuList(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="130"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:130</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;PS_SearchResultsPaged&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="post"></a>
                     <span class="name">
                         <span ><b>post</b></span>
@@ -767,8 +1194,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="121"
-                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:121</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="213"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:213</a></div>
                 </td>
             </tr>
 
@@ -778,6 +1205,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -831,6 +1259,168 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="postItemList"></a>
+                    <span class="name">
+                        <span ><b>postItemList</b></span>
+                        <a href="#postItemList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postItemList(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, list: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="227"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:227</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>list</td>
+                                    <td>
+                                                <code><a href="../interfaces/DiscountInfo.html" target="_self" >DiscountInfo[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/DiscountInfo.html" target="_self" >Observable&lt;DiscountInfo[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postSchedulesList"></a>
+                    <span class="name">
+                        <span ><b>postSchedulesList</b></span>
+                        <a href="#postSchedulesList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postSchedulesList(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, list: IPriceSearchModel[])</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="241"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:241</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>list</td>
+                                    <td>
+                                            <code>IPriceSearchModel[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IPriceSearchModel[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="put"></a>
                     <span class="name">
                         <span ><b>put</b></span>
@@ -847,8 +1437,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="107"
-                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:107</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="199"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:199</a></div>
                 </td>
             </tr>
 
@@ -858,6 +1448,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -927,8 +1518,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="135"
-                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:135</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="256"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:256</a></div>
                 </td>
             </tr>
 
@@ -938,6 +1529,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -987,12 +1579,133 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateItemPriceSchedule"></a>
+                    <span class="name">
+                        <span ><b>updateItemPriceSchedule</b></span>
+                        <a href="#updateItemPriceSchedule"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateItemPriceSchedule(priceSchedule: <a href="../interfaces/IPriceSchedule.html" target="_self">IPriceSchedule</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="25"
+                            class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:25</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>priceSchedule</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPriceSchedule.html" target="_self" >IPriceSchedule</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>
-            <section>
+            <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_priceSchedule"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>_priceSchedule</b></span>
+                        <a href="#_priceSchedule"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new BehaviorSubject&lt;IPriceSchedule&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:22</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="priceSchedule$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>priceSchedule$</b></span>
+                        <a href="#priceSchedule$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._priceSchedule.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -1012,7 +1725,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:17</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/_services/menu/price-schedule.service.ts:15</a></div>
                         </td>
                     </tr>
 
@@ -1024,17 +1737,15 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Input } from &#x27;@angular/core&#x27;;
 import { AuthenticationService } from &#x27;../system/authentication.service&#x27;;
-import { Observable, Subject, throwError  } from &#x27;rxjs&#x27;;
-import { IProduct, IProductCategory, ISite, MenuItem }  from &#x27;src/app/_interfaces&#x27;;
-import { IMenuItem } from &#x27;../../_interfaces/menu/menu-products&#x27;;
-import { ProductSearchModel } from &#x27;../../_interfaces/search-models/product-search&#x27;;
+import { BehaviorSubject, Observable  } from &#x27;rxjs&#x27;;
+import { ISite }  from &#x27;src/app/_interfaces&#x27;;
 import { HttpClient } from &#x27;@angular/common/http&#x27;;
 import { HttpClientCacheService } from &#x27;src/app/_http-interceptors/http-client-cache.service&#x27;;
 import { SitesService } from &#x27;../reporting/sites.service&#x27;;
-import { IPriceSchedule, IPriceSearchModel, PriceAdjustScheduleTypes, PS_SearchResultsPaged } from &#x27;src/app/_interfaces/menu/price-schedule&#x27;;
+import { DiscountInfo, IPriceSchedule, IPriceSearchModel, PriceAdjustScheduleTypes, PS_SearchResultsPaged } from &#x27;src/app/_interfaces/menu/price-schedule&#x27;;
 
 @Injectable({
   providedIn: &#x27;root&#x27;
@@ -1048,6 +1759,13 @@ export class PriceScheduleService {
   @Input() pageSize      &#x3D; 25;
   @Input() pageNumber    &#x3D; 1;
 
+  private _priceSchedule         &#x3D; new BehaviorSubject&lt;IPriceSchedule&gt;(null);
+  public  priceSchedule$         &#x3D; this._priceSchedule.asObservable();
+
+  updateItemPriceSchedule(priceSchedule:  IPriceSchedule) {
+    this._priceSchedule.next(priceSchedule);
+  }
+
   constructor(
               private httpCache: HttpClientCacheService,
               private httpClient: HttpClient,
@@ -1057,15 +1775,29 @@ export class PriceScheduleService {
 
   delete(site: ISite, id: number): Observable&lt;IPriceSchedule&gt; {
 
-    const controller &#x3D;&quot;/PriceSchedules/&quot;
+    const controller &#x3D; &quot;/PriceSchedules/&quot;
 
-    const endPoint &#x3D; &#x60;DeletePriceSchedule&#x60;
+    const endPoint   &#x3D; &#x60;DeletePriceSchedule&#x60;
 
-    const parameters &#x3D; &#x60;id&#x3D;${id}&#x60;
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
 
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
     return this.httpClient.delete&lt;any&gt;(url)
+
+  }
+
+  deleteItemDiscountSelected(site: ISite, id: number): Observable&lt;DiscountInfo&gt; {
+
+    const controller &#x3D; &quot;/PriceSchedules/&quot;;
+
+    const endPoint &#x3D; &#x60;deleteItemDiscount&#x60;;
+
+    const parameters&#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.delete&lt;DiscountInfo&gt;(url)
 
   }
 
@@ -1099,6 +1831,60 @@ export class PriceScheduleService {
 
   };
 
+  getScheduleMenuItems(site: ISite, id: number): Observable&lt;DiscountInfo[]&gt; {
+
+    const controller &#x3D; &quot;/PriceSchedules/&quot;
+
+    const endPoint &#x3D; &quot;getScheduleMenuItems&quot;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.httpClient.get&lt;DiscountInfo[]&gt;(uri)
+
+    const url &#x3D; { url: uri, cacheMins: 60}
+
+    return  this.httpCache.get&lt;DiscountInfo[]&gt;(url)
+
+  };
+
+  getMenuList(site: ISite): Observable&lt;PS_SearchResultsPaged&gt; {
+
+    const search &#x3D;  {type: &quot;Menu List&quot;};
+
+    const controller &#x3D; &quot;/PriceSchedules/&quot;
+
+    const endPoint &#x3D; &quot;getMenuList&quot;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    // const url &#x3D; { url: uri, cacheMins: 0}
+
+    return  this.httpClient.post&lt;PS_SearchResultsPaged&gt;(url, search)
+
+  };
+
+  getSimpleMenuList(site: ISite): Observable&lt;PS_SearchResultsPaged&gt; {
+
+    const search &#x3D;  {type: &quot;Menu List&quot;};
+
+    const controller &#x3D; &quot;/PriceSchedules/&quot;
+
+    const endPoint &#x3D; &quot;getSimpleMenuList&quot;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    // const url &#x3D; { url: uri, cacheMins: 0}
+
+    return  this.httpClient.post&lt;PS_SearchResultsPaged&gt;(url, search)
+
+  };
+
   getListBySearch(site: ISite, searchModel: IPriceSearchModel): Observable&lt;PS_SearchResultsPaged&gt; {
 
     const controller &#x3D; &quot;/PriceSchedules/&quot;
@@ -1125,9 +1911,28 @@ export class PriceScheduleService {
 
     const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
-    const url &#x3D; { url: uri, cacheMins: 0}
+    // const url &#x3D; { url: uri, cacheMins: 0}
 
     return  this.httpClient.get&lt;IPriceSchedule&gt;(uri)
+
+  };
+
+  getPriceScheduleFull(site: ISite, id: number): Observable&lt;IPriceSchedule&gt; {
+
+    const controller &#x3D; &quot;/PriceSchedules/&quot;
+
+    const endPoint &#x3D; &quot;getPriceScheduleFull&quot;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.httpClient.get&lt;IPriceSchedule&gt;(url)
+    const uri &#x3D; { url: url, cacheMins: 30}
+
+    return this.httpCache.get(uri);
+
+
 
   };
 
@@ -1137,11 +1942,11 @@ export class PriceScheduleService {
 
     const endPoint &#x3D; &#x27;PutPriceSchedule&#x27;
 
-    const parameters &#x3D; &#x60;?id&#x3D;${priceSchedule.id}&#x60;
+    // const parameters &#x3D; &#x60;?id&#x3D;${priceSchedule.id}&#x60;
 
-    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
 
-    return  this.httpClient.put&lt;IPriceSchedule&gt;(url, priceSchedule)
+    return  this.httpClient.post&lt;IPriceSchedule&gt;(url, priceSchedule)
 
   }
 
@@ -1159,7 +1964,38 @@ export class PriceScheduleService {
 
   }
 
+  postItemList(site: ISite, list: DiscountInfo[]): Observable&lt;DiscountInfo[]&gt; {
+
+    const controller &#x3D; &quot;/PriceSchedules/&quot;
+
+    const endPoint &#x3D; &#x60;PostMenuItemsList&#x60;;
+
+    const parameters&#x3D; &#x60;&#x60;;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;DiscountInfo[]&gt;(url, list)
+
+  }
+
+  postSchedulesList(site: ISite, list: IPriceSearchModel[]): Observable&lt;IPriceSearchModel[]&gt; {
+
+    const controller &#x3D; &quot;/PriceSchedules/&quot;
+
+    const endPoint &#x3D; &#x60;postSchedulesList&#x60;;
+
+    const parameters&#x3D; &#x60;&#x60;;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;IPriceSearchModel[]&gt;(url, list)
+
+  }
+
+
   save(site: ISite, priceSchedule: IPriceSchedule): Observable&lt;IPriceSchedule&gt; {
+
+    if (priceSchedule.id &#x3D;&#x3D; undefined) {priceSchedule.id &#x3D; 0}
 
     if (priceSchedule.id &#x3D;&#x3D; 0) {
       return this.post(site, priceSchedule)
@@ -1212,14 +2048,15 @@ export class PriceScheduleService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -1231,6 +2068,15 @@ export class PriceScheduleService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -1240,8 +2086,8 @@ export class PriceScheduleService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

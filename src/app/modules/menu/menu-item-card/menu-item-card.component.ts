@@ -11,6 +11,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class MenuItemCardDashboardComponent implements OnInit {
 
+
   @Input() chartHeight: any;
   @Input() listItemID : any;
   @Input() MMJMenu: boolean;

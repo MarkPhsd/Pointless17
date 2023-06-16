@@ -1,0 +1,1652 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >DSIProcessService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_services/dsiEMV/dsiprocess.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#applyAmount" >applyAmount</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#emvBatch" >emvBatch</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#emvBatchInquire" >emvBatchInquire</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#emvReset" >emvReset</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#emvReturn" >emvReturn</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#emvSale" >emvSale</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#emvTransaction" >emvTransaction</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#emvVoid" >emvVoid</a>
+                            </li>
+                            <li>
+                                <a href="#getRStreamAsResponse" >getRStreamAsResponse</a>
+                            </li>
+                            <li>
+                                <a href="#initTransaction" >initTransaction</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#pinPadReset" >pinPadReset</a>
+                            </li>
+                            <li>
+                                <a href="#testSale" >testSale</a>
+                            </li>
+                            <li>
+                                <a href="#testVoid" >testVoid</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(orderMethodsService: <a href="../injectables/OrderMethodsService.html" target="_self">OrderMethodsService</a>, matSnack: MatSnackBar, dsi: <a href="../injectables/DSIEMVTransactionsService.html" target="_self">DSIEMVTransactionsService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">src/app/_services/dsiEMV/dsiprocess.service.ts:10</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>orderMethodsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/OrderMethodsService.html" target="_self" >OrderMethodsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>matSnack</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatSnackBar</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dsi</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/DSIEMVTransactionsService.html" target="_self" >DSIEMVTransactionsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applyAmount"></a>
+                    <span class="name">
+                        <span ><b>applyAmount</b></span>
+                        <a href="#applyAmount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>applyAmount(amount: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, gratuity: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="238"
+                            class="link-to-prism">src/app/_services/dsiEMV/dsiprocess.service.ts:238</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>amount</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>gratuity</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/Amount.html" target="_self" >Amount</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="emvBatch"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>emvBatch</b></span>
+                        <a href="#emvBatch"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>emvBatch()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="244"
+                            class="link-to-prism">src/app/_services/dsiEMV/dsiprocess.service.ts:244</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/BatchClose.html" target="_self" >Promise&lt;BatchClose&gt;</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="emvBatchInquire"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>emvBatchInquire</b></span>
+                        <a href="#emvBatchInquire"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>emvBatchInquire()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="259"
+                            class="link-to-prism">src/app/_services/dsiEMV/dsiprocess.service.ts:259</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Promise&lt;BatchSummary&gt;</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="emvReset"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>emvReset</b></span>
+                        <a href="#emvReset"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>emvReset()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="158"
+                            class="link-to-prism">src/app/_services/dsiEMV/dsiprocess.service.ts:158</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Promise&lt;RStream&gt;</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="emvReturn"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>emvReturn</b></span>
+                        <a href="#emvReturn"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>emvReturn(amount: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, paymentID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, manual: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="53"
+                            class="link-to-prism">src/app/_services/dsiEMV/dsiprocess.service.ts:53</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>amount</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>paymentID</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>manual</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Promise&lt;RStream&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="emvSale"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>emvSale</b></span>
+                        <a href="#emvSale"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>emvSale(amount: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, paymentID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, manual: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>, tipPrompt: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="47"
+                            class="link-to-prism">src/app/_services/dsiEMV/dsiprocess.service.ts:47</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>amount</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>paymentID</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>manual</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>tipPrompt</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Promise&lt;RStream&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="emvTransaction"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>emvTransaction</b></span>
+                        <a href="#emvTransaction"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>emvTransaction(tranCode: <a href="../s/s.html" target="_self">string</a>, amount: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, paymentID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, manual: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>, tipPrompt: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>, TranType: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="172"
+                            class="link-to-prism">src/app/_services/dsiEMV/dsiprocess.service.ts:172</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>tranCode</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>amount</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>paymentID</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>manual</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>tipPrompt</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>TranType</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Promise&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="emvVoid"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>emvVoid</b></span>
+                        <a href="#emvVoid"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>emvVoid(posPayment: <a href="../interfaces/IPOSPayment.html" target="_self">IPOSPayment</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="59"
+                            class="link-to-prism">src/app/_services/dsiEMV/dsiprocess.service.ts:59</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>posPayment</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPOSPayment.html" target="_self" >IPOSPayment</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Promise&lt;RStream&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getRStreamAsResponse"></a>
+                    <span class="name">
+                        <span ><b>getRStreamAsResponse</b></span>
+                        <a href="#getRStreamAsResponse"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getRStreamAsResponse(response: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="164"
+                            class="link-to-prism">src/app/_services/dsiEMV/dsiprocess.service.ts:164</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>response</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/RStream.html" target="_self" >RStream</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initTransaction"></a>
+                    <span class="name">
+                        <span ><b>initTransaction</b></span>
+                        <a href="#initTransaction"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initTransaction()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="17"
+                            class="link-to-prism">src/app/_services/dsiEMV/dsiprocess.service.ts:17</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/Transaction.html" target="_self" >Transaction</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pinPadReset"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>pinPadReset</b></span>
+                        <a href="#pinPadReset"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>pinPadReset()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="34"
+                            class="link-to-prism">src/app/_services/dsiEMV/dsiprocess.service.ts:34</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Promise&lt;RStream&gt;</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="testSale"></a>
+                    <span class="name">
+                        <span ><b>testSale</b></span>
+                        <a href="#testSale"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>testSale(TranCode: <a href="../s/s.html" target="_self">string</a>, amount: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, paymentID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, manual: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>, tipPrompt: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>, TranType: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="272"
+                            class="link-to-prism">src/app/_services/dsiEMV/dsiprocess.service.ts:272</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>TranCode</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>amount</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>paymentID</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>manual</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>tipPrompt</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>TranType</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/RStream.html" target="_self" >RStream</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="testVoid"></a>
+                    <span class="name">
+                        <span ><b>testVoid</b></span>
+                        <a href="#testVoid"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>testVoid(TranCode: <a href="../s/s.html" target="_self">string</a>, amount: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, paymentID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, manual: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>, tipPrompt: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>, TranType: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="309"
+                            class="link-to-prism">src/app/_services/dsiEMV/dsiprocess.service.ts:309</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>TranCode</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>amount</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>paymentID</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>manual</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>tipPrompt</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>TranType</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/RStream.html" target="_self" >RStream</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { MatSnackBar } from &#x27;@angular/material/snack-bar&#x27;;
+import { IPOSPayment } from &#x27;src/app/_interfaces&#x27;;
+import { DSIEMVSettings } from &#x27;../system/settings/uisettings.service&#x27;;
+import { OrderMethodsService } from &#x27;../transactions/order-methods.service&#x27;;
+import { Account, Amount, RStream, DSIEMVTransactionsService, Transaction, CmdResponse, TranResponse, BatchSummary, BatchClose } from &#x27;./dsiemvtransactions.service&#x27;;
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class DSIProcessService {
+
+  constructor(
+    private orderMethodsService: OrderMethodsService,
+    private matSnack        : MatSnackBar,
+    private dsi             : DSIEMVTransactionsService) { }
+
+  initTransaction(): Transaction {
+    const item &#x3D; localStorage.getItem(&#x27;DSIEMVSettings&#x27;);
+    if (!item) { return null }
+    const dsiSettings         &#x3D; JSON.parse(item) as DSIEMVSettings;
+    const transaction         &#x3D;{} as Transaction // {...transactiontemp, id: undefined}
+    transaction.MerchantID    &#x3D;dsiSettings.MerchantID;
+    transaction.TerminalID    &#x3D;dsiSettings.TerminalID;;
+    transaction.OperatorID    &#x3D;dsiSettings.OperatorID;
+    transaction.HostOrIP      &#x3D;dsiSettings.HostOrIP;
+    transaction.IpPort        &#x3D;dsiSettings.IpPort;
+    transaction.UserTrace     &#x3D;&#x27;PointlessPOS1.0&#x27;;
+    transaction.SecureDevice  &#x3D;dsiSettings.SecureDevice;
+    transaction.ComPort       &#x3D;dsiSettings.ComPort;
+    transaction.SequenceNo    &#x3D;&#x27;0010010010&#x27;
+    return transaction
+  }
+
+  async pinPadReset(): Promise&lt;RStream&gt; {
+    const item &#x3D; localStorage.getItem(&#x27;DSIEMVSettings&#x27;)
+    if (!item) { return }
+    const transactiontemp     &#x3D; JSON.parse(item) as DSIEMVSettings;
+    if (transactiontemp?.SecureDevice.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;test&#x27;) { return null; }
+
+    let transaction           &#x3D; {} as Transaction // {...transactiontemp, id: undefined}
+    transaction               &#x3D; this.initTransaction()
+    transaction.TranCode      &#x3D; &#x27;EMVPadReset&#x27;;
+    const response            &#x3D; await  this.dsi.pinPadReset(transaction)
+    return response
+  }
+
+  async emvSale(amount: number, paymentID: number, manual: boolean, tipPrompt: boolean): Promise&lt;RStream&gt;  {
+    const response &#x3D; await this.emvTransaction(&#x27;EMVSale&#x27;, amount, paymentID, manual, tipPrompt, &#x27;&#x27;);
+    console.log(&#x27;response&#x27;, response)
+    return response
+  }
+
+  async emvReturn(amount: number, paymentID: number, manual: boolean): Promise&lt;RStream&gt; {
+    const respsonse &#x3D; await this.emvTransaction(&#x27;EMVReturn&#x27;, amount, paymentID, manual, false, &#x27;&#x27;);
+    console.log(&#x27;respsonse&#x27;, respsonse)
+    return respsonse;
+  }
+
+  async emvVoid(posPayment: IPOSPayment): Promise&lt;RStream&gt; {
+
+    try {
+      const item     &#x3D; localStorage.getItem(&#x27;DSIEMVSettings&#x27;) ;
+      const device   &#x3D; JSON.parse(item) as DSIEMVSettings;
+      const reset    &#x3D; await this.pinPadReset(); //ignore response for now.
+
+      if (!item) {
+        this.orderMethodsService.notification(&#x27;Could not initialized DSI Settings&#x27;, &#x27;Error&#x27;)
+        return null
+      }
+      let transaction      &#x3D; this.initTransaction();
+
+      transaction.TranType &#x3D; &#x27;Credit&#x27;;
+      transaction.TranCode &#x3D; &#x27;VoidSale&#x27;;
+
+      if (!transaction) {
+        this.orderMethodsService.notification(&#x27;Could not Initialize Transaction Settings&#x27;, &#x27;Error&#x27;)
+        return null
+      }
+
+      console.log(&#x27;emvVoid&#x27;, transaction)
+      if (transaction.SecureDevice.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;test&#x27;) {
+        transaction.TranType &#x3D; &#x27;Credit&#x27;;
+        transaction.TranCode &#x3D; &#x27;VoidSale&#x27;;
+        const result &#x3D; this.testSale(transaction.TranCode, posPayment.amountPaid + posPayment.addedPercentageFee, posPayment.id, false, false, transaction.TranType)
+        return result;
+      }
+
+      if (transaction.SecureDevice.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;EMV_ISC250_HEARTLAND&#x27;.toLowerCase()) {
+        transaction.TranType &#x3D; &#x27;Credit&#x27;;
+        transaction.TranCode &#x3D; &#x27;VoidSaleByRecordNo&#x27;;
+      }
+
+      if (transaction.SecureDevice &#x3D;&#x3D;&#x3D; &#x27;EMV_VX805_PAYMENTECH&#x27;) {
+        transaction.TranType &#x3D; &#x27;Credit&#x27;;
+        transaction.TranCode &#x3D; &#x27;VoidSale&#x27;;
+      }
+
+      if (transaction.SecureDevice &#x3D;&#x3D;&#x3D; &quot;EMV_VX805_MERCURY&quot; ||
+          transaction.SecureDevice &#x3D;&#x3D;&#x3D; &quot;EMV_VX805_VANTIV&quot; ||
+          transaction.SecureDevice &#x3D;&#x3D;&#x3D; &quot;EMV_VX805_RAPIDCONNECT&quot;) {
+        transaction.TranType &#x3D; &#x27;Credit&#x27;;
+        transaction.TranCode &#x3D; &#x27;VoidSaleByRecordNo&#x27;;
+      }
+
+      if (posPayment.id) {
+        transaction.InvoiceNo   &#x3D; posPayment.id.toString();
+      }
+      if ( posPayment.refNumber) {
+        transaction.RefNo       &#x3D; posPayment.refNumber.toString();
+      }
+      if (posPayment.approvalCode) {
+        transaction.AuthCode    &#x3D; posPayment.approvalCode.toString();
+      }
+      if (posPayment.refNumber) {
+        transaction.RecordNo    &#x3D; posPayment.ccNumber.toString();
+      }
+      transaction.Frequency   &#x3D; &#x27;OneTime&#x27;
+      if (posPayment.dlNumber ) {
+        transaction.AcqRefData  &#x3D; posPayment.dlNumber.toString();
+      }
+      if (posPayment.processData) {
+        transaction.ProcessData &#x3D; posPayment.processData.toString();
+      }
+
+      let amount &#x3D; {} as Amount;
+      if (posPayment.tipAmount &amp;&amp; posPayment.tipAmount !&#x3D; 0) {
+        transaction.Amount.Gratuity &#x3D; posPayment.tipAmount.toFixed(2).toString();
+      }
+      amount.Purchase &#x3D; posPayment.amountPaid.toFixed(2).toString();
+
+      if (!amount.Purchase) {
+        this.orderMethodsService.notification(&#x27;Void amount cannot be 0.00&#x27;, &#x27;Error&#x27;)
+        return;
+      }
+
+      if (transaction.SecureDevice.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;test&#x27;) {
+        transaction.TranType &#x3D; &#x27;Credit&#x27;;
+        transaction.TranCode &#x3D; &#x27;VoidSale&#x27;;
+        const result &#x3D; this.testVoid(transaction.TranCode, +transaction.Amount, posPayment.id, false, false,  transaction.TranType)
+        result.TranResponse.TranCode &#x3D; &#x27;EMVVoidSale&#x27;;
+        return result
+      }
+
+      if (transaction.SecureDevice.toLowerCase() !&#x3D; &#x27;test&#x27;) {
+        transaction.Amount &#x3D; amount;
+        console.log(&#x27;void request&#x27;, transaction)
+        const result &#x3D;  await this.dsi.emvTransaction(transaction)
+        console.log(&#x27;DSIProcess.service EMVVoid Resposne RStream&#x27;, result?.RStream)
+        return result?.RStream;
+      }
+
+    } catch (error) {
+      console.log(&#x27;DSIEMVVoid&#x27;, error)
+    }
+
+  }
+
+  async emvReset(): Promise&lt;RStream&gt;  {
+    let item &#x3D; this.initTransaction()
+    const commandResponse &#x3D; this.emvReset()
+    return commandResponse;
+  }
+
+  getRStreamAsResponse(response: string) {
+    const rStream  &#x3D; {} as RStream;
+    rStream.CmdResponse &#x3D; {} as CmdResponse
+    rStream.CmdResponse.TextResponse &#x3D; response;
+    rStream.CmdResponse.CmdStatus    &#x3D; &quot;Failed&quot;
+    return rStream
+  }
+
+  async emvTransaction(tranCode: string, amount: number,
+                       paymentID: number, manual: boolean,
+                       tipPrompt: boolean, TranType: string ): Promise&lt;any&gt; {
+
+    const item  &#x3D; localStorage.getItem(&#x27;DSIEMVSettings&#x27;);
+    if (!item) {
+      const response &#x3D; &#x27;no dsiemvSettings&#x27;
+      return this.getRStreamAsResponse(response)
+    }
+
+    if (!amount) {
+      const result  &#x3D; &#x27;Failed, no amount given.&#x27;
+      return this.getRStreamAsResponse(result)
+    }
+
+    const transactiontemp     &#x3D; JSON.parse(item) as Transaction;
+
+    if (!transactiontemp){
+      const result  &#x3D; &#x27;Failed, transaction settings not found.&#x27;
+      return this.getRStreamAsResponse(result)
+    }
+
+    if (!transactiontemp.SecureDevice) {
+      const result  &#x3D; &#x27;Failed, no secure device entered.&#x27;
+      return this.getRStreamAsResponse(result)
+    }
+
+    if (transactiontemp?.SecureDevice.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;test&#x27;) {
+      console.log(&#x27;test sale&#x27;)
+      const result &#x3D; this.testSale(tranCode, amount, paymentID, manual, tipPrompt, TranType)
+      return result;
+    }
+
+    if (transactiontemp?.SecureDevice !&#x3D; &#x27;test&#x27;) {
+      const reset &#x3D;  await this.pinPadReset(); //ignore response for now.
+    }
+
+    let transaction           &#x3D; {} as Transaction // {...transactiontemp, id: undefined}
+    transaction               &#x3D; this.initTransaction()
+    transaction.TranCode      &#x3D; tranCode;
+    if (TranType) { transaction.TranType   &#x3D; TranType; }
+
+    transaction.InvoiceNo     &#x3D; paymentID.toString();
+    transaction.RefNo         &#x3D; paymentID.toString();
+
+    if (manual) {
+      transaction.Account &#x3D; {} as Account;
+      transaction.Account.AcctNo &#x3D; &#x27;Prompt&#x27;
+    }
+
+    transaction.Amount &#x3D; {} as Amount
+    if (amount) {
+      const value &#x3D; +amount
+      transaction.Amount.Purchase &#x3D; value.toFixed(2)
+    }
+
+    if (tipPrompt) {
+      transaction.Amount.Gratuity &#x3D; &#x27;Prompt&#x27;
+    }
+
+    console.log(&#x27;request&#x27;, transaction)
+    const result &#x3D;  await this.dsi.emvTransaction(transaction)
+    console.log(&#x27;DSIProcess.service EMVTransaction Response RStream&#x27;, result?.RStream)
+    return result?.RStream;
+  }
+
+  applyAmount(amount: number, gratuity: number): Amount {
+    return null
+  }
+
+  // XML &#x3D; XML &amp; setTag(&quot;TranType&quot;, opay.TranType) &#x27;CREDIT/DEBIT/EBT
+  // XML &#x3D; XML &amp; setTag(&quot;TranCode&quot;, opay.TranCode) &#x27;&#x27;SALE/REFUND/VOUCHERReturn
+  async emvBatch() : Promise&lt;BatchClose&gt; {
+    const item                &#x3D; localStorage.getItem(&#x27;DSIEMVSettings&#x27;);
+    const reset               &#x3D; await this.pinPadReset(); //ignore response for now.
+    console.log(&#x27;reset complete&#x27;)
+    const batchSummary        &#x3D; await this.emvBatchInquire()
+    let transaction           &#x3D; {} as Transaction // {...transactiontemp, id: undefined}
+    transaction               &#x3D; this.initTransaction()
+    const  response &#x3D;  await this.dsi.emvBatch(transaction, batchSummary)
+    if (response) {
+      return  response?.RStream?.BatchClose
+    }
+    this.matSnack.open(&#x27;Issue closing batch.&#x27;, &#x27;Alert&#x27;, {duration: 1500})
+    return null
+  }
+
+  async emvBatchInquire() : Promise&lt;BatchSummary&gt; {
+    const item                &#x3D; localStorage.getItem(&#x27;DSIEMVSettings&#x27;);
+    const reset               &#x3D; await this.pinPadReset(); //ignore response for now.
+    let transaction           &#x3D; {} as Transaction // {...transactiontemp, id: undefined}
+    transaction               &#x3D; this.initTransaction()
+    const response            &#x3D; await this.dsi.getBatchInquireValues(transaction)
+    if (response) {
+      return  response?.RStream?.BatchSummary
+    }
+    this.matSnack.open(&#x27;Issue retrieving batch info.&#x27;, &#x27;Alert&#x27;, {duration: 1500})
+    return null
+  }
+
+  testSale(TranCode: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string): RStream {
+    const stream &#x3D; {} as RStream;
+    stream.CmdResponse &#x3D; {} as CmdResponse
+    stream.TranResponse &#x3D; {} as TranResponse
+    stream.TranResponse.Amount &#x3D; {} as Amount
+
+    stream.CmdResponse.CmdStatus &#x3D; &quot;Approved&quot;
+    stream.CmdResponse.TextResponse &#x3D; &quot;APPROVED&quot;
+
+    stream.TranResponse.CardType &#x3D; &quot;AMEX&quot;
+
+    stream.TranResponse.AuthCode     &#x3D; &quot;00421D&quot; //&lt;/AuthCode&gt;
+		stream.TranResponse.CaptureStatus&#x3D; &quot;Captured&quot; //&lt;/CaptureStatus&gt;
+		stream.TranResponse.RefNo        &#x3D; &quot;212442535014&quot;//&lt;/RefNo&gt;
+    stream.TranResponse.InvoiceNo    &#x3D; &quot;263757&quot;//&lt;/InvoiceNo&gt;
+		stream.TranResponse.OperatorID   &#x3D;&quot; Wolf Wolverson&quot;//&lt;/OperatorID&gt;
+
+    stream.TranResponse.Amount.Authorize &#x3D; amount.toString();
+    stream.TranResponse.Amount.Purchase &#x3D; amount.toString();
+
+    stream.TranResponse.AcqRefData  &#x3D; &quot;|1623410529|95985&quot;//&lt;/AcqRefData&gt;
+    stream.TranResponse.AVSResult   &#x3D; &quot;Z&quot;//&lt;/AVSResult&gt;
+		stream.TranResponse.CVVResult   &#x3D; &quot;M&quot;//&lt;/CVVResult&gt;
+		stream.TranResponse.RecordNo    &#x3D; &quot;1623410529&quot;//&lt;/RecordNo&gt;
+		stream.TranResponse.EntryMethod &#x3D; &quot;CHIP READ/MANUAL&quot;//&lt;/EntryMethod&gt;
+		stream.TranResponse.Date        &#x3D; &quot;05/04/2022&quot;//&lt;/Date&gt;
+		stream.TranResponse.Time        &#x3D; &quot;15:00:14&quot;//&lt;/Time&gt;
+    stream.TranResponse.TranCode    &#x3D; TranCode
+
+    const item &#x3D;  stream
+    // console.log(&#x27;CmdResponse&#x27;, result?.CmdResponse)
+    // console.log(&#x27;TranResponse&#x27;, result?.TranResponse)
+    // console.log(&#x27;RStream&#x27;, item?.RStream)
+
+    return item;
+  }
+
+  testVoid(TranCode: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string): RStream {
+    const stream &#x3D; {} as RStream;
+    stream.CmdResponse &#x3D; {} as CmdResponse
+    stream.TranResponse &#x3D; {} as TranResponse
+    stream.TranResponse.Amount &#x3D; {} as Amount
+
+    //VoidSaleByRecordNo	APPROVED	Captured
+    stream.CmdResponse.CmdStatus      &#x3D; &quot;Approved&quot;
+    stream.CmdResponse.TextResponse   &#x3D; &quot;APPROVED&quot;
+
+    stream.TranResponse.CardType      &#x3D; &quot;VISA&quot;
+
+    stream.TranResponse.AuthCode     &#x3D; &quot;00421D&quot; //&lt;/AuthCode&gt;
+		stream.TranResponse.CaptureStatus&#x3D; &quot;Captured&quot; //&lt;/CaptureStatus&gt;
+		stream.TranResponse.RefNo        &#x3D; &quot;212442535014&quot;//&lt;/RefNo&gt;
+    stream.TranResponse.InvoiceNo    &#x3D; &quot;249571&quot;//&lt;/InvoiceNo&gt;
+		stream.TranResponse.OperatorID   &#x3D;&quot; Wolf Wolverson&quot;//&lt;/OperatorID&gt;
+
+    stream.TranResponse.Amount.Authorize &#x3D; amount.toString();
+    stream.TranResponse.Amount.Purchase &#x3D; amount.toString();
+
+    stream.TranResponse.AcqRefData  &#x3D;&quot;|1623410529|95985&quot;//&lt;/AcqRefData&gt;
+    stream.TranResponse.AVSResult   &#x3D;&quot;Z&quot;//&lt;/AVSResult&gt;
+		stream.TranResponse.CVVResult   &#x3D;&quot;M&quot;//&lt;/CVVResult&gt;
+		stream.TranResponse.RecordNo    &#x3D;&quot;1623410529&quot;//&lt;/RecordNo&gt;
+		stream.TranResponse.EntryMethod &#x3D;&quot;CHIP READ/MANUAL&quot;//&lt;/EntryMethod&gt;
+		stream.TranResponse.Date        &#x3D;&quot;05/04/2022&quot;//&lt;/Date&gt;
+		stream.TranResponse.Time        &#x3D;&quot;15:00:14&quot;//&lt;/Time&gt;
+
+    return stream;
+  }
+
+
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'DSIProcessService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

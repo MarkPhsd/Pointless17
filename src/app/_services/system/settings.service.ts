@@ -403,11 +403,15 @@ export class SettingsService {
 
   getUITransactionSetting():  Observable<TransactionUISettings> {
 
-    if (!this.userAuthorizationService.user) {  of(null)  }
+    const item = {} as TransactionUISettings
+    if (!this.userAuthorizationService.user) {  of(item)  }
+    // console.log(this.userAuthorizationService.user, 'getUITransactionsSetting')
 
-    const user = this.userAuthorizationService.user;
-    
-    if (!user || !user.roles ) {return  of(null) };
+    const user = this.userAuthorizationService?.user;
+
+    if (!user || !user.roles ) {return  of(item) };
+
+    // console.log(user, 'getUITransactionsSetting')
 
     const site =  this.siteService.getAssignedSite();
 
@@ -439,23 +443,23 @@ export class SettingsService {
 
   }
 
-  getAppCahcURI(url) { 
+  getAppCahcURI(url) {
     let appCache =  JSON.parse(localStorage.getItem('appCache')) as any;
     if (appCache) {
       if (appCache?.value && appCache?.boolean) {
         const uri = { url: url, cacheMins: appCache.value}
-        console.log('getting url via cache' , uri)
+        // console.log('getting url via cache' , uri)
         return  this.httpCache.get<unknown>(uri)
       }
     }
     return this.http.get<unknown>(url);
   }
 
-  postAppCacheURI(url) { 
+  postAppCacheURI(url) {
 
   }
 
-  putAppCachURI(url) { 
+  putAppCachURI(url) {
 
   }
 

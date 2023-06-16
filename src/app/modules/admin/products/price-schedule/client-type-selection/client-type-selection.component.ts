@@ -46,7 +46,7 @@ export class ClientTypeSelectionComponent implements OnInit {
 
   async ngOnInit() {
     this.initSubscriptions();
-    await this.initForm()
+    this.initForm()
   }
 
   ngDestroy() {
@@ -55,7 +55,7 @@ export class ClientTypeSelectionComponent implements OnInit {
     }
   }
 
-  async initForm() {
+  initForm() {
     const site = this.siteService.getAssignedSite();
     const clientTypes$ = this.clientTypeService.getClientTypes(site)
     clientTypes$.subscribe(clienTypes => {
@@ -79,7 +79,9 @@ export class ClientTypeSelectionComponent implements OnInit {
     this.priceScheduleDataService.updatePriceSchedule(this.priceSchedule);
   }
 
-  addToList(list: any[], typeList: IItemBasic[], priceSchedule: IPriceSchedule  ) {
+  addToList(list: any[], 
+            typeList: IItemBasic[], 
+            priceSchedule: IPriceSchedule  ) {
     const clientList = [] as ClientType[];
     list.forEach( data => {
         if (typeList) {

@@ -40,7 +40,7 @@
 
     </mat-card-subtitle>
 
-    <mat-card-content>
+    <mat-card-content *ngIf="(uiTransactions$ | async) as uiTransactions">
 
       <div>
         <mat-tab-group
@@ -95,7 +95,7 @@
                   </div>
               </div>
 
-              <div class="grid-fields">
+              <div class="grid-fields" *ngIf="uiTransactions.enableLimitsView">
 
                 <div>
                   <mat-form-field appearance="outline">
@@ -311,21 +311,6 @@
                 </mat-slide-toggle>
               </div>
 
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="changeItemPrice" >
-                  <mat-label>Change Item Price</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="changeInventoryValue" >
-                  <mat-label>Change Inventory Value</mat-label>
-                </mat-slide-toggle>
-              </div>
-
               <div class="toggle-fields">
                 <mat-slide-toggle
                           formControlName="priceColumnOption" >
@@ -371,8 +356,6 @@
                 </mat-slide-toggle>
               </div>
 
-            </div>
-
               <div class="toggle-fields">
                 <mat-slide-toggle
                           formControlName="closeDay" >
@@ -380,7 +363,8 @@
                 </mat-slide-toggle>
               </div>
 
-              <div>
+            </div>
+            <div>
                 <h4>Marketing</h4>
 
                 <div class="toggle-fields">
@@ -422,8 +406,6 @@
                     <mat-label>Balance Sheet Audit</mat-label>
                   </mat-slide-toggle>
                 </div>
-
-
               </div>
 
               <div>
@@ -452,8 +434,15 @@
 
                 <div class="toggle-fields">
                   <mat-slide-toggle
-                            formControlName="adjustProductCount" >
-                    <mat-label>Adjust Product Count</mat-label>
+                            formControlName="intakeInventory" >
+                    <mat-label>Intake Inventory</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="changeInventoryValue" >
+                    <mat-label>Change Inventory Price/Cost</mat-label>
                   </mat-slide-toggle>
                 </div>
 
@@ -474,6 +463,28 @@
                     <mat-label>Delete Product</mat-label>
                   </mat-slide-toggle>
                 </div>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="editProduct" >
+                    <mat-label>Edit Product</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="changeItemPrice" >
+                    <mat-label>Change Item Price</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="adjustProductCount" >
+                    <mat-label>Adjust Product Count</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
               </div>
 
               <div>

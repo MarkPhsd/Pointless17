@@ -7,6 +7,7 @@ import { OrdersService } from 'src/app/_services';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
 @Component({
@@ -20,13 +21,14 @@ export class POSOrderScheduleCardComponent implements OnInit, OnDestroy {
   _order               : Subscription;
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
     })
   }
 
   constructor(
     private orderService      : OrdersService,
+    public orderMethodsService: OrderMethodsService,
     private router:            Router,
     private dateService      : DateHelperService,
    ) { }

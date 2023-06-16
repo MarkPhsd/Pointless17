@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >EmployeeService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >EmployeeService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,10 +71,37 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_currentEditEmployee" >_currentEditEmployee</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_searchModel" >_searchModel</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#currentEditEmployee$" >currentEditEmployee$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#searchModel$" >searchModel$</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
 
                 <tr>
                     <td class="col-md-4">
@@ -78,28 +112,43 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <a href="#getAllEmployees" >getAllEmployees</a>
+                                <a href="#delete" >delete</a>
                             </li>
                             <li>
-                                <a href="#getBudtenders" >getBudtenders</a>
+                                <a href="#getAllActiveEmployees" >getAllActiveEmployees</a>
                             </li>
                             <li>
-                                <a href="#getCashiers" >getCashiers</a>
+                                <a href="#getEmployee" >getEmployee</a>
                             </li>
                             <li>
-                                <a href="#getDispatchers" >getDispatchers</a>
+                                <a href="#getEmployeeByPIN" >getEmployeeByPIN</a>
                             </li>
                             <li>
-                                <a href="#getDrivers" >getDrivers</a>
+                                <a href="#getEmployeeBySearch" >getEmployeeBySearch</a>
                             </li>
                             <li>
-                                <a href="#getEmployeesByJobType" >getEmployeesByJobType</a>
+                                <a href="#initForm" >initForm</a>
                             </li>
                             <li>
-                                <a href="#getManagers" >getManagers</a>
+                                <a href="#postEmployee" >postEmployee</a>
                             </li>
                             <li>
-                                <a href="#getServers" >getServers</a>
+                                <a href="#putEmployee" >putEmployee</a>
+                            </li>
+                            <li>
+                                <a href="#putEmployeeMetrcKey" >putEmployeeMetrcKey</a>
+                            </li>
+                            <li>
+                                <a href="#saveClient" >saveClient</a>
+                            </li>
+                            <li>
+                                <a href="#saveEmployeeClient" >saveEmployeeClient</a>
+                            </li>
+                            <li>
+                                <a href="#updateCurrentEditEmployee" >updateCurrentEditEmployee</a>
+                            </li>
+                            <li>
+                                <a href="#updateSearchModel" >updateSearchModel</a>
                             </li>
                         </ul>
                     </td>
@@ -113,18 +162,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+<code>constructor(http: HttpClient, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>, _fb: UntypedFormBuilder)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">src/app/_services/people/employee-service.service.ts:12</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/_services/people/employee-service.service.ts:62</a></div>
                             </td>
                         </tr>
 
@@ -145,7 +194,7 @@
                                                         <td>http</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                                    <code>HttpClient</code>
                                                         </td>
                                                   
                                                     <td>
@@ -165,6 +214,18 @@
                                                     </td>
                                                     
                                                 </tr>
+                                                <tr>
+                                                        <td>_fb</td>
+                                                  
+                                                        <td>
+                                                                    <code>UntypedFormBuilder</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
                                         </tbody>
                                     </table>
                             </div>
@@ -174,7 +235,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -183,24 +244,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getAllEmployees"></a>
+                    <a name="delete"></a>
                     <span class="name">
-                        <span ><b>getAllEmployees</b></span>
-                        <a href="#getAllEmployees"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>delete</b></span>
+                        <a href="#delete"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getAllEmployees(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+<code>delete(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="16"
-                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:16</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="69"
+                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:69</a></div>
                 </td>
             </tr>
 
@@ -210,6 +271,88 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/employee.html" target="_self" >Observable&lt;employee&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAllActiveEmployees"></a>
+                    <span class="name">
+                        <span ><b>getAllActiveEmployees</b></span>
+                        <a href="#getAllActiveEmployees"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getAllActiveEmployees(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="112"
+                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:112</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -237,7 +380,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../interfaces/IEmployee.html" target="_self" >Observable&lt;IEmployee[]&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IItemBasic[]&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -251,24 +394,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getBudtenders"></a>
+                    <a name="getEmployee"></a>
                     <span class="name">
-                        <span ><b>getBudtenders</b></span>
-                        <a href="#getBudtenders"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>getEmployee</b></span>
+                        <a href="#getEmployee"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getBudtenders(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+<code>getEmployee(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="33"
-                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:33</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="126"
+                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:126</a></div>
                 </td>
             </tr>
 
@@ -278,6 +421,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -291,6 +435,18 @@
                                     <td>site</td>
                                     <td>
                                                 <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
                                     </td>
 
                                     <td>
@@ -305,7 +461,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../interfaces/IEmployee.html" target="_self" >Observable&lt;IEmployee[]&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../interfaces/employee.html" target="_self" >Observable&lt;employee&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -319,24 +475,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getCashiers"></a>
+                    <a name="getEmployeeByPIN"></a>
                     <span class="name">
-                        <span ><b>getCashiers</b></span>
-                        <a href="#getCashiers"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>getEmployeeByPIN</b></span>
+                        <a href="#getEmployeeByPIN"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getCashiers(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+<code>getEmployeeByPIN(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, pin: <a href="../s/s.html" target="_self">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="35"
-                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:35</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="97"
+                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:97</a></div>
                 </td>
             </tr>
 
@@ -346,210 +502,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>site</td>
-                                    <td>
-                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../interfaces/IEmployee.html" target="_self" >Observable&lt;IEmployee[]&gt;</a></code>
-
-                    </div>
-                    <div class="io-description">
                         
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="getDispatchers"></a>
-                    <span class="name">
-                        <span ><b>getDispatchers</b></span>
-                        <a href="#getDispatchers"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>getDispatchers(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="31"
-                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:31</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>site</td>
-                                    <td>
-                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../interfaces/IEmployee.html" target="_self" >Observable&lt;IEmployee[]&gt;</a></code>
-
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="getDrivers"></a>
-                    <span class="name">
-                        <span ><b>getDrivers</b></span>
-                        <a href="#getDrivers"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>getDrivers(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="29"
-                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:29</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>site</td>
-                                    <td>
-                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../interfaces/IEmployee.html" target="_self" >Observable&lt;IEmployee[]&gt;</a></code>
-
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="getEmployeesByJobType"></a>
-                    <span class="name">
-                        <span ><b>getEmployeesByJobType</b></span>
-                        <a href="#getEmployeesByJobType"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>getEmployeesByJobType(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, name: <a href="../s/s.html" target="_self">string</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="41"
-                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:41</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
                         <table class="params">
                             <thead>
                                 <tr>
@@ -572,7 +525,7 @@
 
                                 </tr>
                                 <tr>
-                                    <td>name</td>
+                                    <td>pin</td>
                                     <td>
                                                 <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
                                     </td>
@@ -589,7 +542,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../interfaces/IEmployee.html" target="_self" >Observable&lt;IEmployee[]&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;EmployeePinResults&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -603,24 +556,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getManagers"></a>
+                    <a name="getEmployeeBySearch"></a>
                     <span class="name">
-                        <span ><b>getManagers</b></span>
-                        <a href="#getManagers"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>getEmployeeBySearch</b></span>
+                        <a href="#getEmployeeBySearch"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getManagers(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+<code>getEmployeeBySearch(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, employeeSearchModel: <a href="../interfaces/EmployeeSearchModel.html" target="_self">EmployeeSearchModel</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="39"
-                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:39</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="83"
+                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:83</a></div>
                 </td>
             </tr>
 
@@ -630,6 +583,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -651,13 +605,25 @@
 
 
                                 </tr>
+                                <tr>
+                                    <td>employeeSearchModel</td>
+                                    <td>
+                                                <code><a href="../interfaces/EmployeeSearchModel.html" target="_self" >EmployeeSearchModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../interfaces/IEmployee.html" target="_self" >Observable&lt;IEmployee[]&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;EmployeeSearchResults&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -671,24 +637,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getServers"></a>
+                    <a name="initForm"></a>
                     <span class="name">
-                        <span ><b>getServers</b></span>
-                        <a href="#getServers"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>initForm</b></span>
+                        <a href="#initForm"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getServers(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+<code>initForm(fb: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="37"
-                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:37</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="238"
+                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:238</a></div>
                 </td>
             </tr>
 
@@ -698,6 +664,76 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>fb</td>
+                                    <td>
+                                            <code>UntypedFormGroup</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>UntypedFormGroup</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postEmployee"></a>
+                    <span class="name">
+                        <span ><b>postEmployee</b></span>
+                        <a href="#postEmployee"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postEmployee(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, employee: <a href="../interfaces/employee.html" target="_self">employee</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="217"
+                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:217</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -719,13 +755,511 @@
 
 
                                 </tr>
+                                <tr>
+                                    <td>employee</td>
+                                    <td>
+                                                <code><a href="../interfaces/employee.html" target="_self" >employee</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../interfaces/IEmployee.html" target="_self" >Observable&lt;IEmployee[]&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../interfaces/employee.html" target="_self" >Observable&lt;employee&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="putEmployee"></a>
+                    <span class="name">
+                        <span ><b>putEmployee</b></span>
+                        <a href="#putEmployee"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>putEmployee(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, employee: <a href="../interfaces/employee.html" target="_self">employee</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="189"
+                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:189</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>employee</td>
+                                    <td>
+                                                <code><a href="../interfaces/employee.html" target="_self" >employee</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/employee.html" target="_self" >Observable&lt;employee&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="putEmployeeMetrcKey"></a>
+                    <span class="name">
+                        <span ><b>putEmployeeMetrcKey</b></span>
+                        <a href="#putEmployeeMetrcKey"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>putEmployeeMetrcKey(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, employee: <a href="../interfaces/employee.html" target="_self">employee</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="203"
+                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:203</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>employee</td>
+                                    <td>
+                                                <code><a href="../interfaces/employee.html" target="_self" >employee</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/employee.html" target="_self" >Observable&lt;employee&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="saveClient"></a>
+                    <span class="name">
+                        <span ><b>saveClient</b></span>
+                        <a href="#saveClient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>saveClient(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, client: <a href="../interfaces/employee.html" target="_self">employee</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="167"
+                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:167</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>client</td>
+                                    <td>
+                                                <code><a href="../interfaces/employee.html" target="_self" >employee</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/employee.html" target="_self" >Observable&lt;employee&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="saveEmployeeClient"></a>
+                    <span class="name">
+                        <span ><b>saveEmployeeClient</b></span>
+                        <a href="#saveEmployeeClient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>saveEmployeeClient(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, clientEmployee: <a href="../interfaces/IEmployeeClient.html" target="_self">IEmployeeClient</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="175"
+                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:175</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>clientEmployee</td>
+                                    <td>
+                                                <code><a href="../interfaces/IEmployeeClient.html" target="_self" >IEmployeeClient</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IEmployeeClient.html" target="_self" >Observable&lt;IEmployeeClient&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateCurrentEditEmployee"></a>
+                    <span class="name">
+                        <span ><b>updateCurrentEditEmployee</b></span>
+                        <a href="#updateCurrentEditEmployee"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateCurrentEditEmployee(employee: <a href="../interfaces/employee.html" target="_self">employee</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="56"
+                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:56</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>employee</td>
+                                    <td>
+                                                <code><a href="../interfaces/employee.html" target="_self" >employee</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateSearchModel"></a>
+                    <span class="name">
+                        <span ><b>updateSearchModel</b></span>
+                        <a href="#updateSearchModel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateSearchModel(searchModel: <a href="../interfaces/EmployeeSearchModel.html" target="_self">EmployeeSearchModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="60"
+                            class="link-to-prism">src/app/_services/people/employee-service.service.ts:60</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>searchModel</td>
+                                    <td>
+                                                <code><a href="../interfaces/EmployeeSearchModel.html" target="_self" >EmployeeSearchModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
                     </div>
                     <div class="io-description">
@@ -736,66 +1270,431 @@
         </tbody>
     </table>
 </section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_currentEditEmployee"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>_currentEditEmployee</b></span>
+                        <a href="#_currentEditEmployee"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new BehaviorSubject&lt;employee&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/_services/people/employee-service.service.ts:53</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_searchModel"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>_searchModel</b></span>
+                        <a href="#_searchModel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new BehaviorSubject&lt;EmployeeSearchModel&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/_services/people/employee-service.service.ts:49</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentEditEmployee$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>currentEditEmployee$</b></span>
+                        <a href="#currentEditEmployee$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._currentEditEmployee.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/_services/people/employee-service.service.ts:54</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="searchModel$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>searchModel$</b></span>
+                        <a href="#searchModel$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._searchModel.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/_services/people/employee-service.service.ts:50</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
 
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
-import { HttpClient, HttpHeaders,  } from &#x27;@angular/common/http&#x27;;
+import { HttpClient,   } from &#x27;@angular/common/http&#x27;;
 import { AuthenticationService } from &#x27;src/app/_services/system/authentication.service&#x27;;
-import { Observable, } from &#x27;rxjs&#x27;;
-import { environment } from &#x27;src/environments/environment&#x27;;
-import { IEmployee } from &#x27;../../_interfaces/people/employees&#x27;;
-import { ISite } from &#x27;src/app/_interfaces&#x27;;
+import { BehaviorSubject, Observable, } from &#x27;rxjs&#x27;;
+import { employee, IClientTable, ISite, IUserProfile } from &#x27;src/app/_interfaces&#x27;;
+import { IItemBasic } from &#x27;../menu/menu.service&#x27;;
+import { IPagedList } from &#x27;../system/paging.service&#x27;;
+import { UntypedFormBuilder, UntypedFormGroup, } from &#x27;@angular/forms&#x27;;
+
+export interface EmployeeSearchResults {
+ results: employee[];
+ paging: IPagedList;
+}
+
+export interface IEmployeeClient {
+  employee: employee;
+  client  : IClientTable;
+  message : string;
+}
+
+export interface EmployeePinResults {
+  client:   IUserProfile;
+  employee: employee;
+ }
+
+export interface EmployeeSearchModel {
+  dOB: string;
+  name: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  pageSize : number;
+  pageNumber : number;
+  pageCount : number;
+  currentPage : number;
+  lastPage : number;
+  useNameInAllFieldsForSearch: boolean;
+  id: number;
+  jobTypeID: number;
+  terminated: string;
+}
 
 @Injectable({
   providedIn: &#x27;root&#x27;
 })
 export class EmployeeService {
 
-  constructor( private http: HttpClient, private auth: AuthenticationService, ) { }
+  private _searchModel       &#x3D; new BehaviorSubject&lt;EmployeeSearchModel&gt;(null);
+  public searchModel$        &#x3D; this._searchModel.asObservable();
 
-  getAllEmployees(site: ISite):  Observable&lt;IEmployee[]&gt; {
 
-    const endPoint &#x3D; &quot;/employees/&quot;
+  private _currentEditEmployee       &#x3D; new BehaviorSubject&lt;employee&gt;(null);
+  public currentEditEmployee$        &#x3D; this._currentEditEmployee.asObservable();
 
-    const parameters &#x3D; &#x27;GetEmployeesByPage?pagenumber&#x3D;1&amp;pagesize&#x3D;1000&#x27;;
-
-    const url &#x3D; &#x60;${site.url}${endPoint}${parameters}&#x60;
-    console.log(url)
-    return this.http.get&lt;IEmployee[]&gt;(url);
-
+  updateCurrentEditEmployee(employee:  employee) {
+    this._currentEditEmployee.next(employee);
   }
-  //GetSaleTypes
 
-  getDrivers(site: ISite):  Observable&lt;IEmployee[]&gt; { return this.getEmployeesByJobType(site,&#x27;driver&#x27;) }
+  updateSearchModel(searchModel:  EmployeeSearchModel) {
+    this._searchModel.next(searchModel);
+  }
 
-  getDispatchers(site: ISite):  Observable&lt;IEmployee[]&gt; { return this.getEmployeesByJobType(site,&#x27;dispatcher&#x27;) }
+  constructor( private http: HttpClient,
+               private auth: AuthenticationService,
+               private _fb:   UntypedFormBuilder ) { }
 
-  getBudtenders(site: ISite):  Observable&lt;IEmployee[]&gt; { return this.getEmployeesByJobType(site,&#x27;budTender&#x27;) }
 
-  getCashiers(site: ISite):  Observable&lt;IEmployee[]&gt; { return this.getEmployeesByJobType(site,&#x27;cashier&#x27;) }
+  delete(site: ISite, id: number) : Observable&lt;employee&gt; {
 
-  getServers(site: ISite):  Observable&lt;IEmployee[]&gt; { return this.getEmployeesByJobType(site,&#x27;server&#x27;) }
+    const controller &#x3D;  &quot;/employees/&quot;
 
-  getManagers(site: ISite):  Observable&lt;IEmployee[]&gt; { return this.getEmployeesByJobType(site,&#x27;dispatcher&#x27;) }
+    const endPoint &#x3D; &#x60;deleteEmployee&#x60;
 
-  getEmployeesByJobType(site: ISite, name: string) :  Observable&lt;IEmployee[]&gt; {
-
-    const controller &#x3D; &#x60;/employees/&#x60;
-
-    const endPoint &#x3D; &#x27;GetEmployeeByJobType&#x27;
-
-    const parameters &#x3D; &#x60;?name&#x3D;&#x27;${name}&#x27;&#x60;
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
 
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
-    return this.http.get&lt;IEmployee[]&gt;(url);
+    return  this.http.delete&lt;employee&gt;(url)
 
   }
 
+  getEmployeeBySearch(site: ISite, employeeSearchModel: EmployeeSearchModel):  Observable&lt;EmployeeSearchResults&gt; {
+
+    const controller &#x3D; &quot;/employees/&quot;
+
+    const endPoint &#x3D; &#x27;getEmployeeBySearch&#x27;;
+
+    const parameters &#x3D; &#x27;&#x27;;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;EmployeeSearchResults&gt;(url, employeeSearchModel);
+
   }
+
+  getEmployeeByPIN(site: ISite, pin: string):  Observable&lt;EmployeePinResults&gt; {
+
+    const controller &#x3D; &quot;/employees/&quot;
+
+    const endPoint &#x3D; &#x27;getEmployeeByPIN&#x27;;
+
+    const parameters &#x3D; &#x60;?pin&#x3D;${pin}&#x60;;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.get&lt;EmployeePinResults&gt;(url);
+
+  }
+
+
+  getAllActiveEmployees(site: ISite):  Observable&lt;IItemBasic[]&gt; {
+
+    const controller &#x3D; &quot;/employees/&quot;
+
+    const endPoint &#x3D; &#x27;getAllActiveEmployees&#x27;;
+
+    const parameters &#x3D; &#x27;&#x27;;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.get&lt;IItemBasic[]&gt;(url);
+
+  }
+
+  getEmployee(site: ISite, id: number):  Observable&lt;employee&gt; {
+
+    const endPoint &#x3D; &quot;/employees/&quot;
+
+    const parameters &#x3D; &#x60;getEmployee?id&#x3D;${id}&#x60;;
+
+    const url &#x3D; &#x60;${site.url}${endPoint}${parameters}&#x60;
+
+    return this.http.get&lt;employee&gt;(url);
+
+  }
+
+  //GetSaleTypes
+
+  // getDrivers(site: ISite):  Observable&lt;IEmployee[]&gt; { return this.getEmployeesByJobType(site,&#x27;driver&#x27;) }
+
+  // getDispatchers(site: ISite):  Observable&lt;IEmployee[]&gt; { return this.getEmployeesByJobType(site,&#x27;dispatcher&#x27;) }
+
+  // getBudtenders(site: ISite):  Observable&lt;IEmployee[]&gt; { return this.getEmployeesByJobType(site,&#x27;budTender&#x27;) }
+
+  // getCashiers(site: ISite):  Observable&lt;IEmployee[]&gt; { return this.getEmployeesByJobType(site,&#x27;cashier&#x27;) }
+
+  // getServers(site: ISite):  Observable&lt;IEmployee[]&gt; { return this.getEmployeesByJobType(site,&#x27;server&#x27;) }
+
+  // getManagers(site: ISite):  Observable&lt;IEmployee[]&gt; { return this.getEmployeesByJobType(site,&#x27;dispatcher&#x27;) }
+
+  // getEmployeesByJobType(site: ISite, name: string) :  Observable&lt;IEmployee[]&gt; {
+
+  //   const controller &#x3D; &#x60;/employees/&#x60;
+
+  //   const endPoint &#x3D; &#x27;GetEmployeeByJobType&#x27;
+
+  //   const parameters &#x3D; &#x60;?name&#x3D;&#x27;${name}&#x27;&#x60;
+
+  //   const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+  //   return this.http.get&lt;IEmployee[]&gt;(url);
+
+  // }
+
+
+  saveClient( site: ISite,  client: employee) : Observable&lt;employee&gt; {
+    if (client.id !&#x3D;&#x3D; 0) {
+      return this.putEmployee(site, client.id, client)
+    } else {
+      return this.postEmployee(site, client)
+    }
+  }
+
+  saveEmployeeClient( site: ISite, clientEmployee: IEmployeeClient):  Observable&lt;IEmployeeClient&gt; {
+
+    const controller &#x3D; &#x60;/ClientTable/&#x60;
+
+    const endPoint &#x3D; &#x27;putEmployeeClient&#x27;
+
+    const parameters &#x3D; &#x60;&#x60;;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.put&lt;IEmployeeClient&gt;(url, clientEmployee);
+
+  }
+
+  putEmployee(site: ISite, id: number, employee: employee):  Observable&lt;employee&gt; {
+
+    const controller &#x3D; &#x60;/employees/&#x60;
+
+    const endPoint &#x3D; &#x27;putEmployee&#x27;
+
+    const parameters &#x3D; &#x60;&#x60;;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.put&lt;employee&gt;(url, employee);
+
+  }
+
+  putEmployeeMetrcKey(site: ISite, id: number, employee: employee):  Observable&lt;employee&gt; {
+
+    const controller &#x3D; &#x60;/employees/&#x60;
+
+    const endPoint &#x3D; &#x27;putEmployeeMetrcKey&#x27;
+
+    const parameters &#x3D; &#x60;&#x60;;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.put&lt;employee&gt;(url, employee);
+
+  }
+
+  postEmployee(site: ISite, employee: employee):  Observable&lt;employee&gt; {
+
+    const controller &#x3D; &#x60;/employees/&#x60;
+
+    const endPoint &#x3D; &#x27;postEmployee&#x27;
+
+    const parameters &#x3D; &#x60;&#x60;;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;employee&gt;(url, employee);
+
+  }
+
+  //   &lt;div *ngIf&#x3D;&quot;requiredForm.controls[&#x27;name&#x27;].invalid &amp;&amp; requiredForm.controls[&#x27;name&#x27;].touched&quot; class&#x3D;&quot;alert alert-danger&quot;&gt;
+//   &lt;div *ngIf&#x3D;&quot;requiredForm.controls[&#x27;name&#x27;].errors.required&quot;&gt;
+//   Name is required.
+// &lt;/div&gt;
+// &lt;/div&gt;
+// , [Validators.required, Validators.maxLength(10), Validators.minLength(4)]
+// , [Validators.required, Validators.pattern(&quot;^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$&quot;)]
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
+    fb &#x3D; this._fb.group({
+      id:                        [&#x27;&#x27;],
+      firstName:                 [&#x27;&#x27;],
+      lastName:                  [&#x27;&#x27;],
+      address:                   [&#x27;&#x27;],
+      city:                      [&#x27;&#x27;],
+      state:                     [&#x27;&#x27;],
+      zip:                       [&#x27;&#x27;],
+      phone:                     [&#x27;&#x27;],
+      cell:                      [&#x27;&#x27;],
+      email:                     [&#x27;&#x27;],
+      emergencyContact:          [&#x27;&#x27;],
+      emergencyPhone:            [&#x27;&#x27;],
+      positionID:                [&#x27;&#x27;],
+      dob:                       [&#x27;&#x27;],
+      jobTypeID:                 [&#x27;&#x27;],
+      courtesyTitle:             [&#x27;&#x27;],
+      notes:                     [&#x27;&#x27;],
+      reportsTo:                 [&#x27;&#x27;],
+      logonOnCheck1:             [&#x27;&#x27;],
+      logonCheck2:               [&#x27;&#x27;],
+      logonCheck3:               [&#x27;&#x27;],
+      password:                  [&#x27;&#x27; ],
+      socialSecurity:            [&#x27;&#x27;],
+      payRate:                   [&#x27;&#x27;],
+      numberofHoursPrefered:     [&#x27;&#x27;],
+      active:                    [&#x27;&#x27;],
+      hireDate:                  [&#x27;&#x27;],
+      registerLock:              [&#x27;&#x27;],
+      withHolding:               [&#x27;&#x27;],
+      employeeTier:              [&#x27;&#x27;],
+      employeeDiscountRate:      [&#x27;&#x27;],
+      employeeCard:              [&#x27;&#x27;],
+      title:                     [&#x27;&#x27;],
+      prefix:                    [&#x27;&#x27;],
+      driverOut:                 [&#x27;&#x27;],
+      driverOrder:               [&#x27;&#x27;],
+      termTemp:                  [&#x27;&#x27;],
+      activePosition:            [&#x27;&#x27;],
+      onClock:                   [&#x27;&#x27;],
+      terminationDate:           [&#x27;&#x27;],
+      upsize_ts:                 [&#x27;&#x27;],
+      driverFee:                 [&#x27;&#x27;],
+      commissionRate:            [&#x27;&#x27;],
+      logonPassword:             [&#x27;&#x27;],
+      securityLevel:             [&#x27;&#x27;],
+      siteID:                    [&#x27;&#x27;],
+      regionMajorID:             [&#x27;&#x27;],
+      regionMinorID:             [&#x27;&#x27;],
+      regionSuperiorID:          [&#x27;&#x27;],
+      commissionDollarLevel:     [&#x27;&#x27;],
+      commissionPercentageLevel: [&#x27;&#x27;],
+      commissionGroupID:         [&#x27;&#x27;],
+      apiPassword:               [&#x27;&#x27;],
+      metrcLicenseNumber:        [&#x27;&#x27;],
+      metrcStatus:               [&#x27;&#x27;],
+      metrcType:                 [&#x27;&#x27;],
+      metrcGranted:              [&#x27;&#x27;],
+      metrcExpires:              [&#x27;&#x27;],
+      metrcHired:                [&#x27;&#x27;],
+      metrcMGR:                  [&#x27;&#x27;],
+      metrcLastLogin:            [&#x27;&#x27;],
+      stateIDNumber:             [&#x27;&#x27;],
+      stateIDExpiration:         [&#x27;&#x27;],
+      metrcKey:                  [&#x27;&#x27;],
+      metrcPass:                 [&#x27;&#x27;],
+    })
+    return fb
+  }
+}
+
+// jobType:                   JobType;
 </code></pre>
     </div>
 
@@ -807,14 +1706,15 @@ export class EmployeeService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -826,6 +1726,15 @@ export class EmployeeService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -835,8 +1744,8 @@ export class EmployeeService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

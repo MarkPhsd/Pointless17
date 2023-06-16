@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >ServiceTypeService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >ServiceTypeService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -90,7 +97,13 @@
                                 <a href="#getSaleTypes" >getSaleTypes</a>
                             </li>
                             <li>
+                                <a href="#getSaleTypesCached" >getSaleTypesCached</a>
+                            </li>
+                            <li>
                                 <a href="#getType" >getType</a>
+                            </li>
+                            <li>
+                                <a href="#getTypeCached" >getTypeCached</a>
                             </li>
                             <li>
                                 <a href="#getTypesBySearch" >getTypesBySearch</a>
@@ -116,13 +129,13 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+<code>constructor(http: HttpClient, httpCache: <a href="../injectables/HttpClientCacheService.html" target="_self">HttpClientCacheService</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>)</code>
                     </td>
                 </tr>
                         <tr>
@@ -148,7 +161,7 @@
                                                         <td>http</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                                    <code>HttpClient</code>
                                                         </td>
                                                   
                                                     <td>
@@ -157,10 +170,22 @@
                                                     
                                                 </tr>
                                                 <tr>
-                                                        <td>auth</td>
+                                                        <td>httpCache</td>
                                                   
                                                         <td>
-                                                                        <code><a href="../injectables/AuthenticationService.html" target="_self" >AuthenticationService</a></code>
+                                                                        <code><a href="../injectables/HttpClientCacheService.html" target="_self" >HttpClientCacheService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>siteService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SitesService.html" target="_self" >SitesService</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -177,7 +202,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -202,8 +227,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="99"
-                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:99</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="143"
+                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:143</a></div>
                 </td>
             </tr>
 
@@ -213,6 +238,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -282,8 +308,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="43"
-                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:43</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="70"
+                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:70</a></div>
                 </td>
             </tr>
 
@@ -293,6 +319,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -350,8 +377,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="71"
-                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:71</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="115"
+                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:115</a></div>
                 </td>
             </tr>
 
@@ -361,6 +388,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -418,8 +446,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="57"
-                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:57</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="84"
+                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:84</a></div>
                 </td>
             </tr>
 
@@ -429,6 +457,76 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IServiceType.html" target="_self" >Observable&lt;IServiceType[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getSaleTypesCached"></a>
+                    <span class="name">
+                        <span ><b>getSaleTypesCached</b></span>
+                        <a href="#getSaleTypesCached"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getSaleTypesCached(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="99"
+                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:99</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -486,8 +584,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="16"
-                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:16</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="18"
+                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:18</a></div>
                 </td>
             </tr>
 
@@ -497,6 +595,88 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IServiceType.html" target="_self" >Observable&lt;IServiceType&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTypeCached"></a>
+                    <span class="name">
+                        <span ><b>getTypeCached</b></span>
+                        <a href="#getTypeCached"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTypeCached(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="33"
+                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:33</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -566,8 +746,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="30"
-                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:30</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="57"
+                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:57</a></div>
                 </td>
             </tr>
 
@@ -577,6 +757,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -639,15 +820,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>postServiceType(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, serviceType: <a href="../interfaces/IServiceType.html" target="_self">IServiceType</a>)</code>
+<code>postServiceType(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, serviceType: <a href="../interfaces/IServiceTypePOSPut.html" target="_self">IServiceTypePOSPut</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="113"
-                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:113</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="157"
+                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:157</a></div>
                 </td>
             </tr>
 
@@ -657,6 +838,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -681,7 +863,7 @@
                                 <tr>
                                     <td>serviceType</td>
                                     <td>
-                                                <code><a href="../interfaces/IServiceType.html" target="_self" >IServiceType</a></code>
+                                                <code><a href="../interfaces/IServiceTypePOSPut.html" target="_self" >IServiceTypePOSPut</a></code>
                                     </td>
 
                                     <td>
@@ -719,15 +901,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>putServiceType(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, serviceType: <a href="../interfaces/IServiceType.html" target="_self">IServiceType</a>)</code>
+<code>putServiceType(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, serviceType: <a href="../interfaces/IServiceTypePOSPut.html" target="_self">IServiceTypePOSPut</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="85"
-                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:85</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="129"
+                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:129</a></div>
                 </td>
             </tr>
 
@@ -737,6 +919,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -773,7 +956,7 @@
                                 <tr>
                                     <td>serviceType</td>
                                     <td>
-                                                <code><a href="../interfaces/IServiceType.html" target="_self" >IServiceType</a></code>
+                                                <code><a href="../interfaces/IServiceTypePOSPut.html" target="_self" >IServiceTypePOSPut</a></code>
                                     </td>
 
                                     <td>
@@ -811,15 +994,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>saveServiceType(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, serviceType: <a href="../interfaces/IServiceType.html" target="_self">IServiceType</a>)</code>
+<code>saveServiceType(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, serviceType: <a href="../interfaces/IServiceTypePOSPut.html" target="_self">IServiceTypePOSPut</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="127"
-                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:127</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="171"
+                            class="link-to-prism">src/app/_services/transactions/service-type-service.service.ts:171</a></div>
                 </td>
             </tr>
 
@@ -829,6 +1012,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -853,7 +1037,7 @@
                                 <tr>
                                     <td>serviceType</td>
                                     <td>
-                                                <code><a href="../interfaces/IServiceType.html" target="_self" >IServiceType</a></code>
+                                                <code><a href="../interfaces/IServiceTypePOSPut.html" target="_self" >IServiceTypePOSPut</a></code>
                                     </td>
 
                                     <td>
@@ -883,13 +1067,13 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
 import { HttpClient } from &#x27;@angular/common/http&#x27;;
-import { AuthenticationService } from &#x27;src/app/_services/system/authentication.service&#x27;;
 import { Observable } from &#x27;rxjs&#x27;;
-import { IServiceType, ISite }   from &#x27;src/app/_interfaces&#x27;;
-import { environment } from &#x27;src/environments/environment&#x27;;
+import { IServiceType, IServiceTypePOSPut, ISetting, ISite }   from &#x27;src/app/_interfaces&#x27;;
+import { HttpClientCacheService } from &#x27;src/app/_http-interceptors/http-client-cache.service&#x27;;
+import { SitesService } from &#x27;../reporting/sites.service&#x27;;
 
 @Injectable({
   providedIn: &#x27;root&#x27;
@@ -897,7 +1081,9 @@ import { environment } from &#x27;src/environments/environment&#x27;;
 
 export class ServiceTypeService {
 
-  constructor( private http: HttpClient, private auth: AuthenticationService, ) { }
+  constructor( private http        : HttpClient,
+                private httpCache  : HttpClientCacheService,
+                private siteService: SitesService) { }
 
   getType(site: ISite, id: number):  Observable&lt;IServiceType&gt; {
 
@@ -908,6 +1094,31 @@ export class ServiceTypeService {
     const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
 
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.get&lt;IServiceType&gt;(url);
+
+  }
+
+
+  getTypeCached(site: ISite, id: number):  Observable&lt;IServiceType&gt; {
+
+    const controller &#x3D; &#x27;/ServiceType/&#x27;
+
+    const endPoint &#x3D; &#x60;getServiceType&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const uri &#x3D; { url: url, cacheMins: 120}
+
+    let appCache &#x3D;  JSON.parse(localStorage.getItem(&#x27;appCache&#x27;)) as ISetting
+    if (appCache) {
+      if (appCache?.value &amp;&amp; appCache?.boolean) {
+        const url &#x3D; { url: uri, cacheMins: appCache.value}
+        return  this.httpCache.get&lt;IServiceType&gt;(uri)
+      }
+    }
 
     return this.http.get&lt;IServiceType&gt;(url);
 
@@ -954,6 +1165,23 @@ export class ServiceTypeService {
 
   }
 
+
+  getSaleTypesCached(site: ISite):  Observable&lt;IServiceType[]&gt; {
+
+    const controller &#x3D; &#x27;/ServiceType/&#x27;
+
+    const endPoint &#x3D; &#x27;GetSaleTypes&#x27;
+
+    const parameters &#x3D; &#x27;&#x27;;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const uri &#x3D;  this.siteService.getCacheURI(url)
+
+    return  this.httpCache.get&lt;IServiceType[]&gt;(uri)
+
+  }
+
   getPurchaseOrderTypes(site: ISite):  Observable&lt;IServiceType[]&gt; {
 
     const controller &#x3D; &#x27;/ServiceType/&#x27;
@@ -968,7 +1196,7 @@ export class ServiceTypeService {
 
   }
 
-  putServiceType(site: ISite, id: any, serviceType: IServiceType): Observable&lt;IServiceType&gt; {
+  putServiceType(site: ISite, id: any, serviceType: IServiceTypePOSPut): Observable&lt;IServiceType&gt; {
 
     const controller &#x3D; &quot;/ServiceType/&quot;
 
@@ -996,7 +1224,7 @@ export class ServiceTypeService {
 
   }
 
-  postServiceType(site: ISite, serviceType: IServiceType): Observable&lt;IServiceType&gt; {
+  postServiceType(site: ISite, serviceType: IServiceTypePOSPut): Observable&lt;IServiceType&gt; {
 
     const controller &#x3D; &#x27;/ServiceType/&#x27;
 
@@ -1010,7 +1238,7 @@ export class ServiceTypeService {
 
   }
 
-  saveServiceType(site: ISite, serviceType: IServiceType): Observable&lt;IServiceType&gt; {
+  saveServiceType(site: ISite, serviceType: IServiceTypePOSPut): Observable&lt;IServiceType&gt; {
 
     if (!serviceType.id || serviceType.id &#x3D;&#x3D; 0) {
       return this.postServiceType(site, serviceType)
@@ -1035,14 +1263,15 @@ export class ServiceTypeService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -1054,6 +1283,15 @@ export class ServiceTypeService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -1063,8 +1301,8 @@ export class ServiceTypeService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

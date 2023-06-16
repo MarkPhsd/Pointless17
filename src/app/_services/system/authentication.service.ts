@@ -57,6 +57,7 @@ export class AuthenticationService {
     public  userAuths$   = this._userAuths.asObservable();
 
     _deviceInfo: IDeviceInfo;
+
     updateUserAuths(userAuths : IUserAuth_Properties ) {
       this._userAuths.next(userAuths)
       if (userAuths) {
@@ -72,7 +73,6 @@ export class AuthenticationService {
     get deviceInfo(): IDeviceInfo {
       return this._deviceInfo;
     }
-
 
     updateUser(user: IUser) {
       if (!user ){
@@ -171,6 +171,45 @@ export class AuthenticationService {
       return false
     }
 
+    public get isCustomer(): boolean {
+      try {
+        if  (this.userValue  != null) {
+          if  (this.userValue &&
+          (this.userValue.roles === 'user' )) {
+            return true
+          }
+        }
+      } catch (error) {
+        console.log('error', error)
+      }
+      return false
+    }
+    public get isUser(): boolean {
+      try {
+        if  (this.userValue  != null) {
+          if  (this.userValue &&
+          (this.userValue.roles === 'user' )) {
+            return true
+          }
+        }
+      } catch (error) {
+        console.log('error', error)
+      }
+      return false
+    }
+    public get isStaff(): boolean {
+      try {
+        if  (this.userValue  != null) {
+          if  (this.userValue &&
+          (this.userValue.roles === 'admin' || this.userValue.roles === 'manager' || this.userValue.roles === 'employee' )) {
+            return true
+          }
+        }
+      } catch (error) {
+        console.log('error', error)
+      }
+      return false
+    }
 
     public get userxValue(): IUser {
       if ( !this._userx.value ) {
@@ -236,6 +275,11 @@ export class AuthenticationService {
       localStorage.removeItem('userx');
       localStorage.removeItem('userAuth')
       localStorage.removeItem('orderSubscription');
+      
+      // if (!this.platFormservice.isApp()) {
+      //   localStorage.removeItem('storedApiUrl');
+      // }
+
       this.updateUser(null);
       this.updateUserX(null);
     }

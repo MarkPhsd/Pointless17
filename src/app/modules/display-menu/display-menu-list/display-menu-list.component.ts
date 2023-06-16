@@ -47,7 +47,7 @@ export class DisplayMenuListComponent implements OnInit {
   }
 
   orderSubscriber() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderMethodService.currentOrder$.subscribe( data => {
       if (data && data.id) {
         this.order = data
         return
@@ -60,6 +60,7 @@ export class DisplayMenuListComponent implements OnInit {
       public route: ActivatedRoute,
       private priceScheduleService: PriceScheduleService,
       private siteService: SitesService,
+      
       private orderMethodService: OrderMethodsService,
       private orderService: OrdersService,
       private awsBucket         : AWSBucketService,
@@ -119,7 +120,7 @@ export class DisplayMenuListComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     let order$ = of(this.order)
     if (!this.order || this.order == null) {
-      order$ = this.orderService.newOrderWithPayloadMethod(site, null);
+      order$ = this.orderMethodService.newOrderWithPayloadMethod(site, null);
     }
     if (order$) {
 

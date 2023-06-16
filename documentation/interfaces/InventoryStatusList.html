@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -42,35 +42,42 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Interfaces</li>
-  <li
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
   >
   InventoryStatusList</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/modules/admin/inventory/inventory-list/inventory-list/inventory-list.component.ts</code>
+            <code>src/app/_services/inventory/inventory-assignment.service.ts</code>
         </p>
 
 
 
 
-        <section>
+        <section data-compodoc="block-index">
             <h3 id="index">Index</h3>
             <table class="table table-sm table-bordered index-table">
                 <tbody>
@@ -103,7 +110,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-properties">
                 <h3 id="inputs">Properties</h3>
                     <table class="table table-sm table-bordered">
                         <tbody>
@@ -175,632 +182,688 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, AfterViewInit, ViewChild, Output, Inject } from &#x27;@angular/core&#x27;;
-import { MatSnackBar } from &#x27;@angular/material/snack-bar&#x27;;
-import { fromEvent, Observable, Subject  } from &#x27;rxjs&#x27;;
-import { FormBuilder, FormControl, FormGroup } from &#x27;@angular/forms&#x27;;
-import { Router } from &#x27;@angular/router&#x27;;
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { HttpClient } from &#x27;@angular/common/http&#x27;;
+import { AuthenticationService } from &#x27;../system/authentication.service&#x27;;
+import { BehaviorSubject, Observable } from &#x27;rxjs&#x27;;
+import { IPOSOrder, IProduct, ISite, IUser, Paging}  from &#x27;src/app/_interfaces&#x27;;
 import { SitesService } from &#x27;src/app/_services/reporting/sites.service&#x27;;
-import { debounceTime, distinctUntilChanged, switchMap, filter, tap } from &#x27;rxjs/operators&#x27;;
-import { InventoryAssignmentService, IInventoryAssignment, InventoryFilter } from &#x27;src/app/_services/inventory/inventory-assignment.service&#x27;;
-import { ISite } from &#x27;src/app/_interfaces&#x27;;
-import { MetrcItemsCategoriesService } from &#x27;src/app/_services/metrc/metrc-items-categories.service&#x27;;
-import { InventoryLocationsService } from &#x27;src/app/_services/inventory/inventory-locations.service&#x27;;
-import { MatDialog } from &#x27;@angular/material/dialog&#x27;;
-import { IInventoryLocation } from &#x27;src/app/_services/inventory/inventory-locations.service&#x27;;
-import { AgGridService } from &#x27;src/app/_services/system/ag-grid-service&#x27;;
-import { IGetRowsParams,  GridApi, GridOptions, ICellRendererParams  } from &#x27;@ag-grid-community/all-modules&#x27;;
-import { ButtonRendererComponent } from &#x27;src/app/_components/btn-renderer.component&#x27;;
-import &quot;ag-grid-community/dist/styles/ag-grid.css&quot;;
-import &quot;ag-grid-community/dist/styles/ag-theme-alpine.css&quot;;
-import { GridAlignColumnsDirective } from &#x27;@angular/flex-layout/grid/typings/align-columns/align-columns&#x27;;
+import { IMenuItem } from &#x27;src/app/_interfaces/menu/menu-products&#x27;;
+import { METRCPackage } from &#x27;src/app/_interfaces/metrcs/packages&#x27;;
+import { UntypedFormBuilder, UntypedFormGroup } from &#x27;@angular/forms&#x27;;
+import { InventoryManifest } from &#x27;./manifest-inventory.service&#x27;;
+export interface InventorySearchResultsPaged {
+  results     : IInventoryAssignment[];
+  paging      : Paging;
+  errorMessage: string;
+  total       : number;
+}
 
-import {
-  METRCItems,
-  METRCItemsCategories,
-  MetrcItemsBrands,
-  METRCItemsCreate,
-  METRCItemsUpdate
-} from &#x27;src/app/_interfaces/metrcs/items&#x27;;
-import { MoveInventoryLocationComponent } from &#x27;../../move-inventory-location/move-inventory-location.component&#x27;;
-import { InventoryListToolTipComponent } from &#x27;../inventory-list-tool-tip/inventory-list-tool-tip.component&#x27;;
-import { NavParams } from &#x27;@ionic/angular&#x27;;
-import { InventoryEditButtonService } from &#x27;src/app/_services/inventory/inventory-edit-button.service&#x27;;
+export interface AvalibleInventoryResults {
+  results     : IInventoryAssignment[];
+  total       : number;
+  errorMessage: string;
+}
+export interface IInventoryAssignment {
+  id:                    number;
+  manifestID            :number;
+  packageType:           string;
+  productName:           string;
+  productCategoryName:   string;
+  itemStrainName:        string;
+  unitOfMeasureName:     string;
+  unitMulitplier:        number;
+  sku:                   string;
+  label:                 string;
+  metrcPackageID:        number;
+  locationID:            number;
+  location:              string;
+  baseQuantity:          number;
+  packageQuantity:       number;
+  unitConvertedtoName:   string;
+  productID:             number;
+  packageCountRemaining: number;
+  baseQuantityRemaining: number;
+  dateCreated:           string;
+  expiration:            string;
+  facilityLicenseNumber: string;
+  batchDate:             string;
+  cost:                  number;
+  price:                 number;
+  notAvalibleForSale:    boolean;
+  thc:                   number;
+  thc2:                  number;
+  thca2:                 number;
+  thca:                  number;
+  cbd:                   number;
+  cbd2:                  number;
+  cbda2:                 number;
+  cbda:                  number;
+  cbn:                   number;
+  cbn2:                  number;
+  employeeID:            number;
+  employeeName:          string;
+  requiresAttention:     boolean;
+  jointWeight:           number;
+  beginDate:             string;
+  endDate:               string;
+  intakeUOM:             string;
+  intakeConversionValue: number;
+  adjustmentType:        string;
+  adjustmentDate:        string;
+  adjustmentNote:        string;
+  invoice:               string;
+  packagedOrBulk:        number;
+  priceScheduleID:       number;
+  invoiceCode:           string;
+  thcContent:            number;
+  productionBatchNumber: string;
+  sourceSiteID        : number;
+  sourceSiteURL       : string;
+  sourceSiteName      : string;
+  destinationSiteID   : number;
+  destinationSiteURL  : string;
+  destinationSiteName : string;
+  rejected:             string;
+  priceCategoryID     : number;
+  productCountUpdated : boolean;
+  poDetailID          : number;
+  caseQuantity        : number;
+  itemSku             : string;
+  casePrice           : number;
+  product             : IProduct;
+  serials:              Serial[];
+
+  originID : number;
+  vendor : number
+  createdAtTime : string;
+  lastAuditDate : string;
+  itemForm : string;
+  description : string;
+  testLotNumber : string;
+  testDate : string;
+  testedBy : string;
+  batchdescription : string;
+  itemTypeName : string;
+  itemTypeID : number;
+  brandID : number;
+  itemSKU : string;
+
+}
+
+export interface Serial {
+  id:                    number;
+  inventoryAssignmentID: number;
+  sku:                   string;
+  quantity:              number;
+  serialCode:            string;
+  adjustmentType:        string;
+  adjustmentDate:        string;
+  adjustmentNote:        string;
+  beginDate:             string;
+  endDate:               string;
+}
+
+
+export interface InventoryFilter {
+  productName:          string;
+  productCategoryName:  string;
+  itemStrainName:       string;
+  sku:                  string;
+  label:                string;
+  location:             string;
+  noActiveCount:        boolean;
+  packageType:          string;
+  pageSize:             number;
+  pageNumber:           number;
+  notAvalibleForSale:   boolean;
+  requiresAttention:    boolean;
+  inventoryStatus:      number;
+  manifestID        :   number;
+  manifestAssigned    : number;
+}
 
 export interface InventoryStatusList {
   name: string;
   id:   number;
 }
-
-@Component({
-  selector: &#x27;app-inventory-list&#x27;,
-  templateUrl: &#x27;./inventory-list.component.html&#x27;,
-  styleUrls: [&#x27;./inventory-list.component.scss&#x27;]
+@Injectable({
+  providedIn: &#x27;root&#x27;
 })
 
-export class InventoryListComponent implements OnInit, AfterViewInit {
-
-  @ViewChild(&#x27;input&#x27;, {static: true}) input: ElementRef;
-  @Output() itemSelect  &#x3D; new EventEmitter();
-
-  id:                   any;
-  item:                 string;
-  search:               string;
-  searchPhrase:         Subject&lt;any&gt; &#x3D; new Subject();
-
-
-  // _inventoryAssignment$             : Observable&lt;IInventoryAssignment[]&gt;;
-  inventoryAssignment$             : Subject&lt;IInventoryAssignment[]&gt; &#x3D; new Subject();
-  _iInventoryAssignment$ &#x3D; this.searchPhrase.pipe(
-    debounceTime(250),
-    distinctUntilChanged(),
-    switchMap(searchPhrase &#x3D;&gt;
-        this.refreshSearch(searchPhrase)
-    )
-  )
-
-  searchGridApi:         GridApi;
-  searchGridColumnApi:   GridAlignColumnsDirective;
-  searchGridOptions:     any;
-  //AgGrid
-  private gridApi:       GridApi;
-  private gridColumnApi: GridAlignColumnsDirective;
-  gridOptions:           any
-  columnDefs &#x3D;           [];
-  defaultColDef;
-
-  // public modules:        any[] &#x3D; AllCommunityModules;
-  frameworkComponents:   any;
-  tooltipShowDelay:      any;
-  rowDataClicked1 &#x3D;      {};
-  rowDataClicked2 &#x3D;      {};
-  public rowData:        any[];
-  public info:           string;
-  paginationSize &#x3D;       50
-  currentRow &#x3D;           1;
-  currentPage &#x3D;          1
-  pageNumber &#x3D;           1
-  pageSize &#x3D;             50
-  numberOfPages &#x3D;        1
-  rowCount &#x3D;             50
-  startRow: number;
-  endRow  : number;
-
-  rowSelection              :  any;
-  inventoryAssignment       :  IInventoryAssignment;
-  inventoryAssignmentHistory: IInventoryAssignment[];
-
-  //list select
-  sites$:               Observable&lt;ISite[]&gt;;
-  site:                 ISite;
-  selectedSiteID:       number;
-
-  metrcCategory$:       Observable&lt;METRCItemsCategories[]&gt;;
-  metrcCategory:        METRCItemsCategories;
-  metrcCategoryID:      number;
-
-  locations$:           Observable&lt;IInventoryLocation[]&gt;;
-  inventoryLocation:    IInventoryLocation;
-  inventoryLocationID:  number;
-
-  inventoryFilter:      InventoryFilter;
-  inventoryStatus:      InventoryStatusList
-  inventoryStatusID:    number
+export class InventoryAssignmentService {
   inventoryStatusList  &#x3D; [
-                          {id: 1, name: &#x27;In Stock - For Sale&#x27;},
-                          {id: 2, name: &#x27;In Stock - Not for Sale&#x27;},
-                          {id: 3, name: &#x27;Sold Out&#x27;},
-                          {id: 0, name:  &#x27;All&#x27;}
-  ] as InventoryStatusList[]
+    {id: 1, name: &#x27;In Stock - For Sale&#x27;},
+    {id: 2, name: &#x27;In Stock - Not for Sale&#x27;},
+    {id: 3, name: &#x27;Sold Out&#x27;},
+    {id: 0, name:  &#x27;All&#x27;}
+ ] as InventoryStatusList[]
 
-  //This is for the search Section//
-  public searchForm: FormGroup;
-  get searchProductsValue() { return this.searchForm.get(&quot;searchProducts&quot;) as FormControl;}
-  get selectedSiteValue()   { return this.searchForm.get(&quot;selectedSiteID&quot;) as FormControl;}
-  private readonly onDestroy &#x3D; new Subject&lt;void&gt;();
+ inventoryActiveList  &#x3D; [
+  {id: 1, name: &#x27;Active&#x27;},
+  {id: 2, name: &#x27;All&#x27;},
+  {id: 0, name: &#x27;Inactive&#x27;}
+] as InventoryStatusList[]
 
-  searchPaging:               boolean;
-  refreshGrid:                boolean;
-  //This is for the search Section//
+  private _avalibleInventoryResults &#x3D; new BehaviorSubject&lt;AvalibleInventoryResults&gt;(null);
+  public avalibleInventoryResults$  &#x3D; this._avalibleInventoryResults.asObservable()
+  public avalibleInventoryResults:   AvalibleInventoryResults;
 
-  constructor(  private _snackBar: MatSnackBar,
-                private inventoryAssignmentService: InventoryAssignmentService,
-                private router: Router,
-                private agGridService: AgGridService,
-                private fb: FormBuilder,
-                private siteService: SitesService,
-                private metrcCategoriesService: MetrcItemsCategoriesService,
-                private locationService: InventoryLocationsService,
-                private dialog: MatDialog,
-                private inventoryEditButon: InventoryEditButtonService,
-              )
+  constructor(
+    private http: HttpClient,
+    private auth: AuthenticationService,
+    private fb  : UntypedFormBuilder,
+    private siteService: SitesService)
   {
-
-
-
   }
 
-  ngOnInit(): void {
+  createManifestFromOrder(site: ISite, manifest: InventoryManifest, order: IPOSOrder): Observable&lt;InventoryManifest&gt; {
 
-    this.sites$ &#x3D;          this.siteService.getSites();
-    this.metrcCategory$ &#x3D;  this.metrcCategoriesService.getCategories();
-    this.locations$ &#x3D; this.locationService.getLocations();
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
 
-    this.searchForm &#x3D; this.fb.group( {
-        searchProducts:     [&#x27;&#x27;],
-        selectedSiteID:     [&#x27;&#x27;],
-        inventoryLocations: [&#x27;&#x27;],
-        inventoryStatusID:  [&#x27;&#x27;],
+    const endPoint &#x3D; &#x60;createManifestFromOrder&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const item &#x3D; {manifest: manifest, order: order}
+
+    return  this.http.post&lt;InventoryManifest&gt;(url, item )
+  }
+
+  rejectItemsInManifest(site: ISite, id: number, items: IInventoryAssignment[]): Observable&lt;IInventoryAssignment[]&gt; {
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;rejectItemsInManifest&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.get&lt;IInventoryAssignment[]&gt;(url)
+  }
+
+  updateAvalibleInventoryResults(results) {
+    this.avalibleInventoryResults &#x3D; results
+    this._avalibleInventoryResults.next(results)
+  }
+
+  getAvalibleInventory(site: ISite, productID: number, active: boolean): Observable&lt;AvalibleInventoryResults&gt; {
+
+      const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+      let endPoint &#x3D; &#x60;getAvalibleInventory&#x60;
+
+      const user &#x3D;  JSON.parse(localStorage.getItem(&#x27;user&#x27;)) as IUser
+
+      if (!user || !user.roles || user.roles &#x3D;&#x3D; &#x27;&#x27;) {
+        endPoint  &#x3D; &#x60;getAvalibleInventoryNoRoles&#x60;
       }
-    );
 
-    this.initGridResults();
+      const parameters &#x3D; &#x60;?ProductID&#x3D;${productID}&amp;availible&#x3D;${active}&#x60;
 
-    this.refreshGrid &#x3D; true
+      const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
-    if (!this.search) { this.search &#x3D; &#x27;&#x27;}
-  };
+      console.log(&#x27;url&#x27;, url)
 
-  ngAfterViewInit() {
-    fromEvent(this.input.nativeElement,&#x27;keyup&#x27;)
-        .pipe(
-            filter(Boolean),
-            debounceTime(500),
-            distinctUntilChanged(),
-            tap((event:KeyboardEvent) &#x3D;&gt; {
-              const search  &#x3D; this.input.nativeElement.value
-              this.refreshSearch(search);
-            })
-        )
-      .subscribe();
-  }
-
-
-  initAGGridFeatures() {
-
-    this.columnDefs &#x3D;  [
-
-      {headerName: &#x27;id&#x27;,  sortable: true, field: &#x27;id&#x27;,  hide: true, },
-      {headerName: &#x27;Name&#x27;,  sortable: true, field: &#x27;productName&#x27;,  minWidth: 150},
-      {headerName: &#x27;Sku&#x27;, field: &#x27;sku&#x27;, sortable: true},
-      {headerName: &#x27;Location&#x27;, field: &#x27;location&#x27;, sortable: true},
-      {headerName: &#x27;Category&#x27;, field: &#x27;productCategoryName&#x27;, sortable: true},
-      {headerName: &#x27;Count&#x27;, field: &#x27;packageCountRemaining&#x27;, sortable: true},
-      {headerName: &#x27;PKG Type&#x27;, field: &#x27;unitConvertedtoName&#x27;, sortable: true},
-      {headerName: &#x27;Retail&#x27;, field: &#x27;price&#x27;, sortable: true,
-                    cellRenderer: this.currencyCellRendererUSD},
-      {headerName: &#x27;Cost&#x27;, field: &#x27;cost&#x27;, sortable: true,
-                    cellRenderer: this.currencyCellRendererUSD},
-    ]
-
-    this.rowSelection &#x3D; &#x27;single&#x27;;
-
-    this.tooltipShowDelay &#x3D; 0;
-
-    this.initGridOptions()
-
+      return  this.http.get&lt;AvalibleInventoryResults&gt;(url)
 
   }
 
-  // agGridService
-  currencyCellRendererUSD(params: any) {
-
-    if (isNaN(params) !&#x3D; true)  {  return 0.00 }
-
-    var inrFormat &#x3D; new Intl.NumberFormat(&#x27;en-US&#x27;, {
-      style: &#x27;currency&#x27;,
-      currency: &#x27;USD&#x27;,
-      minimumFractionDigits: 2
-    });
-
-    if (inrFormat.format(params.value) &#x3D;&#x3D; &#x27;$NaN&#x27;) { return &#x27;&#x27;}
-    return inrFormat.format(params.value);
-
-  }
-
-  initGridResults() {
-
-    this.initAGGridFeatures()
-
-    this.frameworkComponents &#x3D;  { inventoryListToolTipComponent: InventoryListToolTipComponent,
-                                  btnCellRenderer: ButtonRendererComponent  }
-
-    this.defaultColDef &#x3D; {
-      flex:             1,
-      minWidth:         100,
-      filter:           true,
-      resizable:        true,
-      // editable:         true,
-      sortable:         true,
-      tooltipComponent: &#x27;inventoryListToolTipComponent&#x27;,
-      // cellRendererFramework: InventoryListToolTipComponent,
-      // cellRendererParams: (params: ICellRendererParams) &#x3D;&gt; this.formatToolTip(params.data)
-    };
-  }
-
-  formatToolTip(params: any) {
-    // USE THIS FOR TOOLTIP LINE BREAKS
-    const adjustmentNote &#x3D; params.adjustmentNote;
-    const adjustmentType &#x3D; params.adjustmentType;
-    const lineBreak &#x3D; true;
-    const toolTipArray &#x3D; [adjustmentNote, adjustmentType]
-    return { toolTipArray, lineBreak }
-
-    // USE THIS FOR SINGLE LINE TOOLTIP
-    // const lineBreak &#x3D; false;
-    // const toolTipString &#x3D; &#x27;Hello World&#x27;
-    // return { toolTipString, lineBreak }
-  }
-
-  initGridOptions()  {
-    this.gridOptions &#x3D; {
-      pagination: true,
-      paginationPageSize: 50,
-      cacheBlockSize: 50,
-      maxBlocksInCache: 800,
-      rowModelType: &#x27;infinite&#x27;,
-      infiniteInitialRowCount: 2,
-    }
-  }
-
-  initSearchGridOptions()  {
-    this.searchGridOptions &#x3D; {
-      pagination: true,
-      paginationPageSize: this.paginationSize,
-      cacheBlockSize: this.paginationSize,
-      // maxBlocksInCache: 2,
-      rowModelType: &#x27;infinite&#x27;,
-      infiniteInitialRowCount: 2,
-    }
-  }
-
-  addInventoryItem() {
-    try {
-      this.inventoryEditButon.addInventoryDialog(0)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  listAll(){
-
-    this.pageNumber &#x3D; 1
-    this.currentPage &#x3D; this.currentPage  + 1
-    this.inventoryFilter &#x3D; this.initSearchModel(&#x27;&#x27;)
-    this._iInventoryAssignment$ &#x3D; this.inventoryAssignmentService.getInventory(this.site, this.inventoryFilter)
-    this.getRowData(1, 50)
-
-  }
-
-  refreshData() {
-
-    const inv$ &#x3D; this.inventoryAssignmentService.getInventory(this.site, this.inventoryFilter)
-    inv$.subscribe ( data &#x3D;&gt; {
-      this.inventoryAssignment$.next(data)
-    })
-
-
-  }
-
-  getAssignedSiteSelection(event) {
-    if (event.value) {
-      this.selectedSiteID &#x3D; event.value
-      this.assignSite(this.selectedSiteID);
-    }
-  }
-
-  assignSite(id: number){
-    this.siteService.getSite(id).subscribe( data &#x3D;&gt; {
-      this.site &#x3D; data
-    })
-  }
-
-  getAssignedSite(): ISite {
-    if (this.site) {
-      return this.site
-    } else {
-      return  this.siteService.getAssignedSite()
-    }
-  }
-
-  getMetrcCategory(event) {
-
-    this.metrcCategoryID &#x3D; event.value
-    if (this.metrcCategoryID &#x3D;&#x3D; 0) {
-      this.metrcCategory &#x3D; null
-      this.searchItems()
-      return
-    }
-    if (event.value) {
-      this.metrcCategoryID &#x3D; event.value
-      this.assignMetrcCategory(this.metrcCategoryID);
-    }
-  }
-
-  assignMetrcCategory(id: number) {
-    this.metrcCategoriesService.getCategory(id).subscribe( data &#x3D;&gt; {
-      this.metrcCategory &#x3D; data
-      this.searchItems()
-    })
-  }
-
-  getLocation(event) {
-    this.inventoryLocationID &#x3D; event.value
-    if (this.inventoryLocationID &#x3D;&#x3D; 0) {
-      this.inventoryLocation &#x3D; null
-      this.searchItems()
-      return
-    }
-    if (event.value) {
-      this.assignLocation(this.inventoryLocationID);
-    }
-  }
-
-  assignLocation(id: number){
-    this.locationService.getLocation(id).subscribe( data &#x3D;&gt; {
-      this.inventoryLocation &#x3D; data
-      console.log(data)
-      this.searchItems()
-    })
-  }
-
-  getInventoryStatus(event) {
-    if (event.value) {
-      this.assignInventoryStatus(event.value);
-    } else {
-      this.inventoryStatus.id &#x3D; 0
-      this.searchItems()
-    }
-  }
-
-  assignInventoryStatus(name: string): InventoryStatusList {
-    return  this.inventoryStatus &#x3D; this.inventoryStatusList.find(data &#x3D;&gt;
+  getSummaryOfGramsUsed(site: ISite, inventoryAssigments: IInventoryAssignment[], packageQuantity: number): any {
+    if (inventoryAssigments) {
+      let total &#x3D; 0; inventoryAssigments.forEach(item &#x3D;&gt;
       {
-        if ( data.name &#x3D;&#x3D;&#x3D; name ) {
-          this.inventoryStatus &#x3D; data;
-          this.inventoryStatusID  &#x3D; this.inventoryStatus.id
-          this.searchItems()
-          return
-        }
+        total +&#x3D; item.baseQuantity //* item.jointWeight
+      })
+      console.log(&#x27;total used&#x27;)
+      return packageQuantity - total
+    }
+  }
+
+  getInventoryAssignment(site: ISite, id: number): Observable&lt;IInventoryAssignment&gt; {
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;GetInventoryAssignment&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.get&lt;IInventoryAssignment&gt;(url)
+
+  }
+
+  getInventoryAssignmentHistory(site: ISite, id: number): Observable&lt;IInventoryAssignment[]&gt; {
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;getInventoryHistoryList&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.get&lt;IInventoryAssignment[]&gt;(url)
+
+  }
+
+  getInventory(site: ISite, inventoryFilter: InventoryFilter): Observable&lt;InventorySearchResultsPaged&gt; {
+
+      const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+      const endPoint &#x3D; &#x60;getInventoryList&#x60;
+
+      const parameters &#x3D; &#x60;&#x60;
+
+      const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+      return  this.http.post&lt;InventorySearchResultsPaged&gt;(url, inventoryFilter)
+
+  }
+
+  getActiveInventory(site: ISite, inventoryFilter: InventoryFilter): Observable&lt;InventorySearchResultsPaged&gt; {
+
+    inventoryFilter.noActiveCount &#x3D; true
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;postInventory&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+    return  this.http.post&lt;InventorySearchResultsPaged&gt;(url, inventoryFilter)
+
+  }
+
+
+    getInActiveInventory(site: ISite, pageNumber: number, pageSize: number): Observable&lt;InventorySearchResultsPaged&gt; {
+
+      const inventoryFilter &#x3D; {}  as InventoryFilter;
+
+      inventoryFilter.pageNumber &#x3D; pageNumber
+      inventoryFilter.pageSize &#x3D; pageSize
+      inventoryFilter.noActiveCount &#x3D; true
+
+      const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+      const endPoint &#x3D; &#x60;getInventoryList&#x60;
+
+      const parameters &#x3D; &#x60;&#x60;
+
+      const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+      return  this.http.post&lt;InventorySearchResultsPaged&gt;(url, inventoryFilter )
+
+  }
+
+  getInventoryByType(site: ISite,pageNumber: number, pageSize: number, type: string): Observable&lt;InventorySearchResultsPaged&gt; {
+
+    const inventoryFilter &#x3D; {}  as InventoryFilter;
+
+    inventoryFilter.packageType &#x3D; type
+    inventoryFilter.pageNumber &#x3D; pageNumber
+    inventoryFilter.pageSize &#x3D; pageSize
+    inventoryFilter.noActiveCount &#x3D; true
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;getInventoryList&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.post&lt;any&gt;(url, inventoryFilter )
+
+  }
+
+  assignItemsToManifest(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment[]) {
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;AssignToManifest&#x60;
+
+    const parameters &#x3D; &#x60;?manifestID&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.post&lt;IInventoryAssignment[]&gt;(url, iInventoryAssignment)
+  }
+    // https://localhost:44309/api/InventoryAssignments/PutInventoryAssignment?id&#x3D;8
+  editInventory(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment): Observable&lt;IInventoryAssignment&gt; {
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;PutInventoryAssignment&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.put&lt;IInventoryAssignment&gt;(url, iInventoryAssignment)
+
+  }
+
+  reconcileInventory(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment): Observable&lt;IInventoryAssignment&gt; {
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;reconcileInventory&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.put&lt;IInventoryAssignment&gt;(url, iInventoryAssignment)
+
+  }
+
+  postUpdateInventoryLocations(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment[]): Observable&lt;IInventoryAssignment[]&gt; {
+
+    if (id &#x3D;&#x3D; null) { return null}
+
+    if (iInventoryAssignment &#x3D;&#x3D; null) { return null}
+
+    if (site &#x3D;&#x3D; null) { return null}
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;postUpdateInventoryLocations&#x60;
+
+    const parameters &#x3D; &#x60;?manifestID&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.post&lt;IInventoryAssignment[]&gt;(url, iInventoryAssignment)
+
+  }
+
+  postInventoryAssignmentList(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment[]): Observable&lt;IInventoryAssignment[]&gt; {
+
+    if (id &#x3D;&#x3D; null) { return null}
+
+    if (iInventoryAssignment &#x3D;&#x3D; null) { return null}
+
+    if (site &#x3D;&#x3D; null) { return null}
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;postInventoryAssignmentList&#x60;
+
+    const parameters &#x3D; &#x60;?manifestID&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.post&lt;IInventoryAssignment[]&gt;(url, iInventoryAssignment)
+
+  }
+
+  moveInventory(site: ISite, iInventoryAssignment: IInventoryAssignment[]): Observable&lt;IInventoryAssignment[]&gt; {
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;moveInventory&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+    return  this.http.post&lt;IInventoryAssignment[]&gt;(url, iInventoryAssignment)
+
+  }
+
+  addInventoryList(site: ISite, label: string, iInventoryAssignment: IInventoryAssignment[]): Observable&lt;IInventoryAssignment[]&gt; {
+
+    console.log(iInventoryAssignment)
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;PostInventoryAssignments&#x60;
+
+    const parameters &#x3D; &#x60;?label&#x3D;${label}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.post&lt;IInventoryAssignment[]&gt;(url, iInventoryAssignment)
+
+  }
+
+  addInventoryItem(site: ISite,  iInventoryAssignment: IInventoryAssignment): Observable&lt;IInventoryAssignment&gt; {
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;PostInventoryAssignment&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.post&lt;IInventoryAssignment&gt;(url, iInventoryAssignment)
+
+
+  }
+
+  deleteInventory(site: ISite, id: number): Observable&lt;IInventoryAssignment&gt; {
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;DeleteInventoryAssignment&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.delete&lt;IInventoryAssignment&gt;(url)
+
+  }
+
+  setNonConvertingFieldValues(inventoryAssignment: IInventoryAssignment,
+                                        facility, inventoryLocation , intakeConversion, menuItem: IMenuItem, metrcPackage: METRCPackage ): IInventoryAssignment {
+
+    // inventoryAssignment &#x3D; this.inventoryAssignmentService.setNonConvertingFieldValues( )
+    //assign values to inventoryAssignement
+    inventoryAssignment.locationID            &#x3D; inventoryLocation.id
+    inventoryAssignment.location              &#x3D; inventoryLocation.name
+
+    inventoryAssignment.intakeUOM             &#x3D; intakeConversion.name
+    inventoryAssignment.intakeConversionValue &#x3D; intakeConversion.value
+
+    inventoryAssignment.facilityLicenseNumber &#x3D; facility.metrcLicense
+
+    inventoryAssignment.productID             &#x3D; menuItem.id
+    inventoryAssignment.productName           &#x3D; menuItem.name
+    inventoryAssignment.itemStrainName        &#x3D; menuItem.name
+
+    console.log(inventoryAssignment)
+
+    inventoryAssignment.label                 &#x3D; metrcPackage.label
+    inventoryAssignment.metrcPackageID        &#x3D; metrcPackage.id
+    inventoryAssignment.packageType           &#x3D; metrcPackage.packageType
+    inventoryAssignment.unitOfMeasureName     &#x3D; metrcPackage.unitOfMeasureName
+    inventoryAssignment.productCategoryName   &#x3D; metrcPackage.productCategoryName
+    // metrcPackage.
+
+    inventoryAssignment.notAvalibleForSale  &#x3D; false
+    if (!inventoryLocation.activeLocation) { inventoryAssignment.notAvalibleForSale  &#x3D; true}
+    inventoryAssignment.requiresAttention     &#x3D; false
+
+    inventoryAssignment.employeeName          &#x3D; localStorage.getItem(&#x27;username&#x27;);
+    inventoryAssignment.employeeID            &#x3D; parseInt(localStorage.getItem(&#x27;userID&#x27;));
+
+    const d &#x3D; new Date();
+    inventoryAssignment.dateCreated           &#x3D; d.toISOString()
+
+    return inventoryAssignment
+  }
+
+
+  assignProductToInventory(menuItem: IMenuItem,  item: IInventoryAssignment) {
+    if (item &amp;&amp; menuItem) {
+      item.productName &#x3D; menuItem.name
+      item.label       &#x3D; menuItem.sku;
+      item.productID   &#x3D; menuItem.id;
+      item.cost        &#x3D; menuItem.wholeSale;
+      item.price       &#x3D; menuItem.retail;
+      item.notAvalibleForSale &#x3D;  false;
+      if (menuItem.itemType) {
+        item.packageType &#x3D; menuItem.itemType.name;
+      }
+      return item
+    }
+  }
+
+  generateSku(sku: string, index: number): string {
+    return &#x60;ps-${sku.substring(sku.length - 7)}-${index}&#x60;
+  }
+
+  setItemValues(inputForm: UntypedFormGroup, item: IInventoryAssignment) {
+    if (!item &amp;&amp; !inputForm) {return item}
+    const  controls &#x3D; inputForm.controls
+    try {
+
+      item.dateCreated &#x3D; new Date().toISOString();
+      item.expiration   &#x3D; controls[&#x27;expiration&#x27;].value;
+      item.packageCountRemaining &#x3D; controls[&#x27;packageQuantity&#x27;].value;
+
+      item.baseQuantityRemaining &#x3D; item.packageCountRemaining;
+      item.packageQuantity       &#x3D; item.packageCountRemaining;
+      item.baseQuantity          &#x3D; item.packageCountRemaining;
+      item.jointWeight           &#x3D; 1;
+      item.notAvalibleForSale    &#x3D; controls[&#x27;notAvalibleForSale&#x27;].value;
+      item.invoice               &#x3D; controls[&#x27;invoiceCode&#x27;].value;
+      item.location              &#x3D; controls[&#x27;location&#x27;].value;
+      item.locationID            &#x3D; controls[&#x27;locationID&#x27;].value;
+      item.unitOfMeasureName     &#x3D; controls[&#x27;unitOfMeasureName&#x27;].value;
+      item.intakeConversionValue &#x3D;1
+      if (  item.jointWeight &#x3D;&#x3D; 0) {  item.jointWeight &#x3D; 1; }
+
+      item.price &#x3D; controls[&#x27;price&#x27;].value;
+      item.cost  &#x3D; controls[&#x27;cost&#x27;].value;
+
+    } catch (error) {
+      console.log(&#x27;error on set item values&#x27;, error)
+      return item
+    }
+    return item
+  }
+
+  assignChemicals(menuItem: IMenuItem, item: IInventoryAssignment) {
+    if (!item &amp;&amp; !menuItem) {return item}
+    item.thc   &#x3D; +menuItem.thc
+    item.thc2  &#x3D; +menuItem.thc2
+    item.thca  &#x3D; +menuItem.thca
+    item.thca2 &#x3D; +menuItem.thca2
+    item.cbd   &#x3D; +menuItem.cbd
+    item.cbd2  &#x3D; +menuItem.cbd2
+    item.cbn   &#x3D; +menuItem.cbn
+    item.cbd2  &#x3D; +menuItem.cbd2
+    item.cbda2 &#x3D; +menuItem.cbda2
+    return item
+  }
+
+  initFields(inputForm: UntypedFormGroup) {
+    inputForm &#x3D; this.fb.group({
+        id:                                [&#x27;&#x27;],
+        label:                             [&#x27;&#x27;],
+        packageType:                       [&#x27;&#x27;],
+        sourceHarvestName:                 [&#x27;&#x27;],
+        locationID:                        [&#x27;&#x27;],
+        locationName:                      [&#x27;&#x27;],
+        locationTypeName:                  [&#x27;&#x27;],
+        quantity:                          [&#x27;&#x27;],
+        quantityType:                      [&#x27;&#x27;],
+        unitOfMeasureName:                 [&#x27;&#x27;],
+        unitOfMeasureAbbreviation:         [&#x27;&#x27;],
+        patientLicenseNumber:              [&#x27;&#x27;],
+        itemFromFacilityLicenseNumber:     [&#x27;&#x27;],
+        itemFromFacilityName:              [&#x27;&#x27;],
+        itemStrainName:                    [&#x27;&#x27;],
+        note:                              [&#x27;&#x27;],
+        packagedDate:                      [&#x27;&#x27;],
+        initialLabTestingState:            [&#x27;&#x27;],
+        labTestingState:                   [&#x27;&#x27;],
+        labTestingStateDate:               [&#x27;&#x27;],
+        isProductionBatch:                 [&#x27;&#x27;],
+        productionBatchNumber:             [&#x27;&#x27;],
+        sourceProductionBatchNumbers:      [&#x27;&#x27;],
+        isTradeSample:                     [&#x27;&#x27;],
+        isTradeSamplePersistent:           [&#x27;&#x27;],
+        isDonation:                        [&#x27;&#x27;],
+        isDonationPersistent:              [&#x27;&#x27;],
+        sourcePackageIsDonation:           [&#x27;&#x27;],
+        isTestingSample:                   [&#x27;&#x27;],
+        isProcessValidationTestingSample:  [&#x27;&#x27;],
+        productRequiresRemediation:        [&#x27;&#x27;],
+        containsRemediatedProduct:         [&#x27;&#x27;],
+        remediationDate:                   [&#x27;&#x27;],
+        receivedDateTime:                  [&#x27;&#x27;],
+        receivedFromManifestNumber:        [&#x27;&#x27;],
+        receivedFrom:                      [&#x27;&#x27;],
+        facilityLicenseNumber:             [&#x27;&#x27;],
+        receivedFromFacilityName:          [&#x27;&#x27;],
+        isOnHold:                          [&#x27;&#x27;],
+        archivedDate:                      [&#x27;&#x27;],
+        finishedDate:                      [&#x27;&#x27;],
+        lastModified:                      [&#x27;&#x27;],
+        remainingCount:                    [&#x27;&#x27;],
+        inventoryImported:                 [&#x27;&#x27;],
+        metrcItemID:                       [&#x27;&#x27;],
+        productID:                         [&#x27;&#x27;],
+        productName:                       [&#x27;&#x27;],
+        productCategoryName:               [&#x27;&#x27;],
+        productCategoryType:               [&#x27;&#x27;],
+        inventoryLocationID :              [&#x27;&#x27;],
+        expiration:                        [&#x27;&#x27;],
+        conversionName  :                  [&#x27;&#x27;],
+
+        thc:                              [&#x27;&#x27;],
+        thc2:                             [&#x27;&#x27;],
+        thca:                             [&#x27;&#x27;],
+        thca2:                            [&#x27;&#x27;],
+        cbn:                              [&#x27;&#x27;],
+        cbn2:                             [&#x27;&#x27;],
+        cbd:                              [&#x27;&#x27;],
+        cbd2:                             [&#x27;&#x27;],
+        cbda2:                            [&#x27;&#x27;],
+        cbda:                             [&#x27;&#x27;],
+        terpenes:                         [&#x27;&#x27;],
+        mGTCH:                            [&#x27;&#x27;],
+        mGCBD:                            [&#x27;&#x27;],
+        childProof                        :[],
+
+        //non data codes
+        batchDate:                         [&#x27;&#x27;],
+        cost:                              [0],
+        price:                             [0],
+        jointWeight:                       [1],
+        inputQuantity:                     [0],
+        active                             : [&#x27;&#x27;],
+        hasImported                        : [&#x27;&#x27;],
+        priceCategoryID                   :[0],
+
       }
     )
+    return inputForm
   }
 
-  initSearchModel(search: string): InventoryFilter {
-    let searchModel &#x3D; {} as InventoryFilter;
-    searchModel.productName &#x3D; search
-    searchModel.label &#x3D; search
-    searchModel.sku &#x3D; search
-    searchModel.inventoryStatus &#x3D; this.inventoryStatusID
-    //if location
-    if (this.inventoryLocation) {searchModel.location &#x3D; this.inventoryLocation.name }
-    if (this.metrcCategory)     {searchModel.productCategoryName &#x3D; this.metrcCategory.name}
-    searchModel.pageSize  &#x3D; this.pageSize
-    searchModel.pageNumber &#x3D; this.pageNumber
-    this.id &#x3D; 0
-    return searchModel
-  }
-
-  refreshSearch(search: string) : Observable&lt;IInventoryAssignment[]&gt;  {
-
-    const site &#x3D;   this.getAssignedSite()
-    this.searchPaging &#x3D; true
-    // this.search &#x3D; search //for update of forms when the dialog&#x27;s close.
-    if (site) {
-      const searchModel &#x3D; this.initSearchModel(search);
-      const inv$ &#x3D; this.inventoryAssignmentService.getActiveInventory(site, searchModel).subscribe( data &#x3D;&gt; {
-        this.inventoryAssignment$.next(data)
-      })
-      return  this._iInventoryAssignment$
-
-    } else {
-
-      this.inventoryAssignment$.next(null)// &#x3D; null
-    }
-  }
-
-  searchItems() {
-    const site &#x3D; this.getAssignedSite()
-    if (site) {
-      const search &#x3D; this.searchProductsValue.value
-      const searchModel &#x3D; this.initSearchModel(search);
-      const inv &#x3D;  this.inventoryAssignmentService.getActiveInventory(site, searchModel)
-      inv.subscribe( data &#x3D;&gt; {
-        this.inventoryAssignment$.next(data)
-      })
-    } else {
-      console.log(&quot;site not defined&quot;)
-    }
-  }
-
-  // iInventoryAssignment$ &#x3D; this.searchPhrase.pipe(
-  //   debounceTime(250),
-  //   distinctUntilChanged(),
-  //   switchMap(searchPhrase &#x3D;&gt;
-  //       this.refreshSearch(searchPhrase)
-  //   )
-  // )
-
-  getRowData(startRow: number, endRow: number) : Observable&lt;IInventoryAssignment[]&gt; { //:  { //  Observable&lt;IInventoryAssignment[]&gt;  {
-
-    //this routine converts the StartRows and Endrows to pageNumber and PageSize.
-    //this means we have to keep track of the current page.
-    //the grid only captures the star rows and current rows. So it doesn&#x27;t know
-    //what page we are on.
-    //we can display the current page on the screen using currentPage
-    startRow &#x3D; this.currentPage
-    console.log(startRow, endRow)
-
-    this.pageNumber &#x3D; this.currentPage
-    this.currentPage &#x3D; this.currentPage  + 1
-    if (startRow &#x3D;&#x3D; 0)  { startRow &#x3D; 1 }
-
-    if (!this.searchProductsValue.value)
-    {
-      if (this.searchPaging) {
-        this.pageNumber &#x3D; 1
-        this.searchPaging &#x3D; !this.searchPaging
-      }
-      this.searchItems()
-    }
-
-    return this.inventoryAssignment$
-
-  }
-
-  onSelectionChanged(event) {
-    console.log(&#x27;onSelectionChanged&#x27;, event)
-    const  selectedRows &#x3D; this.gridApi.getSelectedRows();
-    this.id &#x3D; selectedRows[0].id;
-    this.getInventoryHistory(this.id)
-  }
-
-  async getInventoryHistory(id: any) {
-    const site &#x3D; this.siteService.getAssignedSite();
-    if (id) {
-
-      this.inventoryAssignmentService.getInventoryAssignment(site, id ).subscribe(data &#x3D;&gt;{
-        this.inventoryAssignment &#x3D; data;
-      })
-
-      const history$ &#x3D; this.inventoryAssignmentService.getInventoryAssignmentHistory(site, id)
-      history$.subscribe(data&#x3D;&gt;{
-        this.inventoryAssignmentHistory &#x3D; data
-      })
-    }
-  }
-
-  onSearchgridReady({ api } : {api: GridApi}) {
-    this.gridApi &#x3D; api;
-    api.sizeColumnsToFit();
-  }
-
-  onSearchGridReady(params) {
-    this.searchItems()
-    this.gridApi &#x3D; params.api;
-    this.gridColumnApi &#x3D; params.columnApi;
-    console.log(params)
-  }
-
-  ongridReady({ api } : {api: GridApi}) {
-    this.gridApi &#x3D; api;
-    api.sizeColumnsToFit();
-  }
-
-  onGridReady(params: any) {
-    this.gridApi &#x3D; params.api;
-    this.gridColumnApi &#x3D; params.columnApi;
-    let datasource &#x3D; {
-      getRows: (params: IGetRowsParams) &#x3D;&gt; {
-        this.info &#x3D; &quot;Getting datasource rows, start: &quot; + params.startRow + &quot;, end: &quot; + params.endRow;
-        this.getRowData(params.startRow, params.endRow)
-          .subscribe(data &#x3D;&gt;
-              {
-                if (this.paginationSize &gt; data.length) {
-                  this.paginationSize &#x3D; data.length
-                  this.refreshGrid &#x3D; false
-                  this.initAGGridFeatures()
-                  this.refreshGrid &#x3D; true
-                }
-                params.successCallback(data)
-              }, err &#x3D;&gt; {
-                console.log(err)
-              }
-            );
-       }
-    };
-    params.api.setDatasource(datasource);
-  }
-
-  onSearch(){
-    if (this.searchProductsValue.value) {
-      this.searchPaging &#x3D; true
-      this.pageNumber &#x3D; 1
-      this.currentPage &#x3D; 1
-    } else {
-      this.searchPaging &#x3D; false
-    }
-    this.searchItems()
-  }
-
-  getLabel(rowData)
-  {
-    if(rowData &amp;&amp; rowData.hasIndicator)
-      return &#x27;Edit&#x27;;
-      else return &#x27;Edit&#x27;;
-  }
-
-  onBtnClick1(e) {
-    this.rowDataClicked1 &#x3D; e.rowData;
-  }
-
-  onBtnClick2(e) {
-    this.rowDataClicked2 &#x3D; e.rowData;
-  }
-
-  editItemFromGrid(e) {
-    if (e.rowData.id)  {
-      this.editItemWithId(e.rowData.id);
-    }
-  }
-
-  editItemWithId(id:any) {
-
-    return
-  }
-
-  onDeselectAll() {
-  }
-
-  onExportToCsv() {
-    if (!this.searchPaging) {
-      this.gridApi.exportDataAsCsv();
-    } else {
-      this.searchGridApi.exportDataAsCsv();
-    }
-  }
-
-  onSortByNameAndPrice(sort: string) {
-  }
-
-  displayFn(search) {
-    this.searchPaging &#x3D; true
-    this.selectItem(search)
-    this.item &#x3D; search
-    this.search &#x3D; search
-    return search;
-  }
-
-  selectItem(search){
-    if (search) {
-      this.searchPaging &#x3D; true
-      this.searchPhrase.next(search)
-    }
-  }
-
-  notifyEvent(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2000,
-      verticalPosition: &#x27;top&#x27;
-    });
-  }
 }
-
-
 </code></pre>
     </div>
 </div>
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -812,6 +875,15 @@ export class InventoryListComponent implements OnInit, AfterViewInit {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
@@ -821,8 +893,8 @@ export class InventoryListComponent implements OnInit, AfterViewInit {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

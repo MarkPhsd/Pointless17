@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -42,35 +42,42 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Interfaces</li>
-  <li
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
   >
   UseGroupTax</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/_services/menu/use-groups.service.ts</code>
+            <code>src/app/_interfaces/menu/menu-products.ts</code>
         </p>
 
 
 
 
-        <section>
+        <section data-compodoc="block-index">
             <h3 id="index">Index</h3>
             <table class="table table-sm table-bordered index-table">
                 <tbody>
@@ -83,9 +90,9 @@
                         <td class="col-md-4">
                             <ul class="index-list">
                                 <li>
-                                        <a href="#iD" 
+                                        <a href="#id" 
 >
-                                            iD
+                                            id
                                         </a>
                                 </li>
                                 <li>
@@ -100,6 +107,12 @@
                                             taxID
                                         </a>
                                 </li>
+                                <li>
+                                        <a href="#UseGroupID" 
+>
+                                            UseGroupID
+                                        </a>
+                                </li>
                             </ul>
                         </td>
                     </tr>
@@ -109,15 +122,15 @@
 
 
 
-            <section>
+            <section data-compodoc="block-properties">
                 <h3 id="inputs">Properties</h3>
                     <table class="table table-sm table-bordered">
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
-                                        <a name="iD"></a>
-                                        <span class="name "><b>iD</b>
-                                            <a href="#iD">
+                                        <a name="id"></a>
+                                        <span class="name "><b>id</b>
+                                            <a href="#id">
                                                 <span class="icon ion-ios-link"></span>
                                             </a>
                                         </span>
@@ -125,7 +138,7 @@
                                 </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <code>iD:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                        <code>id:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
 </code>
                                     </td>
                                 </tr>
@@ -210,18 +223,214 @@
 
                         </tbody>
                     </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="UseGroupID"></a>
+                                        <span class="name "><b>UseGroupID</b>
+                                            <a href="#UseGroupID">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>UseGroupID:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
             </section>
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
-import { HttpClient } from &#x27;@angular/common/http&#x27;;
-import { AuthenticationService } from &#x27;../system/authentication.service&#x27;;
-import { Observable  } from &#x27;rxjs&#x27;;
-import { ISite }  from &#x27;src/app/_interfaces&#x27;;
-import { IItemBasicB } from &#x27;./menu.service&#x27;;
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { IPrinterLocation } from &quot;src/app/_services/menu/printer-locations.service&quot;;
+import { IClientTable } from &quot;../raw/clients&quot;;
+import { PriceCategories, ProductPrice } from &quot;./price-categories&quot;;
 
+// Generated by https://quicktype.io
+
+export interface IMenuItem {
+  id:                       number;
+  prodModifierType:         number;
+  name:                     string;
+  displayName:              string;
+  caseQty:                  number;
+  caseWholeSale:            number;
+  retail:                   number;
+  caseRetail:               number;
+  casePrice1:               number;
+  casePrice2:               number;
+  casePrice3:               number;
+  price1:                   number;
+  price2:                   number;
+  price3:                   number;
+  msrp:                     number;
+  productCount:             number;
+  gramCount:                number;
+  metaTags:                 string;
+  metaDescription:          string;
+  onlineDescription:        string;
+  onlineShortDescription:   string;
+  urlImageOther:            string;
+  urlImageMain:             string;
+  categoryID:               number;
+  subCategoryID:            number;
+  priceCategoryID:          number;
+  category:                 string;
+  subcategory:              string;
+  barcode:                  string;
+  sku:                      string;
+  brandID:                  number;
+  departmentID:             number;
+  department:               string;
+  unitTypeID:               number;
+  unitDescription:          string;
+  specialDescription:       string;
+  taxable:                  number;
+  order_BarTax:             string;
+  order_CRV:                string;
+  order_SeedCount:          string;
+  order_GramCount:          string;
+  order_LiquidCount:        string;
+  order_ConcentrateCount:   string;
+  order_Quantity:           string;
+  wholeSale:                number;
+  taxRate1ID:               number;
+  taxRate2ID:               number;
+  taxRate3ID:               number;
+  priceTierID:              number;
+  requiredGroupID:          number;
+  productSortOrder:         number;
+  kcode:                    string;
+  cannabisType:             string;
+  item_GramCountMulitplier: string;
+  order_TaxAmount1:         string;
+  order_TaxAmount2:         string;
+  order_TaxAmount3:         string;
+  order_EachCount:          string;
+  order_SolidCount:         string;
+  order_ExtractCount:       string;
+  gender:                   number;
+  requiresSerial:           number;
+  wicEBT:                   number;
+  wickEligible:             number;
+  giftCardType:             number;
+  alcoholItem:              number;
+  weightedItem:             number;
+  ratingAverage:            number;
+  ratingCount:              number;
+  thc:                      string;
+  thc2:                     number;
+  thca:                     number;
+  thca2:                    number;
+  cbd:                      string;
+  cbd2:                     number;
+  cbn:                      number;
+  cbn2:                     number;
+  cbda:                     string;
+  cbda2:                    number;
+  species:                  string;
+  productCategoryType:      string;
+  quantityType:             string;
+  defaultLabTestingState:   string;
+  approvalStatus:           string;
+  approvalStatusDateTime:   string;
+  icon                    : string;
+  strainID:                 boolean;
+  strainName:               boolean;
+  isUsed:                   boolean;
+  promptGroupID           : number;
+  abv                     : string;
+  active:                   boolean;
+  thcContent              : number;
+  glutenFree              : boolean;
+  itemType:                 ItemType;
+  productPrice:             ProductPrice;
+  priceCategories:          PriceCategories;
+  slug: string;
+  prodSecondLanguage: string;
+  dateMade                : string;
+  testDate                : string;
+  labID     : number;
+  producerID: number;
+  producer  : IClientTable;
+  lab       : IClientTable;
+  json      : string;
+  menuButtonJSON: menuButtonJSON;
+}
+
+export interface menuButtonJSON { 
+  backColor: string;
+  buttonColor: string;
+}
+
+//also in itemtype service - should consolidate
+export interface ItemType {
+  id:                   number;
+  name:                 string;
+  taxable:              number;
+  type:                 string;
+  weightedItem:         boolean;
+  expirationRequired:   boolean;
+  labelRequired:        boolean;
+  ageRequirement:       number;
+  sortOrder:            number;
+  enabled:              boolean;
+  useType:              string;
+  icon:                 string;
+  imageName:            string;
+  useGroupID:           number;
+  prepTicketID        : number;
+  labelTypeID         : number;
+  printerName:          string;
+  printLocationID :     number;
+  itemType_Categories:  ItemTypeCategory[];
+  useGroups           : UseGroups;
+  printerLocation     : IPrinterLocation;
+  requiresSerial      : boolean;
+  packageType         : string;
+  requireInStock      : boolean;
+  metrcCategoryID :    number;
+  preptTicketID       : number;
+  packagingMaterial   : string;
+  portionValue        : string;
+  instructions        : string;
+  enableCustomNote   : boolean;
+  wicebt             : number;
+  requireWholeNumber : boolean;
+  pricePrompt        : boolean;
+}
+
+export interface ItemTypeCategory {
+  id:         number;
+  itemTypeID: number;
+  categoryID: number;
+  itemCounts: ItemCounts;
+}
+
+export interface ItemCounts {
+  id:        number;
+  name:      string;
+  itemCount: number;
+}
 
 export interface UseGroups {
   id:            number;
@@ -230,159 +439,106 @@ export interface UseGroups {
 }
 
 export interface UseGroupTax {
-  iD:    number;
+  id:    number;
   taxID: number;
+  UseGroupID: number;
   taxes: Taxes;
 }
 
 export interface Taxes {
-  iD:    number;
+  id:    number;
   value: number;
   name:  string;
+  taxColumn: number;
 }
 
-@Injectable({
-  providedIn: &#x27;root&#x27;
-})
-export class UseGroupsService {
-
-  site: ISite;
-  constructor(private http: HttpClient,
-            private auth: AuthenticationService) { }
-
-  delete(site: ISite, id: number): Observable&lt;UseGroups&gt; {
-
-    const controller &#x3D; &#x27;/ItemTypes/&#x27;;
-
-    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;;
-
-    const endPoint &#x3D; &#x27;deleteItemType&#x27;;
-
-    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;;
-
-    return  this.http.delete&lt;UseGroups&gt;(url);
-
-  }
-
-  deleteItems(site: ISite, items: UseGroups[]): Observable&lt;UseGroups[]&gt; {
-
-    const controller &#x3D; &#x27;/ItemTypes/&#x27;;
-
-    const parameters &#x3D; &#x60;&#x60;;
-
-    const endPoint &#x3D; &#x27;DeleteItemTypes&#x27;;
-
-    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;;
-
-    return  this.http.post&lt;UseGroups[]&gt;(url, items);
-
-  }
-
-  getDefaultGroups(): UseGroups[] {
-    let   useGroup    &#x3D; {} as UseGroups[]
-    const groupsTaxes &#x3D; {} as UseGroupTax[]
-
-    useGroup &#x3D;  [
-      { name: &#x27;Product&#x27;,       id: 1, useGroupTaxes: groupsTaxes},
-      { name: &#x27;Adjustment&#x27;,    id: 2, useGroupTaxes: groupsTaxes},
-      { name: &#x27;Grouping&#x27;,      id: 3, useGroupTaxes: groupsTaxes},
-      { name: &#x27;Discounts&#x27;,     id: 4, useGroupTaxes: groupsTaxes},
-      { name: &#x27;Retail&#x27;,        id: 5, useGroupTaxes: groupsTaxes},
-      { name: &#x27;Tobacco&#x27;,       id: 6, useGroupTaxes: groupsTaxes},
-      { name: &#x27;Cannabis&#x27;,      id: 7, useGroupTaxes: groupsTaxes},
-      { name: &#x27;Med-Cannabis&#x27;,  id: 8, useGroupTaxes: groupsTaxes},
-      { name: &#x27;Retail Liquor&#x27;, id: 9, useGroupTaxes: groupsTaxes},
-      { name: &#x27;Grocery&#x27;,       id: 10,useGroupTaxes: groupsTaxes},
-      { name: &#x27;Generic&#x27;,       id: 11,useGroupTaxes: groupsTaxes},
-      { name: &#x27;Food&#x27;,          id: 12,useGroupTaxes: groupsTaxes},
-   ]
-
-   return useGroup
-
-  }
-
-  async initGroups(site: ISite): Promise&lt;any&gt; {
 
 
-    const useGroup &#x3D; this.getDefaultGroups();
+// export interface PriceTiers {
+//   id:              number;
+//   name:            string;
+//   uid:             string;
+//   webEnabled:      number;
+//   priceTierPrices: PriceTierPrice[];
+// }
 
-    const initList$ &#x3D; this.postItemGroups(site, useGroup)
-    return await initList$.pipe().toPromise();
+// export interface PriceTierPrice {
+//   id:             number;
+//   productPriceID: number; //pricetier
+//   quantityFrom:   number;
+//   quantityTo:     number;
+//   retail:         number;
+//   price1:         number;
+//   price2:         number;
+//   price3:         number;
+//   price4:         number;
+//   price5:         number;
+//   price6:         number;
+//   price7:         number;
+//   price8:         number;
+//   price9:         number;
+//   startTime:      string;
+//   endTime:        string;
+//   specialPrice:   number;
+//   weekDays:       string;
+//   flatQuantity:   number;
+//   priceName:      string;
+//   rateOrPrice:    boolean;
+// }
 
-  }
-
-  postItemGroups(site: ISite, iItemType: UseGroups[]): Observable&lt;UseGroups[]&gt; {
-
-    const controller &#x3D; &#x27;/UseGroups/&#x27;;
-
-    const parameters &#x3D; &#x27;&#x27;;
-
-    const endPoint &#x3D;&#x27;PostUseGroupList&#x27;;
-
-    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;;
-
-    return  this.http.post&lt;UseGroups[]&gt;(url, iItemType);
-
-  }
-
-  getGroup(site: ISite, id: number): Observable&lt;UseGroups&gt; {
-
-    const controller &#x3D; &#x27;/UseGroups/&#x27;;
-
-    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;;
-
-    const endPoint &#x3D; &#x27;GetUseGroup&#x27;;
-
-    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;;
-
-    return  this.http.get&lt;UseGroups&gt;(url);
-
-  }
-
-  getUseGroupListNoChildren(site: ISite): Observable&lt;UseGroups[]&gt; {
-
-    const controller &#x3D; &#x27;/UseGroups/&#x27;;
-
-    const parameters &#x3D; &#x60;&#x60;;
-
-    const endPoint &#x3D; &#x27;getUseGroupListNoChildren&#x27;;
-
-    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;;
-
-    return  this.http.get&lt;UseGroups[]&gt;(url);
-
-  }
-
-  getBasicTypes(site: ISite): Observable&lt;IItemBasicB[]&gt; {
-
-    const controller &#x3D; &#x27;/UseGroups/&#x27;;
-
-    const parameters &#x3D; &#x27;&#x27;;
-
-    const endPoint &#x3D; &#x27;GetBasicTypes&#x27;;
-
-    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;;
-
-    return  this.http.get&lt;IItemBasicB[]&gt;(url);
-
-  }
-
-
-
+export interface UnitType {
+  id:               number;
+  name:             string;
+  unitNote:         string;
+  unitCategory:     string;
+  unitMultipliedTo: number;
+  unitMultiplyer:   number;
+  mainUnit:         number;
+  isMainUnit:       boolean;
+  itemMultiplier:   number;
+  doNotDelete:      number;
+  abbreviation:     string;
+  plural:           string;
+  milileters:       number;
+  fluidOunces:      number;
+  massOunces:       number;
+  grams:            number;
+  unitID:           number;
+  uid:              string;
 }
+
+
+export interface Review {
+  id:           number;
+  reviewDate:   string;
+  clientID:     number;
+  productID:    number;
+  sku:          string;
+  reviewNotes:  string;
+  ratingValue:  number;
+  activeReview: number;
+  poDetailID:   number;
+  reviewReponse: string;
+  images:       string;
+  orderID:      string;
+}
+
+
+
 </code></pre>
     </div>
 </div>
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -394,6 +550,15 @@ export class UseGroupsService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
@@ -403,8 +568,8 @@ export class UseGroupsService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

@@ -81,7 +81,7 @@ export class DsiEMVAndroidComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe(order => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe(order => {
       this.order = order;
     })
     this.initTransactionUISettings()

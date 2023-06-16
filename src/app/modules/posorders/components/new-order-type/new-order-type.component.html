@@ -8,7 +8,7 @@
 
    <mat-card-subtitle>
 
-    <div *ngIf="orderService.toggleChangeOrderType">
+    <div *ngIf="orderMethodsService.toggleChangeOrderType">
       <mat-label>Update all Items</mat-label>
       <mat-button-toggle-group
             [ngModel]="updateItems">
@@ -40,10 +40,10 @@
         [hideAllOption]="'true'"
         (outPutID)="orderByType($event)">
 
-        <div *ngIf="orderService.toggleChangeOrderType">
+        <div *ngIf="orderMethodsService.toggleChangeOrderType">
           Change Order Type
         </div>
-        <div *ngIf="!orderService.toggleChangeOrderType">
+        <div *ngIf="!orderMethodsService.toggleChangeOrderType">
            Start new Order
         </div>
 

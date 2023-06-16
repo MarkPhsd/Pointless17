@@ -1,5 +1,4 @@
 <div *ngIf="(action$  | async) as action"></div>
-<!-- {{class}} / {{infiniteItemClass}} -->
 
 <ng-container [ngTemplateOutlet]="enableEditItem"></ng-container>
 
@@ -7,7 +6,7 @@
            [style]="buttonColor"
            [class]="matCardClass">
 
-   <div class="container" >
+   <div class="container">
     <div class="image-container">
       <ng-container [ngTemplateOutlet]="menuButton"></ng-container>
       <div *ngIf="!isDiscountItem && imageUrl" >
@@ -15,7 +14,7 @@
         <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>
         <div class="item-name-center"
               *ngIf="!isDiscountItem && imageUrl" >
-          {{ menuItem.name  | truncateText: 30   }}
+            {{ menuItem.name  | truncateText: 30   }}
           <div *ngIf="menuItem?.prodSecondLanguage">
             {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}
           </div>
@@ -34,7 +33,6 @@
     <ng-container #reviews *ngIf="menuItem"></ng-container>
     <div class="price-grid" *ngIf="isProduct">
       <ng-container [ngTemplateOutlet]="price"></ng-container>
-
       <div *ngIf="menuItem.itemType">
         <div *ngIf="isApp">
           <ng-container [ngTemplateOutlet]="openInNew"></ng-container>
@@ -51,7 +49,7 @@
 </mat-card>
 
 <ng-template #editItemView>
-  <div class="edit-button">
+  <div class="edit-float-button">
     <button
         mat-mini-fab
         color="accent"
@@ -67,7 +65,6 @@
       <button mat-button
               class="image-button"
               (click)="menuItemActionObs(true)">
-
         <div *ngIf="isDiscountItem && !isApp">
           <div *ngIf="menuItem.itemType.name.toLowerCase() == 'Discount % Entire Order' ||
                       menuItem.itemType.name.toLowerCase() == 'Discount % One Item'">
@@ -88,7 +85,6 @@
 </ng-template>
 
 <ng-template #imageButton>
-
   <div *ngIf="menuItem?.name === 'Load More' && ((isApp && !imageUrl) || !imageUrl)"
     class="product-name-only" >
       <button mat-raised-button
@@ -113,7 +109,6 @@
     </div>
 </ng-template>
 
-
 <ng-template #price>
   <div id="price">
     {{menuItem.retail | currency}}
@@ -127,11 +122,10 @@
 </ng-template>
 
 <ng-template #productImage>
-  <!-- isCategory {{isCategory}} - {{imageUrl}} -->
   <img  *ngIf     ="!isCategory"
         [src]     ="imageUrl"
         onerror   = "this.src='assets/images/placeholderimage.png'"
-        class="product-image"
+        class     ="product-image"
         (click)="menuItemActionObs(true)"/>
 </ng-template>
 
@@ -141,9 +135,8 @@
       [src]     ="imageUrl"
       onerror   = "this.src='assets/images/placeholderimage.png'"
       class     ="product-image"
-      (click)="menuItemActionObs(false)"/>
+      (click)   ="menuItemActionObs(false)"/>
   </div>
-
 </ng-template>
 
 <ng-template #buttonAddItem>
@@ -151,7 +144,7 @@
       mat-mini-fab
       class="add-button"
       color="warn"
-      (click)="menuItemActionObs(true)" >
+      (click)="menuItemActionObs(true, true)" >
     <div *ngIf="!isProduct">
       <mat-icon>open_in_new</mat-icon>
       View
@@ -173,7 +166,6 @@
 </ng-template>
 
 <ng-template #discountItemDescription>
-
   <div *ngIf="isDiscountItem && !isApp">
     <div *ngIf="menuItem.itemType.name.toLowerCase() == 'Discount % Entire Order' ||
                 menuItem.itemType.name.toLowerCase() == 'Discount % One Item'">
@@ -184,13 +176,9 @@
         {{menuItem?.itemType?.name }} - {{menuItem?.cannabisType | currency}}
     </div>
   </div>
-
 </ng-template>
 
 <ng-template #seeMoreInCategory>
-  <!-- <div class="item-name-center">
-     {{menuItem.name | truncateText : 8}}
-  </div> -->
   <div class="category-open">
     <button mat-button (click)="menuItemActionObs(false)">
       <mat-icon >open_in_new</mat-icon>

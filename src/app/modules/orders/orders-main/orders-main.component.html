@@ -112,10 +112,11 @@
   <div>
     <div class="flex-row" >
       <div><button
-        *ngIf="posOrdersSelectedList && posOrdersSelectedList.length>0"
-        mat-raised-button
-        (click)="mergeOrdersComplete()"
-        aria-label="merge"><mat-icon>join_full</mat-icon>Merge</button>
+                  *ngIf="posOrdersSelectedList && posOrdersSelectedList.length>0"
+                  mat-raised-button
+                  (click)="mergeOrdersComplete()"
+                  aria-label="merge"><mat-icon>join_full</mat-icon>Merge
+            </button>
       </div>
       <div><button mat-raised-button (click)="cancelMerge()" aria-label="trash">Cancel</button></div>
       <div *ngFor="let order of posOrdersSelectedList; let i = index">

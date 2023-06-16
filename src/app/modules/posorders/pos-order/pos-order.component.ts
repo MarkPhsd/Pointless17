@@ -285,7 +285,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   currentOrderSusbcriber() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
       this.canRemoveClient = true
       if (this.order) {
@@ -423,6 +423,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               public platFormService    : PlatformService,
               private navigationService : NavigationService,
               private orderService      : OrdersService,
+              public orderMethodsService: OrderMethodsService,
               private awsBucket         : AWSBucketService,
               private printingService   : PrintingService,
               private _snackBar         : MatSnackBar,
@@ -440,6 +441,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private _bottomSheet     : MatBottomSheet,
               private inventoryAssignmentService: InventoryAssignmentService,
               private posOrderItemService: POSOrderItemService,
+           
               private manifestService: ManifestInventoryService,
               private productEditButtonService: ProductEditButtonService,
               private prepPrintingService: PrepPrintingServiceService,
@@ -529,7 +531,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   getDeviceInfo() {
-    const devicename = this.orderService.posName
+    const devicename = localStorage.getItem('devicename')
     if (devicename && this.isApp) {
       this.posDevice$ = this.uiSettingsService.getPOSDeviceSettings(devicename).pipe(
         switchMap(data => {
@@ -593,11 +595,11 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   changeTransactionType(event) {
-    this.orderService.toggleChangeOrderType = true;
+    this.orderMethodsService.toggleChangeOrderType = true;
     const bottomSheet = this._bottomSheet.open(NewOrderTypeComponent)
     this.bottomSheet$ = bottomSheet.afterDismissed()
     this.bottomSheet$.subscribe(data => {
-      this.orderService.toggleChangeOrderType = false;
+      this.orderMethodsService.toggleChangeOrderType = false;
     })
   }
 
@@ -661,7 +663,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   sendToPrep() {
     if (this.order) {
-      this.printAction$ = this.orderMethodService.sendToPrep(this.order, true)
+      this.printAction$ = this.paymentsMethodsService.sendToPrep(this.order, true)
     }
   }
 
@@ -681,7 +683,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   async assignCurrentOrder() {
     if (this.currentPOSOrderExists()) {
-      const order$ = this.orderService.getCurrentPOSOrder(this.siteService.getAssignedSite(),this.orderService.posName)
+      const order$ = this.orderService.getCurrentPOSOrder(this.siteService.getAssignedSite(),localStorage.getItem('devicename'))
     } else {
       if (!this.order) {
         this.order$ = null
@@ -695,12 +697,13 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   refreshObservable(order$: Observable<IPOSOrder>) {
     order$.pipe(
       repeatWhen(x => x.pipe(delay(3500)))).subscribe(data => {
-      this.orderService.updateOrderSubscription(data)
+      this.orderMethodsService.updateOrderSubscription(data)
     })
   }
 
   currentPOSOrderExists() {
-    if ( this.orderService.posName != '' && this.orderService.posName != undefined  && this.orderService.posName != null ) {
+    const posName = localStorage.getItem('devicename')
+    if ( posName != '' && posName != undefined  && posName != null ) {
       return true
     }
   }
@@ -733,7 +736,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (this.id) { clearInterval(this.id); }
     if(this._order) { this._order.unsubscribe() }
     if (this._transactionUI) { this._transactionUI.unsubscribe()}
-    this.orderService.updateBottomSheetOpen(false)
+    this.orderMethodsService.updateBottomSheetOpen(false)
     if (this._user) { this._user.unsubscribe()}
     if (this._uiSettings) { this._uiSettings.unsubscribe()}
     if (this._uiTransactionSettings) { this._uiTransactionSettings.unsubscribe()}
@@ -756,7 +759,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       const site = this.siteService.getAssignedSite();
       let item$ = this.posOrderItemService.removeOrderDiscount(site, this.order.id);
       item$.subscribe(data => {
-        this.orderService.updateOrderSubscription(data);
+        this.orderMethodsService.updateOrderSubscription(data);
       })
     };
 
@@ -790,7 +793,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       const site = this.siteService.getAssignedSite();
       this.order.clientID = id
       const order = await this.orderService.putOrder(site, this.order).pipe().toPromise()
-      this.orderService.updateOrderSubscription(order)
+      this.orderMethodsService.updateOrderSubscription(order)
     }
   }
 
@@ -873,7 +876,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   showItems() {
     this.toolbarUIService.updateOrderBar(false)
     if (this.order) {
-      this.orderService.updateBottomSheetOpen(true)
+      this.orderMethodsService.updateBottomSheetOpen(true)
       this.bottomSheet.open(PosOrderItemsComponent)
     }
   }

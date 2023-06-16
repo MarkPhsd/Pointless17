@@ -265,7 +265,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   forgetMe() {
     this.initForm();
-    localStorage.clear()
+    // localStorage.clear();
     this.clearUserSettings();
     this.notifyEvent("Your settings have been removed from this device.", "Bye!");
     this.statusMessage = ''
@@ -285,7 +285,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   clearUserSettings() {
     this.authenticationService.clearUserSettings();
-    // await this.siteService.setDefaultSite();
   }
 
   getCompanyInfo() {
@@ -401,12 +400,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       switchMap(result =>
         {
 
-          // console.log('result of submit login', result);
-
-
           this.initForm();
           if (result && result.errorMessage) {
             this.notifyEvent(result.errorMessage, 'Failed Login');
+            this.clearUserSettings()
             return of('failed')
           }
 
@@ -414,7 +411,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           //if is not app then result is the user.
           let user = result?.user ;
           let sheet = result?.sheet as IBalanceSheet;
-
           //if there is a sheet we login here with the user to prompt the sheet if needed.
           if (sheet) {
             if (this.loginApp(result)) {
@@ -426,8 +422,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
           if (user) {
             this.spinnerLoading = false;
-
             if (user && user?.errorMessage === 'failed') {
+              this.clearUserSettings()
               this.authenticationService.updateUser(null);
               return of('failed')
             }

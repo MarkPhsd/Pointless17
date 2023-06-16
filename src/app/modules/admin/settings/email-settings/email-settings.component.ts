@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EmployeeDetailsPanelComponent } from '../../employees/employee-details-panel/employee-details-panel.component';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 @Component({
   selector: 'app-email-settings',
   templateUrl: './email-settings.component.html',
@@ -23,6 +24,7 @@ export class EmailSettingsComponent implements OnInit {
     private systemService   : SystemService,
     private _snackbar: MatSnackBar,
     private orderService: OrdersService,
+    private orderMethodsService: OrderMethodsService ,
     private sitesSerivce: SitesService,
     private sendGridService :  SendGridService,
   ) {
@@ -59,7 +61,7 @@ export class EmailSettingsComponent implements OnInit {
   sendOrderTest() {
 
     const site = this.sitesSerivce.getAssignedSite()
-    const orderID = this.orderService.currentOrder.id;
+    const orderID = this.orderMethodsService.currentOrder.id;
     const emailTo = this.inputForm.controls['salesReportsEmail'].value;
     const emailName = this.inputForm.controls['salesReportsEmail'].value;
 

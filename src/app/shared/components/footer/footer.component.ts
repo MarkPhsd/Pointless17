@@ -7,6 +7,7 @@ import { AuthenticationService, IDeviceInfo, OrdersService } from 'src/app/_serv
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PosOrderItemsComponent } from 'src/app/modules/posorders/pos-order/pos-order-items/pos-order-items.component';
 
 @Component({
@@ -36,7 +37,7 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   deviceInfo      : IDeviceInfo;
   currentOrderSusbcriber() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
     })
   }
@@ -44,6 +45,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   constructor(
     public  toolbarUIService  : ToolBarUIService,
     private orderService      : OrdersService,
+    public orderMethodsService: OrderMethodsService,
     private  navigationService: NavigationService,
     public printingService    : PrintingService,
     private bottomSheet       : MatBottomSheet,
@@ -141,7 +143,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   toggleOpenOrderBar() {
     this.navigationService.toggleOpenOrderBar(this.isStaff)
     if (this.order) {
-      this.orderService.updateBottomSheetOpen(true)
+      this.orderMethodsService.updateBottomSheetOpen(true)
       this.bottomSheet.open(PosOrderItemsComponent)
     }
   }

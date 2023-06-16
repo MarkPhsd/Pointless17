@@ -28,6 +28,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   @ViewChild('editItemView') editItemView :  TemplateRef<any>;
   @Output() outPutLoadMore = new EventEmitter()
+  @Input() allowEdit : boolean;
   @Input() id        : number;
   @Input() retail    : number;
   @Input() name      : string;
@@ -52,7 +53,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     public  route: ActivatedRoute,
     private orderService: OrdersService,
     private _snackBar: MatSnackBar,
-    private orderMethodService: OrderMethodsService,
+    private orderMethodsService: OrderMethodsService,
     private platFormService   : PlatformService,
     private menuService: MenuService,
     private authenticationService: AuthenticationService,
@@ -80,6 +81,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     //   this.matCardClass= 'mat-card-grid'
     // }
   }
+
   getMenuItemObject(menuItem: IMenuItem) {
     if (menuItem && menuItem.json ) {
       const item = JSON.parse(menuItem.json) as menuButtonJSON;
@@ -103,18 +105,18 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   get enableEditItem() {
-    if (this.authenticationService.isAdmin) {
+    if (this.authenticationService.isAdmin || this.allowEdit) {
         return this.editItemView
     }
     return null;
   }
+
   getIsNonProduct(menuItem: IMenuItem): boolean {
     if (!menuItem) { return false}
     if (menuItem) {
       if (!menuItem.itemType)   {
         return false
       }
-
       if (menuItem.itemType.useType && menuItem.itemType.useType.toLowerCase()  === 'adjustment') { return false}
       if (menuItem.itemType.type && menuItem.itemType.type.toLowerCase()     === 'adjustment') { return false}
       if (menuItem.itemType.type && menuItem.itemType.type.toLowerCase()     === 'discounts') { return false}
@@ -137,14 +139,13 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     return false;
   }
 
-
   ngOnDestroy(): void {
     if (this._order)  this._order.unsubscribe();
   }
 
   initSubscriptions() {
     try {
-      this._order = this.orderService.currentOrder$.subscribe( data => {
+      this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
         this.order = data
       })
     } catch (error) {
@@ -159,16 +160,12 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   getItemSrc(item:IMenuItem) {
     if (!item.urlImageMain) {
-      if (this.isApp) {
-        return
-      }
+      if (this.isApp) { return }
       const image = this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.png")
       return image
     } else {
       const imageName =  item.urlImageMain.split(",")
       const image =`${this.bucketName}${imageName[0]}`
-      // const image2 =  this.awsBucket.getImageURLFromNameArray(this.bucketName, item.urlImageMain)
-      // console.log('image 2', image)
       return image
     }
   }
@@ -178,61 +175,54 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
       this.outPutLoadMore.emit('true')
       return ;
     }
-    // console.log('add', add)
-   this.orderMethodService.menuItemAction(this.order,this.menuItem, add)
+   this.orderMethodsService.menuItemAction(this.order,this.menuItem, add)
   }
 
-  menuItemActionObs(add : boolean) {
-
+  menuItemActionObs(add : boolean, plusOne?: boolean) {
     if (this.menuItem?.name.toLowerCase() === 'load more') {
       this.outPutLoadMore.emit('true')
       return ;
     }
-
     if (this.isCategory) {
       this.listItems(this.menuItem.id,this.menuItem.itemType.id);
       add = false;
       return;
     }
+    if (this.authenticationService.isCustomer) { add = false; }
 
-    console.log('assigned items', this.orderMethodService.assignPOSItems)
-
-    this.action$ = this.orderMethodService.menuItemActionObs(this.order,this.menuItem, add,
-                                            this.orderMethodService.assignPOSItems)
-
+    if (plusOne) { add = true; }
+    this.action$ = this.orderMethodsService.menuItemActionObs(this.order,this.menuItem, add,
+                                                            this.orderMethodsService.assignPOSItems);
   }
 
   listItems(id: number, typeID: number) {
-    console.log('init search Model')
-    // this.initProductSearchModel(id, typeID)
+    if (this.menuService.searchModel) { this.menuService.searchModel = {} as ProductSearchModel}
     if (this.menuItem?.itemType?.id == 4) {
       this.router.navigate(["/menuitems-infinite/", {categoryID: id, hideSubCategoryItems: false }]);
+      return;
     }
     if (this.menuItem?.itemType?.id == 5) {
       this.router.navigate(["/menuitems-infinite/", {subCategoryID:id, hideSubCategoryItems: false}]);
+      return;
     }
     if (this.menuItem?.itemType?.id == 6) {
       this.router.navigate(["/menuitems-infinite/", {departmentID:id}]);
+      return;
     }
-
   }
 
   initProductSearchModel(id: number, itemTypeID: number): ProductSearchModel {
     let productSearchModel        = {} as ProductSearchModel;
-
     if (itemTypeID== 6) {
      { productSearchModel.departmentID  = id.toString(); }
     }
-
     if (itemTypeID == 4) {
       { productSearchModel.categoryID  = id.toString(); }
     }
-
     productSearchModel.pageSize   = 25
     productSearchModel.pageNumber = 1
-    this.menuService.updateMeunuItemData(productSearchModel)
+    this.menuService.updateSearchModel(productSearchModel)
     return productSearchModel;
-
   }
 
   notifyEvent(message: string, action: string) {

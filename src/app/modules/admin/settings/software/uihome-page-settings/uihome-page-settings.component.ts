@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { catchError, Observable, of, switchMap } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
+import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 @Component({
@@ -23,14 +24,16 @@ export class UIHomePageSettingsComponent implements OnInit {
   message     : string;
   showEmailSettings = false;
 
+  toolTips = this.labelingService.homePageToolTips;
+
   constructor(
+    private labelingService: LabelingService,
     private settingsService  : SettingsService,
     private uISettingsService: UISettingsService) { }
 
   ngOnInit() {
 
     this.saving$  = null;
-
     this. uiHomePage$ = this.settingsService.getUIHomePageSettingsNoCache().pipe(
       switchMap(
         data => {
@@ -41,7 +44,6 @@ export class UIHomePageSettingsComponent implements OnInit {
             this.inputForm.patchValue(data)
             this.initializeImages(this.uiHomePage)
           }
-
         } else {
           this.inputForm = this.uISettingsService.initHomePageForm(this.inputForm);
           this.initializeImages(this.uiHomePage)
@@ -55,25 +57,15 @@ export class UIHomePageSettingsComponent implements OnInit {
   }
 
   initializeImages(data: UIHomePageSettings) {
-    try {
-      if (data.backgroundImage) {
-        this.backgroundImage = data.backgroundImage;
-      }
-    } catch (error) {
+    if (!data) {return }
+    if (data.backgroundImage) {
+      this.backgroundImage = data?.backgroundImage;
     }
-
-    try {
-      if (data.tinyLogo) {
-        this.tinyLogo =  data.tinyLogo;
-      }
-    } catch (error) {
+    if (data.tinyLogo) {
+      this.tinyLogo =  data?.tinyLogo;
     }
-
-    try {
-      if (data.logoHomePage) {
-        this.logoHomePage = data.logoHomePage;
-      }
-    } catch (error) {
+    if (data.logoHomePage) {
+      this.logoHomePage = data?.logoHomePage;
     }
   }
 

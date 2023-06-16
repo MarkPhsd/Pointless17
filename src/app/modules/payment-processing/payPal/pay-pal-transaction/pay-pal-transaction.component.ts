@@ -46,7 +46,7 @@ export class PayPalTransactionComponent implements OnInit {
   settings: TransactionUISettings;
   message = ''
   currentOrderSusbcriber() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
       if (!data) { return }
       this.checkIfPaymentsMade()
@@ -58,7 +58,7 @@ export class PayPalTransactionComponent implements OnInit {
               public  userAuthorization    : UserAuthorizationService,
               private paymentMethodService: PaymentMethodsService,
               public paymentService       : POSPaymentService,
-              private siteService         : SitesService,
+              public orderMethodsService: OrderMethodsService,  private siteService         : SitesService,
               @Inject(MAT_DIALOG_DATA) public data: any,
               @Optional() private dialogRef  : MatDialogRef<PayPalTransactionComponent>,
             ) {
@@ -127,7 +127,7 @@ export class PayPalTransactionComponent implements OnInit {
      ).pipe(
       switchMap(data => {
         console.log("completeOrder" )
-        this.orderService.updateOrderSubscription(data)
+        this.orderMethodsService.updateOrderSubscription(data)
         this.dialogRef.close()
         return of(data)
       })
@@ -159,7 +159,7 @@ export class PayPalTransactionComponent implements OnInit {
       })
       ).pipe(
       switchMap(data => {
-        this.orderService.updateOrderSubscription(data)
+        this.orderMethodsService.updateOrderSubscription(data)
         this.dialogRef.close()
         return of(data)
       })

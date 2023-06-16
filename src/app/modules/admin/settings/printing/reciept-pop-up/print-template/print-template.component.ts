@@ -7,6 +7,7 @@ import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { OrdersService } from 'src/app/_services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-print-template',
@@ -87,7 +88,7 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
 
   intSubscriptions() {
 
-    this._printOrder = this.orderService.printOrder$.subscribe(
+    this._printOrder = this.printingService.printOrder$.subscribe(
       data => {
         if (data) {
           this.order         = data.order;
@@ -122,6 +123,7 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
 
   constructor(
     public orderService           : OrdersService,
+    private orderMethodsService    : OrderMethodsService,
     private settingService        : SettingsService,
     private siteService           : SitesService,
     private platFormService       : PlatformService,

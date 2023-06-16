@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -40,22 +40,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Pipes</li>
-  <li >TruncateTextPipe</li>
+  <li class="breadcrumb-item">Pipes</li>
+  <li class="breadcrumb-item" >TruncateTextPipe</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
 
         <p class="comment">
             <h3>File</h3>
@@ -67,9 +74,9 @@
 
 
 
-        <section>
+        <section data-compodoc="block-metadata">
             <h3>Metadata</h3>
-            <table class="table table-sm table-hover">
+            <table class="table table-sm table-hover metadata">
                 <tbody>
                     <tr>
                         <td class="col-md-3">Name</td>
@@ -79,7 +86,7 @@
             </table>
         </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -104,8 +111,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="8"
-                            class="link-to-prism">src/app/_pipes/truncate-text.pipe.ts:8</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="7"
+                            class="link-to-prism">src/app/_pipes/truncate-text.pipe.ts:7</a></div>
                 </td>
             </tr>
 
@@ -115,6 +122,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -169,9 +177,8 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Pipe, PipeTransform } from &#x27;@angular/core&#x27;;
-
 @Pipe({
   name: &#x27;truncateText&#x27;
 })
@@ -182,14 +189,17 @@ export class TruncateTextPipe implements PipeTransform {
     const elipses &#x3D; &quot;...&quot;;
 
     if(typeof value &#x3D;&#x3D;&#x3D; &quot;undefined&quot;) return value;
+    if(value &#x3D;&#x3D;&#x3D; null) return value;
 
     if(value.length &lt;&#x3D; length) return value;
 
     //.. truncate to about correct lenght
 
     let truncatedText &#x3D; value.slice(0, length + biggestWord);
-    // console.log(truncatedText)
-    //.. now nibble ends till correct length
+
+    // console.log(&#x27;long&#x27;, value.slice(0, length + biggestWord))
+    // console.log(&#x27;short&#x27;, value.slice(0, length));
+    return  value.slice(0, length) + elipses;
 
     while (truncatedText.length &gt; length - elipses.length) {
         let lastSpace &#x3D; truncatedText.lastIndexOf(&quot; &quot;);
@@ -197,10 +207,54 @@ export class TruncateTextPipe implements PipeTransform {
         truncatedText &#x3D; truncatedText.slice(0, lastSpace).replace(/[!,.?;:]$/, &#x27;&#x27;);
     };
 
+   console.log(truncatedText)
    return truncatedText + elipses;
 
   }
 }
+
+
+// &lt;h1&gt;{{longStr | truncate }}&lt;/h1&gt;
+// &lt;!-- Outputs: A really long string that... --&gt;
+
+// &lt;h1&gt;{{longStr | truncate : 12 }}&lt;/h1&gt;
+// &lt;!-- Outputs: A really lon... --&gt;
+
+// &lt;h1&gt;{{longStr | truncate : 12 : true }}&lt;/h1&gt;
+// &lt;!-- Outputs: A really... --&gt;
+
+// &lt;h1&gt;{{longStr | truncate : 12 : false : &#x27;***&#x27; }}&lt;/h1&gt;
+// &lt;!-- Outputs: A really lon*** --&gt;
+
+
+// /*
+
+// A pipe is a class decorated with pipe metadata.
+// The pipe class implements the PipeTransform interface&#x27;s transform method that accepts an input value followed by optional parameters and returns the transformed value.
+// There will be one additional argument to the transform method for each parameter passed to the pipe. Your pipe has one such parameter: the exponent.
+// To tell Angular that this is a pipe, you apply the @Pipe decorator, which you import from the core Angular library.
+// The @Pipe decorator allows you to define the pipe name that you&#x27;ll use within template expressions. It must be a valid JavaScript identifier.
+
+// */
+// /*
+//   This pipe truncates a string.
+//   Use it like so {{ String expression | truncate:10 }}
+//   This truncates the string to 10 letters and adds &#x27;...&#x27; to end.
+// */
+
+// @Pipe({ name: &#x27;truncate&#x27; })
+// export class TruncatePipe implements PipeTransform {
+
+//   /*
+//   The transform method is essential to a pipe. The PipeTransform interface defines that method and guides both tooling and the compiler. Technically, it&#x27;s optional; Angular looks for and executes the transform method regardless.
+//   */
+
+//   transform(value: string, limit: number): string {
+//     return value.length &lt; limit
+//       ? value
+//       : value.slice(0, limit) + &#x27;...&#x27;;
+//   }
+// }
 </code></pre>
     </div>
 
@@ -209,14 +263,15 @@ export class TruncateTextPipe implements PipeTransform {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -228,6 +283,15 @@ export class TruncateTextPipe implements PipeTransform {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'pipe';
@@ -237,8 +301,8 @@ export class TruncateTextPipe implements PipeTransform {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

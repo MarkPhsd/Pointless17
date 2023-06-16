@@ -126,7 +126,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.pipe(
+    // this.order.
+    this._order = this.orderMethodsService.currentOrder$.pipe(
       switchMap( data => {
       if (data) {
         this.order = data
@@ -200,9 +201,14 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.refreshIsOrderPaid();
     this.freshDevice();
 
+    this.paymentMethods$ = this.getPaymentMethods(site).pipe(
+      switchMap(data => {
+        this.paymentMethods = data;
+        return of(data)
+        }
+      )
+    );
 
-    this.paymentMethods$ = this.getPaymentMethods(site)
-    this.paymentMethods$.subscribe(data => { this.paymentMethods = data; })
     if (this.authenticationService.userValue) {
       this.orderAction$ = this.orderMethodsService.getLoginActions()
     }
@@ -237,7 +243,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         this.uiTransactions = data
       }
     )
-    
+
   }
 
   ngOnDestroy(): void {
@@ -735,8 +741,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   closeCart() {
-    this.orderService.currentOrder = null
-    this.orderService.updateOrderSubscription(null)
+    this.orderMethodsService.currentOrder = null
+    this.orderMethodsService.updateOrderSubscription(null)
     this.router.navigate(['/app-main-menu'])
   }
 

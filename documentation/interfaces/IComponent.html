@@ -1,0 +1,1036 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
+  >
+  IComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_services/system/gridster-layout.service.ts</code>
+        </p>
+
+
+
+
+        <section data-compodoc="block-index">
+            <h3 id="index">Index</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Properties</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                        <a href="#componentRef" 
+>
+                                            componentRef
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#id" 
+>
+                                            id
+                                        </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section data-compodoc="block-properties">
+                <h3 id="inputs">Properties</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="componentRef"></a>
+                                        <span class="name "><b>componentRef</b>
+                                            <a href="#componentRef">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>componentRef:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="id"></a>
+                                        <span class="name "><b>id</b>
+                                            <a href="#id">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>id:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { DisplayGrid, GridsterConfig, GridsterItem, GridType, } from &#x27;angular-gridster2&#x27;;
+import { UUID } from &#x27;angular2-uuid&#x27;;
+import { CardComponent } from &#x27;src/app/modules/admin/reports/card/card.component&#x27;;
+import { DashBoardComponentProperties, DashboardContentModel, DashboardModel, DashBoardProperties, WidgetModel, widgetRoles } from &#x27;src/app/modules/admin/grid-menu-layout/grid-models&#x27;;
+import { GridsterDataService } from &#x27;../gridster/gridster-data.service&#x27;;
+import { SitesService } from &#x27;../reporting/sites.service&#x27;;
+import { BehaviorSubject, Observable, of } from &#x27;rxjs&#x27;;
+import { MatSnackBar } from &#x27;@angular/material/snack-bar&#x27;;
+import { Router } from &#x27;@angular/router&#x27;;
+import { StrainBoardComponent } from &#x27;src/app/modules/tv-menu/strainBoard/strain-board/strain-board.component&#x27;;
+import { AuthenticationService } from &#x27;./authentication.service&#x27;;
+import { CategoryItemsBoardComponent } from &#x27;src/app/modules/tv-menu/category-items-board/category-items-board.component&#x27;;
+import { PosOrderItemsComponent } from &#x27;src/app/modules/posorders/pos-order/pos-order-items/pos-order-items.component&#x27;;
+import { PosOrderBoardComponent } from &#x27;src/app/modules/posorders/pos-order/pos-order-board/pos-order-board.component&#x27;;
+import { OrderHeaderDemographicsBoardComponent } from &#x27;src/app/modules/posorders/pos-order/order-header-demographics-board/order-header-demographics-board.component&#x27;;
+import { OrderTotalBoardComponent } from &#x27;src/app/modules/posorders/pos-order/order-total-board/order-total-board.component&#x27;;
+import { IFrameComponent } from &#x27;src/app/shared/widgets/i-frame/i-frame.component&#x27;;
+import { YoutubePlayerComponent } from &#x27;src/app/shared/widgets/youtube-player/youtube-player.component&#x27;;
+import { LimitValuesCardComponent } from &#x27;src/app/modules/posorders/limit-values-card/limit-values-card.component&#x27;;
+import { ISetting, ISite } from &#x27;src/app/_interfaces&#x27;;
+import { CardDashboardComponent } from &#x27;src/app/modules/admin/reports/card-dashboard/card-dashboard.component&#x27;;
+import { MenuItemCardDashboardComponent } from &#x27;src/app/modules/menu/menu-item-card/menu-item-card.component&#x27;;
+import { SettingsService } from &#x27;./settings.service&#x27;;
+import { TiersWithPricesComponent } from &#x27;src/app/modules/menu/tierMenu/tiers-with-prices/tiers-with-prices.component&#x27;;
+import { LastImageDisplayComponent } from &#x27;src/app/shared/widgets/last-image-display/last-image-display.component&#x27;;
+export interface IComponent {
+  id: string;
+  componentRef: string;
+}
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class GridsterLayoutService {
+
+  designerMode &#x3D; false; //: boolean;
+
+  public widgetCollection: WidgetModel[];
+  public dashboardCollection: DashboardModel[];
+  public dashboardID: number;
+  public dashboardContentModel: DashboardContentModel;
+  public layout: GridsterItem[] &#x3D; [];
+  public components: IComponent[] &#x3D; [];
+  public dropId: string;
+  // protected options: GridsterConfig;
+  public dashboardId: number;
+	public dashboardModel: DashboardModel;
+	public dashboardArray: DashboardContentModel[];
+
+  public _dashboardModel      &#x3D; new BehaviorSubject&lt;DashboardModel&gt;(null);
+  public dashboardModel$        &#x3D; this._dashboardModel.asObservable();
+
+  public _dashboardModels      &#x3D; new BehaviorSubject&lt;DashboardModel[]&gt;(null);
+  public dashboardModels$        &#x3D; this._dashboardModels.asObservable();
+
+  dashboardProperties: DashBoardProperties;
+  sites: ISite[];
+  public cartTypeCollection  &#x3D; [
+    { type: &quot;arcdiagram&quot; , icon: &#x27;&#x27; },
+    { type: &quot;area&quot; , icon: &#x27;&#x27; },
+    { type: &quot;arearange&quot; , icon: &#x27;&#x27; },
+    { type: &quot;areaspline&quot; , icon: &#x27;&#x27; },
+    { type: &quot;areasplinerange&quot; , icon: &#x27;&#x27; },
+    { type: &quot;bar&quot; , icon: &#x27;bar_chart&#x27; },
+    { type: &quot;bellcurve&quot; , icon: &#x27;&#x27; },
+    { type: &quot;boxplot&quot; , icon: &#x27;&#x27; },
+    { type: &quot;bubble&quot; , icon: &#x27;bubble_chart&#x27; },
+    { type: &quot;bullet&quot; , icon: &#x27;&#x27; },
+    { type: &quot;column&quot; , icon: &#x27;&#x27; },
+    { type: &quot;columnpyramid&quot; , icon: &#x27;&#x27; },
+    { type: &quot;columnrange&quot; , icon: &#x27;&#x27; },
+    { type: &quot;cylinder&quot; , icon: &#x27;&#x27; },
+    { type: &quot;dependencywheel&quot; , icon: &#x27;&#x27; },
+    { type: &quot;dumbbell&quot; , icon: &#x27;&#x27; },
+    { type: &quot;errorbar&quot; , icon: &#x27;&#x27; },
+    { type: &quot;funnel&quot; , icon: &#x27;&#x27; },
+    { type: &quot;funnel3d&quot; , icon: &#x27;&#x27; },
+    { type: &quot;gauge&quot; , icon: &#x27;&#x27; },
+    { type: &quot;heatmap&quot; , icon: &#x27;&#x27; },
+    { type: &quot;histogram&quot; , icon: &#x27;&#x27; },
+    { type: &quot;item&quot; , icon: &#x27;&#x27; },
+    { type: &quot;line&quot; , icon: &#x27;show_chart&#x27; },
+    { type: &quot;lollipop&quot; , icon: &#x27;&#x27; },
+    { type: &quot;networkgraph&quot; , icon: &#x27;&#x27; },
+    { type: &quot;organization&quot; , icon: &#x27;&#x27; },
+    { type: &quot;packedbubble&quot; , icon: &#x27;&#x27; },
+    { type: &quot;pareto&quot; , icon: &#x27;&#x27; },
+    { type: &quot;pie&quot; , icon: &#x27;pie_chart&#x27; },
+    { type: &quot;polygon&quot; , icon: &#x27;&#x27; },
+    { type: &quot;pyramid&quot; , icon: &#x27;&#x27; },
+    { type: &quot;pyramid3d&quot; , icon: &#x27;&#x27; },
+    { type: &quot;sankey&quot; , icon: &#x27;&#x27; },
+    { type: &quot;scatter&quot; , icon: &#x27;scatter_chart&#x27; },
+    { type: &quot;scatter3d&quot; , icon: &#x27;&#x27; },
+    { type: &quot;solidgauge&quot; , icon: &#x27;&#x27; },
+    { type: &quot;spline&quot; , icon: &#x27;&#x27; },
+    { type: &quot;streamgraph&quot; , icon: &#x27;&#x27; },
+    { type: &quot;sunburst&quot; , icon: &#x27;&#x27; },
+    { type: &quot;tilemap&quot; , icon: &#x27;&#x27; },
+    { type: &quot;timeline&quot; , icon: &#x27;&#x27; },
+    { type: &quot;treemap&quot; , icon: &#x27;&#x27; },
+    { type: &quot;variablepie&quot; , icon: &#x27;&#x27; },
+    { type: &quot;variwide&quot; , icon: &#x27;&#x27; },
+    { type: &quot;vector&quot; , icon: &#x27;&#x27; },
+    { type: &quot;venn&quot; , icon: &#x27;&#x27; },
+    { type: &quot;waterfall&quot; , icon: &#x27;&#x27; },
+    { type: &quot;windbarb&quot; , icon: &#x27;&#x27; },
+    { type: &quot;wordcloud&quot; , icon: &#x27;&#x27; },
+    { type: &quot;xrange&quot; , icon: &#x27;&#x27; },
+  ]
+
+	protected componentCollection &#x3D; [
+		{ name: &quot;Category&quot;    , componentInstance: CategoryItemsBoardComponent },
+    { name: &quot;Product&quot;     , componentInstance: MenuItemCardDashboardComponent},
+		{ name: &quot;Flowers&quot;     , componentInstance: StrainBoardComponent },
+    { name: &quot;FlowerPrices&quot;, componentInstance: TiersWithPricesComponent},
+
+		{ name: &quot;Chart&quot;       , componentInstance: CardDashboardComponent },
+    { name: &quot;report&quot;      , componentInstance: CardComponent },
+
+    { name: &quot;POSOrder&quot;    , componentInstance: PosOrderBoardComponent },
+    { name: &quot;ClientInfo&quot;  , componentInstance: OrderHeaderDemographicsBoardComponent },
+    { name: &quot;OrderTotal&quot;  , componentInstance: OrderTotalBoardComponent },
+    { name: &quot;Limits&quot;      , componentInstance: LimitValuesCardComponent },
+    { name: &quot;lastItemAdded&quot; , componentInstance: LastImageDisplayComponent },
+    
+    { name: &quot;Iframe&quot;      , componentInstance: IFrameComponent },
+    { name: &quot;YouTube&quot;     , componentInstance: YoutubePlayerComponent },
+    // { name: &quot;youtube&quot;       , componentInstance: YoutubePlayerComponent },
+	];
+
+  stateChanged: boolean;
+
+  public options: GridsterConfig &#x3D; {
+
+      gridType: GridType.Fit,
+      displayGrid: DisplayGrid.OnDragAndResize,
+      pushItems: true,
+			// pushDirections: { north: true, east: true, south: true, west: true },
+      swap             : true,
+      swapWhileDragging: true,
+      allowMultiLayer  : true,
+      resizable: { enabled: true },
+      enableEmptyCellDrop: true,
+			emptyCellDropCallback: this.onDrop,
+      itemChangeCallback : this.modifyChanges.bind(this),
+      draggable: {
+        enabled: true
+      },
+      // draggable: { enabled: false},
+      // resizable: { enabled: true},
+      minCols: 100,
+			minRows: 100,
+      maxCols: 100,
+      maxRows: 100,
+      maxItemRows: 100,
+      maxItemCols: 100,
+      maxItemArea: 1000000,
+      mobileBreakpoint: 640,
+
+  };
+
+  constructor(
+    private siteService    : SitesService,
+    private gridDataService: GridsterDataService,
+    private _snackBar      : MatSnackBar,
+    private router         : Router,
+    private authService    : AuthenticationService,
+    private settingsService: SettingsService,
+  ) {
+  }
+
+  addItem(): void {
+    this.layout.push({
+      cols: 5,
+      id: UUID.UUID(),
+      rows: 5,
+      x: 0,
+      y: 0
+    });
+  }
+
+  getGridsterDesignSettings(): Observable&lt;ISetting&gt; {
+    const site     &#x3D; this.siteService.getAssignedSite();
+    return this.settingsService.getSettingByName(site, &#x27;GridsterSettings&#x27;)
+  }
+
+  updateDashboardModel(dashboard:DashboardModel) {
+    if (dashboard) {
+      this.dashboardModel &#x3D; dashboard;
+      this.dashboardArray &#x3D; dashboard.dashboard;
+    }
+    this._dashboardModel.next(dashboard)
+    if (dashboard) { 
+      this.refreshCollection();
+    }
+  }
+
+  deleteItem(id: string): void {
+    const item &#x3D; this.layout.find(d &#x3D;&gt; d.id &#x3D;&#x3D;&#x3D; id);
+    this.layout.splice(this.layout.indexOf(item), 1);
+    const comp &#x3D; this.components.find(c &#x3D;&gt; c.id &#x3D;&#x3D;&#x3D; id);
+    this.components.splice(this.components.indexOf(comp), 1);
+  }
+
+  setDropId(dropId: string): void {
+    this.dropId &#x3D; dropId;
+  }
+
+  dropItem(dragId: string): void {
+    const { components }    &#x3D; this;
+    const comp: IComponent  &#x3D; components.find(c &#x3D;&gt; c.id &#x3D;&#x3D;&#x3D; this.dropId);
+    const updateIdx: number &#x3D; comp ? components.indexOf(comp) : components.length;
+    const componentItem: IComponent &#x3D; {
+      id: this.dropId,
+      componentRef: dragId
+    };
+    this.components &#x3D; Object.assign([], components, { [updateIdx]: componentItem });
+  }
+
+  getComponentRef(id: string): string {
+    const comp &#x3D; this.components.find(c &#x3D;&gt; c.id &#x3D;&#x3D;&#x3D; id);
+    return comp ? comp.componentRef : null;
+  }
+
+  itemChange(item) {
+    if (item) { {
+        if (!this.dashboardModel.dashboard) {
+          this.dashboardModel.dashboard &#x3D; []
+        }
+       this.dashboardModel.dashboard.push(item)
+      }
+    }
+    try {
+      this.dashboardModel.dashboard &#x3D; this.dashboardArray;
+
+      let  tmp &#x3D; JSON.stringify(this.dashboardModel);
+
+      let parsed: DashboardModel &#x3D; JSON.parse(tmp);
+      this.serialize(parsed);
+      this.dashboardModel.jsonObject  &#x3D; tmp;
+      this.saveModel(this.dashboardModel);
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  saveDashBoard() {
+    this.dashboardModel.jsonObject  &#x3D; null;
+    const json &#x3D; JSON.stringify(this.dashboardModel)
+    this.dashboardModel.jsonObject &#x3D; json;
+    this.saveModel(this.dashboardModel)
+  }
+
+  deleteModel(model:DashboardModel) {
+    const site     &#x3D; this.siteService.getAssignedSite();
+    this.gridDataService.deleteGrid(site, model.id).subscribe(data &#x3D;&gt; {
+      this.refreshCollection();
+    })
+
+  }
+
+  saveModel(model:DashboardModel) {
+    const site     &#x3D; this.siteService.getAssignedSite();
+    this.dashboardArray &#x3D; null
+    this.dashboardModel &#x3D; null
+    let forceRefreshList &#x3D; false;
+    if (model.id &#x3D;&#x3D; 0) { forceRefreshList &#x3D; true}
+    console.log(model)
+    this.gridDataService.saveGrid(site, model).subscribe(
+      {
+        next: data &#x3D;&gt; {
+          if (data.errorMessage) {
+            this.notifyEvent(&#x27;Error Occured: &#x27; + data.errorMessage, &#x27;Failed&#x27;)
+          }
+          this.dashboardArray &#x3D; data.dashboard;
+          this.dashboardModel &#x3D; data;
+          this.stateChanged &#x3D; false
+          this.updateDashboardModel(data)
+          this.forceRefresh(data.id);
+          if (forceRefreshList) {
+            this.refreshCollection();
+          }
+        },
+        error: err &#x3D;&gt; {
+          this.forceRefresh(null);
+          this.notifyEvent(&#x27;Save failed: &#x27; + err, &#x27;Failed&#x27;)
+          console.log(&#x27;save failed&#x27;, err)
+        }
+      }
+    );
+  }
+
+  publish(model$: Observable&lt;DashboardModel&gt;) {
+    model$.subscribe(
+      {
+        next : data &#x3D;&gt;{
+          this.notifyEvent(&#x27;Saved&#x27;, &quot;Saved&quot;)
+          this.updateDashboardModel(data)
+        },
+        error: err &#x3D;&gt; {
+            this.notifyEvent(err, &quot;Failure&quot;)
+        }
+      }
+    )
+  }
+
+  redirectTo(uri:string, item: any){
+    if (item.id &#x3D;&#x3D; 0) {
+      this.router.navigateByUrl(&#x27;/menu-manager&#x27;)
+      return
+    }
+    this.getData(item.id);
+    this.router.navigateByUrl(&#x27;/menu-manager&#x27;, {skipLocationChange: true}).then(()&#x3D;&gt;
+    this.router.navigate([uri]));
+  }
+
+  toggleDesignerMode(mode) {
+
+    if (this.authService.isAuthorized)  {
+      this.designerMode &#x3D; mode
+      
+      const designerMode &#x3D; localStorage.getItem(&#x27;dashBoardDesignerMode&#x27;) 
+      if (designerMode &#x3D;&#x3D;&#x3D; &#x27;true&#x27; || designerMode &#x3D;&#x3D;&#x3D; &#x27;false&#x27;) {
+        mode &#x3D; (designerMode &#x3D;&#x3D; &#x27;true&#x27;)
+        if (designerMode) { 
+          this.designerMode &#x3D; mode
+        }
+      }
+
+
+    }  else {
+      this.designerMode &#x3D; false; 
+    }
+
+    this.options.draggable &#x3D; { enabled: mode}
+    this.options.resizable &#x3D; { enabled: mode}
+    this.changedOptions();
+  }
+
+  initGridDesignerMode() { 
+    const designerMode &#x3D; localStorage.getItem(&#x27;dashBoardDesignerMode&#x27;) 
+    let mode &#x3D; (designerMode &#x3D;&#x3D; &#x27;true&#x27;)
+    this.designerMode &#x3D; mode;
+    this.options.draggable &#x3D; { enabled: mode}
+    this.options.resizable &#x3D; { enabled: mode}
+  }
+
+
+  changedOptions(): void {
+    if (this.options.api &amp;&amp; this.options.api.optionsChanged) {
+      this.options.api.optionsChanged();
+    }
+  }
+
+  forceChangeOptions(): void {
+    this.initGridDesignerMode();  
+    this.options.api.optionsChanged();
+  }
+
+  reloadRoute(route) {
+    this.router.navigateByUrl(&#x27;/menu-board&#x27;, { skipLocationChange: true }).then(() &#x3D;&gt; {
+        this.router.navigate(route);
+    }); 
+  }
+
+  forceRefresh(id: number) {
+    if (id !&#x3D; 0) {
+      if (id &#x3D;&#x3D; null) { return }
+      const path &#x3D; &quot;/menu-board/grid-menu-layout/&quot;;
+      const item &#x3D; {id:id};
+      this.stateChanged &#x3D; false;
+      const route &#x3D; [path, item]
+      this.reloadRoute(route);
+      this.router.navigate([path, item]);
+      // this.router.navigateByUrl(path, { skipLocationChange: true }).then(() &#x3D;&gt; {
+      //  }); 
+    }
+  }
+
+  refreshCollection() {
+    const collection$ &#x3D; this.getCollection()
+    collection$.subscribe(dashboards &#x3D;&gt; {
+      this._dashboardModels.next(dashboards)
+			this.dashboardCollection &#x3D; dashboards;
+      this.initGridDesignerMode()
+      this.changedOptions();
+      if (!this.dashboardModel) {
+        if (dashboards[0]) {
+
+        }
+      } else {
+        // this.forceRefresh(this.dashboardModel.id.toString())
+      }
+		});
+  }
+
+  getCollection() {
+    const site &#x3D; this.siteService.getAssignedSite();
+		// We make get request to get all dashboards from our REST API
+		return this.gridDataService.getGrids(site)
+  }
+
+  	// Return Array of WidgetModel
+	getWidgets(): Observable&lt;Array&lt;WidgetModel&gt;&gt; {
+
+    let list &#x3D; [] as WidgetModel[]
+
+    let item &#x3D; {} as WidgetModel;
+    item.name &#x3D; &#x27;Chart&#x27;
+    item.identifier &#x3D; &#x27;chart&#x27;
+    item.icon &#x3D; &#x27;analytics&#x27;
+    item.type &#x3D; &#x27;analytics&#x27;
+    list.push(item);
+
+    item &#x3D; {} as WidgetModel;
+    item.name &#x3D; &#x27;Report&#x27;
+    item.identifier &#x3D; &#x27;Report&#x27;
+    item.icon &#x3D; &#x27;list&#x27;
+    item.type &#x3D; &#x27;analytics&#x27;
+    list.push(item);
+
+    item &#x3D; {} as WidgetModel;
+    item.name &#x3D; &#x27;Menu&#x27;
+    item.identifier &#x3D; &#x27;menu&#x27;
+    item.icon &#x3D; &#x27;category&#x27;
+    item.type &#x3D; &#x27;menu&#x27;
+    list.push(item);
+
+    item &#x3D; {} as WidgetModel;
+    item.name &#x3D; &#x27;Menu Item&#x27;
+    item.identifier &#x3D; &#x27;menuitem&#x27;
+    item.icon &#x3D; &#x27;inventory&#x27;
+    item.type &#x3D; &#x27;menu&#x27;
+    list.push(item);
+
+    item &#x3D; {} as WidgetModel;
+    item.name &#x3D; &#x27;POSOrder&#x27;
+    item.identifier &#x3D; &#x27;order&#x27;
+    item.icon &#x3D; &#x27;shopping_cart&#x27;
+    item.type &#x3D; &#x27;order&#x27;
+    list.push(item);
+
+    item &#x3D; {} as WidgetModel;
+    item.name &#x3D; &#x27;ClientInfo&#x27;
+    item.identifier &#x3D; &#x27;clientinfo&#x27;
+    item.icon &#x3D; &#x27;person&#x27;
+    item.type &#x3D; &#x27;order&#x27;
+    list.push(item);
+
+    item &#x3D; {} as WidgetModel;
+    item.name &#x3D; &#x27;OrderTotal&#x27;
+    item.identifier &#x3D; &#x27;ordertotal&#x27;
+    item.icon &#x3D; &#x27;credit_card&#x27;
+    item.type &#x3D; &#x27;order&#x27;
+    list.push(item);
+
+    item &#x3D; {} as WidgetModel;
+    item.name &#x3D; &#x27;lastItemAdded&#x27;
+    item.identifier &#x3D; &#x27;lastitemadded&#x27;
+    item.type &#x3D; &#x27;order&#x27;
+    item.icon &#x3D; &#x27;last_page&#x27;
+    list.push(item);
+
+    item &#x3D; {} as WidgetModel;
+    item.name &#x3D; &#x27;Limits&#x27;
+    item.identifier &#x3D; &#x27;limits&#x27;
+    item.type &#x3D; &#x27;order&#x27;
+    item.icon &#x3D; &#x27;production_quantity_limits&#x27;
+    list.push(item);
+
+    item &#x3D; {} as WidgetModel;
+    item.name &#x3D; &#x27;Iframe&#x27;
+    item.identifier &#x3D; &#x27;iframe&#x27;
+    item.icon &#x3D; &#x27;whatshot&#x27;
+    item.type &#x3D; &#x27;advertising&#x27;
+    list.push(item);
+
+    item &#x3D; {} as WidgetModel;
+    item.name &#x3D; &#x27;Youtube&#x27;
+    item.identifier &#x3D; &#x27;youtube&#x27;
+    item.icon &#x3D; &#x27;smart_display&#x27;
+    item.type &#x3D; &#x27;advertising&#x27;
+    list.push(item);
+
+		return of(list) ;
+	}
+
+  getRandomInt(min, max) : number{
+    min &#x3D; Math.ceil(min);
+    max &#x3D; Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  onDrop(ev) {
+		const componentType &#x3D; ev.dataTransfer.getData(&quot;widgetIdentifier&quot;);
+    console.log(componentType)
+
+    if (!this.dashboardArray) {
+      this.dashboardArray &#x3D; [] as DashboardContentModel[]
+    }
+    if (!this.dashboardModel.dashboard) {
+      this.dashboardModel.dashboard&#x3D; [] as DashboardContentModel[]
+    }
+
+    let id &#x3D; this.getRandomInt(1, 100000)// +this.dashboardArray.length + 1
+
+		switch (componentType) {
+      case &#x27;youtube&#x27; :
+        this.applyItem(id, &#x27;YouTube&#x27;, &#x27;YouTube&#x27;, YoutubePlayerComponent );
+        return;
+      case &#x27;iframe&#x27; :
+        this.applyItem(id, &#x27;IFrame&#x27;, &#x27;IFrame&#x27;, IFrameComponent );
+        return;
+      case &#x27;clientinfo&#x27; :
+        this.applyItem(id, &#x27;ClientInfo&#x27;, &#x27;ClientInfo&#x27;, OrderHeaderDemographicsBoardComponent );
+        return
+      case &#x27;limits&#x27; :
+        this.applyItem(id, &#x27;Limits&#x27;, &#x27;Limits&#x27;, LimitValuesCardComponent );
+         return
+      case &#x27;lastitemadded&#x27; :
+        this.applyItem(id, &#x27;lastItemAdded&#x27;, &#x27;LastItemAdded&#x27;  , LastImageDisplayComponent );
+        return
+      case &#x27;ordertotal&#x27; :
+        this.applyItem(id, &#x27;OrderTotal&#x27;, &#x27;OrderTotal&#x27;, OrderTotalBoardComponent );
+        return
+      case &#x27;order&#x27; :
+        this.applyItem(id, &#x27;POSOrder&#x27;, &#x27;POSOrder&#x27;, PosOrderItemsComponent );
+        return
+      case &#x27;chart&#x27; :
+        this.applyItem(id, &#x27;Chart&#x27;, &#x27;Chart&#x27;, CardComponent );
+        return
+      case &#x27;menu&#x27; :
+        this.applyItem(id, &#x27;Category&#x27;, &#x27;Category&#x27;, CategoryItemsBoardComponent );
+        return
+      case &#x27;menuitem&#x27; :
+        this.applyItem(id, &quot;Menu Item&quot;, &#x27;MenuItem&#x27;, MenuItemCardDashboardComponent );
+        return
+      case &#x27;flowerprices&#x27; :
+       this.applyItem(id, &quot;Flower Prices&quot;, &#x27;FlowerPrices&#x27;, TiersWithPricesComponent );
+        return
+    }
+	}
+
+  applyItem(id: number, name: string, componentName: string, component: any) {
+    if (!this.dashboardArray) { return }
+    console.log(name,componentName)
+    const properties &#x3D; {} as DashBoardComponentProperties;
+    properties.name &#x3D; componentName;
+    let jsonString &#x3D; &#x27;&#x27;
+
+    if (componentName) {
+
+      const types &#x3D; this.componentCollection.filter(data &#x3D;&gt;
+         { return data.name.toLowerCase() &#x3D;&#x3D;&#x3D; componentName.toLowerCase()}
+      )
+
+      if (componentName.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;posorder&#x27;) {
+        properties.type &#x3D; &#x27;order&#x27;
+        properties.cardValueType &#x3D; &#x27;POSOrder&#x27;
+      }
+      if (componentName.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;clientinfo&#x27;) {
+        properties.type &#x3D; &#x27;order&#x27;
+        properties.cardValueType &#x3D; &#x27;ClientInfo&#x27;
+      }
+      if (componentName.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;limits&#x27;) {
+        properties.type &#x3D; &#x27;order&#x27;
+        properties.cardValueType &#x3D; &#x27;limits&#x27;
+      }
+      if (componentName.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;lastitemadded&#x27;) {
+        properties.type &#x3D; &#x27;order&#x27;
+        properties.cardValueType &#x3D; &#x27;lastItemAdded&#x27;
+      }
+      if (componentName.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;ordertotal&#x27;) {
+        properties.type &#x3D; &#x27;order&#x27;
+        properties.cardValueType &#x3D; &#x27;OrderTotal&#x27;
+      }
+
+      if (componentName.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;menuitem&#x27;) {
+        properties.type &#x3D; &#x27;menu&#x27;
+        properties.cardValueType &#x3D; &#x27;Product&#x27;
+      }
+
+      if (componentName.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;lastItemAdded&#x27;) {
+        properties.type &#x3D; &#x27;menu&#x27;
+        properties.cardValueType &#x3D; &#x27;Product&#x27;
+      }
+
+      // case &#x27;limits&#x27; :
+      //   this.applyItem(id, &#x27;lastItemAdded&#x27;, &#x27;Last Item Added&#x27;  , LastImageDisplayComponent );
+      //   return
+
+      if (componentName.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;menu&#x27; || componentName.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;menu&#x27;) {
+        properties.type &#x3D; &#x27;menu&#x27;
+      }
+
+
+      if (types &amp;&amp; types.length&gt;0) {
+        const type  &#x3D; types[0].name.toLowerCase()
+        if (type &#x3D;&#x3D;&#x3D; &#x27;category&#x27;){
+
+        }
+        if (type &#x3D;&#x3D;&#x3D; &#x27;category&#x27;){
+
+        }
+        if (type &#x3D;&#x3D;&#x3D; &#x27;category&#x27;){
+
+        }
+      }
+
+      jsonString &#x3D; JSON.stringify(properties)
+
+    }
+
+    const  item &#x3D; {
+      componentName: componentName,
+      cols      : 40,
+      rows      : 40,
+      x         : 0,
+      y         : 0,
+      component : component,
+      name      : name,
+      id        :  id,
+      properties: jsonString,
+    } as DashboardContentModel;
+
+    this.itemChange(item);
+    if (this.dashboardModel) {
+      if (!this.dashboardModel.dashboard) {
+        this.dashboardModel.dashboard &#x3D; [] as DashboardContentModel[]
+      }
+      this.dashboardModel.dashboard.push(item)
+    }
+  }
+
+  modifyChanges() {
+    this.stateChanged &#x3D; true
+  }
+
+  getData(id: number) {
+    const site &#x3D; this.siteService.getAssignedSite();
+    if (id &#x3D;&#x3D; 0 || id &#x3D;&#x3D; undefined) {
+      this.router.navigateByUrl(&#x27;/menu-manager&#x27;)
+      return
+    }
+
+    const gridData$ &#x3D; this.gridDataService.getGrid(site, id)
+    gridData$.subscribe({
+      next: data &#x3D;&gt; {
+        this.dashboardModel &#x3D; data
+        this.dashboardProperties &#x3D; {}  as DashBoardProperties
+        if (this.dashboardModel.userName) {
+          this.dashboardProperties &#x3D; JSON.parse(data.userName)  as DashBoardProperties
+        }
+  
+        if (this.dashboardModel.widgetRolesJSON) {
+          this.dashboardModel.widgetRoles &#x3D; JSON.parse(data.widgetRolesJSON)  as widgetRoles[]
+        }
+
+        this.parseJson(data)
+        this.dashboardArray &#x3D;  data.dashboard;
+        this.dashboardArray.forEach(data &#x3D;&gt; {
+          data.layerIndex &#x3D; 1;
+          if (data.properties) {
+            data.object &#x3D; JSON.parse(data.properties)
+            if (data?.object?.layerIndex)  {
+              data.layerIndex &#x3D; data?.object?.layerIndex
+            }
+          }
+        })
+        this.updateDashboardModel(data)
+      }
+    })
+	}
+
+  removeCard(item) {
+    const dashBoard &#x3D; this.dashboardModel;
+    const list &#x3D; dashBoard.dashboard.filter( data &#x3D;&gt; data.id !&#x3D; item.id)
+    dashBoard.dashboard &#x3D; list;
+    this.dashboardArray &#x3D; list;
+    this.dashboardModel.dashboard &#x3D; list;
+  }
+
+  // // Super TOKENIZER 2.0 POWERED BY NATCHOIN
+	// parseJson(dashboardModel: DashboardModel) {
+	// 	// We loop on our dashboardCollection
+  //   if (!dashboardModel || !dashboardModel.dashboard) {
+  //     return;
+  //   }
+	// 	dashboardModel.dashboard.forEach(dashboard &#x3D;&gt; {
+	// 		// We loop on our componentCollection
+  //     dashboard &#x3D; this.initComponentComplexData(dashboard)
+	// 		this.componentCollection.forEach(component &#x3D;&gt; {
+	//       // We check if component key in our dashboardCollection
+	// 			// is equal to our component name key in our componentCollection
+  //       console.log(dashboard.componentName.toLowerCase() ,component.name.toLowerCase())
+  //       if (dashboard.componentName.toLowerCase() &#x3D;&#x3D;&#x3D; component.name.toLowerCase()) {
+  //         dashboard.component &#x3D; component.componentInstance;
+  //       }
+	// 		});
+	// 	});
+  //   this.updateDashboardModel(dashboardModel)
+  //   this.dashboardModel &#x3D; dashboardModel
+	// }
+
+  parseJson(dashboardModel: DashboardModel) {
+		// We loop on our dashboardCollection
+
+    if (!dashboardModel.dashboard) {
+      dashboardModel.dashboard &#x3D; [] as DashboardContentModel[]
+    }
+
+		dashboardModel.dashboard.forEach(dashboard &#x3D;&gt; {
+			// We loop on our componentCollection
+			this.componentCollection.forEach(component &#x3D;&gt; {
+				// We check if component key in our dashboardCollection
+				// is equal to our component name key in our componentCollection
+        if (dashboard.componentName.toLowerCase() &#x3D;&#x3D;&#x3D; component.name.toLowerCase()) {
+					dashboard.component &#x3D; component.componentInstance;
+				}
+			});
+		});
+	}
+
+  initComponentComplexData(item: DashboardContentModel): DashboardContentModel {
+    const properties &#x3D; JSON.parse(item.properties)
+    console.log(properties)
+    item.object &#x3D; this.getDateRange(properties);
+    return item;
+  }
+
+  //date range type is year month day etc.
+  getDateRange(item: DashBoardComponentProperties ) {
+    //if dateRangeReport then use the filter variable date ranges.
+    //otherwise use
+    if (!item?.dateRangeReport) {
+      //then we have to figure out the date range
+      if (item.rangeValue) {
+        if (item.rangeType &#x3D;&#x3D;&#x3D; &#x27;year&#x27;) {
+
+        }
+        if (item.rangeType &#x3D;&#x3D;&#x3D; &#x27;month&#x27;) {
+
+        }
+        if (item.rangeType &#x3D;&#x3D;&#x3D; &#x27;week&#x27;) {
+
+        }
+        if (item.rangeType &#x3D;&#x3D;&#x3D; &#x27;date&#x27;) {
+
+        }
+      }
+    }
+    return item;
+  }
+
+	serialize(dashboardModel: DashboardModel) {
+    if (!dashboardModel.dashboard) {
+
+      return
+    }
+		dashboardModel.dashboard.forEach(dashboard &#x3D;&gt; {
+			// We loop on our componentCollection
+			this.componentCollection.forEach(component &#x3D;&gt; {
+				// We check if component key in our dashboardCollection
+				// is equal to our component name key in our componentCollection
+				if (dashboard.componentName.toLowerCase() &#x3D;&#x3D;&#x3D; component.name.toLowerCase()) {
+					dashboard.component &#x3D; component.name;
+				}
+			});
+		});
+	}
+
+    notifyEvent(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+      verticalPosition: &#x27;top&#x27;
+    });
+  }
+
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'IComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

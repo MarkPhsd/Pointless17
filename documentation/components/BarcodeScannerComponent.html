@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -35,32 +35,37 @@
 
 
 <ol class="breadcrumb">
-  <li>Components</li>
-  <li
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
   >
   BarcodeScannerComponent</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
-        <li >
-            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
         </li>
-        <li >
-            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
         </li>
-        <li >
-            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
     <h3>File</h3>
 </p>
 <p class="comment">
@@ -74,15 +79,16 @@
         <h3>Implements</h3>
     </p>
     <p class="comment">
-                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+                <code>OnInit</code>
                     <code><a href="../miscellaneous/variables.html#s" target="_self" >OnDestroy</a></code>
     </p>
 
 
-<section>
+<section data-compodoc="block-metadata">
     <h3>Metadata</h3>
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover metadata">
         <tbody>
+
 
 
 
@@ -98,6 +104,8 @@
                 <td class="col-md-3">selector</td>
                 <td class="col-md-9"><code>app-barcode-scanner</code></td>
             </tr>
+
+
 
             <tr>
                 <td class="col-md-3">styleUrls</td>
@@ -122,7 +130,7 @@
     </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -163,12 +171,31 @@
                                 <a href="#scanActive" >scanActive</a>
                             </li>
                             <li>
+                                <a href="#scanResult" >scanResult</a>
+                            </li>
+                            <li>
+                                <a href="#scanStatus" >scanStatus</a>
+                            </li>
+                            <li>
+                                <a href="#startScanSub" >startScanSub</a>
+                            </li>
+                            <li>
                                 <a href="#status" >status</a>
+                            </li>
+                            <li>
+                                <a href="#statusCheckPermision" >statusCheckPermision</a>
+                            </li>
+                            <li>
+                                <a href="#uiTransactions" >uiTransactions</a>
+                            </li>
+                            <li>
+                                <a href="#uiTransactions$" >uiTransactions$</a>
                             </li>
                             <li>
                                 <a href="#user" >user</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
                                 <a href="#video" >video</a>
                             </li>
                             <li>
@@ -189,9 +216,6 @@
                 <tr>
                     <td class="col-md-4">
                         <ul class="index-list">
-                            <li>
-                                <a href="#askUser" >askUser</a>
-                            </li>
                             <li>
                                 <a href="#beforeDestroy" >beforeDestroy</a>
                             </li>
@@ -217,23 +241,22 @@
                                 <a href="#goHome" >goHome</a>
                             </li>
                             <li>
-                                <a href="#initData" >initData</a>
+                                <a href="#initDisplayResults" >initDisplayResults</a>
                             </li>
                             <li>
                                 <a href="#ngOnDestroy" >ngOnDestroy</a>
                             </li>
                             <li>
-                                    <span class="modifier">Async</span>
                                 <a href="#ngOnInit" >ngOnInit</a>
                             </li>
                             <li>
                                 <a href="#notifyEvent" >notifyEvent</a>
                             </li>
                             <li>
-                                <a href="#prepare" >prepare</a>
+                                <a href="#resolveContent" >resolveContent</a>
                             </li>
                             <li>
-                                <a href="#resolveContent" >resolveContent</a>
+                                <a href="#saveCustomer" >saveCustomer</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
@@ -247,6 +270,9 @@
                                     <span class="modifier">Async</span>
                                 <a href="#stopScan" >stopScan</a>
                             </li>
+                            <li>
+                                <a href="#validateCustomerOnly" >validateCustomerOnly</a>
+                            </li>
                         </ul>
                     </td>
                 </tr>
@@ -259,18 +285,18 @@
     </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(_snackBar: MatSnackBar, dlParserService: <a href="../injectables/DlParserService.html" target="_self">DlParserService</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, actionSheetController: ActionSheetController, router: <a href="https://angular.io/api/router/Router" target="_blank">Router</a>)</code>
+<code>constructor(_snackBar: MatSnackBar, dlParserService: <a href="../injectables/DlParserService.html" target="_self">DlParserService</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, actionSheetController: ActionSheetController, uISettingsService: <a href="../injectables/UISettingsService.html" target="_self">UISettingsService</a>, router: Router)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:47</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:61</a></div>
                             </td>
                         </tr>
 
@@ -336,10 +362,22 @@
                                                     
                                                 </tr>
                                                 <tr>
+                                                        <td>uISettingsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/UISettingsService.html" target="_self" >UISettingsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
                                                         <td>router</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/router/Router" target="_blank" >Router</a></code>
+                                                                    <code>Router</code>
                                                         </td>
                                                   
                                                     <td>
@@ -360,48 +398,11 @@
 
 
 
-    <section>
+    <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
     </h3>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="askUser"></a>
-                    <span class="name">
-                        <span ><b>askUser</b></span>
-                        <a href="#askUser"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>askUser()</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="171"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:171</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -422,8 +423,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="191"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:191</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="241"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:241</a></div>
                 </td>
             </tr>
 
@@ -454,15 +455,15 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>cameraOff()</code>
+                    <code>cameraOff(goHome: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="85"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:85</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="110"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:110</a></div>
                 </td>
             </tr>
 
@@ -471,8 +472,40 @@
                 <td class="col-md-4">
 
                     <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>goHome</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
 
+                    </div>
+                    <div class="io-description">
+                        
                     </div>
                 </td>
             </tr>
@@ -500,8 +533,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="70"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:70</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="89"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:89</a></div>
                 </td>
             </tr>
 
@@ -539,8 +572,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="91"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:91</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="127"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:127</a></div>
                 </td>
             </tr>
 
@@ -576,8 +609,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="187"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:187</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="237"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:237</a></div>
                 </td>
             </tr>
 
@@ -613,8 +646,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="183"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:183</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="233"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:233</a></div>
                 </td>
             </tr>
 
@@ -650,8 +683,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="207"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:207</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="257"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:257</a></div>
                 </td>
             </tr>
 
@@ -671,24 +704,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="initData"></a>
+                    <a name="initDisplayResults"></a>
                     <span class="name">
-                        <span ><b>initData</b></span>
-                        <a href="#initData"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>initDisplayResults</b></span>
+                        <a href="#initDisplayResults"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>initData()</code>
+<code>initDisplayResults()</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="111"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:111</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="104"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:104</a></div>
                 </td>
             </tr>
 
@@ -724,8 +757,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="66"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:66</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="84"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:84</a></div>
                 </td>
             </tr>
 
@@ -747,7 +780,6 @@
                 <td class="col-md-4">
                     <a name="ngOnInit"></a>
                     <span class="name">
-                        <span class="modifier">Async</span>
                         <span ><b>ngOnInit</b></span>
                         <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -755,16 +787,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>ngOnInit()</code>
+<code>ngOnInit()</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="56"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:56</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="71"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:71</a></div>
                 </td>
             </tr>
 
@@ -773,7 +804,7 @@
                 <td class="col-md-4">
 
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
                     </div>
                 </td>
@@ -800,8 +831,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="200"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:200</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="250"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:250</a></div>
                 </td>
             </tr>
 
@@ -811,6 +842,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -864,43 +896,6 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="prepare"></a>
-                    <span class="name">
-                        <span ><b>prepare</b></span>
-                        <a href="#prepare"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>prepare()</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="100"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:100</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
                     <a name="resolveContent"></a>
                     <span class="name">
                         <span ><b>resolveContent</b></span>
@@ -917,8 +912,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="140"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:140</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="155"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:155</a></div>
                 </td>
             </tr>
 
@@ -928,6 +923,76 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>result</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="saveCustomer"></a>
+                    <span class="name">
+                        <span ><b>saveCustomer</b></span>
+                        <a href="#saveCustomer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>saveCustomer(result: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="193"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:193</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -987,8 +1052,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="121"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:121</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="136"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:136</a></div>
                 </td>
             </tr>
 
@@ -1026,8 +1091,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="195"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:195</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="245"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:245</a></div>
                 </td>
             </tr>
 
@@ -1065,8 +1130,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="157"
-                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:157</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="221"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:221</a></div>
                 </td>
             </tr>
 
@@ -1082,8 +1147,77 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="validateCustomerOnly"></a>
+                    <span class="name">
+                        <span ><b>validateCustomerOnly</b></span>
+                        <a href="#validateCustomerOnly"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>validateCustomerOnly(result: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="167"
+                            class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:167</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>result</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>
-    <section>
+    <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
@@ -1108,7 +1242,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:52</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:66</a></div>
                         </td>
                     </tr>
 
@@ -1133,7 +1267,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:46</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:51</a></div>
                         </td>
                     </tr>
 
@@ -1159,7 +1293,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:31</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:29</a></div>
                         </td>
                     </tr>
 
@@ -1185,7 +1319,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:39</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:37</a></div>
                         </td>
                     </tr>
 
@@ -1211,7 +1345,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:41</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:39</a></div>
                         </td>
                     </tr>
 
@@ -1237,7 +1371,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:47</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:52</a></div>
                         </td>
                     </tr>
 
@@ -1263,7 +1397,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:37</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:35</a></div>
                         </td>
                     </tr>
 
@@ -1289,7 +1423,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:34</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:32</a></div>
                         </td>
                     </tr>
 
@@ -1315,7 +1449,84 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:38</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="scanResult"></a>
+                    <span class="name">
+                        <span ><b>scanResult</b></span>
+                        <a href="#scanResult"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="scanStatus"></a>
+                    <span class="name">
+                        <span ><b>scanStatus</b></span>
+                        <a href="#scanStatus"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
                                 <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:40</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="startScanSub"></a>
+                    <span class="name">
+                        <span ><b>startScanSub</b></span>
+                        <a href="#startScanSub"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>() &#x3D;&gt; {...}</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:54</a></div>
                         </td>
                     </tr>
 
@@ -1341,7 +1552,84 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:38</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:36</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="statusCheckPermision"></a>
+                    <span class="name">
+                        <span ><b>statusCheckPermision</b></span>
+                        <a href="#statusCheckPermision"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:42</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="uiTransactions"></a>
+                    <span class="name">
+                        <span ><b>uiTransactions</b></span>
+                        <a href="#uiTransactions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{} as TransactionUISettings</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:43</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="uiTransactions$"></a>
+                    <span class="name">
+                        <span ><b>uiTransactions$</b></span>
+                        <a href="#uiTransactions$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;TransactionUISettings&gt;</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:44</a></div>
                         </td>
                     </tr>
 
@@ -1367,7 +1655,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:33</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:31</a></div>
                         </td>
                     </tr>
 
@@ -1380,6 +1668,7 @@
                 <td class="col-md-4">
                     <a name="video"></a>
                     <span class="name">
+                            <span class="modifier"></span>
                         <span ><b>video</b></span>
                         <a href="#video"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -1387,7 +1676,7 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="https://angular.io/api/core/ElementRef" target="_blank" >ElementRef</a></code>
+                        <i>Type : </i>    <code>ElementRef</code>
 
                     </td>
                 </tr>
@@ -1402,7 +1691,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:43</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:48</a></div>
                         </td>
                     </tr>
 
@@ -1428,7 +1717,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:44</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:49</a></div>
                         </td>
                     </tr>
 
@@ -1454,7 +1743,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:30</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/shared/widgets/barcode-scanner/barcode-scanner.component.ts:28</a></div>
                         </td>
                     </tr>
 
@@ -1466,28 +1755,26 @@
 </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Input } from &#x27;@angular/core&#x27;;
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from &#x27;@angular/core&#x27;;
 import { MatSnackBar } from &#x27;@angular/material/snack-bar&#x27;;
 import { Router } from &#x27;@angular/router&#x27;;
 import { SitesService } from &#x27;src/app/_services/reporting/sites.service&#x27;;
 import { DlParserService } from &#x27;src/app/_services/people/dl-parser.service&#x27;;
-import { IUserProfile } from &#x27;src/app/_interfaces&#x27;;
+import { ISetting, IUserProfile } from &#x27;src/app/_interfaces&#x27;;
 import { ActionSheetController } from &#x27;@ionic/angular&#x27;;
-
 import { Plugins} from &#x27;@capacitor/core&#x27;;
 import { CameraPreviewOptions }  from &#x27;@capacitor-community/camera-preview&#x27;;
+import { BarcodeScanner } from &#x27;@capacitor-community/barcode-scanner&#x27;;
+import &#x27;@capacitor-community/camera-preview&#x27;;
 
 const { CameraPreview } &#x3D; Plugins;
-
-import &#x27;@capacitor-community/camera-preview&#x27;;
-import { environment } from &#x27;src/environments/environment&#x27;;
 // https://medium.com/cashify-engineering/barcode-reader-using-google-mobile-vision-88b3e9f31668
 // https://www.ionicanddjangotutorial.com/ionic-qrcode-scanning/
 // https://github.com/DutchConcepts/capacitor-barcode-scanner#usage
 // (window.document.querySelector(&#x27;ion-app&#x27;) as HTMLElement).classList.remove(&#x27;cameraView&#x27;);
-
-import { Observable } from &#x27;rxjs&#x27;;
+import { catchError, Observable, of, switchMap } from &#x27;rxjs&#x27;;
+import { TransactionUISettings, UISettingsService } from &#x27;src/app/_services/system/settings/uisettings.service&#x27;;
 
 @Component({
   selector: &#x27;app-barcode-scanner&#x27;,
@@ -1508,6 +1795,13 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   error: string;
   scanActive: boolean ;
   image: any;
+  scanStatus: string;
+  scanResult: string;
+  statusCheckPermision: string;
+  uiTransactions  &#x3D; {} as TransactionUISettings;
+  uiTransactions$  : Observable&lt;TransactionUISettings&gt;;
+  // Dim UI &#x3D; Await settingController._GetUITransactionSetting()
+  // Dim doNotSaveValues &#x3D; UI.idParseOnlyAgeConfirmation
 
   @ViewChild(&#x27;video&#x27;) video: ElementRef
   videoElement: any;
@@ -1515,29 +1809,43 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   cameraActive &#x3D; false;
   parser$: Observable&lt;IUserProfile&gt;;
 
-  constructor(private _snackBar: MatSnackBar,
-              private dlParserService: DlParserService,
-              private siteService: SitesService,
-              public actionSheetController: ActionSheetController,
-              private router: Router,
+  startScanSub &#x3D; async () &#x3D;&gt; {
+    BarcodeScanner.hideBackground(); // make background of WebView transparent
+    const result &#x3D; await BarcodeScanner.startScan(); // start scanning and wait for a result
+    // if the result has content
+    if (result.hasContent) {
+      this.result &#x3D; result.content;
+    }
+  };
+
+  constructor(private _snackBar             : MatSnackBar,
+              private dlParserService       : DlParserService,
+              private siteService           : SitesService,
+              public actionSheetController  : ActionSheetController,
+              private uISettingsService: UISettingsService,
+              private router                : Router,
               ) { }
 
-  async ngOnInit() {
-    this.image &#x3D; &#x60;${environment.logo}&#x60;
-
-    if (this.checkPermission) {
+  ngOnInit() {
+    if (this.checkPermission()) {
       this.startScan();
-      // this.rearCameraOn();
     }
-
+    window.document.body.style.background &#x3D; &quot;transparent&quot;
+    this.uiTransactions$ &#x3D; this.uISettingsService.getSetting(&#x27;UITransactionSetting&#x27;).pipe(switchMap(data &#x3D;&gt; {
+      if (data &amp;&amp; data.text) {
+        this.uiTransactions &#x3D; JSON.parse(data.text) as TransactionUISettings
+      }
+      return of(this.uiTransactions)
+    }))
   }
 
   ngOnDestroy(): void {
+    this.stopScan();
     this.stopReadingCamera();
   }
 
   public  cameraOn() {
-
+    this.initDisplayResults();
     const cameraPreviewOptions: CameraPreviewOptions &#x3D; {
       position: &#x27;rear&#x27;,
       parent: &#x27;cameraPreview&#x27;,
@@ -1545,106 +1853,137 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
       toBack: true,
     };
 
-  //  window.document.querySelector(&#x27;ion-app&#x27;).classList.add(&#x27;lowOpacity&#x27;);
+    //window.document.querySelector(&#x27;ion-app&#x27;).classList.add(&#x27;lowOpacity&#x27;);
     CameraPreview.start(cameraPreviewOptions);
     this.cameraActive &#x3D; true;
-
+    this.scanStatus &#x3D; &#x27;Scanning&#x27;
   }
 
-  async cameraOff() {
+  initDisplayResults() {
+    this.result &#x3D; &#x27;&#x27;
+    this.err &#x3D; &#x27;&#x27;
+    this.scanStatus &#x3D; &#x27;&#x27;
+  }
+
+  async cameraOff(goHome: boolean) {
+    this.initDisplayResults();
     this.cameraActive &#x3D; false
-    await CameraPreview.stop();
+    try {
+      await CameraPreview.stop();
+    } catch (error) {
+    }
+    try {
+      await BarcodeScanner.stopScan();
+    } catch (error) {
+    }
     this.stopScan();
+    if (goHome) {
+      this.goHome();
+    }
   }
 
   async checkPermission() {
-    const { BarcodeScanner } &#x3D; Plugins;
     const status &#x3D; await BarcodeScanner.checkPermission({ force: true });
     if (status.granted) {
       return true;
     }
+    this.statusCheckPermision &#x3D; this.status
     return false;
   }
 
-  prepare() {
-    const { BarcodeScanner } &#x3D; Plugins;
-    this.scanActive &#x3D; true
-    try {
-      BarcodeScanner.prepare();
-    } catch (error) {
-      this.err &#x3D; &#x60;${this.err}. ${error}&#x60;
-    }
-    this.status &#x3D; &quot;prepared&quot;
-  }
-
-  initData() {
-    this.status &#x3D; &#x27;Scanning&#x27;
-    this.error &#x3D;&#x27;&#x27;
-    this.result &#x3D; &#x27;&#x27;
-    this.user &#x3D; null;
-    this.status &#x3D; &#x27;Capturing Content.&#x27;
-    this.cameraActive &#x3D; true
-    this.scanActive &#x3D; true;
-  }
-
   async startScan() {
-    this.initData()
-
-    const { BarcodeScanner } &#x3D; Plugins;
-    BarcodeScanner.hideBackground();
-
+    await BarcodeScanner.prepare();
+    await BarcodeScanner.hideBackground();
+    this.scanStatus &#x3D; &#x27;Scanning Started&#x27;;
     const result &#x3D; await BarcodeScanner.startScan();
 
     if (result.hasContent) {
-      this.resolveContent(result)
+      this.stopScan();
+      this.scanResult &#x3D; &#x27;Content Resolved &#x27; + result.content
+      this.resolveContent(result);
+
     } else {
+      this.stopScan();
+      this.scanResult &#x3D; &#x27;Content not resolved &#x27;
       this.status &#x3D; &#x27;no content&#x27;;
+
     }
-
-    // this.cameraOff();
-    this.stopScan();
-
   }
 
   resolveContent(result: any) {
+    if (this.uiTransactions.idParseOnlyAgeConfirmation) {
+      this.validateCustomerOnly(result)
+      return
+    }
 
-    this.result  &#x3D;  result.content.replace(/(\r\n|\n|\r)/gm, &quot;--&quot;);
-    const parser$ &#x3D;  this.dlParserService.parseDriverLicense(this.siteService.getAssignedSite(),  this.result)
+    if (!this.uiTransactions.idParseOnlyAgeConfirmation) {
+      this.saveCustomer(result)
+      return
+    }
+  }
 
-    parser$.subscribe(data &#x3D;&gt; {
-      this.user &#x3D; data
-      if (this.user.id) {
-        this.router.navigate([&quot;/profileEditor/&quot;, {id:this.user.id}]);
-      }
+  validateCustomerOnly(result: any) {
+    const site    &#x3D; this.siteService.getAssignedSite();
+    const data    &#x3D;  result.content.replace(/(\r\n|\n|\r)/gm, &quot;--&quot;);
+    const parser$ &#x3D;  this.dlParserService.checkIfIDisValid(site, data)
+    console.log(data)
+    this.parser$  &#x3D;  parser$.pipe(
+      switchMap(data &#x3D;&gt; {
+        if (!data) {
+          this.notifyEvent(&#x27;No response&#x27;, &#x27;Try again&#x27;)
+          return of (null)
+        }
+        // console.log(data)
+        if (!data.result || data.errorMessage ) {
+          this.notifyEvent(data.errorMessage, data.message)
+          return of (data)
+        }
+        this.notifyEvent(&#x27;Client is valid&#x27;, &#x27;Success&#x27;)
+        return of(data)
+    }),
+    catchError( err &#x3D;&gt; {
+      this.notifyEvent(err, &#x27;Unexpected Error&#x27;)
+      this.error &#x3D; err
+      return of(err)
+    }))
+  }
 
-    }, error &#x3D;&gt; {
-      this.error &#x3D; error
-    })
-
+  saveCustomer(result: any) {
+    const data   &#x3D;  result.content.replace(/(\r\n|\n|\r)/gm, &quot;--&quot;);
+    this.result &#x3D; result.content;
+    const site &#x3D; this.siteService.getAssignedSite();
+    const parser$ &#x3D;  this.dlParserService.parseDriverLicense(site, data)
+    this.parser$ &#x3D;  parser$.pipe(
+      switchMap(data &#x3D;&gt; {
+        if (!data) {
+          this.notifyEvent(&#x27;No response&#x27;, &#x27;Try again&#x27;)
+          return of (null)
+        }
+        if (data.errorMessage || data.message &#x3D;&#x3D; &#x27;failure&#x27;) {
+          this.notifyEvent(data.errorMessage, data.message)
+          return of (null)
+        }
+        if (data.id) {
+          this.router.navigate([&quot;/profileEditor/&quot;, {id: data.id}]);
+          return of(null)
+        }
+        return of(null)
+    }),
+    catchError( err &#x3D;&gt; {
+      this.notifyEvent(err, &#x27;Unexpected Error&#x27;)
+      this.error &#x3D; err
+      return of(err)
+    }))
   }
 
   async stopScan() {
-
+    this.initDisplayResults();
     this.scanActive &#x3D; false;
+    await BarcodeScanner.showBackground();
 
-    const { BarcodeScanner } &#x3D; Plugins;
-
-    BarcodeScanner.showBackground();
-
-    BarcodeScanner.stopScan();
-
-    this.status &#x3D; &quot;Not scanning&quot;;
-
-  }
-
-  askUser() {
-
-    this.prepare();
-    const c &#x3D; confirm(&#x27;Do you want to scan a barcode?&#x27;);
-    if (c) {
-      this.startScan();
-    } else {
-      this.stopScan();
+    try {
+      await BarcodeScanner.stopScan();
+    } catch (error) {
     }
 
   }
@@ -1662,13 +2001,13 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   }
 
   async stopReadingCamera() {
-    // await this.cameraOff();
+    await this.cameraOff(false);
     this.stopScan();
   }
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-      duration: 2000,
+      duration: 5000,
       verticalPosition: &#x27;top&#x27;
     });
   }
@@ -1682,75 +2021,100 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
 </code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-templateData">
-        <pre class="line-numbers"><code class="language-html">
-&lt;ion-header&gt;
-  &lt;ion-toolbar color&#x3D;&quot;primary&quot;&gt;
-    &lt;div class&#x3D;&quot;site-info&quot;&gt;
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;!-- &lt;ion-header&gt; --&gt;
+  &lt;div *ngIf&#x3D;&quot;(parser$ | async) as parse&quot;&gt;&lt;/div&gt;
+
+  &lt;ion-toolbar class &#x3D;&#x27;toolbar&#x27; color&#x3D;&quot;primary&quot;&gt;
+    &lt;span class&#x3D;&quot;site-info&quot;&gt;
       &lt;button mat-button (click)&#x3D;&quot;goHome()&quot;&gt;
-        &lt;mat-icon &gt;home&lt;/mat-icon&gt;
+        &lt;mat-icon &gt;close&lt;/mat-icon&gt; Exit
       &lt;/button&gt;
-    &lt;/div&gt;
-    &lt;ion-title&gt;DL Scanner&lt;/ion-title&gt;
+    &lt;/span&gt;
+    &lt;span&gt;
+      &lt;ion-title&gt;ID / Driver License  Scanner&lt;/ion-title&gt;
+    &lt;/span&gt;
   &lt;/ion-toolbar&gt;
-&lt;/ion-header&gt;
 
-&lt;ion-button (click)&#x3D;&quot;cameraOn()&quot;  *ngIf&#x3D;&quot;!cameraActive&quot;&gt;
-  Scan
-&lt;/ion-button&gt;
+&lt;mat-card class&#x3D;&quot;mat-card&quot;&gt;
 
-&lt;div&gt;
-  status: {{status}}
-&lt;/div&gt;
+  &lt;div class&#x3D;&quot;card-text&quot;&gt;
 
-&lt;div *ngIf&#x3D;&quot;error&quot;&gt;Error: {{error}} &lt;/div&gt;
+    &lt;div *ngIf&#x3D;&quot;scanStatus&quot;&gt;
+      Scan Status      : {{scanStatus}}
+    &lt;/div&gt;
+    &lt;div *ngIf&#x3D;&quot;scanStatus&quot;&gt;
+      status           : {{status}}
+    &lt;/div&gt;
+    &lt;div *ngIf&#x3D;&quot;result&quot;&gt;
+      scanResult       : {{result}}
+    &lt;/div&gt;
+    &lt;div *ngIf&#x3D;&quot;err&quot;&gt;
+      err              : {{err}}&gt;
+    &lt;/div&gt;
+    &lt;div *ngIf&#x3D;&quot;error&quot;&gt;
+      Error              : {{error}}
+    &lt;/div&gt;
 
-&lt;div *ngIf&#x3D;&quot;user&quot;&gt;
-  &lt;!-- &lt;div&gt;
-    Name:  {{user?.firstName}} {{user?.lastName}}
   &lt;/div&gt;
-  &lt;div&gt;
-    Account: {{user?.accountNumber}}
-    &lt;br&gt;
-    ID: {{user.id}}
-  &lt;/div&gt; --&gt;
-&lt;/div&gt;
+&lt;/mat-card&gt;
 
 &lt;ion-content&gt;
   &lt;div class&#x3D;&quot;overlay&quot; [style.z-index]&#x3D;&quot;cameraActive ? 10 : 0&quot;&gt;
-    &lt;div *ngIf&#x3D;&quot;cameraActive&quot;  class&#x3D;&quot;cameraPreview&quot; id&#x3D;&quot;cameraPreview&quot;&gt;
+    &lt;div class&#x3D;&quot;cameraPreview&quot;&gt;
 
-        &lt;ion-button (click)&#x3D;&quot;cameraOff()&quot; expand&#x3D;&quot;block&quot; id&#x3D;&quot;close&quot;&gt;
-          &lt;ion-icon name&#x3D;&quot;close-circle&quot; slot&#x3D;&quot;icon-only&quot;&gt;&lt;/ion-icon&gt;
+      &lt;div&gt;
+
+        &lt;ion-button (click)&#x3D;&quot;cameraOff(true)&quot; expand&#x3D;&quot;block&quot; id&#x3D;&quot;close&quot;&gt;
+          &lt;ion-icon name&#x3D;&quot;close-circle&quot;
+                    slot&#x3D;&quot;icon-only&quot;&gt;&lt;/ion-icon&gt;
         &lt;/ion-button&gt;
 
-        &lt;!-- &lt;ion-button (click)&#x3D;&quot;captureImage()&quot; expand&#x3D;&quot;block&quot; id&#x3D;&quot;capture&quot;&gt;
-          &lt;ion-icon name&#x3D;&quot;camera&quot; slot&#x3D;&quot;icon-only&quot;&gt;&lt;/ion-icon&gt;
-        &lt;/ion-button&gt; --&gt;
+        &lt;div  *ngIf&#x3D;&quot;(uiTransactions$ | async) as uiTransactions; else loading&quot;&gt;
+          &lt;ion-button (click)&#x3D;&quot;startScan()&quot; expand&#x3D;&quot;block&quot; id&#x3D;&quot;capture&quot;&gt;
+            &lt;ion-icon name&#x3D;&quot;barcode&quot;
+                      slot&#x3D;&quot;icon-only&quot;&gt;&lt;/ion-icon&gt;
+            &lt;!-- &lt;mat-icon&gt;barcode&lt;/mat-icon&gt; --&gt;
+          &lt;/ion-button&gt;
+        &lt;/div&gt;
 
         &lt;ion-button (click)&#x3D;&quot;flipCamera()&quot; expand&#x3D;&quot;block&quot; id&#x3D;&quot;flip&quot;&gt;
           &lt;ion-icon name&#x3D;&quot;camera-reverse&quot; slot&#x3D;&quot;icon-only&quot;&gt;&lt;/ion-icon&gt;
         &lt;/ion-button&gt;
+
+
       &lt;/div&gt;
-
     &lt;/div&gt;
-
+  &lt;/div&gt;
 &lt;/ion-content&gt;
+
+&lt;ng-template #loading&gt;...loading&lt;/ng-template&gt;
 </code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-styleData">
+    <div class="tab-pane fade " id="styleData">
                 <p class="comment">
                     <code>./barcode-scanner.component.scss</code>
                 </p>
-                <pre class="line-numbers"><code class="language-scss">ion-content, body, container {
+                <pre class="line-numbers"><code class="language-scss">ion-content, body, container , .camera-view {
   --background: transparent!important;
 }
+
+.toolbar {
+  margin-top: 15px;
+  top: 10px;
+  padding-top: 10px;
+}
+
 .overlay {
   position: absolute;
   width: 100%;
   height: 100%;
   z-index: 10;
+}
+
+.site-info {
+  float:right
 }
 
 .cameraPreview {
@@ -1772,8 +2136,8 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   position: absolute;
   bottom: 75px;
   left: calc(50% - 25px);
-  width: 50px;
-  height: 50px;
+  width: 75px;
+  height: 75px;
   z-index: 11;
 }
 
@@ -1781,8 +2145,8 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   position: absolute;
   bottom: 75px;
   left: calc(50% - 175px);
-  width: 50px;
-  height: 50px;
+  width: 75px;
+  height: 75px;
   z-index: 11;
 }
 
@@ -1790,26 +2154,43 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   position: absolute;
   bottom: 75px;
   left: calc(50% + 125px);
-  width: 50px;
-  height: 50px;
+  width: 75px;
+  height: 75px;
   z-index: 11;
 }
 
 #close::part(native) {
-  border-radius: 30px;
+  border-radius: 40px;
+  height: 75px;
+  font-size: 1.5em;
 }
 
 #capture::part(native) {
-  border-radius: 30px;
+  border-radius: 40px;
+  font-size: 1.5em;
 }
 
 #flip::part(native) {
-  border-radius: 30px;
+  border-radius: 40px;
+  font-size: 1.5em;
+}
+
+.mat-card {
+  opacity: 50%;
+  top: 75px;
+}
+
+.card-text {
+  // opacity: 50%;
+}
+
+.button{
+  opacity: 100%;
 }
 </code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-tree">
+    <div class="tab-pane fade " id="tree">
         <div id="tree-container"></div>
         <div class="tree-legend">
             <div class="title">
@@ -1834,9 +2215,9 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><ion-header>  <ion-toolbar color="primary">    <div class="site-info">      <button mat-button (click)="goHome()">        <mat-icon >home</mat-icon>      </button>    </div>    <ion-title>DL Scanner</ion-title>  </ion-toolbar></ion-header><ion-button (click)="cameraOn()"  *ngIf="!cameraActive">  Scan</ion-button><div>  status: {{status}}</div><div *ngIf="error">Error: {{error}} </div><div *ngIf="user">  <!-- <div>    Name:  {{user?.firstName}} {{user?.lastName}}  </div>  <div>    Account: {{user?.accountNumber}}    <br>    ID: {{user.id}}  </div> --></div><ion-content>  <div class="overlay" [style.z-index]="cameraActive ? 10 : 0">    <div *ngIf="cameraActive"  class="cameraPreview" id="cameraPreview">        <ion-button (click)="cameraOff()" expand="block" id="close">          <ion-icon name="close-circle" slot="icon-only"></ion-icon>        </ion-button>        <!-- <ion-button (click)="captureImage()" expand="block" id="capture">          <ion-icon name="camera" slot="icon-only"></ion-icon>        </ion-button> -->        <ion-button (click)="flipCamera()" expand="block" id="flip">          <ion-icon name="camera-reverse" slot="icon-only"></ion-icon>        </ion-button>      </div>    </div></ion-content></div>'
-    var COMPONENTS = [{'name': 'AccordionComponent', 'selector': 'app-accordion'},{'name': 'AccordionMenuItemEditComponent', 'selector': 'app-accordion-menu-item-edit'},{'name': 'AddInventoryItemComponent', 'selector': 'app-add-inventory-item'},{'name': 'AddItemByTypeComponent', 'selector': 'app-add-item-by-type'},{'name': 'AdjustItemComponent', 'selector': 'app-adjust-item'},{'name': 'AdjustItemNoteComponent', 'selector': 'app-adjust-item-note'},{'name': 'AdjustItemPriceChangeComponent', 'selector': 'app-adjust-item-price-change'},{'name': 'AdjustItemVoidReasonsComponent', 'selector': 'app-adjust-item-void-reasons'},{'name': 'AdjustmentReasonsComponent', 'selector': 'app-adjustment-reasons'},{'name': 'AdminbranditemComponent', 'selector': 'app-adminbranditem'},{'name': 'AdminbrandslistComponent', 'selector': 'app-adminbrandslist'},{'name': 'AdminComponent', 'selector': 'app-admin'},{'name': 'AgGridImageFormatterComponent', 'selector': 'app-ag-grid-image-formatter'},{'name': 'AgGridTestComponent', 'selector': 'app-ag-grid-test'},{'name': 'AgGridToggleComponent', 'selector': 'app-ag-grid-toggle'},{'name': 'AgPaginationComponent', 'selector': 'app-ag-pagination'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AppGateComponent', 'selector': 'app-app-gate'},{'name': 'AreaComponent', 'selector': 'app-widget-area'},{'name': 'AuditPanelComponent', 'selector': 'app-audit-panel'},{'name': 'BarcodeScannerComponent', 'selector': 'app-barcode-scanner'},{'name': 'BrandslistComponent', 'selector': 'app-brandslist'},{'name': 'BrandTypeSelectComponent', 'selector': 'app-brand-type-select'},{'name': 'BtBlueToothScannerComponent', 'selector': 'app-bt-blue-tooth-scanner'},{'name': 'BtPOSPrinterComponent', 'selector': 'app-bt-posprinter'},{'name': 'ButtonComponent', 'selector': 'storybook-button'},{'name': 'ButtonRendererComponent', 'selector': 'app-button-renderer'},{'name': 'CacheSettingsComponent', 'selector': 'app-cache-settings'},{'name': 'CannabisItemEditComponent', 'selector': 'app-cannabis-item-edit'},{'name': 'CardComponent', 'selector': 'app-widget-card'},{'name': 'CartButtonComponent', 'selector': 'app-cart-button'},{'name': 'CashDiscountItemProductEditComponent', 'selector': 'app-cash-discount-item-product-edit'},{'name': 'CashDiscountOrderProductEditComponent', 'selector': 'app-cash-discount-order-product-edit'},{'name': 'CategoriesAlternateComponent', 'selector': 'app-categories-alternate'},{'name': 'CategoriesComponent', 'selector': 'app-categories'},{'name': 'CategorieslistviewComponent', 'selector': 'app-categorieslistview'},{'name': 'CategoryScrollComponent', 'selector': 'app-category-scroll'},{'name': 'CategorySelectComponent', 'selector': 'app-category-select'},{'name': 'ChangepasswordComponent', 'selector': 'app-changepassword'},{'name': 'ChartTableComponent', 'selector': 'app-widget-chart-table'},{'name': 'CheckInProfileComponent', 'selector': 'app-check-in-profile'},{'name': 'ChemicalSpinnersComponent', 'selector': 'app-chemical-spinners'},{'name': 'ChemicalValuesComponent', 'selector': 'app-chemical-values'},{'name': 'ChipsDisplayComponent', 'selector': 'app-chips-display'},{'name': 'ClientSearchSelectorComponent', 'selector': 'app-client-search-selector'},{'name': 'ClientTypeEditComponent', 'selector': 'app-client-type-edit'},{'name': 'ClientTypeListComponent', 'selector': 'app-client-type-list'},{'name': 'ClientTypeSelectionComponent', 'selector': 'app-client-type-selection'},{'name': 'ClientTypesLookupComponent', 'selector': 'app-client-types-lookup'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'DatabaseSchemaComponent', 'selector': 'app-database-schema'},{'name': 'DateScheduleComponent', 'selector': 'app-date-schedule'},{'name': 'DefaultComponent', 'selector': 'app-default'},{'name': 'DemographicsComponent', 'selector': 'app-demographics'},{'name': 'DepartmentSelectComponent', 'selector': 'app-department-select'},{'name': 'DiscountOptionsComponent', 'selector': 'app-discount-options'},{'name': 'DiscountTypeSelectionComponent', 'selector': 'app-discount-type-selection'},{'name': 'DsiEMVPaymentComponent', 'selector': 'app-dsi-emvpayment'},{'name': 'EachProductEditComponent', 'selector': 'app-each-product-edit'},{'name': 'EditButtonsStandardComponent', 'selector': 'app-edit-buttons-standard'},{'name': 'EditSelectedItemsComponent', 'selector': 'app-edit-selected-items'},{'name': 'FacilitiesListComponent', 'selector': 'app-facilities-list'},{'name': 'FacilitySearchSelectorComponent', 'selector': 'app-facility-search-selector'},{'name': 'FilterComponent', 'selector': 'app-widget-filter'},{'name': 'FlatRateEditComponent', 'selector': 'app-flat-rate-edit'},{'name': 'FlatRateListComponent', 'selector': 'app-flat-rate-list'},{'name': 'FlatTaxRateListComponent', 'selector': 'app-flat-tax-rate-list'},{'name': 'FoodProductEditComponent', 'selector': 'app-food-product-edit'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'FormSelectListComponent', 'selector': 'app-form-select-list'},{'name': 'GenericIdSelectComponent', 'selector': 'app-generic-id-select'},{'name': 'GenericNameSelectComponent', 'selector': 'app-generic-name-select'},{'name': 'GiftCardProductEditComponent', 'selector': 'app-gift-card-product-edit'},{'name': 'GoogleMapsComponent', 'selector': 'app-google-maps'},{'name': 'HammerCardComponent', 'selector': 'app-hammer-card'},{'name': 'HeaderComponent', 'selector': 'storybook-header'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HTMLEditPrintingComponent', 'selector': 'app-htmledit-printing'},{'name': 'ImageCaptureComponent', 'selector': 'app-image-capture'},{'name': 'InstalledPrintersComponent', 'selector': 'app-installed-printers'},{'name': 'InventoryAdjustmentNoteComponent', 'selector': 'app-adjustment-note'},{'name': 'InventoryComponent', 'selector': 'app-inventory-settings'},{'name': 'InventoryHistoryItemComponent', 'selector': 'app-inventory-history-item'},{'name': 'InventoryHistoryListComponent', 'selector': 'app-inventory-history-list'},{'name': 'InventoryListComponent', 'selector': 'app-inventory-list'},{'name': 'InventoryListToolTipComponent', 'selector': 'app-inventory-list-tool-tip'},{'name': 'InventoryLocationsComponent', 'selector': 'app-inventory-locations'},{'name': 'IonicGeoLocationComponent', 'selector': 'app-ionic-geo-location'},{'name': 'ItemCategoriesEditComponent', 'selector': 'app-item-categories-edit'},{'name': 'ItemCategoriesListComponent', 'selector': 'app-item-categories-list'},{'name': 'ItemPercentageDiscountProductEditComponent', 'selector': 'app-item-percentage-discount-product-edit'},{'name': 'ItemTypeCategoryAssignmentComponent', 'selector': 'app-item-type-category-assignment'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'ItemTypeDisplayAssignmentComponent', 'selector': 'app-item-type-display-assignment'},{'name': 'ItemTypeEditorComponent', 'selector': 'app-item-type-editor'},{'name': 'ItemTypeSortComponent', 'selector': 'app-item-type-sort'},{'name': 'Label1by8Component', 'selector': 'app-label1by8'},{'name': 'LabelViewSelectorComponent', 'selector': 'app-label-view-selector'},{'name': 'LimitValuesProgressBarsComponent', 'selector': 'app-limit-values-progress-bars'},{'name': 'LiquorProductEditComponent', 'selector': 'app-liquor-product-edit'},{'name': 'ListPrintersElectronComponent', 'selector': 'app-list-printers-electron'},{'name': 'ListProductSearchInputComponent', 'selector': 'app-list-product-search-input'},{'name': 'LoginComponent', 'selector': 'login-dashboard'},{'name': 'MainMenuComponent', 'selector': 'app-main-menu'},{'name': 'MatSpinnerOverlayComponent', 'selector': 'app-mat-spinner-overlay'},{'name': 'MatToggleSelectorComponent', 'selector': 'app-mat-toggle-selector'},{'name': 'MenuCardCategoriesComponent', 'selector': 'app-menu-card-categories'},{'name': 'MenuCompactComponent', 'selector': 'app-menu-compact'},{'name': 'MenuGroupItemEditComponent', 'selector': 'app-menu-group-item-edit'},{'name': 'MenuItemCardComponent', 'selector': 'app-menu-item-card'},{'name': 'MenuitemComponent', 'selector': 'app-menuitem'},{'name': 'MenuItemGalleryComponent', 'selector': 'app-menu-item-gallery'},{'name': 'MenuItemModalComponent', 'selector': 'app-menu-item-modal'},{'name': 'MenuitemsComponent', 'selector': 'app-menuitems'},{'name': 'MenuItemsInfiniteComponent', 'selector': 'app-menu-items-infinite'},{'name': 'MenuManagerComponent', 'selector': 'app-menu-manager'},{'name': 'MenuMinimalComponent', 'selector': 'app-menu-minimal'},{'name': 'MenuSearchBarComponent', 'selector': 'app-menu-search-bar'},{'name': 'MenuTinyComponent', 'selector': 'app-menu-tiny'},{'name': 'MessagesToUserComponent', 'selector': 'app-messages-to-user'},{'name': 'MetaTagChipsComponent', 'selector': 'app-meta-tag-chips'},{'name': 'MetrcIndividualPackageComponent', 'selector': 'app-metrc-individual-package'},{'name': 'MetrcInventoryPropertiesComponent', 'selector': 'app-metrc-inventory-properties'},{'name': 'METRCProductsAddComponent', 'selector': 'app-products-add'},{'name': 'MetrcSalesListComponent', 'selector': 'app-metrc-sales-list'},{'name': 'ModifierProductEditComponent', 'selector': 'app-modifier-product-edit'},{'name': 'MoveInventoryLocationComponent', 'selector': 'app-move-inventory-location'},{'name': 'NewInventoryItemComponent', 'selector': 'app-new-inventory-item'},{'name': 'OrderBarComponent', 'selector': 'app-order-bar'},{'name': 'OrderCardComponent', 'selector': 'app-order-card'},{'name': 'OrderFilterPanelComponent', 'selector': 'app-order-filter-panel'},{'name': 'OrderItemListComponent', 'selector': 'app-order-item-list'},{'name': 'OrderItemsListComponent', 'selector': 'app-order-items-list'},{'name': 'OrderPercentageDiscountProductEditComponent', 'selector': 'app-order-percentage-discount-product-edit'},{'name': 'OrdersFilterComponent', 'selector': 'app-orders-filter'},{'name': 'OrdersMainComponent', 'selector': 'app-orders-main'},{'name': 'OrderTypeSelectionComponent', 'selector': 'app-order-type-selection'},{'name': 'PackageActionsComponent', 'selector': 'app-package-actions'},{'name': 'PackageListComponent', 'selector': 'app-package-list'},{'name': 'PackageSearchSelectorComponent', 'selector': 'app-package-search-selector'},{'name': 'PageComponent', 'selector': 'storybook-page'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PagerBlobComponent', 'selector': 'pager-blob'},{'name': 'PieComponent', 'selector': 'app-widget-pie'},{'name': 'PosListComponent', 'selector': 'app-pos-list'},{'name': 'PosOrderComponent', 'selector': 'app-pos-order'},{'name': 'PosOrderItemComponent', 'selector': 'app-pos-order-item'},{'name': 'PosOrderListComponent', 'selector': 'app-pos-order-list'},{'name': 'PosOrdersComponent', 'selector': 'app-pos-orders'},{'name': 'PosPaymentComponent', 'selector': 'app-pos-payment'},{'name': 'PosPaymentsComponent', 'selector': 'app-pos-payments'},{'name': 'PriceCategoriesComponent', 'selector': 'app-price-categories'},{'name': 'PriceCategoriesEditComponent', 'selector': 'app-price-categories-edit'},{'name': 'PriceCategorySearchComponent', 'selector': 'app-price-category-search'},{'name': 'PriceCategorySelectComponent', 'selector': 'app-price-category-select'},{'name': 'PriceLinesComponent', 'selector': 'app-price-lines'},{'name': 'PriceScheduleComponent', 'selector': 'app-price-schedule'},{'name': 'PriceScheduleConstraintsComponent', 'selector': 'app-price-schedule-constraints'},{'name': 'PriceScheduleFieldsComponent', 'selector': 'app-price-schedule-fields'},{'name': 'PriceScheduleInfoComponent', 'selector': 'app-price-schedule-info'},{'name': 'PriceScheduleListComponent', 'selector': 'app-price-schedule-list'},{'name': 'PriceTiersComponent', 'selector': 'app-price-tiers'},{'name': 'ProducteditComponent', 'selector': 'app-productedit'},{'name': 'ProductInfoPanelComponent', 'selector': 'app-product-info-panel'},{'name': 'ProductlistviewComponent', 'selector': 'app-productlistview'},{'name': 'ProductSearchSelectorComponent', 'selector': 'app-product-search-selector'},{'name': 'ProductTypeSelectComponent', 'selector': 'app-product-type-select'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'ProfileEditorComponent', 'selector': 'app-profile-editor'},{'name': 'ProfileListComponent', 'selector': 'app-profile-list'},{'name': 'ProfileLookupComponent', 'selector': 'app-profile-lookup'},{'name': 'ProgressBarComponent', 'selector': 'app-progress-bar'},{'name': 'ProgressUploaderComponent', 'selector': 'app-progress'},{'name': 'ReceiptLayoutComponent', 'selector': 'app-receipt-layout'},{'name': 'RegisterAccountExistingUserComponent', 'selector': 'app-register-account-existing-user'},{'name': 'RegisterAccountExistingUserWithTokenComponent', 'selector': 'app-register-account-existing-user-with-token'},{'name': 'RegisterAccountMainComponent', 'selector': 'app-register-account-main'},{'name': 'ReportsComponent', 'selector': 'app-reports'},{'name': 'ResetpasswordComponent', 'selector': 'app-resetpassword'},{'name': 'ReviewComponent', 'selector': 'app-review'},{'name': 'ReviewEditComponent', 'selector': 'app-review-edit'},{'name': 'ReviewsComponent', 'selector': 'app-reviews'},{'name': 'RewardTypeFilterComponent', 'selector': 'app-reward-type-filter'},{'name': 'RewardTypeResultsSelectorComponent', 'selector': 'app-reward-type-panel'},{'name': 'RouteDispatchComponent', 'selector': 'app-route-dispatch'},{'name': 'RouteDispatchDetailsComponent', 'selector': 'app-route-dispatch-details'},{'name': 'RouteDispatchDetailsEditComponent', 'selector': 'app-route-dispatch-details-edit'},{'name': 'RouteDispatchEditComponent', 'selector': 'app-route-dispatch-edit'},{'name': 'RouteDispatchesComponent', 'selector': 'app-route-dispatches'},{'name': 'SalesTaxReportComponent', 'selector': 'app-sales-tax-report'},{'name': 'ScaleReaderComponent', 'selector': 'app-scale-reader'},{'name': 'SearchPanelComponent', 'selector': 'app-search-panel'},{'name': 'SearchResultsComponent', 'selector': 'app-search-results'},{'name': 'ServiceTypeEditComponent', 'selector': 'app-service-type-edit'},{'name': 'ServiceTypeListComponent', 'selector': 'app-service-type-list'},{'name': 'SettingsComponent', 'selector': 'app-settings'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'SimpleTinyComponent', 'selector': 'simple-tinymce'},{'name': 'SiteEditComponent', 'selector': 'app-site-edit'},{'name': 'SitepointsComponent', 'selector': 'app-sitepoints'},{'name': 'SitepurchasesComponent', 'selector': 'app-sitepurchases'},{'name': 'SitesComponent', 'selector': 'app-sites'},{'name': 'SiteSelectorComponent', 'selector': 'app-site-selector'},{'name': 'SmokeProductEditComponent', 'selector': 'app-smoke-product-edit'},{'name': 'SoftwareComponent', 'selector': 'app-software'},{'name': 'SpeciesListComponent', 'selector': 'app-species-list'},{'name': 'StatusLookupComponent', 'selector': 'app-status-lookup'},{'name': 'StickyHeaderComponent', 'selector': 'app-sticky-header'},{'name': 'StrainPackagesComponent', 'selector': 'app-strain-packages'},{'name': 'StrainProductEditComponent', 'selector': 'app-strain-product-edit'},{'name': 'StrainsAddComponent', 'selector': 'app-strains-add'},{'name': 'SubMenuItemEditComponent', 'selector': 'app-sub-menu-item-edit'},{'name': 'SummarycardComponent', 'selector': 'app-summarycard'},{'name': 'TaxEditComponent', 'selector': 'app-tax-edit'},{'name': 'TaxFieldsComponent', 'selector': 'app-tax-fields'},{'name': 'TaxListComponent', 'selector': 'app-tax-list'},{'name': 'TaxRateListComponent', 'selector': 'app-tax-rate-list'},{'name': 'TierItemsComponent', 'selector': 'app-tier-items'},{'name': 'TierMenuComponent', 'selector': 'app-tier-menu'},{'name': 'TierPricesComponent', 'selector': 'app-tier-prices'},{'name': 'TiersCardComponent', 'selector': 'app-tiers-card'},{'name': 'TimeScheduleComponent', 'selector': 'app-time-schedule'},{'name': 'TvHappyHoursComponent', 'selector': 'app-tv-happy-hours'},{'name': 'TvPriceSpecialsComponent', 'selector': 'app-tv-price-specials'},{'name': 'TvPriceTierMenuItemsComponent', 'selector': 'app-tv-price-tier-menu-items'},{'name': 'TvPriceTiersComponent', 'selector': 'app-tv-price-tiers'},{'name': 'TypeFilterComponent', 'selector': 'app-type-filter'},{'name': 'TypeResultsSelectorComponent', 'selector': 'app-type-results-selector'},{'name': 'UnitTypeEditComponent', 'selector': 'app-unit-type-edit'},{'name': 'UnitTypeFieldsComponent', 'selector': 'app-unit-type-fields'},{'name': 'UnitTypeListComponent', 'selector': 'unit-types'},{'name': 'UploaderComponent', 'selector': 'app-widget-uploader'},{'name': 'UseGroupTaxAssignmentComponent', 'selector': 'app-use-group-tax-assignment'},{'name': 'UsermessagesComponent', 'selector': 'app-usermessages'},{'name': 'ValueFieldsComponent', 'selector': 'app-value-fields'},{'name': 'ValueSpinnerComponent', 'selector': 'app-value-spinner'},{'name': 'WebEnabledComponent', 'selector': 'app-web-enabled'},{'name': 'WeekDaySelectionComponent', 'selector': 'app-week-day-selection'},{'name': 'WeightedFoodProductEditComponent', 'selector': 'app-weighted-food-product-edit'},{'name': 'WishlistComponent', 'selector': 'app-wishlist'}];
-    var DIRECTIVES = [{'name': 'AutofocusDirective', 'selector': '[appAutoFocusInput]'},{'name': 'CurrencyFormatterDirective', 'selector': '[currencyFormatter]'},{'name': 'DndDirective', 'selector': '[appDnd]'},{'name': 'Events', 'selector': '[Events]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'ScrollableDirective', 'selector': '[appScrollable]'},{'name': 'StickyHeaderDirective', 'selector': '[stickyHeaderDirective]'}];
+        var COMPONENT_TEMPLATE = '<div><!-- <ion-header> -->  <div *ngIf="(parser$ | async) as parse"></div>  <ion-toolbar class =\'toolbar\' color="primary">    <span class="site-info">      <button mat-button (click)="goHome()">        <mat-icon >close</mat-icon> Exit      </button>    </span>    <span>      <ion-title>ID / Driver License  Scanner</ion-title>    </span>  </ion-toolbar><mat-card class="mat-card">  <div class="card-text">    <div *ngIf="scanStatus">      Scan Status      : {{scanStatus}}    </div>    <div *ngIf="scanStatus">      status           : {{status}}    </div>    <div *ngIf="result">      scanResult       : {{result}}    </div>    <div *ngIf="err">      err              : {{err}}>    </div>    <div *ngIf="error">      Error              : {{error}}    </div>  </div></mat-card><ion-content>  <div class="overlay" [style.z-index]="cameraActive ? 10 : 0">    <div class="cameraPreview">      <div>        <ion-button (click)="cameraOff(true)" expand="block" id="close">          <ion-icon name="close-circle"                    slot="icon-only"></ion-icon>        </ion-button>        <div  *ngIf="(uiTransactions$ | async) as uiTransactions; else loading">          <ion-button (click)="startScan()" expand="block" id="capture">            <ion-icon name="barcode"                      slot="icon-only"></ion-icon>            <!-- <mat-icon>barcode</mat-icon> -->          </ion-button>        </div>        <ion-button (click)="flipCamera()" expand="block" id="flip">          <ion-icon name="camera-reverse" slot="icon-only"></ion-icon>        </ion-button>      </div>    </div>  </div></ion-content><ng-template #loading>...loading</ng-template></div>'
+    var COMPONENTS = [{'name': 'AccordionComponent', 'selector': 'app-accordion'},{'name': 'AccordionMenuItemEditComponent', 'selector': 'app-accordion-menu-item-edit'},{'name': 'ActivityTogglesComponent', 'selector': 'app-activity-toggles'},{'name': 'ActivityTogglesMetrcComponent', 'selector': 'activity-toggles-metrc'},{'name': 'AddInventoryItemComponent', 'selector': 'app-add-inventory-item'},{'name': 'AddItemByTypeComponent', 'selector': 'app-add-item-by-type'},{'name': 'AdjustItemComponent', 'selector': 'app-adjust-item'},{'name': 'AdjustItemNoteComponent', 'selector': 'app-adjust-item-note'},{'name': 'AdjustItemPriceChangeComponent', 'selector': 'app-adjust-item-price-change'},{'name': 'AdjustItemVoidReasonsComponent', 'selector': 'app-adjust-item-void-reasons'},{'name': 'AdjustmentReasonsComponent', 'selector': 'app-adjustment-reasons'},{'name': 'AdjustPaymentComponent', 'selector': 'app-adjust-payment'},{'name': 'AdminbranditemComponent', 'selector': 'app-adminbranditem'},{'name': 'AdminbrandslistComponent', 'selector': 'app-adminbrandslist'},{'name': 'AdminComponent', 'selector': 'app-admin'},{'name': 'AdminDisplayMenuComponent', 'selector': 'Admin-display-menu'},{'name': 'AdminDisplayMenuListComponent', 'selector': 'admin-display-menu-list'},{'name': 'AdminDisplayMenuSelctorComponent', 'selector': 'display-menu-selctor'},{'name': 'AggregateSelectorComponent', 'selector': 'psReporting-aggregate-selector'},{'name': 'AgGridImageFormatterComponent', 'selector': 'app-ag-grid-image-formatter'},{'name': 'AgGridTestComponent', 'selector': 'app-ag-grid-test'},{'name': 'AgGridToggleComponent', 'selector': 'app-ag-grid-toggle'},{'name': 'AgIconFormatterComponent', 'selector': 'app-ag-icon-formatter'},{'name': 'AgPaginationComponent', 'selector': 'app-ag-pagination'},{'name': 'AndOrSelectorComponent', 'selector': 'psReporting-and-or-selector'},{'name': 'APISettingComponent', 'selector': 'app-apisetting'},{'name': 'ApiStatusDisplayComponent', 'selector': 'api-status-display'},{'name': 'ApiStoredValueComponent', 'selector': 'api-stored-value'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AppGateComponent', 'selector': 'app-app-gate'},{'name': 'AppWizardProgressButtonComponent', 'selector': 'wizard-progress-button'},{'name': 'AppWizardStatusComponent', 'selector': 'app-app-wizard-status'},{'name': 'AreaComponent', 'selector': 'app-widget-area'},{'name': 'AuditPanelComponent', 'selector': 'app-audit-panel'},{'name': 'BackgroundCoverComponent', 'selector': 'app-background-cover'},{'name': 'BalanceSheetCalculationsViewComponent', 'selector': 'balance-sheet-calculations-view'},{'name': 'BalanceSheetEditComponent', 'selector': 'app-balance-sheet-edit'},{'name': 'BalanceSheetEmployeeSalesComponent', 'selector': 'balance-sheet-employee-sales'},{'name': 'BalanceSheetFilterComponent', 'selector': 'balance-sheet-filter'},{'name': 'BalanceSheetHeaderViewComponent', 'selector': 'balance-sheet-header-view'},{'name': 'BalanceSheetQuickViewComponent', 'selector': 'balance-sheet-quick-view'},{'name': 'BalanceSheetReportComponent', 'selector': 'balance-sheet-report'},{'name': 'BalanceSheetsComponent', 'selector': 'app-balance-sheets'},{'name': 'BalanceSheetViewComponent', 'selector': 'balance-sheet-view'},{'name': 'BarcodeScannerComponent', 'selector': 'app-barcode-scanner'},{'name': 'BlogListEditComponent', 'selector': 'app-blog-list-edit'},{'name': 'BlogPostComponent', 'selector': 'app-blog-post'},{'name': 'BlogPostEditComponent', 'selector': 'app-blog-post-edit'},{'name': 'BlogPostListComponent', 'selector': 'blog-post-list'},{'name': 'BlogPostSortComponent', 'selector': 'blog-post-sort'},{'name': 'BrandslistComponent', 'selector': 'app-brandslist'},{'name': 'BrandTypeSelectComponent', 'selector': 'app-brand-type-select'},{'name': 'BtBlueToothScannerComponent', 'selector': 'app-bt-blue-tooth-scanner'},{'name': 'BtPOSPrinterComponent', 'selector': 'app-bt-posprinter'},{'name': 'ButtonComponent', 'selector': 'storybook-button'},{'name': 'ButtonRendererComponent', 'selector': 'app-button-renderer'},{'name': 'ButtonRendererComponent', 'selector': 'btn-cell-renderer'},{'name': 'CacheSettingsComponent', 'selector': 'app-cache-settings'},{'name': 'CallUsSelectorComponent', 'selector': 'call-us-selector'},{'name': 'CannabisItemEditComponent', 'selector': 'cannabis-item-edit'},{'name': 'CardComponent', 'selector': 'app-widget-card'},{'name': 'CardDashboardComponent', 'selector': 'app-card-dashboard'},{'name': 'CardPointeCardPayBtnComponent', 'selector': 'card-pointe-card-pay-btn'},{'name': 'CardpointeTransactionsComponent', 'selector': 'app-cardpointe-transactions'},{'name': 'CardPointIDTECHAndroidComponent', 'selector': 'app-card-point-idtechandroid'},{'name': 'CardPointSettingsComponent', 'selector': 'card-point-settings'},{'name': 'CartButtonComponent', 'selector': 'app-cart-button'},{'name': 'CashDrawerSettingsComponent', 'selector': 'app-cash-drawer-settings'},{'name': 'CashPaymentButtonComponent', 'selector': 'cash-payment-buttons'},{'name': 'CashValueCalcComponent', 'selector': 'cash-value-calc'},{'name': 'CategoriesAlternateComponent', 'selector': 'app-categories-alternate'},{'name': 'CategoriesComponent', 'selector': 'app-categories'},{'name': 'CategorieslistviewComponent', 'selector': 'app-categorieslistview'},{'name': 'CategoryItemsBoardComponent', 'selector': 'app-category-items-board'},{'name': 'CategoryItemsBoardItemComponent', 'selector': 'category-items-board-item'},{'name': 'CategoryScrollComponent', 'selector': 'app-category-scroll'},{'name': 'CategorySelectComponent', 'selector': 'app-category-select'},{'name': 'CategorySelectListFilterComponent', 'selector': 'category-select-list-filter'},{'name': 'ChangeDueComponent', 'selector': 'app-balance-due'},{'name': 'ChangepasswordComponent', 'selector': 'app-changepassword'},{'name': 'ChartTableComponent', 'selector': 'app-widget-chart-table'},{'name': 'CheckInProfileComponent', 'selector': 'app-check-in-profile'},{'name': 'ChemicalSpinnersComponent', 'selector': 'app-chemical-spinners'},{'name': 'ChemicalValuesComponent', 'selector': 'app-chemical-values'},{'name': 'ChipsDisplayComponent', 'selector': 'app-chips-display'},{'name': 'ClientInfoComponent', 'selector': 'app-client-info'},{'name': 'ClientSearchSelectorComponent', 'selector': 'app-client-search-selector'},{'name': 'ClientTypeEditComponent', 'selector': 'app-client-type-edit'},{'name': 'ClientTypeListComponent', 'selector': 'app-client-type-list'},{'name': 'ClientTypeSelectionComponent', 'selector': 'app-client-type-selection'},{'name': 'ClientTypesLookupComponent', 'selector': 'app-client-types-lookup'},{'name': 'ClockBreaksTypesComponent', 'selector': 'clock-breaks-types'},{'name': 'ClockInOutComponent', 'selector': 'clock-in-out'},{'name': 'CloseDayValidationComponent', 'selector': 'close-day-validation'},{'name': 'CompanyEditComponent', 'selector': 'company-edit'},{'name': 'CompanyInfoHeaderComponent', 'selector': 'app-company-info-header'},{'name': 'CpVIVO3300Component', 'selector': 'app-cp-vivo3300'},{'name': 'CreditCardPaymentsPrintListComponent', 'selector': 'credit-card-payments-print-list'},{'name': 'CSVImportComponent', 'selector': 'app-csv-import'},{'name': 'DailyReportComponent', 'selector': 'app-daily-report'},{'name': 'DashboardClientTypeSelectionComponent', 'selector': 'dashboard-client-type-selection'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'DashboardMenuComponent', 'selector': 'app-dashboard-menu'},{'name': 'DatabaseSchemaComponent', 'selector': 'app-database-schema'},{'name': 'DateScheduleComponent', 'selector': 'app-date-schedule'},{'name': 'DefaultComponent', 'selector': 'app-default'},{'name': 'DefaultReceiptSelectorComponent', 'selector': 'default-receipt-selector'},{'name': 'DemographicsComponent', 'selector': 'app-demographics'},{'name': 'DepartmentMenuComponent', 'selector': 'app-department-menu'},{'name': 'DepartmentSelectComponent', 'selector': 'app-department-select'},{'name': 'DesignerEditorComponent', 'selector': 'psReporting-designer-editor'},{'name': 'DesignerListComponent', 'selector': 'ps-designer-list'},{'name': 'DeviceInfoComponent', 'selector': 'app-device-info'},{'name': 'DevxReportDesignerComponent', 'selector': 'app-devx-report-designer'},{'name': 'DiscountOptionsComponent', 'selector': 'app-discount-options'},{'name': 'DiscountTypeSelectionComponent', 'selector': 'app-discount-type-selection'},{'name': 'DisplayMenuListComponent', 'selector': 'display-menu-list'},{'name': 'DisplayMenuMainComponent', 'selector': 'display-menu-main'},{'name': 'DisplayMenuMenuComponent', 'selector': 'display-menu-menu'},{'name': 'DisplayMenuSortComponent', 'selector': 'display-menu-sort'},{'name': 'DisplayMenuTitleComponent', 'selector': 'display-menu-title'},{'name': 'DsiAndroidResultsComponent', 'selector': 'pointlesscc-dsi-android-results'},{'name': 'DSIAndroidSettingsComponent', 'selector': 'pointlesscc-dsiandroid-settings'},{'name': 'DsiEMVAndroidComponent', 'selector': 'pointlesscc-dsi-emvandroid'},{'name': 'DSIEMVAndroidPayBtnComponent', 'selector': 'dsiemvandroid-pay-btn'},{'name': 'DsiEMVCardPayBtnComponent', 'selector': 'dsi-emvcard-pay-btn'},{'name': 'DSIEMVElectronComponent', 'selector': 'app-dsiemvelectron'},{'name': 'DsiEMVPaymentComponent', 'selector': 'app-dsi-emvpayment'},{'name': 'DSIEMVTransactionComponent', 'selector': 'app-dsiemvtransaction'},{'name': 'DynamicAgGridComponent', 'selector': 'dynamic-ag-grid'},{'name': 'EditBarComponent', 'selector': 'pgReporting-edit-bar'},{'name': 'EditButtonsStandardComponent', 'selector': 'app-edit-buttons-standard'},{'name': 'EditCSSStylesComponent', 'selector': 'app-edit-cssstyles'},{'name': 'EditSelectedItemsComponent', 'selector': 'app-edit-selected-items'},{'name': 'EditSettingsComponent', 'selector': 'app-edit-settings'},{'name': 'ElectronZoomControlComponent', 'selector': 'electron-zoom-control'},{'name': 'EmailEntryComponent', 'selector': 'app-email-entry'},{'name': 'EmailSettingsComponent', 'selector': 'app-email-settings'},{'name': 'EmployeeClockEditComponent', 'selector': 'app-employee-clock-edit'},{'name': 'EmployeeClockFilterComponent', 'selector': 'employee-clock-filter'},{'name': 'EmployeeClockListComponent', 'selector': 'app-employee-clock-list'},{'name': 'EmployeeDetailsPanelComponent', 'selector': 'app-employee-details-panel'},{'name': 'EmployeeEditComponent', 'selector': 'employee-edit'},{'name': 'EmployeeFilterPanelComponent', 'selector': 'employee-filter-panel'},{'name': 'EmployeeListComponent', 'selector': 'employee-list'},{'name': 'EmployeeLookupComponent', 'selector': 'employee-lookup'},{'name': 'EmployeeMetrcKeyEntryComponent', 'selector': 'app-employee-metrc-key-entry'},{'name': 'ExitLabelSelectionComponent', 'selector': 'exit-label-selection'},{'name': 'ExportDataComponent', 'selector': 'app-export-data'},{'name': 'FacilitiesListComponent', 'selector': 'app-facilities-list'},{'name': 'FacilitySearchSelectorComponent', 'selector': 'app-facility-search-selector'},{'name': 'FastUserSwitchComponent', 'selector': 'app-fast-user-switch'},{'name': 'FieldListTypeAssignerComponent', 'selector': 'pgReporting-field-list-type-assigner'},{'name': 'FieldSelectorComponent', 'selector': 'psReporting-field-selector'},{'name': 'FieldTypeSelectorComponent', 'selector': 'psReporting-field-type-selector'},{'name': 'FieldValueSelectorComponent', 'selector': 'pgReporting-field-value-selector'},{'name': 'FilterBuilderComponent', 'selector': 'pgReporting-filter-builder'},{'name': 'FilterComponent', 'selector': 'app-widget-filter'},{'name': 'FlatRateEditComponent', 'selector': 'app-flat-rate-edit'},{'name': 'FlatRateListComponent', 'selector': 'app-flat-rate-list'},{'name': 'FlatTaxRateListComponent', 'selector': 'app-flat-tax-rate-list'},{'name': 'FloorPlanComponent', 'selector': 'app-floor-plan'},{'name': 'FoodProductEditComponent', 'selector': 'food-product-edit'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'FormSelectListComponent', 'selector': 'form-select-list'},{'name': 'FunctionGroupButtonEditComponent', 'selector': 'function-group-button-edit'},{'name': 'FunctionGroupEditComponent', 'selector': 'app-function-group-edit'},{'name': 'FunctionGroupListComponent', 'selector': 'app-function-group-list'},{'name': 'GenericIdSelectComponent', 'selector': 'app-generic-id-select'},{'name': 'GenericNameSelectComponent', 'selector': 'app-generic-name-select'},{'name': 'GiftCardPayBtnComponent', 'selector': 'gift-card-pay-btn'},{'name': 'GoogleMapsComponent', 'selector': 'app-google-maps'},{'name': 'GridComponentPropertiesComponent', 'selector': 'app-grid-component-properties'},{'name': 'GridcomponentPropertiesDesignComponent', 'selector': 'gridcomponent-properties-design'},{'name': 'GridDesignerInfoComponent', 'selector': 'grid-designer-info'},{'name': 'GridManagerComponent', 'selector': 'menu-manager'},{'name': 'GridManagerEditComponent', 'selector': 'app-grid-manager-edit'},{'name': 'GridMenuLayoutComponent', 'selector': 'grid-menu-layout'},{'name': 'GridSettingsComponent', 'selector': 'app-grid-settings'},{'name': 'GroupByTypesComponent', 'selector': 'psReporting-group-by-types'},{'name': 'HammerCardComponent', 'selector': 'app-hammer-card'},{'name': 'HeaderComponent', 'selector': 'storybook-header'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HouseAccountPayBtnComponent', 'selector': 'app-house-account-pay-btn'},{'name': 'HTMLEditPrintingComponent', 'selector': 'app-htmledit-printing'},{'name': 'IFrameComponent', 'selector': 'app-i-frame'},{'name': 'ImageCaptureComponent', 'selector': 'app-image-capture'},{'name': 'ImageContainerComponent', 'selector': 'image-container'},{'name': 'ImageSwiperComponent', 'selector': 'app-image-swiper'},{'name': 'InstalledPrintersComponent', 'selector': 'app-installed-printers'},{'name': 'InventoryAdjustmentNoteComponent', 'selector': 'app-adjustment-note'},{'name': 'InventoryComponent', 'selector': 'app-inventory-settings'},{'name': 'InventoryCountsViewComponent', 'selector': 'inventory-counts-view'},{'name': 'InventoryHeaderValuesComponent', 'selector': 'app-inventory-header-values'},{'name': 'InventoryHistoryItemComponent', 'selector': 'app-inventory-history-item'},{'name': 'InventoryHistoryListComponent', 'selector': 'app-inventory-history-list'},{'name': 'InventoryListComponent', 'selector': 'app-inventory-list'},{'name': 'InventoryListToolTipComponent', 'selector': 'app-inventory-list-tool-tip'},{'name': 'InventoryLocationsComponent', 'selector': 'app-inventory-locations'},{'name': 'IonicGeoLocationComponent', 'selector': 'app-ionic-geo-location'},{'name': 'IonicSwipeToDeleteComponent', 'selector': 'app-ionic-swipe-to-delete'},{'name': 'ItemCategoriesEditComponent', 'selector': 'app-item-categories-edit'},{'name': 'ItemCategoriesListComponent', 'selector': 'app-item-categories-list'},{'name': 'ItemSalesCardComponent', 'selector': 'item-sales-card'},{'name': 'ItemSortComponent', 'selector': 'app-item-sort'},{'name': 'ItemTypeCategoryAssignmentComponent', 'selector': 'app-item-type-category-assignment'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'ItemTypeDisplayAssignmentComponent', 'selector': 'app-item-type-display-assignment'},{'name': 'ItemTypeEditorComponent', 'selector': 'app-item-type-editor'},{'name': 'ItemTypeSortComponent', 'selector': 'app-item-type-sort'},{'name': 'ItemTypeTogglesEditComponent', 'selector': 'item-type-toggles-edit'},{'name': 'JobTypesEditComponent', 'selector': 'app-job-types-edit'},{'name': 'JobTypesListComponent', 'selector': 'app-job-type-list'},{'name': 'KeyboardButtonComponent', 'selector': 'app-keyboard-button'},{'name': 'KeyboardComponent', 'selector': 'app-keyboard'},{'name': 'KeyboardViewComponent', 'selector': 'app-keyboard-view'},{'name': 'KeyPadComponent', 'selector': 'app-key-pad'},{'name': 'Label1by8Component', 'selector': 'app-label1by8'},{'name': 'LabelViewSelectorComponent', 'selector': 'app-label-view-selector'},{'name': 'LastImageDisplayComponent', 'selector': 'last-image-display'},{'name': 'LimitValuesCardComponent', 'selector': 'app-limit-values-card'},{'name': 'LimitValuesProgressBarsComponent', 'selector': 'limit-values-progress-bars'},{'name': 'LinkedPriceSelectorComponent', 'selector': 'linked-price-selector'},{'name': 'LiquorProductEditComponent', 'selector': 'liquor-product-edit'},{'name': 'ListPrintersElectronComponent', 'selector': 'app-list-printers-electron'},{'name': 'ListProductSearchInputComponent', 'selector': 'list-product-search-input'},{'name': 'LoginComponent', 'selector': 'login-dashboard'},{'name': 'LogoComponent', 'selector': 'app-logo'},{'name': 'M22ResizableComponent', 'selector': '[m22Resizable]'},{'name': 'MainfestEditorComponent', 'selector': 'app-mainfest-editor'},{'name': 'MainfestFilterComponent', 'selector': 'app-mainfest-filter'},{'name': 'MainMenuComponent', 'selector': 'app-main-menu'},{'name': 'ManifestEditorHeaderComponent', 'selector': 'app-manifest-editor-header'},{'name': 'ManifestsComponent', 'selector': 'app-manifests'},{'name': 'ManifestStatusComponent', 'selector': 'app-manifest-status'},{'name': 'ManifestTypeComponent', 'selector': 'app-manifest-type'},{'name': 'MatDateRangeComponent', 'selector': 'mat-date-range'},{'name': 'MatMenuBasicComponent', 'selector': 'mat-menu-basic'},{'name': 'MatSelectComponent', 'selector': 'app-mat-select'},{'name': 'MatSelectNGModelComponent', 'selector': 'mat-select-ngmodel'},{'name': 'MatSelectorComponent', 'selector': 'pgReporting-mat-selector'},{'name': 'MatSpinnerOverlayComponent', 'selector': 'app-mat-spinner-overlay'},{'name': 'MatToggleSelectorComponent', 'selector': 'app-mat-toggle-selector'},{'name': 'MenuBoardComponent', 'selector': 'app-menu-board'},{'name': 'MenuCardCategoriesComponent', 'selector': 'app-menu-card-categories'},{'name': 'MenuCompactComponent', 'selector': 'app-menu-compact'},{'name': 'MenuGroupItemEditComponent', 'selector': 'app-menu-group-item-edit'},{'name': 'MenuItemCardComponent', 'selector': 'app-menu-item-card'},{'name': 'MenuItemCardDashboardComponent', 'selector': 'menu-item-card-dashboard'},{'name': 'MenuitemComponent', 'selector': 'app-menuitem'},{'name': 'MenuItemExtendedPricesComponent', 'selector': 'menu-item-extended-prices'},{'name': 'MenuItemGalleryComponent', 'selector': 'app-menu-item-gallery'},{'name': 'MenuItemModalComponent', 'selector': 'app-menu-item-modal'},{'name': 'MenuItemProductCountComponent', 'selector': 'menu-item-product-count'},{'name': 'MenuItemsInfiniteComponent', 'selector': 'menu-items-infinite'},{'name': 'MenuManagerComponent', 'selector': 'app-menu-manager'},{'name': 'MenuMinimalComponent', 'selector': 'app-menu-minimal'},{'name': 'MenuPriceSelectionComponent', 'selector': 'app-menu-price-selection'},{'name': 'MenuSearchBarComponent', 'selector': 'app-menu-search-bar'},{'name': 'MenuTinyComponent', 'selector': 'app-menu-tiny'},{'name': 'MessagesToUserComponent', 'selector': 'app-messages-to-user'},{'name': 'MetaTagChipsComponent', 'selector': 'app-meta-tag-chips'},{'name': 'MetrcIndividualPackageComponent', 'selector': 'app-metrc-individual-package'},{'name': 'MetrcIntakeHeaderComponent', 'selector': 'metrc-intake-header'},{'name': 'MetrcInventoryPropertiesComponent', 'selector': 'metrc-inventory-properties'},{'name': 'METRCProductsAddComponent', 'selector': 'app-products-add'},{'name': 'MetrcSalesFilterComponent', 'selector': 'metrc-sales-filter'},{'name': 'MetrcSalesListComponent', 'selector': 'app-metrc-sales-list'},{'name': 'MetrcSummaryComponent', 'selector': 'app-metrc-summary'},{'name': 'MoveInventoryLocationComponent', 'selector': 'app-move-inventory-location'},{'name': 'MyThingComponent', 'selector': 'my-thing'},{'name': 'NewInventoryItemComponent', 'selector': 'app-new-inventory-item'},{'name': 'NewOrderTypeComponent', 'selector': 'new-order-type'},{'name': 'OptionsSelectFilterComponent', 'selector': 'options-select-filter'},{'name': 'OrderBarComponent', 'selector': 'app-order-bar'},{'name': 'OrderCardComponent', 'selector': 'app-order-card'},{'name': 'OrderCardsComponent', 'selector': 'app-order-cards'},{'name': 'OrderFilterPanelComponent', 'selector': 'app-order-filter-panel'},{'name': 'OrderHeaderComponent', 'selector': 'app-order-header'},{'name': 'OrderHeaderDemographicsBoardComponent', 'selector': 'app-order-header-demographics-board'},{'name': 'OrderHeaderDemoGraphicsComponent', 'selector': 'app-order-header-demo-graphics'},{'name': 'OrderItemListComponent', 'selector': 'app-order-item-list'},{'name': 'OrderItemsListComponent', 'selector': 'app-order-items-list'},{'name': 'OrderPanelComponent', 'selector': 'app-order-panel'},{'name': 'OrderPercentageDiscountProductEditComponent', 'selector': 'app-order-percentage-discount-product-edit'},{'name': 'OrderPrepComponent', 'selector': 'app-order-prep'},{'name': 'OrdersListComponent', 'selector': 'app-orders-list'},{'name': 'OrdersMainComponent', 'selector': 'app-orders-main'},{'name': 'OrderTotalBoardComponent', 'selector': 'app-order-total-board'},{'name': 'OrderTotalComponent', 'selector': 'app-order-total'},{'name': 'OrderTypeSelectionComponent', 'selector': 'app-order-type-selection'},{'name': 'OverLayComponent', 'selector': 'app-over-lay'},{'name': 'PackageListComponent', 'selector': 'app-package-list'},{'name': 'PackageSearchSelectorComponent', 'selector': 'app-package-search-selector'},{'name': 'PageComponent', 'selector': 'storybook-page'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PagerBlobComponent', 'selector': 'pager-blob'},{'name': 'PagingInfoComponent', 'selector': 'app-paging-info'},{'name': 'PasswordValidationComponent', 'selector': 'app-password-validation'},{'name': 'PaymentBalanceComponent', 'selector': 'app-payment-balance'},{'name': 'PaymentMethodEditComponent', 'selector': 'app-payment-method-edit'},{'name': 'PaymentMethodListComponent', 'selector': 'app-payment-method-list'},{'name': 'PaymentMethodSettingsComponent', 'selector': 'payment-method-settings'},{'name': 'PaymentReportCardComponent', 'selector': 'app-payment-report-card'},{'name': 'PaymentReportComponent', 'selector': 'payment-report'},{'name': 'PaymentReportDataComponent', 'selector': 'app-payment-report-data'},{'name': 'PaypalCardPayBtnComponent', 'selector': 'paypal-card-pay-btn'},{'name': 'PayPalTransactionComponent', 'selector': 'app-pay-pal-transaction'},{'name': 'PieComponent', 'selector': 'app-widget-pie'},{'name': 'PointlessMETRCSalesComponent', 'selector': 'app-pointless-metrcsales'},{'name': 'PosCheckOutButtonsComponent', 'selector': 'pos-check-out-buttons'},{'name': 'PosEditSettingsComponent', 'selector': 'app-pos-edit-settings'},{'name': 'PosListComponent', 'selector': 'app-pos-list'},{'name': 'PosOperationsComponent', 'selector': 'pos-operations'},{'name': 'PosOrderBoardComponent', 'selector': 'app-pos-order-board'},{'name': 'PosOrderComponent', 'selector': 'app-pos-order'},{'name': 'PosOrderFunctionButtonsComponent', 'selector': 'pos-order-function-buttons'},{'name': 'PosOrderItemComponent', 'selector': 'pos-order-item'},{'name': 'PosOrderItemEditComponent', 'selector': 'app-pos-order-item-edit'},{'name': 'PosOrderItemListComponent', 'selector': 'pos-order-item-list'},{'name': 'PosOrderItemsComponent', 'selector': 'pos-order-items'},{'name': 'PosOrderListComponent', 'selector': 'app-pos-order-list'},{'name': 'PosOrderNotesComponent', 'selector': 'pos-order-notes'},{'name': 'PosOrderPriceScheduleInfoComponent', 'selector': 'pos-order-price-schedule-info'},{'name': 'POSOrderScheduleCardComponent', 'selector': 'posorder-schedule-card'},{'name': 'POSOrderScheduleComponent', 'selector': 'pos-order-schedule'},{'name': 'PosOrderScheduleDescriptionComponent', 'selector': 'pos-order-schedule-description'},{'name': 'POSOrderScheduleFormComponent', 'selector': 'app-posorder-schedule-form'},{'name': 'POSOrderServiceTypeComponent', 'selector': 'posorder-service-type'},{'name': 'POSOrderShippingAddressComponent', 'selector': 'posorder-shipping-address'},{'name': 'PosOrderTransactionDataComponent', 'selector': 'pos-order-transaction-data'},{'name': 'PosPaymentComponent', 'selector': 'app-pos-payment'},{'name': 'PosPaymentEditComponent', 'selector': 'pos-payment-edit'},{'name': 'POSPaymentsComponent', 'selector': 'app-pospayments'},{'name': 'PosPaymentsFilterComponent', 'selector': 'app-pos-payments-filter'},{'name': 'PosSplitGroupsComponent', 'selector': 'pos-split-groups'},{'name': 'POSSplitItemsComponent', 'selector': 'app-possplit-items'},{'name': 'PrepContainerComponent', 'selector': 'app-prep-container'},{'name': 'PrepOrderComponent', 'selector': 'app-prep-order'},{'name': 'PrepOrderFilterComponent', 'selector': 'app-prep-order-filter'},{'name': 'PrepOrderItemComponent', 'selector': 'app-prep-order-item'},{'name': 'PriceCategoriesComponent', 'selector': 'app-price-categories'},{'name': 'PriceCategoriesEditComponent', 'selector': 'app-price-categories-edit'},{'name': 'PriceCategoryConversionsComponent', 'selector': 'price-category-conversions'},{'name': 'PriceCategoryMultiplePricesComponent', 'selector': 'price-category-multiple-prices'},{'name': 'PriceCategoryPriceFieldsComponent', 'selector': 'price-category-price-fields'},{'name': 'PriceCategorySearchComponent', 'selector': 'app-price-category-search'},{'name': 'PriceCategorySelectComponent', 'selector': 'app-price-category-select'},{'name': 'PriceCategoryTimeFiltersComponent', 'selector': 'price-category-time-filters'},{'name': 'PriceLinesComponent', 'selector': 'app-price-lines'},{'name': 'PriceOptionsComponent', 'selector': 'app-price-options'},{'name': 'PriceScheduleComponent', 'selector': 'app-price-schedule'},{'name': 'PriceScheduleConstraintsComponent', 'selector': 'app-price-schedule-constraints'},{'name': 'PriceScheduleFieldsComponent', 'selector': 'app-price-schedule-fields'},{'name': 'PriceScheduleInfoComponent', 'selector': 'app-price-schedule-info'},{'name': 'PriceScheduleListComponent', 'selector': 'app-price-schedule-list'},{'name': 'PriceScheduleMenuItemsComponent', 'selector': 'price-schedule-menu-items'},{'name': 'PriceScheduleMenuListComponent', 'selector': 'price-schedule-menu-list'},{'name': 'PriceScheduleMenuOptionsComponent', 'selector': 'price-schedule-menu-options'},{'name': 'PriceScheduleSortComponent', 'selector': 'price-schedule-sort'},{'name': 'PriceTierEditComponent', 'selector': 'app-price-tier-edit'},{'name': 'PriceTierLineEditComponent', 'selector': 'app-price-tier-line-edit'},{'name': 'PriceTierScheduleComponent', 'selector': 'price-tier-schedule'},{'name': 'PriceTiersComponent', 'selector': 'price-tiers-list'},{'name': 'PrinterLocationsComponent', 'selector': 'app-printer-locations'},{'name': 'PrinterLocationSelectionComponent', 'selector': 'app-printer-location-selection'},{'name': 'PrintGroupReceiptComponent', 'selector': 'print-group-receipt'},{'name': 'PrintTemplateComponent', 'selector': 'app-print-template'},{'name': 'PrintTemplatePopUpComponent', 'selector': 'app-print-template-pop-up'},{'name': 'ProducteditComponent', 'selector': 'app-productedit'},{'name': 'ProductFilterComponent', 'selector': 'app-product-filter'},{'name': 'ProductInfoPanelComponent', 'selector': 'app-product-info-panel'},{'name': 'ProductListByBarcodeComponent', 'selector': 'app-product-list-by-barcode'},{'name': 'ProductlistviewComponent', 'selector': 'app-productlistview'},{'name': 'ProductSearchSelector2Component', 'selector': 'product-search-selector2'},{'name': 'ProductSearchSelectorComponent', 'selector': 'app-product-search-selector'},{'name': 'ProductTypeSelectComponent', 'selector': 'product-type-select'},{'name': 'ProfileBillingAddressComponent', 'selector': 'app-profile-billing-address'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'ProfileDemographicsComponent', 'selector': 'app-profile-demographics'},{'name': 'ProfileEditorComponent', 'selector': 'app-profile-editor'},{'name': 'ProfileIDCardInfoComponent', 'selector': 'app-profile-idcard-info'},{'name': 'ProfileListComponent', 'selector': 'app-profile-list'},{'name': 'ProfileLookupComponent', 'selector': 'app-profile-lookup'},{'name': 'ProfileMedInfoComponent', 'selector': 'profile-med-info'},{'name': 'ProfileRolesComponent', 'selector': 'app-profile-roles'},{'name': 'ProfileShippingAddressComponent', 'selector': 'app-profile-shipping-address'},{'name': 'ProgressBarComponent', 'selector': 'app-progress-bar'},{'name': 'ProgressUploaderComponent', 'selector': 'app-progress'},{'name': 'PromptGroupEditComponent', 'selector': 'app-prompt-group-edit'},{'name': 'PromptGroupsComponent', 'selector': 'prompt-groups'},{'name': 'PromptGroupSelectComponent', 'selector': 'prompt-group-select'},{'name': 'PromptInfoPanelComponent', 'selector': 'prompt-info-panel'},{'name': 'PromptItemSelectionComponent', 'selector': 'prompt-item-selection'},{'name': 'PromptItemsSelectedComponent', 'selector': 'prompt-items-selected'},{'name': 'PromptKitsComponent', 'selector': 'prompt-kits'},{'name': 'PromptPanelMenuItemComponent', 'selector': 'prompt-panel-menu-item'},{'name': 'PromptPanelMenuItemsComponent', 'selector': 'prompt-panel-menu-items'},{'name': 'PromptSelectedItemsComponent', 'selector': 'prompt-selected-items'},{'name': 'PromptSubGroupAssociationComponent', 'selector': 'prompt-associations'},{'name': 'PromptSubGroupEditComponent', 'selector': 'app-prompt-sub-group-edit'},{'name': 'PromptSubGroupPanelComponent', 'selector': 'prompt-sub-group-panel'},{'name': 'PromptSubGroupsComponent', 'selector': 'prompt-sub-groups'},{'name': 'PromptWalkThroughComponent', 'selector': 'app-prompt-walk-through'},{'name': 'PSMenuGroupEditComponent', 'selector': 'app-psmenu-group-edit'},{'name': 'PSMenuGroupListComponent', 'selector': 'psmenu-group-list'},{'name': 'PurchaseItemCostHistoryComponent', 'selector': 'purchase-item-cost-history'},{'name': 'PurchaseItemSalesComponent', 'selector': 'purchase-item-sales'},{'name': 'QRCodeTableComponent', 'selector': 'qr-order'},{'name': 'QROrderComponent', 'selector': 'app-qrorder'},{'name': 'QuantiySelectorComponent', 'selector': 'app-quantiy-selector'},{'name': 'QuickPayButtonsComponent', 'selector': 'quick-pay-buttons'},{'name': 'ReceiptLayoutComponent', 'selector': 'app-receipt-layout'},{'name': 'ReceiptViewComponent', 'selector': 'app-receipt-view'},{'name': 'RecieptPopUpComponent', 'selector': 'app-reciept-pop-up'},{'name': 'RegisterAccountExistingUserWithTokenComponent', 'selector': 'app-register-account-existing-user-with-token'},{'name': 'RegisterAccountMainComponent', 'selector': 'app-register-account-main'},{'name': 'ReportGroupSelectorComponent', 'selector': 'psReporting-report-group-selector'},{'name': 'ReportsComponent', 'selector': 'app-reports'},{'name': 'ReportSelectorComponent', 'selector': 'psReporting-report-selector'},{'name': 'ReportTypesComponent', 'selector': 'ps-report-types'},{'name': 'ReportViewerComponent', 'selector': 'app-report-viewer'},{'name': 'RequestMessageComponent', 'selector': 'app-request-message'},{'name': 'RequestMessagesComponent', 'selector': 'app-request-messages'},{'name': 'RequiresSerialComponent', 'selector': 'app-requires-serial'},{'name': 'ResetpasswordComponent', 'selector': 'app-resetpassword'},{'name': 'RetailProductEditComponent', 'selector': 'retail-product-edit'},{'name': 'ReviewComponent', 'selector': 'app-review'},{'name': 'ReviewEditComponent', 'selector': 'app-review-edit'},{'name': 'ReviewsComponent', 'selector': 'app-reviews'},{'name': 'RewardsAvailibleComponent', 'selector': 'app-rewards-availible'},{'name': 'RewardTypeFilterComponent', 'selector': 'app-reward-type-filter'},{'name': 'RewardTypeResultsSelectorComponent', 'selector': 'app-reward-type-panel'},{'name': 'RouteDispatchComponent', 'selector': 'app-route-dispatch'},{'name': 'RouteDispatchDetailsComponent', 'selector': 'app-route-dispatch-details'},{'name': 'RouteDispatchDetailsEditComponent', 'selector': 'app-route-dispatch-details-edit'},{'name': 'RouteDispatchEditComponent', 'selector': 'app-route-dispatch-edit'},{'name': 'RouteDispatchesComponent', 'selector': 'app-route-dispatches'},{'name': 'SalesTaxReportComponent', 'selector': 'sales-tax-report'},{'name': 'SaveChangesButtonComponent', 'selector': 'save-changes-button'},{'name': 'ScaleReaderComponent', 'selector': 'app-scale-reader'},{'name': 'ScaleSettingsComponent', 'selector': 'app-scale-settings'},{'name': 'ScaleValueViewComponent', 'selector': 'scale-value-view'},{'name': 'ScheduledMenuContainerComponent', 'selector': 'scheduled-menu-container'},{'name': 'ScheduledMenuHeaderComponent', 'selector': 'scheduled-menu-header'},{'name': 'ScheduledMenuImageComponent', 'selector': 'scheduled-menu-image'},{'name': 'ScheduledMenuItemComponent', 'selector': 'scheduled-menu-item'},{'name': 'ScheduledMenuItemsComponent', 'selector': 'scheduled-menu-items'},{'name': 'ScheduledMenuListComponent', 'selector': 'scheduled-menu-list'},{'name': 'SearchDebounceInputComponent', 'selector': 'search-debounce-input'},{'name': 'SearchInventoryInputComponent', 'selector': 'search-inventory-input'},{'name': 'SearchPanelComponent', 'selector': 'app-search-panel'},{'name': 'SearchResultsComponent', 'selector': 'app-search-results'},{'name': 'ServiceTypeEditComponent', 'selector': 'app-service-type-edit'},{'name': 'ServiceTypeListComponent', 'selector': 'app-service-type-list'},{'name': 'SettingsComponent', 'selector': 'app-settings'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'SimpleTinyComponent', 'selector': 'simple-tinymce'},{'name': 'SiteEditComponent', 'selector': 'app-site-edit'},{'name': 'SiteEditFormComponent', 'selector': 'app-site-edit-form'},{'name': 'SiteFooterComponent', 'selector': 'app-site-footer'},{'name': 'SitepointsComponent', 'selector': 'app-sitepoints'},{'name': 'SitepurchasesComponent', 'selector': 'app-sitepurchases'},{'name': 'SitesComponent', 'selector': 'app-sites'},{'name': 'SiteSelectorComponent', 'selector': 'app-site-selector'},{'name': 'SoftwareComponent', 'selector': 'app-software-settings'},{'name': 'SortSelectorComponent', 'selector': 'psReporting-sort-selector'},{'name': 'SpeciesListComponent', 'selector': 'app-species-list'},{'name': 'SplashLoadingComponent', 'selector': 'app-splash-loading'},{'name': 'SplitEntrySelectorComponent', 'selector': 'split-entry-selector'},{'name': 'StatusLookupComponent', 'selector': 'app-status-lookup'},{'name': 'StickyHeaderComponent', 'selector': 'app-sticky-header'},{'name': 'StoreCreditEditorComponent', 'selector': 'app-store-credit-editor'},{'name': 'StoreCreditInfoComponent', 'selector': 'store-credit-info'},{'name': 'StoreCreditIssueComponent', 'selector': 'app-store-credit-issue'},{'name': 'StoreCreditListComponent', 'selector': 'app-store-credit-list'},{'name': 'StoreCreditPopUpComponent', 'selector': 'app-store-credit-pop-up'},{'name': 'StoreCreditSearchComponent', 'selector': 'store-credit-search'},{'name': 'StrainBoardComponent', 'selector': 'app-strain-board'},{'name': 'StrainCardComponent', 'selector': 'app-strain-card'},{'name': 'StrainIndicatorComponent', 'selector': 'app-strain-indicator'},{'name': 'StrainPackagesComponent', 'selector': 'app-strain-packages'},{'name': 'StrainProductEditComponent', 'selector': 'app-strain-product-edit'},{'name': 'StrainsAddComponent', 'selector': 'app-strains-add'},{'name': 'StripeCardPayBtnComponent', 'selector': 'stripe-card-pay-btn'},{'name': 'StripeCheckOutComponent', 'selector': 'stripe-check-out'},{'name': 'StripeSettingsComponent', 'selector': 'app-stripe-settings'},{'name': 'SummarycardComponent', 'selector': 'app-summarycard'},{'name': 'TagChipsProductsComponent', 'selector': 'tag-chips-products'},{'name': 'TaxEditComponent', 'selector': 'app-tax-edit'},{'name': 'TaxFieldsComponent', 'selector': 'app-tax-fields'},{'name': 'TaxListComponent', 'selector': 'app-tax-list'},{'name': 'TaxRateListComponent', 'selector': 'app-tax-rate-list'},{'name': 'ThreeCXFabComponent', 'selector': 'app-three-cxfab'},{'name': 'TierItemsComponent', 'selector': 'app-tier-items'},{'name': 'TierMenuComponent', 'selector': 'app-tier-menu'},{'name': 'TierPriceLineComponent', 'selector': 'tier-price-line'},{'name': 'TierPricesComponent', 'selector': 'app-tier-prices'},{'name': 'TiersCardComponent', 'selector': 'app-tiers-card'},{'name': 'TiersWithPricesComponent', 'selector': 'tiers-with-prices'},{'name': 'TimeScheduleComponent', 'selector': 'app-time-schedule'},{'name': 'TipEntryComponent', 'selector': 'tip-entry-amount'},{'name': 'ToggleThemeComponent', 'selector': 'app-toggle-theme'},{'name': 'TriPOSCardPayBtnComponent', 'selector': 'app-tri-poscard-pay-btn'},{'name': 'TriposSettingsComponent', 'selector': 'app-tripos-settings'},{'name': 'TriPosTransactionsComponent', 'selector': 'app-tri-pos-transactions'},{'name': 'TvPriceSpecialsComponent', 'selector': 'app-tv-price-specials'},{'name': 'TvPriceTierMenuItemsComponent', 'selector': 'app-tv-price-tier-menu-items'},{'name': 'TVPriceTiersComponent', 'selector': 'app-tvprice-tiers'},{'name': 'TypeBoardComponent', 'selector': 'app-type-board'},{'name': 'TypeBoardItemsComponent', 'selector': 'app-type-board-items'},{'name': 'TypeFilterComponent', 'selector': 'app-type-filter'},{'name': 'TypeResultsSelectorComponent', 'selector': 'app-type-results-selector'},{'name': 'UIHomePageSettingsComponent', 'selector': 'uihome-page-settings'},{'name': 'UITransactionsComponent', 'selector': 'app-uitransactions'},{'name': 'UnitTypeEditComponent', 'selector': 'app-unit-type-edit'},{'name': 'UnitTypeFieldsComponent', 'selector': 'app-unit-type-fields'},{'name': 'UnitTypeListComponent', 'selector': 'unit-types'},{'name': 'UnitTypePromptComponent', 'selector': 'app-unit-type-prompt'},{'name': 'UnitTypeSelectComponent', 'selector': 'unit-type-select'},{'name': 'UploaderComponent', 'selector': 'app-widget-uploader'},{'name': 'UseGroupTaxAssignmentComponent', 'selector': 'app-use-group-tax-assignment'},{'name': 'UsermessagesComponent', 'selector': 'app-usermessages'},{'name': 'ValueFieldsComponent', 'selector': 'app-value-fields'},{'name': 'ValueFromListSelectorComponent', 'selector': 'value-from-list-selector'},{'name': 'ValueSpinnerComponent', 'selector': 'app-value-spinner'},{'name': 'WebEnabledComponent', 'selector': 'app-web-enabled'},{'name': 'WeekDaySelectionComponent', 'selector': 'app-week-day-selection'},{'name': 'WicEBTCardPayBtnComponent', 'selector': 'wic-ebtcard-pay-btn'},{'name': 'WishlistComponent', 'selector': 'app-wishlist'},{'name': 'YoutubePlayerComponent', 'selector': 'app-youtube-player'},{'name': 'ZoomFloorPlanComponent', 'selector': 'zoom-floor-plan'}];
+    var DIRECTIVES = [{'name': 'AppPasswordMaskDirective', 'selector': '[appAppPasswordMask]'},{'name': 'AutofocusDirective', 'selector': '[appAutoFocusInput]'},{'name': 'CurrencyFormatterDirective', 'selector': '[currencyFormatter]'},{'name': 'DefaultImageDirective', 'selector': 'img[default]'},{'name': 'DisableControlDirective', 'selector': '[disableControl]'},{'name': 'DndDirective', 'selector': '[appDnd]'},{'name': 'Events', 'selector': '[Events]'},{'name': 'FreeDraggingDirective', 'selector': '[appFreeDragging]'},{'name': 'FreeDraggingHandleDirective', 'selector': '[appFreeDraggingHandle]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'InstructionDirective', 'selector': '[appInstruction]'},{'name': 'NgControlAttributeDirective', 'selector': '[formControlName],[formControl]'},{'name': 'NumericDirective', 'selector': '[numeric]'},{'name': 'ResizeDirective', 'selector': '[resize]'},{'name': 'ScrollableDirective', 'selector': '[appScrollable]'},{'name': 'ScrollbarThemeDirectiveDirective', 'selector': '[appScrollbarThemeDirective]'},{'name': 'StickyHeaderDirective', 'selector': '[stickyHeaderDirective]'},{'name': 'UserAuthorizedDirective', 'selector': '[userAuthorized]'}];
     var ACTUAL_COMPONENT = {'name': 'BarcodeScannerComponent'};
 </script>
 <script src="../js/tree.js"></script>
@@ -1850,14 +2231,16 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
 
 
 
-                   
+
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -1869,6 +2252,15 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
@@ -1878,8 +2270,8 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

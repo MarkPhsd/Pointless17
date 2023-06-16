@@ -1,0 +1,18 @@
+<div *ngIf="(list$ | async) as list">
+  <ng-content [select]="head"></ng-content>
+  <mat-radio-group
+        aria-labelledby="Selection Group"
+        class="list"
+        [(ngModel)]="savedItem">
+    <mat-radio-button
+            class="radio-button"
+            (change)="setItem($event)"
+            *ngFor ="let item of basicList;
+                    let i =index;"
+        [value]="item">
+      {{item.name}}
+    </mat-radio-button>
+  </mat-radio-group>
+</div>
+
+<button mat-button color="accent" (click)="clearOption()">Clear</button>

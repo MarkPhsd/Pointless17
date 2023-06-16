@@ -2,7 +2,7 @@
 <div class="grid-container">
 
   <div >
-    <mat-card *ngIf="order" 
+    <mat-card *ngIf="order"
               (resized)="onResizedOrderPanel($event)">
       <mat-card-subtitle>
         <app-order-header
@@ -12,7 +12,7 @@
           [order]="order">
         </app-order-header>
       </mat-card-subtitle>
-    
+
       <mat-card-content>
         <div>
           <app-order-total
@@ -26,7 +26,7 @@
   </div>
 
   <div class="image-display" image [style]="orderPanelHeight">
-    <div *ngIf="orderService.lastItemAddedExists">
+    <div *ngIf="orderMethodsService.lastItemAddedExists">
       <mat-card>
         <ng-content [select]="image"></ng-content>
       </mat-card>

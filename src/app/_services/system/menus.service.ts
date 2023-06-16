@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable, of, Subscription, } from 'rxjs';
 import { ISite, IUser }   from 'src/app/_interfaces';
 import { AccordionMenu, MenuGroup, SubMenu }  from 'src/app/_interfaces/index';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
+import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 
 export interface ResultCheck {
   result: boolean;
@@ -18,6 +19,8 @@ export class MenusService {
 
   private _accordionMenu    = new BehaviorSubject<AccordionMenu>(null);
   public  accordionMenu$    = this._accordionMenu.asObservable();
+
+
 
   submenu = {} as SubMenu[]
   accordionMenus: AccordionMenu[] = [
@@ -199,6 +202,7 @@ export class MenusService {
       this.user  = data
     })
   }
+
 
   constructor( private http: HttpClient,
                private httpCache: HttpClientCacheService,

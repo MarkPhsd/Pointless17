@@ -52,7 +52,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   deviceInfo: IDeviceInfo;
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
       this.gettriPOSTotalPayments();
       this.lastIncrementalAuth();
@@ -123,7 +123,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     this.toolbarUIService.updateOrderBar(false)
     this.toolbarUIService.resetOrderBar(true)
     this.router.navigate(["/currentorder/", {mainPanel:true}]);
-    this.orderService.setScanner()
+    this.orderMethodsService.setScanner()
   }
 
 
@@ -150,7 +150,6 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       if (!order.posPayments) {return }
       if (order.posPayments == null || order.posPayments == undefined) { return };
 
-      console.log('last incremental',  this.order.posPayments)
       try {
         this.order.posPayments.slice().reverse().forEach(data => {
           // console.log(data?.tranType && data.amountPaid)
@@ -319,7 +318,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
      const result$ = this.orderService.forceCompleteOrder(site, this.order.id)
      this.action$ = result$.pipe(switchMap(data =>  {
        this.paymentService.updatePaymentSubscription(null)
-       this.orderService.updateOrderSubscription(null)
+       this.orderMethodsService.updateOrderSubscription(null)
        this.toolBarUI.updateOrderBar(false)
        return of(data)
      })).pipe(switchMap(data => {
@@ -364,14 +363,14 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
 
    printPaymentReceipt(item) {
 
-    this.orderService.selectedPayment = item;
+    this.orderMethodsService.selectedPayment = item;
 
     if (item && (item.groupID && item.groupID != 0)) {
         console.log('prinint item group total')
         const site = this.siteService.getAssignedSite();
         this.printing$ = this.orderService.getPOSOrderGroupTotal(site, item.orderID, item.groupID).pipe(switchMap(data => {
-        this.orderService.printOrder = data;
-        this.printingService.previewReceipt();
+        this.printingService.printOrder = data;
+        this.printingService.previewReceipt(null, data);
         return of(data)
       }))
       return;

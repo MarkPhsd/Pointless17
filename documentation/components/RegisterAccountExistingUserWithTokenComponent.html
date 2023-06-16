@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -35,32 +35,37 @@
 
 
 <ol class="breadcrumb">
-  <li>Components</li>
-  <li
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
   >
   RegisterAccountExistingUserWithTokenComponent</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
-        <li >
-            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
         </li>
-        <li >
-            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
         </li>
-        <li >
-            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
     <h3>File</h3>
 </p>
 <p class="comment">
@@ -74,14 +79,15 @@
         <h3>Implements</h3>
     </p>
     <p class="comment">
-                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+                <code>OnInit</code>
     </p>
 
 
-<section>
+<section data-compodoc="block-metadata">
     <h3>Metadata</h3>
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover metadata">
         <tbody>
+
 
 
 
@@ -97,6 +103,8 @@
                 <td class="col-md-3">selector</td>
                 <td class="col-md-9"><code>app-register-account-existing-user-with-token</code></td>
             </tr>
+
+
 
             <tr>
                 <td class="col-md-3">styleUrls</td>
@@ -121,7 +129,7 @@
     </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -133,6 +141,12 @@
                 <tr>
                     <td class="col-md-4">
                         <ul class="index-list">
+                            <li>
+                                <a href="#_uISettings" >_uISettings</a>
+                            </li>
+                            <li>
+                                <a href="#bucket" >bucket</a>
+                            </li>
                             <li>
                                 <a href="#company" >company</a>
                             </li>
@@ -164,6 +178,9 @@
                                 <a href="#submitted" >submitted</a>
                             </li>
                             <li>
+                                <a href="#uiHomePageSetting" >uiHomePageSetting</a>
+                            </li>
+                            <li>
                                 <a href="#userExists" >userExists</a>
                             </li>
                             <li>
@@ -186,6 +203,15 @@
                             </li>
                             <li>
                                 <a href="#goBack" >goBack</a>
+                            </li>
+                            <li>
+                                <a href="#initForm" >initForm</a>
+                            </li>
+                            <li>
+                                <a href="#initLogo" >initLogo</a>
+                            </li>
+                            <li>
+                                <a href="#initSubscription" >initSubscription</a>
                             </li>
                             <li>
                                 <a href="#ngOnInit" >ngOnInit</a>
@@ -239,18 +265,18 @@
     </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(fb: <a href="https://angular.io/api/forms/FormBuilder" target="_blank">FormBuilder</a>, route: <a href="https://angular.io/api/router/ActivatedRoute" target="_blank">ActivatedRoute</a>, router: <a href="https://angular.io/api/router/Router" target="_blank">Router</a>, _snackBar: MatSnackBar, authenticationService: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>, companyService: <a href="../injectables/CompanyService.html" target="_self">CompanyService</a>)</code>
+<code>constructor(fb: UntypedFormBuilder, route: ActivatedRoute, router: Router, _snackBar: MatSnackBar, authenticationService: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>, sitesService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, appInitService: <a href="../injectables/AppInitService.html" target="_self">AppInitService</a>, uiSettingService: <a href="../injectables/UISettingsService.html" target="_self">UISettingsService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:37</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:54</a></div>
                             </td>
                         </tr>
 
@@ -271,7 +297,7 @@
                                                         <td>fb</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/forms/FormBuilder" target="_blank" >FormBuilder</a></code>
+                                                                    <code>UntypedFormBuilder</code>
                                                         </td>
                                                   
                                                     <td>
@@ -283,7 +309,7 @@
                                                         <td>route</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/router/ActivatedRoute" target="_blank" >ActivatedRoute</a></code>
+                                                                    <code>ActivatedRoute</code>
                                                         </td>
                                                   
                                                     <td>
@@ -295,7 +321,7 @@
                                                         <td>router</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/router/Router" target="_blank" >Router</a></code>
+                                                                    <code>Router</code>
                                                         </td>
                                                   
                                                     <td>
@@ -328,10 +354,34 @@
                                                     
                                                 </tr>
                                                 <tr>
-                                                        <td>companyService</td>
+                                                        <td>sitesService</td>
                                                   
                                                         <td>
-                                                                        <code><a href="../injectables/CompanyService.html" target="_self" >CompanyService</a></code>
+                                                                        <code><a href="../injectables/SitesService.html" target="_self" >SitesService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>appInitService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AppInitService.html" target="_self" >AppInitService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>uiSettingService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/UISettingsService.html" target="_self" >UISettingsService</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -348,7 +398,7 @@
         </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-inputs">
     <h3 id="inputs">Inputs</h3>
         <table class="table table-sm table-bordered">
             <tbody>
@@ -366,7 +416,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:18</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:20</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -387,7 +437,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:19</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:33</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -396,7 +446,7 @@
 
 
 
-    <section>
+    <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -421,8 +471,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="148"
-                            class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:148</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="91"
+                            class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:91</a></div>
                 </td>
             </tr>
 
@@ -458,8 +508,119 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="84"
-                            class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:84</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="95"
+                            class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:95</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initForm"></a>
+                    <span class="name">
+                        <span ><b>initForm</b></span>
+                        <a href="#initForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initForm()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="76"
+                            class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:76</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initLogo"></a>
+                    <span class="name">
+                        <span ><b>initLogo</b></span>
+                        <a href="#initLogo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initLogo()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="85"
+                            class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:85</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initSubscription"></a>
+                    <span class="name">
+                        <span ><b>initSubscription</b></span>
+                        <a href="#initSubscription"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initSubscription()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="43"
+                            class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:43</a></div>
                 </td>
             </tr>
 
@@ -495,8 +656,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="62"
-                            class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:62</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="69"
+                            class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:69</a></div>
                 </td>
             </tr>
 
@@ -532,8 +693,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="166"
-                            class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:166</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="159"
+                            class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:159</a></div>
                 </td>
             </tr>
 
@@ -543,6 +704,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -612,8 +774,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="89"
-                            class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:89</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="100"
+                            class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:100</a></div>
                 </td>
             </tr>
 
@@ -630,11 +792,63 @@
         </tbody>
     </table>
 </section>
-    <section>
+    <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_uISettings"></a>
+                    <span class="name">
+                        <span ><b>_uISettings</b></span>
+                        <a href="#_uISettings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Subscription</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="bucket"></a>
+                    <span class="name">
+                        <span ><b>bucket</b></span>
+                        <a href="#bucket"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -679,7 +893,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:29</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:28</a></div>
                         </td>
                     </tr>
 
@@ -736,7 +950,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:28</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:27</a></div>
                         </td>
                     </tr>
 
@@ -762,7 +976,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:30</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:29</a></div>
                         </td>
                     </tr>
 
@@ -787,7 +1001,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:25</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:24</a></div>
                         </td>
                     </tr>
 
@@ -807,7 +1021,7 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                        <i>Type : </i>    <code>UntypedFormGroup</code>
 
                     </td>
                 </tr>
@@ -865,7 +1079,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:27</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:26</a></div>
                         </td>
                     </tr>
 
@@ -890,7 +1104,33 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:26</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:25</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="uiHomePageSetting"></a>
+                    <span class="name">
+                        <span ><b>uiHomePageSetting</b></span>
+                        <a href="#uiHomePageSetting"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/UIHomePageSettings.html" target="_self" >UIHomePageSettings</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:40</a></div>
                         </td>
                     </tr>
 
@@ -916,7 +1156,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:33</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:35</a></div>
                         </td>
                     </tr>
 
@@ -942,7 +1182,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:35</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:37</a></div>
                         </td>
                     </tr>
 
@@ -951,7 +1191,7 @@
     </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-accessors">
     <h3 id="accessors">
         Accessors
     </h3>
@@ -971,7 +1211,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:37</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component.ts:39</a></div>
                                 </td>
                             </tr>
 
@@ -981,16 +1221,17 @@
 </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { CompanyService,AuthenticationService, IUserExists} from &#x27;src/app/_services&#x27;;
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { AuthenticationService, IUserExists} from &#x27;src/app/_services&#x27;;
 import { ICompany, IUser }  from &#x27;src/app/_interfaces&#x27;;
 import { Component, Input, OnInit } from &#x27;@angular/core&#x27;;
-import { first } from &#x27;rxjs/operators&#x27;;
-import { FormBuilder, FormGroup, Validators } from &#x27;@angular/forms&#x27;;
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from &#x27;@angular/forms&#x27;;
 import { Router, ActivatedRoute } from &#x27;@angular/router&#x27;;
-import { fadeInAnimation } from &#x27;src/app/_animations&#x27;;
 import { MatSnackBar } from &#x27;@angular/material/snack-bar&#x27;;
-import { environment } from &#x27;src/environments/environment&#x27;;
+import { SitesService } from &#x27;src/app/_services/reporting/sites.service&#x27;;
+import { AppInitService } from &#x27;src/app/_services/system/app-init.service&#x27;;
+import { UIHomePageSettings, UISettingsService } from &#x27;src/app/_services/system/settings/uisettings.service&#x27;;
+import { Subscription } from &#x27;rxjs&#x27;;
 
 @Component({
   selector: &#x27;app-register-account-existing-user-with-token&#x27;,
@@ -999,76 +1240,86 @@ import { environment } from &#x27;src/environments/environment&#x27;;
 })
 export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
 
+  
   @Input() statusMessage: string;
+  compName   : string;
+  company    &#x3D; {} as ICompany;
+  logo       : string;
+  loading    &#x3D; false;
+  submitted  &#x3D; false;
+  returnUrl  : string;
+  error      &#x3D; &#x27;&#x27;;
+  companyName: string;
+  id         : any;
+
+  bucket: string;
+  loginForm: UntypedFormGroup;
   @Input() userName: string;
 
-  compName: string;
-  company &#x3D; {} as ICompany;
-  logo: string;
-
-  loading &#x3D; false;
-  submitted &#x3D; false;
-  returnUrl: string;
-  error &#x3D; &#x27;&#x27;;
-  companyName: string;
-  id: any;
-
-  loginForm: FormGroup;
   userExists: IUserExists;
 
   userPhoneOrEmail: string;
-  // convenience getter for easy access to form fields
-  get f() { return this.loginForm.controls; }
 
+  get f() { return this.loginForm.controls; }
+  uiHomePageSetting: UIHomePageSettings;
+  _uISettings: Subscription;
+
+  initSubscription() {
+    this._uISettings &#x3D; this.uiSettingService.homePageSetting$.subscribe( data &#x3D;&gt; {
+      if (data) {
+        const image  &#x3D; &#x60;${this.bucket}${data.backgroundImage}&#x60;
+        this.uiHomePageSetting &#x3D; data;
+        if (data.logoHomePage) {
+          this.logo &#x3D; &#x60;${this.bucket}${data.logoHomePage}&#x60;;
+        }
+      }
+    }
+  )
+  }
   constructor(
-      private fb: FormBuilder,
+      private fb: UntypedFormBuilder,
       private route: ActivatedRoute,
       private router: Router,
       private _snackBar: MatSnackBar,
       private authenticationService: AuthenticationService,
-      private companyService: CompanyService,
+      private sitesService: SitesService,
+      private appInitService: AppInitService,
+      private uiSettingService     : UISettingsService,
   ) {
-
-    // this.id &#x3D; this.route.snapshot.paramMap.get(&#x27;id&#x27;);
-    this.userExists &#x3D; JSON.parse( this.route.snapshot.paramMap.get(&#x27;data&#x27;) )
-
-    console.log(this.userExists)
-
-    if (this.userExists) {
-      // redirect to home if already logged in
-      if (this.authenticationService.userValue) {
-        this.router.navigate([&#x27;/app-main-menu&#x27;]);
-      }
-    }
-
+    const item &#x3D;   this.route.snapshot.paramMap.get(&#x27;data&#x27;)
+    this.userName &#x3D;  item
   }
 
   ngOnInit(): void {
-
-    this.loginForm &#x3D; this.fb.group({
-      token: [&#x27;&#x27;, Validators.required],
-      userName: [this.userName, Validators.required],
-      password: [&#x27;&#x27;, Validators.required],
-      confirmPassword: [&#x27;&#x27;, Validators.required],
-    });
-
+    this.initForm();
     this.getCompanyInfo();
-    // get return url from route parameters or default to &#x27;/&#x27;
-    this.returnUrl &#x3D; this.route.snapshot.queryParams[&#x27;returnUrl&#x27;] || &#x27;/&#x27;;
+    this.initLogo()
+    this.initSubscription();
+  }
 
-    if (this.company &#x3D;&#x3D;&#x3D; undefined) {
-    } else {
-      this.compName &#x3D; this.company.compName
-    }
+  initForm() {
+    this.loginForm &#x3D; this.fb.group({
+      token            : [&#x27;&#x27;, Validators.required],
+      userName         : [this.userName, Validators.required],
+      password         : [&#x27;&#x27;, Validators.required],
+      confirmPassword  : [&#x27;&#x27;, Validators.required],
+    });
+  }
 
-    this.logo &#x3D; &#x60;${environment.logo}&#x60;
-    this.compName &#x3D; &#x60;${environment.company}&#x60;
+  initLogo() {
+    const logo        &#x3D; this.appInitService.logo;
+    if ( logo)  {  this.logo   &#x3D; logo}
+    this.compName &#x3D; &#x60;${this.appInitService.company}&#x60;
+  }
+
+  getCompanyInfo() {
+    const site &#x3D; this.sitesService.getAssignedSite();
   }
 
   goBack(){
+    this.initForm()
     this.router.navigate([&#x27;/login&#x27;])
   }
-
 
   onSubmit(){
     this.submitted &#x3D; true;
@@ -1105,45 +1356,27 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
         user.type &#x3D; &quot;phone&quot;
       }
 
-      this.authenticationService.assignUserNameAndPassword(user).subscribe(
-        data &#x3D;&gt;
-        {
-          if (data.userExists) {
-            this.notifyEvent(&#x60;${data} . You may login&#x60;, &#x27;Success&#x27;)
-            this.router.navigate([&#x27;/&#x27;]);
-          } else {
-            this.statusMessage &#x3D; &quot;User not found.&quot;
+      this.authenticationService.assignUserNameAndPassword(user).subscribe( {
+        next: data &#x3D;&gt;
+            {
+              this.initForm()
+              if (data.userExists) {
+                this.notifyEvent(&#x60;You may login&#x60;, &#x27;Success&#x27;)
+                this.router.navigate([&#x27;/login&#x27;]);
+              } else {
+                this.notifyEvent(&#x60;${data.message} . &#x60;, &#x27;Error Occured&#x27;)
+                this.statusMessage &#x3D; &quot;User not found.&quot;
+              }
+            },
+            error: error &#x3D;&gt; {
+              this.initForm()
+              this.statusMessage &#x3D; &quot;Error connecting&quot;
+              this.error &#x3D; error;
+              console.log(error)
+              this.loading &#x3D; false;
           }
-        },
-        error &#x3D;&gt; {
-          this.statusMessage &#x3D; &quot;Error connecting&quot;
-          this.error &#x3D; error;
-          console.log(error)
-          this.loading &#x3D; false;
-       });
-    }
-
-  }
-
-  // { path: &#x27;register-existing-user&#x27;, component: RegisterAccountExistingUserComponent, data: { animation: &#x27;isLeft&#x27;}},
-  // { path: &#x27;register-token&#x27;, component: RegisterAccountExistingUserWithTokenComponent, data: { animation: &#x27;isLeft&#x27;}},
-  // { path: &#x27;register-user&#x27;, component: RegisterAccountMainComponent, data: { animation: &#x27;isLeft&#x27;}},
-
-  getCompanyInfo() {
-    try {
-        this.companyService.getCompany().subscribe(data &#x3D;&gt;
-        {
-          this.company  &#x3D; data
-          localStorage.setItem(&#x27;company/compName&#x27;, JSON.stringify(this.company.compName))
-          localStorage.setItem(&#x27;company/phone&#x27;, JSON.stringify(this.company.phone))
-          localStorage.setItem(&#x27;company/address&#x27;, JSON.stringify(this.company.compAddress1))
-        }, error  &#x3D;&gt; {
-          this.statusMessage &#x3D;&quot;Offline&quot;
         }
-      );
-
-    } catch (error) {
-      this.statusMessage &#x3D;&quot;Offline&quot;
+      ) ;
     }
   }
 
@@ -1159,105 +1392,116 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
 </code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-templateData">
-        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;container bg&quot;&gt;
-  &lt;div class&#x3D;&quot;row-height&quot;&gt;
-   &lt;div fxLayout&#x3D;&quot;row&quot; fxLayoutAlign&#x3D;&quot;center center&quot; class&#x3D;&quot;row-height&quot;&gt;
-    &lt;div *ngIf&#x3D;&quot;this.companyName !&#x3D; &#x27;&#x27; ; else loading&quot;&gt;
-      &lt;div fxLayout&#x3D;&quot;row&quot;  fxlayoutGap&#x3D;&quot;20px&quot; class&#x3D;&quot;stat-cards&quot;&gt;
-        &lt;mat-card fxFlex&#x3D;&quot;100%&quot;&gt;
-          &lt;mat-card-title&gt;
-            &lt;div fxLayout&#x3D;&quot;column&quot; fxLayoutAlign&#x3D;&quot;center center&quot; class&#x3D;&quot;row-height&quot;&gt;
-                &lt;img [src]&#x3D;&quot;logo&quot; [alt]&#x3D;&quot;company&quot;  class&#x3D;&quot;logo&quot;&gt;
-                &lt;h2&gt;{{compName}} &lt;/h2&gt;
-            &lt;/div&gt;
-          &lt;/mat-card-title&gt;
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;mat-card *ngIf&#x3D;&quot;companyName !&#x3D; &#x27;&#x27; ; else loading&quot;
+          class&#x3D;&quot;centered centered-flex&quot;&gt;
+    &lt;mat-card-title&gt;
+      &lt;div class&#x3D;&quot;centered-flex&quot;&gt;
+        &lt;div *ngIf&#x3D;&quot;uiHomePageSetting &amp;&amp; uiHomePageSetting.logoHomePage&quot;
+              class&#x3D;&quot;logo&quot;&gt;
+          &lt;app-logo
+                [uiHomePageSetting] &#x3D;&quot;uiHomePageSetting&quot;
+                [logoSize]          &#x3D;&quot;&#x27;large&#x27;&quot;
+                [logo]              &#x3D;&quot;uiHomePageSetting.logoHomePage&quot;
+          &gt;&lt;/app-logo&gt;
+        &lt;/div&gt;
 
-          &lt;mat-card-subtitle&gt;
-            &lt;div fxLayout&#x3D;&quot;column&quot; fxLayoutAlign&#x3D;&quot;center center&quot; class&#x3D;&quot;row-height&quot;&gt;
-              &lt;h2&gt;Register to use the App&lt;/h2&gt;
-              &lt;p&gt;Enter a user name. You may use your phone or email. If it is not unique, &lt;br&gt;
-                  you will be requested to choose another.
-              &lt;/p&gt;
-            &lt;/div&gt;
-          &lt;/mat-card-subtitle&gt;
-
-            &lt;mat-card-content&gt;
-              &lt;div fxLayout&#x3D;&quot;column&quot; fxLayoutAlign&#x3D;&quot;center center&quot; class&#x3D;&quot;row-height&quot;&gt;
-                &lt;form [formGroup]&#x3D;&quot;loginForm&quot; &gt;
-                  &lt;mat-form-field appearance&#x3D;&quot;fill&quot;&gt;
-                    &lt;mat-label&gt;Enter Token&lt;/mat-label&gt;
-                    &lt;input matInput type&#x3D;&quot;text&quot; formControlName&#x3D;&quot;token&quot; class&#x3D;&quot;form-control&quot;
-                        [ngClass]&#x3D;&quot;{ &#x27;is-invalid&#x27;: submitted &amp;&amp; f.token.errors }&quot; /&gt;
-                    &lt;div *ngIf&#x3D;&quot;submitted &amp;&amp; f.token.errors&quot; class&#x3D;&quot;invalid-feedback&quot;&gt;
-                        &lt;div *ngIf&#x3D;&quot;f.token.errors.required&quot;&gt;Unique Token from Message&lt;/div&gt;
-                    &lt;/div&gt;
-                  &lt;/mat-form-field&gt;
-                    &lt;br&gt;
-                    &lt;mat-form-field appearance&#x3D;&quot;fill&quot;&gt;
-                        &lt;mat-label&gt;Enter User Name&lt;/mat-label&gt;
-                        &lt;input matInput type&#x3D;&quot;text&quot; formControlName&#x3D;&quot;userName&quot; class&#x3D;&quot;form-control&quot;
-                            [ngClass]&#x3D;&quot;{ &#x27;is-invalid&#x27;: submitted &amp;&amp; f.userName.errors }&quot; /&gt;
-                        &lt;div *ngIf&#x3D;&quot;submitted &amp;&amp; f.userName.errors&quot; class&#x3D;&quot;invalid-feedback&quot;&gt;
-                            &lt;div *ngIf&#x3D;&quot;f.userName.errors.required&quot;&gt;Unique User Name Required&lt;/div&gt;
-                        &lt;/div&gt;
-                    &lt;/mat-form-field&gt;
-                    &lt;br&gt;
-                    &lt;mat-form-field appearance&#x3D;&quot;fill&quot;&gt;
-                      &lt;mat-label&gt;Password&lt;/mat-label&gt;
-                      &lt;input matInput type&#x3D;&quot;text&quot; formControlName&#x3D;&quot;password&quot; class&#x3D;&quot;form-control&quot;
-                          [ngClass]&#x3D;&quot;{ &#x27;is-invalid&#x27;: submitted &amp;&amp; f.password.errors }&quot; /&gt;
-                      &lt;div *ngIf&#x3D;&quot;submitted &amp;&amp; f.password.errors&quot; class&#x3D;&quot;invalid-feedback&quot;&gt;
-                          &lt;div *ngIf&#x3D;&quot;f.password.errors.required&quot;&gt;Password required&lt;/div&gt;
-                      &lt;/div&gt;
-                    &lt;/mat-form-field&gt;
-                    &lt;br&gt;
-                    &lt;mat-form-field appearance&#x3D;&quot;fill&quot;&gt;
-                      &lt;mat-label&gt;Confirm Password&lt;/mat-label&gt;
-                      &lt;input matInput type&#x3D;&quot;text&quot; formControlName&#x3D;&quot;confirmPassword&quot; class&#x3D;&quot;form-control&quot;
-                          [ngClass]&#x3D;&quot;{ &#x27;is-invalid&#x27;: submitted &amp;&amp; f.confirmPassword.errors }&quot; /&gt;
-                      &lt;div *ngIf&#x3D;&quot;submitted &amp;&amp; f.confirmPassword.errors&quot; class&#x3D;&quot;invalid-feedback&quot;&gt;
-                          &lt;div *ngIf&#x3D;&quot;f.confirmPassword.errors.required&quot;&gt;Confirmation Password  required&lt;/div&gt;
-                      &lt;/div&gt;
-                    &lt;/mat-form-field&gt;
-                    &lt;br&gt;
-                    &lt;div fxLayout&#x3D;&quot;column&quot; fxLayoutAlign&#x3D;&quot;center center&quot; class&#x3D;&quot;row-height&quot;&gt;
-                      &lt;div&gt;
-                        &lt;button mat-raised-button color&#x3D;&quot;primary&quot; (click)&#x3D;&quot;onSubmit()&quot;&gt;Register&lt;/button&gt;
-                      &lt;/div&gt;
-                    &lt;/div&gt;
-                    {{ statusMessage }}
-                &lt;/form&gt;
-              &lt;/div&gt;
-            &lt;br&gt;
-            &lt;mat-divider&gt;&lt;/mat-divider&gt;
-            &lt;br&gt;
-            &lt;div fxLayout&#x3D;&quot;column&quot; fxLayoutAlign&#x3D;&quot;center center&quot; class&#x3D;&quot;row-height&quot;&gt;
-              &lt;button mat-raised-button  (click)&#x3D;&#x27;goBack()&#x27;&gt;Cancel&lt;/button&gt;
-            &lt;/div&gt;
-          &lt;/mat-card-content&gt;
-        &lt;/mat-card&gt;
+        &lt;h2 *ngIf&#x3D;&quot;uiHomePageSetting&quot;&gt;
+            {{uiHomePageSetting.displayCompanyName}}
+        &lt;/h2&gt;
       &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;br&gt;
-    &lt;ng-template #loading &gt;
-      &lt;h2&gt;Please wait...is loading.&lt;/h2&gt;
-      &lt;mat-spinner&gt;&lt;/mat-spinner&gt;
-    &lt;/ng-template&gt;
-  &lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
+    &lt;/mat-card-title&gt;
+
+    &lt;mat-card-subtitle&gt;
+      &lt;div class&#x3D;&quot;centered-flex&quot;&gt;
+        &lt;h2&gt;Register to use the App&lt;/h2&gt;
+        &lt;p&gt;Check your phone or email for the token. Enter a user name. You may use your phone or email. If it is not unique, &lt;br&gt;
+            you will be requested to choose another.
+        &lt;/p&gt;
+        &lt;div *ngIf&#x3D;&quot;statusMessage&quot;&gt;&lt;mat-icon color&#x3D;&quot;warn&quot;&gt;alert&lt;/mat-icon&gt;{{ statusMessage }}&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/mat-card-subtitle&gt;
+
+      &lt;mat-card-content&gt;
+        &lt;form [formGroup]&#x3D;&quot;loginForm&quot; class&#x3D;&quot;centered-flex&quot;&gt;
+          &lt;mat-form-field appearance&#x3D;&quot;fill&quot;&gt;
+            &lt;mat-label&gt;Enter Token&lt;/mat-label&gt;
+            &lt;input matInput type&#x3D;&quot;text&quot; formControlName&#x3D;&quot;token&quot; class&#x3D;&quot;form-control&quot;
+                [ngClass]&#x3D;&quot;{ &#x27;is-invalid&#x27;: submitted &amp;&amp; f.token.errors }&quot; /&gt;
+            &lt;div *ngIf&#x3D;&quot;submitted &amp;&amp; f.token.errors&quot; class&#x3D;&quot;invalid-feedback&quot;&gt;
+                &lt;div *ngIf&#x3D;&quot;f.token.errors.required&quot;&gt;Unique Token from Message&lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/mat-form-field&gt;
+            &lt;br&gt;
+            &lt;mat-form-field appearance&#x3D;&quot;fill&quot;&gt;
+                &lt;mat-label&gt;User Name&lt;/mat-label&gt;
+                &lt;input matInput type&#x3D;&quot;text&quot; formControlName&#x3D;&quot;userName&quot; class&#x3D;&quot;form-control&quot;
+                    [ngClass]&#x3D;&quot;{ &#x27;is-invalid&#x27;: submitted &amp;&amp; f.userName.errors }&quot; /&gt;
+                &lt;div *ngIf&#x3D;&quot;submitted &amp;&amp; f.userName.errors&quot; class&#x3D;&quot;invalid-feedback&quot;&gt;
+                    &lt;div *ngIf&#x3D;&quot;f.userName.errors.required&quot;&gt;Unique User Name Required&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;mat-hint&gt;Email or Phone&lt;/mat-hint&gt;
+            &lt;/mat-form-field&gt;
+            &lt;br&gt;
+            &lt;mat-form-field appearance&#x3D;&quot;fill&quot;&gt;
+              &lt;mat-label&gt;Password&lt;/mat-label&gt;
+              &lt;input matInput type&#x3D;&quot;password&quot; formControlName&#x3D;&quot;password&quot; class&#x3D;&quot;form-control&quot;
+                  [ngClass]&#x3D;&quot;{ &#x27;is-invalid&#x27;: submitted &amp;&amp; f.password.errors }&quot; /&gt;
+              &lt;div *ngIf&#x3D;&quot;submitted &amp;&amp; f.password.errors&quot; class&#x3D;&quot;invalid-feedback&quot;&gt;
+                  &lt;div *ngIf&#x3D;&quot;f.password.errors.required&quot;&gt;Password required&lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/mat-form-field&gt;
+            &lt;br&gt;
+            &lt;mat-form-field appearance&#x3D;&quot;fill&quot;&gt;
+              &lt;mat-label&gt;Confirm Password&lt;/mat-label&gt;
+              &lt;input matInput type&#x3D;&quot;password&quot; formControlName&#x3D;&quot;confirmPassword&quot; class&#x3D;&quot;form-control&quot;
+                  [ngClass]&#x3D;&quot;{ &#x27;is-invalid&#x27;: submitted &amp;&amp; f.confirmPassword.errors }&quot; /&gt;
+              &lt;div *ngIf&#x3D;&quot;submitted &amp;&amp; f.confirmPassword.errors&quot; class&#x3D;&quot;invalid-feedback&quot;&gt;
+                  &lt;div *ngIf&#x3D;&quot;f.confirmPassword.errors.required&quot;&gt;Confirmation Password  required&lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/mat-form-field&gt;
+            &lt;br&gt;
+
+            &lt;div&gt;
+              &lt;button mat-raised-button color&#x3D;&quot;primary&quot; (click)&#x3D;&quot;onSubmit()&quot;&gt;Register&lt;/button&gt;
+            &lt;/div&gt;
+
+            &lt;api-status-display&gt;Service may be unavalible&lt;/api-status-display&gt;
+
+        &lt;/form&gt;
+
+        &lt;br&gt;
+        &lt;mat-divider&gt;&lt;/mat-divider&gt;
+        &lt;br&gt;
+
+        &lt;div&gt;
+          &lt;button mat-raised-button  (click)&#x3D;&#x27;goBack()&#x27;&gt;Cancel&lt;/button&gt;
+        &lt;/div&gt;
+
+    &lt;/mat-card-content&gt;
+
+&lt;/mat-card&gt;
+
+&lt;ng-template #loading &gt;
+  &lt;h2&gt;Please wait ...loading.&lt;/h2&gt;
+  &lt;mat-spinner&gt;&lt;/mat-spinner&gt;
+&lt;/ng-template&gt;
+
 </code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-styleData">
+    <div class="tab-pane fade " id="styleData">
                 <p class="comment">
                     <code>./register-account-existing-user-with-token.component.scss</code>
                 </p>
-                <pre class="line-numbers"><code class="language-scss"></code></pre>
+                <pre class="line-numbers"><code class="language-scss">
+mat-card {
+  width: 500px;
+}
+</code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-tree">
+    <div class="tab-pane fade " id="tree">
         <div id="tree-container"></div>
         <div class="tree-legend">
             <div class="title">
@@ -1282,9 +1526,9 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="container bg">  <div class="row-height">   <div fxLayout="row" fxLayoutAlign="center center" class="row-height">    <div *ngIf="this.companyName != \'\' ; else loading">      <div fxLayout="row"  fxlayoutGap="20px" class="stat-cards">        <mat-card fxFlex="100%">          <mat-card-title>            <div fxLayout="column" fxLayoutAlign="center center" class="row-height">                <img [src]="logo" [alt]="company"  class="logo">                <h2>{{compName}} </h2>            </div>          </mat-card-title>          <mat-card-subtitle>            <div fxLayout="column" fxLayoutAlign="center center" class="row-height">              <h2>Register to use the App</h2>              <p>Enter a user name. You may use your phone or email. If it is not unique, <br>                  you will be requested to choose another.              </p>            </div>          </mat-card-subtitle>            <mat-card-content>              <div fxLayout="column" fxLayoutAlign="center center" class="row-height">                <form [formGroup]="loginForm" >                  <mat-form-field appearance="fill">                    <mat-label>Enter Token</mat-label>                    <input matInput type="text" formControlName="token" class="form-control"                        [ngClass]="{ \'is-invalid\': submitted && f.token.errors }" />                    <div *ngIf="submitted && f.token.errors" class="invalid-feedback">                        <div *ngIf="f.token.errors.required">Unique Token from Message</div>                    </div>                  </mat-form-field>                    <br>                    <mat-form-field appearance="fill">                        <mat-label>Enter User Name</mat-label>                        <input matInput type="text" formControlName="userName" class="form-control"                            [ngClass]="{ \'is-invalid\': submitted && f.userName.errors }" />                        <div *ngIf="submitted && f.userName.errors" class="invalid-feedback">                            <div *ngIf="f.userName.errors.required">Unique User Name Required</div>                        </div>                    </mat-form-field>                    <br>                    <mat-form-field appearance="fill">                      <mat-label>Password</mat-label>                      <input matInput type="text" formControlName="password" class="form-control"                          [ngClass]="{ \'is-invalid\': submitted && f.password.errors }" />                      <div *ngIf="submitted && f.password.errors" class="invalid-feedback">                          <div *ngIf="f.password.errors.required">Password required</div>                      </div>                    </mat-form-field>                    <br>                    <mat-form-field appearance="fill">                      <mat-label>Confirm Password</mat-label>                      <input matInput type="text" formControlName="confirmPassword" class="form-control"                          [ngClass]="{ \'is-invalid\': submitted && f.confirmPassword.errors }" />                      <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">                          <div *ngIf="f.confirmPassword.errors.required">Confirmation Password  required</div>                      </div>                    </mat-form-field>                    <br>                    <div fxLayout="column" fxLayoutAlign="center center" class="row-height">                      <div>                        <button mat-raised-button color="primary" (click)="onSubmit()">Register</button>                      </div>                    </div>                    {{ statusMessage }}                </form>              </div>            <br>            <mat-divider></mat-divider>            <br>            <div fxLayout="column" fxLayoutAlign="center center" class="row-height">              <button mat-raised-button  (click)=\'goBack()\'>Cancel</button>            </div>          </mat-card-content>        </mat-card>      </div>    </div>    <br>    <ng-template #loading >      <h2>Please wait...is loading.</h2>      <mat-spinner></mat-spinner>    </ng-template>  </div>  </div></div></div>'
-    var COMPONENTS = [{'name': 'AccordionComponent', 'selector': 'app-accordion'},{'name': 'AccordionMenuItemEditComponent', 'selector': 'app-accordion-menu-item-edit'},{'name': 'AddInventoryItemComponent', 'selector': 'app-add-inventory-item'},{'name': 'AddItemByTypeComponent', 'selector': 'app-add-item-by-type'},{'name': 'AdjustItemComponent', 'selector': 'app-adjust-item'},{'name': 'AdjustItemNoteComponent', 'selector': 'app-adjust-item-note'},{'name': 'AdjustItemPriceChangeComponent', 'selector': 'app-adjust-item-price-change'},{'name': 'AdjustItemVoidReasonsComponent', 'selector': 'app-adjust-item-void-reasons'},{'name': 'AdjustmentReasonsComponent', 'selector': 'app-adjustment-reasons'},{'name': 'AdminbranditemComponent', 'selector': 'app-adminbranditem'},{'name': 'AdminbrandslistComponent', 'selector': 'app-adminbrandslist'},{'name': 'AdminComponent', 'selector': 'app-admin'},{'name': 'AgGridImageFormatterComponent', 'selector': 'app-ag-grid-image-formatter'},{'name': 'AgGridTestComponent', 'selector': 'app-ag-grid-test'},{'name': 'AgGridToggleComponent', 'selector': 'app-ag-grid-toggle'},{'name': 'AgPaginationComponent', 'selector': 'app-ag-pagination'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AppGateComponent', 'selector': 'app-app-gate'},{'name': 'AreaComponent', 'selector': 'app-widget-area'},{'name': 'AuditPanelComponent', 'selector': 'app-audit-panel'},{'name': 'BarcodeScannerComponent', 'selector': 'app-barcode-scanner'},{'name': 'BrandslistComponent', 'selector': 'app-brandslist'},{'name': 'BrandTypeSelectComponent', 'selector': 'app-brand-type-select'},{'name': 'BtBlueToothScannerComponent', 'selector': 'app-bt-blue-tooth-scanner'},{'name': 'BtPOSPrinterComponent', 'selector': 'app-bt-posprinter'},{'name': 'ButtonComponent', 'selector': 'storybook-button'},{'name': 'ButtonRendererComponent', 'selector': 'app-button-renderer'},{'name': 'CacheSettingsComponent', 'selector': 'app-cache-settings'},{'name': 'CannabisItemEditComponent', 'selector': 'app-cannabis-item-edit'},{'name': 'CardComponent', 'selector': 'app-widget-card'},{'name': 'CartButtonComponent', 'selector': 'app-cart-button'},{'name': 'CashDiscountItemProductEditComponent', 'selector': 'app-cash-discount-item-product-edit'},{'name': 'CashDiscountOrderProductEditComponent', 'selector': 'app-cash-discount-order-product-edit'},{'name': 'CategoriesAlternateComponent', 'selector': 'app-categories-alternate'},{'name': 'CategoriesComponent', 'selector': 'app-categories'},{'name': 'CategorieslistviewComponent', 'selector': 'app-categorieslistview'},{'name': 'CategoryScrollComponent', 'selector': 'app-category-scroll'},{'name': 'CategorySelectComponent', 'selector': 'app-category-select'},{'name': 'ChangepasswordComponent', 'selector': 'app-changepassword'},{'name': 'ChartTableComponent', 'selector': 'app-widget-chart-table'},{'name': 'CheckInProfileComponent', 'selector': 'app-check-in-profile'},{'name': 'ChemicalSpinnersComponent', 'selector': 'app-chemical-spinners'},{'name': 'ChemicalValuesComponent', 'selector': 'app-chemical-values'},{'name': 'ChipsDisplayComponent', 'selector': 'app-chips-display'},{'name': 'ClientSearchSelectorComponent', 'selector': 'app-client-search-selector'},{'name': 'ClientTypeEditComponent', 'selector': 'app-client-type-edit'},{'name': 'ClientTypeListComponent', 'selector': 'app-client-type-list'},{'name': 'ClientTypeSelectionComponent', 'selector': 'app-client-type-selection'},{'name': 'ClientTypesLookupComponent', 'selector': 'app-client-types-lookup'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'DatabaseSchemaComponent', 'selector': 'app-database-schema'},{'name': 'DateScheduleComponent', 'selector': 'app-date-schedule'},{'name': 'DefaultComponent', 'selector': 'app-default'},{'name': 'DemographicsComponent', 'selector': 'app-demographics'},{'name': 'DepartmentSelectComponent', 'selector': 'app-department-select'},{'name': 'DiscountOptionsComponent', 'selector': 'app-discount-options'},{'name': 'DiscountTypeSelectionComponent', 'selector': 'app-discount-type-selection'},{'name': 'DsiEMVPaymentComponent', 'selector': 'app-dsi-emvpayment'},{'name': 'EachProductEditComponent', 'selector': 'app-each-product-edit'},{'name': 'EditButtonsStandardComponent', 'selector': 'app-edit-buttons-standard'},{'name': 'EditSelectedItemsComponent', 'selector': 'app-edit-selected-items'},{'name': 'FacilitiesListComponent', 'selector': 'app-facilities-list'},{'name': 'FacilitySearchSelectorComponent', 'selector': 'app-facility-search-selector'},{'name': 'FilterComponent', 'selector': 'app-widget-filter'},{'name': 'FlatRateEditComponent', 'selector': 'app-flat-rate-edit'},{'name': 'FlatRateListComponent', 'selector': 'app-flat-rate-list'},{'name': 'FlatTaxRateListComponent', 'selector': 'app-flat-tax-rate-list'},{'name': 'FoodProductEditComponent', 'selector': 'app-food-product-edit'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'FormSelectListComponent', 'selector': 'app-form-select-list'},{'name': 'GenericIdSelectComponent', 'selector': 'app-generic-id-select'},{'name': 'GenericNameSelectComponent', 'selector': 'app-generic-name-select'},{'name': 'GiftCardProductEditComponent', 'selector': 'app-gift-card-product-edit'},{'name': 'GoogleMapsComponent', 'selector': 'app-google-maps'},{'name': 'HammerCardComponent', 'selector': 'app-hammer-card'},{'name': 'HeaderComponent', 'selector': 'storybook-header'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HTMLEditPrintingComponent', 'selector': 'app-htmledit-printing'},{'name': 'ImageCaptureComponent', 'selector': 'app-image-capture'},{'name': 'InstalledPrintersComponent', 'selector': 'app-installed-printers'},{'name': 'InventoryAdjustmentNoteComponent', 'selector': 'app-adjustment-note'},{'name': 'InventoryComponent', 'selector': 'app-inventory-settings'},{'name': 'InventoryHistoryItemComponent', 'selector': 'app-inventory-history-item'},{'name': 'InventoryHistoryListComponent', 'selector': 'app-inventory-history-list'},{'name': 'InventoryListComponent', 'selector': 'app-inventory-list'},{'name': 'InventoryListToolTipComponent', 'selector': 'app-inventory-list-tool-tip'},{'name': 'InventoryLocationsComponent', 'selector': 'app-inventory-locations'},{'name': 'IonicGeoLocationComponent', 'selector': 'app-ionic-geo-location'},{'name': 'ItemCategoriesEditComponent', 'selector': 'app-item-categories-edit'},{'name': 'ItemCategoriesListComponent', 'selector': 'app-item-categories-list'},{'name': 'ItemPercentageDiscountProductEditComponent', 'selector': 'app-item-percentage-discount-product-edit'},{'name': 'ItemTypeCategoryAssignmentComponent', 'selector': 'app-item-type-category-assignment'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'ItemTypeDisplayAssignmentComponent', 'selector': 'app-item-type-display-assignment'},{'name': 'ItemTypeEditorComponent', 'selector': 'app-item-type-editor'},{'name': 'ItemTypeSortComponent', 'selector': 'app-item-type-sort'},{'name': 'Label1by8Component', 'selector': 'app-label1by8'},{'name': 'LabelViewSelectorComponent', 'selector': 'app-label-view-selector'},{'name': 'LimitValuesProgressBarsComponent', 'selector': 'app-limit-values-progress-bars'},{'name': 'LiquorProductEditComponent', 'selector': 'app-liquor-product-edit'},{'name': 'ListPrintersElectronComponent', 'selector': 'app-list-printers-electron'},{'name': 'ListProductSearchInputComponent', 'selector': 'app-list-product-search-input'},{'name': 'LoginComponent', 'selector': 'login-dashboard'},{'name': 'MainMenuComponent', 'selector': 'app-main-menu'},{'name': 'MatSpinnerOverlayComponent', 'selector': 'app-mat-spinner-overlay'},{'name': 'MatToggleSelectorComponent', 'selector': 'app-mat-toggle-selector'},{'name': 'MenuCardCategoriesComponent', 'selector': 'app-menu-card-categories'},{'name': 'MenuCompactComponent', 'selector': 'app-menu-compact'},{'name': 'MenuGroupItemEditComponent', 'selector': 'app-menu-group-item-edit'},{'name': 'MenuItemCardComponent', 'selector': 'app-menu-item-card'},{'name': 'MenuitemComponent', 'selector': 'app-menuitem'},{'name': 'MenuItemGalleryComponent', 'selector': 'app-menu-item-gallery'},{'name': 'MenuItemModalComponent', 'selector': 'app-menu-item-modal'},{'name': 'MenuitemsComponent', 'selector': 'app-menuitems'},{'name': 'MenuItemsInfiniteComponent', 'selector': 'app-menu-items-infinite'},{'name': 'MenuManagerComponent', 'selector': 'app-menu-manager'},{'name': 'MenuMinimalComponent', 'selector': 'app-menu-minimal'},{'name': 'MenuSearchBarComponent', 'selector': 'app-menu-search-bar'},{'name': 'MenuTinyComponent', 'selector': 'app-menu-tiny'},{'name': 'MessagesToUserComponent', 'selector': 'app-messages-to-user'},{'name': 'MetaTagChipsComponent', 'selector': 'app-meta-tag-chips'},{'name': 'MetrcIndividualPackageComponent', 'selector': 'app-metrc-individual-package'},{'name': 'MetrcInventoryPropertiesComponent', 'selector': 'app-metrc-inventory-properties'},{'name': 'METRCProductsAddComponent', 'selector': 'app-products-add'},{'name': 'MetrcSalesListComponent', 'selector': 'app-metrc-sales-list'},{'name': 'ModifierProductEditComponent', 'selector': 'app-modifier-product-edit'},{'name': 'MoveInventoryLocationComponent', 'selector': 'app-move-inventory-location'},{'name': 'NewInventoryItemComponent', 'selector': 'app-new-inventory-item'},{'name': 'OrderBarComponent', 'selector': 'app-order-bar'},{'name': 'OrderCardComponent', 'selector': 'app-order-card'},{'name': 'OrderFilterPanelComponent', 'selector': 'app-order-filter-panel'},{'name': 'OrderItemListComponent', 'selector': 'app-order-item-list'},{'name': 'OrderItemsListComponent', 'selector': 'app-order-items-list'},{'name': 'OrderPercentageDiscountProductEditComponent', 'selector': 'app-order-percentage-discount-product-edit'},{'name': 'OrdersFilterComponent', 'selector': 'app-orders-filter'},{'name': 'OrdersMainComponent', 'selector': 'app-orders-main'},{'name': 'OrderTypeSelectionComponent', 'selector': 'app-order-type-selection'},{'name': 'PackageActionsComponent', 'selector': 'app-package-actions'},{'name': 'PackageListComponent', 'selector': 'app-package-list'},{'name': 'PackageSearchSelectorComponent', 'selector': 'app-package-search-selector'},{'name': 'PageComponent', 'selector': 'storybook-page'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PagerBlobComponent', 'selector': 'pager-blob'},{'name': 'PieComponent', 'selector': 'app-widget-pie'},{'name': 'PosListComponent', 'selector': 'app-pos-list'},{'name': 'PosOrderComponent', 'selector': 'app-pos-order'},{'name': 'PosOrderItemComponent', 'selector': 'app-pos-order-item'},{'name': 'PosOrderListComponent', 'selector': 'app-pos-order-list'},{'name': 'PosOrdersComponent', 'selector': 'app-pos-orders'},{'name': 'PosPaymentComponent', 'selector': 'app-pos-payment'},{'name': 'PosPaymentsComponent', 'selector': 'app-pos-payments'},{'name': 'PriceCategoriesComponent', 'selector': 'app-price-categories'},{'name': 'PriceCategoriesEditComponent', 'selector': 'app-price-categories-edit'},{'name': 'PriceCategorySearchComponent', 'selector': 'app-price-category-search'},{'name': 'PriceCategorySelectComponent', 'selector': 'app-price-category-select'},{'name': 'PriceLinesComponent', 'selector': 'app-price-lines'},{'name': 'PriceScheduleComponent', 'selector': 'app-price-schedule'},{'name': 'PriceScheduleConstraintsComponent', 'selector': 'app-price-schedule-constraints'},{'name': 'PriceScheduleFieldsComponent', 'selector': 'app-price-schedule-fields'},{'name': 'PriceScheduleInfoComponent', 'selector': 'app-price-schedule-info'},{'name': 'PriceScheduleListComponent', 'selector': 'app-price-schedule-list'},{'name': 'PriceTiersComponent', 'selector': 'app-price-tiers'},{'name': 'ProducteditComponent', 'selector': 'app-productedit'},{'name': 'ProductInfoPanelComponent', 'selector': 'app-product-info-panel'},{'name': 'ProductlistviewComponent', 'selector': 'app-productlistview'},{'name': 'ProductSearchSelectorComponent', 'selector': 'app-product-search-selector'},{'name': 'ProductTypeSelectComponent', 'selector': 'app-product-type-select'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'ProfileEditorComponent', 'selector': 'app-profile-editor'},{'name': 'ProfileListComponent', 'selector': 'app-profile-list'},{'name': 'ProfileLookupComponent', 'selector': 'app-profile-lookup'},{'name': 'ProgressBarComponent', 'selector': 'app-progress-bar'},{'name': 'ProgressUploaderComponent', 'selector': 'app-progress'},{'name': 'ReceiptLayoutComponent', 'selector': 'app-receipt-layout'},{'name': 'RegisterAccountExistingUserComponent', 'selector': 'app-register-account-existing-user'},{'name': 'RegisterAccountExistingUserWithTokenComponent', 'selector': 'app-register-account-existing-user-with-token'},{'name': 'RegisterAccountMainComponent', 'selector': 'app-register-account-main'},{'name': 'ReportsComponent', 'selector': 'app-reports'},{'name': 'ResetpasswordComponent', 'selector': 'app-resetpassword'},{'name': 'ReviewComponent', 'selector': 'app-review'},{'name': 'ReviewEditComponent', 'selector': 'app-review-edit'},{'name': 'ReviewsComponent', 'selector': 'app-reviews'},{'name': 'RewardTypeFilterComponent', 'selector': 'app-reward-type-filter'},{'name': 'RewardTypeResultsSelectorComponent', 'selector': 'app-reward-type-panel'},{'name': 'RouteDispatchComponent', 'selector': 'app-route-dispatch'},{'name': 'RouteDispatchDetailsComponent', 'selector': 'app-route-dispatch-details'},{'name': 'RouteDispatchDetailsEditComponent', 'selector': 'app-route-dispatch-details-edit'},{'name': 'RouteDispatchEditComponent', 'selector': 'app-route-dispatch-edit'},{'name': 'RouteDispatchesComponent', 'selector': 'app-route-dispatches'},{'name': 'SalesTaxReportComponent', 'selector': 'app-sales-tax-report'},{'name': 'ScaleReaderComponent', 'selector': 'app-scale-reader'},{'name': 'SearchPanelComponent', 'selector': 'app-search-panel'},{'name': 'SearchResultsComponent', 'selector': 'app-search-results'},{'name': 'ServiceTypeEditComponent', 'selector': 'app-service-type-edit'},{'name': 'ServiceTypeListComponent', 'selector': 'app-service-type-list'},{'name': 'SettingsComponent', 'selector': 'app-settings'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'SimpleTinyComponent', 'selector': 'simple-tinymce'},{'name': 'SiteEditComponent', 'selector': 'app-site-edit'},{'name': 'SitepointsComponent', 'selector': 'app-sitepoints'},{'name': 'SitepurchasesComponent', 'selector': 'app-sitepurchases'},{'name': 'SitesComponent', 'selector': 'app-sites'},{'name': 'SiteSelectorComponent', 'selector': 'app-site-selector'},{'name': 'SmokeProductEditComponent', 'selector': 'app-smoke-product-edit'},{'name': 'SoftwareComponent', 'selector': 'app-software'},{'name': 'SpeciesListComponent', 'selector': 'app-species-list'},{'name': 'StatusLookupComponent', 'selector': 'app-status-lookup'},{'name': 'StickyHeaderComponent', 'selector': 'app-sticky-header'},{'name': 'StrainPackagesComponent', 'selector': 'app-strain-packages'},{'name': 'StrainProductEditComponent', 'selector': 'app-strain-product-edit'},{'name': 'StrainsAddComponent', 'selector': 'app-strains-add'},{'name': 'SubMenuItemEditComponent', 'selector': 'app-sub-menu-item-edit'},{'name': 'SummarycardComponent', 'selector': 'app-summarycard'},{'name': 'TaxEditComponent', 'selector': 'app-tax-edit'},{'name': 'TaxFieldsComponent', 'selector': 'app-tax-fields'},{'name': 'TaxListComponent', 'selector': 'app-tax-list'},{'name': 'TaxRateListComponent', 'selector': 'app-tax-rate-list'},{'name': 'TierItemsComponent', 'selector': 'app-tier-items'},{'name': 'TierMenuComponent', 'selector': 'app-tier-menu'},{'name': 'TierPricesComponent', 'selector': 'app-tier-prices'},{'name': 'TiersCardComponent', 'selector': 'app-tiers-card'},{'name': 'TimeScheduleComponent', 'selector': 'app-time-schedule'},{'name': 'TvHappyHoursComponent', 'selector': 'app-tv-happy-hours'},{'name': 'TvPriceSpecialsComponent', 'selector': 'app-tv-price-specials'},{'name': 'TvPriceTierMenuItemsComponent', 'selector': 'app-tv-price-tier-menu-items'},{'name': 'TvPriceTiersComponent', 'selector': 'app-tv-price-tiers'},{'name': 'TypeFilterComponent', 'selector': 'app-type-filter'},{'name': 'TypeResultsSelectorComponent', 'selector': 'app-type-results-selector'},{'name': 'UnitTypeEditComponent', 'selector': 'app-unit-type-edit'},{'name': 'UnitTypeFieldsComponent', 'selector': 'app-unit-type-fields'},{'name': 'UnitTypeListComponent', 'selector': 'unit-types'},{'name': 'UploaderComponent', 'selector': 'app-widget-uploader'},{'name': 'UseGroupTaxAssignmentComponent', 'selector': 'app-use-group-tax-assignment'},{'name': 'UsermessagesComponent', 'selector': 'app-usermessages'},{'name': 'ValueFieldsComponent', 'selector': 'app-value-fields'},{'name': 'ValueSpinnerComponent', 'selector': 'app-value-spinner'},{'name': 'WebEnabledComponent', 'selector': 'app-web-enabled'},{'name': 'WeekDaySelectionComponent', 'selector': 'app-week-day-selection'},{'name': 'WeightedFoodProductEditComponent', 'selector': 'app-weighted-food-product-edit'},{'name': 'WishlistComponent', 'selector': 'app-wishlist'}];
-    var DIRECTIVES = [{'name': 'AutofocusDirective', 'selector': '[appAutoFocusInput]'},{'name': 'CurrencyFormatterDirective', 'selector': '[currencyFormatter]'},{'name': 'DndDirective', 'selector': '[appDnd]'},{'name': 'Events', 'selector': '[Events]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'ScrollableDirective', 'selector': '[appScrollable]'},{'name': 'StickyHeaderDirective', 'selector': '[stickyHeaderDirective]'}];
+        var COMPONENT_TEMPLATE = '<div><mat-card *ngIf="companyName != \'\' ; else loading"          class="centered centered-flex">    <mat-card-title>      <div class="centered-flex">        <div *ngIf="uiHomePageSetting && uiHomePageSetting.logoHomePage"              class="logo">          <app-logo                [uiHomePageSetting] ="uiHomePageSetting"                [logoSize]          ="\'large\'"                [logo]              ="uiHomePageSetting.logoHomePage"          ></app-logo>        </div>        <h2 *ngIf="uiHomePageSetting">            {{uiHomePageSetting.displayCompanyName}}        </h2>      </div>    </mat-card-title>    <mat-card-subtitle>      <div class="centered-flex">        <h2>Register to use the App</h2>        <p>Check your phone or email for the token. Enter a user name. You may use your phone or email. If it is not unique, <br>            you will be requested to choose another.        </p>        <div *ngIf="statusMessage"><mat-icon color="warn">alert</mat-icon>{{ statusMessage }}</div>      </div>    </mat-card-subtitle>      <mat-card-content>        <form [formGroup]="loginForm" class="centered-flex">          <mat-form-field appearance="fill">            <mat-label>Enter Token</mat-label>            <input matInput type="text" formControlName="token" class="form-control"                [ngClass]="{ \'is-invalid\': submitted && f.token.errors }" />            <div *ngIf="submitted && f.token.errors" class="invalid-feedback">                <div *ngIf="f.token.errors.required">Unique Token from Message</div>            </div>          </mat-form-field>            <br>            <mat-form-field appearance="fill">                <mat-label>User Name</mat-label>                <input matInput type="text" formControlName="userName" class="form-control"                    [ngClass]="{ \'is-invalid\': submitted && f.userName.errors }" />                <div *ngIf="submitted && f.userName.errors" class="invalid-feedback">                    <div *ngIf="f.userName.errors.required">Unique User Name Required</div>                </div>                <mat-hint>Email or Phone</mat-hint>            </mat-form-field>            <br>            <mat-form-field appearance="fill">              <mat-label>Password</mat-label>              <input matInput type="password" formControlName="password" class="form-control"                  [ngClass]="{ \'is-invalid\': submitted && f.password.errors }" />              <div *ngIf="submitted && f.password.errors" class="invalid-feedback">                  <div *ngIf="f.password.errors.required">Password required</div>              </div>            </mat-form-field>            <br>            <mat-form-field appearance="fill">              <mat-label>Confirm Password</mat-label>              <input matInput type="password" formControlName="confirmPassword" class="form-control"                  [ngClass]="{ \'is-invalid\': submitted && f.confirmPassword.errors }" />              <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">                  <div *ngIf="f.confirmPassword.errors.required">Confirmation Password  required</div>              </div>            </mat-form-field>            <br>            <div>              <button mat-raised-button color="primary" (click)="onSubmit()">Register</button>            </div>            <api-status-display>Service may be unavalible</api-status-display>        </form>        <br>        <mat-divider></mat-divider>        <br>        <div>          <button mat-raised-button  (click)=\'goBack()\'>Cancel</button>        </div>    </mat-card-content></mat-card><ng-template #loading >  <h2>Please wait ...loading.</h2>  <mat-spinner></mat-spinner></ng-template></div>'
+    var COMPONENTS = [{'name': 'AccordionComponent', 'selector': 'app-accordion'},{'name': 'AccordionMenuItemEditComponent', 'selector': 'app-accordion-menu-item-edit'},{'name': 'ActivityTogglesComponent', 'selector': 'app-activity-toggles'},{'name': 'ActivityTogglesMetrcComponent', 'selector': 'activity-toggles-metrc'},{'name': 'AddInventoryItemComponent', 'selector': 'app-add-inventory-item'},{'name': 'AddItemByTypeComponent', 'selector': 'app-add-item-by-type'},{'name': 'AdjustItemComponent', 'selector': 'app-adjust-item'},{'name': 'AdjustItemNoteComponent', 'selector': 'app-adjust-item-note'},{'name': 'AdjustItemPriceChangeComponent', 'selector': 'app-adjust-item-price-change'},{'name': 'AdjustItemVoidReasonsComponent', 'selector': 'app-adjust-item-void-reasons'},{'name': 'AdjustmentReasonsComponent', 'selector': 'app-adjustment-reasons'},{'name': 'AdjustPaymentComponent', 'selector': 'app-adjust-payment'},{'name': 'AdminbranditemComponent', 'selector': 'app-adminbranditem'},{'name': 'AdminbrandslistComponent', 'selector': 'app-adminbrandslist'},{'name': 'AdminComponent', 'selector': 'app-admin'},{'name': 'AdminDisplayMenuComponent', 'selector': 'Admin-display-menu'},{'name': 'AdminDisplayMenuListComponent', 'selector': 'admin-display-menu-list'},{'name': 'AdminDisplayMenuSelctorComponent', 'selector': 'display-menu-selctor'},{'name': 'AggregateSelectorComponent', 'selector': 'psReporting-aggregate-selector'},{'name': 'AgGridImageFormatterComponent', 'selector': 'app-ag-grid-image-formatter'},{'name': 'AgGridTestComponent', 'selector': 'app-ag-grid-test'},{'name': 'AgGridToggleComponent', 'selector': 'app-ag-grid-toggle'},{'name': 'AgIconFormatterComponent', 'selector': 'app-ag-icon-formatter'},{'name': 'AgPaginationComponent', 'selector': 'app-ag-pagination'},{'name': 'AndOrSelectorComponent', 'selector': 'psReporting-and-or-selector'},{'name': 'APISettingComponent', 'selector': 'app-apisetting'},{'name': 'ApiStatusDisplayComponent', 'selector': 'api-status-display'},{'name': 'ApiStoredValueComponent', 'selector': 'api-stored-value'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AppGateComponent', 'selector': 'app-app-gate'},{'name': 'AppWizardProgressButtonComponent', 'selector': 'wizard-progress-button'},{'name': 'AppWizardStatusComponent', 'selector': 'app-app-wizard-status'},{'name': 'AreaComponent', 'selector': 'app-widget-area'},{'name': 'AuditPanelComponent', 'selector': 'app-audit-panel'},{'name': 'BackgroundCoverComponent', 'selector': 'app-background-cover'},{'name': 'BalanceSheetCalculationsViewComponent', 'selector': 'balance-sheet-calculations-view'},{'name': 'BalanceSheetEditComponent', 'selector': 'app-balance-sheet-edit'},{'name': 'BalanceSheetEmployeeSalesComponent', 'selector': 'balance-sheet-employee-sales'},{'name': 'BalanceSheetFilterComponent', 'selector': 'balance-sheet-filter'},{'name': 'BalanceSheetHeaderViewComponent', 'selector': 'balance-sheet-header-view'},{'name': 'BalanceSheetQuickViewComponent', 'selector': 'balance-sheet-quick-view'},{'name': 'BalanceSheetReportComponent', 'selector': 'balance-sheet-report'},{'name': 'BalanceSheetsComponent', 'selector': 'app-balance-sheets'},{'name': 'BalanceSheetViewComponent', 'selector': 'balance-sheet-view'},{'name': 'BarcodeScannerComponent', 'selector': 'app-barcode-scanner'},{'name': 'BlogListEditComponent', 'selector': 'app-blog-list-edit'},{'name': 'BlogPostComponent', 'selector': 'app-blog-post'},{'name': 'BlogPostEditComponent', 'selector': 'app-blog-post-edit'},{'name': 'BlogPostListComponent', 'selector': 'blog-post-list'},{'name': 'BlogPostSortComponent', 'selector': 'blog-post-sort'},{'name': 'BrandslistComponent', 'selector': 'app-brandslist'},{'name': 'BrandTypeSelectComponent', 'selector': 'app-brand-type-select'},{'name': 'BtBlueToothScannerComponent', 'selector': 'app-bt-blue-tooth-scanner'},{'name': 'BtPOSPrinterComponent', 'selector': 'app-bt-posprinter'},{'name': 'ButtonComponent', 'selector': 'storybook-button'},{'name': 'ButtonRendererComponent', 'selector': 'app-button-renderer'},{'name': 'ButtonRendererComponent', 'selector': 'btn-cell-renderer'},{'name': 'CacheSettingsComponent', 'selector': 'app-cache-settings'},{'name': 'CallUsSelectorComponent', 'selector': 'call-us-selector'},{'name': 'CannabisItemEditComponent', 'selector': 'cannabis-item-edit'},{'name': 'CardComponent', 'selector': 'app-widget-card'},{'name': 'CardDashboardComponent', 'selector': 'app-card-dashboard'},{'name': 'CardPointeCardPayBtnComponent', 'selector': 'card-pointe-card-pay-btn'},{'name': 'CardpointeTransactionsComponent', 'selector': 'app-cardpointe-transactions'},{'name': 'CardPointIDTECHAndroidComponent', 'selector': 'app-card-point-idtechandroid'},{'name': 'CardPointSettingsComponent', 'selector': 'card-point-settings'},{'name': 'CartButtonComponent', 'selector': 'app-cart-button'},{'name': 'CashDrawerSettingsComponent', 'selector': 'app-cash-drawer-settings'},{'name': 'CashPaymentButtonComponent', 'selector': 'cash-payment-buttons'},{'name': 'CashValueCalcComponent', 'selector': 'cash-value-calc'},{'name': 'CategoriesAlternateComponent', 'selector': 'app-categories-alternate'},{'name': 'CategoriesComponent', 'selector': 'app-categories'},{'name': 'CategorieslistviewComponent', 'selector': 'app-categorieslistview'},{'name': 'CategoryItemsBoardComponent', 'selector': 'app-category-items-board'},{'name': 'CategoryItemsBoardItemComponent', 'selector': 'category-items-board-item'},{'name': 'CategoryScrollComponent', 'selector': 'app-category-scroll'},{'name': 'CategorySelectComponent', 'selector': 'app-category-select'},{'name': 'CategorySelectListFilterComponent', 'selector': 'category-select-list-filter'},{'name': 'ChangeDueComponent', 'selector': 'app-balance-due'},{'name': 'ChangepasswordComponent', 'selector': 'app-changepassword'},{'name': 'ChartTableComponent', 'selector': 'app-widget-chart-table'},{'name': 'CheckInProfileComponent', 'selector': 'app-check-in-profile'},{'name': 'ChemicalSpinnersComponent', 'selector': 'app-chemical-spinners'},{'name': 'ChemicalValuesComponent', 'selector': 'app-chemical-values'},{'name': 'ChipsDisplayComponent', 'selector': 'app-chips-display'},{'name': 'ClientInfoComponent', 'selector': 'app-client-info'},{'name': 'ClientSearchSelectorComponent', 'selector': 'app-client-search-selector'},{'name': 'ClientTypeEditComponent', 'selector': 'app-client-type-edit'},{'name': 'ClientTypeListComponent', 'selector': 'app-client-type-list'},{'name': 'ClientTypeSelectionComponent', 'selector': 'app-client-type-selection'},{'name': 'ClientTypesLookupComponent', 'selector': 'app-client-types-lookup'},{'name': 'ClockBreaksTypesComponent', 'selector': 'clock-breaks-types'},{'name': 'ClockInOutComponent', 'selector': 'clock-in-out'},{'name': 'CloseDayValidationComponent', 'selector': 'close-day-validation'},{'name': 'CompanyEditComponent', 'selector': 'company-edit'},{'name': 'CompanyInfoHeaderComponent', 'selector': 'app-company-info-header'},{'name': 'CpVIVO3300Component', 'selector': 'app-cp-vivo3300'},{'name': 'CreditCardPaymentsPrintListComponent', 'selector': 'credit-card-payments-print-list'},{'name': 'CSVImportComponent', 'selector': 'app-csv-import'},{'name': 'DailyReportComponent', 'selector': 'app-daily-report'},{'name': 'DashboardClientTypeSelectionComponent', 'selector': 'dashboard-client-type-selection'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'DashboardMenuComponent', 'selector': 'app-dashboard-menu'},{'name': 'DatabaseSchemaComponent', 'selector': 'app-database-schema'},{'name': 'DateScheduleComponent', 'selector': 'app-date-schedule'},{'name': 'DefaultComponent', 'selector': 'app-default'},{'name': 'DefaultReceiptSelectorComponent', 'selector': 'default-receipt-selector'},{'name': 'DemographicsComponent', 'selector': 'app-demographics'},{'name': 'DepartmentMenuComponent', 'selector': 'app-department-menu'},{'name': 'DepartmentSelectComponent', 'selector': 'app-department-select'},{'name': 'DesignerEditorComponent', 'selector': 'psReporting-designer-editor'},{'name': 'DesignerListComponent', 'selector': 'ps-designer-list'},{'name': 'DeviceInfoComponent', 'selector': 'app-device-info'},{'name': 'DevxReportDesignerComponent', 'selector': 'app-devx-report-designer'},{'name': 'DiscountOptionsComponent', 'selector': 'app-discount-options'},{'name': 'DiscountTypeSelectionComponent', 'selector': 'app-discount-type-selection'},{'name': 'DisplayMenuListComponent', 'selector': 'display-menu-list'},{'name': 'DisplayMenuMainComponent', 'selector': 'display-menu-main'},{'name': 'DisplayMenuMenuComponent', 'selector': 'display-menu-menu'},{'name': 'DisplayMenuSortComponent', 'selector': 'display-menu-sort'},{'name': 'DisplayMenuTitleComponent', 'selector': 'display-menu-title'},{'name': 'DsiAndroidResultsComponent', 'selector': 'pointlesscc-dsi-android-results'},{'name': 'DSIAndroidSettingsComponent', 'selector': 'pointlesscc-dsiandroid-settings'},{'name': 'DsiEMVAndroidComponent', 'selector': 'pointlesscc-dsi-emvandroid'},{'name': 'DSIEMVAndroidPayBtnComponent', 'selector': 'dsiemvandroid-pay-btn'},{'name': 'DsiEMVCardPayBtnComponent', 'selector': 'dsi-emvcard-pay-btn'},{'name': 'DSIEMVElectronComponent', 'selector': 'app-dsiemvelectron'},{'name': 'DsiEMVPaymentComponent', 'selector': 'app-dsi-emvpayment'},{'name': 'DSIEMVTransactionComponent', 'selector': 'app-dsiemvtransaction'},{'name': 'DynamicAgGridComponent', 'selector': 'dynamic-ag-grid'},{'name': 'EditBarComponent', 'selector': 'pgReporting-edit-bar'},{'name': 'EditButtonsStandardComponent', 'selector': 'app-edit-buttons-standard'},{'name': 'EditCSSStylesComponent', 'selector': 'app-edit-cssstyles'},{'name': 'EditSelectedItemsComponent', 'selector': 'app-edit-selected-items'},{'name': 'EditSettingsComponent', 'selector': 'app-edit-settings'},{'name': 'ElectronZoomControlComponent', 'selector': 'electron-zoom-control'},{'name': 'EmailEntryComponent', 'selector': 'app-email-entry'},{'name': 'EmailSettingsComponent', 'selector': 'app-email-settings'},{'name': 'EmployeeClockEditComponent', 'selector': 'app-employee-clock-edit'},{'name': 'EmployeeClockFilterComponent', 'selector': 'employee-clock-filter'},{'name': 'EmployeeClockListComponent', 'selector': 'app-employee-clock-list'},{'name': 'EmployeeDetailsPanelComponent', 'selector': 'app-employee-details-panel'},{'name': 'EmployeeEditComponent', 'selector': 'employee-edit'},{'name': 'EmployeeFilterPanelComponent', 'selector': 'employee-filter-panel'},{'name': 'EmployeeListComponent', 'selector': 'employee-list'},{'name': 'EmployeeLookupComponent', 'selector': 'employee-lookup'},{'name': 'EmployeeMetrcKeyEntryComponent', 'selector': 'app-employee-metrc-key-entry'},{'name': 'ExitLabelSelectionComponent', 'selector': 'exit-label-selection'},{'name': 'ExportDataComponent', 'selector': 'app-export-data'},{'name': 'FacilitiesListComponent', 'selector': 'app-facilities-list'},{'name': 'FacilitySearchSelectorComponent', 'selector': 'app-facility-search-selector'},{'name': 'FastUserSwitchComponent', 'selector': 'app-fast-user-switch'},{'name': 'FieldListTypeAssignerComponent', 'selector': 'pgReporting-field-list-type-assigner'},{'name': 'FieldSelectorComponent', 'selector': 'psReporting-field-selector'},{'name': 'FieldTypeSelectorComponent', 'selector': 'psReporting-field-type-selector'},{'name': 'FieldValueSelectorComponent', 'selector': 'pgReporting-field-value-selector'},{'name': 'FilterBuilderComponent', 'selector': 'pgReporting-filter-builder'},{'name': 'FilterComponent', 'selector': 'app-widget-filter'},{'name': 'FlatRateEditComponent', 'selector': 'app-flat-rate-edit'},{'name': 'FlatRateListComponent', 'selector': 'app-flat-rate-list'},{'name': 'FlatTaxRateListComponent', 'selector': 'app-flat-tax-rate-list'},{'name': 'FloorPlanComponent', 'selector': 'app-floor-plan'},{'name': 'FoodProductEditComponent', 'selector': 'food-product-edit'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'FormSelectListComponent', 'selector': 'form-select-list'},{'name': 'FunctionGroupButtonEditComponent', 'selector': 'function-group-button-edit'},{'name': 'FunctionGroupEditComponent', 'selector': 'app-function-group-edit'},{'name': 'FunctionGroupListComponent', 'selector': 'app-function-group-list'},{'name': 'GenericIdSelectComponent', 'selector': 'app-generic-id-select'},{'name': 'GenericNameSelectComponent', 'selector': 'app-generic-name-select'},{'name': 'GiftCardPayBtnComponent', 'selector': 'gift-card-pay-btn'},{'name': 'GoogleMapsComponent', 'selector': 'app-google-maps'},{'name': 'GridComponentPropertiesComponent', 'selector': 'app-grid-component-properties'},{'name': 'GridcomponentPropertiesDesignComponent', 'selector': 'gridcomponent-properties-design'},{'name': 'GridDesignerInfoComponent', 'selector': 'grid-designer-info'},{'name': 'GridManagerComponent', 'selector': 'menu-manager'},{'name': 'GridManagerEditComponent', 'selector': 'app-grid-manager-edit'},{'name': 'GridMenuLayoutComponent', 'selector': 'grid-menu-layout'},{'name': 'GridSettingsComponent', 'selector': 'app-grid-settings'},{'name': 'GroupByTypesComponent', 'selector': 'psReporting-group-by-types'},{'name': 'HammerCardComponent', 'selector': 'app-hammer-card'},{'name': 'HeaderComponent', 'selector': 'storybook-header'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HouseAccountPayBtnComponent', 'selector': 'app-house-account-pay-btn'},{'name': 'HTMLEditPrintingComponent', 'selector': 'app-htmledit-printing'},{'name': 'IFrameComponent', 'selector': 'app-i-frame'},{'name': 'ImageCaptureComponent', 'selector': 'app-image-capture'},{'name': 'ImageContainerComponent', 'selector': 'image-container'},{'name': 'ImageSwiperComponent', 'selector': 'app-image-swiper'},{'name': 'InstalledPrintersComponent', 'selector': 'app-installed-printers'},{'name': 'InventoryAdjustmentNoteComponent', 'selector': 'app-adjustment-note'},{'name': 'InventoryComponent', 'selector': 'app-inventory-settings'},{'name': 'InventoryCountsViewComponent', 'selector': 'inventory-counts-view'},{'name': 'InventoryHeaderValuesComponent', 'selector': 'app-inventory-header-values'},{'name': 'InventoryHistoryItemComponent', 'selector': 'app-inventory-history-item'},{'name': 'InventoryHistoryListComponent', 'selector': 'app-inventory-history-list'},{'name': 'InventoryListComponent', 'selector': 'app-inventory-list'},{'name': 'InventoryListToolTipComponent', 'selector': 'app-inventory-list-tool-tip'},{'name': 'InventoryLocationsComponent', 'selector': 'app-inventory-locations'},{'name': 'IonicGeoLocationComponent', 'selector': 'app-ionic-geo-location'},{'name': 'IonicSwipeToDeleteComponent', 'selector': 'app-ionic-swipe-to-delete'},{'name': 'ItemCategoriesEditComponent', 'selector': 'app-item-categories-edit'},{'name': 'ItemCategoriesListComponent', 'selector': 'app-item-categories-list'},{'name': 'ItemSalesCardComponent', 'selector': 'item-sales-card'},{'name': 'ItemSortComponent', 'selector': 'app-item-sort'},{'name': 'ItemTypeCategoryAssignmentComponent', 'selector': 'app-item-type-category-assignment'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'ItemTypeDisplayAssignmentComponent', 'selector': 'app-item-type-display-assignment'},{'name': 'ItemTypeEditorComponent', 'selector': 'app-item-type-editor'},{'name': 'ItemTypeSortComponent', 'selector': 'app-item-type-sort'},{'name': 'ItemTypeTogglesEditComponent', 'selector': 'item-type-toggles-edit'},{'name': 'JobTypesEditComponent', 'selector': 'app-job-types-edit'},{'name': 'JobTypesListComponent', 'selector': 'app-job-type-list'},{'name': 'KeyboardButtonComponent', 'selector': 'app-keyboard-button'},{'name': 'KeyboardComponent', 'selector': 'app-keyboard'},{'name': 'KeyboardViewComponent', 'selector': 'app-keyboard-view'},{'name': 'KeyPadComponent', 'selector': 'app-key-pad'},{'name': 'Label1by8Component', 'selector': 'app-label1by8'},{'name': 'LabelViewSelectorComponent', 'selector': 'app-label-view-selector'},{'name': 'LastImageDisplayComponent', 'selector': 'last-image-display'},{'name': 'LimitValuesCardComponent', 'selector': 'app-limit-values-card'},{'name': 'LimitValuesProgressBarsComponent', 'selector': 'limit-values-progress-bars'},{'name': 'LinkedPriceSelectorComponent', 'selector': 'linked-price-selector'},{'name': 'LiquorProductEditComponent', 'selector': 'liquor-product-edit'},{'name': 'ListPrintersElectronComponent', 'selector': 'app-list-printers-electron'},{'name': 'ListProductSearchInputComponent', 'selector': 'list-product-search-input'},{'name': 'LoginComponent', 'selector': 'login-dashboard'},{'name': 'LogoComponent', 'selector': 'app-logo'},{'name': 'M22ResizableComponent', 'selector': '[m22Resizable]'},{'name': 'MainfestEditorComponent', 'selector': 'app-mainfest-editor'},{'name': 'MainfestFilterComponent', 'selector': 'app-mainfest-filter'},{'name': 'MainMenuComponent', 'selector': 'app-main-menu'},{'name': 'ManifestEditorHeaderComponent', 'selector': 'app-manifest-editor-header'},{'name': 'ManifestsComponent', 'selector': 'app-manifests'},{'name': 'ManifestStatusComponent', 'selector': 'app-manifest-status'},{'name': 'ManifestTypeComponent', 'selector': 'app-manifest-type'},{'name': 'MatDateRangeComponent', 'selector': 'mat-date-range'},{'name': 'MatMenuBasicComponent', 'selector': 'mat-menu-basic'},{'name': 'MatSelectComponent', 'selector': 'app-mat-select'},{'name': 'MatSelectNGModelComponent', 'selector': 'mat-select-ngmodel'},{'name': 'MatSelectorComponent', 'selector': 'pgReporting-mat-selector'},{'name': 'MatSpinnerOverlayComponent', 'selector': 'app-mat-spinner-overlay'},{'name': 'MatToggleSelectorComponent', 'selector': 'app-mat-toggle-selector'},{'name': 'MenuBoardComponent', 'selector': 'app-menu-board'},{'name': 'MenuCardCategoriesComponent', 'selector': 'app-menu-card-categories'},{'name': 'MenuCompactComponent', 'selector': 'app-menu-compact'},{'name': 'MenuGroupItemEditComponent', 'selector': 'app-menu-group-item-edit'},{'name': 'MenuItemCardComponent', 'selector': 'app-menu-item-card'},{'name': 'MenuItemCardDashboardComponent', 'selector': 'menu-item-card-dashboard'},{'name': 'MenuitemComponent', 'selector': 'app-menuitem'},{'name': 'MenuItemExtendedPricesComponent', 'selector': 'menu-item-extended-prices'},{'name': 'MenuItemGalleryComponent', 'selector': 'app-menu-item-gallery'},{'name': 'MenuItemModalComponent', 'selector': 'app-menu-item-modal'},{'name': 'MenuItemProductCountComponent', 'selector': 'menu-item-product-count'},{'name': 'MenuItemsInfiniteComponent', 'selector': 'menu-items-infinite'},{'name': 'MenuManagerComponent', 'selector': 'app-menu-manager'},{'name': 'MenuMinimalComponent', 'selector': 'app-menu-minimal'},{'name': 'MenuPriceSelectionComponent', 'selector': 'app-menu-price-selection'},{'name': 'MenuSearchBarComponent', 'selector': 'app-menu-search-bar'},{'name': 'MenuTinyComponent', 'selector': 'app-menu-tiny'},{'name': 'MessagesToUserComponent', 'selector': 'app-messages-to-user'},{'name': 'MetaTagChipsComponent', 'selector': 'app-meta-tag-chips'},{'name': 'MetrcIndividualPackageComponent', 'selector': 'app-metrc-individual-package'},{'name': 'MetrcIntakeHeaderComponent', 'selector': 'metrc-intake-header'},{'name': 'MetrcInventoryPropertiesComponent', 'selector': 'metrc-inventory-properties'},{'name': 'METRCProductsAddComponent', 'selector': 'app-products-add'},{'name': 'MetrcSalesFilterComponent', 'selector': 'metrc-sales-filter'},{'name': 'MetrcSalesListComponent', 'selector': 'app-metrc-sales-list'},{'name': 'MetrcSummaryComponent', 'selector': 'app-metrc-summary'},{'name': 'MoveInventoryLocationComponent', 'selector': 'app-move-inventory-location'},{'name': 'MyThingComponent', 'selector': 'my-thing'},{'name': 'NewInventoryItemComponent', 'selector': 'app-new-inventory-item'},{'name': 'NewOrderTypeComponent', 'selector': 'new-order-type'},{'name': 'OptionsSelectFilterComponent', 'selector': 'options-select-filter'},{'name': 'OrderBarComponent', 'selector': 'app-order-bar'},{'name': 'OrderCardComponent', 'selector': 'app-order-card'},{'name': 'OrderCardsComponent', 'selector': 'app-order-cards'},{'name': 'OrderFilterPanelComponent', 'selector': 'app-order-filter-panel'},{'name': 'OrderHeaderComponent', 'selector': 'app-order-header'},{'name': 'OrderHeaderDemographicsBoardComponent', 'selector': 'app-order-header-demographics-board'},{'name': 'OrderHeaderDemoGraphicsComponent', 'selector': 'app-order-header-demo-graphics'},{'name': 'OrderItemListComponent', 'selector': 'app-order-item-list'},{'name': 'OrderItemsListComponent', 'selector': 'app-order-items-list'},{'name': 'OrderPanelComponent', 'selector': 'app-order-panel'},{'name': 'OrderPercentageDiscountProductEditComponent', 'selector': 'app-order-percentage-discount-product-edit'},{'name': 'OrderPrepComponent', 'selector': 'app-order-prep'},{'name': 'OrdersListComponent', 'selector': 'app-orders-list'},{'name': 'OrdersMainComponent', 'selector': 'app-orders-main'},{'name': 'OrderTotalBoardComponent', 'selector': 'app-order-total-board'},{'name': 'OrderTotalComponent', 'selector': 'app-order-total'},{'name': 'OrderTypeSelectionComponent', 'selector': 'app-order-type-selection'},{'name': 'OverLayComponent', 'selector': 'app-over-lay'},{'name': 'PackageListComponent', 'selector': 'app-package-list'},{'name': 'PackageSearchSelectorComponent', 'selector': 'app-package-search-selector'},{'name': 'PageComponent', 'selector': 'storybook-page'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PagerBlobComponent', 'selector': 'pager-blob'},{'name': 'PagingInfoComponent', 'selector': 'app-paging-info'},{'name': 'PasswordValidationComponent', 'selector': 'app-password-validation'},{'name': 'PaymentBalanceComponent', 'selector': 'app-payment-balance'},{'name': 'PaymentMethodEditComponent', 'selector': 'app-payment-method-edit'},{'name': 'PaymentMethodListComponent', 'selector': 'app-payment-method-list'},{'name': 'PaymentMethodSettingsComponent', 'selector': 'payment-method-settings'},{'name': 'PaymentReportCardComponent', 'selector': 'app-payment-report-card'},{'name': 'PaymentReportComponent', 'selector': 'payment-report'},{'name': 'PaymentReportDataComponent', 'selector': 'app-payment-report-data'},{'name': 'PaypalCardPayBtnComponent', 'selector': 'paypal-card-pay-btn'},{'name': 'PayPalTransactionComponent', 'selector': 'app-pay-pal-transaction'},{'name': 'PieComponent', 'selector': 'app-widget-pie'},{'name': 'PointlessMETRCSalesComponent', 'selector': 'app-pointless-metrcsales'},{'name': 'PosCheckOutButtonsComponent', 'selector': 'pos-check-out-buttons'},{'name': 'PosEditSettingsComponent', 'selector': 'app-pos-edit-settings'},{'name': 'PosListComponent', 'selector': 'app-pos-list'},{'name': 'PosOperationsComponent', 'selector': 'pos-operations'},{'name': 'PosOrderBoardComponent', 'selector': 'app-pos-order-board'},{'name': 'PosOrderComponent', 'selector': 'app-pos-order'},{'name': 'PosOrderFunctionButtonsComponent', 'selector': 'pos-order-function-buttons'},{'name': 'PosOrderItemComponent', 'selector': 'pos-order-item'},{'name': 'PosOrderItemEditComponent', 'selector': 'app-pos-order-item-edit'},{'name': 'PosOrderItemListComponent', 'selector': 'pos-order-item-list'},{'name': 'PosOrderItemsComponent', 'selector': 'pos-order-items'},{'name': 'PosOrderListComponent', 'selector': 'app-pos-order-list'},{'name': 'PosOrderNotesComponent', 'selector': 'pos-order-notes'},{'name': 'PosOrderPriceScheduleInfoComponent', 'selector': 'pos-order-price-schedule-info'},{'name': 'POSOrderScheduleCardComponent', 'selector': 'posorder-schedule-card'},{'name': 'POSOrderScheduleComponent', 'selector': 'pos-order-schedule'},{'name': 'PosOrderScheduleDescriptionComponent', 'selector': 'pos-order-schedule-description'},{'name': 'POSOrderScheduleFormComponent', 'selector': 'app-posorder-schedule-form'},{'name': 'POSOrderServiceTypeComponent', 'selector': 'posorder-service-type'},{'name': 'POSOrderShippingAddressComponent', 'selector': 'posorder-shipping-address'},{'name': 'PosOrderTransactionDataComponent', 'selector': 'pos-order-transaction-data'},{'name': 'PosPaymentComponent', 'selector': 'app-pos-payment'},{'name': 'PosPaymentEditComponent', 'selector': 'pos-payment-edit'},{'name': 'POSPaymentsComponent', 'selector': 'app-pospayments'},{'name': 'PosPaymentsFilterComponent', 'selector': 'app-pos-payments-filter'},{'name': 'PosSplitGroupsComponent', 'selector': 'pos-split-groups'},{'name': 'POSSplitItemsComponent', 'selector': 'app-possplit-items'},{'name': 'PrepContainerComponent', 'selector': 'app-prep-container'},{'name': 'PrepOrderComponent', 'selector': 'app-prep-order'},{'name': 'PrepOrderFilterComponent', 'selector': 'app-prep-order-filter'},{'name': 'PrepOrderItemComponent', 'selector': 'app-prep-order-item'},{'name': 'PriceCategoriesComponent', 'selector': 'app-price-categories'},{'name': 'PriceCategoriesEditComponent', 'selector': 'app-price-categories-edit'},{'name': 'PriceCategoryConversionsComponent', 'selector': 'price-category-conversions'},{'name': 'PriceCategoryMultiplePricesComponent', 'selector': 'price-category-multiple-prices'},{'name': 'PriceCategoryPriceFieldsComponent', 'selector': 'price-category-price-fields'},{'name': 'PriceCategorySearchComponent', 'selector': 'app-price-category-search'},{'name': 'PriceCategorySelectComponent', 'selector': 'app-price-category-select'},{'name': 'PriceCategoryTimeFiltersComponent', 'selector': 'price-category-time-filters'},{'name': 'PriceLinesComponent', 'selector': 'app-price-lines'},{'name': 'PriceOptionsComponent', 'selector': 'app-price-options'},{'name': 'PriceScheduleComponent', 'selector': 'app-price-schedule'},{'name': 'PriceScheduleConstraintsComponent', 'selector': 'app-price-schedule-constraints'},{'name': 'PriceScheduleFieldsComponent', 'selector': 'app-price-schedule-fields'},{'name': 'PriceScheduleInfoComponent', 'selector': 'app-price-schedule-info'},{'name': 'PriceScheduleListComponent', 'selector': 'app-price-schedule-list'},{'name': 'PriceScheduleMenuItemsComponent', 'selector': 'price-schedule-menu-items'},{'name': 'PriceScheduleMenuListComponent', 'selector': 'price-schedule-menu-list'},{'name': 'PriceScheduleMenuOptionsComponent', 'selector': 'price-schedule-menu-options'},{'name': 'PriceScheduleSortComponent', 'selector': 'price-schedule-sort'},{'name': 'PriceTierEditComponent', 'selector': 'app-price-tier-edit'},{'name': 'PriceTierLineEditComponent', 'selector': 'app-price-tier-line-edit'},{'name': 'PriceTierScheduleComponent', 'selector': 'price-tier-schedule'},{'name': 'PriceTiersComponent', 'selector': 'price-tiers-list'},{'name': 'PrinterLocationsComponent', 'selector': 'app-printer-locations'},{'name': 'PrinterLocationSelectionComponent', 'selector': 'app-printer-location-selection'},{'name': 'PrintGroupReceiptComponent', 'selector': 'print-group-receipt'},{'name': 'PrintTemplateComponent', 'selector': 'app-print-template'},{'name': 'PrintTemplatePopUpComponent', 'selector': 'app-print-template-pop-up'},{'name': 'ProducteditComponent', 'selector': 'app-productedit'},{'name': 'ProductFilterComponent', 'selector': 'app-product-filter'},{'name': 'ProductInfoPanelComponent', 'selector': 'app-product-info-panel'},{'name': 'ProductListByBarcodeComponent', 'selector': 'app-product-list-by-barcode'},{'name': 'ProductlistviewComponent', 'selector': 'app-productlistview'},{'name': 'ProductSearchSelector2Component', 'selector': 'product-search-selector2'},{'name': 'ProductSearchSelectorComponent', 'selector': 'app-product-search-selector'},{'name': 'ProductTypeSelectComponent', 'selector': 'product-type-select'},{'name': 'ProfileBillingAddressComponent', 'selector': 'app-profile-billing-address'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'ProfileDemographicsComponent', 'selector': 'app-profile-demographics'},{'name': 'ProfileEditorComponent', 'selector': 'app-profile-editor'},{'name': 'ProfileIDCardInfoComponent', 'selector': 'app-profile-idcard-info'},{'name': 'ProfileListComponent', 'selector': 'app-profile-list'},{'name': 'ProfileLookupComponent', 'selector': 'app-profile-lookup'},{'name': 'ProfileMedInfoComponent', 'selector': 'profile-med-info'},{'name': 'ProfileRolesComponent', 'selector': 'app-profile-roles'},{'name': 'ProfileShippingAddressComponent', 'selector': 'app-profile-shipping-address'},{'name': 'ProgressBarComponent', 'selector': 'app-progress-bar'},{'name': 'ProgressUploaderComponent', 'selector': 'app-progress'},{'name': 'PromptGroupEditComponent', 'selector': 'app-prompt-group-edit'},{'name': 'PromptGroupsComponent', 'selector': 'prompt-groups'},{'name': 'PromptGroupSelectComponent', 'selector': 'prompt-group-select'},{'name': 'PromptInfoPanelComponent', 'selector': 'prompt-info-panel'},{'name': 'PromptItemSelectionComponent', 'selector': 'prompt-item-selection'},{'name': 'PromptItemsSelectedComponent', 'selector': 'prompt-items-selected'},{'name': 'PromptKitsComponent', 'selector': 'prompt-kits'},{'name': 'PromptPanelMenuItemComponent', 'selector': 'prompt-panel-menu-item'},{'name': 'PromptPanelMenuItemsComponent', 'selector': 'prompt-panel-menu-items'},{'name': 'PromptSelectedItemsComponent', 'selector': 'prompt-selected-items'},{'name': 'PromptSubGroupAssociationComponent', 'selector': 'prompt-associations'},{'name': 'PromptSubGroupEditComponent', 'selector': 'app-prompt-sub-group-edit'},{'name': 'PromptSubGroupPanelComponent', 'selector': 'prompt-sub-group-panel'},{'name': 'PromptSubGroupsComponent', 'selector': 'prompt-sub-groups'},{'name': 'PromptWalkThroughComponent', 'selector': 'app-prompt-walk-through'},{'name': 'PSMenuGroupEditComponent', 'selector': 'app-psmenu-group-edit'},{'name': 'PSMenuGroupListComponent', 'selector': 'psmenu-group-list'},{'name': 'PurchaseItemCostHistoryComponent', 'selector': 'purchase-item-cost-history'},{'name': 'PurchaseItemSalesComponent', 'selector': 'purchase-item-sales'},{'name': 'QRCodeTableComponent', 'selector': 'qr-order'},{'name': 'QROrderComponent', 'selector': 'app-qrorder'},{'name': 'QuantiySelectorComponent', 'selector': 'app-quantiy-selector'},{'name': 'QuickPayButtonsComponent', 'selector': 'quick-pay-buttons'},{'name': 'ReceiptLayoutComponent', 'selector': 'app-receipt-layout'},{'name': 'ReceiptViewComponent', 'selector': 'app-receipt-view'},{'name': 'RecieptPopUpComponent', 'selector': 'app-reciept-pop-up'},{'name': 'RegisterAccountExistingUserWithTokenComponent', 'selector': 'app-register-account-existing-user-with-token'},{'name': 'RegisterAccountMainComponent', 'selector': 'app-register-account-main'},{'name': 'ReportGroupSelectorComponent', 'selector': 'psReporting-report-group-selector'},{'name': 'ReportsComponent', 'selector': 'app-reports'},{'name': 'ReportSelectorComponent', 'selector': 'psReporting-report-selector'},{'name': 'ReportTypesComponent', 'selector': 'ps-report-types'},{'name': 'ReportViewerComponent', 'selector': 'app-report-viewer'},{'name': 'RequestMessageComponent', 'selector': 'app-request-message'},{'name': 'RequestMessagesComponent', 'selector': 'app-request-messages'},{'name': 'RequiresSerialComponent', 'selector': 'app-requires-serial'},{'name': 'ResetpasswordComponent', 'selector': 'app-resetpassword'},{'name': 'RetailProductEditComponent', 'selector': 'retail-product-edit'},{'name': 'ReviewComponent', 'selector': 'app-review'},{'name': 'ReviewEditComponent', 'selector': 'app-review-edit'},{'name': 'ReviewsComponent', 'selector': 'app-reviews'},{'name': 'RewardsAvailibleComponent', 'selector': 'app-rewards-availible'},{'name': 'RewardTypeFilterComponent', 'selector': 'app-reward-type-filter'},{'name': 'RewardTypeResultsSelectorComponent', 'selector': 'app-reward-type-panel'},{'name': 'RouteDispatchComponent', 'selector': 'app-route-dispatch'},{'name': 'RouteDispatchDetailsComponent', 'selector': 'app-route-dispatch-details'},{'name': 'RouteDispatchDetailsEditComponent', 'selector': 'app-route-dispatch-details-edit'},{'name': 'RouteDispatchEditComponent', 'selector': 'app-route-dispatch-edit'},{'name': 'RouteDispatchesComponent', 'selector': 'app-route-dispatches'},{'name': 'SalesTaxReportComponent', 'selector': 'sales-tax-report'},{'name': 'SaveChangesButtonComponent', 'selector': 'save-changes-button'},{'name': 'ScaleReaderComponent', 'selector': 'app-scale-reader'},{'name': 'ScaleSettingsComponent', 'selector': 'app-scale-settings'},{'name': 'ScaleValueViewComponent', 'selector': 'scale-value-view'},{'name': 'ScheduledMenuContainerComponent', 'selector': 'scheduled-menu-container'},{'name': 'ScheduledMenuHeaderComponent', 'selector': 'scheduled-menu-header'},{'name': 'ScheduledMenuImageComponent', 'selector': 'scheduled-menu-image'},{'name': 'ScheduledMenuItemComponent', 'selector': 'scheduled-menu-item'},{'name': 'ScheduledMenuItemsComponent', 'selector': 'scheduled-menu-items'},{'name': 'ScheduledMenuListComponent', 'selector': 'scheduled-menu-list'},{'name': 'SearchDebounceInputComponent', 'selector': 'search-debounce-input'},{'name': 'SearchInventoryInputComponent', 'selector': 'search-inventory-input'},{'name': 'SearchPanelComponent', 'selector': 'app-search-panel'},{'name': 'SearchResultsComponent', 'selector': 'app-search-results'},{'name': 'ServiceTypeEditComponent', 'selector': 'app-service-type-edit'},{'name': 'ServiceTypeListComponent', 'selector': 'app-service-type-list'},{'name': 'SettingsComponent', 'selector': 'app-settings'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'SimpleTinyComponent', 'selector': 'simple-tinymce'},{'name': 'SiteEditComponent', 'selector': 'app-site-edit'},{'name': 'SiteEditFormComponent', 'selector': 'app-site-edit-form'},{'name': 'SiteFooterComponent', 'selector': 'app-site-footer'},{'name': 'SitepointsComponent', 'selector': 'app-sitepoints'},{'name': 'SitepurchasesComponent', 'selector': 'app-sitepurchases'},{'name': 'SitesComponent', 'selector': 'app-sites'},{'name': 'SiteSelectorComponent', 'selector': 'app-site-selector'},{'name': 'SoftwareComponent', 'selector': 'app-software-settings'},{'name': 'SortSelectorComponent', 'selector': 'psReporting-sort-selector'},{'name': 'SpeciesListComponent', 'selector': 'app-species-list'},{'name': 'SplashLoadingComponent', 'selector': 'app-splash-loading'},{'name': 'SplitEntrySelectorComponent', 'selector': 'split-entry-selector'},{'name': 'StatusLookupComponent', 'selector': 'app-status-lookup'},{'name': 'StickyHeaderComponent', 'selector': 'app-sticky-header'},{'name': 'StoreCreditEditorComponent', 'selector': 'app-store-credit-editor'},{'name': 'StoreCreditInfoComponent', 'selector': 'store-credit-info'},{'name': 'StoreCreditIssueComponent', 'selector': 'app-store-credit-issue'},{'name': 'StoreCreditListComponent', 'selector': 'app-store-credit-list'},{'name': 'StoreCreditPopUpComponent', 'selector': 'app-store-credit-pop-up'},{'name': 'StoreCreditSearchComponent', 'selector': 'store-credit-search'},{'name': 'StrainBoardComponent', 'selector': 'app-strain-board'},{'name': 'StrainCardComponent', 'selector': 'app-strain-card'},{'name': 'StrainIndicatorComponent', 'selector': 'app-strain-indicator'},{'name': 'StrainPackagesComponent', 'selector': 'app-strain-packages'},{'name': 'StrainProductEditComponent', 'selector': 'app-strain-product-edit'},{'name': 'StrainsAddComponent', 'selector': 'app-strains-add'},{'name': 'StripeCardPayBtnComponent', 'selector': 'stripe-card-pay-btn'},{'name': 'StripeCheckOutComponent', 'selector': 'stripe-check-out'},{'name': 'StripeSettingsComponent', 'selector': 'app-stripe-settings'},{'name': 'SummarycardComponent', 'selector': 'app-summarycard'},{'name': 'TagChipsProductsComponent', 'selector': 'tag-chips-products'},{'name': 'TaxEditComponent', 'selector': 'app-tax-edit'},{'name': 'TaxFieldsComponent', 'selector': 'app-tax-fields'},{'name': 'TaxListComponent', 'selector': 'app-tax-list'},{'name': 'TaxRateListComponent', 'selector': 'app-tax-rate-list'},{'name': 'ThreeCXFabComponent', 'selector': 'app-three-cxfab'},{'name': 'TierItemsComponent', 'selector': 'app-tier-items'},{'name': 'TierMenuComponent', 'selector': 'app-tier-menu'},{'name': 'TierPriceLineComponent', 'selector': 'tier-price-line'},{'name': 'TierPricesComponent', 'selector': 'app-tier-prices'},{'name': 'TiersCardComponent', 'selector': 'app-tiers-card'},{'name': 'TiersWithPricesComponent', 'selector': 'tiers-with-prices'},{'name': 'TimeScheduleComponent', 'selector': 'app-time-schedule'},{'name': 'TipEntryComponent', 'selector': 'tip-entry-amount'},{'name': 'ToggleThemeComponent', 'selector': 'app-toggle-theme'},{'name': 'TriPOSCardPayBtnComponent', 'selector': 'app-tri-poscard-pay-btn'},{'name': 'TriposSettingsComponent', 'selector': 'app-tripos-settings'},{'name': 'TriPosTransactionsComponent', 'selector': 'app-tri-pos-transactions'},{'name': 'TvPriceSpecialsComponent', 'selector': 'app-tv-price-specials'},{'name': 'TvPriceTierMenuItemsComponent', 'selector': 'app-tv-price-tier-menu-items'},{'name': 'TVPriceTiersComponent', 'selector': 'app-tvprice-tiers'},{'name': 'TypeBoardComponent', 'selector': 'app-type-board'},{'name': 'TypeBoardItemsComponent', 'selector': 'app-type-board-items'},{'name': 'TypeFilterComponent', 'selector': 'app-type-filter'},{'name': 'TypeResultsSelectorComponent', 'selector': 'app-type-results-selector'},{'name': 'UIHomePageSettingsComponent', 'selector': 'uihome-page-settings'},{'name': 'UITransactionsComponent', 'selector': 'app-uitransactions'},{'name': 'UnitTypeEditComponent', 'selector': 'app-unit-type-edit'},{'name': 'UnitTypeFieldsComponent', 'selector': 'app-unit-type-fields'},{'name': 'UnitTypeListComponent', 'selector': 'unit-types'},{'name': 'UnitTypePromptComponent', 'selector': 'app-unit-type-prompt'},{'name': 'UnitTypeSelectComponent', 'selector': 'unit-type-select'},{'name': 'UploaderComponent', 'selector': 'app-widget-uploader'},{'name': 'UseGroupTaxAssignmentComponent', 'selector': 'app-use-group-tax-assignment'},{'name': 'UsermessagesComponent', 'selector': 'app-usermessages'},{'name': 'ValueFieldsComponent', 'selector': 'app-value-fields'},{'name': 'ValueFromListSelectorComponent', 'selector': 'value-from-list-selector'},{'name': 'ValueSpinnerComponent', 'selector': 'app-value-spinner'},{'name': 'WebEnabledComponent', 'selector': 'app-web-enabled'},{'name': 'WeekDaySelectionComponent', 'selector': 'app-week-day-selection'},{'name': 'WicEBTCardPayBtnComponent', 'selector': 'wic-ebtcard-pay-btn'},{'name': 'WishlistComponent', 'selector': 'app-wishlist'},{'name': 'YoutubePlayerComponent', 'selector': 'app-youtube-player'},{'name': 'ZoomFloorPlanComponent', 'selector': 'zoom-floor-plan'}];
+    var DIRECTIVES = [{'name': 'AppPasswordMaskDirective', 'selector': '[appAppPasswordMask]'},{'name': 'AutofocusDirective', 'selector': '[appAutoFocusInput]'},{'name': 'CurrencyFormatterDirective', 'selector': '[currencyFormatter]'},{'name': 'DefaultImageDirective', 'selector': 'img[default]'},{'name': 'DisableControlDirective', 'selector': '[disableControl]'},{'name': 'DndDirective', 'selector': '[appDnd]'},{'name': 'Events', 'selector': '[Events]'},{'name': 'FreeDraggingDirective', 'selector': '[appFreeDragging]'},{'name': 'FreeDraggingHandleDirective', 'selector': '[appFreeDraggingHandle]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'InstructionDirective', 'selector': '[appInstruction]'},{'name': 'NgControlAttributeDirective', 'selector': '[formControlName],[formControl]'},{'name': 'NumericDirective', 'selector': '[numeric]'},{'name': 'ResizeDirective', 'selector': '[resize]'},{'name': 'ScrollableDirective', 'selector': '[appScrollable]'},{'name': 'ScrollbarThemeDirectiveDirective', 'selector': '[appScrollbarThemeDirective]'},{'name': 'StickyHeaderDirective', 'selector': '[stickyHeaderDirective]'},{'name': 'UserAuthorizedDirective', 'selector': '[userAuthorized]'}];
     var ACTUAL_COMPONENT = {'name': 'RegisterAccountExistingUserWithTokenComponent'};
 </script>
 <script src="../js/tree.js"></script>
@@ -1298,14 +1542,16 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
 
 
 
-                   
+
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -1317,6 +1563,15 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
@@ -1326,8 +1581,8 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

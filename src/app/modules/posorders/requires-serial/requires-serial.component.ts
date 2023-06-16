@@ -30,7 +30,7 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
   keyboardOption      = false;
   keyboardDisplayOn   = false;
 
-  constructor(private orderMethodService          : OrderMethodsService,
+  constructor(private orderMethodsService          : OrderMethodsService,
               private orderService                : OrdersService,
               private snackBar                    : MatSnackBar,
               private fb                          : UntypedFormBuilder,
@@ -70,10 +70,10 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
 
   applySerial(serial: string) {
     if (this.id && serial) {
-      this.orderMethodService.appylySerial(this.id, serial).subscribe(data =>{
+      this.orderMethodsService.appylySerial(this.id, serial).subscribe(data =>{
         if (data.order) {
-          console.log('Serial Application')
-          this.orderService.updateOrderSubscription(data.order)
+         
+          this.orderMethodsService.updateOrderSubscription(data.order)
           this.dialogRef.close({id: this.id, result : true, order: data.order});
         }
       })

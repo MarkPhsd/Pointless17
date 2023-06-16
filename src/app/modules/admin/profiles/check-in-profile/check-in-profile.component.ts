@@ -79,10 +79,10 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   password2
 
   initSubscriptions() {
-    this._currentOrder = this.orderService.currentOrder$.subscribe(data=> {
+    this._currentOrder = this.orderMethodsService.currentOrder$.subscribe(data=> {
       this.currentOrder = data;
     })
-    this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
+    this._searchModel = this.orderMethodsService.posSearchModel$.subscribe( data => {
       this.searchModel = data
       this.initFilter(data)
     })
@@ -138,7 +138,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    this.orderService.updateOrderSearchModel(null)
+    this.orderMethodsService.updateOrderSearchModel(null)
     if (this._currentOrder) {this._currentOrder.unsubscribe()}
     if (this._searchModel) { this._searchModel.unsubscribe()}
   }
@@ -254,7 +254,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
       return  this.orderService.getOrder(site, data.id.toString(), false)
     })).pipe(switchMap(data => {
       this.orderService.notificationEvent('Orders Consolidated. Primary order unsuspended. Check the current order.', 'Alert')
-      this.orderService.updateOrderSubscriptionLoginAction(data);
+      this.orderMethodsService.updateOrderSubscriptionLoginAction(data);
       return of(data)
     }))
   }
@@ -263,7 +263,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     const searchModel    = {} as IPOSOrderSearchModel;
     searchModel.clientID = parseInt (this.id)
     searchModel.suspendedOrder        = 2;
-    this.orderService.updateOrderSearchModel(searchModel)
+    this.orderMethodsService.updateOrderSearchModel(searchModel)
   }
 
   showOnlyOpenOrders() {
@@ -274,7 +274,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     search.suspendedOrder        = 2;
     search.clientID             = parseInt(this.id)
     this.searchModel            = search;
-    this.orderService.updateOrderSearchModel(search)
+    this.orderMethodsService.updateOrderSearchModel(search)
   }
 
   showClosedOrders() {
@@ -285,7 +285,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     search.suspendedOrder        = 0;
     search.clientID             = parseInt(this.id)
     this.searchModel            = search;
-    this.orderService.updateOrderSearchModel(search)
+    this.orderMethodsService.updateOrderSearchModel(search)
   }
 
   initForm() {
@@ -362,7 +362,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   }
 
   initOrderSearch(searchModel: IPOSOrderSearchModel) {
-    this.orderService.updateOrderSearchModel( searchModel )
+    this.orderMethodsService.updateOrderSearchModel( searchModel )
   }
 
   initFilter(search: IPOSOrderSearchModel) {
@@ -406,7 +406,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   postNewCheckIn() {
     if (!this.clientTable) { return }
     const site = this.siteService.getAssignedSite()
-    const payload = this.orderService.getPayLoadDefaults(null)
+    const payload = this.orderMethodsService.getPayLoadDefaults(null)
     payload.order.clientID = this.clientTable.id;
     const postOrder$ = this.orderService.postOrderWithPayload(site, payload)
     return postOrder$
@@ -438,7 +438,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
         }
       )).pipe(
         switchMap( order => {
-        this.orderService.updateOrderSubscription(order)
+        this.orderMethodsService.updateOrderSubscription(order)
         if (event) {
           this.goBackToList();
         }

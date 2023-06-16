@@ -10,6 +10,7 @@ import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.s
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ChangeDueComponent } from '../balance-due/balance-due.component';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'new-order-type',
@@ -30,7 +31,8 @@ export class NewOrderTypeComponent  {
 
   constructor(private siteService       : SitesService,
               private serviceTypeService: ServiceTypeService,
-              public orderService      : OrdersService,
+              public  orderMethodsService      :  OrderMethodsService,
+              public  orderService: OrdersService,
               private snackBar          : MatSnackBar,
               private _bottomSheet      : MatBottomSheet,
               private userAuthorizationService: UserAuthorizationService,
@@ -50,7 +52,7 @@ export class NewOrderTypeComponent  {
 
   onCancel() {
     try {
-      this.orderService.toggleChangeOrderType = false;
+      this.orderMethodsService.toggleChangeOrderType = false;
       this._bottomSheet.dismiss();
     } catch (error) {
       console.log(error)
@@ -59,13 +61,13 @@ export class NewOrderTypeComponent  {
 
   newOrder(){
     const site = this.siteService.getAssignedSite();
-    const order$ = this.orderService.newDefaultOrder(site)
+    const order$ = this.orderMethodsService.newDefaultOrder(site)
     this.close()
   }
 
   close() {
     try {
-      this.orderService.toggleChangeOrderType = false;
+      this.orderMethodsService.toggleChangeOrderType = false;
       if (this.dialogRef) {
         this.dialogRef.close();
       }
@@ -79,11 +81,11 @@ export class NewOrderTypeComponent  {
 
   setActiveOrder(order) {
     const site  = this.siteService.getAssignedSite();
-    this.orderService.setActiveOrder(site,order)
+    this.orderMethodsService.setActiveOrder(site,order)
   }
 
   orderByType(event) {
-    if (this.orderService.toggleChangeOrderType) {
+    if (this.orderMethodsService.toggleChangeOrderType) {
       this.changeOrderType(event);
       return
     }
@@ -97,12 +99,12 @@ export class NewOrderTypeComponent  {
     if (event && event.filterType && event.filterType != 0 ) {
       this.updateItems = true;
     }
-    const item$ = this.orderService.changeOrderType(site, this.orderService.currentOrder.id, event.id, this.updateItems)
+    const item$ = this.orderService.changeOrderType(site, this.orderMethodsService.currentOrder.id, event.id, this.updateItems)
     this.process$ = item$.pipe(
       switchMap(data => {
         this.message = 'Processed';
-        this.orderService.updateOrderSubscription(data)
-        this.orderService.toggleChangeOrderType = false
+        this.orderMethodsService.updateOrderSubscription(data)
+        this.orderMethodsService.toggleChangeOrderType = false
         try {
           this.close()
         } catch (error) {
@@ -121,7 +123,7 @@ export class NewOrderTypeComponent  {
 
   newOrderWithPayload(serviceType: IServiceType){
     const site = this.siteService.getAssignedSite();
-    const order$ = this.orderService.newOrderWithPayload(site, serviceType)
+    const order$ = this.orderMethodsService.newOrderWithPayload(site, serviceType)
     this.close()
   }
 

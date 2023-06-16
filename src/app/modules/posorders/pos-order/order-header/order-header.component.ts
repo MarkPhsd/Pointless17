@@ -10,6 +10,7 @@ import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printi
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 
 @Component({
   selector: 'app-order-header',
@@ -35,13 +36,14 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
              public  printingService: PrintingService,
              public  platFormService: PlatformService,
              private orderMethodsService: OrderMethodsService,
+             private paymentsMethodsProcessService: PaymentsMethodsProcessService,
              private siteService : SitesService,
              public  authenticationService: AuthenticationService,
              public  prepPrintingService: PrepPrintingServiceService,
     ) {
 
-    this.ordersService.currentOrder$.subscribe(data => {
-      this.isOrderClaimed = this.ordersService.IsOrderClaimed
+    this.orderMethodsService.currentOrder$.subscribe(data => {
+      this.isOrderClaimed = this.orderMethodsService.IsOrderClaimed
     })
 
 
@@ -73,7 +75,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
 
   }
   reSendOrder() {
-    this.action$ = this.orderMethodsService.sendToPrep(this.order, true).pipe(
+    this.action$ = this.paymentsMethodsProcessService.sendToPrep(this.order, true).pipe(
       switchMap(data => {
         return of(data)
       })
@@ -81,7 +83,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
   }
 
   sendOrder() {
-    this.action$ = this.orderMethodsService.sendToPrep(this.order, true).pipe(
+    this.action$ = this.paymentsMethodsProcessService.sendToPrep(this.order, true).pipe(
       switchMap(data => {
         this.clearOrder()
         return of(data)
@@ -102,7 +104,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
         switchMap(data => {
           // this.siteService.notify(`Price Column Set: ${value}`, 'Result', 2000)
           this.order.priceColumn = data;
-          this.ordersService.updateOrder(this.order)
+          this.orderMethodsService.updateOrder(this.order)
           return of(data)
         })
       )

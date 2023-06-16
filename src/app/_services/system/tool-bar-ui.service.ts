@@ -101,7 +101,7 @@ export class ToolBarUIService {
   updateOrderBar(value: boolean) {
 
     const deviceInfo = this.authenticationService.deviceInfo;
-    console.log('device info update order bar', deviceInfo)
+    // console.log('device info update order bar', deviceInfo)/
     if (deviceInfo && deviceInfo.phoneDevice) {
       return;
     }
@@ -223,7 +223,7 @@ export class ToolBarUIService {
         this.resizeWindow();
         return
       }
-      console.log('switchSearchBarSideBar hideToolbars')
+      // console.log('switchSearchBarSideBar hideToolbars')
       this.hideToolbarSearchBar();
       return
     }
@@ -239,7 +239,7 @@ export class ToolBarUIService {
     }
 
     if (this.mainMenuSideBar && this.leftSideBarToggle) {
-      console.log('event 3')
+      // console.log('event 3')
       this._leftSideBarToggle.next(true);
       this._mainMenuSideBar.next(false)
       this.resizeWindow();
@@ -252,7 +252,7 @@ export class ToolBarUIService {
     }
 
     if (this.searchBar) {
-      console.log('event 4')
+      // console.log('event 4')
       this._leftSideBarToggle.next(false);
       this._mainMenuSideBar.next(false)
       this.resizeWindow();

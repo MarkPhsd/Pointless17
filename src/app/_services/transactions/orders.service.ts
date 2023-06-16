@@ -1,26 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
-import { BehaviorSubject, catchError, Observable, of, switchMap } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { IProductPostOrderItem, IServiceType, ISite, IUserProfile }   from 'src/app/_interfaces';
 import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel, IPOSPayment, PosOrderItem,  } from 'src/app/_interfaces/transactions/posorder';
 import { IPagedList } from '../system/paging.service';
 import { IItemBasic } from '../menu/menu.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Capacitor,  } from '@capacitor/core';
-import { StringDecoder } from 'node:string_decoder';
-import { ToolBarUIService } from '../system/tool-bar-ui.service';
 import { IBalanceSheet } from './balance-sheet.service';
-import { PlatformService } from '../system/platform.service';
-import { Router } from '@angular/router';
 import { SitesService } from '../reporting/sites.service';
 import { ItemWithAction } from './posorder-item-service.service';
-import { AuthenticationService } from '../system/authentication.service';
 import { IListBoxItem } from 'src/app/_interfaces/dual-lists';
-import { IPaymentMethod } from './payment-methods.service';
 import { UserAuthorizationService } from '../system/user-authorization.service';
-import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
-import { StoreCreditMethodsService } from '../storecredit/store-credit-methods.service';
-import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { POOrderImport } from '../data/fake-products.service';
 export interface POSOrdersPaged {
   paging : IPagedList
@@ -48,13 +39,11 @@ export interface IVoidOrder {
   voidReason  : string;
   returnToInventory: boolean;
 }
-
 export interface OrderActionResult {
   message : string;
   errorMessage : string;
   order : IPOSOrder;
 }
-
 
 @Injectable({
   providedIn: 'root'
@@ -62,291 +51,17 @@ export interface OrderActionResult {
 
 export class OrdersService {
 
-  public toggleChangeOrderType: boolean;
-
   get platForm() {  return Capacitor.getPlatform(); }
 
-  public _printOrder        = new BehaviorSubject<IPrintOrders>(null);
-  public printOrder$         = this._printOrder.asObservable();
-
-  //applies to order filter for POS
-  private _prepStatus        = new BehaviorSubject<number>(null);
-  public prepStatus$         = this._prepStatus.asObservable();
-  //applies to order filter for POS
-  public printerLocation    : number;
-  private _printerLocation    = new BehaviorSubject<number>(null);
-  public printerLocation$      = this._printerLocation.asObservable();
-  //applies to order filter for POS
-  private _viewOrderType      = new BehaviorSubject<number>(null);
-  public viewOrderType$       = this._viewOrderType.asObservable();
-
-  posSearchModel  :IPOSOrderSearchModel
-  private _posSearchModel     = new BehaviorSubject<IPOSOrderSearchModel>(null);
-  public posSearchModel$      = this._posSearchModel.asObservable();
-
-  private _lastItemAdded     = new BehaviorSubject<IMenuItem>(null);
-  public lastItemAdded$      = this._lastItemAdded.asObservable();
-  lastItemAddedExists : boolean;
-
-  private _splitGroupOrder     = new BehaviorSubject<IPOSOrder>(null);
-  public splitGroupOrder$      = this._splitGroupOrder.asObservable();
-
-  private _posOrders          = new BehaviorSubject<IPOSOrder[]>(null);
-  public posOrders$           = this._posOrders.asObservable();
-
-  printOrder: IPOSOrder ;
-
-  public _scanner             = new BehaviorSubject<boolean>(null);
-  public scanner$             = this._scanner.asObservable();
-
-  private _currentOrder       = new BehaviorSubject<IPOSOrder>(null);
-  public currentOrder$        = this._currentOrder.asObservable();
-  public currentOrder         = {} as IPOSOrder
-
-  private _templateOrder       = new BehaviorSubject<IPOSOrder>(null);
-  public templateOrder$        = this._templateOrder.asObservable();
-  public templateOrder         = {} as IPOSOrder
-
-  private _bottomSheetOpen    = new BehaviorSubject<boolean>(null);
-  public bottomSheetOpen$     = this._bottomSheetOpen.asObservable();
-
-  selectedPayment             : IPOSPayment;
-
-  isApp                       = false;
-  private orderClaimed                : boolean;
-
-  getCurrentOrder() {
-    if (!this.currentOrder) {
-      this.currentOrder = this.getStateOrder();
-    }
-    return this.currentOrder;
-  }
-
-  get IsOrderClaimed() { return this.orderClaimed};
-
-  updateTemplateOrder(order: IPOSOrder) {
-    order = this.getCost(order)
-    this._templateOrder.next(order)
-  }
-
-  getSelectedPayment() {
-    const payment = this.selectedPayment ;
-    this.selectedPayment = null
-    return of(payment);
-  }
-
-  updateBottomSheetOpen(open: boolean) {
-    this._bottomSheetOpen.next(open);
-  }
-
-  updateViewOrderType(value: number) {
-    this._viewOrderType.next(value)
-  }
-
-  updatePrepStatus(value: number) {
-    this._prepStatus.next(value);
-  }
-
-  updateOrderPrinterLocation(value: number) {
-    this.printerLocation = value;
-    this._printerLocation.next(value)
-  }
-
-  updateLastItemAdded(item: IMenuItem) {
-    this.lastItemAddedExists = false
-    // console.log('menuitem updating last', item?.name)
-    if (!item || !item.urlImageMain) {
-      this._lastItemAdded.next(null)
-      return;
-    }
-    this.lastItemAddedExists = true
-    this._lastItemAdded.next(item)
-  }
-
-  updateOrderSubscriptionClearOrder(id: number) {
-    if (id) {
-      const site = this.siteService.getAssignedSite();
-      this.releaseOrder(site, id).subscribe()
-    }
-    this.clearOrderSubscription()
-  }
-
-  clearOrderSubscription() {
-    localStorage.removeItem('orderSubscription')
-    this.toolbarServiceUI.updateOrderBar(false)
-    this.updateLastItemAdded(null)
-    this.updateOrderSubscription(null);
-  }
-
-  updateOrderSubscriptionLoginAction(order: IPOSOrder) {
-    this.storeCreditMethodService.updateSearchModel(null)
-    this.getCost(order)
-    this.currentOrder = order;
-    this._currentOrder.next(order);
-    if (order == null) {
-      order = this.getStateOrder();
-      order = this.getCost(order);
-      if (order) {
-        return;
-      }
-    }
-
-  }
-
-  getCost(order: IPOSOrder) {
-    if (order ) {
-      order.cost = 0
-      if (order.posOrderItems && order.posOrderItems.length>0) {
-        order.posOrderItems.forEach(data => {
-          if (data.wholeSaleCost) {
-            order.cost = data.wholeSaleCost + order.cost
-          }
-        })
-      }
-      console.log('order cost', order?.cost)
-    }
-
-    return order
-  }
-
-  updateOrder(order: IPOSOrder) {
-    this.currentOrder = order;
-    this._currentOrder.next(order);
-    this.setStateOrder(order);
-    this._scanner.next(true)
-  }
-
-  setScanner() {
-    this._scanner.next(true)
-  }
-
-  updateOrderSubscription(order: IPOSOrder) {
-    this.updateOrder(order);
-    if (order == null) {
-      order = this.getStateOrder();
-      if (order) {
-        this.toolbarServiceUI.updateOrderBar(false)
-        return;
-      }
-      if (!order) {
-        this.toolbarServiceUI.updateOrderBar(false);
-      }
-    }
-
-    this.storeCreditMethodService.updateSearchModel(null);
-    this.setScanner()
-    const site = this.siteService.getAssignedSite();
-
-    const devicename = localStorage.getItem('devicename')
-    if (order?.deviceName === devicename) { return }
-    this.orderClaimed = false;
-    if (order && order.id ) {
-      const order$ = this.claimOrder(site, order.id.toString(), order.history)
-      if (!order$) {
-        this.orderClaimed = false;
-        return
-      }
-      order$.subscribe(result => {
-        this.orderClaimed = true;
-      });
-    }
-  }
-
-  setStateOrder(order) {
-    order = this.getCost(order);
-    const orderJson = JSON.stringify(order);
-    localStorage.setItem('orderSubscription', orderJson);
-  }
-
-  getStateOrder(){
-    try {
-      let stringorder = localStorage.getItem('orderSubscription');
-      let order = JSON.parse(stringorder) as IPOSOrder;
-      if (order) {
-        order = this.getCost(order)
-      }
-      return order;
-    } catch (error) {
-      return null;
-    }
-  }
-
-  updateOrderSearchModel(searchModel: IPOSOrderSearchModel) {
-    if (!searchModel) {
-      this._posSearchModel.next(searchModel);
-      return ;
-    }
-    const user = this.userAuthorizationService.currentUser()
-    if (this.showAllOrders) {
-      if (user && user.employeeID && user.employeeID != null) {
-        searchModel.employeeID = 0
-      }
-    }
-    if (!this.showAllOrders && this.userAuthorizationService.isStaff ) {
-      if (user && user.employeeID  && user.employeeID != null) {
-        searchModel.employeeID = user.employeeID
-      }
-    }
-    if (!this.showAllOrders && this.userAuthorizationService.isUser) {
-      if (user && user.id && user.id != null) {
-        searchModel.clientID = user.id
-      }
-    }
-    this.posSearchModel = searchModel
-    this._posSearchModel.next(searchModel);
-  }
-
-  updateSplitGroup(data: IPOSOrder) {
-    this._splitGroupOrder.next(data);
-  }
-
-  get showAllOrders() {
-    let  user = this.userAuthorizationService.user
-    if ( user && user.userPreferences) {
-      return user.userPreferences.showAllOrders
-    }
-    return false
-  }
-
   constructor(
-        private platFormService: PlatformService,
         private http: HttpClient,
         private _SnackBar: MatSnackBar,
-        private toolbarServiceUI: ToolBarUIService,
-        private router: Router,
         private siteService: SitesService,
-        private storeCreditMethodService: StoreCreditMethodsService,
         private userAuthorizationService: UserAuthorizationService,
-        private authorizationService: AuthenticationService,
     )
   {
-    this.isApp = this.platFormService.isApp()
-    const order = this.getStateOrder();
-    if (order) {
-      this.updateOrderSubscription(order)
-    }
+
   }
-
-  setPOSName(name: string): boolean {
-    if (name.length) {
-      if (name.length <= 5) {
-        localStorage.setItem(`devicename`, name)
-        if (localStorage.getItem(`devicename`) === name  ) {
-          return true
-        } else {
-          return false
-        }
-      }
-    } else {
-      localStorage.removeItem('devicename');
-      return false
-    }
-  }
-
-
-
-  get posName(): string { return localStorage.getItem(`devicename`) };
-
   applyItemsToGroup(site: ISite, groupID: number, selectedItems: any) :  Observable<any>  {
     const controller = "/POSOrders/"
 
@@ -704,15 +419,15 @@ export class OrdersService {
 
     return this.http.post<IPOSOrder>(url, orderPayload).pipe( switchMap (
       data => {
-        if (!data) {
+
+        if (!data || +data.id == 0) {
           this.siteService.notify(`Order was not submitted`, "Error", 2000, 'yellow' )
           return of(null)
         }
-        if (data.id == 0 && data.resultMessage){
+        if (data.resultMessage){
           this.siteService.notify(`Order was not submitted ${JSON.stringify(data.resultMessage)}`, "Error", 2000, 'yellow' )
           return of(null)
         }
-        // this.siteService.notify(`Order Submitted Order # ${data.id}`, "Posted", 3000, 'green')
         return of(data)
       })
     )
@@ -959,155 +674,6 @@ export class OrdersService {
 
     return  this.http.get<any>( url )
 
-  }
-
-  //////////////////async await functions.
-  newDefaultOrder(site: ISite)  {
-    if (!site)        {  return }
-    this.newOrderWithPayload(site, null);
-  }
-
-  newOrderWithPayload(site: ISite, serviceType: IServiceType) {
-    const order$ = this.newOrderWithPayloadMethod(site, serviceType )
-    order$.subscribe( {
-        next:  order => {
-          this.processOrderResult(order ,site)
-        },
-        error:  catchError => {
-          this.notificationEvent(`Error submitting Order # ${catchError}`, "Posted")
-        }
-      }
-    )
-  }
-
-  newOrderWithPayloadObs(site: ISite, serviceType: IServiceType) {
-    const order$ = this.newOrderWithPayloadMethod(site, serviceType )
-    return order$.pipe(
-      switchMap( data => {
-           console.log('order')
-          this.processOrderResult(data, site)
-          return of(data)
-      })
-      // , catchError( err  => {
-      //     this.notificationEvent(`Error submitting Order # ${err}`, "Posted")
-      //     return of(err)
-      // }
-    );
-  }
-
-  processOrderResult(order: IPOSOrder, site: ISite, ) {
-    if (order.resultMessage) {
-      this.notificationEvent(`Error submitting Order ${order.resultMessage}`, "Posted")
-      return
-    }
-    this.setActiveOrder(site, order)
-    this.navToMenu();
-  }
-
-  newOrderWithPayloadMethod(site: ISite, serviceType: IServiceType): Observable<IPOSOrder> {
-    if (!site) { return }
-    if (!this.userAuthorizationService.user) {
-      this.siteService.notify('user required', 'Alert', 1000)
-      return of(null)
-    }
-    const orderPayload = this.getPayLoadDefaults(serviceType)
-    return  this.postOrderWithPayload(site, orderPayload).pipe(switchMap(data => {
-      this.processOrderResult(data, site)
-      return of(data)
-    }),
-      catchError(data => {
-      this.siteService.notify('Order not started', 'Alert', 2000, 'red')
-      return of(data)
-    }))
-  }
-
-  newOrderFromTable(site: ISite, serviceType: IServiceType, uuID: string, floorPlanID: number, name: string): Observable<IPOSOrder> {
-    if (!site) { return }
-    let orderPayload = this.getPayLoadDefaults(serviceType)
-    if (!orderPayload.order) {
-      orderPayload.order = {} as IPOSOrder
-    }
-    orderPayload.order.tableUUID = uuID;
-    orderPayload.order.floorPlanID = floorPlanID;
-    orderPayload.order.customerName = name;
-    orderPayload.order.tableName = name;
-    return  this.postOrderWithPayload(site, orderPayload)
-  }
-
-  navToMenu() {
-    // determine device type so weknow how to respond
-    //if it's a phone. then we can go to the menu.
-    if (this.router.url != '/app-main-menu'){
-      if (this.router.url.substring(0, '/menuitems-infinite'.length) != '/menuitems-infinite') {
-         this.router.navigate(['/app-main-menu']);
-        return
-      }
-
-    }
-  }
-
-  getPayLoadDefaults(serviceType: IServiceType): OrderPayload {
-    const orderPayload = {} as OrderPayload;
-    orderPayload.client = null;
-    orderPayload.serviceType = serviceType;
-    orderPayload.deviceName = this.getCurrentAssignedBalanceSheetDeviceName();
-    const order = {} as IPOSOrder;
-    order.deviceName =  orderPayload.deviceName;
-    order.employeeID = +this.getEmployeeID();
-    orderPayload.order = order
-    return orderPayload
-  }
-
-  getEmployeeID(): number {
-    const id = +this.authorizationService?.userValue?.id;
-    // const id = localStorage.getItem('employeeIDLogin')  ;
-    // console.log('employeeIDLogin', id)
-    if (id) {
-      return +id
-    }
-    return  0
-  }
-
-  getCurrentAssignedBalanceSheetDeviceName(): string {
-    try {
-      if (localStorage.getItem('devicename')) {
-        return localStorage.getItem('devicename')
-      }
-    } catch (error) {
-
-      return '';
-    }
-  }
-
-  setActiveOrder(site, order: IPOSOrder) {
-    if (order) {
-      //determine device type so we know how to respond.
-      console.log('set active order',!this.authorizationService?.deviceInfo?.phoneDevice)
-      if (!this.authorizationService?.deviceInfo?.phoneDevice) {
-        this.toolbarServiceUI.updateOrderBar(true)
-      }
-
-      this.updateOrderSubscription(order)
-      this.updateLastItemAdded(null)
-
-      if (!order.history && this.platFormService.isApp()) {
-        if (!order.completionDate && !order.preferredScheduleDate) {
-          if (!this.authorizationService?.deviceInfo?.phoneDevice) {
-            this.toolbarServiceUI.showSearchSideBar()
-          }
-          return
-        }
-      }
-    }
-  }
-
-  toggleOpenOrderBar(isStaff: boolean) {
-    let schedule = 'currentorder'
-    if (isStaff) { schedule = '/currentorder/' }
-    this.router.navigate([ schedule , {mainPanel:true}]);
-    this.toolbarServiceUI.updateOrderBar(false)
-
-    this.toolbarServiceUI.resetOrderBar(true)
   }
 
   changeOrderType(site: ISite, id: number, orderTypeID: number, updateItems: boolean): Observable<IPOSOrder> {

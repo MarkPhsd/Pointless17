@@ -324,9 +324,8 @@
   <!-- </span> -->
 </ng-template>
 
-
 <ng-template #cashPayCustom>
-  <div *ngIf="order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -340,7 +339,7 @@
 </ng-template>
 
 <ng-template #cashPayButtons>
-  <div *ngIf="!smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -354,7 +353,7 @@
 </ng-template>
 
 <ng-template #cashPay100>
-  <div *ngIf="!smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -367,7 +366,7 @@
 </ng-template>
 
 <ng-template #cashPay50>
-  <div *ngIf="!smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -380,7 +379,7 @@
 </ng-template>
 
 <ng-template #cashPay20>
-  <div *ngIf="!smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -393,7 +392,7 @@
 </ng-template>
 
 <ng-template #cashPay10>
-  <div *ngIf="!smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -407,7 +406,7 @@
 
 
 <ng-template #cashPay5>
-  <div *ngIf="!smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -418,7 +417,6 @@
     </cash-payment-buttons>
   </div>
 </ng-template>
-
 
 <ng-template #payButton>
   <button

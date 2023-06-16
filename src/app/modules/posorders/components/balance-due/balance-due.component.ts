@@ -16,8 +16,9 @@ import { TransactionUISettings,  UISettingsService } from 'src/app/_services/sys
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
-import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
+import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 
 @Component({
   selector: 'app-balance-due',
@@ -36,7 +37,7 @@ export class ChangeDueComponent implements OnInit  {
   @Input() payment      : IPOSPayment;
   finalizer: boolean;
   _finalizer: Subscription;
-  
+
   step                  = 1;
   changeDue             : any;
   serviceType           : IServiceType;
@@ -52,6 +53,7 @@ export class ChangeDueComponent implements OnInit  {
               private router   : Router,
                private uISettingsService: UISettingsService,
               private printingService: PrintingService,
+              private paymentMethodProcessService: PaymentsMethodsProcessService,
               private methodsService: CardPointMethodsService,
               private orderMethodService: OrderMethodsService,
               private prepPrintingService: PrepPrintingServiceService ,
@@ -72,12 +74,12 @@ export class ChangeDueComponent implements OnInit  {
       this.printing$ = this.processSendOrder(data.order)
     }
     this.initForm();
-    this.orderService.setScanner( )
+    this.orderMethodsService.setScanner( )
   }
 
-  printingCheck() { 
-    this._finalizer = this.orderMethodService.printingFinalizer$.subscribe(data => {
-      console.log('finalizer for balance due', data)
+  printingCheck() {
+    this._finalizer = this.printingService.printingFinalizer$.subscribe(data => {
+      // console.log('finalizer for balance due', data)
       this.changeDetect.detectChanges()
       this.finalizer = data;
       this.changeDetect.detectChanges()
@@ -86,7 +88,7 @@ export class ChangeDueComponent implements OnInit  {
 
   newDefaultOrder(){
     const site = this.siteService.getAssignedSite();
-    this.action$ = this.orderService.newOrderWithPayloadMethod(site, null).pipe(
+    this.action$ = this.orderMethodsService.newOrderWithPayloadMethod(site, null).pipe(
      switchMap(data => {
       this.dialogRef.close()
        return of(data)
@@ -95,7 +97,7 @@ export class ChangeDueComponent implements OnInit  {
    }
 
   processSendOrder(order: IPOSOrder) {
-    return this.orderMethodService.sendToPrep(order, true)
+    return this.paymentMethodProcessService.sendToPrep(order, true)
   }
 
   changeStep() {
@@ -137,7 +139,7 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   clearSubscriptions() {
-    this.orderService.updateOrderSubscription(null) ;
+    this.orderMethodsService.updateOrderSubscription(null) ;
     this.toolbarServiceUI.updateOrderBar(false);
   }
 
@@ -145,8 +147,8 @@ export class ChangeDueComponent implements OnInit  {
     if (this.payment && (this.payment.groupID && this.payment.groupID != 0)) {
       const site = this.siteService.getAssignedSite();
        this.printing$ = this.orderService.getPOSOrderGroupTotal(site, this.payment.orderID, this.payment.groupID).pipe(switchMap(data => {
-        this.orderService.printOrder = data;
-        this.printingService.previewReceipt();
+        this.printingService.printOrder = data;
+        this.printingService.previewReceipt(null, data);
         return of(data)
       }))
       return;
@@ -192,7 +194,7 @@ export class ChangeDueComponent implements OnInit  {
             const orderID = data.orderID.toString();
             return this.orderService.getOrder(site, orderID, false);
         })).subscribe(data => {
-          this.orderService.updateOrderSubscription(data)
+          this.orderMethodsService.updateOrderSubscription(data)
           this.dialogRef.close()
           if (this.uiTransactions && this.uiTransactions.cardPointBoltEnabled) {
             this.capture(this.payment)

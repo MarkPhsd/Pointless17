@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >ContactsService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >ContactsService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -77,10 +84,18 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_searchModel" >_searchModel</a>
+                            </li>
+                            <li>
                                 <a href="#pageNumber" >pageNumber</a>
                             </li>
                             <li>
                                 <a href="#pageSize" >pageSize</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#searchModel$" >searchModel$</a>
                             </li>
                         </ul>
                     </td>
@@ -94,6 +109,12 @@
                 <tr>
                     <td class="col-md-4">
                         <ul class="index-list">
+                            <li>
+                                <a href="#addClient" >addClient</a>
+                            </li>
+                            <li>
+                                <a href="#deleteClient" >deleteClient</a>
+                            </li>
                             <li>
                                 <a href="#getBrandItemCountByType" >getBrandItemCountByType</a>
                             </li>
@@ -110,7 +131,19 @@
                                 <a href="#getContactBySearch" >getContactBySearch</a>
                             </li>
                             <li>
+                                <a href="#getContactBySearchModel" >getContactBySearchModel</a>
+                            </li>
+                            <li>
                                 <a href="#getContacts" >getContacts</a>
+                            </li>
+                            <li>
+                                <a href="#getLiveBrands" >getLiveBrands</a>
+                            </li>
+                            <li>
+                                <a href="#last30DayValues" >last30DayValues</a>
+                            </li>
+                            <li>
+                                <a href="#updateSearchModel" >updateSearchModel</a>
                             </li>
                         </ul>
                     </td>
@@ -124,18 +157,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(http: <a href="../injectables/HttpClientCacheService.html" target="_self">HttpClientCacheService</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+<code>constructor(httpLive: HttpClient, http: <a href="../injectables/HttpClientCacheService.html" target="_self">HttpClientCacheService</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/_services/people/contacts.service.ts:15</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/_services/people/contacts.service.ts:27</a></div>
                             </td>
                         </tr>
 
@@ -152,6 +185,18 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                                <tr>
+                                                        <td>httpLive</td>
+                                                  
+                                                        <td>
+                                                                    <code>HttpClient</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
                                                 <tr>
                                                         <td>http</td>
                                                   
@@ -185,11 +230,173 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addClient"></a>
+                    <span class="name">
+                        <span ><b>addClient</b></span>
+                        <a href="#addClient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addClient(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, userProfile: <a href="../interfaces/IUserProfile.html" target="_self">IUserProfile</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="35"
+                            class="link-to-prism">src/app/_services/people/contacts.service.ts:35</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>userProfile</td>
+                                    <td>
+                                                <code><a href="../interfaces/IUserProfile.html" target="_self" >IUserProfile</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IUserProfile&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteClient"></a>
+                    <span class="name">
+                        <span ><b>deleteClient</b></span>
+                        <a href="#deleteClient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteClient(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="49"
+                            class="link-to-prism">src/app/_services/people/contacts.service.ts:49</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IUserProfile&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -210,8 +417,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="40"
-                            class="link-to-prism">src/app/_services/people/contacts.service.ts:40</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="93"
+                            class="link-to-prism">src/app/_services/people/contacts.service.ts:93</a></div>
                 </td>
             </tr>
 
@@ -221,6 +428,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -283,15 +491,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getBrands(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+<code>getBrands(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, clientSearchModel: <a href="../interfaces/ClientSearchModel.html" target="_self">ClientSearchModel</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="24"
-                            class="link-to-prism">src/app/_services/people/contacts.service.ts:24</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="77"
+                            class="link-to-prism">src/app/_services/people/contacts.service.ts:77</a></div>
                 </td>
             </tr>
 
@@ -301,6 +509,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -322,13 +531,25 @@
 
 
                                 </tr>
+                                <tr>
+                                    <td>clientSearchModel</td>
+                                    <td>
+                                                <code><a href="../interfaces/ClientSearchModel.html" target="_self" >ClientSearchModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IUserProfile[]&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ClientSearchResults&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -358,8 +579,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="89"
-                            class="link-to-prism">src/app/_services/people/contacts.service.ts:89</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="174"
+                            class="link-to-prism">src/app/_services/people/contacts.service.ts:174</a></div>
                 </td>
             </tr>
 
@@ -369,6 +590,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -438,8 +660,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="105"
-                            class="link-to-prism">src/app/_services/people/contacts.service.ts:105</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="190"
+                            class="link-to-prism">src/app/_services/people/contacts.service.ts:190</a></div>
                 </td>
             </tr>
 
@@ -449,6 +671,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -518,8 +741,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="73"
-                            class="link-to-prism">src/app/_services/people/contacts.service.ts:73</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="142"
+                            class="link-to-prism">src/app/_services/people/contacts.service.ts:142</a></div>
                 </td>
             </tr>
 
@@ -529,6 +752,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -592,7 +816,88 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IUserProfile[]&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ClientSearchResults&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getContactBySearchModel"></a>
+                    <span class="name">
+                        <span ><b>getContactBySearchModel</b></span>
+                        <a href="#getContactBySearchModel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getContactBySearchModel(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, searchModel: <a href="../interfaces/ClientSearchModel.html" target="_self">ClientSearchModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="158"
+                            class="link-to-prism">src/app/_services/people/contacts.service.ts:158</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>searchModel</td>
+                                    <td>
+                                                <code><a href="../interfaces/ClientSearchModel.html" target="_self" >ClientSearchModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ClientSearchResults&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -622,8 +927,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="57"
-                            class="link-to-prism">src/app/_services/people/contacts.service.ts:57</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="110"
+                            class="link-to-prism">src/app/_services/people/contacts.service.ts:110</a></div>
                 </td>
             </tr>
 
@@ -633,6 +938,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -670,12 +976,268 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getLiveBrands"></a>
+                    <span class="name">
+                        <span ><b>getLiveBrands</b></span>
+                        <a href="#getLiveBrands"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getLiveBrands(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, clientSearchModel: <a href="../interfaces/ClientSearchModel.html" target="_self">ClientSearchModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="63"
+                            class="link-to-prism">src/app/_services/people/contacts.service.ts:63</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>clientSearchModel</td>
+                                    <td>
+                                                <code><a href="../interfaces/ClientSearchModel.html" target="_self" >ClientSearchModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ClientSearchResults&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="last30DayValues"></a>
+                    <span class="name">
+                        <span ><b>last30DayValues</b></span>
+                        <a href="#last30DayValues"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>last30DayValues(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="126"
+                            class="link-to-prism">src/app/_services/people/contacts.service.ts:126</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/Last30DaysSales.html" target="_self" >Observable&lt;Last30DaysSales&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateSearchModel"></a>
+                    <span class="name">
+                        <span ><b>updateSearchModel</b></span>
+                        <a href="#updateSearchModel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateSearchModel(searchModel: <a href="../interfaces/ClientSearchModel.html" target="_self">ClientSearchModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="25"
+                            class="link-to-prism">src/app/_services/people/contacts.service.ts:25</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>searchModel</td>
+                                    <td>
+                                                <code><a href="../interfaces/ClientSearchModel.html" target="_self" >ClientSearchModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>
-            <section>
+            <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_searchModel"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>_searchModel</b></span>
+                        <a href="#_searchModel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new BehaviorSubject&lt;ClientSearchModel&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/_services/people/contacts.service.ts:19</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -700,7 +1262,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/_services/people/contacts.service.ts:21</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/_services/people/contacts.service.ts:22</a></div>
                         </td>
                     </tr>
 
@@ -731,7 +1293,33 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/_services/people/contacts.service.ts:22</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/_services/people/contacts.service.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="searchModel$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>searchModel$</b></span>
+                        <a href="#searchModel$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._searchModel.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/_services/people/contacts.service.ts:20</a></div>
                         </td>
                     </tr>
 
@@ -743,14 +1331,16 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
 // import { HttpClient } from &#x27;@angular/common/http&#x27;;
 import { AuthenticationService } from &#x27;src/app/_services/system/authentication.service&#x27;;
-import { Observable, } from &#x27;rxjs&#x27;;
-import { ISite, IUserProfile }   from  &#x27;src/app/_interfaces&#x27;;
-import { environment } from &#x27;src/environments/environment&#x27;;
+import { BehaviorSubject, Observable, } from &#x27;rxjs&#x27;;
+import { ClientSearchModel, ClientSearchResults, ISite, IUserProfile, Last30DaysSales }   from  &#x27;src/app/_interfaces&#x27;;
 import { HttpClientCacheService } from &#x27;src/app/_http-interceptors/http-client-cache.service&#x27;;
+import { HttpClient } from &#x27;@angular/common/http&#x27;;
+import { IItemBasic } from &#x27;../menuPrompt/prompt-group.service&#x27;;
+import { I } from &#x27;@angular/cdk/keycodes&#x27;;
 
 // import { HttpClientService } from &#x27;src/app/_http-interceptors/http-client.service&#x27;;
 
@@ -760,14 +1350,65 @@ import { HttpClientCacheService } from &#x27;src/app/_http-interceptors/http-cli
 })
 export class ContactsService {
 
-  constructor(
-               private http: HttpClientCacheService,
-               private auth: AuthenticationService) { }
+  private _searchModel       &#x3D; new BehaviorSubject&lt;ClientSearchModel&gt;(null);
+  public searchModel$        &#x3D; this._searchModel.asObservable();
 
   pageNumber &#x3D; 1;
   pageSize   &#x3D; 50;
 
-  getBrands(site: ISite): Observable&lt;IUserProfile[]&gt; {
+  updateSearchModel(searchModel:  ClientSearchModel) {
+    this._searchModel.next(searchModel);
+  }
+
+  constructor(
+               private httpLive: HttpClient,
+               private http: HttpClientCacheService,
+               private auth: AuthenticationService) { }
+
+
+  addClient(site: ISite, userProfile: IUserProfile): Observable&lt;IUserProfile&gt; {
+
+    const  controller &#x3D;  &quot;/clients/&quot;
+
+    const endPoint &#x3D; &quot;postClient&quot;
+
+	  const parameters &#x3D; &#x27;&#x27;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.httpLive.post&lt;IUserProfile&gt;(uri, userProfile)
+
+  };
+
+  deleteClient(site: ISite, id: number): Observable&lt;IUserProfile&gt; {
+
+    const  controller &#x3D;  &quot;/clients/&quot;
+
+    const endPoint &#x3D; &quot;deleteClient&quot;
+
+	  const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.httpLive.delete&lt;IUserProfile&gt;(uri)
+
+  };
+
+  getLiveBrands(site: ISite, clientSearchModel: ClientSearchModel): Observable&lt;ClientSearchResults&gt; {
+
+    const  controller &#x3D;  &quot;/clients/&quot;
+
+    const endPoint &#x3D; &quot;getBrands&quot;
+
+	  const parameters &#x3D; &#x27;&#x27;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.httpLive.post&lt;ClientSearchResults&gt;(uri, clientSearchModel)
+
+  };
+
+  getBrands(site: ISite, clientSearchModel: ClientSearchModel): Observable&lt;ClientSearchResults&gt; {
 
     const  controller &#x3D;  &quot;/clients/&quot;
 
@@ -779,7 +1420,7 @@ export class ContactsService {
 
     const url &#x3D; { url: uri, cacheMins: 30}
 
-    return  this.http.get&lt;IUserProfile[]&gt;(url)
+    return  this.http.post&lt;ClientSearchResults&gt;(url , clientSearchModel)
 
   };
 
@@ -816,7 +1457,23 @@ export class ContactsService {
 
   };
 
-  getContactBySearch(site: ISite, fields: string, pageNumber: number, pageSize: number): Observable&lt;IUserProfile[]&gt; {
+  last30DayValues(site: ISite, id): Observable&lt;Last30DaysSales&gt; {
+
+    const   controller &#x3D;  &quot;/clients/&quot;
+
+    const endPoint &#x3D; &#x60;last30DayValues&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const url &#x3D; { url: uri, cacheMins: 5}
+
+    return  this.http.get&lt;Last30DaysSales&gt;(url)
+
+  };
+
+  getContactBySearch(site: ISite, fields: string, pageNumber: number, pageSize: number): Observable&lt;ClientSearchResults&gt; {
 
     const  controller &#x3D;  &quot;/clients/&quot;
 
@@ -828,7 +1485,23 @@ export class ContactsService {
 
     const url &#x3D; { url: uri, cacheMins: 0}
 
-    return  this.http.get&lt;IUserProfile[]&gt;(url)
+    return  this.http.get&lt;ClientSearchResults&gt;(url)
+
+  };
+
+  getContactBySearchModel(site: ISite, searchModel: ClientSearchModel): Observable&lt;ClientSearchResults&gt; {
+
+    const  controller &#x3D;  &quot;/clients/&quot;
+
+    const endPoint &#x3D; &quot;GetClientBySearchModel&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const url &#x3D; { url: uri, cacheMins: 0}
+
+    return  this.http.post&lt;ClientSearchResults&gt;(url, searchModel)
 
   };
 
@@ -864,6 +1537,9 @@ export class ContactsService {
 
   };
 
+
+
+
 }
 </code></pre>
     </div>
@@ -876,14 +1552,15 @@ export class ContactsService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -895,6 +1572,15 @@ export class ContactsService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -904,8 +1590,8 @@ export class ContactsService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

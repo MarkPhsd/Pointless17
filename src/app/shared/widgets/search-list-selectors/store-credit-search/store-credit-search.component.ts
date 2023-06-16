@@ -52,7 +52,7 @@ export class StoreCreditSearchComponent implements OnInit,OnDestroy {
   )
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
     })
   }
@@ -61,6 +61,7 @@ export class StoreCreditSearchComponent implements OnInit,OnDestroy {
     private fb                       : UntypedFormBuilder,
     private orderService             : OrdersService,
     private sitesService             : SitesService,
+    public orderMethodsService       : OrderMethodsService,
     private storeCreditMethodsService: StoreCreditMethodsService,
   )
   {   }

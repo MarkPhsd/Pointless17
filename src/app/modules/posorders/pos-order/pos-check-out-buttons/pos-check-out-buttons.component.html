@@ -3,27 +3,37 @@
       [style.width]="deviceWidthPercentage"
       *ngIf="order && !mainPanel && !smallDevice && (uiSettings && uiSettings.wideOrderBar)" >
     <div *ngIf="!phoneDevice">
-      <button mat-raised-button
-              color="primary"
+      <button 
+              [disabled]="disableViewCart"
+              mat-raised-button
+              color="accent"
               class="button"
               (click)="toggleOpenOrderBar()">
-        <div *ngIf="order && order.history">
-          <mat-icon>view</mat-icon>
+        <div *ngIf="order && (order.balanceRemaining == 0 || order.history)">
+          <mat-icon color="primary">edit</mat-icon>
           View Cart
         </div>
-        <div *ngIf="order && !order.history">
-          <mat-icon>edit</mat-icon>
+        <div *ngIf="order && ( order.balanceRemaining != 0 && !order.history)">
+          <mat-icon color="primary">edit</mat-icon>
           Edit Cart
         </div>
       </button>
     </div>
     <div>
+    
       <button  mat-raised-button
-              color="primary"
+              [disabled]="disableCheckOut"
+              color="accent"
               class="button"
               (click)="makePayment()">
-        <mat-icon>credit_card</mat-icon>
-        Check Out
+          <div *ngIf="order && (order.balanceRemaining == 0 || order.history)">
+            <mat-icon color="primary">credit_card</mat-icon>
+            View Payment
+          </div>
+          <div *ngIf="order && ( order.balanceRemaining != 0 && !order.history)">
+            <mat-icon color="primary">credit_card</mat-icon>
+            Check Out
+          </div>
       </button>
     </div>
   </div>

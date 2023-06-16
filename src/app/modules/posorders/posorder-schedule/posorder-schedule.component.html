@@ -48,7 +48,7 @@
         </mat-tab>
 
         <mat-tab (click)="selectedIndex == 2"
-                *ngIf   ="serviceType && serviceType.promptScheduleTime"
+                *ngIf   ="serviceType && serviceType?.promptScheduleTime"
                  label  ="Schedule Information">
           <app-posorder-schedule-form
               [serviceType]="serviceType"
@@ -70,7 +70,9 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <div *ngIf="(selectedIndex == 3 || selectedIndex == 2) || (showSaveButton && selectedIndex != 0)">
+    <div *ngIf="(selectedIndex == 3 ||
+                 selectedIndex == 2) || 
+                (showSaveButton && selectedIndex != 0)">
       <button mat-raised-button
               color="primary"
               (click)="save()">

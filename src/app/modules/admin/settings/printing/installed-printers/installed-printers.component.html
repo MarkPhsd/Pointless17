@@ -170,7 +170,7 @@
 </ng-template>
 
 <ng-template #receiptLayoutView>
-  <div *ngIf="orderService.currentOrder
+  <div *ngIf="orderMethodsService.currentOrder
         && receiptLayoutSetting
         && receiptStyles
         && receiptLayoutSetting.option9
@@ -187,7 +187,7 @@
                         [paymentsText]="paymentsText"
                         [subFooterText]="subFooterText"
                         [items]="items"
-                        [order]="orderService.currentOrder"
+                        [order]="orderMethodsService.currentOrder"
                         [payments]="payments"
                         [orderType]="orderTypes"
                         [testdata]="true"

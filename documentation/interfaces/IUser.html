@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -42,24 +42,31 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Interfaces</li>
-  <li
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
   >
   IUser</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -70,7 +77,7 @@
 
 
 
-        <section>
+        <section data-compodoc="block-index">
             <h3 id="index">Index</h3>
             <table class="table table-sm table-bordered index-table">
                 <tbody>
@@ -96,6 +103,18 @@
                                         </a>
                                 </li>
                                 <li>
+                                        <a href="#employeeID" 
+>
+                                            employeeID
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#errorMessage" 
+>
+                                            errorMessage
+                                        </a>
+                                </li>
+                                <li>
                                         <a href="#firstName" 
 >
                                             firstName
@@ -114,9 +133,27 @@
                                         </a>
                                 </li>
                                 <li>
+                                        <a href="#loginAttempts" 
+>
+                                            loginAttempts
+                                        </a>
+                                </li>
+                                <li>
                                         <a href="#message" 
 >
                                             message
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#metrcKey" 
+>
+                                            metrcKey
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#metrcUser" 
+>
+                                            metrcUser
                                         </a>
                                 </li>
                                 <li>
@@ -132,6 +169,12 @@
                                         </a>
                                 </li>
                                 <li>
+                                        <a href="#preferences" 
+>
+                                            preferences
+                                        </a>
+                                </li>
+                                <li>
                                             <span class="modifier">Optional</span>
                                         <a href="#resetCode" 
 >
@@ -142,6 +185,12 @@
                                         <a href="#roles" 
 >
                                             roles
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#sortMenu" 
+>
+                                            sortMenu
                                         </a>
                                 </li>
                                 <li>
@@ -168,6 +217,12 @@
                                             username
                                         </a>
                                 </li>
+                                <li>
+                                        <a href="#userPreferences" 
+>
+                                            userPreferences
+                                        </a>
+                                </li>
                             </ul>
                         </td>
                     </tr>
@@ -177,7 +232,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-properties">
                 <h3 id="inputs">Properties</h3>
                     <table class="table table-sm table-bordered">
                         <tbody>
@@ -232,6 +287,72 @@
                                 <tr>
                                     <td class="col-md-4">
                                         <code>email:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="employeeID"></a>
+                                        <span class="name "><b>employeeID</b>
+                                            <a href="#employeeID">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>employeeID:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="errorMessage"></a>
+                                        <span class="name "><b>errorMessage</b>
+                                            <a href="#errorMessage">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>errorMessage:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
 </code>
                                     </td>
                                 </tr>
@@ -353,6 +474,39 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
+                                        <a name="loginAttempts"></a>
+                                        <span class="name "><b>loginAttempts</b>
+                                            <a href="#loginAttempts">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>loginAttempts:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
                                         <a name="message"></a>
                                         <span class="name "><b>message</b>
                                             <a href="#message">
@@ -364,6 +518,72 @@
                                 <tr>
                                     <td class="col-md-4">
                                         <code>message:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="metrcKey"></a>
+                                        <span class="name "><b>metrcKey</b>
+                                            <a href="#metrcKey">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>metrcKey:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="metrcUser"></a>
+                                        <span class="name "><b>metrcUser</b>
+                                            <a href="#metrcUser">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>metrcUser:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
 </code>
                                     </td>
                                 </tr>
@@ -452,6 +672,39 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
+                                        <a name="preferences"></a>
+                                        <span class="name "><b>preferences</b>
+                                            <a href="#preferences">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>preferences:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
                                         <a name="resetCode"></a>
                                         <span class="name "><b>resetCode</b>
                                             <a href="#resetCode">
@@ -501,6 +754,39 @@
                                 <tr>
                                     <td class="col-md-4">
                                         <code>roles:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="sortMenu"></a>
+                                        <span class="name "><b>sortMenu</b>
+                                            <a href="#sortMenu">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>sortMenu:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
 </code>
                                     </td>
                                 </tr>
@@ -651,12 +937,48 @@
 
                         </tbody>
                     </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="userPreferences"></a>
+                                        <span class="name "><b>userPreferences</b>
+                                            <a href="#userPreferences">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>userPreferences:         <code><a href="../interfaces/UserPreferences.html" target="_self" >UserPreferences</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../interfaces/UserPreferences.html" target="_self" >UserPreferences</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
             </section>
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">export interface IUser {
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ProductSearchModel } from &quot;../search-models/product-search&quot;;
+import { IPOSOrderSearchModel } from &quot;../transactions/posorder&quot;;
+
+export interface IUser {
     id: number;
     username: string;
     password: string;
@@ -670,21 +992,44 @@
     phone: string;
     roles: string;
     type:  string;
+    employeeID: number;
+    metrcUser: string;
+    metrcKey: string;
+    loginAttempts: number;
     message: string;
+    errorMessage: string;
+    sortMenu: string;
+    preferences: string;
+    userPreferences: UserPreferences;
 }
+
+export interface UserPreferences {
+  darkMode: boolean;
+  swapMenuOrderPlacement: boolean;
+  orderFilter: IPOSOrderSearchModel
+  product: ProductSearchModel;
+  showAllOrders: boolean;
+
+  firstTime_notifyShowAllOrders: boolean;
+  firstTime_FilterOrderInstruction: boolean;
+
+
+}
+
 </code></pre>
     </div>
 </div>
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -696,6 +1041,15 @@
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
@@ -705,8 +1059,8 @@
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

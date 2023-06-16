@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -35,32 +35,37 @@
 
 
 <ol class="breadcrumb">
-  <li>Components</li>
-  <li
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
   >
   TypeResultsSelectorComponent</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
-        <li >
-            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
         </li>
-        <li >
-            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
         </li>
-        <li >
-            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
     <h3>File</h3>
 </p>
 <p class="comment">
@@ -74,16 +79,17 @@
         <h3>Implements</h3>
     </p>
     <p class="comment">
-                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+                <code>OnInit</code>
                     <code><a href="../miscellaneous/variables.html#s" target="_self" >OnChanges</a></code>
-                    <code><a href="https://angular.io/api/core/AfterViewInit" target="_blank" >AfterViewInit</a></code>
+                    <code><a href="../miscellaneous/functions.html#AfterViewInit" target="_self" >AfterViewInit</a></code>
     </p>
 
 
-<section>
+<section data-compodoc="block-metadata">
     <h3>Metadata</h3>
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover metadata">
         <tbody>
+
 
 
 
@@ -99,6 +105,8 @@
                 <td class="col-md-3">selector</td>
                 <td class="col-md-9"><code>app-type-results-selector</code></td>
             </tr>
+
+
 
             <tr>
                 <td class="col-md-3">styleUrls</td>
@@ -123,7 +131,7 @@
     </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -170,13 +178,13 @@
                                 <a href="#gridApi" >gridApi</a>
                             </li>
                             <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#gridColumnApi" >gridColumnApi</a>
-                            </li>
-                            <li>
                                 <a href="#gridOptions" >gridOptions</a>
                             </li>
                             <li>
+                                <a href="#id" >id</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
                                 <a href="#input" >input</a>
                             </li>
                             <li>
@@ -200,10 +208,22 @@
                                 <a href="#params" >params</a>
                             </li>
                             <li>
+                                <a href="#priceScheduleID" >priceScheduleID</a>
+                            </li>
+                            <li>
                                 <a href="#priceScheduleTracking" >priceScheduleTracking</a>
                             </li>
                             <li>
+                                <a href="#requiredBrands" >requiredBrands</a>
+                            </li>
+                            <li>
+                                <a href="#requiredCategories" >requiredCategories</a>
+                            </li>
+                            <li>
                                 <a href="#requiredItems" >requiredItems</a>
+                            </li>
+                            <li>
+                                <a href="#requiredItemTypes" >requiredItemTypes</a>
                             </li>
                             <li>
                                 <a href="#rowCount" >rowCount</a>
@@ -250,6 +270,9 @@
                 <tr>
                     <td class="col-md-4">
                         <ul class="index-list">
+                            <li>
+                                <a href="#applyCategoryChanges" >applyCategoryChanges</a>
+                            </li>
                             <li>
                                 <a href="#applyChanges" >applyChanges</a>
                             </li>
@@ -302,6 +325,9 @@
                                 <a href="#ngAfterViewInit" >ngAfterViewInit</a>
                             </li>
                             <li>
+                                <a href="#ngDestroy" >ngDestroy</a>
+                            </li>
+                            <li>
                                 <a href="#ngOnChanges" >ngOnChanges</a>
                             </li>
                             <li>
@@ -315,6 +341,15 @@
                             </li>
                             <li>
                                 <a href="#onSelectionChanged" >onSelectionChanged</a>
+                            </li>
+                            <li>
+                                <a href="#patchValues" >patchValues</a>
+                            </li>
+                            <li>
+                                <a href="#pushCategory" >pushCategory</a>
+                            </li>
+                            <li>
+                                <a href="#pushRequiredItems" >pushRequiredItems</a>
                             </li>
                             <li>
                                 <a href="#refreshSearch" >refreshSearch</a>
@@ -396,6 +431,9 @@
                                 <li>
                                     <a href="#requiredItemsControl" >requiredItemsControl</a>
                                 </li>
+                                <li>
+                                    <a href="#requiredCategoriesControl" >requiredCategoriesControl</a>
+                                </li>
                             </ul>
                         </td>
                     </tr>
@@ -403,18 +441,18 @@
     </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(menuService: <a href="../injectables/MenuService.html" target="_self">MenuService</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, fb: <a href="https://angular.io/api/forms/FormBuilder" target="_blank">FormBuilder</a>, agGridService: <a href="../injectables/AgGridFormatingService.html" target="_self">AgGridFormatingService</a>, fbPriceScheduleService: <a href="../injectables/FbPriceScheduleService.html" target="_self">FbPriceScheduleService</a>, priceScheduleDataService: <a href="../injectables/PriceScheduleDataService.html" target="_self">PriceScheduleDataService</a>)</code>
+<code>constructor(menuService: <a href="../injectables/MenuService.html" target="_self">MenuService</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, fb: UntypedFormBuilder, agGridService: <a href="../injectables/AgGridFormatingService.html" target="_self">AgGridFormatingService</a>, fbPriceScheduleService: <a href="../injectables/FbPriceScheduleService.html" target="_self">FbPriceScheduleService</a>, priceScheduleDataService: <a href="../injectables/PriceScheduleDataService.html" target="_self">PriceScheduleDataService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="92" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:92</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="104" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:104</a></div>
                             </td>
                         </tr>
 
@@ -459,7 +497,7 @@
                                                         <td>fb</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/forms/FormBuilder" target="_blank" >FormBuilder</a></code>
+                                                                    <code>UntypedFormBuilder</code>
                                                         </td>
                                                   
                                                     <td>
@@ -512,7 +550,7 @@
         </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-inputs">
     <h3 id="inputs">Inputs</h3>
         <table class="table table-sm table-bordered">
             <tbody>
@@ -524,7 +562,7 @@
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                        <i>Type : </i>    <code>UntypedFormGroup</code>
 
                     </td>
                 </tr>
@@ -566,7 +604,7 @@
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                        <i>Type : </i>    <code>UntypedFormGroup</code>
 
                     </td>
                 </tr>
@@ -593,7 +631,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="76" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:76</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="81" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:81</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -614,7 +652,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="77" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:77</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="82" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:82</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -635,13 +673,13 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="78" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:78</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="83" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:83</a></div>
                             </td>
                         </tr>
             </tbody>
         </table>
 </section>
-    <section>
+    <section data-compodoc="block-outputs">
     <h3 id="outputs">Outputs</h3>
         <table class="table table-sm table-bordered">
             <tbody>
@@ -653,7 +691,7 @@
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="https://angular.io/api/core/EventEmitter" target="_blank" >EventEmitter</a></code>
+                        <i>Type : </i>    <code>EventEmitter</code>
 
                     </td>
                 </tr>
@@ -667,11 +705,80 @@
 </section>
 
 
-    <section>
+    <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applyCategoryChanges"></a>
+                    <span class="name">
+                        <span ><b>applyCategoryChanges</b></span>
+                        <a href="#applyCategoryChanges"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>applyCategoryChanges(item: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="475"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:475</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/DiscountInfo.html" target="_self" >DiscountInfo</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -692,8 +799,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="400"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:400</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="467"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:467</a></div>
                 </td>
             </tr>
 
@@ -703,6 +810,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -760,8 +868,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="369"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:369</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="385"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:385</a></div>
                 </td>
             </tr>
 
@@ -771,6 +879,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -824,8 +933,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="306"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:306</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="321"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:321</a></div>
                 </td>
             </tr>
 
@@ -861,8 +970,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="168"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:168</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="186"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:186</a></div>
                 </td>
             </tr>
 
@@ -898,8 +1007,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="293"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:293</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="309"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:309</a></div>
                 </td>
             </tr>
 
@@ -909,6 +1018,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -971,8 +1081,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="252"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:252</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="270"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:270</a></div>
                 </td>
             </tr>
 
@@ -982,6 +1092,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1005,7 +1116,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >{ getRows: (params: any) &#x3D;&gt; void; }</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >{ getRows: (params: IGetRowsParams) &#x3D;&gt; void; }</a></code>
 
                     </div>
                     <div class="io-description">
@@ -1035,8 +1146,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="142"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:142</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="159"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:159</a></div>
                 </td>
             </tr>
 
@@ -1046,6 +1157,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1099,8 +1211,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="214"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:214</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="231"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:231</a></div>
                 </td>
             </tr>
 
@@ -1110,6 +1222,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1190,8 +1303,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="182"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:182</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="200"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:200</a></div>
                 </td>
             </tr>
 
@@ -1227,8 +1340,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="149"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:149</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="166"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:166</a></div>
                 </td>
             </tr>
 
@@ -1264,8 +1377,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="134"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:134</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="150"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:150</a></div>
                 </td>
             </tr>
 
@@ -1301,8 +1414,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="316"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:316</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="331"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:331</a></div>
                 </td>
             </tr>
 
@@ -1338,8 +1451,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="87"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:87</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="96"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:96</a></div>
                 </td>
             </tr>
 
@@ -1375,8 +1488,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="422"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:422</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="501"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:501</a></div>
                 </td>
             </tr>
 
@@ -1386,6 +1499,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1439,8 +1553,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="268"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:268</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="287"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:287</a></div>
                 </td>
             </tr>
 
@@ -1476,8 +1590,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="272"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:272</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="291"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:291</a></div>
                 </td>
             </tr>
 
@@ -1513,8 +1627,45 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="112"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:112</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="130"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:130</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngDestroy</b></span>
+                        <a href="#ngDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngDestroy()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="124"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:124</a></div>
                 </td>
             </tr>
 
@@ -1550,8 +1701,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="126"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:126</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="144"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:144</a></div>
                 </td>
             </tr>
 
@@ -1587,8 +1738,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="107"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:107</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="119"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:119</a></div>
                 </td>
             </tr>
 
@@ -1624,8 +1775,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="222"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:222</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="240"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:240</a></div>
                 </td>
             </tr>
 
@@ -1635,6 +1786,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1692,8 +1844,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="195"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:195</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="213"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:213</a></div>
                 </td>
             </tr>
 
@@ -1703,6 +1855,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1756,8 +1909,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="331"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:331</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="346"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:346</a></div>
                 </td>
             </tr>
 
@@ -1767,6 +1920,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1777,6 +1931,227 @@
                             <tbody>
                                 <tr>
                                     <td>event</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="patchValues"></a>
+                    <span class="name">
+                        <span ><b>patchValues</b></span>
+                        <a href="#patchValues"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>patchValues()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="495"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:495</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pushCategory"></a>
+                    <span class="name">
+                        <span ><b>pushCategory</b></span>
+                        <a href="#pushCategory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>pushCategory(index, itemID, item, requiredItems)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="440"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:440</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>index</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>itemID</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>requiredItems</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pushRequiredItems"></a>
+                    <span class="name">
+                        <span ><b>pushRequiredItems</b></span>
+                        <a href="#pushRequiredItems"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>pushRequiredItems(index, itemID, item, requiredItems)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="417"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:417</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>index</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>itemID</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>requiredItems</td>
 
                                     <td>
                                         No
@@ -1820,8 +2195,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="282"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:282</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="297"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:297</a></div>
                 </td>
             </tr>
 
@@ -1831,6 +2206,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1881,15 +2257,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>removeItemFB(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, item: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>, index: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+<code>removeItemFB(inputForm: UntypedFormGroup, item: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>, index: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="406"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:406</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="482"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:482</a></div>
                 </td>
             </tr>
 
@@ -1899,6 +2275,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1911,7 +2288,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -1980,8 +2357,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="355"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:355</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="371"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:371</a></div>
                 </td>
             </tr>
 
@@ -1991,6 +2368,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2044,8 +2422,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="361"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:361</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="377"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:377</a></div>
                 </td>
             </tr>
 
@@ -2055,6 +2433,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2108,8 +2487,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="204"
-                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:204</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="221"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:221</a></div>
                 </td>
             </tr>
 
@@ -2119,6 +2498,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2169,7 +2549,7 @@
         </tbody>
     </table>
 </section>
-    <section>
+    <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
@@ -2193,7 +2573,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="84" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:84</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="93" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:93</a></div>
                         </td>
                     </tr>
 
@@ -2255,7 +2635,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:50</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:55</a></div>
                         </td>
                     </tr>
 
@@ -2286,7 +2666,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="71" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:71</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="76" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:76</a></div>
                         </td>
                     </tr>
 
@@ -2317,7 +2697,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:56</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:61</a></div>
                         </td>
                     </tr>
 
@@ -2348,7 +2728,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:65</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="70" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:70</a></div>
                         </td>
                     </tr>
 
@@ -2379,7 +2759,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:64</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:69</a></div>
                         </td>
                     </tr>
 
@@ -2399,7 +2779,7 @@
             </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:57</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:62</a></div>
                         </td>
                     </tr>
 
@@ -2430,7 +2810,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:69</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:74</a></div>
                         </td>
                     </tr>
 
@@ -2456,7 +2836,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:58</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:63</a></div>
                         </td>
                     </tr>
 
@@ -2483,34 +2863,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:53</a></div>
-                        </td>
-                    </tr>
-
-
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="gridColumnApi"></a>
-                    <span class="name">
-                            <span class="modifier">Private</span>
-                        <span ><b>gridColumnApi</b></span>
-                        <a href="#gridColumnApi"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >GridAlignColumnsDirective</a></code>
-
-                    </td>
-                </tr>
-                    <tr>
-                        <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:54</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:58</a></div>
                         </td>
                     </tr>
 
@@ -2536,7 +2889,33 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:55</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:60</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="id"></a>
+                    <span class="name">
+                        <span ><b>id</b></span>
+                        <a href="#id"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:49</a></div>
                         </td>
                     </tr>
 
@@ -2549,6 +2928,7 @@
                 <td class="col-md-4">
                     <a name="input"></a>
                     <span class="name">
+                            <span class="modifier"></span>
                         <span ><b>input</b></span>
                         <a href="#input"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -2556,7 +2936,7 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="https://angular.io/api/core/ElementRef" target="_blank" >ElementRef</a></code>
+                        <i>Type : </i>    <code>ElementRef</code>
 
                     </td>
                 </tr>
@@ -2597,7 +2977,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="75" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:75</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="80" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:80</a></div>
                         </td>
                     </tr>
 
@@ -2654,7 +3034,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:66</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="71" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:71</a></div>
                         </td>
                     </tr>
 
@@ -2712,7 +3092,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:63</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="68" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:68</a></div>
                         </td>
                     </tr>
 
@@ -2738,7 +3118,33 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:52</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:57</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="priceScheduleID"></a>
+                    <span class="name">
+                        <span ><b>priceScheduleID</b></span>
+                        <a href="#priceScheduleID"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:50</a></div>
                         </td>
                     </tr>
 
@@ -2764,7 +3170,69 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="85" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:85</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="94" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:94</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="requiredBrands"></a>
+                    <span class="name">
+                        <span ><b>requiredBrands</b></span>
+                        <a href="#requiredBrands"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/DiscountInfo.html" target="_self" >DiscountInfo[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:52</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="requiredCategories"></a>
+                    <span class="name">
+                        <span ><b>requiredCategories</b></span>
+                        <a href="#requiredCategories"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/DiscountInfo.html" target="_self" >DiscountInfo[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:53</a></div>
                         </td>
                     </tr>
 
@@ -2795,7 +3263,38 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:48</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:54</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="requiredItemTypes"></a>
+                    <span class="name">
+                        <span ><b>requiredItemTypes</b></span>
+                        <a href="#requiredItemTypes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/DiscountInfo.html" target="_self" >DiscountInfo[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:51</a></div>
                         </td>
                     </tr>
 
@@ -2826,7 +3325,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:67</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="72" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:72</a></div>
                         </td>
                     </tr>
 
@@ -2852,7 +3351,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:62</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:67</a></div>
                         </td>
                     </tr>
 
@@ -2883,7 +3382,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:60</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:65</a></div>
                         </td>
                     </tr>
 
@@ -2914,7 +3413,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:61</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:66</a></div>
                         </td>
                     </tr>
 
@@ -2940,7 +3439,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:59</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:64</a></div>
                         </td>
                     </tr>
 
@@ -3028,7 +3527,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:74</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="79" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:79</a></div>
                         </td>
                     </tr>
 
@@ -3054,7 +3553,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="73" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:73</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="78" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:78</a></div>
                         </td>
                     </tr>
 
@@ -3080,7 +3579,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="79" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:79</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="84" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:84</a></div>
                         </td>
                     </tr>
 
@@ -3111,7 +3610,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="68" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:68</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="73" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:73</a></div>
                         </td>
                     </tr>
 
@@ -3120,7 +3619,7 @@
     </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-accessors">
     <h3 id="accessors">
         Accessors
     </h3>
@@ -3162,7 +3661,29 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="81" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:81</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="86" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:86</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="requiredCategoriesControl"></a>
+                        <span class="name"><b>requiredCategoriesControl</b><a href="#requiredCategoriesControl"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>requiredCategoriesControl()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="89" class="link-to-prism">src/app/modules/admin/products/price-schedule/item-selections/type-results-selector/type-results-selector.component.ts:89</a></div>
                                 </td>
                             </tr>
 
@@ -3172,10 +3693,10 @@
 </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component,  Inject,  Input, Output,OnChanges, OnInit, Optional, ViewChild ,ElementRef,
          AfterViewInit, EventEmitter } from &#x27;@angular/core&#x27;;
-import { FormArray, FormBuilder, FormControl, FormGroup } from &#x27;@angular/forms&#x27;;
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from &#x27;@angular/forms&#x27;;
 import { ISite } from &#x27;src/app/_interfaces&#x27;;
 import { PriceScheduleDataService } from &#x27;src/app/_services/menu/price-schedule-data.service&#x27;;
 import { Observable, Subject ,fromEvent, Subscription } from &#x27;rxjs&#x27;;
@@ -3184,10 +3705,10 @@ import { ProductSearchModel } from &#x27;src/app/_interfaces/search-models/produ
 import { SitesService } from &#x27;src/app/_services/reporting/sites.service&#x27;;
 
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from &#x27;rxjs/operators&#x27;;
-import { GridAlignColumnsDirective } from &#x27;@angular/flex-layout/grid/typings/align-columns/align-columns&#x27;;
+// import { GridAlignColumnsDirective } from &#x27;@angular/flex-layout/grid/typings/align-columns/align-columns&#x27;;
 import { IGetRowsParams,  GridApi } from &#x27;ag-grid-community&#x27;;
-import &quot;ag-grid-community/dist/styles/ag-grid.css&quot;;
-import &quot;ag-grid-community/dist/styles/ag-theme-alpine.css&quot;;
+// import &quot;ag-grid-community/dist/styles/ag-grid.css&quot;;
+// import &quot;ag-grid-community/dist/styles/ag-theme-alpine.css&quot;;
 import { AgGridFormatingService } from &#x27;src/app/_components/_aggrid/ag-grid-formating.service&#x27;;
 import { DiscountInfo, IPriceSchedule } from &#x27;src/app/_interfaces/menu/price-schedule&#x27;;
 import { FbPriceScheduleService } from &#x27;src/app/_form-builder/fb-price-schedule.service&#x27;;
@@ -3204,7 +3725,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   @Output() itemSelect  &#x3D; new EventEmitter();
 
   searchPhrase:         Subject&lt;any&gt; &#x3D; new Subject();
-  get itemName() { return this.searchForm.get(&quot;itemName&quot;) as FormControl;}
+  get itemName() { return this.searchForm.get(&quot;itemName&quot;) as UntypedFormControl;}
   private readonly onDestroy &#x3D; new Subject&lt;void&gt;();
 
   searchItems$              : Subject&lt;IProductSearchResults[]&gt; &#x3D; new Subject();
@@ -3216,17 +3737,22 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
     )
   )
 
-  @Input()  searchForm: FormGroup;
-  @Input()  inputForm : FormGroup;
-  @Input() item       : IPriceSchedule;
+  @Input()  searchForm: UntypedFormGroup;
+  @Input()  inputForm : UntypedFormGroup;
+  @Input()  item      : IPriceSchedule;
   lastSelectedItem    : DiscountInfo;
-  requiredItems       : DiscountInfo[] &#x3D; [];
-
+  // export interface RequiredOption {
+  id:                 number;
+  priceScheduleID:    number;
+  requiredItemTypes:  DiscountInfo[] &#x3D; []; //what is a main type? This is itemType
+  requiredBrands:     DiscountInfo[] &#x3D; [];
+  requiredCategories: DiscountInfo[] &#x3D; [];
+  requiredItems:      DiscountInfo[] &#x3D; [];
   accordionStep &#x3D; 0;
   //AgGrid
   params               : any;
   private gridApi      : GridApi;
-  private gridColumnApi: GridAlignColumnsDirective;
+  // private gridColumnApi: GridAlignColumnsDirective;
   gridOptions          : any
   columnDefs           &#x3D; [];
   defaultColDef        ;
@@ -3253,15 +3779,22 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   @Input() selectedItemType : any;
   site: ISite;
 
-  get requiredItemsControl() : FormArray {
-    return this.inputForm.get(&#x27;requiredItems&#x27;) as FormArray;
+  get requiredItemsControl() : UntypedFormArray {
+    return this.inputForm.get(&#x27;requiredItems&#x27;) as UntypedFormArray;
   }
+  get requiredCategoriesControl() : UntypedFormArray {
+    return this.inputForm.get(&#x27;requiredCategories&#x27;) as UntypedFormArray;
+  }
+
   _priceSchedule              : Subscription;
   priceScheduleTracking       : IPriceSchedule;
 
   initSubscriptions() {
     this._priceSchedule &#x3D; this.priceScheduleDataService.priceSchedule$.subscribe( data &#x3D;&gt; {
       this.priceScheduleTracking &#x3D; data
+      this.requiredItemTypes     &#x3D; data.requiredItemTypes;
+      this.requiredBrands        &#x3D; data.requiredBrands;
+      this.requiredCategories    &#x3D; data.requiredCategories;
       this.requiredItems         &#x3D; data.requiredItems;
     })
   }
@@ -3269,7 +3802,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   constructor(
     private menuService             : MenuService,
     private siteService             : SitesService,
-    private fb                      : FormBuilder,
+    private fb                      : UntypedFormBuilder,
     private agGridService           : AgGridFormatingService,
     private fbPriceScheduleService  : FbPriceScheduleService,
     private priceScheduleDataService: PriceScheduleDataService,
@@ -3282,6 +3815,12 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   ngOnInit() {
     this.rowSelection   &#x3D; &#x27;multiple&#x27;
     this.initSubscriptions();
+  }
+
+  ngDestroy() {
+    if (this._priceSchedule) {
+      this._priceSchedule.unsubscribe();
+    }
   }
 
   ngAfterViewInit() {
@@ -3299,14 +3838,13 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   }
 
   ngOnChanges() {
-
     this.currentPage        &#x3D; 1;
     this.navItemsByCategory()
     this.refreshSearch(&#x27;&#x27;);
-
   }
 
   initGridOptions()  {
+    console.log(&#x27;initGridOptions&#x27;)
     this.frameworkComponents  &#x3D; this.agGridService.initFrameworkComponents();
     this.defaultColDef        &#x3D; this.agGridService.initDefaultColumnDef();
     this.rowSelection         &#x3D; &#x27;multiple&#x27;;
@@ -3322,6 +3860,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   }
 
   initColumnDefs() {
+    console.log(&#x27;initColumnDefs&#x27;)
     return  [
       {headerName: &#x27;Name&#x27;, field: &#x27;name&#x27;, sortable: true, width: 300, minWidth: 300},
       {
@@ -3369,12 +3908,11 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 
   onSearchGridReady(params) {
     this.gridApi &#x3D; params.api;
-    this.gridColumnApi &#x3D; params.columnApi;
+    // this.gridColumnApi &#x3D; params.columnApi;
     if (!this.searchItems$) {
       this.navItemsByCategory()
     }
   }
-
 
   setCurrentPage(startRow: number, endRow: number): number {
     const tempStartRow &#x3D; this.startRow
@@ -3389,20 +3927,21 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   getRowData(params, startRow: number, endRow: number):  Observable&lt;IProductSearchResultsPaged&gt;  {
     this.currentPage &#x3D; this.setCurrentPage(startRow, endRow)
     const productSearchModel &#x3D; this.initSearchModel( );
+    console.log(&#x27;productSearchModel&#x27;, productSearchModel)
     const site &#x3D; this.siteService.getAssignedSite()
     return this.menuService.getProductsBySearchForLists(site, productSearchModel)
   }
 
   //ag-grid standard method
   onGridReady(params: any) {
+    console.log(&#x27;on grid ready&#x27;)
     if (params)  {
       this.params  &#x3D; params
       this.gridApi &#x3D; params.api;
-      this.gridColumnApi &#x3D; params.columnApi;
+      // this.gridColumnApi &#x3D; params.columnApi;
     }
 
     if (params &#x3D;&#x3D; undefined) {
-      console.log(&#x27;params is not defined&#x27;)
       return
     }
 
@@ -3425,6 +3964,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 
   //ag-grid standard method.
   getDataSource(params) {
+    console.log(&#x27;getDataSource&#x27;)
     return {
       getRows: (params: IGetRowsParams) &#x3D;&gt; {
         const items$ &#x3D; this.getRowData(params, params.startRow, params.endRow)
@@ -3447,14 +3987,11 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   navItemsByCategory(): Observable&lt;IProductSearchResults[]&gt; {
     const site &#x3D; this.siteService.getAssignedSite()
     const productSearchModel &#x3D; this.initSearchModel();
-    console.log(&#x27;refreshSearch&#x27;, productSearchModel)
     return this.getData(site, productSearchModel)
   }
 
-  //this is called from subject rxjs obversablve above constructor.
-
-  //this is called from subject rxjs obversablve above constructor.
   refreshSearch(searchPhrase: string): Observable&lt;IProductSearchResults[]&gt; {
+    console.log(&#x27;refreshSearch&#x27;)
     if (!this.params) { return }
     this.currentPage         &#x3D; 1
     const site               &#x3D; this.siteService.getAssignedSite()
@@ -3466,8 +4003,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   }
 
   getData(site, productSearchModel): Observable&lt;IProductSearchResults[]&gt; {
-    console.log(&#x27;this.getCategoryID()&#x27;, this.getCategoryID())
-    console.log(&#x27;getData&#x27;, productSearchModel)
+    console.log(&#x27;productSearch get data&#x27;)
     const menu$  &#x3D; this.menuService.getProductsBySearchForLists(site, productSearchModel)
     menu$.subscribe( data &#x3D;&gt; {
       this.rowData &#x3D; data.results
@@ -3491,7 +4027,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   initSearchModel(): ProductSearchModel {
     const categoryID &#x3D; this.getCategoryID();
     const brandID  &#x3D; this.getBrandID();
-
+    console.log(&#x27;initSearchModel&#x27;)
     return this.agGridService.initProductSearchModel(
         categoryID,
         this.input.nativeElement.value,
@@ -3507,7 +4043,8 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
     let selectedRows &#x3D; this.gridApi.getSelectedRows();
     let selectedRowsString &#x3D; &#x27;&#x27;;
     let maxToShow &#x3D; 5;
-    let selected &#x3D; []
+    let selected &#x3D; [];
+
     selectedRows.forEach(function (selectedRow, index) {
       if (index &gt;&#x3D; maxToShow) {  return;   }
       if (index &gt; 0) {  selectedRowsString +&#x3D; &#x27;, &#x27;;}
@@ -3536,7 +4073,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   selectItemFromGrid(e) {
     if (e.rowData.id)  {
       this.enableItem(e.rowData);
-      this.lastSelectedItem &#x3D; e.rowData;
+      // this.lastSelectedItem &#x3D; e.rowData;
     }
   }
 
@@ -3546,51 +4083,114 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
     this.lastSelectedItem &#x3D; null
     if (!item)                 { return }
     if (item.id &#x3D;&#x3D; undefined)  { return }
-
     const itemID &#x3D; parseInt( item.id );
 
     if (this.requiredItemsControl) {
-      const array &#x3D; this.requiredItems
-      const index &#x3D; array.findIndex( data &#x3D;&gt;  data.itemID &#x3D;&#x3D;&#x3D; itemID)
+      this.requiredItems &#x3D; this.requiredItemsControl.value;
+      console.log(&#x27;presss&#x27;,  this.requiredItems)
 
-      if (index &#x3D;&#x3D; -1){
-        console.log(&#x27;itemID adding&#x27;, itemID)
-        const newItem    &#x3D;  {} as DiscountInfo;
-        newItem.itemID   &#x3D;  itemID;
-        newItem.name     &#x3D;  item.name;
-        newItem.quantity &#x3D;  1;
-        this.requiredItems.push(newItem)
-        this.applyChanges(newItem);
-        this.lastSelectedItem &#x3D; newItem
-        console.log(&#x27;item added&#x27;)
-      } else {
-        this.requiredItems &#x3D; this.requiredItems.splice(index, 1)
-        this.applyChanges(null);
-        this.lastSelectedItem &#x3D; null
-        console.log(&#x27;item added&#x27;)
+      if (item.prodModifierType !&#x3D; 5 &amp;&amp; item.prodModifierType !&#x3D; 4) {
+        if (!this.requiredItems) {
+          this.requiredItems &#x3D; []
+        }
+        const array &#x3D; this.requiredItems;
+        const index &#x3D; array.findIndex( data &#x3D;&gt;  data.itemID &#x3D;&#x3D;&#x3D; itemID)
+        this.pushRequiredItems(index, itemID, item, this.requiredItems )
+        return;
+      }
+
+      if (item.prodModifierType &#x3D;&#x3D; 5 || item.prodModifierType &#x3D;&#x3D; 4 ) {
+        if (!this.requiredCategories) {
+          this.requiredCategories &#x3D; []
+        }
+        const array &#x3D; this.requiredCategories;
+        const index &#x3D; array.findIndex( data &#x3D;&gt;  data.itemID &#x3D;&#x3D;&#x3D; itemID)
+        this.pushCategory(index, itemID, item, this.requiredCategories )
       }
     }
   }
 
+  pushRequiredItems(index, itemID, item,  requiredItems) {
+    // console.log(&#x27;requiredITems&#x27;, requiredItems)
+    try {
+      if (index &#x3D;&#x3D; -1){
+        const newItem    &#x3D;  {} as DiscountInfo;
+        newItem.itemID   &#x3D;  parseInt( itemID );
+        newItem.name     &#x3D;  item.name;
+        newItem.quantity &#x3D;  1;
+        requiredItems.push(newItem)
+        this.applyChanges(newItem);
+        this.lastSelectedItem &#x3D; newItem
+      } else {
+        this.requiredItems &#x3D; requiredItems.splice(index, 1)
+        this.applyChanges(null);
+        this.lastSelectedItem &#x3D; null
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+
+  }
+
+  pushCategory(index, itemID, item,  requiredItems) {
+
+    if (!this.requiredCategories) {
+      this.requiredCategories &#x3D; []
+    }
+
+    if (!this.requiredCategories) {
+      this.requiredCategories &#x3D; []
+    }
+    const array &#x3D; this.requiredCategories
+    index &#x3D; array.findIndex( data &#x3D;&gt;   data.itemID &#x3D;&#x3D;&#x3D; parseInt( itemID ))
+
+    if (index &#x3D;&#x3D; -1){
+      const newItem    &#x3D;  {} as DiscountInfo;
+      newItem.itemID   &#x3D;  itemID;
+      newItem.name     &#x3D;  item.name;
+      newItem.quantity &#x3D;  1;
+      this.requiredCategories.push(newItem);
+      this.applyCategoryChanges(newItem);
+      this.lastSelectedItem &#x3D; newItem
+    } else {
+      this.requiredItems &#x3D; this.requiredCategories.splice(index, 1)
+      this.applyCategoryChanges(null);
+      this.lastSelectedItem &#x3D; null
+    }
+  }
+
   applyChanges(item: DiscountInfo) {
+    if (!this.requiredItems) { this.requiredItems &#x3D; []}
     this.priceScheduleTracking.requiredItems &#x3D; this.requiredItems;
+    this.requiredItemsControl.patchValue(this.requiredItems)
     this.priceScheduleDataService.updatePriceSchedule(this.priceScheduleTracking)
     this.lastSelectedItem  &#x3D; item
   }
 
-  removeItemFB(inputForm: FormGroup, item: DiscountInfo, index: number) {
+  applyCategoryChanges(item: DiscountInfo) {
+    if (!this.requiredCategories) { this.requiredCategories &#x3D; []}
+    this.priceScheduleTracking.requiredCategories &#x3D; this.requiredCategories;
+    this.priceScheduleDataService.updatePriceSchedule(this.priceScheduleTracking)
+    this.lastSelectedItem  &#x3D; item
+  }
+
+  removeItemFB(inputForm: UntypedFormGroup, item: DiscountInfo, index: number) {
     if (!inputForm || !item) {return}
     this.item.requiredItems &#x3D; this.requiredItems;
     let i &#x3D; 0
     if ( index !&#x3D; -1 ) {
       this.fbPriceScheduleService.deleteItem(index, this.inputForm)
       this.lastSelectedItem &#x3D; null
-
       this.priceScheduleDataService.updatePriceSchedule(this.inputForm.value)
       return
     }
-
     this.priceScheduleDataService.updatePriceSchedule(this.inputForm.value)
+  }
+
+  patchValues() {
+    this.inputForm.patchValue({requiredItems: this.requiredItems})
+    this.inputForm.patchValue({requiredCategories: this.requiredCategories})
   }
 
   //requiredCategories
@@ -3604,7 +4204,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 </code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-templateData">
+    <div class="tab-pane fade " id="templateData">
         <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;grid-item&quot;&gt;
   &lt;div  class&#x3D;&quot;item-label&quot; [formGroup]&#x3D;&quot;searchForm&quot; &gt;
     &lt;mat-form-field appearance&#x3D;&quot;outline&quot; class&#x3D;&quot;form-fields&quot;&gt;
@@ -3619,9 +4219,9 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   &lt;/div&gt;
 &lt;/div&gt;
 
+&lt;!-- #agGrid --&gt;
 &lt;ag-grid-angular
-      #agGrid
-      style&#x3D;&quot;width: 100%; height: 75vh; border-radius: 5px;&quot;
+      style&#x3D;&quot;width: 75%; height: 90%; border-radius: 5px;&quot;
       id&#x3D;&quot;myGrid&quot;
       [class]&#x3D;&quot;agtheme&quot;
       [columnDefs]&#x3D;&quot;columnDefs&quot;
@@ -3647,7 +4247,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 </code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-styleData">
+    <div class="tab-pane fade " id="styleData">
                 <p class="comment">
                     <code>./type-results-selector.component.scss</code>
                 </p>
@@ -3741,7 +4341,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 </code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-tree">
+    <div class="tab-pane fade " id="tree">
         <div id="tree-container"></div>
         <div class="tree-legend">
             <div class="title">
@@ -3766,9 +4366,9 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="grid-item">  <div  class="item-label" [formGroup]="searchForm" >    <mat-form-field appearance="outline" class="form-fields">      <mat-label >Search Items</mat-label>        <input                #input                matInput                type           ="text"                id             ="name"                formControlName="itemName">    </mat-form-field>  </div></div><ag-grid-angular      #agGrid      style="width: 100%; height: 75vh; border-radius: 5px;"      id="myGrid"      [class]="agtheme"      [columnDefs]="columnDefs"      [defaultColDef]="defaultColDef"      [gridOptions]="gridOptions"      [rowSelection]="rowSelection"      [frameworkComponents]="frameworkComponents"      (selectionChanged)="onSelectionChanged($event)"      (gridReady)="onGridReady($event)"></ag-grid-angular><br><!-- <div *ngIf="requiredItems">  required items {{requiredItems | json}}</div> --><br><!--<div *ngIf="requiredItemsControl">  {{requiredItemsControl | json }}</div> --></div>'
-    var COMPONENTS = [{'name': 'AccordionComponent', 'selector': 'app-accordion'},{'name': 'AccordionMenuItemEditComponent', 'selector': 'app-accordion-menu-item-edit'},{'name': 'AddInventoryItemComponent', 'selector': 'app-add-inventory-item'},{'name': 'AddItemByTypeComponent', 'selector': 'app-add-item-by-type'},{'name': 'AdjustItemComponent', 'selector': 'app-adjust-item'},{'name': 'AdjustItemNoteComponent', 'selector': 'app-adjust-item-note'},{'name': 'AdjustItemPriceChangeComponent', 'selector': 'app-adjust-item-price-change'},{'name': 'AdjustItemVoidReasonsComponent', 'selector': 'app-adjust-item-void-reasons'},{'name': 'AdjustmentReasonsComponent', 'selector': 'app-adjustment-reasons'},{'name': 'AdminbranditemComponent', 'selector': 'app-adminbranditem'},{'name': 'AdminbrandslistComponent', 'selector': 'app-adminbrandslist'},{'name': 'AdminComponent', 'selector': 'app-admin'},{'name': 'AgGridImageFormatterComponent', 'selector': 'app-ag-grid-image-formatter'},{'name': 'AgGridTestComponent', 'selector': 'app-ag-grid-test'},{'name': 'AgGridToggleComponent', 'selector': 'app-ag-grid-toggle'},{'name': 'AgPaginationComponent', 'selector': 'app-ag-pagination'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AppGateComponent', 'selector': 'app-app-gate'},{'name': 'AreaComponent', 'selector': 'app-widget-area'},{'name': 'AuditPanelComponent', 'selector': 'app-audit-panel'},{'name': 'BarcodeScannerComponent', 'selector': 'app-barcode-scanner'},{'name': 'BrandslistComponent', 'selector': 'app-brandslist'},{'name': 'BrandTypeSelectComponent', 'selector': 'app-brand-type-select'},{'name': 'BtBlueToothScannerComponent', 'selector': 'app-bt-blue-tooth-scanner'},{'name': 'BtPOSPrinterComponent', 'selector': 'app-bt-posprinter'},{'name': 'ButtonComponent', 'selector': 'storybook-button'},{'name': 'ButtonRendererComponent', 'selector': 'app-button-renderer'},{'name': 'CacheSettingsComponent', 'selector': 'app-cache-settings'},{'name': 'CannabisItemEditComponent', 'selector': 'app-cannabis-item-edit'},{'name': 'CardComponent', 'selector': 'app-widget-card'},{'name': 'CartButtonComponent', 'selector': 'app-cart-button'},{'name': 'CashDiscountItemProductEditComponent', 'selector': 'app-cash-discount-item-product-edit'},{'name': 'CashDiscountOrderProductEditComponent', 'selector': 'app-cash-discount-order-product-edit'},{'name': 'CategoriesAlternateComponent', 'selector': 'app-categories-alternate'},{'name': 'CategoriesComponent', 'selector': 'app-categories'},{'name': 'CategorieslistviewComponent', 'selector': 'app-categorieslistview'},{'name': 'CategoryScrollComponent', 'selector': 'app-category-scroll'},{'name': 'CategorySelectComponent', 'selector': 'app-category-select'},{'name': 'ChangepasswordComponent', 'selector': 'app-changepassword'},{'name': 'ChartTableComponent', 'selector': 'app-widget-chart-table'},{'name': 'CheckInProfileComponent', 'selector': 'app-check-in-profile'},{'name': 'ChemicalSpinnersComponent', 'selector': 'app-chemical-spinners'},{'name': 'ChemicalValuesComponent', 'selector': 'app-chemical-values'},{'name': 'ChipsDisplayComponent', 'selector': 'app-chips-display'},{'name': 'ClientSearchSelectorComponent', 'selector': 'app-client-search-selector'},{'name': 'ClientTypeEditComponent', 'selector': 'app-client-type-edit'},{'name': 'ClientTypeListComponent', 'selector': 'app-client-type-list'},{'name': 'ClientTypeSelectionComponent', 'selector': 'app-client-type-selection'},{'name': 'ClientTypesLookupComponent', 'selector': 'app-client-types-lookup'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'DatabaseSchemaComponent', 'selector': 'app-database-schema'},{'name': 'DateScheduleComponent', 'selector': 'app-date-schedule'},{'name': 'DefaultComponent', 'selector': 'app-default'},{'name': 'DemographicsComponent', 'selector': 'app-demographics'},{'name': 'DepartmentSelectComponent', 'selector': 'app-department-select'},{'name': 'DiscountOptionsComponent', 'selector': 'app-discount-options'},{'name': 'DiscountTypeSelectionComponent', 'selector': 'app-discount-type-selection'},{'name': 'DsiEMVPaymentComponent', 'selector': 'app-dsi-emvpayment'},{'name': 'EachProductEditComponent', 'selector': 'app-each-product-edit'},{'name': 'EditButtonsStandardComponent', 'selector': 'app-edit-buttons-standard'},{'name': 'EditSelectedItemsComponent', 'selector': 'app-edit-selected-items'},{'name': 'FacilitiesListComponent', 'selector': 'app-facilities-list'},{'name': 'FacilitySearchSelectorComponent', 'selector': 'app-facility-search-selector'},{'name': 'FilterComponent', 'selector': 'app-widget-filter'},{'name': 'FlatRateEditComponent', 'selector': 'app-flat-rate-edit'},{'name': 'FlatRateListComponent', 'selector': 'app-flat-rate-list'},{'name': 'FlatTaxRateListComponent', 'selector': 'app-flat-tax-rate-list'},{'name': 'FoodProductEditComponent', 'selector': 'app-food-product-edit'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'FormSelectListComponent', 'selector': 'app-form-select-list'},{'name': 'GenericIdSelectComponent', 'selector': 'app-generic-id-select'},{'name': 'GenericNameSelectComponent', 'selector': 'app-generic-name-select'},{'name': 'GiftCardProductEditComponent', 'selector': 'app-gift-card-product-edit'},{'name': 'GoogleMapsComponent', 'selector': 'app-google-maps'},{'name': 'HammerCardComponent', 'selector': 'app-hammer-card'},{'name': 'HeaderComponent', 'selector': 'storybook-header'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HTMLEditPrintingComponent', 'selector': 'app-htmledit-printing'},{'name': 'ImageCaptureComponent', 'selector': 'app-image-capture'},{'name': 'InstalledPrintersComponent', 'selector': 'app-installed-printers'},{'name': 'InventoryAdjustmentNoteComponent', 'selector': 'app-adjustment-note'},{'name': 'InventoryComponent', 'selector': 'app-inventory-settings'},{'name': 'InventoryHistoryItemComponent', 'selector': 'app-inventory-history-item'},{'name': 'InventoryHistoryListComponent', 'selector': 'app-inventory-history-list'},{'name': 'InventoryListComponent', 'selector': 'app-inventory-list'},{'name': 'InventoryListToolTipComponent', 'selector': 'app-inventory-list-tool-tip'},{'name': 'InventoryLocationsComponent', 'selector': 'app-inventory-locations'},{'name': 'IonicGeoLocationComponent', 'selector': 'app-ionic-geo-location'},{'name': 'ItemCategoriesEditComponent', 'selector': 'app-item-categories-edit'},{'name': 'ItemCategoriesListComponent', 'selector': 'app-item-categories-list'},{'name': 'ItemPercentageDiscountProductEditComponent', 'selector': 'app-item-percentage-discount-product-edit'},{'name': 'ItemTypeCategoryAssignmentComponent', 'selector': 'app-item-type-category-assignment'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'ItemTypeDisplayAssignmentComponent', 'selector': 'app-item-type-display-assignment'},{'name': 'ItemTypeEditorComponent', 'selector': 'app-item-type-editor'},{'name': 'ItemTypeSortComponent', 'selector': 'app-item-type-sort'},{'name': 'Label1by8Component', 'selector': 'app-label1by8'},{'name': 'LabelViewSelectorComponent', 'selector': 'app-label-view-selector'},{'name': 'LimitValuesProgressBarsComponent', 'selector': 'app-limit-values-progress-bars'},{'name': 'LiquorProductEditComponent', 'selector': 'app-liquor-product-edit'},{'name': 'ListPrintersElectronComponent', 'selector': 'app-list-printers-electron'},{'name': 'ListProductSearchInputComponent', 'selector': 'app-list-product-search-input'},{'name': 'LoginComponent', 'selector': 'login-dashboard'},{'name': 'MainMenuComponent', 'selector': 'app-main-menu'},{'name': 'MatSpinnerOverlayComponent', 'selector': 'app-mat-spinner-overlay'},{'name': 'MatToggleSelectorComponent', 'selector': 'app-mat-toggle-selector'},{'name': 'MenuCardCategoriesComponent', 'selector': 'app-menu-card-categories'},{'name': 'MenuCompactComponent', 'selector': 'app-menu-compact'},{'name': 'MenuGroupItemEditComponent', 'selector': 'app-menu-group-item-edit'},{'name': 'MenuItemCardComponent', 'selector': 'app-menu-item-card'},{'name': 'MenuitemComponent', 'selector': 'app-menuitem'},{'name': 'MenuItemGalleryComponent', 'selector': 'app-menu-item-gallery'},{'name': 'MenuItemModalComponent', 'selector': 'app-menu-item-modal'},{'name': 'MenuitemsComponent', 'selector': 'app-menuitems'},{'name': 'MenuItemsInfiniteComponent', 'selector': 'app-menu-items-infinite'},{'name': 'MenuManagerComponent', 'selector': 'app-menu-manager'},{'name': 'MenuMinimalComponent', 'selector': 'app-menu-minimal'},{'name': 'MenuSearchBarComponent', 'selector': 'app-menu-search-bar'},{'name': 'MenuTinyComponent', 'selector': 'app-menu-tiny'},{'name': 'MessagesToUserComponent', 'selector': 'app-messages-to-user'},{'name': 'MetaTagChipsComponent', 'selector': 'app-meta-tag-chips'},{'name': 'MetrcIndividualPackageComponent', 'selector': 'app-metrc-individual-package'},{'name': 'MetrcInventoryPropertiesComponent', 'selector': 'app-metrc-inventory-properties'},{'name': 'METRCProductsAddComponent', 'selector': 'app-products-add'},{'name': 'MetrcSalesListComponent', 'selector': 'app-metrc-sales-list'},{'name': 'ModifierProductEditComponent', 'selector': 'app-modifier-product-edit'},{'name': 'MoveInventoryLocationComponent', 'selector': 'app-move-inventory-location'},{'name': 'NewInventoryItemComponent', 'selector': 'app-new-inventory-item'},{'name': 'OrderBarComponent', 'selector': 'app-order-bar'},{'name': 'OrderCardComponent', 'selector': 'app-order-card'},{'name': 'OrderFilterPanelComponent', 'selector': 'app-order-filter-panel'},{'name': 'OrderItemListComponent', 'selector': 'app-order-item-list'},{'name': 'OrderItemsListComponent', 'selector': 'app-order-items-list'},{'name': 'OrderPercentageDiscountProductEditComponent', 'selector': 'app-order-percentage-discount-product-edit'},{'name': 'OrdersFilterComponent', 'selector': 'app-orders-filter'},{'name': 'OrdersMainComponent', 'selector': 'app-orders-main'},{'name': 'OrderTypeSelectionComponent', 'selector': 'app-order-type-selection'},{'name': 'PackageActionsComponent', 'selector': 'app-package-actions'},{'name': 'PackageListComponent', 'selector': 'app-package-list'},{'name': 'PackageSearchSelectorComponent', 'selector': 'app-package-search-selector'},{'name': 'PageComponent', 'selector': 'storybook-page'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PagerBlobComponent', 'selector': 'pager-blob'},{'name': 'PieComponent', 'selector': 'app-widget-pie'},{'name': 'PosListComponent', 'selector': 'app-pos-list'},{'name': 'PosOrderComponent', 'selector': 'app-pos-order'},{'name': 'PosOrderItemComponent', 'selector': 'app-pos-order-item'},{'name': 'PosOrderListComponent', 'selector': 'app-pos-order-list'},{'name': 'PosOrdersComponent', 'selector': 'app-pos-orders'},{'name': 'PosPaymentComponent', 'selector': 'app-pos-payment'},{'name': 'PosPaymentsComponent', 'selector': 'app-pos-payments'},{'name': 'PriceCategoriesComponent', 'selector': 'app-price-categories'},{'name': 'PriceCategoriesEditComponent', 'selector': 'app-price-categories-edit'},{'name': 'PriceCategorySearchComponent', 'selector': 'app-price-category-search'},{'name': 'PriceCategorySelectComponent', 'selector': 'app-price-category-select'},{'name': 'PriceLinesComponent', 'selector': 'app-price-lines'},{'name': 'PriceScheduleComponent', 'selector': 'app-price-schedule'},{'name': 'PriceScheduleConstraintsComponent', 'selector': 'app-price-schedule-constraints'},{'name': 'PriceScheduleFieldsComponent', 'selector': 'app-price-schedule-fields'},{'name': 'PriceScheduleInfoComponent', 'selector': 'app-price-schedule-info'},{'name': 'PriceScheduleListComponent', 'selector': 'app-price-schedule-list'},{'name': 'PriceTiersComponent', 'selector': 'app-price-tiers'},{'name': 'ProducteditComponent', 'selector': 'app-productedit'},{'name': 'ProductInfoPanelComponent', 'selector': 'app-product-info-panel'},{'name': 'ProductlistviewComponent', 'selector': 'app-productlistview'},{'name': 'ProductSearchSelectorComponent', 'selector': 'app-product-search-selector'},{'name': 'ProductTypeSelectComponent', 'selector': 'app-product-type-select'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'ProfileEditorComponent', 'selector': 'app-profile-editor'},{'name': 'ProfileListComponent', 'selector': 'app-profile-list'},{'name': 'ProfileLookupComponent', 'selector': 'app-profile-lookup'},{'name': 'ProgressBarComponent', 'selector': 'app-progress-bar'},{'name': 'ProgressUploaderComponent', 'selector': 'app-progress'},{'name': 'ReceiptLayoutComponent', 'selector': 'app-receipt-layout'},{'name': 'RegisterAccountExistingUserComponent', 'selector': 'app-register-account-existing-user'},{'name': 'RegisterAccountExistingUserWithTokenComponent', 'selector': 'app-register-account-existing-user-with-token'},{'name': 'RegisterAccountMainComponent', 'selector': 'app-register-account-main'},{'name': 'ReportsComponent', 'selector': 'app-reports'},{'name': 'ResetpasswordComponent', 'selector': 'app-resetpassword'},{'name': 'ReviewComponent', 'selector': 'app-review'},{'name': 'ReviewEditComponent', 'selector': 'app-review-edit'},{'name': 'ReviewsComponent', 'selector': 'app-reviews'},{'name': 'RewardTypeFilterComponent', 'selector': 'app-reward-type-filter'},{'name': 'RewardTypeResultsSelectorComponent', 'selector': 'app-reward-type-panel'},{'name': 'RouteDispatchComponent', 'selector': 'app-route-dispatch'},{'name': 'RouteDispatchDetailsComponent', 'selector': 'app-route-dispatch-details'},{'name': 'RouteDispatchDetailsEditComponent', 'selector': 'app-route-dispatch-details-edit'},{'name': 'RouteDispatchEditComponent', 'selector': 'app-route-dispatch-edit'},{'name': 'RouteDispatchesComponent', 'selector': 'app-route-dispatches'},{'name': 'SalesTaxReportComponent', 'selector': 'app-sales-tax-report'},{'name': 'ScaleReaderComponent', 'selector': 'app-scale-reader'},{'name': 'SearchPanelComponent', 'selector': 'app-search-panel'},{'name': 'SearchResultsComponent', 'selector': 'app-search-results'},{'name': 'ServiceTypeEditComponent', 'selector': 'app-service-type-edit'},{'name': 'ServiceTypeListComponent', 'selector': 'app-service-type-list'},{'name': 'SettingsComponent', 'selector': 'app-settings'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'SimpleTinyComponent', 'selector': 'simple-tinymce'},{'name': 'SiteEditComponent', 'selector': 'app-site-edit'},{'name': 'SitepointsComponent', 'selector': 'app-sitepoints'},{'name': 'SitepurchasesComponent', 'selector': 'app-sitepurchases'},{'name': 'SitesComponent', 'selector': 'app-sites'},{'name': 'SiteSelectorComponent', 'selector': 'app-site-selector'},{'name': 'SmokeProductEditComponent', 'selector': 'app-smoke-product-edit'},{'name': 'SoftwareComponent', 'selector': 'app-software'},{'name': 'SpeciesListComponent', 'selector': 'app-species-list'},{'name': 'StatusLookupComponent', 'selector': 'app-status-lookup'},{'name': 'StickyHeaderComponent', 'selector': 'app-sticky-header'},{'name': 'StrainPackagesComponent', 'selector': 'app-strain-packages'},{'name': 'StrainProductEditComponent', 'selector': 'app-strain-product-edit'},{'name': 'StrainsAddComponent', 'selector': 'app-strains-add'},{'name': 'SubMenuItemEditComponent', 'selector': 'app-sub-menu-item-edit'},{'name': 'SummarycardComponent', 'selector': 'app-summarycard'},{'name': 'TaxEditComponent', 'selector': 'app-tax-edit'},{'name': 'TaxFieldsComponent', 'selector': 'app-tax-fields'},{'name': 'TaxListComponent', 'selector': 'app-tax-list'},{'name': 'TaxRateListComponent', 'selector': 'app-tax-rate-list'},{'name': 'TierItemsComponent', 'selector': 'app-tier-items'},{'name': 'TierMenuComponent', 'selector': 'app-tier-menu'},{'name': 'TierPricesComponent', 'selector': 'app-tier-prices'},{'name': 'TiersCardComponent', 'selector': 'app-tiers-card'},{'name': 'TimeScheduleComponent', 'selector': 'app-time-schedule'},{'name': 'TvHappyHoursComponent', 'selector': 'app-tv-happy-hours'},{'name': 'TvPriceSpecialsComponent', 'selector': 'app-tv-price-specials'},{'name': 'TvPriceTierMenuItemsComponent', 'selector': 'app-tv-price-tier-menu-items'},{'name': 'TvPriceTiersComponent', 'selector': 'app-tv-price-tiers'},{'name': 'TypeFilterComponent', 'selector': 'app-type-filter'},{'name': 'TypeResultsSelectorComponent', 'selector': 'app-type-results-selector'},{'name': 'UnitTypeEditComponent', 'selector': 'app-unit-type-edit'},{'name': 'UnitTypeFieldsComponent', 'selector': 'app-unit-type-fields'},{'name': 'UnitTypeListComponent', 'selector': 'unit-types'},{'name': 'UploaderComponent', 'selector': 'app-widget-uploader'},{'name': 'UseGroupTaxAssignmentComponent', 'selector': 'app-use-group-tax-assignment'},{'name': 'UsermessagesComponent', 'selector': 'app-usermessages'},{'name': 'ValueFieldsComponent', 'selector': 'app-value-fields'},{'name': 'ValueSpinnerComponent', 'selector': 'app-value-spinner'},{'name': 'WebEnabledComponent', 'selector': 'app-web-enabled'},{'name': 'WeekDaySelectionComponent', 'selector': 'app-week-day-selection'},{'name': 'WeightedFoodProductEditComponent', 'selector': 'app-weighted-food-product-edit'},{'name': 'WishlistComponent', 'selector': 'app-wishlist'}];
-    var DIRECTIVES = [{'name': 'AutofocusDirective', 'selector': '[appAutoFocusInput]'},{'name': 'CurrencyFormatterDirective', 'selector': '[currencyFormatter]'},{'name': 'DndDirective', 'selector': '[appDnd]'},{'name': 'Events', 'selector': '[Events]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'ScrollableDirective', 'selector': '[appScrollable]'},{'name': 'StickyHeaderDirective', 'selector': '[stickyHeaderDirective]'}];
+        var COMPONENT_TEMPLATE = '<div><div class="grid-item">  <div  class="item-label" [formGroup]="searchForm" >    <mat-form-field appearance="outline" class="form-fields">      <mat-label >Search Items</mat-label>        <input                #input                matInput                type           ="text"                id             ="name"                formControlName="itemName">    </mat-form-field>  </div></div><!-- #agGrid --><ag-grid-angular      style="width: 75%; height: 90%; border-radius: 5px;"      id="myGrid"      [class]="agtheme"      [columnDefs]="columnDefs"      [defaultColDef]="defaultColDef"      [gridOptions]="gridOptions"      [rowSelection]="rowSelection"      [frameworkComponents]="frameworkComponents"      (selectionChanged)="onSelectionChanged($event)"      (gridReady)="onGridReady($event)"></ag-grid-angular><br><!-- <div *ngIf="requiredItems">  required items {{requiredItems | json}}</div> --><br><!--<div *ngIf="requiredItemsControl">  {{requiredItemsControl | json }}</div> --></div>'
+    var COMPONENTS = [{'name': 'AccordionComponent', 'selector': 'app-accordion'},{'name': 'AccordionMenuItemEditComponent', 'selector': 'app-accordion-menu-item-edit'},{'name': 'ActivityTogglesComponent', 'selector': 'app-activity-toggles'},{'name': 'ActivityTogglesMetrcComponent', 'selector': 'activity-toggles-metrc'},{'name': 'AddInventoryItemComponent', 'selector': 'app-add-inventory-item'},{'name': 'AddItemByTypeComponent', 'selector': 'app-add-item-by-type'},{'name': 'AdjustItemComponent', 'selector': 'app-adjust-item'},{'name': 'AdjustItemNoteComponent', 'selector': 'app-adjust-item-note'},{'name': 'AdjustItemPriceChangeComponent', 'selector': 'app-adjust-item-price-change'},{'name': 'AdjustItemVoidReasonsComponent', 'selector': 'app-adjust-item-void-reasons'},{'name': 'AdjustmentReasonsComponent', 'selector': 'app-adjustment-reasons'},{'name': 'AdjustPaymentComponent', 'selector': 'app-adjust-payment'},{'name': 'AdminbranditemComponent', 'selector': 'app-adminbranditem'},{'name': 'AdminbrandslistComponent', 'selector': 'app-adminbrandslist'},{'name': 'AdminComponent', 'selector': 'app-admin'},{'name': 'AdminDisplayMenuComponent', 'selector': 'Admin-display-menu'},{'name': 'AdminDisplayMenuListComponent', 'selector': 'admin-display-menu-list'},{'name': 'AdminDisplayMenuSelctorComponent', 'selector': 'display-menu-selctor'},{'name': 'AggregateSelectorComponent', 'selector': 'psReporting-aggregate-selector'},{'name': 'AgGridImageFormatterComponent', 'selector': 'app-ag-grid-image-formatter'},{'name': 'AgGridTestComponent', 'selector': 'app-ag-grid-test'},{'name': 'AgGridToggleComponent', 'selector': 'app-ag-grid-toggle'},{'name': 'AgIconFormatterComponent', 'selector': 'app-ag-icon-formatter'},{'name': 'AgPaginationComponent', 'selector': 'app-ag-pagination'},{'name': 'AndOrSelectorComponent', 'selector': 'psReporting-and-or-selector'},{'name': 'APISettingComponent', 'selector': 'app-apisetting'},{'name': 'ApiStatusDisplayComponent', 'selector': 'api-status-display'},{'name': 'ApiStoredValueComponent', 'selector': 'api-stored-value'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AppGateComponent', 'selector': 'app-app-gate'},{'name': 'AppWizardProgressButtonComponent', 'selector': 'wizard-progress-button'},{'name': 'AppWizardStatusComponent', 'selector': 'app-app-wizard-status'},{'name': 'AreaComponent', 'selector': 'app-widget-area'},{'name': 'AuditPanelComponent', 'selector': 'app-audit-panel'},{'name': 'BackgroundCoverComponent', 'selector': 'app-background-cover'},{'name': 'BalanceSheetCalculationsViewComponent', 'selector': 'balance-sheet-calculations-view'},{'name': 'BalanceSheetEditComponent', 'selector': 'app-balance-sheet-edit'},{'name': 'BalanceSheetEmployeeSalesComponent', 'selector': 'balance-sheet-employee-sales'},{'name': 'BalanceSheetFilterComponent', 'selector': 'balance-sheet-filter'},{'name': 'BalanceSheetHeaderViewComponent', 'selector': 'balance-sheet-header-view'},{'name': 'BalanceSheetQuickViewComponent', 'selector': 'balance-sheet-quick-view'},{'name': 'BalanceSheetReportComponent', 'selector': 'balance-sheet-report'},{'name': 'BalanceSheetsComponent', 'selector': 'app-balance-sheets'},{'name': 'BalanceSheetViewComponent', 'selector': 'balance-sheet-view'},{'name': 'BarcodeScannerComponent', 'selector': 'app-barcode-scanner'},{'name': 'BlogListEditComponent', 'selector': 'app-blog-list-edit'},{'name': 'BlogPostComponent', 'selector': 'app-blog-post'},{'name': 'BlogPostEditComponent', 'selector': 'app-blog-post-edit'},{'name': 'BlogPostListComponent', 'selector': 'blog-post-list'},{'name': 'BlogPostSortComponent', 'selector': 'blog-post-sort'},{'name': 'BrandslistComponent', 'selector': 'app-brandslist'},{'name': 'BrandTypeSelectComponent', 'selector': 'app-brand-type-select'},{'name': 'BtBlueToothScannerComponent', 'selector': 'app-bt-blue-tooth-scanner'},{'name': 'BtPOSPrinterComponent', 'selector': 'app-bt-posprinter'},{'name': 'ButtonComponent', 'selector': 'storybook-button'},{'name': 'ButtonRendererComponent', 'selector': 'app-button-renderer'},{'name': 'ButtonRendererComponent', 'selector': 'btn-cell-renderer'},{'name': 'CacheSettingsComponent', 'selector': 'app-cache-settings'},{'name': 'CallUsSelectorComponent', 'selector': 'call-us-selector'},{'name': 'CannabisItemEditComponent', 'selector': 'cannabis-item-edit'},{'name': 'CardComponent', 'selector': 'app-widget-card'},{'name': 'CardDashboardComponent', 'selector': 'app-card-dashboard'},{'name': 'CardPointeCardPayBtnComponent', 'selector': 'card-pointe-card-pay-btn'},{'name': 'CardpointeTransactionsComponent', 'selector': 'app-cardpointe-transactions'},{'name': 'CardPointIDTECHAndroidComponent', 'selector': 'app-card-point-idtechandroid'},{'name': 'CardPointSettingsComponent', 'selector': 'card-point-settings'},{'name': 'CartButtonComponent', 'selector': 'app-cart-button'},{'name': 'CashDrawerSettingsComponent', 'selector': 'app-cash-drawer-settings'},{'name': 'CashPaymentButtonComponent', 'selector': 'cash-payment-buttons'},{'name': 'CashValueCalcComponent', 'selector': 'cash-value-calc'},{'name': 'CategoriesAlternateComponent', 'selector': 'app-categories-alternate'},{'name': 'CategoriesComponent', 'selector': 'app-categories'},{'name': 'CategorieslistviewComponent', 'selector': 'app-categorieslistview'},{'name': 'CategoryItemsBoardComponent', 'selector': 'app-category-items-board'},{'name': 'CategoryItemsBoardItemComponent', 'selector': 'category-items-board-item'},{'name': 'CategoryScrollComponent', 'selector': 'app-category-scroll'},{'name': 'CategorySelectComponent', 'selector': 'app-category-select'},{'name': 'CategorySelectListFilterComponent', 'selector': 'category-select-list-filter'},{'name': 'ChangeDueComponent', 'selector': 'app-balance-due'},{'name': 'ChangepasswordComponent', 'selector': 'app-changepassword'},{'name': 'ChartTableComponent', 'selector': 'app-widget-chart-table'},{'name': 'CheckInProfileComponent', 'selector': 'app-check-in-profile'},{'name': 'ChemicalSpinnersComponent', 'selector': 'app-chemical-spinners'},{'name': 'ChemicalValuesComponent', 'selector': 'app-chemical-values'},{'name': 'ChipsDisplayComponent', 'selector': 'app-chips-display'},{'name': 'ClientInfoComponent', 'selector': 'app-client-info'},{'name': 'ClientSearchSelectorComponent', 'selector': 'app-client-search-selector'},{'name': 'ClientTypeEditComponent', 'selector': 'app-client-type-edit'},{'name': 'ClientTypeListComponent', 'selector': 'app-client-type-list'},{'name': 'ClientTypeSelectionComponent', 'selector': 'app-client-type-selection'},{'name': 'ClientTypesLookupComponent', 'selector': 'app-client-types-lookup'},{'name': 'ClockBreaksTypesComponent', 'selector': 'clock-breaks-types'},{'name': 'ClockInOutComponent', 'selector': 'clock-in-out'},{'name': 'CloseDayValidationComponent', 'selector': 'close-day-validation'},{'name': 'CompanyEditComponent', 'selector': 'company-edit'},{'name': 'CompanyInfoHeaderComponent', 'selector': 'app-company-info-header'},{'name': 'CpVIVO3300Component', 'selector': 'app-cp-vivo3300'},{'name': 'CreditCardPaymentsPrintListComponent', 'selector': 'credit-card-payments-print-list'},{'name': 'CSVImportComponent', 'selector': 'app-csv-import'},{'name': 'DailyReportComponent', 'selector': 'app-daily-report'},{'name': 'DashboardClientTypeSelectionComponent', 'selector': 'dashboard-client-type-selection'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'DashboardMenuComponent', 'selector': 'app-dashboard-menu'},{'name': 'DatabaseSchemaComponent', 'selector': 'app-database-schema'},{'name': 'DateScheduleComponent', 'selector': 'app-date-schedule'},{'name': 'DefaultComponent', 'selector': 'app-default'},{'name': 'DefaultReceiptSelectorComponent', 'selector': 'default-receipt-selector'},{'name': 'DemographicsComponent', 'selector': 'app-demographics'},{'name': 'DepartmentMenuComponent', 'selector': 'app-department-menu'},{'name': 'DepartmentSelectComponent', 'selector': 'app-department-select'},{'name': 'DesignerEditorComponent', 'selector': 'psReporting-designer-editor'},{'name': 'DesignerListComponent', 'selector': 'ps-designer-list'},{'name': 'DeviceInfoComponent', 'selector': 'app-device-info'},{'name': 'DevxReportDesignerComponent', 'selector': 'app-devx-report-designer'},{'name': 'DiscountOptionsComponent', 'selector': 'app-discount-options'},{'name': 'DiscountTypeSelectionComponent', 'selector': 'app-discount-type-selection'},{'name': 'DisplayMenuListComponent', 'selector': 'display-menu-list'},{'name': 'DisplayMenuMainComponent', 'selector': 'display-menu-main'},{'name': 'DisplayMenuMenuComponent', 'selector': 'display-menu-menu'},{'name': 'DisplayMenuSortComponent', 'selector': 'display-menu-sort'},{'name': 'DisplayMenuTitleComponent', 'selector': 'display-menu-title'},{'name': 'DsiAndroidResultsComponent', 'selector': 'pointlesscc-dsi-android-results'},{'name': 'DSIAndroidSettingsComponent', 'selector': 'pointlesscc-dsiandroid-settings'},{'name': 'DsiEMVAndroidComponent', 'selector': 'pointlesscc-dsi-emvandroid'},{'name': 'DSIEMVAndroidPayBtnComponent', 'selector': 'dsiemvandroid-pay-btn'},{'name': 'DsiEMVCardPayBtnComponent', 'selector': 'dsi-emvcard-pay-btn'},{'name': 'DSIEMVElectronComponent', 'selector': 'app-dsiemvelectron'},{'name': 'DsiEMVPaymentComponent', 'selector': 'app-dsi-emvpayment'},{'name': 'DSIEMVTransactionComponent', 'selector': 'app-dsiemvtransaction'},{'name': 'DynamicAgGridComponent', 'selector': 'dynamic-ag-grid'},{'name': 'EditBarComponent', 'selector': 'pgReporting-edit-bar'},{'name': 'EditButtonsStandardComponent', 'selector': 'app-edit-buttons-standard'},{'name': 'EditCSSStylesComponent', 'selector': 'app-edit-cssstyles'},{'name': 'EditSelectedItemsComponent', 'selector': 'app-edit-selected-items'},{'name': 'EditSettingsComponent', 'selector': 'app-edit-settings'},{'name': 'ElectronZoomControlComponent', 'selector': 'electron-zoom-control'},{'name': 'EmailEntryComponent', 'selector': 'app-email-entry'},{'name': 'EmailSettingsComponent', 'selector': 'app-email-settings'},{'name': 'EmployeeClockEditComponent', 'selector': 'app-employee-clock-edit'},{'name': 'EmployeeClockFilterComponent', 'selector': 'employee-clock-filter'},{'name': 'EmployeeClockListComponent', 'selector': 'app-employee-clock-list'},{'name': 'EmployeeDetailsPanelComponent', 'selector': 'app-employee-details-panel'},{'name': 'EmployeeEditComponent', 'selector': 'employee-edit'},{'name': 'EmployeeFilterPanelComponent', 'selector': 'employee-filter-panel'},{'name': 'EmployeeListComponent', 'selector': 'employee-list'},{'name': 'EmployeeLookupComponent', 'selector': 'employee-lookup'},{'name': 'EmployeeMetrcKeyEntryComponent', 'selector': 'app-employee-metrc-key-entry'},{'name': 'ExitLabelSelectionComponent', 'selector': 'exit-label-selection'},{'name': 'ExportDataComponent', 'selector': 'app-export-data'},{'name': 'FacilitiesListComponent', 'selector': 'app-facilities-list'},{'name': 'FacilitySearchSelectorComponent', 'selector': 'app-facility-search-selector'},{'name': 'FastUserSwitchComponent', 'selector': 'app-fast-user-switch'},{'name': 'FieldListTypeAssignerComponent', 'selector': 'pgReporting-field-list-type-assigner'},{'name': 'FieldSelectorComponent', 'selector': 'psReporting-field-selector'},{'name': 'FieldTypeSelectorComponent', 'selector': 'psReporting-field-type-selector'},{'name': 'FieldValueSelectorComponent', 'selector': 'pgReporting-field-value-selector'},{'name': 'FilterBuilderComponent', 'selector': 'pgReporting-filter-builder'},{'name': 'FilterComponent', 'selector': 'app-widget-filter'},{'name': 'FlatRateEditComponent', 'selector': 'app-flat-rate-edit'},{'name': 'FlatRateListComponent', 'selector': 'app-flat-rate-list'},{'name': 'FlatTaxRateListComponent', 'selector': 'app-flat-tax-rate-list'},{'name': 'FloorPlanComponent', 'selector': 'app-floor-plan'},{'name': 'FoodProductEditComponent', 'selector': 'food-product-edit'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'FormSelectListComponent', 'selector': 'form-select-list'},{'name': 'FunctionGroupButtonEditComponent', 'selector': 'function-group-button-edit'},{'name': 'FunctionGroupEditComponent', 'selector': 'app-function-group-edit'},{'name': 'FunctionGroupListComponent', 'selector': 'app-function-group-list'},{'name': 'GenericIdSelectComponent', 'selector': 'app-generic-id-select'},{'name': 'GenericNameSelectComponent', 'selector': 'app-generic-name-select'},{'name': 'GiftCardPayBtnComponent', 'selector': 'gift-card-pay-btn'},{'name': 'GoogleMapsComponent', 'selector': 'app-google-maps'},{'name': 'GridComponentPropertiesComponent', 'selector': 'app-grid-component-properties'},{'name': 'GridcomponentPropertiesDesignComponent', 'selector': 'gridcomponent-properties-design'},{'name': 'GridDesignerInfoComponent', 'selector': 'grid-designer-info'},{'name': 'GridManagerComponent', 'selector': 'menu-manager'},{'name': 'GridManagerEditComponent', 'selector': 'app-grid-manager-edit'},{'name': 'GridMenuLayoutComponent', 'selector': 'grid-menu-layout'},{'name': 'GridSettingsComponent', 'selector': 'app-grid-settings'},{'name': 'GroupByTypesComponent', 'selector': 'psReporting-group-by-types'},{'name': 'HammerCardComponent', 'selector': 'app-hammer-card'},{'name': 'HeaderComponent', 'selector': 'storybook-header'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HouseAccountPayBtnComponent', 'selector': 'app-house-account-pay-btn'},{'name': 'HTMLEditPrintingComponent', 'selector': 'app-htmledit-printing'},{'name': 'IFrameComponent', 'selector': 'app-i-frame'},{'name': 'ImageCaptureComponent', 'selector': 'app-image-capture'},{'name': 'ImageContainerComponent', 'selector': 'image-container'},{'name': 'ImageSwiperComponent', 'selector': 'app-image-swiper'},{'name': 'InstalledPrintersComponent', 'selector': 'app-installed-printers'},{'name': 'InventoryAdjustmentNoteComponent', 'selector': 'app-adjustment-note'},{'name': 'InventoryComponent', 'selector': 'app-inventory-settings'},{'name': 'InventoryCountsViewComponent', 'selector': 'inventory-counts-view'},{'name': 'InventoryHeaderValuesComponent', 'selector': 'app-inventory-header-values'},{'name': 'InventoryHistoryItemComponent', 'selector': 'app-inventory-history-item'},{'name': 'InventoryHistoryListComponent', 'selector': 'app-inventory-history-list'},{'name': 'InventoryListComponent', 'selector': 'app-inventory-list'},{'name': 'InventoryListToolTipComponent', 'selector': 'app-inventory-list-tool-tip'},{'name': 'InventoryLocationsComponent', 'selector': 'app-inventory-locations'},{'name': 'IonicGeoLocationComponent', 'selector': 'app-ionic-geo-location'},{'name': 'IonicSwipeToDeleteComponent', 'selector': 'app-ionic-swipe-to-delete'},{'name': 'ItemCategoriesEditComponent', 'selector': 'app-item-categories-edit'},{'name': 'ItemCategoriesListComponent', 'selector': 'app-item-categories-list'},{'name': 'ItemSalesCardComponent', 'selector': 'item-sales-card'},{'name': 'ItemSortComponent', 'selector': 'app-item-sort'},{'name': 'ItemTypeCategoryAssignmentComponent', 'selector': 'app-item-type-category-assignment'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'ItemTypeDisplayAssignmentComponent', 'selector': 'app-item-type-display-assignment'},{'name': 'ItemTypeEditorComponent', 'selector': 'app-item-type-editor'},{'name': 'ItemTypeSortComponent', 'selector': 'app-item-type-sort'},{'name': 'ItemTypeTogglesEditComponent', 'selector': 'item-type-toggles-edit'},{'name': 'JobTypesEditComponent', 'selector': 'app-job-types-edit'},{'name': 'JobTypesListComponent', 'selector': 'app-job-type-list'},{'name': 'KeyboardButtonComponent', 'selector': 'app-keyboard-button'},{'name': 'KeyboardComponent', 'selector': 'app-keyboard'},{'name': 'KeyboardViewComponent', 'selector': 'app-keyboard-view'},{'name': 'KeyPadComponent', 'selector': 'app-key-pad'},{'name': 'Label1by8Component', 'selector': 'app-label1by8'},{'name': 'LabelViewSelectorComponent', 'selector': 'app-label-view-selector'},{'name': 'LastImageDisplayComponent', 'selector': 'last-image-display'},{'name': 'LimitValuesCardComponent', 'selector': 'app-limit-values-card'},{'name': 'LimitValuesProgressBarsComponent', 'selector': 'limit-values-progress-bars'},{'name': 'LinkedPriceSelectorComponent', 'selector': 'linked-price-selector'},{'name': 'LiquorProductEditComponent', 'selector': 'liquor-product-edit'},{'name': 'ListPrintersElectronComponent', 'selector': 'app-list-printers-electron'},{'name': 'ListProductSearchInputComponent', 'selector': 'list-product-search-input'},{'name': 'LoginComponent', 'selector': 'login-dashboard'},{'name': 'LogoComponent', 'selector': 'app-logo'},{'name': 'M22ResizableComponent', 'selector': '[m22Resizable]'},{'name': 'MainfestEditorComponent', 'selector': 'app-mainfest-editor'},{'name': 'MainfestFilterComponent', 'selector': 'app-mainfest-filter'},{'name': 'MainMenuComponent', 'selector': 'app-main-menu'},{'name': 'ManifestEditorHeaderComponent', 'selector': 'app-manifest-editor-header'},{'name': 'ManifestsComponent', 'selector': 'app-manifests'},{'name': 'ManifestStatusComponent', 'selector': 'app-manifest-status'},{'name': 'ManifestTypeComponent', 'selector': 'app-manifest-type'},{'name': 'MatDateRangeComponent', 'selector': 'mat-date-range'},{'name': 'MatMenuBasicComponent', 'selector': 'mat-menu-basic'},{'name': 'MatSelectComponent', 'selector': 'app-mat-select'},{'name': 'MatSelectNGModelComponent', 'selector': 'mat-select-ngmodel'},{'name': 'MatSelectorComponent', 'selector': 'pgReporting-mat-selector'},{'name': 'MatSpinnerOverlayComponent', 'selector': 'app-mat-spinner-overlay'},{'name': 'MatToggleSelectorComponent', 'selector': 'app-mat-toggle-selector'},{'name': 'MenuBoardComponent', 'selector': 'app-menu-board'},{'name': 'MenuCardCategoriesComponent', 'selector': 'app-menu-card-categories'},{'name': 'MenuCompactComponent', 'selector': 'app-menu-compact'},{'name': 'MenuGroupItemEditComponent', 'selector': 'app-menu-group-item-edit'},{'name': 'MenuItemCardComponent', 'selector': 'app-menu-item-card'},{'name': 'MenuItemCardDashboardComponent', 'selector': 'menu-item-card-dashboard'},{'name': 'MenuitemComponent', 'selector': 'app-menuitem'},{'name': 'MenuItemExtendedPricesComponent', 'selector': 'menu-item-extended-prices'},{'name': 'MenuItemGalleryComponent', 'selector': 'app-menu-item-gallery'},{'name': 'MenuItemModalComponent', 'selector': 'app-menu-item-modal'},{'name': 'MenuItemProductCountComponent', 'selector': 'menu-item-product-count'},{'name': 'MenuItemsInfiniteComponent', 'selector': 'menu-items-infinite'},{'name': 'MenuManagerComponent', 'selector': 'app-menu-manager'},{'name': 'MenuMinimalComponent', 'selector': 'app-menu-minimal'},{'name': 'MenuPriceSelectionComponent', 'selector': 'app-menu-price-selection'},{'name': 'MenuSearchBarComponent', 'selector': 'app-menu-search-bar'},{'name': 'MenuTinyComponent', 'selector': 'app-menu-tiny'},{'name': 'MessagesToUserComponent', 'selector': 'app-messages-to-user'},{'name': 'MetaTagChipsComponent', 'selector': 'app-meta-tag-chips'},{'name': 'MetrcIndividualPackageComponent', 'selector': 'app-metrc-individual-package'},{'name': 'MetrcIntakeHeaderComponent', 'selector': 'metrc-intake-header'},{'name': 'MetrcInventoryPropertiesComponent', 'selector': 'metrc-inventory-properties'},{'name': 'METRCProductsAddComponent', 'selector': 'app-products-add'},{'name': 'MetrcSalesFilterComponent', 'selector': 'metrc-sales-filter'},{'name': 'MetrcSalesListComponent', 'selector': 'app-metrc-sales-list'},{'name': 'MetrcSummaryComponent', 'selector': 'app-metrc-summary'},{'name': 'MoveInventoryLocationComponent', 'selector': 'app-move-inventory-location'},{'name': 'MyThingComponent', 'selector': 'my-thing'},{'name': 'NewInventoryItemComponent', 'selector': 'app-new-inventory-item'},{'name': 'NewOrderTypeComponent', 'selector': 'new-order-type'},{'name': 'OptionsSelectFilterComponent', 'selector': 'options-select-filter'},{'name': 'OrderBarComponent', 'selector': 'app-order-bar'},{'name': 'OrderCardComponent', 'selector': 'app-order-card'},{'name': 'OrderCardsComponent', 'selector': 'app-order-cards'},{'name': 'OrderFilterPanelComponent', 'selector': 'app-order-filter-panel'},{'name': 'OrderHeaderComponent', 'selector': 'app-order-header'},{'name': 'OrderHeaderDemographicsBoardComponent', 'selector': 'app-order-header-demographics-board'},{'name': 'OrderHeaderDemoGraphicsComponent', 'selector': 'app-order-header-demo-graphics'},{'name': 'OrderItemListComponent', 'selector': 'app-order-item-list'},{'name': 'OrderItemsListComponent', 'selector': 'app-order-items-list'},{'name': 'OrderPanelComponent', 'selector': 'app-order-panel'},{'name': 'OrderPercentageDiscountProductEditComponent', 'selector': 'app-order-percentage-discount-product-edit'},{'name': 'OrderPrepComponent', 'selector': 'app-order-prep'},{'name': 'OrdersListComponent', 'selector': 'app-orders-list'},{'name': 'OrdersMainComponent', 'selector': 'app-orders-main'},{'name': 'OrderTotalBoardComponent', 'selector': 'app-order-total-board'},{'name': 'OrderTotalComponent', 'selector': 'app-order-total'},{'name': 'OrderTypeSelectionComponent', 'selector': 'app-order-type-selection'},{'name': 'OverLayComponent', 'selector': 'app-over-lay'},{'name': 'PackageListComponent', 'selector': 'app-package-list'},{'name': 'PackageSearchSelectorComponent', 'selector': 'app-package-search-selector'},{'name': 'PageComponent', 'selector': 'storybook-page'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PagerBlobComponent', 'selector': 'pager-blob'},{'name': 'PagingInfoComponent', 'selector': 'app-paging-info'},{'name': 'PasswordValidationComponent', 'selector': 'app-password-validation'},{'name': 'PaymentBalanceComponent', 'selector': 'app-payment-balance'},{'name': 'PaymentMethodEditComponent', 'selector': 'app-payment-method-edit'},{'name': 'PaymentMethodListComponent', 'selector': 'app-payment-method-list'},{'name': 'PaymentMethodSettingsComponent', 'selector': 'payment-method-settings'},{'name': 'PaymentReportCardComponent', 'selector': 'app-payment-report-card'},{'name': 'PaymentReportComponent', 'selector': 'payment-report'},{'name': 'PaymentReportDataComponent', 'selector': 'app-payment-report-data'},{'name': 'PaypalCardPayBtnComponent', 'selector': 'paypal-card-pay-btn'},{'name': 'PayPalTransactionComponent', 'selector': 'app-pay-pal-transaction'},{'name': 'PieComponent', 'selector': 'app-widget-pie'},{'name': 'PointlessMETRCSalesComponent', 'selector': 'app-pointless-metrcsales'},{'name': 'PosCheckOutButtonsComponent', 'selector': 'pos-check-out-buttons'},{'name': 'PosEditSettingsComponent', 'selector': 'app-pos-edit-settings'},{'name': 'PosListComponent', 'selector': 'app-pos-list'},{'name': 'PosOperationsComponent', 'selector': 'pos-operations'},{'name': 'PosOrderBoardComponent', 'selector': 'app-pos-order-board'},{'name': 'PosOrderComponent', 'selector': 'app-pos-order'},{'name': 'PosOrderFunctionButtonsComponent', 'selector': 'pos-order-function-buttons'},{'name': 'PosOrderItemComponent', 'selector': 'pos-order-item'},{'name': 'PosOrderItemEditComponent', 'selector': 'app-pos-order-item-edit'},{'name': 'PosOrderItemListComponent', 'selector': 'pos-order-item-list'},{'name': 'PosOrderItemsComponent', 'selector': 'pos-order-items'},{'name': 'PosOrderListComponent', 'selector': 'app-pos-order-list'},{'name': 'PosOrderNotesComponent', 'selector': 'pos-order-notes'},{'name': 'PosOrderPriceScheduleInfoComponent', 'selector': 'pos-order-price-schedule-info'},{'name': 'POSOrderScheduleCardComponent', 'selector': 'posorder-schedule-card'},{'name': 'POSOrderScheduleComponent', 'selector': 'pos-order-schedule'},{'name': 'PosOrderScheduleDescriptionComponent', 'selector': 'pos-order-schedule-description'},{'name': 'POSOrderScheduleFormComponent', 'selector': 'app-posorder-schedule-form'},{'name': 'POSOrderServiceTypeComponent', 'selector': 'posorder-service-type'},{'name': 'POSOrderShippingAddressComponent', 'selector': 'posorder-shipping-address'},{'name': 'PosOrderTransactionDataComponent', 'selector': 'pos-order-transaction-data'},{'name': 'PosPaymentComponent', 'selector': 'app-pos-payment'},{'name': 'PosPaymentEditComponent', 'selector': 'pos-payment-edit'},{'name': 'POSPaymentsComponent', 'selector': 'app-pospayments'},{'name': 'PosPaymentsFilterComponent', 'selector': 'app-pos-payments-filter'},{'name': 'PosSplitGroupsComponent', 'selector': 'pos-split-groups'},{'name': 'POSSplitItemsComponent', 'selector': 'app-possplit-items'},{'name': 'PrepContainerComponent', 'selector': 'app-prep-container'},{'name': 'PrepOrderComponent', 'selector': 'app-prep-order'},{'name': 'PrepOrderFilterComponent', 'selector': 'app-prep-order-filter'},{'name': 'PrepOrderItemComponent', 'selector': 'app-prep-order-item'},{'name': 'PriceCategoriesComponent', 'selector': 'app-price-categories'},{'name': 'PriceCategoriesEditComponent', 'selector': 'app-price-categories-edit'},{'name': 'PriceCategoryConversionsComponent', 'selector': 'price-category-conversions'},{'name': 'PriceCategoryMultiplePricesComponent', 'selector': 'price-category-multiple-prices'},{'name': 'PriceCategoryPriceFieldsComponent', 'selector': 'price-category-price-fields'},{'name': 'PriceCategorySearchComponent', 'selector': 'app-price-category-search'},{'name': 'PriceCategorySelectComponent', 'selector': 'app-price-category-select'},{'name': 'PriceCategoryTimeFiltersComponent', 'selector': 'price-category-time-filters'},{'name': 'PriceLinesComponent', 'selector': 'app-price-lines'},{'name': 'PriceOptionsComponent', 'selector': 'app-price-options'},{'name': 'PriceScheduleComponent', 'selector': 'app-price-schedule'},{'name': 'PriceScheduleConstraintsComponent', 'selector': 'app-price-schedule-constraints'},{'name': 'PriceScheduleFieldsComponent', 'selector': 'app-price-schedule-fields'},{'name': 'PriceScheduleInfoComponent', 'selector': 'app-price-schedule-info'},{'name': 'PriceScheduleListComponent', 'selector': 'app-price-schedule-list'},{'name': 'PriceScheduleMenuItemsComponent', 'selector': 'price-schedule-menu-items'},{'name': 'PriceScheduleMenuListComponent', 'selector': 'price-schedule-menu-list'},{'name': 'PriceScheduleMenuOptionsComponent', 'selector': 'price-schedule-menu-options'},{'name': 'PriceScheduleSortComponent', 'selector': 'price-schedule-sort'},{'name': 'PriceTierEditComponent', 'selector': 'app-price-tier-edit'},{'name': 'PriceTierLineEditComponent', 'selector': 'app-price-tier-line-edit'},{'name': 'PriceTierScheduleComponent', 'selector': 'price-tier-schedule'},{'name': 'PriceTiersComponent', 'selector': 'price-tiers-list'},{'name': 'PrinterLocationsComponent', 'selector': 'app-printer-locations'},{'name': 'PrinterLocationSelectionComponent', 'selector': 'app-printer-location-selection'},{'name': 'PrintGroupReceiptComponent', 'selector': 'print-group-receipt'},{'name': 'PrintTemplateComponent', 'selector': 'app-print-template'},{'name': 'PrintTemplatePopUpComponent', 'selector': 'app-print-template-pop-up'},{'name': 'ProducteditComponent', 'selector': 'app-productedit'},{'name': 'ProductFilterComponent', 'selector': 'app-product-filter'},{'name': 'ProductInfoPanelComponent', 'selector': 'app-product-info-panel'},{'name': 'ProductListByBarcodeComponent', 'selector': 'app-product-list-by-barcode'},{'name': 'ProductlistviewComponent', 'selector': 'app-productlistview'},{'name': 'ProductSearchSelector2Component', 'selector': 'product-search-selector2'},{'name': 'ProductSearchSelectorComponent', 'selector': 'app-product-search-selector'},{'name': 'ProductTypeSelectComponent', 'selector': 'product-type-select'},{'name': 'ProfileBillingAddressComponent', 'selector': 'app-profile-billing-address'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'ProfileDemographicsComponent', 'selector': 'app-profile-demographics'},{'name': 'ProfileEditorComponent', 'selector': 'app-profile-editor'},{'name': 'ProfileIDCardInfoComponent', 'selector': 'app-profile-idcard-info'},{'name': 'ProfileListComponent', 'selector': 'app-profile-list'},{'name': 'ProfileLookupComponent', 'selector': 'app-profile-lookup'},{'name': 'ProfileMedInfoComponent', 'selector': 'profile-med-info'},{'name': 'ProfileRolesComponent', 'selector': 'app-profile-roles'},{'name': 'ProfileShippingAddressComponent', 'selector': 'app-profile-shipping-address'},{'name': 'ProgressBarComponent', 'selector': 'app-progress-bar'},{'name': 'ProgressUploaderComponent', 'selector': 'app-progress'},{'name': 'PromptGroupEditComponent', 'selector': 'app-prompt-group-edit'},{'name': 'PromptGroupsComponent', 'selector': 'prompt-groups'},{'name': 'PromptGroupSelectComponent', 'selector': 'prompt-group-select'},{'name': 'PromptInfoPanelComponent', 'selector': 'prompt-info-panel'},{'name': 'PromptItemSelectionComponent', 'selector': 'prompt-item-selection'},{'name': 'PromptItemsSelectedComponent', 'selector': 'prompt-items-selected'},{'name': 'PromptKitsComponent', 'selector': 'prompt-kits'},{'name': 'PromptPanelMenuItemComponent', 'selector': 'prompt-panel-menu-item'},{'name': 'PromptPanelMenuItemsComponent', 'selector': 'prompt-panel-menu-items'},{'name': 'PromptSelectedItemsComponent', 'selector': 'prompt-selected-items'},{'name': 'PromptSubGroupAssociationComponent', 'selector': 'prompt-associations'},{'name': 'PromptSubGroupEditComponent', 'selector': 'app-prompt-sub-group-edit'},{'name': 'PromptSubGroupPanelComponent', 'selector': 'prompt-sub-group-panel'},{'name': 'PromptSubGroupsComponent', 'selector': 'prompt-sub-groups'},{'name': 'PromptWalkThroughComponent', 'selector': 'app-prompt-walk-through'},{'name': 'PSMenuGroupEditComponent', 'selector': 'app-psmenu-group-edit'},{'name': 'PSMenuGroupListComponent', 'selector': 'psmenu-group-list'},{'name': 'PurchaseItemCostHistoryComponent', 'selector': 'purchase-item-cost-history'},{'name': 'PurchaseItemSalesComponent', 'selector': 'purchase-item-sales'},{'name': 'QRCodeTableComponent', 'selector': 'qr-order'},{'name': 'QROrderComponent', 'selector': 'app-qrorder'},{'name': 'QuantiySelectorComponent', 'selector': 'app-quantiy-selector'},{'name': 'QuickPayButtonsComponent', 'selector': 'quick-pay-buttons'},{'name': 'ReceiptLayoutComponent', 'selector': 'app-receipt-layout'},{'name': 'ReceiptViewComponent', 'selector': 'app-receipt-view'},{'name': 'RecieptPopUpComponent', 'selector': 'app-reciept-pop-up'},{'name': 'RegisterAccountExistingUserWithTokenComponent', 'selector': 'app-register-account-existing-user-with-token'},{'name': 'RegisterAccountMainComponent', 'selector': 'app-register-account-main'},{'name': 'ReportGroupSelectorComponent', 'selector': 'psReporting-report-group-selector'},{'name': 'ReportsComponent', 'selector': 'app-reports'},{'name': 'ReportSelectorComponent', 'selector': 'psReporting-report-selector'},{'name': 'ReportTypesComponent', 'selector': 'ps-report-types'},{'name': 'ReportViewerComponent', 'selector': 'app-report-viewer'},{'name': 'RequestMessageComponent', 'selector': 'app-request-message'},{'name': 'RequestMessagesComponent', 'selector': 'app-request-messages'},{'name': 'RequiresSerialComponent', 'selector': 'app-requires-serial'},{'name': 'ResetpasswordComponent', 'selector': 'app-resetpassword'},{'name': 'RetailProductEditComponent', 'selector': 'retail-product-edit'},{'name': 'ReviewComponent', 'selector': 'app-review'},{'name': 'ReviewEditComponent', 'selector': 'app-review-edit'},{'name': 'ReviewsComponent', 'selector': 'app-reviews'},{'name': 'RewardsAvailibleComponent', 'selector': 'app-rewards-availible'},{'name': 'RewardTypeFilterComponent', 'selector': 'app-reward-type-filter'},{'name': 'RewardTypeResultsSelectorComponent', 'selector': 'app-reward-type-panel'},{'name': 'RouteDispatchComponent', 'selector': 'app-route-dispatch'},{'name': 'RouteDispatchDetailsComponent', 'selector': 'app-route-dispatch-details'},{'name': 'RouteDispatchDetailsEditComponent', 'selector': 'app-route-dispatch-details-edit'},{'name': 'RouteDispatchEditComponent', 'selector': 'app-route-dispatch-edit'},{'name': 'RouteDispatchesComponent', 'selector': 'app-route-dispatches'},{'name': 'SalesTaxReportComponent', 'selector': 'sales-tax-report'},{'name': 'SaveChangesButtonComponent', 'selector': 'save-changes-button'},{'name': 'ScaleReaderComponent', 'selector': 'app-scale-reader'},{'name': 'ScaleSettingsComponent', 'selector': 'app-scale-settings'},{'name': 'ScaleValueViewComponent', 'selector': 'scale-value-view'},{'name': 'ScheduledMenuContainerComponent', 'selector': 'scheduled-menu-container'},{'name': 'ScheduledMenuHeaderComponent', 'selector': 'scheduled-menu-header'},{'name': 'ScheduledMenuImageComponent', 'selector': 'scheduled-menu-image'},{'name': 'ScheduledMenuItemComponent', 'selector': 'scheduled-menu-item'},{'name': 'ScheduledMenuItemsComponent', 'selector': 'scheduled-menu-items'},{'name': 'ScheduledMenuListComponent', 'selector': 'scheduled-menu-list'},{'name': 'SearchDebounceInputComponent', 'selector': 'search-debounce-input'},{'name': 'SearchInventoryInputComponent', 'selector': 'search-inventory-input'},{'name': 'SearchPanelComponent', 'selector': 'app-search-panel'},{'name': 'SearchResultsComponent', 'selector': 'app-search-results'},{'name': 'ServiceTypeEditComponent', 'selector': 'app-service-type-edit'},{'name': 'ServiceTypeListComponent', 'selector': 'app-service-type-list'},{'name': 'SettingsComponent', 'selector': 'app-settings'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'SimpleTinyComponent', 'selector': 'simple-tinymce'},{'name': 'SiteEditComponent', 'selector': 'app-site-edit'},{'name': 'SiteEditFormComponent', 'selector': 'app-site-edit-form'},{'name': 'SiteFooterComponent', 'selector': 'app-site-footer'},{'name': 'SitepointsComponent', 'selector': 'app-sitepoints'},{'name': 'SitepurchasesComponent', 'selector': 'app-sitepurchases'},{'name': 'SitesComponent', 'selector': 'app-sites'},{'name': 'SiteSelectorComponent', 'selector': 'app-site-selector'},{'name': 'SoftwareComponent', 'selector': 'app-software-settings'},{'name': 'SortSelectorComponent', 'selector': 'psReporting-sort-selector'},{'name': 'SpeciesListComponent', 'selector': 'app-species-list'},{'name': 'SplashLoadingComponent', 'selector': 'app-splash-loading'},{'name': 'SplitEntrySelectorComponent', 'selector': 'split-entry-selector'},{'name': 'StatusLookupComponent', 'selector': 'app-status-lookup'},{'name': 'StickyHeaderComponent', 'selector': 'app-sticky-header'},{'name': 'StoreCreditEditorComponent', 'selector': 'app-store-credit-editor'},{'name': 'StoreCreditInfoComponent', 'selector': 'store-credit-info'},{'name': 'StoreCreditIssueComponent', 'selector': 'app-store-credit-issue'},{'name': 'StoreCreditListComponent', 'selector': 'app-store-credit-list'},{'name': 'StoreCreditPopUpComponent', 'selector': 'app-store-credit-pop-up'},{'name': 'StoreCreditSearchComponent', 'selector': 'store-credit-search'},{'name': 'StrainBoardComponent', 'selector': 'app-strain-board'},{'name': 'StrainCardComponent', 'selector': 'app-strain-card'},{'name': 'StrainIndicatorComponent', 'selector': 'app-strain-indicator'},{'name': 'StrainPackagesComponent', 'selector': 'app-strain-packages'},{'name': 'StrainProductEditComponent', 'selector': 'app-strain-product-edit'},{'name': 'StrainsAddComponent', 'selector': 'app-strains-add'},{'name': 'StripeCardPayBtnComponent', 'selector': 'stripe-card-pay-btn'},{'name': 'StripeCheckOutComponent', 'selector': 'stripe-check-out'},{'name': 'StripeSettingsComponent', 'selector': 'app-stripe-settings'},{'name': 'SummarycardComponent', 'selector': 'app-summarycard'},{'name': 'TagChipsProductsComponent', 'selector': 'tag-chips-products'},{'name': 'TaxEditComponent', 'selector': 'app-tax-edit'},{'name': 'TaxFieldsComponent', 'selector': 'app-tax-fields'},{'name': 'TaxListComponent', 'selector': 'app-tax-list'},{'name': 'TaxRateListComponent', 'selector': 'app-tax-rate-list'},{'name': 'ThreeCXFabComponent', 'selector': 'app-three-cxfab'},{'name': 'TierItemsComponent', 'selector': 'app-tier-items'},{'name': 'TierMenuComponent', 'selector': 'app-tier-menu'},{'name': 'TierPriceLineComponent', 'selector': 'tier-price-line'},{'name': 'TierPricesComponent', 'selector': 'app-tier-prices'},{'name': 'TiersCardComponent', 'selector': 'app-tiers-card'},{'name': 'TiersWithPricesComponent', 'selector': 'tiers-with-prices'},{'name': 'TimeScheduleComponent', 'selector': 'app-time-schedule'},{'name': 'TipEntryComponent', 'selector': 'tip-entry-amount'},{'name': 'ToggleThemeComponent', 'selector': 'app-toggle-theme'},{'name': 'TriPOSCardPayBtnComponent', 'selector': 'app-tri-poscard-pay-btn'},{'name': 'TriposSettingsComponent', 'selector': 'app-tripos-settings'},{'name': 'TriPosTransactionsComponent', 'selector': 'app-tri-pos-transactions'},{'name': 'TvPriceSpecialsComponent', 'selector': 'app-tv-price-specials'},{'name': 'TvPriceTierMenuItemsComponent', 'selector': 'app-tv-price-tier-menu-items'},{'name': 'TVPriceTiersComponent', 'selector': 'app-tvprice-tiers'},{'name': 'TypeBoardComponent', 'selector': 'app-type-board'},{'name': 'TypeBoardItemsComponent', 'selector': 'app-type-board-items'},{'name': 'TypeFilterComponent', 'selector': 'app-type-filter'},{'name': 'TypeResultsSelectorComponent', 'selector': 'app-type-results-selector'},{'name': 'UIHomePageSettingsComponent', 'selector': 'uihome-page-settings'},{'name': 'UITransactionsComponent', 'selector': 'app-uitransactions'},{'name': 'UnitTypeEditComponent', 'selector': 'app-unit-type-edit'},{'name': 'UnitTypeFieldsComponent', 'selector': 'app-unit-type-fields'},{'name': 'UnitTypeListComponent', 'selector': 'unit-types'},{'name': 'UnitTypePromptComponent', 'selector': 'app-unit-type-prompt'},{'name': 'UnitTypeSelectComponent', 'selector': 'unit-type-select'},{'name': 'UploaderComponent', 'selector': 'app-widget-uploader'},{'name': 'UseGroupTaxAssignmentComponent', 'selector': 'app-use-group-tax-assignment'},{'name': 'UsermessagesComponent', 'selector': 'app-usermessages'},{'name': 'ValueFieldsComponent', 'selector': 'app-value-fields'},{'name': 'ValueFromListSelectorComponent', 'selector': 'value-from-list-selector'},{'name': 'ValueSpinnerComponent', 'selector': 'app-value-spinner'},{'name': 'WebEnabledComponent', 'selector': 'app-web-enabled'},{'name': 'WeekDaySelectionComponent', 'selector': 'app-week-day-selection'},{'name': 'WicEBTCardPayBtnComponent', 'selector': 'wic-ebtcard-pay-btn'},{'name': 'WishlistComponent', 'selector': 'app-wishlist'},{'name': 'YoutubePlayerComponent', 'selector': 'app-youtube-player'},{'name': 'ZoomFloorPlanComponent', 'selector': 'zoom-floor-plan'}];
+    var DIRECTIVES = [{'name': 'AppPasswordMaskDirective', 'selector': '[appAppPasswordMask]'},{'name': 'AutofocusDirective', 'selector': '[appAutoFocusInput]'},{'name': 'CurrencyFormatterDirective', 'selector': '[currencyFormatter]'},{'name': 'DefaultImageDirective', 'selector': 'img[default]'},{'name': 'DisableControlDirective', 'selector': '[disableControl]'},{'name': 'DndDirective', 'selector': '[appDnd]'},{'name': 'Events', 'selector': '[Events]'},{'name': 'FreeDraggingDirective', 'selector': '[appFreeDragging]'},{'name': 'FreeDraggingHandleDirective', 'selector': '[appFreeDraggingHandle]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'InstructionDirective', 'selector': '[appInstruction]'},{'name': 'NgControlAttributeDirective', 'selector': '[formControlName],[formControl]'},{'name': 'NumericDirective', 'selector': '[numeric]'},{'name': 'ResizeDirective', 'selector': '[resize]'},{'name': 'ScrollableDirective', 'selector': '[appScrollable]'},{'name': 'ScrollbarThemeDirectiveDirective', 'selector': '[appScrollbarThemeDirective]'},{'name': 'StickyHeaderDirective', 'selector': '[stickyHeaderDirective]'},{'name': 'UserAuthorizedDirective', 'selector': '[userAuthorized]'}];
     var ACTUAL_COMPONENT = {'name': 'TypeResultsSelectorComponent'};
 </script>
 <script src="../js/tree.js"></script>
@@ -3782,14 +4382,16 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 
 
 
-                   
+
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -3801,6 +4403,15 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
@@ -3810,8 +4421,8 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

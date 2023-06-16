@@ -53,7 +53,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
           )
   {
     if (data) {
-      this.orderService.currentOrder$.subscribe(order => {
+      this.orderMethodService.currentOrder$.subscribe(order => {
         if (order) {
           this.order = order;
         }
@@ -78,7 +78,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   }
 
   getVoidReasons() {
-    console.log('action', this.itemWithAction.action)
+    // console.log('action', this.itemWithAction.action)
     const site = this.siteService.getAssignedSite();
     if (!this.itemWithAction) { return }
     if (this.itemWithAction?.typeOfAction.toLowerCase()  === 'VoidOrder'.toLowerCase() ) {
@@ -184,9 +184,9 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateOrderSub(order: IPOSOrder) { 
-    this.orderService.updateLastItemAdded(null)
-    this.orderService.updateOrderSubscription(order)
+  updateOrderSub(order: IPOSOrder) {
+    this.orderMethodService.updateLastItemAdded(null)
+    this.orderMethodService.updateOrderSubscription(order)
     this.dialogRef.close();
   }
 
@@ -216,7 +216,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
             this.actionResponse$ = response$.pipe(switchMap(
               data => {
                   if (data === 'Item voided') {
-                 
+
                     this.updateSubscription()
                     this.notifyEvent('Item voided', 'Result')
                     this.closeDialog();
@@ -236,7 +236,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
             const item = {} as OrderActionResult
             this.actionResponse$ = this.orderMethodService.refundOrder(this.itemWithAction).pipe(
               switchMap( data => {
-                 
+
                   if (data?.errorMessage) {
                     this.notifyEvent(data.errorMessage, 'Result')
                   }
@@ -288,8 +288,8 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     const site = this.siteService.getAssignedSite();
     const orderID = this.itemWithAction?.posItem?.orderID;
     this.orderService.getOrder(site, orderID.toString(), false).subscribe(data => {
-        this.orderService.updateLastItemAdded(null)
-        this.orderService.updateOrderSubscription(data)
+        this.orderMethodService.updateLastItemAdded(null)
+        this.orderMethodService.updateOrderSubscription(data)
       }
     )
   }

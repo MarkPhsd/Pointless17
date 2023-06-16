@@ -26,6 +26,7 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { TriposResult } from 'src/app/_services/tripos/triposModels';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-adjust-payment',
@@ -83,6 +84,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                 private productEditButonService: ProductEditButtonService,
                 private manifestService       : ManifestInventoryService,
                 private settingsService       : SettingsService,
+                private orderMethodsService   : OrderMethodsService,
                 private dialogRef             : MatDialogRef<AdjustPaymentComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: OperationWithAction,
                 )
@@ -292,11 +294,11 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                     item.transactionId = this.payment.refNumber;
                   }
 
-                  if (!this.voidAmount) { 
+                  if (!this.voidAmount) {
                     this.voidAmount = this.resultAction.payment.amountPaid
                   }
 
-                  this.resultAction.voidAmount = this.voidAmount  
+                  this.resultAction.voidAmount = this.voidAmount
                   item.transactionAmount = this.voidAmount.toString();
                   let process$ : Observable<TriposResult>;
 
@@ -514,7 +516,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
     if (response && response.result) {
       item$.subscribe( order => {
-        this.orderService.updateOrderSubscription(order)
+        this.orderMethodsService.updateOrderSubscription(order)
         this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
         this.closeDialog(response.payment, response.paymentMethod);
       });
@@ -559,7 +561,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     )).pipe(switchMap(data => {
 
       // console.log('getting order', data)
-      this.orderService.updateOrderSubscription(data)
+      this.orderMethodsService.updateOrderSubscription(data)
       this.storeCreditMethodService.updateSearchModel(null)
 
       this.dialogRef.close();

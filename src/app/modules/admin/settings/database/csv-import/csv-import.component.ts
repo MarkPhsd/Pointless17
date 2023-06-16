@@ -12,6 +12,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FlowVendor, ImportFlowVendorResults, IPOSOrder, IProduct } from 'src/app/_interfaces';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { FlowInventory, ImportFlowInventoryResults } from 'src/app/_interfaces/import_interfaces/inventory-flow';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 export interface NamesCities {
   names: string[];
   cities: string[];
@@ -57,6 +58,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     private clientTableService: ClientTableService,
     private menuService         : MenuService,
     private orderService        : OrdersService,
+    public orderMethodsService  : OrderMethodsService,
     private ngxCsvParser        : NgxCsvParser) { }
 
   @ViewChild('fileDropRef') fileImportInput: any;
@@ -347,8 +349,8 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     this.importing = true;
     if (items) {
       this.orderService.importPurchaseOrderCSV(site, this.order, items).subscribe(data => {
-        this.orderService.updateOrder(data)
-        this.orderService.updateOrderSubscription(data)
+        this.orderMethodsService.updateOrder(data)
+        this.orderMethodsService.updateOrderSubscription(data)
         this.importing = false;
         this.csvRecords = 'Import complete.';
         this.fileImportInput.nativeElement.value = "";

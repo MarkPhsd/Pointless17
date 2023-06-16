@@ -9,7 +9,6 @@
     <h4>
       <ng-content></ng-content>
     </h4>
-
     <button mat-raised-button color="warn" (click)="resetTransactionSettings()">Reset Settings</button>
   </mat-card-subtitle>
 
@@ -42,6 +41,7 @@
     <div class="grid-items">
 
       <h4>Item Options</h4>
+      <mat-label>These are options that display during the order to modify the item.</mat-label>
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="displayNotes"
@@ -239,7 +239,10 @@
       </div>
 
       <mat-divider></mat-divider>
-      <h4>Client Options</h4>
+
+      <mat-divider></mat-divider>
+      <h4>Default Selections</h4>
+
       <div *ngIf="(clientTypes$ | async) as clientTypes ">
         <mat-form-field style="width: 200px" class="fields"
             appearance="outline">
@@ -256,8 +259,42 @@
           </mat-form-field>
       </div>
 
+      <div *ngIf="(serviceType$ | async) as list ">
+        <mat-form-field style="width: 200px" class="fields"
+            appearance="outline">
+          <mat-label>Default Online Order Type</mat-label>
+            <mat-select
+                      type              = "number"
+                      formControlName   = "defaultOrderTypeID" >
+              <mat-option
+                  *ngFor="let item of list"
+                  [value]="item?.id">
+                  {{item?.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+      </div>
+
+      <div *ngIf="(categories$ | async) as list ">
+        <mat-form-field style="width: 200px" class="fields"
+            appearance="outline">
+          <mat-label>Default Category On New Order</mat-label>
+            <mat-select
+                      type              = "number"
+                      formControlName   = "defaultNewOrderCategoryID" >
+              <mat-option
+                  *ngFor="let item of list"
+                  [value]="item?.id">
+                  {{item?.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+      </div>
+
+      <mat-divider></mat-divider>
+      <h4>Contact Validations</h4>
+
       <div class="toggle-fields">
-        <!-- -->
         <mat-slide-toggle
                   formControlName="validateCustomerLicenseID">
           <mat-label>Validate Customer License/ID</mat-label>
@@ -280,9 +317,6 @@
         </mat-slide-toggle>
       </div>
 
-
-
-
       <div>
         <mat-label  class="mat-label-design">Enable to not save customer info on ID Scanning (driver license, id etc.).</mat-label>
         <div class="toggle-fields">
@@ -294,7 +328,7 @@
       </div>
 
       <mat-divider></mat-divider>
-      <h3>Operation Settings:</h3>
+      <h3>Operation Settings</h3>
 
       <div class="grid-small">
         <div>
@@ -307,7 +341,15 @@
         </div>
         <div>
 
-
+        <div>
+          <mat-label class="mat-label-design">Scale Weight Grace Value.</mat-label>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'weightGraceValue'">
+            Grace Value
+          </app-value-fields>
+        </div>
+  
         <div>
           <mat-label  class="mat-label-design">Minimum Client Age.</mat-label>
           <app-value-fields
@@ -346,7 +388,7 @@
         </div>
 
         <div>
-          <mat-label class="mat-label-design">Log out time in minutes of inactivity.</mat-label>
+          <mat-label class="mat-label-design">(Beta) Log out time in minutes of inactivity.</mat-label>
           <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'idleTime'">
@@ -388,15 +430,6 @@
 
     <mat-divider></mat-divider>
 
-    <h4>Gift Card Store Credit</h4>
-    <mat-label>Pointless can handle multiple locations for gift cards. Please see documentation.</mat-label>
-    <div class="toggle-fields">
-      <mat-slide-toggle
-                formControlName="enableGiftCards"
-                >
-        <mat-label>CardPointe Android Enabled</mat-label>
-      </mat-slide-toggle>
-    </div>
 
     <h4>Credit Card Processing</h4>
 
@@ -491,6 +524,16 @@
                 formControlName="triposEnabled"
                 >
         <mat-label>Tri POS Enabled (FISGlobal)</mat-label>
+      </mat-slide-toggle>
+    </div>
+    
+    <h4>Gift Card Store Credit</h4>
+    <mat-label>Pointless can handle multiple locations for gift cards. Please see documentation.</mat-label>
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="enableGiftCards"
+                >
+        <mat-label>Enable Gift Cards</mat-label>
       </mat-slide-toggle>
     </div>
 

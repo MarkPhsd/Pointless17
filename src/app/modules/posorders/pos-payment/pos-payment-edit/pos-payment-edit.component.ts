@@ -12,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialogRef } from '@angular/material/dialog';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'pos-payment-edit',
@@ -50,6 +51,7 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
       private siteService         : SitesService,
       public  route               : ActivatedRoute,
       private orderService        : OrdersService,
+      public orderMethodsService: OrderMethodsService,
       private _snackBar           : MatSnackBar,
       private _bottomSheet        : MatBottomSheet,
       private printingService     : PrintingService,
@@ -85,7 +87,7 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
     if (this.payment) {
       const site      = this.siteService.getAssignedSite()
       this.orderService.getOrder(site, this.payment.orderID.toString(), this.payment.history).subscribe( order => {
-          this.orderService.updateOrderSubscription(order)
+          this.orderMethodsService.updateOrderSubscription(order)
           this.printingService.previewReceipt();
         }
       )
@@ -98,7 +100,7 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
     const id      = this.payment.orderID;
     const site    = this.siteService.getAssignedSite();
     const order$  =  this.orderService.getOrder(site, id.toString(), history )
-    order$.subscribe(data =>  { this.orderService.setActiveOrder(site, data)
+    order$.subscribe(data =>  { this.orderMethodsService.setActiveOrder(site, data)
       this._bottomSheet.dismiss();
     })
   }

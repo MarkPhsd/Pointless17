@@ -68,7 +68,6 @@ export class AWSBucketService {
 
   awsBucketURLOBS(): Observable<string> {
     return this.getAWSBucketObservable().pipe(switchMap(data => {
-      // console.log('awsBucketURLOBS', JSON.stringify(data))
       return of(`https://${data.preassignedURL}.s3.amazonaws.com/`)
     }))
   }

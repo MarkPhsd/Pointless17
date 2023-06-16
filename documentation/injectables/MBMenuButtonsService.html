@@ -1,0 +1,1862 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >MBMenuButtonsService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_services/system/mb-menu-buttons.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#deleteButton" >deleteButton</a>
+                            </li>
+                            <li>
+                                <a href="#deleteGroup" >deleteGroup</a>
+                            </li>
+                            <li>
+                                <a href="#generateDefaultOrderButtons" >generateDefaultOrderButtons</a>
+                            </li>
+                            <li>
+                                <a href="#getButtonByName" >getButtonByName</a>
+                            </li>
+                            <li>
+                                <a href="#getButtonsByID" >getButtonsByID</a>
+                            </li>
+                            <li>
+                                <a href="#getGroupByID" >getGroupByID</a>
+                            </li>
+                            <li>
+                                <a href="#getGroups" >getGroups</a>
+                            </li>
+                            <li>
+                                <a href="#getGroupsByName" >getGroupsByName</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getOrderDefaultButtonProperties" >getOrderDefaultButtonProperties</a>
+                            </li>
+                            <li>
+                                <a href="#postButton" >postButton</a>
+                            </li>
+                            <li>
+                                <a href="#postButtonList" >postButtonList</a>
+                            </li>
+                            <li>
+                                <a href="#postGroup" >postGroup</a>
+                            </li>
+                            <li>
+                                <a href="#putButton" >putButton</a>
+                            </li>
+                            <li>
+                                <a href="#putGroup" >putGroup</a>
+                            </li>
+                            <li>
+                                <a href="#resetOrderButtons" >resetOrderButtons</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(http: HttpClient, httpCache: <a href="../injectables/HttpClientCacheService.html" target="_self">HttpClientCacheService</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>, sitesService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:46</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                    <code>HttpClient</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>httpCache</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/HttpClientCacheService.html" target="_self" >HttpClientCacheService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>auth</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthenticationService.html" target="_self" >AuthenticationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>sitesService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SitesService.html" target="_self" >SitesService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteButton"></a>
+                    <span class="name">
+                        <span ><b>deleteButton</b></span>
+                        <a href="#deleteButton"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteButton(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="230"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:230</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/mb_MenuButton.html" target="_self" >Observable&lt;mb_MenuButton&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteGroup"></a>
+                    <span class="name">
+                        <span ><b>deleteGroup</b></span>
+                        <a href="#deleteGroup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteGroup(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="136"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:136</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IMenuButtonGroups.html" target="_self" >Observable&lt;IMenuButtonGroups&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="generateDefaultOrderButtons"></a>
+                    <span class="name">
+                        <span ><b>generateDefaultOrderButtons</b></span>
+                        <a href="#generateDefaultOrderButtons"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>generateDefaultOrderButtons(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="244"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:244</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/mb_MenuButton.html" target="_self" >mb_MenuButton[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getButtonByName"></a>
+                    <span class="name">
+                        <span ><b>getButtonByName</b></span>
+                        <a href="#getButtonByName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getButtonByName(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, name: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="154"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:154</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>name</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/mb_MenuButton.html" target="_self" >Observable&lt;mb_MenuButton&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getButtonsByID"></a>
+                    <span class="name">
+                        <span ><b>getButtonsByID</b></span>
+                        <a href="#getButtonsByID"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getButtonsByID(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="170"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:170</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/mb_MenuButton.html" target="_self" >Observable&lt;mb_MenuButton&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getGroupByID"></a>
+                    <span class="name">
+                        <span ><b>getGroupByID</b></span>
+                        <a href="#getGroupByID"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getGroupByID(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="88"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:88</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IMenuButtonGroups.html" target="_self" >Observable&lt;IMenuButtonGroups&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getGroups"></a>
+                    <span class="name">
+                        <span ><b>getGroups</b></span>
+                        <a href="#getGroups"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getGroups(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="56"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:56</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IMenuButtonGroups.html" target="_self" >Observable&lt;IMenuButtonGroups[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getGroupsByName"></a>
+                    <span class="name">
+                        <span ><b>getGroupsByName</b></span>
+                        <a href="#getGroupsByName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getGroupsByName(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, name: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="72"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:72</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>name</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IMenuButtonGroups.html" target="_self" >Observable&lt;IMenuButtonGroups[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getOrderDefaultButtonProperties"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>getOrderDefaultButtonProperties</b></span>
+                        <a href="#getOrderDefaultButtonProperties"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getOrderDefaultButtonProperties()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="338"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:338</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IMenuButtonProperties.html" target="_self" >IMenuButtonProperties</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postButton"></a>
+                    <span class="name">
+                        <span ><b>postButton</b></span>
+                        <a href="#postButton"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postButton(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, menuButton: <a href="../interfaces/mb_MenuButton.html" target="_self">mb_MenuButton</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="202"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:202</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>menuButton</td>
+                                    <td>
+                                                <code><a href="../interfaces/mb_MenuButton.html" target="_self" >mb_MenuButton</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/mb_MenuButton.html" target="_self" >Observable&lt;mb_MenuButton&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postButtonList"></a>
+                    <span class="name">
+                        <span ><b>postButtonList</b></span>
+                        <a href="#postButtonList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postButtonList(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, menuButton: <a href="../interfaces/mb_MenuButton.html" target="_self">mb_MenuButton[]</a>, groupName: <a href="../s/s.html" target="_self">string</a>, reset: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="216"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:216</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>menuButton</td>
+                                    <td>
+                                                <code><a href="../interfaces/mb_MenuButton.html" target="_self" >mb_MenuButton[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>groupName</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>reset</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/mb_MenuButton.html" target="_self" >Observable&lt;mb_MenuButton[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postGroup"></a>
+                    <span class="name">
+                        <span ><b>postGroup</b></span>
+                        <a href="#postGroup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postGroup(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, menuButtonGroup: <a href="../interfaces/IMenuButtonGroups.html" target="_self">IMenuButtonGroups</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="120"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:120</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>menuButtonGroup</td>
+                                    <td>
+                                                <code><a href="../interfaces/IMenuButtonGroups.html" target="_self" >IMenuButtonGroups</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IMenuButtonGroups.html" target="_self" >Observable&lt;IMenuButtonGroups&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="putButton"></a>
+                    <span class="name">
+                        <span ><b>putButton</b></span>
+                        <a href="#putButton"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>putButton(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, menuButton: <a href="../interfaces/mb_MenuButton.html" target="_self">mb_MenuButton</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="186"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:186</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>menuButton</td>
+                                    <td>
+                                                <code><a href="../interfaces/mb_MenuButton.html" target="_self" >mb_MenuButton</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/mb_MenuButton.html" target="_self" >Observable&lt;mb_MenuButton&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="putGroup"></a>
+                    <span class="name">
+                        <span ><b>putGroup</b></span>
+                        <a href="#putGroup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>putGroup(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, menuButtonGroup: <a href="../interfaces/IMenuButtonGroups.html" target="_self">IMenuButtonGroups</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="104"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:104</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>menuButtonGroup</td>
+                                    <td>
+                                                <code><a href="../interfaces/IMenuButtonGroups.html" target="_self" >IMenuButtonGroups</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IMenuButtonGroups.html" target="_self" >Observable&lt;IMenuButtonGroups&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="resetOrderButtons"></a>
+                    <span class="name">
+                        <span ><b>resetOrderButtons</b></span>
+                        <a href="#resetOrderButtons"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>resetOrderButtons(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="356"
+                            class="link-to-prism">src/app/_services/system/mb-menu-buttons.service.ts:356</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/mb_MenuButton.html" target="_self" >Observable&lt;mb_MenuButton[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { HttpClient } from &#x27;@angular/common/http&#x27;;
+import { Injectable } from &#x27;@angular/core&#x27;;
+import { Observable } from &#x27;rxjs&#x27;;
+import { HttpClientCacheService } from &#x27;src/app/_http-interceptors/http-client-cache.service&#x27;;
+import { ISite } from &#x27;src/app/_interfaces&#x27;;
+import { AuthenticationService } from &#x27;..&#x27;;
+import { SitesService } from &#x27;../reporting/sites.service&#x27;;
+
+export interface IMenuButtonGroups {
+  id: number
+  name: string
+  description: string;
+  mb_MenuButtons: mb_MenuButton[];
+}
+
+export interface mb_MenuButton {
+  id: number
+  mb_MenuButtonGroupID: number;
+  name: string;
+  sort: number;
+  properties: string;
+  icon: string;
+}
+
+export interface IMenuButtonProperties {
+  orderHistory: boolean;
+  balanceRemainingGreaterThanZero: boolean;
+  method: string;
+  allowStaff: boolean;
+  allowUser: boolean;
+  itemsPrinted: boolean;
+  paymentsMade: boolean;
+  isAuthorized: boolean;
+  suspendedOrders: boolean;
+  completedOrder: boolean;
+  completedOrderAndUser: boolean;
+  sidePanelOnly: boolean;
+  mainPanelOnly: boolean;
+  smallDeviceOnly: boolean;
+  color: string;
+}
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class MBMenuButtonsService {
+
+  constructor(
+    private http: HttpClient,
+    private httpCache: HttpClientCacheService,
+    private auth: AuthenticationService,
+    private sitesService: SitesService,
+   )
+{ }
+
+  getGroups(site: ISite): Observable&lt;IMenuButtonGroups[]&gt; {
+
+    const controller &#x3D; &quot;/mb_MenuButtonGroups/&quot;
+
+    const endPoint &#x3D; &quot;GetGroups&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const options &#x3D; { url: uri, cacheMins: 0}
+
+    return  this.httpCache.get&lt;IMenuButtonGroups[]&gt;(options)
+
+  };
+
+  getGroupsByName(site: ISite, name: string): Observable&lt;IMenuButtonGroups[]&gt; {
+
+    const controller &#x3D; &quot;/MB_MenuButtonGroups/&quot;
+
+    const endPoint &#x3D; &quot;GetMenuItems&quot;
+
+    const parameters &#x3D; &#x60;?name&#x3D;${name}&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const options &#x3D; { url: uri, cacheMins: 0}
+
+    return  this.httpCache.get&lt;IMenuButtonGroups[]&gt;(options)
+
+  };
+
+  getGroupByID(site: ISite, id: number): Observable&lt;IMenuButtonGroups&gt; {
+
+    const controller &#x3D; &quot;/MB_MenuButtonGroups/&quot;
+
+    const endPoint &#x3D; &quot;GetGroup&quot;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const options &#x3D; { url: uri, cacheMins: 0}
+
+    return  this.httpCache.get&lt;IMenuButtonGroups&gt;(options)
+
+  };
+
+  putGroup(site: ISite, menuButtonGroup: IMenuButtonGroups): Observable&lt;IMenuButtonGroups&gt; {
+
+    const controller &#x3D; &quot;/MB_MenuButtonGroups/&quot;
+
+    const endPoint &#x3D; &quot;PutGroup&quot;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${menuButtonGroup.id}&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const url &#x3D; { url: uri, cacheMins: 0}
+
+    return  this.http.put&lt;IMenuButtonGroups&gt;(uri , menuButtonGroup)
+
+  };
+
+  postGroup(site: ISite, menuButtonGroup: IMenuButtonGroups): Observable&lt;IMenuButtonGroups&gt; {
+
+    const controller &#x3D; &quot;/MB_MenuButtonGroups/&quot;
+
+    const endPoint &#x3D; &quot;PostGroup&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const url &#x3D; { url: uri, cacheMins: 0}
+
+    return  this.http.post&lt;IMenuButtonGroups&gt;(uri , menuButtonGroup)
+
+  };
+
+  deleteGroup(site: ISite, id: number): Observable&lt;IMenuButtonGroups&gt; {
+
+    const controller &#x3D;&quot;/MB_MenuButtonGroups/&quot;
+
+    const endPoint &#x3D; &#x60;deleteGroup&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.delete&lt;any&gt;(url)
+
+  }
+
+
+  /////////////////////////////
+
+
+  getButtonByName(site: ISite, name: string): Observable&lt;mb_MenuButton&gt; {
+
+    const controller &#x3D; &quot;/MB_MenuButtons/&quot;
+
+    const endPoint &#x3D; &quot;GetMB_MenuButton&quot;
+
+    const parameters &#x3D; &#x60;?name&#x3D;${name}&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const options &#x3D; { url: uri, cacheMins: 0}
+
+    return  this.httpCache.get&lt;mb_MenuButton&gt;(options)
+
+  };
+
+  getButtonsByID(site: ISite, id: number): Observable&lt;mb_MenuButton&gt; {
+
+    const controller &#x3D; &quot;/MB_MenuButtons/&quot;
+
+    const endPoint &#x3D; &quot;GetMB_MenuButton&quot;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const options &#x3D; { url: uri, cacheMins: 0}
+
+    return  this.httpCache.get&lt;mb_MenuButton&gt;(options)
+
+  };
+
+  putButton(site: ISite, menuButton: mb_MenuButton): Observable&lt;mb_MenuButton&gt; {
+
+    if (!menuButton || !menuButton.id) { return null}
+
+    const controller &#x3D; &quot;/MB_MenuButtons/&quot;
+
+    const endPoint &#x3D; &quot;PutMB_MenuButton&quot;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${menuButton.id}&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.put&lt;mb_MenuButton&gt;(uri , menuButton)
+
+  };
+
+  postButton(site: ISite, menuButton: mb_MenuButton): Observable&lt;mb_MenuButton&gt; {
+    if (!menuButton ) { return null}
+    const controller &#x3D; &quot;/mB_MenuButtons/&quot;
+
+    const endPoint &#x3D; &quot;PostMB_MenuButton&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.post&lt;mb_MenuButton&gt;(uri , menuButton)
+
+  };
+
+  postButtonList(site: ISite, menuButton: mb_MenuButton[], groupName: string, reset: boolean): Observable&lt;mb_MenuButton[]&gt; {
+
+    const controller &#x3D; &quot;/mB_MenuButtons/&quot;
+
+    const endPoint &#x3D; &quot;PostmB_MenuButtons&quot;
+
+    const parameters &#x3D; &#x60;?groupName&#x3D;${groupName}&amp;reset&#x3D;${reset}&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.post&lt;mb_MenuButton[]&gt;(uri , menuButton)
+
+  };
+
+  deleteButton(site: ISite, id: number): Observable&lt;mb_MenuButton&gt; {
+
+    const controller &#x3D;&quot;/mB_MenuButtons/&quot;
+
+    const endPoint &#x3D; &#x60;DeletemB_MenuButtons&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.delete&lt;mb_MenuButton&gt;(url)
+
+  }
+
+  generateDefaultOrderButtons(id: number): mb_MenuButton[] {
+    //post up to API order buttons.
+    const items &#x3D; [] as mb_MenuButton[];
+
+    let item &#x3D; {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID &#x3D;id
+    item.name &#x3D; &quot;Items&quot;
+    item.icon &#x3D; &quot;list&quot;
+    item.sort  &#x3D; 1
+    let prop &#x3D; this.getOrderDefaultButtonProperties();
+    prop.method &#x3D; &#x27;showItems()&#x27;
+    prop.smallDeviceOnly &#x3D; true;
+    item.properties  &#x3D; JSON.stringify(prop)
+    items.push(item)
+
+    item &#x3D; {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID &#x3D;id
+    item.name &#x3D; &quot;Suspend&quot;
+    item.icon &#x3D; &quot;&quot;
+    item.sort  &#x3D; 2
+    prop.color      &#x3D; &quot;warn&quot;
+    prop &#x3D; this.getOrderDefaultButtonProperties();
+    prop.method &#x3D; &#x27;removeSuspension()&#x27;
+    item.properties  &#x3D; JSON.stringify(prop)
+    items.push(item)
+
+    item &#x3D; {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID &#x3D;id
+    item.name &#x3D; &quot;Delete&quot;
+    item.icon &#x3D; &quot;delete&quot;
+    item.sort  &#x3D; 3
+    prop.color      &#x3D; &quot;warn&quot;
+    prop &#x3D; this.getOrderDefaultButtonProperties();
+    prop.method &#x3D; &#x27;deleteOrder()&#x27;
+    item.properties  &#x3D; JSON.stringify(prop)
+    items.push(item)
+
+    item &#x3D; {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID &#x3D;id
+    item.name &#x3D; &quot;Check Out / Pay&quot;
+    item.icon &#x3D; &quot;credit_card&quot;
+    item.sort  &#x3D; 4
+    prop &#x3D; this.getOrderDefaultButtonProperties();
+    prop.method &#x3D; &#x27;makePayment()&#x27;
+    prop.sidePanelOnly &#x3D; true
+    item.properties  &#x3D; JSON.stringify(prop)
+    items.push(item)
+
+    item &#x3D; {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID &#x3D;id
+    item.name &#x3D; &quot;Labels&quot;
+    item.icon &#x3D; &quot;print&quot;
+    item.sort  &#x3D; 5
+    prop.method &#x3D; &#x27;printLabels()&#x27;
+    prop &#x3D; this.getOrderDefaultButtonProperties();
+    item.properties  &#x3D; JSON.stringify(prop)
+    items.push(item)
+
+    item &#x3D; {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID &#x3D;id
+    item.name &#x3D; &quot;Re-Print Labels&quot;
+    item.icon &#x3D; &quot;print&quot;
+    item.sort  &#x3D; 6
+    prop.method &#x3D; &#x27;rePrintLabels()&#x27;
+    prop &#x3D; this.getOrderDefaultButtonProperties();
+    item.properties  &#x3D; JSON.stringify(prop)
+    items.push(item)
+
+    item &#x3D; {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID &#x3D;id
+    item.name &#x3D; &quot;Void&quot;
+    item.icon &#x3D; &quot;delete&quot;
+    item.sort  &#x3D; 7
+    prop.method &#x3D; &#x27;voidOrder()&#x27;
+    prop.color      &#x3D; &quot;warn&quot;
+    prop &#x3D; this.getOrderDefaultButtonProperties();
+    item.properties  &#x3D; JSON.stringify(prop)
+    items.push(item)
+
+    item &#x3D; {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID &#x3D;id
+    item.name &#x3D; &quot;Leave&quot;
+    item.icon &#x3D; &quot;&quot;
+    item.sort  &#x3D; 7
+    prop.method &#x3D; &#x27;clearOrder()&#x27;
+    prop &#x3D; this.getOrderDefaultButtonProperties();
+    prop.color      &#x3D; &quot;warn&quot;
+    item.properties  &#x3D; JSON.stringify(prop)
+    items.push(item)
+
+
+    return items
+  }
+
+  private getOrderDefaultButtonProperties() : IMenuButtonProperties {
+    const item           &#x3D; {} as IMenuButtonProperties;
+    item.completedOrder  &#x3D; false;
+    item.completedOrderAndUser &#x3D; false;
+    item.balanceRemainingGreaterThanZero &#x3D; true;
+    item.allowUser       &#x3D; true;
+    item.allowStaff      &#x3D; true;
+    item.itemsPrinted    &#x3D; true;
+    item.isAuthorized    &#x3D; true;
+    item.suspendedOrders &#x3D; true;
+    item.sidePanelOnly   &#x3D; false;
+    item.mainPanelOnly   &#x3D; false
+    item.orderHistory    &#x3D; false;
+    item.smallDeviceOnly &#x3D; false;
+    item.color           &#x3D; &quot;primary&quot;
+    return item
+  }
+
+  resetOrderButtons(site: ISite, id: number): Observable&lt;mb_MenuButton[]&gt; {
+    const list &#x3D; this.generateDefaultOrderButtons(id);
+    return this.postButtonList(site, list, &#x27;Order Buttons&#x27;, true)
+    return null;
+  }
+}
+
+
+// orderHistory: boolean;
+// balanceRemainingGreaterThanZero: boolean;
+// method: string;
+// requiresStaff: boolean;
+// requiresUser: boolean;
+// itemsPrinted: boolean;
+// paymentsMade: boolean;
+// isAuthorized: boolean;
+// suspendedOrders: boolean;
+// completedOrder: boolean;
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'MBMenuButtonsService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

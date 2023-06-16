@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -42,24 +42,31 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Interfaces</li>
-  <li
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
   >
   IMenuItem</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -70,7 +77,7 @@
 
 
 
-        <section>
+        <section data-compodoc="block-index">
             <h3 id="index">Index</h3>
             <table class="table table-sm table-bordered index-table">
                 <tbody>
@@ -82,6 +89,18 @@
                     <tr>
                         <td class="col-md-4">
                             <ul class="index-list">
+                                <li>
+                                        <a href="#abv" 
+>
+                                            abv
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#active" 
+>
+                                            active
+                                        </a>
+                                </li>
                                 <li>
                                         <a href="#alcoholItem" 
 >
@@ -203,6 +222,12 @@
                                         </a>
                                 </li>
                                 <li>
+                                        <a href="#dateMade" 
+>
+                                            dateMade
+                                        </a>
+                                </li>
+                                <li>
                                         <a href="#defaultLabTestingState" 
 >
                                             defaultLabTestingState
@@ -239,9 +264,21 @@
                                         </a>
                                 </li>
                                 <li>
+                                        <a href="#glutenFree" 
+>
+                                            glutenFree
+                                        </a>
+                                </li>
+                                <li>
                                         <a href="#gramCount" 
 >
                                             gramCount
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#icon" 
+>
+                                            icon
                                         </a>
                                 </li>
                                 <li>
@@ -269,9 +306,33 @@
                                         </a>
                                 </li>
                                 <li>
+                                        <a href="#json" 
+>
+                                            json
+                                        </a>
+                                </li>
+                                <li>
                                         <a href="#kcode" 
 >
                                             kcode
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#lab" 
+>
+                                            lab
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#labID" 
+>
+                                            labID
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#menuButtonJSON" 
+>
+                                            menuButtonJSON
                                         </a>
                                 </li>
                                 <li>
@@ -431,6 +492,24 @@
                                         </a>
                                 </li>
                                 <li>
+                                        <a href="#prodSecondLanguage" 
+>
+                                            prodSecondLanguage
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#producer" 
+>
+                                            producer
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#producerID" 
+>
+                                            producerID
+                                        </a>
+                                </li>
+                                <li>
                                         <a href="#productCategoryType" 
 >
                                             productCategoryType
@@ -452,6 +531,12 @@
                                         <a href="#productSortOrder" 
 >
                                             productSortOrder
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#promptGroupID" 
+>
+                                            promptGroupID
                                         </a>
                                 </li>
                                 <li>
@@ -494,6 +579,12 @@
                                         <a href="#sku" 
 >
                                             sku
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#slug" 
+>
+                                            slug
                                         </a>
                                 </li>
                                 <li>
@@ -557,6 +648,12 @@
                                         </a>
                                 </li>
                                 <li>
+                                        <a href="#testDate" 
+>
+                                            testDate
+                                        </a>
+                                </li>
+                                <li>
                                         <a href="#thc" 
 >
                                             thc
@@ -578,6 +675,12 @@
                                         <a href="#thca2" 
 >
                                             thca2
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#thcContent" 
+>
+                                            thcContent
                                         </a>
                                 </li>
                                 <li>
@@ -637,8 +740,74 @@
 
 
 
-            <section>
+            <section data-compodoc="block-properties">
                 <h3 id="inputs">Properties</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="abv"></a>
+                                        <span class="name "><b>abv</b>
+                                            <a href="#abv">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>abv:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="active"></a>
+                                        <span class="name "><b>active</b>
+                                            <a href="#active">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>active:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
                     <table class="table table-sm table-bordered">
                         <tbody>
                                 <tr>
@@ -1303,6 +1472,39 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
+                                        <a name="dateMade"></a>
+                                        <span class="name "><b>dateMade</b>
+                                            <a href="#dateMade">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>dateMade:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
                                         <a name="defaultLabTestingState"></a>
                                         <span class="name "><b>defaultLabTestingState</b>
                                             <a href="#defaultLabTestingState">
@@ -1501,6 +1703,39 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
+                                        <a name="glutenFree"></a>
+                                        <span class="name "><b>glutenFree</b>
+                                            <a href="#glutenFree">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>glutenFree:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
                                         <a name="gramCount"></a>
                                         <span class="name "><b>gramCount</b>
                                             <a href="#gramCount">
@@ -1520,6 +1755,39 @@
                                     <tr>
                                         <td class="col-md-4">
                                             <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="icon"></a>
+                                        <span class="name "><b>icon</b>
+                                            <a href="#icon">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>icon:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
 
                                         </td>
                                     </tr>
@@ -1666,6 +1934,39 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
+                                        <a name="json"></a>
+                                        <span class="name "><b>json</b>
+                                            <a href="#json">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>json:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
                                         <a name="kcode"></a>
                                         <span class="name "><b>kcode</b>
                                             <a href="#kcode">
@@ -1685,6 +1986,105 @@
                                     <tr>
                                         <td class="col-md-4">
                                             <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="lab"></a>
+                                        <span class="name "><b>lab</b>
+                                            <a href="#lab">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>lab:         <code><a href="../interfaces/IClientTable.html" target="_self" >IClientTable</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../interfaces/IClientTable.html" target="_self" >IClientTable</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="labID"></a>
+                                        <span class="name "><b>labID</b>
+                                            <a href="#labID">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>labID:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="menuButtonJSON"></a>
+                                        <span class="name "><b>menuButtonJSON</b>
+                                            <a href="#menuButtonJSON">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>menuButtonJSON:         <code><a href="../interfaces/menuButtonJSON.html" target="_self" >menuButtonJSON</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../interfaces/menuButtonJSON.html" target="_self" >menuButtonJSON</a></code>
 
                                         </td>
                                     </tr>
@@ -2557,6 +2957,105 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
+                                        <a name="prodSecondLanguage"></a>
+                                        <span class="name "><b>prodSecondLanguage</b>
+                                            <a href="#prodSecondLanguage">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>prodSecondLanguage:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="producer"></a>
+                                        <span class="name "><b>producer</b>
+                                            <a href="#producer">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>producer:         <code><a href="../interfaces/IClientTable.html" target="_self" >IClientTable</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../interfaces/IClientTable.html" target="_self" >IClientTable</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="producerID"></a>
+                                        <span class="name "><b>producerID</b>
+                                            <a href="#producerID">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>producerID:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
                                         <a name="productCategoryType"></a>
                                         <span class="name "><b>productCategoryType</b>
                                             <a href="#productCategoryType">
@@ -2667,6 +3166,39 @@
                                 <tr>
                                     <td class="col-md-4">
                                         <code>productSortOrder:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="promptGroupID"></a>
+                                        <span class="name "><b>promptGroupID</b>
+                                            <a href="#promptGroupID">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>promptGroupID:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
 </code>
                                     </td>
                                 </tr>
@@ -2898,6 +3430,39 @@
                                 <tr>
                                     <td class="col-md-4">
                                         <code>sku:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="slug"></a>
+                                        <span class="name "><b>slug</b>
+                                            <a href="#slug">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>slug:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
 </code>
                                     </td>
                                 </tr>
@@ -3250,6 +3815,39 @@
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
+                                        <a name="testDate"></a>
+                                        <span class="name "><b>testDate</b>
+                                            <a href="#testDate">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>testDate:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
                                         <a name="thc"></a>
                                         <span class="name "><b>thc</b>
                                             <a href="#thc">
@@ -3360,6 +3958,39 @@
                                 <tr>
                                     <td class="col-md-4">
                                         <code>thca2:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="thcContent"></a>
+                                        <span class="name "><b>thcContent</b>
+                                            <a href="#thcContent">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>thcContent:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
 </code>
                                     </td>
                                 </tr>
@@ -3646,8 +4277,14 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">export interface IMenuItem {
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { IPrinterLocation } from &quot;src/app/_services/menu/printer-locations.service&quot;;
+import { IClientTable } from &quot;../raw/clients&quot;;
+import { PriceCategories, ProductPrice } from &quot;./price-categories&quot;;
+
+// Generated by https://quicktype.io
+
+export interface IMenuItem {
   id:                       number;
   prodModifierType:         number;
   name:                     string;
@@ -3733,133 +4370,138 @@
   defaultLabTestingState:   string;
   approvalStatus:           string;
   approvalStatusDateTime:   string;
+  icon                    : string;
   strainID:                 boolean;
   strainName:               boolean;
   isUsed:                   boolean;
+  promptGroupID           : number;
+  abv                     : string;
+  active:                   boolean;
+  thcContent              : number;
+  glutenFree              : boolean;
+  itemType:                 ItemType;
   productPrice:             ProductPrice;
   priceCategories:          PriceCategories;
-  itemType:                 ItemType;
+  slug: string;
+  prodSecondLanguage: string;
+  dateMade                : string;
+  testDate                : string;
+  labID     : number;
+  producerID: number;
+  producer  : IClientTable;
+  lab       : IClientTable;
+  json      : string;
+  menuButtonJSON: menuButtonJSON;
 }
 
+export interface menuButtonJSON { 
+  backColor: string;
+  buttonColor: string;
+}
+
+//also in itemtype service - should consolidate
 export interface ItemType {
-  id:                 number;
-  name:               string;
-  taxable:            number;
-  type:               string;
-  weightedItem:       boolean;
-  expirationRequired: boolean;
-  labelRequired:      boolean;
-  tax1id:             number;
-  tax2id:             number;
-  tax3id:             number;
-  ageRequirement:     number;
-  flatRateTaxID:      number;
-  sortOrder:          number;
-  enabled:            boolean;
-  flatRateTax:        FlatRateTax;
-  tax1:               Tax;
-  tax2:               Tax;
-  tax3:               Tax;
+  id:                   number;
+  name:                 string;
+  taxable:              number;
+  type:                 string;
+  weightedItem:         boolean;
+  expirationRequired:   boolean;
+  labelRequired:        boolean;
+  ageRequirement:       number;
+  sortOrder:            number;
+  enabled:              boolean;
+  useType:              string;
+  icon:                 string;
+  imageName:            string;
+  useGroupID:           number;
+  prepTicketID        : number;
+  labelTypeID         : number;
+  printerName:          string;
+  printLocationID :     number;
+  itemType_Categories:  ItemTypeCategory[];
+  useGroups           : UseGroups;
+  printerLocation     : IPrinterLocation;
+  requiresSerial      : boolean;
+  packageType         : string;
+  requireInStock      : boolean;
+  metrcCategoryID :    number;
+  preptTicketID       : number;
+  packagingMaterial   : string;
+  portionValue        : string;
+  instructions        : string;
+  enableCustomNote   : boolean;
+  wicebt             : number;
+  requireWholeNumber : boolean;
+  pricePrompt        : boolean;
 }
 
-export interface FlatRateTax {
-  id:                number;
-  name:              string;
-  flatRateTaxValues: FlatRateTaxValue[];
+export interface ItemTypeCategory {
+  id:         number;
+  itemTypeID: number;
+  categoryID: number;
+  itemCounts: ItemCounts;
 }
 
-export interface FlatRateTaxValue {
-  id:            number;
-  flatRateTaxID: number;
-  rateStart:     number;
-  rateEnd:       number;
-  fee:           number;
+export interface ItemCounts {
+  id:        number;
+  name:      string;
+  itemCount: number;
 }
 
-export interface Tax {
-  id:     number;
-  amount: number;
-  name:   string;
-}
-
-export interface PriceCategories {
+export interface UseGroups {
   id:            number;
   name:          string;
-  uid:           string;
-  productPrices: ProductPrice[];
+  useGroupTaxes: UseGroupTax[];
 }
 
-export interface ProductPrice {
-  id:               number;
-  priceCategoryID:  number;
-  retail:           number;
-  wholeSale:        number;
-  unitTypeID:       number;
-  price1:           number;
-  price2:           number;
-  price3:           number;
-  hideFromMenu:     number;
-  useforInventory:  number;
-  pizzaMultiplier:  number;
-  unitPartRatio:    number;
-  partMultiplyer:   number;
-  doNotDelete:      number;
-  pizzaSize:        number;
-  priceType:        number;
-  barcode:          string;
-  itemQuantity:     number;
-  productID:        number;
-  tierPriceGroup:   number;
-  price4:           number;
-  price5:           number;
-  price6:           number;
-  price7:           number;
-  price8:           number;
-  price9:           number;
-  price10:          number;
-  timeBasedPrice:   number;
-  uid:              string;
-  weekDays:         string;
-  endTime:          string;
-  startTime:        string;
-  webEnabled:       number;
-  specialDatePrice: number;
-  startDate:        string;
-  endDate:          string;
-  priceTiers:       PriceTiers;
-  unitType:         UnitType;
+export interface UseGroupTax {
+  id:    number;
+  taxID: number;
+  UseGroupID: number;
+  taxes: Taxes;
 }
 
-export interface PriceTiers {
-  id:              number;
-  name:            string;
-  uid:             string;
-  webEnabled:      number;
-  priceTierPrices: PriceTierPrice[];
+export interface Taxes {
+  id:    number;
+  value: number;
+  name:  string;
+  taxColumn: number;
 }
 
-export interface PriceTierPrice {
-  id:             number;
-  productPriceID: number;
-  quantityFrom:   string;
-  quantityTo:     string;
-  retail:         string;
-  price1:         string;
-  price2:         string;
-  price3:         string;
-  price4:         string;
-  price5:         string;
-  price6:         string;
-  price7:         string;
-  price8:         string;
-  price9:         string;
-  startTime:      string;
-  endTime:        string;
-  specialPrice:   string;
-  weekDays:       string;
-  flatQuantity:   string;
-  priceName:      string;
-}
+
+
+// export interface PriceTiers {
+//   id:              number;
+//   name:            string;
+//   uid:             string;
+//   webEnabled:      number;
+//   priceTierPrices: PriceTierPrice[];
+// }
+
+// export interface PriceTierPrice {
+//   id:             number;
+//   productPriceID: number; //pricetier
+//   quantityFrom:   number;
+//   quantityTo:     number;
+//   retail:         number;
+//   price1:         number;
+//   price2:         number;
+//   price3:         number;
+//   price4:         number;
+//   price5:         number;
+//   price6:         number;
+//   price7:         number;
+//   price8:         number;
+//   price9:         number;
+//   startTime:      string;
+//   endTime:        string;
+//   specialPrice:   number;
+//   weekDays:       string;
+//   flatQuantity:   number;
+//   priceName:      string;
+//   rateOrPrice:    boolean;
+// }
 
 export interface UnitType {
   id:               number;
@@ -3905,14 +4547,15 @@ export interface Review {
 </div>
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -3924,6 +4567,15 @@ export interface Review {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
@@ -3933,8 +4585,8 @@ export interface Review {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

@@ -67,7 +67,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     }
 
     try {
-      this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
+      this._bottomSheetOpen = this.orderMethodService.bottomSheetOpen$.subscribe(data => {
         if (data) {
          this.bottomSheetOpen = data
         }
@@ -82,7 +82,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     try {
       if (!this.prepScreen) {
         if (!this.disableActions) {
-          this._order = this.orderService.currentOrder$.subscribe( order => {
+          this._order = this.orderMethodService.currentOrder$.subscribe( order => {
             this.order = order
             if (this.order && this.order.posOrderItems)  {
               this.order.posOrderItems = this.sortItems(this.order.posOrderItems)
@@ -256,7 +256,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     const item =  this.order.posOrderItems[index]
     if (!item)  { return }
     this.orderMethodService.removeItemFromList(index, item)
-    
+
   }
 
   // updateSubscription(orderID: number) {

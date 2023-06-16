@@ -1,12 +1,14 @@
-<div  class="mat-card-container" *ngIf="sales.resultMessage != 'success'">
+<div  class="mat-card-container" 
+      *ngIf="sales.resultMessage != 'success'">
   <mat-card>
       <div  class="totals_label">
       <h4> <ng-content></ng-content> </h4>
     </div>
-    {{sales.resultMessage}}
+    {{sales.resultMessage}} - {{groupBy}}
   </mat-card>
 </div>
 
+<!-- {{sales.paymentSummary | json}} -->
 <div  class="mat-card-container" *ngIf="sales.resultMessage == '' && sales.count == 0 ">
   <mat-card>
     <div  class="totals_label">
@@ -71,6 +73,15 @@
             <div class="grid-item">Avg</div>
         </div>
 
+        <div  class="grid-order-employeecount"
+              *ngIf="payments && groupBy && groupBy === 'service'">
+          <div *ngIf="groupBy === 'service'" class="grid-item">Method</div>
+          <div *ngIf="groupBy === 'service'" class="totals">Amount</div>
+          <div *ngIf="groupBy === 'service'" class="totals">Avg</div>
+          <div *ngIf="groupBy === 'service'" class="totals">Count</div>
+          <div *ngIf="groupBy === 'service'" class="totals">Tip</div>
+        </div>
+
         <div  class="grid-voids"
               *ngIf="payments && !groupBy">
             <div class="grid-item">Method</div>
@@ -97,6 +108,19 @@
         <div class="grid-footer-payments" *ngIf="groupBy && (groupBy === 'paymentMethod')">
           <div class="grid-items">
             Credit Total
+          </div>
+          <div class="totals">
+            {{sales.creditTotal | currency }}
+          </div>
+          <div class="totals" >
+          </div>
+          <div class="totals">
+          </div>
+        </div>
+
+        <div class="grid-footer-payments" *ngIf="groupBy && (groupBy === 'service')">
+          <div class="grid-items">
+            Type Total
           </div>
           <div class="totals">
             {{sales.creditTotal | currency }}

@@ -13,7 +13,7 @@
           [inputForm]  ="inputForm"  >
       </app-price-category-search>
     </div>
-    <div *ngIf="!isInventory ">
+    <div style="margin-top:5px;" *ngIf="!isInventory ">
       <button mat-button
               color="accent"
               (click)="openPriceCategory()">
@@ -26,7 +26,7 @@
       </button>
     </div>
 
-    <div *ngIf="!isInventory && (priceCategoryID  && priceCategoryID != 0)">
+    <div style="margin-top:5px;"  *ngIf="!isInventory && (priceCategoryID  && priceCategoryID != 0)">
       <button mat-button
               color="warn"
               (click)="clearPriceCategory()">
@@ -44,7 +44,7 @@
       Price
     </app-value-fields>
 
-    <div *ngIf="!isInventory && !itemType.disableSimplePrice">
+    <div style="margin-top:5px;"  *ngIf="!isInventory && !itemType.disableSimplePrice">
       <button class="button"
               mat-raised-button
               (click)="showMorePrices = !showMorePrices">

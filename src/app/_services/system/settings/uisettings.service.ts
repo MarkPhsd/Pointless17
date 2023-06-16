@@ -13,6 +13,12 @@ import { PosEditSettingsComponent } from 'src/app/modules/admin/settings/pos-lis
 import { ElectronService } from 'ngx-electron';
 import { PlatformService } from '../platform.service';
 
+export interface ContactFieldOptions {
+  id: number;
+  exp: boolean;
+  account: boolean;
+}
+
 export interface TransactionUISettings {
   id                     : number;
   displayNotes           : boolean;
@@ -75,6 +81,9 @@ export interface TransactionUISettings {
   scanIncreaseQuantity: boolean;
   mixMatchTierPricing: boolean;
   toggleUserOrAllOrders: boolean;
+  defaultOrderTypeID: number;
+  defaultNewOrderCategoryID: number;
+  weightGraceValue: number;
 }
 
 export interface StripeAPISettings {
@@ -189,6 +198,18 @@ export interface UIHomePageSettings {
   hideSearchBar: boolean;
   timeOutValue: number
   timeOut: boolean;
+
+  storeNavigation: boolean;
+
+  colorFilter: boolean;
+  sizeFilter: boolean;
+  speciesFilter: boolean;
+  gluetenFilter: boolean;
+  brandFilter: boolean;
+  itemTypeFilter: boolean;
+  departmentFilter: boolean;
+  categoryFilter: boolean;
+  subCategoryFilter: boolean;
 }
 
 @Injectable({
@@ -371,6 +392,8 @@ export class UISettingsService {
 
   initSecureSettings() {
     if (this.userAuthorizationService.currentUser()) {
+      const item = this.userAuthorizationService.currentUser();
+      if (!item) {return}
       this.getTransactionUISettings();
       this.subscribeToStripedCachedConfig();
       this.getDSSIEmvSettings();
@@ -386,6 +409,9 @@ export class UISettingsService {
     if (this.userAuthorizationService.user.username === 'Temp') {
       return;
     }
+
+    const item = this.userAuthorizationService.currentUser()
+    // console.log('item', item)
 
     this.settingsService.getUITransactionSetting().subscribe(data => {
       this._transactionUISettings.next(data)
@@ -417,7 +443,7 @@ export class UISettingsService {
 
   openEditPOSDevice(data): any {
     let dialogRef: any;
-    console.log('open device')
+    // console.log('open device')
     dialogRef = this.dialog.open(PosEditSettingsComponent,
       { width:        '800px',
         minWidth:     '800px',
@@ -482,7 +508,7 @@ export class UISettingsService {
     if (!setting || (!setting?.id || setting?.id === '')) {
       this.getSetting(name).pipe(
         switchMap(data => {
-          console.log('setting', data)
+          // console.log('setting', data)
           setting.id = data.id;
           return this.setSetting(setting, name)
       }))
@@ -498,7 +524,7 @@ export class UISettingsService {
   setSetting(uiSetting: any, name: string): Observable<ISetting> {
     const site    = this.siteService.getAssignedSite();
     const setting = {} as ISetting;
-    console.log(uiSetting);
+    // console.log(uiSetting);
 
     if (!uiSetting || !uiSetting.id) { return null }
     setting.id    = uiSetting.id
@@ -570,6 +596,17 @@ export class UISettingsService {
       timeOutValue: [],
       displaySendButton: [],
       suppressMenuItems: [],
+      storeNavigation: [], //
+
+      colorFilter: [], //: boolean;
+      sizeFilter: [], //: boolean;
+      speciesFilter: [], //: boolean;
+      gluetenFilter: [], //: boolean;
+      brandFilter: [], //: boolean;
+      itemTypeFilter: [], //: boolean;
+      departmentFilter: [], //: boolean;
+      categoryFilter: [], //: boolean;
+      subCategoryFilter: [], //: boolean;
      })
     return fb
   }
@@ -660,7 +697,7 @@ export class UISettingsService {
   initHomePageSettingsForm(config: any, fb: UntypedFormGroup): UntypedFormGroup {
     if (!config) { return this.initHomePageForm(fb) }
     fb = this.initHomePageForm(fb);
-    console.log('init Home Page', config)
+    // console.log('init Home Page', config)
     fb.patchValue(config);
     return fb
   }
@@ -727,8 +764,20 @@ export class UISettingsService {
       scanIncreaseQuantity: [],
       mixMatchTierPricing: [],
       toggleUserOrAllOrders: [],
+      defaultOrderTypeID: [],
+      defaultNewOrderCategoryID: [],
+      weightGraceValue: [],
      })
+
+
   }
+
+  // initContactFieldOptions(config: ContactFieldOptions: fb: UntypedFormGroup) {
+  //   return this._fb.group({
+  //     id : [],
+
+  //   })
+  //  }
 
   initUITransactionsForm(config: TransactionUISettings, fb: UntypedFormGroup): UntypedFormGroup {
     fb = this.initForm(fb);

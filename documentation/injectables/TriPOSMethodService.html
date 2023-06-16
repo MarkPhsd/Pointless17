@@ -1,0 +1,2832 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >TriPOSMethodService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_services/tripos/tri-posmethod.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#_dialog" >_dialog</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#_dialog$" >_dialog$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#dialogRef" >dialogRef</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#authorizationCompletion" >authorizationCompletion</a>
+                            </li>
+                            <li>
+                                <a href="#authorizationToken" >authorizationToken</a>
+                            </li>
+                            <li>
+                                <a href="#authorizeAmount" >authorizeAmount</a>
+                            </li>
+                            <li>
+                                <a href="#deleteLane" >deleteLane</a>
+                            </li>
+                            <li>
+                                <a href="#displayTextView" >displayTextView</a>
+                            </li>
+                            <li>
+                                <a href="#getAuthTotal" >getAuthTotal</a>
+                            </li>
+                            <li>
+                                <a href="#getIncrementListOfTransactionIDs" >getIncrementListOfTransactionIDs</a>
+                            </li>
+                            <li>
+                                <a href="#getLane" >getLane</a>
+                            </li>
+                            <li>
+                                <a href="#getLanes" >getLanes</a>
+                            </li>
+                            <li>
+                                <a href="#getTotalAuthorizedAmount" >getTotalAuthorizedAmount</a>
+                            </li>
+                            <li>
+                                <a href="#getTriPOSTotalAuthorizations" >getTriPOSTotalAuthorizations</a>
+                            </li>
+                            <li>
+                                <a href="#getValueToIncrement" >getValueToIncrement</a>
+                            </li>
+                            <li>
+                                <a href="#increment" >increment</a>
+                            </li>
+                            <li>
+                                <a href="#initializeLane" >initializeLane</a>
+                            </li>
+                            <li>
+                                <a href="#openDialogCompleteCreditPayment" >openDialogCompleteCreditPayment</a>
+                            </li>
+                            <li>
+                                <a href="#openDialogCreditPayment" >openDialogCreditPayment</a>
+                            </li>
+                            <li>
+                                <a href="#pathLane" >pathLane</a>
+                            </li>
+                            <li>
+                                <a href="#processIncrement" >processIncrement</a>
+                            </li>
+                            <li>
+                                <a href="#processIncrementalReversal" >processIncrementalReversal</a>
+                            </li>
+                            <li>
+                                <a href="#reboot" >reboot</a>
+                            </li>
+                            <li>
+                                <a href="#refund" >refund</a>
+                            </li>
+                            <li>
+                                <a href="#returnTransaction" >returnTransaction</a>
+                            </li>
+                            <li>
+                                <a href="#reversal" >reversal</a>
+                            </li>
+                            <li>
+                                <a href="#sale" >sale</a>
+                            </li>
+                            <li>
+                                <a href="#void" >void</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(http: HttpClient, settingsService: <a href="../injectables/SettingsService.html" target="_self">SettingsService</a>, dialogOptions: <a href="../injectables/ProductEditButtonService.html" target="_self">ProductEditButtonService</a>, paymentService: <a href="../injectables/POSPaymentService.html" target="_self">POSPaymentService</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:43</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                    <code>HttpClient</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>settingsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SettingsService.html" target="_self" >SettingsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dialogOptions</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ProductEditButtonService.html" target="_self" >ProductEditButtonService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>paymentService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/POSPaymentService.html" target="_self" >POSPaymentService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>siteService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SitesService.html" target="_self" >SitesService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authorizationCompletion"></a>
+                    <span class="name">
+                        <span ><b>authorizationCompletion</b></span>
+                        <a href="#authorizationCompletion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>authorizationCompletion(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/authorizationPOST.html" target="_self">authorizationPOST</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="79"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:79</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/authorizationPOST.html" target="_self" >authorizationPOST</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;TriposResult&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authorizationToken"></a>
+                    <span class="name">
+                        <span ><b>authorizationToken</b></span>
+                        <a href="#authorizationToken"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>authorizationToken(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/authorizationPOST.html" target="_self">authorizationPOST</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="65"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:65</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/authorizationPOST.html" target="_self" >authorizationPOST</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;TriposResult&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authorizeAmount"></a>
+                    <span class="name">
+                        <span ><b>authorizeAmount</b></span>
+                        <a href="#authorizeAmount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>authorizeAmount(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/authorizationPOST.html" target="_self">authorizationPOST</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="51"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:51</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/authorizationPOST.html" target="_self" >authorizationPOST</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;TriposResult&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteLane"></a>
+                    <span class="name">
+                        <span ><b>deleteLane</b></span>
+                        <a href="#deleteLane"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteLane(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="263"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:263</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="displayTextView"></a>
+                    <span class="name">
+                        <span ><b>displayTextView</b></span>
+                        <a href="#displayTextView"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>displayTextView(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/authorizationPOST.html" target="_self">authorizationPOST</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="193"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:193</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/authorizationPOST.html" target="_self" >authorizationPOST</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;TriposResult&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAuthTotal"></a>
+                    <span class="name">
+                        <span ><b>getAuthTotal</b></span>
+                        <a href="#getAuthTotal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getAuthTotal(posPayments: <a href="../s/s.html" target="_self">PosPayment[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="291"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:291</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>posPayments</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >PosPayment[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getIncrementListOfTransactionIDs"></a>
+                    <span class="name">
+                        <span ><b>getIncrementListOfTransactionIDs</b></span>
+                        <a href="#getIncrementListOfTransactionIDs"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getIncrementListOfTransactionIDs()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="427"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:427</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getLane"></a>
+                    <span class="name">
+                        <span ><b>getLane</b></span>
+                        <a href="#getLane"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getLane(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="221"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:221</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getLanes"></a>
+                    <span class="name">
+                        <span ><b>getLanes</b></span>
+                        <a href="#getLanes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getLanes(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="235"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:235</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTotalAuthorizedAmount"></a>
+                    <span class="name">
+                        <span ><b>getTotalAuthorizedAmount</b></span>
+                        <a href="#getTotalAuthorizedAmount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTotalAuthorizedAmount()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="411"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:411</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTriPOSTotalAuthorizations"></a>
+                    <span class="name">
+                        <span ><b>getTriPOSTotalAuthorizations</b></span>
+                        <a href="#getTriPOSTotalAuthorizations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTriPOSTotalAuthorizations(data: <a href="../interfaces/PosPayment.html" target="_self">PosPayment</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="300"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:300</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>data</td>
+                                    <td>
+                                                <code><a href="../interfaces/PosPayment.html" target="_self" >PosPayment</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getValueToIncrement"></a>
+                    <span class="name">
+                        <span ><b>getValueToIncrement</b></span>
+                        <a href="#getValueToIncrement"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getValueToIncrement()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="407"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:407</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="increment"></a>
+                    <span class="name">
+                        <span ><b>increment</b></span>
+                        <a href="#increment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>increment(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/authorizationPOST.html" target="_self">authorizationPOST</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="277"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:277</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/authorizationPOST.html" target="_self" >authorizationPOST</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initializeLane"></a>
+                    <span class="name">
+                        <span ><b>initializeLane</b></span>
+                        <a href="#initializeLane"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initializeLane(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, post: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="249"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:249</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>post</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openDialogCompleteCreditPayment"></a>
+                    <span class="name">
+                        <span ><b>openDialogCompleteCreditPayment</b></span>
+                        <a href="#openDialogCompleteCreditPayment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openDialogCompleteCreditPayment(order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>, amount: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, posPayment: <a href="../interfaces/IPOSPayment.html" target="_self">IPOSPayment</a>, settings: <a href="../interfaces/TransactionUISettings.html" target="_self">TransactionUISettings</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="372"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:372</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>order</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPOSOrder.html" target="_self" >IPOSOrder</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>amount</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>posPayment</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPOSPayment.html" target="_self" >IPOSPayment</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>settings</td>
+                                    <td>
+                                                <code><a href="../interfaces/TransactionUISettings.html" target="_self" >TransactionUISettings</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openDialogCreditPayment"></a>
+                    <span class="name">
+                        <span ><b>openDialogCreditPayment</b></span>
+                        <a href="#openDialogCreditPayment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openDialogCreditPayment(order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>, amount: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, manualPrompt: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>, settings: <a href="../interfaces/TransactionUISettings.html" target="_self">TransactionUISettings</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="337"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:337</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>order</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPOSOrder.html" target="_self" >IPOSOrder</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>amount</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>manualPrompt</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>settings</td>
+                                    <td>
+                                                <code><a href="../interfaces/TransactionUISettings.html" target="_self" >TransactionUISettings</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pathLane"></a>
+                    <span class="name">
+                        <span ><b>pathLane</b></span>
+                        <a href="#pathLane"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>pathLane(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/ITriPOSPatch.html" target="_self">ITriPOSPatch</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="207"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:207</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/ITriPOSPatch.html" target="_self" >ITriPOSPatch</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;TriposResult&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="processIncrement"></a>
+                    <span class="name">
+                        <span ><b>processIncrement</b></span>
+                        <a href="#processIncrement"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>processIncrement(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, transactionId: <a href="../s/s.html" target="_self">string</a>, amount: <a href="../s/s.html" target="_self">string</a>, laneID: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="415"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:415</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>transactionId</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>amount</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>laneID</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;TriposResult&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="processIncrementalReversal"></a>
+                    <span class="name">
+                        <span ><b>processIncrementalReversal</b></span>
+                        <a href="#processIncrementalReversal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>processIncrementalReversal(auth: <a href="../interfaces/authorizationPOST.html" target="_self">authorizationPOST</a>, item: <a href="../interfaces/IPOSPayment.html" target="_self">IPOSPayment</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="312"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:312</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>auth</td>
+                                    <td>
+                                                <code><a href="../interfaces/authorizationPOST.html" target="_self" >authorizationPOST</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPOSPayment.html" target="_self" >IPOSPayment</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IPOSPayment.html" target="_self" >Observable&lt;IPOSPayment&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="reboot"></a>
+                    <span class="name">
+                        <span ><b>reboot</b></span>
+                        <a href="#reboot"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>reboot(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/authorizationPOST.html" target="_self">authorizationPOST</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="107"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:107</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/authorizationPOST.html" target="_self" >authorizationPOST</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;TriposResult&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="refund"></a>
+                    <span class="name">
+                        <span ><b>refund</b></span>
+                        <a href="#refund"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>refund(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/authorizationPOST.html" target="_self">authorizationPOST</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="135"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:135</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/authorizationPOST.html" target="_self" >authorizationPOST</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;TriposResult&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="returnTransaction"></a>
+                    <span class="name">
+                        <span ><b>returnTransaction</b></span>
+                        <a href="#returnTransaction"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>returnTransaction(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/authorizationPOST.html" target="_self">authorizationPOST</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="121"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:121</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/authorizationPOST.html" target="_self" >authorizationPOST</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;TriposResult&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="reversal"></a>
+                    <span class="name">
+                        <span ><b>reversal</b></span>
+                        <a href="#reversal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>reversal(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/authorizationPOST.html" target="_self">authorizationPOST</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="176"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:176</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/authorizationPOST.html" target="_self" >authorizationPOST</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;TriposResult&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sale"></a>
+                    <span class="name">
+                        <span ><b>sale</b></span>
+                        <a href="#sale"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>sale(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/authorizationPOST.html" target="_self">authorizationPOST</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="93"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:93</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/authorizationPOST.html" target="_self" >authorizationPOST</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;TriposResult&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="void"></a>
+                    <span class="name">
+                        <span ><b>void</b></span>
+                        <a href="#void"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>void(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, item: <a href="../interfaces/authorizationPOST.html" target="_self">authorizationPOST</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="161"
+                            class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:161</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/authorizationPOST.html" target="_self" >authorizationPOST</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;TriposResult&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_dialog"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>_dialog</b></span>
+                        <a href="#_dialog"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new BehaviorSubject&lt;any&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_dialog$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>_dialog$</b></span>
+                        <a href="#_dialog$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._dialog.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:42</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dialogRef"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>dialogRef</b></span>
+                        <a href="#dialogRef"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/_services/tripos/tri-posmethod.service.ts:43</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { HttpClient } from &#x27;@angular/common/http&#x27;;
+import { Injectable } from &#x27;@angular/core&#x27;;
+import { BehaviorSubject, catchError, Observable, of, switchMap } from &#x27;rxjs&#x27;;
+import { IPOSOrder, IPOSPayment, ISite, PosPayment } from &#x27;src/app/_interfaces&#x27;;
+import { ProductEditButtonService } from &#x27;../menu/product-edit-button.service&#x27;;
+import { SitesService } from &#x27;../reporting/sites.service&#x27;;
+import { SettingsService } from &#x27;../system/settings.service&#x27;;
+import { TransactionUISettings } from &#x27;../system/settings/uisettings.service&#x27;;
+import { POSPaymentService } from &#x27;../transactions/pospayment.service&#x27;;
+import { ITriPOSPatch, TriposResult } from &#x27;./triposModels&#x27;;
+
+  export interface	authorizationPOST {
+    action: string;
+    laneId: string;
+    transactionAmount: string;
+    tipAmount: string;
+    referenceNumber: string;
+    invokeManualEntry : boolean;
+    getToken: string;
+    cardLogo: string;
+    clerkNumber: string;
+    tokenId: string;
+    tokenProvider: string;
+    vaultId: string;
+    transactionId: string;
+    paymentType: string;
+    description: string;
+    terminalId: string;
+    activationCode: string;
+    marketCode: string;
+    ticketNumber: string;
+    allowDebit: boolean;
+  }
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class TriPOSMethodService {
+
+
+  public _dialog        &#x3D; new BehaviorSubject&lt;any&gt;(null);
+  public _dialog$       &#x3D; this._dialog.asObservable();
+  private dialogRef: any;
+
+  constructor(private http: HttpClient,
+              private settingsService: SettingsService,
+                private dialogOptions       : ProductEditButtonService,
+                private paymentService: POSPaymentService,
+              private siteService: SitesService) { }
+
+  authorizeAmount(site: ISite,item: authorizationPOST): Observable&lt;TriposResult&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSProcessing/&#x27;
+
+    const endPoint &#x3D; &quot;Authorization&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;TriposResult&gt;(url,  item)
+
+  }
+
+  authorizationToken(site: ISite,item: authorizationPOST): Observable&lt;TriposResult&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSProcessing/&#x27;
+
+    const endPoint &#x3D; &quot;authorizationToken&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;TriposResult&gt;(url,  item)
+
+  }
+
+  authorizationCompletion(site: ISite,item: authorizationPOST): Observable&lt;TriposResult&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSProcessing/&#x27;
+
+    const endPoint &#x3D; &quot;authorizationCompletion&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;TriposResult&gt;(url,  item)
+
+  }
+
+  sale(site: ISite,item: authorizationPOST): Observable&lt;TriposResult&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSProcessing/&#x27;
+
+    const endPoint &#x3D; &quot;sale&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;TriposResult&gt;(url,  item)
+
+  }
+
+  reboot(site: ISite,item: authorizationPOST): Observable&lt;TriposResult&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSProcessing/&#x27;
+
+    const endPoint &#x3D; &quot;reboot&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;TriposResult&gt;(url,  item)
+
+  }
+
+  returnTransaction(site: ISite,item: authorizationPOST): Observable&lt;TriposResult&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSProcessing/&#x27;
+
+    const endPoint &#x3D; &quot;returnTransaction&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;TriposResult&gt;(url,  item)
+
+  }
+
+  refund(site: ISite,item: authorizationPOST): Observable&lt;TriposResult&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSProcessing/&#x27;
+
+    const endPoint &#x3D; &quot;refund&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;TriposResult&gt;(url,  item)
+
+  }
+
+  // {
+    //   &quot;laneId&quot;: -90856942,
+    //   &quot;cardHolderPresentCode&quot;: &quot;non quis&quot;,
+    //   &quot;clerkNumber&quot;: &quot;enim ut&quot;,
+    //   &quot;configuration&quot;: {
+  //     &quot;marketCode&quot;: &quot;culpa non irure velit dolore&quot;
+  //   },
+  //   &quot;referenceNumber&quot;: &quot;amet dolor commodo non&quot;,
+  //   &quot;shiftId&quot;: &quot;pariatur et consequat&quot;,
+  //   &quot;ticketNumber&quot;: &quot;consectetur minim non&quot;
+  // }
+
+  void(site: ISite, item: authorizationPOST): Observable&lt;TriposResult&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSProcessing/&#x27;
+
+    const endPoint &#x3D; &quot;void&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;TriposResult&gt;(url,  item)
+
+  }
+
+
+  reversal(site: ISite,item: authorizationPOST): Observable&lt;TriposResult&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSProcessing/&#x27;
+
+    const endPoint &#x3D; &quot;reversal&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;TriposResult&gt;(url,  item)
+
+  }
+
+
+
+
+  displayTextView(site: ISite,item: authorizationPOST): Observable&lt;TriposResult&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSProcessing/&#x27;
+
+    const endPoint &#x3D; &quot;displayTextView&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;TriposResult&gt;(url,  item)
+
+  }
+
+  pathLane(site: ISite, item: ITriPOSPatch): Observable&lt;TriposResult&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSLane/&#x27;
+
+    const endPoint &#x3D; &quot;PatchLane&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;TriposResult&gt;(url,  item)
+
+  }
+
+  getLane(site: ISite, id: string): Observable&lt;any&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSLane/&#x27;
+
+    const endPoint &#x3D; &quot;getLane&quot;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.get&lt;any&gt;(url)
+
+  }
+
+  getLanes(site: ISite): Observable&lt;any&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSLane/&#x27;
+
+    const endPoint &#x3D; &quot;getLanes&quot;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.get&lt;any&gt;(url)
+
+  }
+
+  initializeLane(site: ISite, post: any): Observable&lt;any&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSLane/&#x27;
+
+    const endPoint &#x3D; &quot;createLane&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;any&gt;(url, post)
+
+  }
+
+  deleteLane(site: ISite, id: string): Observable&lt;any&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSLane/&#x27;
+
+    const endPoint &#x3D; &quot;deleteLane&quot;
+
+    const parameters &#x3D; &#x60;?laneID&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.get&lt;any&gt;(url)
+
+  }
+
+  increment(site: ISite, item: authorizationPOST): Observable&lt;any&gt; {
+
+    const controller &#x3D; &#x27;/TriPOSProcessing/&#x27;
+
+    const endPoint &#x3D; &quot;incremental&quot;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;any&gt;(url, item)
+
+  }
+
+  getAuthTotal(posPayments: PosPayment[]) : any {
+    if (!posPayments ) {return }
+    let amount &#x3D; 0;
+    posPayments.forEach(data &#x3D;&gt; {
+      amount +&#x3D; this.getTriPOSTotalAuthorizations(data)
+    })
+    return amount
+  }
+
+  getTriPOSTotalAuthorizations(data: PosPayment) {
+    // if (data.tran)
+    let amount &#x3D; 0
+    if (data.tranType &#x3D;&#x3D;&#x3D; &#x27;authorizationResponse&#x27;) {
+      amount &#x3D; data.amountPaid
+    }
+    if (data.tranType &#x3D;&#x3D;&#x3D; &#x27;incrementalAuthorizationResponse&#x27;) {
+      amount &#x3D; data.amountPaid
+    }
+    return amount
+  }
+    // /Observable&lt;import(&quot;../system/settings.service&quot;).ITerminalSettings&gt;,
+  processIncrementalReversal( auth: authorizationPOST, item: IPOSPayment): Observable&lt;IPOSPayment&gt; {
+    const site &#x3D; this.siteService.getAssignedSite()
+
+    const item$ &#x3D; this.reversal(site, auth).pipe(switchMap(data &#x3D;&gt; {
+
+      console.log(&#x27;reversal&#x27;, data);
+
+      if (!data) {
+        this.siteService.notify(&#x27;Error with reversal, not completed.&#x27;, &#x27;close&#x27;,2000, &#x27;yellow&#x27;)
+        return of(null)
+      }
+      if (data &amp;&amp; data.exceptionMessage) {
+        this.siteService.notify(&#x60;Not approved: ${data?.exceptionMessage}&#x60;, &#x27;close&#x27;, 3000, &#x27;red&#x27;)
+        return of(null)
+      }
+
+      item.amountPaid &#x3D; 0;
+      item.amountReceived &#x3D; 0;
+      return this.paymentService.savePOSPayment(site, item)
+    }))
+
+    return item$
+
+  }
+
+  openDialogCreditPayment ( order: IPOSOrder,
+                            amount: number,
+                            manualPrompt: boolean,
+                            settings: TransactionUISettings,
+                            ) {
+    //once we get back the method &#x27;Card Type&#x27;
+    //lookup the payment method.
+    //we can&#x27;t get the type of payment before we get the PaymentID.
+    //so we just have to request the ID, and then we can establish everything after that.
+    const site &#x3D; this.siteService.getAssignedSite();
+    const  posPayment &#x3D; {} as IPOSPayment;
+    posPayment.orderID &#x3D; order.id;
+    posPayment.zrun &#x3D; order.zrun;
+    posPayment.reportRunID &#x3D; order.reportRunID;
+
+    const payment$  &#x3D; this.paymentService.postPOSPayment(site, posPayment)
+
+    const paymentProcess &#x3D; {order: order, posPayment: posPayment, settings: settings, manualPrompt: manualPrompt, action: 1}
+
+    return payment$.pipe(
+      switchMap(data &#x3D;&gt;
+      {
+
+        data.amountPaid &#x3D; amount;
+        paymentProcess.posPayment &#x3D; data;
+        this.dialogRef &#x3D; this.dialogOptions.openTriPOSTransaction(
+          paymentProcess
+        );
+        this._dialog.next(this.dialogRef)
+        return of(data)
+      }
+    ))
+
+  }
+
+  openDialogCompleteCreditPayment ( order: IPOSOrder,
+    amount: number,
+    posPayment: IPOSPayment,
+    settings: TransactionUISettings) {
+    //once we get back the method &#x27;Card Type&#x27;
+    //lookup the payment method.
+    //we can&#x27;t get the type of payment before we get the PaymentID.
+    //so we just have to request the ID, and then we can establish everything after that.
+    const site &#x3D; this.siteService.getAssignedSite();
+    // const  posPayment &#x3D; {} as IPOSPayment;
+    posPayment.orderID      &#x3D; order.id;
+    posPayment.zrun         &#x3D; order.zrun;
+    posPayment.reportRunID  &#x3D; order.reportRunID;
+    posPayment.amountPaid   &#x3D; order.creditBalanceRemaining;
+    if (settings.triposEnabled) {
+      posPayment.amountPaid &#x3D; amount;
+    }
+    const payment$          &#x3D; this.paymentService.savePOSPayment(site, posPayment)
+    const paymentProcess    &#x3D; {order: order, posPayment: posPayment, settings: settings, manualPrompt: false, action: 1}
+
+    return payment$.pipe(
+    switchMap(data &#x3D;&gt;
+      {
+        data.amountPaid &#x3D; amount;
+        paymentProcess.posPayment &#x3D; data;
+        this.dialogRef &#x3D; this.dialogOptions.openTriPOSTransaction(
+        paymentProcess
+      );
+        this._dialog.next(this.dialogRef)
+        return of(data)
+    }
+  ))
+
+}
+
+  getValueToIncrement() {
+
+  }
+
+  getTotalAuthorizedAmount() {
+
+  }
+
+  processIncrement(site: ISite, transactionId: string, amount: string, laneID: string) : Observable&lt;TriposResult&gt; {
+    //processes through tripos
+    const auth &#x3D; {} as authorizationPOST
+    auth.transactionId &#x3D; transactionId;
+    // auth.terminalId &#x3D; terminalID;
+    auth.laneId &#x3D; laneID
+    auth.transactionAmount &#x3D; amount;
+    //creates new payment
+    return this.increment(site,auth)
+  }
+
+
+  getIncrementListOfTransactionIDs()  {
+    //we would take the payments
+    //get the transactionData
+    //get the AuthorizationCodes from each Transaction
+    //add to a list
+    //and update the Main Payment
+
+  }
+
+
+
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'TriPOSMethodService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

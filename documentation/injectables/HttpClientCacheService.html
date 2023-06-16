@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >HttpClientCacheService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >HttpClientCacheService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -108,13 +115,13 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, _cacheService: <a href="../injectables/CacheClientService.html" target="_self">CacheClientService</a>)</code>
+<code>constructor(http: HttpClient, _cacheService: <a href="../injectables/CacheClientService.html" target="_self">CacheClientService</a>)</code>
                     </td>
                 </tr>
                         <tr>
@@ -140,7 +147,7 @@
                                                         <td>http</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                                    <code>HttpClient</code>
                                                         </td>
                                                   
                                                     <td>
@@ -169,7 +176,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -187,7 +194,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>delete(options: <a href="../interfaces/Option.html" target="_self">HttpOptions</a>)</code>
+<code>delete(options: <a href="../classes/HttpOptions.html" target="_self">HttpOptions</a>)</code>
                 </td>
             </tr>
 
@@ -213,6 +220,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -225,7 +233,7 @@
                                 <tr>
                                     <td>options</td>
                                     <td>
-                                                <code><a href="../interfaces/Option.html" target="_self" >HttpOptions</a></code>
+                                                <code><a href="../classes/HttpOptions.html" target="_self" >HttpOptions</a></code>
                                     </td>
 
                                     <td>
@@ -263,7 +271,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>get(options: <a href="../interfaces/Option.html" target="_self">HttpOptions</a>)</code>
+<code>get(options: <a href="../classes/HttpOptions.html" target="_self">HttpOptions</a>)</code>
                 </td>
             </tr>
 
@@ -289,6 +297,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -301,7 +310,7 @@
                                 <tr>
                                     <td>options</td>
                                     <td>
-                                                <code><a href="../interfaces/Option.html" target="_self" >HttpOptions</a></code>
+                                                <code><a href="../classes/HttpOptions.html" target="_self" >HttpOptions</a></code>
                                     </td>
 
                                     <td>
@@ -339,7 +348,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getKey(verb: <a href="../s/s.html" target="_self">Verbs</a>, options: <a href="../interfaces/Option.html" target="_self">HttpOptions</a>)</code>
+<code>getKey(verb: <a href="../undefineds/Verbs.html" target="_self">Verbs</a>, options: <a href="../classes/HttpOptions.html" target="_self">HttpOptions</a>)</code>
                 </td>
             </tr>
 
@@ -357,6 +366,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -369,7 +379,7 @@
                                 <tr>
                                     <td>verb</td>
                                     <td>
-                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >Verbs</a></code>
+                                                <code><a href="../miscellaneous/enumerations.html#Verbs" target="_self" >Verbs</a></code>
                                     </td>
 
                                     <td>
@@ -381,7 +391,7 @@
                                 <tr>
                                     <td>options</td>
                                     <td>
-                                                <code><a href="../interfaces/Option.html" target="_self" >HttpOptions</a></code>
+                                                <code><a href="../classes/HttpOptions.html" target="_self" >HttpOptions</a></code>
                                     </td>
 
                                     <td>
@@ -421,7 +431,7 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>httpCall(verb: <a href="../s/s.html" target="_self">Verbs</a>, options: <a href="../interfaces/Option.html" target="_self">HttpOptions</a>)</code>
+                    <code>httpCall(verb: <a href="../undefineds/Verbs.html" target="_self">Verbs</a>, options: <a href="../classes/HttpOptions.html" target="_self">HttpOptions</a>)</code>
                 </td>
             </tr>
 
@@ -447,6 +457,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -459,7 +470,7 @@
                                 <tr>
                                     <td>verb</td>
                                     <td>
-                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >Verbs</a></code>
+                                                <code><a href="../miscellaneous/enumerations.html#Verbs" target="_self" >Verbs</a></code>
                                     </td>
 
                                     <td>
@@ -471,7 +482,7 @@
                                 <tr>
                                     <td>options</td>
                                     <td>
-                                                <code><a href="../interfaces/Option.html" target="_self" >HttpOptions</a></code>
+                                                <code><a href="../classes/HttpOptions.html" target="_self" >HttpOptions</a></code>
                                     </td>
 
                                     <td>
@@ -509,7 +520,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>post(options: <a href="../interfaces/Option.html" target="_self">HttpOptions</a>, model: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+<code>post(options: <a href="../classes/HttpOptions.html" target="_self">HttpOptions</a>, model: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
                 </td>
             </tr>
 
@@ -535,6 +546,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -547,7 +559,7 @@
                                 <tr>
                                     <td>options</td>
                                     <td>
-                                                <code><a href="../interfaces/Option.html" target="_self" >HttpOptions</a></code>
+                                                <code><a href="../classes/HttpOptions.html" target="_self" >HttpOptions</a></code>
                                     </td>
 
                                     <td>
@@ -597,7 +609,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>put(options: <a href="../interfaces/Option.html" target="_self">HttpOptions</a>)</code>
+<code>put(options: <a href="../classes/HttpOptions.html" target="_self">HttpOptions</a>)</code>
                 </td>
             </tr>
 
@@ -623,6 +635,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -635,7 +648,7 @@
                                 <tr>
                                     <td>options</td>
                                     <td>
-                                                <code><a href="../interfaces/Option.html" target="_self" >HttpOptions</a></code>
+                                                <code><a href="../classes/HttpOptions.html" target="_self" >HttpOptions</a></code>
                                     </td>
 
                                     <td>
@@ -665,7 +678,7 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;
 import { HttpClient, HttpHeaders,  } from &#x27;@angular/common/http&#x27;;
 import { CacheClientService } from &#x27;./cache-client.service&#x27;;
@@ -698,7 +711,7 @@ export class HttpClientCacheService {
 	}
 
 	post&lt;T&gt;(options: HttpOptions, model: any): Observable&lt;T&gt; {
-    console.log(&#x27;post  cache&#x27;, options)
+    // console.log(&#x27;post  cache&#x27;, options)
     options.body &#x3D; model;
 		return this.httpCall(Verbs.POST, options)
 	}
@@ -718,7 +731,7 @@ export class HttpClientCacheService {
         }
       }
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
 
     if (key &#x3D;&#x3D; &#x27;&#x27;) {
@@ -739,9 +752,12 @@ export class HttpClientCacheService {
     options.body &#x3D; options.body || null
     options.cacheMins &#x3D; options.cacheMins || 0
     const  key &#x3D; this.getKey(verb, options)
+    // console.log(key)
+    // console.log(options )
 
     if (options.cacheMins &gt; 0) {
       const data &#x3D; this._cacheService.load(key)
+      // console.log(data )
       // Return data from cache
       if (data !&#x3D;&#x3D; null) {
         return of&lt;T&gt;(data)
@@ -766,7 +782,7 @@ export class HttpClientCacheService {
         )
     }
 
-    // return this.http.request&lt;T&gt;(verb, options.url, {
+
     return this.http.request&lt;T&gt;(verb, options.url, {observe: &#x27;body&#x27;})
       .pipe(
         switchMap(response &#x3D;&gt; {
@@ -801,14 +817,15 @@ export class HttpOptions {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -820,6 +837,15 @@ export class HttpOptions {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -829,8 +855,8 @@ export class HttpOptions {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

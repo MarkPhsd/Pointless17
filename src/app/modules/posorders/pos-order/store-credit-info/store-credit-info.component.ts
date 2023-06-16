@@ -100,7 +100,7 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     try {
-      this._order = this.orderService.currentOrder$.subscribe( data => {
+      this._order = this.orderMethodService.currentOrder$.subscribe( data => {
         if (!data) {
           this.order = null;
           this.clientID = 0;
@@ -264,7 +264,7 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
         )).pipe(switchMap(data => {
           return this.orderService.getOrder(site, this.order.id.toString(), false)
         })).pipe(switchMap( data => {
-          this.orderService.updateOrderSubscription(data)
+          this.orderMethodService.updateOrderSubscription(data)
           this.closeDialog.emit(true)
           return of(data)
         }))
@@ -326,7 +326,7 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
           })
         ).pipe(
           switchMap(data => {
-            this.orderService.updateOrderSubscription(this.order);
+            this.orderMethodService.updateOrderSubscription(this.order);
             this.closeDialog.emit(true)
             return of(data)
           }),

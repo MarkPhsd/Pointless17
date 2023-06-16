@@ -4,7 +4,6 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { switchMap,   } from 'rxjs/operators';
 import { clientType, IUser, IUserProfile, UserPreferences } from 'src/app/_interfaces';
-import { EmployeeService } from '../people/employee-service.service';
 import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switch/fast-user-switch.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SitesService } from '../reporting/sites.service';
@@ -19,6 +18,7 @@ import { ElectronService } from 'ngx-electron';
 import { ToolBarUIService } from './tool-bar-ui.service';
 import { UISettingsService } from './settings/uisettings.service';
 import { ClientTypeService, IUserAuth_Properties } from '../people/client-type.service';
+import { OrderMethodsService } from '../transactions/order-methods.service';
 
 export interface ElectronDimensions {
   height: string;
@@ -71,6 +71,7 @@ export class UserSwitchingService implements  OnDestroy {
     private dialog           : MatDialog,
     private authenticationService: AuthenticationService,
     private orderService     : OrdersService,
+    private orderMethodService: OrderMethodsService,
     private contactsService  : ContactsService,
     private sheetMethodsService: BalanceSheetMethodsService,
     private paymentService   : POSPaymentService,
@@ -141,8 +142,8 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   clearLoggedInUser() {
-    this.orderService.updateOrderSubscriptionClearOrder(0)
-    this.orderService.updateOrderSearchModel(null);
+    this.orderMethodService.updateOrderSubscriptionClearOrder(0)
+    this.orderMethodService.updateOrderSearchModel(null);
     this.toolbarUIService.updateDepartmentMenu(0);
     this.authenticationService.logout();
   }
@@ -193,6 +194,7 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   login(userName: string, password: string): Observable<any> {
+
     this.clearSubscriptions();
     this.authenticationService.clearUserSettings();
     const site = this.siteService.getAssignedSite()
@@ -332,7 +334,7 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   clearSubscriptions() {
-    this.orderService.updateOrderSubscription(null);
+    this.orderMethodService.updateOrderSubscription(null);
     this.contactsService.updateSearchModel(null);
     this.sheetMethodsService.updateBalanceSearchModel(null);
     this.sheetMethodsService.updateBalanceSheet(null);
@@ -409,10 +411,14 @@ export class UserSwitchingService implements  OnDestroy {
   assignCurrentOrder(user: IUserProfile)  {
     const site = this.siteService.getAssignedSite()
     if (user && user.roles == 'user' && user.id) {
+
       const order$ = this.orderService.getUserCurrentOrder(site, user.id)
       order$.subscribe(data => {
-        this.orderService.updateOrderSubscription(data)
+        if (!data) {return of(null)}
+        if (data.toString().toLowerCase() === 'no order') {return of(null)}
+        this.orderMethodService.updateOrderSubscription(data)
       })
+
     }
   }
 

@@ -41,6 +41,10 @@ export interface printOptions {
 })
 
 export class PrintingService {
+
+  public _printOrder        = new BehaviorSubject<IPrintOrders>(null);
+  public printOrder$         = this._printOrder.asObservable();
+
   labelPrinter     : string;
   labelContentList = []  as string[]
   interval;
@@ -54,17 +58,40 @@ export class PrintingService {
   obs$ : Observable<any>[];
   private _printReady       = new BehaviorSubject<any>(null);
   public printReady$        = this._printReady.asObservable();
-
+  //applies to order filter for POS
+  private _prepStatus        = new BehaviorSubject<number>(null);
+  public prepStatus$         = this._prepStatus.asObservable();
+  //applies to order filter for POS
+  public printerLocation    : number;
+  private _printerLocation    = new BehaviorSubject<number>(null);
+  public printerLocation$      = this._printerLocation.asObservable();
+  private _printingFinalizer      = new BehaviorSubject<boolean>(null);
+  public  printingFinalizer$      = this._printingFinalizer.asObservable();
   public _printView         = new BehaviorSubject<number>(null);
   public printView$         = this._printView.asObservable();
   public __printView        : number;
-  currentGroupID = 0
 
+  printOrder: IPOSOrder ;
+
+  currentGroupID = 0
+  // posName: string  = this.orderMethodsService.devicename;
   image: string;
   get printView() {
     return this.__printView;
   }
 
+  updatePrepStatus(value: number) {
+    this._prepStatus.next(value);
+  }
+
+  updateOrderPrinterLocation(value: number) {
+    this.printerLocation = value;
+    this._printerLocation.next(value)
+  }
+
+  updatePrintingFinalizer(value) { 
+    this._printingFinalizer.next(value)
+  }
   updatePrintView(value: number) {
     this._printView.next(value);
     this.__printView = value;
@@ -72,12 +99,13 @@ export class PrintingService {
 
   constructor(  private electronService   : ElectronService,
                 private dialog            : MatDialog,
+                private orderService      : OrdersService,
                 private clientService     : ClientTableService,
                 private labelaryService   : LabelaryService,
                 private inventoryService   : InventoryAssignmentService,
-                private orderService      : OrdersService,
                 private router            : Router,
                 private userAuthService   : UserAuthorizationService,
+                // private orderMethodsService: OrderMethodsService,
                 private orderItemService  : POSOrderItemService,
                 private platFormService   : PlatformService,
                 private menuItemService   : MenuService,
@@ -98,25 +126,31 @@ export class PrintingService {
   updatePrintReady(data) {
     this._printReady.next(data)
   }
+  
+  printReceipt(orderID: number, groupID: number)  {
+    if (!groupID) { groupID = 0 }
+    const site = this.siteService.getAssignedSite()
+    return this.orderService.getPOSOrderGroupTotal(site, orderID, groupID).pipe(
+      switchMap(data => {
+        this.currentGroupID = groupID;
+        this.printOrder = data;
+        this.previewReceipt();
+         return of(data);
+    }))
+  }
 
   printJoinedLabels( ) {
     let contents = ''
     this.labelContentList.forEach(data => {
       contents =`${data} ${contents}`
     })
-    // console.log('print Joined Labels Contents:', contents)
-    // console.log('label', this.labelPrinter);
-
     if (!this.labelPrinter) { return }
     this.printLabelElectron(contents, this.labelPrinter)
     this.labelContentList = []
   }
 
   printLabels(order: IPOSOrder, newLabels: boolean): Observable<any> {
-
-
     if (!order || !order.posOrderItems) {
-      console.log('not printing anything')
       return of(null)
     }
 
@@ -124,8 +158,6 @@ export class PrintingService {
     if (!timer || timer != 0) {
       timer = +50000
     }
-
-    // console.log('label count', order.posOrderItems.length, newLabels)
 
     let printCount = 0
     const printLabelList  = []
@@ -142,7 +174,6 @@ export class PrintingService {
               )
               printLabelList.push(item)
               printCount += 1
-              // console.log('print label product:', item.productName)
             }
             if (!newLabels) {
               this.obs$.push(
@@ -155,8 +186,6 @@ export class PrintingService {
         }
       }
 
-      // console.log('printLabelList', printLabelList)
-      // console.log('fork join', printCount, printLabelList )
       if (printCount == 0) {return of(null)};
       return forkJoin(this.obs$)
 
@@ -173,7 +202,6 @@ export class PrintingService {
       console.log(error)
     }
   }
-
 
   async initDefaultLabel() {
     const site        = this.siteService.getAssignedSite();
@@ -589,7 +617,7 @@ export class PrintingService {
 
   printItemLabel(item: any, menuItem$: Observable<IMenuItem>, order: IPOSOrder, joinLabels: boolean ) {
     const site = this.siteService.getAssignedSite()
-    // console.log('print item label', item)
+    console.log('print item label', item)
     if (!menuItem$) {
       menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
     }
@@ -635,22 +663,23 @@ export class PrintingService {
       menuItem$ = of(item.menuItem)
     }
 
+
     // console.log('now printing label')
-    const printer$ = this.settingService.getDeviceSettings(this.orderService.posName).pipe(
+    const printer$ = this.settingService.getDeviceSettings(localStorage.getItem('devicename')).pipe(
       switchMap(data => {
         const item = JSON.parse(data.text) as ITerminalSettings;
         this.uiSettingsService.updatePOSDevice(item)
         printer = {text: item?.labelPrinter}
         this.labelPrinter = item?.labelPrinter;
         return of(item)
-      })
+      }),catchError( switchMap(data => {
+        this.siteService.notify("Print Label Error:" + data, "Close", 2000, 'red')
+        return of(data)
+      }))
     )
 
     const result$ =  printer$.pipe(
       switchMap(data => {
-        // console.log('label printer', data.labelPrinter)
-        // console.log('parameters', item,history,joinLabels);
-
         if (!data ) {
           this.siteService.notify('No Printer assigned to label', 'Alert', 2000)
           return of(null)
@@ -680,7 +709,7 @@ export class PrintingService {
           try {
             let field = 'productName';
             if (data[field]) {
-              // console.log('not going to print label')
+              console.log('not going to print label')
               return of(null)
             }
           } catch (error) {
@@ -700,17 +729,17 @@ export class PrintingService {
           producer$ = of(null);
 
           if (labID) {
-            console.log('trying to get contact for label')
+            // console.log('trying to get contact for label')
             this.getContact(site, labID)
           }
           if (producerID) {
-            console.log('trying to get producer for label')
+            // console.log('trying to get producer for label')
             producer$  = this.getContact(site, producerID);
           }
 
           return forkJoin([lab$, producer$, of(data)])
 
-        })).pipe(
+      })).pipe(
           switchMap( results => {
 
             if (!results) {
@@ -749,10 +778,6 @@ export class PrintingService {
             }
 
             const content = this.renderingService.interpolateText(item, data.text);
-
-            // console.log('contents', content)
-            // console.log('printer text', printer.text );
-
             if (printer.text) {
               const printerName = printer.text
               if (!joinLabels) {
@@ -770,15 +795,13 @@ export class PrintingService {
             return of(null);
       })).pipe(
         switchMap( data => {
-        const order$ = this.orderService.getOrder(site, orderID.toString() , history);
-        return order$
-    })).pipe(switchMap(data => {
-      this.orderService.updateOrder(data)
-
-      return of(data)
-    }))
-
-
+          return this.orderService.getOrder(site, orderID.toString() , history);
+      })).pipe(switchMap(data => {
+        // console.log('before update order', data)
+        // this.orderMethodsService.updateOrder(data)
+        return of(data)
+      }))
+  
     return result$
   }
 
@@ -786,23 +809,11 @@ export class PrintingService {
     clearInterval(this.interval);
   }
 
+  getContact(site: ISite, contactID: number): Observable<IClientTable> {
 
-  refreshOrder(id: number, history) {
-    if (this.order) {
-      const site = this.siteService.getAssignedSite();
-      const order$ = this.orderService.getOrder(site, this.order.id.toString() , this.order.history)
+    if (!contactID || contactID == null) {return of(null)};
 
-      order$.subscribe( data => {
-          this.orderService.updateOrderSubscription(data)
-      })
-    }
-  }
-
-  getContact(site: ISite, labID: number): Observable<IClientTable> {
-
-    if (!labID || labID == null) {return of(null)};
-
-    const client$ = this.clientService.getClient(site, labID).pipe(
+    const client$ = this.clientService.getClient(site, contactID).pipe(
     switchMap(data =>
       {
         return of(data)
@@ -817,13 +828,11 @@ export class PrintingService {
   async saveContentsToFile(filePath: string, contents: string) {
     try {
       const fileWriting = this.electronService.remote.require('./datacap/transactions.js');
-      let response        : any;
+      let response      : any;
       // response   =  await fileWriting.createFile(filePath, contents)
-      response   =  await fileWriting.writeToFile(filePath, contents)
-      console.log(response)
+      response          =  await fileWriting.writeToFile(filePath, contents)
     } catch (error) {
       this.siteService.notify(`File could not be written. ${error}`, 'Close', 3000, 'red')
-      console.log('error', error)
     }
   }
 
@@ -870,9 +879,7 @@ export class PrintingService {
   async saveReceiptHTML(prtContent: any) {
     const site = this.siteService.getAssignedSite();
     let styles  = ''
-    if (this.receiptStyles) {
-      const styles =  this.receiptStyles.text;
-    }
+    if (this.receiptStyles) { const styles =  this.receiptStyles.text; }
     let setting = {} as ISetting;
     setting.name = 'receiptStyles';
     setting.text = this.getTestData(prtContent);
@@ -880,7 +887,6 @@ export class PrintingService {
   }
 
   getTestData(prtContent: any) {
-    // var prtContent = document.getElementById('print-section');
     return prtContent.innerHTML;
   }
 
@@ -962,12 +968,12 @@ export class PrintingService {
     this.previewReceipt()
   }
 
-  previewReceipt(autoPrint?: boolean) {
+  previewReceipt(autoPrint?: boolean, order?: IPOSOrder, ) {
     //get device settings;
     if (this.uiSettingsService.posDeviceInfo) {
       if (this.platFormService.androidApp) {
         const device = this.uiSettingsService.posDeviceInfo;
-        this.printingAndroidService.printAndroidPOSReceipt( this.orderService.currentOrder,
+        this.printingAndroidService.printAndroidPOSReceipt( order,
                                                             null, device.btPrinter );
         return of(null)
       }
@@ -1003,7 +1009,7 @@ export class PrintingService {
           const user = this.userAuthService.currentUser()
           if (user && user.roles == 'user') {
             if (this.order.balanceRemaining == 0) {
-              this.orderService.updateOrderSubscription(null)
+              // this.orderMethodsService.updateOrderSubscription(null)
             }
           }
         }

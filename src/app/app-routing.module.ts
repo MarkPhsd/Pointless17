@@ -134,6 +134,7 @@ import { ClockBreaksTypesComponent } from './modules/admin/employeeClockAdmin/cl
 import { PointlessMETRCSalesComponent } from './modules/admin/metrc/pointless-metrcsales/pointless-metrcsales.component';
 import { DesignerListComponent } from './modules/admin/report-designer/designer/designer-list/designer-list.component';
 import { DesignerEditorComponent } from './modules/admin/report-designer/designer/designer-editor/designer-editor.component';
+import { ProductFilterComponent } from './shared/widgets/product-filter/product-filter.component';
 
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
@@ -156,6 +157,8 @@ const routes: Routes = [
 
     {path: '', component: DefaultComponent,
       children: [
+
+        { path: 'filter',  component: ProductFilterComponent, data: { title: 'Filter', animation: 'isLeft'} },
 
         // { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
         // { path: '/menu-board',  component: GridManagerComponent, pathMatch: 'full', data : { title: 'Menu Board Layout', animation: 'isLeft'},
@@ -386,7 +389,7 @@ const routes: Routes = [
   imports:[
     // RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
     // RouterModule.forRoot(routes, { preloadingStrategy: QuicklinkStrategy })
-    RouterModule.forRoot(routes, { enableTracing: true })
+    RouterModule.forRoot(routes, { enableTracing: false })
   ],
   // imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],

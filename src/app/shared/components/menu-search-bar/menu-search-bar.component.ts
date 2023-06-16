@@ -19,6 +19,7 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 const { Keyboard } = Plugins;
 
 @Component({
@@ -134,7 +135,7 @@ isStaff = this.userAuthorizationService.isCurrentUserStaff()
 isUser  = this.userAuthorizationService.isUser;
 
 initSubscriptions() {
-  this._order = this.orderService.currentOrder$.subscribe( data => {
+  this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
     this.order = data
   })
   this._uiHomePage = this.uiSettingsService.homePageSetting$.subscribe(data => {
@@ -144,7 +145,6 @@ initSubscriptions() {
       this.isDisplayMenuOn;
     }
   })
-
 
 }
 
@@ -157,9 +157,11 @@ constructor(
     private awsService     :        AWSBucketService,
     private router         :        Router,
     private orderService        :  OrdersService,
+    public orderMethodsService: OrderMethodsService,
     private toolBarUIService    : ToolBarUIService,
     public  platFormService     : PlatformService,
     public  uiSettingsService   : UISettingsService,
+    private toolbarUIService    : ToolBarUIService, 
     private userAuthorizationService: UserAuthorizationService,
   )
   {
@@ -422,7 +424,7 @@ constructor(
     productSearchModel.barcode    = productSearchModel.name
     productSearchModel.pageSize   = this.pageSize
     productSearchModel.pageNumber = this.currentPage
-    this.menuService.updateMeunuItemData(productSearchModel)
+    this.menuService.updateSearchModel(productSearchModel)
     return productSearchModel
 
   }
@@ -514,6 +516,10 @@ constructor(
     return this.currentPage
   }
 
+  gotoFilter() {
+    this.router.navigate(['filter'])
+    this.toolbarUIService.hideToolbarSearchBar()
+  }
 
 
 }

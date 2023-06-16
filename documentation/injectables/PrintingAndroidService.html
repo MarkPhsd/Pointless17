@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >PrintingAndroidService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >PrintingAndroidService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -107,10 +114,31 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <a href="#encoodReceipt" >encoodReceipt</a>
+                                <a href="#formatMoney" >formatMoney</a>
+                            </li>
+                            <li>
+                                <a href="#getItems" >getItems</a>
                             </li>
                             <li>
                                 <a href="#getLastAndroidPOSPrinterName" >getLastAndroidPOSPrinterName</a>
+                            </li>
+                            <li>
+                                <a href="#getPayments" >getPayments</a>
+                            </li>
+                            <li>
+                                <a href="#getReceiptFooter" >getReceiptFooter</a>
+                            </li>
+                            <li>
+                                <a href="#getReceiptHeader" >getReceiptHeader</a>
+                            </li>
+                            <li>
+                                <a href="#getReceiptOrderHeader" >getReceiptOrderHeader</a>
+                            </li>
+                            <li>
+                                <a href="#getSpacer" >getSpacer</a>
+                            </li>
+                            <li>
+                                <a href="#getSubtotal" >getSubtotal</a>
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
@@ -120,7 +148,6 @@
                                 <a href="#printAndroidOrder" >printAndroidOrder</a>
                             </li>
                             <li>
-                                    <span class="modifier">Async</span>
                                 <a href="#printAndroidPOSReceipt" >printAndroidPOSReceipt</a>
                             </li>
                             <li>
@@ -135,6 +162,9 @@
                             <li>
                                 <a href="#testContent" >testContent</a>
                             </li>
+                            <li>
+                                <a href="#writeContent" >writeContent</a>
+                            </li>
                         </ul>
                     </td>
                 </tr>
@@ -147,18 +177,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(electronService: ElectronService, snack: MatSnackBar, settingService: <a href="../injectables/SettingsService.html" target="_self">SettingsService</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, renderingService: <a href="../injectables/RenderingService.html" target="_self">RenderingService</a>, labelaryService: <a href="../injectables/LabelaryService.html" target="_self">LabelaryService</a>, fakeDataService: <a href="../injectables/FakeDataService.html" target="_self">FakeDataService</a>, btPrintingService: <a href="../injectables/BtPrintingService.html" target="_self">BtPrintingService</a>, http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>)</code>
+<code>constructor(snack: MatSnackBar, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, serviceTypeService: <a href="../injectables/ServiceTypeService.html" target="_self">ServiceTypeService</a>, companyService: <a href="../injectables/CompanyService.html" target="_self">CompanyService</a>, btPrintingService: <a href="../injectables/BtPrintingService.html" target="_self">BtPrintingService</a>, currencyPipe: CurrencyPipe, dateHelper: <a href="../injectables/DateHelperService.html" target="_self">DateHelperService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/_services/system/printing-android.service.ts:33</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/_services/system/printing-android.service.ts:28</a></div>
                             </td>
                         </tr>
 
@@ -176,34 +206,10 @@
                                         </thead>
                                         <tbody>
                                                 <tr>
-                                                        <td>electronService</td>
-                                                  
-                                                        <td>
-                                                                    <code>ElectronService</code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
                                                         <td>snack</td>
                                                   
                                                         <td>
                                                                     <code>MatSnackBar</code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
-                                                        <td>settingService</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="../injectables/SettingsService.html" target="_self" >SettingsService</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -224,10 +230,10 @@
                                                     
                                                 </tr>
                                                 <tr>
-                                                        <td>renderingService</td>
+                                                        <td>serviceTypeService</td>
                                                   
                                                         <td>
-                                                                        <code><a href="../injectables/RenderingService.html" target="_self" >RenderingService</a></code>
+                                                                        <code><a href="../injectables/ServiceTypeService.html" target="_self" >ServiceTypeService</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -236,22 +242,10 @@
                                                     
                                                 </tr>
                                                 <tr>
-                                                        <td>labelaryService</td>
+                                                        <td>companyService</td>
                                                   
                                                         <td>
-                                                                        <code><a href="../injectables/LabelaryService.html" target="_self" >LabelaryService</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
-                                                        <td>fakeDataService</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="../injectables/FakeDataService.html" target="_self" >FakeDataService</a></code>
+                                                                        <code><a href="../injectables/CompanyService.html" target="_self" >CompanyService</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -272,10 +266,22 @@
                                                     
                                                 </tr>
                                                 <tr>
-                                                        <td>http</td>
+                                                        <td>currencyPipe</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                                    <code>CurrencyPipe</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dateHelper</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/DateHelperService.html" target="_self" >DateHelperService</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -292,7 +298,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -301,24 +307,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="encoodReceipt"></a>
+                    <a name="formatMoney"></a>
                     <span class="name">
-                        <span ><b>encoodReceipt</b></span>
-                        <a href="#encoodReceipt"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>formatMoney</b></span>
+                        <a href="#formatMoney"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>encoodReceipt(Order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>)</code>
+<code>formatMoney(value)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="76"
-                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:76</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="96"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:96</a></div>
                 </td>
             </tr>
 
@@ -328,6 +334,72 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>value</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getItems"></a>
+                    <span class="name">
+                        <span ><b>getItems</b></span>
+                        <a href="#getItems"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getItems(order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="354"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:354</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -338,7 +410,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Order</td>
+                                    <td>order</td>
                                     <td>
                                                 <code><a href="../interfaces/IPOSOrder.html" target="_self" >IPOSOrder</a></code>
                                     </td>
@@ -355,7 +427,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
                     </div>
                     <div class="io-description">
@@ -385,8 +457,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="133"
-                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:133</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="359"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:359</a></div>
                 </td>
             </tr>
 
@@ -397,6 +469,444 @@
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
 
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPayments"></a>
+                    <span class="name">
+                        <span ><b>getPayments</b></span>
+                        <a href="#getPayments"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPayments(order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="356"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:356</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>order</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPOSOrder.html" target="_self" >IPOSOrder</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getReceiptFooter"></a>
+                    <span class="name">
+                        <span ><b>getReceiptFooter</b></span>
+                        <a href="#getReceiptFooter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getReceiptFooter(order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="357"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:357</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>order</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPOSOrder.html" target="_self" >IPOSOrder</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getReceiptHeader"></a>
+                    <span class="name">
+                        <span ><b>getReceiptHeader</b></span>
+                        <a href="#getReceiptHeader"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getReceiptHeader(result: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, item: <a href="../interfaces/ICompany.html" target="_self">ICompany</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="337"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:337</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>result</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>item</td>
+                                    <td>
+                                                <code><a href="../interfaces/ICompany.html" target="_self" >ICompany</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getReceiptOrderHeader"></a>
+                    <span class="name">
+                        <span ><b>getReceiptOrderHeader</b></span>
+                        <a href="#getReceiptOrderHeader"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getReceiptOrderHeader(order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="353"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:353</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>order</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPOSOrder.html" target="_self" >IPOSOrder</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getSpacer"></a>
+                    <span class="name">
+                        <span ><b>getSpacer</b></span>
+                        <a href="#getSpacer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getSpacer(quantity: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, priceLength: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="258"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:258</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>quantity</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>priceLength</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getSubtotal"></a>
+                    <span class="name">
+                        <span ><b>getSubtotal</b></span>
+                        <a href="#getSubtotal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getSubtotal(order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="355"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:355</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>order</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPOSOrder.html" target="_self" >IPOSOrder</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
                     </div>
                 </td>
             </tr>
@@ -424,8 +934,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="50"
-                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:50</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="44"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:44</a></div>
                 </td>
             </tr>
 
@@ -435,6 +945,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -497,15 +1008,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>printAndroidOrder(order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>)</code>
+<code>printAndroidOrder(item: <a href="../interfaces/ICompany.html" target="_self">ICompany</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="129"
-                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:129</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="331"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:331</a></div>
                 </td>
             </tr>
 
@@ -515,6 +1026,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -525,9 +1037,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>order</td>
+                                    <td>item</td>
                                     <td>
-                                                <code><a href="../interfaces/IPOSOrder.html" target="_self" >IPOSOrder</a></code>
+                                                <code><a href="../interfaces/ICompany.html" target="_self" >ICompany</a></code>
                                     </td>
 
                                     <td>
@@ -558,7 +1070,6 @@
                 <td class="col-md-4">
                     <a name="printAndroidPOSReceipt"></a>
                     <span class="name">
-                        <span class="modifier">Async</span>
                         <span ><b>printAndroidPOSReceipt</b></span>
                         <a href="#printAndroidPOSReceipt"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -566,16 +1077,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>printAndroidPOSReceipt(order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>, macAddress: <a href="../s/s.html" target="_self">string</a>)</code>
+<code>printAndroidPOSReceipt(order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>, payment: <a href="../interfaces/PosPayment.html" target="_self">PosPayment</a>, macAddress: <a href="../s/s.html" target="_self">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="69"
-                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:69</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="65"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:65</a></div>
                 </td>
             </tr>
 
@@ -585,6 +1095,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -598,6 +1109,18 @@
                                     <td>order</td>
                                     <td>
                                                 <code><a href="../interfaces/IPOSOrder.html" target="_self" >IPOSOrder</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>payment</td>
+                                    <td>
+                                                <code><a href="../interfaces/PosPayment.html" target="_self" >PosPayment</a></code>
                                     </td>
 
                                     <td>
@@ -624,7 +1147,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
                     </div>
                     <div class="io-description">
@@ -654,8 +1177,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="83"
-                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:83</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="85"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:85</a></div>
                 </td>
             </tr>
 
@@ -665,6 +1188,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -734,8 +1258,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="88"
-                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:88</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="90"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:90</a></div>
                 </td>
             </tr>
 
@@ -745,6 +1269,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -802,8 +1327,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="137"
-                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:137</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="363"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:363</a></div>
                 </td>
             </tr>
 
@@ -813,6 +1338,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -882,8 +1408,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="94"
-                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:94</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="296"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:296</a></div>
                 </td>
             </tr>
 
@@ -899,8 +1425,113 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="writeContent"></a>
+                    <span class="name">
+                        <span ><b>writeContent</b></span>
+                        <a href="#writeContent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>writeContent(order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>, comp: <a href="../interfaces/ICompany.html" target="_self">ICompany</a>, serviceType: <a href="../interfaces/IServiceType.html" target="_self">IServiceType</a>, currentPayment: <a href="../interfaces/PosPayment.html" target="_self">PosPayment</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="126"
+                            class="link-to-prism">src/app/_services/system/printing-android.service.ts:126</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>order</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPOSOrder.html" target="_self" >IPOSOrder</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>comp</td>
+                                    <td>
+                                                <code><a href="../interfaces/ICompany.html" target="_self" >ICompany</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>serviceType</td>
+                                    <td>
+                                                <code><a href="../interfaces/IServiceType.html" target="_self" >IServiceType</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>currentPayment</td>
+                                    <td>
+                                                <code><a href="../interfaces/PosPayment.html" target="_self" >PosPayment</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>
-            <section>
+            <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
@@ -923,7 +1554,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/_services/system/printing-android.service.ts:33</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/_services/system/printing-android.service.ts:28</a></div>
                         </td>
                     </tr>
 
@@ -949,7 +1580,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/_services/system/printing-android.service.ts:31</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/_services/system/printing-android.service.ts:26</a></div>
                         </td>
                     </tr>
 
@@ -975,7 +1606,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/_services/system/printing-android.service.ts:32</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/_services/system/printing-android.service.ts:27</a></div>
                         </td>
                     </tr>
 
@@ -1001,7 +1632,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/_services/system/printing-android.service.ts:29</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/_services/system/printing-android.service.ts:24</a></div>
                         </td>
                     </tr>
 
@@ -1027,7 +1658,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/_services/system/printing-android.service.ts:30</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/_services/system/printing-android.service.ts:25</a></div>
                         </td>
                     </tr>
 
@@ -1053,7 +1684,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/_services/system/printing-android.service.ts:28</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/_services/system/printing-android.service.ts:23</a></div>
                         </td>
                     </tr>
 
@@ -1065,28 +1696,23 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ElementRef, Injectable, Renderer2 } from &#x27;@angular/core&#x27;;
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
 import * as _ from &quot;lodash&quot;;
-import { SettingsService } from &#x27;src/app/_services/system/settings.service&#x27;;
-import { SitesService } from &#x27;src/app/_services/reporting/sites.service&#x27;;
-import { Settings } from &#x27;electron/main&#x27;;
-import { ISetting, ISite } from &#x27;src/app/_interfaces&#x27;;
-import { observable } from &#x27;rxjs&#x27;;
+import { ICompany, IServiceType, ISetting,  } from &#x27;src/app/_interfaces&#x27;;
 import { IInventoryAssignment } from &#x27;src/app/_services/inventory/inventory-assignment.service&#x27;;
-import { MatSnackBar } from &#x27;@angular/material/snack-bar&#x27;;
-import { HttpClient } from &#x27;@angular/common/http&#x27;;
+import { MatSnackBar, } from &#x27;@angular/material/snack-bar&#x27;;
 import { ElectronService } from &#x27;ngx-electron&#x27;;
-import { IPOSOrder } from &#x27;src/app/_interfaces/transactions/posorder&#x27;;
-import html2canvas from &#x27;html2canvas&#x27;;
-import domtoimage from &#x27;dom-to-image&#x27;;
-import { jsPDF } from &quot;jspdf&quot;;
-import * as  printJS from &quot;print-js&quot;;
-import { RenderingService } from &#x27;./rendering.service&#x27;;
-import { LabelaryService, zplLabel } from &#x27;../labelary/labelary.service&#x27;;
-import { FakeDataService } from &#x27;./fake-data.service&#x27;;
+import { IPOSOrder, IPOSPayment, PosPayment } from &#x27;src/app/_interfaces/transactions/posorder&#x27;;
 import { BtPrintingService } from &#x27;./bt-printing.service&#x27;;
 import  EscPosEncoder  from &#x27;esc-pos-encoder-ionic&#x27;;
+// import EscPosEncoder from &#x27;esc-pos-encoder&#x27;;
+import { CompanyService } from &#x27;./company.service&#x27;;
+import { ServiceTypeService } from &#x27;../transactions/service-type-service.service&#x27;;
+import { combineLatestWith } from &#x27;rxjs&#x27;;
+import { SitesService } from &#x27;../reporting/sites.service&#x27;;
+import { CurrencyPipe, DatePipe, formatCurrency, getCurrencySymbol } from &#x27;@angular/common&#x27;;
+import { DateHelperService } from &#x27;../reporting/date-helper.service&#x27;;
 
 @Injectable({
   providedIn: &#x27;root&#x27;
@@ -1100,19 +1726,18 @@ export class PrintingAndroidService {
   order                 : IPOSOrder
   isElectronServiceInitiated &#x3D; false
 
-  constructor(  private electronService: ElectronService,
+  constructor(
                 private snack: MatSnackBar,
-                private settingService: SettingsService,
                 private siteService: SitesService,
-                private renderingService: RenderingService,
-                private labelaryService: LabelaryService,
-                private fakeDataService: FakeDataService,
+                private serviceTypeService: ServiceTypeService,
+                private companyService: CompanyService,
                 private btPrintingService: BtPrintingService,
-                private http: HttpClient,) {
-
-    if (this.electronService.remote !&#x3D; null) {
-      this.isElectronServiceInitiated &#x3D; true
-    }
+                private currencyPipe: CurrencyPipe,
+                private dateHelper: DateHelperService,
+              ) {
+    // if (this.electronService.remote !&#x3D; null) {
+    //   this.isElectronServiceInitiated &#x3D; true
+    // }
   }
 
   async printAndroidImage(image: any, macAddress: string) {
@@ -1123,29 +1748,37 @@ export class PrintingAndroidService {
     }
 
     let encoder &#x3D; new EscPosEncoder();
+
+
+    // let encoder &#x3D; new EscPosEncoder({
+    //   language: &#x27;esc/pos&#x27;
+    // });
     let result &#x3D; encoder
       .initialize()
       .image(image, 128, 128, &#x27;atkinson&#x27;)
-
       .encode()
     this.btPrintingService.sendToBluetoothPrinter(macAddress, result)
-
 }
 
 // https://github.com/Ans0n-Ti0/EscPosEncoder
+  printAndroidPOSReceipt(order: IPOSOrder, payment: PosPayment, macAddress: string) {
 
-  async printAndroidPOSReceipt( order: IPOSOrder, macAddress: string) {
+    const site &#x3D; this.siteService.getAssignedSite()
+    const company$ &#x3D; this.companyService.getCompany(site)
+    const service$  &#x3D; this.serviceTypeService.getTypeCached(site, order.serviceTypeID)
 
-    const result &#x3D; this.encoodReceipt(order);
-    this.printFromAndroid(macAddress, result)
+    company$.pipe(combineLatestWith(service$)).subscribe(
+      ([company, service, ]) &#x3D;&gt; {
+        /*
+          Example:
+        timerThree first tick: &#x27;Timer One Latest: 0, Timer Two Latest: 0, Timer Three Latest: 0
+        timerOne second tick: &#x27;Timer One Latest: 1, Timer Two Latest: 0, Timer Three Latest: 0
+        timerTwo second tick: &#x27;Timer One Latest: 1, Timer Two Latest: 1, Timer Three Latest: 0
+       */
+        const result &#x3D;  this.writeContent(order, company, service, payment)
+        this.printFromAndroid(macAddress, result)
+      })
 
-  }
-
-  encoodReceipt(Order: IPOSOrder) {
-    const encoder &#x3D; new EscPosEncoder();
-    let result &#x3D; encoder
-    .encode()
-    return result
   }
 
   printFromAndroid(printerName: string, content: any) {
@@ -1159,6 +1792,206 @@ export class PrintingAndroidService {
     this.printFromAndroid(printerName, content)
   }
 
+  formatMoney(value) {
+    const temp &#x3D; &#x60;${value}&#x60;.replace(/\,/g, &quot;&quot;);
+    return this.currencyPipe.transform(temp).replace(&quot;$&quot;, &quot;&quot;);
+  }
+
+        // for (const item of order.posOrderItems) {
+      //   if (item?.itemType?.useType &#x3D;&#x3D;&#x3D; &#x27;adjustment&#x27; &amp;&amp; item?.itemType?.type &#x3D;&#x3D;&#x3D; &#x27;service fee&#x27;) {
+      //     serviceFee +&#x3D; item.gratuity;
+      //   } else {
+      //     const total &#x3D; this.formatMoney(item.total)
+      //     const line &#x3D; &#x60;&#x60;
+      //     table.push(  item.quantity.toFixed(2) , (item.productName).substring(0, 10),  total )
+      //   }
+      // }
+
+      // const paymentsTable &#x3D; []
+      // if (serviceFee !&#x3D; 0) {
+      //   const total &#x3D; this.formatMoney(serviceFee)
+      //   const line &#x3D; &#x60;${&#x27;Service Fee&#x27;}:      $${ serviceFee }&#x60;
+      //   const paymentsTable &#x3D; []
+      //   .push(line);
+      // }
+
+      // for (const item of order.posPayments) {
+      //   const currency  &#x3D; getCurrencySymbol(&#x27;default&#x27;, &#x27;narrow&#x27;);
+      //   const total     &#x3D; this.formatMoney(item.amountPaid) //, locale, currency) ;
+      //   const line      &#x3D; &#x60;${item.paymentMethod.name }  $${ total }&#x60;
+      //   paymentsTable.push(line);
+      // }
+
+      writeContent(order: IPOSOrder, comp: ICompany ,serviceType: IServiceType, currentPayment: PosPayment ) {
+        const locale &#x3D; &#x27;en-us&#x27;
+
+        try {
+          const currency &#x3D;  getCurrencySymbol(&#x27;$&#x27;, &#x27;narrow&#x27;);
+          const taxTotal &#x3D; this.formatMoney(order.taxTotal) ;
+          const total    &#x3D; this.formatMoney(order.total) ;
+          const subTotal &#x3D; this.formatMoney(order.subTotal) ;
+
+          let serviceFee &#x3D; 0;
+          if (order.gratuity !&#x3D; 0) {
+            serviceFee &#x3D; order.gratuity
+          }
+
+          let time &#x3D; &#x27;       &#x27;;
+          if (order.completionDate) {
+            time &#x3D; this.dateHelper.format( order.completionDate, &#x27;short&#x27;)
+          }
+          let customer &#x3D; &#x27;       &#x27;
+          if (order.customerName) {
+            customer &#x3D; order?.customerName;
+          }
+
+          let encoder &#x3D; new EscPosEncoder();
+          let result &#x3D;
+          encoder
+          .align(&#x27;center&#x27;)
+          .line(comp.compName)
+          .align(&#x27;center&#x27;)
+          .line(comp.compAddress1 + &#x27; &#x27; + comp.compAddress2)
+          .align(&#x27;center&#x27;)
+          .line(&#x60;${comp.compCity},${comp.compState} ${comp.compZip}&#x60;)
+          .align(&#x27;center&#x27;)
+          .line(comp.phone)
+          .newline()
+          .line(&#x27;--------------------&#x27;)
+          .newline()
+          .align(&#x27;left&#x27;)
+          .bold()
+          .line(&#x60;${&#x27;ID&#x27;}     ${&#x27;Type&#x27;}             ${&#x27;Time&#x27;}&#x60;)
+          .line(&#x60;${order.id} ${order?.serviceType.substring(0,6)} ${time}&#x60;)
+
+          if (customer !&#x3D; &#x27;&#x27;) {
+            result &#x3D; result.line(&#x60;${&#x27;Customer&#x27;}&#x60;)
+            result &#x3D; result.line(&#x60;${customer}&#x60;)
+          }
+
+          result &#x3D; result
+
+          .bold()
+          .line(&#x27;---------------------------&#x27;)
+
+          //this is used for when order grouping payments occurs.
+          for (const item of order.posOrderItems) {
+            // if (item?.itemType?.useType &#x3D;&#x3D;&#x3D; &#x27;adjustment&#x27; &amp;&amp; item?.itemType?.type &#x3D;&#x3D;&#x3D; &#x27;service fee&#x27;) {
+            //   serviceFee +&#x3D; item.gratuity;
+            // } else {
+              const quantity &#x3D; item.quantity.toFixed(2);
+              const total &#x3D; this.formatMoney(item.total)
+              const spacer &#x3D; this.getSpacer(total.length + quantity.length, total.length )
+
+              const itemName &#x3D; (&#x60;${item.productName}${&#x27;                                   &#x27;}&#x60;).substring(0, spacer)
+
+              const line &#x3D; &#x60;${quantity} ${itemName} ${total}&#x60;
+
+              result &#x3D; result.line(line);
+            // }
+          }
+
+          result &#x3D; result
+
+          .bold()
+          .line(&#x27;---------------------------&#x27;)
+          .newline()
+
+          .newline()
+          .align(&#x27;right&#x27;)
+          .line(&#x60;Subtotal: ${subTotal}&#x60;)
+          .align(&#x27;right&#x27;)
+          .line(&#x60;Tax     :  ${taxTotal}&#x60;)
+          .align(&#x27;right&#x27;)
+
+          if (serviceFee !&#x3D; 0) {
+            const total &#x3D; this.formatMoney(serviceFee) ;
+            const perc  &#x3D; ((serviceFee / +subTotal) * 100).toFixed(0);
+            const line &#x3D; &#x60;${&#x27;Service Fee&#x27;} %${perc}:      $${ serviceFee }&#x60;
+            result &#x3D; result.line(line);
+          }
+          result &#x3D; result
+
+          .line(&#x60;Total   : ${total}&#x60;)
+          .newline()
+
+          if (currentPayment) {
+              const item &#x3D; currentPayment
+            // for () {
+              const total &#x3D; this.formatMoney(item.amountPaid) ;
+              const line &#x3D; &#x60;${item.paymentMethod.name }  $${ total }&#x60;
+              result &#x3D; result.line(line);
+              if (item.entryMethod) {
+                let ccInfo &#x3D; &#x60;${item.entryMethod} -Ref ${item.refNumber}&#x60;
+                result &#x3D; result.line(ccInfo);
+                ccInfo &#x3D; &#x60;Approval: ${item.approvalCode} &#x60;
+                result &#x3D; result.line(ccInfo);
+
+                const message &#x3D; &#x27;I agree to pay the above amount noted. I agree to the purchase agreement.&#x27;
+                result &#x3D; result.line(message);
+                result.newline()
+                result.newline()
+                result.line(&#x27;Signature _______________&#x27;)
+              }
+            // }
+          }
+
+          result &#x3D; result
+
+          .newline()
+          if (serviceType.instructions) {
+            result &#x3D; result.line(&#x60;${&#x27;Policy&#x27;}&#x60;)
+            result &#x3D; result.line(&#x60;${serviceType.instructions}&#x60;)
+          }
+          result &#x3D; result
+          .newline()
+          .newline()
+          .encode()
+          return result;
+
+      } catch (error) {
+        console.log(&#x27;error&#x27;, error)
+      }
+  }
+
+  getSpacer(quantity: number, priceLength: number) {
+    const spacer &#x3D; &#x27;                    &#x27;
+    let returnValue
+
+    if (priceLength &#x3D;&#x3D; 3) {
+      returnValue &#x3D; 21
+    }
+    if (priceLength &#x3D;&#x3D; 4) {
+      returnValue &#x3D; 20
+    }
+    if (priceLength &#x3D;&#x3D; 5) {
+      returnValue &#x3D; 19
+    }
+    if (priceLength &#x3D;&#x3D; 6) {
+      returnValue &#x3D; 18
+    }
+    if (priceLength &#x3D;&#x3D; 7) {
+      returnValue &#x3D; 17
+    }
+
+    if (quantity &#x3D;&#x3D; 3) {
+      return returnValue - quantity
+    }
+    if (quantity &#x3D;&#x3D; 4) {
+      return returnValue - quantity - 1
+    }
+    if (quantity &#x3D;&#x3D; 5) {
+      return returnValue - quantity - 2
+    }
+    if (quantity &#x3D;&#x3D; 6) {
+      return returnValue - quantity - 3
+    }
+    if (quantity &#x3D;&#x3D; 6) {
+      return returnValue - quantity - 4
+    }
+    return 21;
+
+  }
   testContent() {
     const encoder &#x3D; new EscPosEncoder();
     let result &#x3D; encoder
@@ -1194,9 +2027,33 @@ export class PrintingAndroidService {
     return result
   }
 
-  printAndroidOrder(order: IPOSOrder) {
+  printAndroidOrder(item: ICompany) {
+    const encoder &#x3D; new EscPosEncoder();
+    let result &#x3D; encoder
 
   }
+
+  getReceiptHeader(result: any, item: ICompany){
+
+    const encoder &#x3D; new EscPosEncoder();
+    result
+    .align(&#x27;center&#x27;)
+    .line(item.compName)
+    .align(&#x27;center&#x27;)
+    .line(item.compBillingAddress)
+    .align(&#x27;center&#x27;)
+    .line(&#x60;${item.compBillingCity} , ${item.compBillingState} ${item.compBillingZip}&#x60;)
+    .align(&#x27;center&#x27;)
+    .line(&#x60;${item.phone}&#x60;)
+
+    return result
+  }
+
+  getReceiptOrderHeader(order :  IPOSOrder) { }
+  getItems(order : IPOSOrder) {}
+  getSubtotal(order :  IPOSOrder) {}
+  getPayments(order :  IPOSOrder) {}
+  getReceiptFooter(order :  IPOSOrder) {}
 
   getLastAndroidPOSPrinterName(): string {
     return  localStorage.getItem(&#x27;androidPOSPrinter&#x27;)
@@ -1218,14 +2075,15 @@ export class PrintingAndroidService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -1237,6 +2095,15 @@ export class PrintingAndroidService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -1246,8 +2113,8 @@ export class PrintingAndroidService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

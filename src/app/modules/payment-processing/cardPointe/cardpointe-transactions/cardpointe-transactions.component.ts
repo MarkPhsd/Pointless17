@@ -10,6 +10,7 @@ import { TransactionUISettings } from 'src/app/_services/system/settings/uisetti
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSPayment } from 'src/app/_interfaces';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-cardpointe-transactions',
@@ -102,7 +103,7 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
       if (!data) {return}
       this.processingTransaction = true
       this.action$ = this.paymentMethodsService.processCardPointResponse( data, this.methodsService.payment,
-                                                            this.orderService.currentOrder).pipe(
+                                                            this.orderMethodsService.currentOrder).pipe(
                                                               switchMap(data => {
                                                                 this.processingTransaction = false
                                                                 return of(data)
@@ -130,6 +131,7 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
                 public paymentMethodsService: PaymentsMethodsProcessService,
                 public paymentService       : POSPaymentService,
                 private siteService         : SitesService,
+                public orderMethodsService  : OrderMethodsService,
                 private orderService        : OrdersService,
                 @Inject(MAT_DIALOG_DATA) public data: any,
                 @Optional() private dialogRef  : MatDialogRef<CardpointeTransactionsComponent>,
@@ -307,7 +309,7 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
           return
         }
         this.orderService.notificationEvent('Card Authorized. Press the edit button in the payments to capture.', 'Alert')
-        this.orderService.updateOrderSubscription(data);
+        this.orderMethodsService.updateOrderSubscription(data);
       })
     }
   }

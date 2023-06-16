@@ -127,6 +127,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   constructor(
     public orderService           : OrdersService,
+    public orderMethodsService: OrderMethodsService,
     private settingService        : SettingsService,
     private siteService           : SitesService,
     private platFormService       : PlatformService,
@@ -146,7 +147,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     this.printingService.updatePrintView(1);
     if(this._order) { this._order.unsubscribe() }
     this.printingService.currentGroupID = 0;
-    this.orderService.printOrder = null;
+    this.printingService.printOrder = null;
   }
 
   refreshViewObservable(){
@@ -483,9 +484,9 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   getOrder() {
-     let printOrder$  = of(this.orderService.printOrder);
-     if (!this.orderService.printOrder) {
-      printOrder$ = this.orderService.currentOrder$
+     let printOrder$  = of(this.printingService.printOrder);
+     if (!this.printingService.printOrder) {
+      printOrder$ = this.orderMethodsService.currentOrder$
      }
 
      return printOrder$.pipe(switchMap(data => {
@@ -501,7 +502,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
             if (data.posOrderItems) {
               this.items      = data.posOrderItems
             }
-            return  this.orderService.getSelectedPayment()
+            return  this.orderMethodsService.getSelectedPayment()
           }
         )
       ).pipe(switchMap(payment => {

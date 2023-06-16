@@ -1,0 +1,733 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
+  >
+  userLogin</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_services/system/user-switching.service.ts</code>
+        </p>
+
+
+
+
+        <section data-compodoc="block-index">
+            <h3 id="index">Index</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Properties</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                        <a href="#password" 
+>
+                                            password
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#userName" 
+>
+                                            userName
+                                        </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section data-compodoc="block-properties">
+                <h3 id="inputs">Properties</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="password"></a>
+                                        <span class="name "><b>password</b>
+                                            <a href="#password">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>password:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="userName"></a>
+                                        <span class="name "><b>userName</b>
+                                            <a href="#userName">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>userName:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, OnDestroy } from &#x27;@angular/core&#x27;;
+import { ActivatedRoute, Router } from &#x27;@angular/router&#x27;;
+import { HttpClient, HttpErrorResponse } from &#x27;@angular/common/http&#x27;;
+import { BehaviorSubject, Observable, of, Subscription } from &#x27;rxjs&#x27;;
+import { switchMap,   } from &#x27;rxjs/operators&#x27;;
+import { clientType, IUser, IUserProfile, UserPreferences } from &#x27;src/app/_interfaces&#x27;;
+import { FastUserSwitchComponent } from &#x27;src/app/modules/profile/fast-user-switch/fast-user-switch.component&#x27;;
+import { MatDialog } from &#x27;@angular/material/dialog&#x27;;
+import { SitesService } from &#x27;../reporting/sites.service&#x27;;
+import { AuthenticationService, ContactsService, OrdersService } from &#x27;..&#x27;;
+import { POSPaymentService } from &#x27;../transactions/pospayment.service&#x27;;
+import { MatSnackBar } from &#x27;@angular/material/snack-bar&#x27;;
+import { AppInitService } from &#x27;./app-init.service&#x27;;
+import { PlatformService } from &#x27;./platform.service&#x27;;
+import { EncryptionService } from &#x27;../encryption/encryption.service&#x27;;
+import { BalanceSheetMethodsService } from &#x27;../transactions/balance-sheet-methods.service&#x27;;
+import { ElectronService } from &#x27;ngx-electron&#x27;;
+import { ToolBarUIService } from &#x27;./tool-bar-ui.service&#x27;;
+import { UISettingsService } from &#x27;./settings/uisettings.service&#x27;;
+import { ClientTypeService, IUserAuth_Properties } from &#x27;../people/client-type.service&#x27;;
+import { OrderMethodsService } from &#x27;../transactions/order-methods.service&#x27;;
+
+export interface ElectronDimensions {
+  height: string;
+  width : string;
+  depth : string;
+}
+export interface userLogin {
+  userName: string;
+  password: string;
+}
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class UserSwitchingService implements  OnDestroy {
+
+  loginData  : any;
+  clientType : clientType
+
+  user  : IUser;
+  _user : Subscription
+
+  isElectron: boolean;
+
+  public  swapMenuWithOrderBoolean    :boolean;
+  private _swapMenuWithOrder   &#x3D; new BehaviorSubject&lt;boolean&gt;(null);
+  public  swapMenuWithOrder$   &#x3D; this._swapMenuWithOrder.asObservable();
+
+  private _loginStatus         &#x3D; new BehaviorSubject&lt;number&gt;(0);
+  public  loginStatus$         &#x3D; this._loginStatus.asObservable();
+
+  updateLoginStatus(value: number) {
+    this._loginStatus.next(value)
+  }
+
+  initSubscriptions() {
+    this._user &#x3D; this.authenticationService.user$.subscribe(user &#x3D;&gt; {
+      this.user &#x3D; user;
+    })
+  }
+
+  //enter or chain observables here.
+  promptBalanceSheet(user: IUser): Observable&lt;any&gt; {
+    return this.sheetMethodsService.promptBalanceSheet(user)
+  }
+
+  constructor(
+    private router           : Router,
+    private http             : HttpClient,
+    private siteService      : SitesService,
+    private dialog           : MatDialog,
+    private authenticationService: AuthenticationService,
+    private orderService     : OrdersService,
+    private orderMethodService: OrderMethodsService,
+    private contactsService  : ContactsService,
+    private sheetMethodsService: BalanceSheetMethodsService,
+    private paymentService   : POSPaymentService,
+    private snackBar         : MatSnackBar,
+    private appInitService   : AppInitService,
+    private route            : ActivatedRoute,
+    private platformService  : PlatformService,
+    private encryptionService: EncryptionService,
+    private toolbarUIService : ToolBarUIService,
+    private uiSettingService: UISettingsService,
+    private electronService  : ElectronService,
+    private clientTypeService: ClientTypeService,
+  ) {
+    this.initSubscriptions();
+    this.initializeAppUser();
+  }
+
+  ngOnDestroy(): void {
+    if (this._user) { this._user.unsubscribe()}
+  }
+
+  initializeAppUser() {
+    const temp &#x3D; JSON.parse(localStorage.getItem(&#x27;appUser&#x27;)) as ElectronDimensions;
+    if (temp) { return }
+    const appUser &#x3D; {} as ElectronDimensions;
+    const user &#x3D; JSON.stringify(appUser)
+    localStorage.setItem(&#x27;appUser&#x27;, user)
+    this.isElectron &#x3D;  this.electronService.isElectronApp
+  }
+
+  async switchUser(): Promise&lt;boolean&gt; {
+    //open dialog
+    const request &#x3D; {request: &#x27;switchUser&#x27;}
+    //should have be switch user
+    this.openPIN(request);
+    //allow pin entry with password
+    return true
+  }
+
+  getCurrentUser() {
+
+  }
+
+  getUserTypeAuthorizations(id: number) {
+    const site &#x3D; this.siteService.getAssignedSite()
+    return this.clientTypeService.getClientType(site, id).pipe(
+      switchMap( data &#x3D;&gt; {
+        if (data) {
+          this.authenticationService.updateUserAuths(JSON.parse(data.jsonObject))
+          return of(data)
+        }
+      }
+    ))
+  }
+
+  setAppUser() {
+    const appUser &#x3D; JSON.parse(localStorage.getItem(&#x27;appUser&#x27;)) as ElectronDimensions;
+    const iUser &#x3D; {} as IUser;
+    iUser.username  &#x3D; this.encryptionService.decrypt(appUser.height, appUser.depth)
+    iUser.password &#x3D; this.encryptionService.decrypt(appUser.width, appUser.depth)
+  }
+
+  saveAppUser(appUser: ElectronDimensions) {
+    appUser.height &#x3D; this.encryptionService.encrypt(appUser.height, appUser.depth)
+    appUser.width  &#x3D; this.encryptionService.encrypt(appUser.width, appUser.depth)
+    const user &#x3D; JSON.stringify(appUser);
+    localStorage.setItem(&#x27;electronFeature&#x27;, user);
+  }
+
+  clearLoggedInUser() {
+    this.orderMethodService.updateOrderSubscriptionClearOrder(0)
+    this.orderMethodService.updateOrderSearchModel(null);
+    this.toolbarUIService.updateDepartmentMenu(0);
+    this.authenticationService.logout();
+  }
+
+  pinEntryResults(pin: any) {
+    //find employee
+    const token &#x3D;  localStorage.getItem(&#x27;posToken&#x27;)
+    const site &#x3D; this.siteService.getAssignedSite()
+    return this.login(token, pin)
+    //secret user
+    // if (!this.user &amp;&amp; !this.platformService.webMode) {
+    //   this.setAppUser();
+    // }
+
+    // this.employeeService.getEmployeeByPIN(site, pin).subscribe
+    //   (data &#x3D;&gt;
+    //   {
+    //     if (data) {
+    //       if (data.employee &amp;&amp; data.client) {
+
+    //         let currentUser       &#x3D; {} as IUser;
+    //         const emp             &#x3D; data.employee
+    //         const client          &#x3D; data.client;
+
+    //         currentUser.password  &#x3D; pin;
+    //         currentUser.roles     &#x3D; client.roles.toLowerCase()
+    //         currentUser.id        &#x3D; client.id
+    //         currentUser.employeeID&#x3D; client.employeeID
+    //         currentUser.username  &#x3D; client.userName;
+    //         currentUser.phone     &#x3D; client.phone;
+    //         currentUser.email     &#x3D; client.email;
+
+    //         const user &#x3D; this.setUserInfo(currentUser, pin)
+    //         this.authenticationService.updateUser(user)
+    //         this.clearSubscriptions();
+    //         return true;
+
+    //       }
+    //     }
+    //   }
+    // )
+  }
+
+  authenticate(userLogin: userLogin): Observable&lt;any&gt; {
+    const apiUrl &#x3D;  this.appInitService.apiBaseUrl()
+    const url &#x3D; &#x60;${apiUrl}/users/authenticate&#x60;
+    return this.http.post&lt;any&gt;(url, userLogin )
+  }
+
+  login(userName: string, password: string): Observable&lt;any&gt; {
+
+    this.clearSubscriptions();
+    this.authenticationService.clearUserSettings();
+    const site &#x3D; this.siteService.getAssignedSite()
+    const userLogin &#x3D; { userName, password } as userLogin;
+    const timeOut   &#x3D; 3 * 1000;
+
+    return  this.authenticate(userLogin)
+      .pipe(
+        switchMap(
+          user &#x3D;&gt; {
+
+            if (user &amp;&amp; user.errorMessage) {
+              const message &#x3D; user?.errorMessage;
+              this.snackBar.open(message, &#x27;Failed Login&#x27;, {duration: 1500})
+              const item &#x3D; {message: &#x27;failed&#x27;}
+              return of(item)
+            }
+
+            if (user) {
+              if (user?.message.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;failed&#x27;) {
+                const user &#x3D; {message: &#x27;failed&#x27;}
+                return of(user)
+              }
+              user.message &#x3D; &#x27;success&#x27;
+              const currentUser &#x3D; this.setUserInfo(user, password)
+              this.uiSettingService.initSecureSettings();
+              return of(user)
+            } else {
+              const user &#x3D; {message: &#x27;failed&#x27;} as IUser;
+              return of(user)
+            }
+
+      })).pipe(switchMap(data &#x3D;&gt; {
+        // console.log(&#x27;Sending user getting contact&#x27;, data)
+        if (data?.message &#x3D;&#x3D;&#x3D; &#x27;failed&#x27;) { return of(data)}
+        return this.contactsService.getContact(site, data?.id)
+
+      })).pipe(switchMap(data &#x3D;&gt; {
+          if ( !data ) {
+              const user &#x3D; {} as IUser
+              user.message &#x3D; &#x27;failed&#x27;;
+              return of( user )
+            }
+
+            const item &#x3D; localStorage.getItem(&#x27;user&#x27;)
+            const user &#x3D; JSON.parse(item) as IUser;
+
+            // console.log(&#x27;Sending user getting contact - getting auths&#x27;, user)
+            if (data.clientType &amp;&amp; data.clientType.jsonObject) {
+              this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
+            } else
+            {
+              this.authenticationService.updateUserAuths(null)
+            }
+
+            return of(user)
+          }
+
+      )).pipe(switchMap(user &#x3D;&gt;
+         {
+            if (user) {
+              ///this is where we prompt the balance sheet
+              if ( this.platformService.isApp()  )  {
+                // console.log(&#x27;platform is app getting balance sheet&#x27;)
+                return this.promptBalanceSheet(user)
+              }
+              if ( !this.platformService.isApp() )  {
+                // console.log(&#x27;platform is not app&#x27;)
+                return of(user)
+              }
+            }
+            return of(null)
+          }
+        )
+      )
+
+  }
+
+  // getAuthorization()
+  setUserInfo(user: IUser, password) {
+
+    const currentUser &#x3D; {} as IUser;
+    if (!user.roles)     { user.roles &#x3D; &#x27;user&#x27; }
+    if (!user.firstName) { user.firstName &#x3D; user.username }
+    localStorage.setItem(&quot;ami21&quot;, &#x27;true&#x27;)
+    currentUser.password     &#x3D; password;
+    currentUser.roles        &#x3D; user?.roles.toLowerCase()
+    currentUser.id           &#x3D; user.id
+    currentUser.employeeID   &#x3D; user.employeeID
+    currentUser.username     &#x3D; user.username;
+    currentUser.phone        &#x3D; user.phone;
+    currentUser.email        &#x3D; user.email;
+    currentUser.token        &#x3D; user.token;
+    currentUser.firstName    &#x3D; user?.firstName;
+    currentUser.lastName     &#x3D; user?.lastName;
+    currentUser.errorMessage &#x3D; user.errorMessage
+    currentUser.message      &#x3D; user.message
+
+    if (user.preferences) {
+      currentUser.userPreferences &#x3D; JSON.parse(user.preferences) as UserPreferences;
+      currentUser.preferences &#x3D; user.preferences;
+      if (!currentUser.userPreferences.swapMenuOrderPlacement) {
+        currentUser.userPreferences.swapMenuOrderPlacement &#x3D; false;
+      }
+      if (!currentUser.userPreferences.showAllOrders) {
+        currentUser.userPreferences.showAllOrders &#x3D; false;
+      }
+    }
+
+    if (!user.preferences) {
+      currentUser.userPreferences               &#x3D;  {} as UserPreferences;
+      currentUser.userPreferences.darkMode      &#x3D; false;
+      currentUser.userPreferences.swapMenuOrderPlacement &#x3D; false;
+      currentUser.userPreferences.showAllOrders &#x3D; false;
+      currentUser.preferences &#x3D; JSON.stringify(currentUser.userPreferences);
+    }
+
+    if (currentUser?.userPreferences.swapMenuOrderPlacement) {
+      this.swapMenuWithOrder(currentUser.userPreferences.swapMenuOrderPlacement);
+    } else {
+      this.swapMenuWithOrder(false);
+    }
+
+    user.authdata            &#x3D; window.btoa(user.username + &#x27;:&#x27; + user.password);
+    currentUser.authdata     &#x3D; user.authdata
+    localStorage.setItem(&#x27;user&#x27;, JSON.stringify(currentUser))
+    this.authenticationService.updateUser(currentUser)
+
+    return currentUser
+
+  }
+
+
+
+  setUserAuth(userAuth: string) {
+    localStorage.setItem(&#x27;userAuth&#x27;, userAuth)
+  }
+
+  clearSubscriptions() {
+    this.orderMethodService.updateOrderSubscription(null);
+    this.contactsService.updateSearchModel(null);
+    this.sheetMethodsService.updateBalanceSearchModel(null);
+    this.sheetMethodsService.updateBalanceSheet(null);
+    this.paymentService.updatePaymentSubscription(null);
+    this.paymentService.updateSearchModel(null);
+  }
+
+  navigateToOrders(){
+    this.toolbarUIService.updateDepartmentMenu(0);
+    this.router.navigateByUrl(&#x27;/pos-orders&#x27;)
+  }
+
+  openPIN(request: any) {
+    if (!this.platformService.isApp) {return}
+
+    let dialogRef: any;
+    dialogRef &#x3D; this.dialog.open(FastUserSwitchComponent,
+      { width:        &#x27;550px&#x27;,
+        minWidth:     &#x27;550px&#x27;,
+        height:       &#x27;600px&#x27;,
+        minHeight:    &#x27;600px&#x27;,
+        data: request
+      },
+    )
+  }
+
+  swapMenuWithOrder(swap: boolean) {
+    this.swapMenuWithOrderBoolean &#x3D; swap;
+    this._swapMenuWithOrder.next(swap)
+  }
+
+  processLogin(user: IUser, path : string) {
+
+    if (user &amp;&amp; user.message &#x3D;&#x3D; undefined) {
+      return &#x27;user undefined&#x27;
+    }
+
+    // if account loccked out then change here.
+    if (user.message.toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;failed&#x27;) {
+      return user.errorMessage
+    }
+
+    if (user &amp;&amp; !user.message) {
+      return &#x27;No message response from API.&#x27;
+    }
+
+    if (path) {
+      this.router.navigate([path]);
+      return &#x27;success&#x27;
+    }
+
+    if (user.message &#x3D;&#x3D;&#x3D; &#x27;success&#x27;) {
+      this.loginToReturnUrl();
+      return &#x27;success&#x27;
+    }
+    // console.log(&#x27;processlogin5&#x27;)
+    this.setAppUser()
+  }
+
+  loginToURL(path) {
+    let returnUrl &#x3D; this.route.snapshot.queryParams[&#x27;returnUrl&#x27;] || &#x27;/&#x27;;
+
+    if (path) {
+      this.router.navigate([path])
+    }
+
+    if (returnUrl) {
+      this.router.navigate([returnUrl])
+    }
+
+    this.loginToReturnUrl()
+  }
+
+  assignCurrentOrder(user: IUserProfile)  {
+    const site &#x3D; this.siteService.getAssignedSite()
+    if (user &amp;&amp; user.roles &#x3D;&#x3D; &#x27;user&#x27; &amp;&amp; user.id) {
+
+      const order$ &#x3D; this.orderService.getUserCurrentOrder(site, user.id)
+      order$.subscribe(data &#x3D;&gt; {
+        if (!data) {return of(null)}
+        if (data.toString().toLowerCase() &#x3D;&#x3D;&#x3D; &#x27;no order&#x27;) {return of(null)}
+        this.orderMethodService.updateOrderSubscription(data)
+      })
+
+    }
+  }
+
+  loginApp(user) {
+    const currentUser   &#x3D; user.user
+    const sheet         &#x3D; user.sheet
+    // console.log(&#x27;loginApp sheet.shiftStarted&#x27;, sheet)
+
+    if (sheet) {
+      if (sheet.message) {
+        this.siteService.notify(&#x60;Message ${sheet.message}&#x60;, &#x60;Error&#x60;, 20000)
+        const result &#x3D;   this.processLogin(currentUser, null)
+        if (result &#x3D;&#x3D;&#x3D; &#x27;success&#x27;) {
+          return true;
+        }
+      }
+
+
+      if (!sheet.shiftStarted || sheet.shiftStarted &#x3D;&#x3D; 0 ||  (sheet.shiftStarted &#x3D;&#x3D; 1 &amp;&amp; sheet.endTime)) {
+        this.router.navigate([&#x27;/balance-sheet-edit&#x27;, {id:sheet.id}]);
+        return true
+      }
+    }
+
+    return false
+
+  }
+
+  initUserFeatures() {
+    this.uiSettingService.initSecureSettings();
+  }
+
+  browseMenu() {
+    this.toolbarUIService.updateDepartmentMenu(0);
+    this.router.navigate([&#x27;/app-main-menu&#x27;]);
+  }
+
+  loginToReturnUrl() {
+
+    let returnUrl &#x3D; this.route.snapshot.queryParams[&#x27;returnUrl&#x27;] || &#x27;/&#x27;;
+
+    if (this.platformService.isApp()) {
+      if (returnUrl &#x3D;&#x3D;&#x3D; &#x27;/login&#x27;) {  returnUrl &#x3D; &#x27;/pos-orders&#x27;}
+    }
+
+    if (!this.platformService.isApp()) {
+      if (returnUrl &#x3D; &#x27;/&#x27;) { returnUrl &#x3D; &#x27;/app-main-menu&#x27; }
+      if (returnUrl &#x3D;&#x3D;&#x3D; &#x27;/login&#x27;) {  returnUrl &#x3D; &#x27;/app-main-menu&#x27;}
+    }
+
+    this.router.navigate([returnUrl]);
+
+  }
+
+
+}
+
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'userLogin.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

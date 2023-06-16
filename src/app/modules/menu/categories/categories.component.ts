@@ -2,7 +2,8 @@
 import {  Component, ElementRef,AfterViewInit,
    OnInit, EventEmitter,Output,
   ViewChild,
-  Input
+  Input,
+  TemplateRef
   } from '@angular/core';
 import { AWSBucketService, AuthenticationService, IProductSearchResults, MenuService} from 'src/app/_services';
 import { Router } from '@angular/router';
@@ -16,6 +17,8 @@ import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-se
 import { IPagedList } from 'src/app/_services/system/paging.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 const { Keyboard } = Plugins;
 
 // https://codeburst.io/how-to-create-horizontal-scrolling-containers-d8069651e9c6
@@ -113,10 +116,11 @@ const { Keyboard } = Plugins;
 export class CategoriesComponent implements OnInit, AfterViewInit{
   // @HostBinding('@pageAnimations')
   amount: any;
+  @ViewChild('editItemView') editItemView :  TemplateRef<any>;
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
-  textLength = 15;
+  textLength = 26;
   @Input()         panelHeightValue = 300;
   panelHeightStyle= ''
   currentPage      : number;
@@ -171,7 +175,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   @Input()  itemTypeID    = 4;
   scrollContainer  :   any;
   isNearBottom     :   any;
-
+  action$: Observable<any>;
   classcontainer   : string;
   orderslist       : string
   getPlatForm() {  return Capacitor.getPlatform(); }
@@ -180,9 +184,12 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
                 private menuService:     MenuService,
                 private awsBucket:       AWSBucketService,
                 private router:          Router,
-                private siteService:     SitesService,
-                private platFormService :PlatformService,
-                private authSevice: AuthenticationService,
+                private authSevice              : AuthenticationService,
+                private siteService             : SitesService,
+                private platFormService         : PlatformService,
+                private productEditButtonService: ProductEditButtonService,
+                public authenticationService    : AuthenticationService ,
+                private toolbarUIService        : ToolBarUIService,
    )
   {
     this.isApp = this.platFormService.isApp();
@@ -338,10 +345,10 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
        productSearchModel.hideSubCategoryItems = false;
       { productSearchModel.categoryID  = id.toString(); }
     }
-    console.log('init Product Search Model categories',productSearchModel)
+    // console.log('init Product Search Model categories',productSearchModel)
     productSearchModel.pageSize   = 25
     productSearchModel.pageNumber = 1
-    this.menuService.updateMeunuItemData(productSearchModel)
+    this.menuService.updateSearchModel(productSearchModel)
     return productSearchModel;
 
   }
@@ -363,7 +370,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   }
 
   onScrollUp() {
-    console.log('scrolled up!!');
+    // console.log('scrolled up!!');
   }
 
   async addToList(pageSize: number, pageNumber: number)  {
@@ -460,5 +467,21 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     return searchModel;
   }
 
+  editItem(menuItem) {
+    if (!menuItem) { return }
+    this.action$ = this.productEditButtonService.openProductDialogObs(menuItem.id);
+  }
+
+  get enableEditItem() {
+    if (this.authenticationService.isAdmin) {
+        return this.editItemView
+    }
+    return null;
+  }
+
+  gotoFilter() {
+    this.router.navigate(['filter'])
+    this.toolbarUIService.hideToolbarSearchBar()
+  }
 
 }

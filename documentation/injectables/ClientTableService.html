@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >ClientTableService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >ClientTableService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -95,10 +102,34 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                <a href="#delete" >delete</a>
+                            </li>
+                            <li>
+                                <a href="#deleteList" >deleteList</a>
+                            </li>
+                            <li>
+                                <a href="#getCitiesList" >getCitiesList</a>
+                            </li>
+                            <li>
                                 <a href="#getClient" >getClient</a>
                             </li>
                             <li>
+                                <a href="#getNamesList" >getNamesList</a>
+                            </li>
+                            <li>
+                                <a href="#GetNewClientsOverDateCount" >GetNewClientsOverDateCount</a>
+                            </li>
+                            <li>
+                                <a href="#importFlowVendors" >importFlowVendors</a>
+                            </li>
+                            <li>
+                                <a href="#newTempClient" >newTempClient</a>
+                            </li>
+                            <li>
                                 <a href="#postClient" >postClient</a>
+                            </li>
+                            <li>
+                                <a href="#postClientWithEmployee" >postClientWithEmployee</a>
                             </li>
                             <li>
                                 <a href="#postDriversLicense" >postDriversLicense</a>
@@ -107,7 +138,19 @@
                                 <a href="#putClient" >putClient</a>
                             </li>
                             <li>
+                                <a href="#putPassword" >putPassword</a>
+                            </li>
+                            <li>
+                                <a href="#putPreference" >putPreference</a>
+                            </li>
+                            <li>
+                                <a href="#randomizeClientInfo" >randomizeClientInfo</a>
+                            </li>
+                            <li>
                                 <a href="#saveClient" >saveClient</a>
+                            </li>
+                            <li>
+                                <a href="#savePreferences" >savePreferences</a>
                             </li>
                         </ul>
                     </td>
@@ -121,18 +164,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+<code>constructor(http: HttpClient, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">src/app/_services/people/client-table.service.ts:12</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/_services/people/client-table.service.ts:17</a></div>
                             </td>
                         </tr>
 
@@ -153,7 +196,7 @@
                                                         <td>http</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                                    <code>HttpClient</code>
                                                         </td>
                                                   
                                                     <td>
@@ -182,11 +225,210 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="delete"></a>
+                    <span class="name">
+                        <span ><b>delete</b></span>
+                        <a href="#delete"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>delete(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="57"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:57</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IClientTable.html" target="_self" >Observable&lt;IClientTable&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteList"></a>
+                    <span class="name">
+                        <span ><b>deleteList</b></span>
+                        <a href="#deleteList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteList(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: number[])</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="73"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:73</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                            <code>number[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IClientTable.html" target="_self" >Observable&lt;IClientTable&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getCitiesList"></a>
+                    <span class="name">
+                        <span ><b>getCitiesList</b></span>
+                        <a href="#getCitiesList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getCitiesList()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="249"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:249</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -207,8 +449,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="20"
-                            class="link-to-prism">src/app/_services/people/client-table.service.ts:20</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="26"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:26</a></div>
                 </td>
             </tr>
 
@@ -218,6 +460,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -271,6 +514,274 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="getNamesList"></a>
+                    <span class="name">
+                        <span ><b>getNamesList</b></span>
+                        <a href="#getNamesList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getNamesList()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="253"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:253</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="GetNewClientsOverDateCount"></a>
+                    <span class="name">
+                        <span ><b>GetNewClientsOverDateCount</b></span>
+                        <a href="#GetNewClientsOverDateCount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>GetNewClientsOverDateCount(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, numberOfdays: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="220"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:220</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>numberOfdays</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IItemBasic&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="importFlowVendors"></a>
+                    <span class="name">
+                        <span ><b>importFlowVendors</b></span>
+                        <a href="#importFlowVendors"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>importFlowVendors(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, list: <a href="../interfaces/FlowVendor.html" target="_self">FlowVendor[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="205"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:205</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>list</td>
+                                    <td>
+                                                <code><a href="../interfaces/FlowVendor.html" target="_self" >FlowVendor[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ImportFlowVendorResults&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="newTempClient"></a>
+                    <span class="name">
+                        <span ><b>newTempClient</b></span>
+                        <a href="#newTempClient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>newTempClient(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="42"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:42</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IClientTable.html" target="_self" >Observable&lt;IClientTable&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="postClient"></a>
                     <span class="name">
                         <span ><b>postClient</b></span>
@@ -287,8 +798,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="49"
-                            class="link-to-prism">src/app/_services/people/client-table.service.ts:49</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="149"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:149</a></div>
                 </td>
             </tr>
 
@@ -298,6 +809,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -351,6 +863,87 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="postClientWithEmployee"></a>
+                    <span class="name">
+                        <span ><b>postClientWithEmployee</b></span>
+                        <a href="#postClientWithEmployee"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postClientWithEmployee(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, employee: <a href="../interfaces/employee.html" target="_self">employee</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="135"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:135</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>employee</td>
+                                    <td>
+                                                <code><a href="../interfaces/employee.html" target="_self" >employee</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IEmployeeClient.html" target="_self" >Observable&lt;IEmployeeClient&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="postDriversLicense"></a>
                     <span class="name">
                         <span ><b>postDriversLicense</b></span>
@@ -367,8 +960,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="77"
-                            class="link-to-prism">src/app/_services/people/client-table.service.ts:77</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="191"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:191</a></div>
                 </td>
             </tr>
 
@@ -378,6 +971,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -446,8 +1040,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="34"
-                            class="link-to-prism">src/app/_services/people/client-table.service.ts:34</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="87"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:87</a></div>
                 </td>
             </tr>
 
@@ -457,6 +1051,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -522,6 +1117,272 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="putPassword"></a>
+                    <span class="name">
+                        <span ><b>putPassword</b></span>
+                        <a href="#putPassword"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>putPassword(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, client: <a href="../interfaces/IClientTable.html" target="_self">IClientTable</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="119"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:119</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>client</td>
+                                    <td>
+                                                <code><a href="../interfaces/IClientTable.html" target="_self" >IClientTable</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IClientTable.html" target="_self" >Observable&lt;IClientTable&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="putPreference"></a>
+                    <span class="name">
+                        <span ><b>putPreference</b></span>
+                        <a href="#putPreference"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>putPreference(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, preference: <a href="../interfaces/UserPreferences.html" target="_self">UserPreferences</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="103"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:103</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>preference</td>
+                                    <td>
+                                                <code><a href="../interfaces/UserPreferences.html" target="_self" >UserPreferences</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IClientTable.html" target="_self" >Observable&lt;IClientTable&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="randomizeClientInfo"></a>
+                    <span class="name">
+                        <span ><b>randomizeClientInfo</b></span>
+                        <a href="#randomizeClientInfo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>randomizeClientInfo(site, namesCities: <a href="../interfaces/NamesCities.html" target="_self">NamesCities</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="233"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:233</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>namesCities</td>
+                                    <td>
+                                                <code><a href="../interfaces/NamesCities.html" target="_self" >NamesCities</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IUserProfile&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="saveClient"></a>
                     <span class="name">
                         <span ><b>saveClient</b></span>
@@ -538,8 +1399,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="63"
-                            class="link-to-prism">src/app/_services/people/client-table.service.ts:63</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="163"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:163</a></div>
                 </td>
             </tr>
 
@@ -549,6 +1410,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -598,8 +1460,101 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="savePreferences"></a>
+                    <span class="name">
+                        <span ><b>savePreferences</b></span>
+                        <a href="#savePreferences"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>savePreferences(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, preference: <a href="../s/s.html" target="_self">string</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="173"
+                            class="link-to-prism">src/app/_services/people/client-table.service.ts:173</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>preference</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>
-            <section>
+            <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
@@ -628,7 +1583,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/_services/people/client-table.service.ts:16</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/_services/people/client-table.service.ts:22</a></div>
                         </td>
                     </tr>
 
@@ -659,7 +1614,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/_services/people/client-table.service.ts:17</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/_services/people/client-table.service.ts:23</a></div>
                         </td>
                     </tr>
 
@@ -671,19 +1626,25 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
 import { HttpClient } from &#x27;@angular/common/http&#x27;;
 import { AuthenticationService } from &#x27;src/app/_services/system/authentication.service&#x27;;
-import { Observable, } from &#x27;rxjs&#x27;;
-import { IClientTable, ISite, IUserProfile }   from  &#x27;src/app/_interfaces&#x27;;
-import { environment } from &#x27;src/environments/environment&#x27;;
+import { EMPTY, Observable, of, } from &#x27;rxjs&#x27;;
+import { IClientTable, ISite, IUserProfile,employee, FlowVendor, ImportFlowVendorResults, UserPreferences }   from  &#x27;src/app/_interfaces&#x27;;
 import { IDriversLicense } from &#x27;src/app/_interfaces/people/drivers-license&#x27;;
+import { IEmployeeClient } from &#x27;./employee-service.service&#x27;;
+import { IItemBasic } from &#x27;..&#x27;;
 
+export interface NamesCities {
+  names: string[];
+  cities: string[];
+}
 @Injectable({
   providedIn: &#x27;root&#x27;
 })
 export class ClientTableService {
+
 
   constructor( private http: HttpClient, private auth: AuthenticationService) { }
 
@@ -692,6 +1653,8 @@ export class ClientTableService {
 
 
   getClient(site: ISite, id: any) : Observable&lt;IClientTable&gt; {
+
+    if (id &#x3D;&#x3D; 0) {return EMPTY}
 
     const controller &#x3D;  &quot;/ClientTable/&quot;
 
@@ -705,7 +1668,54 @@ export class ClientTableService {
 
   }
 
+  newTempClient(site: ISite) : Observable&lt;IClientTable&gt;  {
+
+    const controller &#x3D;  &quot;/ClientTable/&quot;
+
+    const endPoint &#x3D; &#x60;getTempClient&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.get&lt;IClientTable&gt;(url)
+
+  }
+
+
+  delete(site: ISite, id: number) : Observable&lt;IClientTable&gt; {
+
+    if (id &#x3D;&#x3D; 0) {return EMPTY}
+
+    const controller &#x3D;  &quot;/ClientTable/&quot;
+
+    const endPoint &#x3D; &#x60;delete&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.delete&lt;IClientTable&gt;(url)
+
+  }
+
+  deleteList(site: ISite, id: number[]) : Observable&lt;IClientTable&gt; {
+
+    const controller &#x3D;  &quot;/ClientTable/&quot;
+
+    const endPoint &#x3D; &#x60;deleteList&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.post&lt;IClientTable&gt;(url, id)
+
+  }
+
   putClient(site: ISite, id: any, client: IClientTable): Observable&lt;IClientTable&gt; {
+
+    if (id &#x3D;&#x3D; 0) {return EMPTY}
 
     const controller &#x3D;  &quot;/ClientTable/&quot;
 
@@ -719,12 +1729,57 @@ export class ClientTableService {
 
   };
 
+  putPreference(site: ISite, preference: UserPreferences, id: number): Observable&lt;IClientTable&gt; {
+
+    if (id &#x3D;&#x3D; 0) {return of(null)}
+
+    const controller &#x3D;  &quot;/ClientTable/&quot;
+
+    const endPoint &#x3D; &#x60;putPreference&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.put&lt;IClientTable&gt;(url , preference)
+
+  };
+
+  putPassword(site: ISite, id: any, client: IClientTable): Observable&lt;IClientTable&gt; {
+
+    if (id &#x3D;&#x3D; 0) {return EMPTY}
+
+    const controller &#x3D;  &quot;/ClientTable/&quot;
+
+    const endPoint &#x3D; &#x60;putPassword&#x60;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.put&lt;IClientTable&gt;(url , client)
+
+  };
+
+  postClientWithEmployee(site: ISite, employee: employee): Observable&lt;IEmployeeClient&gt; {
+
+    const controller &#x3D;  &quot;/ClientTable/&quot;
+
+    const endPoint &#x3D; &#x60;postClientWithEmployee&#x60;
+
+    const parameters  &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.post&lt;IEmployeeClient&gt;(url , employee)
+
+  };
 
   postClient(site: ISite, client: IClientTable): Observable&lt;IClientTable&gt; {
 
     const controller &#x3D;  &quot;/ClientTable/&quot;
 
-    const endPoint &#x3D; &#x60;putClientTable&#x60;
+    const endPoint &#x3D; &#x60;postClient&#x60;
 
     const parameters  &#x3D; &#x60;&#x60;
 
@@ -737,14 +1792,28 @@ export class ClientTableService {
   saveClient( site: ISite,  client: IClientTable) : Observable&lt;IClientTable&gt; {
 
     if (client.id !&#x3D;&#x3D; 0) {
-
       return this.putClient(site, client.id, client)
-
     } else {
-
       return this.postClient(site, client)
-
     }
+
+  }
+
+  savePreferences(site: ISite, preference: string, id: number) {
+
+    const item &#x3D; {} as IItemBasic;
+    item.name &#x3D; preference;
+    item.id &#x3D; id;
+
+    const controller &#x3D;  &quot;/ClientTable/&quot;
+
+    const endPoint &#x3D; &#x60;SavePreferences&#x60;
+
+    const parameters  &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.post&lt;any&gt;(url , item)
 
   }
 
@@ -762,6 +1831,57 @@ export class ClientTableService {
 
   };
 
+  importFlowVendors(site: ISite, list: FlowVendor[]): Observable&lt;ImportFlowVendorResults&gt; {
+
+    const controller &#x3D;&quot;/ClientTable/&quot;
+
+    const endPoint &#x3D; &#x60;ImportFlowVendors&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;any&gt;(url, list)
+
+  };
+
+
+  GetNewClientsOverDateCount(site: ISite, numberOfdays: number): Observable&lt;IItemBasic&gt; {
+    const controller &#x3D;&quot;/ClientTable/&quot;
+
+    const endPoint &#x3D; &#x60;GetNewClientsOverDateCount&#x60;
+
+    const parameters &#x3D; &#x60;?number&#x3D;${numberOfdays}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.get&lt;any&gt;(url)
+  }
+
+  //namesList As List(Of String), cities As List(Of String)
+  randomizeClientInfo(site, namesCities: NamesCities): Observable&lt;IUserProfile&gt; {
+
+    const controller &#x3D;  &quot;/ClientTable/&quot;
+
+    const endPoint &#x3D; &#x60;randomizeClientInfo&#x60;
+
+    const parameters  &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.post&lt;any&gt;(url , namesCities)
+
+  };
+
+  //  https://names.drycodes.com/10000?nameOptions&#x3D;boy_names
+  // &#x27;https://names.drycodes.com/1000?nameOptions&#x3D;cities
+  getCitiesList(): Observable&lt;any&gt; {
+    return  this.http.get(&#x60;https://names.drycodes.com/1000?nameOptions&#x3D;cities&#x60;)
+  }
+
+  getNamesList(): Observable&lt;any&gt; {
+    return  this.http.get(&#x60;https://names.drycodes.com/10000?nameOptions&#x3D;boy_names&#x60;)
+  }
 }
 </code></pre>
     </div>
@@ -774,14 +1894,15 @@ export class ClientTableService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -793,6 +1914,15 @@ export class ClientTableService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -802,8 +1932,8 @@ export class ClientTableService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

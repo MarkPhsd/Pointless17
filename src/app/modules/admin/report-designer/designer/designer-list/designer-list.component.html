@@ -3,6 +3,14 @@
 <div *ngIf="(listReports$ | async) as list"></div>
 
 <div class="ps-flex-group">
+  <div class="ps-flex-group">
+    <div>
+      Designer List
+    </div>
+    <div>
+      <mat-icon>design</mat-icon>
+    </div>
+  </div>
   <div>
     <pgReporting-edit-bar
       [hideSave]="true"

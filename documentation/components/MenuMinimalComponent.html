@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -35,32 +35,37 @@
 
 
 <ol class="breadcrumb">
-  <li>Components</li>
-  <li
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
   >
   MenuMinimalComponent</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
-        <li >
-            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
         </li>
-        <li >
-            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
         </li>
-        <li >
-            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
     <h3>File</h3>
 </p>
 <p class="comment">
@@ -74,14 +79,16 @@
         <h3>Implements</h3>
     </p>
     <p class="comment">
-                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+                <code>OnInit</code>
+                    <code><a href="../miscellaneous/variables.html#s" target="_self" >OnDestroy</a></code>
     </p>
 
 
-<section>
+<section data-compodoc="block-metadata">
     <h3>Metadata</h3>
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover metadata">
         <tbody>
+
 
 
 
@@ -97,6 +104,8 @@
                 <td class="col-md-3">selector</td>
                 <td class="col-md-9"><code>app-menu-minimal</code></td>
             </tr>
+
+
 
             <tr>
                 <td class="col-md-3">styleUrls</td>
@@ -121,7 +130,7 @@
     </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -134,7 +143,16 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                <a href="#_barSize" >_barSize</a>
+                            </li>
+                            <li>
+                                <a href="#_user" >_user</a>
+                            </li>
+                            <li>
                                 <a href="#accordionMenu$" >accordionMenu$</a>
+                            </li>
+                            <li>
+                                <a href="#barSize" >barSize</a>
                             </li>
                             <li>
                                 <a href="#config" >config</a>
@@ -143,13 +161,34 @@
                                 <a href="#displayCategories" >displayCategories</a>
                             </li>
                             <li>
+                                <a href="#gridtoggletiny" >gridtoggletiny</a>
+                            </li>
+                            <li>
                                 <a href="#index" >index</a>
+                            </li>
+                            <li>
+                                <a href="#isStaff" >isStaff</a>
+                            </li>
+                            <li>
+                                <a href="#menus$" >menus$</a>
                             </li>
                             <li>
                                 <a href="#result" >result</a>
                             </li>
                             <li>
+                                <a href="#site" >site</a>
+                            </li>
+                            <li>
+                                <a href="#smallMenu" >smallMenu</a>
+                            </li>
+                            <li>
                                 <a href="#submenu" >submenu</a>
+                            </li>
+                            <li>
+                                <a href="#tinyMenu" >tinyMenu</a>
+                            </li>
+                            <li>
+                                <a href="#user" >user</a>
                             </li>
                         </ul>
                     </td>
@@ -164,21 +203,37 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                    <span class="modifier">Async</span>
+                                <a href="#addItemToMenu" >addItemToMenu</a>
+                            </li>
+                            <li>
+                                <a href="#hideMenu" >hideMenu</a>
+                            </li>
+                            <li>
                                 <a href="#initMenu" >initMenu</a>
                             </li>
                             <li>
-                                <a href="#isHeaderUserAuthorized" >isHeaderUserAuthorized</a>
+                                <a href="#initMenus" >initMenus</a>
                             </li>
                             <li>
-                                <a href="#isUserAuthorized" >isUserAuthorized</a>
+                                <a href="#initSubscription" >initSubscription</a>
+                            </li>
+                            <li>
+                                <a href="#isAuthorized" >isAuthorized</a>
                             </li>
                             <li>
                                 <a href="#mergeConfig" >mergeConfig</a>
                             </li>
                             <li>
-                                    <span class="modifier">Async</span>
+                                <a href="#navigateMenu" >navigateMenu</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy" >ngOnDestroy</a>
+                            </li>
+                            <li>
                                 <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#refreshMenu" >refreshMenu</a>
                             </li>
                             <li>
                                 <a href="#resetMenu" >resetMenu</a>
@@ -187,13 +242,14 @@
                                 <a href="#routerNavigation" >routerNavigation</a>
                             </li>
                             <li>
-                                <a href="#test" >test</a>
+                                <a href="#setSmallMenu" >setSmallMenu</a>
                             </li>
                             <li>
                                 <a href="#toggle" >toggle</a>
                             </li>
                             <li>
-                                <a href="#toggleDelayHide" >toggleDelayHide</a>
+                                    <span class="modifier"></span>
+                                <a href="#updateScreenSize" >updateScreenSize</a>
                             </li>
                         </ul>
                     </td>
@@ -219,23 +275,37 @@
 
 
 
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>HostListeners</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#window:resize" >window:resize</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
 
         </tbody>
     </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(menusService: <a href="../injectables/MenusService.html" target="_self">MenusService</a>, SystemService: <a href="../injectables/SystemService.html" target="_self">SystemService</a>, userAuthorizationService: <a href="../injectables/UserAuthorizationService.html" target="_self">UserAuthorizationService</a>, router: <a href="https://angular.io/api/router/Router" target="_blank">Router</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>)</code>
+<code>constructor(menusService: <a href="../injectables/MenusService.html" target="_self">MenusService</a>, router: Router, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, authenticationService: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>, userSwichingService: <a href="../injectables/UserSwitchingService.html" target="_self">UserSwitchingService</a>, toolbarUIService: <a href="../injectables/ToolBarUIService.html" target="_self">ToolBarUIService</a>, userAuthorizationService: <a href="../injectables/UserAuthorizationService.html" target="_self">UserAuthorizationService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:36</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="134" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:134</a></div>
                             </td>
                         </tr>
 
@@ -265,34 +335,10 @@
                                                     
                                                 </tr>
                                                 <tr>
-                                                        <td>SystemService</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="../injectables/SystemService.html" target="_self" >SystemService</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
-                                                        <td>userAuthorizationService</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="../injectables/UserAuthorizationService.html" target="_self" >UserAuthorizationService</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
                                                         <td>router</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/router/Router" target="_blank" >Router</a></code>
+                                                                    <code>Router</code>
                                                         </td>
                                                   
                                                     <td>
@@ -312,6 +358,54 @@
                                                     </td>
                                                     
                                                 </tr>
+                                                <tr>
+                                                        <td>authenticationService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthenticationService.html" target="_self" >AuthenticationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>userSwichingService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/UserSwitchingService.html" target="_self" >UserSwitchingService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>toolbarUIService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ToolBarUIService.html" target="_self" >ToolBarUIService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>userAuthorizationService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/UserAuthorizationService.html" target="_self" >UserAuthorizationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
                                         </tbody>
                                     </table>
                             </div>
@@ -321,7 +415,7 @@
         </table>
 </section>
 
-    <section>
+    <section data-compodoc="block-inputs">
     <h3 id="inputs">Inputs</h3>
         <table class="table table-sm table-bordered">
             <tbody>
@@ -339,7 +433,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:31</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:35</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -360,7 +454,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:30</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:34</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -368,8 +462,37 @@
 </section>
 
 
+    <section data-compodoc="block-methods">
+    <h3>HostListeners</h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="window:resize"></a>
+                    <span class="name">
+                        <span ><b>window:resize</b></span>
+                        <a href="#window:resize"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>window:resize()</code>
+                </td>
+            </tr>
 
-    <section>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="148"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:148</a></div>
+                </td>
+            </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -378,63 +501,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="initMenu"></a>
+                    <a name="addItemToMenu"></a>
                     <span class="name">
-                        <span class="modifier">Async</span>
-                        <span ><b>initMenu</b></span>
-                        <a href="#initMenu"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>addItemToMenu</b></span>
+                        <a href="#addItemToMenu"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>initMenu()</code>
+<code>addItemToMenu(item: <a href="../interfaces/AccordionMenu.html" target="_self">AccordionMenu</a>, mainMenu: <a href="../interfaces/AccordionMenu.html" target="_self">AccordionMenu[]</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="60"
-                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:60</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="isHeaderUserAuthorized"></a>
-                    <span class="name">
-                        <span ><b>isHeaderUserAuthorized</b></span>
-                        <a href="#isHeaderUserAuthorized"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>isHeaderUserAuthorized(userRoles: <a href="../s/s.html" target="_self">string</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="107"
-                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:107</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="130"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:130</a></div>
                 </td>
             </tr>
 
@@ -444,6 +528,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -454,9 +539,21 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>userRoles</td>
+                                    <td>item</td>
                                     <td>
-                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                                <code><a href="../interfaces/AccordionMenu.html" target="_self" >AccordionMenu</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>mainMenu</td>
+                                    <td>
+                                                <code><a href="../interfaces/AccordionMenu.html" target="_self" >AccordionMenu[]</a></code>
                                     </td>
 
                                     <td>
@@ -471,7 +568,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
                     </div>
                     <div class="io-description">
@@ -485,24 +582,172 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="isUserAuthorized"></a>
+                    <a name="hideMenu"></a>
                     <span class="name">
-                        <span ><b>isUserAuthorized</b></span>
-                        <a href="#isUserAuthorized"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>hideMenu</b></span>
+                        <a href="#hideMenu"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>isUserAuthorized(userRoles: <a href="../s/s.html" target="_self">string</a>)</code>
+<code>hideMenu()</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="101"
-                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:101</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="213"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:213</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initMenu"></a>
+                    <span class="name">
+                        <span ><b>initMenu</b></span>
+                        <a href="#initMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initMenu()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="175"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:175</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initMenus"></a>
+                    <span class="name">
+                        <span ><b>initMenus</b></span>
+                        <a href="#initMenus"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initMenus()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="170"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:170</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initSubscription"></a>
+                    <span class="name">
+                        <span ><b>initSubscription</b></span>
+                        <a href="#initSubscription"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initSubscription()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="57"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:57</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isAuthorized"></a>
+                    <span class="name">
+                        <span ><b>isAuthorized</b></span>
+                        <a href="#isAuthorized"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isAuthorized(userType: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="52"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:52</a></div>
                 </td>
             </tr>
 
@@ -512,6 +757,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -522,7 +768,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>userRoles</td>
+                                    <td>userType</td>
                                     <td>
                                                 <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
                                     </td>
@@ -569,8 +815,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="70"
-                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:70</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="200"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:200</a></div>
                 </td>
             </tr>
 
@@ -580,6 +826,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -621,26 +868,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="ngOnInit"></a>
+                    <a name="navigateMenu"></a>
                     <span class="name">
-                        <span class="modifier">Async</span>
-                        <span ><b>ngOnInit</b></span>
-                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>navigateMenu</b></span>
+                        <a href="#navigateMenu"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>ngOnInit()</code>
+<code>navigateMenu(routerLink: <a href="../s/s.html" target="_self">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="45"
-                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:45</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="217"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:217</a></div>
                 </td>
             </tr>
 
@@ -649,8 +894,183 @@
                 <td class="col-md-4">
 
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>routerLink</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
 
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngOnDestroy</b></span>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="165"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:165</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="157"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:157</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="refreshMenu"></a>
+                    <span class="name">
+                        <span ><b>refreshMenu</b></span>
+                        <a href="#refreshMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>refreshMenu(user: <a href="../interfaces/IUser.html" target="_self">IUser</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="80"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:80</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>user</td>
+                                    <td>
+                                                <code><a href="../interfaces/IUser.html" target="_self" >IUser</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
                     </div>
                 </td>
             </tr>
@@ -676,8 +1096,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="77"
-                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:77</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="205"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:205</a></div>
                 </td>
             </tr>
 
@@ -713,8 +1133,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="81"
-                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:81</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="209"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:209</a></div>
                 </td>
             </tr>
 
@@ -724,6 +1144,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -765,24 +1186,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="test"></a>
+                    <a name="setSmallMenu"></a>
                     <span class="name">
-                        <span ><b>test</b></span>
-                        <a href="#test"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>setSmallMenu</b></span>
+                        <a href="#setSmallMenu"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>test()</code>
+<code>setSmallMenu()</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="113"
-                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:113</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="73"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:73</a></div>
                 </td>
             </tr>
 
@@ -818,8 +1239,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="85"
-                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:85</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="227"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:227</a></div>
                 </td>
             </tr>
 
@@ -829,6 +1250,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -882,24 +1304,33 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="toggleDelayHide"></a>
+                    <a name="updateScreenSize"></a>
                     <span class="name">
-                        <span ><b>toggleDelayHide</b></span>
-                        <a href="#toggleDelayHide"><span class="icon ion-ios-link"></span></a>
+                        <span class="modifier"></span>
+                        <span ><b>updateScreenSize</b></span>
+                        <a href="#updateScreenSize"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>toggleDelayHide()</code>
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateScreenSize()</code>
                 </td>
             </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@HostListener(&#x27;window:resize&#x27;, undefined)<br /></code>
+                </td>
+            </tr>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="66"
-                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:66</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="148"
+                            class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:148</a></div>
                 </td>
             </tr>
 
@@ -916,11 +1347,63 @@
         </tbody>
     </table>
 </section>
-    <section>
+    <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_barSize"></a>
+                    <span class="name">
+                        <span ><b>_barSize</b></span>
+                        <a href="#_barSize"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Subscription</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:48</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_user"></a>
+                    <span class="name">
+                        <span ><b>_user</b></span>
+                        <a href="#_user"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Subscription</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:43</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -940,7 +1423,33 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:29</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:33</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="barSize"></a>
+                    <span class="name">
+                        <span ><b>barSize</b></span>
+                        <a href="#barSize"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:49</a></div>
                         </td>
                     </tr>
 
@@ -966,7 +1475,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:33</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:37</a></div>
                         </td>
                     </tr>
 
@@ -992,7 +1501,33 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:34</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:38</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gridtoggletiny"></a>
+                    <span class="name">
+                        <span ><b>gridtoggletiny</b></span>
+                        <a href="#gridtoggletiny"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:32</a></div>
                         </td>
                     </tr>
 
@@ -1018,7 +1553,59 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:35</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:39</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isStaff"></a>
+                    <span class="name">
+                        <span ><b>isStaff</b></span>
+                        <a href="#isStaff"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:45</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="menus$"></a>
+                    <span class="name">
+                        <span ><b>menus$</b></span>
+                        <a href="#menus$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/AccordionMenu.html" target="_self" >Observable&lt;AccordionMenu[]&gt;</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:50</a></div>
                         </td>
                     </tr>
 
@@ -1044,7 +1631,59 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:36</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:40</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="site"></a>
+                    <span class="name">
+                        <span ><b>site</b></span>
+                        <a href="#site"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:44</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="smallMenu"></a>
+                    <span class="name">
+                        <span ><b>smallMenu</b></span>
+                        <a href="#smallMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:47</a></div>
                         </td>
                     </tr>
 
@@ -1070,7 +1709,59 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:32</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:36</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="tinyMenu"></a>
+                    <span class="name">
+                        <span ><b>tinyMenu</b></span>
+                        <a href="#tinyMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:46</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="user"></a>
+                    <span class="name">
+                        <span ><b>user</b></span>
+                        <a href="#user"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IUser.html" target="_self" >IUser</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/shared/widgets/menus/menu-minimal/menu-minimal.component.ts:42</a></div>
                         </td>
                     </tr>
 
@@ -1082,16 +1773,19 @@
 </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, Input } from &#x27;@angular/core&#x27;;
-import { AccordionMenu, accordionConfig, SubMenu } from &#x27;src/app/_interfaces/index&#x27;;
-import { Observable, } from &#x27;rxjs&#x27;;
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, Input, OnDestroy, HostListener } from &#x27;@angular/core&#x27;;
+import { AccordionMenu, accordionConfig, SubMenu, IUser, ISite } from &#x27;src/app/_interfaces/index&#x27;;
+import { EMPTY, Observable, of, Subscription, } from &#x27;rxjs&#x27;;
 import { MenusService } from &#x27;src/app/_services/system/menus.service&#x27;;
 import { transition, animate, style, trigger } from &#x27;@angular/animations&#x27;;
-import { SystemService } from &#x27;src/app/_services/system/system.service&#x27;;
-import { UserAuthorizationService } from &#x27;src/app/_services/system/user-authorization.service&#x27;;
 import { Router } from &#x27;@angular/router&#x27;;
 import { SitesService } from &#x27;src/app/_services/reporting/sites.service&#x27;;
+import { AuthenticationService } from &#x27;src/app/_services&#x27;;
+import { switchMap } from &#x27;rxjs/operators&#x27;;
+import { UserSwitchingService } from &#x27;src/app/_services/system/user-switching.service&#x27;;
+import { UserAuthorizationService } from &#x27;src/app/_services/system/user-authorization.service&#x27;;
+import { ToolBarUIService } from &#x27;src/app/_services/system/tool-bar-ui.service&#x27;;
 
 @Component({
   selector: &#x27;app-menu-minimal&#x27;,
@@ -1109,10 +1803,11 @@ import { SitesService } from &#x27;src/app/_services/reporting/sites.service&#x2
     ])
   ]
 })
-export class MenuMinimalComponent implements OnInit {
 
+export class MenuMinimalComponent implements OnInit, OnDestroy {
+  gridtoggletiny:    string;
   accordionMenu$:    Observable&lt;AccordionMenu[]&gt;;
-  @Input() options;
+  @Input()           options;
   @Input() menus:    AccordionMenu[];
   submenu:           SubMenu[];
   config:            accordionConfig;
@@ -1120,42 +1815,166 @@ export class MenuMinimalComponent implements OnInit {
   index:             number;
   result:            boolean;
 
-  constructor ( private menusService: MenusService,
-                private SystemService: SystemService,
-                private userAuthorizationService: UserAuthorizationService,
-                private router: Router,
-                private siteService: SitesService,
-              ) {}
+  user              : IUser;
+  _user             : Subscription;
+  site              : ISite;
+  isStaff: boolean;
+  tinyMenu : boolean;
+  smallMenu : boolean;
+  _barSize: Subscription
+  barSize: boolean;
+  menus$ : Observable&lt;AccordionMenu[]&gt;;
 
-  async ngOnInit() {
-    const site  &#x3D;  this.siteService.getAssignedSite();
-    try {
-      await this.initMenu();
-      this.config &#x3D; this.mergeConfig(this.options);
-      this.accordionMenu$ &#x3D;  this.menusService.getMainMenu(site)
-      this.accordionMenu$.subscribe(data&#x3D;&gt;{
-        this.menus &#x3D; data
-      })
-      this.displayCategories &#x3D; false;
-    } catch (error) {
-      console.log(error)
+  isAuthorized(userType: string): boolean {
+    // console.log(&#x27;userType&#x27;, userType)
+    return this.userAuthorizationService.isUserAuthorized(userType)
+  }
+
+  initSubscription() {
+    this._user &#x3D; this.authenticationService.user$.subscribe(user &#x3D;&gt; {
+        this.user &#x3D; user
+        if (!user || !user.token) {
+          this.menus &#x3D; [] as AccordionMenu[];
+          return
+        }
+        this.user &#x3D; user;
+        this.refreshMenu(user)
+      }
+    )
+    this._barSize &#x3D; this.toolbarUIService.barSize$.subscribe( data &#x3D;&gt; {
+      this.smallMenu &#x3D; data;
+    })
+  }
+
+  setSmallMenu() {
+    const result &#x3D; !this.smallMenu
+    this.toolbarUIService.updateBarSize(result)
+    localStorage.setItem(&#x27;barSize&#x27;, String(result))
+    this.updateScreenSize();
+  }
+
+  refreshMenu(user: IUser) {
+
+    this.initMenu();
+
+    if (!user || !user.token) {
+      return
     }
+    const site  &#x3D; this.siteService.getAssignedSite();
+    const menu$ &#x3D; this.menusService.getMainMenu(site)
+
+    this.menus$ &#x3D; menu$.pipe(
+      switchMap(data &#x3D;&gt; {
+
+        if (!data) { return of(null) }
+        this.config &#x3D; this.mergeConfig(this.options);
+        if (data)
+
+        try {
+          if (data.toString() &#x3D;&#x3D;&#x3D; &#x27;no menu&#x27;) {
+            if (this.user &amp;&amp; this.user?.roles &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;) {
+              this.siteService.notify(&#x27;No Menu Found. Please do system check.&#x27;, &#x27;Alert&#x27;, 2000)
+            }
+            return of(null)
+          }
+        } catch (error) { }
+
+
+        try {
+          data.filter( item &#x3D;&gt; {
+            this.addItemToMenu(item, this.menus)
+          })
+          this.menus &#x3D;  [...new Set(this.menus)]
+
+          if (this.menus) {
+            // this.toggle(this.menus[0], 0)
+          }
+
+        } catch (error) {
+        }
+
+        return of(this.menus)
+      }
+    ))
+
+    this._barSize &#x3D; this.toolbarUIService.barSize$.subscribe( data &#x3D;&gt; {
+      this.smallMenu &#x3D; data;
+    })
 
   }
-  async initMenu() {
-    const site &#x3D; this.siteService.getAssignedSite();
-    const menu$ &#x3D;  this.menusService.createMainMenu(site)
-    await menu$.pipe().toPromise()
+
+  addItemToMenu(item: AccordionMenu, mainMenu: AccordionMenu[]) {
+    if (!mainMenu &amp;&amp; item) { return }
+    if (item.active) {mainMenu.push(item) }
+    this.menus &#x3D;  [...new Set(mainMenu)]
   }
 
-  toggleDelayHide() {
+  constructor ( private menusService            : MenusService,
+                private router                  : Router,
+                private siteService             : SitesService,
+                private authenticationService   : AuthenticationService,
+                private userSwichingService:    UserSwitchingService,
+                private toolbarUIService        : ToolBarUIService,
+                private userAuthorizationService: UserAuthorizationService,
+              ) {
+    this.site  &#x3D;  this.siteService.getAssignedSite();
+  }
 
+  @HostListener(&quot;window:resize&quot;, [])
+  updateScreenSize() {
+    this.tinyMenu &#x3D; false
+    this.gridtoggletiny &#x3D; &quot;grid-toggle-tiny&quot;
+    if ( this.smallMenu) {
+      this.tinyMenu &#x3D; true
+      this.gridtoggletiny &#x3D; &quot;grid-toggle-collapsed&quot;
+    }
+  }
+
+  ngOnInit() {
+    this.isStaff &#x3D; this.userAuthorizationService.isUserAuthorized(&#x27;employee,manager,admin&#x27;)
+    if (this.isStaff) {
+      this.initMenu()
+      this.initSubscription()
+    }
+  }
+
+  ngOnDestroy() {
+    if (this._user) { this._user.unsubscribe() }
+    this.initMenus()
+  }
+
+  initMenus() {
+    this.menus   &#x3D; [] as AccordionMenu[];
+    this.submenu &#x3D; [] as SubMenu[];
+  }
+
+  initMenu() {
+    this.initMenus()
+    const site       &#x3D; this.siteService.getAssignedSite();
+
+    if (!this.user || !this.user.token) {return}
+    if (!this.user.roles) {return};
+
+    const menuCheck$ &#x3D; this.menusService.mainMenuExists(site);
+    menuCheck$.pipe(
+      switchMap( data &#x3D;&gt; {
+        if (!data || !data.result) {
+           if (this.user) {
+            return  this.menusService.createMainMenu(this.user , site)
+          }
+          return EMPTY;
+        }
+      })
+    ).pipe(
+      switchMap(data &#x3D;&gt; {
+        this.refreshMenu(this.user)
+        return of(data)
+      }
+    ))
   }
 
   mergeConfig(options: accordionConfig) {
-    const config &#x3D; {
-      multi: true
-    };
+    const config &#x3D; { multi: true  };
     return { ...config, ...options };
   }
 
@@ -1167,155 +1986,200 @@ export class MenuMinimalComponent implements OnInit {
     this.router.navigate([url]);
   }
 
+  hideMenu() {
+    this.toolbarUIService.updateToolBarSideBar(false)
+  }
+
+  navigateMenu(routerLink: string) {
+    this.router.navigate([routerLink]);
+    if (this.authenticationService?.deviceInfo?.phoneDevice) {
+      console.log(&#x27;hide menu&#x27;)
+      this.hideMenu()
+    }
+    // if (this.tinyMenu) {
+    // }
+  }
+
   toggle(menu: AccordionMenu, index: number) {
+    try {
+      this.displayCategories &#x3D; true
+      this.index &#x3D; index;
 
-    this.displayCategories &#x3D; true
-    this.index &#x3D; index;
-    if (!this.config.multi) {
-      this.menus.filter(
-        (menu, i) &#x3D;&gt; i !&#x3D;&#x3D; index &amp;&amp; menu.active
-      ).forEach(menu &#x3D;&gt; menu.active &#x3D; !menu.active);
+      if (!this.config.multi) {
+        this.menus.filter(
+          (menu, i) &#x3D;&gt; i !&#x3D;&#x3D; index &amp;&amp; menu.active
+        ).forEach(menu &#x3D;&gt; menu.active &#x3D; !menu.active);
+      }
+
+      this.menus[index].active &#x3D; !this.menus[index].active;
+      this.submenu  &#x3D; this.menus[index].submenus
+
+      if (menu.routerLink) {
+        this.routerNavigation(menu.routerLink)
+        if (this.authenticationService?.deviceInfo?.phoneDevice &amp;&amp; this.submenu.length &#x3D;&#x3D; 0){
+          this.hideMenu()
+        }
+      }
+
+    } catch (error) {
+      console.log(error)
     }
-    this.menus[index].active &#x3D; !this.menus[index].active;
-    this.submenu  &#x3D; this.menus[index].submenus
-    if (menu.routerLink) {
-      this.routerNavigation(menu.routerLink)
-    }
-  }
-
-  isUserAuthorized(userRoles: string): boolean {
-    // console.log(userRoles)
-    return this.userAuthorizationService.isUserAuthorized(userRoles)
-
-  }
-
-  isHeaderUserAuthorized(userRoles: string): boolean {
-    // console.log(userRoles)
-    return this.userAuthorizationService.isUserAuthorized(userRoles)
-
-  }
-
-  test() {
-    //&#x27;admin&#x27;
-    this.result &#x3D; this.userAuthorizationService.isUserAuthorized(&#x27;admin&#x27;)
-    // console.log(this.result)
   }
 
 }
 </code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-templateData">
+    <div class="tab-pane fade " id="templateData">
         <pre class="line-numbers"><code class="language-html">
-&lt;div fxLayout&#x3D;&quot;row&quot; class&#x3D;&quot;row-class&quot;&gt;
-  &lt;div fxLayout&#x3D;&quot;column&quot; class&#x3D;&quot;row-class&quot;
-       *ngIf&#x3D;&quot;!displayCategories&quot;&gt;
+
+&lt;div *ngIf&#x3D;&quot;(menus$ | async) as menus&quot;&gt;
+
+  &lt;div
+      class&#x3D;&quot;row-class&quot;
+      *ngIf&#x3D;&quot;isStaff &amp;&amp; !displayCategories &amp;&amp; menus&quot;&gt;
 
     &lt;ul id&#x3D;&quot;accordion&quot;
         class&#x3D;&quot;accordion&quot;&gt;
-      &lt;li class&#x3D;&quot;menu-item&quot; @fade *ngFor&#x3D;&quot;let menu of menus; let i &#x3D; index&quot;
+      &lt;li class&#x3D;&quot;menu-item&quot;
+          @fade
+          *ngFor&#x3D;&quot;let menu of menus; let i &#x3D; index&quot;
           [class.active]&#x3D;&quot;menu.active&quot;&gt;
-
-        &lt;div *ngIf&#x3D;&quot;isHeaderUserAuthorized(menu.userType)&quot; &gt;
+          &lt;div  *ngIf&#x3D;&quot;isAuthorized(menu?.userType)&quot;&gt;
             &lt;div class&#x3D;&quot;menu&quot;
-              (click)&#x3D;&quot;toggle(menu, i)&quot;&gt;
-              &lt;mat-icon&gt;{{ menu.icon }}&lt;/mat-icon&gt;
-              {{ menu.name }}
+                  (click)&#x3D;&quot;toggle(menu, i)&quot;&gt;
+
+              &lt;div class&#x3D;&quot;grid-toggle-tiny&quot;&gt;
+                &lt;div class&#x3D;&quot;item-font&quot; *ngIf&#x3D;&quot;menu?.icon&quot;&gt;
+                  &lt;mat-icon&gt;{{ menu?.icon }}&lt;/mat-icon&gt;
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;item-text&quot; *ngIf&#x3D;&quot;gridtoggletiny !&#x3D; &#x27;grid-toggle-collapsed&#x27;&quot;&gt;
+                  {{menu?.name | truncateText : 20}}
+                &lt;/div&gt;
+              &lt;/div&gt;
+
+            &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class&#x3D;&quot;row-class&quot;
+      *ngIf&#x3D;&quot;displayCategories&quot;&gt;
+  &lt;div class&#x3D;&quot;accordion  menu-header&quot;&gt;
+
+    &lt;div class&#x3D;&quot;grid-toggle-tiny&quot;&gt;
+      &lt;div class&#x3D;&quot;item-font&quot; *ngIf&#x3D;&quot;menus[index]?.icon&quot;&gt;
+        &lt;mat-icon&gt;{{menus[index]?.icon}}&lt;/mat-icon&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;item-font&quot; *ngIf&#x3D;&quot;gridtoggletiny !&#x3D; &#x27;grid-toggle-collapsed&#x27;&quot;&gt;
+        {{menus[index]?.name  | truncateText : 20}}
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div *ngIf&#x3D;&quot;!tinyMenu&quot;&gt;
+       &lt;mat-divider&gt;&lt;/mat-divider&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;menu-header-footer&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;submenu&quot;&gt;
+    &lt;ul id&#x3D;&quot;accordion&quot;
+        class&#x3D;&quot;accordion&quot;&gt;
+      &lt;li class&#x3D;&quot;menu-item&quot;
+          @fade
+          *ngFor&#x3D;&quot;let item of submenu&quot; &gt;
+        &lt;div *ngIf&#x3D;&quot;!item?.minimized&quot;&gt;
+          &lt;div class&#x3D;&quot;menu&quot;
+               *ngIf&#x3D;&quot;isAuthorized(item?.userType)&quot;&gt;
+              &lt;!-- &lt;button mat-menu-item
+                routerLinkActive&#x3D;{{item?.routerLinkActive}}
+                routerLink&#x3D;      {{item?.routerLink}}&gt; --&gt;
+                &lt;button mat-menu-item
+                        (click)&#x3D;&quot;navigateMenu(item.routerLink)&quot;&gt;
+
+              &lt;div class&#x3D;&quot;grid-toggle-tiny&quot;&gt;
+                &lt;div class&#x3D;&quot;item-font&quot; *ngIf&#x3D;&quot;item.icon&quot;&gt;
+                  &lt;mat-icon&gt;{{item?.icon}}&lt;/mat-icon&gt;
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;item-font&quot; *ngIf&#x3D;&quot;gridtoggletiny !&#x3D; &#x27;grid-toggle-collapsed&#x27;&quot;&gt;
+                  {{item?.name | truncateText : 20}}
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/button&gt;
           &lt;/div&gt;
         &lt;/div&gt;
       &lt;/li&gt;
     &lt;/ul&gt;
 
-  &lt;/div&gt;
+    &lt;button mat-icon-button
+            [matMenuTriggerFor]&#x3D;&quot;menu&quot;
+            aria-label&#x3D;&quot;Example icon-button with a menu&quot;&gt;
+      &lt;mat-icon&gt;more_vert&lt;/mat-icon&gt;
+    &lt;/button&gt;
 
-  &lt;div fxLayout&#x3D;&quot;column&quot; class&#x3D;&quot;row-class&quot;
-       *ngIf&#x3D;&quot;displayCategories&quot;&gt;
-
-    &lt;div class&#x3D;&quot; accordion  menu-header&quot;&gt;
-      &lt;mat-icon&gt;{{menus[index].icon}}&lt;/mat-icon&gt;
-      {{ menus[index].name }}
-      &lt;mat-divider&gt;&lt;/mat-divider&gt;
-      &lt;div class&#x3D;&quot;menu-header-footer&quot;&gt;&lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;div *ngIf&#x3D;&quot;submenu&quot;&gt;
-
-      &lt;ul id&#x3D;&quot;accordion&quot;
-          class&#x3D;&quot;accordion&quot;&gt;
+    &lt;ul id&#x3D;&quot;accordion&quot;
+        class&#x3D;&quot;accordion&quot;&gt;
         &lt;li class&#x3D;&quot;menu-item&quot;
-            @fade
-            *ngFor&#x3D;&quot;let item of submenu&quot; &gt;
+            @fade&gt;
+          &lt;mat-menu #menu&#x3D;&quot;matMenu&quot;&gt;
+            &lt;div  *ngFor&#x3D;&quot;let item of submenu&quot;&gt;
+              &lt;div  *ngIf&#x3D;&quot;isAuthorized(item?.userType)&quot;&gt;
+                &lt;div *ngIf&#x3D;&quot;item &amp;&amp; item?.minimized&quot;&gt;
+                  &lt;button mat-menu-item
+                          (click)&#x3D;&quot;navigateMenu(item.routerLink)&quot;&gt;
 
-          &lt;div *ngIf&#x3D;&quot;!item.minimized&quot;&gt;
-            &lt;div class&#x3D;&quot;menu&quot;
-                 *ngIf&#x3D;&quot;isUserAuthorized(item.userType)&quot; &gt;
-              &lt;a mat-list-item
-                  color&#x3D;&quot;accent&quot;
-                  routerLinkActive&#x3D;{{item.routerLinkActive}}
-                  routerLink&#x3D;      {{item.routerLink}}&gt;
-                &lt;mat-icon&gt;{{ item.icon }}&lt;/mat-icon&gt;
-                {{ item.name }}
-              &lt;/a&gt;
+                    &lt;div class&#x3D;&quot;grid-toggle-tiny&quot;&gt;
+                      &lt;div class&#x3D;&quot;item-font&quot; *ngIf&#x3D;&quot;item.icon&quot;&gt;
+                        &lt;mat-icon&gt;{{item.icon}}&lt;/mat-icon&gt;
+                      &lt;/div&gt;
+                      &lt;div class&#x3D;&quot;item-font&quot;*ngIf&#x3D;&quot;gridtoggletiny !&#x3D; &#x27;grid-toggle-collapsed&#x27;&quot;&gt;
+                        {{item.name | truncateText : 20}}
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+
+                  &lt;/button&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
             &lt;/div&gt;
-          &lt;/div&gt;
+          &lt;/mat-menu&gt;
+
         &lt;/li&gt;
       &lt;/ul&gt;
 
-      &lt;button mat-icon-button
-              [matMenuTriggerFor]&#x3D;&quot;menu&quot;
-              aria-label&#x3D;&quot;Example icon-button with a menu&quot;&gt;
-        &lt;mat-icon&gt;more_vert&lt;/mat-icon&gt;
-      &lt;/button&gt;
-
       &lt;ul id&#x3D;&quot;accordion&quot;
-        class&#x3D;&quot;accordion&quot;&gt;
-          &lt;li&gt;
-            &lt;mat-menu #menu&#x3D;&quot;matMenu&quot;&gt;
-              &lt;div  *ngFor&#x3D;&quot;let item of submenu&quot;&gt;
-                &lt;div  *ngIf&#x3D;&quot;isUserAuthorized(item.userType)&quot; &gt;
-                  &lt;div *ngIf&#x3D;&quot;item.minimized&quot;&gt;
-                    &lt;button mat-menu-item
-                            color&#x3D;&quot;accent&quot;
-                            routerLinkActive&#x3D;{{item.routerLinkActive}}
-                            routerLink&#x3D;      {{item.routerLink}}&gt;
-                      &lt;mat-icon&gt;{{ item.icon }}&lt;/mat-icon&gt;
-                      &lt;span&gt; {{ item.name }}&lt;/span&gt;
-                    &lt;/button&gt;
-                  &lt;/div&gt;
-                &lt;/div&gt;
-              &lt;/div&gt;
-            &lt;/mat-menu&gt;
-
+          class&#x3D;&quot;accordion&quot;&gt;
+          &lt;li class&#x3D;&quot;menu-item&quot;
+              @fade&gt;
+            &lt;div class&#x3D;&quot;menu&quot;&gt;
+              &lt;a  mat-list-item
+                      (click)&#x3D;&quot;resetMenu()&quot;&gt;
+                &lt;mat-icon&gt;navigate_before&lt;/mat-icon&gt;
+              &lt;/a&gt;
+            &lt;/div&gt;
           &lt;/li&gt;
-        &lt;/ul&gt;
+      &lt;/ul&gt;
 
-        &lt;ul id&#x3D;&quot;accordion&quot;
-            class&#x3D;&quot;accordion&quot;&gt;
-            &lt;li&gt;
-              &lt;div class&#x3D;&quot;menu&quot;&gt;
-                &lt;a  mat-list-item
-                        (click)&#x3D;&quot;resetMenu()&quot;&gt;
-                  &lt;mat-icon&gt;navigate_before&lt;/mat-icon&gt;
-                  Back
-                &lt;/a&gt;
-              &lt;/div&gt;
-            &lt;/li&gt;
-        &lt;/ul&gt;
+  &lt;/div&gt;
 
+  &lt;button mat-icon-button
+      (click)&#x3D;&quot;setSmallMenu()&quot;
+      aria-label&#x3D;&quot; toggle&quot;&gt;
+    &lt;mat-icon&gt;view_compact&lt;/mat-icon&gt;
+  &lt;/button&gt;
 
-   &lt;/div&gt;
 &lt;/div&gt;
+
 </code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-styleData">
+    <div class="tab-pane fade " id="styleData">
                 <p class="comment">
                     <code>./menu-minimal.component.scss</code>
                 </p>
-                <pre class="line-numbers"><code class="language-scss">@import url(https://fonts.googleapis.com/css?family&#x3D;Open+Sans);
-@import url(https://use.fontawesome.com/releases/v5.3.1/css/all.css);
-@import url(&quot;https://fonts.googleapis.com/icon?family&#x3D;Material+Icons&quot;);
-
+                <pre class="line-numbers"><code class="language-scss">
 :host {
     .mat-icon {
         vertical-align: middle;
@@ -1333,12 +2197,26 @@ export class MenuMinimalComponent implements OnInit {
   width: 100%;
 }
 
+.spinner-container {
+  top: 50px;
+}
+
 .accordion {
   width: 100%;
   // max-width: 225px;
   margin: auto;
   line-height: 1.6em;
   border-radius: 4px;
+  overflow: hidden;
+}
+
+.accordion-submenu {
+  width: 100%;
+  // max-width: 225px;
+  margin: auto;
+  line-height: 1.6em;
+  border-radius: 4px;
+  overflow-x: hidden;
 }
 
 .accordion .menu {
@@ -1362,6 +2240,12 @@ export class MenuMinimalComponent implements OnInit {
 .accordion li i.fa-chevron-down {
   right: .5rem;
   left: auto;
+}
+
+.submenu-position  {
+  position: fixed;
+  bottom: 0;
+  left: 0;
 }
 
 ul {
@@ -1424,6 +2308,10 @@ li {
   color: #fff;
 }
 
+.submenu {
+  color: wheat
+}
+
 .menu-header {
   font-size:     1.2em;
   font-weight:   425;
@@ -1435,10 +2323,31 @@ li {
 .menu-header {
   margin-bottom: 15px
 }
+
+.item-font {
+  // color: wheat
+}
+
+
+.grid-toggle-tiny {
+  height: 50px;
+  grid-template-columns: minmax(45px, 50px) 140px;
+
+  // @include for-phone-only {
+  //   grid-template-columns: minmax(45px, 50px);
+  // }
+}
+
+.grid-toggle-collapsed {
+  height: 50px;
+  // @include for-phone-only {
+  //   grid-template-columns: minmax(45px, 50px);
+  // }
+}
 </code></pre>
     </div>
 
-    <div class="tab-pane fade " id="c-tree">
+    <div class="tab-pane fade " id="tree">
         <div id="tree-container"></div>
         <div class="tree-legend">
             <div class="title">
@@ -1463,9 +2372,9 @@ li {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div fxLayout="row" class="row-class">  <div fxLayout="column" class="row-class"       *ngIf="!displayCategories">    <ul id="accordion"        class="accordion">      <li class="menu-item" @fade *ngFor="let menu of menus; let i = index"          [class.active]="menu.active">        <div *ngIf="isHeaderUserAuthorized(menu.userType)" >            <div class="menu"              (click)="toggle(menu, i)">              <mat-icon>{{ menu.icon }}</mat-icon>              {{ menu.name }}          </div>        </div>      </li>    </ul>  </div>  <div fxLayout="column" class="row-class"       *ngIf="displayCategories">    <div class=" accordion  menu-header">      <mat-icon>{{menus[index].icon}}</mat-icon>      {{ menus[index].name }}      <mat-divider></mat-divider>      <div class="menu-header-footer"></div>    </div>    <div *ngIf="submenu">      <ul id="accordion"          class="accordion">        <li class="menu-item"            @fade            *ngFor="let item of submenu" >          <div *ngIf="!item.minimized">            <div class="menu"                 *ngIf="isUserAuthorized(item.userType)" >              <a mat-list-item                  color="accent"                  routerLinkActive={{item.routerLinkActive}}                  routerLink=      {{item.routerLink}}>                <mat-icon>{{ item.icon }}</mat-icon>                {{ item.name }}              </a>            </div>          </div>        </li>      </ul>      <button mat-icon-button              [matMenuTriggerFor]="menu"              aria-label="Example icon-button with a menu">        <mat-icon>more_vert</mat-icon>      </button>      <ul id="accordion"        class="accordion">          <li>            <mat-menu #menu="matMenu">              <div  *ngFor="let item of submenu">                <div  *ngIf="isUserAuthorized(item.userType)" >                  <div *ngIf="item.minimized">                    <button mat-menu-item                            color="accent"                            routerLinkActive={{item.routerLinkActive}}                            routerLink=      {{item.routerLink}}>                      <mat-icon>{{ item.icon }}</mat-icon>                      <span> {{ item.name }}</span>                    </button>                  </div>                </div>              </div>            </mat-menu>          </li>        </ul>        <ul id="accordion"            class="accordion">            <li>              <div class="menu">                <a  mat-list-item                        (click)="resetMenu()">                  <mat-icon>navigate_before</mat-icon>                  Back                </a>              </div>            </li>        </ul>   </div></div></div>'
-    var COMPONENTS = [{'name': 'AccordionComponent', 'selector': 'app-accordion'},{'name': 'AccordionMenuItemEditComponent', 'selector': 'app-accordion-menu-item-edit'},{'name': 'AddInventoryItemComponent', 'selector': 'app-add-inventory-item'},{'name': 'AddItemByTypeComponent', 'selector': 'app-add-item-by-type'},{'name': 'AdjustItemComponent', 'selector': 'app-adjust-item'},{'name': 'AdjustItemNoteComponent', 'selector': 'app-adjust-item-note'},{'name': 'AdjustItemPriceChangeComponent', 'selector': 'app-adjust-item-price-change'},{'name': 'AdjustItemVoidReasonsComponent', 'selector': 'app-adjust-item-void-reasons'},{'name': 'AdjustmentReasonsComponent', 'selector': 'app-adjustment-reasons'},{'name': 'AdminbranditemComponent', 'selector': 'app-adminbranditem'},{'name': 'AdminbrandslistComponent', 'selector': 'app-adminbrandslist'},{'name': 'AdminComponent', 'selector': 'app-admin'},{'name': 'AgGridImageFormatterComponent', 'selector': 'app-ag-grid-image-formatter'},{'name': 'AgGridTestComponent', 'selector': 'app-ag-grid-test'},{'name': 'AgGridToggleComponent', 'selector': 'app-ag-grid-toggle'},{'name': 'AgPaginationComponent', 'selector': 'app-ag-pagination'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AppGateComponent', 'selector': 'app-app-gate'},{'name': 'AreaComponent', 'selector': 'app-widget-area'},{'name': 'AuditPanelComponent', 'selector': 'app-audit-panel'},{'name': 'BarcodeScannerComponent', 'selector': 'app-barcode-scanner'},{'name': 'BrandslistComponent', 'selector': 'app-brandslist'},{'name': 'BrandTypeSelectComponent', 'selector': 'app-brand-type-select'},{'name': 'BtBlueToothScannerComponent', 'selector': 'app-bt-blue-tooth-scanner'},{'name': 'BtPOSPrinterComponent', 'selector': 'app-bt-posprinter'},{'name': 'ButtonComponent', 'selector': 'storybook-button'},{'name': 'ButtonRendererComponent', 'selector': 'app-button-renderer'},{'name': 'CacheSettingsComponent', 'selector': 'app-cache-settings'},{'name': 'CannabisItemEditComponent', 'selector': 'app-cannabis-item-edit'},{'name': 'CardComponent', 'selector': 'app-widget-card'},{'name': 'CartButtonComponent', 'selector': 'app-cart-button'},{'name': 'CashDiscountItemProductEditComponent', 'selector': 'app-cash-discount-item-product-edit'},{'name': 'CashDiscountOrderProductEditComponent', 'selector': 'app-cash-discount-order-product-edit'},{'name': 'CategoriesAlternateComponent', 'selector': 'app-categories-alternate'},{'name': 'CategoriesComponent', 'selector': 'app-categories'},{'name': 'CategorieslistviewComponent', 'selector': 'app-categorieslistview'},{'name': 'CategoryScrollComponent', 'selector': 'app-category-scroll'},{'name': 'CategorySelectComponent', 'selector': 'app-category-select'},{'name': 'ChangepasswordComponent', 'selector': 'app-changepassword'},{'name': 'ChartTableComponent', 'selector': 'app-widget-chart-table'},{'name': 'CheckInProfileComponent', 'selector': 'app-check-in-profile'},{'name': 'ChemicalSpinnersComponent', 'selector': 'app-chemical-spinners'},{'name': 'ChemicalValuesComponent', 'selector': 'app-chemical-values'},{'name': 'ChipsDisplayComponent', 'selector': 'app-chips-display'},{'name': 'ClientSearchSelectorComponent', 'selector': 'app-client-search-selector'},{'name': 'ClientTypeEditComponent', 'selector': 'app-client-type-edit'},{'name': 'ClientTypeListComponent', 'selector': 'app-client-type-list'},{'name': 'ClientTypeSelectionComponent', 'selector': 'app-client-type-selection'},{'name': 'ClientTypesLookupComponent', 'selector': 'app-client-types-lookup'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'DatabaseSchemaComponent', 'selector': 'app-database-schema'},{'name': 'DateScheduleComponent', 'selector': 'app-date-schedule'},{'name': 'DefaultComponent', 'selector': 'app-default'},{'name': 'DemographicsComponent', 'selector': 'app-demographics'},{'name': 'DepartmentSelectComponent', 'selector': 'app-department-select'},{'name': 'DiscountOptionsComponent', 'selector': 'app-discount-options'},{'name': 'DiscountTypeSelectionComponent', 'selector': 'app-discount-type-selection'},{'name': 'DsiEMVPaymentComponent', 'selector': 'app-dsi-emvpayment'},{'name': 'EachProductEditComponent', 'selector': 'app-each-product-edit'},{'name': 'EditButtonsStandardComponent', 'selector': 'app-edit-buttons-standard'},{'name': 'EditSelectedItemsComponent', 'selector': 'app-edit-selected-items'},{'name': 'FacilitiesListComponent', 'selector': 'app-facilities-list'},{'name': 'FacilitySearchSelectorComponent', 'selector': 'app-facility-search-selector'},{'name': 'FilterComponent', 'selector': 'app-widget-filter'},{'name': 'FlatRateEditComponent', 'selector': 'app-flat-rate-edit'},{'name': 'FlatRateListComponent', 'selector': 'app-flat-rate-list'},{'name': 'FlatTaxRateListComponent', 'selector': 'app-flat-tax-rate-list'},{'name': 'FoodProductEditComponent', 'selector': 'app-food-product-edit'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'FormSelectListComponent', 'selector': 'app-form-select-list'},{'name': 'GenericIdSelectComponent', 'selector': 'app-generic-id-select'},{'name': 'GenericNameSelectComponent', 'selector': 'app-generic-name-select'},{'name': 'GiftCardProductEditComponent', 'selector': 'app-gift-card-product-edit'},{'name': 'GoogleMapsComponent', 'selector': 'app-google-maps'},{'name': 'HammerCardComponent', 'selector': 'app-hammer-card'},{'name': 'HeaderComponent', 'selector': 'storybook-header'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HTMLEditPrintingComponent', 'selector': 'app-htmledit-printing'},{'name': 'ImageCaptureComponent', 'selector': 'app-image-capture'},{'name': 'InstalledPrintersComponent', 'selector': 'app-installed-printers'},{'name': 'InventoryAdjustmentNoteComponent', 'selector': 'app-adjustment-note'},{'name': 'InventoryComponent', 'selector': 'app-inventory-settings'},{'name': 'InventoryHistoryItemComponent', 'selector': 'app-inventory-history-item'},{'name': 'InventoryHistoryListComponent', 'selector': 'app-inventory-history-list'},{'name': 'InventoryListComponent', 'selector': 'app-inventory-list'},{'name': 'InventoryListToolTipComponent', 'selector': 'app-inventory-list-tool-tip'},{'name': 'InventoryLocationsComponent', 'selector': 'app-inventory-locations'},{'name': 'IonicGeoLocationComponent', 'selector': 'app-ionic-geo-location'},{'name': 'ItemCategoriesEditComponent', 'selector': 'app-item-categories-edit'},{'name': 'ItemCategoriesListComponent', 'selector': 'app-item-categories-list'},{'name': 'ItemPercentageDiscountProductEditComponent', 'selector': 'app-item-percentage-discount-product-edit'},{'name': 'ItemTypeCategoryAssignmentComponent', 'selector': 'app-item-type-category-assignment'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'ItemTypeDisplayAssignmentComponent', 'selector': 'app-item-type-display-assignment'},{'name': 'ItemTypeEditorComponent', 'selector': 'app-item-type-editor'},{'name': 'ItemTypeSortComponent', 'selector': 'app-item-type-sort'},{'name': 'Label1by8Component', 'selector': 'app-label1by8'},{'name': 'LabelViewSelectorComponent', 'selector': 'app-label-view-selector'},{'name': 'LimitValuesProgressBarsComponent', 'selector': 'app-limit-values-progress-bars'},{'name': 'LiquorProductEditComponent', 'selector': 'app-liquor-product-edit'},{'name': 'ListPrintersElectronComponent', 'selector': 'app-list-printers-electron'},{'name': 'ListProductSearchInputComponent', 'selector': 'app-list-product-search-input'},{'name': 'LoginComponent', 'selector': 'login-dashboard'},{'name': 'MainMenuComponent', 'selector': 'app-main-menu'},{'name': 'MatSpinnerOverlayComponent', 'selector': 'app-mat-spinner-overlay'},{'name': 'MatToggleSelectorComponent', 'selector': 'app-mat-toggle-selector'},{'name': 'MenuCardCategoriesComponent', 'selector': 'app-menu-card-categories'},{'name': 'MenuCompactComponent', 'selector': 'app-menu-compact'},{'name': 'MenuGroupItemEditComponent', 'selector': 'app-menu-group-item-edit'},{'name': 'MenuItemCardComponent', 'selector': 'app-menu-item-card'},{'name': 'MenuitemComponent', 'selector': 'app-menuitem'},{'name': 'MenuItemGalleryComponent', 'selector': 'app-menu-item-gallery'},{'name': 'MenuItemModalComponent', 'selector': 'app-menu-item-modal'},{'name': 'MenuitemsComponent', 'selector': 'app-menuitems'},{'name': 'MenuItemsInfiniteComponent', 'selector': 'app-menu-items-infinite'},{'name': 'MenuManagerComponent', 'selector': 'app-menu-manager'},{'name': 'MenuMinimalComponent', 'selector': 'app-menu-minimal'},{'name': 'MenuSearchBarComponent', 'selector': 'app-menu-search-bar'},{'name': 'MenuTinyComponent', 'selector': 'app-menu-tiny'},{'name': 'MessagesToUserComponent', 'selector': 'app-messages-to-user'},{'name': 'MetaTagChipsComponent', 'selector': 'app-meta-tag-chips'},{'name': 'MetrcIndividualPackageComponent', 'selector': 'app-metrc-individual-package'},{'name': 'MetrcInventoryPropertiesComponent', 'selector': 'app-metrc-inventory-properties'},{'name': 'METRCProductsAddComponent', 'selector': 'app-products-add'},{'name': 'MetrcSalesListComponent', 'selector': 'app-metrc-sales-list'},{'name': 'ModifierProductEditComponent', 'selector': 'app-modifier-product-edit'},{'name': 'MoveInventoryLocationComponent', 'selector': 'app-move-inventory-location'},{'name': 'NewInventoryItemComponent', 'selector': 'app-new-inventory-item'},{'name': 'OrderBarComponent', 'selector': 'app-order-bar'},{'name': 'OrderCardComponent', 'selector': 'app-order-card'},{'name': 'OrderFilterPanelComponent', 'selector': 'app-order-filter-panel'},{'name': 'OrderItemListComponent', 'selector': 'app-order-item-list'},{'name': 'OrderItemsListComponent', 'selector': 'app-order-items-list'},{'name': 'OrderPercentageDiscountProductEditComponent', 'selector': 'app-order-percentage-discount-product-edit'},{'name': 'OrdersFilterComponent', 'selector': 'app-orders-filter'},{'name': 'OrdersMainComponent', 'selector': 'app-orders-main'},{'name': 'OrderTypeSelectionComponent', 'selector': 'app-order-type-selection'},{'name': 'PackageActionsComponent', 'selector': 'app-package-actions'},{'name': 'PackageListComponent', 'selector': 'app-package-list'},{'name': 'PackageSearchSelectorComponent', 'selector': 'app-package-search-selector'},{'name': 'PageComponent', 'selector': 'storybook-page'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PagerBlobComponent', 'selector': 'pager-blob'},{'name': 'PieComponent', 'selector': 'app-widget-pie'},{'name': 'PosListComponent', 'selector': 'app-pos-list'},{'name': 'PosOrderComponent', 'selector': 'app-pos-order'},{'name': 'PosOrderItemComponent', 'selector': 'app-pos-order-item'},{'name': 'PosOrderListComponent', 'selector': 'app-pos-order-list'},{'name': 'PosOrdersComponent', 'selector': 'app-pos-orders'},{'name': 'PosPaymentComponent', 'selector': 'app-pos-payment'},{'name': 'PosPaymentsComponent', 'selector': 'app-pos-payments'},{'name': 'PriceCategoriesComponent', 'selector': 'app-price-categories'},{'name': 'PriceCategoriesEditComponent', 'selector': 'app-price-categories-edit'},{'name': 'PriceCategorySearchComponent', 'selector': 'app-price-category-search'},{'name': 'PriceCategorySelectComponent', 'selector': 'app-price-category-select'},{'name': 'PriceLinesComponent', 'selector': 'app-price-lines'},{'name': 'PriceScheduleComponent', 'selector': 'app-price-schedule'},{'name': 'PriceScheduleConstraintsComponent', 'selector': 'app-price-schedule-constraints'},{'name': 'PriceScheduleFieldsComponent', 'selector': 'app-price-schedule-fields'},{'name': 'PriceScheduleInfoComponent', 'selector': 'app-price-schedule-info'},{'name': 'PriceScheduleListComponent', 'selector': 'app-price-schedule-list'},{'name': 'PriceTiersComponent', 'selector': 'app-price-tiers'},{'name': 'ProducteditComponent', 'selector': 'app-productedit'},{'name': 'ProductInfoPanelComponent', 'selector': 'app-product-info-panel'},{'name': 'ProductlistviewComponent', 'selector': 'app-productlistview'},{'name': 'ProductSearchSelectorComponent', 'selector': 'app-product-search-selector'},{'name': 'ProductTypeSelectComponent', 'selector': 'app-product-type-select'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'ProfileEditorComponent', 'selector': 'app-profile-editor'},{'name': 'ProfileListComponent', 'selector': 'app-profile-list'},{'name': 'ProfileLookupComponent', 'selector': 'app-profile-lookup'},{'name': 'ProgressBarComponent', 'selector': 'app-progress-bar'},{'name': 'ProgressUploaderComponent', 'selector': 'app-progress'},{'name': 'ReceiptLayoutComponent', 'selector': 'app-receipt-layout'},{'name': 'RegisterAccountExistingUserComponent', 'selector': 'app-register-account-existing-user'},{'name': 'RegisterAccountExistingUserWithTokenComponent', 'selector': 'app-register-account-existing-user-with-token'},{'name': 'RegisterAccountMainComponent', 'selector': 'app-register-account-main'},{'name': 'ReportsComponent', 'selector': 'app-reports'},{'name': 'ResetpasswordComponent', 'selector': 'app-resetpassword'},{'name': 'ReviewComponent', 'selector': 'app-review'},{'name': 'ReviewEditComponent', 'selector': 'app-review-edit'},{'name': 'ReviewsComponent', 'selector': 'app-reviews'},{'name': 'RewardTypeFilterComponent', 'selector': 'app-reward-type-filter'},{'name': 'RewardTypeResultsSelectorComponent', 'selector': 'app-reward-type-panel'},{'name': 'RouteDispatchComponent', 'selector': 'app-route-dispatch'},{'name': 'RouteDispatchDetailsComponent', 'selector': 'app-route-dispatch-details'},{'name': 'RouteDispatchDetailsEditComponent', 'selector': 'app-route-dispatch-details-edit'},{'name': 'RouteDispatchEditComponent', 'selector': 'app-route-dispatch-edit'},{'name': 'RouteDispatchesComponent', 'selector': 'app-route-dispatches'},{'name': 'SalesTaxReportComponent', 'selector': 'app-sales-tax-report'},{'name': 'ScaleReaderComponent', 'selector': 'app-scale-reader'},{'name': 'SearchPanelComponent', 'selector': 'app-search-panel'},{'name': 'SearchResultsComponent', 'selector': 'app-search-results'},{'name': 'ServiceTypeEditComponent', 'selector': 'app-service-type-edit'},{'name': 'ServiceTypeListComponent', 'selector': 'app-service-type-list'},{'name': 'SettingsComponent', 'selector': 'app-settings'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'SimpleTinyComponent', 'selector': 'simple-tinymce'},{'name': 'SiteEditComponent', 'selector': 'app-site-edit'},{'name': 'SitepointsComponent', 'selector': 'app-sitepoints'},{'name': 'SitepurchasesComponent', 'selector': 'app-sitepurchases'},{'name': 'SitesComponent', 'selector': 'app-sites'},{'name': 'SiteSelectorComponent', 'selector': 'app-site-selector'},{'name': 'SmokeProductEditComponent', 'selector': 'app-smoke-product-edit'},{'name': 'SoftwareComponent', 'selector': 'app-software'},{'name': 'SpeciesListComponent', 'selector': 'app-species-list'},{'name': 'StatusLookupComponent', 'selector': 'app-status-lookup'},{'name': 'StickyHeaderComponent', 'selector': 'app-sticky-header'},{'name': 'StrainPackagesComponent', 'selector': 'app-strain-packages'},{'name': 'StrainProductEditComponent', 'selector': 'app-strain-product-edit'},{'name': 'StrainsAddComponent', 'selector': 'app-strains-add'},{'name': 'SubMenuItemEditComponent', 'selector': 'app-sub-menu-item-edit'},{'name': 'SummarycardComponent', 'selector': 'app-summarycard'},{'name': 'TaxEditComponent', 'selector': 'app-tax-edit'},{'name': 'TaxFieldsComponent', 'selector': 'app-tax-fields'},{'name': 'TaxListComponent', 'selector': 'app-tax-list'},{'name': 'TaxRateListComponent', 'selector': 'app-tax-rate-list'},{'name': 'TierItemsComponent', 'selector': 'app-tier-items'},{'name': 'TierMenuComponent', 'selector': 'app-tier-menu'},{'name': 'TierPricesComponent', 'selector': 'app-tier-prices'},{'name': 'TiersCardComponent', 'selector': 'app-tiers-card'},{'name': 'TimeScheduleComponent', 'selector': 'app-time-schedule'},{'name': 'TvHappyHoursComponent', 'selector': 'app-tv-happy-hours'},{'name': 'TvPriceSpecialsComponent', 'selector': 'app-tv-price-specials'},{'name': 'TvPriceTierMenuItemsComponent', 'selector': 'app-tv-price-tier-menu-items'},{'name': 'TvPriceTiersComponent', 'selector': 'app-tv-price-tiers'},{'name': 'TypeFilterComponent', 'selector': 'app-type-filter'},{'name': 'TypeResultsSelectorComponent', 'selector': 'app-type-results-selector'},{'name': 'UnitTypeEditComponent', 'selector': 'app-unit-type-edit'},{'name': 'UnitTypeFieldsComponent', 'selector': 'app-unit-type-fields'},{'name': 'UnitTypeListComponent', 'selector': 'unit-types'},{'name': 'UploaderComponent', 'selector': 'app-widget-uploader'},{'name': 'UseGroupTaxAssignmentComponent', 'selector': 'app-use-group-tax-assignment'},{'name': 'UsermessagesComponent', 'selector': 'app-usermessages'},{'name': 'ValueFieldsComponent', 'selector': 'app-value-fields'},{'name': 'ValueSpinnerComponent', 'selector': 'app-value-spinner'},{'name': 'WebEnabledComponent', 'selector': 'app-web-enabled'},{'name': 'WeekDaySelectionComponent', 'selector': 'app-week-day-selection'},{'name': 'WeightedFoodProductEditComponent', 'selector': 'app-weighted-food-product-edit'},{'name': 'WishlistComponent', 'selector': 'app-wishlist'}];
-    var DIRECTIVES = [{'name': 'AutofocusDirective', 'selector': '[appAutoFocusInput]'},{'name': 'CurrencyFormatterDirective', 'selector': '[currencyFormatter]'},{'name': 'DndDirective', 'selector': '[appDnd]'},{'name': 'Events', 'selector': '[Events]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'ScrollableDirective', 'selector': '[appScrollable]'},{'name': 'StickyHeaderDirective', 'selector': '[stickyHeaderDirective]'}];
+        var COMPONENT_TEMPLATE = '<div><div *ngIf="(menus$ | async) as menus">  <div      class="row-class"      *ngIf="isStaff && !displayCategories && menus">    <ul id="accordion"        class="accordion">      <li class="menu-item"          @fade          *ngFor="let menu of menus; let i = index"          [class.active]="menu.active">          <div  *ngIf="isAuthorized(menu?.userType)">            <div class="menu"                  (click)="toggle(menu, i)">              <div class="grid-toggle-tiny">                <div class="item-font" *ngIf="menu?.icon">                  <mat-icon>{{ menu?.icon }}</mat-icon>                </div>                <div class="item-text" *ngIf="gridtoggletiny != \'grid-toggle-collapsed\'">                  {{menu?.name | truncateText : 20}}                </div>              </div>            </div>        </div>      </li>    </ul>  </div></div><div class="row-class"      *ngIf="displayCategories">  <div class="accordion  menu-header">    <div class="grid-toggle-tiny">      <div class="item-font" *ngIf="menus[index]?.icon">        <mat-icon>{{menus[index]?.icon}}</mat-icon>      </div>      <div class="item-font" *ngIf="gridtoggletiny != \'grid-toggle-collapsed\'">        {{menus[index]?.name  | truncateText : 20}}      </div>    </div>    <div *ngIf="!tinyMenu">       <mat-divider></mat-divider>    </div>    <div class="menu-header-footer"></div>  </div>  <div *ngIf="submenu">    <ul id="accordion"        class="accordion">      <li class="menu-item"          @fade          *ngFor="let item of submenu" >        <div *ngIf="!item?.minimized">          <div class="menu"               *ngIf="isAuthorized(item?.userType)">              <!-- <button mat-menu-item                routerLinkActive={{item?.routerLinkActive}}                routerLink=      {{item?.routerLink}}> -->                <button mat-menu-item                        (click)="navigateMenu(item.routerLink)">              <div class="grid-toggle-tiny">                <div class="item-font" *ngIf="item.icon">                  <mat-icon>{{item?.icon}}</mat-icon>                </div>                <div class="item-font" *ngIf="gridtoggletiny != \'grid-toggle-collapsed\'">                  {{item?.name | truncateText : 20}}                </div>              </div>            </button>          </div>        </div>      </li>    </ul>    <button mat-icon-button            [matMenuTriggerFor]="menu"            aria-label="Example icon-button with a menu">      <mat-icon>more_vert</mat-icon>    </button>    <ul id="accordion"        class="accordion">        <li class="menu-item"            @fade>          <mat-menu #menu="matMenu">            <div  *ngFor="let item of submenu">              <div  *ngIf="isAuthorized(item?.userType)">                <div *ngIf="item && item?.minimized">                  <button mat-menu-item                          (click)="navigateMenu(item.routerLink)">                    <div class="grid-toggle-tiny">                      <div class="item-font" *ngIf="item.icon">                        <mat-icon>{{item.icon}}</mat-icon>                      </div>                      <div class="item-font"*ngIf="gridtoggletiny != \'grid-toggle-collapsed\'">                        {{item.name | truncateText : 20}}                      </div>                    </div>                  </button>                </div>              </div>            </div>          </mat-menu>        </li>      </ul>      <ul id="accordion"          class="accordion">          <li class="menu-item"              @fade>            <div class="menu">              <a  mat-list-item                      (click)="resetMenu()">                <mat-icon>navigate_before</mat-icon>              </a>            </div>          </li>      </ul>  </div>  <button mat-icon-button      (click)="setSmallMenu()"      aria-label=" toggle">    <mat-icon>view_compact</mat-icon>  </button></div></div>'
+    var COMPONENTS = [{'name': 'AccordionComponent', 'selector': 'app-accordion'},{'name': 'AccordionMenuItemEditComponent', 'selector': 'app-accordion-menu-item-edit'},{'name': 'ActivityTogglesComponent', 'selector': 'app-activity-toggles'},{'name': 'ActivityTogglesMetrcComponent', 'selector': 'activity-toggles-metrc'},{'name': 'AddInventoryItemComponent', 'selector': 'app-add-inventory-item'},{'name': 'AddItemByTypeComponent', 'selector': 'app-add-item-by-type'},{'name': 'AdjustItemComponent', 'selector': 'app-adjust-item'},{'name': 'AdjustItemNoteComponent', 'selector': 'app-adjust-item-note'},{'name': 'AdjustItemPriceChangeComponent', 'selector': 'app-adjust-item-price-change'},{'name': 'AdjustItemVoidReasonsComponent', 'selector': 'app-adjust-item-void-reasons'},{'name': 'AdjustmentReasonsComponent', 'selector': 'app-adjustment-reasons'},{'name': 'AdjustPaymentComponent', 'selector': 'app-adjust-payment'},{'name': 'AdminbranditemComponent', 'selector': 'app-adminbranditem'},{'name': 'AdminbrandslistComponent', 'selector': 'app-adminbrandslist'},{'name': 'AdminComponent', 'selector': 'app-admin'},{'name': 'AdminDisplayMenuComponent', 'selector': 'Admin-display-menu'},{'name': 'AdminDisplayMenuListComponent', 'selector': 'admin-display-menu-list'},{'name': 'AdminDisplayMenuSelctorComponent', 'selector': 'display-menu-selctor'},{'name': 'AggregateSelectorComponent', 'selector': 'psReporting-aggregate-selector'},{'name': 'AgGridImageFormatterComponent', 'selector': 'app-ag-grid-image-formatter'},{'name': 'AgGridTestComponent', 'selector': 'app-ag-grid-test'},{'name': 'AgGridToggleComponent', 'selector': 'app-ag-grid-toggle'},{'name': 'AgIconFormatterComponent', 'selector': 'app-ag-icon-formatter'},{'name': 'AgPaginationComponent', 'selector': 'app-ag-pagination'},{'name': 'AndOrSelectorComponent', 'selector': 'psReporting-and-or-selector'},{'name': 'APISettingComponent', 'selector': 'app-apisetting'},{'name': 'ApiStatusDisplayComponent', 'selector': 'api-status-display'},{'name': 'ApiStoredValueComponent', 'selector': 'api-stored-value'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AppGateComponent', 'selector': 'app-app-gate'},{'name': 'AppWizardProgressButtonComponent', 'selector': 'wizard-progress-button'},{'name': 'AppWizardStatusComponent', 'selector': 'app-app-wizard-status'},{'name': 'AreaComponent', 'selector': 'app-widget-area'},{'name': 'AuditPanelComponent', 'selector': 'app-audit-panel'},{'name': 'BackgroundCoverComponent', 'selector': 'app-background-cover'},{'name': 'BalanceSheetCalculationsViewComponent', 'selector': 'balance-sheet-calculations-view'},{'name': 'BalanceSheetEditComponent', 'selector': 'app-balance-sheet-edit'},{'name': 'BalanceSheetEmployeeSalesComponent', 'selector': 'balance-sheet-employee-sales'},{'name': 'BalanceSheetFilterComponent', 'selector': 'balance-sheet-filter'},{'name': 'BalanceSheetHeaderViewComponent', 'selector': 'balance-sheet-header-view'},{'name': 'BalanceSheetQuickViewComponent', 'selector': 'balance-sheet-quick-view'},{'name': 'BalanceSheetReportComponent', 'selector': 'balance-sheet-report'},{'name': 'BalanceSheetsComponent', 'selector': 'app-balance-sheets'},{'name': 'BalanceSheetViewComponent', 'selector': 'balance-sheet-view'},{'name': 'BarcodeScannerComponent', 'selector': 'app-barcode-scanner'},{'name': 'BlogListEditComponent', 'selector': 'app-blog-list-edit'},{'name': 'BlogPostComponent', 'selector': 'app-blog-post'},{'name': 'BlogPostEditComponent', 'selector': 'app-blog-post-edit'},{'name': 'BlogPostListComponent', 'selector': 'blog-post-list'},{'name': 'BlogPostSortComponent', 'selector': 'blog-post-sort'},{'name': 'BrandslistComponent', 'selector': 'app-brandslist'},{'name': 'BrandTypeSelectComponent', 'selector': 'app-brand-type-select'},{'name': 'BtBlueToothScannerComponent', 'selector': 'app-bt-blue-tooth-scanner'},{'name': 'BtPOSPrinterComponent', 'selector': 'app-bt-posprinter'},{'name': 'ButtonComponent', 'selector': 'storybook-button'},{'name': 'ButtonRendererComponent', 'selector': 'app-button-renderer'},{'name': 'ButtonRendererComponent', 'selector': 'btn-cell-renderer'},{'name': 'CacheSettingsComponent', 'selector': 'app-cache-settings'},{'name': 'CallUsSelectorComponent', 'selector': 'call-us-selector'},{'name': 'CannabisItemEditComponent', 'selector': 'cannabis-item-edit'},{'name': 'CardComponent', 'selector': 'app-widget-card'},{'name': 'CardDashboardComponent', 'selector': 'app-card-dashboard'},{'name': 'CardPointeCardPayBtnComponent', 'selector': 'card-pointe-card-pay-btn'},{'name': 'CardpointeTransactionsComponent', 'selector': 'app-cardpointe-transactions'},{'name': 'CardPointIDTECHAndroidComponent', 'selector': 'app-card-point-idtechandroid'},{'name': 'CardPointSettingsComponent', 'selector': 'card-point-settings'},{'name': 'CartButtonComponent', 'selector': 'app-cart-button'},{'name': 'CashDrawerSettingsComponent', 'selector': 'app-cash-drawer-settings'},{'name': 'CashPaymentButtonComponent', 'selector': 'cash-payment-buttons'},{'name': 'CashValueCalcComponent', 'selector': 'cash-value-calc'},{'name': 'CategoriesAlternateComponent', 'selector': 'app-categories-alternate'},{'name': 'CategoriesComponent', 'selector': 'app-categories'},{'name': 'CategorieslistviewComponent', 'selector': 'app-categorieslistview'},{'name': 'CategoryItemsBoardComponent', 'selector': 'app-category-items-board'},{'name': 'CategoryItemsBoardItemComponent', 'selector': 'category-items-board-item'},{'name': 'CategoryScrollComponent', 'selector': 'app-category-scroll'},{'name': 'CategorySelectComponent', 'selector': 'app-category-select'},{'name': 'CategorySelectListFilterComponent', 'selector': 'category-select-list-filter'},{'name': 'ChangeDueComponent', 'selector': 'app-balance-due'},{'name': 'ChangepasswordComponent', 'selector': 'app-changepassword'},{'name': 'ChartTableComponent', 'selector': 'app-widget-chart-table'},{'name': 'CheckInProfileComponent', 'selector': 'app-check-in-profile'},{'name': 'ChemicalSpinnersComponent', 'selector': 'app-chemical-spinners'},{'name': 'ChemicalValuesComponent', 'selector': 'app-chemical-values'},{'name': 'ChipsDisplayComponent', 'selector': 'app-chips-display'},{'name': 'ClientInfoComponent', 'selector': 'app-client-info'},{'name': 'ClientSearchSelectorComponent', 'selector': 'app-client-search-selector'},{'name': 'ClientTypeEditComponent', 'selector': 'app-client-type-edit'},{'name': 'ClientTypeListComponent', 'selector': 'app-client-type-list'},{'name': 'ClientTypeSelectionComponent', 'selector': 'app-client-type-selection'},{'name': 'ClientTypesLookupComponent', 'selector': 'app-client-types-lookup'},{'name': 'ClockBreaksTypesComponent', 'selector': 'clock-breaks-types'},{'name': 'ClockInOutComponent', 'selector': 'clock-in-out'},{'name': 'CloseDayValidationComponent', 'selector': 'close-day-validation'},{'name': 'CompanyEditComponent', 'selector': 'company-edit'},{'name': 'CompanyInfoHeaderComponent', 'selector': 'app-company-info-header'},{'name': 'CpVIVO3300Component', 'selector': 'app-cp-vivo3300'},{'name': 'CreditCardPaymentsPrintListComponent', 'selector': 'credit-card-payments-print-list'},{'name': 'CSVImportComponent', 'selector': 'app-csv-import'},{'name': 'DailyReportComponent', 'selector': 'app-daily-report'},{'name': 'DashboardClientTypeSelectionComponent', 'selector': 'dashboard-client-type-selection'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'DashboardMenuComponent', 'selector': 'app-dashboard-menu'},{'name': 'DatabaseSchemaComponent', 'selector': 'app-database-schema'},{'name': 'DateScheduleComponent', 'selector': 'app-date-schedule'},{'name': 'DefaultComponent', 'selector': 'app-default'},{'name': 'DefaultReceiptSelectorComponent', 'selector': 'default-receipt-selector'},{'name': 'DemographicsComponent', 'selector': 'app-demographics'},{'name': 'DepartmentMenuComponent', 'selector': 'app-department-menu'},{'name': 'DepartmentSelectComponent', 'selector': 'app-department-select'},{'name': 'DesignerEditorComponent', 'selector': 'psReporting-designer-editor'},{'name': 'DesignerListComponent', 'selector': 'ps-designer-list'},{'name': 'DeviceInfoComponent', 'selector': 'app-device-info'},{'name': 'DevxReportDesignerComponent', 'selector': 'app-devx-report-designer'},{'name': 'DiscountOptionsComponent', 'selector': 'app-discount-options'},{'name': 'DiscountTypeSelectionComponent', 'selector': 'app-discount-type-selection'},{'name': 'DisplayMenuListComponent', 'selector': 'display-menu-list'},{'name': 'DisplayMenuMainComponent', 'selector': 'display-menu-main'},{'name': 'DisplayMenuMenuComponent', 'selector': 'display-menu-menu'},{'name': 'DisplayMenuSortComponent', 'selector': 'display-menu-sort'},{'name': 'DisplayMenuTitleComponent', 'selector': 'display-menu-title'},{'name': 'DsiAndroidResultsComponent', 'selector': 'pointlesscc-dsi-android-results'},{'name': 'DSIAndroidSettingsComponent', 'selector': 'pointlesscc-dsiandroid-settings'},{'name': 'DsiEMVAndroidComponent', 'selector': 'pointlesscc-dsi-emvandroid'},{'name': 'DSIEMVAndroidPayBtnComponent', 'selector': 'dsiemvandroid-pay-btn'},{'name': 'DsiEMVCardPayBtnComponent', 'selector': 'dsi-emvcard-pay-btn'},{'name': 'DSIEMVElectronComponent', 'selector': 'app-dsiemvelectron'},{'name': 'DsiEMVPaymentComponent', 'selector': 'app-dsi-emvpayment'},{'name': 'DSIEMVTransactionComponent', 'selector': 'app-dsiemvtransaction'},{'name': 'DynamicAgGridComponent', 'selector': 'dynamic-ag-grid'},{'name': 'EditBarComponent', 'selector': 'pgReporting-edit-bar'},{'name': 'EditButtonsStandardComponent', 'selector': 'app-edit-buttons-standard'},{'name': 'EditCSSStylesComponent', 'selector': 'app-edit-cssstyles'},{'name': 'EditSelectedItemsComponent', 'selector': 'app-edit-selected-items'},{'name': 'EditSettingsComponent', 'selector': 'app-edit-settings'},{'name': 'ElectronZoomControlComponent', 'selector': 'electron-zoom-control'},{'name': 'EmailEntryComponent', 'selector': 'app-email-entry'},{'name': 'EmailSettingsComponent', 'selector': 'app-email-settings'},{'name': 'EmployeeClockEditComponent', 'selector': 'app-employee-clock-edit'},{'name': 'EmployeeClockFilterComponent', 'selector': 'employee-clock-filter'},{'name': 'EmployeeClockListComponent', 'selector': 'app-employee-clock-list'},{'name': 'EmployeeDetailsPanelComponent', 'selector': 'app-employee-details-panel'},{'name': 'EmployeeEditComponent', 'selector': 'employee-edit'},{'name': 'EmployeeFilterPanelComponent', 'selector': 'employee-filter-panel'},{'name': 'EmployeeListComponent', 'selector': 'employee-list'},{'name': 'EmployeeLookupComponent', 'selector': 'employee-lookup'},{'name': 'EmployeeMetrcKeyEntryComponent', 'selector': 'app-employee-metrc-key-entry'},{'name': 'ExitLabelSelectionComponent', 'selector': 'exit-label-selection'},{'name': 'ExportDataComponent', 'selector': 'app-export-data'},{'name': 'FacilitiesListComponent', 'selector': 'app-facilities-list'},{'name': 'FacilitySearchSelectorComponent', 'selector': 'app-facility-search-selector'},{'name': 'FastUserSwitchComponent', 'selector': 'app-fast-user-switch'},{'name': 'FieldListTypeAssignerComponent', 'selector': 'pgReporting-field-list-type-assigner'},{'name': 'FieldSelectorComponent', 'selector': 'psReporting-field-selector'},{'name': 'FieldTypeSelectorComponent', 'selector': 'psReporting-field-type-selector'},{'name': 'FieldValueSelectorComponent', 'selector': 'pgReporting-field-value-selector'},{'name': 'FilterBuilderComponent', 'selector': 'pgReporting-filter-builder'},{'name': 'FilterComponent', 'selector': 'app-widget-filter'},{'name': 'FlatRateEditComponent', 'selector': 'app-flat-rate-edit'},{'name': 'FlatRateListComponent', 'selector': 'app-flat-rate-list'},{'name': 'FlatTaxRateListComponent', 'selector': 'app-flat-tax-rate-list'},{'name': 'FloorPlanComponent', 'selector': 'app-floor-plan'},{'name': 'FoodProductEditComponent', 'selector': 'food-product-edit'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'FormSelectListComponent', 'selector': 'form-select-list'},{'name': 'FunctionGroupButtonEditComponent', 'selector': 'function-group-button-edit'},{'name': 'FunctionGroupEditComponent', 'selector': 'app-function-group-edit'},{'name': 'FunctionGroupListComponent', 'selector': 'app-function-group-list'},{'name': 'GenericIdSelectComponent', 'selector': 'app-generic-id-select'},{'name': 'GenericNameSelectComponent', 'selector': 'app-generic-name-select'},{'name': 'GiftCardPayBtnComponent', 'selector': 'gift-card-pay-btn'},{'name': 'GoogleMapsComponent', 'selector': 'app-google-maps'},{'name': 'GridComponentPropertiesComponent', 'selector': 'app-grid-component-properties'},{'name': 'GridcomponentPropertiesDesignComponent', 'selector': 'gridcomponent-properties-design'},{'name': 'GridDesignerInfoComponent', 'selector': 'grid-designer-info'},{'name': 'GridManagerComponent', 'selector': 'menu-manager'},{'name': 'GridManagerEditComponent', 'selector': 'app-grid-manager-edit'},{'name': 'GridMenuLayoutComponent', 'selector': 'grid-menu-layout'},{'name': 'GridSettingsComponent', 'selector': 'app-grid-settings'},{'name': 'GroupByTypesComponent', 'selector': 'psReporting-group-by-types'},{'name': 'HammerCardComponent', 'selector': 'app-hammer-card'},{'name': 'HeaderComponent', 'selector': 'storybook-header'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HouseAccountPayBtnComponent', 'selector': 'app-house-account-pay-btn'},{'name': 'HTMLEditPrintingComponent', 'selector': 'app-htmledit-printing'},{'name': 'IFrameComponent', 'selector': 'app-i-frame'},{'name': 'ImageCaptureComponent', 'selector': 'app-image-capture'},{'name': 'ImageContainerComponent', 'selector': 'image-container'},{'name': 'ImageSwiperComponent', 'selector': 'app-image-swiper'},{'name': 'InstalledPrintersComponent', 'selector': 'app-installed-printers'},{'name': 'InventoryAdjustmentNoteComponent', 'selector': 'app-adjustment-note'},{'name': 'InventoryComponent', 'selector': 'app-inventory-settings'},{'name': 'InventoryCountsViewComponent', 'selector': 'inventory-counts-view'},{'name': 'InventoryHeaderValuesComponent', 'selector': 'app-inventory-header-values'},{'name': 'InventoryHistoryItemComponent', 'selector': 'app-inventory-history-item'},{'name': 'InventoryHistoryListComponent', 'selector': 'app-inventory-history-list'},{'name': 'InventoryListComponent', 'selector': 'app-inventory-list'},{'name': 'InventoryListToolTipComponent', 'selector': 'app-inventory-list-tool-tip'},{'name': 'InventoryLocationsComponent', 'selector': 'app-inventory-locations'},{'name': 'IonicGeoLocationComponent', 'selector': 'app-ionic-geo-location'},{'name': 'IonicSwipeToDeleteComponent', 'selector': 'app-ionic-swipe-to-delete'},{'name': 'ItemCategoriesEditComponent', 'selector': 'app-item-categories-edit'},{'name': 'ItemCategoriesListComponent', 'selector': 'app-item-categories-list'},{'name': 'ItemSalesCardComponent', 'selector': 'item-sales-card'},{'name': 'ItemSortComponent', 'selector': 'app-item-sort'},{'name': 'ItemTypeCategoryAssignmentComponent', 'selector': 'app-item-type-category-assignment'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'ItemTypeDisplayAssignmentComponent', 'selector': 'app-item-type-display-assignment'},{'name': 'ItemTypeEditorComponent', 'selector': 'app-item-type-editor'},{'name': 'ItemTypeSortComponent', 'selector': 'app-item-type-sort'},{'name': 'ItemTypeTogglesEditComponent', 'selector': 'item-type-toggles-edit'},{'name': 'JobTypesEditComponent', 'selector': 'app-job-types-edit'},{'name': 'JobTypesListComponent', 'selector': 'app-job-type-list'},{'name': 'KeyboardButtonComponent', 'selector': 'app-keyboard-button'},{'name': 'KeyboardComponent', 'selector': 'app-keyboard'},{'name': 'KeyboardViewComponent', 'selector': 'app-keyboard-view'},{'name': 'KeyPadComponent', 'selector': 'app-key-pad'},{'name': 'Label1by8Component', 'selector': 'app-label1by8'},{'name': 'LabelViewSelectorComponent', 'selector': 'app-label-view-selector'},{'name': 'LastImageDisplayComponent', 'selector': 'last-image-display'},{'name': 'LimitValuesCardComponent', 'selector': 'app-limit-values-card'},{'name': 'LimitValuesProgressBarsComponent', 'selector': 'limit-values-progress-bars'},{'name': 'LinkedPriceSelectorComponent', 'selector': 'linked-price-selector'},{'name': 'LiquorProductEditComponent', 'selector': 'liquor-product-edit'},{'name': 'ListPrintersElectronComponent', 'selector': 'app-list-printers-electron'},{'name': 'ListProductSearchInputComponent', 'selector': 'list-product-search-input'},{'name': 'LoginComponent', 'selector': 'login-dashboard'},{'name': 'LogoComponent', 'selector': 'app-logo'},{'name': 'M22ResizableComponent', 'selector': '[m22Resizable]'},{'name': 'MainfestEditorComponent', 'selector': 'app-mainfest-editor'},{'name': 'MainfestFilterComponent', 'selector': 'app-mainfest-filter'},{'name': 'MainMenuComponent', 'selector': 'app-main-menu'},{'name': 'ManifestEditorHeaderComponent', 'selector': 'app-manifest-editor-header'},{'name': 'ManifestsComponent', 'selector': 'app-manifests'},{'name': 'ManifestStatusComponent', 'selector': 'app-manifest-status'},{'name': 'ManifestTypeComponent', 'selector': 'app-manifest-type'},{'name': 'MatDateRangeComponent', 'selector': 'mat-date-range'},{'name': 'MatMenuBasicComponent', 'selector': 'mat-menu-basic'},{'name': 'MatSelectComponent', 'selector': 'app-mat-select'},{'name': 'MatSelectNGModelComponent', 'selector': 'mat-select-ngmodel'},{'name': 'MatSelectorComponent', 'selector': 'pgReporting-mat-selector'},{'name': 'MatSpinnerOverlayComponent', 'selector': 'app-mat-spinner-overlay'},{'name': 'MatToggleSelectorComponent', 'selector': 'app-mat-toggle-selector'},{'name': 'MenuBoardComponent', 'selector': 'app-menu-board'},{'name': 'MenuCardCategoriesComponent', 'selector': 'app-menu-card-categories'},{'name': 'MenuCompactComponent', 'selector': 'app-menu-compact'},{'name': 'MenuGroupItemEditComponent', 'selector': 'app-menu-group-item-edit'},{'name': 'MenuItemCardComponent', 'selector': 'app-menu-item-card'},{'name': 'MenuItemCardDashboardComponent', 'selector': 'menu-item-card-dashboard'},{'name': 'MenuitemComponent', 'selector': 'app-menuitem'},{'name': 'MenuItemExtendedPricesComponent', 'selector': 'menu-item-extended-prices'},{'name': 'MenuItemGalleryComponent', 'selector': 'app-menu-item-gallery'},{'name': 'MenuItemModalComponent', 'selector': 'app-menu-item-modal'},{'name': 'MenuItemProductCountComponent', 'selector': 'menu-item-product-count'},{'name': 'MenuItemsInfiniteComponent', 'selector': 'menu-items-infinite'},{'name': 'MenuManagerComponent', 'selector': 'app-menu-manager'},{'name': 'MenuMinimalComponent', 'selector': 'app-menu-minimal'},{'name': 'MenuPriceSelectionComponent', 'selector': 'app-menu-price-selection'},{'name': 'MenuSearchBarComponent', 'selector': 'app-menu-search-bar'},{'name': 'MenuTinyComponent', 'selector': 'app-menu-tiny'},{'name': 'MessagesToUserComponent', 'selector': 'app-messages-to-user'},{'name': 'MetaTagChipsComponent', 'selector': 'app-meta-tag-chips'},{'name': 'MetrcIndividualPackageComponent', 'selector': 'app-metrc-individual-package'},{'name': 'MetrcIntakeHeaderComponent', 'selector': 'metrc-intake-header'},{'name': 'MetrcInventoryPropertiesComponent', 'selector': 'metrc-inventory-properties'},{'name': 'METRCProductsAddComponent', 'selector': 'app-products-add'},{'name': 'MetrcSalesFilterComponent', 'selector': 'metrc-sales-filter'},{'name': 'MetrcSalesListComponent', 'selector': 'app-metrc-sales-list'},{'name': 'MetrcSummaryComponent', 'selector': 'app-metrc-summary'},{'name': 'MoveInventoryLocationComponent', 'selector': 'app-move-inventory-location'},{'name': 'MyThingComponent', 'selector': 'my-thing'},{'name': 'NewInventoryItemComponent', 'selector': 'app-new-inventory-item'},{'name': 'NewOrderTypeComponent', 'selector': 'new-order-type'},{'name': 'OptionsSelectFilterComponent', 'selector': 'options-select-filter'},{'name': 'OrderBarComponent', 'selector': 'app-order-bar'},{'name': 'OrderCardComponent', 'selector': 'app-order-card'},{'name': 'OrderCardsComponent', 'selector': 'app-order-cards'},{'name': 'OrderFilterPanelComponent', 'selector': 'app-order-filter-panel'},{'name': 'OrderHeaderComponent', 'selector': 'app-order-header'},{'name': 'OrderHeaderDemographicsBoardComponent', 'selector': 'app-order-header-demographics-board'},{'name': 'OrderHeaderDemoGraphicsComponent', 'selector': 'app-order-header-demo-graphics'},{'name': 'OrderItemListComponent', 'selector': 'app-order-item-list'},{'name': 'OrderItemsListComponent', 'selector': 'app-order-items-list'},{'name': 'OrderPanelComponent', 'selector': 'app-order-panel'},{'name': 'OrderPercentageDiscountProductEditComponent', 'selector': 'app-order-percentage-discount-product-edit'},{'name': 'OrderPrepComponent', 'selector': 'app-order-prep'},{'name': 'OrdersListComponent', 'selector': 'app-orders-list'},{'name': 'OrdersMainComponent', 'selector': 'app-orders-main'},{'name': 'OrderTotalBoardComponent', 'selector': 'app-order-total-board'},{'name': 'OrderTotalComponent', 'selector': 'app-order-total'},{'name': 'OrderTypeSelectionComponent', 'selector': 'app-order-type-selection'},{'name': 'OverLayComponent', 'selector': 'app-over-lay'},{'name': 'PackageListComponent', 'selector': 'app-package-list'},{'name': 'PackageSearchSelectorComponent', 'selector': 'app-package-search-selector'},{'name': 'PageComponent', 'selector': 'storybook-page'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PagerBlobComponent', 'selector': 'pager-blob'},{'name': 'PagingInfoComponent', 'selector': 'app-paging-info'},{'name': 'PasswordValidationComponent', 'selector': 'app-password-validation'},{'name': 'PaymentBalanceComponent', 'selector': 'app-payment-balance'},{'name': 'PaymentMethodEditComponent', 'selector': 'app-payment-method-edit'},{'name': 'PaymentMethodListComponent', 'selector': 'app-payment-method-list'},{'name': 'PaymentMethodSettingsComponent', 'selector': 'payment-method-settings'},{'name': 'PaymentReportCardComponent', 'selector': 'app-payment-report-card'},{'name': 'PaymentReportComponent', 'selector': 'payment-report'},{'name': 'PaymentReportDataComponent', 'selector': 'app-payment-report-data'},{'name': 'PaypalCardPayBtnComponent', 'selector': 'paypal-card-pay-btn'},{'name': 'PayPalTransactionComponent', 'selector': 'app-pay-pal-transaction'},{'name': 'PieComponent', 'selector': 'app-widget-pie'},{'name': 'PointlessMETRCSalesComponent', 'selector': 'app-pointless-metrcsales'},{'name': 'PosCheckOutButtonsComponent', 'selector': 'pos-check-out-buttons'},{'name': 'PosEditSettingsComponent', 'selector': 'app-pos-edit-settings'},{'name': 'PosListComponent', 'selector': 'app-pos-list'},{'name': 'PosOperationsComponent', 'selector': 'pos-operations'},{'name': 'PosOrderBoardComponent', 'selector': 'app-pos-order-board'},{'name': 'PosOrderComponent', 'selector': 'app-pos-order'},{'name': 'PosOrderFunctionButtonsComponent', 'selector': 'pos-order-function-buttons'},{'name': 'PosOrderItemComponent', 'selector': 'pos-order-item'},{'name': 'PosOrderItemEditComponent', 'selector': 'app-pos-order-item-edit'},{'name': 'PosOrderItemListComponent', 'selector': 'pos-order-item-list'},{'name': 'PosOrderItemsComponent', 'selector': 'pos-order-items'},{'name': 'PosOrderListComponent', 'selector': 'app-pos-order-list'},{'name': 'PosOrderNotesComponent', 'selector': 'pos-order-notes'},{'name': 'PosOrderPriceScheduleInfoComponent', 'selector': 'pos-order-price-schedule-info'},{'name': 'POSOrderScheduleCardComponent', 'selector': 'posorder-schedule-card'},{'name': 'POSOrderScheduleComponent', 'selector': 'pos-order-schedule'},{'name': 'PosOrderScheduleDescriptionComponent', 'selector': 'pos-order-schedule-description'},{'name': 'POSOrderScheduleFormComponent', 'selector': 'app-posorder-schedule-form'},{'name': 'POSOrderServiceTypeComponent', 'selector': 'posorder-service-type'},{'name': 'POSOrderShippingAddressComponent', 'selector': 'posorder-shipping-address'},{'name': 'PosOrderTransactionDataComponent', 'selector': 'pos-order-transaction-data'},{'name': 'PosPaymentComponent', 'selector': 'app-pos-payment'},{'name': 'PosPaymentEditComponent', 'selector': 'pos-payment-edit'},{'name': 'POSPaymentsComponent', 'selector': 'app-pospayments'},{'name': 'PosPaymentsFilterComponent', 'selector': 'app-pos-payments-filter'},{'name': 'PosSplitGroupsComponent', 'selector': 'pos-split-groups'},{'name': 'POSSplitItemsComponent', 'selector': 'app-possplit-items'},{'name': 'PrepContainerComponent', 'selector': 'app-prep-container'},{'name': 'PrepOrderComponent', 'selector': 'app-prep-order'},{'name': 'PrepOrderFilterComponent', 'selector': 'app-prep-order-filter'},{'name': 'PrepOrderItemComponent', 'selector': 'app-prep-order-item'},{'name': 'PriceCategoriesComponent', 'selector': 'app-price-categories'},{'name': 'PriceCategoriesEditComponent', 'selector': 'app-price-categories-edit'},{'name': 'PriceCategoryConversionsComponent', 'selector': 'price-category-conversions'},{'name': 'PriceCategoryMultiplePricesComponent', 'selector': 'price-category-multiple-prices'},{'name': 'PriceCategoryPriceFieldsComponent', 'selector': 'price-category-price-fields'},{'name': 'PriceCategorySearchComponent', 'selector': 'app-price-category-search'},{'name': 'PriceCategorySelectComponent', 'selector': 'app-price-category-select'},{'name': 'PriceCategoryTimeFiltersComponent', 'selector': 'price-category-time-filters'},{'name': 'PriceLinesComponent', 'selector': 'app-price-lines'},{'name': 'PriceOptionsComponent', 'selector': 'app-price-options'},{'name': 'PriceScheduleComponent', 'selector': 'app-price-schedule'},{'name': 'PriceScheduleConstraintsComponent', 'selector': 'app-price-schedule-constraints'},{'name': 'PriceScheduleFieldsComponent', 'selector': 'app-price-schedule-fields'},{'name': 'PriceScheduleInfoComponent', 'selector': 'app-price-schedule-info'},{'name': 'PriceScheduleListComponent', 'selector': 'app-price-schedule-list'},{'name': 'PriceScheduleMenuItemsComponent', 'selector': 'price-schedule-menu-items'},{'name': 'PriceScheduleMenuListComponent', 'selector': 'price-schedule-menu-list'},{'name': 'PriceScheduleMenuOptionsComponent', 'selector': 'price-schedule-menu-options'},{'name': 'PriceScheduleSortComponent', 'selector': 'price-schedule-sort'},{'name': 'PriceTierEditComponent', 'selector': 'app-price-tier-edit'},{'name': 'PriceTierLineEditComponent', 'selector': 'app-price-tier-line-edit'},{'name': 'PriceTierScheduleComponent', 'selector': 'price-tier-schedule'},{'name': 'PriceTiersComponent', 'selector': 'price-tiers-list'},{'name': 'PrinterLocationsComponent', 'selector': 'app-printer-locations'},{'name': 'PrinterLocationSelectionComponent', 'selector': 'app-printer-location-selection'},{'name': 'PrintGroupReceiptComponent', 'selector': 'print-group-receipt'},{'name': 'PrintTemplateComponent', 'selector': 'app-print-template'},{'name': 'PrintTemplatePopUpComponent', 'selector': 'app-print-template-pop-up'},{'name': 'ProducteditComponent', 'selector': 'app-productedit'},{'name': 'ProductFilterComponent', 'selector': 'app-product-filter'},{'name': 'ProductInfoPanelComponent', 'selector': 'app-product-info-panel'},{'name': 'ProductListByBarcodeComponent', 'selector': 'app-product-list-by-barcode'},{'name': 'ProductlistviewComponent', 'selector': 'app-productlistview'},{'name': 'ProductSearchSelector2Component', 'selector': 'product-search-selector2'},{'name': 'ProductSearchSelectorComponent', 'selector': 'app-product-search-selector'},{'name': 'ProductTypeSelectComponent', 'selector': 'product-type-select'},{'name': 'ProfileBillingAddressComponent', 'selector': 'app-profile-billing-address'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'ProfileDemographicsComponent', 'selector': 'app-profile-demographics'},{'name': 'ProfileEditorComponent', 'selector': 'app-profile-editor'},{'name': 'ProfileIDCardInfoComponent', 'selector': 'app-profile-idcard-info'},{'name': 'ProfileListComponent', 'selector': 'app-profile-list'},{'name': 'ProfileLookupComponent', 'selector': 'app-profile-lookup'},{'name': 'ProfileMedInfoComponent', 'selector': 'profile-med-info'},{'name': 'ProfileRolesComponent', 'selector': 'app-profile-roles'},{'name': 'ProfileShippingAddressComponent', 'selector': 'app-profile-shipping-address'},{'name': 'ProgressBarComponent', 'selector': 'app-progress-bar'},{'name': 'ProgressUploaderComponent', 'selector': 'app-progress'},{'name': 'PromptGroupEditComponent', 'selector': 'app-prompt-group-edit'},{'name': 'PromptGroupsComponent', 'selector': 'prompt-groups'},{'name': 'PromptGroupSelectComponent', 'selector': 'prompt-group-select'},{'name': 'PromptInfoPanelComponent', 'selector': 'prompt-info-panel'},{'name': 'PromptItemSelectionComponent', 'selector': 'prompt-item-selection'},{'name': 'PromptItemsSelectedComponent', 'selector': 'prompt-items-selected'},{'name': 'PromptKitsComponent', 'selector': 'prompt-kits'},{'name': 'PromptPanelMenuItemComponent', 'selector': 'prompt-panel-menu-item'},{'name': 'PromptPanelMenuItemsComponent', 'selector': 'prompt-panel-menu-items'},{'name': 'PromptSelectedItemsComponent', 'selector': 'prompt-selected-items'},{'name': 'PromptSubGroupAssociationComponent', 'selector': 'prompt-associations'},{'name': 'PromptSubGroupEditComponent', 'selector': 'app-prompt-sub-group-edit'},{'name': 'PromptSubGroupPanelComponent', 'selector': 'prompt-sub-group-panel'},{'name': 'PromptSubGroupsComponent', 'selector': 'prompt-sub-groups'},{'name': 'PromptWalkThroughComponent', 'selector': 'app-prompt-walk-through'},{'name': 'PSMenuGroupEditComponent', 'selector': 'app-psmenu-group-edit'},{'name': 'PSMenuGroupListComponent', 'selector': 'psmenu-group-list'},{'name': 'PurchaseItemCostHistoryComponent', 'selector': 'purchase-item-cost-history'},{'name': 'PurchaseItemSalesComponent', 'selector': 'purchase-item-sales'},{'name': 'QRCodeTableComponent', 'selector': 'qr-order'},{'name': 'QROrderComponent', 'selector': 'app-qrorder'},{'name': 'QuantiySelectorComponent', 'selector': 'app-quantiy-selector'},{'name': 'QuickPayButtonsComponent', 'selector': 'quick-pay-buttons'},{'name': 'ReceiptLayoutComponent', 'selector': 'app-receipt-layout'},{'name': 'ReceiptViewComponent', 'selector': 'app-receipt-view'},{'name': 'RecieptPopUpComponent', 'selector': 'app-reciept-pop-up'},{'name': 'RegisterAccountExistingUserWithTokenComponent', 'selector': 'app-register-account-existing-user-with-token'},{'name': 'RegisterAccountMainComponent', 'selector': 'app-register-account-main'},{'name': 'ReportGroupSelectorComponent', 'selector': 'psReporting-report-group-selector'},{'name': 'ReportsComponent', 'selector': 'app-reports'},{'name': 'ReportSelectorComponent', 'selector': 'psReporting-report-selector'},{'name': 'ReportTypesComponent', 'selector': 'ps-report-types'},{'name': 'ReportViewerComponent', 'selector': 'app-report-viewer'},{'name': 'RequestMessageComponent', 'selector': 'app-request-message'},{'name': 'RequestMessagesComponent', 'selector': 'app-request-messages'},{'name': 'RequiresSerialComponent', 'selector': 'app-requires-serial'},{'name': 'ResetpasswordComponent', 'selector': 'app-resetpassword'},{'name': 'RetailProductEditComponent', 'selector': 'retail-product-edit'},{'name': 'ReviewComponent', 'selector': 'app-review'},{'name': 'ReviewEditComponent', 'selector': 'app-review-edit'},{'name': 'ReviewsComponent', 'selector': 'app-reviews'},{'name': 'RewardsAvailibleComponent', 'selector': 'app-rewards-availible'},{'name': 'RewardTypeFilterComponent', 'selector': 'app-reward-type-filter'},{'name': 'RewardTypeResultsSelectorComponent', 'selector': 'app-reward-type-panel'},{'name': 'RouteDispatchComponent', 'selector': 'app-route-dispatch'},{'name': 'RouteDispatchDetailsComponent', 'selector': 'app-route-dispatch-details'},{'name': 'RouteDispatchDetailsEditComponent', 'selector': 'app-route-dispatch-details-edit'},{'name': 'RouteDispatchEditComponent', 'selector': 'app-route-dispatch-edit'},{'name': 'RouteDispatchesComponent', 'selector': 'app-route-dispatches'},{'name': 'SalesTaxReportComponent', 'selector': 'sales-tax-report'},{'name': 'SaveChangesButtonComponent', 'selector': 'save-changes-button'},{'name': 'ScaleReaderComponent', 'selector': 'app-scale-reader'},{'name': 'ScaleSettingsComponent', 'selector': 'app-scale-settings'},{'name': 'ScaleValueViewComponent', 'selector': 'scale-value-view'},{'name': 'ScheduledMenuContainerComponent', 'selector': 'scheduled-menu-container'},{'name': 'ScheduledMenuHeaderComponent', 'selector': 'scheduled-menu-header'},{'name': 'ScheduledMenuImageComponent', 'selector': 'scheduled-menu-image'},{'name': 'ScheduledMenuItemComponent', 'selector': 'scheduled-menu-item'},{'name': 'ScheduledMenuItemsComponent', 'selector': 'scheduled-menu-items'},{'name': 'ScheduledMenuListComponent', 'selector': 'scheduled-menu-list'},{'name': 'SearchDebounceInputComponent', 'selector': 'search-debounce-input'},{'name': 'SearchInventoryInputComponent', 'selector': 'search-inventory-input'},{'name': 'SearchPanelComponent', 'selector': 'app-search-panel'},{'name': 'SearchResultsComponent', 'selector': 'app-search-results'},{'name': 'ServiceTypeEditComponent', 'selector': 'app-service-type-edit'},{'name': 'ServiceTypeListComponent', 'selector': 'app-service-type-list'},{'name': 'SettingsComponent', 'selector': 'app-settings'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'SimpleTinyComponent', 'selector': 'simple-tinymce'},{'name': 'SiteEditComponent', 'selector': 'app-site-edit'},{'name': 'SiteEditFormComponent', 'selector': 'app-site-edit-form'},{'name': 'SiteFooterComponent', 'selector': 'app-site-footer'},{'name': 'SitepointsComponent', 'selector': 'app-sitepoints'},{'name': 'SitepurchasesComponent', 'selector': 'app-sitepurchases'},{'name': 'SitesComponent', 'selector': 'app-sites'},{'name': 'SiteSelectorComponent', 'selector': 'app-site-selector'},{'name': 'SoftwareComponent', 'selector': 'app-software-settings'},{'name': 'SortSelectorComponent', 'selector': 'psReporting-sort-selector'},{'name': 'SpeciesListComponent', 'selector': 'app-species-list'},{'name': 'SplashLoadingComponent', 'selector': 'app-splash-loading'},{'name': 'SplitEntrySelectorComponent', 'selector': 'split-entry-selector'},{'name': 'StatusLookupComponent', 'selector': 'app-status-lookup'},{'name': 'StickyHeaderComponent', 'selector': 'app-sticky-header'},{'name': 'StoreCreditEditorComponent', 'selector': 'app-store-credit-editor'},{'name': 'StoreCreditInfoComponent', 'selector': 'store-credit-info'},{'name': 'StoreCreditIssueComponent', 'selector': 'app-store-credit-issue'},{'name': 'StoreCreditListComponent', 'selector': 'app-store-credit-list'},{'name': 'StoreCreditPopUpComponent', 'selector': 'app-store-credit-pop-up'},{'name': 'StoreCreditSearchComponent', 'selector': 'store-credit-search'},{'name': 'StrainBoardComponent', 'selector': 'app-strain-board'},{'name': 'StrainCardComponent', 'selector': 'app-strain-card'},{'name': 'StrainIndicatorComponent', 'selector': 'app-strain-indicator'},{'name': 'StrainPackagesComponent', 'selector': 'app-strain-packages'},{'name': 'StrainProductEditComponent', 'selector': 'app-strain-product-edit'},{'name': 'StrainsAddComponent', 'selector': 'app-strains-add'},{'name': 'StripeCardPayBtnComponent', 'selector': 'stripe-card-pay-btn'},{'name': 'StripeCheckOutComponent', 'selector': 'stripe-check-out'},{'name': 'StripeSettingsComponent', 'selector': 'app-stripe-settings'},{'name': 'SummarycardComponent', 'selector': 'app-summarycard'},{'name': 'TagChipsProductsComponent', 'selector': 'tag-chips-products'},{'name': 'TaxEditComponent', 'selector': 'app-tax-edit'},{'name': 'TaxFieldsComponent', 'selector': 'app-tax-fields'},{'name': 'TaxListComponent', 'selector': 'app-tax-list'},{'name': 'TaxRateListComponent', 'selector': 'app-tax-rate-list'},{'name': 'ThreeCXFabComponent', 'selector': 'app-three-cxfab'},{'name': 'TierItemsComponent', 'selector': 'app-tier-items'},{'name': 'TierMenuComponent', 'selector': 'app-tier-menu'},{'name': 'TierPriceLineComponent', 'selector': 'tier-price-line'},{'name': 'TierPricesComponent', 'selector': 'app-tier-prices'},{'name': 'TiersCardComponent', 'selector': 'app-tiers-card'},{'name': 'TiersWithPricesComponent', 'selector': 'tiers-with-prices'},{'name': 'TimeScheduleComponent', 'selector': 'app-time-schedule'},{'name': 'TipEntryComponent', 'selector': 'tip-entry-amount'},{'name': 'ToggleThemeComponent', 'selector': 'app-toggle-theme'},{'name': 'TriPOSCardPayBtnComponent', 'selector': 'app-tri-poscard-pay-btn'},{'name': 'TriposSettingsComponent', 'selector': 'app-tripos-settings'},{'name': 'TriPosTransactionsComponent', 'selector': 'app-tri-pos-transactions'},{'name': 'TvPriceSpecialsComponent', 'selector': 'app-tv-price-specials'},{'name': 'TvPriceTierMenuItemsComponent', 'selector': 'app-tv-price-tier-menu-items'},{'name': 'TVPriceTiersComponent', 'selector': 'app-tvprice-tiers'},{'name': 'TypeBoardComponent', 'selector': 'app-type-board'},{'name': 'TypeBoardItemsComponent', 'selector': 'app-type-board-items'},{'name': 'TypeFilterComponent', 'selector': 'app-type-filter'},{'name': 'TypeResultsSelectorComponent', 'selector': 'app-type-results-selector'},{'name': 'UIHomePageSettingsComponent', 'selector': 'uihome-page-settings'},{'name': 'UITransactionsComponent', 'selector': 'app-uitransactions'},{'name': 'UnitTypeEditComponent', 'selector': 'app-unit-type-edit'},{'name': 'UnitTypeFieldsComponent', 'selector': 'app-unit-type-fields'},{'name': 'UnitTypeListComponent', 'selector': 'unit-types'},{'name': 'UnitTypePromptComponent', 'selector': 'app-unit-type-prompt'},{'name': 'UnitTypeSelectComponent', 'selector': 'unit-type-select'},{'name': 'UploaderComponent', 'selector': 'app-widget-uploader'},{'name': 'UseGroupTaxAssignmentComponent', 'selector': 'app-use-group-tax-assignment'},{'name': 'UsermessagesComponent', 'selector': 'app-usermessages'},{'name': 'ValueFieldsComponent', 'selector': 'app-value-fields'},{'name': 'ValueFromListSelectorComponent', 'selector': 'value-from-list-selector'},{'name': 'ValueSpinnerComponent', 'selector': 'app-value-spinner'},{'name': 'WebEnabledComponent', 'selector': 'app-web-enabled'},{'name': 'WeekDaySelectionComponent', 'selector': 'app-week-day-selection'},{'name': 'WicEBTCardPayBtnComponent', 'selector': 'wic-ebtcard-pay-btn'},{'name': 'WishlistComponent', 'selector': 'app-wishlist'},{'name': 'YoutubePlayerComponent', 'selector': 'app-youtube-player'},{'name': 'ZoomFloorPlanComponent', 'selector': 'zoom-floor-plan'}];
+    var DIRECTIVES = [{'name': 'AppPasswordMaskDirective', 'selector': '[appAppPasswordMask]'},{'name': 'AutofocusDirective', 'selector': '[appAutoFocusInput]'},{'name': 'CurrencyFormatterDirective', 'selector': '[currencyFormatter]'},{'name': 'DefaultImageDirective', 'selector': 'img[default]'},{'name': 'DisableControlDirective', 'selector': '[disableControl]'},{'name': 'DndDirective', 'selector': '[appDnd]'},{'name': 'Events', 'selector': '[Events]'},{'name': 'FreeDraggingDirective', 'selector': '[appFreeDragging]'},{'name': 'FreeDraggingHandleDirective', 'selector': '[appFreeDraggingHandle]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'InstructionDirective', 'selector': '[appInstruction]'},{'name': 'NgControlAttributeDirective', 'selector': '[formControlName],[formControl]'},{'name': 'NumericDirective', 'selector': '[numeric]'},{'name': 'ResizeDirective', 'selector': '[resize]'},{'name': 'ScrollableDirective', 'selector': '[appScrollable]'},{'name': 'ScrollbarThemeDirectiveDirective', 'selector': '[appScrollbarThemeDirective]'},{'name': 'StickyHeaderDirective', 'selector': '[stickyHeaderDirective]'},{'name': 'UserAuthorizedDirective', 'selector': '[userAuthorized]'}];
     var ACTUAL_COMPONENT = {'name': 'MenuMinimalComponent'};
 </script>
 <script src="../js/tree.js"></script>
@@ -1479,14 +2388,16 @@ li {
 
 
 
-                   
+
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -1498,6 +2409,15 @@ li {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
@@ -1507,8 +2427,8 @@ li {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

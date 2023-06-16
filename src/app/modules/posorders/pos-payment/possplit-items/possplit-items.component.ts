@@ -10,6 +10,7 @@ import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posord
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { group } from 'console';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 export interface   ISelectedItems{
   id        : number;
@@ -103,7 +104,7 @@ export class POSSplitItemsComponent implements OnInit {
     }
 
     subscriber() {
-      this.orderService.currentOrder$.subscribe(data => {
+      this.orderMethodsService.currentOrder$.subscribe(data => {
         if (data) {
           this.order = data;
         }
@@ -113,6 +114,7 @@ export class POSSplitItemsComponent implements OnInit {
     constructor(
       private siteService: SitesService,
       private orderService: OrdersService,
+      public orderMethodsService: OrderMethodsService,
       public printingService: PrintingService,
       private matSnack   : MatSnackBar,
       public fb: UntypedFormBuilder) {
@@ -223,7 +225,7 @@ export class POSSplitItemsComponent implements OnInit {
             return  this.orderService.getOrder(site, this.order.id.toString() , false)
         })).pipe(
           switchMap(data => {
-          this.orderService.updateOrder(data);
+          this.orderMethodsService.updateOrder(data);
           return of(data)
         }));
 
@@ -242,7 +244,7 @@ export class POSSplitItemsComponent implements OnInit {
       const site = this.siteService.getAssignedSite()
       this.order$ = this.orderService.getOrder(site, this.order.id.toString() , false).pipe(
         switchMap(data => {
-          this.orderService.updateOrder(data);
+          this.orderMethodsService.updateOrder(data);
           return of(data)
       }))
     }
@@ -271,7 +273,7 @@ export class POSSplitItemsComponent implements OnInit {
           return this.orderService.getOrder(site, this.order.id.toString(), false);
       })).pipe(switchMap(data => {
         {
-          this.orderService.updateOrder(data)
+          this.orderMethodsService.updateOrder(data)
           return this.orderService.getPOSOrderGroupTotal(site, this.order.id, this.currentGroupID);
         }
       })).pipe(switchMap(data => {

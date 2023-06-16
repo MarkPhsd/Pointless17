@@ -4,6 +4,7 @@ import { IPOSOrder } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'print-group-receipt',
@@ -21,6 +22,7 @@ export class PrintGroupReceiptComponent implements OnInit {
 
   constructor(
     private siteService: SitesService,
+    public orderMethodsService: OrderMethodsService,
     private orderService: OrdersService,
     public printingService: PrintingService,) { }
 
@@ -32,14 +34,17 @@ export class PrintGroupReceiptComponent implements OnInit {
 
   printReceipt()  {
     if (!this.groupID) { this.groupID = 0 }
-    const groupID = this.groupID;
-    const site = this.siteService.getAssignedSite()
-    this.printReceipt$  = this.orderService.getPOSOrderGroupTotal(site, this.orderID, groupID).pipe(
-      switchMap(data => {
-        this.printingService.currentGroupID = groupID;
-        this.orderService.printOrder = data;
-        this.printingService.previewReceipt();
-        return of(data);
+    // const groupID = this.groupID;
+    // const site = this.siteService.getAssignedSite()
+    // this.printReceipt$  = this.orderService.getPOSOrderGroupTotal(site, this.orderID, groupID).pipe(
+    //   switchMap(data => {
+    //     this.printingService.currentGroupID = groupID;
+    //     this.orderMethodsService.printOrder = data;
+    //     this.printingService.previewReceipt();
+    //     return of(data);
+    // }))
+    this.printReceipt$ = this.printingService.printReceipt(this.orderID, this.groupID).pipe(switchMap(data => { 
+      return of(data)
     }))
   }
 

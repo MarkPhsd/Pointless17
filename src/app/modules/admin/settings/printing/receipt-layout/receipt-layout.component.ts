@@ -12,6 +12,7 @@ import { DatePipe } from '@angular/common';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { catchError, switchMap,  } from 'rxjs/operators';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-receipt-layout',
@@ -74,9 +75,9 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     this.site = this.siteService.getAssignedSite();
 
-    let printOrder$  = of(this.orderService.printOrder);
-    if (!this.orderService.printOrder) {
-     printOrder$ = this.orderService.currentOrder$
+    let printOrder$  = of(this.printingService.printOrder);
+    if (!this.printingService.printOrder) {
+     printOrder$ = this.orderMethodsService.currentOrder$
     }
 
     return  printOrder$.pipe(
@@ -125,7 +126,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   }
 
   initTemlplateSubscription() {
-    this._printOrder = this.orderService.printOrder$.subscribe(
+    this._printOrder = this.printingService.printOrder$.subscribe(
       data => {
         if (data) {
           this.printOrder    = data;
@@ -200,6 +201,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
     private printingService : PrintingService,
     private renderingService: RenderingService,
     private orderService    : OrdersService,
+    public orderMethodsService: OrderMethodsService,
     private menuService:     MenuService,
     private fakeDataService : FakeDataService) { }
 

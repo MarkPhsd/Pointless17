@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -42,24 +42,31 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Interfaces</li>
-  <li
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
   >
   IUserExists</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -70,7 +77,7 @@
 
 
 
-        <section>
+        <section data-compodoc="block-index">
             <h3 id="index">Index</h3>
             <table class="table table-sm table-bordered index-table">
                 <tbody>
@@ -86,6 +93,12 @@
                                         <a href="#email" 
 >
                                             email
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#employeeID" 
+>
+                                            employeeID
                                         </a>
                                 </li>
                                 <li>
@@ -145,7 +158,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-properties">
                 <h3 id="inputs">Properties</h3>
                     <table class="table table-sm table-bordered">
                         <tbody>
@@ -170,6 +183,39 @@
                                     <tr>
                                         <td class="col-md-4">
                                             <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="employeeID"></a>
+                                        <span class="name "><b>employeeID</b>
+                                            <a href="#employeeID">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>employeeID:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
 
                                         </td>
                                     </tr>
@@ -448,14 +494,20 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, OnInit } from &#x27;@angular/core&#x27;;
 import { Router } from &#x27;@angular/router&#x27;;
-import { HttpClient, HttpHeaders } from &#x27;@angular/common/http&#x27;;
-import { BehaviorSubject, Observable } from &#x27;rxjs&#x27;;
-import { map } from &#x27;rxjs/operators&#x27;;
-import { environment } from &#x27;src/environments/environment&#x27;;
-import { IUser } from &#x27;src/app/_interfaces&#x27;;
+import { HttpClient} from &#x27;@angular/common/http&#x27;;
+import { BehaviorSubject, Observable, of } from &#x27;rxjs&#x27;;
+import { IUser, UserPreferences } from &#x27;src/app/_interfaces&#x27;;
+import { AppInitService } from &#x27;./app-init.service&#x27;;
+import { PlatformService } from &#x27;./platform.service&#x27;;
+import { ToolBarUIService } from &#x27;./tool-bar-ui.service&#x27;;
+import { LoginComponent } from &#x27;src/app/modules/login&#x27;;
+import { SitesService} from &#x27;src/app/_services/reporting/sites.service&#x27;;
+import { MatDialog } from &#x27;@angular/material/dialog&#x27;;
+import { IUserAuth_Properties } from &#x27;../people/client-type.service&#x27;;
+import { ThemesService } from &#x27;./themes.service&#x27;;
 
 export interface IUserExists {
   id:           number;
@@ -467,159 +519,312 @@ export interface IUserExists {
   phone:        string;
   email:        string;
   message:      string;
+  employeeID:   number;
 }
 
+
+// Public Property UserExists As Boolean
+// Public Property FirstInitial As String
+// Public Property LastInitial As String
+// Public Property UserName As String
+// Public Property phone As String
+// Public Property email As String
+// Public Property type As String
+// Public Property message As String
+
+export interface IDeviceInfo {
+  phoneDevice: boolean;
+  smallDevice: boolean;
+}
 @Injectable({ providedIn: &#x27;root&#x27; })
 
 export class AuthenticationService {
-    private userSubject: BehaviorSubject&lt;IUser&gt;;
-    private userxSubject: BehaviorSubject&lt;IUser&gt;;
-    public  user: Observable&lt;IUser&gt;;
-    public  userx: Observable&lt;IUser&gt;;
-    public  externalAPI: boolean;
 
-    constructor(
-        private router: Router,private http: HttpClient
-    ) {
-        try {
-            this.userxSubject &#x3D; new BehaviorSubject&lt;IUser&gt;(JSON.parse(localStorage.getItem(&#x27;userx&#x27;)));
-            this.userx &#x3D; this.userxSubject.asObservable();
-        } catch (error) {
-        }
+    apiUrl                      : any;
+    public  externalAPI         : boolean;
 
-        try {
-            this.userSubject &#x3D; new BehaviorSubject&lt;IUser&gt;(JSON.parse(localStorage.getItem(&#x27;user&#x27;)));
-            this.user &#x3D; this.userSubject.asObservable();
-        } catch (error) {
+    private _user               &#x3D; new BehaviorSubject&lt;IUser&gt;(null);
+    public  user$               &#x3D; this._user.asObservable();
 
-        }
+    private _userx              &#x3D; new BehaviorSubject&lt;IUser&gt;(null);
+    public  userx$              &#x3D; this._userx.asObservable();
+
+    userAuths            : IUserAuth_Properties;
+    _userAuths           &#x3D; new BehaviorSubject&lt;IUserAuth_Properties&gt;(null);
+    public  userAuths$   &#x3D; this._userAuths.asObservable();
+
+    _deviceInfo: IDeviceInfo;
+
+    updateUserAuths(userAuths : IUserAuth_Properties ) {
+      this._userAuths.next(userAuths)
+      if (userAuths) {
+        this.userAuths &#x3D; userAuths;
+        localStorage.setItem(&#x27;userAuth&#x27;, JSON.stringify(userAuths));
       }
-
-    public setUser(user: IUser){
-        try {
-            user.authdata &#x3D; window.btoa(user.username + &#x27;:&#x27; + user.password);
-            localStorage.setItem(&#x27;user&#x27;, JSON.stringify(user));
-        } catch (error) {
-        }
     }
 
-    public setxUser(user: IUser){
-        try {
-            user.authdata &#x3D; window.btoa(user.username + &#x27;:&#x27; + user.password);
-            localStorage.setItem(&#x27;userx&#x27;, JSON.stringify(user));
-            this.userxSubject.next(user);
-        } catch (error) {
+    updateDeviceInfo(item: IDeviceInfo) {
+      this._deviceInfo &#x3D; item
+    }
 
+    get deviceInfo(): IDeviceInfo {
+      return this._deviceInfo;
+    }
+
+    updateUser(user: IUser) {
+      if (!user ){
+        this._user.next(null)
+        this.siteSerivce._user.next(null)
+        return
+      }
+      if (!user.userPreferences) {
+        user.userPreferences &#x3D; {} as UserPreferences;
+      }
+      if ( !user.userPreferences.firstTime_FilterOrderInstruction) {
+         user.userPreferences.firstTime_FilterOrderInstruction &#x3D; false
+      }
+      if ( !user.userPreferences.firstTime_notifyShowAllOrders) {
+        user.userPreferences.firstTime_notifyShowAllOrders &#x3D; false
+      }
+      this._user.next(user)
+      this.siteSerivce._user.next(user)
+    }
+
+    updatePreferences(preferences: UserPreferences) {
+      // this.themeService.setDarkLight(preferences.darkMode);
+    }
+
+    updateUserX(user: IUser) {
+      this._userx.next(user)
+      try {
+        if (user.preferences) {
+          const pref &#x3D; JSON.parse(user.preferences) as UserPreferences
+          user.userPreferences &#x3D; pref;
         }
+      } catch (error) {
+
+      }
+      localStorage.setItem(&#x27;userx&#x27;, JSON.stringify(user));
+    }
+
+    constructor(
+        private router           : Router,
+        private http             : HttpClient,
+        private appInitService   : AppInitService,
+        private platFormservice  : PlatformService,
+        private toolbarUIService : ToolBarUIService,
+        private siteSerivce      : SitesService,
+        private dialog           : MatDialog,
+    ) {
+
+      this.apiUrl &#x3D; this.appInitService.apiBaseUrl()
+      const userx &#x3D; JSON.parse(JSON.parse(localStorage.getItem(&#x27;userx&#x27;))) as IUser;
+      const user  &#x3D; JSON.parse(localStorage.getItem(&#x27;user&#x27;)) as IUser;
+      const userAuth &#x3D; JSON.parse(localStorage.getItem(&#x27;userAuth&#x27;));
+      this.updateUserAuths(userAuth)
+      this.updateUser(user);
+      this.updateUserX(userx)
     }
 
     public get userValue(): IUser {
-      return this.userSubject.value;
+      if (!this._user.value) {
+        const item &#x3D; localStorage.getItem(&#x27;user&#x27;);
+        if (item) {
+          const nextUser &#x3D;  JSON.parse(item)
+          this._user.next(nextUser)
+          return nextUser
+        }
+        if (!item) {
+          return null
+        }
+      }
+      return this._user.value;
+    }
+
+    public get isAuthorized(): boolean {
+      try {
+        if  (this.userValue  !&#x3D; null) {
+          if  (this.userValue &amp;&amp;
+          (this.userValue.roles &#x3D;&#x3D;&#x3D; &#x27;admin&#x27; || this.userValue.roles &#x3D;&#x3D;&#x3D; &#x27;manager&#x27;)) {
+            return true
+          }
+        }
+      } catch (error) {
+        console.log(&#x27;error&#x27;, error)
+      }
+      return false
+    }
+    public get isAdmin(): boolean {
+      try {
+        if  (this.userValue  !&#x3D; null) {
+          if  (this.userValue &amp;&amp;
+          (this.userValue.roles &#x3D;&#x3D;&#x3D; &#x27;admin&#x27; )) {
+            return true
+          }
+        }
+      } catch (error) {
+        console.log(&#x27;error&#x27;, error)
+      }
+      return false
+    }
+
+    public get isCustomer(): boolean {
+      try {
+        if  (this.userValue  !&#x3D; null) {
+          if  (this.userValue &amp;&amp;
+          (this.userValue.roles &#x3D;&#x3D;&#x3D; &#x27;user&#x27; )) {
+            return true
+          }
+        }
+      } catch (error) {
+        console.log(&#x27;error&#x27;, error)
+      }
+      return false
+    }
+    public get isUser(): boolean {
+      try {
+        if  (this.userValue  !&#x3D; null) {
+          if  (this.userValue &amp;&amp;
+          (this.userValue.roles &#x3D;&#x3D;&#x3D; &#x27;user&#x27; )) {
+            return true
+          }
+        }
+      } catch (error) {
+        console.log(&#x27;error&#x27;, error)
+      }
+      return false
+    }
+    public get isStaff(): boolean {
+      try {
+        if  (this.userValue  !&#x3D; null) {
+          if  (this.userValue &amp;&amp;
+          (this.userValue.roles &#x3D;&#x3D;&#x3D; &#x27;admin&#x27; || this.userValue.roles &#x3D;&#x3D;&#x3D; &#x27;manager&#x27; || this.userValue.roles &#x3D;&#x3D;&#x3D; &#x27;employee&#x27; )) {
+            return true
+          }
+        }
+      } catch (error) {
+        console.log(&#x27;error&#x27;, error)
+      }
+      return false
     }
 
     public get userxValue(): IUser {
-      return this.userxSubject.value;
+      if ( !this._userx.value ) {
+        const user &#x3D; JSON.parse(localStorage.getItem(&#x27;userx&#x27;)) as IUser;
+        user.roles &#x3D; user.roles.toLowerCase();
+      }
+      return this._userx.value;
     }
 
-    login(username: string, password: string) {
-
-      let url &#x3D; &#x60;${environment.apiUrl}/users/authenticate&#x60;
-
-      return this.http.post&lt;any&gt;(url, { username, password })
-          .pipe(map(
-            user &#x3D;&gt; {
-
-            if (user) {
-              localStorage.setItem(&quot;ami21&quot;, &#x27;true&#x27;)
-
-              try {
-                const roles  &#x3D; user.roles.toLowerCase()
-
-                user.authdata &#x3D; window.btoa( &#x60;${username}:${password}&#x60;);
-                localStorage.setItem(&#x27;password&#x27;, JSON.stringify(password))
-                localStorage.setItem(&#x27;user&#x27;, JSON.stringify(user));
-                localStorage.setItem(&#x27;username&#x27;, JSON.stringify(username));
-                localStorage.setItem(&#x27;userID&#x27;, JSON.stringify(user.id));
-                localStorage.setItem(&#x27;roles&#x27;, JSON.stringify(roles));
-                localStorage.setItem(&#x27;metrcUser&#x27;, JSON.stringify(user.metrcUser));
-                localStorage.setItem(&#x27;metrcKey&#x27;, JSON.stringify(user.metrcKey));
-                this.userSubject.next(user);
-
-                return user;
-              } catch (error) {
-                console.log(error)
-                return false;
-              }
-
-            }
-
-          },
-          err &#x3D;&gt; {
-            console.log(err)
-            return err
-          }
-        )
-      )
-   }
+    setUserSubject(user:IUser) {
+      if (!user || !user.password || !user.username) {return}
+      user.authdata &#x3D; window.btoa( &#x60;${user.username}:${user.token}&#x60;);
+      localStorage.setItem(&quot;ami21&quot;, &#x27;true&#x27;);
+      this.updateUser(user);
+    }
 
     logout() {
-        // remove user from local storage to log user out
-        try {
-          this.clearUserSettings();
-        } catch (error) {
-
+      this.clearUserSettings();
+      this.toolbarUIService.updateOrderBar(false)
+      this.toolbarUIService.updateToolBarSideBar(false)
+      if (!this.platFormservice.isApp()) {
+        if (this.appInitService.useAppGate) {
+          try {
+            this.router.navigate([&#x27;/appgate&#x27;]);
+          } catch (error) {
+            console.log(&#x27;log out error&#x27;, error)
+          }
+          return
         }
-        this.router.navigate([&#x27;/app-app-gate&#x27;]);
+      }
+
+      try {
+        this.router.navigate([&#x27;/login&#x27;]);
+      } catch (error) {
+        console.log(&#x27;log out error&#x27;, error)
+      }
+
+      this.clearSubscriptions()
+    }
+
+    openLoginDialog() {
+      let width    &#x3D; &#x27;455px&#x27;
+      let dialogRef: any;
+      dialogRef &#x3D; this.dialog.open(LoginComponent,
+        { width    : width,
+          minWidth : width,
+          height   : &#x27;650px&#x27;,
+          minHeight: &#x27;650px&#x27;,
+          data:    &#x27;openLogin&#x27;
+        },
+      )
+      return dialogRef;
+    }
+
+    clearSubscriptions() {
+      // this.orderService.updateOrderSubscription(null)
+      // this.orderService.updateOrderSearchModel(null);
     }
 
     clearUserSettings(){
       localStorage.removeItem(&quot;ami21&quot;);
       localStorage.removeItem(&#x27;user&#x27;);
-      localStorage.removeItem(&#x27;password&#x27;);
-      localStorage.removeItem(&#x27;username&#x27;);
-      localStorage.removeItem(&#x27;roles&#x27;);
-      localStorage.removeItem(&#x27;userID&#x27;);
-      localStorage.removeItem(&#x27;roles&#x27;);
-      localStorage.removeItem(&#x27;metrcUser&#x27;);
-      localStorage.removeItem(&#x27;metrcKey&#x27;);
-      this.userSubject.next(null);
-      this.userxSubject.next(null);
+      localStorage.removeItem(&#x27;userx&#x27;);
+      localStorage.removeItem(&#x27;userAuth&#x27;)
+      localStorage.removeItem(&#x27;orderSubscription&#x27;);
+      
+      // if (!this.platFormservice.isApp()) {
+      //   localStorage.removeItem(&#x27;storedApiUrl&#x27;);
+      // }
+
+      this.updateUser(null);
+      this.updateUserX(null);
     }
 
     requestUserSetupToken(userName: string): Observable&lt;IUserExists&gt; {
-      let url &#x3D; &#x60;${environment.apiUrl}/users/RequestUserSetupToken&#x60;
+
+      const api &#x3D; this.siteSerivce.getAssignedSite().url
+      const url &#x3D; &#x60;${api}/users/RequestUserSetupToken&#x60;
+
+      console.log(url)
       return  this.http.post&lt;any&gt;(url, {userName: userName})
     };
 
-    requestPasswordResetToken(userName: string): any  {
-      let url &#x3D; &#x60;${environment.apiUrl}/users/RequestPasswordResetToken&#x60;
-      url &#x3D; url + &quot;?username&#x3D;&quot; + userName
-      this.http.post&lt;any&gt;(url, {userName: userName}).subscribe(
-        data &#x3D;&gt; {
-        return data
-      },
-        error &#x3D;&gt; {
-        return error
-      })
+    requestPasswordResetToken(userName: string): Observable&lt;any&gt;  {
+
+      const api &#x3D; this.siteSerivce.getAssignedSite().url
+      const url &#x3D; &#x60;${api}/users/RequestPasswordResetToken&#x60;
+
+      return this.http.post&lt;any&gt;(url, {userName: userName})
     };
 
     assignUserNameAndPassword(user: IUser): Observable&lt;IUserExists&gt;  {
-      let url &#x3D; &#x60;${environment.apiUrl}/users/CreateNewUserName&#x60;
-      console.log(user)
+
+      const api &#x3D; this.siteSerivce.getAssignedSite().url
+      const url &#x3D; &#x60;${api}/users/CreateNewUserName&#x60;
+
       return  this.http.post&lt;any&gt;(url, user)
     };
 
-    updatePassword(user: IUser): any {
-      let url &#x3D; &#x60;${environment.apiUrl}/users/updatePassword&#x60;
-      return this.http.post&lt;any&gt;(url, { token: user.resetCode, userName: user.username, password: user.password } )
-      .subscribe(
-          data &#x3D;&gt; {
-          return &quot;Password updated.&quot;;
-        },
-          error &#x3D;&gt; {
-          return error
-        }
-      )
+    createTempUser() : Observable&lt;any&gt; {
+      //check local storage.
+      //if local user exists then return that as observable
+
+      const user &#x3D; localStorage.getItem(&#x27;user&#x27;);
+      if (user) {
+        return of(user);
+      }
+
+      const api &#x3D; this.siteSerivce.getAssignedSite().url
+      const url &#x3D; &#x60;${api}/users/CreateTempUser&#x60;
+      return  this.http.get&lt;any&gt;(url);
+
+    }
+
+    updatePassword(user: IUser): Observable&lt;any&gt; {
+      const api &#x3D; this.siteSerivce.getAssignedSite().url
+      const url &#x3D; &#x60;${api}/users/updatePassword&#x60;
+      return  this.http.post&lt;any&gt;(url, user)
     }
 
 }
@@ -628,14 +833,15 @@ export class AuthenticationService {
 </div>
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -647,6 +853,15 @@ export class AuthenticationService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
@@ -656,8 +871,8 @@ export class AuthenticationService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

@@ -32,11 +32,14 @@ export interface IUserAuth_Properties {
 
 // 'inventory work
   adjustInventory     : boolean;
+  intakeInventory     : boolean;
+  adjustInventoryCount: boolean;
+  deleteInventory: boolean;
 
 // 'product work
-  adjustInventoryCount: boolean;
+  editProduct         : boolean;
   adjustProductCount  : boolean;
-
+  deleteProduct: boolean;
   // 'add non customer types
   addEmployee         : boolean;
   changeClientType    : boolean;
@@ -50,8 +53,7 @@ export interface IUserAuth_Properties {
 
   userAssignedBalanceSheet : boolean;
   searchBalanceSheets      : boolean;
-  deleteInventory: boolean;
-  deleteProduct: boolean;
+
   deleteEmployee: boolean;
 
   uploadPictures: boolean;

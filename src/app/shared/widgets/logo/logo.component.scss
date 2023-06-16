@@ -1,7 +1,11 @@
 .small {
-  width: 35px;
+  // width: 35px;
+  min-width: 25px;
+  min-height: 25px;
 }
 
 .large {
   width: 125px;
+  min-width: 125px;
+  min-height: 125px;
 }

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit,Output,EventEmitter } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog,  } from '@angular/material/dialog';
 import { Observable,switchMap,of   } from 'rxjs';
 import { StripeCheckOutComponent } from 'src/app/modules/admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
 import { IPOSOrder } from 'src/app/_interfaces';
@@ -34,7 +34,7 @@ export class StripeCardPayBtnComponent implements OnInit {
     private uISettingsService: UISettingsService,
     private sitesService: SitesService,
     private dialog: MatDialog,
-    private paymentsMethodsService: PaymentsMethodsProcessService,
+    private paymentsMethodsProcessService: PaymentsMethodsProcessService,
     private orderMethodsService: OrderMethodsService,
     private paymentMethodService: PaymentMethodsService,
     public  platFormService : PlatformService,) { }
@@ -88,7 +88,7 @@ export class StripeCardPayBtnComponent implements OnInit {
     )
     dialogRef.afterClosed().subscribe(result => {
       if (!result) { return }
-      this.orderMethodsService.processResults(result, this.paymentMethod);
+      this.paymentsMethodsProcessService.processResults(result, this.paymentMethod);
       this.resetPaymentMethod();
     });
 

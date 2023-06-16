@@ -164,7 +164,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
     initSubscriptions() {
       try {
-        this._order = this.orderService.currentOrder$.subscribe( data => {
+        this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
           this.order = data
         })
       } catch (error) {

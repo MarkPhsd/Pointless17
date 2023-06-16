@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >ReportingService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >ReportingService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -78,6 +85,9 @@
                         <ul class="index-list">
                             <li>
                                 <a href="#anyvalues" >anyvalues</a>
+                            </li>
+                            <li>
+                                <a href="#apiUrl" >apiUrl</a>
                             </li>
                             <li>
                                 <a href="#chartData" >chartData</a>
@@ -125,9 +135,6 @@
                                 <a href="#sales" >sales</a>
                             </li>
                             <li>
-                                <a href="#SalesAPIURL" >SalesAPIURL</a>
-                            </li>
-                            <li>
                                 <a href="#salesPayments" >salesPayments</a>
                             </li>
                             <li>
@@ -155,13 +162,70 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                <a href="#_getDateSeriesWithHours" >_getDateSeriesWithHours</a>
+                            </li>
+                            <li>
+                                <a href="#addDates" >addDates</a>
+                            </li>
+                            <li>
+                                <a href="#addDays" >addDays</a>
+                            </li>
+                            <li>
+                                <a href="#dateConvert" >dateConvert</a>
+                            </li>
+                            <li>
                                 <a href="#getDataSeriesValues" >getDataSeriesValues</a>
                             </li>
                             <li>
                                 <a href="#getDateSeries" >getDateSeries</a>
                             </li>
                             <li>
+                                <a href="#getDateSeriesWithHours" >getDateSeriesWithHours</a>
+                            </li>
+                            <li>
+                                <a href="#getDateSeriesWithValue" >getDateSeriesWithValue</a>
+                            </li>
+                            <li>
+                                <a href="#getDateString" >getDateString</a>
+                            </li>
+                            <li>
+                                <a href="#getDaysBackUsingCurrentDate" >getDaysBackUsingCurrentDate</a>
+                            </li>
+                            <li>
                                 <a href="#getHourlySeries" >getHourlySeries</a>
+                            </li>
+                            <li>
+                                <a href="#getHoursBackUsingCurrentDate" >getHoursBackUsingCurrentDate</a>
+                            </li>
+                            <li>
+                                <a href="#getMetrcsForPO" >getMetrcsForPO</a>
+                            </li>
+                            <li>
+                                <a href="#getMonthsBackUsingCurrentDate" >getMonthsBackUsingCurrentDate</a>
+                            </li>
+                            <li>
+                                <a href="#getMonthSeries" >getMonthSeries</a>
+                            </li>
+                            <li>
+                                <a href="#getMonthSeriesByCount" >getMonthSeriesByCount</a>
+                            </li>
+                            <li>
+                                <a href="#getMonthSeriesValueByCount" >getMonthSeriesValueByCount</a>
+                            </li>
+                            <li>
+                                <a href="#getMonthSeriesWithValue" >getMonthSeriesWithValue</a>
+                            </li>
+                            <li>
+                                <a href="#getMonthString" >getMonthString</a>
+                            </li>
+                            <li>
+                                <a href="#getMonthWithDatesSeries" >getMonthWithDatesSeries</a>
+                            </li>
+                            <li>
+                                <a href="#getPurchaseOrderHelper" >getPurchaseOrderHelper</a>
+                            </li>
+                            <li>
+                                <a href="#getReOrderList" >getReOrderList</a>
                             </li>
                             <li>
                                 <a href="#getResults" >getResults</a>
@@ -176,11 +240,32 @@
                                 <a href="#getSiteStatus" >getSiteStatus</a>
                             </li>
                             <li>
+                                <a href="#getWeeksBackUsingCurrentDate" >getWeeksBackUsingCurrentDate</a>
+                            </li>
+                            <li>
+                                <a href="#getYearsBackUsingCurrentDate" >getYearsBackUsingCurrentDate</a>
+                            </li>
+                            <li>
+                                <a href="#getYearSeries" >getYearSeries</a>
+                            </li>
+                            <li>
+                                <a href="#listofProductsInSales" >listofProductsInSales</a>
+                            </li>
+                            <li>
+                                <a href="#listofSumProductsInSales" >listofSumProductsInSales</a>
+                            </li>
+                            <li>
+                                <a href="#push24HoursToDateArray" >push24HoursToDateArray</a>
+                            </li>
+                            <li>
                                 <a href="#setFilterToday" >setFilterToday</a>
                             </li>
                             <li>
                                     <span class="modifier">Private</span>
                                 <a href="#tempCode" >tempCode</a>
+                            </li>
+                            <li>
+                                <a href="#updateDateRange" >updateDateRange</a>
                             </li>
                         </ul>
                     </td>
@@ -194,18 +279,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>, sitesService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>)</code>
+<code>constructor(http: HttpClient, appInitService: <a href="../injectables/AppInitService.html" target="_self">AppInitService</a>, dateHelpers: <a href="../injectables/ReportDateHelpersService.html" target="_self">ReportDateHelpersService</a>, datePipe: DatePipe, dateHelper: <a href="../injectables/DateHelperService.html" target="_self">DateHelperService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:50</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="76" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:76</a></div>
                             </td>
                         </tr>
 
@@ -226,7 +311,7 @@
                                                         <td>http</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                                    <code>HttpClient</code>
                                                         </td>
                                                   
                                                     <td>
@@ -235,10 +320,10 @@
                                                     
                                                 </tr>
                                                 <tr>
-                                                        <td>auth</td>
+                                                        <td>appInitService</td>
                                                   
                                                         <td>
-                                                                        <code><a href="../injectables/AuthenticationService.html" target="_self" >AuthenticationService</a></code>
+                                                                        <code><a href="../injectables/AppInitService.html" target="_self" >AppInitService</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -247,10 +332,34 @@
                                                     
                                                 </tr>
                                                 <tr>
-                                                        <td>sitesService</td>
+                                                        <td>dateHelpers</td>
                                                   
                                                         <td>
-                                                                        <code><a href="../injectables/SitesService.html" target="_self" >SitesService</a></code>
+                                                                        <code><a href="../injectables/ReportDateHelpersService.html" target="_self" >ReportDateHelpersService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>datePipe</td>
+                                                  
+                                                        <td>
+                                                                    <code>DatePipe</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dateHelper</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/DateHelperService.html" target="_self" >DateHelperService</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -267,11 +376,323 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_getDateSeriesWithHours"></a>
+                    <span class="name">
+                        <span ><b>_getDateSeriesWithHours</b></span>
+                        <a href="#_getDateSeriesWithHours"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>_getDateSeriesWithHours(start: <a href="../s/s.html" target="_self">string</a>, end: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="236"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:236</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>start</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>end</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/rowValue.html" target="_self" >rowValue[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addDates"></a>
+                    <span class="name">
+                        <span ><b>addDates</b></span>
+                        <a href="#addDates"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addDates(date: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank">Date</a>, days: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="259"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:259</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>date</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>days</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addDays"></a>
+                    <span class="name">
+                        <span ><b>addDays</b></span>
+                        <a href="#addDays"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addDays(date: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank">Date</a>, days: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="254"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:254</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>date</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>days</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dateConvert"></a>
+                    <span class="name">
+                        <span ><b>dateConvert</b></span>
+                        <a href="#dateConvert"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>dateConvert(dateString: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="379"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:379</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>dateString</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -292,8 +713,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="129"
-                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:129</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="358"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:358</a></div>
                 </td>
             </tr>
 
@@ -303,6 +724,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -360,8 +782,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="66"
-                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:66</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="102"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:102</a></div>
                 </td>
             </tr>
 
@@ -371,6 +793,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -424,6 +847,298 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="getDateSeriesWithHours"></a>
+                    <span class="name">
+                        <span ><b>getDateSeriesWithHours</b></span>
+                        <a href="#getDateSeriesWithHours"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getDateSeriesWithHours(start: <a href="../s/s.html" target="_self">string</a>, end: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="228"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:228</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>start</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>end</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/rowValue.html" target="_self" >rowValue[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDateSeriesWithValue"></a>
+                    <span class="name">
+                        <span ><b>getDateSeriesWithValue</b></span>
+                        <a href="#getDateSeriesWithValue"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getDateSeriesWithValue(start: <a href="../s/s.html" target="_self">string</a>, end: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="285"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:285</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>start</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>end</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/rowValue.html" target="_self" >rowValue[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDateString"></a>
+                    <span class="name">
+                        <span ><b>getDateString</b></span>
+                        <a href="#getDateString"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getDateString(dateString)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="276"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:276</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>dateString</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDaysBackUsingCurrentDate"></a>
+                    <span class="name">
+                        <span ><b>getDaysBackUsingCurrentDate</b></span>
+                        <a href="#getDaysBackUsingCurrentDate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getDaysBackUsingCurrentDate(value)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="399"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:399</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>value</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IDateRange.html" target="_self" >IDateRange</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="getHourlySeries"></a>
                     <span class="name">
                         <span ><b>getHourlySeries</b></span>
@@ -440,8 +1155,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="61"
-                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:61</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="97"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:97</a></div>
                 </td>
             </tr>
 
@@ -451,6 +1166,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -478,7 +1194,862 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+                        <b>Returns : </b>    <code>{}</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getHoursBackUsingCurrentDate"></a>
+                    <span class="name">
+                        <span ><b>getHoursBackUsingCurrentDate</b></span>
+                        <a href="#getHoursBackUsingCurrentDate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getHoursBackUsingCurrentDate(value)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="389"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:389</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>value</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IDateRange.html" target="_self" >IDateRange</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMetrcsForPO"></a>
+                    <span class="name">
+                        <span ><b>getMetrcsForPO</b></span>
+                        <a href="#getMetrcsForPO"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMetrcsForPO(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, search: <a href="../interfaces/POSItemSearchModel.html" target="_self">POSItemSearchModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="456"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:456</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>search</td>
+                                    <td>
+                                                <code><a href="../interfaces/POSItemSearchModel.html" target="_self" >POSItemSearchModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/HistoricalSalesPurchaseOrderMetrcs.html" target="_self" >Observable&lt;HistoricalSalesPurchaseOrderMetrcs&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMonthsBackUsingCurrentDate"></a>
+                    <span class="name">
+                        <span ><b>getMonthsBackUsingCurrentDate</b></span>
+                        <a href="#getMonthsBackUsingCurrentDate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMonthsBackUsingCurrentDate(value)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="419"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:419</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>value</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IDateRange.html" target="_self" >IDateRange</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMonthSeries"></a>
+                    <span class="name">
+                        <span ><b>getMonthSeries</b></span>
+                        <a href="#getMonthSeries"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMonthSeries(value)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="139"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:139</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>value</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>{}</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMonthSeriesByCount"></a>
+                    <span class="name">
+                        <span ><b>getMonthSeriesByCount</b></span>
+                        <a href="#getMonthSeriesByCount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMonthSeriesByCount(dateStarting: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank">Date</a>, count: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, foward: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="157"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:157</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>dateStarting</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>count</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>foward</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMonthSeriesValueByCount"></a>
+                    <span class="name">
+                        <span ><b>getMonthSeriesValueByCount</b></span>
+                        <a href="#getMonthSeriesValueByCount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMonthSeriesValueByCount(dateStarting: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank">Date</a>, count: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, foward: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="175"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:175</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>dateStarting</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>count</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>foward</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/rowValue.html" target="_self" >rowValue[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMonthSeriesWithValue"></a>
+                    <span class="name">
+                        <span ><b>getMonthSeriesWithValue</b></span>
+                        <a href="#getMonthSeriesWithValue"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMonthSeriesWithValue(dateStarting: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank">Date</a>, count: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, foward: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="301"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:301</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>dateStarting</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>count</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>foward</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/rowValue.html" target="_self" >rowValue[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMonthString"></a>
+                    <span class="name">
+                        <span ><b>getMonthString</b></span>
+                        <a href="#getMonthString"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMonthString(month: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank">Date</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="322"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:322</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>month</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMonthWithDatesSeries"></a>
+                    <span class="name">
+                        <span ><b>getMonthWithDatesSeries</b></span>
+                        <a href="#getMonthWithDatesSeries"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMonthWithDatesSeries(start: <a href="../s/s.html" target="_self">string</a>, end: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="202"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:202</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>start</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>end</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>{}</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPurchaseOrderHelper"></a>
+                    <span class="name">
+                        <span ><b>getPurchaseOrderHelper</b></span>
+                        <a href="#getPurchaseOrderHelper"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPurchaseOrderHelper(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, search: <a href="../interfaces/POSItemSearchModel.html" target="_self">POSItemSearchModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="484"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:484</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>search</td>
+                                    <td>
+                                                <code><a href="../interfaces/POSItemSearchModel.html" target="_self" >POSItemSearchModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IReportItemSales[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getReOrderList"></a>
+                    <span class="name">
+                        <span ><b>getReOrderList</b></span>
+                        <a href="#getReOrderList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getReOrderList(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="470"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:470</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;MenuItem[]&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -508,8 +2079,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="87"
-                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:87</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="327"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:327</a></div>
                 </td>
             </tr>
 
@@ -519,6 +2090,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -605,15 +2177,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getSales(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, dateFrom: <a href="../s/s.html" target="_self">string</a>, dateTo: <a href="../s/s.html" target="_self">string</a>, groupBY: <a href="../s/s.html" target="_self">string</a>)</code>
+<code>getSales(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, dateFrom: <a href="../s/s.html" target="_self">string</a>, dateTo: <a href="../s/s.html" target="_self">string</a>, groupBY: <a href="../s/s.html" target="_self">string</a>, zrunID?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="98"
-                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:98</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="338"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:338</a></div>
                 </td>
             </tr>
 
@@ -623,6 +2195,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -676,6 +2249,18 @@
 
                                     <td>
                                         No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>zrunID</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
                                     </td>
 
 
@@ -716,8 +2301,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="117"
-                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:117</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="444"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:444</a></div>
                 </td>
             </tr>
 
@@ -727,6 +2312,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -790,7 +2376,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../interfaces/ISalesReportingOrdersSummary.html" target="_self" >Observable&lt;ISalesReportingOrdersSummary[]&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ISalesReportingOrdersSummary[]&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -820,8 +2406,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="93"
-                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:93</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="333"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:333</a></div>
                 </td>
             </tr>
 
@@ -831,6 +2417,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -872,6 +2459,413 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="getWeeksBackUsingCurrentDate"></a>
+                    <span class="name">
+                        <span ><b>getWeeksBackUsingCurrentDate</b></span>
+                        <a href="#getWeeksBackUsingCurrentDate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getWeeksBackUsingCurrentDate(value)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="409"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:409</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>value</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IDateRange.html" target="_self" >IDateRange</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getYearsBackUsingCurrentDate"></a>
+                    <span class="name">
+                        <span ><b>getYearsBackUsingCurrentDate</b></span>
+                        <a href="#getYearsBackUsingCurrentDate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getYearsBackUsingCurrentDate(value)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="433"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:433</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>value</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IDateRange.html" target="_self" >IDateRange</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getYearSeries"></a>
+                    <span class="name">
+                        <span ><b>getYearSeries</b></span>
+                        <a href="#getYearSeries"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getYearSeries(value)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="119"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:119</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>value</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>{}</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="listofProductsInSales"></a>
+                    <span class="name">
+                        <span ><b>listofProductsInSales</b></span>
+                        <a href="#listofProductsInSales"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>listofProductsInSales(sales: <a href="../s/s.html" target="_self">IReportItemSales[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="499"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:499</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>sales</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >IReportItemSales[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="listofSumProductsInSales"></a>
+                    <span class="name">
+                        <span ><b>listofSumProductsInSales</b></span>
+                        <a href="#listofSumProductsInSales"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>listofSumProductsInSales(sales: <a href="../s/s.html" target="_self">IReportItemSales[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="509"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:509</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>sales</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >IReportItemSales[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="push24HoursToDateArray"></a>
+                    <span class="name">
+                        <span ><b>push24HoursToDateArray</b></span>
+                        <a href="#push24HoursToDateArray"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>push24HoursToDateArray(date, dateSeries)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="264"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:264</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>date</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>dateSeries</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="setFilterToday"></a>
                     <span class="name">
                         <span ><b>setFilterToday</b></span>
@@ -888,8 +2882,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="147"
-                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:147</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="370"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:370</a></div>
                 </td>
             </tr>
 
@@ -927,8 +2921,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="55"
-                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:55</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="91"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:91</a></div>
                 </td>
             </tr>
 
@@ -944,8 +2938,77 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateDateRange"></a>
+                    <span class="name">
+                        <span ><b>updateDateRange</b></span>
+                        <a href="#updateDateRange"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateDateRange(dateRange: <a href="../interfaces/IDateRange.html" target="_self">IDateRange</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="87"
+                            class="link-to-prism">src/app/_services/reporting/reporting.service.ts:87</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>dateRange</td>
+                                    <td>
+                                                <code><a href="../interfaces/IDateRange.html" target="_self" >IDateRange</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>
-            <section>
+            <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
@@ -969,7 +3032,33 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:32</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:58</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="apiUrl"></a>
+                    <span class="name">
+                        <span ><b>apiUrl</b></span>
+                        <a href="#apiUrl"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="76" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:76</a></div>
                         </td>
                     </tr>
 
@@ -995,7 +3084,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:40</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:65</a></div>
                         </td>
                     </tr>
 
@@ -1021,7 +3110,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:47</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="72" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:72</a></div>
                         </td>
                     </tr>
 
@@ -1047,7 +3136,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:39</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:64</a></div>
                         </td>
                     </tr>
 
@@ -1073,7 +3162,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:26</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:53</a></div>
                         </td>
                     </tr>
 
@@ -1099,7 +3188,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:35</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:60</a></div>
                         </td>
                     </tr>
 
@@ -1125,7 +3214,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:22</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:49</a></div>
                         </td>
                     </tr>
 
@@ -1151,7 +3240,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:25</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:52</a></div>
                         </td>
                     </tr>
 
@@ -1177,7 +3266,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:23</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:50</a></div>
                         </td>
                     </tr>
 
@@ -1203,12 +3292,12 @@
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Default value : </i><code>&quot;Date&quot;</code>
+                        <i>Default value : </i><code>&quot;date&quot;</code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:30</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:56</a></div>
                         </td>
                     </tr>
 
@@ -1234,7 +3323,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:49</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:74</a></div>
                         </td>
                     </tr>
 
@@ -1260,7 +3349,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:50</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="75" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:75</a></div>
                         </td>
                     </tr>
 
@@ -1286,7 +3375,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:44</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:69</a></div>
                         </td>
                     </tr>
 
@@ -1312,7 +3401,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:41</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:66</a></div>
                         </td>
                     </tr>
 
@@ -1343,7 +3432,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:19</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:47</a></div>
                         </td>
                     </tr>
 
@@ -1369,32 +3458,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:36</a></div>
-                        </td>
-                    </tr>
-
-
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="SalesAPIURL"></a>
-                    <span class="name">
-                        <span ><b>SalesAPIURL</b></span>
-                        <a href="#SalesAPIURL"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Default value : </i><code>environment.apiUrl + this.Parameter</code>
-                    </td>
-                </tr>
-                    <tr>
-                        <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:20</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:61</a></div>
                         </td>
                     </tr>
 
@@ -1420,7 +3484,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:46</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="71" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:71</a></div>
                         </td>
                     </tr>
 
@@ -1446,7 +3510,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:37</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:62</a></div>
                         </td>
                     </tr>
 
@@ -1472,7 +3536,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:38</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:63</a></div>
                         </td>
                     </tr>
 
@@ -1498,7 +3562,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:43</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="68" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:68</a></div>
                         </td>
                     </tr>
 
@@ -1524,7 +3588,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:28</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/_services/reporting/reporting.service.ts:54</a></div>
                         </td>
                     </tr>
 
@@ -1536,76 +3600,110 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
 import { HttpClient, HttpHeaders,  } from &#x27;@angular/common/http&#x27;;
-import { AuthenticationService } from &#x27;src/app/_services/system/authentication.service&#x27;;
 import { Observable, } from &#x27;rxjs&#x27;;
 import { ISalesPayments, ISalesReportingOrdersSummary, IUser, ISite, ISalesReportingFilter }   from &#x27;src/app/_interfaces&#x27;;
-import { environment } from &#x27;src/environments/environment&#x27;;
-import { InterceptorSkipHeader } from &#x27;../../_http-interceptors/basic-auth.interceptor&#x27;;
-import { formatDate } from &#x27;@angular/common&#x27;;
-import { SitesService } from &#x27;./sites.service&#x27;;
-import { first } from &#x27;rxjs/operators&#x27;;
+import { AppInitService } from &#x27;../system/app-init.service&#x27;;
+import { IDateRange, ReportDateHelpersService } from &#x27;./report-date-helpers.service&#x27;;
+import { formatDate, DatePipe } from &#x27;@angular/common&#x27;;
+import { IReportItemSales, IReportItemSaleSummary, ItemPOMetrics, POSItemSearchModel } from &#x27;./reporting-items-sales.service&#x27;;
+import { DateHelperService } from &#x27;./date-helper.service&#x27;;
+import { MenuItem } from &#x27;electron&#x27;;
 
-
+// this.symbolSearchService.getSymbolData(&#x27;xl&#x27;)
+// .switchMap(stock &#x3D;&gt; {
+//   this.stock &#x3D; stock;
+//   return Observable.combineLatest(
+//     this.symbolSearchService.getResearchReportData(stock),
+//     this.symbolSearchService.getPGRDataAndContextSummary(stock)
+//   )})
+// .subscribe(
+//   [report, summary] &#x3D;&gt; {
+//     this.researchReport &#x3D; report;
+//     this.contextSummary &#x3D; summary;
+//   },
+//   err &#x3D;&gt; this.sharedService.handleError
+// );
+export interface HistoricalSalesPurchaseOrderMetrcs {
+  lastWeek : number;
+  lastMonth : number;
+  lastYear : number;
+  lastYearMonth : number;
+  lastYearSameWeekTotal : number;
+  thisMonthsTotal: number;
+ }
+export interface rowValue {
+  date: string;
+  value: number;
+  year: number;
+  month: number;
+}
 @Injectable({
   providedIn: &#x27;root&#x27;
 })
 export class ReportingService {
 
+
   ///salespayments?DateFrom&#x3D;4/1/2019&amp;DateTo&#x3D;5/1/2019&amp;GroupBy&#x3D;Date
-  Parameter &#x3D; &#x27;&#x27;
-  SalesAPIURL &#x3D; environment.apiUrl + this.Parameter;
+  Parameter   &#x3D; &#x27;&#x27;
 
-  dateFrom: string; //From and to Dates for Reports.
-  dateTo: string;
+  dateFrom    : string; //From and to Dates for Reports.
+  dateTo      : string;
 
-  dateSeries: any[]; //getDateSeries(datefrom, dateTo) retrieved to do series labeling in charts.
-  dataSeries: any[];
+  dateSeries  : any[]; //getDateSeries(datefrom, dateTo) retrieved to do series labeling in charts.
+  dataSeries  : any[];
+  users       : any[];
 
-  users: any[];
+  groupBy     &#x3D; &quot;date&quot;;
 
-  groupBy: string &#x3D; &quot;Date&quot;;
-
-  anyvalues: any;
-  //data Values - charts need a Data[] format
+  anyvalues   : any;   //data Values - charts need a Data[] format
 
   dataSeriesValues: any[];
-  sales: any[];
+  sales       : any[];
   salesResults: any[];
-  salesValues: any[];
-  chartValues: any[];
-  chartData: any[];
-  label: string;
+  salesValues : any[];
+  chartValues : any[];
+  chartData   : any[];
+  label       : string;
 
-  seriesNames: any[];
+  seriesNames : any[];
   jsonResponse: any;
 
-  salesPayments: ISalesPayments[];
-  chartOptions: {};
+  salesPayments : ISalesPayments[];
+  chartOptions  : {};
 
-  hourFrom: number;
-  hourTo: number;
+  hourFrom      : number;
+  hourTo        : number;
+  apiUrl        : any;
 
-  constructor( private http: HttpClient, private auth: AuthenticationService,
-               private sitesService: SitesService ) { }
+  constructor( private http            : HttpClient,
+               private appInitService  : AppInitService,
+               private dateHelpers     : ReportDateHelpersService,
+               private datePipe        : DatePipe,
+               private dateHelper      : DateHelperService,
+  ) {
+    this.apiUrl   &#x3D; this.appInitService.apiBaseUrl()
+  }
+
+  updateDateRange(dateRange: IDateRange) {
+
+  }
 
   private tempCode(){
-      let newDate &#x3D; new Date();
-      this.dateTo &#x3D;  new Date(newDate.setDate(newDate.getDate()+1)).toDateString();
-      this.dateFrom &#x3D;  new Date(newDate.setMonth(newDate.getMonth()-1)).toDateString();
+    let newDate &#x3D; new Date();
+    this.dateTo &#x3D;  new Date(newDate.setDate(newDate.getDate()+1)).toDateString();
+    this.dateFrom &#x3D;  new Date(newDate.setMonth(newDate.getMonth()-1)).toDateString();
   }
 
   getHourlySeries(values: number) {
     this.dateSeries.push(values)
+    return this.dateSeries
   }
 
-
   getDateSeries(start: string, end: string) {
-
     this.dateSeries &#x3D; [];
-
     let dateStart: Date;
     let dateEnd: Date;
 
@@ -1613,14 +3711,220 @@ export class ReportingService {
     dateEnd &#x3D; new Date(end);
 
     for (var d &#x3D; dateStart; d &lt;&#x3D; dateEnd; d.setDate(d.getDate() + 1)) {
+      var loopDay &#x3D; new Date(d);
+      this.dateSeries.push(
+        this.datePipe.transform(loopDay, &#x27;MM/dd/yyyy&#x27;)
+      )
+    }
+    return this.dateSeries
+  }
 
-        var loopDay &#x3D; new Date(d);
+  getYearSeries(value) {
+    this.dateSeries &#x3D; [];
+    let dateStart: Date;
+    let dateEnd: Date;
 
-        this.dateSeries.push(formatDate(loopDay, &#x27;yyyy/MM/dd&#x27;, &#x27;en-US&#x27;))
+    var d &#x3D; new Date(new Date().getFullYear(), 0, 1);
+
+    //we will establish 5 years as the default;
+    dateStart &#x3D; new Date(value);
+    dateEnd &#x3D; new Date();
+
+    for (var d &#x3D; dateStart; d &lt;&#x3D; dateEnd; d.setDate(d.getDate() + 1)) {
+      var loopDay &#x3D; new Date(d);
+      this.dateSeries.push(
+        this.datePipe.transform(loopDay, &#x27;MM/dd/yyyy&#x27;)
+      )
+    }
+    return this.dateSeries
+  }
+
+  getMonthSeries(value) {
+    this.dateSeries &#x3D; [];
+    let dateStart: Date;
+    let dateEnd: Date;
+    if (!value) value &#x3D; 12
+    //we will establish 12 years as the default;
+    // dateStart &#x3D; new Date(start);
+    // dateEnd &#x3D; new Date(end);
+
+    for (var d &#x3D; dateStart; d &lt;&#x3D; dateEnd; d.setDate(d.getDate() + 1)) {
+      var loopDay &#x3D; new Date(d);
+      this.dateSeries.push(
+        this.datePipe.transform(loopDay, &#x27;MM/dd/yyyy&#x27;)
+      )
+    }
+    return this.dateSeries
+  }
+
+  getMonthSeriesByCount(dateStarting: Date, count: number, foward: boolean): string[] {
+    const series &#x3D; [];
+    const month &#x3D; this.getMonthString(dateStarting);
+    series.push(month);
+    for (let i &#x3D; 1; i &lt; count; i +&#x3D; 1) {
+      let y &#x3D; i;
+      if (!foward) {
+        y &#x3D; -i;
+      }
+      let newDate &#x3D; new Date(
+        dateStarting.setMonth(dateStarting.getMonth() + y)
+      );
+      let month &#x3D; this.getMonthString(newDate);
+      series.push(month);
+    }
+    return series;
+  }
+
+ getMonthSeriesValueByCount(dateStarting: Date, count: number, foward: boolean): rowValue[] {
+   const series &#x3D; [];
+    const month &#x3D; this.getMonthString(dateStarting);
+
+    series.push(month);
+    for (let i &#x3D; 1; i &lt; count; i +&#x3D; 1) {
+      let y &#x3D; i;
+      if (!foward) {
+        y &#x3D; -i;
+      }
+      // let newDate &#x3D; new Date(
+      //   dateStarting.setMonth(dateStarting.getMonth() + y)
+      // );
+      const date &#x3D; new Date(month)
+      const result &#x3D; this.dateHelper.add(&#x27;month&#x27;, y, date)
+
+      // let month &#x3D; this.getMonthString(newDate);
+      const dateValue &#x3D; this.datePipe.transform(result, &#x27;MM/dd/yyyy&#x27;)
+      const yearValue &#x3D; this.datePipe.transform(result, &#x27;yyyy&#x27;)
+      const monthValue &#x3D; this.datePipe.transform(result, &#x27;MM&#x27;)
+      const item &#x3D; {date: dateValue, value: 0, year: +yearValue, month: +monthValue }
+      series.push(item);
     }
 
-    return this.dateSeries
+    return series;
+}
 
+  getMonthWithDatesSeries(start: string, end: string) {
+    this.dateSeries &#x3D; [];
+    // let dateStart: Date;
+    // let dateEnd: Date;
+    // if (!value) value &#x3D; 12
+    //we will establish 12 years as the default;
+    let dateStart &#x3D; new Date(start);
+    let dateEnd &#x3D; new Date(end);
+
+    console.log(&#x27;start Date&#x27; , this.datePipe.transform(dateStart, &#x27;MM/dd/yyyy&#x27;))
+    console.log(&#x27;end   Date&#x27; , this.datePipe.transform(dateEnd,   &#x27;MM/dd/yyyy&#x27;))
+
+    for (var d &#x3D; dateStart; d &lt;&#x3D; dateEnd; d.setDate(d.getDate() + 1)) {
+      var loopDay &#x3D; new Date(d);
+
+      this.dateSeries.push(
+        this.datePipe.transform(loopDay, &#x27;MM/dd/yyyy&#x27;)
+      )
+    }
+
+    console.log(this.dataSeries)
+    return this.dateSeries
+  }
+
+
+
+  getDateSeriesWithHours(start: string, end: string): rowValue[] {
+    this.dateSeries &#x3D;  [];
+    const dateStart &#x3D;  new Date(start)
+    this.dateSeries &#x3D;  this.push24HoursToDateArray(dateStart, this.dateSeries);
+    this.dateSeries &#x3D;  this.push24HoursToDateArray(this.addDays(dateStart, 1), this.dateSeries);
+    return this.dateSeries
+  }
+
+  _getDateSeriesWithHours(start: string, end: string): rowValue[] {
+    this.dateSeries &#x3D;  [];
+    const dateStart &#x3D;  new Date(start)
+    this.dateSeries &#x3D;  this.push24HoursToDateArray(dateStart, this.dateSeries);
+
+    const dateEnd &#x3D; new Date(end);
+
+    for (var d &#x3D; dateStart; d &lt;&#x3D; dateEnd; d.setDate(d.getDate() + 1)) {
+      var loopDay &#x3D; new Date(d);
+      this.dateSeries.push(
+        formatDate(loopDay, &#x27;yyyy/MM/dd&#x27;, &#x27;en-US&#x27;)
+      )
+    }
+
+    this.dateSeries &#x3D;  this.push24HoursToDateArray(this.addDays(dateStart, 1), this.dateSeries);
+    return this.dateSeries
+  }
+
+  addDays(date: Date, days: number): Date {
+    date.setDate(date.getDate() + days);
+    return date;
+  }
+
+  addDates(date: Date, days: number): Date {
+    date.setDate(date.getDate() + days);
+    return date;
+  }
+
+  push24HoursToDateArray(date, dateSeries) {
+    let i &#x3D; 0
+    const dateString &#x3D; this.getDateString(date.toDateString())
+    for (let i &#x3D; 0; i &lt; 24; i++) {
+      dateSeries.push(
+        {date:  &#x60;${dateString} ${i}&#x60;, value: 0}
+      )
+      if (i&gt;23) { i &#x3D; 24}
+    }
+    return dateSeries;
+  }
+
+  getDateString(dateString) {
+    if (!dateString) { return }
+    return new Date(dateString).toLocaleDateString(&#x27;en-US&#x27;, {
+      day  : &#x27;2-digit&#x27;,
+      month: &#x27;2-digit&#x27;,
+      year : &#x27;numeric&#x27;,
+    })
+  }
+
+  getDateSeriesWithValue(start: string, end: string) : rowValue[] {
+    this.dateSeries &#x3D; [];
+    let dateStart: Date;
+    let dateEnd: Date;
+    dateStart &#x3D; new Date(start);
+    dateEnd &#x3D; new Date(end);
+    for (var d &#x3D; dateStart; d &lt;&#x3D; dateEnd; d.setDate(d.getDate() + 1)) {
+      var loopDay &#x3D; new Date(d);
+      this.dateSeries.push(
+        {date: formatDate(loopDay, &#x27;yyyy/MM/dd&#x27;, &#x27;en-US&#x27;), value: 0}
+      )
+    }
+    return this.dateSeries
+  }
+
+  // getMonthSeriesWithValue(start: string, end: string) : rowValue[] {
+  getMonthSeriesWithValue(dateStarting: Date, count: number, foward: boolean):  rowValue[] {
+
+    const series &#x3D; [];
+    const month &#x3D; this.getMonthString(dateStarting);
+    series.push(month);
+    for (let i &#x3D; 1; i &lt; count; i +&#x3D; 1) {
+      let y &#x3D; i;
+      if (!foward) {
+        y &#x3D; -i;
+      }
+      let newDate &#x3D; new Date(
+        dateStarting.setMonth(dateStarting.getMonth() + y)
+      );
+
+      const item &#x3D; {date: month, value: 0}
+      series.push(item);
+    }
+     console.log(&#x27;getMonthSeriesWithValue&#x27;, series)
+     return series;
+  }
+
+  getMonthString(month: Date): string {
+    // console.log(month);
+    return this.datePipe.transform(month, &#x27;MM/dd/yyyy&#x27;);
   }
 
   getResults(url: string, parameters: string, headers: HttpHeaders, InterFaceName: any[]) {
@@ -1634,23 +3938,110 @@ export class ReportingService {
     return  this.http.get&lt;any[]&gt;(&#x60;${site.url}${parameters}&#x60;)
   };
 
-  getSales(site: ISite, dateFrom: string, dateTo: string, groupBY: string): Observable&lt;ISalesPayments[]&gt; {
-
+  getSales(site: ISite, dateFrom: string, dateTo: string, groupBY: string,
+             zrunID?: number): Observable&lt;ISalesPayments[]&gt; {
     const controller &#x3D; &#x60;/SalesPayments/&#x60;
 
     const endPoint &#x3D; &#x60;getSalesSummary&#x60;
 
     let filter &#x3D; {} as ISalesReportingFilter
-
-    filter.dateFrom &#x3D; dateFrom
-    filter.dateTo &#x3D; dateTo
+    filter.startDate &#x3D; dateFrom
+    filter.endDate &#x3D; dateTo
     filter.groupBy &#x3D; groupBY
+    filter.zrunID &#x3D; zrunID
 
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
 
     return  this.http.post&lt;ISalesReportingOrdersSummary[]&gt;(url, filter )
-
   };
+
+
+
+
+  getDataSeriesValues(salesValues: any): any[] {
+    this.salesPayments &#x3D; salesValues;
+    this.dataSeriesValues &#x3D;  [];
+    if (salesValues?.length) {
+      for(var i &#x3D; 0; i &lt; salesValues.length; i++)(
+        this.dataSeriesValues.push(salesValues[i].amountPaid)
+          );
+      }
+    return  this.dataSeriesValues;
+  };
+
+  //get the current date for the filter
+  setFilterToday() {
+    //in the API always get +1 for the sales.
+    this.dateFrom &#x3D; new Date().toLocaleDateString();
+    let tomorrow &#x3D; new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    this.dateTo &#x3D; tomorrow.toLocaleDateString();
+    this.tempCode();
+  }
+
+  dateConvert(dateString: string) {
+    if (dateString.length &#x3D;&#x3D; 8) {
+      const month &#x3D;  dateString.substr(0, 2);
+      const day   &#x3D; dateString.substr(2, 2);
+      const year  &#x3D; dateString.substr(4, 4);
+      // return this.datePipe.transform(dateString,&#x27;MM/dd/yyyy&#x27;);
+      return &#x60;${month}/${day}/${year}&#x60;
+    }
+  }
+
+  getHoursBackUsingCurrentDate(value): IDateRange {
+    const startDate     &#x3D; this.dateHelpers.getCurrentDay();
+    const d             &#x3D; new Date();
+    const endDate       &#x3D;  this.datePipe.transform(this.addDates(d, value), &#x27;MM/dd/yyyy&#x27;);
+    const dateRange     &#x3D; {} as IDateRange;
+    dateRange.startdate &#x3D; startDate;
+    dateRange.endDate   &#x3D; endDate;
+    return dateRange;
+  }
+
+  getDaysBackUsingCurrentDate(value): IDateRange {
+    const startDate     &#x3D; this.dateHelpers.getCurrentDay();
+    const d             &#x3D; new Date();
+    const endDate       &#x3D; this.datePipe.transform(this.addDates(d, value), &#x27;MM/dd/yyyy&#x27;);
+    const dateRange     &#x3D; {} as IDateRange;
+    dateRange.startdate &#x3D; startDate;
+    dateRange.endDate   &#x3D; endDate;
+    return dateRange;
+  }
+
+  getWeeksBackUsingCurrentDate(value) {
+    const startDate     &#x3D; this.dateHelpers.getCurrentDay();
+    const d             &#x3D; new Date();
+    const endDate       &#x3D; this.datePipe.transform(this.addDates(d, value), &#x27;MM/dd/yyyy&#x27;);
+    const dateRange     &#x3D; {} as IDateRange;
+    dateRange.startdate &#x3D; startDate;
+    dateRange.endDate   &#x3D; endDate;
+    return dateRange;
+  }
+
+  getMonthsBackUsingCurrentDate(value) {
+    const startDate     &#x3D; this.dateHelpers.getFirstDayOfMonthFromCurrentMonth(-value);
+    const endDate       &#x3D; this.dateHelpers.getLastDayofCurrentMonth()
+
+    let dateStart       &#x3D; Date();
+    const dateRange     &#x3D; {} as IDateRange;
+    const startMonth    &#x3D; this.dateHelpers.getFirstMonthInSeries(startDate, value, false)
+    // const startMonth    &#x3D; dateStart.setDate(dateStart.getDate() + value)
+
+    dateRange.startdate &#x3D; this.datePipe.transform(startMonth, &#x27;MM/dd/yyyy&#x27;);
+    dateRange.endDate   &#x3D; this.datePipe.transform(endDate  , &#x27;MM/dd/yyyy&#x27;);;
+    return dateRange;
+  }
+
+  getYearsBackUsingCurrentDate(value) {
+    const startDate     &#x3D; this.dateHelpers.getCurrentYear();
+    const year          &#x3D; new Date(startDate)
+    const endDate       &#x3D; this.dateHelpers.getLastYearInSeries(year, value, false)
+    const dateRange     &#x3D; {} as IDateRange;
+    dateRange.startdate &#x3D; this.datePipe.transform(startDate, &#x27;MM/dd/yyyy&#x27;);
+    dateRange.endDate   &#x3D; endDate;
+    return dateRange;
+  }
 
   //SalesReportingOrders?DateFrom&#x3D;1/1/2020&amp;DateTo&#x3D;1/15/2020&amp;GroupBY&#x3D;Range
   getSalesOrderSummary(site: ISite,dateFrom: string, dateTo: string, groupBY: string): Observable&lt;ISalesReportingOrdersSummary[]&gt; {
@@ -1665,32 +4056,68 @@ export class ReportingService {
 
   };
 
-  getDataSeriesValues(salesValues: any): any[] {
+  getMetrcsForPO(site: ISite, search : POSItemSearchModel): Observable&lt;HistoricalSalesPurchaseOrderMetrcs&gt; {
 
-    this.salesPayments &#x3D; salesValues;
-    this.dataSeriesValues &#x3D;  [];
+    const controller &#x3D; &#x60;/ReportItemSales/&#x60;
 
-    if (salesValues?.length) {
-      for(var i &#x3D; 0; i &lt; salesValues.length; i++)(
-        this.dataSeriesValues.push(salesValues[i].amountPaid)
-          );
-      }
+    const endPoint &#x3D; &#x60;getMetrcsForPO&#x60;
 
-    return  this.dataSeriesValues;
+    const parameters &#x3D; &#x60;&#x60;
 
-  };
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;;
 
+    return  this.http.put&lt;HistoricalSalesPurchaseOrderMetrcs&gt;(url, search);
 
-
-  //get the current date for the filter
-  setFilterToday() {
-    //in the API always get +1 for the sales.
-    this.dateFrom &#x3D; new Date().toLocaleDateString();
-    let tomorrow &#x3D; new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    this.dateTo &#x3D; tomorrow.toLocaleDateString();
-    this.tempCode();
   }
+
+  getReOrderList(site: ISite): Observable&lt;MenuItem[]&gt; {
+    // https://localhost:44309/api/ReportItemSales/GetReOrderList
+    const controller &#x3D; &#x60;/Products/&#x60;
+
+    const endPoint &#x3D; &#x60;GetReOrderList&#x60;
+
+    let filter &#x3D; {} as any
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+    return  this.http.post&lt;MenuItem[]&gt;(url, filter );
+
+  }
+
+  getPurchaseOrderHelper(site: ISite, search : POSItemSearchModel): Observable&lt;IReportItemSales[]&gt; {
+
+    const controller &#x3D; &#x60;/ReportItemSales/&#x60;
+
+    const endPoint &#x3D; &#x60;getPurchaseOrderHistory&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;;
+
+    return  this.http.put&lt;IReportItemSales[]&gt;(url, search);
+
+  }
+
+  ///Product Sales////
+  listofProductsInSales(sales:  IReportItemSales[]): string[] {
+    let itemNames &#x3D; [] as string[]
+    for (let item of sales)  {
+      itemNames.push(item.productName)
+    }
+    itemNames &#x3D;  [...new Set(itemNames)]
+    return itemNames;
+  }
+
+  //not implemented
+  listofSumProductsInSales(sales: IReportItemSales[]): string[]  {
+    let itemNames &#x3D; [] as string[]
+    for (let item of sales)  {
+      itemNames.push(item.productName)
+    }
+    itemNames &#x3D;  [...new Set(itemNames)]
+    return itemNames
+  }
+
 
 }
 </code></pre>
@@ -1704,14 +4131,15 @@ export class ReportingService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -1723,6 +4151,15 @@ export class ReportingService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -1732,8 +4169,8 @@ export class ReportingService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

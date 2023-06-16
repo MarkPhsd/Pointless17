@@ -4,7 +4,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ISite } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-
 export interface IAppConfig {
   apiUrl : string
   useAppGate: boolean;
@@ -20,7 +19,6 @@ declare var window: any;
 export class AppInitService  {
 
   initialized       = false;
-
   appConfig         = {} as IAppConfig;
   private apiUrl    : any;
   public  useAppGate: boolean;
@@ -28,6 +26,7 @@ export class AppInitService  {
   public  company    : string;
   // public get appConfig
   private httpClient: HttpClient;
+
   isApp(): boolean {
     if (this.platformService.isAppElectron || this.platformService.androidApp)  {
       return true
@@ -56,7 +55,7 @@ export class AppInitService  {
     this.apiUrl      = this.getLocalApiUrl();
     const rememberMe = localStorage.getItem('rememberMe')
     const isApp      = this.platFormService.isApp();
-
+  
     if (!rememberMe) {
       if (!this.initialized && isApp ) {
         this.clearUserSettings();
@@ -66,60 +65,71 @@ export class AppInitService  {
       }
     }
 
-    const result = await this.httpClient.get('assets/app-config.json').toPromise() //;( result => {
-    const data = result  as IAppConfig
+    const config = await this.httpClient.get('assets/app-config.json').toPromise()  as IAppConfig
 
-    if ( !isApp  ) {
-        if (data) {
-          this.apiUrl     = data.apiUrl
-          if (!data.apiUrl) {
-            if (!this.platformService.androidApp && !this.platformService.isAppElectron){
-            }
-            this.apiUrl     = "https://pointlessposdemo.com/api"
-            data.apiUrl     = "https://pointlessposdemo.com/api"
-            this.setAPIUrl(this.apiUrl)
-          }
+    if ( !isApp && config) {
+      // this.apiUrl     = config.apiUrl
+      //we can use this for the online free site so anyone can use a site for their own store.
+      if (  config.apiUrl === undefined ||  config.apiUrl === 'domain'){
+        this.useAppGate = false
+        console.log('navigating to app setting from init: APIURL Defined', this.apiUrl, config)
+        this.router.navigate(['/apisetting']);
+        return
+      }
 
-          this.useAppGate = data.useAppGate
-          this.logo       = data.logo;
-          this.company    = data.company
-          this.appConfig  = data ;
-          this.apiUrl     = data.apiUrl
+      if (!config.apiUrl) {
+        console.log('config setting to pointless', config)
+        this.apiUrl     = "https://pointlessposdemo.com/api"
+        config.apiUrl     = "https://pointlessposdemo.com/api"
+        this.setAPIUrl(this.apiUrl)
+      }
 
-          localStorage.setItem('storedApiUrl', data.apiUrl)
+      this.useAppGate = config.useAppGate
+      this.logo       = config.logo;
+      this.company    = config.company
+      this.appConfig  = config ;
 
-          if ( this.apiUrl === undefined ){
-            this.useAppGate = false
-            this.router.navigate(['/apisetting']);
-            return
-          }
-
-        }
+      // if someone already set the api.
+      if (!this.apiUrl) { 
+        this.apiUrl     = config.apiUrl;
         return;
       }
 
-      if ( isApp ) {
-        if (!data ) {
-          if (!this.platformService.androidApp && !this.platformService.isAppElectron){
-            this._snackbar.open('Using demo data', 'Close', {duration: 3000} )
-          }
-          this.apiUrl           = "https://pointlessposdemo.com/api"
-          this.useAppGate       = false;
-          this.logo             = "http://pointlesspos.com/temp/logo.png";
-          this.company          = 'Pointless'
-          this.appConfig.apiUrl = this.apiUrl;
-          this.useAppGate       = false;
-          this.appConfig.logo   = this.logo;
-          this.appConfig.company= 'Pointless'
-          localStorage.setItem('storedApiUrl', data.apiUrl)
-        }
+      // if (localStorage.getItem("site.url") === 'https://localhost:44309/api') {
+      //   localStorage.setItem('site.url', config.apiUrl)
+      // }
 
-        if (this.apiUrl) {
-        }
+      // this.setAPIUrl(config.apiUrl)
+      return;
+    }
 
+    if ( isApp && !this.apiUrl ) {
+      // console.log('getting basurl for app',  this.apiBaseUrl())
+    }
+
+    if ( isApp && !this.apiUrl ) {
+
+      if (!this.platformService.androidApp && !this.platformService.isAppElectron){
+        this._snackbar.open('Using demo data', 'Close', {duration: 3000} )
       }
-  }
 
+      this.apiUrl           = "https://pointlessposdemo.com/api"
+      this.useAppGate       = false;
+      this.logo             = "http://pointlesspos.com/temp/logo.png";
+      this.company          = 'Pointless'
+      this.appConfig.apiUrl = this.apiUrl;
+      this.useAppGate       = false;
+      this.appConfig.logo   = this.logo;
+      this.appConfig.company= 'Pointless'
+      this.setAPIUrl(this.apiUrl)
+      return;
+    }
+
+    if (this.apiUrl) {
+      return;
+    }
+
+  }
 
   setAPIUrl(apiUrl): string {
 
@@ -127,7 +137,8 @@ export class AppInitService  {
       try {
         const url = new URL(apiUrl);
         if (url) {
-          localStorage.setItem('storedApiUrl', apiUrl)
+          localStorage.setItem('storedApiUrl', apiUrl);
+          localStorage.setItem("site.url"    , apiUrl)
           this.setAssignedSite(apiUrl)
           return apiUrl;
         }
@@ -144,21 +155,17 @@ export class AppInitService  {
     const result = localStorage.getItem('storedApiUrl')
     const site = {} as ISite;
     site.url = result
-
-    if (result != undefined && result != null && result != '' ) {
-      return result;
-    }
+    // console.log('getlocal API Url', site, result)
 
     if (this.isApp() && !result ) {
-      if (! this.platformService.androidApp){
-        try {
-        } catch (error) {
-          console.log('snack bar open error', error)
-        }
-      }
+      this.router.navigate(['/apisetting']);
+      return ;
       localStorage.setItem('storedApiUrl', 'https://pointlessposdemo.com/api')
       return localStorage.getItem('storedApiUrl')
     }
+
+    return site.url;
+
   }
 
   setAssignedSite(apiUrl) {
@@ -173,26 +180,24 @@ export class AppInitService  {
   }
 
   apiBaseUrl() {
-    this.init();
+
     const urlSaved = this.getLocalApiUrl();
 
-    if (this.isApp() && urlSaved != undefined) {
+    if (this.isApp() && urlSaved ) {
       this.apiUrl =  urlSaved
       return   this.apiUrl
+    }
+
+    if (urlSaved) { 
+      return urlSaved;
     }
 
     if (!this.isApp() && this.appConfig && this.appConfig.apiUrl)  {
       return this.appConfig.apiUrl;
     }
 
-    if (!this.apiUrl) {
-      this.apiUrl = this.getLocalApiUrl();
-      if ( this.apiUrl ){
-        return  this.apiUrl
-      }
-    }
-
     if ((!this.appConfig || !this.apiUrl) && this.isApp()) {
+      console.log('navigating to app setting from APIBaseURL')
       this.useAppGate = false
       this.router.navigate(['/apisetting']);
       return ''

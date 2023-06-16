@@ -11,6 +11,7 @@ import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-tri-pos-transactions',
@@ -41,6 +42,7 @@ export class TriPosTransactionsComponent implements OnInit {
     public paymentService       : POSPaymentService,
     private siteService         : SitesService,
     private orderService        : OrdersService,
+    public orderMethodsService: OrderMethodsService,
     private setingsServerice: SettingsService,
     private fb: UntypedFormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -222,7 +224,7 @@ export class TriPosTransactionsComponent implements OnInit {
       })).pipe(switchMap(data => {
         this.reset()
         if (!data) { return of(null)}
-        this.orderService.updateOrderSubscription(data);
+        this.orderMethodsService.updateOrderSubscription(data);
         this.dialogRef.close(true)
         return of(data)
       }))
@@ -279,7 +281,7 @@ export class TriPosTransactionsComponent implements OnInit {
 
         })).pipe(switchMap(data => {
           if (data) {
-            this.orderService.updateOrderSubscription(data);
+            this.orderMethodsService.updateOrderSubscription(data);
             return of(data);
           }
       }))

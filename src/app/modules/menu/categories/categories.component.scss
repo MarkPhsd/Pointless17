@@ -33,21 +33,33 @@ $white: #efefef;
 }
 
 .text {
+  // text-align: center;
+  // text-overflow: ellipsis;
+  // margin: .25em;
+  // font-size: 1.4em;
+
   text-align: center;
   text-overflow: ellipsis;
-  margin: .25em;
+  margin: 0.25em;
+  // font-size: 1.2em;
+  // max-height: 1em;
+  font-size: 1.3em;
+  height: 2em;
+  font-weight: 500;
+
+  z-index: 99;
+  position: relative;
+
 
   @include for-phone-only  {
     font-weight: 500;
     font-size: 1.75em;
-    // margin-top: 5px;
-    // justify-content: center;
     margin: 0;
     position: inherit;
-
     -ms-transform: translateY(-20%);
     transform: translateY(20%);
   }
+
 
 }
 
@@ -154,7 +166,7 @@ img:active:hover {
   border-radius: 50%;
   margin: 0;
   background: radial-gradient(circle at 100px 100px, #5cabff, #000);
-  z-index: 100;
+  z-index: 99;
   width: 15vh;
   height: 15vh;
   opacity: .25;

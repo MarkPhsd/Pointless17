@@ -3,6 +3,7 @@ import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'pos-split-groups',
@@ -16,11 +17,13 @@ export class PosSplitGroupsComponent implements OnInit , OnDestroy{
   orderGroupTotal$: Observable<IPOSOrder>[];
 
   values = [0,1,2,3,4,5,6,7,8,9]
-  constructor(public orderService: OrdersService,private siteService: SitesService  ) { }
+  constructor(public orderMethodsService: OrderMethodsService,
+              private orderService: OrdersService,
+              private siteService: SitesService  ) { }
 
   ngOnInit(): void {
     const i = 0;
-    this._order = this.orderService.currentOrder$.subscribe(data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe(data => {
       this.order = data;
       this.getListOf();
     })

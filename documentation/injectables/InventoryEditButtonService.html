@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >InventoryEditButtonService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >InventoryEditButtonService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -79,6 +86,9 @@
                         <ul class="index-list">
                             <li>
                                 <a href="#addInventoryDialog" >addInventoryDialog</a>
+                            </li>
+                            <li>
+                                <a href="#addManifest" >addManifest</a>
                             </li>
                             <li>
                                 <a href="#openInventoryDialog" >openInventoryDialog</a>
@@ -107,7 +117,7 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
@@ -118,7 +128,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:21</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:19</a></div>
                             </td>
                         </tr>
 
@@ -180,7 +190,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -205,8 +215,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="42"
-                            class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:42</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="45"
+                            class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:45</a></div>
                 </td>
             </tr>
 
@@ -216,6 +226,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -243,7 +254,76 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addManifest"></a>
+                    <span class="name">
+                        <span ><b>addManifest</b></span>
+                        <a href="#addManifest"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addManifest(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="72"
+                            class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:72</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
 
                     </div>
                     <div class="io-description">
@@ -273,8 +353,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="29"
-                            class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:29</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="27"
+                            class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:27</a></div>
                 </td>
             </tr>
 
@@ -284,6 +364,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -341,8 +422,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="111"
-                            class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:111</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="139"
+                            class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:139</a></div>
                 </td>
             </tr>
 
@@ -352,6 +433,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -421,8 +503,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="81"
-                            class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:81</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="109"
+                            class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:109</a></div>
                 </td>
             </tr>
 
@@ -432,6 +514,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -489,8 +572,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="65"
-                            class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:65</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="95"
+                            class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:95</a></div>
                 </td>
             </tr>
 
@@ -500,6 +583,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -527,7 +611,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
 
                     </div>
                     <div class="io-description">
@@ -557,8 +641,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="97"
-                            class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:97</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="125"
+                            class="link-to-prism">src/app/_services/inventory/inventory-edit-button.service.ts:125</a></div>
                 </td>
             </tr>
 
@@ -568,6 +652,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -610,22 +695,20 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
-import { Component, Input, OnInit } from &#x27;@angular/core&#x27;;
-import { IMenuItem } from &#x27;src/app/_interfaces/menu/menu-products&#x27;;
-import { IItemType, ItemTypeService } from &#x27;src/app/_services/menu/item-type.service&#x27;;
 import { ProducteditComponent} from &#x27;src/app/modules/admin/products/productedit/productedit.component&#x27;;
 // import { ItemPercentageDiscountProductEditComponent } from &#x27;src/app/modules/admin/productedit/item-percentage-discount-product-edit/item-percentage-discount-product-edit.component&#x27;;
 import { MatDialog } from &#x27;@angular/material/dialog&#x27;;
 import { MenuService } from &#x27;src/app/_services&#x27;;
 import { SitesService } from &#x27;src/app/_services/reporting/sites.service&#x27;;
-import { StrainProductEditComponent } from &#x27;src/app/modules/admin/products/productedit/strain-product-edit/strain-product-edit.component&#x27;;
 import { NewInventoryItemComponent } from &#x27;src/app/modules/admin/inventory/new-inventory-item/new-inventory-item.component&#x27;;
 import { IInventoryAssignment } from &#x27;./inventory-assignment.service&#x27;;
 import { MoveInventoryLocationComponent } from &#x27;src/app/modules/admin/inventory/move-inventory-location/move-inventory-location.component&#x27;;
 import { InventoryAdjustmentNoteComponent } from &#x27;src/app/shared/widgets/adjustment-notes/adjustment-note/adjustment-note.component&#x27;;
 import { AddInventoryItemComponent } from &#x27;src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component&#x27;;
+import { ManifestEditorHeaderComponent } from &#x27;src/app/modules/admin/inventory/manifests/mainfest-editor/manifest-editor-header/manifest-editor-header.component&#x27;;
+import { MainfestEditorComponent } from &#x27;src/app/modules/admin/inventory/manifests/mainfest-editor/mainfest-editor.component&#x27;;
 
 
 @Injectable({
@@ -645,50 +728,80 @@ export class InventoryEditButtonService {
     const site &#x3D; this.siteService.getAssignedSite();
 
     this.menuService.getProduct( site, item.productID ).subscribe( data&#x3D;&gt; {
-      const productTypeID &#x3D; data.prodModifierType
+
+      let productTypeID &#x3D; 0;
+      if (data) {
+        const productTypeID &#x3D; data.prodModifierType
+      }
 
       this.openInventoryEditor(item.id, productTypeID)
+
     })
 
   }
 
-  addInventoryDialog(id: number) {
+  addInventoryDialog(id: number): any {
 
     try {
       const site &#x3D; this.siteService.getAssignedSite();
 
       const dialogRef &#x3D; this.dialog.open(AddInventoryItemComponent,
-         {  width:      &#x27;750px&#x27;,
-            minWidth:   &#x27;750px&#x27;,
-            height:     &#x27;550px&#x27;,
-            minHeight:  &#x27;550px&#x27;,
+         {  width:      &#x27;850px&#x27;,
+            minWidth:   &#x27;850px&#x27;,
+            height:     &#x27;750px&#x27;,
+            minHeight:  &#x27;750px&#x27;,
+            data :      {id: id}
+          },
+        )
+      
+        // dialogRef.afterClosed().subscribe(result &#x3D;&gt; {
+        //   return true
+        // });
+
+        return dialogRef;
+
+    } catch (error) {
+
+    }
+    return null
+
+  }
+
+  addManifest(id: number): boolean {
+
+    try {
+      const site &#x3D; this.siteService.getAssignedSite();
+
+      const dialogRef &#x3D; this.dialog.open(MainfestEditorComponent,
+         {  width:      &#x27;850px&#x27;,
+            minWidth:   &#x27;850px&#x27;,
+            height:     &#x27;750px&#x27;,
+            minHeight:  &#x27;750px&#x27;,
             data :      {id: id}
           },
         )
         dialogRef.afterClosed().subscribe(result &#x3D;&gt; {
-          // return result
+          return true
         });
     } catch (error) {
-      console.log(error)
+
     }
+    return false
 
   }
 
+  openNoteDialog(id: any): any {
+    const dialogRef &#x3D; this.dialog.open(InventoryAdjustmentNoteComponent,
+      { width:      &#x27;300px&#x27;,
+        minWidth:   &#x27;300px&#x27;,
+        height:     &#x27;500px&#x27;,
+        minHeight:  &#x27;500px&#x27;,
+        data : {id: id}
+      },
+    )
 
-  openNoteDialog(id: any) {
-      const dialogRef &#x3D; this.dialog.open(InventoryAdjustmentNoteComponent,
-        { width:      &#x27;300px&#x27;,
-          minWidth:   &#x27;300px&#x27;,
-          height:     &#x27;500px&#x27;,
-          minHeight:  &#x27;500px&#x27;,
-          data : {id: id}
-        },
-      )
-
-      dialogRef.afterClosed().subscribe(result &#x3D;&gt; {
-        return result
-      }
-    );
+    return dialogRef;
+    
   }
 
   openMoveInventoryDialog(id: any) {
@@ -739,8 +852,8 @@ export class InventoryEditButtonService {
         {
 
           dialogRef &#x3D; this.dialog.open(NewInventoryItemComponent,
-            { width:        &#x27;800px&#x27;,
-              minWidth:     &#x27;800px&#x27;,
+            { width:        &#x27;850px&#x27;,
+              minWidth:     &#x27;850px&#x27;,
               height:       &#x27;725px&#x27;,
               minHeight:    &#x27;725px&#x27;,
               data : {id: id}
@@ -752,13 +865,15 @@ export class InventoryEditButtonService {
       case 15:
         {
           dialogRef &#x3D; this.dialog.open(NewInventoryItemComponent,
-            { width:        &#x27;800px&#x27;,
-              minWidth:     &#x27;800px&#x27;,
+            { width:        &#x27;850px&#x27;,
+              minWidth:     &#x27;850px&#x27;,
               height:       &#x27;725px&#x27;,
               minHeight:    &#x27;725px&#x27;,
               data : {id: id}
             },
           )
+
+
         }
         break;
 
@@ -768,8 +883,8 @@ export class InventoryEditButtonService {
       case 45:
         {
           dialogRef &#x3D; this.dialog.open(NewInventoryItemComponent,
-            { width:       &#x27;800px&#x27;,
-              minWidth:    &#x27;800px&#x27;,
+            { width:       &#x27;850px&#x27;,
+              minWidth:    &#x27;850px&#x27;,
               height:      &#x27;650px&#x27;,
               minHeight:   &#x27;650px&#x27;,
               data : {id: id}
@@ -782,8 +897,8 @@ export class InventoryEditButtonService {
       default:
         {
           dialogRef &#x3D; this.dialog.open(NewInventoryItemComponent,
-            { width:        &#x27;800px&#x27;,
-              minWidth:     &#x27;800px&#x27;,
+            { width:        &#x27;850px&#x27;,
+              minWidth:     &#x27;850px&#x27;,
               height:       &#x27;750px&#x27;,
               minHeight:    &#x27;750px&#x27;,
               data : {id: id}
@@ -795,7 +910,8 @@ export class InventoryEditButtonService {
 
     if (dialogRef) {
       dialogRef.afterClosed().subscribe(result &#x3D;&gt; {
-        //then we can emit back up to the component.
+
+          // this.outputRefresh.emit(&#x27;true&#x27;)
 
         });
       }
@@ -815,14 +931,15 @@ export class InventoryEditButtonService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -834,6 +951,15 @@ export class InventoryEditButtonService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -843,8 +969,8 @@ export class InventoryEditButtonService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

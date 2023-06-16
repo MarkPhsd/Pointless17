@@ -1,0 +1,687 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
+  >
+  uuidList</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/modules/floor-plan/floor-plan/floor-plan.component.ts</code>
+        </p>
+
+
+
+
+        <section data-compodoc="block-index">
+            <h3 id="index">Index</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Properties</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                        <a href="#color" 
+>
+                                            color
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#uuID" 
+>
+                                            uuID
+                                        </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section data-compodoc="block-properties">
+                <h3 id="inputs">Properties</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="color"></a>
+                                        <span class="name "><b>color</b>
+                                            <a href="#color">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>color:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="uuID"></a>
+                                        <span class="name "><b>uuID</b>
+                                            <a href="#uuID">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>uuID:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { Observable,  of,  Subject, switchMap } from &#x27;rxjs&#x27;;
+import { FloorPlanService, IFloorPlan } from &#x27;src/app/_services/floor-plan.service&#x27;;
+import { SitesService } from &#x27;src/app/_services/reporting/sites.service&#x27;;
+import { OrdersService } from &#x27;src/app/_services&#x27;;
+import { IPOSOrder, IUser } from &#x27;src/app/_interfaces&#x27;;
+import { UserAuthorizationService } from &#x27;src/app/_services/system/user-authorization.service&#x27;;
+import { OrderMethodsService } from &#x27;src/app/_services/transactions/order-methods.service&#x27;;
+// import { compress, decompress } from &#x27;compress-json&#x27;
+
+export interface uuidList {
+  uuID: string;
+  color: string;
+}
+@Component({
+  selector: &#x27;app-floor-plan&#x27;,
+  templateUrl: &#x27;./floor-plan.component.html&#x27;,
+  styleUrls: [&#x27;./floor-plan.component.scss&#x27;]
+})
+export class FloorPlanComponent implements OnInit {
+
+  floorPlanRefresh$ : Observable&lt;IPOSOrder[]&gt;;
+
+  displayImage: boolean;
+
+  isUserStaff         &#x3D;   false;
+  isAdmin             &#x3D;   false;
+  isUser              &#x3D;   false;
+  refresh: boolean;
+  editMode &#x3D; false;
+  userMode &#x3D; false;
+  user: IUser;
+
+  floorPlans$: Observable&lt;IFloorPlan[]&gt;;
+  floorPlan: IFloorPlan;
+
+  _zoom     : Subject&lt;number&gt; &#x3D; new Subject();
+  _userMode : Subject&lt;boolean&gt; &#x3D; new Subject();
+  _floorPlan: Subject&lt;IFloorPlan&gt; &#x3D; new Subject();
+  _performOperations: Subject&lt;any&gt; &#x3D; new Subject();
+  changeObjectColor: Subject&lt;any&gt; &#x3D; new Subject();
+  tableInfo: any;
+  orderInfo: any;
+  _setTableInfo: Subject&lt;any&gt; &#x3D; new Subject();
+  _newOrder    : Subject&lt;any&gt; &#x3D; new Subject();
+  interval: any;
+  backupRestore$: Observable&lt;any&gt;;
+  loading: boolean;
+  saving: boolean;
+  zoomDefault: number
+  constructor(private siteService       : SitesService,
+              private orderService      : OrdersService,
+              public orderMethodsService: OrderMethodsService,
+              public  userAuth : UserAuthorizationService,
+              private floorPlanSevice   : FloorPlanService,
+         ) { }
+
+  ngOnInit(): void {
+    const site &#x3D; this.siteService.getAssignedSite();
+    this.getUserInfo();
+    this.initPlansList(site);
+    this.userMode &#x3D; false
+    this.toggleUserMode()
+    this.zoomDefault &#x3D; 100;
+    this._zoom.next(this.zoomDefault);
+  }
+
+
+
+  initPlansList(site) {
+    this.floorPlans$ &#x3D; this.floorPlanSevice.listFloorPlansNames(site).pipe(
+      switchMap(data &#x3D;&gt; {
+        if (data) {
+          this._getFloorPlan(data[0])
+        }
+        return of(data)
+      })
+    )
+  }
+
+  refreshPlans() {
+    const site &#x3D; this.siteService.getAssignedSite();
+    this.initPlansList(site);
+  }
+
+  saveTableSettings() {
+    this._setTableInfo.next(data &#x3D;&gt; {
+      // console.log(&#x27;saveTableSettings&#x27;, data?.name)
+    })
+  }
+
+  deleteFloorPlan() {
+    const confirm &#x3D; window.confirm(&#x27;Are you sure you want to delete this item?&#x27;)
+    if (this.floorPlan &amp;&amp; confirm) {
+      const site &#x3D; this.siteService.getAssignedSite()
+      this.floorPlanSevice.delete(site,this.floorPlan.id).subscribe(data &#x3D;&gt; {
+        this.floorPlans$ &#x3D; this.floorPlanSevice.listFloorPlansNames(site);
+      })
+    }
+  }
+
+  newFloorPlan() {
+    const site &#x3D; this.siteService.getAssignedSite()
+    const plan &#x3D; {} as IFloorPlan;
+    plan.name     &#x3D; &#x27;new plan&#x27;;
+    plan.template &#x3D; this.templateBasic;
+    plan.sort     &#x3D; 1;
+    plan.height   &#x3D; 500;
+    plan.width    &#x3D; 900;
+    plan.enabled  &#x3D; true;
+    this.floorPlanSevice.saveFloorPlan(site, plan).subscribe(data &#x3D;&gt; {
+        this._floorPlan.next(data)
+        this.floorPlan &#x3D; data;
+        this.initPlansList(site);
+      }
+    )
+  }
+
+  refresher() {
+    setInterval(function () {
+      if (this.userMode) {
+        if ( this.floorPlan ) {
+          this._getFloorPlan(this.floorPlan)
+        }
+      }
+    }, 60000);
+  }
+
+  saveFloorPlan(event) {
+    if (!event) { return }
+
+    if (event.template) {
+      event.template &#x3D; this.floorPlanSevice.replaceJSONText(event.template)
+    }
+
+    const site &#x3D; this.siteService.getAssignedSite();
+    const plan &#x3D; event as IFloorPlan;
+    this.floorPlanSevice.saveFloorPlan(site, plan).subscribe(data &#x3D;&gt; {
+        this.floorPlans$ &#x3D; this.floorPlanSevice.listFloorPlansNames(site);
+        this.floorPlan  &#x3D; data;
+      }
+    )
+  }
+
+  saveFloorPlanfromOrder(event) {
+    if (!event) { return }
+    this.saving &#x3D; true;
+
+    if (event.template) {
+      event.template &#x3D; this.floorPlanSevice.replaceJSONText(event.template)
+    }
+
+    const site &#x3D; this.siteService.getAssignedSite();
+    const plan &#x3D; event as IFloorPlan;
+    this.backupRestore$ &#x3D; this.floorPlanSevice.saveFloorPlan(site, plan).pipe(
+      switchMap(data &#x3D;&gt; {
+        this.saving &#x3D; false;
+        this.floorPlan  &#x3D; data;
+        return this.floorPlanSevice.listFloorPlansNames(site);
+      }
+    ))
+  }
+
+  outPutJSONFull() {
+    this._performOperations.next(&#x27;saveFullJson&#x27;)
+  }
+
+  outPutJSON(event) {
+    console.log(&#x27;outPutJSON&#x27;, event)
+  }
+
+  clearPlan() {
+    const confirm &#x3D; window.confirm(&quot;If you you confirm you will clear this layout of any items.&quot;)
+    if (!confirm) { return }
+    this.floorPlan.template &#x3D; this.templateBasic;
+    this.setFloorPlan(this.floorPlan);
+    this.saveFloorPlan(this.floorPlan);
+  }
+
+  initUserInfo() {
+    this.isAdmin          &#x3D; false;
+    this.isUserStaff      &#x3D; false;
+  }
+
+  getUserInfo() {
+    this.initUserInfo();
+    // const user &#x3D;   JSON.parse(localStorage.getItem(&#x27;user&#x27;)) as IUser;
+    this.isAdmin  &#x3D; this.userAuth.isAdmin;
+    this.isUser   &#x3D; this.userAuth.isUser;
+    this.userMode &#x3D; true;
+    this.editMode &#x3D; false;
+
+    if (this.isAdmin) {
+      this.isAdmin          &#x3D; true
+      this.isUser           &#x3D; true;
+      this.isUserStaff      &#x3D; true
+    }
+
+    if (!this.isAdmin) {
+      this.isUserStaff      &#x3D; true
+      this.isUser &#x3D; true;
+      this.userMode &#x3D; true;
+      this.editMode &#x3D; false;
+    }
+  }
+
+  setFloorPlan(item: IFloorPlan) {
+    this.floorPlan &#x3D; item;
+    this.floorPlan.template  &#x3D; JSON.parse(this.floorPlan.template)
+    this._floorPlan.next(item);
+    if (this.userMode) {
+      this._userMode.next(true)
+    }
+  }
+
+  backup() {
+    const site &#x3D; this.siteService.getAssignedSite()
+    this.backupRestore$ &#x3D; this.floorPlanSevice.saveBackup(site, this.floorPlan)
+  }
+
+  restore() {
+    this.loading &#x3D; true;
+    const site &#x3D; this.siteService.getAssignedSite()
+    const item$ &#x3D; this.floorPlanSevice.restoreBackup(site, this.floorPlan.id)
+    this.backupRestore$ &#x3D; item$.pipe(
+      switchMap( data &#x3D;&gt; {
+        this._floorPlan.next(data)
+        this.floorPlan &#x3D; data;
+        this.loading &#x3D; false;
+        return of(data)
+    }))
+
+  }
+
+  setTable(event) {
+    if (event) {
+      const value &#x3D; event?.name.split(&#x27;;&#x27;)
+      if (value) {
+        const item &#x3D; {uuid: value[0], orderID: value[1],  name: value[2], status: value[3] };
+        if (item) {
+          if (this.userMode) {
+            this.orderInfo &#x3D; item;
+            this.tableInfo &#x3D; event;
+            this.setActiveOrder(this.orderInfo.orderID, item.uuid, this.floorPlan.id, item.name )
+          }
+        }
+      }
+    }
+  }
+
+  setActiveOrder(id: string, uuID: string, floorPlanID: number, name: string) {
+    const site   &#x3D; this.siteService.getAssignedSite();
+    const order$ &#x3D;  this.orderService.getOrderByTableUUID(site, uuID )
+    order$.pipe(
+      switchMap(data &#x3D;&gt; {
+        this.refresh &#x3D; false;
+        if (!data || !data.id || data.id &#x3D;&#x3D; 0) {
+          this.refresh &#x3D; true;
+          return this.orderMethodsService.newOrderFromTable(site, null, uuID, floorPlanID, name);
+        }
+        if (data) {return of(data)}
+      }
+    )).pipe(
+      switchMap(data &#x3D;&gt; {
+      this.orderMethodsService.setActiveOrder(site, data)
+      if (this.orderInfo) {
+        const item &#x3D; {orderID: data.id, status: &#x27;active&#x27;};
+      }
+      if (data &amp;&amp; this.floorPlan &amp;&amp; this.refresh) {
+        return this.orderService.getActiveTableOrders(site, this.floorPlan.id);
+      }
+      const orders &#x3D; [] as IPOSOrder[]
+      return of(orders)
+    })).subscribe( orders &#x3D;&gt; {
+
+      if (this.refresh) {
+        if (orders &amp;&amp; orders.length&gt;0) {
+          try {
+            this.floorPlan.template  &#x3D; JSON.parse(this.floorPlan.template);
+            this.floorPlan.template  &#x3D; JSON.parse(this.floorPlan.template);
+          } catch (error) {
+          }
+          this.processActiveItems(orders);
+        }
+      }
+
+    })
+  }
+
+  getOrderIDFromTable(item: any) {
+    const id &#x3D; item?.orderID;
+    if (id &#x3D;&#x3D; undefined || id &#x3D;&#x3D;&#x3D; &#x27;undefined&#x27; || !id || id &#x3D;&#x3D;&#x3D; &#x27;&#x27; ||
+        id &#x3D;&#x3D;&#x3D; &#x27;orderid&#x27; || id &#x3D;&#x3D;&#x3D; &#x27;0&#x27;) {
+      return null
+    }
+    return id;
+  }
+
+  setOrder(event) {
+    if (this.orderInfo) {
+      const item &#x3D; this.orderInfo
+      this._newOrder.next(this.orderInfo)
+    }
+  }
+
+  getFloorPlan(event) {
+
+  }
+
+  _getFloorPlan(event) {
+    const site &#x3D; this.siteService.getAssignedSite();
+    if (!event) { return }
+    let floorPlan$ : Observable&lt;IFloorPlan&gt;;
+
+    if (this.userMode) {
+      floorPlan$ &#x3D; this.floorPlanSevice.getFloorPlanNoBackupCached(site, event.id);
+    }
+    if (!this.userMode) {
+      floorPlan$ &#x3D; this.floorPlanSevice.getFloorPlan(site, event.id);
+    }
+
+    this.floorPlanRefresh$ &#x3D; floorPlan$.pipe(
+      switchMap(data &#x3D;&gt; {
+
+        data.template  &#x3D; JSON.stringify(data.template)
+        try {
+          data.template  &#x3D; JSON.parse(data.template)
+          data.template  &#x3D; JSON.parse(data.template)
+        } catch (error) {
+          console.log(&#x27;error&#x27;, error)
+        }
+        this.floorPlan &#x3D; data;
+
+        if (data) {
+          return this.orderService.getActiveTableOrders(site, data.id)
+        }
+
+        this._floorPlan.next(this.floorPlan);
+        const orders &#x3D; [] as IPOSOrder[]
+        return of(orders)
+
+    })).pipe(
+      switchMap( orders &#x3D;&gt; {
+        if (orders &amp;&amp; orders.length&gt;0) {
+          this.processActiveItems(orders);
+          return of(orders)
+        }
+        this._floorPlan.next(this.floorPlan);
+        this.setZoomOnTimer();
+        return of(orders)
+    }))
+
+  }
+
+  setZoomDefault() {
+    this.zoomDefault &#x3D; +localStorage.getItem(&#x27;zoomDefault&#x27;);
+    if (this.zoomDefault &#x3D;&#x3D; 0 || !this.zoomDefault) {
+      this.zoomDefault &#x3D; 100;
+    }
+  }
+
+  onZoom(event) {
+    localStorage.setItem(&#x27;zoomDefault&#x27;, event)
+    this.zoomDefault &#x3D; event;
+    this._zoom.next(this.zoomDefault)
+  }
+
+  processActiveItems(orders: IPOSOrder[]) {
+    if (orders &amp;&amp; orders.length &gt;0 ) {
+      // console.log(&#x27;active orders&#x27;, orders)
+      orders.forEach(order &#x3D;&gt; {
+        const item &#x3D; {uuID: order.tableUUID, color: &#x27;red&#x27;};
+        this.floorPlan.template &#x3D; this.floorPlanSevice.alterObjectColor(item.uuID,item.color, this.floorPlan.template)
+      })
+      this.floorPlan.template &#x3D; JSON.stringify(this.floorPlan.template)
+    }
+
+    this._floorPlan.next(this.floorPlan);
+    this.setZoomOnTimer()
+
+  }
+
+  setZoomOnTimer() {
+    this.setZoomDefault()
+    this._zoom.next(this.zoomDefault)
+    // setTimeout (() &#x3D;&gt; {
+    //   this.setZoomDefault()
+    //   this._zoom.next(this.zoomDefault)
+    // }, 1000);
+  }
+
+  toggleUserMode() {
+    this.userMode &#x3D; !this.userMode
+    this._userMode.next(this.userMode)
+  }
+
+  disableAdmin(option: boolean) {
+    this.userMode  &#x3D; option;
+    this._userMode.next(option)
+  }
+
+  isJsonStructure(str) {
+    if (typeof str !&#x3D;&#x3D; &#x27;string&#x27;) return false;
+    try {
+      const result &#x3D; JSON.parse(str);
+      const type &#x3D; Object.prototype.toString.call(result);
+      return type &#x3D;&#x3D;&#x3D; &#x27;[object Object]&#x27;
+             || type &#x3D;&#x3D;&#x3D; &#x27;[object Array]&#x27;;
+    } catch (err) {
+        return false;
+    }
+  }
+
+  exampleFloor() {
+    this.floorPlan &#x3D; {} as IFloorPlan;
+    this.floorPlan.name &#x3D; &#x27;hello there&#x27;;
+    this.floorPlan.enabled &#x3D; true;
+    this.floorPlan.template &#x3D; this.templateBasic;
+  }
+
+  get templateBasic() {
+    return  &#x27;{&quot;version&quot;:&quot;5.2.4&quot;,&quot;objects&quot;:[{&quot;type&quot;:&quot;line&quot;,&quot;version&quot;:&quot;5.2.4&quot;,&quot;originX&quot;:&quot;center&quot;,&quot;originY&quot;:&quot;center&quot;,&quot;left&quot;:48,&quot;top&quot;:288,&quot;width&quot;:0,&quot;height&quot;:480,&quot;fill&quot;:&quot;rgb(0,0,0)&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;strokeWidth&quot;:4,&quot;strokeDashArray&quot;:null,&quot;strokeLineCap&quot;:&quot;butt&quot;,&quot;strokeDashOffset&quot;:0,&quot;strokeLineJoin&quot;:&quot;miter&quot;,&quot;strokeUniform&quot;:false,&quot;strokeMiterLimit&quot;:4,&quot;scaleX&quot;:1,&quot;scaleY&quot;:1,&quot;angle&quot;:0,&quot;flipX&quot;:false,&quot;flipY&quot;:false,&quot;opacity&quot;:1,&quot;shadow&quot;:null,&quot;visible&quot;:true,&quot;backgroundColor&quot;:&quot;&quot;,&quot;fillRule&quot;:&quot;nonzero&quot;,&quot;paintFirst&quot;:&quot;fill&quot;,&quot;globalCompositeOperation&quot;:&quot;source-over&quot;,&quot;skewX&quot;:0,&quot;skewY&quot;:0,&quot;name&quot;:&quot;WALL:3&quot;,&quot;hasControls&quot;:false,&quot;selectable&quot;:false,&quot;hasBorders&quot;:false,&quot;evented&quot;:true,&quot;hoverCursor&quot;:&quot;default&quot;,&quot;moveCursor&quot;:null,&quot;x1&quot;:0,&quot;x2&quot;:0,&quot;y1&quot;:240,&quot;y2&quot;:-240},{&quot;type&quot;:&quot;line&quot;,&quot;version&quot;:&quot;5.2.4&quot;,&quot;originX&quot;:&quot;center&quot;,&quot;originY&quot;:&quot;center&quot;,&quot;left&quot;:528,&quot;top&quot;:528,&quot;width&quot;:960,&quot;height&quot;:0,&quot;fill&quot;:&quot;rgb(0,0,0)&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;strokeWidth&quot;:4,&quot;strokeDashArray&quot;:null,&quot;strokeLineCap&quot;:&quot;butt&quot;,&quot;strokeDashOffset&quot;:0,&quot;strokeLineJoin&quot;:&quot;miter&quot;,&quot;strokeUniform&quot;:false,&quot;strokeMiterLimit&quot;:4,&quot;scaleX&quot;:1,&quot;scaleY&quot;:1,&quot;angle&quot;:0,&quot;flipX&quot;:false,&quot;flipY&quot;:false,&quot;opacity&quot;:1,&quot;shadow&quot;:null,&quot;visible&quot;:true,&quot;backgroundColor&quot;:&quot;&quot;,&quot;fillRule&quot;:&quot;nonzero&quot;,&quot;paintFirst&quot;:&quot;fill&quot;,&quot;globalCompositeOperation&quot;:&quot;source-over&quot;,&quot;skewX&quot;:0,&quot;skewY&quot;:0,&quot;name&quot;:&quot;WALL:2&quot;,&quot;hasControls&quot;:false,&quot;selectable&quot;:false,&quot;hasBorders&quot;:false,&quot;evented&quot;:true,&quot;hoverCursor&quot;:&quot;default&quot;,&quot;moveCursor&quot;:null,&quot;x1&quot;:480,&quot;x2&quot;:-480,&quot;y1&quot;:0,&quot;y2&quot;:0},{&quot;type&quot;:&quot;line&quot;,&quot;version&quot;:&quot;5.2.4&quot;,&quot;originX&quot;:&quot;center&quot;,&quot;originY&quot;:&quot;center&quot;,&quot;left&quot;:1008,&quot;top&quot;:288,&quot;width&quot;:0,&quot;height&quot;:480,&quot;fill&quot;:&quot;rgb(0,0,0)&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;strokeWidth&quot;:4,&quot;strokeDashArray&quot;:null,&quot;strokeLineCap&quot;:&quot;butt&quot;,&quot;strokeDashOffset&quot;:0,&quot;strokeLineJoin&quot;:&quot;miter&quot;,&quot;strokeUniform&quot;:false,&quot;strokeMiterLimit&quot;:4,&quot;scaleX&quot;:1,&quot;scaleY&quot;:1,&quot;angle&quot;:0,&quot;flipX&quot;:false,&quot;flipY&quot;:false,&quot;opacity&quot;:1,&quot;shadow&quot;:null,&quot;visible&quot;:true,&quot;backgroundColor&quot;:&quot;&quot;,&quot;fillRule&quot;:&quot;nonzero&quot;,&quot;paintFirst&quot;:&quot;fill&quot;,&quot;globalCompositeOperation&quot;:&quot;source-over&quot;,&quot;skewX&quot;:0,&quot;skewY&quot;:0,&quot;name&quot;:&quot;WALL:1&quot;,&quot;hasControls&quot;:false,&quot;selectable&quot;:false,&quot;hasBorders&quot;:false,&quot;evented&quot;:true,&quot;hoverCursor&quot;:&quot;default&quot;,&quot;moveCursor&quot;:null,&quot;x1&quot;:0,&quot;x2&quot;:0,&quot;y1&quot;:-240,&quot;y2&quot;:240},{&quot;type&quot;:&quot;line&quot;,&quot;version&quot;:&quot;5.2.4&quot;,&quot;originX&quot;:&quot;center&quot;,&quot;originY&quot;:&quot;center&quot;,&quot;left&quot;:528,&quot;top&quot;:48,&quot;width&quot;:960,&quot;height&quot;:0,&quot;fill&quot;:&quot;rgb(0,0,0)&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;strokeWidth&quot;:4,&quot;strokeDashArray&quot;:null,&quot;strokeLineCap&quot;:&quot;butt&quot;,&quot;strokeDashOffset&quot;:0,&quot;strokeLineJoin&quot;:&quot;miter&quot;,&quot;strokeUniform&quot;:false,&quot;strokeMiterLimit&quot;:4,&quot;scaleX&quot;:1,&quot;scaleY&quot;:1,&quot;angle&quot;:0,&quot;flipX&quot;:false,&quot;flipY&quot;:false,&quot;opacity&quot;:1,&quot;shadow&quot;:null,&quot;visible&quot;:true,&quot;backgroundColor&quot;:&quot;&quot;,&quot;fillRule&quot;:&quot;nonzero&quot;,&quot;paintFirst&quot;:&quot;fill&quot;,&quot;globalCompositeOperation&quot;:&quot;source-over&quot;,&quot;skewX&quot;:0,&quot;skewY&quot;:0,&quot;name&quot;:&quot;WALL:0&quot;,&quot;hasControls&quot;:false,&quot;selectable&quot;:false,&quot;hasBorders&quot;:false,&quot;evented&quot;:true,&quot;hoverCursor&quot;:&quot;default&quot;,&quot;moveCursor&quot;:null,&quot;x1&quot;:-480,&quot;x2&quot;:480,&quot;y1&quot;:0,&quot;y2&quot;:0},{&quot;type&quot;:&quot;rect&quot;,&quot;version&quot;:&quot;5.2.4&quot;,&quot;originX&quot;:&quot;center&quot;,&quot;originY&quot;:&quot;center&quot;,&quot;left&quot;:48,&quot;top&quot;:48,&quot;width&quot;:4,&quot;height&quot;:4,&quot;fill&quot;:&quot;#000&quot;,&quot;stroke&quot;:null,&quot;strokeWidth&quot;:0,&quot;strokeDashArray&quot;:null,&quot;strokeLineCap&quot;:&quot;butt&quot;,&quot;strokeDashOffset&quot;:0,&quot;strokeLineJoin&quot;:&quot;miter&quot;,&quot;strokeUniform&quot;:false,&quot;strokeMiterLimit&quot;:4,&quot;scaleX&quot;:1,&quot;scaleY&quot;:1,&quot;angle&quot;:0,&quot;flipX&quot;:false,&quot;flipY&quot;:false,&quot;opacity&quot;:1,&quot;shadow&quot;:null,&quot;visible&quot;:true,&quot;backgroundColor&quot;:&quot;&quot;,&quot;fillRule&quot;:&quot;nonzero&quot;,&quot;paintFirst&quot;:&quot;fill&quot;,&quot;globalCompositeOperation&quot;:&quot;source-over&quot;,&quot;skewX&quot;:0,&quot;skewY&quot;:0,&quot;rx&quot;:0,&quot;ry&quot;:0,&quot;name&quot;:&quot;CORNER&quot;,&quot;hasControls&quot;:false,&quot;selectable&quot;:false,&quot;hasBorders&quot;:true,&quot;evented&quot;:true,&quot;hoverCursor&quot;:&quot;crosshair&quot;,&quot;moveCursor&quot;:&quot;crosshair&quot;},{&quot;type&quot;:&quot;rect&quot;,&quot;version&quot;:&quot;5.2.4&quot;,&quot;originX&quot;:&quot;center&quot;,&quot;originY&quot;:&quot;center&quot;,&quot;left&quot;:1008,&quot;top&quot;:48,&quot;width&quot;:4,&quot;height&quot;:4,&quot;fill&quot;:&quot;#000&quot;,&quot;stroke&quot;:null,&quot;strokeWidth&quot;:0,&quot;strokeDashArray&quot;:null,&quot;strokeLineCap&quot;:&quot;butt&quot;,&quot;strokeDashOffset&quot;:0,&quot;strokeLineJoin&quot;:&quot;miter&quot;,&quot;strokeUniform&quot;:false,&quot;strokeMiterLimit&quot;:4,&quot;scaleX&quot;:1,&quot;scaleY&quot;:1,&quot;angle&quot;:0,&quot;flipX&quot;:false,&quot;flipY&quot;:false,&quot;opacity&quot;:1,&quot;shadow&quot;:null,&quot;visible&quot;:true,&quot;backgroundColor&quot;:&quot;&quot;,&quot;fillRule&quot;:&quot;nonzero&quot;,&quot;paintFirst&quot;:&quot;fill&quot;,&quot;globalCompositeOperation&quot;:&quot;source-over&quot;,&quot;skewX&quot;:0,&quot;skewY&quot;:0,&quot;rx&quot;:0,&quot;ry&quot;:0,&quot;name&quot;:&quot;CORNER&quot;,&quot;hasControls&quot;:false,&quot;selectable&quot;:false,&quot;hasBorders&quot;:true,&quot;evented&quot;:true,&quot;hoverCursor&quot;:&quot;crosshair&quot;,&quot;moveCursor&quot;:&quot;crosshair&quot;},{&quot;type&quot;:&quot;rect&quot;,&quot;version&quot;:&quot;5.2.4&quot;,&quot;originX&quot;:&quot;center&quot;,&quot;originY&quot;:&quot;center&quot;,&quot;left&quot;:1008,&quot;top&quot;:528,&quot;width&quot;:4,&quot;height&quot;:4,&quot;fill&quot;:&quot;#000&quot;,&quot;stroke&quot;:null,&quot;strokeWidth&quot;:0,&quot;strokeDashArray&quot;:null,&quot;strokeLineCap&quot;:&quot;butt&quot;,&quot;strokeDashOffset&quot;:0,&quot;strokeLineJoin&quot;:&quot;miter&quot;,&quot;strokeUniform&quot;:false,&quot;strokeMiterLimit&quot;:4,&quot;scaleX&quot;:1,&quot;scaleY&quot;:1,&quot;angle&quot;:0,&quot;flipX&quot;:false,&quot;flipY&quot;:false,&quot;opacity&quot;:1,&quot;shadow&quot;:null,&quot;visible&quot;:true,&quot;backgroundColor&quot;:&quot;&quot;,&quot;fillRule&quot;:&quot;nonzero&quot;,&quot;paintFirst&quot;:&quot;fill&quot;,&quot;globalCompositeOperation&quot;:&quot;source-over&quot;,&quot;skewX&quot;:0,&quot;skewY&quot;:0,&quot;rx&quot;:0,&quot;ry&quot;:0,&quot;name&quot;:&quot;CORNER&quot;,&quot;hasControls&quot;:false,&quot;selectable&quot;:false,&quot;hasBorders&quot;:true,&quot;evented&quot;:true,&quot;hoverCursor&quot;:&quot;crosshair&quot;,&quot;moveCursor&quot;:&quot;crosshair&quot;},{&quot;type&quot;:&quot;rect&quot;,&quot;version&quot;:&quot;5.2.4&quot;,&quot;originX&quot;:&quot;center&quot;,&quot;originY&quot;:&quot;center&quot;,&quot;left&quot;:48,&quot;top&quot;:528,&quot;width&quot;:4,&quot;height&quot;:4,&quot;fill&quot;:&quot;#000&quot;,&quot;stroke&quot;:null,&quot;strokeWidth&quot;:0,&quot;strokeDashArray&quot;:null,&quot;strokeLineCap&quot;:&quot;butt&quot;,&quot;strokeDashOffset&quot;:0,&quot;strokeLineJoin&quot;:&quot;miter&quot;,&quot;strokeUniform&quot;:false,&quot;strokeMiterLimit&quot;:4,&quot;scaleX&quot;:1,&quot;scaleY&quot;:1,&quot;angle&quot;:0,&quot;flipX&quot;:false,&quot;flipY&quot;:false,&quot;opacity&quot;:1,&quot;shadow&quot;:null,&quot;visible&quot;:true,&quot;backgroundColor&quot;:&quot;&quot;,&quot;fillRule&quot;:&quot;nonzero&quot;,&quot;paintFirst&quot;:&quot;fill&quot;,&quot;globalCompositeOperation&quot;:&quot;source-over&quot;,&quot;skewX&quot;:0,&quot;skewY&quot;:0,&quot;rx&quot;:0,&quot;ry&quot;:0,&quot;name&quot;:&quot;CORNER&quot;,&quot;hasControls&quot;:false,&quot;selectable&quot;:false,&quot;hasBorders&quot;:true,&quot;evented&quot;:true,&quot;hoverCursor&quot;:&quot;crosshair&quot;,&quot;moveCursor&quot;:&quot;crosshair&quot;}],&quot;backgroundImage&quot;:{&quot;type&quot;:&quot;image&quot;,&quot;version&quot;:&quot;5.2.4&quot;,&quot;originX&quot;:&quot;left&quot;,&quot;originY&quot;:&quot;top&quot;,&quot;left&quot;:0,&quot;top&quot;:0,&quot;width&quot;:1246,&quot;height&quot;:600,&quot;fill&quot;:&quot;rgb(0,0,0)&quot;,&quot;stroke&quot;:null,&quot;strokeWidth&quot;:0,&quot;strokeDashArray&quot;:null,&quot;strokeLineCap&quot;:&quot;butt&quot;,&quot;strokeDashOffset&quot;:0,&quot;strokeLineJoin&quot;:&quot;miter&quot;,&quot;strokeUniform&quot;:false,&quot;strokeMiterLimit&quot;:4,&quot;scaleX&quot;:1,&quot;scaleY&quot;:1,&quot;angle&quot;:0,&quot;flipX&quot;:false,&quot;flipY&quot;:false,&quot;opacity&quot;:1,&quot;shadow&quot;:null,&quot;visible&quot;:true,&quot;backgroundColor&quot;:&quot;&quot;,&quot;fillRule&quot;:&quot;nonzero&quot;,&quot;paintFirst&quot;:&quot;fill&quot;,&quot;globalCompositeOperation&quot;:&quot;source-over&quot;,&quot;skewX&quot;:0,&quot;skewY&quot;:0,&quot;cropX&quot;:0,&quot;cropY&quot;:0,&quot;hasControls&quot;:true,&quot;selectable&quot;:true,&quot;hasBorders&quot;:true,&quot;evented&quot;:true,&quot;hoverCursor&quot;:null,&quot;moveCursor&quot;:null,&quot;src&quot;:&quot;https://pointlesspos.com/img/cement.png&quot;,&quot;crossOrigin&quot;:null,&quot;filters&quot;:[]},&quot;hoverCursor&quot;:&quot;move&quot;,&quot;moveCursor&quot;:&quot;move&quot;}&#x27;
+  }
+
+   //image data
+  backgroudImage(event) {
+    let data &#x3D; event
+    this.floorPlan.image &#x3D; data
+    this.saveFloorPlan(event)
+  };
+
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'uuidList.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -6,6 +6,7 @@ import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-qrorder',
@@ -21,43 +22,44 @@ export class QROrderComponent implements OnInit {
   order$        : Observable<IPOSOrder>;
 
   currentOrderSusbcriber() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
       if (!data) { return }
     })
   }
 
   constructor(public  route: ActivatedRoute,
-              private siteService: SitesService, 
+              private siteService: SitesService,
               private clientService: ClientTableService,
               private auth: AuthenticationService,
+              public orderMethodsService: OrderMethodsService,
               private userSwitchingService: UserSwitchingService,
               private orderService: OrdersService){
     this.id = this.route.snapshot.paramMap.get('id');
    }
 
-  ngOnInit(): void 
+  ngOnInit(): void
   {
-    if (this.id) { 
-      if (this.order) { 
-        //skip scanning and go to order. 
+    if (this.id) {
+      if (this.order) {
+        //skip scanning and go to order.
       }
       this.initQROrder()
     };
     this.message = 'Could not start new order, please contact staff.'
   }
 
-  initQROrder() { 
+  initQROrder() {
     this.message = "...starting your order."
     const site = this.siteService.getAssignedSite()
     const client$ = this.initTempUser();
     this.order$ = client$.pipe(
-      switchMap(data => { 
+      switchMap(data => {
         return this.orderService.newOrderFromQR(site, this.id)
       })
     ).pipe(
-      switchMap(data => { 
-        //navigate to the menu screen 
+      switchMap(data => {
+        //navigate to the menu screen
         //hide the sidebar
         //show the search bar
         return of(data)
@@ -65,14 +67,14 @@ export class QROrderComponent implements OnInit {
     )
   }
 
-  initTempUser() { 
+  initTempUser() {
     const site = this.siteService.getAssignedSite()
     const newClient$ = this.clientService.newTempClient(site)
     if (this.auth.userValue) {
-      return of(this.auth.userValue)       
+      return of(this.auth.userValue)
     }
     const client$ = newClient$.pipe(
-      switchMap(data => { 
+      switchMap(data => {
         const iUser = {} as IUser;
         iUser.firstName = data.firstName;
         iUser.lastName  = data.lastName;

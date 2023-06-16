@@ -8,6 +8,7 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { IUser } from 'src/app/_interfaces';
 import { Router } from '@angular/router';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-cart-button',
@@ -47,7 +48,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   deviceInfo : IDeviceInfo;
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       if (data && data.id) {
         this.order = data
         return
@@ -73,6 +74,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     private toolbarServiceUI:       ToolBarUIService,
     private router                : Router,
     private userSwitchingService: UserSwitchingService,
+    public orderMethodsService: OrderMethodsService,
     ) {
    }
 
@@ -130,7 +132,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   addNewOrder() {
     const site = this.siteService.getAssignedSite();
 
-     this.actionOrder$ = this.orderService.newOrderWithPayloadMethod(site, null).pipe(
+     this.actionOrder$ = this.orderMethodsService.newOrderWithPayloadMethod(site, null).pipe(
       switchMap(data => {
         return of(data)
       })
@@ -144,7 +146,8 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   }
 
   isPosNameDefined(): boolean {
-    if (this.orderService.posName != '' && this.orderService.posName != undefined  && this.orderService.posName != null)
+    const posName = localStorage.getItem('devicename')
+    if (posName != '' && posName != undefined  && posName != null)
     {return true}
   }
 
@@ -161,7 +164,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
           data.subscribe(data => {
             if (data && data.id) {
               this.order = data
-              this.order$.next(this.orderService.currentOrder$)
+              this.order$.next(this.orderMethodsService.currentOrder$)
               this.toolbarServiceUI.updateOrderBar(true)
             }
           })
@@ -181,7 +184,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     if (!user) { return }
 
     const site   = this.siteService.getAssignedSite()
-    const posName = this.orderService.posName
+    const posName = localStorage.getItem('devicename')
     this._order$  =  this.orderService.getCurrentPOSOrder(site, posName )
       .pipe(
         repeatWhen(notifications =>
@@ -207,7 +210,8 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   processOrder() {
     const site = this.siteService.getAssignedSite()
     if (this.isPosNameDefined()) {
-      this._order$  =  this.orderService.getCurrentPOSOrder(site ,this.orderService.posName )
+      const posName = localStorage.getItem('devicename')
+      this._order$  =  this.orderService.getCurrentPOSOrder(site ,posName )
         .pipe(repeatWhen(notifications => notifications.pipe(
            delay(1500)),
         ),finalize(() => {

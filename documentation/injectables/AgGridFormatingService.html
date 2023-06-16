@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >AgGridFormatingService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >AgGridFormatingService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -87,6 +94,12 @@
                                 <a href="#initGridOptions" >initGridOptions</a>
                             </li>
                             <li>
+                                <a href="#initGridOptionsClientType" >initGridOptionsClientType</a>
+                            </li>
+                            <li>
+                                <a href="#initGridOptionsFormated" >initGridOptionsFormated</a>
+                            </li>
+                            <li>
                                 <a href="#initProductSearchModel" >initProductSearchModel</a>
                             </li>
                         </ul>
@@ -97,11 +110,25 @@
 
 
 
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#rowClasses" >rowClasses</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
         </tbody>
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
@@ -150,7 +177,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -249,8 +276,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="26"
-                            class="link-to-prism">src/app/_components/_aggrid/ag-grid-formating.service.ts:26</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="84"
+                            class="link-to-prism">src/app/_components/_aggrid/ag-grid-formating.service.ts:84</a></div>
                 </td>
             </tr>
 
@@ -260,6 +287,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -299,7 +327,169 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >{ pagination: boolean; paginationPageSize: number; cacheBlockSize: number; maxBlocksInCache: number; rowModelType: string; infiniteInitialRowCount: number; columnDefs: any; rowSelection: string; }</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >{ pagination: boolean; paginationPageSize: number; cacheBlockSize: number; maxBlocksInCache: number; rowModelType: string; infiniteInitialRowCount: number; columnDefs: any; rowSelection: string; rowClassRules: { ...; }; }</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initGridOptionsClientType"></a>
+                    <span class="name">
+                        <span ><b>initGridOptionsClientType</b></span>
+                        <a href="#initGridOptionsClientType"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initGridOptionsClientType(pageSize: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, columnDefs: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="26"
+                            class="link-to-prism">src/app/_components/_aggrid/ag-grid-formating.service.ts:26</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>pageSize</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>columnDefs</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >{ pagination: boolean; columnDefs: any; rowSelection: string; rowClassRules: { &quot;&quot;: (params: any) &#x3D;&gt; boolean; &quot;row-not-forsale&quot;: (params: any) &#x3D;&gt; boolean; &quot;row-manifest-rejected&quot;: (params: any) &#x3D;&gt; boolean; &quot;row-active&quot;: (params: any) &#x3D;&gt; boolean; &quot;row-not-active&quot;: (params: any) &#x3D;&gt; boolean; &quot;row-unassigned&quot;: (params: a...</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initGridOptionsFormated"></a>
+                    <span class="name">
+                        <span ><b>initGridOptionsFormated</b></span>
+                        <a href="#initGridOptionsFormated"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initGridOptionsFormated(pageSize: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, columnDefs: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="99"
+                            class="link-to-prism">src/app/_components/_aggrid/ag-grid-formating.service.ts:99</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>pageSize</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>columnDefs</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >{ pagination: boolean; paginationPageSize: number; cacheBlockSize: number; maxBlocksInCache: number; rowModelType: string; infiniteInitialRowCount: number; columnDefs: any; rowSelection: string; rowClassRules: { ...; }; }</a></code>
 
                     </div>
                     <div class="io-description">
@@ -329,8 +519,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="52"
-                            class="link-to-prism">src/app/_components/_aggrid/ag-grid-formating.service.ts:52</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="129"
+                            class="link-to-prism">src/app/_components/_aggrid/ag-grid-formating.service.ts:129</a></div>
                 </td>
             </tr>
 
@@ -340,6 +530,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -439,10 +630,37 @@
     </table>
 </section>
 
+            <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="rowClasses"></a>
+                        <span class="name"><b>rowClasses</b><a href="#rowClasses"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>rowClasses()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/_components/_aggrid/ag-grid-formating.service.ts:36</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
 import { MatSnackBar } from &#x27;@angular/material/snack-bar&#x27;;
 import { ProductSearchModel } from &#x27;src/app/_interfaces/search-models/product-search&#x27;;
@@ -453,7 +671,7 @@ import { ButtonRendererComponent } from &#x27;../btn-renderer.component&#x27;;
 })
 export class AgGridFormatingService {
 
-  constructor(private _snackbar: MatSnackBar) { }
+constructor(private _snackbar: MatSnackBar) { }
 
 initFrameworkComponents() {
   return {
@@ -468,10 +686,85 @@ initDefaultColumnDef() {
   };
 }
 
-initGridOptions(pageSize: number, columnDefs: any)  {
-
-  console.log(&#x27;initGridOptions&#x27;)
+initGridOptionsClientType(pageSize: number, columnDefs: any)  {
   return {
+    pagination: true,
+    // rowModelType: &#x27;clienttype&#x27;,
+    columnDefs: columnDefs,
+    rowSelection: &#x27;multiple&#x27;,
+    rowClassRules: this.rowClasses
+  }
+}
+
+get rowClasses() {
+  return  {
+
+    &quot;&quot; :  (params) &#x3D;&gt; {
+      if (params.node.selected) {
+        return true;
+      }
+    },
+
+    &quot;row-not-forsale&quot; :  (params) &#x3D;&gt; {
+      const value &#x3D; params.api.getValue(&quot;notAvalibleForSale&quot;, params.node) &#x3D;&#x3D; true;
+      if (value) {
+        return true
+      }
+    },
+
+    &quot;row-manifest-rejected&quot; :  (params) &#x3D;&gt; {
+      const value &#x3D; params.api.getValue(&quot;rejected&quot;, params.node) !&#x3D; null;
+      if (value) {
+        return true
+      }
+    },
+
+    &quot;row-active&quot; :  (params) &#x3D;&gt; {
+      const value &#x3D; params.api.getValue(&quot;active&quot;, params.node) !&#x3D; false;
+      if (value) {
+        return true
+      }
+    },
+
+    &quot;row-not-active&quot; :  (params) &#x3D;&gt; {
+      const value &#x3D; params.api.getValue(&quot;active&quot;, params.node) &#x3D;&#x3D; false;
+      if (value) {
+        return true
+      }
+    },
+
+    &quot;row-unassigned&quot;: (params) &#x3D;&gt; {
+      return params.api.getValue(&quot;manifestID&quot;, params.node) &#x3D;&#x3D; 0
+    },
+
+    &quot;row-manifest&quot;: (params) &#x3D;&gt; {
+      return params.api.getValue(&quot;manifestID&quot;, params.node) &gt;&#x3D; 1
+    }
+  }
+
+}
+
+initGridOptions(pageSize: number, columnDefs: any)  {
+  return {
+    pagination: true,
+    paginationPageSize: pageSize,
+    cacheBlockSize: pageSize,
+    maxBlocksInCache: 50,
+    rowModelType: &#x27;infinite&#x27;,
+    infiniteInitialRowCount: 0,
+    columnDefs: columnDefs,
+    rowSelection: &#x27;multiple&#x27;,
+    rowClassRules: this.rowClasses
+  }
+
+}
+
+initGridOptionsFormated(pageSize: number, columnDefs: any) {
+
+  if (!columnDefs) { return null };
+
+  const grid &#x3D; {
+    // rowClassRules: this.getRowCalassRules(),
     pagination: true,
     paginationPageSize: pageSize,
     cacheBlockSize: 20,
@@ -480,19 +773,21 @@ initGridOptions(pageSize: number, columnDefs: any)  {
     infiniteInitialRowCount: 0,
     columnDefs: columnDefs,
     rowSelection: &#x27;multiple&#x27;,
+    rowClassRules: {
+      &quot;row-fail&quot;: params &#x3D;&gt; params.api.getValue(&quot;packageCountRemaining&quot;, params.node) &lt; 10,
+      &quot;row-pass&quot;: params &#x3D;&gt; params.api.getValue(&quot;packageCountRemaining&quot;, params.node) &gt;&#x3D; 10,
+      &quot;row-unassigned&quot;: params &#x3D;&gt; params.api.getValue(&quot;manifestID&quot;, params.node) &#x3D;&#x3D; 0,
+      &quot;row-manifest&quot;: params &#x3D;&gt; params.api.getValue(&quot;manifestID&quot;, params.node) &gt;&#x3D; 1
+    },
   }
-
-  //Infinite settings
-  // rowModelType: &#x27;infinite&#x27;,
-  // pagination: true,
-  // cacheBlockSize: 15,
-  // paginationPageSize: 10,
-  // cacheOverflowSize: 2,
-  // maxConcurrentDatasourceRequests: 2,
-  // infiniteInitialRowCount: 1,
-  // maxBlocksInCache: 2,
-
+  return grid
 }
+// getRowCalassRules() {
+//   return {
+//     &#x27;row-unassigned&#x27; : function(params) { return params.data.manifestID &#x3D;&#x3D; 0  },
+//     &#x27;row-manifest&#x27;   : function(params) { return params.data.manifestID &gt;&#x3D; 0  },
+//   }
+// }
 
   initProductSearchModel(categoryID: number, search: string, pageSize: number,
                          currentPage: number, itemTypeID: number, brandID: number): ProductSearchModel {
@@ -518,8 +813,6 @@ initGridOptions(pageSize: number, columnDefs: any)  {
   }
 
 
-
-
 }
 </code></pre>
     </div>
@@ -532,14 +825,15 @@ initGridOptions(pageSize: number, columnDefs: any)  {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -551,6 +845,15 @@ initGridOptions(pageSize: number, columnDefs: any)  {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -560,8 +863,8 @@ initGridOptions(pageSize: number, columnDefs: any)  {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

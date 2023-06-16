@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >FbPriceScheduleService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >FbPriceScheduleService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -79,9 +86,6 @@
                         <ul class="index-list">
                             <li>
                                 <a href="#addArray" >addArray</a>
-                            </li>
-                            <li>
-                                <a href="#addClientType" >addClientType</a>
                             </li>
                             <li>
                                 <a href="#addClientTypes" >addClientTypes</a>
@@ -242,18 +246,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(fb: <a href="https://angular.io/api/forms/FormBuilder" target="_blank">FormBuilder</a>, priceScheduledataService: <a href="../injectables/PriceScheduleDataService.html" target="_self">PriceScheduleDataService</a>)</code>
+<code>constructor(fb: UntypedFormBuilder, datePipe: DatePipe, priceScheduledataService: <a href="../injectables/PriceScheduleDataService.html" target="_self">PriceScheduleDataService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:26</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:25</a></div>
                             </td>
                         </tr>
 
@@ -274,7 +278,19 @@
                                                         <td>fb</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/forms/FormBuilder" target="_blank" >FormBuilder</a></code>
+                                                                    <code>UntypedFormBuilder</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>datePipe</td>
+                                                  
+                                                        <td>
+                                                                    <code>DatePipe</code>
                                                         </td>
                                                   
                                                     <td>
@@ -303,7 +319,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -328,8 +344,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="247"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:247</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="255"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:255</a></div>
                 </td>
             </tr>
 
@@ -339,6 +355,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -403,86 +420,6 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="addClientType"></a>
-                    <span class="name">
-                        <span ><b>addClientType</b></span>
-                        <a href="#addClientType"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>addClientType(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, clientType: <a href="../interfaces/ClientType.html" target="_self">ClientTypes</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="190"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:190</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>inputForm</td>
-                                    <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>clientType</td>
-                                    <td>
-                                                <code><a href="../interfaces/ClientType.html" target="_self" >ClientTypes</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
                     <a name="addClientTypes"></a>
                     <span class="name">
                         <span ><b>addClientTypes</b></span>
@@ -492,15 +429,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addClientTypes(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, items: <a href="../interfaces/ClientType.html" target="_self">ClientType[]</a>)</code>
+<code>addClientTypes(inputForm: UntypedFormGroup, items: any[])</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="314"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:314</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="335"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:335</a></div>
                 </td>
             </tr>
 
@@ -510,6 +447,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -522,7 +460,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -534,7 +472,7 @@
                                 <tr>
                                     <td>items</td>
                                     <td>
-                                                <code><a href="../interfaces/ClientType.html" target="_self" >ClientType[]</a></code>
+                                            <code>any[]</code>
                                     </td>
 
                                     <td>
@@ -572,15 +510,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addDateRange(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, dateFrame: <a href="../interfaces/DateFrame.html" target="_self">DateFrame</a>)</code>
+<code>addDateRange(inputForm: UntypedFormGroup, dateFrame: <a href="../interfaces/DateFrame.html" target="_self">DateFrame</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="432"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:432</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="459"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:459</a></div>
                 </td>
             </tr>
 
@@ -590,6 +528,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -602,7 +541,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -652,15 +591,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addDateRanges(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, items: <a href="../interfaces/DateFrame.html" target="_self">DateFrame[]</a>)</code>
+<code>addDateRanges(inputForm: UntypedFormGroup, items: <a href="../interfaces/DateFrame.html" target="_self">DateFrame[]</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="398"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:398</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="401"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:401</a></div>
                 </td>
             </tr>
 
@@ -670,6 +609,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -682,7 +622,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -732,15 +672,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addDiscountBrand(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
+<code>addDiscountBrand(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="271"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:271</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="279"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:279</a></div>
                 </td>
             </tr>
 
@@ -750,6 +690,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -762,7 +703,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -812,15 +753,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addDiscountBrands(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
+<code>addDiscountBrands(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="207"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:207</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="213"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:213</a></div>
                 </td>
             </tr>
 
@@ -830,6 +771,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -842,7 +784,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -892,15 +834,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addDiscountCategories(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
+<code>addDiscountCategories(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="198"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:198</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="204"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:204</a></div>
                 </td>
             </tr>
 
@@ -910,6 +852,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -922,7 +865,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -972,15 +915,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addDiscountCategory(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
+<code>addDiscountCategory(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="262"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:262</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="270"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:270</a></div>
                 </td>
             </tr>
 
@@ -990,6 +933,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1002,7 +946,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -1052,15 +996,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addDiscountInfo(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>, controlName: <a href="../s/s.html" target="_self">string</a>)</code>
+<code>addDiscountInfo(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>, controlName: <a href="../s/s.html" target="_self">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="287"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:287</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="295"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:295</a></div>
                 </td>
             </tr>
 
@@ -1070,6 +1014,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1082,7 +1027,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -1144,15 +1089,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addDiscountItem(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
+<code>addDiscountItem(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="268"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:268</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="276"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:276</a></div>
                 </td>
             </tr>
 
@@ -1162,6 +1107,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1174,7 +1120,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -1224,15 +1170,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addDiscountItems(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
+<code>addDiscountItems(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="204"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:204</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="210"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:210</a></div>
                 </td>
             </tr>
 
@@ -1242,6 +1188,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1254,7 +1201,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -1304,15 +1251,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addDiscountItemType(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
+<code>addDiscountItemType(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="265"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:265</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="273"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:273</a></div>
                 </td>
             </tr>
 
@@ -1322,6 +1269,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1334,7 +1282,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -1384,15 +1332,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addDiscountItemTypes(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
+<code>addDiscountItemTypes(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="201"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:201</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="207"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:207</a></div>
                 </td>
             </tr>
 
@@ -1402,6 +1350,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1414,7 +1363,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -1464,15 +1413,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addOrderTypes(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, items: <a href="../interfaces/OrderType.html" target="_self">OrderType[]</a>)</code>
+<code>addOrderTypes(inputForm: UntypedFormGroup, items: <a href="../interfaces/OrderType.html" target="_self">OrderType[]</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="335"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:335</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="356"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:356</a></div>
                 </td>
             </tr>
 
@@ -1482,6 +1431,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1494,7 +1444,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -1544,15 +1494,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addRequiredBrand(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
+<code>addRequiredBrand(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="283"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:283</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="291"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:291</a></div>
                 </td>
             </tr>
 
@@ -1562,6 +1512,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1574,7 +1525,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -1624,15 +1575,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addRequiredBrands(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
+<code>addRequiredBrands(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="220"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:220</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="226"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:226</a></div>
                 </td>
             </tr>
 
@@ -1642,6 +1593,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1654,7 +1606,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -1704,15 +1656,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addRequiredCategories(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
+<code>addRequiredCategories(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="211"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:211</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="217"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:217</a></div>
                 </td>
             </tr>
 
@@ -1722,6 +1674,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1734,7 +1687,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -1784,15 +1737,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addRequiredCategory(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
+<code>addRequiredCategory(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="274"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:274</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="282"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:282</a></div>
                 </td>
             </tr>
 
@@ -1802,6 +1755,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1814,7 +1768,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -1864,15 +1818,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addRequiredItem(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
+<code>addRequiredItem(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="280"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:280</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="288"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:288</a></div>
                 </td>
             </tr>
 
@@ -1882,6 +1836,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1894,7 +1849,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -1944,15 +1899,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addRequiredItems(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
+<code>addRequiredItems(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="217"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:217</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="223"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:223</a></div>
                 </td>
             </tr>
 
@@ -1962,6 +1917,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1974,7 +1930,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -2024,15 +1980,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addRequiredItemType(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
+<code>addRequiredItemType(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="277"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:277</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="285"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:285</a></div>
                 </td>
             </tr>
 
@@ -2042,6 +1998,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2054,7 +2011,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -2104,15 +2061,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addRequiredItemTypes(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
+<code>addRequiredItemTypes(inputForm: UntypedFormGroup, info: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="214"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:214</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="220"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:220</a></div>
                 </td>
             </tr>
 
@@ -2122,6 +2079,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2134,7 +2092,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -2184,15 +2142,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addTimeRange(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, timeFrame: <a href="../interfaces/TimeFrame.html" target="_self">TimeFrame</a>)</code>
+<code>addTimeRange(inputForm: UntypedFormGroup, timeFrame: <a href="../interfaces/TimeFrame.html" target="_self">TimeFrame</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="419"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:419</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="446"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:446</a></div>
                 </td>
             </tr>
 
@@ -2202,6 +2160,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2214,7 +2173,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -2264,15 +2223,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addTimeRanges(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, items: <a href="../interfaces/TimeFrame.html" target="_self">TimeFrame[]</a>)</code>
+<code>addTimeRanges(inputForm: UntypedFormGroup, items: <a href="../interfaces/TimeFrame.html" target="_self">TimeFrame[]</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="356"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:356</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="378"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:378</a></div>
                 </td>
             </tr>
 
@@ -2282,6 +2241,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2294,7 +2254,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -2351,8 +2311,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="463"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:463</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="490"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:490</a></div>
                 </td>
             </tr>
 
@@ -2388,8 +2348,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="456"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:456</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="483"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:483</a></div>
                 </td>
             </tr>
 
@@ -2418,15 +2378,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>deleteArrayItem(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, controlName: <a href="../s/s.html" target="_self">string</a>)</code>
+<code>deleteArrayItem(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: UntypedFormGroup, controlName: <a href="../s/s.html" target="_self">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="501"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:501</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="528"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:528</a></div>
                 </td>
             </tr>
 
@@ -2436,6 +2396,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2460,7 +2421,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -2510,15 +2471,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>deleteBrand(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>deleteBrand(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="476"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:476</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="503"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:503</a></div>
                 </td>
             </tr>
 
@@ -2528,6 +2489,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2552,7 +2514,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -2590,15 +2552,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>deleteCategory(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>deleteCategory(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="479"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:479</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="506"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:506</a></div>
                 </td>
             </tr>
 
@@ -2608,6 +2570,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2632,7 +2595,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -2670,15 +2633,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>deleteDateFrame(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>deleteDateFrame(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="473"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:473</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="500"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:500</a></div>
                 </td>
             </tr>
 
@@ -2688,6 +2651,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2712,7 +2676,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -2750,15 +2714,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>deleteDiscountBrand(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>deleteDiscountBrand(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="488"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:488</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="515"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:515</a></div>
                 </td>
             </tr>
 
@@ -2768,6 +2732,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2792,7 +2757,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -2830,15 +2795,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>deleteDiscountCategory(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>deleteDiscountCategory(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="491"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:491</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="518"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:518</a></div>
                 </td>
             </tr>
 
@@ -2848,6 +2813,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2872,7 +2838,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -2910,15 +2876,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>deleteDiscountItem(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>deleteDiscountItem(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="494"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:494</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="521"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:521</a></div>
                 </td>
             </tr>
 
@@ -2928,6 +2894,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2952,7 +2919,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -2990,15 +2957,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>deleteDiscountItemType(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>deleteDiscountItemType(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="498"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:498</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="525"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:525</a></div>
                 </td>
             </tr>
 
@@ -3008,6 +2975,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -3032,7 +3000,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -3070,15 +3038,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>deleteFrame(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>deleteFrame(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="470"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:470</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="497"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:497</a></div>
                 </td>
             </tr>
 
@@ -3088,6 +3056,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -3112,7 +3081,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -3150,15 +3119,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>deleteItem(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>deleteItem(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="482"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:482</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="509"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:509</a></div>
                 </td>
             </tr>
 
@@ -3168,6 +3137,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -3192,7 +3162,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -3230,15 +3200,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>deleteItemType(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>deleteItemType(i: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, inputForm: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="485"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:485</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="512"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:512</a></div>
                 </td>
             </tr>
 
@@ -3248,6 +3218,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -3272,7 +3243,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -3310,7 +3281,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getFormValue(item: <a href="../interfaces/IPriceSchedule.html" target="_self">IPriceSchedule</a>, inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>getFormValue(item: <a href="../interfaces/IPriceSchedule.html" target="_self">IPriceSchedule</a>, inputForm: UntypedFormGroup)</code>
                 </td>
             </tr>
 
@@ -3328,6 +3299,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -3352,7 +3324,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -3390,7 +3362,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>initForm(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>initForm(inputForm: UntypedFormGroup)</code>
                 </td>
             </tr>
 
@@ -3408,6 +3380,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -3420,7 +3393,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -3435,7 +3408,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                        <b>Returns : </b>    <code>UntypedFormGroup</code>
 
                     </div>
                     <div class="io-description">
@@ -3458,15 +3431,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>initFormData(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, priceSchedule: <a href="../interfaces/IPriceSchedule.html" target="_self">IPriceSchedule</a>)</code>
+<code>initFormData(inputForm: UntypedFormGroup, priceSchedule: <a href="../interfaces/IPriceSchedule.html" target="_self">IPriceSchedule</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="164"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:164</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="178"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:178</a></div>
                 </td>
             </tr>
 
@@ -3476,6 +3449,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -3488,7 +3462,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -3545,8 +3519,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="104"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:104</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="121"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:121</a></div>
                 </td>
             </tr>
 
@@ -3575,7 +3549,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>initSearchForm(form: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>initSearchForm(form: UntypedFormGroup)</code>
                 </td>
             </tr>
 
@@ -3593,6 +3567,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -3605,7 +3580,7 @@
                                 <tr>
                                     <td>form</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -3620,7 +3595,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                        <b>Returns : </b>    <code>UntypedFormGroup</code>
 
                     </div>
                     <div class="io-description">
@@ -3643,15 +3618,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>setArrayValue(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, items: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, controlName: <a href="../s/s.html" target="_self">string</a>, itemName: <a href="../s/s.html" target="_self">string</a>)</code>
+<code>setArrayValue(inputForm: UntypedFormGroup, items: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, controlName: <a href="../s/s.html" target="_self">string</a>, itemName: <a href="../s/s.html" target="_self">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="126"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:126</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="142"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:142</a></div>
                 </td>
             </tr>
 
@@ -3661,6 +3636,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -3673,7 +3649,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -3747,15 +3723,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>setClientTypeValues(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, items: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+<code>setClientTypeValues(inputForm: UntypedFormGroup, items: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="108"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:108</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="125"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:125</a></div>
                 </td>
             </tr>
 
@@ -3765,6 +3741,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -3777,7 +3754,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -3827,15 +3804,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>setDiscountInfoValues(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, items: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>, formArrayName: <a href="../s/s.html" target="_self">string</a>)</code>
+<code>setDiscountInfoValues(inputForm: UntypedFormGroup, items: <a href="../interfaces/DiscountInfo.html" target="_self">DiscountInfo[]</a>, formArrayName: <a href="../s/s.html" target="_self">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="224"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:224</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="230"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:230</a></div>
                 </td>
             </tr>
 
@@ -3845,6 +3822,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -3857,7 +3835,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -3919,15 +3897,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>setOrderTypeValues(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, items: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+<code>setOrderTypeValues(inputForm: UntypedFormGroup, items: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="112"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:112</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="129"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:129</a></div>
                 </td>
             </tr>
 
@@ -3937,6 +3915,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -3949,7 +3928,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -3999,15 +3978,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>setValue(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, fieldName: <a href="../s/s.html" target="_self">string</a>, value: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+<code>setValue(inputForm: UntypedFormGroup, fieldName: <a href="../s/s.html" target="_self">string</a>, value: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="118"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:118</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="135"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:135</a></div>
                 </td>
             </tr>
 
@@ -4017,6 +3996,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -4029,7 +4009,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -4091,7 +4071,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>setValues(item: <a href="../interfaces/IPriceSchedule.html" target="_self">IPriceSchedule</a>, inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>setValues(item: <a href="../interfaces/IPriceSchedule.html" target="_self">IPriceSchedule</a>, inputForm: UntypedFormGroup)</code>
                 </td>
             </tr>
 
@@ -4109,6 +4089,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -4133,7 +4114,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -4148,7 +4129,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                        <b>Returns : </b>    <code>UntypedFormGroup</code>
 
                     </div>
                     <div class="io-description">
@@ -4171,15 +4152,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>setWeekDayArray(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, items: any[])</code>
+<code>setWeekDayArray(inputForm: UntypedFormGroup, items: any[])</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="377"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:377</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="424"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:424</a></div>
                 </td>
             </tr>
 
@@ -4189,6 +4170,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -4201,7 +4183,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -4251,15 +4233,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>updateDiscountInfos(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, priceSchedule: <a href="../interfaces/IPriceSchedule.html" target="_self">IPriceSchedule</a>)</code>
+<code>updateDiscountInfos(inputForm: UntypedFormGroup, priceSchedule: <a href="../interfaces/IPriceSchedule.html" target="_self">IPriceSchedule</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="178"
-                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:178</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="191"
+                            class="link-to-prism">src/app/_form-builder/fb-price-schedule.service.ts:191</a></div>
                 </td>
             </tr>
 
@@ -4269,6 +4251,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -4281,7 +4264,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -4323,11 +4306,10 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
-import { FormBuilder, FormGroup, FormArray } from &#x27;@angular/forms&#x27;;
-import { DateRange } from &#x27;@angular/material/datepicker&#x27;;
-import { ClientType, IPriceSchedule, WeekDay , DateFrame, TimeFrame, OrderType, DiscountInfo  } from &#x27;../_interfaces/menu/price-schedule&#x27;;
+import { UntypedFormBuilder, UntypedFormGroup, UntypedFormArray } from &#x27;@angular/forms&#x27;;
+import { IPriceSchedule, DateFrame, TimeFrame, OrderType, DiscountInfo  } from &#x27;../_interfaces/menu/price-schedule&#x27;;
 import { DatePipe } from &#x27;@angular/common&#x27;;
 import { PriceScheduleDataService } from &#x27;../_services/menu/price-schedule-data.service&#x27;;
 
@@ -4352,11 +4334,12 @@ import { PriceScheduleDataService } from &#x27;../_services/menu/price-schedule-
 export class FbPriceScheduleService {
 
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
+             private datePipe: DatePipe,
               private priceScheduledataService: PriceScheduleDataService,
       ) { }
 
-  getFormValue(item: IPriceSchedule, inputForm: FormGroup): IPriceSchedule {
+  getFormValue(item: IPriceSchedule, inputForm: UntypedFormGroup): IPriceSchedule {
 
     if (inputForm.valid) {
       item &#x3D; inputForm.value;
@@ -4366,7 +4349,7 @@ export class FbPriceScheduleService {
     return item
   }
 
-  setValues(item: IPriceSchedule, inputForm: FormGroup): FormGroup {
+  setValues(item: IPriceSchedule, inputForm: UntypedFormGroup): UntypedFormGroup {
 
     if (inputForm.valid) {
       inputForm.patchValue(item);
@@ -4378,7 +4361,7 @@ export class FbPriceScheduleService {
   }
 
 
-  initSearchForm(form: FormGroup) {
+  initSearchForm(form: UntypedFormGroup) {
     form &#x3D; this.fb.group( {
       itemName        : [&#x27;&#x27;],//  [this.itemName],
       allDates        : [&#x27;&#x27;],//  [this.allDates],
@@ -4393,9 +4376,9 @@ export class FbPriceScheduleService {
 
   }
   // ClientType, IPriceSchedule, WeekDay , DateFrame, TimeFrame, OrderType, DiscountOption
-  initForm(inputForm: FormGroup): FormGroup {
+  initForm(inputForm: UntypedFormGroup): UntypedFormGroup {
     inputForm &#x3D; this.fb.group({
-      id:              [&#x27;&#x27;],
+      id             : [&#x27;&#x27;],
       allEligible:     [true],
       allOrderTypes:   [true],
       allWeekdaysDays: [true],
@@ -4408,7 +4391,24 @@ export class FbPriceScheduleService {
       type:            [&#x27;&#x27;],
       value:           [&#x27;&#x27;],
       enabled:         [true],
+      image:           [],
+      description    : [],
 
+      showMetaTags: [],
+      showCBD     : [],
+      showTCH     : [],
+      showProof   : [],
+      showABV     : [],
+      showGlueten : [],
+      showImage   : [],
+      showDescription : [],
+      showInfo    : [],
+      title       : [],
+      subTitle    : [],
+      showAddress : [],
+      autoApplyRewards: [],
+      allItems    : [],
+      orderTotal  : [],
       orderTypes:           this.fb.array([ ]),
       clientTypes:          this.fb.array([ ]),
       weekDays:             this.fb.array([ ]),
@@ -4431,34 +4431,32 @@ export class FbPriceScheduleService {
 
   }
 
-  setClientTypeValues(inputForm: FormGroup, items: any) {
+  setClientTypeValues(inputForm: UntypedFormGroup, items: any) {
     this.setArrayValue(inputForm, items, &#x27;clientTypes&#x27;, &#x27;clientTypeID&#x27;)
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
-  setOrderTypeValues(inputForm: FormGroup, items: any) {
+  setOrderTypeValues(inputForm: UntypedFormGroup, items: any) {
     this.setArrayValue(inputForm, items, &#x27;orderTypes&#x27;, &#x27;orderTypeID&#x27;)
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
   //set fields
-  setValue(inputForm: FormGroup, fieldName: string, value: any) {
+  setValue(inputForm: UntypedFormGroup, fieldName: string, value: any) {
     inputForm.setValue({
       fieldName: value
     });
-
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
-  setArrayValue(inputForm: FormGroup, items: any, controlName: string, itemName: string) {
+  setArrayValue(inputForm: UntypedFormGroup, items: any, controlName: string, itemName: string) {
     if (!inputForm) { return }
     if (items) {
       try {
-        const control &#x3D; inputForm.get(controlName) as FormArray;
+        const control &#x3D; inputForm.get(controlName) as UntypedFormArray;
         if (!control)   { return }
         if (control) {
           control.clear();
           items.forEach( data &#x3D;&gt;  {
-            // console.log(&#x27;set order type values data&#x27;, data)
 
             if (itemName &#x3D;&#x3D;&#x3D; &#x27;clientTypeID&#x27;) {
               control.push(this.fb.control({
@@ -4469,11 +4467,10 @@ export class FbPriceScheduleService {
 
             if (itemName &#x3D;&#x3D;&#x3D; &#x27;orderTypeID&#x27;) {
               control.push(this.fb.control({
-                orderTypeID: data.id,
+                orderTypeID: data,
                 name:        data.name
                }))
             }
-
 
             if (itemName &#x3D;&#x3D;&#x3D; &#x27;name&#x27;) {
               control.push(this.fb.control({ name: data }))
@@ -4487,11 +4484,10 @@ export class FbPriceScheduleService {
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
-  initFormData(inputForm: FormGroup, priceSchedule: IPriceSchedule) {
+  initFormData(inputForm: UntypedFormGroup, priceSchedule: IPriceSchedule) {
 
     inputForm.patchValue(priceSchedule)
     this.updateDiscountInfos(inputForm, priceSchedule)
-
     this.addDateRanges(inputForm, priceSchedule.dateFrames)
     this.addOrderTypes(inputForm, priceSchedule.orderTypes)
     this.addClientTypes(inputForm, priceSchedule.clientTypes)
@@ -4501,7 +4497,7 @@ export class FbPriceScheduleService {
 
   }
 
-  updateDiscountInfos(inputForm: FormGroup, priceSchedule: IPriceSchedule) {
+  updateDiscountInfos(inputForm: UntypedFormGroup, priceSchedule: IPriceSchedule) {
     this.addRequiredBrands(inputForm, priceSchedule.requiredBrands)
     this.addRequiredCategories(inputForm, priceSchedule.requiredCategories)
     this.addRequiredItemTypes(inputForm, priceSchedule.requiredItemTypes)
@@ -4513,45 +4509,38 @@ export class FbPriceScheduleService {
     this.addDiscountCategories(inputForm, priceSchedule.categoryDiscounts)
   }
 
-  addClientType(inputForm: FormGroup, clientType: ClientTypes) {
-    if (!inputForm) { return }
-    const control &#x3D; inputForm.get(&#x27;clientTypes&#x27;) as FormArray;
-    if (!control)   { return }
-    control.push(this.fb.control(clientType))
-    this.priceScheduledataService.updatePriceSchedule(inputForm.value)
-  }
 
-  addDiscountCategories(inputForm: FormGroup, info: DiscountInfo[]) {
+  addDiscountCategories(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues( inputForm, info, &#x27;categoryDiscounts&#x27; )
   }
-  addDiscountItemTypes(inputForm: FormGroup, info: DiscountInfo[]) {
+  addDiscountItemTypes(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues(inputForm, info, &quot;itemTypeDiscounts&quot;)
   }
-  addDiscountItems(inputForm: FormGroup, info: DiscountInfo[]) {
+  addDiscountItems(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues(inputForm, info, &quot;itemDiscounts&quot;)
   }
-  addDiscountBrands(inputForm: FormGroup, info: DiscountInfo[]) {
+  addDiscountBrands(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues(inputForm, info,  &quot;brandDiscounts&quot;)
   }
 
-  addRequiredCategories(inputForm: FormGroup, info: DiscountInfo[]) {
+  addRequiredCategories(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues( inputForm, info, &#x27;requiredCategories&#x27; )
   }
-  addRequiredItemTypes(inputForm: FormGroup, info: DiscountInfo[]) {
+  addRequiredItemTypes(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues(inputForm, info,  &quot;requiredItemTypes&quot;)
   }
-  addRequiredItems(inputForm: FormGroup, info: DiscountInfo[]) {
+  addRequiredItems(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues(inputForm, info, &quot;requiredItems&quot;)
   }
-  addRequiredBrands(inputForm: FormGroup, info: DiscountInfo[]) {
+  addRequiredBrands(inputForm: UntypedFormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues(inputForm, info ,  &quot;requiredBrands&quot;)
   }
 
-  setDiscountInfoValues(inputForm: FormGroup, items: DiscountInfo[], formArrayName: string) {
+  setDiscountInfoValues(inputForm: UntypedFormGroup, items: DiscountInfo[], formArrayName: string) {
     if (!inputForm) { return }
     if (items) {
       try {
-        const control &#x3D; inputForm.get(formArrayName) as FormArray;
+        const control &#x3D; inputForm.get(formArrayName) as UntypedFormArray;
         if (!control)  { return }
         if (control) { control.clear(); }
 
@@ -4562,6 +4551,8 @@ export class FbPriceScheduleService {
             quantity:   [info.quantity],
             itemID:     [info.itemID],
             name:       [info.name],
+            sort:       [info.sort],
+            andOr:      [info.andOr],
           }))
         })
       } catch (error) {
@@ -4573,7 +4564,7 @@ export class FbPriceScheduleService {
   addArray(inputForm, controlName: string, array: any[]) {
     if (!inputForm) { return }
     try {
-      const control &#x3D; inputForm.get(controlName) as FormArray;
+      const control &#x3D; inputForm.get(controlName) as UntypedFormArray;
       control.clear()
       array.forEach( data &#x3D;&gt;  {
         control.push(this.fb.control(data))
@@ -4585,35 +4576,35 @@ export class FbPriceScheduleService {
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
-  addDiscountCategory(inputForm: FormGroup, info: DiscountInfo) {
+  addDiscountCategory(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, &quot;categoryDiscounts&quot;)
   }
-  addDiscountItemType(inputForm: FormGroup, info: DiscountInfo) {
+  addDiscountItemType(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, &quot;itemTypeDiscounts&quot;)
   }
-  addDiscountItem(inputForm: FormGroup, info: DiscountInfo) {
+  addDiscountItem(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, &quot;itemDiscounts&quot;)
   }
-  addDiscountBrand(inputForm: FormGroup, info: DiscountInfo) {
+  addDiscountBrand(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, &quot;brandDiscounts&quot;)
   }
-  addRequiredCategory(inputForm: FormGroup, info: DiscountInfo) {
+  addRequiredCategory(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, &quot;requiredCategories&quot;)
   }
-  addRequiredItemType(inputForm: FormGroup, info: DiscountInfo) {
+  addRequiredItemType(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, &quot;requiredItemTypes&quot;)
   }
-  addRequiredItem(inputForm: FormGroup, info: DiscountInfo) {
+  addRequiredItem(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, &quot;requiredItems&quot;)
   }
-  addRequiredBrand(inputForm: FormGroup, info: DiscountInfo) {
+  addRequiredBrand(inputForm: UntypedFormGroup, info: DiscountInfo) {
     this.addDiscountInfo(inputForm, info, &quot;requiredBrands&quot;)
   }
 
-  addDiscountInfo(inputForm: FormGroup, info: DiscountInfo, controlName: string) {
+  addDiscountInfo(inputForm: UntypedFormGroup, info: DiscountInfo, controlName: string) {
 
     if (!inputForm) { return }
-    const control &#x3D; inputForm.get(controlName) as FormArray;
+    const control &#x3D; inputForm.get(controlName) as UntypedFormArray;
     if (!control)  { return }
 
     if (info) {
@@ -4623,6 +4614,8 @@ export class FbPriceScheduleService {
         quantity:   [info.quantity],
         itemID:     info.itemID,
         name:       info.name,
+        sort:       [info.sort],
+        andOr:      [info.andOr],
       }))
       return
     }
@@ -4633,15 +4626,26 @@ export class FbPriceScheduleService {
       quantity:   &#x27;0&#x27;,
       itemID:     &#x27;&#x27;,
       name:       &#x27;&#x27;,
+      andOr     : &#x27;&#x27;,
+      sort:       [info.sort],
     }))
 
   }
 
-  addClientTypes(inputForm: FormGroup, items: ClientType[]) {
+  // addClientType(inputForm: FormGroup, clientType: ClientTypes) {
+  //   if (!inputForm) { return }
+  //   const control &#x3D; inputForm.get(&#x27;clientTypes&#x27;) as FormArray;
+  //   if (!control)   { return }
+  //   control.push(this.fb.control(clientType))
+  //   this.priceScheduledataService.updatePriceSchedule(inputForm.value)
+  // }
+
+
+  addClientTypes(inputForm: UntypedFormGroup, items: any[]) {
     // this.addArray(inputForm, &#x27;clientTypes&#x27;, clientTypes)
 
     if (!inputForm) { return }
-    const control &#x3D; inputForm.get(&#x27;clientTypes&#x27;) as FormArray;
+    const control &#x3D; inputForm.get(&#x27;clientTypes&#x27;) as UntypedFormArray;
     if (!control)  { return }
     if (control) { control.clear(); }
     if (items) {
@@ -4658,17 +4662,18 @@ export class FbPriceScheduleService {
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
-  addOrderTypes(inputForm: FormGroup, items: OrderType[]) {
+  addOrderTypes(inputForm: UntypedFormGroup, items: OrderType[]) {
     // this.addArray(inputForm, &#x27;clientTypes&#x27;, clientTypes)
 
     if (!inputForm) { return }
-    const control &#x3D; inputForm.get(&#x27;orderTypes&#x27;) as FormArray;
+    const control &#x3D; inputForm.get(&#x27;orderTypes&#x27;) as UntypedFormArray;
     if (!control)  { return }
     control.clear()
+    if (!items) { return }
     if (items) {
       items.forEach( info &#x3D;&gt;  {
           control.push(this.fb.group({
-            orderTypeID:   [info], //    number;
+            orderTypeID:   [info.orderTypeID], //    number;
             name:          [info.name]
           }))
         }
@@ -4679,54 +4684,36 @@ export class FbPriceScheduleService {
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
-  addTimeRanges(inputForm: FormGroup, items: TimeFrame[]) {
+  addTimeRanges(inputForm: UntypedFormGroup, items: TimeFrame[]) {
     try {
       if (!inputForm) { return }
-      const control &#x3D; inputForm.get(&#x27;timeFrames&#x27;) as FormArray;
-      control.clear()
+      const control &#x3D; inputForm.get(&#x27;timeFrames&#x27;) as UntypedFormArray;
       if (!control)   { return }
+      control.clear()
+      if (!items) { return }
       items.forEach( info &#x3D;&gt;  {
+        const pipe &#x3D; new DatePipe(&#x27;en-US&#x27;);
+        // const startTime &#x3D;  this.datePipe.transform(info.startTime, &#x27;HH:mm&#x27;);
+        // const endTime   &#x3D;  this.datePipe.transform(info.endTime, &#x27;HH:mm&#x27;);
         control.push(this.fb.group({
-          startTime: [info.startTime],
-          endTime:   [info.endTime]
+          startTime: [this.datePipe.transform(info.startTime, &#x27;HH:mm&#x27;)],  //this.datePipe.transform(info.startTime, &#x27;shortTime&#x27;) ],
+          endTime:   [pipe.transform(info.endTime, &#x27;HH:mm&#x27;) ]//  [endTime] ,// this.datePipe.transform(info.endTime, &#x27;shortTime&#x27;) ]
         }))
       })
     } catch (error) {
       console.log(error)
     }
-
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
 
-  // WeekDay[]
-  setWeekDayArray(inputForm: FormGroup, items: any[]) {
-    //clean this up later, not too much importance, but could be more reduced.
-    // this.setArrayValue(inputForm, items, &#x27;weekDays&#x27;, &#x27;name&#x27;)
-    if (!inputForm) { return }
-    try {
-      const control &#x3D; inputForm.get(&#x27;weekDays&#x27;) as FormArray;
-      if (!control)   { return }
-      control.clear();
-      items.forEach( data &#x3D;&gt;  {
-        control.push(this.fb.control({
-            name: data.name
-          }
-        ))
-      })
-    } catch (error) {
-      console.log(error)
-    }
-
-    this.priceScheduledataService.updatePriceSchedule(inputForm.value)
-  }
-
-  addDateRanges(inputForm: FormGroup, items: DateFrame[]) {
+  addDateRanges(inputForm: UntypedFormGroup, items: DateFrame[]) {
     try {
       if (!inputForm) { return }
-      const control &#x3D; inputForm.get(&#x27;dateFrames&#x27;) as FormArray;
-      control.clear()
+      const control &#x3D; inputForm.get(&#x27;dateFrames&#x27;) as UntypedFormArray;
       if (!control)   { return }
+      control.clear()
+      if (!items) { return }
       const pipe &#x3D; new DatePipe(&#x27;en-US&#x27;);
       items.forEach( info &#x3D;&gt;  {
         control.push(this.fb.group({
@@ -4742,9 +4729,32 @@ export class FbPriceScheduleService {
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
-  addTimeRange(inputForm: FormGroup, timeFrame: TimeFrame) {
+  // WeekDay[]
+  setWeekDayArray(inputForm: UntypedFormGroup, items: any[]) {
+    //clean this up later, not too much importance, but could be more reduced.
+    // this.setArrayValue(inputForm, items, &#x27;weekDays&#x27;, &#x27;name&#x27;)
     if (!inputForm) { return }
-    const control &#x3D; inputForm.get(&#x27;timeFrames&#x27;) as FormArray;
+    try {
+      const control &#x3D; inputForm.get(&#x27;weekDays&#x27;) as UntypedFormArray;
+      if (!control)   { return }
+      control.clear();
+      if (!items) { return }
+      items.forEach( data &#x3D;&gt;  {
+        control.push(this.fb.control({
+            name: data.name
+          }
+        ))
+      })
+    } catch (error) {
+      console.log(error)
+    }
+
+    this.priceScheduledataService.updatePriceSchedule(inputForm.value)
+  }
+
+  addTimeRange(inputForm: UntypedFormGroup, timeFrame: TimeFrame) {
+    if (!inputForm) { return }
+    const control &#x3D; inputForm.get(&#x27;timeFrames&#x27;) as UntypedFormArray;
     if (!control)   { return }
 
     control.push(this.fb.group({
@@ -4755,10 +4765,10 @@ export class FbPriceScheduleService {
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
-  addDateRange(inputForm: FormGroup, dateFrame: DateFrame) {
+  addDateRange(inputForm: UntypedFormGroup, dateFrame: DateFrame) {
     try {
       if (!inputForm) { return }
-      const control  &#x3D; inputForm.get(&#x27;dateFrames&#x27;) as FormArray;
+      const control  &#x3D; inputForm.get(&#x27;dateFrames&#x27;) as UntypedFormArray;
       if (!control)   { return }
       const pipe &#x3D; new DatePipe(&#x27;en-US&#x27;);
       if (dateFrame){
@@ -4793,41 +4803,41 @@ export class FbPriceScheduleService {
     })
   }
 
-  deleteFrame(i: number, inputForm: FormGroup) {
+  deleteFrame(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, &#x27;timeFrames&#x27;)
   }
-  deleteDateFrame(i: number, inputForm: FormGroup) {
+  deleteDateFrame(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, &#x27;dateFrames&#x27;)
   }
-  deleteBrand(i: number, inputForm: FormGroup) {
+  deleteBrand(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, &#x27;requiredBrands&#x27;)
   }
-  deleteCategory(i: number, inputForm: FormGroup) {
+  deleteCategory(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, &#x27;requiredCategories&#x27;)
   }
-  deleteItem(i: number, inputForm: FormGroup) {
+  deleteItem(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, &#x27;requiredItems&#x27;)
   }
-  deleteItemType(i: number, inputForm: FormGroup) {
+  deleteItemType(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, &#x27;requiredItemTypes&#x27;)
   }
-  deleteDiscountBrand(i: number, inputForm: FormGroup) {
+  deleteDiscountBrand(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, &#x27;brandDiscounts&#x27;)
   }
-  deleteDiscountCategory(i: number, inputForm: FormGroup) {
+  deleteDiscountCategory(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, &#x27;categoryDiscounts&#x27;)
   }
-  deleteDiscountItem(i: number, inputForm: FormGroup) {
+  deleteDiscountItem(i: number, inputForm: UntypedFormGroup) {
     console.log(&#x27;delete Item Discounts&#x27;)
     this.deleteArrayItem(i, inputForm, &#x27;itemDiscounts&#x27;)
   }
-  deleteDiscountItemType(i: number, inputForm: FormGroup) {
+  deleteDiscountItemType(i: number, inputForm: UntypedFormGroup) {
     this.deleteArrayItem(i, inputForm, &#x27;itemTypesDiscounts&#x27;)
   }
-  deleteArrayItem(i: number, inputForm: FormGroup, controlName: string) {
-    const control &#x3D; inputForm.get(controlName) as FormArray;
+  deleteArrayItem(i: number, inputForm: UntypedFormGroup, controlName: string) {
+    const control &#x3D; inputForm.get(controlName) as UntypedFormArray;
     control.removeAt(i)
-    console.log(inputForm.value)
+    // console.log(inputForm.value)
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
@@ -4845,14 +4855,15 @@ export class FbPriceScheduleService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -4864,6 +4875,15 @@ export class FbPriceScheduleService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -4873,8 +4893,8 @@ export class FbPriceScheduleService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

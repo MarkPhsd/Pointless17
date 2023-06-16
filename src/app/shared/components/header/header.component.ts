@@ -21,6 +21,7 @@ import { IFloorPlan } from 'pointless-room-layout/src/app/app.component';
 import { FloorPlanService } from 'src/app/_services/floor-plan.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 interface IIsOnline {
   result: string;
@@ -138,7 +139,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   initOrderSubscriber() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
     })
   }
@@ -202,6 +203,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private companyService:         CompanyService,
               private _renderer:              Renderer2,
               public  orderService:           OrdersService,
+              public orderMethodsService: OrderMethodsService,
               private messageService:         MessageService,
               public  breakpointObserver:     BreakpointObserver,
               private siteService:            SitesService,
@@ -211,7 +213,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               public  platFormService       : PlatformService,
               private router                : Router,
               private floorPlanSevice       : FloorPlanService,
-              private settingsService       : SettingsService,
               public uiSettings            : UISettingsService,
               private fb                    : UntypedFormBuilder ) {
   }
@@ -255,7 +256,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getDeviceInfo() {
-    const devicename = this.orderService.posName
+    const devicename = localStorage.getItem('devicename')
     if (devicename && this.isApp) {
       this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
         switchMap(data => {

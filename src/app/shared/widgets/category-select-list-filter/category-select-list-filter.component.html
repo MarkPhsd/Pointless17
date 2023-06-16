@@ -1,0 +1,42 @@
+<div *ngIf="(list$ | async) as list">
+  <ng-content select="[header]"></ng-content>
+  <mat-selection-list
+        class="list"
+        [compareWith] ="compareFunction"
+        [(ngModel)]   ="savedList" >
+
+    <mat-list-option
+            *ngFor         ="let item of basicList;
+                                        let i =index;"
+            [value]       ="item"
+            (click)       ="setValues()" >
+        <div class="list-grid">
+
+          <div class="text">
+            {{item.name | truncateText: 30}}
+          </div>
+
+          <div class="img-icon">
+            <img
+              [src]     ="item.image"
+              onerror   = "this.src='assets/images/placeholderimage.png'"
+              class     ="product-image"
+              />
+          </div>
+        </div>
+    </mat-list-option>
+
+  </mat-selection-list>
+</div>
+
+<ng-template #image let-item>
+  <div class="round-container">
+    <img
+      [src]     ="item.image"
+      onerror   = "this.src='assets/images/placeholderimage.png'"
+      class     ="product-image"
+     />
+  </div>
+</ng-template>
+
+

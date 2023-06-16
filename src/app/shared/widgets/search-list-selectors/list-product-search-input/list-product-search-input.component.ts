@@ -69,11 +69,11 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   }
 
   initSubscriptions() {
-    this.orderService.scanner$.subscribe(data =>  {
+    this.orderMethodsService.scanner$.subscribe(data =>  {
       this.input.nativeElement.focus();
     })
 
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       if (!data) {
         this.order = null
       }
@@ -111,6 +111,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     private settingService        : SettingsService,
     private siteService           : SitesService,
     private uiSettingService      : UISettingsService,
+    public orderMethodsService: OrderMethodsService,
   )
   {   }
 
@@ -180,7 +181,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   getOrderObs() {
     if (!this.order) {
       const site = this.siteService.getAssignedSite()
-      return this.orderService.newOrderWithPayloadMethod(site, null).pipe(switchMap(data => {
+      return this.orderMethodsService.newOrderWithPayloadMethod(site, null).pipe(switchMap(data => {
           this.order = data;
           this.initForm()
           return of(data)

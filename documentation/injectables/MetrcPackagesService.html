@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >MetrcPackagesService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >MetrcPackagesService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -92,10 +99,10 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <a href="#generateSku" >generateSku</a>
+                                <a href="#deletePackage" >deletePackage</a>
                             </li>
                             <li>
-                                <a href="#getActive" >getActive</a>
+                                <a href="#generateSku" >generateSku</a>
                             </li>
                             <li>
                                 <a href="#getAdjustReasons" >getAdjustReasons</a>
@@ -113,7 +120,16 @@
                                 <a href="#getPackagesByLabel" >getPackagesByLabel</a>
                             </li>
                             <li>
+                                <a href="#getPackagesBySearch" >getPackagesBySearch</a>
+                            </li>
+                            <li>
                                 <a href="#getTypes" >getTypes</a>
+                            </li>
+                            <li>
+                                <a href="#importActive" >importActive</a>
+                            </li>
+                            <li>
+                                <a href="#importActiveByDaysBack" >importActiveByDaysBack</a>
                             </li>
                             <li>
                                 <a href="#postPacakgesAdjust" >postPacakgesAdjust</a>
@@ -145,6 +161,12 @@
                             <li>
                                 <a href="#postPackagesUnfinish" >postPackagesUnfinish</a>
                             </li>
+                            <li>
+                                <a href="#putPackage" >putPackage</a>
+                            </li>
+                            <li>
+                                <a href="#resetImportActivePackages" >resetImportActivePackages</a>
+                            </li>
                         </ul>
                     </td>
                 </tr>
@@ -157,18 +179,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+<code>constructor(http: HttpClient, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:33</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:37</a></div>
                             </td>
                         </tr>
 
@@ -189,7 +211,7 @@
                                                         <td>http</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                                    <code>HttpClient</code>
                                                         </td>
                                                   
                                                     <td>
@@ -218,11 +240,92 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deletePackage"></a>
+                    <span class="name">
+                        <span ><b>deletePackage</b></span>
+                        <a href="#deletePackage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deletePackage(id: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="44"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:44</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackage&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -243,8 +346,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="302"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:302</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="366"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:366</a></div>
                 </td>
             </tr>
 
@@ -254,6 +357,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -307,86 +411,6 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getActive"></a>
-                    <span class="name">
-                        <span ><b>getActive</b></span>
-                        <a href="#getActive"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>getActive(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, packageFilter: <a href="../interfaces/PackageFilter.html" target="_self">PackageFilter</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="69"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:69</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>site</td>
-                                    <td>
-                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>packageFilter</td>
-                                    <td>
-                                                <code><a href="../interfaces/PackageFilter.html" target="_self" >PackageFilter</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackage[]&gt;</a></code>
-
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
                     <a name="getAdjustReasons"></a>
                     <span class="name">
                         <span ><b>getAdjustReasons</b></span>
@@ -403,8 +427,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="129"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:129</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="195"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:195</a></div>
                 </td>
             </tr>
 
@@ -414,6 +438,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -471,8 +496,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="83"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:83</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="149"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:149</a></div>
                 </td>
             </tr>
 
@@ -482,6 +507,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -551,8 +577,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="97"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:97</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="163"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:163</a></div>
                 </td>
             </tr>
 
@@ -562,6 +588,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -619,8 +646,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="40"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:40</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="72"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:72</a></div>
                 </td>
             </tr>
 
@@ -630,6 +657,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -692,15 +720,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getPackagesByLabel(label: <a href="../s/s.html" target="_self">string</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+<code>getPackagesByLabel(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, label: <a href="../s/s.html" target="_self">string</a>, facility: <a href="../s/s.html" target="_self">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="55"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:55</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="86"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:86</a></div>
                 </td>
             </tr>
 
@@ -710,6 +738,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -719,6 +748,18 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
                                 <tr>
                                     <td>label</td>
                                     <td>
@@ -732,9 +773,9 @@
 
                                 </tr>
                                 <tr>
-                                    <td>site</td>
+                                    <td>facility</td>
                                     <td>
-                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
                                     </td>
 
                                     <td>
@@ -749,7 +790,88 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackage&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackage[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPackagesBySearch"></a>
+                    <span class="name">
+                        <span ><b>getPackagesBySearch</b></span>
+                        <a href="#getPackagesBySearch"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPackagesBySearch(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, packageFilter: <a href="../interfaces/PackageFilter.html" target="_self">PackageFilter</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="137"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:137</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>packageFilter</td>
+                                    <td>
+                                                <code><a href="../interfaces/PackageFilter.html" target="_self" >PackageFilter</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;PackageSearchResultsPaged&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -779,8 +901,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="113"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:113</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="179"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:179</a></div>
                 </td>
             </tr>
 
@@ -790,6 +912,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -803,6 +926,192 @@
                                     <td>site</td>
                                     <td>
                                                 <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackage[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="importActive"></a>
+                    <span class="name">
+                        <span ><b>importActive</b></span>
+                        <a href="#importActive"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>importActive(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, daysBack: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, facility: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="101"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:101</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>daysBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>facility</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackage[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="importActiveByDaysBack"></a>
+                    <span class="name">
+                        <span ><b>importActiveByDaysBack</b></span>
+                        <a href="#importActiveByDaysBack"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>importActiveByDaysBack(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, numberOfDays: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, facility: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="125"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:125</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>numberOfDays</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>facility</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
                                     </td>
 
                                     <td>
@@ -847,8 +1156,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="240"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:240</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="306"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:306</a></div>
                 </td>
             </tr>
 
@@ -858,6 +1167,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -927,8 +1237,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="193"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:193</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="259"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:259</a></div>
                 </td>
             </tr>
 
@@ -938,6 +1248,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1007,8 +1318,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="209"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:209</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="275"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:275</a></div>
                 </td>
             </tr>
 
@@ -1018,6 +1329,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1087,8 +1399,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="145"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:145</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="211"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:211</a></div>
                 </td>
             </tr>
 
@@ -1098,6 +1410,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1167,8 +1480,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="225"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:225</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="291"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:291</a></div>
                 </td>
             </tr>
 
@@ -1178,6 +1491,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1247,8 +1561,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="177"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:177</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="243"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:243</a></div>
                 </td>
             </tr>
 
@@ -1258,6 +1572,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1327,8 +1642,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="161"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:161</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="227"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:227</a></div>
                 </td>
             </tr>
 
@@ -1338,6 +1653,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1407,8 +1723,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="255"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:255</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="321"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:321</a></div>
                 </td>
             </tr>
 
@@ -1418,6 +1734,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1487,8 +1804,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="285"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:285</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="351"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:351</a></div>
                 </td>
             </tr>
 
@@ -1498,6 +1815,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1567,8 +1885,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="270"
-                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:270</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="336"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:336</a></div>
                 </td>
             </tr>
 
@@ -1578,6 +1896,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1627,8 +1946,194 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="putPackage"></a>
+                    <span class="name">
+                        <span ><b>putPackage</b></span>
+                        <a href="#putPackage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>putPackage(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, metrcPackage: <a href="../interfaces/METRCPackage.html" target="_self">METRCPackage</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="58"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:58</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>metrcPackage</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCPackage.html" target="_self" >METRCPackage</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackage&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="resetImportActivePackages"></a>
+                    <span class="name">
+                        <span ><b>resetImportActivePackages</b></span>
+                        <a href="#resetImportActivePackages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>resetImportActivePackages(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, daysBack: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, facility: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="113"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:113</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>daysBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>facility</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackage[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>
-            <section>
+            <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
@@ -1651,7 +2156,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:33</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:37</a></div>
                         </td>
                     </tr>
 
@@ -1663,14 +2168,12 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
 import { Observable, } from &#x27;rxjs&#x27;;
-import { IMETRCSales } from &#x27;src/app/_interfaces/transactions/metrc-sales&#x27;;
 import { HttpClient } from &#x27;@angular/common/http&#x27;;
 import { AuthenticationService } from &#x27;../../_services/system/authentication.service&#x27;;
-import { ISite } from &#x27;src/app/_interfaces&#x27;;
-import { SitesService } from &#x27;../../_services/reporting/sites.service&#x27;;
+import { ISite, Paging } from &#x27;src/app/_interfaces&#x27;;
 
 import {
   METRCPackage,
@@ -1689,6 +2192,12 @@ import {
   METRCPackagesRemediate
 } from &#x27;../../_interfaces/metrcs/packages&#x27;;
 
+
+export interface PackageSearchResultsPaged {
+  results     : METRCPackage[];
+  paging      : Paging;
+  errorMessage: string;
+}
 @Injectable({
   providedIn: &#x27;root&#x27;
 })
@@ -1700,7 +2209,35 @@ export class MetrcPackagesService {
 
   constructor( private http: HttpClient,
     private auth: AuthenticationService,
-  ) {
+    ) {
+    }
+
+    deletePackage(id:any, site: ISite): Observable&lt;METRCPackage&gt; {
+
+      const controller &#x3D; &#x27;/METRCPackages/&#x27;
+
+      const endPoint &#x3D; &#x60;DeleteMETRCPackage&#x60;
+
+      const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+      const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+      return this.http.delete&lt;METRCPackage&gt;(url);
+
+    }
+
+    putPackage( site: ISite ,id:any, metrcPackage: METRCPackage): Observable&lt;METRCPackage&gt; {
+
+      const controller &#x3D; &#x27;/METRCPackages/&#x27;
+
+      const endPoint &#x3D; &#x60;PutMETRCPackage&#x60;
+
+      const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+      const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+      return this.http.put&lt;METRCPackage&gt;(url, metrcPackage);
+
     }
 
     getPackagesByID(id:any, site: ISite): Observable&lt;METRCPackage&gt; {
@@ -1713,36 +2250,70 @@ export class MetrcPackagesService {
 
       const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
-      console.log(url)
       return this.http.get&lt;METRCPackage&gt;(url);
 
     }
 
-    getPackagesByLabel(label:string, site: ISite): Observable&lt;METRCPackage&gt; {
+    getPackagesByLabel(site: ISite,label:string, facility: string): Observable&lt;METRCPackage[]&gt; {
+
 
       const controller &#x3D; &#x27;/METRCPackages/&#x27;
 
       const endPoint &#x3D; &#x60;GetMETRCPackageByLabel&#x60;
 
-      const parameters &#x3D; &#x60;${label}&#x60;
+      const parameters &#x3D; &#x60;?label&#x3D;${label}&amp;facilityName&#x3D;${facility}&#x60;
 
       const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
-      return this.http.get&lt;METRCPackage&gt;(url);
+      return this.http.get&lt;METRCPackage[]&gt;(url);
 
     }
 
-    getActive(site: ISite, packageFilter: PackageFilter): Observable&lt;METRCPackage[]&gt; {
+    importActive(site: ISite, daysBack: number,  facility: string): Observable&lt;METRCPackage[]&gt; {
+
+      const controller &#x3D; &#x27;/METRCPackages/&#x27;
+
+      const endPoint &#x3D; &#x60;ImportActivePackages?siteName&#x3D;${site.name}&amp;facilityName&#x3D;${facility}&amp;numberOfDays&#x3D;${daysBack}&#x60;
+
+      const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+      return this.http.get&lt;METRCPackage[]&gt;(url);
+
+    }
+
+    resetImportActivePackages(site: ISite, daysBack: number,  facility: string): Observable&lt;METRCPackage[]&gt; {
+
+      const controller &#x3D; &#x27;/METRCPackages/&#x27;
+
+      const endPoint &#x3D; &#x60;resetImportActivePackages?siteName&#x3D;${site.name}&amp;facilityName&#x3D;${facility}&amp;numberOfDays&#x3D;${daysBack}&#x60;
+
+      const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+      return this.http.get&lt;METRCPackage[]&gt;(url);
+
+    }
+
+    importActiveByDaysBack(site: ISite, numberOfDays: number, facility: string): Observable&lt;METRCPackage[]&gt; {
+
+      const controller &#x3D; &#x27;/METRCPackages/&#x27;
+
+      const endPoint &#x3D; &#x60;ImportActivePackages?siteName&#x3D;${site.name}&amp;DaysBackCount&#x3D;${numberOfDays}&amp;facilityName&#x3D;${facility}&#x60;
+
+      const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+      return this.http.get&lt;METRCPackage[]&gt;(url);
+
+    }
+
+    getPackagesBySearch(site: ISite, packageFilter: PackageFilter): Observable&lt;PackageSearchResultsPaged&gt; {
 
       const controller &#x3D; &#x27;/METRCPackages/&#x27;
 
       const endPoint &#x3D; &#x60;GetMETRCPackages&#x60;
 
-      packageFilter.hasImported &#x3D; false
-
       const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
 
-      return this.http.post&lt;METRCPackage[]&gt;(url, packageFilter);
+      return this.http.post&lt;PackageSearchResultsPaged&gt;(url, packageFilter);
 
     }
 
@@ -1963,10 +2534,8 @@ export class MetrcPackagesService {
       return this.http.post&lt;METRCPackagesRemediate[]&gt;(url, mETRCPackagesRemediate);
     }
 
-
-
     generateSku(sku: string, index: number): string {
-      return &#x60;mt${sku.substring(sku.length - 7)}-${index}&#x60;
+      return &#x60;mt-${sku.substring(sku.length - 7)}-${index}&#x60;
     }
 }
 </code></pre>
@@ -1980,14 +2549,15 @@ export class MetrcPackagesService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -1999,6 +2569,15 @@ export class MetrcPackagesService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -2008,8 +2587,8 @@ export class MetrcPackagesService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

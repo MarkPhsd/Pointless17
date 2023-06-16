@@ -33,6 +33,14 @@
       <div  class="totals"  *ngIf="payment?.count != 0" >  {{ payment.count }} </div>
     </div>
 
+    <div *ngIf="groupBy && groupBy === 'service'"
+          class="grid-headerfooter">
+        <div class="grid-item" *ngIf="payment.serviceType" >{{ payment?.serviceType }} </div>
+        <div class="grid-item" *ngIf="!payment.serviceType" > Not Assigned </div>
+        <div  class="totals">    {{payment?.amountPaid | currency }}   </div>
+        <div  class="totals"  *ngIf="payment?.count != 0"  >{{payment.amountPaid / payment.count | currency }}    </div>
+        <div  class="totals"  *ngIf="payment?.count != 0" >  {{ payment.count }} </div>
+    </div>
 
     <div *ngIf="type === 'voids'"
           class="grid-voids">

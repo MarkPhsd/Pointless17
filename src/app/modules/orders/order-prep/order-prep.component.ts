@@ -39,7 +39,7 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
   prepScreen: boolean;
 
   initStatusSubscriber() {
-    this._prepStatus = this.orderService.prepStatus$.subscribe( data => {
+    this._prepStatus = this.printingService.prepStatus$.subscribe( data => {
       if (data) {
         this.prepStatus = data;
       }
@@ -47,7 +47,7 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
   }
 
   initPrintLocationSubscriber() {
-    this._printLocation = this.orderService.printerLocation$.subscribe( data => {
+    this._printLocation = this.printingService.printerLocation$.subscribe( data => {
       if (data) {
         this.printLocation = data;
       }
@@ -55,7 +55,7 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
   }
 
   initViewType() {
-    this._viewType = this.orderService.viewOrderType$.subscribe(data => {
+    this._viewType = this.orderMethodsService.viewOrderType$.subscribe(data => {
       this.viewType = data;
       if (this.viewType) {
         this.prepScreen = true;
@@ -107,7 +107,7 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
   }
 
   refreshOrder() {
-    const printerLocation = this.orderService.printerLocation
+    const printerLocation = this.printingService.printerLocation
     if (this.order) {
       if(!this.order.total) {  this.order.total = 0      }
       if(!this.order.itemCount) { this.order.itemCount = 0     }
@@ -193,14 +193,14 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
       order$.subscribe( order => {
         if (order) {
           this.refreshOrder();
-          this.orderService.updateOrderSubscription(order);
+          this.orderMethodsService.updateOrderSubscription(order);
         }
       })
     }
   }
 
   printOrder() {
-    this.orderService.updateOrderSubscription(this.order)
+    this.orderMethodsService.updateOrderSubscription(this.order)
     this.printingService.previewReceipt()
   }
 

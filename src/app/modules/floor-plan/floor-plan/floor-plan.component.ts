@@ -5,6 +5,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrdersService } from 'src/app/_services';
 import { IPOSOrder, IUser } from 'src/app/_interfaces';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 // import { compress, decompress } from 'compress-json'
 
 export interface uuidList {
@@ -49,6 +50,7 @@ export class FloorPlanComponent implements OnInit {
   zoomDefault: number
   constructor(private siteService       : SitesService,
               private orderService      : OrdersService,
+              public orderMethodsService: OrderMethodsService,
               public  userAuth : UserAuthorizationService,
               private floorPlanSevice   : FloorPlanService,
          ) { }
@@ -254,13 +256,13 @@ export class FloorPlanComponent implements OnInit {
         this.refresh = false;
         if (!data || !data.id || data.id == 0) {
           this.refresh = true;
-          return this.orderService.newOrderFromTable(site, null, uuID, floorPlanID, name);
+          return this.orderMethodsService.newOrderFromTable(site, null, uuID, floorPlanID, name);
         }
         if (data) {return of(data)}
       }
     )).pipe(
       switchMap(data => {
-      this.orderService.setActiveOrder(site, data)
+      this.orderMethodsService.setActiveOrder(site, data)
       if (this.orderInfo) {
         const item = {orderID: data.id, status: 'active'};
       }

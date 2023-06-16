@@ -12,6 +12,8 @@ import { IPOSOrder, IPOSOrderSearchModel, ISetting, ISite, IUser, UserPreference
 import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 import { InstructionDirective } from 'src/app/_directives/instruction.directive';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 
 @Component({
   selector: 'app-orders-main',
@@ -73,7 +75,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   initStatusSubscriber() {
-    this._prepStatus = this.orderService.prepStatus$.subscribe( data => {
+    this._prepStatus = this.printingService.prepStatus$.subscribe( data => {
       if (data) {
         this.prepStatus = data;
       }
@@ -81,7 +83,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   initPrintLocationSubscriber() {
-    this._printLocation = this.orderService.printerLocation$.subscribe( data => {
+    this._printLocation = this.printingService.printerLocation$.subscribe( data => {
       if (data) {
         this.printLocation = data;
       }
@@ -97,7 +99,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   initSearchModelSubscriber() {
-    this._searchModel =  this.orderService.posSearchModel$.subscribe(data => {
+    this._searchModel =  this.orderMethodsService.posSearchModel$.subscribe(data => {
       if (!data) {
         this.searchModel = {} as IPOSOrderSearchModel
       }
@@ -119,7 +121,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   initViewTypeSubscriber() {
-    this._viewType = this.orderService.viewOrderType$.subscribe(data => {
+    this._viewType = this.orderMethodsService.viewOrderType$.subscribe(data => {
       this.viewType = data;
     })
   }
@@ -147,12 +149,14 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     public  userAuthorization : UserAuthorizationService,
     private authenticationService: AuthenticationService,
     private printerService   : PrinterLocationsService,
+    private printingService  : PrintingService,
     private changeDetectorRef: ChangeDetectorRef,
     private uISettingsService: UISettingsService,
+    public orderMethodsService: OrderMethodsService,
     private orderService     : OrdersService)
   {
     this.initAuthorization();
-    this.orderService.updateViewOrderType(1)
+    this.orderMethodsService.updateViewOrderType(1)
   }
 
   ngOnInit(): void {
@@ -219,9 +223,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   updatePrinterLocation() {
     this.searchModel.printLocation = this.printLocation;
     this.searchModel.prepStatus    = this.prepStatus
-    this.orderService.updateOrderPrinterLocation(this.printLocation)
-    this.orderService.updatePrepStatus(this.prepStatus)
-    this.orderService.updateOrderSearchModel(this.searchModel)
+    this.printingService.updateOrderPrinterLocation(this.printLocation)
+    this.printingService.updatePrepStatus(this.prepStatus)
+    this.orderMethodsService.updateOrderSearchModel(this.searchModel)
   }
 
   updatePreptStatus(value:number) {
@@ -233,8 +237,8 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   refreshPrep() {
     this.searchModel.printLocation = this.printLocation;
     this.searchModel.prepStatus = this.prepStatus
-    this.orderService.updatePrepStatus(this.prepStatus)
-    this.orderService.updateOrderSearchModel(this.searchModel)
+    this.printingService.updatePrepStatus(this.prepStatus)
+    this.orderMethodsService.updateOrderSearchModel(this.searchModel)
   }
 
   togglePrepStatus() {
@@ -256,9 +260,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     const list = []
     this.posOrdersSelectedList.forEach(data => { list.push(data.id) })
     this.action$ = this.orderService.mergeOrders(site, list).pipe(switchMap(data => {
-      this.orderService.updateOrderSubscription(data)
+      this.orderMethodsService.updateOrderSubscription(data)
       this.cancelMerge()
-      this.orderService.updateOrderSearchModel(this.searchModel)
+      this.orderMethodsService.updateOrderSearchModel(this.searchModel)
       return of(data)
     }))
   }
@@ -374,7 +378,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async newOrder(){
     const site = this.siteService.getAssignedSite();
-    this.orderService.newDefaultOrder(site);
+    this.orderMethodsService.newDefaultOrder(site);
   }
 
   newOrderOptions() {
@@ -385,26 +389,26 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if (this.viewType == 1) {
       this.viewType = 0
-      this.orderService.updateViewOrderType(this.viewType)
+      this.orderMethodsService.updateViewOrderType(this.viewType)
       return
     }
 
     if (this.viewType == 0 || this.viewType == 3) {
       this.viewType = 1
-      this.orderService.updateViewOrderType(this.viewType)
+      this.orderMethodsService.updateViewOrderType(this.viewType)
       return
     }
 
     if (this.viewType == 3) {
       this.viewType = 0
-      this.orderService.updateViewOrderType(this.viewType)
+      this.orderMethodsService.updateViewOrderType(this.viewType)
       return
     }
   }
 
   setViewType(value) {
     this.viewType = value;
-    this.orderService.updateViewOrderType(value);
+    this.orderMethodsService.updateViewOrderType(value);
     this.setPrepInterval()
   }
 
@@ -420,7 +424,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this.authenticationService.updateUser(user)
     this.userAuthorization.setUser(user)
-    this.orderService.updateOrderSearchModel(this.orderService.posSearchModel)
+    this.orderMethodsService.updateOrderSearchModel(this.orderMethodsService.posSearchModel)
   }
 
   updateFilterInstruction() {
@@ -431,7 +435,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
       this.userAuthorization.setUser(user)
       this.authenticationService.updateUser(user)
     }
-    this.orderService.updateOrderSearchModel(this.orderService.posSearchModel)
+    this.orderMethodsService.updateOrderSearchModel(this.orderMethodsService.posSearchModel)
   }
 
   hideInstruction(index: number) {

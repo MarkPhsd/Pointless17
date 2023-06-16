@@ -157,7 +157,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   initBottomSheetSubscriber() {
-    this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
+    this._bottomSheetOpen = this.orderMethodsService.bottomSheetOpen$.subscribe(data => {
       this.bottomSheetOpen = data
       this.morebutton = 'more-button'
       if (data) {
@@ -279,9 +279,9 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   displayPrintLabel(item) {
-    console.log('displayPrintLabel', item) //item?.itemType?.name, item?.itemType?.labelTypeID )//labelID)
+    // console.log('displayPrintLabel', item) //item?.itemType?.name, item?.itemType?.labelTypeID )//labelID)
     // if (this.ui)
-    console.log('item type' , item?.itemType)
+    // console.log('item type' , item?.itemType)
     const labelID =  item?.itemType?.labelTypeID
     if (labelID && labelID != 0) {
       return true
@@ -300,7 +300,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     return this.posOrderItemService.changeItemValues(site, item ).pipe(
       switchMap(data => {
         if (data) {
-          this.orderService.updateOrderSubscription(data)
+          this.orderMethodsService.updateOrderSubscription(data)
           return of(data)
         }
         return of(null)
@@ -493,12 +493,12 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   cancelItem(index: number, orderItem: PosOrderItem) {
-    console.log('cancel item')
+    // console.log('cancel item')
     let payload = {} as payload
     payload.index = index;
     payload.item  = orderItem;
     this.outputDelete.emit(payload)
-    console.log('remove item should clear last item added')
+    // console.log('remove item should clear last item added')
     this.orderMethodsService.updateLastItemAdded(null)
   }
 
@@ -545,7 +545,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
       const site = this.siteService.getAssignedSite();
       let item$ = this.posOrderItemService.removeItemDiscount(site, this.orderItem, this.menuItem);
       item$.subscribe(data => {
-        this.orderService.updateOrderSubscription(data);
+        this.orderMethodsService.updateOrderSubscription(data);
       })
     }
   }
@@ -631,11 +631,14 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   printLabel(item: PosOrderItem) {
     this.printLabel$ = this.printingService.printItemLabel(item, this.menuItem$,
-                                                            this.order, false) // this.menuItem$)
+                                                            this.order, false).pipe(switchMap(data => { 
+                                                              this.orderMethodsService.updateOrder(data)
+                                                              return of(data)
+                                                            })) // this.menuItem$)
   }
 
   swipeOutItem(){
-    console.log('swipe out')
+    // console.log('swipe out')
     if (this.disableActions) {return}
     this.cancelItem(this.index,  this.orderItem)
   }

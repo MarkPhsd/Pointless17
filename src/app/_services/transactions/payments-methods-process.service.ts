@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, of, Subscription, switchMap, } from 'rxjs';
+import { BehaviorSubject, catchError, forkJoin, Observable, of, Subscription, switchMap, } from 'rxjs';
 import { IPaymentResponse, IPOSOrder,  IPOSPayment,   ISite, PosPayment }   from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from '../reporting/sites.service';
@@ -9,11 +9,13 @@ import { RStream, TranResponse } from '../dsiEMV/dsiemvtransactions.service';
 import { ProductEditButtonService } from '../menu/product-edit-button.service';
 import { OrderMethodsService } from './order-methods.service';
 import { OrdersService } from './orders.service';
-import { DSIEMVSettings, TransactionUISettings } from '../system/settings/uisettings.service';
+import { DSIEMVSettings, TransactionUISettings, UISettingsService } from '../system/settings/uisettings.service';
 import { PrintingService } from '../system/printing.service';
 import { BalanceSheetService } from './balance-sheet.service';
 import { PrepPrintingServiceService } from '../system/prep-printing-service.service';
 import { BalanceSheetMethodsService } from './balance-sheet-methods.service';
+import { PlatformService } from '../system/platform.service';
+import { POSOrderItemService } from './posorder-item-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +35,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     this.dialogSubject = this.dialogRef.afterClosed().pipe(
       switchMap( result => {
         if (result) {
-          return this.processSendOrder(this.orderService.currentOrder)
+          return this.processSendOrder(this.orderMethodsService.currentOrder)
         }
     })).subscribe(data => {
       return of(data)
@@ -49,11 +51,15 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     private paymentService      : POSPaymentService,
     private paymentMethodService: PaymentMethodsService,
     private orderService        : OrdersService,
+    private platFormService     : PlatformService,
+    private uiSettingService    : UISettingsService,
     private orderMethodsService : OrderMethodsService,
+    private posOrderItemService : POSOrderItemService,
     public  printingService     : PrintingService,
+    private prepPrintingService : PrepPrintingServiceService,
     private dialogOptions       : ProductEditButtonService,
-    private balanceSheetService : BalanceSheetService,
     private balanceSheetMethodsSevice: BalanceSheetMethodsService,
+    private editDialog              : ProductEditButtonService,
     private matSnackBar         : MatSnackBar) {
   }
 
@@ -82,13 +88,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   processPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder,
     amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
     let response: IPaymentResponse;
+
     const balance$ =  this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet();
-    console.log(amount)
+
+
     if (posPayment.tipAmount) {
       amount = (amount - posPayment.tipAmount)
     }
 
-    console.log(amount)
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
     return balance$.pipe(
         switchMap(data => {
@@ -105,24 +112,125 @@ export class PaymentsMethodsProcessService implements OnDestroy {
           return  this.sitesService.notifyObs(`Payment failed because: ${data?.responseMessage}`, 'Close.', 5000)
         }
 
-        return this.orderMethodsService.finalizeOrderProcesses(null, null, order);
+        return this.finalizeOrderProcesses(order);
 
       })).pipe(switchMap( data => {
-
-        this.orderService.updateOrderSubscription( order );
+        console.log('udpdate order subscription')
+        this.orderMethodsService.updateOrderSubscription( order );
 
         if (response.orderCompleted) {
-          this.orderMethodsService.finalizeOrder(response, paymentMethod, order);
+          this.printingService.printJoinedLabels() ;
+          this.finalizeOrder(response, paymentMethod, order);
           this._initTransactionComplete.next(true)
         }
 
         return of(response);
 
       }), catchError(err => {
-        this.sitesService.notify('Error in processing cash payment' + err, 'Error', 5000, 'red')
+        this.sitesService.notify('Error in processing payment' + err, 'Error', 5000, 'red')
         return of(err)
     }));
   }
+
+  
+  finalizeOrderProcesses(order: IPOSOrder) {
+
+    this.printingService.updatePrintingFinalizer(true)
+    let printLabels$ : Observable<any>;
+    let sendOrder$   : Observable<any>;
+    if (!this.platFormService.isApp || !this.platFormService.isAppElectron) return of(null);
+
+    return this.uiSettingService.transactionUISettings$.pipe(switchMap(data => {
+      printLabels$ = of(null);
+      sendOrder$  = of(null);
+
+      if (data.prepOrderOnClose) {
+        this.sendToPrep(order, true)
+      }
+      if (data.printLabelsOnclose) {
+        return this.printingService.printLabels(order, true)
+      }
+      return forkJoin([printLabels$, sendOrder$])
+    }))
+  }
+
+
+  finalizeOrder(paymentResponse: IPaymentResponse, 
+                paymentMethod: IPaymentMethod, 
+                order: IPOSOrder): number {
+
+  // this.printingService.printJoinedLabels() ;
+  if (!paymentResponse ) {
+    this.sitesService.notify(`No payment response `, 'close', 3000, 'red');
+    return 0
+  }
+
+  if (!paymentResponse || !paymentResponse.payment) {
+    this.sitesService.notify('No payment in payment response', 'close', 3000, 'red');
+    return 0
+  }
+
+  const payment = paymentResponse.payment;
+  if (order && !order.balanceRemaining) { order.balanceRemaining = 0}
+
+  if (payment && paymentMethod) {
+
+  if (paymentMethod.isCreditCard) {
+    if (this.platFormService.isApp()) {
+      this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+    }
+    return 1
+  }
+
+  if (paymentMethod.isCash) {
+      this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet()
+  }
+
+  if (payment.amountReceived >= payment.amountPaid || order.balanceRemaining == 0) {
+    if (this.platFormService.isApp()) {
+        this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+  }
+  return 1
+  }
+
+  return 0
+  }
+}
+
+  sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean): Observable<any> {
+    if (order) {
+      const site = this.sitesService.getAssignedSite()
+      const item$ = this.prepPrintingService.printLocations(order,printUnPrintedOnly).pipe(
+        switchMap( data => {
+          return  this.prepPrintUnPrintedItems(order.id)
+        })
+        ,catchError( data => {
+          this.sitesService.notify('Error printing templates' + data.toString(), 'close', 5000, 'red')
+          return of(data)
+      }))
+      return item$;
+    }
+    return of(null)
+  }
+
+  prepPrintUnPrintedItems(id: number) {
+    if (id) {
+      const site = this.sitesService.getAssignedSite()
+      return  this.posOrderItemService.setUnPrintedItemsAsPrinted(site, id).pipe(
+        switchMap(data => {
+          return this.orderService.getOrder(site, id.toString(), false)
+        })).pipe(
+          switchMap( order => {
+          if (order) {
+            console.log(' prepPrintUnPrintedItems orderMethodsService.updateOrderSubscription')
+            this.orderMethodsService.updateOrderSubscription(order)
+            return of(order)
+          }
+      }));
+    }
+    return of(null)
+  }
+  // Error in processing cash paymentTypeError: Cannot read properties of undefined (reading 'pipe')
 
 
   // processResults(paymentResponse: IPaymentResponse) {
@@ -513,13 +621,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         const payment$ =   this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize, paymentMethod)
 
         return  payment$.pipe(
-          switchMap(data => {
-            this.orderService.updateOrderSubscription(data.order);
+          switchMap(data => {            
+            console.log(' prepPrintUnPrintedItems orderMethodsService.updateOrderSubscription')
+            this.orderMethodsService.updateOrderSubscription(data.order);
             this.printingService.previewReceipt();
             response = data;
-            return this.orderMethodsService.finalizeOrderProcesses(null, null, order )
+            return this.finalizeOrderProcesses(order )
           })).pipe(switchMap(data => {
-            this.orderMethodsService.finalizeOrder(response,  paymentMethod, data.order);
+            this.finalizeOrder(response,  paymentMethod, data.order);
             return of(cmdResponse);
           })
         )
@@ -530,7 +639,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   processSendOrder(order: IPOSOrder) {
-    return this.orderMethodsService.sendToPrep(order, true)
+    return this.sendToPrep(order, true)
   }
 
   applyCardPointResponseToPayment(response: any, payment: IPOSPayment) {
@@ -726,41 +835,37 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     if (paymentMethod && posPayment && order)
       if (paymentMethod.wic) {
-        console.log('method is wic')
+        // console.log('method is wic')
         return   this.processCashPayment(site, posPayment, order, amount, paymentMethod)
       }
       if (paymentMethod.ebt) {
-        console.log('method is ebt')
+        // console.log('method is ebt')
         return   this.processCashPayment(site, posPayment, order, amount, paymentMethod)
       }
       //cash
       if (paymentMethod.isCash) {
-        console.log('method is isCash')
+        // console.log('method is isCash')
         return   this.processCashPayment(site, posPayment, order, amount, paymentMethod)
       }
 
       if (paymentMethod.isCreditCard) {
-        console.log('method is isCreditCard')
+        // console.log('method is isCreditCard')
         return  this.processCreditPayment(site, posPayment, order, amount, paymentMethod)
       }
 
       if (paymentMethod.name.toLowerCase()  == 'check') {
-        console.log('method is check')
+        // console.log('method is check')
         return   this.processCashPayment(site, posPayment, order, amount, paymentMethod)
       }
 
       if (paymentMethod.name.toLowerCase() === 'rewards points' || paymentMethod.name.toLowerCase() === 'loyalty points') {
-        console.log('method is points')
+        // console.log('method is points')
         return this.enterPointCashValue(amount, paymentMethod, posPayment, order)
       }
 
-      return   this.processCashPayment(site, posPayment, order, amount, paymentMethod)
       // console.log('paymentMethod', paymentMethod, posPayment )
-      // console.log('is there a method' , method$)
-      // if (!method$) {return of(null)}
-      // labelPrint$.pipe(switchMap(data => {
-      //   return of(method$)
-      // }))
+      return   this.processCashPayment(site, posPayment, order, amount, paymentMethod)
+
   }
 
   validatePaymentAmount(amount, paymentMethod: IPaymentMethod, balanceRemaining: number, creditBalanceRemaining): boolean {
@@ -792,6 +897,23 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       if ( order.balanceRemaining == 0)  {
         return  true;
       }
+    }
+  }
+
+  processResults(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod) {
+    let result = 0
+    if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
+      if (paymentResponse.orderCompleted) {
+        result =  this.finalizeOrder(paymentResponse, paymentMethod, paymentResponse.order)
+      } else {
+      }
+    }
+
+    if (paymentResponse.paymentSuccess || paymentResponse.responseMessage.toLowerCase() === 'success') {
+      this.orderMethodsService.updateOrderSubscription(paymentResponse.order)
+      this.sitesService.notify(`Payment succeeded: ${paymentResponse.responseMessage}`, 'Success', 1000)
+    } else {
+      this.sitesService.notify(`Payment failed because: ${paymentResponse.responseMessage}`, 'Something unexpected happened.',3000)
     }
   }
 

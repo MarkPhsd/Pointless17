@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >UnitTypesService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >UnitTypesService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -113,13 +120,13 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+<code>constructor(http: HttpClient, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
                     </td>
                 </tr>
                         <tr>
@@ -145,7 +152,7 @@
                                                         <td>http</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                                    <code>HttpClient</code>
                                                         </td>
                                                   
                                                     <td>
@@ -174,7 +181,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -210,6 +217,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -249,7 +257,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;UnitType&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -290,6 +298,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -352,7 +361,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getBasicTypes(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, searchModel: <a href="../interfaces/PriceCategorySearchModel.html" target="_self">PriceCategorySearchModel</a>)</code>
+<code>getBasicTypes(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, searchModel: <a href="../interfaces/SearchModel.html" target="_self">SearchModel</a>)</code>
                 </td>
             </tr>
 
@@ -370,6 +379,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -394,7 +404,7 @@
                                 <tr>
                                     <td>searchModel</td>
                                     <td>
-                                                <code><a href="../interfaces/PriceCategorySearchModel.html" target="_self" >PriceCategorySearchModel</a></code>
+                                                <code><a href="../interfaces/SearchModel.html" target="_self" >SearchModel</a></code>
                                     </td>
 
                                     <td>
@@ -432,7 +442,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getList(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, searchModel: <a href="../interfaces/UnitTypeSearchModel.html" target="_self">UnitTypeSearchModel</a>)</code>
+<code>getList(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, searchModel: <a href="../interfaces/SearchModel.html" target="_self">SearchModel</a>)</code>
                 </td>
             </tr>
 
@@ -450,6 +460,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -474,7 +485,7 @@
                                 <tr>
                                     <td>searchModel</td>
                                     <td>
-                                                <code><a href="../interfaces/UnitTypeSearchModel.html" target="_self" >UnitTypeSearchModel</a></code>
+                                                <code><a href="../interfaces/SearchModel.html" target="_self" >SearchModel</a></code>
                                     </td>
 
                                     <td>
@@ -512,7 +523,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getUnitTypesSearch(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, searchModel: <a href="../interfaces/PriceCategorySearchModel.html" target="_self">PriceCategorySearchModel</a>)</code>
+<code>getUnitTypesSearch(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, searchModel: <a href="../interfaces/SearchModel.html" target="_self">SearchModel</a>)</code>
                 </td>
             </tr>
 
@@ -530,6 +541,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -554,7 +566,7 @@
                                 <tr>
                                     <td>searchModel</td>
                                     <td>
-                                                <code><a href="../interfaces/PriceCategorySearchModel.html" target="_self" >PriceCategorySearchModel</a></code>
+                                                <code><a href="../interfaces/SearchModel.html" target="_self" >SearchModel</a></code>
                                     </td>
 
                                     <td>
@@ -610,6 +622,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -690,6 +703,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -782,6 +796,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -836,14 +851,14 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { IPriceCategoryPaged, IUnitTypePaged, PriceCategorySearchModel, UnitType, UnitTypeSearchModel } from &#x27;src/app/_interfaces/menu/price-categories&#x27;;
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { IUnitTypePaged, UnitType } from &#x27;src/app/_interfaces/menu/price-categories&#x27;;
 import { Injectable, Input } from &#x27;@angular/core&#x27;;
 import { AuthenticationService } from &#x27;../system/authentication.service&#x27;;
-import { Observable, Subject, throwError  } from &#x27;rxjs&#x27;;
+import { Observable, switchMap, } from &#x27;rxjs&#x27;;
 import { ISite,  }  from &#x27;src/app/_interfaces&#x27;;
 import { HttpClient } from &#x27;@angular/common/http&#x27;;
-import { IItemBasic } from &#x27;./menu.service&#x27;;
+import { SearchModel } from &#x27;../system/paging.service&#x27;;
 
 
 @Injectable({
@@ -863,7 +878,7 @@ export class UnitTypesService {
               )
   { }
 
-  delete(site: ISite, id: number): Observable&lt;UnitType&gt; {
+  delete(site: ISite, id: number): Observable&lt;any&gt; {
 
     const controller &#x3D; &quot;/UnitTypes/&quot;
 
@@ -877,7 +892,7 @@ export class UnitTypesService {
 
    }
 
-   getUnitTypesSearch(site: ISite, searchModel: PriceCategorySearchModel): Observable&lt;IUnitTypePaged&gt; {
+   getUnitTypesSearch(site: ISite, searchModel: SearchModel): Observable&lt;IUnitTypePaged&gt; {
 
     const controller &#x3D;  &quot;/UnitTypes/&quot;
 
@@ -891,7 +906,7 @@ export class UnitTypesService {
 
   };
 
-  getBasicTypes(site: ISite, searchModel: PriceCategorySearchModel): Observable&lt;IUnitTypePaged&gt; {
+  getBasicTypes(site: ISite,  searchModel: SearchModel): Observable&lt;IUnitTypePaged&gt; {
 
     const controller &#x3D;  &quot;/UnitTypes/&quot;
 
@@ -901,7 +916,7 @@ export class UnitTypesService {
 
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
-    return  this.http.get&lt;IUnitTypePaged&gt;(url)
+    return  this.http.post&lt;IUnitTypePaged&gt;(url,searchModel)
 
   }
 ;
@@ -921,7 +936,7 @@ get(site: ISite, id: number): Observable&lt;UnitType&gt; {
 };
 
   // api/PriceCategories/GetPriceCategories
-  getList(site: ISite, searchModel: UnitTypeSearchModel): Observable&lt;IUnitTypePaged&gt; {
+  getList(site: ISite, searchModel: SearchModel): Observable&lt;IUnitTypePaged&gt; {
 
     const controller &#x3D;  &quot;/UnitTypes/&quot;
 
@@ -973,6 +988,10 @@ get(site: ISite, id: number): Observable&lt;UnitType&gt; {
 
   }
 
+
+
+
+
 }
 </code></pre>
     </div>
@@ -985,14 +1004,15 @@ get(site: ISite, id: number): Observable&lt;UnitType&gt; {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -1004,6 +1024,15 @@ get(site: ISite, id: number): Observable&lt;UnitType&gt; {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -1013,8 +1042,8 @@ get(site: ISite, id: number): Observable&lt;UnitType&gt; {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

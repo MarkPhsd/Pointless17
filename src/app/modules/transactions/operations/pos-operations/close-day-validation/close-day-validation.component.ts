@@ -7,6 +7,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { BalanceSheetService,  IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { BalanceSheetQuickViewComponent } from '../../../balanceSheets/balance-sheet-quick-view/balance-sheet-quick-view.component';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'close-day-validation',
@@ -24,6 +25,7 @@ export class CloseDayValidationComponent implements OnInit {
     private siteService             : SitesService,
     private sheetMethodsService     : BalanceSheetMethodsService,
     private orderService            : OrdersService,
+    public orderMethodsService: OrderMethodsService,
   ) { }
 
   ngOnInit(): void {
@@ -59,7 +61,7 @@ export class CloseDayValidationComponent implements OnInit {
     if (id) {
       const site = this.siteService.getAssignedSite();
       this.orderService.getOrder(site, id.toString(), false).subscribe(data => {
-        this.orderService.setActiveOrder(site, data)
+        this.orderMethodsService.setActiveOrder(site, data)
         }
       )
     }

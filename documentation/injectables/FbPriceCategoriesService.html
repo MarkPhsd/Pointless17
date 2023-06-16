@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >FbPriceCategoriesService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >FbPriceCategoriesService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -79,6 +86,9 @@
                         <ul class="index-list">
                             <li>
                                 <a href="#addPrice" >addPrice</a>
+                            </li>
+                            <li>
+                                <a href="#addPriceArray" >addPriceArray</a>
                             </li>
                             <li>
                                 <a href="#initForm" >initForm</a>
@@ -98,18 +108,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(fb: <a href="https://angular.io/api/forms/FormBuilder" target="_blank">FormBuilder</a>)</code>
+<code>constructor(fb: UntypedFormBuilder)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">src/app/_form-builder/fb-price-categories.ts:12</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">src/app/_form-builder/fb-price-categories.ts:10</a></div>
                             </td>
                         </tr>
 
@@ -130,7 +140,7 @@
                                                         <td>fb</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/forms/FormBuilder" target="_blank" >FormBuilder</a></code>
+                                                                    <code>UntypedFormBuilder</code>
                                                         </td>
                                                   
                                                     <td>
@@ -147,7 +157,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -165,15 +175,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>addPrice(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, clientType: <a href="../interfaces/ProductPrice.html" target="_self">ProductPrice</a>)</code>
+<code>addPrice(inputForm: UntypedFormGroup, arrayType: <a href="../interfaces/ProductPrice.html" target="_self">ProductPrice</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="34"
-                            class="link-to-prism">src/app/_form-builder/fb-price-categories.ts:34</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="30"
+                            class="link-to-prism">src/app/_form-builder/fb-price-categories.ts:30</a></div>
                 </td>
             </tr>
 
@@ -183,6 +193,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -195,7 +206,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -205,7 +216,7 @@
 
                                 </tr>
                                 <tr>
-                                    <td>clientType</td>
+                                    <td>arrayType</td>
                                     <td>
                                                 <code><a href="../interfaces/ProductPrice.html" target="_self" >ProductPrice</a></code>
                                     </td>
@@ -236,6 +247,43 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="addPriceArray"></a>
+                    <span class="name">
+                        <span ><b>addPriceArray</b></span>
+                        <a href="#addPriceArray"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addPriceArray()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="37"
+                            class="link-to-prism">src/app/_form-builder/fb-price-categories.ts:37</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="initForm"></a>
                     <span class="name">
                         <span ><b>initForm</b></span>
@@ -245,15 +293,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>initForm(fb: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>initForm(fb: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="23"
-                            class="link-to-prism">src/app/_form-builder/fb-price-categories.ts:23</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="20"
+                            class="link-to-prism">src/app/_form-builder/fb-price-categories.ts:20</a></div>
                 </td>
             </tr>
 
@@ -263,6 +311,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -275,7 +324,7 @@
                                 <tr>
                                     <td>fb</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -290,7 +339,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                        <b>Returns : </b>    <code>UntypedFormGroup</code>
 
                     </div>
                     <div class="io-description">
@@ -313,15 +362,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>intitFormData(inputForm: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>, data: <a href="../interfaces/IPriceCategories.html" target="_self">IPriceCategories</a>)</code>
+<code>intitFormData(inputForm: UntypedFormGroup, data: <a href="../interfaces/PriceCategories.html" target="_self">PriceCategories</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="17"
-                            class="link-to-prism">src/app/_form-builder/fb-price-categories.ts:17</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="14"
+                            class="link-to-prism">src/app/_form-builder/fb-price-categories.ts:14</a></div>
                 </td>
             </tr>
 
@@ -331,6 +380,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -343,7 +393,7 @@
                                 <tr>
                                     <td>inputForm</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -355,7 +405,7 @@
                                 <tr>
                                     <td>data</td>
                                     <td>
-                                                <code><a href="../interfaces/IPriceCategories.html" target="_self" >IPriceCategories</a></code>
+                                                <code><a href="../interfaces/PriceCategories.html" target="_self" >PriceCategories</a></code>
                                     </td>
 
                                     <td>
@@ -370,7 +420,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                        <b>Returns : </b>    <code>UntypedFormGroup</code>
 
                     </div>
                     <div class="io-description">
@@ -385,12 +435,10 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
-import { FormArray, FormBuilder, FormGroup } from &#x27;@angular/forms&#x27;;
-
-import { IPriceCategories, ProductPrice } from &#x27;../_interfaces/menu/price-categories&#x27;;
-
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from &#x27;@angular/forms&#x27;;
+import { PriceCategories, ProductPrice } from &#x27;../_interfaces/menu/price-categories&#x27;;
 
 @Injectable({
   providedIn: &#x27;root&#x27;
@@ -398,71 +446,82 @@ import { IPriceCategories, ProductPrice } from &#x27;../_interfaces/menu/price-c
 
 export class FbPriceCategoriesService {
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: UntypedFormBuilder) { }
 
-
-  intitFormData(inputForm: FormGroup, data: IPriceCategories) {
+  intitFormData(inputForm: UntypedFormGroup, data: PriceCategories) {
     inputForm.patchValue(data)
     return inputForm
   }
 
 
-  initForm(fb: FormGroup): FormGroup {
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb &#x3D; this.fb.group({
       id:                           [&#x27;&#x27;],
       name:                         [&#x27;&#x27;],
       productPrices:      this.fb.array([
-
       ]),
     })
     return fb
   }
 
-  addPrice(inputForm: FormGroup, clientType: ProductPrice) {
+  addPrice(inputForm: UntypedFormGroup, arrayType: ProductPrice) {
     if (!inputForm) { return }
-    const control &#x3D; inputForm.get(&#x27;productPrices&#x27;) as FormArray;
+    const control &#x3D; inputForm.get(&#x27;productPrices&#x27;) as UntypedFormArray;
     if (!control)   { return }
-    control.push(this.fb.control(clientType))
+    control.push(this.fb.control(arrayType))
+  }
+
+  addPriceArray() {
+    return this.fb.group({
+      id:               [&#x27;&#x27;],
+      priceCategoryID:  [&#x27;&#x27;],
+      retail:           [&#x27;&#x27;],
+      wholeSale:        [&#x27;&#x27;],
+      unitTypeID:       [&#x27;&#x27;],
+
+      hideFromMenu:     [&#x27;&#x27;],
+      useforInventory:  [&#x27;&#x27;],
+      pizzaMultiplier:  [&#x27;&#x27;],
+
+      unitPartRatio:    [&#x27;&#x27;],
+      partMultiplyer:   [&#x27;&#x27;],
+
+      doNotDelete:      [&#x27;&#x27;],
+      pizzaSize:        [&#x27;&#x27;],
+      priceType:        [&#x27;&#x27;],
+      barcode:          [&#x27;&#x27;],
+      itemQuantity:     [&#x27;&#x27;],
+      productID:        [&#x27;&#x27;],
+      tierPriceGroup:   [&#x27;&#x27;],
+      price1:           [&#x27;&#x27;],
+      price2:           [&#x27;&#x27;],
+      price3:           [&#x27;&#x27;],
+      price4:           [&#x27;&#x27;],
+      price5:           [&#x27;&#x27;],
+      price6:           [&#x27;&#x27;],
+      price7:           [&#x27;&#x27;],
+      price8:           [&#x27;&#x27;],
+      price9:           [&#x27;&#x27;],
+      price10:          [&#x27;&#x27;],
+      timeBasedPrice:   [&#x27;&#x27;],
+      uid:              [&#x27;&#x27;],
+      weekDays:         [&#x27;&#x27;],
+      endTime:          [&#x27;&#x27;],
+      startTime:        [&#x27;&#x27;],
+      webEnabled:       [&#x27;&#x27;],
+      specialDatePrice: [&#x27;&#x27;],
+      startDate:        [&#x27;&#x27;],
+      endDate:          [&#x27;&#x27;],
+      gramPrice:        [&#x27;&#x27;],
+      eightPrice:       [&#x27;&#x27;],
+      halfPrice:        [&#x27;&#x27;],
+      quarterPrice:     [&#x27;&#x27;],
+      ouncePrice:       [&#x27;&#x27;],
+    }
+  )
   }
 
 }
-
-  // id:               [&#x27;&#x27;],
-  // priceCategoryID:  [&#x27;&#x27;],
-  // retail:           [&#x27;&#x27;],
-  // wholeSale:        [&#x27;&#x27;],
-  // unitTypeID:       [&#x27;&#x27;],
-  // price1:           [&#x27;&#x27;],
-  // price2:           [&#x27;&#x27;],
-  // price3:           [&#x27;&#x27;],
-  // hideFromMenu:     [&#x27;&#x27;],
-  // useforInventory:  [&#x27;&#x27;],
-  // pizzaMultiplier:  [&#x27;&#x27;],
-  // unitPartRatio:    [&#x27;&#x27;],
-  // partMultiplyer:   [&#x27;&#x27;],
-  // doNotDelete:      [&#x27;&#x27;],
-  // pizzaSize:        [&#x27;&#x27;],
-  // priceType:        [&#x27;&#x27;],
-  // barcode:          [&#x27;&#x27;],
-  // itemQuantity:     [&#x27;&#x27;],
-  // productID:        [&#x27;&#x27;],
-  // tierPriceGroup:   [&#x27;&#x27;],
-  // price4:           [&#x27;&#x27;],
-  // price5:           [&#x27;&#x27;],
-  // price6:           [&#x27;&#x27;],
-  // price7:           [&#x27;&#x27;],
-  // price8:           [&#x27;&#x27;],
-  // price9:           [&#x27;&#x27;],
-  // price10:          [&#x27;&#x27;],
-  // timeBasedPrice:   [&#x27;&#x27;],
-  // uid:              [&#x27;&#x27;],
-  // weekDays:         [&#x27;&#x27;],
-  // endTime:          [&#x27;&#x27;],
-  // startTime:        [&#x27;&#x27;],
-  // webEnabled:       [&#x27;&#x27;],
-  // specialDatePrice: [&#x27;&#x27;],
-  // startDate:        [&#x27;&#x27;],
-  // endDate:          [&#x27;&#x27;],
 </code></pre>
     </div>
 
@@ -474,14 +533,15 @@ export class FbPriceCategoriesService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -493,6 +553,15 @@ export class FbPriceCategoriesService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -502,8 +571,8 @@ export class FbPriceCategoriesService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

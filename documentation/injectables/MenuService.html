@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >MenuService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >MenuService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -78,7 +85,15 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Private</span>
-                                <a href="#_menuItemsData" >_menuItemsData</a>
+                                <a href="#_currentMeuItem" >_currentMeuItem</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_searchModel" >_searchModel</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#currentMeuItem$" >currentMeuItem$</a>
                             </li>
                             <li>
                                 <a href="#endpoint" >endpoint</a>
@@ -87,15 +102,30 @@
                                 <a href="#httpOptions" >httpOptions</a>
                             </li>
                             <li>
+                                <a href="#isStaff" >isStaff</a>
+                            </li>
+                            <li>
                                 <a href="#menuItems$" >menuItems$</a>
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#menuItemsData$" >menuItemsData$</a>
+                                <a href="#searchFilter" >searchFilter</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#searchFilter$" >searchFilter$</a>
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
                                 <a href="#searchIsLoaded" >searchIsLoaded</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#searchModel" >searchModel</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#searchModel$" >searchModel$</a>
                             </li>
                             <li>
                                 <a href="#site" >site</a>
@@ -113,13 +143,16 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                <a href="#addSearchFilter" >addSearchFilter</a>
+                            </li>
+                            <li>
                                 <a href="#clearSearch" >clearSearch</a>
                             </li>
                             <li>
                                 <a href="#deleteProduct" >deleteProduct</a>
                             </li>
                             <li>
-                                <a href="#getBasicLists" >getBasicLists</a>
+                                <a href="#deleteProducts" >deleteProducts</a>
                             </li>
                             <li>
                                 <a href="#getCategoryAsyncList" >getCategoryAsyncList</a>
@@ -134,16 +167,64 @@
                                 <a href="#getCategoryListNoChildrenPaging" >getCategoryListNoChildrenPaging</a>
                             </li>
                             <li>
+                                <a href="#getCategoryValues" >getCategoryValues</a>
+                            </li>
+                            <li>
+                                <a href="#getDepartmentValues" >getDepartmentValues</a>
+                            </li>
+                            <li>
+                                <a href="#getGetCategoriesList" >getGetCategoriesList</a>
+                            </li>
+                            <li>
+                                <a href="#getGetCategoriesListActive" >getGetCategoriesListActive</a>
+                            </li>
+                            <li>
+                                <a href="#getGetCategoriesListAll" >getGetCategoriesListAll</a>
+                            </li>
+                            <li>
+                                <a href="#getGetCategoriesListByID" >getGetCategoriesListByID</a>
+                            </li>
+                            <li>
+                                <a href="#getGetDepartment" >getGetDepartment</a>
+                            </li>
+                            <li>
+                                <a href="#getGetDepartmentList" >getGetDepartmentList</a>
+                            </li>
+                            <li>
+                                <a href="#getImportCountProgress" >getImportCountProgress</a>
+                            </li>
+                            <li>
+                                <a href="#getInventoryValues" >getInventoryValues</a>
+                            </li>
+                            <li>
+                                <a href="#getItemBasicBySearch" >getItemBasicBySearch</a>
+                            </li>
+                            <li>
+                                <a href="#getItemBasicImage" >getItemBasicImage</a>
+                            </li>
+                            <li>
                                 <a href="#getItemsNameBySearch" >getItemsNameBySearch</a>
                             </li>
                             <li>
                                 <a href="#getListOfCategories" >getListOfCategories</a>
                             </li>
                             <li>
+                                <a href="#getListOfCategoriesAll" >getListOfCategoriesAll</a>
+                            </li>
+                            <li>
                                 <a href="#getListOfDepartments" >getListOfDepartments</a>
                             </li>
                             <li>
+                                <a href="#getListOfDepartmentsAll" >getListOfDepartmentsAll</a>
+                            </li>
+                            <li>
                                 <a href="#getListOfSubCategories" >getListOfSubCategories</a>
+                            </li>
+                            <li>
+                                <a href="#getListOfSubCategoriesAll" >getListOfSubCategoriesAll</a>
+                            </li>
+                            <li>
+                                <a href="#getListOfSubCategoriesByCategory" >getListOfSubCategoriesByCategory</a>
                             </li>
                             <li>
                                 <a href="#getMenuItemByBarcode" >getMenuItemByBarcode</a>
@@ -152,13 +233,28 @@
                                 <a href="#getMenuItemByID" >getMenuItemByID</a>
                             </li>
                             <li>
+                                <a href="#getMenuItemByIDLinked" >getMenuItemByIDLinked</a>
+                            </li>
+                            <li>
                                 <a href="#getMenuItemsByPage" >getMenuItemsByPage</a>
+                            </li>
+                            <li>
+                                <a href="#getMenuItemsBySchedule" >getMenuItemsBySchedule</a>
                             </li>
                             <li>
                                 <a href="#getMenuItemsBySearchPaged" >getMenuItemsBySearchPaged</a>
                             </li>
                             <li>
                                 <a href="#getMenuProduct" >getMenuProduct</a>
+                            </li>
+                            <li>
+                                <a href="#getModiferPrices" >getModiferPrices</a>
+                            </li>
+                            <li>
+                                <a href="#getPackagingMaterialArray" >getPackagingMaterialArray</a>
+                            </li>
+                            <li>
+                                <a href="#getPricesFromProductPrices" >getPricesFromProductPrices</a>
                             </li>
                             <li>
                                 <a href="#getProduct" >getProduct</a>
@@ -198,22 +294,58 @@
                                 <a href="#handleError" >handleError</a>
                             </li>
                             <li>
+                                <a href="#importFlowInventory" >importFlowInventory</a>
+                            </li>
+                            <li>
+                                <a href="#importFlowPrices" >importFlowPrices</a>
+                            </li>
+                            <li>
+                                <a href="#importFlowProducts" >importFlowProducts</a>
+                            </li>
+                            <li>
+                                <a href="#importFlowStrains" >importFlowStrains</a>
+                            </li>
+                            <li>
+                                <a href="#importInventory" >importInventory</a>
+                            </li>
+                            <li>
+                                <a href="#importProducts" >importProducts</a>
+                            </li>
+                            <li>
+                                <a href="#initSearchModel" >initSearchModel</a>
+                            </li>
+                            <li>
                                 <a href="#postProduct" >postProduct</a>
                             </li>
                             <li>
                                 <a href="#putProduct" >putProduct</a>
                             </li>
                             <li>
+                                <a href="#resetProgressIndicator" >resetProgressIndicator</a>
+                            </li>
+                            <li>
                                 <a href="#saveProduct" >saveProduct</a>
+                            </li>
+                            <li>
+                                <a href="#setAllItemsActive" >setAllItemsActive</a>
                             </li>
                             <li>
                                 <a href="#showSearch" >showSearch</a>
                             </li>
                             <li>
+                                <a href="#sortCategoriesSubCategoriesFirst" >sortCategoriesSubCategoriesFirst</a>
+                            </li>
+                            <li>
+                                <a href="#updateCurrentMenuItem" >updateCurrentMenuItem</a>
+                            </li>
+                            <li>
                                 <a href="#updateField" >updateField</a>
                             </li>
                             <li>
-                                <a href="#updateMeunuItemData" >updateMeunuItemData</a>
+                                <a href="#updateSearchFilter" >updateSearchFilter</a>
+                            </li>
+                            <li>
+                                <a href="#updateSearchModel" >updateSearchModel</a>
                             </li>
                         </ul>
                     </td>
@@ -223,22 +355,36 @@
 
 
 
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#isWebModeMenu" >isWebModeMenu</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
         </tbody>
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(httpCache: <a href="../injectables/HttpClientCacheService.html" target="_self">HttpClientCacheService</a>, httpClient: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, sitesService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+<code>constructor(httpCache: <a href="../injectables/HttpClientCacheService.html" target="_self">HttpClientCacheService</a>, httpClient: HttpClient, sitesService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, userAuthorizationService: <a href="../injectables/UserAuthorizationService.html" target="_self">UserAuthorizationService</a>, platFormService: <a href="../injectables/PlatformService.html" target="_self">PlatformService</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>, fb: FormBuilder)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/_services/menu/menu.service.ts:57</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="104" class="link-to-prism">src/app/_services/menu/menu.service.ts:104</a></div>
                             </td>
                         </tr>
 
@@ -271,7 +417,7 @@
                                                         <td>httpClient</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                                    <code>HttpClient</code>
                                                         </td>
                                                   
                                                     <td>
@@ -292,10 +438,46 @@
                                                     
                                                 </tr>
                                                 <tr>
+                                                        <td>userAuthorizationService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/UserAuthorizationService.html" target="_self" >UserAuthorizationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>platFormService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/PlatformService.html" target="_self" >PlatformService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
                                                         <td>auth</td>
                                                   
                                                         <td>
                                                                         <code><a href="../injectables/AuthenticationService.html" target="_self" >AuthenticationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>fb</td>
+                                                  
+                                                        <td>
+                                                                    <code>FormBuilder</code>
                                                         </td>
                                                   
                                                     <td>
@@ -312,11 +494,104 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addSearchFilter"></a>
+                    <span class="name">
+                        <span ><b>addSearchFilter</b></span>
+                        <a href="#addSearchFilter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addSearchFilter(inputForm: UntypedFormGroup, items: any[], types: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="1091"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:1091</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>inputForm</td>
+                                    <td>
+                                            <code>UntypedFormGroup</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>items</td>
+                                    <td>
+                                            <code>any[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>types</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -337,8 +612,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="93"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:93</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="184"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:184</a></div>
                 </td>
             </tr>
 
@@ -374,8 +649,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="119"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:119</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="246"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:246</a></div>
                 </td>
             </tr>
 
@@ -385,6 +660,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -438,24 +714,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getBasicLists"></a>
+                    <a name="deleteProducts"></a>
                     <span class="name">
-                        <span ><b>getBasicLists</b></span>
-                        <a href="#getBasicLists"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>deleteProducts</b></span>
+                        <a href="#deleteProducts"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getBasicLists(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, type: <a href="../s/s.html" target="_self">string</a>)</code>
+<code>deleteProducts(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, listofItems: any[])</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="282"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:282</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="232"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:232</a></div>
                 </td>
             </tr>
 
@@ -465,6 +741,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -487,9 +764,9 @@
 
                                 </tr>
                                 <tr>
-                                    <td>type</td>
+                                    <td>listofItems</td>
                                     <td>
-                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                            <code>any[]</code>
                                     </td>
 
                                     <td>
@@ -504,7 +781,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IMenuItem[]&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
 
                     </div>
                     <div class="io-description">
@@ -534,8 +811,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="316"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:316</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="596"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:596</a></div>
                 </td>
             </tr>
 
@@ -545,6 +822,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -602,8 +880,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="216"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:216</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="406"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:406</a></div>
                 </td>
             </tr>
 
@@ -613,6 +891,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -670,8 +949,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="238"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:238</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="428"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:428</a></div>
                 </td>
             </tr>
 
@@ -681,6 +960,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -738,8 +1018,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="260"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:260</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="450"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:450</a></div>
                 </td>
             </tr>
 
@@ -749,6 +1029,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -814,6 +1095,942 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="getCategoryValues"></a>
+                    <span class="name">
+                        <span ><b>getCategoryValues</b></span>
+                        <a href="#getCategoryValues"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getCategoryValues(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="390"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:390</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDepartmentValues"></a>
+                    <span class="name">
+                        <span ><b>getDepartmentValues</b></span>
+                        <a href="#getDepartmentValues"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getDepartmentValues(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="374"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:374</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getGetCategoriesList"></a>
+                    <span class="name">
+                        <span ><b>getGetCategoriesList</b></span>
+                        <a href="#getGetCategoriesList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getGetCategoriesList(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, type: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="467"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:467</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>type</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IMenuItem[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getGetCategoriesListActive"></a>
+                    <span class="name">
+                        <span ><b>getGetCategoriesListActive</b></span>
+                        <a href="#getGetCategoriesListActive"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getGetCategoriesListActive(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, type: <a href="../s/s.html" target="_self">string</a>, option: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="484"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:484</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>type</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>option</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IMenuItem[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getGetCategoriesListAll"></a>
+                    <span class="name">
+                        <span ><b>getGetCategoriesListAll</b></span>
+                        <a href="#getGetCategoriesListAll"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getGetCategoriesListAll(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, type: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="520"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:520</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>type</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IMenuItem[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getGetCategoriesListByID"></a>
+                    <span class="name">
+                        <span ><b>getGetCategoriesListByID</b></span>
+                        <a href="#getGetCategoriesListByID"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getGetCategoriesListByID(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, type: <a href="../s/s.html" target="_self">string</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="504"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:504</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>type</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IMenuItem[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getGetDepartment"></a>
+                    <span class="name">
+                        <span ><b>getGetDepartment</b></span>
+                        <a href="#getGetDepartment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getGetDepartment(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="552"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:552</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IDepartmentList.html" target="_self" >Observable&lt;IDepartmentList[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getGetDepartmentList"></a>
+                    <span class="name">
+                        <span ><b>getGetDepartmentList</b></span>
+                        <a href="#getGetDepartmentList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getGetDepartmentList(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="536"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:536</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IDepartmentList.html" target="_self" >Observable&lt;IDepartmentList[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getImportCountProgress"></a>
+                    <span class="name">
+                        <span ><b>getImportCountProgress</b></span>
+                        <a href="#getImportCountProgress"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getImportCountProgress(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="991"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:991</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getInventoryValues"></a>
+                    <span class="name">
+                        <span ><b>getInventoryValues</b></span>
+                        <a href="#getInventoryValues"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getInventoryValues(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="358"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:358</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getItemBasicBySearch"></a>
+                    <span class="name">
+                        <span ><b>getItemBasicBySearch</b></span>
+                        <a href="#getItemBasicBySearch"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getItemBasicBySearch(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, productSearchModel: <a href="../interfaces/ProductSearchModel.html" target="_self">ProductSearchModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="693"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:693</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>productSearchModel</td>
+                                    <td>
+                                                <code><a href="../interfaces/ProductSearchModel.html" target="_self" >ProductSearchModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IItemBasic[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getItemBasicImage"></a>
+                    <span class="name">
+                        <span ><b>getItemBasicImage</b></span>
+                        <a href="#getItemBasicImage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getItemBasicImage(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="708"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:708</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IItemBasicB&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="getItemsNameBySearch"></a>
                     <span class="name">
                         <span ><b>getItemsNameBySearch</b></span>
@@ -830,8 +2047,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="418"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:418</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="730"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:730</a></div>
                 </td>
             </tr>
 
@@ -841,6 +2058,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -922,8 +2140,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="304"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:304</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="568"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:568</a></div>
                 </td>
             </tr>
 
@@ -933,6 +2151,76 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IMenuItem[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getListOfCategoriesAll"></a>
+                    <span class="name">
+                        <span ><b>getListOfCategoriesAll</b></span>
+                        <a href="#getListOfCategoriesAll"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getListOfCategoriesAll(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="584"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:584</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -990,8 +2278,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="308"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:308</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="572"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:572</a></div>
                 </td>
             </tr>
 
@@ -1001,6 +2289,76 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IMenuItem[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getListOfDepartmentsAll"></a>
+                    <span class="name">
+                        <span ><b>getListOfDepartmentsAll</b></span>
+                        <a href="#getListOfDepartmentsAll"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getListOfDepartmentsAll(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="588"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:588</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1058,8 +2416,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="312"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:312</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="576"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:576</a></div>
                 </td>
             </tr>
 
@@ -1069,6 +2427,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1110,24 +2469,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getMenuItemByBarcode"></a>
+                    <a name="getListOfSubCategoriesAll"></a>
                     <span class="name">
-                        <span ><b>getMenuItemByBarcode</b></span>
-                        <a href="#getMenuItemByBarcode"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>getListOfSubCategoriesAll</b></span>
+                        <a href="#getListOfSubCategoriesAll"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getMenuItemByBarcode(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, barcode: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+<code>getListOfSubCategoriesAll(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="549"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:549</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="592"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:592</a></div>
                 </td>
             </tr>
 
@@ -1137,6 +2496,157 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IMenuItem[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getListOfSubCategoriesByCategory"></a>
+                    <span class="name">
+                        <span ><b>getListOfSubCategoriesByCategory</b></span>
+                        <a href="#getListOfSubCategoriesByCategory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getListOfSubCategoriesByCategory(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="580"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:580</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IMenuItem[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMenuItemByBarcode"></a>
+                    <span class="name">
+                        <span ><b>getMenuItemByBarcode</b></span>
+                        <a href="#getMenuItemByBarcode"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMenuItemByBarcode(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, barcode: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, clientID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="854"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:854</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1162,6 +2672,18 @@
                                     <td>barcode</td>
                                     <td>
                                                 <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>clientID</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
                                     </td>
 
                                     <td>
@@ -1206,8 +2728,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="526"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:526</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="821"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:821</a></div>
                 </td>
             </tr>
 
@@ -1217,6 +2739,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1270,6 +2793,99 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="getMenuItemByIDLinked"></a>
+                    <span class="name">
+                        <span ><b>getMenuItemByIDLinked</b></span>
+                        <a href="#getMenuItemByIDLinked"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMenuItemByIDLinked(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, priceLink: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="837"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:837</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>priceLink</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IMenuItem&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="getMenuItemsByPage"></a>
                     <span class="name">
                         <span ><b>getMenuItemsByPage</b></span>
@@ -1286,8 +2902,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="151"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:151</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="294"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:294</a></div>
                 </td>
             </tr>
 
@@ -1297,6 +2913,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1362,6 +2979,87 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="getMenuItemsBySchedule"></a>
+                    <span class="name">
+                        <span ><b>getMenuItemsBySchedule</b></span>
+                        <a href="#getMenuItemsBySchedule"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMenuItemsBySchedule(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="277"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:277</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/DiscountInfo.html" target="_self" >Observable&lt;DiscountInfo[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="getMenuItemsBySearchPaged"></a>
                     <span class="name">
                         <span ><b>getMenuItemsBySearchPaged</b></span>
@@ -1378,8 +3076,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="361"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:361</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="634"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:634</a></div>
                 </td>
             </tr>
 
@@ -1389,6 +3087,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1458,8 +3157,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="486"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:486</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="790"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:790</a></div>
                 </td>
             </tr>
 
@@ -1469,6 +3168,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1522,6 +3222,213 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="getModiferPrices"></a>
+                    <span class="name">
+                        <span ><b>getModiferPrices</b></span>
+                        <a href="#getModiferPrices"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getModiferPrices(menuItem: <a href="../interfaces/IMenuItem.html" target="_self">IMenuItem</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="936"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:936</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>menuItem</td>
+                                    <td>
+                                                <code><a href="../interfaces/IMenuItem.html" target="_self" >IMenuItem</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IMenuItem.html" target="_self" >IMenuItem</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPackagingMaterialArray"></a>
+                    <span class="name">
+                        <span ><b>getPackagingMaterialArray</b></span>
+                        <a href="#getPackagingMaterialArray"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPackagingMaterialArray(menuItem: <a href="../interfaces/IMenuItem.html" target="_self">IMenuItem</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="929"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:929</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>menuItem</td>
+                                    <td>
+                                                <code><a href="../interfaces/IMenuItem.html" target="_self" >IMenuItem</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPricesFromProductPrices"></a>
+                    <span class="name">
+                        <span ><b>getPricesFromProductPrices</b></span>
+                        <a href="#getPricesFromProductPrices"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPricesFromProductPrices(menuItem: <a href="../interfaces/IMenuItem.html" target="_self">IMenuItem</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="954"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:954</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>menuItem</td>
+                                    <td>
+                                                <code><a href="../interfaces/IMenuItem.html" target="_self" >IMenuItem</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IMenuItem.html" target="_self" >IMenuItem</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="getProduct"></a>
                     <span class="name">
                         <span ><b>getProduct</b></span>
@@ -1538,8 +3445,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="504"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:504</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="807"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:807</a></div>
                 </td>
             </tr>
 
@@ -1549,6 +3456,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1618,8 +3526,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="134"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:134</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="261"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:261</a></div>
                 </td>
             </tr>
 
@@ -1629,6 +3537,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1686,8 +3595,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="196"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:196</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="337"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:337</a></div>
                 </td>
             </tr>
 
@@ -1697,6 +3606,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1766,8 +3676,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="169"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:169</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="310"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:310</a></div>
                 </td>
             </tr>
 
@@ -1777,6 +3687,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1846,8 +3757,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="437"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:437</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="748"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:748</a></div>
                 </td>
             </tr>
 
@@ -1857,6 +3768,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1926,8 +3838,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="466"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:466</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="770"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:770</a></div>
                 </td>
             </tr>
 
@@ -1937,6 +3849,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2006,8 +3919,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="338"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:338</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="618"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:618</a></div>
                 </td>
             </tr>
 
@@ -2017,6 +3930,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2086,8 +4000,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="384"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:384</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="663"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:663</a></div>
                 </td>
             </tr>
 
@@ -2097,6 +4011,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2166,8 +4081,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="404"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:404</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="679"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:679</a></div>
                 </td>
             </tr>
 
@@ -2177,6 +4092,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2246,8 +4162,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="98"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:98</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="189"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:189</a></div>
                 </td>
             </tr>
 
@@ -2283,8 +4199,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="608"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:608</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="916"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:916</a></div>
                 </td>
             </tr>
 
@@ -2322,8 +4238,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="622"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:622</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="972"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:972</a></div>
                 </td>
             </tr>
 
@@ -2333,6 +4249,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2374,6 +4291,529 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="importFlowInventory"></a>
+                    <span class="name">
+                        <span ><b>importFlowInventory</b></span>
+                        <a href="#importFlowInventory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>importFlowInventory(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, list: <a href="../interfaces/FlowInventory.html" target="_self">FlowInventory[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="1049"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:1049</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>list</td>
+                                    <td>
+                                                <code><a href="../interfaces/FlowInventory.html" target="_self" >FlowInventory[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ImportFlowInventoryResults&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="importFlowPrices"></a>
+                    <span class="name">
+                        <span ><b>importFlowPrices</b></span>
+                        <a href="#importFlowPrices"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>importFlowPrices(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, list: FlowPrice[])</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="1034"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:1034</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>list</td>
+                                    <td>
+                                            <code>FlowPrice[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ImportFlowPriceResults&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="importFlowProducts"></a>
+                    <span class="name">
+                        <span ><b>importFlowProducts</b></span>
+                        <a href="#importFlowProducts"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>importFlowProducts(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, list: <a href="../interfaces/FlowProducts.html" target="_self">FlowProducts[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="976"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:976</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>list</td>
+                                    <td>
+                                                <code><a href="../interfaces/FlowProducts.html" target="_self" >FlowProducts[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ImportFlowProductResults&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="importFlowStrains"></a>
+                    <span class="name">
+                        <span ><b>importFlowStrains</b></span>
+                        <a href="#importFlowStrains"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>importFlowStrains(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, list: <a href="../interfaces/FlowStrain.html" target="_self">FlowStrain[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="1019"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:1019</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>list</td>
+                                    <td>
+                                                <code><a href="../interfaces/FlowStrain.html" target="_self" >FlowStrain[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ImportFlowStainsResults&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="importInventory"></a>
+                    <span class="name">
+                        <span ><b>importInventory</b></span>
+                        <a href="#importInventory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>importInventory(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, list: <a href="../interfaces/IInventoryAssignment.html" target="_self">IInventoryAssignment[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="1063"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:1063</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>list</td>
+                                    <td>
+                                                <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >IInventoryAssignment[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="importProducts"></a>
+                    <span class="name">
+                        <span ><b>importProducts</b></span>
+                        <a href="#importProducts"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>importProducts(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, list: <a href="../interfaces/IProduct.html" target="_self">IProduct[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="1005"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:1005</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>list</td>
+                                    <td>
+                                                <code><a href="../interfaces/IProduct.html" target="_self" >IProduct[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ImportProductResults&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initSearchModel"></a>
+                    <span class="name">
+                        <span ><b>initSearchModel</b></span>
+                        <a href="#initSearchModel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initSearchModel()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="155"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:155</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/ProductSearchModel.html" target="_self" >ProductSearchModel</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="postProduct"></a>
                     <span class="name">
                         <span ><b>postProduct</b></span>
@@ -2390,8 +4830,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="576"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:576</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="885"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:885</a></div>
                 </td>
             </tr>
 
@@ -2401,6 +4841,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2470,8 +4911,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="590"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:590</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="899"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:899</a></div>
                 </td>
             </tr>
 
@@ -2481,6 +4922,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2546,6 +4988,75 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="resetProgressIndicator"></a>
+                    <span class="name">
+                        <span ><b>resetProgressIndicator</b></span>
+                        <a href="#resetProgressIndicator"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>resetProgressIndicator(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="1077"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:1077</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="saveProduct"></a>
                     <span class="name">
                         <span ><b>saveProduct</b></span>
@@ -2562,8 +5073,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="565"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:565</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="874"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:874</a></div>
                 </td>
             </tr>
 
@@ -2573,6 +5084,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2626,6 +5138,75 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="setAllItemsActive"></a>
+                    <span class="name">
+                        <span ><b>setAllItemsActive</b></span>
+                        <a href="#setAllItemsActive"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setAllItemsActive(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="193"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:193</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="showSearch"></a>
                     <span class="name">
                         <span ><b>showSearch</b></span>
@@ -2642,8 +5223,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="88"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:88</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="179"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:179</a></div>
                 </td>
             </tr>
 
@@ -2653,6 +5234,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2666,6 +5248,144 @@
                                     <td>value</td>
                                     <td>
                                                 <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sortCategoriesSubCategoriesFirst"></a>
+                    <span class="name">
+                        <span ><b>sortCategoriesSubCategoriesFirst</b></span>
+                        <a href="#sortCategoriesSubCategoriesFirst"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>sortCategoriesSubCategoriesFirst(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="218"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:218</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateCurrentMenuItem"></a>
+                    <span class="name">
+                        <span ><b>updateCurrentMenuItem</b></span>
+                        <a href="#updateCurrentMenuItem"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateCurrentMenuItem(menuItem: <a href="../interfaces/IMenuItem.html" target="_self">IMenuItem</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="175"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:175</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>menuItem</td>
+                                    <td>
+                                                <code><a href="../interfaces/IMenuItem.html" target="_self" >IMenuItem</a></code>
                                     </td>
 
                                     <td>
@@ -2710,8 +5430,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="103"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:103</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="208"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:208</a></div>
                 </td>
             </tr>
 
@@ -2721,6 +5441,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2798,24 +5519,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="updateMeunuItemData"></a>
+                    <a name="updateSearchFilter"></a>
                     <span class="name">
-                        <span ><b>updateMeunuItemData</b></span>
-                        <a href="#updateMeunuItemData"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>updateSearchFilter</b></span>
+                        <a href="#updateSearchFilter"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>updateMeunuItemData(items: <a href="../interfaces/ProductSearchModel.html" target="_self">ProductSearchModel</a>)</code>
+<code>updateSearchFilter(search: <a href="../interfaces/ProductSearchModel.html" target="_self">ProductSearchModel</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="84"
-                            class="link-to-prism">src/app/_services/menu/menu.service.ts:84</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="140"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:140</a></div>
                 </td>
             </tr>
 
@@ -2825,6 +5546,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -2835,7 +5557,76 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>items</td>
+                                    <td>search</td>
+                                    <td>
+                                                <code><a href="../interfaces/ProductSearchModel.html" target="_self" >ProductSearchModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateSearchModel"></a>
+                    <span class="name">
+                        <span ><b>updateSearchModel</b></span>
+                        <a href="#updateSearchModel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateSearchModel(item: <a href="../interfaces/ProductSearchModel.html" target="_self">ProductSearchModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="146"
+                            class="link-to-prism">src/app/_services/menu/menu.service.ts:146</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>item</td>
                                     <td>
                                                 <code><a href="../interfaces/ProductSearchModel.html" target="_self" >ProductSearchModel</a></code>
                                     </td>
@@ -2863,7 +5654,7 @@
         </tbody>
     </table>
 </section>
-            <section>
+            <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
@@ -2872,11 +5663,37 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="_menuItemsData"></a>
+                    <a name="_currentMeuItem"></a>
                     <span class="name">
                             <span class="modifier">Private</span>
-                        <span ><b>_menuItemsData</b></span>
-                        <a href="#_menuItemsData"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>_currentMeuItem</b></span>
+                        <a href="#_currentMeuItem"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new BehaviorSubject&lt;IMenuItem&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="100" class="link-to-prism">src/app/_services/menu/menu.service.ts:100</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_searchModel"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>_searchModel</b></span>
+                        <a href="#_searchModel"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
@@ -2887,7 +5704,33 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/_services/menu/menu.service.ts:54</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="93" class="link-to-prism">src/app/_services/menu/menu.service.ts:93</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentMeuItem$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>currentMeuItem$</b></span>
+                        <a href="#currentMeuItem$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._currentMeuItem.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="101" class="link-to-prism">src/app/_services/menu/menu.service.ts:101</a></div>
                         </td>
                     </tr>
 
@@ -2918,7 +5761,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="81" class="link-to-prism">src/app/_services/menu/menu.service.ts:81</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="130" class="link-to-prism">src/app/_services/menu/menu.service.ts:130</a></div>
                         </td>
                     </tr>
 
@@ -2954,7 +5797,32 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/app/_services/menu/menu.service.ts:65</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="115" class="link-to-prism">src/app/_services/menu/menu.service.ts:115</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isStaff"></a>
+                    <span class="name">
+                        <span ><b>isStaff</b></span>
+                        <a href="#isStaff"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="104" class="link-to-prism">src/app/_services/menu/menu.service.ts:104</a></div>
                         </td>
                     </tr>
 
@@ -2980,7 +5848,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="79" class="link-to-prism">src/app/_services/menu/menu.service.ts:79</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="128" class="link-to-prism">src/app/_services/menu/menu.service.ts:128</a></div>
                         </td>
                     </tr>
 
@@ -2991,22 +5859,49 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="menuItemsData$"></a>
+                    <a name="searchFilter"></a>
                     <span class="name">
                             <span class="modifier">Public</span>
-                        <span ><b>menuItemsData$</b></span>
-                        <a href="#menuItemsData$"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>searchFilter</b></span>
+                        <a href="#searchFilter"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Default value : </i><code>this._menuItemsData.asObservable()</code>
+                        <i>Type : </i>        <code><a href="../interfaces/ProductSearchModel.html" target="_self" >ProductSearchModel</a></code>
+
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/_services/menu/menu.service.ts:55</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="96" class="link-to-prism">src/app/_services/menu/menu.service.ts:96</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="searchFilter$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>searchFilter$</b></span>
+                        <a href="#searchFilter$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._searchModel.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="98" class="link-to-prism">src/app/_services/menu/menu.service.ts:98</a></div>
                         </td>
                     </tr>
 
@@ -3032,7 +5927,60 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="82" class="link-to-prism">src/app/_services/menu/menu.service.ts:82</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="131" class="link-to-prism">src/app/_services/menu/menu.service.ts:131</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="searchModel"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>searchModel</b></span>
+                        <a href="#searchModel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/ProductSearchModel.html" target="_self" >ProductSearchModel</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="92" class="link-to-prism">src/app/_services/menu/menu.service.ts:92</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="searchModel$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>searchModel$</b></span>
+                        <a href="#searchModel$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._searchModel.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="94" class="link-to-prism">src/app/_services/menu/menu.service.ts:94</a></div>
                         </td>
                     </tr>
 
@@ -3058,7 +6006,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/_services/menu/menu.service.ts:57</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="103" class="link-to-prism">src/app/_services/menu/menu.service.ts:103</a></div>
                         </td>
                     </tr>
 
@@ -3067,24 +6015,90 @@
     </table>
 </section>
 
+            <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="isWebModeMenu"></a>
+                        <span class="name"><b>isWebModeMenu</b><a href="#isWebModeMenu"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>isWebModeMenu()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="133" class="link-to-prism">src/app/_services/menu/menu.service.ts:133</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Input } from &#x27;@angular/core&#x27;;
-
 import { AuthenticationService } from &#x27;../system/authentication.service&#x27;;
-import { BehaviorSubject, Observable, Subject, throwError  } from &#x27;rxjs&#x27;;
-import { IProduct, IProductCategory, ISite, MenuItem }  from &#x27;src/app/_interfaces&#x27;;
+import { BehaviorSubject, EMPTY, Observable, Subject, of, throwError  } from &#x27;rxjs&#x27;;
+import { IProduct, IProductCategory, ISite }  from &#x27;src/app/_interfaces&#x27;;
 import { IMenuItem } from &#x27;../../_interfaces/menu/menu-products&#x27;;
 import { ProductSearchModel } from &#x27;../../_interfaces/search-models/product-search&#x27;;
 import { HttpClient, HttpHeaders } from &#x27;@angular/common/http&#x27;;
 import { HttpClientCacheService } from &#x27;src/app/_http-interceptors/http-client-cache.service&#x27;;
 import { SitesService } from &#x27;../reporting/sites.service&#x27;;
 import { IPagedList } from &#x27;../system/paging.service&#x27;;
+import { DiscountInfo } from &#x27;src/app/_interfaces/menu/price-schedule&#x27;;
+import { FlowPrice, FlowProducts, FlowStrain, ImportFlowPriceResults, ImportFlowProductResults, ImportFlowStainsResults } from &#x27;src/app/_interfaces/import_interfaces/productflow&#x27;;
+import { FlowInventory, ImportFlowInventoryResults } from &#x27;src/app/_interfaces/import_interfaces/inventory-flow&#x27;;
+import { IInventoryAssignment } from &#x27;../inventory/inventory-assignment.service&#x27;;
+import { UserAuthorizationService } from &#x27;../system/user-authorization.service&#x27;;
+import { PlatformService } from &#x27;../system/platform.service&#x27;;
+import { FormBuilder, UntypedFormArray, UntypedFormGroup } from &#x27;@angular/forms&#x27;;
 
 // import { HttpClientService } from &#x27;src/app/_http-interceptors/http-client.service&#x27;;
-
+// Generated by https://quicktype.io
+export interface ImportProductResults {
+  listNotAdded: IProduct[];
+  listAdded   : IProduct[]
+}
+export interface IDepartmentList {
+  categories:             Category[];
+  id:                     number;
+  name:                   string;
+  metaTags:               string | string;
+  description:            string | string;
+  onlineDescription:      string | string;
+  onlineShortDescription: string | string;
+  urlImageOther:          string | string;
+  urlImageMain:           string;
+  prodModifierType:       number;
+  icon:                   string | string;
+  slug                :   string;
+}
+export interface Category {
+  menuItem:               any[];
+  itemCount:              null;
+  id:                     number;
+  name:                   string;
+  metaTags:               string;
+  metaDescription:        string;
+  onlineDescription:      string;
+  onlineShortDescription: string;
+  urlImageOther:          string;
+  urlImageMain:           string;
+  prodModifierType:       number;
+  departmentID:           number;
+  icon:                   string;
+}
 export interface IProductSearchResults {
    id          : number;
    name        : string
@@ -3095,28 +6109,27 @@ export interface IProductSearchResults {
    urlImageMain: string;
    productCount: number;
    barcode     : string;
+   type        : string;
+   active      : boolean;
 }
-
 export interface IProductSearchResultsPaged {
   results: IProductSearchResults[]
   paging: IPagedList
 }
-
 export interface IMenuItemsResultsPaged {
   results: IMenuItem[]
   paging: IPagedList
 }
-
 export interface IItemBasic{
   name: string;
   id  : number;
 }
-
 export interface IItemBasicB{
   name: string;
   id  : number;
   type: string;
   icon: string
+  image: string;
 }
 
 @Injectable({
@@ -3124,15 +6137,27 @@ export interface IItemBasicB{
 })
 export class MenuService {
 
-  private _menuItemsData       &#x3D; new BehaviorSubject&lt;ProductSearchModel&gt;(null);
-  public  menuItemsData$       &#x3D; this._menuItemsData.asObservable();
+  public searchModel: ProductSearchModel
+  private _searchModel       &#x3D; new BehaviorSubject&lt;ProductSearchModel&gt;(null);
+  public  searchModel$       &#x3D; this._searchModel.asObservable();
+
+  public searchFilter: ProductSearchModel
+  // private _searchFilter       &#x3D; new BehaviorSubject&lt;ProductSearchModel&gt;(null);
+  public  searchFilter$       &#x3D; this._searchModel.asObservable();
+
+  private _currentMeuItem      &#x3D; new BehaviorSubject&lt;IMenuItem&gt;(null);
+  public currentMeuItem$       &#x3D; this._currentMeuItem.asObservable();
 
   site: ISite;
+  isStaff           &#x3D; false;
   constructor(
-              private httpCache: HttpClientCacheService,
-              private httpClient: HttpClient,
-              private sitesService: SitesService,
-              private auth: AuthenticationService,) {
+              private httpCache               : HttpClientCacheService,
+              private httpClient              : HttpClient,
+              private sitesService            : SitesService,
+              private userAuthorizationService: UserAuthorizationService,
+              private platFormService         : PlatformService,
+              private auth                    : AuthenticationService,
+              private fb: FormBuilder,) {
   }
 
   httpOptions: { headers; observe; } &#x3D; {
@@ -3141,7 +6166,6 @@ export class MenuService {
     }),
     observe: &#x27;response&#x27;
   };
-
 
   @Input() currentPage   &#x3D; 1;
   @Input() lastPage:     number;
@@ -3154,8 +6178,50 @@ export class MenuService {
   endpoint &#x3D;  &quot;&quot;
   public searchIsLoaded &#x3D; new Subject&lt;any&gt;();
 
-  updateMeunuItemData(items: ProductSearchModel) {
-    this._menuItemsData.next(items);
+  get isWebModeMenu(){
+    if (!this.platFormService.isApp() &amp;&amp; !this.userAuthorizationService.isStaff) {
+      return true ;
+    }
+    return false
+  }
+
+  updateSearchFilter(search: ProductSearchModel) {
+    this.searchModel &#x3D; search;
+    this.searchFilter &#x3D; search;
+    this._searchModel.next(search)
+  }
+
+  updateSearchModel(item: ProductSearchModel) {
+    if (!item) {
+      item &#x3D; this.initSearchModel();
+      this._searchModel.next(item);
+      return;
+    }
+    this._searchModel.next(item);
+  }
+
+  initSearchModel() {
+    const item &#x3D; {} as ProductSearchModel;
+    item.listTypeID &#x3D; [] as number[];
+    item.listPublisherID  &#x3D; [] as number[];;
+    item.listArtistID  &#x3D; [] as number[];
+    item.listBrandID  &#x3D; [] as number[];
+    item.listDepartmentID  &#x3D; [] as number[];
+    item.listCategoryID &#x3D; [] as number[];
+    item.listSubCategoryID  &#x3D; [] as number[];
+    item.listSpecies  &#x3D; [] as number[];
+    item.listSize &#x3D; [] as number[];
+    item.hideSubCategoryItems &#x3D; false;
+    item.pageNumber &#x3D; 1;
+    item.pageSize &#x3D; 50;
+    if (this.userAuthorizationService.isStaff) {
+      item.webMode &#x3D; true;
+    }
+    return item ;
+  }
+
+  updateCurrentMenuItem(menuItem: IMenuItem) {
+    this._currentMeuItem.next(menuItem);
   }
 
   showSearch(value:any)
@@ -3165,27 +6231,63 @@ export class MenuService {
 
   clearSearch()
   {
-    this.searchIsLoaded.next();
+    this.searchIsLoaded.next(null);
   }
 
   getsearchIsLoaded(): Observable&lt;any&gt; {
     return this.searchIsLoaded.asObservable();
   }
 
-  // this.menuService.updateField(&#x27;DepartmentID&#x27;, id, listOfItems)
-  updateField(site: ISite, fieldName: string,value: any, listofItems: any[] ) {
+  setAllItemsActive(site: ISite): Observable&lt;unknown&gt; {
 
-    const controller &#x3D;  &quot;/Products/&quot;
+    const controller &#x3D;&quot;/MenuItems/&quot;
 
-    const endPoint &#x3D; &quot;UpdateFieldValue&quot;
+    const endPoint &#x3D; &#x60;setAllItemsActive&#x60;
 
-    const parameters &#x3D; &#x60;?fieldName&#x3D;${fieldName}&amp;value&#x3D;${value}&#x60;
+    const parameters &#x3D; &#x60;&#x60;
 
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
-    const uri &#x3D;  this.sitesService.getCacheURI(url)
+    return this.httpClient.get&lt;any&gt;(url)
 
+  }
+
+  // this.menuService.updateField(&#x27;DepartmentID&#x27;, id, listOfItems)
+  updateField(site: ISite, fieldName: string,value: any, listofItems: any[] ) {
+    const controller &#x3D;  &quot;/Products/&quot;
+    const endPoint &#x3D; &quot;UpdateFieldValue&quot;
+    const parameters &#x3D; &#x60;?fieldName&#x3D;${fieldName}&amp;value&#x3D;${value}&#x60;
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+    const uri &#x3D;  this.sitesService.getCacheURI(url)
     return  this.httpClient.put&lt;any[]&gt;(url, listofItems)
+
+  }
+
+  sortCategoriesSubCategoriesFirst(site: ISite): Observable&lt;any&gt; {
+    const controller &#x3D;&quot;/products/&quot;
+
+    const endPoint &#x3D; &#x60;sortCategoriesSubCategoriesFirst&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.get&lt;any&gt;(url)
+
+  }
+
+  // this.menuService.updateField(&#x27;DepartmentID&#x27;, id, listOfItems)
+  deleteProducts(site: ISite,  listofItems: any[] ) {
+
+    const controller &#x3D;&quot;/products/&quot;
+
+    const endPoint &#x3D; &#x60;deleteProducts&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;any&gt;(url, listofItems)
 
   }
 
@@ -3218,8 +6320,24 @@ export class MenuService {
 
     return  this.httpClient.get&lt;IMenuItem[]&gt;(uri)
 
+  };
+
+  getMenuItemsBySchedule(site: ISite, id: number): Observable&lt;DiscountInfo[]&gt; {
+
+    const controller &#x3D; &#x27;/MenuItems/&#x27;
+
+    const endPoint &#x3D; &#x27;GetMenuItemsBySchedule&#x27;
+
+    const parameters &#x3D;&#x60;?id&#x3D;${id}&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const cache &#x3D;  this.sitesService.getCacheURI(uri)
+
+    return  this.httpCache.get&lt;DiscountInfo[]&gt;(cache)
 
   };
+
 
   getMenuItemsByPage(site: ISite, pageNumber: number, pageSize: number): Observable&lt;IMenuItem[]&gt; {
 
@@ -3227,11 +6345,9 @@ export class MenuService {
 
     const endPoint &#x3D; &#x27;GetMenuItemsByPage&#x27;
 
-    const parameters &#x3D; &#x27;?pagenumber&#x3D;${pageNumber}&amp;pageSize&#x3D;${pageSize}&#x27;
+    const parameters &#x3D; &#x60;?pagenumber&#x3D;${pageNumber}&amp;pageSize&#x3D;${pageSize}&#x60;
 
     const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
-
-    // return  this.httpClient.get&lt;IMenuItem[]&gt;(uri);
 
     const url &#x3D; { url: uri, cacheMins: 0}
 
@@ -3283,6 +6399,55 @@ export class MenuService {
     const uri &#x3D;  this.sitesService.getCacheURI(url)
 
     return  this.httpCache.get&lt;any[]&gt;(uri)
+
+  };
+
+
+  getInventoryValues(site: ISite): Observable&lt;any&gt; {
+
+    const post &#x3D; {count: &#x27;0&#x27;};
+
+    const controller &#x3D;  &quot;/Products/&quot;
+
+    const endPoint   &#x3D; &quot;GetInventoryValues&quot;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.httpClient.post&lt;any&gt;(url, post);
+
+  };
+
+  getDepartmentValues(site: ISite): Observable&lt;any&gt; {
+
+    const post &#x3D; {count: &#x27;0&#x27;};
+
+    const controller &#x3D;  &quot;/Products/&quot;
+
+    const endPoint   &#x3D; &quot;GetDepartmentValues&quot;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.httpClient.post&lt;any&gt;(url, post);
+
+  };
+
+  getCategoryValues(site: ISite): Observable&lt;any&gt; {
+
+    const post &#x3D; {count: &#x27;0&#x27;};
+
+    const controller &#x3D;  &quot;/Products/&quot;
+
+    const endPoint   &#x3D; &quot;GetCategoryValues&quot;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.httpClient.post&lt;any&gt;(url, post);
 
   };
 
@@ -3344,15 +6509,10 @@ export class MenuService {
 
     return  this.httpCache.get&lt;any[]&gt;(uri )
 
-    // return  this.httpClient.get&lt;IProductCategory[]&gt;(url)
-
-    // const uri &#x3D; {url: url, cacheMins: 1 }
-
-    // return  this.httpCache.get&lt;IProductCategory[]&gt;(uri)
-
   };
 
-  getBasicLists(site: ISite, type: string):  Observable&lt;IMenuItem[]&gt;  {
+  //active only
+  getGetCategoriesList(site: ISite, type: string):  Observable&lt;IMenuItem[]&gt;  {
 
     const controller &#x3D;  &#x27;/MenuItems/&#x27;
 
@@ -3366,24 +6526,119 @@ export class MenuService {
 
     return  this.httpCache.get&lt;any[]&gt;(uri)
 
-    // return  this.httpClient.get&lt;IMenuItem[]&gt;(uri)
+  }
 
-    // const url &#x3D; { url: uri, cacheMins: 1 }
 
-    // return  this.httpCache.get&lt;IMenuItem[]&gt;(url)
+  getGetCategoriesListActive(site: ISite, type: string, option: number):  Observable&lt;IMenuItem[]&gt;  {
+    const controller &#x3D;  &#x27;/MenuItems/&#x27;
+
+    const endPoint &#x3D; &#x27;getGetCategoriesListActive&#x27;
+
+    const parameters &#x3D; &#x60;?TypeofCategoryasName&#x3D;${type}&amp;activeOption&#x3D;${option}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    // const uri &#x3D;  this.sitesService.getCacheURI(url)
+
+    const uri &#x3D;  this.sitesService.getCacheURI(url)
+
+    // console.log(&#x27;getGetCategoriesListActive&#x27;, uri)
+
+    // return this.httpClient.get&lt;IMenuItem[]&gt;(url)
+    return  this.httpCache.get&lt;any[]&gt;(uri)
+
+  }
+
+  getGetCategoriesListByID(site: ISite, type: string, id: number):  Observable&lt;IMenuItem[]&gt;  {
+
+    const controller &#x3D;  &#x27;/MenuItems/&#x27;
+
+    const endPoint &#x3D; &#x27;getGetCategoriesListByID&#x27;
+
+    const parameters &#x3D; &#x60;?TypeofCategoryasName&#x3D;${type}&amp;id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const uri &#x3D;  this.sitesService.getCacheURI(url)
+
+    return  this.httpCache.get&lt;any[]&gt;(uri)
+
+  }
+
+  getGetCategoriesListAll(site: ISite, type: string):  Observable&lt;IMenuItem[]&gt;  {
+
+    const controller &#x3D;  &#x27;/MenuItems/&#x27;
+
+    const endPoint &#x3D; &#x27;GetGetCategoriesListAll&#x27;
+
+    const parameters &#x3D; &#x60;?TypeofCategoryasName&#x3D;${type}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    // const uri &#x3D;  this.sitesService.getCacheURI(url)
+
+    return  this.httpClient.get&lt;any[]&gt;(url)
+
+  }
+
+  getGetDepartmentList(site: ISite):  Observable&lt;IDepartmentList[]&gt;  {
+    // https://localhost:44309/api/MenuCategories/GetDepartment?id&#x3D;1488
+    const controller &#x3D;  &#x27;/MenuCategories/&#x27;
+
+    const endPoint &#x3D; &#x27;GetDepartments&#x27;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const uri &#x3D;  this.sitesService.getCacheURI(url)
+
+    return  this.httpCache.get&lt;IDepartmentList[]&gt;(uri)
+
+  }
+
+  getGetDepartment(site: ISite,id: any):  Observable&lt;IDepartmentList[]&gt;  {
+
+    const controller &#x3D;  &#x27;/MenuCategories/&#x27;
+
+    const endPoint &#x3D; &#x27;GetDepartment&#x27;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const uri &#x3D;  this.sitesService.getCacheURI(url)
+
+    return  this.httpCache.get&lt;IDepartmentList[]&gt;(uri)
 
   }
 
   getListOfCategories(site: ISite):  Observable&lt;IMenuItem[]&gt;  {
-    return this.getBasicLists(site, &#x60;category&#x60;);
+    return this.getGetCategoriesListActive(site, &#x60;category&#x60;, 0);
   }
 
   getListOfDepartments(site: ISite):  Observable&lt;IMenuItem[]&gt;  {
-    return this.getBasicLists(site, &#x60;department&#x60;);
+    return this.getGetCategoriesListActive(site, &#x60;department&#x60;, 0);
   }
 
   getListOfSubCategories(site: ISite):  Observable&lt;IMenuItem[]&gt;  {
-    return this.getBasicLists(site, &#x60;subcategory&#x60;);
+    return this.getGetCategoriesListActive(site, &#x60;subcategory&#x60;, 0);
+  }
+
+  getListOfSubCategoriesByCategory(site: ISite, id: number):  Observable&lt;IMenuItem[]&gt;  {
+    return this.getGetCategoriesListByID(site, &#x60;subcategory&#x60;, id);
+  }
+
+  getListOfCategoriesAll(site: ISite):  Observable&lt;IMenuItem[]&gt;  {
+    return this.getGetCategoriesListAll(site, &#x60;category&#x60;);
+  }
+
+  getListOfDepartmentsAll(site: ISite):  Observable&lt;IMenuItem[]&gt;  {
+    return this.getGetCategoriesListAll(site, &#x60;department&#x60;);
+  }
+
+  getListOfSubCategoriesAll(site: ISite):  Observable&lt;IMenuItem[]&gt;  {
+    return this.getGetCategoriesListAll(site, &#x60;subcategory&#x60;);
   }
 
   getCategoryAsyncList(site: ISite): Observable&lt;IProductCategory[]&gt; {
@@ -3420,14 +6675,7 @@ export class MenuService {
 
     const uri &#x3D;  this.sitesService.getCacheURI(url)
 
-    return  this.httpClient.post&lt;any[]&gt;(url, productSearchModel )
-
-    // return this.httpClient.post&lt;IMenuItem[]&gt;(uri, productSearchModel)
-
-    // const url &#x3D; { url: uri, cacheMins: 1, body: productSearchModel}
-
-    // return this.httpCache.post&lt;IMenuItem[]&gt;(url)
-
+    return this.httpCache.post&lt;IMenuItem[]&gt;(uri, productSearchModel)
   }
 
    //for customer menu
@@ -3443,14 +6691,20 @@ export class MenuService {
 
     const uri &#x3D;  this.sitesService.getCacheURI(url)
 
-    const cacheTime &#x3D; this.sitesService.getCurrentCache()
-    if ( cacheTime  &#x3D;&#x3D; 0 ) {
-      return  this.httpClient.post&lt;any&gt;(url, productSearchModel )
+    const cacheTime &#x3D; this.sitesService.getCurrentCache();
+
+    let appCache &#x3D;  JSON.parse(localStorage.getItem(&#x27;appCache&#x27;)) as any;
+    // console.log(&#x27;appCache getMenuItemsBySearchPaged&#x27;, appCache);
+
+    if (appCache) {
+      if (appCache?.value &amp;&amp; appCache?.boolean) {
+        const uri &#x3D; { url: url, cacheMins: appCache.value}
+        return this.httpCache.post&lt;any&gt;(uri, productSearchModel)
+      }
     }
-    return this.httpCache.post&lt;any&gt;(uri, productSearchModel)
 
-
-
+    // console.log(url, productSearchModel)
+    return  this.httpClient.post&lt;any&gt;(url, productSearchModel )
 
   }
 
@@ -3468,10 +6722,6 @@ export class MenuService {
 
     return this.httpClient.post&lt;IProductSearchResultsPaged&gt;(url, productSearchModel)
 
-    const uri &#x3D; { url: url, cacheMins: 10, body: productSearchModel}
-
-    // return this.httpCache.post&lt;IProductSearchResults[]&gt;(uri)
-
   }
 
   getProductsBySearchForListsPaging(site: ISite, productSearchModel: ProductSearchModel): Observable&lt;IProductSearchResultsPaged&gt; {
@@ -3488,6 +6738,43 @@ export class MenuService {
 
   }
 
+  getItemBasicBySearch(site: ISite, productSearchModel: ProductSearchModel): Observable&lt;IItemBasic[]&gt; {
+
+    const controller &#x3D;  &quot;/MenuItems/&quot;
+
+    const endPoint &#x3D; &quot;GetItemBasicBySearch&quot;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;IItemBasic[]&gt;(url, productSearchModel)
+
+  }
+
+
+  getItemBasicImage(site: ISite, id: number ): Observable&lt;IItemBasicB&gt; {
+
+    const controller &#x3D;  &quot;/MenuItems/&quot;
+
+    const endPoint &#x3D; &quot;GetItemBasicImage&quot;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const uri &#x3D; { url: url, cacheMins: 480}
+
+    const cacheTime &#x3D; this.sitesService.getCurrentCache()
+    if ( cacheTime  &#x3D;&#x3D; 0 ) {
+      return  this.httpCache.get&lt;IItemBasicB&gt;(uri)
+    }
+
+    return this.httpClient.get&lt;IItemBasicB&gt;(url)
+
+
+  }
+
   getItemsNameBySearch(site: ISite, name: string, type: number): Observable&lt;IItemBasic[]&gt; {
 
     const controller &#x3D;  &quot;/MenuItems/&quot;
@@ -3500,12 +6787,11 @@ export class MenuService {
 
     return this.httpClient.get&lt;IItemBasic[]&gt;(uri)
 
-    const url &#x3D; { url: uri, cacheMins: 0}
+    // const url &#x3D; { url: uri, cacheMins: 0}
 
-    return this.httpCache.get&lt;IItemBasic[]&gt;(url)
+    // return this.httpCache.get&lt;IItemBasic[]&gt;(url)
 
   }
-
 
   getProductListSearch(site: ISite, search:string): Observable&lt;IMenuItem[]&gt; {
 
@@ -3526,13 +6812,6 @@ export class MenuService {
     const uri &#x3D;  this.sitesService.getCacheURI(url)
 
     return  this.httpCache.get&lt;any[]&gt;(uri)
-
-    // return this.httpClient.post&lt;IMenuItem[]&gt;(uri, productSearchModel)
-
-    // console.log(&#x27;getProductListSearch&#x27;)
-    // const url &#x3D; { url: uri, cacheMins: 1, body: productSearchModel}
-
-    // return this.httpCache.post&lt;IMenuItem[]&gt;(url)
 
   }
 
@@ -3562,15 +6841,14 @@ export class MenuService {
 
     const endPoint &#x3D; &#x60;GetMenuItemByID&#x60;
 
-    const parameters &#x3D; &#x60;?ID&#x3D;${id}&#x60;
+    const parameters &#x3D; &#x60;?ID&#x3D;${id}&amp;quantity&#x3D;${1}&#x60;
 
     const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
     return  this.httpClient.get&lt;IMenuItem&gt;(uri)
-//
-    const url &#x3D; { url: uri, cacheMins: 0}
-
-    return this.httpCache.get&lt;IMenuItem&gt;(url)
+    // //
+    //     const url &#x3D; { url: uri, cacheMins: 0}
+    //     return this.httpCache.get&lt;IMenuItem&gt;(url)
 
   };
 
@@ -3586,17 +6864,11 @@ export class MenuService {
 
     return  this.httpClient.get&lt;IProduct&gt;(url)
 
-    // const uri &#x3D;  this.sitesService.getCacheURI(url)
-
-    // return  this.httpCache.get&lt;any&gt;(uri)
-
-    // const url &#x3D; { url: uri, cacheMins: 0}
-
-    // return  this.httpClient.get&lt;IProduct&gt;(url)
-
   };
 
   getMenuItemByID(site: ISite, id: any): Observable&lt;IMenuItem&gt; {
+
+    if (!id)  { return EMPTY };
 
     const controller &#x3D;  &#x27;/MenuItems/&#x27;
 
@@ -3607,25 +6879,37 @@ export class MenuService {
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
     return  this.httpClient.get&lt;IMenuItem&gt;(url)
-
-    const uri &#x3D;  this.sitesService.getCacheURI(url)
-
-    return  this.httpCache.get&lt;any&gt;(uri)
-
-
-    // const url &#x3D; { url: uri, cacheMins: 0}
-
-    // return  this.httpClient.get&lt;IMenuItem&gt;(uri  )
-
   };
 
-  getMenuItemByBarcode(site: ISite, barcode:any): Observable&lt;IMenuItem[]&gt; {
+
+  getMenuItemByIDLinked(site: ISite, id: any, priceLink : number): Observable&lt;IMenuItem&gt; {
+
+    if (!priceLink || priceLink &#x3D;&#x3D; null) { priceLink &#x3D; 0}
+    if (!id)  { return of(null) };
+
+    const controller &#x3D;  &#x27;/MenuItems/&#x27;
+
+    const endPoint &#x3D; &#x27;getMenuItemByIDLinked&#x27;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&amp;quantity&#x3D;1&amp;priceLink&#x3D;${priceLink}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.httpClient.get&lt;IMenuItem&gt;(url)
+  };
+
+
+  getMenuItemByBarcode(site: ISite, barcode:any, clientID: number): Observable&lt;IMenuItem[]&gt; {
+
+    if (!clientID || clientID &#x3D;&#x3D; null || clientID &#x3D;&#x3D; undefined) {
+      clientID &#x3D; 0;
+    }
 
     const controller &#x3D;&quot;/MenuItems/&quot;
 
     const endPoint &#x3D; &#x60;GetMenuItemByBarcode&#x60;
 
-    const parameters &#x3D; &#x60;?barcode&#x3D;${barcode}&amp;quantity&#x3D;1&#x60;
+    const parameters &#x3D; &#x60;?barcode&#x3D;${barcode}&amp;quantity&#x3D;1&amp;clientID&#x3D;${clientID}&#x60;
 
     const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
@@ -3637,13 +6921,13 @@ export class MenuService {
 
    saveProduct(site: ISite, product:IProduct): Observable&lt;IProduct&gt; {
 
-    if (product.id) {
+    if (product.id &amp;&amp; product.id !&#x3D; 0) {
       return  this.putProduct(site, product.id, product);
 
     } else {
       return this.postProduct(site, product);
-
     }
+
   }
 
    postProduct(site: ISite, product: IProduct): Observable&lt;IProduct&gt; {
@@ -3675,7 +6959,6 @@ export class MenuService {
       return  this.httpClient.put&lt;any&gt;(url, product)
 
     }
-
   };
 
   getSpeciesType(): IItemBasic[] {
@@ -3691,9 +6974,185 @@ export class MenuService {
     }
   }
 
+  getPackagingMaterialArray(menuItem: IMenuItem): string[] {
+    if (menuItem.itemType &amp;&amp; menuItem.itemType.packagingMaterial) {
+      return menuItem.itemType.packagingMaterial.split(&#x27;,&#x27;)
+    }
+    return null
+  }
+
+  getModiferPrices(menuItem: IMenuItem) {
+    if (menuItem &amp;&amp; menuItem.priceCategories &amp;&amp; menuItem.priceCategories.productPrices &amp;&amp; menuItem.priceCategories.productPrices) {
+      const items &#x3D; menuItem.priceCategories.productPrices;
+      if ( items.length&gt;0 ) {
+
+         items.filter(prices &#x3D;&gt; { return prices.priceType &#x3D;&#x3D; 2})
+         let list &#x3D;  items.filter( prices &#x3D;&gt;{ return prices.priceType &#x3D;&#x3D; 2;})
+         if (list.length&gt;0){
+           menuItem.retail &#x3D; list[0].retail;
+           menuItem.unitTypeID &#x3D; list[0].unitTypeID;
+           menuItem.productPrice &#x3D; list[0];
+           return menuItem
+        }
+      }
+    }
+    return menuItem;
+  }
+
+  getPricesFromProductPrices(menuItem: IMenuItem) {
+    if (menuItem.priceCategories &amp;&amp; menuItem.priceCategories.productPrices &amp;&amp; menuItem.priceCategories.productPrices) {
+      const items &#x3D; menuItem.priceCategories.productPrices;
+      if ( items.length&gt;0 ) {
+         items.filter(prices &#x3D;&gt; { return prices.priceType &#x3D;&#x3D; 2})
+         let list &#x3D;  items.filter( prices &#x3D;&gt;{ return prices.priceType &#x3D;&#x3D; 2;})
+         if (list.length&gt;0){
+           menuItem.retail &#x3D; list[0].retail;
+           menuItem.unitTypeID &#x3D; list[0].unitTypeID;
+           menuItem.productPrice &#x3D; list[0];
+           menuItem.priceCategories.productPrices &#x3D; list;
+           return menuItem
+        }
+      }
+    }
+    return menuItem;
+  }
 
   private handleError(error: any) {
     return throwError(error);
+  }
+
+  importFlowProducts(site: ISite, list: FlowProducts[]): Observable&lt;ImportFlowProductResults&gt; {
+
+    const controller &#x3D;&quot;/products/&quot;
+
+    const endPoint &#x3D; &#x60;ImportFlowProducts&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;any&gt;(url, list)
+
+  };
+
+
+  getImportCountProgress(site: ISite): Observable&lt;any&gt; {
+
+    const controller &#x3D;&quot;/products/&quot;
+
+    const endPoint &#x3D; &#x60;GetImportCountProgress&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.get&lt;any&gt;(url)
+
+  };
+
+  importProducts(site: ISite, list: IProduct[]): Observable&lt;ImportProductResults&gt; {
+
+    const controller &#x3D;&quot;/products/&quot;
+
+    const endPoint &#x3D; &#x60;ImportProducts&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;any&gt;(url, list)
+
+  };
+
+  importFlowStrains(site: ISite, list: FlowStrain[]): Observable&lt;ImportFlowStainsResults&gt; {
+
+    const controller &#x3D;&quot;/products/&quot;
+
+    const endPoint &#x3D; &#x60;ImportFlowStrains&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;any&gt;(url, list)
+
+  };
+
+
+  importFlowPrices(site: ISite, list: FlowPrice[]): Observable&lt;ImportFlowPriceResults&gt; {
+
+    const controller &#x3D;&quot;/priceCategories/&quot;
+
+    const endPoint &#x3D; &#x60;ImportFlowPrices&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;any&gt;(url, list)
+
+  };
+
+
+  importFlowInventory(site: ISite, list: FlowInventory[]): Observable&lt;ImportFlowInventoryResults&gt; {
+
+    const controller &#x3D;&quot;/InventoryAssignments/&quot;
+
+    const endPoint &#x3D; &#x60;ImportFlowInventory&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;any&gt;(url, list)
+
+  };
+
+  importInventory(site: ISite, list: IInventoryAssignment[]): Observable&lt;any&gt; {
+
+    const controller &#x3D;&quot;/InventoryAssignments/&quot;
+
+    const endPoint &#x3D; &#x60;ImportFlowInventory&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.post&lt;any&gt;(url, list)
+
+  };
+
+  resetProgressIndicator(site: ISite): Observable&lt;any&gt; {
+
+    const controller &#x3D;&quot;/products/&quot;
+
+    const endPoint &#x3D; &#x60;ResetProgressImport&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.httpClient.get&lt;any&gt;(url)
+
+  };
+
+  addSearchFilter(inputForm: UntypedFormGroup, items: any[],
+                  types: string) {
+    if (!inputForm) { return }
+    const control &#x3D; inputForm.get(types) as UntypedFormArray;
+    if (!control)  { return }
+    if (control) { control.clear(); }
+    if (items) {
+      items.forEach( item &#x3D;&gt;  {
+          control.push(this.fb.group({
+            id:   [item.id], //    number;
+            name: [item.name]
+          }))
+        }
+      )
+      return
+    }
+    // this.updatePriceSchedule(inputForm.value)
   }
 }
 
@@ -3709,14 +7168,15 @@ export class MenuService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -3728,6 +7188,15 @@ export class MenuService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -3737,8 +7206,8 @@ export class MenuService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

@@ -57,6 +57,7 @@ export class ApiStoredValueComponent implements OnInit {
     const value = this.inputForm.controls['apiUrl'].value;
     this.inputForm.patchValue({apiUrl: 'https://'})
   }
+  
   typeAPI() {
     //apiUrl
     const value = this.inputForm.controls['apiUrl'].value;
@@ -83,9 +84,10 @@ export class ApiStoredValueComponent implements OnInit {
     });
   }
 
-  async  setAPIUrl(){
-    await this.clearUserSettings();
+  setAPIUrl(){
+    this.clearUserSettings();
     this.authenticationService.clearUserSettings()
+    localStorage.setItem('rememberMe', 'true')
     const apiUrl = this.inputForm.controls['apiUrl'].value
     const result =  this.appInitService.setAPIUrl(apiUrl)
     if (!result || result == '') {return}
@@ -93,11 +95,10 @@ export class ApiStoredValueComponent implements OnInit {
     this.currentAPIUrl = apiUrl;
   }
 
-  async clearUserSettings() {
+  clearUserSettings() {
     this.authenticationService.clearUserSettings();
-    await this.siteService.clearAssignedSite();
+    this.siteService.clearBucket();
   }
-
 
   checkNode() {
     this.matSnack.open('checkNode ' + this.IPCService.isElectronApp, 'status')

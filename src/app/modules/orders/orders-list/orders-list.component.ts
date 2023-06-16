@@ -20,6 +20,7 @@ import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { DatePipe } from '@angular/common';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-orders-list',
@@ -123,7 +124,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       clientID = this.userAuthorization.user.id;
     }
 
-    this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
+    this._searchModel = this.orderMethodsService.posSearchModel$.subscribe( data => {
         this.searchModel            = data
         if (!this.searchModel) {
           const searchModel       = {} as IPOSOrderSearchModel;
@@ -151,6 +152,8 @@ export class OrdersListComponent implements OnInit,OnDestroy {
                 private _bottomSheet            : MatBottomSheet,
                 private readonly datePipe       : DatePipe,
                 private orderService            : OrdersService,
+                public orderMethodsService: OrderMethodsService,
+    
               )
   {
   }
@@ -504,7 +507,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     const order$ =  this.orderService.getOrder(site, order.id, order.history )
     order$.subscribe(data =>
       {
-        this.orderService.setActiveOrder(site, data)
+        this.orderMethodsService.setActiveOrder(site, data)
       }
     )
   }

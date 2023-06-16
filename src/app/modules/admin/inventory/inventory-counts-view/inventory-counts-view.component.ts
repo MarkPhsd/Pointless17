@@ -6,6 +6,7 @@ import { AvalibleInventoryResults, IInventoryAssignment, InventoryAssignmentServ
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'inventory-counts-view',
@@ -40,7 +41,7 @@ export class InventoryCountsViewComponent implements OnInit, OnDestroy {
   private order  : IPOSOrder;
 
   initSubscriptions(){
-     this._order = this.orderService.currentOrder$.subscribe(data =>  {
+     this._order = this.orderMethodsService.currentOrder$.subscribe(data =>  {
       if (data) {
         this.order = data;
         this.refreshValues();
@@ -52,6 +53,7 @@ export class InventoryCountsViewComponent implements OnInit, OnDestroy {
               private userAuthService           : UserAuthorizationService,
               private inventoryEditButon        : InventoryEditButtonService,
               private orderService              :  OrdersService,
+              private orderMethodsService       : OrderMethodsService,
               private siteService               : SitesService) { }
 
   ngOnInit() {

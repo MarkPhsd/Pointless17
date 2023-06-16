@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FbClientTypesService } from 'src/app/_form-builder/fb-client-types.service';
 import { Observable, switchMap , of, catchError} from 'rxjs';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
   selector: 'app-client-type-edit',
@@ -18,16 +19,21 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 })
 export class ClientTypeEditComponent implements OnInit {
 
-  id                     :any;
-  clientType             :clientType;
-  clientType$             :Observable<clientType>;
+  limitsEnabled          : boolean;
+  id                     : any;
+  clientType             : clientType;
+  clientType$            : Observable<clientType>;
   action$                : Observable<any>;
   message                = ''
-  bucketName             :string;
-  awsBucketURL           :string;
-  inputForm              :UntypedFormGroup;
+  bucketName             : string;
+  awsBucketURL           : string;
+  inputForm              : UntypedFormGroup;
   jsonObjectForm         : UntypedFormGroup;
-
+  uiTransactions$        = this.uisettingService.transactionUISettings$
+                            .pipe(switchMap(data => {
+                              // data.enableLimitsView
+                              return of(data)
+                            }))
 
   authCodes = [ { id: 1, name: 'Admin'}, {id: 2, name: 'Manager'}, {id: 3, name: 'Employee'}, {id: 4, name: 'User'}, {id: 5, name: 'API'}]
   constructor(
@@ -37,6 +43,7 @@ export class ClientTypeEditComponent implements OnInit {
     private awsBucket               : AWSBucketService,
     public fbClientTypesService     : FbClientTypesService,
     public userAuthService          : UserAuthorizationService,
+    public uisettingService         : UISettingsService,
     private dialogRef: MatDialogRef<ClientTypeEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
 

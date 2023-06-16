@@ -70,13 +70,11 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
   // private idle: Idle,
   constructor(
       private platForm              : Platform,
-      private platFormService       : PlatformService,
       private router:                Router,
       private titleService          :Title,
       private authenticationService: AuthenticationService,
       private uiSettingsService: UISettingsService,
       private statusBar:             StatusBar,
-      private cd                   : ChangeDetectorRef,
       private awsService           : AWSBucketService,
       private electronService      : ElectronService,
       private appInitService       : AppInitService,
@@ -85,21 +83,24 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
       private viewContainerRef: ViewContainerRef
   ) {
 
-      console.log('app initialized')
-      this.initSubscription();
-      this.initStyle();
-      this.initializeApp();
-      this.backButtonEvent();
-      this.awsService.awsBucket();
-      this.setTitle();
-      this.devMode = isDevMode();
+    this.setTitle();
+    this.initSubscription();
+    this.initStyle();
+    this.backButtonEvent();
+    this.devMode = isDevMode();
 
-      if (this.electronService.isElectronApp && !this.devMode) {
-        this.balanceSheetMethodsService.startScaleService()
-      }
+    if (this.electronService.isElectronApp && !this.devMode) {
+      this.balanceSheetMethodsService.startScaleService()
+    }
+    this.initKeyboardSubscriber();
 
-      this.initKeyboardSubscriber();
+    // this.initializeApp();
+    // this.awsService.awsBucket();
   }
+
+  // initializeApp() {
+  //   this.appUrl = this.appInitService.apiBaseUrl()
+  // }
 
   async ngOnInit() {
     try {
@@ -162,13 +163,8 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
     }
   }
 
-
   toggleDrag() {
     // this.toggleDrag
-  }
-
-  initializeApp() {
-    this.appUrl = this.appInitService.apiBaseUrl()
   }
 
   initStyle() {
@@ -177,7 +173,6 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
         this.statusBar.styleLightContent();
       });
     } catch (error) {
-
     }
   }
 
@@ -211,9 +206,9 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
     return data;
   }
 
-  logout() {
-    this.authenticationService.logout();
-  }
+  // logout() {
+  //   this.authenticationService.logout();
+  // }
 
   backButtonEvent() {
     this.platForm.backButton.subscribe(outlet => {

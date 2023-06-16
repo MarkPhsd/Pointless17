@@ -149,7 +149,7 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
     return item$.pipe(
       switchMap(data => { 
         this.order = data;
-        this.orderService.setActiveOrder(site, data)
+        this.orderMethodsService.setActiveOrder(site, data)
         return of(data)
       })
     )
@@ -162,7 +162,7 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
      return item$.pipe(
         switchMap(data => { 
           this.order = data;
-          this.orderService.setActiveOrder(site, data)
+          this.orderMethodsService.setActiveOrder(site, data)
           this.goingToPay = false
           this.router.navigate(['pos-payment'])
           return of(data)

@@ -10,6 +10,7 @@ import { of, Subscription } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { Observable } from 'rxjs';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 @Component({
   selector: 'app-prompt-walk-through',
   templateUrl: './prompt-walk-through.component.html',
@@ -71,7 +72,7 @@ export class PromptWalkThroughComponent implements OnInit {
     }
 
     try {
-      this._order = this.orderService.currentOrder$.subscribe(data => {
+      this._order = this.orderMethodsService.currentOrder$.subscribe(data => {
         this.order = data;
       })
     } catch (error) {
@@ -98,6 +99,7 @@ export class PromptWalkThroughComponent implements OnInit {
     private sitesService             : SitesService,
     private posOrderItemService      : POSOrderItemService,
     private orderService             : OrdersService,
+    public orderMethodsService: OrderMethodsService,
     private promptGroupService       : PromptGroupService,
     private promptWalkThroughService : PromptWalkThroughService,
     private dialogRef                : MatDialogRef<PromptWalkThroughComponent>,
@@ -180,7 +182,7 @@ export class PromptWalkThroughComponent implements OnInit {
              }
           )).pipe(
             switchMap( data => {
-              this.orderService.updateOrderSubscription(data)
+              this.orderMethodsService.updateOrderSubscription(data)
               this.dialogRef.close('success')
               return of('success')
             }
@@ -225,7 +227,7 @@ export class PromptWalkThroughComponent implements OnInit {
             switchMap( data => {
               this.processing = false
               this.dialogRef.close(false)
-              this.orderService.updateOrderSubscription(data)
+              this.orderMethodsService.updateOrderSubscription(data)
               return of('success')
             }),
             catchError(data => {

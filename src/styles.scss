@@ -617,6 +617,18 @@ button {
   margin: 5px;
 }
 
+.edit-float-button {
+  position: relative;
+  z-index: 105;
+  top: 10px;
+  right: 0px;
+  margin-bottom: -35px;
+  opacity: .5;
+  z-index: 100;
+}
+
+
 /* In the component.css or app.css add Icon Color styles */
 .material-icons.color_green { color: #00FF00; }
 .material-icons.color_white { color: #FFFFFF; }
+

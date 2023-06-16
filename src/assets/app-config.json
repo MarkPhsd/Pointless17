@@ -1,6 +1,5 @@
 {
-  "apiUrl": "https://localhost:44309/api",
-  "apiUrlold": "https://pointlessposdemo.com/api",
+  "apiUrl": "https://pointlesposdemo.com/api",
   "useAppGate" : false,
   "appGateMessage": "Are you over 21? If so press yes to continue.",
   "company": "Pointless POS",

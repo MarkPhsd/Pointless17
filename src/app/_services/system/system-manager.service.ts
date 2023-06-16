@@ -3,6 +3,7 @@ import { ToolBarUIService } from './tool-bar-ui.service';
 import { OrdersService } from '../transactions/orders.service';
 import { POSPaymentService } from '../transactions/pospayment.service';
 import { BehaviorSubject } from 'rxjs';
+import { OrderMethodsService } from '../transactions/order-methods.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,8 +15,7 @@ export class SystemManagerService {
   public   accordionMenu$       = this._accordionMenu.asObservable();
 
   constructor(
-        private toolbarUI: ToolBarUIService,
-        private orderService: OrdersService,
+        public orderMethodsService: OrderMethodsService,
         private paymentService: POSPaymentService,
   ) { }
 
@@ -25,8 +25,8 @@ export class SystemManagerService {
 
     unSubscribeEverything() {
       // this.toolbarUI.updateOrderBar(false);
-      this.orderService.updateOrderSubscription(null)
-      this.orderService.updateOrderSearchModel(null)
+      this.orderMethodsService.updateOrderSubscription(null)
+      this.orderMethodsService.updateOrderSearchModel(null)
       this.paymentService.updatePaymentSubscription(null)
 
     }

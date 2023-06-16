@@ -4,12 +4,14 @@ import { POSOrderItemService } from './posorder-item-service.service';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { SitesService } from '../reporting/sites.service';
 import { Observable, of, switchMap } from 'rxjs';
+import { OrderMethodsService } from './order-methods.service';
 @Injectable({
   providedIn: 'root'
 })
 export class PosOrderItemMethodsService {
 
   constructor(private orderService: OrdersService,
+              public orderMethodsService: OrderMethodsService,
               private siteService: SitesService,
               private posOrderItemService: POSOrderItemService) {
         }
@@ -23,7 +25,8 @@ export class PosOrderItemMethodsService {
       if (editField == 'quantity') {
         const site = this.siteService.getAssignedSite();
         obs$ = this.posOrderItemService.changeItemQuantity(site, item ).pipe(switchMap( data => {
-          this.orderService.updateOrderSubscription(data)
+          console.log('udpdate order subscription')
+          this.orderMethodsService.updateOrderSubscription(data)
           return of(data)
         }))
       }
@@ -36,7 +39,7 @@ export class PosOrderItemMethodsService {
                 this.siteService.notify(data.resultMessage, 'Alert', 1500)
               }
             }
-            this.orderService.updateOrderSubscription(data)
+        
             return of(data)
           }))
         }
@@ -50,7 +53,7 @@ export class PosOrderItemMethodsService {
                 this.siteService.notify(data.resultMessage, 'Alert', 1500)
               }
             }
-            this.orderService.updateOrderSubscription(data)
+            this.orderMethodsService.updateOrderSubscription(data)
             return of(data)
           }))
         }
@@ -64,7 +67,7 @@ export class PosOrderItemMethodsService {
                 this.siteService.notify(data.resultMessage, 'Alert', 1500)
               }
             }
-            this.orderService.updateOrderSubscription(data)
+            this.orderMethodsService.updateOrderSubscription(data)
             return of(data)
           }))
         }
@@ -78,7 +81,7 @@ export class PosOrderItemMethodsService {
                 this.siteService.notify(data.resultMessage, 'Alert', 1500)
               }
             }
-            this.orderService.updateOrderSubscription(data)
+            this.orderMethodsService.updateOrderSubscription(data)
             return of(data)
           }))
         }
@@ -86,7 +89,7 @@ export class PosOrderItemMethodsService {
 
       if (editField == 'modifierNote') {
         obs$ = this.posOrderItemService.changeModifierNote(site, item ).pipe(switchMap( data => {
-          this.orderService.updateOrderSubscription(data)
+          this.orderMethodsService.updateOrderSubscription(data)
           return of(data)
         }))
       }

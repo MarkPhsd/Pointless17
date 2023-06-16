@@ -23,11 +23,9 @@ export class PriceScheduleMenuItemsComponent implements OnInit,OnChanges {
   sort : number
   menuItems: DiscountInfo[];
   order: IPOSOrder;
-  _order =  this.orderService.currentOrder$.subscribe(data => {
+  _order =  this.orderMethodService.currentOrder$.subscribe(data => {
     this.order = data;
   })
-
-
 
   constructor(
     public route: ActivatedRoute,

@@ -41,10 +41,28 @@ export interface ProductSearchModel {
   webMode                    : boolean;
   exactNameMatch            : boolean;
   sku                       : string;
-  itemTypeIDList            : number[];
+  itemTypeIDList             : number[];
   hideSubCategoryItems      : boolean;
+  gf: boolean;
+  listTypeID: number[];
+  listPublisherID : number[] ;
+  listArtistID:  number[];
+  listBrandID : number[];
+  listDepartmentID :  number[];
+  listCategoryID :  number[];
+  listSubCategoryID : number[];
+  listSpecies: number[];
+  listSize: number[];
+  listColor: number[];
 }
-
+    // Public Property GF As Nullable(Of Boolean) = False
+    // Public Property ListTypeID As List(Of Integer)
+    // Public Property ListPublisherID As List(Of Integer)
+    // Public Property ListArtistID As List(Of Integer)
+    // Public Property ListDepartmentID As List(Of Integer)
+    // Public Property ListBrandID As List(Of Integer)
+    // Public Property ListCategoryID As List(Of Integer)
+    // Public Property ListSubCategoryID As List(Of Integer)
 
 // Public Property barcode As String
 // Public Property Name As String

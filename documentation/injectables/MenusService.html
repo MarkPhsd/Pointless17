@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >MenusService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >MenusService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -77,10 +84,24 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_accordionMenu" >_accordionMenu</a>
+                            </li>
+                            <li>
+                                <a href="#_user" >_user</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#accordionMenu$" >accordionMenu$</a>
+                            </li>
+                            <li>
                                 <a href="#accordionMenus" >accordionMenus</a>
                             </li>
                             <li>
                                 <a href="#submenu" >submenu</a>
+                            </li>
+                            <li>
+                                <a href="#user" >user</a>
                             </li>
                         </ul>
                     </td>
@@ -98,7 +119,16 @@
                                 <a href="#createMainMenu" >createMainMenu</a>
                             </li>
                             <li>
+                                <a href="#deleteAccordionMenu" >deleteAccordionMenu</a>
+                            </li>
+                            <li>
+                                <a href="#deleteMenu" >deleteMenu</a>
+                            </li>
+                            <li>
                                 <a href="#deleteMenuGroup" >deleteMenuGroup</a>
+                            </li>
+                            <li>
+                                <a href="#deleteSubMenu" >deleteSubMenu</a>
                             </li>
                             <li>
                                 <a href="#getAccordionMenuByID" >getAccordionMenuByID</a>
@@ -122,10 +152,28 @@
                                 <a href="#getMenuByID" >getMenuByID</a>
                             </li>
                             <li>
+                                <a href="#getStaff" >getStaff</a>
+                            </li>
+                            <li>
                                 <a href="#getSubMenuByID" >getSubMenuByID</a>
                             </li>
                             <li>
                                 <a href="#getUsers" >getUsers</a>
+                            </li>
+                            <li>
+                                <a href="#initSubscription" >initSubscription</a>
+                            </li>
+                            <li>
+                                <a href="#mainMenuExists" >mainMenuExists</a>
+                            </li>
+                            <li>
+                                <a href="#menuExists" >menuExists</a>
+                            </li>
+                            <li>
+                                <a href="#postAccordionMenu" >postAccordionMenu</a>
+                            </li>
+                            <li>
+                                <a href="#postSubMenuItem" >postSubMenuItem</a>
                             </li>
                             <li>
                                 <a href="#putAccordionMenuByID" >putAccordionMenuByID</a>
@@ -142,6 +190,9 @@
                             <li>
                                 <a href="#putSubMenuGrouplist" >putSubMenuGrouplist</a>
                             </li>
+                            <li>
+                                <a href="#updateAccordionMenuSubscription" >updateAccordionMenuSubscription</a>
+                            </li>
                         </ul>
                     </td>
                 </tr>
@@ -154,18 +205,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+<code>constructor(http: HttpClient, httpCache: <a href="../injectables/HttpClientCacheService.html" target="_self">HttpClientCacheService</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="197" class="link-to-prism">src/app/_services/system/menus.service.ts:197</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="204" class="link-to-prism">src/app/_services/system/menus.service.ts:204</a></div>
                             </td>
                         </tr>
 
@@ -186,7 +237,19 @@
                                                         <td>http</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                                    <code>HttpClient</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>httpCache</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/HttpClientCacheService.html" target="_self" >HttpClientCacheService</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -215,7 +278,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -233,15 +296,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>createMainMenu(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+<code>createMainMenu(user: <a href="../interfaces/IUser.html" target="_self">IUser</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="262"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:262</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="324"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:324</a></div>
                 </td>
             </tr>
 
@@ -251,6 +314,169 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>user</td>
+                                    <td>
+                                                <code><a href="../interfaces/IUser.html" target="_self" >IUser</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/MenuGroup.html" target="_self" >Observable&lt;MenuGroup&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteAccordionMenu"></a>
+                    <span class="name">
+                        <span ><b>deleteAccordionMenu</b></span>
+                        <a href="#deleteAccordionMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteAccordionMenu(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="360"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:360</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/AccordionMenu.html" target="_self" >Observable&lt;AccordionMenu&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteMenu"></a>
+                    <span class="name">
+                        <span ><b>deleteMenu</b></span>
+                        <a href="#deleteMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteMenu(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="347"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:347</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -308,8 +534,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="277"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:277</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="387"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:387</a></div>
                 </td>
             </tr>
 
@@ -319,6 +545,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -372,6 +599,87 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="deleteSubMenu"></a>
+                    <span class="name">
+                        <span ><b>deleteSubMenu</b></span>
+                        <a href="#deleteSubMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteSubMenu(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="374"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:374</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/SubMenu.html" target="_self" >Observable&lt;SubMenu&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="getAccordionMenuByID"></a>
                     <span class="name">
                         <span ><b>getAccordionMenuByID</b></span>
@@ -388,8 +696,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="290"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:290</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="400"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:400</a></div>
                 </td>
             </tr>
 
@@ -399,6 +707,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -468,8 +777,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="201"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:201</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="216"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:216</a></div>
                 </td>
             </tr>
 
@@ -505,8 +814,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="364"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:364</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="498"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:498</a></div>
                 </td>
             </tr>
 
@@ -542,8 +851,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="227"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:227</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="258"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:258</a></div>
                 </td>
             </tr>
 
@@ -553,6 +862,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -610,8 +920,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="209"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:209</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="228"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:228</a></div>
                 </td>
             </tr>
 
@@ -647,8 +957,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="213"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:213</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="232"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:232</a></div>
                 </td>
             </tr>
 
@@ -658,6 +968,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -727,8 +1038,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="302"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:302</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="412"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:412</a></div>
                 </td>
             </tr>
 
@@ -738,6 +1049,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -791,6 +1103,43 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="getStaff"></a>
+                    <span class="name">
+                        <span ><b>getStaff</b></span>
+                        <a href="#getStaff"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getStaff()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="224"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:224</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="getSubMenuByID"></a>
                     <span class="name">
                         <span ><b>getSubMenuByID</b></span>
@@ -807,8 +1156,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="314"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:314</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="424"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:424</a></div>
                 </td>
             </tr>
 
@@ -818,6 +1167,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -887,8 +1237,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="205"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:205</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="220"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:220</a></div>
                 </td>
             </tr>
 
@@ -899,6 +1249,355 @@
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
 
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initSubscription"></a>
+                    <span class="name">
+                        <span ><b>initSubscription</b></span>
+                        <a href="#initSubscription"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initSubscription()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="200"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:200</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mainMenuExists"></a>
+                    <span class="name">
+                        <span ><b>mainMenuExists</b></span>
+                        <a href="#mainMenuExists"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>mainMenuExists(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="292"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:292</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ResultCheck&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="menuExists"></a>
+                    <span class="name">
+                        <span ><b>menuExists</b></span>
+                        <a href="#menuExists"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>menuExists(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, name: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="308"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:308</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>name</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;ResultCheck&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postAccordionMenu"></a>
+                    <span class="name">
+                        <span ><b>postAccordionMenu</b></span>
+                        <a href="#postAccordionMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postAccordionMenu(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, accordionMenu: <a href="../interfaces/AccordionMenu.html" target="_self">AccordionMenu</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="436"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:436</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>accordionMenu</td>
+                                    <td>
+                                                <code><a href="../interfaces/AccordionMenu.html" target="_self" >AccordionMenu</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/AccordionMenu.html" target="_self" >Observable&lt;AccordionMenu&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postSubMenuItem"></a>
+                    <span class="name">
+                        <span ><b>postSubMenuItem</b></span>
+                        <a href="#postSubMenuItem"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postSubMenuItem(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, subMenu: <a href="../interfaces/SubMenu.html" target="_self">SubMenu</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="485"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:485</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>subMenu</td>
+                                    <td>
+                                                <code><a href="../interfaces/SubMenu.html" target="_self" >SubMenu</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/SubMenu.html" target="_self" >Observable&lt;SubMenu&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
                     </div>
                 </td>
             </tr>
@@ -924,8 +1623,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="327"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:327</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="448"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:448</a></div>
                 </td>
             </tr>
 
@@ -935,6 +1634,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1016,8 +1716,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="248"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:248</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="278"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:278</a></div>
                 </td>
             </tr>
 
@@ -1027,6 +1727,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1096,8 +1797,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="339"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:339</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="460"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:460</a></div>
                 </td>
             </tr>
 
@@ -1107,6 +1808,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1188,8 +1890,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="351"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:351</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="472"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:472</a></div>
                 </td>
             </tr>
 
@@ -1199,6 +1901,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1280,8 +1983,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="234"
-                            class="link-to-prism">src/app/_services/system/menus.service.ts:234</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="264"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:264</a></div>
                 </td>
             </tr>
 
@@ -1291,6 +1994,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -1340,12 +2044,159 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateAccordionMenuSubscription"></a>
+                    <span class="name">
+                        <span ><b>updateAccordionMenuSubscription</b></span>
+                        <a href="#updateAccordionMenuSubscription"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateAccordionMenuSubscription(accordionMenu: <a href="../interfaces/AccordionMenu.html" target="_self">AccordionMenu</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="213"
+                            class="link-to-prism">src/app/_services/system/menus.service.ts:213</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>accordionMenu</td>
+                                    <td>
+                                                <code><a href="../interfaces/AccordionMenu.html" target="_self" >AccordionMenu</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>
-            <section>
+            <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_accordionMenu"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>_accordionMenu</b></span>
+                        <a href="#_accordionMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new BehaviorSubject&lt;AccordionMenu&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/_services/system/menus.service.ts:20</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_user"></a>
+                    <span class="name">
+                        <span ><b>_user</b></span>
+                        <a href="#_user"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Subscription</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="198" class="link-to-prism">src/app/_services/system/menus.service.ts:198</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="accordionMenu$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>accordionMenu$</b></span>
+                        <a href="#accordionMenu$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this._accordionMenu.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/_services/system/menus.service.ts:21</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -1380,14 +2231,13 @@
       method:           &#x27;&#x27;,
       submenus: [
         { name: &#x27;Profile&#x27;,  minimized: false, method: &#x27;&#x27;,  routerLink: &#x27;/app-profile&#x27;, routerLinkActive: &#x27;app-profile&#x27;, icon: &#x27;face&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getUsers(), meunyType: 0},
-        { name: &#x27;Sales&#x27; ,   minimized: false,  method: &#x27;&#x27; ,  routerLink: &#x27;/sales&#x27;,     routerLinkActive: &#x27;sales&#x27;,   icon: &#x27;money&#x27;,   onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getUsers(), meunyType: 0},
       ]
     },
     {
       id:             0,
       name:          &#x27;POS&#x27;,
       icon:          &#x27;shopping_cart&#x27;,
-      active:        false,
+      active:        true,
       sortOrder:      2,
       menuGroupID:    0,
       userType:       this.getUsers(),
@@ -1395,33 +2245,20 @@
       routerLinkActive: &#x27;pos-orders&#x27;,
       method:           &#x27;&#x27;,
       submenus: [
-        { name: &#x27;Orders&#x27;,  minimized: false, method: &#x27;&#x27;,  routerLink: &#x27;/pos-orders&#x27;, routerLinkActive: &#x27;pos-orders&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getUsers(), meunyType: 0},
-        { name: &#x27;Tables&#x27; ,   minimized: false,  method: &#x27;&#x27; ,  routerLink: &#x27;/table-layout&#x27;,     routerLinkActive: &#x27;pos-orders&#x27;,   icon: &#x27;flatware&#x27;,   onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getUsers(), meunyType: 0},
+        { name: &#x27;Orders&#x27;,  minimized: false, method: &#x27;&#x27;,  routerLink: &#x27;/pos-orders&#x27;, routerLinkActive: &#x27;pos-orders&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: &#x27;Payments&#x27;,  minimized: false, method: &#x27;&#x27;,  routerLink: &#x27;/pos-payments&#x27;, routerLinkActive: &#x27;pos-payments&#x27;, icon: &#x27;credit_card&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Balance Sheets&#x27;,  minimized: true, method: &#x27;&#x27;,  routerLink: &#x27;/balance-sheets&#x27;, routerLinkActive: &#x27;balance-sheets&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Balance Sheet&#x27;,  minimized: false, method: &#x27;&#x27;,  routerLink: &#x27;/balance-sheet-edit&#x27;, routerLinkActive: &#x27;balance-sheet-edit&#x27;, icon: &#x27;point_of_sale&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: &#x27;Operations&#x27;,    minimized: false,  method: &#x27;&#x27; ,routerLink: &#x27;/operations&#x27;, routerLinkActive: &#x27;operations&#x27;,   icon: &#x27;article&#x27;,   onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: &#x27;Tables&#x27; ,   minimized: true,  method: &#x27;&#x27; ,  routerLink: &#x27;/table-layout&#x27;,     routerLinkActive: &#x27;pos-orders&#x27;,   icon: &#x27;flatware&#x27;,   onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: &#x27;Gift/Credit&#x27;,  minimized: false, method: &#x27;&#x27;,  routerLink: &#x27;/store-credit&#x27;, routerLinkActive: &#x27;store-credit&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
       ]
     },
-    // {
-    //   id:               0,
-    //   name:             &#x27;Menu&#x27;,
-    //   icon:             &#x27;search&#x27;,
-    //   active:           true,
-    //   sortOrder:        1,
-    //   menuGroupID:      0,
-    //   userType:         this.getAnonymous(),
-    //   routerLink:       &#x27;/app-main-menu&#x27;,
-    //   routerLinkActive: &#x27;app-main-menu&#x27;,
-    //   method:           &#x27;&#x27;,
-    //   submenus: [
-    //     { name: &#x27;Categories&#x27;, minimized: false, method: &#x27;&#x27;, routerLink: &#x27;/categories&#x27;, routerLinkActive: &#x27;categories&#x27;, icon: &#x27;article&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType:  this.getUsers(), meunyType: 0},
-    //     { name: &#x27;Brands&#x27;,     minimized: false,  method: &#x27;&#x27;, routerLink: &#x27;/brandslist&#x27;,     routerLinkActive: &#x27;brandslist&#x27;,   icon: &#x27;article&#x27;,   onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType:  this.getUsers(), meunyType: 0},
-    //     { name: &#x27;Flowers&#x27;,    minimized: true,  method: &#x27;&#x27;,  routerLink: &#x27;/tier-menu&#x27;,   routerLinkActive: &#x27;tier-menu&#x27;,   icon: &#x27;yard&#x27;,   onClick: &#x27;&#x27;, id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType:  this.getUsers(), meunyType: 0},
-    //     { name: &#x27;Search&#x27;,     minimized: true,  method: &#x27;&#x27;, routerLink: &#x27;/searchproducts&#x27;,   routerLinkActive: &#x27;searchproducts&#x27;,   icon: &#x27;search&#x27;,   onClick: &#x27;&#x27;, id: 4, sortOrder: 0, submenuID:0, menuID: 0, submenus: this.submenu, userType:  this.getUsers(), meunyType: 0},
-    //   ]
-    // },
     {
       id:           0,
       name:         &#x27;Contacts&#x27;,
       icon:         &#x27;person_search&#x27;,
-      active:       false,
+      active:       true,
       menuGroupID:  0,
       sortOrder:    3,
       userType:     this.getManagers(),
@@ -1429,50 +2266,19 @@
       routerLinkActive: &#x27;profileListing&#x27;,
       method: &#x27;&#x27; ,
       submenus: [
-        { name: &#x27;Find Profile&#x27;,    method: &#x27;&#x27; ,minimized: true, routerLink: &#x27;/profileListing&#x27;, routerLinkActive: &#x27;profileListing&#x27;, icon: &#x27;person_search&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Scan&#x27;,            method: &#x27;&#x27; ,minimized: true, routerLink: &#x27;/barcodescanner&#x27;, routerLinkActive: &#x27;barcodescanner&#x27;, icon: &#x27;qr_code_scanner&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-      ]
-    },
-    {
-      id:           0,
-      name:         &#x27;Reporting&#x27;,
-      icon:         &#x27;bar_chart&#x27;,
-      active:       false,
-      sortOrder:    4,
-      menuGroupID:  0,
-      userType:     this.getManagers(),
-      routerLink:       &#x27;/dashboard&#x27;,
-      routerLinkActive: &#x27;dashboard&#x27;,
-      method: &#x27;&#x27; ,
-      submenus: [
-        { name: &#x27;Dashboard&#x27;,  minimized: false,  method: &#x27;&#x27; ,routerLink: &#x27;/dashboard&#x27;, routerLinkActive: &#x27;dashboard&#x27;, icon: &#x27;bar_chart&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Reports&#x27;,    minimized: false,  method: &#x27;&#x27; ,routerLink: &#x27;/reports&#x27;,     routerLinkActive: &#x27;reports&#x27;,   icon: &#x27;article&#x27;,   onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-      ]
-    },
-
-    {
-      id:           0,
-      name:         &#x27;Sales&#x27;,
-      icon:         &#x27;money&#x27;,
-      sortOrder:     5,
-      active:       false,
-      menuGroupID:  0,
-      userType:     this.getManagers(),
-      routerLink:       &#x27;/pos-order-search&#x27;,
-      routerLinkActive: &#x27;pos-order-search&#x27;,
-      method: &#x27;&#x27; ,
-      submenus: [
-        { name: &#x27;POS Orders&#x27;,   minimized: false,  method: &#x27;&#x27; , routerLink: &#x27;/pos-order-search&#x27;, routerLinkActive: &#x27;pos-order-search&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Order History&#x27;,minimized: true, method: &#x27;&#x27; ,routerLink: &#x27;/pos-order-search&#x27;, routerLinkActive: &#x27;pos-order-search&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Payments&#x27;,     minimized: true, method: &#x27;&#x27; ,  routerLink: &#x27;/pos-order-search&#x27;, routerLinkActive: &#x27;pos-order-search&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Items&#x27;,        minimized: true, method: &#x27;&#x27; ,   routerLink: &#x27;/pos-order-search&#x27;, routerLinkActive: &#x27;pos-order-search&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 4, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Find Profile&#x27;,    method: &#x27;&#x27; ,minimized: true, routerLink:   &#x27;/profileListing&#x27;, routerLinkActive:    &#x27;profileListing&#x27;, icon: &#x27;person_search&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: &#x27;Scan&#x27;,            method: &#x27;&#x27; ,minimized: false, routerLink:  &#x27;/barcodescanner&#x27;, routerLinkActive:    &#x27;barcodescanner&#x27;, icon: &#x27;qr_code_scanner&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: &#x27;User Types&#x27;,       method: &#x27;&#x27; ,minimized: false, routerLink: &#x27;/client-type-list&#x27;,  routerLinkActive: &#x27;client-type-list&#x27;,  icon: &#x27;groups&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Employees&#x27;,       method: &#x27;&#x27; ,minimized: false, routerLink:  &#x27;/employee-list&#x27;,  routerLinkActive:    &#x27;employee-list&#x27;,  icon: &#x27;groups&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Job Types&#x27;,       method: &#x27;&#x27; ,minimized: false, routerLink:  &#x27;/job-type-list&#x27;,  routerLinkActive:    &#x27;job-type-list&#x27;,  icon: &#x27;groups&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Clock&#x27;,           method: &#x27;&#x27; ,minimized: false, routerLink:  &#x27;/employee-clock&#x27;,  routerLinkActive:   &#x27;employee-clock&#x27;,  icon: &#x27;schedule&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
     {
       id:     0,
       name: &#x27;Metrc&#x27;,
       icon: &#x27;list&#x27;,
-      active: false,
+      active: true,
       sortOrder: 6,
       menuGroupID:  0,
       userType:     this.getManagers(),
@@ -1480,7 +2286,8 @@
       routerLinkActive: &#x27;package-list&#x27;,
       method: &#x27;&#x27; ,
       submenus: [
-        { name: &#x27;METRC Sales&#x27;,minimized: false, method: &#x27;&#x27; , routerLink: &#x27;/metrc-sales&#x27;, routerLinkActive: &#x27;metrc-sales&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Sales Report&#x27;,minimized: false, method: &#x27;&#x27; , routerLink: &#x27;/metrc-sales-report&#x27;, routerLinkActive: &#x27;metrc-sales-report&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;METRC Posted Sales&#x27;,minimized: false, method: &#x27;&#x27; , routerLink: &#x27;/metrc-posted-sales&#x27;, routerLinkActive: &#x27;metrc-posted-sales&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Packages&#x27;,   minimized: false, method: &#x27;&#x27; ,routerLink: &#x27;/package-list&#x27;, routerLinkActive: &#x27;package-list&#x27;, icon: &#x27;download&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Facilites&#x27;,  minimized: true, method: &#x27;&#x27; , routerLink: &#x27;/metrc-facilities-list&#x27;, routerLinkActive: &#x27;metrc-facilities-list&#x27;, icon: &#x27;add_business&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Categories&#x27;, minimized: true, method: &#x27;&#x27; , routerLink: &#x27;/metrc-categories-list&#x27;, routerLinkActive: &#x27;metrc-categories-list&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 4, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
@@ -1490,7 +2297,7 @@
       id:            0,
       name: &#x27;Inventory&#x27;,
       icon: &#x27;inventory&#x27;,
-      active: false,
+      active: true,
       sortOrder:     7,
       menuGroupID:   0,
       userType:     this.getManagers(),
@@ -1498,15 +2305,18 @@
       routerLinkActive: &#x27;inventory-list&#x27;,
       method: &#x27;&#x27; ,
       submenus: [
-        { name: &#x27;Inventory&#x27;,  minimized: false, method: &#x27;&#x27; , routerLink: &#x27;/inventory-list&#x27;,      routerLinkActive: &#x27;inventory-list&#x27;,      icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Locations&#x27;,  minimized: true, method: &#x27;&#x27; , routerLink: &#x27;/inventory-locations&#x27;, routerLinkActive: &#x27;inventory-locations&#x27;, icon: &#x27;location&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Manifest&#x27;,             minimized: false, method: &#x27;&#x27; , routerLink: &#x27;/manifests&#x27;,      routerLinkActive: &#x27;manifests&#x27;,      icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Inventory&#x27;,            minimized: false, method: &#x27;&#x27; , routerLink: &#x27;/inventory-list&#x27;,      routerLinkActive: &#x27;inventory-list&#x27;,      icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Locations List&#x27;,       minimized: true, method: &#x27;&#x27; , routerLink: &#x27;/inventory-locations&#x27;, routerLinkActive: &#x27;inventory-locations&#x27;, icon: &#x27;location&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Manifest Status List&#x27;, minimized: true, method: &#x27;&#x27; , routerLink: &#x27;/manifest-status&#x27;, routerLinkActive: &#x27;manifest-status&#x27;, icon: &#x27;location&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Manifest Types List&#x27;,  minimized: true, method: &#x27;&#x27; , routerLink: &#x27;/manifest-types&#x27;, routerLinkActive: &#x27;manifest-types&#x27;, icon: &#x27;location&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
     {
       id:           0,
       name:         &#x27;Catalog&#x27;,
       icon:         &#x27;toc&#x27;,
-      active:       false,
+      active:       true,
       menuGroupID:  0,
       sortOrder:    8,
       userType:     this.getManagers(),
@@ -1514,23 +2324,53 @@
       routerLinkActive: &#x27;product-list-view&#x27;,
       method: &#x27;&#x27; ,
       submenus: [
-        { name: &#x27;Types&#x27;,          method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/item-types&#x27;, routerLinkActive: &#x27;item-types&#x27;, onClick: &#x27;settings_applications&#x27;, icon: &#x27;list&#x27;, id: 5, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Types&#x27;,          method: &#x27;&#x27; ,  minimized: false, routerLink: &#x27;/item-types&#x27;,            routerLinkActive: &#x27;item-types&#x27;, onClick: &#x27;settings_applications&#x27;, icon: &#x27;list&#x27;, id: 5, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Categories&#x27;,     method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/categorieslistview&#x27;,    routerLinkActive:  &#x27;categorieslistview&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Items&#x27;,          method: &#x27;&#x27; ,  minimized: false,routerLink: &#x27;/product-list-view&#x27;,     routerLinkActive:  &#x27;product-list-view&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Brands&#x27;,         method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/adminbrandslist&#x27;,       routerLinkActive:  &#x27;adminbrandslist&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 4, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Price Categories&#x27;,method: &#x27;&#x27; , minimized: true, routerLink: &#x27;/price-categories&#x27; ,     routerLinkActive: &#x27;price-categories&#x27;, icon: &#x27;price_change&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Price Schedule&#x27;, method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/price-schedule&#x27; ,       routerLinkActive: &#x27;price-schedule&#x27;, icon: &#x27;price_change&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Price Categories&#x27;,method: &#x27;&#x27; , minimized: false, routerLink: &#x27;/price-categories&#x27; ,     routerLinkActive: &#x27;price-categories&#x27;, icon: &#x27;price_change&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Catalog Schedule&#x27;, method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/price-schedule&#x27; ,       routerLinkActive: &#x27;price-schedule&#x27;, icon: &#x27;calendar_month&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;TV Print Menu&#x27;, method: &#x27;&#x27; ,   minimized:  false, routerLink:  &#x27;/admin-display-menu&#x27; ,       routerLinkActive: &#x27;admin-display-menu&#x27;, icon: &#x27;monitor&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Price Tiers&#x27;,    method: &#x27;&#x27; ,  minimized: false, routerLink: &#x27;/price-tier-list-edit&#x27; ,       routerLinkActive: &#x27;price-schedule&#x27;, icon: &#x27;price_change&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Unit Types&#x27;,     method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/unit-types&#x27;,            routerLinkActive: &#x27;unit-types&#x27;, onClick: &#x27;&#x27;, icon: &#x27;list&#x27;, id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Tax Rates&#x27;,      method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/taxes&#x27; ,                routerLinkActive: &#x27;taxes&#x27;, icon: &#x27;price_change&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 6, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        // { name: &#x27;Taxes and Fees&#x27;, method: &#x27;&#x27; ,  minimized: false, routerLink: &#x27;/taxes&#x27; ,                routerLinkActive: &#x27;taxes&#x27;, icon: &#x27;price_change&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 6, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Taxes and Fees&#x27;,       method: &#x27;&#x27; ,  minimized: false, routerLink: &#x27;/taxes&#x27;,       routerLinkActive: &#x27;taxes&#x27;, onClick: &#x27;&#x27;, icon: &#x27;price_change&#x27;, id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Flat Tax&#x27;,       method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/flat-rate-taxes&#x27;,       routerLinkActive: &#x27;flat-rate-taxes&#x27;, onClick: &#x27;&#x27;, icon: &#x27;list&#x27;, id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Print Locations&#x27;,method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/printer-locations&#x27;,     routerLinkActive: &#x27;printer-locations&#x27;, onClick: &#x27;&#x27;, icon: &#x27;printer&#x27;, id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Prompts &amp; Kits&#x27;, method: &#x27;&#x27; ,  minimized: false, routerLink: &#x27;/prompt-kits&#x27;,          routerLinkActive: &#x27;speaker-group&#x27;, onClick: &#x27;&#x27;, icon: &#x27;chat&#x27;, id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
-
+    {
+      id:             0,
+      name:          &#x27;Reporting&#x27;,
+      icon:          &#x27;analytics&#x27;,
+      active:        true,
+      sortOrder:      2,
+      menuGroupID:    0,
+      userType:       this.getManagers(),
+      routerLink:       &#x27;/dashboard&#x27;,
+      routerLinkActive: &#x27;dashboard&#x27;,
+      method:           &#x27;&#x27;,
+      submenus: [ ]
+    },
+    {
+      id:             0,
+      name:          &#x27;Dashboard&#x27;,
+      icon:          &#x27;dashboard&#x27;,
+      active:        true,
+      sortOrder:      2,
+      menuGroupID:    0,
+      userType:       this.getStaff(),
+      routerLink:       &#x27;/menu-board&#x27;,
+      routerLinkActive: &#x27;menu-board&#x27;,
+      method:           &#x27;&#x27;,
+      submenus: [ ]
+    },
     {
       id:        0,
       name:     &#x27;Settings&#x27;,
       icon:     &#x27;settings&#x27;,
-      active:    false,
+      active:    true,
       sortOrder  : 15,
       menuGroupID:  0,
       userType:     this.getManagers(),
@@ -1539,16 +2379,18 @@
       method: &#x27;&#x27; ,
       submenus: [
         { name: &#x27;Settings&#x27;, method: &#x27;&#x27; ,minimized: true,routerLink: &#x27;/app-settings&#x27;, routerLinkActive: &#x27;settings&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Sites&#x27;,    method: &#x27;&#x27; ,minimized: true, routerLink: &#x27;/site-edit&#x27;, routerLinkActive: &#x27;site-edit&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Terminals&#x27;,method: &#x27;&#x27; ,minimized: true, routerLink: &#x27;/pos-list&#x27;, routerLinkActive: &#x27;pos-list&#x27;, icon: &#x27;computer&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Sites&#x27;,    method: &#x27;&#x27; ,minimized: false, routerLink: &#x27;/site-edit&#x27;, routerLinkActive: &#x27;site-edit&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Terminals&#x27;,method: &#x27;&#x27; ,minimized: false, routerLink: &#x27;/pos-list&#x27;, routerLinkActive: &#x27;pos-list&#x27;, icon: &#x27;computer&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
+
+
   ]</code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/_services/system/menus.service.ts:19</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/_services/system/menus.service.ts:26</a></div>
                         </td>
                     </tr>
 
@@ -1573,7 +2415,33 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/_services/system/menus.service.ts:16</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/_services/system/menus.service.ts:25</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="user"></a>
+                    <span class="name">
+                        <span ><b>user</b></span>
+                        <a href="#user"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IUser.html" target="_self" >IUser</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="197" class="link-to-prism">src/app/_services/system/menus.service.ts:197</a></div>
                         </td>
                     </tr>
 
@@ -1585,25 +2453,32 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
-import { HttpClient, HttpHeaders,  } from &#x27;@angular/common/http&#x27;;
+import { HttpClient  } from &#x27;@angular/common/http&#x27;;
 import { AuthenticationService } from &#x27;src/app/_services/system/authentication.service&#x27;;
-import { Observable, } from &#x27;rxjs&#x27;;
-import { ISetting, ISite, IUserProfile }   from &#x27;src/app/_interfaces&#x27;;
-import { environment } from &#x27;src/environments/environment&#x27;;
+import { BehaviorSubject, Observable, of, Subscription, } from &#x27;rxjs&#x27;;
+import { ISite, IUser }   from &#x27;src/app/_interfaces&#x27;;
 import { AccordionMenu, MenuGroup, SubMenu }  from &#x27;src/app/_interfaces/index&#x27;;
-import { UrlResolver } from &#x27;@angular/compiler&#x27;;
-import { UserComponentFactory } from &#x27;ag-grid-community&#x27;;
+import { HttpClientCacheService } from &#x27;src/app/_http-interceptors/http-client-cache.service&#x27;;
+import { ProductSearchModel } from &#x27;src/app/_interfaces/search-models/product-search&#x27;;
 
+export interface ResultCheck {
+  result: boolean;
+  message: string;
+}
 @Injectable({
   providedIn: &#x27;root&#x27;
 })
+
 export class MenusService {
 
+  private _accordionMenu    &#x3D; new BehaviorSubject&lt;AccordionMenu&gt;(null);
+  public  accordionMenu$    &#x3D; this._accordionMenu.asObservable();
+
+
+
   submenu &#x3D; {} as SubMenu[]
-
-
   accordionMenus: AccordionMenu[] &#x3D; [
 
     {
@@ -1619,14 +2494,13 @@ export class MenusService {
       method:           &#x27;&#x27;,
       submenus: [
         { name: &#x27;Profile&#x27;,  minimized: false, method: &#x27;&#x27;,  routerLink: &#x27;/app-profile&#x27;, routerLinkActive: &#x27;app-profile&#x27;, icon: &#x27;face&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getUsers(), meunyType: 0},
-        { name: &#x27;Sales&#x27; ,   minimized: false,  method: &#x27;&#x27; ,  routerLink: &#x27;/sales&#x27;,     routerLinkActive: &#x27;sales&#x27;,   icon: &#x27;money&#x27;,   onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getUsers(), meunyType: 0},
       ]
     },
     {
       id:             0,
       name:          &#x27;POS&#x27;,
       icon:          &#x27;shopping_cart&#x27;,
-      active:        false,
+      active:        true,
       sortOrder:      2,
       menuGroupID:    0,
       userType:       this.getUsers(),
@@ -1634,33 +2508,20 @@ export class MenusService {
       routerLinkActive: &#x27;pos-orders&#x27;,
       method:           &#x27;&#x27;,
       submenus: [
-        { name: &#x27;Orders&#x27;,  minimized: false, method: &#x27;&#x27;,  routerLink: &#x27;/pos-orders&#x27;, routerLinkActive: &#x27;pos-orders&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getUsers(), meunyType: 0},
-        { name: &#x27;Tables&#x27; ,   minimized: false,  method: &#x27;&#x27; ,  routerLink: &#x27;/table-layout&#x27;,     routerLinkActive: &#x27;pos-orders&#x27;,   icon: &#x27;flatware&#x27;,   onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getUsers(), meunyType: 0},
+        { name: &#x27;Orders&#x27;,  minimized: false, method: &#x27;&#x27;,  routerLink: &#x27;/pos-orders&#x27;, routerLinkActive: &#x27;pos-orders&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: &#x27;Payments&#x27;,  minimized: false, method: &#x27;&#x27;,  routerLink: &#x27;/pos-payments&#x27;, routerLinkActive: &#x27;pos-payments&#x27;, icon: &#x27;credit_card&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Balance Sheets&#x27;,  minimized: true, method: &#x27;&#x27;,  routerLink: &#x27;/balance-sheets&#x27;, routerLinkActive: &#x27;balance-sheets&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Balance Sheet&#x27;,  minimized: false, method: &#x27;&#x27;,  routerLink: &#x27;/balance-sheet-edit&#x27;, routerLinkActive: &#x27;balance-sheet-edit&#x27;, icon: &#x27;point_of_sale&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: &#x27;Operations&#x27;,    minimized: false,  method: &#x27;&#x27; ,routerLink: &#x27;/operations&#x27;, routerLinkActive: &#x27;operations&#x27;,   icon: &#x27;article&#x27;,   onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: &#x27;Tables&#x27; ,   minimized: true,  method: &#x27;&#x27; ,  routerLink: &#x27;/table-layout&#x27;,     routerLinkActive: &#x27;pos-orders&#x27;,   icon: &#x27;flatware&#x27;,   onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: &#x27;Gift/Credit&#x27;,  minimized: false, method: &#x27;&#x27;,  routerLink: &#x27;/store-credit&#x27;, routerLinkActive: &#x27;store-credit&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
       ]
     },
-    // {
-    //   id:               0,
-    //   name:             &#x27;Menu&#x27;,
-    //   icon:             &#x27;search&#x27;,
-    //   active:           true,
-    //   sortOrder:        1,
-    //   menuGroupID:      0,
-    //   userType:         this.getAnonymous(),
-    //   routerLink:       &#x27;/app-main-menu&#x27;,
-    //   routerLinkActive: &#x27;app-main-menu&#x27;,
-    //   method:           &#x27;&#x27;,
-    //   submenus: [
-    //     { name: &#x27;Categories&#x27;, minimized: false, method: &#x27;&#x27;, routerLink: &#x27;/categories&#x27;, routerLinkActive: &#x27;categories&#x27;, icon: &#x27;article&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType:  this.getUsers(), meunyType: 0},
-    //     { name: &#x27;Brands&#x27;,     minimized: false,  method: &#x27;&#x27;, routerLink: &#x27;/brandslist&#x27;,     routerLinkActive: &#x27;brandslist&#x27;,   icon: &#x27;article&#x27;,   onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType:  this.getUsers(), meunyType: 0},
-    //     { name: &#x27;Flowers&#x27;,    minimized: true,  method: &#x27;&#x27;,  routerLink: &#x27;/tier-menu&#x27;,   routerLinkActive: &#x27;tier-menu&#x27;,   icon: &#x27;yard&#x27;,   onClick: &#x27;&#x27;, id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType:  this.getUsers(), meunyType: 0},
-    //     { name: &#x27;Search&#x27;,     minimized: true,  method: &#x27;&#x27;, routerLink: &#x27;/searchproducts&#x27;,   routerLinkActive: &#x27;searchproducts&#x27;,   icon: &#x27;search&#x27;,   onClick: &#x27;&#x27;, id: 4, sortOrder: 0, submenuID:0, menuID: 0, submenus: this.submenu, userType:  this.getUsers(), meunyType: 0},
-    //   ]
-    // },
     {
       id:           0,
       name:         &#x27;Contacts&#x27;,
       icon:         &#x27;person_search&#x27;,
-      active:       false,
+      active:       true,
       menuGroupID:  0,
       sortOrder:    3,
       userType:     this.getManagers(),
@@ -1668,50 +2529,19 @@ export class MenusService {
       routerLinkActive: &#x27;profileListing&#x27;,
       method: &#x27;&#x27; ,
       submenus: [
-        { name: &#x27;Find Profile&#x27;,    method: &#x27;&#x27; ,minimized: true, routerLink: &#x27;/profileListing&#x27;, routerLinkActive: &#x27;profileListing&#x27;, icon: &#x27;person_search&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Scan&#x27;,            method: &#x27;&#x27; ,minimized: true, routerLink: &#x27;/barcodescanner&#x27;, routerLinkActive: &#x27;barcodescanner&#x27;, icon: &#x27;qr_code_scanner&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-      ]
-    },
-    {
-      id:           0,
-      name:         &#x27;Reporting&#x27;,
-      icon:         &#x27;bar_chart&#x27;,
-      active:       false,
-      sortOrder:    4,
-      menuGroupID:  0,
-      userType:     this.getManagers(),
-      routerLink:       &#x27;/dashboard&#x27;,
-      routerLinkActive: &#x27;dashboard&#x27;,
-      method: &#x27;&#x27; ,
-      submenus: [
-        { name: &#x27;Dashboard&#x27;,  minimized: false,  method: &#x27;&#x27; ,routerLink: &#x27;/dashboard&#x27;, routerLinkActive: &#x27;dashboard&#x27;, icon: &#x27;bar_chart&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Reports&#x27;,    minimized: false,  method: &#x27;&#x27; ,routerLink: &#x27;/reports&#x27;,     routerLinkActive: &#x27;reports&#x27;,   icon: &#x27;article&#x27;,   onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-      ]
-    },
-
-    {
-      id:           0,
-      name:         &#x27;Sales&#x27;,
-      icon:         &#x27;money&#x27;,
-      sortOrder:     5,
-      active:       false,
-      menuGroupID:  0,
-      userType:     this.getManagers(),
-      routerLink:       &#x27;/pos-order-search&#x27;,
-      routerLinkActive: &#x27;pos-order-search&#x27;,
-      method: &#x27;&#x27; ,
-      submenus: [
-        { name: &#x27;POS Orders&#x27;,   minimized: false,  method: &#x27;&#x27; , routerLink: &#x27;/pos-order-search&#x27;, routerLinkActive: &#x27;pos-order-search&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Order History&#x27;,minimized: true, method: &#x27;&#x27; ,routerLink: &#x27;/pos-order-search&#x27;, routerLinkActive: &#x27;pos-order-search&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Payments&#x27;,     minimized: true, method: &#x27;&#x27; ,  routerLink: &#x27;/pos-order-search&#x27;, routerLinkActive: &#x27;pos-order-search&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Items&#x27;,        minimized: true, method: &#x27;&#x27; ,   routerLink: &#x27;/pos-order-search&#x27;, routerLinkActive: &#x27;pos-order-search&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 4, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Find Profile&#x27;,    method: &#x27;&#x27; ,minimized: true, routerLink:   &#x27;/profileListing&#x27;, routerLinkActive:    &#x27;profileListing&#x27;, icon: &#x27;person_search&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: &#x27;Scan&#x27;,            method: &#x27;&#x27; ,minimized: false, routerLink:  &#x27;/barcodescanner&#x27;, routerLinkActive:    &#x27;barcodescanner&#x27;, icon: &#x27;qr_code_scanner&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: &#x27;User Types&#x27;,       method: &#x27;&#x27; ,minimized: false, routerLink: &#x27;/client-type-list&#x27;,  routerLinkActive: &#x27;client-type-list&#x27;,  icon: &#x27;groups&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Employees&#x27;,       method: &#x27;&#x27; ,minimized: false, routerLink:  &#x27;/employee-list&#x27;,  routerLinkActive:    &#x27;employee-list&#x27;,  icon: &#x27;groups&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Job Types&#x27;,       method: &#x27;&#x27; ,minimized: false, routerLink:  &#x27;/job-type-list&#x27;,  routerLinkActive:    &#x27;job-type-list&#x27;,  icon: &#x27;groups&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Clock&#x27;,           method: &#x27;&#x27; ,minimized: false, routerLink:  &#x27;/employee-clock&#x27;,  routerLinkActive:   &#x27;employee-clock&#x27;,  icon: &#x27;schedule&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
     {
       id:     0,
       name: &#x27;Metrc&#x27;,
       icon: &#x27;list&#x27;,
-      active: false,
+      active: true,
       sortOrder: 6,
       menuGroupID:  0,
       userType:     this.getManagers(),
@@ -1719,7 +2549,8 @@ export class MenusService {
       routerLinkActive: &#x27;package-list&#x27;,
       method: &#x27;&#x27; ,
       submenus: [
-        { name: &#x27;METRC Sales&#x27;,minimized: false, method: &#x27;&#x27; , routerLink: &#x27;/metrc-sales&#x27;, routerLinkActive: &#x27;metrc-sales&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Sales Report&#x27;,minimized: false, method: &#x27;&#x27; , routerLink: &#x27;/metrc-sales-report&#x27;, routerLinkActive: &#x27;metrc-sales-report&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;METRC Posted Sales&#x27;,minimized: false, method: &#x27;&#x27; , routerLink: &#x27;/metrc-posted-sales&#x27;, routerLinkActive: &#x27;metrc-posted-sales&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Packages&#x27;,   minimized: false, method: &#x27;&#x27; ,routerLink: &#x27;/package-list&#x27;, routerLinkActive: &#x27;package-list&#x27;, icon: &#x27;download&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Facilites&#x27;,  minimized: true, method: &#x27;&#x27; , routerLink: &#x27;/metrc-facilities-list&#x27;, routerLinkActive: &#x27;metrc-facilities-list&#x27;, icon: &#x27;add_business&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Categories&#x27;, minimized: true, method: &#x27;&#x27; , routerLink: &#x27;/metrc-categories-list&#x27;, routerLinkActive: &#x27;metrc-categories-list&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 4, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
@@ -1729,7 +2560,7 @@ export class MenusService {
       id:            0,
       name: &#x27;Inventory&#x27;,
       icon: &#x27;inventory&#x27;,
-      active: false,
+      active: true,
       sortOrder:     7,
       menuGroupID:   0,
       userType:     this.getManagers(),
@@ -1737,15 +2568,18 @@ export class MenusService {
       routerLinkActive: &#x27;inventory-list&#x27;,
       method: &#x27;&#x27; ,
       submenus: [
-        { name: &#x27;Inventory&#x27;,  minimized: false, method: &#x27;&#x27; , routerLink: &#x27;/inventory-list&#x27;,      routerLinkActive: &#x27;inventory-list&#x27;,      icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Locations&#x27;,  minimized: true, method: &#x27;&#x27; , routerLink: &#x27;/inventory-locations&#x27;, routerLinkActive: &#x27;inventory-locations&#x27;, icon: &#x27;location&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Manifest&#x27;,             minimized: false, method: &#x27;&#x27; , routerLink: &#x27;/manifests&#x27;,      routerLinkActive: &#x27;manifests&#x27;,      icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Inventory&#x27;,            minimized: false, method: &#x27;&#x27; , routerLink: &#x27;/inventory-list&#x27;,      routerLinkActive: &#x27;inventory-list&#x27;,      icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Locations List&#x27;,       minimized: true, method: &#x27;&#x27; , routerLink: &#x27;/inventory-locations&#x27;, routerLinkActive: &#x27;inventory-locations&#x27;, icon: &#x27;location&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Manifest Status List&#x27;, minimized: true, method: &#x27;&#x27; , routerLink: &#x27;/manifest-status&#x27;, routerLinkActive: &#x27;manifest-status&#x27;, icon: &#x27;location&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Manifest Types List&#x27;,  minimized: true, method: &#x27;&#x27; , routerLink: &#x27;/manifest-types&#x27;, routerLinkActive: &#x27;manifest-types&#x27;, icon: &#x27;location&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
     {
       id:           0,
       name:         &#x27;Catalog&#x27;,
       icon:         &#x27;toc&#x27;,
-      active:       false,
+      active:       true,
       menuGroupID:  0,
       sortOrder:    8,
       userType:     this.getManagers(),
@@ -1753,23 +2587,53 @@ export class MenusService {
       routerLinkActive: &#x27;product-list-view&#x27;,
       method: &#x27;&#x27; ,
       submenus: [
-        { name: &#x27;Types&#x27;,          method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/item-types&#x27;, routerLinkActive: &#x27;item-types&#x27;, onClick: &#x27;settings_applications&#x27;, icon: &#x27;list&#x27;, id: 5, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Types&#x27;,          method: &#x27;&#x27; ,  minimized: false, routerLink: &#x27;/item-types&#x27;,            routerLinkActive: &#x27;item-types&#x27;, onClick: &#x27;settings_applications&#x27;, icon: &#x27;list&#x27;, id: 5, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Categories&#x27;,     method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/categorieslistview&#x27;,    routerLinkActive:  &#x27;categorieslistview&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Items&#x27;,          method: &#x27;&#x27; ,  minimized: false,routerLink: &#x27;/product-list-view&#x27;,     routerLinkActive:  &#x27;product-list-view&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Brands&#x27;,         method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/adminbrandslist&#x27;,       routerLinkActive:  &#x27;adminbrandslist&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 4, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Price Categories&#x27;,method: &#x27;&#x27; , minimized: true, routerLink: &#x27;/price-categories&#x27; ,     routerLinkActive: &#x27;price-categories&#x27;, icon: &#x27;price_change&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Price Schedule&#x27;, method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/price-schedule&#x27; ,       routerLinkActive: &#x27;price-schedule&#x27;, icon: &#x27;price_change&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Price Categories&#x27;,method: &#x27;&#x27; , minimized: false, routerLink: &#x27;/price-categories&#x27; ,     routerLinkActive: &#x27;price-categories&#x27;, icon: &#x27;price_change&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Catalog Schedule&#x27;, method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/price-schedule&#x27; ,       routerLinkActive: &#x27;price-schedule&#x27;, icon: &#x27;calendar_month&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;TV Print Menu&#x27;, method: &#x27;&#x27; ,   minimized:  false, routerLink:  &#x27;/admin-display-menu&#x27; ,       routerLinkActive: &#x27;admin-display-menu&#x27;, icon: &#x27;monitor&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Price Tiers&#x27;,    method: &#x27;&#x27; ,  minimized: false, routerLink: &#x27;/price-tier-list-edit&#x27; ,       routerLinkActive: &#x27;price-schedule&#x27;, icon: &#x27;price_change&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Unit Types&#x27;,     method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/unit-types&#x27;,            routerLinkActive: &#x27;unit-types&#x27;, onClick: &#x27;&#x27;, icon: &#x27;list&#x27;, id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Tax Rates&#x27;,      method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/taxes&#x27; ,                routerLinkActive: &#x27;taxes&#x27;, icon: &#x27;price_change&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 6, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        // { name: &#x27;Taxes and Fees&#x27;, method: &#x27;&#x27; ,  minimized: false, routerLink: &#x27;/taxes&#x27; ,                routerLinkActive: &#x27;taxes&#x27;, icon: &#x27;price_change&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 6, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Taxes and Fees&#x27;,       method: &#x27;&#x27; ,  minimized: false, routerLink: &#x27;/taxes&#x27;,       routerLinkActive: &#x27;taxes&#x27;, onClick: &#x27;&#x27;, icon: &#x27;price_change&#x27;, id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: &#x27;Flat Tax&#x27;,       method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/flat-rate-taxes&#x27;,       routerLinkActive: &#x27;flat-rate-taxes&#x27;, onClick: &#x27;&#x27;, icon: &#x27;list&#x27;, id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Print Locations&#x27;,method: &#x27;&#x27; ,  minimized: true, routerLink: &#x27;/printer-locations&#x27;,     routerLinkActive: &#x27;printer-locations&#x27;, onClick: &#x27;&#x27;, icon: &#x27;printer&#x27;, id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Prompts &amp; Kits&#x27;, method: &#x27;&#x27; ,  minimized: false, routerLink: &#x27;/prompt-kits&#x27;,          routerLinkActive: &#x27;speaker-group&#x27;, onClick: &#x27;&#x27;, icon: &#x27;chat&#x27;, id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
-
+    {
+      id:             0,
+      name:          &#x27;Reporting&#x27;,
+      icon:          &#x27;analytics&#x27;,
+      active:        true,
+      sortOrder:      2,
+      menuGroupID:    0,
+      userType:       this.getManagers(),
+      routerLink:       &#x27;/dashboard&#x27;,
+      routerLinkActive: &#x27;dashboard&#x27;,
+      method:           &#x27;&#x27;,
+      submenus: [ ]
+    },
+    {
+      id:             0,
+      name:          &#x27;Dashboard&#x27;,
+      icon:          &#x27;dashboard&#x27;,
+      active:        true,
+      sortOrder:      2,
+      menuGroupID:    0,
+      userType:       this.getStaff(),
+      routerLink:       &#x27;/menu-board&#x27;,
+      routerLinkActive: &#x27;menu-board&#x27;,
+      method:           &#x27;&#x27;,
+      submenus: [ ]
+    },
     {
       id:        0,
       name:     &#x27;Settings&#x27;,
       icon:     &#x27;settings&#x27;,
-      active:    false,
+      active:    true,
       sortOrder  : 15,
       menuGroupID:  0,
       userType:     this.getManagers(),
@@ -1778,14 +2642,33 @@ export class MenusService {
       method: &#x27;&#x27; ,
       submenus: [
         { name: &#x27;Settings&#x27;, method: &#x27;&#x27; ,minimized: true,routerLink: &#x27;/app-settings&#x27;, routerLinkActive: &#x27;settings&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Sites&#x27;,    method: &#x27;&#x27; ,minimized: true, routerLink: &#x27;/site-edit&#x27;, routerLinkActive: &#x27;site-edit&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: &#x27;Terminals&#x27;,method: &#x27;&#x27; ,minimized: true, routerLink: &#x27;/pos-list&#x27;, routerLinkActive: &#x27;pos-list&#x27;, icon: &#x27;computer&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Sites&#x27;,    method: &#x27;&#x27; ,minimized: false, routerLink: &#x27;/site-edit&#x27;, routerLinkActive: &#x27;site-edit&#x27;, icon: &#x27;list&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: &#x27;Terminals&#x27;,method: &#x27;&#x27; ,minimized: false, routerLink: &#x27;/pos-list&#x27;, routerLinkActive: &#x27;pos-list&#x27;, icon: &#x27;computer&#x27;, onClick: &#x27;&#x27;, id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
+
+
   ] ;
 
-  constructor( private http: HttpClient, private auth: AuthenticationService, ) { }
+  user              : IUser;
+  _user             : Subscription;
 
+  initSubscription() {
+    this._user &#x3D; this.auth.user$.subscribe( data &#x3D;&gt; {
+      this.user  &#x3D; data
+    })
+  }
+
+
+  constructor( private http: HttpClient,
+               private httpCache: HttpClientCacheService,
+               private auth: AuthenticationService, ) {
+                 this.initSubscription();
+               }
+
+  updateAccordionMenuSubscription(accordionMenu: AccordionMenu) {
+    this._accordionMenu.next(accordionMenu)
+  }
   getAnonymous(): string {
     return &#x27;admin,manager,user,employee,anonymous&#x27;
   }
@@ -1794,11 +2677,25 @@ export class MenusService {
     return &#x27;admin,manager,user,employee&#x27;
   }
 
+  getStaff(): string {
+    return &#x27;admin,manager,employee&#x27;
+  }
+
   getManagers(): string {
     return &#x27;admin,manager&#x27;
   }
 
   getMenu(site: ISite, menuName: string): Observable&lt;AccordionMenu[]&gt; {
+
+      const user &#x3D; JSON.parse(localStorage.getItem(&#x27;user&#x27;)) as IUser;
+
+      // console.log(&#x27;getmenu user&#x27;, user)
+      if (!user || !user.token || !user.token || user.token &#x3D;&#x3D; &#x27;&#x27; ) { return of(null) }
+
+
+      if (!user || !user.roles ||  !user.username ) {
+        return of(null)
+      }
 
       const controller &#x3D; &quot;/MenuGroups/&quot;
 
@@ -1808,12 +2705,13 @@ export class MenusService {
 
       const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
+      // console.log(&#x27;url&#x27;, url);
+
       return this.http.get&lt;AccordionMenu[]&gt;(url)
 
-    }
+  }
 
   getMainMenu(site: ISite): Observable&lt;AccordionMenu[]&gt; {
-
      return this.getMenu(site, &#x27;main&#x27;)
   }
 
@@ -1847,9 +2745,49 @@ export class MenusService {
 
   }
 
-  createMainMenu(site: ISite): Observable&lt;MenuGroup&gt; {
+  mainMenuExists(site: ISite): Observable&lt;ResultCheck&gt; {
 
-    const  menuGroup &#x3D;  {name: &#x27;main&#x27;, id: 0, userType: this.getUsers(), accordionMenus: this.accordionMenus }  as MenuGroup;
+    const controller &#x3D; &quot;/MenuGroups/&quot;
+
+    const endPoint &#x3D; &#x27;MenuExists&#x27;;
+
+    const parameters &#x3D; &#x60;?name&#x3D;main&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const url &#x3D; { url: uri, cacheMins: 0}
+
+    return this.http.get&lt;ResultCheck&gt;(uri);
+
+  }
+
+  menuExists(site: ISite, name: string): Observable&lt;ResultCheck&gt; {
+
+    const controller &#x3D; &quot;/MenuGroups/&quot;
+
+    const endPoint &#x3D; &#x27;MenuExists&#x27;;
+
+    const parameters &#x3D; &#x60;?name&#x3D;${name}&#x60;
+
+    const uri &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const url &#x3D; { url: uri, cacheMins: 120}
+
+    return  this.httpCache.get&lt;ResultCheck&gt;(url)
+
+  }
+
+  createMainMenu(user: IUser, site: ISite): Observable&lt;MenuGroup&gt; {
+    // console.log(&#x27;createMainMenu&#x27;, user)
+    if (!user || !user.roles) {
+      return null
+    }
+    // console.log(&#x27;createMainMenu2&#x27;, user)
+
+    if (user.roles !&#x3D; &#x27;admin&#x27;) { return }
+
+    const  menuGroup &#x3D;  {name: &#x27;main&#x27;, id: 0, userType: &#x27;admin,manager,user,employee&#x27;,
+                         accordionMenus: this.accordionMenus }  as MenuGroup;
 
     const controller &#x3D; &quot;/MenuGroups/&quot;
 
@@ -1860,6 +2798,46 @@ export class MenusService {
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
 
     return this.http.post&lt;MenuGroup&gt;(url, menuGroup)
+  }
+
+  deleteMenu(site: ISite): Observable&lt;MenuGroup&gt; {
+
+    const controller &#x3D; &quot;/MenuGroups/&quot;
+
+    const endPoint &#x3D; &#x27;DeleteMenu&#x27;;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.delete&lt;MenuGroup&gt;(url)
+  }
+
+  deleteAccordionMenu(site: ISite, id: number): Observable&lt;AccordionMenu&gt; {
+
+    const controller &#x3D; &quot;/MenuGroups/&quot;
+
+    const endPoint &#x3D; &#x27;DeleteAccordionMenu&#x27;;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.delete&lt;AccordionMenu&gt;(url)
+  }
+
+
+  deleteSubMenu(site: ISite, id: number): Observable&lt;SubMenu&gt; {
+
+    const controller &#x3D; &quot;/MenuGroups/&quot;
+
+    const endPoint &#x3D; &#x27;deleteSubMenuGroup&#x27;;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.delete&lt;SubMenu&gt;(url)
   }
 
   deleteMenuGroup(site: ISite, id: number): Observable&lt;MenuGroup&gt; {
@@ -1911,6 +2889,17 @@ export class MenusService {
     return this.http.get&lt;SubMenu&gt;(url)
   }
 
+  postAccordionMenu(site: ISite,  accordionMenu: AccordionMenu): Observable&lt;AccordionMenu&gt; {
+    const controller &#x3D; &quot;/MenuGroups/&quot;
+
+    const endPoint &#x3D; &#x27;PostAccordionMenu&#x27;;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;AccordionMenu&gt;(url, accordionMenu)
+  }
 
   putAccordionMenuByID(site: ISite, id: number, accordionMenu: AccordionMenu): Observable&lt;AccordionMenu&gt; {
     const controller &#x3D; &quot;/MenuGroups/&quot;
@@ -1945,8 +2934,21 @@ export class MenusService {
     const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
 
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
-    console.log(subMenu)
+
     return this.http.put&lt;SubMenu&gt;(url, subMenu)
+  }
+
+  postSubMenuItem(site: ISite, subMenu: SubMenu): Observable&lt;SubMenu&gt; {
+
+    const controller &#x3D; &quot;/MenuGroups/&quot;
+
+    const endPoint &#x3D; &#x27;PostSubMenuItem&#x27;;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;SubMenu&gt;(url, subMenu)
   }
 
   getDefaultMenuData() {
@@ -1965,14 +2967,15 @@ export class MenusService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -1984,6 +2987,15 @@ export class MenusService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -1993,8 +3005,8 @@ export class MenusService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

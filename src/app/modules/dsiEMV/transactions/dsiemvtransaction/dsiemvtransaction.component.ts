@@ -79,7 +79,7 @@ export class DSIEMVTransactionComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.orderService.currentOrder$.subscribe(data  => {
+    this.orderMethodService.currentOrder$.subscribe(data  => {
       this.order = data;
       const i = 0;
       this.message  = 'Press process to complete transaction.'
@@ -225,7 +225,7 @@ export class DSIEMVTransactionComponent implements OnInit {
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
     this.processingResults = false;
     this.processResults(response)
-  }
+  };
 
   async processVoidCard() {
     const amount = this.amount
@@ -235,7 +235,7 @@ export class DSIEMVTransactionComponent implements OnInit {
     const response  = await this.dsiProcess.emvVoid(payment);
     this.processingResults = false;
     this.processVoidResults(response)
-  }
+  };
 
   async processRefundCard() {
     const amount  = this.amount
@@ -245,7 +245,7 @@ export class DSIEMVTransactionComponent implements OnInit {
     const response  = await this.dsiProcess.emvReturn(amount, payment.id,  this.manualPrompt );
     this.processingResults = false;
     this.processResults(response)
-  }
+  };
 
   async procesPreAuthCard() {
     const amount = this.amount
@@ -255,7 +255,7 @@ export class DSIEMVTransactionComponent implements OnInit {
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
     this.processingResults = false;
     this.processResults(response)
-  }
+  };
 
   async procesForceAuthCard() {
     const amount = this.amount
@@ -265,7 +265,7 @@ export class DSIEMVTransactionComponent implements OnInit {
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
     this.processingResults = false;
     this.processResults(response)
-  }
+  };
 
   async procesWIC() {
     const amount = this.amount
@@ -275,7 +275,7 @@ export class DSIEMVTransactionComponent implements OnInit {
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
     this.processingResults = false;
     this.processResults(response)
-  }
+  };
 
   async procesEBT() {
     const amount = this.amount
@@ -285,7 +285,7 @@ export class DSIEMVTransactionComponent implements OnInit {
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
     this.processingResults = false;
     this.processResults(response)
-  }
+  };
 
   processVoidResults(response: RStream) {
     try {
@@ -366,7 +366,7 @@ export class DSIEMVTransactionComponent implements OnInit {
             return this.orderService.getOrder(site, id, false)
           }
         )).pipe(switchMap( order => {
-            this.orderService.updateOrderSubscription(order)
+            this.orderMethodService.updateOrderSubscription(order)
             this.orderMethodService.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
             this.message = 'Payment voided. Press cancel to continue. Order is re-opened if closed.'
             this.cancel();

@@ -3,9 +3,7 @@ import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { BehaviorSubject, Observable, of, switchMap, } from 'rxjs';
 import { ISetting, ISite, IUser }   from 'src/app/_interfaces';
-
 import { InterceptorSkipHeader } from 'src/app/_http-interceptors/basic-auth.interceptor';
-
 import { AppInitService, IAppConfig } from '../system/app-init.service';
 import { PlatformService } from '../system/platform.service';
 import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
@@ -54,17 +52,16 @@ export class SitesService {
 
   }
 
-  get debugMode() { 
+  get debugMode() {
     // if (this.platformSevice.i)
     let appCache =  JSON.parse(localStorage.getItem('appCache')) as unknown as ISetting;
-    if (appCache.webEnabled) { 
+    if (appCache.webEnabled) {
       return true
     }
   }
 
   getSites():  Observable<ISite[]> {
     this.apiUrl   = this.appInitService.apiBaseUrl()
-    // console.log('apiUrl', this.apiUrl)
     const endPoint = `/CCSSites/getsites`
 
     if (!this.apiUrl) {
@@ -154,7 +151,7 @@ export class SitesService {
     try {
       let site = {} as ISite
       const url = localStorage.getItem("site.url")
-
+      // console.log('url logging into', url)
       if (!url || url == undefined) {
         this.setDefaultSite();
       }
@@ -175,7 +172,7 @@ export class SitesService {
       }
       return site
     } catch (error) {
-      console.log(error)
+      console.log('get assigned site error: ' + error)
       return null;
     }
 
@@ -225,7 +222,7 @@ export class SitesService {
     }
   }
 
- async clearAssignedSite(){
+ clearAssignedSite(){
     if (!this.platformSevice.isApp) {
       localStorage.removeItem('storedApiUrl') //, site.url)
     }
@@ -239,13 +236,15 @@ export class SitesService {
     localStorage.removeItem("site.state")//, site.phone), site.state)
     localStorage.removeItem("site.zip") //, site.phone), site.zip)
     localStorage.removeItem("site.phone") //, site.phone)
+    this.clearBucket();
+  }
+  clearBucket() { 
     localStorage.removeItem('awsbucket')
   }
 
   //matching code in app-init-service.
   getLocalApiUrl() {
     const result = localStorage.getItem('storedApiUrl')
-    // console.log('getLocalAPIURL', result)
     const site = {} as ISite;
     site.url = result
     if (result != null && result != '' ) {
@@ -253,7 +252,7 @@ export class SitesService {
     }
 
     if (this.platformSevice.isApp() ) {
-      localStorage.setItem('storedApiUrl', 'https://ccsposdemo.ddns.net/api')
+      localStorage.setItem('storedApiUrl', 'https://pointlessposdemo.com/api')
       return localStorage.getItem('storedApiUrl')
     }
   }

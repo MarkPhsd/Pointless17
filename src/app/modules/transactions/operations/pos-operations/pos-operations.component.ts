@@ -276,7 +276,7 @@ export class PosOperationsComponent implements OnInit {
         return  this.transferDataService.canCloseDay(site)
       }
     ))
-    this.orderService.clearOrderSubscription();
+    this.orderMethodsService.clearOrderSubscription();
     this.balanceSheetsClosed = ''
 
     this.closingProcedure$ = closingCheck$.pipe(

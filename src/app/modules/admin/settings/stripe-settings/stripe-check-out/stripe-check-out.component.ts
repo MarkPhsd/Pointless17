@@ -14,6 +14,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPaymentResponse, IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'stripe-check-out',
@@ -94,7 +95,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
         }
       }
     })
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data;
     })
   }
@@ -167,6 +168,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
                 private fb               : UntypedFormBuilder,
                 private stripeService    : StripeService,
                 private orderService     : OrdersService,
+                public orderMethodsService: OrderMethodsService,
                 private posPaymentService   : POSPaymentService,
                 private sitesService     : SitesService,
                 private stripePaymentService: StripePaymentService

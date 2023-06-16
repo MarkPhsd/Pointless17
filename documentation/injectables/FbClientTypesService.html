@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >FbClientTypesService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >FbClientTypesService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -84,6 +91,9 @@
                             <li>
                                 <a href="#initForm" >initForm</a>
                             </li>
+                            <li>
+                                <a href="#initUserAuthForm" >initUserAuthForm</a>
+                            </li>
                         </ul>
                     </td>
                 </tr>
@@ -96,18 +106,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(_fb: <a href="https://angular.io/api/forms/FormBuilder" target="_blank">FormBuilder</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, clientTypeService: <a href="../injectables/ClientTypeService.html" target="_self">ClientTypeService</a>)</code>
+<code>constructor(_fb: UntypedFormBuilder, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, clientTypeService: <a href="../injectables/ClientTypeService.html" target="_self">ClientTypeService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">src/app/_form-builder/fb-client-types.service.ts:12</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/app/_form-builder/fb-client-types.service.ts:11</a></div>
                             </td>
                         </tr>
 
@@ -128,7 +138,7 @@
                                                         <td>_fb</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/forms/FormBuilder" target="_blank" >FormBuilder</a></code>
+                                                                    <code>UntypedFormBuilder</code>
                                                         </td>
                                                   
                                                     <td>
@@ -169,7 +179,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -189,15 +199,15 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>fillForm(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, form: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+                    <code>fillForm(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, form: UntypedFormGroup)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="39"
-                            class="link-to-prism">src/app/_form-builder/fb-client-types.service.ts:39</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="105"
+                            class="link-to-prism">src/app/_form-builder/fb-client-types.service.ts:105</a></div>
                 </td>
             </tr>
 
@@ -207,6 +217,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -231,7 +242,7 @@
                                 <tr>
                                     <td>form</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -269,7 +280,76 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>initForm(fb: <a href="https://angular.io/api/forms/FormGroup" target="_blank">FormGroup</a>)</code>
+<code>initForm(fb: UntypedFormGroup)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="80"
+                            class="link-to-prism">src/app/_form-builder/fb-client-types.service.ts:80</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>fb</td>
+                                    <td>
+                                            <code>UntypedFormGroup</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>UntypedFormGroup</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initUserAuthForm"></a>
+                    <span class="name">
+                        <span ><b>initUserAuthForm</b></span>
+                        <a href="#initUserAuthForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initUserAuthForm(fb: UntypedFormGroup)</code>
                 </td>
             </tr>
 
@@ -287,6 +367,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -299,7 +380,7 @@
                                 <tr>
                                     <td>fb</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                                            <code>UntypedFormGroup</code>
                                     </td>
 
                                     <td>
@@ -314,7 +395,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+                        <b>Returns : </b>    <code>UntypedFormGroup</code>
 
                     </div>
                     <div class="io-description">
@@ -329,10 +410,9 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ReturnStatement } from &#x27;@angular/compiler&#x27;;
-import { Injectable } from &#x27;@angular/core&#x27;;
-import { FormBuilder, FormGroup } from &#x27;@angular/forms&#x27;;
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { UntypedFormBuilder, UntypedFormGroup } from &#x27;@angular/forms&#x27;;
 import { tap } from &#x27;rxjs/operators&#x27;;
 
 import { ClientTypeService } from &#x27;src/app/_services/people/client-type.service&#x27;;
@@ -343,32 +423,99 @@ import { SitesService } from &#x27;../_services/reporting/sites.service&#x27;;
 })
 export class FbClientTypesService {
 
-  constructor(private _fb: FormBuilder,
+  constructor(private _fb: UntypedFormBuilder,
     private siteService: SitesService,
     private clientTypeService: ClientTypeService,
   ) { }
 
-  initForm(fb: FormGroup): FormGroup {
-    // const serializedDate &#x3D; new Date(user?.dob)
+
+  initUserAuthForm(fb: UntypedFormGroup): UntypedFormGroup {
+    fb &#x3D; this._fb.group({
+
+      voidOrder            : [],
+      voidItem             : [],
+      voidPayment          : [],
+      houseAccountPayment  : [],
+      changeItemPrice      : [],
+      changeInventoryValue : [],
+      blindBalanceSheet    : [],
+      blindClose           : [],
+
+      // &#x27;admin section
+      closeDay             : [],
+      sendTextBlast        : [],
+      sendEmailBlast       : [],
+      deleteClientType     : [],
+
+      accessHistoryReports : [],
+      accessDailyReport    : [],
+
+      // &#x27;metrc work
+      importMETRCPackages : [],
+
+    // &#x27;inventory work
+      adjustInventory     : [],
+
+    // &#x27;product work
+      adjustInventoryCount: [],
+      adjustProductCount  : [],
+
+      // &#x27;add non customer types
+      addEmployee         : [],
+      changeClientType    : [],
+
+      changeAuths         : [],
+      accessAdmins        : [],
+
+      refundItem      : [],
+      refundOrder     : [],
+      refundPayment   : [],
+
+      userAssignedBalanceSheet : [],
+      searchBalanceSheets      : [],
+      deleteInventory: [],
+      deleteProduct: [],
+      deleteEmployee: [],
+      uploadPictures: [],
+      priceColumnOption: [],
+
+      allowNegativeTransaction: [],
+      allowZeroTransaction: [],
+      allowSuspendTransaction:[],
+
+      editProduct: [],
+      intakeInventory: [],
+    })
+    return fb
+
+  }
+
+  initForm(fb: UntypedFormGroup): UntypedFormGroup {
+
          fb &#x3D; this._fb.group({
-            id:                [&#x27;&#x27;], //
-            name:              [&#x27;&#x27;], //
-            pointValue:        [&#x27;&#x27;], //
-            dailyCredit:       [&#x27;&#x27;], //
-            dailyLimit:        [&#x27;&#x27;], //
-            limitSeeds:        [&#x27;&#x27;], //
-            limitPlants:       [&#x27;&#x27;], //
-            limitLiquid:       [&#x27;&#x27;], //
-            limitSolid:        [&#x27;&#x27;], //
-            limitConcentrate:  [&#x27;&#x27;], //
-            limitExtract:      [&#x27;&#x27;], //
-            limitConcentrates: [&#x27;&#x27;], //
+            id: [],
+            name: [],
+            pointValue: [],
+            dailyCredit: [],
+            dailyLimit: [],
+            limitGram : [],
+            limitSeeds: [],
+            limitPlants: [],
+            limitLiquid: [],
+            limitSolid: [],
+            limitConcentrate: [],
+            limitExtract: [],
+            limitConcentrates: [],
+            limitCombinedCategory: [],
+            allowStaffUse: [],
+            authorizationGroupID: [],
+            jsonObject       : [],
           }
         )
         return fb
     }
 
-    async  fillForm(id: number, form: FormGroup): Promise&lt;any&gt; {
+    async  fillForm(id: number, form: UntypedFormGroup): Promise&lt;any&gt; {
 
       const site &#x3D;  this.siteService.getAssignedSite();
 
@@ -392,14 +539,15 @@ export class FbClientTypesService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -411,6 +559,15 @@ export class FbClientTypesService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -420,8 +577,8 @@ export class FbClientTypesService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

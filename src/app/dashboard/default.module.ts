@@ -96,6 +96,8 @@ import { TaxListComponent } from '../modules/admin/products/taxes/tax-list/tax-l
 
 import { DatabaseSchemaComponent } from '../modules/admin/settings/database/database-schema/database-schema.component';
 import { CSVImportComponent } from '../modules/admin/settings/database/csv-import/csv-import.component';
+// import { ProductFilterComponent } from './widgets/product-filter/product-filter.component';
+// import { CategorySelectListFilterComponent } from './widgets/category-select-list-filter/category-select-list-filter.component';
 
 import { InstalledPrintersComponent } from '../modules/admin/settings/printing/installed-printers/installed-printers.component';
 import { MenuItemsInfiniteComponent } from '../modules/menu/menuitems/menu-items-infinite/menu-items-infinite.component';
@@ -378,6 +380,9 @@ import { PurchaseItemSalesComponent } from '../modules/posorders/pos-order/purch
 import { PurchaseItemCostHistoryComponent } from '../modules/posorders/pos-order/purchase-item-cost-history/purchase-item-cost-history.component';
 import { ClientInfoComponent } from '../modules/posorders/client-info/client-info.component';
 import { NgxColorsModule } from 'ngx-colors';
+import { CategorySelectListFilterComponent } from '../shared/widgets/category-select-list-filter/category-select-list-filter.component';
+import { ProductFilterComponent } from '../shared/widgets/product-filter/product-filter.component';
+import { OptionsSelectFilterComponent } from '../shared/widgets/options-select-filter/options-select-filter.component';
 // import { PointlessReportingLibModule } from 'projects/pointess-reporting-lib/src/public-api';
 // import { ColorPickerModule } from 'ngx-color-picker';
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
@@ -478,6 +483,12 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PriceCategoryTimeFiltersComponent,
     LinkedPriceSelectorComponent,
     PriceCategoriesComponent,
+
+    //ProductFilterComponent
+    ProductFilterComponent,
+    CategorySelectListFilterComponent,
+    OptionsSelectFilterComponent,
+    //*** */
 
     WicEBTCardPayBtnComponent,
     TriPOSCardPayBtnComponent,
@@ -825,34 +836,33 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   providers: [
     AgGridService,
     AnimationCountService,
-    AuthenticationService,
-    AWSBucketService,
-    ClientTypeService,
-    ContactsService,
-    DashboardService,
     DatePipe,
-    DevService,
-    EmployeeService,
-    InventoryLocationsService,
-    ItemsService,
-    OrderMethodsService,
-    PrepPrintingServiceService,
-    LabelaryService,
     LoggingInterceptor,
-    MenuService,
-    PrintingService,
-    ReportingService,
-    ReviewsService,
-    SettingsService,
-    ServiceTypeService,
-    InventoryAssignmentService,
-    TextMessagingService,
-    ThemesService,
-    UserService,
-    ItemTypeService,
-    ViewComponent,
-    RoomLayoutDesignerComponent,
-    PrintingService,
+    // AuthenticationService,
+    // AWSBucketService,
+    // ClientTypeService,
+    // ContactsService,
+    // DashboardService,
+    // DevService,
+    // EmployeeService,
+    // InventoryLocationsService,
+    // ItemsService,
+    // PrepPrintingServiceService,
+    // LabelaryService,
+    // MenuService,
+    // PrintingService,
+    // ReportingService,
+    // ReviewsService,
+    // SettingsService,
+    // ServiceTypeService,
+    // InventoryAssignmentService,
+    // TextMessagingService,
+    // ThemesService,
+    // UserService,
+    // ItemTypeService,
+    // ViewComponent,
+    // RoomLayoutDesignerComponent,
+    // PrintingService,
    {provide: RouteReuseStrategy , useClass: RouteReuseService},
 
   ],

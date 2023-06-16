@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup, FormGroupDirective,UntypedFormControl ,NgForm, UntypedFormBuilder} from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Observable, switchMap, of } from 'rxjs';
-import { clientType, ISetting } from 'src/app/_interfaces';
+import { clientType, IProductCategory, IServiceType, ISetting } from 'src/app/_interfaces';
+import { AuthenticationService, MenuService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
 @Component({
   selector: 'app-uitransactions',
@@ -28,20 +30,27 @@ export class UITransactionsComponent implements OnInit {
   clientTypes     : clientType[];
   vipCustomer$    : Observable<any>;
   action$         : Observable<unknown>;
+  serviceType$    : Observable<IServiceType[]>;
+  categories$:  Observable<IProductCategory[]>;
 
   constructor(
       private uISettingsService: UISettingsService,
       private settingService   : SettingsService,
+      private serviceTypeService: ServiceTypeService,
       private clientTypeService: ClientTypeService,
       private sitesService     : SitesService,
       private clienTableSerivce: ClientTableService,
+      private menuService: MenuService,
       private fb: UntypedFormBuilder,
+      private authenticationService: AuthenticationService,
   ) {
   }
 
   ngOnInit() {
     const site           = this.sitesService.getAssignedSite();
     this.clientTypes$    = this.clientTypeService.getClientTypes(site);
+    this.serviceType$    = this.serviceTypeService.getAllServiceTypes(site)
+    this.categories$     = this.menuService.getCategoryListNoChildren(site);
     this.initUITransactionSettings()
     this.saving$  = null;
 
@@ -63,7 +72,7 @@ export class UITransactionsComponent implements OnInit {
     }));
   }
 
-  initFormData(data: TransactionUISettings) { 
+  initFormData(data: TransactionUISettings) {
     this.inputForm = this.uISettingsService.initForm(this.inputForm);
       if (data && data) {
         this.payPalEnabled = this.uiTransactions.payPalEnabled
@@ -75,7 +84,7 @@ export class UITransactionsComponent implements OnInit {
         this.payPalEnabled = this.uiTransactions.payPalEnabled
         this.vipCustomer$ = null;
       }
-  } 
+  }
 
   updateSetting(){
     if (!this.validateForm(this.inputForm)) {
@@ -97,15 +106,20 @@ export class UITransactionsComponent implements OnInit {
   }
 
 
-  resetTransactionSettings() { 
-    this.action$ = this.settingService.resetUITransactionSettings().pipe(switchMap(data => { 
+  resetTransactionSettings() {
+    if (!this.authenticationService.isAdmin) { 
+      this.sitesService.notify('Not authorized', 'Close', 2000)
+    } 
+    const confirm = window.confirm('Resetting will remove all settings, email etc. You may want to backup your database before doing this. If your cache is enabled you may have to wait for a refresh. Please confirm')
+    if (!confirm) {return}
+    this.action$ = this.settingService.resetUITransactionSettings().pipe(switchMap(data => {
       this.initFormData(data)
       this.uiTransactions = data;
       this.uISettingsService.updateUISubscription(data);
       return of(data)
     }))
-  } 
-  
+  }
+
   getVipClient(id){
     if (id) {
       this.vipCustomer$ = this.clienTableSerivce.getClient(this.sitesService.getAssignedSite(), id)

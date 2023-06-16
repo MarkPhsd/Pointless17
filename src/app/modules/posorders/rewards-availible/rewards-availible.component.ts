@@ -63,7 +63,7 @@ export class RewardsAvailibleComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const i =0;
-    this._order = this.orderService.currentOrder$.subscribe(data => {
+    this._order = this.orderMethodsService.currentOrder$.subscribe(data => {
         this.order = data;
         this.list = null;
         if (!data) {
@@ -108,6 +108,7 @@ export class RewardsAvailibleComponent implements OnInit, OnDestroy {
     const site = this.siteService.getAssignedSite()
     return this.rewardsAvailibleService.getClientAvailableItems(site, clientID, orderID).pipe(
       switchMap(rewards => {
+          if (!rewards || !rewards.results) { return of(null)}
           this.list = rewards.results as RewardsAvailable[];
           this.results = []
           if (!this.list) { return of('') };

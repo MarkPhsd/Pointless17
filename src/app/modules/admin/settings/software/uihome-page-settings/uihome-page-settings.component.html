@@ -112,12 +112,12 @@
             <mat-label>Suppress Items in Categories (For Food Service)</mat-label>
           </mat-slide-toggle>
         </div>
-        
+
 
         <div class="grid-view-sections">
           <div class="grid-views">
-            <div>Customer View </div>
 
+            <h4><mat-icon color="primary" style="margin-top:5px">home</mat-icon>Home Page Customer View</h4>
             <div class="toggle-fields">
               <mat-slide-toggle
                         formControlName="hideSearchBar"
@@ -141,9 +141,6 @@
                 <mat-label>Sub Menus On Side Bar</mat-label>
               </mat-slide-toggle>
             </div>
-
-            <!-- scheduleSubMenu       : [],
-            staffscheduleSubMenu  : [], -->
 
             <div class="toggle-fields">
               <mat-slide-toggle
@@ -185,10 +182,21 @@
               </mat-slide-toggle>
             </div>
 
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        [matTooltip]="toolTips[0].value"
+                        formControlName="storeNavigation"
+                        >
+                <mat-label> Store Navigation</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+
           </div>
 
           <div class="grid-views">
-            <div>Staff View </div>
+
+            <h4><mat-icon color="primary" style="margin-top:5px">home</mat-icon>Home Page Staff View</h4>
 
             <div class="toggle-fields">
               <mat-slide-toggle
@@ -255,11 +263,8 @@
             </div>
           </div>
 
-      
-
           <div class="grid-views">
-            <div>Side Bar (Search)</div>
-
+            <h4><mat-icon color="primary" style="margin-top:5px">search</mat-icon>Side Bar</h4>
             <div class="toggle-fields">
               <mat-slide-toggle
                         formControlName="sideToolbarDefaultBrand"
@@ -286,6 +291,76 @@
                         formControlName="sideToolbarEnableCategory"
                         >
                 <mat-label>Enable Category</mat-label>
+              </mat-slide-toggle>
+            </div>
+          </div>
+
+          <div class="grid-views">
+            <h4><mat-icon color="primary" style="margin-top:5px">manage_search</mat-icon>Product Filter Options</h4>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="subCategoryFilter"
+                        >
+                <mat-label>Sub Category</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="categoryFilter"
+                        >
+                <mat-label>Category</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="departmentFilter"
+                        >
+                <mat-label>Department</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+
+                        formControlName="itemTypeFilter"
+                        >
+                <mat-label>Item Type</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="brandFilter"
+                        >
+                <mat-label>Brand</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="gluetenFilter"
+                        >
+                <mat-label>Glueten</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="speciesFilter"
+                        >
+                <mat-label>Species</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="sizeFilter"
+                        >
+                <mat-label>Size</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="colorFilter"
+                        >
+                <mat-label>Color</mat-label>
               </mat-slide-toggle>
             </div>
           </div>

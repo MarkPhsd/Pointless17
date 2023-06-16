@@ -1,0 +1,839 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >PointlessCCDSIEMVAndroidService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/modules/payment-processing/services/dsiemvandroid.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#saving" >saving</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#transaction" >transaction</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#dsiEMVReset" >dsiEMVReset</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getDeviceInfo" >getDeviceInfo</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getIPAddress" >getIPAddress</a>
+                            </li>
+                            <li>
+                                <a href="#getSettings" >getSettings</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#listBTDevices" >listBTDevices</a>
+                            </li>
+                            <li>
+                                <a href="#saveDSIEMVSetting" >saveDSIEMVSetting</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#defaultTransaction" >defaultTransaction</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(jsonService: <a href="../s/s.html" target="_self">NgxXml2jsonService</a>, settingService: <a href="../injectables/SettingsService.html" target="_self">SettingsService</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/modules/payment-processing/services/dsiemvandroid.service.ts:16</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>jsonService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../miscellaneous/variables.html#s" target="_self" >NgxXml2jsonService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>settingService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SettingsService.html" target="_self" >SettingsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>siteService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SitesService.html" target="_self" >SitesService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dsiEMVReset"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>dsiEMVReset</b></span>
+                        <a href="#dsiEMVReset"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>dsiEMVReset()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="162"
+                            class="link-to-prism">src/app/modules/payment-processing/services/dsiemvandroid.service.ts:162</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>unknown</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDeviceInfo"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>getDeviceInfo</b></span>
+                        <a href="#getDeviceInfo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getDeviceInfo()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="131"
+                            class="link-to-prism">src/app/modules/payment-processing/services/dsiemvandroid.service.ts:131</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>unknown</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getIPAddress"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>getIPAddress</b></span>
+                        <a href="#getIPAddress"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getIPAddress()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="151"
+                            class="link-to-prism">src/app/modules/payment-processing/services/dsiemvandroid.service.ts:151</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>unknown</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getSettings"></a>
+                    <span class="name">
+                        <span ><b>getSettings</b></span>
+                        <a href="#getSettings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getSettings()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="89"
+                            class="link-to-prism">src/app/modules/payment-processing/services/dsiemvandroid.service.ts:89</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;Transaction&gt;</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="listBTDevices"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>listBTDevices</b></span>
+                        <a href="#listBTDevices"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>listBTDevices()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="123"
+                            class="link-to-prism">src/app/modules/payment-processing/services/dsiemvandroid.service.ts:123</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>unknown</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="saveDSIEMVSetting"></a>
+                    <span class="name">
+                        <span ><b>saveDSIEMVSetting</b></span>
+                        <a href="#saveDSIEMVSetting"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>saveDSIEMVSetting(transaction: <a href="../interfaces/Transaction.html" target="_self">Transaction</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="24"
+                            class="link-to-prism">src/app/modules/payment-processing/services/dsiemvandroid.service.ts:24</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>transaction</td>
+                                    <td>
+                                                <code><a href="../interfaces/Transaction.html" target="_self" >Transaction</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="saving"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>saving</b></span>
+                        <a href="#saving"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/modules/payment-processing/services/dsiemvandroid.service.ts:16</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="transaction"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>transaction</b></span>
+                        <a href="#transaction"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Transaction.html" target="_self" >Transaction</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/modules/payment-processing/services/dsiemvandroid.service.ts:15</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="defaultTransaction"></a>
+                        <span class="name"><b>defaultTransaction</b><a href="#defaultTransaction"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>defaultTransaction()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/modules/payment-processing/services/dsiemvandroid.service.ts:55</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { Transaction } from &#x27;./../models/models&#x27;
+import { dsiemvandroid } from &#x27;dsiemvandroidplugin&#x27;;
+//https://npm.io/package/ngx-xml-to-json update forupgrade.
+
+import { SettingsService } from &#x27;src/app/_services/system/settings.service&#x27;;
+import { SitesService } from &#x27;src/app/_services/reporting/sites.service&#x27;;
+import { ISetting } from &#x27;src/app/_interfaces&#x27;;
+import { Observable, of, switchMap } from &#x27;rxjs&#x27;;
+import { NgxXml2jsonService } from &#x27;ngx-xml2json&#x27;;
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class PointlessCCDSIEMVAndroidService {
+  public transaction: Transaction;
+  public saving: boolean;
+
+  constructor(
+    private jsonService   : NgxXml2jsonService,
+    private settingService: SettingsService,
+    private siteService   : SitesService,
+  ) { }
+
+  saveDSIEMVSetting(transaction: Transaction) {
+    const site &#x3D; this.siteService.getAssignedSite();
+
+    let setting &#x3D; {} as ISetting;
+    const name &#x3D; &#x27;DSIEMVAndroidSetting&#x27;;
+
+    const setting$ &#x3D; this.settingService.getSettingByName(site, name)
+
+    const value &#x3D; JSON.stringify(transaction);
+    this.saving &#x3D; true
+    return setting$.pipe(
+      switchMap( data &#x3D;&gt; {
+        data.text &#x3D; value
+        this.saving  &#x3D; false
+        return this.settingService.saveSetting(site, data)
+      }
+    )).pipe(
+      switchMap(data &#x3D;&gt; {
+        if (data) {
+          this.transaction &#x3D; JSON.parse(data.text)  as Transaction;
+        }
+        if (!data) {
+          const item &#x3D; this.defaultTransaction as Transaction;
+          this.transaction &#x3D; this.defaultTransaction  as Transaction;
+        }
+        return of(this.transaction)
+      })
+    );
+
+  }
+
+  get defaultTransaction() {
+    return {
+      merchantID: &#x27;CROSSCHAL1GD&#x27;,
+      userTrace: &#x27;User&#x27;,
+      pOSPackageID: &#x27;PointlessPOS1.54.3&#x27;,
+      tranCode: &#x27;EMVSale&#x27;,
+      secureDevice: &#x27;EMV_VP3300_DATACAP&#x27;,
+      invoiceNo: &#x27;100&#x27;,
+      amount: &#x27;1.00&#x27;,
+      sequenceNo: &#x27;0010010010&#x27;,
+      bluetoothDeviceName: &#x27;&#x27;,
+      operationMode: &#x27;cert&#x27;,
+      recordNo: &#x27;RecordNumberRequested&#x27;,
+      refNo: &#x27;1&#x27;,
+      pinPadIpAddress: &#x27;&#x27;,
+      padPort: &#x27;1200&#x27;,
+    }
+  }
+
+ //   merchantID: string;
+  //  userTrace: string;
+  //  pOSPackageID: string;
+  //  tranCode: string;
+  //  secureDevice: string;
+  //  invoiceNo: string;
+  //  amount: string;
+  //  sequenceNo: string;
+  //  bluetoothDeviceName: string;
+  //  operationMode: string;
+  //  recordNo: string;
+  //  refNo: string;
+  //  pinPadIpAddress: string;
+  //  padPort: string;
+
+  getSettings():  Observable&lt;Transaction&gt; {
+    const site &#x3D; this.siteService.getAssignedSite();
+
+    const setting &#x3D; localStorage.getItem(&#x27;dsiEMVAndroidSettings&#x27;)
+    if (setting) {
+      this.transaction &#x3D; JSON.parse(setting) as Transaction;
+    }
+
+    const name &#x3D; &#x27;DSIEMVAndroidSetting&#x27;;
+    const setting$ &#x3D; this.settingService.getSettingByName(site, name)
+
+    const result$ &#x3D; setting$.pipe(
+      switchMap( data &#x3D;&gt; {
+        if (!data) {
+          const name &#x3D; &#x27;DSIEMVAndroidSetting&#x27;;
+          return this.settingService.saveSettingObservable(site, data)
+        }
+        if (data) {
+          return of(data)
+        }
+      }
+    )).pipe(
+      switchMap(data &#x3D;&gt; {
+        if (!data.text) {
+          this.transaction &#x3D; {} as Transaction;
+          return of(this.transaction)
+        }
+        this.transaction &#x3D; JSON.parse(data.text) as Transaction;
+        return of(this.transaction)
+    }));
+
+    return result$
+  }
+
+  async  listBTDevices() {
+    const options &#x3D; {value: &#x27;test&#x27;};
+    const items &#x3D; await dsiemvandroid.plugInSearchForBt(options)
+    // let items: any;
+    const list &#x3D; items.value.replace(&#x27;null&#x27;, &#x27;&#x27;).split(&#x27;;&#x27;)
+    return list;
+  }
+
+  async getDeviceInfo() {
+    try {
+      const options &#x3D; this.transaction as Transaction;
+      options.merchantID &#x3D; options.merchantID;
+      options.pinPadIpAddress &#x3D; options.pinPadIpAddress;
+      options.padPort &#x3D; options.padPort;
+      // let item: any;
+      const item    &#x3D; await dsiemvandroid.getDeviceInfo(options);
+      const results &#x3D; item as any;
+      const parser &#x3D; new DOMParser();
+      results.value &#x3D; results.value.replace(&#x27;#&#x27;, &#x27;&#x27;)
+      const xml &#x3D; parser.parseFromString(results.value, &#x27;text/xml&#x27;);
+      const obj &#x3D; this.jsonService.xmlToJson(xml) as any;
+      return obj;
+
+    } catch (error) {
+      return error
+    }
+  }
+
+  async getIPAddress() {
+    try {
+      const options &#x3D; { value: &#x27; value.&#x27;}
+      const item &#x3D; await dsiemvandroid.getIPAddressPlugin(options)
+      // let item: any;
+      return item?.value;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async dsiEMVReset() {
+    try {
+      const setting &#x3D; this.transaction as Transaction;
+      let options &#x3D; {} as any;
+      options &#x3D;  { bluetoothDeviceName: setting.bluetoothDeviceName, secureDevice: setting.secureDevice, merchantID: setting.merchantID,
+                   pinPadIpAddress: setting.pinPadIpAddress, padPort: setting.padPort }
+      const item &#x3D; await dsiemvandroid.emvPadReset(options)
+      // let item: any;
+      return item;
+    } catch (error) {
+      return error;
+    }
+  }
+
+
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'PointlessCCDSIEMVAndroidService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

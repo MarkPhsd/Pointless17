@@ -1,0 +1,832 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >PrepPrintingServiceService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_services/system/prep-printing-service.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#printOrders" >printOrders</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#appyStylesCachedObservable" >appyStylesCachedObservable</a>
+                            </li>
+                            <li>
+                                <a href="#printElectronTemplateOrder" >printElectronTemplateOrder</a>
+                            </li>
+                            <li>
+                                <a href="#printLocations" >printLocations</a>
+                            </li>
+                            <li>
+                                <a href="#setHTMLReceiptStyle" >setHTMLReceiptStyle</a>
+                            </li>
+                            <li>
+                                <a href="#setOrder" >setOrder</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(locationsService: <a href="../injectables/PrinterLocationsService.html" target="_self">PrinterLocationsService</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, dialog: MatDialog, settingService: <a href="../injectables/SettingsService.html" target="_self">SettingsService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/_services/system/prep-printing-service.service.ts:17</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>locationsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/PrinterLocationsService.html" target="_self" >PrinterLocationsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>siteService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SitesService.html" target="_self" >SitesService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dialog</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatDialog</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>settingService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SettingsService.html" target="_self" >SettingsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appyStylesCachedObservable"></a>
+                    <span class="name">
+                        <span ><b>appyStylesCachedObservable</b></span>
+                        <a href="#appyStylesCachedObservable"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>appyStylesCachedObservable(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="92"
+                            class="link-to-prism">src/app/_services/system/prep-printing-service.service.ts:92</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/ISetting.html" target="_self" >Observable&lt;ISetting&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="printElectronTemplateOrder"></a>
+                    <span class="name">
+                        <span ><b>printElectronTemplateOrder</b></span>
+                        <a href="#printElectronTemplateOrder"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>printElectronTemplateOrder(printOrderList: <a href="../interfaces/IPrintOrders.html" target="_self">IPrintOrders[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="72"
+                            class="link-to-prism">src/app/_services/system/prep-printing-service.service.ts:72</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>printOrderList</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPrintOrders.html" target="_self" >IPrintOrders[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="printLocations"></a>
+                    <span class="name">
+                        <span ><b>printLocations</b></span>
+                        <a href="#printLocations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>printLocations(order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>, printUnPrintedOnly: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="26"
+                            class="link-to-prism">src/app/_services/system/prep-printing-service.service.ts:26</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>order</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPOSOrder.html" target="_self" >IPOSOrder</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>printUnPrintedOnly</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setHTMLReceiptStyle"></a>
+                    <span class="name">
+                        <span ><b>setHTMLReceiptStyle</b></span>
+                        <a href="#setHTMLReceiptStyle"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setHTMLReceiptStyle(receiptStyle)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="102"
+                            class="link-to-prism">src/app/_services/system/prep-printing-service.service.ts:102</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>receiptStyle</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setOrder"></a>
+                    <span class="name">
+                        <span ><b>setOrder</b></span>
+                        <a href="#setOrder"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setOrder(newItems: <a href="../s/s.html" target="_self">PosOrderItem[]</a>, order: <a href="../interfaces/IPOSOrder.html" target="_self">IPOSOrder</a>, location: <a href="../interfaces/IPrinterLocation.html" target="_self">IPrinterLocation</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="112"
+                            class="link-to-prism">src/app/_services/system/prep-printing-service.service.ts:112</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>newItems</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >PosOrderItem[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>order</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPOSOrder.html" target="_self" >IPOSOrder</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>location</td>
+                                    <td>
+                                                <code><a href="../interfaces/IPrinterLocation.html" target="_self" >IPrinterLocation</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IPrintOrders.html" target="_self" >IPrintOrders</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="printOrders"></a>
+                    <span class="name">
+                        <span ><b>printOrders</b></span>
+                        <a href="#printOrders"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IPrintOrders.html" target="_self" >IPrintOrders[]</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/_services/system/prep-printing-service.service.ts:17</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { E } from &#x27;@angular/cdk/keycodes&#x27;;
+import { Injectable } from &#x27;@angular/core&#x27;;
+import { MatDialog } from &#x27;@angular/material/dialog&#x27;;
+import { catchError, Observable, of, switchMap } from &#x27;rxjs&#x27;;
+import { PrintTemplatePopUpComponent } from &#x27;src/app/modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component&#x27;;
+import { IPOSOrder, ISetting, ISite, PosOrderItem } from &#x27;src/app/_interfaces&#x27;;
+import { IPrintOrders } from &#x27;src/app/_interfaces/transactions/printServiceOrder&#x27;;
+import { IPrinterLocation, PrinterLocationsService } from &#x27;../menu/printer-locations.service&#x27;;
+import { SitesService } from &#x27;../reporting/sites.service&#x27;;
+import { SettingsService } from &#x27;./settings.service&#x27;;
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class PrepPrintingServiceService {
+
+  printOrders : IPrintOrders[];
+
+  constructor(
+              private locationsService: PrinterLocationsService,
+              private siteService: SitesService,
+              private dialog            : MatDialog,
+              private settingService: SettingsService,
+              ) { }
+
+  printLocations(order: IPOSOrder, printUnPrintedOnly: boolean): Observable&lt;any&gt; {
+
+    const site &#x3D; this.siteService.getAssignedSite();
+    const locations$ &#x3D; this.locationsService.getLocations();
+    const printOrders &#x3D; [] as IPrintOrders[]
+    const posItems  &#x3D; order.posOrderItems;
+
+    const result$ &#x3D; locations$.pipe(switchMap(data &#x3D;&gt; {
+      return of(data);
+    })).pipe(switchMap(data &#x3D;&gt; {
+        data.forEach(location &#x3D;&gt; {
+          const newItems &#x3D; [] as PosOrderItem[];
+          posItems.forEach(data &#x3D;&gt; {
+
+            if (printUnPrintedOnly) {
+              {if(data.printLocation &#x3D;&#x3D; location.id &amp;&amp; !data.printed) {
+                  newItems.push(data)
+              }}
+            } else {
+              {if(data.printLocation &#x3D;&#x3D; location.id) {
+                  newItems.push(data)
+              }}
+            }
+            
+            }
+          )
+
+          if (newItems.length &gt; 0) {
+            const item &#x3D; this.setOrder(newItems, order, location)
+            printOrders.push(item)
+          }
+        }
+      )
+
+      return of(printOrders)
+    })).pipe(switchMap(printOrders &#x3D;&gt; {
+      if (!printOrders || printOrders.length &#x3D;&#x3D; 0) { return of(null)}
+      return this.printElectronTemplateOrder(printOrders)
+    }),catchError(data &#x3D;&gt; {
+      this.siteService.notify(&#x27;Error in printing&#x27; + data.toString(), &#x27;Close&#x27;, 5000, &#x27;red&#x27;)
+      return of(data)
+    }))
+
+    return result$
+  }
+
+  printElectronTemplateOrder(printOrderList:IPrintOrders[]): Observable&lt;any&gt; {
+    try {
+      const site &#x3D; this.siteService.getAssignedSite()
+      const styles$ &#x3D; this.appyStylesCachedObservable(site)
+      return styles$.pipe(switchMap(data &#x3D;&gt; {
+        return this.dialog.open(PrintTemplatePopUpComponent,
+          { width:        &#x27;450px&#x27;,
+            minWidth:     &#x27;450px&#x27;,
+            height:       &#x27;600px&#x27;,
+            minHeight:    &#x27;600px&#x27;,
+            data : printOrderList
+          },
+          ).afterClosed()
+      }))
+    } catch (error) {
+      this.siteService.notify(&#x27;error printElectronTemplateOrder :&#x27; + error.toString(), &#x27;close&#x27;, 5000, &#x27;red&#x27;)
+    }
+    return of(null)
+  }
+
+  appyStylesCachedObservable(site: ISite): Observable&lt;ISetting&gt; {
+    const receiptStyle$ &#x3D; this.settingService.getSettingByNameCachedNoRoles(site, &#x27;ReceiptStyles&#x27;)
+    return  receiptStyle$.pipe(
+      switchMap( data &#x3D;&gt; {
+          return of(this.setHTMLReceiptStyle(data))
+        }
+      )
+    )
+  }
+
+  setHTMLReceiptStyle(receiptStyle) {
+    if (receiptStyle) {
+      const style &#x3D; document.createElement(&#x27;style&#x27;);
+      style.innerHTML &#x3D; receiptStyle.text;
+      document.head.appendChild(style);
+      return receiptStyle
+    }
+    return null;
+  }
+
+  setOrder(newItems: PosOrderItem[], order: IPOSOrder, location: IPrinterLocation): IPrintOrders {
+    let newOrder &#x3D; { ...order };
+    newOrder.posOrderItems &#x3D; newItems
+    const item &#x3D; {} as IPrintOrders;
+    item.location &#x3D; location;
+    item.order &#x3D; newOrder;
+    return item
+  }
+
+
+
+
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'PrepPrintingServiceService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

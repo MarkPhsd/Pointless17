@@ -35,16 +35,24 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     this.voids$ = null;
     this.refunds$ = null;
     this.sales$ = null;
-    if (this.type != 'refunds' && this.type != 'voids') {
+
+    if (this.type === 'service') {
       this.refreshSales();
     }
+
+    if (this.type != 'refunds' && this.type != 'voids' ) {
+      this.refreshSales();
+    }
+
     if (this.type === 'sales') {
       this.refreshRefunds();
       this.refreshVoids();
     }
+
     if (this.type == 'refunds') {
       this.refreshRefunds();
     }
+
     if (this.type == 'voids') {
       this.refreshVoids();
     }
@@ -70,6 +78,16 @@ export class PaymentReportComponent implements OnInit, OnChanges {
   }
 
   refreshVoids() {
+    const searchModel = {} as IPaymentSalesSearchModel;
+    searchModel.startDate = this.dateFrom;
+    searchModel.endDate   = this.dateTo;
+    searchModel.groupBy   = this.groupBy;
+    searchModel.zrunID    = this.zrunID;
+    searchModel.voids     = true
+    this.voids$         = this.salesPaymentService.getPaymentSales(this.site, searchModel);
+  }
+
+  refreshService() {
     const searchModel = {} as IPaymentSalesSearchModel;
     searchModel.startDate = this.dateFrom;
     searchModel.endDate   = this.dateTo;

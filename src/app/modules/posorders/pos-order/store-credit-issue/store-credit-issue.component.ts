@@ -64,7 +64,7 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
     }
 
     try {
-      this._order = this.orderService.currentOrder$.subscribe( data => {
+      this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
         this.order = data
       })
     } catch (error) {
@@ -110,7 +110,7 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
     private fb: UntypedFormBuilder,
     private orderMethodService       : OrderMethodsService,
     private storeCreditMethodService : StoreCreditMethodsService,
-    private orderService             : OrdersService,
+    public orderMethodsService       : OrderMethodsService,
     private posOrderItemService      : POSOrderItemService,
     private siteService              : SitesService,
     private dialogRef                : MatDialogRef<StoreCreditIssueComponent>,
@@ -210,7 +210,7 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
         if (data) {
           if (data.resultMessage) {this.siteService.notify(data.resultMessage, 'Alert', 1500, 'red')}
         }
-        this.orderService.updateOrderSubscription(data)
+        this.orderMethodsService.updateOrderSubscription(data)
         this.toggleKeyValue = false
         return of(data)
       })

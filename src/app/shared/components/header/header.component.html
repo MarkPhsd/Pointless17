@@ -89,9 +89,9 @@
 
         <li *ngIf="!smallDevice">
           <div class="pos-name"
-                *ngIf="(orderService && orderService.posName && showSearchForm) "
+                *ngIf="(orderService && orderMethodsService.posName && showSearchForm) "
                 id="pos-name">
-            <h2 > | {{ orderService?.posName.substr(0, 5) }} | </h2>
+            <h2 > | {{ orderMethodsService?.posName.substr(0, 5) }} | </h2>
           </div>
         </li>
 

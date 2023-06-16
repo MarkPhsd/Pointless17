@@ -42,16 +42,13 @@ export class LastImageDisplayComponent implements OnInit {
   initSubscriptions() {
 
     const awsUrl$ = this.awsBucketService.awsBucketURLOBS().pipe(switchMap(data => {
-      // console.log('aws bucket data', JSON.stringify(data))
       this.url = data;
-      // console.log('bucket', this.url)
       return of(data)
     }))
 
-    const lastItem$ = this.orderService.lastItemAdded$;
+    const lastItem$ = this.orderMethodsService.lastItemAdded$;
 
     if (!this.platFormservice.isApp()) {
-      // console.log('init Subscriptions ')
       this.initSubscriptionOrder(awsUrl$)
       return
     }
@@ -60,14 +57,13 @@ export class LastImageDisplayComponent implements OnInit {
        this.lastItem = data;
        return awsUrl$
     })).pipe(switchMap(data => {
-        //1A40103000220ED000160009
+
         this.imageSource = null
         if (!data) { return of(null) }
         if (!this.lastItem) { return of(null)}
         this.url = data;
         if (data && this.lastItem.urlImageMain && this.url) {
           this.imageSource = `${this.url}${this.lastItem.urlImageMain}`
-          // console.log('last Item Added Exists', this.imageSource)
         }
         return of(data)
       }
@@ -78,10 +74,9 @@ export class LastImageDisplayComponent implements OnInit {
   //if this is the display then show the item absed on the update of the order
   initSubscriptionOrder(awsUrl$: Observable<string>) {
     if (this.platFormservice.isApp()) {return}
-
-    const order$ = this.orderService.currentOrder$
-
+    const order$ = this.orderMethodsService.currentOrder$
     this.menuItem$ =  order$.pipe(switchMap(data => {
+      if (!data) { return of(null)}
       this.order = data;
       this.orderItems = null;
       if (data.posOrderItems) {
@@ -89,24 +84,18 @@ export class LastImageDisplayComponent implements OnInit {
       }
       return awsUrl$
    })).pipe(switchMap(data => {
-
       if (!data) { return of(null)}
-
       this.imageSource = null
       if (!data) { return of(null) }
       if (!this.lastItem) { return of(null)}
       this.url = data;
-
       const lastItem =  this.orderItems[this.orderItems.length];
-
-      //  console.log('subscribe order last image', lastItem)
       if (!lastItem) { return of(null)}
       const site = this.sitesService.getAssignedSite()
       return  this.menuService.getMenuItemByID(site, lastItem.productID)
      }
    )).pipe(switchMap(data => {
     if (!data) { return of(null)}
-
     if (data && data.urlImageMain && this.url) {
       this.imageSource = `${this.url}${data.urlImageMain}`
     }
@@ -117,7 +106,7 @@ export class LastImageDisplayComponent implements OnInit {
 
 
   isViewDisplay() {
-    if (this.imageSource && this.orderService.lastItemAddedExists) {
+    if (this.imageSource && this.orderMethodsService.lastItemAddedExists) {
       return this.viewDisplay
     }
     return null;

@@ -301,7 +301,7 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
     productSearchModel.brandID    = id.toString();
     productSearchModel.pageSize   = 25
     productSearchModel.pageNumber = 1
-    this.menuService.updateMeunuItemData(productSearchModel)
+    this.menuService.updateSearchModel(productSearchModel)
     return productSearchModel
   }
 

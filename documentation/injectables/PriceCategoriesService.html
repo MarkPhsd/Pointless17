@@ -9,11 +9,11 @@
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 	   <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
             <a href="../" class="navbar-brand">pointless documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
@@ -37,22 +37,29 @@
 
 
 
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li >PriceCategoriesService</li>
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >PriceCategoriesService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
@@ -64,7 +71,7 @@
 
 
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -90,6 +97,12 @@
                                 <a href="#getPriceCategory" >getPriceCategory</a>
                             </li>
                             <li>
+                                <a href="#openPriceCategoryEditor" >openPriceCategoryEditor</a>
+                            </li>
+                            <li>
+                                <a href="#openPriceCategoryEditorOBS" >openPriceCategoryEditorOBS</a>
+                            </li>
+                            <li>
                                 <a href="#post" >post</a>
                             </li>
                             <li>
@@ -113,18 +126,18 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+<code>constructor(http: HttpClient, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>, productEditButtonService: <a href="../injectables/ProductEditButtonService.html" target="_self">ProductEditButtonService</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/_services/menu/price-categories.service.ts:31</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/_services/menu/price-categories.service.ts:29</a></div>
                             </td>
                         </tr>
 
@@ -145,7 +158,7 @@
                                                         <td>http</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                                    <code>HttpClient</code>
                                                         </td>
                                                   
                                                     <td>
@@ -165,6 +178,30 @@
                                                     </td>
                                                     
                                                 </tr>
+                                                <tr>
+                                                        <td>productEditButtonService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ProductEditButtonService.html" target="_self" >ProductEditButtonService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>siteService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SitesService.html" target="_self" >SitesService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
                                         </tbody>
                                     </table>
                             </div>
@@ -174,7 +211,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -210,6 +247,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -249,7 +287,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IPriceCategories&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;PriceCategories&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -272,7 +310,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getList(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, searchModel: <a href="../interfaces/PriceCategorySearchModel.html" target="_self">PriceCategorySearchModel</a>)</code>
+<code>getList(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, searchModel: <a href="../interfaces/SearchModel.html" target="_self">SearchModel</a>)</code>
                 </td>
             </tr>
 
@@ -290,6 +328,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -314,7 +353,7 @@
                                 <tr>
                                     <td>searchModel</td>
                                     <td>
-                                                <code><a href="../interfaces/PriceCategorySearchModel.html" target="_self" >PriceCategorySearchModel</a></code>
+                                                <code><a href="../interfaces/SearchModel.html" target="_self" >SearchModel</a></code>
                                     </td>
 
                                     <td>
@@ -370,6 +409,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -438,6 +478,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -477,7 +518,145 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IPriceCategories&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;PriceCategories&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openPriceCategoryEditor"></a>
+                    <span class="name">
+                        <span ><b>openPriceCategoryEditor</b></span>
+                        <a href="#openPriceCategoryEditor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openPriceCategoryEditor(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="154"
+                            class="link-to-prism">src/app/_services/menu/price-categories.service.ts:154</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openPriceCategoryEditorOBS"></a>
+                    <span class="name">
+                        <span ><b>openPriceCategoryEditorOBS</b></span>
+                        <a href="#openPriceCategoryEditorOBS"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openPriceCategoryEditorOBS(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="162"
+                            class="link-to-prism">src/app/_services/menu/price-categories.service.ts:162</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -507,8 +686,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="125"
-                            class="link-to-prism">src/app/_services/menu/price-categories.service.ts:125</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="122"
+                            class="link-to-prism">src/app/_services/menu/price-categories.service.ts:122</a></div>
                 </td>
             </tr>
 
@@ -518,6 +697,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -557,7 +737,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IPriceCategories&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;PriceCategories&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -587,8 +767,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="139"
-                            class="link-to-prism">src/app/_services/menu/price-categories.service.ts:139</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="136"
+                            class="link-to-prism">src/app/_services/menu/price-categories.service.ts:136</a></div>
                 </td>
             </tr>
 
@@ -598,6 +778,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -649,7 +830,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IPriceCategories&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;PriceCategories&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -690,6 +871,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -729,7 +911,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;IPriceCategories&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;PriceCategories&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -770,6 +952,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
+                        
                         <table class="params">
                             <thead>
                                 <tr>
@@ -823,26 +1006,24 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Input } from &#x27;@angular/core&#x27;;
 import { AuthenticationService } from &#x27;../system/authentication.service&#x27;;
-import { Observable, Subject, throwError  } from &#x27;rxjs&#x27;;
-import { IProduct, IProductCategory, ISite, MenuItem,  }  from &#x27;src/app/_interfaces&#x27;;
-import { IMenuItem } from &#x27;../../_interfaces/menu/menu-products&#x27;;
-import { ProductSearchModel } from &#x27;../../_interfaces/search-models/product-search&#x27;;
+import { Observable, of, switchMap  } from &#x27;rxjs&#x27;;
+import { ISite,  }  from &#x27;src/app/_interfaces&#x27;;
 import { HttpClient } from &#x27;@angular/common/http&#x27;;
-import { HttpClientCacheService } from &#x27;src/app/_http-interceptors/http-client-cache.service&#x27;;
+import { PriceCategories, IPriceCategoryPaged, IPriceCategory2 } from &#x27;src/app/_interfaces/menu/price-categories&#x27;;
+import { SearchModel } from &#x27;../system/paging.service&#x27;;
+import { ProductEditButtonService } from &#x27;./product-edit-button.service&#x27;;
 import { SitesService } from &#x27;../reporting/sites.service&#x27;;
-
-import { IPriceCategories, PriceCategorySearchModel,IPriceCategoryPaged, IPriceCategory2 } from &#x27;src/app/_interfaces/menu/price-categories&#x27;;
-
+import { MatDialog, MatDialogRef } from &#x27;@angular/material/dialog&#x27;;
+import { PriceCategoriesEditComponent } from &#x27;src/app/modules/admin/products/pricing/price-categories-edit/price-categories-edit.component&#x27;;
 
 export interface IItemBasic{
   name: string;
   id  : number;
   type: number;
 }
-
 
 @Injectable({
   providedIn: &#x27;root&#x27;
@@ -856,16 +1037,18 @@ export class PriceCategoriesService {
   @Input() pageSize    &#x3D; 25;
   @Input() pageNumber  &#x3D; 1;
 
-  constructor( private http: HttpClient,
-               private auth: AuthenticationService
+  constructor( private http                    : HttpClient,
+               private auth                    : AuthenticationService,
+               private productEditButtonService: ProductEditButtonService,
+               private siteService             : SitesService,
               )
   { }
 
-  delete(site: ISite, id: number): Observable&lt;IPriceCategories&gt; {
+  delete(site: ISite, id: number): Observable&lt;PriceCategories&gt; {
 
-    const controller &#x3D; &quot;/PriceCategoriesSync/&quot;
+    const controller &#x3D; &quot;/pricecategories/&quot;
 
-    const endPoint &#x3D; &#x60;DeletePriceCategoriesSync&#x60;
+    const endPoint &#x3D; &#x60;DeletePriceCategory&#x60;
 
     const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
 
@@ -907,7 +1090,7 @@ export class PriceCategoriesService {
 
   }
 
-  getPriceCategory(site: ISite, id: any) : Observable&lt;IPriceCategories&gt; {
+  getPriceCategory(site: ISite, id: any) : Observable&lt;PriceCategories&gt; {
 
     const controller &#x3D; &quot;/pricecategories/&quot;
 
@@ -917,13 +1100,13 @@ export class PriceCategoriesService {
 
     const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
 
-    return  this.http.get&lt;IPriceCategories&gt;(url)
+    return  this.http.get&lt;PriceCategories&gt;(url)
 
   }
 
 
   // api/PriceCategories/GetPriceCategories
-  getList(site: ISite, searchModel: PriceCategorySearchModel): Observable&lt;IPriceCategoryPaged&gt; {
+  getList(site: ISite, searchModel: SearchModel): Observable&lt;IPriceCategoryPaged&gt; {
 
     const controller &#x3D;  &quot;/PriceCategories/&quot;
 
@@ -936,19 +1119,16 @@ export class PriceCategoriesService {
     return  this.http.post&lt;IPriceCategoryPaged&gt;(url,searchModel)
   };
 
-  save(site: ISite,  price: IPriceCategory2): Observable&lt;IPriceCategories&gt; {
-
-    console.log(&#x27;save&#x27;, price)
-    if (price.id) {
+  save(site: ISite,  price: IPriceCategory2): Observable&lt;PriceCategories&gt; {
+    if (price.id &amp;&amp; price.id !&#x3D; 0) {
       return  this.put(site, price.id, price);
-
-    } else {
+    }
+    if (!price.id) {
       return this.post(site, price);
-
     }
   }
 
-   post(site: ISite,  price: IPriceCategory2): Observable&lt;IPriceCategories&gt; {
+   post(site: ISite,  price: IPriceCategory2): Observable&lt;PriceCategories&gt; {
 
     const controller &#x3D;&quot;/PriceCategories/&quot;
 
@@ -962,7 +1142,7 @@ export class PriceCategoriesService {
 
   }
 
-   put(site: ISite, id: number, price: IPriceCategory2): Observable&lt;IPriceCategories&gt; {
+   put(site: ISite, id: number, price: IPriceCategory2): Observable&lt;PriceCategories&gt; {
 
     if (id &amp;&amp; price) {
 
@@ -979,8 +1159,28 @@ export class PriceCategoriesService {
     }
   }
 
+  //move to methods
+  openPriceCategoryEditor(id: number) {
+    const site &#x3D; this.siteService.getAssignedSite();
+    const price$ &#x3D; this.getPriceCategory(site, id)
+    price$.subscribe( data &#x3D;&gt; {
+      this.productEditButtonService.openPriceEditor(data)
+    })
+  }
 
-
+  openPriceCategoryEditorOBS(id: number): Observable&lt;any&gt; {
+    const site &#x3D; this.siteService.getAssignedSite();
+    const price$ &#x3D; this.getPriceCategory(site, id)
+    const dialog$ &#x3D;  price$.pipe(switchMap( data &#x3D;&gt; {
+      if (!data) {
+        data &#x3D; {} as PriceCategories
+      }
+      return this.productEditButtonService.openPriceEditor(data).afterClosed().pipe(switchMap(data &#x3D;&gt; {
+        return of(true)
+      }))
+    }))
+    return dialog$
+  }
 }
 </code></pre>
     </div>
@@ -993,14 +1193,15 @@ export class PriceCategoriesService {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -1012,6 +1213,15 @@ export class PriceCategoriesService {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
@@ -1021,8 +1231,8 @@ export class PriceCategoriesService {
 
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       
-       <script type="module" src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/menu-wc.js" defer></script>
        <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>

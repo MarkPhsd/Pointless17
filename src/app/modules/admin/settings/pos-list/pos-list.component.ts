@@ -10,6 +10,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { PosEditSettingsComponent } from './pos-edit-settings/pos-edit-settings.component';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-pos-list',
@@ -24,13 +25,14 @@ export class PosListComponent implements OnInit, OnDestroy {
   dataSource$: Observable<ISetting[]>
   dataSource: MatTableDataSource<ISetting>;
 
-  posName: string  = this.orderService.posName;
+  posName: string  = localStorage.getItem('devicename')
   columnsToDisplay = ['name', 'assign', 'edit'];
 
   @Input() user: IUser;
   constructor( private AuthenticationService : AuthenticationService,
                private setingsServerice      : SettingsService,
                private orderService          : OrdersService,
+               public orderMethodsService: OrderMethodsService,
                private siteService           : SitesService,
                public  platForm              : PlatformService,
                private dialog                : MatDialog,
@@ -99,7 +101,7 @@ export class PosListComponent implements OnInit, OnDestroy {
 
     console.log(event)
     // return;
-    if (this.orderService.setPOSName(event?.name)) {
+    if (this.orderMethodsService.setPOSName(event?.name)) {
       this.posName = event?.name;
       this.notifyEvent(`${this.posName} has been assigned.`, "success")
     } else {
@@ -109,7 +111,7 @@ export class PosListComponent implements OnInit, OnDestroy {
   }
 
   clearPOS() {
-    this.orderService.setPOSName('');
+    this.orderMethodsService.setPOSName('');
     this.notifyEvent(`POS name as been cleared.`, "Success")
     this.posName = '';
   }
