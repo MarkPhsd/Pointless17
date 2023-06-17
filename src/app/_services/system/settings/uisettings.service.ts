@@ -200,6 +200,7 @@ export interface UIHomePageSettings {
   timeOut: boolean;
 
   storeNavigation: boolean;
+  suppressItemsInStoreNavigation: boolean;
 
   colorFilter: boolean;
   sizeFilter: boolean;
@@ -210,6 +211,8 @@ export interface UIHomePageSettings {
   departmentFilter: boolean;
   categoryFilter: boolean;
   subCategoryFilter: boolean;
+  disableSearchFeaturesInItemsList: boolean;
+
 }
 
 @Injectable({
@@ -597,6 +600,9 @@ export class UISettingsService {
       displaySendButton: [],
       suppressMenuItems: [],
       storeNavigation: [], //
+
+      suppressItemsInStoreNavigation: [], //
+      disableSearchFeaturesInItemsList: [], //
 
       colorFilter: [], //: boolean;
       sizeFilter: [], //: boolean;

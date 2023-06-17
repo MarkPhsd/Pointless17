@@ -1,5 +1,5 @@
 import {Component,  HostListener, OnInit, AfterViewInit,OnDestroy,
-        ViewChild, ElementRef, QueryList, ViewChildren, Input, TemplateRef}  from '@angular/core';
+        ViewChild, ElementRef, QueryList, ViewChildren, Input, TemplateRef, ChangeDetectorRef}  from '@angular/core';
 import {IMenuItem} from 'src/app/_interfaces/menu/menu-products';
 import {AWSBucketService, AuthenticationService, MenuService} from 'src/app/_services';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -145,6 +145,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
               private toolbarUIService: ToolBarUIService,
               public  authService: AuthenticationService,
               private fb: UntypedFormBuilder,
+              private cd: ChangeDetectorRef,
       )
   {
     this.isApp = this.platFormService.isApp()
@@ -245,7 +246,12 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   }
 
   get isSearchSelectorOn() {
-    if (!this.isApp|| this.smallDevice || this.uiHomePage.suppressMenuItems) {
+
+    if (this.uiHomePage && this.uiHomePage.disableSearchFeaturesInItemsList) { 
+      return null
+    }
+
+    if (!this.isApp || this.smallDevice || this.uiHomePage.storeNavigation) {
       return this.searchSelector
     }
     return null;
@@ -505,6 +511,10 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   initFilterOption() {
     if (this.authService.deviceInfo) {
       const device = this.authService.deviceInfo
+      if (this.uiHomePage && this.uiHomePage.disableSearchFeaturesInItemsList) { 
+        this.enableFilter = false
+        return false
+      }
       if (!device.phoneDevice && !this.isApp) {
         const url =  this.router.url
         if (url.substring(0, 'menuitems-infinite'.length + 1 ) === '/menuitems-infinite'){
@@ -529,7 +539,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
             this.value = 100;
             this.loading = false;
             this.endOfRecords = true
-            // this.value = 0;
             this.totalRecords = 0;
             return of(null)
           }
@@ -543,8 +552,21 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
               };
             } catch (error) {
             }
+            this.cd.detectChanges()
+            this.menuItems = this.splitItemsIntType(data.results, this.menuItems);
 
-            this.menuItems = this.splitItemsIntType(data.results, this.menuItems)
+            if (this.uiHomePage.suppressItemsInStoreNavigation) { 
+              if (this.categories && this.categories.length>0) { 
+                this.menuItems  = [];
+                this.endOfRecords = true;
+                this.loading = false;
+                this.value = 100;
+                this.cd.detectChanges()
+        
+                return of(null)
+              }
+            }
+
             this.totalRecords = data.paging.totalRecordCount;
 
             let catLength = 0
@@ -556,11 +578,12 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
               this.value = 100;
             }
 
-            if ( this.value != 100 && this.value !=0) {
-              // console.log('add last item?', this.value)
+            if ( this.value != 100 && this.value !=0 ) {
+              this.cd.detectChanges()
               const lastItem = this.getNextMenuItem();
               this.loading = false;
               this.menuItems.push(lastItem)
+              this.cd.detectChanges()
             }
 
             this.value     = ((this.menuItems.length   / this.totalRecords ) * 100).toFixed(0)

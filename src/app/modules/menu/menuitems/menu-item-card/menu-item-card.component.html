@@ -5,10 +5,13 @@
 <mat-card  *ngIf="menuItem"
            [style]="buttonColor"
            [class]="matCardClass">
-
-   <div class="container">
+           
+       
+  <div class="container">
     <div class="image-container">
       <ng-container [ngTemplateOutlet]="menuButton"></ng-container>
+      <ng-container [ngTemplateOutlet]="isImageButtonView"></ng-container>
+
       <div *ngIf="!isDiscountItem && imageUrl" >
         <ng-container [ngTemplateOutlet]="productImage"></ng-container>
         <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>
@@ -85,7 +88,7 @@
 </ng-template>
 
 <ng-template #imageButton>
-  <div *ngIf="menuItem?.name === 'Load More' && ((isApp && !imageUrl) || !imageUrl)"
+  <div *ngIf="menuItem?.name === 'Load More'"
     class="product-name-only" >
       <button mat-raised-button
               class="image-button"

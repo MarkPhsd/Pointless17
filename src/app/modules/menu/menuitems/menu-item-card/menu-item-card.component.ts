@@ -26,6 +26,8 @@ export interface DialogData {
 })
 export class MenuItemCardComponent implements OnInit, OnDestroy {
 
+  
+  @ViewChild('imageButton')  imageButton :  TemplateRef<any> | undefined;
   @ViewChild('editItemView') editItemView :  TemplateRef<any>;
   @Output() outPutLoadMore = new EventEmitter()
   @Input() allowEdit : boolean;
@@ -73,6 +75,13 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     this.initLayout()
   };
 
+  get isImageButtonView() { 
+    if (this.menuItem.name.toLocaleLowerCase() === 'load more') { 
+      return this.imageButton
+    }
+    return undefined
+  }
+
   initLayout() {
     // this.matCardClass = this.class
     // if (this.class === 'row-item') {
@@ -106,7 +115,9 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   get enableEditItem() {
     if (this.authenticationService.isAdmin || this.allowEdit) {
+      if (this.menuItem.id > 0) {
         return this.editItemView
+      }
     }
     return null;
   }
