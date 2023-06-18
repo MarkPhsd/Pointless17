@@ -9,7 +9,7 @@ export interface IPromptGroup {
   lastEdited:               string;
   image:                    string;
   instructions:             string;
-  selected_PromptSubGroups: SelectedPromptSubGroup[];
+  selected_PromptSubGroups  : SelectedPromptSubGroup[];
   posOrderItem              : IPurchaseOrderItem;
   orderID                   : number;
   currentAccordionStep      : number;

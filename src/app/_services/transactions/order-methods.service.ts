@@ -120,7 +120,7 @@ export class OrderMethodsService implements OnDestroy {
   private _splitGroupOrder     = new BehaviorSubject<IPOSOrder>(null);
   public splitGroupOrder$      = this._splitGroupOrder.asObservable();
 
- 
+
   public _scanner             = new BehaviorSubject<boolean>(null);
   public scanner$             = this._scanner.asObservable();
 
@@ -521,7 +521,7 @@ export class OrderMethodsService implements OnDestroy {
       })
     ).pipe(
       switchMap(data => {
-        console.log('data', data.posItem)
+        // console.log('data', data.posItem)
         if (data.order) {
           this.order = data.order
           this.updateOrderSubscription(data.order)
@@ -535,7 +535,7 @@ export class OrderMethodsService implements OnDestroy {
     ),
     catchError(err => {
       this.notifyEvent(`Error occured, this item was not changed. ${err}`, 'Error');
-      console.log('error occured', err)
+      // console.log('error occured', err)
       return of(err)
     }))
   }
@@ -746,7 +746,7 @@ export class OrderMethodsService implements OnDestroy {
                                           passAlong, this.assignPOSItems )
   }
 
-  
+
 
   // refreshOrder(id: number, history) {
   //   if (this.order) {
@@ -828,7 +828,7 @@ export class OrderMethodsService implements OnDestroy {
     if (!this.validateItem(item, barcode)) { return }
     let passAlongItem;
 
-    console.log('processAddItem assigned items', this.assignedPOSItem);
+    // console.log('processAddItem assigned items', this.assignedPOSItem);
 
     if (this.assignedPOSItem) {  passAlongItem  = this.assignedPOSItem; };
 
@@ -940,7 +940,7 @@ export class OrderMethodsService implements OnDestroy {
             const orderPayload = this.getPayLoadDefaults(null)
             return this.orderService.postOrderWithPayload(site, orderPayload).pipe(
               switchMap(data => {
-                console.log('post order', data)
+                // console.log('post order', data)
                 if (!data) {
                   this.siteService.notify('No order started. There might be something wrong.', 'Close', 2000)
                   return of(null)
@@ -993,7 +993,7 @@ export class OrderMethodsService implements OnDestroy {
       if (data?.message) {  this.notifyEvent(`Process Result: ${data?.message}`, 'Alert ')};
 
       if (data && data.resultErrorDescription && data.resultErrorDescription != null) {
-        console.log('data.Error', data.resultErrorDescription)
+        // console.log('data.Error', data.resultErrorDescription)
         // this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert');
         this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red');
         return;
@@ -1021,7 +1021,7 @@ export class OrderMethodsService implements OnDestroy {
         }
 
       } else {
-        console.log('data.Error 2 ', data)
+        // console.log('data.Error 2 ', data)
         this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red');
         return;
       }
@@ -1076,7 +1076,7 @@ export class OrderMethodsService implements OnDestroy {
  }
 
    newOrderWithPayloadMethod(site: ISite, serviceType: IServiceType): Observable<any> {
-    console.log('new order with payload')
+    // console.log('new order with payload')
 
     if (!site) { return of(null) }
     if (!this.userAuthorization.user) {
@@ -1086,13 +1086,13 @@ export class OrderMethodsService implements OnDestroy {
     const orderPayload = this.getPayLoadDefaults(serviceType)
     let order: any;
     const order$ = this.orderService.postOrderWithPayload(site, orderPayload);
-    
+
     return order$.pipe(
       switchMap( data => {
         order = data
         this.processOrderResult(order, site)
         return this.navToDefaultCategory()
-      })).pipe(switchMap( item => { 
+      })).pipe(switchMap( item => {
         this.processOrderResult(order, site, item?.id)
         return of(order)
       }),
@@ -1100,11 +1100,11 @@ export class OrderMethodsService implements OnDestroy {
         this.siteService.notify(`Order not started. ${data}`, 'Alert', 2000, 'red')
         return of(data)
       }))
-  
+
   }
 
   newOrderWithPayloadObs(site: ISite, serviceType: IServiceType) {
-    console.log('new order with payload')
+    // console.log('new order with payload')
     let order: any
     const order$ = this.newOrderWithPayloadMethod(site, serviceType )
     return order$.pipe(
@@ -1112,7 +1112,7 @@ export class OrderMethodsService implements OnDestroy {
             order = data
             this.processOrderResult(order, site)
             return this.navToDefaultCategory()
-          })).pipe(switchMap( item => { 
+          })).pipe(switchMap( item => {
             this.processOrderResult(order, site, item?.id)
             return of(order)
           }),
@@ -1130,7 +1130,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   newOrderWithPayload(site: ISite, serviceType: IServiceType) {
-    console.log('new order with payload')
+    // console.log('new order with payload')
     const order$ = this.newOrderWithPayloadMethod(site, serviceType )
     let order: IPOSOrder;
 
@@ -1170,11 +1170,11 @@ export class OrderMethodsService implements OnDestroy {
     }
     this.setActiveOrder(site, order)
 
-    console.log('processsorderresult', categoryID)
-    if (categoryID) { 
+    // console.log('processsorderresult', categoryID)
+    if (categoryID) {
       this.navToCategory(categoryID)
     }
-    if (!categoryID) { 
+    if (!categoryID) {
       this.navToMenu();
     }
   }
@@ -1226,21 +1226,21 @@ export class OrderMethodsService implements OnDestroy {
   navToDefaultCategory(): Observable<IMenuItem> {
 
     return this.uiSettingService.transactionUISettings$.pipe(switchMap(data => {
-      console.log('transaction ui settings', data)
+      // console.log('transaction ui settings', data)
       const site = this.siteService.getAssignedSite()
       if (data && data.defaultNewOrderCategoryID) {
         return this.menuService.getMenuItemByID(site, data.defaultNewOrderCategoryID)
       }
-      console.log('no default categoryID')
+      // console.log('no default categoryID')
       return of(null)
-    })).pipe(switchMap(data => { 
-      ///nav to category 
+    })).pipe(switchMap(data => {
+      ///nav to category
       if (!data) {
-        console.log('no category')
+        // console.log('no category')
         return of(null)
       }
-    
-      if (data) { 
+
+      if (data) {
         this.router.navigate(["/menuitems-infinite/", {categoryID:data.id}]);
       }
       return of(data)
@@ -1259,7 +1259,7 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
-  navToCategory(categoryID: number) { 
+  navToCategory(categoryID: number) {
     this.router.navigate(["/menuitems-infinite/", {categoryID:categoryID}]);
   }
 
@@ -1518,7 +1518,7 @@ export class OrderMethodsService implements OnDestroy {
       result$.subscribe(data=>  {
         this.notifyEvent(`Order Paid for`, 'Order Completed')
         this.updateOrderSubscription(data)
-    
+
       }
     )
    }
@@ -1531,7 +1531,7 @@ export class OrderMethodsService implements OnDestroy {
     const site = this.siteService.getAssignedSite()
     if (!posItem || posItem.promptGroupID == 0 || !posItem.promptGroupID) { return }
     const prompt = this.promptGroupService.getPrompt(site, item.promptGroupID).subscribe ( prompt => {
-      console.log('openPromptWalkThrough', prompt, posItem)
+      // console.log('openPromptWalkThrough', prompt, posItem)
       this.openPromptWalkThroughWithItem(prompt, posItem);
     })
   }
@@ -1860,7 +1860,7 @@ export class OrderMethodsService implements OnDestroy {
       }
 
       if (clientType === 'caregiver') {
-        console.log('instertiaryNum', client.insTertiaryNum)
+        // console.log('instertiaryNum', client.insTertiaryNum)
         if (!client.insTertiaryNum || client.insTertiaryNum == '') {
           resultMessage = resultMessage + 'Problem with Patient Account #.'
           return {valid: false, resultMessage: resultMessage}

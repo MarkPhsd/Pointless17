@@ -84,7 +84,7 @@ export class LabelViewSelectorComponent implements OnInit {
     }
     const site = this.siteService.getAssignedSite();
     const zplTemp$ = this.settingService.getSetting(site, id);
-    console.log('id', id)
+    // console.log('id', id)
     this.outPutLabelID.emit(id)
     zplTemp$.subscribe(data => {
       if (!data){ return }

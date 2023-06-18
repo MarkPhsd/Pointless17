@@ -149,6 +149,7 @@ export class MenuService {
       this._searchModel.next(item);
       return;
     }
+    // console.log('update search model', item.categoryID)
     this._searchModel.next(item);
   }
 

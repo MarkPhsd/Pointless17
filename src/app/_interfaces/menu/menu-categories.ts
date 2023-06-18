@@ -9,6 +9,8 @@ export interface IProductCategory {
   onlineShortDescription: string;
   urlImageOther:          string;
   urlImageMain:           string;
+  departmentID          : number;
+  prodModifierType      : number;
   menuItem:               MenuItem[];
 }
 

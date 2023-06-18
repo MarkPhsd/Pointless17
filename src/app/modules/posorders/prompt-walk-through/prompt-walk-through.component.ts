@@ -38,8 +38,8 @@ export class PromptWalkThroughComponent implements OnInit {
 
   posItem          : PosOrderItem;
   _posItem         : Subscription;
-  smallDevice: boolean;
-  phoneDevice: boolean;
+  smallDevice      : boolean;
+  phoneDevice       : boolean;
 
   intSubscriptions() {
     this.initPOSItemSubscription();
@@ -49,7 +49,7 @@ export class PromptWalkThroughComponent implements OnInit {
 
   initPOSItemSubscription() {
     this._posItem = this.posOrderItemService.posOrderItem$.subscribe(data => {
-      console.log('working on:', data.productName)
+      // console.log('working on:', data.productName)
       this.posItem = data;
     })
   }
@@ -65,7 +65,7 @@ export class PromptWalkThroughComponent implements OnInit {
   initPromptGroupSubscription() {
     try {
       this._promptGroup = this.promptGroupService.promptGroup$.subscribe(data => {
-        console.log('working with prompt:', data.name)
+        // console.log('working with prompt:', data.name)
         this.promptGroup = data;
       })
     } catch (error) {
@@ -77,10 +77,6 @@ export class PromptWalkThroughComponent implements OnInit {
       })
     } catch (error) {
     }
-    //this should be initialized from selecting an item earlier.
-    //the order and the prompt will be assigned.
-    //the main item should also be included .
-    //we might in the future want to use a multiplier. based on size selection
   }
 
   initOrderPromptGroupSubscription() {
@@ -164,7 +160,7 @@ export class PromptWalkThroughComponent implements OnInit {
     if (result) {
       const site = this.sitesService.getAssignedSite();
       let orderID = this.getOrderID()
-      console.log(orderID)
+      // console.log(orderID)/
       if (orderID == 0) {
         this.dialogRef.close('success')
         return;
@@ -174,7 +170,7 @@ export class PromptWalkThroughComponent implements OnInit {
         this.dialogRef.close('success')
         return
       }
-      console.log(item?.orderID, item);
+      // console.log(item?.orderID, item);
       if (item) {
         this.action$ = this.posOrderItemService.deletePOSOrderItem(site, item.id).pipe(
           switchMap(data => {
@@ -193,10 +189,9 @@ export class PromptWalkThroughComponent implements OnInit {
     }
   }
 
-
   get  largeScreenButtons(){
+    return this.buttonDisplay;
     if (this.phoneDevice) {
-      return this.buttonDisplay;
     }
   }
 
@@ -214,6 +209,17 @@ export class PromptWalkThroughComponent implements OnInit {
     if (this.orderPromptGroup) {
       const site = this.sitesService.getAssignedSite();
       this.setNotes();
+
+      const result =   this.promptWalkThroughService.validateSelections(this.orderPromptGroup)
+      if (result && result.length  > 0) {
+        let notes = ''
+        result.forEach(data => {
+          notes = `notes ${data}`
+        })
+        this.sitesService.notify(notes, 'close', 5000, 'yellow')
+        return;
+      }
+
       const prompt$ = this.posOrderItemService.postPromptItems(site, this.orderPromptGroup);
 
       this.processing = true;

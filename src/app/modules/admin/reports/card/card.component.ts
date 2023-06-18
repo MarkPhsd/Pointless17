@@ -94,10 +94,15 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
   _sites: Subscription;
 
   initNotifierSubscription() {
+    if (!this.notifier) {
+      // this.refresh();
+      return 
+    }
     this._changeNotifier = this.notifier.asObservable().subscribe(data => {
       this.refresh();
     })
   }
+
   addObservable(newObservable: Observable<any>): void {
     const currentObservables = this.observablesArraySubject.getValue();
     newObservable = newObservable.pipe(

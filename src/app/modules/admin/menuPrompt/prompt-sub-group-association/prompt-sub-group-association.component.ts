@@ -118,7 +118,7 @@ export class PromptSubGroupAssociationComponent implements OnInit {
     // prompts$.subscribe(prompts => { 
     if (prompts) {
       //then we have each group assisnged from the prompts.
-      console.log('prompt', prompts)
+      // console.log('prompt', prompts)
       this.assignSelectedAndAvalible(prompts.selected_PromptSubGroups)
     }
     
@@ -173,8 +173,8 @@ export class PromptSubGroupAssociationComponent implements OnInit {
           next: data => { 
             if (data) { 
               const allGroups        = data.results;
-              console.log('allgroups', allGroups )
-              console.log(', selectedGroups.length', selectedGroups.length)
+              // console.log('allgroups', allGroups )
+              // console.log(', selectedGroups.length', selectedGroups.length)
               if (selectedGroups.length > 0) {
                 const groups = selectedGroups
                 //for each of these, we can remove matching item from the avalble list.  //avalible

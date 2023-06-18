@@ -10,9 +10,11 @@
               {{promptGroup?.name}}
           </h2>
         </div>
+
         <div>
           <ng-container [ngTemplateOutlet]="largeScreenButtons"></ng-container>
         </div>
+
       </div>
     </mat-card-subtitle>
     <mat-card-content>
@@ -34,6 +36,7 @@
     </div>
 
     <ng-container [ngTemplateOutlet]="largeScreenButtons"></ng-container>
+
     <mat-card-actions>
       <div>
         <mat-form-field  class="notes" appearance="outline">

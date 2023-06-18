@@ -18,6 +18,7 @@ import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { UnitTypeMethodsService } from 'src/app/_services/menu/unit-type-methods.service';
 import { SearchModel } from 'src/app/_services/system/paging.service';
 import { IMenuItem, menuButtonJSON } from 'src/app/_interfaces/menu/menu-products';
+import { LabelingService } from 'src/app/_labeling/labeling.service';
 
 @Component({
   selector: 'app-strain-product-edit',
@@ -25,6 +26,8 @@ import { IMenuItem, menuButtonJSON } from 'src/app/_interfaces/menu/menu-product
   styleUrls: ['./strain-product-edit.component.scss']
 })
 export class StrainProductEditComponent implements OnInit {
+
+
 
   productForm: UntypedFormGroup;
   unitSearchForm: UntypedFormGroup;
@@ -56,6 +59,7 @@ export class StrainProductEditComponent implements OnInit {
               private dialogRef: MatDialogRef<StrainProductEditComponent>,
               private itemTypeMethodsService: ItemTypeMethodsService,
               private unitTypeMethodsService: UnitTypeMethodsService,
+              public labelingService: LabelingService,
               private unitTypeService: UnitTypesService,
               @Inject(MAT_DIALOG_DATA) public data: any
     )
@@ -82,23 +86,23 @@ export class StrainProductEditComponent implements OnInit {
     }
   }
 
-  initMenuButtonJson(product: IProduct) { 
-    console.log('init product', product)
-    if (product && !product.json) { 
+  initMenuButtonJson(product: IProduct) {
+    // console.log('init product', product)
+    if (product && !product.json) {
       this.productJSONObject  = {}  as menuButtonJSON;
       this.productJSONObject.buttonColor = '#F8F8F8';
       this.productJSONObject.backColor = '#F8F8F8';
       // this.productJSONObject.enableButtonColor = '#F8F8F8';
-      
+
       return
     }
-    if (product.json) { 
+    if (product.json) {
       this.productJSONObject = JSON.parse(product.json)
     }
   }
 
-  get JSONAsString() { 
-    if (this.product) { 
+  get JSONAsString() {
+    if (this.product) {
       return JSON.stringify(this.productJSONObject);
     }
     return ''
@@ -215,13 +219,13 @@ export class StrainProductEditComponent implements OnInit {
       this.message = ""
       this.performingAction= true;
       this.product.json = this.JSONAsString;
-      console.log(this.product.json)
+      // console.log(this.product.json)
       const product$ = this.menuService.saveProduct(site, this.product);
       return product$.pipe(switchMap(
           data => {
-            console.log('save results')
+            // console.log('save results')
             if (data) {
-              if (data.errorMessage) { 
+              if (data.errorMessage) {
                 this.notifyEvent('Save did not succeed: ' + data.errorMessage, 'Success')
                 return of(data)
               }
@@ -304,7 +308,7 @@ export class StrainProductEditComponent implements OnInit {
         }
       });
     }
-    console.log('images',images)
+    // console.log('images',images)
     return images
   }
 
@@ -315,7 +319,7 @@ export class StrainProductEditComponent implements OnInit {
   }
 
   parentFunc(event){
-    console.log(event)
+    // console.log(event)
   }
 
 }

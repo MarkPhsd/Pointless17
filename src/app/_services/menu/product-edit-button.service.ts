@@ -26,7 +26,7 @@ import { PromptGroupEditComponent } from 'src/app/modules/admin/menuPrompt/promp
 import { PromptSubGroupEditComponent } from 'src/app/modules/admin/menuPrompt/prompt-sub-groups/prompt-sub-group-edit/prompt-sub-group-edit.component';
 import { PriceTierEditComponent } from 'src/app/modules/admin/products/price-tiers/price-tier-edit/price-tier-edit.component';
 import { PSMenuGroupEditComponent } from 'src/app/modules/admin/products/price-schedule-menu-groups/psmenu-group-edit/psmenu-group-edit.component';
-import { concatMap, map, switchMap } from 'rxjs/operators';
+import { catchError, concatMap, map, switchMap } from 'rxjs/operators';
 import { Observable, of,  } from 'rxjs';
 import { UnitTypePromptComponent } from 'src/app/modules/admin/products/pricing/price-categories-edit/unit-type-prompt/unit-type-prompt.component';
 import { EmployeeMetrcKeyEntryComponent } from 'src/app/modules/admin/employees/employee-metrc-key-entry/employee-metrc-key-entry.component';
@@ -149,25 +149,32 @@ export class ProductEditButtonService {
     this.openProductEditor(product.id,  product.prodModifierType)
   }
 
-  openProductDialogObs(id: any) {
+  openProductDialogObs(id: number) {
     const site = this.siteService.getAssignedSite();
-    return this.menuService.getProduct(site, id).pipe(switchMap(product => { 
-        if (product) {
-          if (!product.prodModifierType) {
-            product.prodModifierType = 1
-            return this.menuService.putProduct(site, product.id, product)
-          }
-        } else {
-          product.id = 0
+    console.log('openProductDialogObs id:', id)
+
+    // return this.menuService.getProduct(site, id)
+
+    const item$ = this.menuService.getProduct(site, id).pipe(
+      switchMap(product => { 
+        // console.log('openProductDialogObs product', product,product.prodModifierType)
+        if (product && !product.prodModifierType) {
           product.prodModifierType = 1
+          return this.menuService.putProduct(site, product.id, product)
         }
         return of(product)
       }
     )).pipe(switchMap(product => { 
+      // console.log('retrieving product', product)
       if (!product) {return of(null)  }
       this.openProductEditor(product.id,  product.prodModifierType);
       return of(product)
+    }),catchError(data => { 
+      this.siteService.notify(`Error opening item. ${data}`, 'Close', 5000, 'red')
+      return of(null)
     }))
+
+    return item$
   }
 
   openClockEditor(id: any) {
@@ -330,7 +337,7 @@ export class ProductEditButtonService {
 
   }
 
-  private _opeEditProductEditor(id: number,productTypeID: number, itemType$: Observable<IItemType>, site: ISite) {
+  private _opeEditProductEditor(id: number, productTypeID: number, itemType$: Observable<IItemType>, site: ISite) {
       const product$ = this.getItemForNewEditor(id, productTypeID)
       this._openProductEditor(product$,itemType$)
   }

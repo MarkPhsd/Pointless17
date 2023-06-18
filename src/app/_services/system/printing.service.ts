@@ -89,7 +89,7 @@ export class PrintingService {
     this._printerLocation.next(value)
   }
 
-  updatePrintingFinalizer(value) { 
+  updatePrintingFinalizer(value) {
     this._printingFinalizer.next(value)
   }
   updatePrintView(value: number) {
@@ -126,7 +126,7 @@ export class PrintingService {
   updatePrintReady(data) {
     this._printReady.next(data)
   }
-  
+
   printReceipt(orderID: number, groupID: number)  {
     if (!groupID) { groupID = 0 }
     const site = this.siteService.getAssignedSite()
@@ -473,6 +473,7 @@ export class PrintingService {
 
   printElectron(contents: string, printerName: string, options: printOptions) : boolean {
 
+    if (!this.platFormService.isAppElectron) { return }
     let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
     if (options.silent) { printWindow.hide(); }
 
@@ -801,7 +802,7 @@ export class PrintingService {
         // this.orderMethodsService.updateOrder(data)
         return of(data)
       }))
-  
+
     return result$
   }
 

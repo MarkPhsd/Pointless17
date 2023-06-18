@@ -23,12 +23,12 @@ export class KeyboardComponent implements OnInit, AfterViewInit {
     ngOnInit() {
       this.trackerService._fieldValue$.subscribe(data => {
         // this.value = ''
-        console.log('data changed', data)
+        // console.log('data changed', data)
         if (this.keyboard) {
           this.value = data;
           this.keyboard.setInput(data);
         }
-        console.log('field changed');
+        // console.log('field changed');
       })
     }
 

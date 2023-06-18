@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
-import { IUserProfile } from 'src/app/_interfaces';
+import { IProductCategory, IUserProfile } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { AWSBucketService, ContactsService } from 'src/app/_services';
@@ -35,6 +35,8 @@ export class CategorySelectListFilterComponent implements OnInit {
   savedList   : IItemBasic[];
   _searchModel: Subscription;
   searchModel : ProductSearchModel;
+  categoryList = [] as IProductCategory[];
+  subCategoryList = [] as IMenuItem[];
 
   initialized: boolean
 
@@ -49,6 +51,78 @@ export class CategorySelectListFilterComponent implements OnInit {
     })
   }
 
+  initSearchSubscription() { 
+    this._searchModel = this.menuService.searchModel$.subscribe( model => {
+
+      if (!model) { model = this.menuService.initSearchModel()}
+
+      // if (!model.listBrandID || model.listBrandID.length == 0 )  { 
+      //   this.savedList = []
+      // }
+      // if (!model.listDepartmentID || model.listDepartmentID.length == 0) { 
+      //   this.savedList = []
+      // }
+      // if (!model.listCategoryID || model.listCategoryID.length == 0) { 
+      //   console.log('clearing saved list', model.listCategoryID)
+      //   this.savedList = []
+      // }
+      // if (!model.listSubCategoryID || model.listSubCategoryID.length == 0) { 
+      //   this.savedList = []
+      // }
+      // if (!model.listPublisherID || model.listPublisherID.length == 0) { 
+      //   this.savedList = []
+      // }
+      // if (!model.listSpecies || model.listSpecies.length == 0) { 
+      //   this.savedList = []
+      // }
+      // if (!model.listArtistID || model.listArtistID.length == 0) { 
+      //   this.savedList = []
+      // }
+
+      this.filterCategories(model);
+      this.filterSubcategories(model);
+      // this.setSavedList(model)
+    })
+  }
+
+  filterCategories(model: ProductSearchModel) { 
+    const dept = model.listDepartmentID
+    if (dept && dept.length>0) { 
+      if (this.type === 'category') { 
+        this.basicList = []
+      
+        let list = new Set(dept);
+        let filteredItems = this.categoryList.filter(item => list.has(item.departmentID));
+        filteredItems.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
+                                                              image: this.getItemSrc(item?.urlImageMain)} ) })
+      }
+    } else { 
+      this.categoryList.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
+        image: this.getItemSrc(item?.urlImageMain)} ) })
+    }
+  }
+
+  filterSubcategories(model: ProductSearchModel) { 
+    const cat = model.listCategoryID
+    if (cat && cat.length > 0) { 
+      if (this.type === 'subcategory') { 
+        this.basicList = []
+      
+        let list = new Set(cat);
+        console.log('filter subcategory', cat, this.subCategoryList)
+        let filteredItems = this.subCategoryList.filter(item => list.has(item.categoryID));
+        filteredItems.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
+                                                              image: this.getItemSrc(item?.urlImageMain)} ) })
+      }
+    } else { 
+      this.subCategoryList.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
+        image: this.getItemSrc(item?.urlImageMain)} ) })
+    }
+  }
+
+ 
+// this.setSavedList(model)
+
   constructor(
     private siteService: SitesService,
     private menuService: MenuService,
@@ -61,12 +135,14 @@ export class CategorySelectListFilterComponent implements OnInit {
   ngOnInit(): void {
     // this.initSearchModel();
     this.initSubscription();
+    this.initSearchSubscription()
   }
 
   initSearchModel() {
     if (!this.menuService.searchModel) {
       this.menuService.updateSearchModel(this.searchModel)
     }
+    if (this._searchModel) { this._searchModel.unsubscribe()}
   }
 
   // if ( this.type === 'species') {
@@ -109,8 +185,9 @@ export class CategorySelectListFilterComponent implements OnInit {
       if (this.type === 'category') {
         this.list$ = category$
         .pipe(switchMap(list => {
+          this.categoryList  = list 
           list.forEach(item => {  this.basicList.push( {name: item?.name, id: item?.id, image: this.getItemSrc(item.urlImageMain)})
-            console.log(item,this.getItemSrc(item.urlImageMain) )
+
           })
           this.setSavedList(model)
           return of(list)
@@ -129,10 +206,13 @@ export class CategorySelectListFilterComponent implements OnInit {
       if (this.type === 'subcategory') {
         this.list$ = subCategory$
         .pipe(switchMap(list => {
+
+          this.subCategoryList  = list 
           list.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
                                                       image: this.getItemSrc(item?.urlImageMain)} ) })
           this.setSavedList(model)
           return of(list)
+
         }))
         return;
       }
@@ -141,6 +221,7 @@ export class CategorySelectListFilterComponent implements OnInit {
     if (this.type === 'brand') {
       this.list$ = this.contactService.getBrands(site, null).pipe(switchMap(results => {
         if (results.results) {
+         
           const list = results.results
           list.forEach(item =>
           {
@@ -261,6 +342,7 @@ export class CategorySelectListFilterComponent implements OnInit {
       }
     });
 
+    // console.log('new list', newList)
     if(type === 'category') {
       this.searchModel.listCategoryID = newList as number[];
     }

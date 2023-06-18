@@ -270,39 +270,48 @@ export class PosOperationsComponent implements OnInit {
       if (!answer) { return }
     }
 
-    const item$ = this._email()
-    const  closingCheck$ = item$.pipe(switchMap(
-      data => {
-        return  this.transferDataService.canCloseDay(site)
-      }
-    ))
+    const email$ = this._email()
+    const closingCheck$ = this.transferDataService.canCloseDay(site);
+
     this.orderMethodsService.clearOrderSubscription();
     this.balanceSheetsClosed = ''
 
     this.closingProcedure$ = closingCheck$.pipe(
       switchMap( data => {
-        //determine if the day can be closed.
-        //if it can't then return what is told from the webapi
-        if (data){
-          if (!data.allowClose) {
-            this.closeResult = `Day not closed.  Open Printed Orders ${data?.openPrintedOrders?.length}.
-                                Open Paid Orders ${data?.openPaidOrders?.length}.
-                                Open Balance Sheets ${data?.openBalanceSheets?.length}`
-            const result = this.orderMethodsService.notifyEvent(`Date not closed. ${JSON.stringify(data)}`, 'Alert');
-            this.canCloseOrderResults = data
-            this.runningClose = false
-            return
+          //determine if the day can be closed.
+          //if it can't then return what is told from the webapi
+          if (data){
+            if (!data.allowClose) {
+              this.closeResult = `Day not closed.  Open Printed Orders ${data?.openPrintedOrders?.length}.
+                                  Open Paid Orders ${data?.openPaidOrders?.length}.
+                                  Open Balance Sheets ${data?.openBalanceSheets?.length}`
+              const result = this.siteService.notify(`Date not closed.`, 'Close', 3000, 'red', 'top');
+              this.canCloseOrderResults = data
+              this.runningClose = false
+              return of(null)
+            }
           }
+          return this.transferDataService.closeAll(site);
         }
-        return this.transferDataService.closeAll(site);
+      )).pipe(switchMap(data => { 
+        if (!data) { 
+          return of(null)
+        }
+        return email$
       })).pipe(
         switchMap(
            data => {
+            if (!data) { 
+              return of(null)
+            }
             this.closeResult = 'Day closed. Closing balance Sheets.'
             return this.balanceSheetService.closeAllSheets(site)
         }
       )).pipe(
         switchMap(data => {
+          if (!data) { 
+            return of(null)
+          }
           this.closeResult = 'Day closed. All balance sheets closed.'
           this.balanceSheetsClosed = ''
           this.runningClose = false;

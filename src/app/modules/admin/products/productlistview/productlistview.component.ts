@@ -94,7 +94,10 @@ viewOptions$     = of(
     {name: 'Inactive', id: 2}
   ]
 )
+
+openingProduct  : boolean;
 action$         : Observable<any>;
+product$        : Observable<IProduct>;
 //search form filters
 inputForm        : UntypedFormGroup;
 categoryID       : number;
@@ -478,7 +481,7 @@ constructor(  private _snackBar              : MatSnackBar,
                   maxWidth: 75,
                   sortable: false,
                   autoHeight: true,
-                  cellRendererFramework: AgGridImageFormatterComponent
+                  cellRenderer: AgGridImageFormatterComponent
                   },
       {
                   headerName: "Active",
@@ -676,7 +679,7 @@ constructor(  private _snackBar              : MatSnackBar,
   getItem(id: number) {
     if (id) {
       const site = this.siteService.getAssignedSite();
-      this.action$  = this.menuService.getProduct(site, this.id).pipe(
+      this.product$  = this.menuService.getProduct(site, this.id).pipe(
         switchMap(data => {
           this.product = data;
           return of(data)
@@ -687,10 +690,18 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   editSelectedItem() {
-    if (this.product) {
-      this.id = this.product.id
+    console.log('selected Items', this.selected)
+    let id = 0;
+    if (this.product) { id = this.product.id}
+    if (this.selected){ id = this.selected[0]};
+    if (id) {
       this.editItemWithId( this.id);
+      return;
     }
+    // console.log('editSelectedItem', this.product.id)
+    // if (this.product) {
+    //   this.id = this.product.id
+    // }
   }
 
   getItemHistory(id: any) {
@@ -709,33 +720,42 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   onBtnClick1(e) {
+    console.log('on button click1')
     this.rowDataClicked1 = e.rowData;
   }
 
   onBtnClick2(e) {
+    console.log('on button click2')
     this.rowDataClicked2 = e.rowData;
   }
 
   editProductFromGrid(e) {
-    if (!e) {return}
+    if (!e) {
+      console.log('edit product from grid no data')
+      return
+    }
     if (e.rowData.id)  {
       if (this.buttonName === 'Edit') {
         this.editItemWithId(e.rowData.id);
        } else {
-          this.assignItem(e)
+        this.assignItem(e)
       }
     }
   }
 
-  editItemWithId(id:any) {
-    if(!id) {
-      return
-    }
-    this.action$ = this.productEditButtonService.openProductDialogObs(id);
-  }
-
-  editProduct(e){
-    this.editItemWithId(e.id)
+  editItemWithId(id:number) {
+    if(!id) { return }
+    // this.openingProduct = true
+    // console.log('edit Item With Id',id)
+    // this.product$ =
+    this.productEditButtonService.openProductDialogObs(id).subscribe(
+      // switchMap(
+        data => {
+        console.log('product', data)
+        this.openingProduct = false
+        return of(data)
+      })
+    // )
   }
 
   assignItem(e){
@@ -757,6 +777,7 @@ constructor(  private _snackBar              : MatSnackBar,
       this._snackBar.open('No items selected. Use Shift + Click or Ctrl + Cick to choose multiple items.', 'oops!', {duration: 2000})
       return
     }
+    console.log(this.selected)
     let dialogRef: any;
     const site = this.siteService.getAssignedSite();
     dialogRef = this.dialog.open(EditSelectedItemsComponent,

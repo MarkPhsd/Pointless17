@@ -282,7 +282,9 @@
 
 <ng-template #icon>
     <div class="grid-item">
-      <mat-label>Use material icons from fonts.google.com</mat-label>
+
+      <mat-label color="accent" [matTooltip]="labelingService.productFieldTips[2].value"
+      >Info</mat-label>
       <div>
         <app-value-fields
           [inputForm]="productForm"
@@ -295,7 +297,9 @@
 
 <ng-template #menuSort>
   <div class="grid-item">
-    <mat-label>Sorting: Enter a negative value to show up at front, a large value to show at the end.</mat-label>
+     <mat-label color="accent" [matTooltip]="labelingService.productFieldTips[1].value"
+    >Info</mat-label>
+
     <div>
       <app-value-fields
         [inputForm]="productForm"
@@ -347,6 +351,9 @@
 </ng-template>
 
 <ng-template #gramCount>
+  <mat-label color="accent" [matTooltip]="labelingService.productFieldTips[0].value"
+  >Info</mat-label>
+
   <app-value-fields
         [inputForm]="productForm"
         [fieldName]="'gramCount'" >

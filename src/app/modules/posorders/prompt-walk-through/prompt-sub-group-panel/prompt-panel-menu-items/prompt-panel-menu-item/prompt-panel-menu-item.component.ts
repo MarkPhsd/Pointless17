@@ -131,9 +131,13 @@ export class PromptPanelMenuItemComponent implements OnInit {
   }
 
   removeItem() {
+    //!!!
+    //should not call validate Adding Item to remove an item.
     let orderPromptGroup = this.validateAddingItem();
     if (!orderPromptGroup) { return }
+
     const currentSubPrompt = orderPromptGroup.selected_PromptSubGroups[this.index]
+
     this.removeItem$ =  this.getMenuItemToRemove().pipe(switchMap(
       data => {
         if (data) {
@@ -151,22 +155,34 @@ export class PromptPanelMenuItemComponent implements OnInit {
   }
 
   addItemSub():Observable<MenuItemsSelected> {
+
+    if (!this.index) {
+      // this.siteService.notify('No index is assigned', 'Close', 3000, 'yellow')
+    }
+
     const mainItem = this.posItem.unitType
 
     const quantityItem = this.getQuantity()
 
     this.orderPromptGroup = this.promptWalkService.initPromptWalkThrough(this.order, this.promptGroup)
-
     if (!this.orderPromptGroup) { this.orderPromptGroup = {} as IPromptGroup}
+
     let orderPromptGroup = this.validateAddingItem();
 
     if (!orderPromptGroup) {
-      this.orderService.notificationEvent('No prompt group assigned..', 'Info')
-      return
+      this.siteService.notify('No prompt group assigned.', 'Close', 3000, 'yellow')
+      return of(null)
     }
-    const currentSubPrompt = orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups
 
-    if (currentSubPrompt.quantityMet) {
+    const currentSubPrompt = orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups
+    if (!currentSubPrompt) {
+      this.siteService.notify('Select page to chose items from.', 'Close', 3000, 'yellow')
+      return of(null)
+    }
+
+    //currentSubPrompt.quantityMet ||
+    const itemsSelected =  orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups.itemsSelected
+    if ((itemsSelected && itemsSelected.length >= currentSubPrompt.maxQuantity)) {
       const lastIndex = orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups.itemsSelected.length
       orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups.itemsSelected.pop()
     }
@@ -176,7 +192,6 @@ export class PromptPanelMenuItemComponent implements OnInit {
   }
 
   getApplyNewItem(value: number, prefix: string, currentSubPrompt: PromptSubGroups, orderPromptGroup: IPromptGroup): Observable<MenuItemsSelected> {
-
 
     return this.getMenuItemToApply(currentSubPrompt).pipe(
       switchMap(item => {
@@ -218,13 +233,14 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
         //do check again after item has been added.
         orderPromptGroup = this.validateAddingItem();
+
         if (!orderPromptGroup) { return };
+
         if (currentSubPrompt.quantityMet) {
           this.nextStep()
           const lastGroupIndex = orderPromptGroup.selected_PromptSubGroups.length;
           const lastGroup =  orderPromptGroup.selected_PromptSubGroups[lastGroupIndex -1];
           if (lastGroup) {
-            // console.log(currentSubPrompt.id , lastGroup)
             if (currentSubPrompt.id == lastGroup?.promptSubGroupsID) {
               if (this.platformService.isApp()){
                 this.promptWalkService.updateSavePromptSelection(true)

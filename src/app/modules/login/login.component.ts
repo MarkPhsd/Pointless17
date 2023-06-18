@@ -209,13 +209,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   setAPIAlt() {
-    if (this.platformService.isApp())  {
+    // if (this.platformService.isApp())  {
       this.counter  = this.counter +1
       if (this.counter > 5) {
         this.counter = 0;
         this.router.navigate(['/apisetting']);
       }
-    }
+    // }
   }
 
  initCompanyInfo() {

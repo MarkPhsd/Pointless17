@@ -281,9 +281,7 @@ constructor(
   }
 
   get isDisplaySubMenuOn() {
-
     if (!this.uiHomePage) { return };
-
     if ((this.isStaff && this.uiHomePage.staffscheduleSubMenu) ||
         (this.isUser && this.uiHomePage.scheduleSubMenu)) {
           this.toggleCatHeight         = 'toggle-buttons-height-medium'
@@ -291,11 +289,8 @@ constructor(
           this.toggleTypeHeight        = 'toggle-buttons-height-medium'
       return this.displaySubMenu
     }
-
     return null;
-
   }
-
 
   refreshSearchPhrase(event) {
     this.itemName = event;
@@ -345,9 +340,14 @@ constructor(
     this.department        = null;
     this.departments$      = null;
 
+  }
+
+  resetAll() { 
+    this.clearAll() 
+    
     this.categories$ = null;
     this.departments$ = null;
-    console.log('get results')
+
     const site           = this.siteService.getAssignedSite()
     this.departments$    = this.menuService.getListOfDepartments(site)
     this.categories$     = this.menuService.getListOfCategories(site);
@@ -387,45 +387,47 @@ constructor(
     return productSearchModel
   }
 
-  applyProductSearchModel(productSearchModel: ProductSearchModel) : ProductSearchModel {
+  applyProductSearchModel(model: ProductSearchModel) : ProductSearchModel {
 
-    productSearchModel.type         = null;
-    productSearchModel.categoryID   = null;
-    productSearchModel.departmentID = null;
-    productSearchModel.name         = null;
-    productSearchModel.barcode      = null;
-    productSearchModel.departmentName = null;
+    model.type         = null;
+    model.categoryID   = null;
+    model.departmentID = null;
+    model.name         = null;
+    model.barcode      = null;
+    model.departmentName = null;
     if (this.itemName) {
-      productSearchModel.name               =  this.itemName;
-      productSearchModel.useNameInAllFields = true
+      model.name               =  this.itemName;
+      model.useNameInAllFields = true
     }
 
     if (this.category )               {
-      productSearchModel.categoryID       = this.category.id.toString();
-      productSearchModel.categoryName     = this.category.name.toString();
+      console.log('this category', this.category)
+      model.categoryID       = this.category.id.toString();
+      model.categoryName     = this.category.name.toString();
     }
 
     if (this.department )               {
-      productSearchModel.departmentID       = this.department.id.toString();
-      productSearchModel.departmentName     = this.department.name.toString();
+      model.departmentID       = this.department.id.toString();
+      model.departmentName     = this.department.name.toString();
     }
 
     if (this.productTypeSearch)         {
-      productSearchModel.itemTypeID       = this.productTypeSearch.id.toString();
-      productSearchModel.type             = this.productTypeSearch.id.toString();
-      productSearchModel.itemTypeName     = this.productTypeSearch.name.toString();
+      model.itemTypeID       = this.productTypeSearch.id.toString();
+      model.type             = this.productTypeSearch.id.toString();
+      model.itemTypeName     = this.productTypeSearch.name.toString();
     }
 
     if (this.brand)                   {
-      productSearchModel.brandID          = this.brand.id.toString();
-      productSearchModel.brandName        = this.brand.company.toString();
+      model.brandID          = this.brand.id.toString();
+      model.brandName        = this.brand.company.toString();
     }
 
-    productSearchModel.barcode    = productSearchModel.name
-    productSearchModel.pageSize   = this.pageSize
-    productSearchModel.pageNumber = this.currentPage
-    this.menuService.updateSearchModel(productSearchModel)
-    return productSearchModel
+    model.barcode    = model.name
+    model.pageSize   = this.pageSize
+    model.pageNumber = this.currentPage
+    console.log(model.categoryID, model.categoryName);
+    this.menuService.updateSearchModel(model)
+    return model
 
   }
 
@@ -446,18 +448,23 @@ constructor(
   }
 
   refreshCategorySearch(item: any) {
-    // console.log('item', item)
-    this.category = item
+    this.clearAll()
     this.clearDeparment()
+    this.category = item
+    
     this.refreshSearch()
   }
+
   refreshBrandSearch(item: any) {
+    this.clearAll()
     this.brand = item
-    this.clearDeparment()
+    this.clearDeparment();
     this.toolBarUIService.updateDepartmentMenu(null)
     this.refreshSearch()
   }
+
   refreshTypeSearch(item: any) {
+    this.clearAll();
     this.type = item
     this.clearDeparment()
     this.refreshSearch()

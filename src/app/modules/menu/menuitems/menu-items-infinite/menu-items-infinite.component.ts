@@ -307,10 +307,20 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
   initSearchProcess() {
     try {
+
         if (!this.productSearchModel) {
+          // console.log('Search model is null')
           this.productSearchModel = this.menuService.initSearchModel()
+
+
+          //updates when the filter is enabled. 
+          if (this.router.url === '/filter') { 
+            this.initModelParameters(this.productSearchModel)
+          }
+          if (this.updateSearchOnModelChange) {
+          }
         }
-        this.initModelParameters(this.productSearchModel)
+  
     } catch (error) {
       console.log('initSearchProcess Error', error)
     }
@@ -349,40 +359,38 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   initSearchFromModel() {
     this._productSearchModel = this.menuService.searchModel$.subscribe( model => {
 
-        this.initSearchProcess();
-        if (!model) {  model = this.menuService.initSearchModel() }
         this.productSearchModel = model;
 
-        model = this.initModelParameters(model)
-        this.productName        = model.name;
+        this.initSearchProcess();
+        if (!model) {  model = this.menuService.initSearchModel() }
 
+        this.productName  = model.name;
         model.web         = this.webMode
         model.webMode     = this.webMode;
+
         if (!model.pageNumber) { model.pageNumber = 1}
         this.currentPage = model.pageNumber
         let  categoryResults = ''
 
         if (model.categoryName && model.categoryName != undefined ) {
           categoryResults = model.categoryName;
-          let reRoute = false
         }
 
         let  departmentName = ''
         if (model.departmentName && model.departmentName != undefined ) {
           departmentName = 'departments ' + model.departmentName;
-          let reRoute = false
         }
 
         let  itemTypeName = ''
         if (model.itemTypeName && model.itemTypeName != undefined) {
           itemTypeName = 'types ' + model.itemTypeName;
-          let reRoute = false
         }
+
         model.webMode = this.menuService.isWebModeMenu
         model.active  = true;
 
         this.productSearchModel = model;
-
+        // console.log('updateSearchOnModelChange',this.updateSearchOnModelChange, model)
         if (this.updateSearchOnModelChange) {
           model.hideSubCategoryItems = false;
           this.productSearchModel = model;
@@ -396,7 +404,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   }
 
   updateSearchResults() {
-    // this.applyProductSearchModel(itemName);
     this.menuItems = [];
     this.nextPage();
   }

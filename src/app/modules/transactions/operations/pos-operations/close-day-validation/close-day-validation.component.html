@@ -2,13 +2,15 @@
 
   <mat-card-subtitle>
     <div *ngIf="closeDayValidation.allowClose">Ready to Close</div>
-    <div *ngIf="!closeDayValidation.allowClose">Resolutions required to close.</div>
+    <mat-label color="warn">
+      <div *ngIf="!closeDayValidation.allowClose">Resolutions required to close.</div>
+    </mat-label>
   </mat-card-subtitle>
 
   <mat-card-content *ngIf="closeDayValidation">
 
     <div *ngIf="closeDayValidation.openBalanceSheets && closeDayValidation.openBalanceSheets.length">
-      <mat-label>{{closeDayValidation.openBalanceSheets.length}} Balance Sheets </mat-label>
+      <mat-label >{{closeDayValidation.openBalanceSheets.length}} Balance Sheets </mat-label>
       <div class="grid-buttons" >
         <div *ngFor="let sheets of closeDayValidation.openBalanceSheets">
           <button mat-raised-button color="warn" (click)="openBalanceSheet(sheets.id)">
@@ -19,7 +21,7 @@
     </div>
 
     <div *ngIf="closeDayValidation.openPaidOrders && closeDayValidation.openPaidOrders.length">
-      <mat-label>{{closeDayValidation.openPaidOrders.length}} Partial Paid Orders </mat-label>
+      <mat-label >{{closeDayValidation.openPaidOrders.length}} Partial Paid Orders </mat-label>
       <div class="grid-buttons" >
         <div *ngFor="let item of closeDayValidation.openPaidOrders">
           <button mat-raised-button color="warn" (click)="setOrder(item.id)">

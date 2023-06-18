@@ -7,31 +7,6 @@ import { POSOrderItemService } from '../transactions/posorder-item-service.servi
 import { PromptGroupService } from './prompt-group.service';
 import { PromptSubGroupsService } from './prompt-sub-groups.service';
 
-// export interface OrderPromptGroup {
-// 	orderID      : number;
-// 	promptGroupID: number;
-//   orderItem    : IPOSOrderItem;
-//   mainMenuItem : IMenuItem;
-// 	prompts	     : OrderPromptSubGroups[];
-// }
-
-// export interface OrderPromptSubGroups {
-// 	 promptSubGroupID : number;
-// 	 items  		      : IMenuItem[];
-// 	 minQuantity      : number;
-// 	 maxQuantity      : number;
-// 	 itemsSelected    : MenuItemsSelected[];
-// 	 quantityMet      : boolean;
-// }
-
-// export interface MenuItemsSelected {
-// 	 menuItem         : IMenuItem;
-// 	 unitTypeID       : number;
-// 	 quantity         : number;
-// 	 price            : number;
-// 	 orderPromptGroup : OrderPromptGroup[];s
-// }
-
 @Injectable({
   providedIn: 'root'
 })
@@ -65,17 +40,20 @@ export class PromptWalkThroughService {
   }
 
   updateAccordionStep(number) {
+    // console.log('updateAccordionStep')
     this.accordionStep = number;
     this._accordionStep.next(number)
   }
 
   nextStep() {
+    // console.log('nextStep')
     if (!this.accordionStep) { this.accordionStep }
     this.accordionStep ++;
     this._accordionStep.next(this.accordionStep)
   }
 
   previousStep() {
+    // console.log('previousStep')
     if (!this.accordionStep) { this.accordionStep = 0 }
     this.accordionStep --;
     this._accordionStep.next(this.accordionStep)
@@ -89,20 +67,26 @@ export class PromptWalkThroughService {
     this._accordionStep.next(0)
   }
 
+  //!!!!
+  //validates all items and counts in the selections.
+  validateSelections(orderPromptGroup: IPromptGroup): string[] {
+    return []
+  }
+
   canItemBeAdded(orderPromptGroup: IPromptGroup,
-                 index: number, subGroupInfo : PromptSubGroups): IPromptGroup {
+                 index: number,
+                 subGroupInfo : PromptSubGroups): IPromptGroup {
+
+    if (!orderPromptGroup) { return null }
 
     let prompt = orderPromptGroup.selected_PromptSubGroups[index].promptSubGroups
 
+    // console.log('orderPromptGroup', orderPromptGroup)
+    // console.log('subGroupInfo', index, subGroupInfo)
+    // console.log('prompt', prompt)
     //&& subGroupInfo && prompt.promptSubGroupID == subGroupInfo.id
     if (prompt) {
       prompt.quantityMet = false;
-
-      // if (!this.accordionStep) {
-      //   console.log('sets accordion setup 1')
-      //   this._accordionStep.next(orderPromptGroup.currentAccordionStep);
-      //   orderPromptGroup.currentAccordionStep = 0;
-      // }
 
       if (!prompt?.itemsSelected) {
         return orderPromptGroup;
@@ -110,10 +94,11 @@ export class PromptWalkThroughService {
 
       prompt = this.setQuantityCheck(prompt)
 
-      if (prompt.minQuantity || prompt.maxQuantityMet) {
+      const itemsCount = +prompt?.itemsSelected?.length;
+
+      if (prompt.moveOnQuantity == itemsCount || prompt.maxQuantityMet ) {
         orderPromptGroup.currentAccordionStep ++;
         this._accordionStep.next(orderPromptGroup.currentAccordionStep);
-        console.log('increment', orderPromptGroup.currentAccordionStep)
       }
 
       orderPromptGroup.selected_PromptSubGroups[index].promptSubGroups = prompt;
@@ -156,7 +141,7 @@ export class PromptWalkThroughService {
           prompt.moveOnQuantity >= prompt.itemsSelected.length ) {
 
       if ( prompt.moveOnQuantity != 0 ) {
-        console.log('move on quantity reached.')
+        // console.log('move on quantity reached.')
         prompt.quantityMet = true
         return prompt;
       }
@@ -194,31 +179,3 @@ export class PromptWalkThroughService {
 
 }
 
-// promptSubGroupID : number;
-// items  		      : IMenuItem[];
-// minQuantity      : number;
-// maxQuantity      : number;
-// itemsSelected    : MenuItemsSelected[];
-// quantityMet      : boolean;
-
-
-// export interface SelectedPromptSubGroup {
-//   promptGroupsID:    number;
-//   promptSubGroupsID: number;
-//   id:                number;
-//   sortOrder:         number;
-//   promptSubGroups:   PromptSubGroups;
-// }
-
-// export interface PromptSubGroups {
-//   id:              number;
-//   name:            string;
-//   minQuantity:     number;
-//   maxQuantity:     number;
-//   moveOnQuantity:  number;
-//   created:         string;
-//   lastEdited:      string;
-//   instructions:    string;
-//   image:           string;
-//   promptMenuItems: PromptMenuItem[];
-// }

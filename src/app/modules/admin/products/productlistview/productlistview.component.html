@@ -128,6 +128,12 @@
   </div>
 </div>
 
+<div *ngIf="action$ | async as item; else opening"></div>
+<ng-template #opening>
+  <div *ngIf="openingProduct">
+    <mat-spinner [diameter]="40"></mat-spinner>
+  </div>
+</ng-template>
 <mat-divider></mat-divider>
 
 <div [class]="gridlist">
@@ -163,4 +169,4 @@
   <span id="selectedRows"> </span>
 </div>
 
-<div *ngIf="action$ | async as item"></div>
+
