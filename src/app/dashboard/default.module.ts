@@ -383,6 +383,9 @@ import { NgxColorsModule } from 'ngx-colors';
 import { CategorySelectListFilterComponent } from '../shared/widgets/category-select-list-filter/category-select-list-filter.component';
 import { ProductFilterComponent } from '../shared/widgets/product-filter/product-filter.component';
 import { OptionsSelectFilterComponent } from '../shared/widgets/options-select-filter/options-select-filter.component';
+import { PartBuilderEditComponent } from '../modules/admin/products/part-builder/part-builder-edit/part-builder-edit.component';
+import { PartBuilderMainComponent } from '../modules/admin/products/part-builder/part-builder-main/part-builder-main.component';
+import { PartBuilderComponentEditComponent } from '../modules/admin/products/part-builder/part-builder-component-edit/part-builder-component-edit.component';
 // import { PointlessReportingLibModule } from 'projects/pointess-reporting-lib/src/public-api';
 // import { ColorPickerModule } from 'ngx-color-picker';
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
@@ -621,6 +624,11 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     OrdersListComponent,
     OrdersMainComponent,
     OrderPanelComponent,
+
+    PartBuilderMainComponent,
+    PartBuilderEditComponent,
+    PartBuilderComponentEditComponent,
+
     PackageListComponent,
     PackageSearchSelectorComponent,
 

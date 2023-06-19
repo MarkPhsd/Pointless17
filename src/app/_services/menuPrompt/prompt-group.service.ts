@@ -41,7 +41,7 @@ export interface editWindowState {
 export class PromptGroupService {
 
   private _promptGroup       = new BehaviorSubject<IPromptGroup>(null);
-  public promptGroup$         = this._promptGroup.asObservable();
+  public promptGroup$        = this._promptGroup.asObservable();
 
   private _editWindowState       = new BehaviorSubject<editWindowState>(null);
   public editWindowState$         = this._editWindowState.asObservable();

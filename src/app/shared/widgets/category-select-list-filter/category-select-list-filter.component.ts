@@ -51,76 +51,76 @@ export class CategorySelectListFilterComponent implements OnInit {
     })
   }
 
-  initSearchSubscription() { 
+  initSearchSubscription() {
     this._searchModel = this.menuService.searchModel$.subscribe( model => {
 
       if (!model) { model = this.menuService.initSearchModel()}
 
-      // if (!model.listBrandID || model.listBrandID.length == 0 )  { 
+      // if (!model.listBrandID || model.listBrandID.length == 0 )  {
       //   this.savedList = []
       // }
-      // if (!model.listDepartmentID || model.listDepartmentID.length == 0) { 
+      // if (!model.listDepartmentID || model.listDepartmentID.length == 0) {
       //   this.savedList = []
       // }
-      // if (!model.listCategoryID || model.listCategoryID.length == 0) { 
+      // if (!model.listCategoryID || model.listCategoryID.length == 0) {
       //   console.log('clearing saved list', model.listCategoryID)
       //   this.savedList = []
       // }
-      // if (!model.listSubCategoryID || model.listSubCategoryID.length == 0) { 
+      // if (!model.listSubCategoryID || model.listSubCategoryID.length == 0) {
       //   this.savedList = []
       // }
-      // if (!model.listPublisherID || model.listPublisherID.length == 0) { 
+      // if (!model.listPublisherID || model.listPublisherID.length == 0) {
       //   this.savedList = []
       // }
-      // if (!model.listSpecies || model.listSpecies.length == 0) { 
+      // if (!model.listSpecies || model.listSpecies.length == 0) {
       //   this.savedList = []
       // }
-      // if (!model.listArtistID || model.listArtistID.length == 0) { 
+      // if (!model.listArtistID || model.listArtistID.length == 0) {
       //   this.savedList = []
       // }
 
-      this.filterCategories(model);
-      this.filterSubcategories(model);
+      // this.filterCategories(model);
+      // this.filterSubcategories(model);
       // this.setSavedList(model)
     })
   }
 
-  filterCategories(model: ProductSearchModel) { 
+  filterCategories(model: ProductSearchModel) {
     const dept = model.listDepartmentID
-    if (dept && dept.length>0) { 
-      if (this.type === 'category') { 
+    if (dept && dept.length>0) {
+      if (this.type === 'category') {
         this.basicList = []
-      
+
         let list = new Set(dept);
         let filteredItems = this.categoryList.filter(item => list.has(item.departmentID));
         filteredItems.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
                                                               image: this.getItemSrc(item?.urlImageMain)} ) })
       }
-    } else { 
+    } else {
       this.categoryList.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
         image: this.getItemSrc(item?.urlImageMain)} ) })
     }
   }
 
-  filterSubcategories(model: ProductSearchModel) { 
+  filterSubcategories(model: ProductSearchModel) {
     const cat = model.listCategoryID
-    if (cat && cat.length > 0) { 
-      if (this.type === 'subcategory') { 
+    if (cat && cat.length > 0) {
+      if (this.type === 'subcategory') {
         this.basicList = []
-      
+
         let list = new Set(cat);
         console.log('filter subcategory', cat, this.subCategoryList)
         let filteredItems = this.subCategoryList.filter(item => list.has(item.categoryID));
         filteredItems.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
                                                               image: this.getItemSrc(item?.urlImageMain)} ) })
       }
-    } else { 
+    } else {
       this.subCategoryList.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
         image: this.getItemSrc(item?.urlImageMain)} ) })
     }
   }
 
- 
+
 // this.setSavedList(model)
 
   constructor(
@@ -185,7 +185,7 @@ export class CategorySelectListFilterComponent implements OnInit {
       if (this.type === 'category') {
         this.list$ = category$
         .pipe(switchMap(list => {
-          this.categoryList  = list 
+          this.categoryList  = list
           list.forEach(item => {  this.basicList.push( {name: item?.name, id: item?.id, image: this.getItemSrc(item.urlImageMain)})
 
           })
@@ -207,7 +207,7 @@ export class CategorySelectListFilterComponent implements OnInit {
         this.list$ = subCategory$
         .pipe(switchMap(list => {
 
-          this.subCategoryList  = list 
+          this.subCategoryList  = list
           list.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
                                                       image: this.getItemSrc(item?.urlImageMain)} ) })
           this.setSavedList(model)
@@ -221,7 +221,7 @@ export class CategorySelectListFilterComponent implements OnInit {
     if (this.type === 'brand') {
       this.list$ = this.contactService.getBrands(site, null).pipe(switchMap(results => {
         if (results.results) {
-         
+
           const list = results.results
           list.forEach(item =>
           {

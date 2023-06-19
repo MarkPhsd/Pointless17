@@ -64,9 +64,24 @@ export class PromptWalkThroughComponent implements OnInit {
 
   initPromptGroupSubscription() {
     try {
-      this._promptGroup = this.promptGroupService.promptGroup$.subscribe(data => {
-        // console.log('working with prompt:', data.name)
-        this.promptGroup = data;
+      this._promptGroup =
+      this.promptGroupService.promptGroup$.pipe(
+        switchMap(data => {
+          if (!data) { return this.orderMethodsService.currentOrder$ }
+          // console.log('working with prompt:', data.name);
+          this.promptGroup = data;
+          return this.orderMethodsService.currentOrder$
+      })).subscribe(data => {
+        console.log('order', data)
+
+        if (data) { this.order = data;}
+        if (this.promptGroup) {
+          this.orderPromptGroup = this.promptGroup;
+          this.orderPromptGroup.orderID = this.order.id
+          // console.log('Order Prompt Group', this.orderPromptGroup)
+          return of(this.orderPromptGroup)
+        }
+        return of(null)
       })
     } catch (error) {
     }
@@ -84,10 +99,10 @@ export class PromptWalkThroughComponent implements OnInit {
     //the order and the prompt will be assigned.
     //the main item should also be included .
     //we might in the future want to use a multiplier. based on size selection
-    this._orderPromptGroup = this.promptWalkThroughService.orderPromptGroup$.subscribe( data => {
-      // console.log('initOrderPromptGroupSubscription', data)
-      this.orderPromptGroup = data;
-    })
+    // this._orderPromptGroup = this.promptWalkThroughService.orderPromptGroup$.subscribe( data => {
+    //   // console.log('initOrderPromptGroupSubscription', data)
+    //   this.orderPromptGroup = data;
+    // })
 
   }
 
@@ -206,9 +221,31 @@ export class PromptWalkThroughComponent implements OnInit {
   // @ViewChild('smallDisplay')    smallDisplay: TemplateRef<any>;
 
   applyChoices() {
+
+    // console.log('Prompt', this.orderPromptGroup);
+
     if (this.orderPromptGroup) {
       const site = this.sitesService.getAssignedSite();
       this.setNotes();
+
+      let time = 500
+      let message = ''
+      const quantityMetValidation = this.promptWalkThroughService.validateAllPromptsQuantityMet(this.orderPromptGroup)
+      if (quantityMetValidation.length) {
+        quantityMetValidation.forEach(data => {
+           if (!data.quantityMet) {
+            if (message != '') { message.concat(' and ')}
+            message = message.concat(`Section ${data.name} requires ${data.quantityRequired} item(s). `);
+           }
+        })
+
+       // console.log('message', message, quantityMetValidation)
+        if (message != '') {
+          this.sitesService.notify(message, 'Close', time * quantityMetValidation.length, 'yellow', 'top');
+          return;
+        }
+      }
+
 
       const result =   this.promptWalkThroughService.validateSelections(this.orderPromptGroup)
       if (result && result.length  > 0) {

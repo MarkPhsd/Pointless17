@@ -45,15 +45,42 @@ export class PromptWalkThroughService {
     this._accordionStep.next(number)
   }
 
+  validateQuantityMet(index: number, prompt:  IPromptGroup) {
+    //print out the current panel
+    // console.log('index', index)
+    // //print out the current Quantity Added
+    // console.log('Sub Groups', prompt?.selected_PromptSubGroups)
+    // console.log('current quantity applied',  prompt?.selected_PromptSubGroups[index]?.promptSubGroups?.itemsSelected?.length )
+    // //print out the required Quantity
+    // console.log('quantity required',  prompt?.selected_PromptSubGroups[index]?.promptSubGroups?.minQuantity )
+    const qtyApplied =  prompt?.selected_PromptSubGroups[index]?.promptSubGroups?.itemsSelected?.length;
+    const minQuantity = prompt?.selected_PromptSubGroups[index]?.promptSubGroups?.minQuantity
+    if ((minQuantity  && (qtyApplied >= minQuantity) || minQuantity == 0) || !minQuantity) {
+      return {name: prompt?.selected_PromptSubGroups[index]?.promptSubGroups.name, quantityMet: true };
+    }
+    return {name: prompt?.selected_PromptSubGroups[index]?.promptSubGroups.name, quantityMet: false, quantityRequired:minQuantity  };
+  }
+
+  validateAllPromptsQuantityMet(prompt: IPromptGroup) {
+   const results = [];
+   const list = prompt?.selected_PromptSubGroups
+   let i = 0
+   list.forEach(data => {
+     const result = this.validateQuantityMet(i, prompt)
+     results.push(result)
+     i += 1
+   })
+   return results;
+  }
+
   nextStep() {
-    // console.log('nextStep')
+    // console.log('moving to next step')
     if (!this.accordionStep) { this.accordionStep }
     this.accordionStep ++;
     this._accordionStep.next(this.accordionStep)
   }
 
   previousStep() {
-    // console.log('previousStep')
     if (!this.accordionStep) { this.accordionStep = 0 }
     this.accordionStep --;
     this._accordionStep.next(this.accordionStep)
@@ -81,10 +108,6 @@ export class PromptWalkThroughService {
 
     let prompt = orderPromptGroup.selected_PromptSubGroups[index].promptSubGroups
 
-    // console.log('orderPromptGroup', orderPromptGroup)
-    // console.log('subGroupInfo', index, subGroupInfo)
-    // console.log('prompt', prompt)
-    //&& subGroupInfo && prompt.promptSubGroupID == subGroupInfo.id
     if (prompt) {
       prompt.quantityMet = false;
 
@@ -96,7 +119,12 @@ export class PromptWalkThroughService {
 
       const itemsCount = +prompt?.itemsSelected?.length;
 
+      // console.log('max quantity', prompt.maxQuantity)
+      // console.log('move on quantity', prompt.moveOnQuantity)
+      // console.log('checking quantity to move on', prompt.moveOnQuantity, prompt.moveOnQuantity == itemsCount, prompt.maxQuantityMet)
+
       if (prompt.moveOnQuantity == itemsCount || prompt.maxQuantityMet ) {
+        // console.log('moving to next step')
         orderPromptGroup.currentAccordionStep ++;
         this._accordionStep.next(orderPromptGroup.currentAccordionStep);
       }
@@ -115,7 +143,7 @@ export class PromptWalkThroughService {
           prompt.itemsSelected.length >= prompt.maxQuantity) {
 
       if ( prompt.maxQuantity != 0 ) {
-        prompt.maxQuantityMet = true;
+        prompt.maxQuantityMet = false;
         prompt.quantityMet = true
         return prompt;
       }
@@ -123,6 +151,10 @@ export class PromptWalkThroughService {
     }
 
     prompt.maxQuantityMet = false;
+    if (prompt.itemsSelected && (prompt.itemsSelected.length == prompt.maxQuantity)) {
+      prompt.maxQuantityMet = true;
+    }
+
     if ( prompt.itemsSelected &&
           prompt.itemsSelected.length != 0 &&
           prompt.minQuantity != 0 &&
@@ -132,7 +164,6 @@ export class PromptWalkThroughService {
         prompt.quantityMet = true
         return prompt;
       }
-
     }
 
     if ( prompt.itemsSelected &&
@@ -141,7 +172,6 @@ export class PromptWalkThroughService {
           prompt.moveOnQuantity >= prompt.itemsSelected.length ) {
 
       if ( prompt.moveOnQuantity != 0 ) {
-        // console.log('move on quantity reached.')
         prompt.quantityMet = true
         return prompt;
       }

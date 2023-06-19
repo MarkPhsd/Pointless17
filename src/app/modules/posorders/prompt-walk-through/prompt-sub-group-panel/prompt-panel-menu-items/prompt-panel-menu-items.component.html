@@ -42,7 +42,7 @@
           </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
-      <div *ngIf="itemOption">
+      <div *ngIf="itemOption && itemSelected && itemSelected.name" >
         Selected  {{itemSelected?.name}}
       </div>
     </div>

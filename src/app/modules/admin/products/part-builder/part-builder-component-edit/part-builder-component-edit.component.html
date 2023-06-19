@@ -1,0 +1,84 @@
+<mat-card>
+  <mat-card-title>
+    <div>
+      Part Builder -  {{pb_Main?.name}}
+    </div>
+
+    <button color="primary" mat-button (click)="initData()">Example</button>
+  </mat-card-title>
+
+  <mat-card-content>
+    <div *ngIf="pb_Main container"  >
+      <ul class="ps-grid-items">
+      <li>Item</li>
+      <li>Unit</li>
+      <li>Price</li>
+      <li>Cost</li>
+      <li>Quantity</li>
+      <li>Edit</li>
+      <li>Delete</li>
+      </ul>
+
+      <div *ngFor="let item of pb_Main.pb_Components">
+        <ul class="ps-grid-items ">
+          <li>{{item?.product?.name}}</li>
+          <li>{{item?.unitType?.name}}</li>
+          <li>{{item?.price | currency}}</li>
+          <li>{{item?.cost | currency}}</li>
+          <li>{{item?.quantity}}</li>
+          <li><button mat-button color="accent" (click)="enableEdit(item)"><mat-icon>edit</mat-icon>Edit</button></li>
+          <li><button mat-button color="accent" (click)="delete(item)"><mat-icon>trash</mat-icon>Delete</button></li>
+        </ul>
+      </div>
+    </div>
+  </mat-card-content>
+
+</mat-card>
+
+<mat-card *ngIf="pb_Component">
+  <div *ngIf="componentForm" [formGroup]="componentForm">
+    <mat-card>
+      <mat-card-content>
+
+        <app-product-search-selector
+            class         = "fields"
+            [itemType]    = 1
+            [productName] = "productName"
+            [searchForm]  = "searchForm"
+            (itemSelect)  = "getItem($event)">
+          >
+        </app-product-search-selector>
+
+        <div class="ps-grid-items">
+          <app-value-fields
+              [inputForm]="componentForm"
+              [fieldName]="'name'">
+            Name
+          </app-value-fields>
+
+          <app-value-fields
+              [inputForm]="componentForm"
+              [fieldName]="'price'">
+            Price
+          </app-value-fields>
+
+          <app-value-fields
+              [inputForm]="componentForm"
+              [fieldName]="'cost'">
+            Cost
+          </app-value-fields>
+
+          <app-value-fields
+              [inputForm]="componentForm"
+              [fieldName]="'quantity'">
+            Quantity
+          </app-value-fields>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</mat-card>
+
+
+

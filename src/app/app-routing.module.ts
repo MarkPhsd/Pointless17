@@ -135,9 +135,14 @@ import { PointlessMETRCSalesComponent } from './modules/admin/metrc/pointless-me
 import { DesignerListComponent } from './modules/admin/report-designer/designer/designer-list/designer-list.component';
 import { DesignerEditorComponent } from './modules/admin/report-designer/designer/designer-editor/designer-editor.component';
 import { ProductFilterComponent } from './shared/widgets/product-filter/product-filter.component';
+import { PartBuilderMainComponent } from './modules/admin/products/part-builder/part-builder-main/part-builder-main.component';
+import { PartBuilderEditComponent } from './modules/admin/products/part-builder/part-builder-edit/part-builder-edit.component';
 
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
+
+    { path: 'partBuilder',  component: PartBuilderMainComponent, data: { title: 'Part Builder', animation: 'isLeft'} },
+    { path: 'partBuilderEdit',  component: PartBuilderEditComponent, data: { title: 'Part Builder', animation: 'isLeft'} },
 
     { path: 'printerslist',  component: InstalledPrintersComponent, data: { title: 'Print Settings', animation: 'isLeft'} },
     { path: 'blog-post-list',  component: BlogPostListComponent, data: { title: 'BlogPosts', animation: 'isLeft'} },

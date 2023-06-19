@@ -152,6 +152,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
   addItem() {
     this.newItem$ = this.addItemSub()
+
   }
 
   addItemSub():Observable<MenuItemsSelected> {
@@ -223,11 +224,15 @@ export class PromptPanelMenuItemComponent implements OnInit {
           if (item.menuItem && item.menuItem.name) {
             item.menuItem.name = `${prefix} ${item.menuItem.name}`.trim()
           } else {
-            console.log('no menu item name');
+            // console.log('no menu item name');
           }
 
           currentSubPrompt.itemsSelected.push(item);
           orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups.itemsSelected = currentSubPrompt.itemsSelected;
+
+          this.promptWalkService.validateQuantityMet(this.index,
+                                                      orderPromptGroup)
+
           this.promptWalkService.updatePromptGroup(orderPromptGroup);
         }
 
@@ -236,7 +241,8 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
         if (!orderPromptGroup) { return };
 
-        if (currentSubPrompt.quantityMet) {
+        // const moveOnQuantity = currentSubPrompt.moveOnQuantity
+        if (currentSubPrompt.quantityMet && currentSubPrompt.moveOnQuantity == currentSubPrompt.itemsSelected.length) {
           this.nextStep()
           const lastGroupIndex = orderPromptGroup.selected_PromptSubGroups.length;
           const lastGroup =  orderPromptGroup.selected_PromptSubGroups[lastGroupIndex -1];
@@ -321,7 +327,6 @@ export class PromptPanelMenuItemComponent implements OnInit {
     return of(null);
   }
 
-
   getMenuItemToRemove(): Observable<MenuItemsSelected> {
     if (this.promptMenuItem) {
         const site = this.siteService.getAssignedSite();
@@ -366,6 +371,11 @@ export class PromptPanelMenuItemComponent implements OnInit {
   }
 
   nextStep() {
+    const result = this.promptWalkService.validateQuantityMet(this.promptWalkService.accordionStep, this.orderPromptGroup)
+    if (!result || !result.quantityMet) {
+      this.siteService.notify(`You must select at least ${result.quantityRequired} from this group`, 'Close', 2000, 'yellow')
+      return
+    }
     this.promptWalkService.nextStep()
   }
 

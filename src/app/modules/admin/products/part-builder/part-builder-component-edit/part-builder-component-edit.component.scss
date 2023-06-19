@@ -1,0 +1,36 @@
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  // background-color: #333333;
+
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 16px;
+  text-decoration: none;
+  line-height: 1em;
+}
+
+li a:hover {
+  background-color: #b2d1d9;
+}
+
+.container {
+  // max-height: 600px;
+  height: 500px;
+  overflow-y: auto;
+
+}
+
+.field-width {
+  width: 200px;
+}

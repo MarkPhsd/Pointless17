@@ -34,6 +34,7 @@ import { RouteReuseService } from "src/app/_services/system/route-reuse.service"
 import { ClientTypeEditComponent } from "./clients/client-types/client-type-edit/client-type-edit.component";
 import { ClientTypeListComponent } from "./clients/client-types/client-type-list/client-type-list.component";
 import { CompanyEditComponent } from "./company-edit/company-edit.component";
+// import { PartBuilderMainComponent } from './products/part-builder/part-builder-main/part-builder-main.component';
 // import { MetrcSummaryComponent } from './reports/metrc-summary/metrc-summary.component';
 // import { ManifestStatusComponent } from "./inventory/manifest-status/manifest-status.component";
 // import { ManifestTypeComponent } from "./inventory/manifest-type/manifest-type.component";
@@ -130,6 +131,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     // StoreCreditListComponent,
 
 
+
+    // PartBuilderMainComponent
   ],
 
   //.withComponents([ButtonRendererComponent,AgIconFormatterComponent, AgGridToggleComponent,AgGridImageFormatterComponent]),

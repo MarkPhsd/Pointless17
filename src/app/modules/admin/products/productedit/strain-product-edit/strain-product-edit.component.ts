@@ -90,8 +90,8 @@ export class StrainProductEditComponent implements OnInit {
     // console.log('init product', product)
     if (product && !product.json) {
       this.productJSONObject  = {}  as menuButtonJSON;
-      this.productJSONObject.buttonColor = '#F8F8F8';
-      this.productJSONObject.backColor = '#F8F8F8';
+      this.productJSONObject.buttonColor = '';
+      this.productJSONObject.backColor = '';
       // this.productJSONObject.enableButtonColor = '#F8F8F8';
 
       return

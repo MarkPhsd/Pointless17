@@ -1,0 +1,23 @@
+<div *ngIf="(action$  | async) as action"></div>
+<div *ngIf="pb_Main$ | async"></div>
+
+<mat-card>
+  <mat-card-title *ngIf="pb_Main">
+    <mat-icon>edit</mat-icon> {{pb_Main?.name}}
+    <mat-label>Last Edited: {{pb_Main?.dateUpdated}}</mat-label>
+    <mat-divider> </mat-divider>
+  </mat-card-title>
+
+  <mat-card-content>
+    <div class="ps-flex-group-column">
+      <app-value-fields
+          [inputForm]="inputForm"
+          [fieldName]="'name'">
+        Name
+      </app-value-fields>
+    </div>
+    <part-builder-component-edit>
+    </part-builder-component-edit>
+  </mat-card-content>
+
+</mat-card>

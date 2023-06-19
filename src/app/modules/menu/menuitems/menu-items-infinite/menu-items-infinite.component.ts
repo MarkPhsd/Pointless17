@@ -164,6 +164,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
         return this.categoryFilter
       }
     }
+    // this.uiHomePage.suppressItemsInStoreNavigation
     return undefined
   }
 
@@ -247,7 +248,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
   get isSearchSelectorOn() {
 
-    if (this.uiHomePage && this.uiHomePage.disableSearchFeaturesInItemsList) { 
+    if (this.uiHomePage && this.uiHomePage.disableSearchFeaturesInItemsList) {
       return null
     }
 
@@ -313,14 +314,14 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
           this.productSearchModel = this.menuService.initSearchModel()
 
 
-          //updates when the filter is enabled. 
-          if (this.router.url === '/filter') { 
+          //updates when the filter is enabled.
+          if (this.router.url === '/filter') {
             this.initModelParameters(this.productSearchModel)
           }
           if (this.updateSearchOnModelChange) {
           }
         }
-  
+
     } catch (error) {
       console.log('initSearchProcess Error', error)
     }
@@ -518,7 +519,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   initFilterOption() {
     if (this.authService.deviceInfo) {
       const device = this.authService.deviceInfo
-      if (this.uiHomePage && this.uiHomePage.disableSearchFeaturesInItemsList) { 
+      if (this.uiHomePage && this.uiHomePage.disableSearchFeaturesInItemsList) {
         this.enableFilter = false
         return false
       }
@@ -562,14 +563,14 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
             this.cd.detectChanges()
             this.menuItems = this.splitItemsIntType(data.results, this.menuItems);
 
-            if (this.uiHomePage.suppressItemsInStoreNavigation) { 
-              if (this.categories && this.categories.length>0) { 
+            if (this.uiHomePage.suppressItemsInStoreNavigation) {
+              if (this.categories && this.categories.length>0) {
                 this.menuItems  = [];
                 this.endOfRecords = true;
                 this.loading = false;
                 this.value = 100;
                 this.cd.detectChanges()
-        
+
                 return of(null)
               }
             }
