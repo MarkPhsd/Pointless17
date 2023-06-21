@@ -84,6 +84,11 @@ mat-card-subtitle {
   color: --ion-color-tertiary;
 }
 
+.total { 
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
 .field-center {
   @include for-phone-only  {
     grid-column: 1 / span 2;

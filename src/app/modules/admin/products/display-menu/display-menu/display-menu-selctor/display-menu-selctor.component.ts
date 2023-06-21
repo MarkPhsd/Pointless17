@@ -96,26 +96,23 @@ export class AdminDisplayMenuSelctorComponent implements OnInit {
   initListMenuList(){
     const site = this.siteService.getAssignedSite()
     this.action$ = this.priceScheduleService.getMenuList(site).pipe(
-      switchMap(schedule => {
+      switchMap(
+        schedule => {
         const data = schedule.results;
-        this.availableItems = []
-        data.forEach(item =>
-          {
-            this.availableItems.push({name: item.name, id: item.id.toString()})
-
-            // this.availableItems = this.availableItems.filter( function( el ) {
-            //   return this.selectedItems.indexOf( el ) < 0;
-            // });
-
-            const items = this.availableItems
-            const remove = this.selectedItems
-            this.availableItems = items.filter(ar => !remove.find(rm => (rm.name === ar.name && ar.id === rm.id) ));
-
-
+        if (data) {
+          this.availableItems = []
+          data.forEach(item =>
+            {
+              this.availableItems.push({name: item.name, id: item.id.toString()})
+              // this.availableItems = this.availableItems.filter( function( el ) {
+              //   return this.selectedItems.indexOf( el ) < 0;
+              // });
+              const items = this.availableItems
+              const remove = this.selectedItems
+              this.availableItems = items.filter(ar => !remove.find(rm => (rm.name === ar.name && ar.id === rm.id) ));
+            });
           }
-        )
-
-        return of(data)
+          return of(data)
         }
       )
     )

@@ -5,7 +5,6 @@
   </div>
 </ng-template>
 
-
 <div class="container">
   <div class="row-class"
        *ngIf="(menu$ | async) as menus; else loading">
@@ -47,10 +46,6 @@
               <div *ngIf="isAuthorized(item.userType)" >
               <div *ngIf="!item.minimized">
                   <div class="menu" >
-                    <!-- <button mat-menu-item
-                            color=""
-                            routerLinkActive={{item.routerLinkActive}}
-                            routerLink=      {{item.routerLink}}> -->
                   <button mat-menu-item
                             (click)="navigateMenu(item.routerLink)">
                       <div [class]="gridtoggletiny">
@@ -113,6 +108,7 @@
 
 <ng-template #compactButton>
   <button mat-icon-button
+      *ngIf="menuName === 'main'"
       (click)="setSmallMenu()"
       aria-label=" toggle">
     <mat-icon>view_compact</mat-icon>

@@ -60,7 +60,6 @@ export class DisplayMenuListComponent implements OnInit {
       public route: ActivatedRoute,
       private priceScheduleService: PriceScheduleService,
       private siteService: SitesService,
-      
       private orderMethodService: OrderMethodsService,
       private orderService: OrdersService,
       private awsBucket         : AWSBucketService,
@@ -104,9 +103,11 @@ export class DisplayMenuListComponent implements OnInit {
           return of('no menu')
         }
         const list = JSON.parse(data?.menuSections);
-        list.forEach(item => {
-          this.obs$.push(this.priceScheduleService.getPriceScheduleFull(site, item.id))
-        });
+        if (list && list.length != 0) {
+          list.forEach(item => {
+            this.obs$.push(this.priceScheduleService.getPriceScheduleFull(site, item.id))
+          });
+        }
 
         this.menu = data;
 

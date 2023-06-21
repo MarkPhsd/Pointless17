@@ -9,6 +9,7 @@ import { IUser } from 'src/app/_interfaces';
 import { Router } from '@angular/router';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'app-cart-button',
@@ -74,6 +75,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     private toolbarServiceUI:       ToolBarUIService,
     private router                : Router,
     private userSwitchingService: UserSwitchingService,
+    public platFormService: PlatformService,
     public orderMethodsService: OrderMethodsService,
     ) {
    }

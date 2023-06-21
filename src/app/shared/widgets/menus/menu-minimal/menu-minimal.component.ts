@@ -85,7 +85,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
       return
     }
     const site  = this.siteService.getAssignedSite();
-    const menu$ = this.menusService.getMainMenu(site)
+    const menu$ = this.menusService.getMenuGroupByName(site, 'main')
 
     this.menus$ = menu$.pipe(
       switchMap(data => {

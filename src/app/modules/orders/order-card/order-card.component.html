@@ -45,8 +45,6 @@
               <span *ngIf="order?.tableName">{{order?.tableName.trim()}}</span>
             </div>
             <div *ngIf="!smallDevice">
-              <!-- <span *ngIf="order?.clientID"> {{ clientNameOfOrder | truncateText : 12}}</span> -->
-
               <span *ngIf="order?.customerName"> {{ order?.customerName.trim() | truncateText : 12}}</span>
               <span *ngIf="order?.tableName">{{order?.tableName.trim()}}</span>
             </div>

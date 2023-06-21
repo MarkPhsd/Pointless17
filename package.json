@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.63.9",
+  "version": "1.64.2",
   "browser": {
     "crypto": false,
     "stream": false,

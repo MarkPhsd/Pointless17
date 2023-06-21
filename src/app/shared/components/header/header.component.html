@@ -4,37 +4,39 @@
 <mat-toolbar [class]="mattoolbar"
              [color]="matToolbarColor">
   <mat-toolbar-row>
-
-    <!-- <div [class]="gridlayout">
-
-      <div class="simple-row">
-      <div [class]="flexsections"> -->
+      <!-- <div class="ps-flex-group"> -->
+        
       <ng-container [ngTemplateOutlet]="backButtonView"></ng-container>
-      <ng-container [ngTemplateOutlet]="logoView"></ng-container>
+      
+      <ng-container *ngIf="user && user.roles && (user.roles == 'employee' || user.roles === 'admin' || user.roles == 'manager') " [ngTemplateOutlet]="logoView"></ng-container>
       <ng-container [ngTemplateOutlet]="menuBarView"></ng-container>
       <ng-container *ngTemplateOutlet="showSearchMenuView"></ng-container>
       <ng-container [ngTemplateOutlet]="goHomeView"></ng-container>
+
       <ng-container [ngTemplateOutlet]="currentSite"></ng-container>
       <ng-container [ngTemplateOutlet]="networkStatus"></ng-container>
       <ng-container [ngTemplateOutlet]="siteSelectorView"></ng-container>
+      
       <div *ngIf="!isUserStaff || phoneDevice">
         <ng-container [ngTemplateOutlet]="userActionsPhoneDevice"></ng-container>
       </div>
-      <!-- </div>
-      </div> -->
-      <!-- <ng-container  [ngTemplateOutlet]="userSwitchingButtonView" ></ng-container> -->
+      
       <ng-container [ngTemplateOutlet]="posPanel"></ng-container>
+      
+      <ng-container *ngIf="user && user.roles == 'user' " [ngTemplateOutlet]="logoView"></ng-container>
       <ng-container [ngTemplateOutlet]="companyHeader"></ng-container>
-      <!-- <div [class]="gridlayout"> -->
+
+      <ng-container *ngIf="!phoneDevice && !isUserStaff" [ngTemplateOutlet]="userSpacer"></ng-container>
+
       <ng-container [ngTemplateOutlet]="wizard"></ng-container>
       <ng-container [ngTemplateOutlet]="clockIn"></ng-container>
       <ng-container [ngTemplateOutlet]="keyboardButton"></ng-container>
       <ng-container [ngTemplateOutlet]="editCartButtons"></ng-container>
-    <!-- </div> -->
-    <!-- </div> -->
+
       <ng-container [ngTemplateOutlet]="appCart"></ng-container>
       <ng-container [ngTemplateOutlet]="userInfoScreen"></ng-container>
 
+    <!-- </div> -->
   </mat-toolbar-row>
 </mat-toolbar>
 
@@ -48,13 +50,13 @@
 </ng-template>
 
 <ng-template #logoView>
-  <div class="logo" *ngIf="!isApp" >
-  <app-logo [logoSize]="'small'" ></app-logo>
+  <div  class="logo" *ngIf="!isApp" >
+    <app-logo [logoSize]="'small'" ></app-logo>
   </div>
 </ng-template>
 
 <ng-template #menuBarView>
-  <div *ngIf="(isUserStaff || isAdmin) ">
+  <div *ngIf="user">
     <button aria-label="menu"
             mat-button
             (click)="toggleSideBar()">
@@ -73,7 +75,12 @@
   </div>
 </ng-template>
 
+<ng-template #userSpacer>
+  <div class="spacer" >
+  </div>
+</ng-template>
 <ng-template #posPanel>
+  
   <div class="grid-flow"
        *ngIf="!phoneDevice">
     <mat-card class='panel-card'
@@ -171,7 +178,7 @@
 </ng-template>
 
 <ng-template #companyHeader>
-  <div *ngIf="(!phoneDevice && !smallDevice) && !isUserStaff" [class]="gridlayout">
+  <div *ngIf="(!phoneDevice && !smallDevice) && !isUserStaff" >
     <div>
       <app-company-info-header [isUser]="!isUserStaff"></app-company-info-header>
     </div>
@@ -220,8 +227,7 @@
     </button>
   </div>
 
-  <!--  && userSwitching -->
-  <div *ngIf="user">
+  <div *ngIf="user && user.roles && user.roles != 'user'">
     <ng-container [ngTemplateOutlet]="menuButtonContainer">  </ng-container>
   </div>
 </ng-template>
@@ -326,7 +332,7 @@
             *ngIf="smallDevice && siteName"
             class="mat-item" >
             <h2> {{ siteName  }} </h2>
-            <mat-divider class="mat-divider"></mat-divider>
+        <mat-divider class="mat-divider"></mat-divider>
       </div>
 
       <div  class="mat-item"

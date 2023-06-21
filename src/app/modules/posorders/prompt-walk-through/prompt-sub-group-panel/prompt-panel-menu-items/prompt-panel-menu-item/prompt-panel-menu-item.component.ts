@@ -127,7 +127,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
   //promptMenuItem.prompt_Products.name
   validateAddingItem(): IPromptGroup {
-    return   this.promptWalkService.canItemBeAdded( this.orderPromptGroup, this.index, this.subGroupInfo)
+    return this.promptWalkService.canItemBeAdded( this.orderPromptGroup, this.index, this.subGroupInfo)
   }
 
   removeItem() {
@@ -241,8 +241,12 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
         if (!orderPromptGroup) { return };
 
-        // const moveOnQuantity = currentSubPrompt.moveOnQuantity
-        if (currentSubPrompt.quantityMet && currentSubPrompt.moveOnQuantity == currentSubPrompt.itemsSelected.length) {
+        const moveOnQuantity = currentSubPrompt.moveOnQuantity;
+        const quantityMet  = currentSubPrompt.quantityMet;
+        console.log('moveOnQuantity', moveOnQuantity)
+        console.log('quantity met', quantityMet)
+        console.log('move on met',  moveOnQuantity == currentSubPrompt.itemsSelected.length)
+        if (quantityMet && moveOnQuantity == currentSubPrompt.itemsSelected.length) {
           this.nextStep()
           const lastGroupIndex = orderPromptGroup.selected_PromptSubGroups.length;
           const lastGroup =  orderPromptGroup.selected_PromptSubGroups[lastGroupIndex -1];

@@ -3,6 +3,7 @@ import { UntypedFormGroup, FormGroupDirective,UntypedFormControl ,NgForm, Untype
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Observable, switchMap, of } from 'rxjs';
 import { clientType, IProductCategory, IServiceType, ISetting } from 'src/app/_interfaces';
+import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { AuthenticationService, MenuService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
@@ -33,6 +34,7 @@ export class UITransactionsComponent implements OnInit {
   serviceType$    : Observable<IServiceType[]>;
   categories$:  Observable<IProductCategory[]>;
 
+  
   constructor(
       private uISettingsService: UISettingsService,
       private settingService   : SettingsService,
@@ -42,6 +44,7 @@ export class UITransactionsComponent implements OnInit {
       private clienTableSerivce: ClientTableService,
       private menuService: MenuService,
       private fb: UntypedFormBuilder,
+      public labelingService: LabelingService,
       private authenticationService: AuthenticationService,
   ) {
   }

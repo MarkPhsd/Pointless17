@@ -16,6 +16,7 @@ export interface ResultCheck {
 })
 
 export class MenusService {
+ 
 
   private _accordionMenu    = new BehaviorSubject<AccordionMenu>(null);
   public  accordionMenu$    = this._accordionMenu.asObservable();
@@ -194,6 +195,35 @@ export class MenusService {
 
   ] ;
 
+  customerAccordionMenu: AccordionMenu[] = [
+    {
+      id:             0,
+      name:          'Profile',
+      icon:          'face',
+      active:        false,
+      sortOrder:      2,
+      menuGroupID:    0,
+      userType:       this.getUsers(),
+      routerLink:       '/app-profile',
+      routerLinkActive: 'app-profile',
+      method:           '',
+      submenus: [ ]
+    },
+    {
+      id:             0,
+      name:          'Orders',
+      icon:          'face',
+      active:        false,
+      sortOrder:      2,
+      menuGroupID:    0,
+      userType:       this.getUsers(),
+      routerLink:       '/pos-orders',
+      routerLinkActive: 'pos-orders',
+      method:           '',
+      submenus: []
+    },
+  ]
+
   user              : IUser;
   _user             : Subscription;
 
@@ -229,6 +259,41 @@ export class MenusService {
     return 'admin,manager'
   }
 
+  getMenuGroupByName(site: ISite, menuName: string):  Observable<AccordionMenu[]> {
+    const controller = "/MenuGroups/"
+
+    const endPoint = 'getMenuGroupByName';
+
+    const parameters = `?name=${menuName}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<AccordionMenu[]>(url)
+  }
+
+  getMenuGroupByNameForEdit(site:ISite, menuName): Observable<AccordionMenu[]> {
+
+    const user = JSON.parse(localStorage.getItem('user')) as IUser;
+    if (!user || !user.token || !user.token || user.token == '' ) { return of(null) }
+
+    if (!user || !user.roles ||  !user.username ) {
+      return of(null)
+    }
+
+    const controller = "/MenuGroups/"
+
+    const endPoint = 'getMenuGroupByNameForEdit';
+
+    const parameters = `?name=${menuName}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    // console.log('url', url);
+
+    return this.http.get<AccordionMenu[]>(url)
+
+}
+
   getMenu(site: ISite, menuName: string): Observable<AccordionMenu[]> {
 
       const user = JSON.parse(localStorage.getItem('user')) as IUser;
@@ -237,7 +302,7 @@ export class MenusService {
       if (!user || !user.token || !user.token || user.token == '' ) { return of(null) }
 
 
-      if (!user || !user.roles ||  !user.username ) {
+      if (!user || (user && !user.roles) ||  (user && !user.username) ) {
         return of(null)
       }
 
@@ -249,16 +314,34 @@ export class MenusService {
 
       const url = `${site.url}${controller}${endPoint}${parameters}`
 
-      // console.log('url', url);
-
       return this.http.get<AccordionMenu[]>(url)
 
   }
 
-  getMainMenu(site: ISite): Observable<AccordionMenu[]> {
-     return this.getMenu(site, 'main')
+  getMainMenuList(site: ISite): Observable<MenuGroup[]> {
+    const controller = "/MenuGroups/"
+
+    const endPoint = 'GetMenuGroupList';
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<MenuGroup[]>(url)
   }
 
+  getMainMenuByName(site: ISite, name: string): Observable<MenuGroup> {
+    const controller = "/MenuGroups/"
+
+    const endPoint = 'GetMenuGroupByName';
+
+    const parameters = `?name=${name}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<MenuGroup>(url)
+
+  }
   //PutSubMenuGrouplist
 
   putSubMenuGrouplist(site: ISite, submenu: SubMenu[]): Observable<SubMenu[]> {
@@ -274,6 +357,8 @@ export class MenusService {
     return this.http.put<SubMenu[]>(url, submenu)
 
   }
+
+
 
   putAccordionMenulist(site: ISite, accordionMenu: AccordionMenu[]): Observable<AccordionMenu[]> {
 
@@ -344,13 +429,35 @@ export class MenusService {
     return this.http.post<MenuGroup>(url, menuGroup)
   }
 
-  deleteMenu(site: ISite): Observable<MenuGroup> {
+  createCustomerMainMenu(user: IUser, site: ISite): Observable<MenuGroup> {
+    if (!user || !user.roles) {
+      return null
+    }
+  
+
+    if (user.roles != 'admin') { return }
+
+    const  menuGroup =  {name: 'customer', id: 0, userType: 'admin,manager,user,employee',
+                         accordionMenus: this.customerAccordionMenu }  as MenuGroup;
+
+    const controller = "/MenuGroups/"
+
+    const endPoint = 'PostMenuGroup';
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}`
+
+    return this.http.post<MenuGroup>(url, menuGroup)
+  }
+
+  deleteMenu(site: ISite, name : string): Observable<MenuGroup> {
 
     const controller = "/MenuGroups/"
 
     const endPoint = 'DeleteMenu';
 
-    const parameters = ``
+    const parameters = `?name=${name}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 

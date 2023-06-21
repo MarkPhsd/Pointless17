@@ -18,7 +18,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
   styleUrls: ['./order-header.component.scss']
 })
 export class OrderHeaderComponent implements OnInit , OnChanges {
-
+  @Input() hideButtonOptions: boolean;
   @Input() qrOrder: boolean;
   @Input() uiTransactionSettings  = {} as TransactionUISettings;
   @Input() mainPanel : boolean;
@@ -29,6 +29,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
   href: string;
   hidePrint = false;
   action$: Observable<any>;
+  isApp = this.platFormService.isApp()
 
   constructor(
              private ordersService:   OrdersService,

@@ -9,7 +9,6 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { fadeAnimation } from 'src/app/_animations';
 import { switchMap } from 'rxjs/operators';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
-
 @Component({
   selector: 'app-menu-tiny',
   templateUrl: './menu-tiny.component.html',
@@ -20,7 +19,7 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 })
 
 export class MenuTinyComponent implements OnInit, OnDestroy {
-
+  @Input() menuName = 'main';
   accordionMenu$:    Observable<any>;
   @Input() options;
   @Input() menus:    AccordionMenu[];
@@ -185,14 +184,18 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
     const site       = this.siteService.getAssignedSite();
     const menuCheck$ = this.menusService.mainMenuExists(site);
+
     this.accordionMenu$ = menuCheck$.pipe(
       switchMap( data => {
-          if (user.roles === 'admin' || (!data ||  !data.result)) {
+          
+          if (user && user.roles === 'admin') {
             return  this.menusService.createMainMenu(user , site)
           }
+
           if (user) {
-            return  this.menusService.getMainMenu(site)
+            return  this.menusService.getMenuGroupByName(site, this.menuName)
           }
+
         }
       )
     ).pipe(
@@ -225,16 +228,12 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
       return
     }
     const site  = this.siteService.getAssignedSite();
-    const menu$ = this.menusService.getMainMenu(site)
+    const menu$ = this.menusService.getMenuGroupByName(site,  this.menuName)
 
     this.menu$ = menu$.pipe(
       switchMap(data => {
-
         if (!data) { return of(null) }
         this.config = this.mergeConfig(this.options);
-
-        // console.log('refresh Menu', data)
-
         try {
           if (data.toString() === 'no menu') {
             if (this.user && this.user?.roles === 'admin') {
@@ -310,12 +309,27 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     try {
       this.displayCategories = true
       this.index = index;
+
       if (!this.config.multi) {
+
         this.menus.filter(
           (menu, i) => i !== index && menu.active
-        ).forEach(menu => menu.active = !menu.active);
+        ).forEach(menu => 
+          {
+            if (menu && menu.active) { 
+              menu.active = !menu.active
+            }
+          });
+      
       }
-      this.menus[index].active = !this.menus[index].active;
+
+      if (this.menus && this.menus[index] && this.menus[index].active) { 
+        this.menus[index].active = !this.menus[index].active;
+      }
+
+      if (!this.menus[index]  || !this.menus[index].submenus) { 
+        return 
+      }
       this.submenu  = this.menus[index].submenus
 
       if (!toggleOn) {

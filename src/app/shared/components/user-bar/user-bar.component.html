@@ -1,0 +1,49 @@
+<mat-card *ngIf="(user$ | async) as user">
+  <mat-card-title>
+    <app-logo></app-logo>
+    <h3>Welcome {{user.username}}</h3>
+    <mat-divider></mat-divider>
+  </mat-card-title>
+ 
+  <mat-card-content>
+
+    <div class="button-margin-10">
+      <button mat-raised-button 
+            class="button-width-150 button-height-50"
+            color="primary" 
+            (click)="navPOSOrders()">
+        <mat-icon>list</mat-icon> Your Orders</button>
+    </div>
+    
+     <mat-divider></mat-divider>
+
+    <app-menu-tiny [menuName]="customerMenu"></app-menu-tiny>
+
+    <mat-divider></mat-divider>
+
+    <div class="button-margin-10">
+      <button mat-raised-button 
+        class="button-margin-10 button-width-150 button-height-50"
+        color="accent" 
+        (click)="navProfile()">
+      <mat-icon>face</mat-icon>Profile</button>
+    </div>
+
+    <mat-divider></mat-divider>
+    
+    <div class="button-margin-10">
+      <button mat-raised-button 
+          class="button-margin-10 button-width-150 button-height-50"
+           color="accent" 
+           (click)="logOut()">
+       <mat-icon>exit_to_app</mat-icon> Log out</button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="button-margin-10">
+      <app-toggle-theme></app-toggle-theme>
+    </div>
+
+    </mat-card-content>
+</mat-card>

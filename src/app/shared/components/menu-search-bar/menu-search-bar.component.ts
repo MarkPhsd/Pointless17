@@ -161,7 +161,7 @@ constructor(
     private toolBarUIService    : ToolBarUIService,
     public  platFormService     : PlatformService,
     public  uiSettingsService   : UISettingsService,
-    private toolbarUIService    : ToolBarUIService, 
+    private toolbarUIService    : ToolBarUIService,
     private userAuthorizationService: UserAuthorizationService,
   )
   {
@@ -342,9 +342,9 @@ constructor(
 
   }
 
-  resetAll() { 
-    this.clearAll() 
-    
+  resetAll() {
+    this.clearAll()
+
     this.categories$ = null;
     this.departments$ = null;
 
@@ -401,7 +401,7 @@ constructor(
     }
 
     if (this.category )               {
-      console.log('this category', this.category)
+      // console.log('this category', this.category)
       model.categoryID       = this.category.id.toString();
       model.categoryName     = this.category.name.toString();
     }
@@ -425,7 +425,7 @@ constructor(
     model.barcode    = model.name
     model.pageSize   = this.pageSize
     model.pageNumber = this.currentPage
-    console.log(model.categoryID, model.categoryName);
+    // console.log(model.categoryID, model.categoryName);
     this.menuService.updateSearchModel(model)
     return model
 
@@ -451,7 +451,7 @@ constructor(
     this.clearAll()
     this.clearDeparment()
     this.category = item
-    
+
     this.refreshSearch()
   }
 

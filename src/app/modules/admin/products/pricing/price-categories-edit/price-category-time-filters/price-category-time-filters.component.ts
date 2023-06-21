@@ -8,7 +8,7 @@ import { UntypedFormGroup } from '@angular/forms';
 })
 export class PriceCategoryTimeFiltersComponent {
 
-  @Input() showTime = false;
+  @Input() showTime : boolean;;
   @Input() inputForm: UntypedFormGroup;
   @Input() formGroupName: any;
 

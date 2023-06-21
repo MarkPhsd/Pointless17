@@ -1,6 +1,7 @@
 <ng-template #loading>
   <mat-spinner [diameter]="70"></mat-spinner>
 </ng-template>
+
 <div *ngIf="(product$ | async) as product"></div>
 <div class="container"
      [formGroup]="productForm"
@@ -36,6 +37,7 @@
           <app-activity-toggles
               [inputForm]="productForm">
           </app-activity-toggles>
+          <ng-container [ngTemplateOutlet]="managerProtectedToggle"></ng-container>
         </div>
 
       </div>
@@ -242,8 +244,28 @@
           </div>
       </div>
     </div>
+
   </mat-card>
 </div>
+
+<ng-template #managerProtectedToggle>
+  <div  class="mat-label" *ngIf="productJSONObject">
+    <mat-slide-toggle
+      class="mat-label"
+      [(ngModel)]="managerProtected">
+
+      <mat-label class="mat-label">Manager Protected</mat-label>
+
+  </mat-slide-toggle>
+   <mat-icon class="mat-label-info"
+             color="accent"
+             [matTooltip]="labelingService.productFieldTips[3].value">info</mat-icon>
+    <!-- <mat-label style="margin-left:5px;"
+               class="mat-label"
+               color="accent"
+               [matTooltip]="labelingService.productFieldTips[3].value">Info</mat-label> -->
+  </div>
+</ng-template>
 
 <ng-template #buttonColorPicker>
   <div *ngIf="productJSONObject">
@@ -282,9 +304,9 @@
 
 <ng-template #icon>
     <div class="grid-item">
-
-      <mat-label color="accent" [matTooltip]="labelingService.productFieldTips[2].value"
-      >Info</mat-label>
+      <mat-icon class="mat-label-info"
+             color="accent"
+             [matTooltip]="labelingService.productFieldTips[2].value">info</mat-icon>
       <div>
         <app-value-fields
           [inputForm]="productForm"
@@ -297,9 +319,9 @@
 
 <ng-template #menuSort>
   <div class="grid-item">
-     <mat-label color="accent" [matTooltip]="labelingService.productFieldTips[1].value"
-    >Info</mat-label>
-
+    <mat-icon class="mat-label-info"
+              color="accent"
+              [matTooltip]="labelingService.productFieldTips[1].value">info</mat-icon>
     <div>
       <app-value-fields
         [inputForm]="productForm"
@@ -351,7 +373,7 @@
 </ng-template>
 
 <ng-template #gramCount>
-  <mat-label color="accent" [matTooltip]="labelingService.productFieldTips[0].value"
+  <mat-label color="accent" class="mat-label-info" [matTooltip]="labelingService.productFieldTips[0].value"
   >Info</mat-label>
 
   <app-value-fields

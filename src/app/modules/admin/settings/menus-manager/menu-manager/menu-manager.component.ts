@@ -20,9 +20,11 @@ import { AccordionMenuItemEditComponent } from '../accordion-menu-item-edit/acco
   styleUrls: ['./menu-manager.component.scss']
 })
 export class MenuManagerComponent implements OnInit,OnDestroy  {
-
+  currentMenu        : MenuGroup;
+  currentMenuName    :  string = 'main';
+  menuGroupID        : number;
   action$            :  Observable<any>;
-  menu$              :  Observable<MenuGroup[]>;
+  menus$              :  Observable<MenuGroup[]>;
   accordionMenu$     :  Observable<AccordionMenu[]>;
   accordionMenuItem$ :  Observable<AccordionMenu>;
   accordionMenus     :  AccordionMenu[];
@@ -31,8 +33,7 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
   submenuItem        :  SubMenu;
   user               :  IUser;
   _user              :  Subscription;
-
-  message: string;
+  message            : string;
 
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe( data => {
@@ -51,7 +52,8 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
 
   ngOnInit() {
     this.initSubscription();
-    this.getMainMenu()
+    this.currentMenuName = 'main'
+    this.refreshMenu();
   }
 
   ngOnDestroy(): void {
@@ -62,22 +64,41 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
     }
   }
 
-  getMainMenu(){
+  getMenuGroup(name: string) {
     const site  =  this.siteService.getAssignedSite();
     if (!this.user) {return}
-    const accordionMenu$ = this.menusService.getMainMenu(site);
-    this.action$ =  accordionMenu$.pipe(
-      switchMap( data => {
-        this.accordionMenus = data
-        return of(data)
+    const menu$ = this.menusService.getMainMenuByName(site, name);
+    const accordionMenu$ = menu$.pipe(
+      switchMap(data => { 
+        this.currentMenu = data;
+        return this.menusService.getMenuGroupByNameForEdit(site, name);
       }
-    ))
+    )).pipe(switchMap(data => { 
+      if (!data) {
+        // console.log()
+        return of(null)
+      }
+      console.log('data', data)
+      this.accordionMenus = data
+      return of(data)
+    }));
+    this.action$ = accordionMenu$;  
+  }
+
+  onToggleChange(name: string) { 
+    this.getMenuGroup(name)
+  };
+
+  getMenuGroupList() { 
+    const site  =  this.siteService.getAssignedSite();
+    this.menus$ = this.menusService.getMainMenuList(site);
   }
 
   refreshMenu() {
+    this.getMenuGroupList();
     this.accordionMenus = null;
     this.accordionMenu  = null;
-    this.getMainMenu();
+    this.getMenuGroup(this.currentMenuName);
   }
 
   assignSubMenuItem(event) {
@@ -138,9 +159,24 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
     const result        = window.confirm('Do you want to reset the menu?')
     if (!result) {return}
     if (this.user) {
-      const deleteMenu$ =  this.menusService.deleteMenu(site);
+      const deleteMenu$ =  this.menusService.deleteMenu(site, 'main');
       deleteMenu$.pipe(switchMap( data => {
         return this.menusService.createMainMenu(this.user, site)
+        }
+      )).subscribe( data =>
+        this.accordionMenus  = data.accordionMenus
+      )
+    }
+  }
+
+  initCustomerMenu() {
+    const site          =  this.siteService.getAssignedSite();
+    const result        = window.confirm('Do you want to reset the customer menu?')
+    if (!result) {return}
+    if (this.user) {
+      const deleteMenu$ =  this.menusService.deleteMenu(site, 'customer');
+      deleteMenu$.pipe(switchMap( data => {
+        return this.menusService.createCustomerMainMenu(this.user, site)
         }
       )).subscribe( data =>
         this.accordionMenus  = data.accordionMenus

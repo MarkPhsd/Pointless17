@@ -4,12 +4,13 @@ ion-item-sliding {
   width: 99%;
   padding: 0;
   // margin: 2px;
+  // height: 125px;
 }
 
 ion-item {
   width: 110%;
-  padding: 0;
   left: -15px;
+  // height: 125px;
 }
 
 .nopadd  {
@@ -56,17 +57,17 @@ pos-order-item {
   }
 }
 
-.main-panel { 
+.main-panel {
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-.side-panel { 
+.side-panel {
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-.qr-style { 
+.qr-style {
   height: calc(100vh - 700px);
   overflow-y: auto;
   overflow-x: hidden;
@@ -88,7 +89,6 @@ pos-order-item {
     overflow-x: hidden;
     width: 100%;
     max-height: 550px;
-   
   }
 
   //ipadpro

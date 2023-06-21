@@ -163,9 +163,22 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.site = this.siteService.getAssignedSite();
+    this.initCustomerView()
     this.displayPanel(null)
     this.initSubscriptions();
     this.printerLocations$ = this.printerService.getLocations()
+  }
+
+  initCustomerView() { 
+    let user = this.userAuthorization.user;
+    if (!user) { 
+      user = this.authenticationService.userValue
+    }
+    if (!user) { return }
+    if (user.roles == 'user') { 
+      this.viewType = 2;
+      this.setViewType(this.viewType)
+    }
   }
 
   ngAfterViewInit() {

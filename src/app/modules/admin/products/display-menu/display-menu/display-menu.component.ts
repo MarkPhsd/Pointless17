@@ -47,11 +47,13 @@ export class AdminDisplayMenuComponent  {
 
     this.action$ = this.displayMenuService.getMenu(site, data.id).pipe(
       switchMap(data => {
-        this.displayMenu = data;
-        this.logo = data.logo;
-        this.backgroundImage = data.backgroundImage;
-        // console.log(data)
-        this.ccs = data.css;
+        if (data) {
+          this.displayMenu = data;
+          this.logo = data.logo;
+          this.backgroundImage = data.backgroundImage;
+          // console.log(data)
+          this.ccs = data.css;
+        }
         this.initForm(data)
         return of(data)
       })
@@ -133,15 +135,22 @@ export class AdminDisplayMenuComponent  {
       const item$ = this.displayMenuService.save(site, this.displayMenu);
       return item$.pipe(switchMap(
           data => {
-            this.displayMenu = data;
-            this.notifyEvent('Item Updated', 'Success');
-            this.logo = data.logo;
-            this.ccs = data.css;
-            this.backgroundImage = data.backgroundImage;
+            if (data) {
+              this.displayMenu = data;
+              this.notifyEvent('Item Updated', 'Success');
+              this.logo = data.logo;
+              this.ccs = data.css;
+              this.backgroundImage = data.backgroundImage;
+            } else {
+              this.siteService.notify('There was a problem saving the data.', 'Close', 2000, 'yellow');
+            }
             this.performingAction = false;
             return of(data);
           }
-      ))
+      ),catchError(data => {
+        this.siteService.notify('There was a problem saving the data.' + data.toString(), 'Close', 2000, 'yellow');
+        return of(data)
+      }))
 
   };
 

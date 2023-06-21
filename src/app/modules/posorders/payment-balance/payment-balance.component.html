@@ -10,13 +10,14 @@
     <div class="grid-header">
       <div>
         <app-order-header
+          [hideButtonOptions]="hideButtonOptions"
           [qrOrder]="qrOrder"
           [order]="order">
         </app-order-header>
       </div>
       <div class="grid-items">
 
-        <div *ngIf="!qrOrder && (!deviceInfo || !deviceInfo?.phoneDevice)">
+        <div *ngIf="!qrOrder && (!deviceInfo || !deviceInfo?.phoneDevice) && !hideButtonOptions">
           <button  class="cart-button"
                    mat-raised-button
                    color="accent"
@@ -147,7 +148,6 @@
   </div>
 </ng-template>
 
-
 <ng-template #triPOSCaptureView let-item>
   <div *ngIf="!qrOrder && (
     (item?.paymentMethod?.isCreditCard &&
@@ -172,7 +172,6 @@
     </div>
 
     <ng-container *ngTemplateOutlet="removeLastAuthView"></ng-container>
-
   </div>
 </ng-template>
 

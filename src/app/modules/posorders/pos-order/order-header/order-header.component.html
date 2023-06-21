@@ -22,16 +22,20 @@
     </div>
 
     <div>
-      <div class="button-row" *ngIf="!qrOrder ">
-        <div *ngIf="!mainPanel">
-          <button  class="button" color="primary" mat-raised-button
-                  (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>
-        </div>
-        <div *ngIf="isSale && isUserStaff">
-          <button  class="button" color="warn" mat-raised-button
-                   (click)="sendOrder()">
-            <mat-icon>local_fire_department</mat-icon>
-          </button>
+
+      <div *ngIf="(isApp) || (!isApp  && isUserStaff)">
+        <div class="button-row" *ngIf="(!qrOrder && !hideButtonOptions)">
+          <div *ngIf="!mainPanel">
+            <button  class="button" color="primary" mat-raised-button
+            (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>
+          </div>
+
+          <div *ngIf="isSale && isUserStaff">
+            <button  class="button" color="warn" mat-raised-button
+              (click)="sendOrder()">
+              <mat-icon>local_fire_department</mat-icon>
+            </button>
+          </div>
         </div>
       </div>
 

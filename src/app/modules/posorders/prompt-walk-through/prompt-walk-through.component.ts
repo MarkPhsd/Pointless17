@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Inject, ViewChild, TemplateRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Inject, ViewChild, TemplateRef, HostListener, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {  PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -18,7 +18,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   encapsulation: ViewEncapsulation.None
 })
 
-export class PromptWalkThroughComponent implements OnInit {
+export class PromptWalkThroughComponent implements OnInit, OnDestroy {
 
   @ViewChild('buttonDisplay')    buttonDisplay: TemplateRef<any>;
 
@@ -72,7 +72,7 @@ export class PromptWalkThroughComponent implements OnInit {
           this.promptGroup = data;
           return this.orderMethodsService.currentOrder$
       })).subscribe(data => {
-        console.log('order', data)
+        // console.log('order', data)
 
         if (data) { this.order = data;}
         if (this.promptGroup) {
@@ -92,6 +92,7 @@ export class PromptWalkThroughComponent implements OnInit {
       })
     } catch (error) {
     }
+
   }
 
   initOrderPromptGroupSubscription() {
@@ -117,6 +118,12 @@ export class PromptWalkThroughComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     )
   {
+  }
+
+  ngOnDestroy() {
+    if (this._order) {this._order.unsubscribe()}
+    if (this._promptGroup) { this._promptGroup.unsubscribe()};
+    if (this._posItem) { this._posItem.unsubscribe()}
   }
 
   ngOnInit(): void {
@@ -173,32 +180,42 @@ export class PromptWalkThroughComponent implements OnInit {
     const result = window.confirm("Do you want to cancel this prompt? This will  apply all selections")
 
     if (result) {
+
       const site = this.sitesService.getAssignedSite();
+
       let orderID = this.getOrderID()
+
       // console.log(orderID)/
       if (orderID == 0) {
         this.dialogRef.close('success')
         return;
       }
+
       const item = this.getItem();
+
       if (!item) {
         this.dialogRef.close('success')
-        return
+        return of(null)
       }
-      // console.log(item?.orderID, item);
+
+      console.log(item?.orderID, item);
       if (item) {
         this.action$ = this.posOrderItemService.deletePOSOrderItem(site, item.id).pipe(
           switchMap(data => {
             return  this.orderService.getOrder(site, orderID.toString(), false)
-             }
+          }
           )).pipe(
             switchMap( data => {
+
               this.orderMethodsService.updateOrderSubscription(data)
               this.dialogRef.close('success')
               return of('success')
             }
           )
-        )
+        ),catchError(data => {
+          this.dialogRef.close('success')
+          return of(null)
+        })
       }
 
     }

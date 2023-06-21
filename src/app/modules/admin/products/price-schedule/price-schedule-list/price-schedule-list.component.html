@@ -106,6 +106,10 @@
 
       <div class="grid-item">
         <button mat-button
+              class="assign-button"
+              (click)="addSchedule()"> <mat-icon>add</mat-icon>Add Item
+        </button>
+        <button mat-button
           class="assign-button"
           (click)="listAll()"> <mat-icon>list</mat-icon>List All
         </button>
@@ -117,10 +121,7 @@
           class="assign-button"
           (click)="deleteSelected()"> <mat-icon>delete</mat-icon>Delete Selected
         </button>
-        <button mat-button
-              class="assign-button"
-              (click)="addSchedule()"> <mat-icon>add</mat-icon>Add Item
-        </button>
+
         <button mat-button
               class="assign-button"
               (click)="navPriceScheduleGroups()"> <mat-icon>settings</mat-icon>Menu List Layouts

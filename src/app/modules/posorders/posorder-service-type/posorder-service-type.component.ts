@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { Observable, of, Subscription } from 'rxjs';
-import { IPOSOrder, IServiceType, ISite, ServiceType } from 'src/app/_interfaces';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
+import { IPOSOrder, IServiceType, ISite, IUser, ServiceType } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
@@ -24,7 +24,10 @@ export class POSOrderServiceTypeComponent implements OnDestroy  {
   @Output() outPutSelectServiceType = new EventEmitter();
   item: any;
 
+  user: IUser;
+
   initSubscriptions() {
+    this.user = this.userAuthorization.currentUser();
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
     })
@@ -51,29 +54,36 @@ export class POSOrderServiceTypeComponent implements OnDestroy  {
 
   getPaymentMethods(site: ISite) {
     const serviceTypes$ = this.serviceTypeService.getSaleTypes(site);
-    this.serviceTypes$ = serviceTypes$
 
     if (this.platFormService.isApp()) {
       this.serviceTypes$ = serviceTypes$
       return
     }
-    serviceTypes$.subscribe(data => {
+
+    this.serviceTypes$ = serviceTypes$.pipe(
+      switchMap(data => {
       if (!this.platFormService.isApp()) {
-        let list = data.filter( item => item.onlineOrder == true ) as IServiceType[]
-        
-        if (!this.userAuthorization.isManagement) { 
-          list = list.filter.call(item => item.managerRequired )
+
+        if (!data) { return of(null)}
+
+        let list = data.filter( item => item.onlineOrder )
+        if (!list) { return of(null)}
+
+        if (!this.userAuthorization.isManagement) {
+          list = list.filter(item => !item.managerRequired )
         }
+
+        if (!list) { return of(null)}
 
         this.serviceTypes$ = of(list)
         this.serviceTypes  = list;
-        return
+        return of(list)
       }
 
       if (!data) {
         this.serviceTypes$ = of(data)
       }
-    })
+    }))
   }
 
   applyServiceType(item: IServiceType) {

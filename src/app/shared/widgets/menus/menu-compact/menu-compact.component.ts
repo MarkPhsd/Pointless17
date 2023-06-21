@@ -45,7 +45,7 @@ export class MenuCompactComponent implements OnInit, OnDestroy {
               console.log('empty results')
               return EMPTY
             }
-            return  this.menusService.getMainMenu(this.site)
+            return  this.menusService.getMenuGroupByName(this.site, 'main')
           }
         )
       ).subscribe( data => {

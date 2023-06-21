@@ -40,6 +40,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('appMenuSearchBar')   appMenuSearchBar: TemplateRef<any>;
   @ViewChild('appOrderBar')        appOrderBar: TemplateRef<any>;
   @ViewChild('menuBarView')        menuBarView: TemplateRef<any>;
+  @ViewChild('userBarView')  userBarView: TemplateRef<any>;
 
   @ViewChild('appSiteFooter')  appSiteFooter: TemplateRef<any>;
   @ViewChild("footer") footer: ElementRef;
@@ -276,6 +277,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     })
   }
 
+  
+
+
   get appSiteFooterOn() {
     if ( !this.platFormService.isApp() ) {
       if (this.userAuthorizationService.isStaff) {
@@ -447,7 +451,12 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       if (this.toolBarUIService.orderBar) {
         return this.appOrderBar
       }
+      
+      if (this.user && this.user.roles.toLowerCase() === 'user') { 
+        return this.userBarView
+      }
       return this.menuBarView
+
     }
     return this.appMenuSearchBar
   }
@@ -462,6 +471,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   get menuOrOrderBar() {
     if (this.swapMenuWithOrder) {
       return
+    }
+    if (this.user && this.user.roles.toLowerCase() === 'user') { 
+      return this.userBarView;
     }
     return this.menuBarView;
   }

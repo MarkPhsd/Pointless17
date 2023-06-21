@@ -209,6 +209,7 @@ import { SortSelectorComponent } from '../modules/admin/report-designer/designer
 import { EditBarComponent } from '../modules/admin/report-designer/widgets/edit-bar/edit-bar.component';
 import { MatSelectorComponent } from '../modules/admin/report-designer/widgets/mat-selector/mat-selector.component';
 import { FieldListTypeAssignerComponent } from '../modules/admin/report-designer/designer/field-list-type-assigner/field-list-type-assigner.component';
+import { UserBarComponent } from './components/user-bar/user-bar.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -424,7 +425,7 @@ import { FieldListTypeAssignerComponent } from '../modules/admin/report-designer
     SortSelectorComponent,
     MatSelectorComponent,
     EditBarComponent,
-
+    UserBarComponent,
   ],
 
   imports: [
@@ -545,6 +546,7 @@ import { FieldListTypeAssignerComponent } from '../modules/admin/report-designer
     MenuMinimalComponent,
     MenuSearchBarComponent,
     MenuTinyComponent,
+    UserBarComponent,
     MetrcSummaryComponent,
     M22ResizableComponent,
     MoveInventoryLocationComponent,

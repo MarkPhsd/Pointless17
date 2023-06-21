@@ -22,14 +22,30 @@ export class NavigationService {
   }
 
   navPOSOrders() {
-    console.log('nav pos orders')
     this.toolbarUIService.hidetoolBars();
     this.toolbarUIService.updateDepartmentMenu(0);
     this.router.navigate(['/pos-orders']);
   }
 
-  navTableService() {
+  navProfile() {
+    this.toolbarUIService.hidetoolBars();
+    this.toolbarUIService.updateDepartmentMenu(0);
+    this.router.navigate(['/app-profile']);
+  }
 
+  gotoPolicies() {
+    this.toolbarUIService.hidetoolBars();
+    this.toolbarUIService.updateDepartmentMenu(0);
+    this.router.navigate(['/policies']);
+  }
+
+  contactUs() {
+    this.toolbarUIService.hidetoolBars();
+    this.toolbarUIService.updateDepartmentMenu(0);
+    this.router.navigate(['/contact-us']);
+  }
+
+  navTableService() {
     this.toolbarUIService.hidetoolBars();
     this.router.navigate(['/table-layout']);
   }

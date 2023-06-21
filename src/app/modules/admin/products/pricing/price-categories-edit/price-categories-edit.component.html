@@ -213,9 +213,16 @@
 
                   <div  *ngIf="showMore || showTime"
                          class="grid-price-time-container">
-                        
+
+                    <div *ngIf="showTime && !showMore">
+                      <price-category-time-filters
+                            [showTime]="showTime"
+                            [inputForm]="inputForm">
+                      </price-category-time-filters>
+                    </div>
+
                     <div  *ngIf="showMore"  class="grid-multiprice-container">
-                 
+
                         <div>
                           <mat-form-field appearance="outline" class="prices-fields">
                             <mat-label >price1</mat-label>
@@ -317,7 +324,7 @@
                           </mat-form-field>
                         </div>
                     </div>
-                    
+
                   </div>
 
                   <div *ngIf="showWeightPrices" class="grid-time-container">

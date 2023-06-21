@@ -3,13 +3,14 @@
 <div *ngIf="(process$ | async) as process"></div>
 
 <div *ngIf="(paymentMethods$ | async) as methods">
-  <!-- {{methods | json}} -->
+  
 
   <div *ngIf="order  && uiTransactions">
     <div [class]="orderlayout">
       <div class="transaction-data">
         <div class="grid-header-item">
           <app-payment-balance
+            [hideButtonOptions]="!isApp"
             [uiTransactions]="uiTransactions"
             [mainPanel]="true"
             [order]="order">
@@ -19,7 +20,7 @@
         <div class="grid-header-item"
             *ngIf="!isUser">
           <app-order-header-demo-graphics
-              [canRemoveClient]="'false'"
+                     [canRemoveClient]="'false'"
               [order]          ="order">
           </app-order-header-demo-graphics>
         </div>
@@ -40,6 +41,10 @@
 
         <ng-container [ngTemplateOutlet]="isProcessingPayment"></ng-container>
 
+        <div *ngIf="paymentsEqualTotal" class="button-margin-10">
+          <button class="button-margin-10 button-width-175 button-height-75" color="accent" mat-raised-button (click)="exitOrder()">Leave Order</button>
+        </div>
+
         <div  class="order-completed"
               *ngIf="(paymentsEqualTotal || order.completionDate)">
             <ng-container [ngTemplateOutlet]="receiptShowTemplate"></ng-container>
@@ -54,6 +59,8 @@
           <div *ngIf="!splitByItem && !paymentsEqualTotal">
             <h4>Payment Amount: {{paymentAmount | currency}}</h4>
           </div>
+
+          
           <div style="margin-left: 5px" *ngIf="!splitByItem  && !paymentsEqualTotal">
             <button class="splitbutton"
                     mat-raised-button
@@ -113,7 +120,6 @@
                         <ng-container [ngTemplateOutlet]="cashPay100"></ng-container>
                       </div>
                     </div>
-
                     <!-- <div class="item-container" *ngIf="isApp">
                       <ng-container [ngTemplateOutlet]="cashPaymentButtons"></ng-container>
                     </div> -->
@@ -121,6 +127,7 @@
                   </mat-card-content>
                 </mat-card>
               </div>
+
               <div *ngIf="paymentMethods.length>0">
                 <mat-card class="payment-dimensions">
                   <app-mat-toggle-selector

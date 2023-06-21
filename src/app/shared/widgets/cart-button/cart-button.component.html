@@ -8,6 +8,9 @@
           mat-raised-button
           color="primary"
           (click)="addNewOrder()" >
+      <span *ngIf="!isUserStaff">
+        New Order
+      </span>
       <mat-icon>
         add
       </mat-icon>

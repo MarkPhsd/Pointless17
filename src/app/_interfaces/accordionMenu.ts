@@ -21,7 +21,7 @@ export interface MenuGroup {
   id:                   number;
   name:                 string;
   userType:             string;
-  accordionMenus:       [];
+  accordionMenus:       AccordionMenu[];
 }
 
 export interface SubMenu {

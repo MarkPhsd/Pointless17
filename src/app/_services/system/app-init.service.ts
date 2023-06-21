@@ -95,16 +95,11 @@ export class AppInitService  {
         return;
       }
 
-      // if (localStorage.getItem("site.url") === 'https://localhost:44309/api') {
-      //   localStorage.setItem('site.url', config.apiUrl)
-      // }
-
-      // this.setAPIUrl(config.apiUrl)
       return;
     }
 
     if ( isApp && !this.apiUrl ) {
-      // console.log('getting basurl for app',  this.apiBaseUrl())
+     
     }
 
     if ( isApp && !this.apiUrl ) {

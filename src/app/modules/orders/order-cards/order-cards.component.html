@@ -44,10 +44,12 @@
 
         <div  class='grid-flow-panel'  *ngIf="cardStyle === 'panel' && orders">
           <ng-container *ngFor="let order of orders; let i = index">
-            <app-order-panel
-              (click)="setActiveOrderObs(order)"
-              [order]="order"
-            ></app-order-panel>
+            <ng-container *ngIf="order.id && order.id != 0">
+              <app-order-panel
+                (click)="setActiveOrderObs(order)"
+                [order]="order"
+              ></app-order-panel>
+              </ng-container>
           </ng-container>
         </div>
 

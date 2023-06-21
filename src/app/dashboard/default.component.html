@@ -13,7 +13,6 @@
         [mode]   ="sidebarMode"
         [opened] ="leftSideBarToggle">
 
-    <!-- system menu bar -->
     <div *ngIf="swapMenuWithOrder">
       <ng-container [ngTemplateOutlet]="leftSideBar"></ng-container>
     </div>
@@ -77,11 +76,18 @@
   </div>
 </ng-template>
 
+
+<ng-template #userBarView>
+  <user-bar></user-bar>
+</ng-template>
+
+
 <ng-template #menuBarView>
   <div  [hidden]="toolbarTiny">
     <app-menu-minimal>
     </app-menu-minimal>
   </div>
+
   <div  [hidden]="!toolbarTiny"
         class="menu-tiny" >
     <app-menu-tiny>

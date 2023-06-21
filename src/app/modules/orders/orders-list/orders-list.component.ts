@@ -352,9 +352,9 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   //ag-grid standard method
   // async
   async  onGridReady(params: any) {
-    console.log('on grid ready', params)
+    // console.log('on grid ready', params)
     if (params == undefined) {
-      console.log('params undefined')
+      // console.log('params undefined')
       return
     }
     if (params)  {
@@ -370,12 +370,12 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     let datasource =  {
 
       getRows: (params: IGetRowsParams) => {
-      console.log('on grid output 3')
+      // console.log('on grid output 3')
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
       this.message = '...loading'
       items$.subscribe(data =>
         {
-            console.log('on grid output 4', data.paging, data.results)
+            // console.log('on grid output 4', data.paging, data.results)
             if (!data || !data.paging) { return }
             const resp         =  data.paging
             if (resp) {
@@ -401,11 +401,11 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     };
 
     if (!datasource)   {
-        console.log('no data source')
+        // console.log('no data source')
         return
     }
     if (!this.gridApi) {
-      console.log('no API')
+      // console.log('no API')
       return
     }
     // console.log('set Data Source')

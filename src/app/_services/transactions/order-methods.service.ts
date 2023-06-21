@@ -1486,6 +1486,10 @@ export class OrderMethodsService implements OnDestroy {
      return of(null)
   }
 
+  exitOrder() { 
+    this.clearOrder();
+  }
+
   clearOrder() {
 
     // localStorage.setItem('orderSubscription', null);

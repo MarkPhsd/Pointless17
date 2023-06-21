@@ -127,12 +127,13 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   constructor(
     public orderService           : OrdersService,
-    public orderMethodsService: OrderMethodsService,
+    public orderMethodsService    : OrderMethodsService,
     private settingService        : SettingsService,
     private siteService           : SitesService,
-    private platFormService       : PlatformService,
+    public platFormService        : PlatformService,
     public  printingService       : PrintingService,
     private orderMethodService    : OrderMethodsService,
+
     private router: Router
     )
   {}

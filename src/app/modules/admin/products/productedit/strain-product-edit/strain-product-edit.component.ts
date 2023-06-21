@@ -28,7 +28,7 @@ import { LabelingService } from 'src/app/_labeling/labeling.service';
 export class StrainProductEditComponent implements OnInit {
 
 
-
+  managerProtected: boolean;
   productForm: UntypedFormGroup;
   unitSearchForm: UntypedFormGroup;
   get f() { return this.productForm;}
@@ -92,18 +92,20 @@ export class StrainProductEditComponent implements OnInit {
       this.productJSONObject  = {}  as menuButtonJSON;
       this.productJSONObject.buttonColor = '';
       this.productJSONObject.backColor = '';
-      // this.productJSONObject.enableButtonColor = '#F8F8F8';
-
+      this.productJSONObject.managerProtected = false;
       return
     }
     if (product.json) {
-      this.productJSONObject = JSON.parse(product.json)
+      this.productJSONObject = JSON.parse(product.json) as menuButtonJSON
+      this.managerProtected = this.productJSONObject.managerProtected;
     }
   }
 
   get JSONAsString() {
     if (this.product) {
-      return JSON.stringify(this.productJSONObject);
+      this.productJSONObject.managerProtected = this.managerProtected;
+
+      return JSON.stringify(this.productJSONObject) ;
     }
     return ''
   }
@@ -111,7 +113,6 @@ export class StrainProductEditComponent implements OnInit {
   ngOnInit() {
     this.initializeDataAndForm()
   };
-
 
   initializeDataAndForm() {
     const site = this.siteService.getAssignedSite();
@@ -123,7 +124,6 @@ export class StrainProductEditComponent implements OnInit {
         this.initializeForm()
         return of(this.product)
     }))
-
   }
 
   editType() {
@@ -207,6 +207,8 @@ export class StrainProductEditComponent implements OnInit {
     const unitName   = event.unitName
     const unitType   = event.unitType;
     this.product.unitTypeID = event.unitTypeID
+
+
     this.productForm.patchValue({unitTypeID: unitTypeID})
     this.action$ = this.updateItem(null)
   }
@@ -218,8 +220,8 @@ export class StrainProductEditComponent implements OnInit {
       if (!this.product.webProduct) {  this.product.webProduct = 0    }
       this.message = ""
       this.performingAction= true;
-      this.product.json = this.JSONAsString;
-      // console.log(this.product.json)
+      this.product.json = this.JSONAsString ;
+      console.log(this.product.json)
       const product$ = this.menuService.saveProduct(site, this.product);
       return product$.pipe(switchMap(
           data => {

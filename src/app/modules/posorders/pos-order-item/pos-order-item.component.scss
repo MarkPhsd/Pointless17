@@ -90,13 +90,34 @@ button {
   }
 }
 
-.custom-card-modifier {
-  padding      : 10px;
+.custom-card-modifier-prep {
+  padding      : 0px;
+  padding-bottom: 10px;
+  padding-top   : 10px;
   padding-left : 15px;
   margin       : 5px;
   left         : 35px;
   width: 85%;
+  height: auto;
+  min-height: 15px;
+  @include for-phone-only  {
+    margin       : 15px;
+    padding      : 15px;
+    padding-left : 15px;
+    left         : 25px;
+    width        : 95%;
+  }
+}
 
+.custom-card-modifier {
+  padding        : 0px;
+  padding-bottom : 0px;
+  padding-left   : 15px;
+  margin         : 5px;
+  left           : 35px;
+  width: 85%;
+  height: auto;
+  min-height: 5px;
   @include for-phone-only  {
     margin       : 15px;
     padding      : 15px;
@@ -118,6 +139,7 @@ button {
 .productname-modifier {
   color: cornflowerblue;
   background-blend-mode: difference;
+  font-size: 1.2em;
 }
 
 .more-button {
@@ -221,9 +243,16 @@ font-style: italic;
 
 .image {
   border-radius: 10px;
-  // min-height: 50px;
   max-height: 65px;
-  height: 65px;
+  height    : 65px;
+  object-fit: contain;
+  // height: 200px;
+}
+
+.image-modifier {
+  border-radius: 10px;
+  max-height: 45px;
+  height    : 45px;
   object-fit: contain;
   // height: 200px;
 }

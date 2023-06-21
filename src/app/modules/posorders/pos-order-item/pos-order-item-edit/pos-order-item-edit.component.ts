@@ -142,7 +142,7 @@ export class PosOrderItemEditComponent  {
     const item = this.getItemValue();
     item.quantity = event;
     this.action$ = this.saveSub(item, this.editField).pipe(switchMap(data => {
-      this.dialogRef.close();
+      this.onCancel();
       return of(data)
     }))
   }
@@ -162,7 +162,12 @@ export class PosOrderItemEditComponent  {
     if (this.posOrderItem) {
       const item = this.getItemValue();
       this.action$ = this.saveSub(item, this.editField).pipe(switchMap(data => {
-        this.dialogRef.close();
+        if (!data) { 
+          this.onCancel();
+          return of(null)
+        }
+        this.orderMethodsService.updateOrder(data)
+        this.onCancel();
         return of(data)
       }))
     }
@@ -171,6 +176,11 @@ export class PosOrderItemEditComponent  {
   saveSub(item: PosOrderItem, editField: string): Observable<IPOSOrder> {
     const order$ = this.posOrderItemMethodsService.saveSub(item, editField).pipe(
       switchMap(data => {
+        if (!data) { 
+          this.onCancel();
+          return of(null)
+        }
+        this.orderMethodsService.updateOrder(data)
         this.onCancel();
         return of(data)
       }

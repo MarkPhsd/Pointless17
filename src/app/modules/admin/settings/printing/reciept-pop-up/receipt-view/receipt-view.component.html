@@ -9,7 +9,7 @@
   <div *ngIf="(refreshView$ | async) as layout">
 
       <div class="buttons-grid">
-        <div>
+        <div *ngIf="platFormService.isApp()">
           <button  mat-button (click)="print()">
             <span *ngIf="printerName">
               <mat-icon>print</mat-icon>{{printerName}}

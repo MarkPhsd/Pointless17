@@ -116,9 +116,10 @@ export interface IMenuItem {
   menuButtonJSON: menuButtonJSON;
 }
 
-export interface menuButtonJSON { 
+export interface menuButtonJSON {
   backColor: string;
   buttonColor: string;
+  managerProtected: boolean;
 }
 
 //also in itemtype service - should consolidate

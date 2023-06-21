@@ -274,7 +274,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
       results$    = this.orderService.getOrderBySearchPaged(site, model) //.pipe(share());
     }
 
-
       this.loading      = true
       this.endOfRecords = false;
       this.results$ = results$.pipe(switchMap(data => {
@@ -293,7 +292,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
           return
         }
 
-        console.log('processing', data, data.results.length)
+        // console.log('processing', data, data.results.length)
 
         if (data.results.length == 0 || data == null) {
           this.value = 100;

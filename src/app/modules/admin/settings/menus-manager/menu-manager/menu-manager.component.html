@@ -16,9 +16,30 @@
     <mat-card-subtitle>
       Sort and edit menus.
       <h2>Drag menus to sort. Click on to edit.</h2>
+      <div>
+        <button mat-button (click)="initMenu()">Initialize Menu</button>
+        <button mat-button (click)="initCustomerMenu()">Initialize Customer Menu</button>
+        <button mat-button (click)="refreshMenu()"><mat-icon>refresh</mat-icon>Refresh</button>
+      </div>
+      
+      <mat-divider></mat-divider>
+      
+      <div *ngIf="(menus$ | async) as list">
+        <mat-button-toggle-group
+                
+                (change)        = "onToggleChange($event.value)"
+                [(ngModel)]     = "currentMenuName" >
+            <mat-button-toggle 
+                                style           = "width:200px;"
+                                [value]="item.name"
+                                *ngFor="let item of list" >
+              {{item.name}}
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
 
-      <button mat-button (click)="initMenu()">Initialize Menu</button>
-      <button color="primary" *ngIf="accordionMenu" mat-button (click)="addAccordionMenu()">Add Menu</button>
+
+      <button color="primary" *ngIf="currentMenu" mat-button (click)="addAccordionMenu()">Add Menu</button>
       <button color="primary" *ngIf="submenu"       mat-button (click)="addSubMenu()">Add Sub Item</button>
     </mat-card-subtitle>
 

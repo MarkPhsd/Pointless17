@@ -282,6 +282,10 @@
             <mat-select
                       type              = "number"
                       formControlName   = "defaultNewOrderCategoryID" >
+                <mat-option
+                      [value]="0">
+                   Clear
+              </mat-option>
               <mat-option
                   *ngFor="let item of list"
                   [value]="item?.id">
@@ -318,7 +322,10 @@
       </div>
 
       <div>
-        <mat-label  class="mat-label-design">Enable to not save customer info on ID Scanning (driver license, id etc.).</mat-label>
+        <mat-icon class="mat-label-info"
+                  color="accent"
+                  [matTooltip]="labelingService.contactInfo[0].value">info</mat-icon>
+
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="idParseOnlyAgeConfirmation" >
@@ -342,14 +349,17 @@
         <div>
 
         <div>
-          <mat-label class="mat-label-design">Scale Weight Grace Value.</mat-label>
+          <!-- <mat-label class="mat-label-design"></mat-label> -->
+          <mat-icon class="mat-label-info"
+                color="accent"
+                [matTooltip]="labelingService.transactionInfo[0].value">info</mat-icon>
           <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'weightGraceValue'">
             Grace Value
           </app-value-fields>
         </div>
-  
+
         <div>
           <mat-label  class="mat-label-design">Minimum Client Age.</mat-label>
           <app-value-fields
@@ -526,7 +536,7 @@
         <mat-label>Tri POS Enabled (FISGlobal)</mat-label>
       </mat-slide-toggle>
     </div>
-    
+
     <h4>Gift Card Store Credit</h4>
     <mat-label>Pointless can handle multiple locations for gift cards. Please see documentation.</mat-label>
     <div class="toggle-fields">

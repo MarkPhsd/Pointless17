@@ -156,7 +156,7 @@ export class ProductEditButtonService {
     // return this.menuService.getProduct(site, id)
 
     const item$ = this.menuService.getProduct(site, id).pipe(
-      switchMap(product => { 
+      switchMap(product => {
         // console.log('openProductDialogObs product', product,product.prodModifierType)
         if (product && !product.prodModifierType) {
           product.prodModifierType = 1
@@ -164,12 +164,12 @@ export class ProductEditButtonService {
         }
         return of(product)
       }
-    )).pipe(switchMap(product => { 
+    )).pipe(switchMap(product => {
       // console.log('retrieving product', product)
       if (!product) {return of(null)  }
       this.openProductEditor(product.id,  product.prodModifierType);
       return of(product)
-    }),catchError(data => { 
+    }),catchError(data => {
       this.siteService.notify(`Error opening item. ${data}`, 'Close', 5000, 'red')
       return of(null)
     }))
@@ -642,12 +642,12 @@ export class ProductEditButtonService {
     let uiSetting =  item.uiSettings;
 
     if (!uiSetting) {
-      console.log('no settings')
+      // console.log('no settings')
       return
     }
 
     if (!payment) {
-      console.log('no payment')
+      // console.log('no payment')
       return
     }
 

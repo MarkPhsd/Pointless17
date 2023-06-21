@@ -17,7 +17,6 @@ import { IPaymentResponse, IPaymentSearchModel, IPOSOrder,
 import { AuthenticationService, IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -45,7 +44,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   process$: Observable<any>;
   @Input() order  :   IPOSOrder;
-   isApp = this.platFormService.isApp();
+  isApp = this.platFormService.isApp();
   userAuths       :   IUserAuth_Properties;
   _userAuths      : Subscription;
   changeDueComing :   any;
@@ -225,6 +224,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.loginAction = JSON.parse(item)
   }
 
+  exitOrder() { 
+    this.orderMethodsService.exitOrder();
+  }
   initAuthorization() {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
     this.isStaff  = this.userAuthorization.isUserAuthorized('admin,manager,employee');
@@ -260,12 +262,12 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (this.userAuthorization?.user?.roles === 'user') {
       return paymentMethods$.pipe(
         switchMap(data => {
-          let list = data.filter( item => !item.isCreditCard)
-          list = list.filter( item => !item.isCash)
-          list = list.filter( item => !item.wic)
-          list = list.filter( item => !item.ebt)
-          list = list.filter( item => item.enabledOnline)
-          list = list.filter( item => item.name != 'Gift Card')
+          // let list = data.filter( item => !item.isCreditCard)
+          // list = list.filter( item => !item.isCash)
+          // list = list.filter( item => !item.wic)
+          // list = list.filter( item => !item.ebt)
+          let list = data.filter( item => item.enabledOnline)
+          // list = list.filter( item => item.name != 'Gift Card')
         return  of(list)
       })
       )
@@ -652,7 +654,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       }
       this.stepSelection = 3;
     }
-    console.log('getPaymentMethod .stepselection', this.stepSelection)
     return
   }
 

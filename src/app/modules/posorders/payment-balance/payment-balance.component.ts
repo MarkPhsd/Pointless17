@@ -19,7 +19,6 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { CardPointMethodsService } from '../../payment-processing/services';
-import { TryCatch } from '@sentry/angular';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 
 @Component({
@@ -28,6 +27,8 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
   styleUrls: ['./payment-balance.component.scss']
 })
 export class PaymentBalanceComponent implements OnInit, OnDestroy {
+
+  @Input() hideButtonOptions: boolean;
   @Input() qrOrder :boolean;
   @Input() order : IPOSOrder;
   @Input() mainPanel = true;

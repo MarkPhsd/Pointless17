@@ -16,6 +16,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { SplashScreenStateService } from 'src/app/_services/system/splash-screen-state.service';
 import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
+import { ScaleSettingsComponent } from '../admin/settings/software/scale-settings/scale-settings.component';
+import { ScaleService } from '../../_services/system/scale-service.service';
+import { ElectronService } from 'ngx-electron';
 // import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY } from '@angular/cdk/overlay/overlay-directives';
 
 @Component({
@@ -120,6 +123,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         private awsBucketService     : AWSBucketService,
         private splashScreenStateService: SplashScreenStateService,
         private orderMethodsService:   OrderMethodsService,
+        private scaleSettings        : ScaleService,
+        private electronService: ElectronService,
         @Optional() private dialogRef  : MatDialogRef<LoginComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
     )
@@ -162,6 +167,23 @@ export class LoginComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.splashScreenStateService.stop();
     }, 1000);
+
+    await this.initScale()
+  }
+
+  async initScale() { 
+    const scale = this.scaleSettings.getScaleSetup() ;
+    if (this.platformService.isAppElectron) { 
+      if (scale && scale.enabled) { 
+        try {
+          const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+          await emvTransactions.killScaleService();
+          await emvTransactions.startScaleService();
+        } catch (error) {
+          console.log('Scale Error', error)          
+        }
+      }
+    }
   }
 
   refreshUIHomePageSettings() {

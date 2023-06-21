@@ -537,8 +537,44 @@ mat-dialog-container {
   align-items: center;
 }
 
-.button-margins {
+.button-margins .button-margin {
   margin: 5px;
+}
+
+.button-margin-5 {
+  margin: 5px;
+}
+
+.button-margin-10 {
+  margin: 10px;
+}
+
+.button-height-50 {
+  height: 50px;
+}
+
+.button-height-75 {
+  height: 75px;
+}
+
+.button-height-100 {
+  height: 100px;
+}
+
+.button-width-100 { 
+  width: 100px;
+}
+
+.button-width-125 { 
+  width: 125px;
+}
+
+.button-width-150 { 
+  width: 150px;
+}
+
+.button-width-175 { 
+  width: 175px;
 }
 
 .centered {
@@ -606,6 +642,7 @@ button {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-around;
   margin: 5px;
   gap: 10px;
 }
@@ -625,6 +662,15 @@ button {
   margin-bottom: -35px;
   opacity: .5;
   z-index: 100;
+}
+
+.mat-label-info {
+  font-size: 1.2em;
+  margin-left: 3px;
+}
+
+.mat-tooltip {
+  font-size: 1.1em;
 }
 
 

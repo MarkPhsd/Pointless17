@@ -115,7 +115,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         return this.finalizeOrderProcesses(order);
 
       })).pipe(switchMap( data => {
-        console.log('udpdate order subscription')
+        // console.log('udpdate order subscription')
         this.orderMethodsService.updateOrderSubscription( order );
 
         if (response.orderCompleted) {
@@ -132,7 +132,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }));
   }
 
-  
+
   finalizeOrderProcesses(order: IPOSOrder) {
 
     this.printingService.updatePrintingFinalizer(true)
@@ -155,8 +155,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
 
-  finalizeOrder(paymentResponse: IPaymentResponse, 
-                paymentMethod: IPaymentMethod, 
+  finalizeOrder(paymentResponse: IPaymentResponse,
+                paymentMethod: IPaymentMethod,
                 order: IPOSOrder): number {
 
   // this.printingService.printJoinedLabels() ;
@@ -264,10 +264,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   processCreditPayment(site: ISite, posPayment: IPOSPayment,
                        order: IPOSOrder, amount: number,
                        paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
-    if (this.DSIEmvSettings.enabled) {
-      this.processSubDSIEMVCreditPayment(order, amount, true)
-      return
+
+    if (this.platFormService.isAppElectron) { 
+      if (this.DSIEmvSettings.enabled) {
+        this.processSubDSIEMVCreditPayment(order, amount, true)
+        return
+      }
     }
+
     return this.processPayment(site, posPayment, order, amount, paymentMethod)
   }
 
@@ -621,7 +625,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         const payment$ =   this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize, paymentMethod)
 
         return  payment$.pipe(
-          switchMap(data => {            
+          switchMap(data => {
             console.log(' prepPrintUnPrintedItems orderMethodsService.updateOrderSubscription')
             this.orderMethodsService.updateOrderSubscription(data.order);
             this.printingService.previewReceipt();

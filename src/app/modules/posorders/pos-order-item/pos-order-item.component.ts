@@ -74,7 +74,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   @Input() enableExitLabel : boolean;
 
   morebutton               = 'more-button';
-  customcard               ='custom-card'
+  customcard               = 'custom-card'
   orderPromptGroup        : IPromptGroup;
   menuItem$               : Observable<IMenuItem>;
   printLabel$             : Observable<any>;
@@ -99,7 +99,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   showEdit              : boolean;
   showView              : boolean;
   promptOption          : boolean;
-  @Input() userAuths       :   IUserAuth_Properties;
+  @Input() userAuths    : IUserAuth_Properties;
 
   bottomSheetOpen       : boolean ;
   _bottomSheetOpen      : Subscription;
@@ -113,7 +113,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   productnameClass       = 'product-name'
   isModifier            : boolean;
   isItemKitItem         : boolean;
-
+  imageBaseCCS          = 'image'
   action$: Observable<any>;
 
   panel  ='string'
@@ -144,7 +144,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
       return true;
     }
     return false;
-
   }
 
   refundItem() {
@@ -211,29 +210,23 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                 private promptGroupservice : PromptGroupService,
                 private printingService    : PrintingService,
                 public  userAuthService    : UserAuthorizationService,
-
-                private fb: UntypedFormBuilder,
+                private fb                 : UntypedFormBuilder,
               )
   {
   }
 
   async ngOnInit() {
-
     this.initSubscriptions();
-
     const site = this.siteService.getAssignedSite();
     this.bucketName   =  await this.awsBucket.awsBucket();
     this.awsBucketURL =  await this.awsBucket.awsBucketURL();
-    // this.orderItem.printLocation
     if (this.orderItem) {
       this.menuItem$  = this.menuService.getMenuItemByID(site, this.orderItem.productID)
     }
-
     if (this.menuItem) {
       this.itemName   =  this.getItemName(this.menuItem.name)
       this.imagePath  =  this.getItemSrc(this.menuItem)
     }
-
     if (!this.menuItem) {
       this.basicItem$ = this.menuService.getItemBasicImage(site, this.orderItem?.productID).pipe(
         switchMap( data => {
@@ -242,16 +235,13 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
         })
       )
     }
-
     if (this.orderItem && this.orderItem.id != this.orderItem.idRef )  {
 
     }
-
     const item = this.orderItem;
     this.showEdit = !item.printed && (this.quantity && !item.voidReason) &&  item.promptGroupID != 0 && item.id != item.idRef
     this.showView = this.mainPanel && ( (  item.promptGroupID === 0) || ( item.promptGroupID != 0 && item.id != item.idRef ) )
     this.promptOption = (item.promptGroupID != undefined && item.promptGroupID != 0)
-
     if (this.mainPanel) {
       this.morebutton = 'more-button-main';
     }
@@ -553,8 +543,18 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   updateCardStyle(option: boolean)  {
     if (this.orderItem && this.orderItem.idRef && this.orderItem.id != this.orderItem.idRef) {
       this.customcard       = 'custom-card-modifier';
+
+      if (this.prepScreen) {
+        this.customcard       = 'custom-card-modifier-prep';
+      }
+
       this.productnameClass = 'productname-modifier'
       this.isModifier       = true;
+
+      this.imageBaseCCS = 'image'
+      if (this.isModifier) {
+        this.imageBaseCCS = 'image-modifier'
+      }
       return
     }
 
@@ -562,6 +562,10 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
     if (!option) {
       this.customcard ='custom-card-side';
+    }
+
+    if (this.prepScreen) {
+      this.customcard       = 'custom-card-modifier-prep';
     }
   }
 
@@ -631,7 +635,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   printLabel(item: PosOrderItem) {
     this.printLabel$ = this.printingService.printItemLabel(item, this.menuItem$,
-                                                            this.order, false).pipe(switchMap(data => { 
+                                                            this.order, false).pipe(switchMap(data => {
                                                               this.orderMethodsService.updateOrder(data)
                                                               return of(data)
                                                             })) // this.menuItem$)

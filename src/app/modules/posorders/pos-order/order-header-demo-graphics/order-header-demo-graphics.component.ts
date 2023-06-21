@@ -18,10 +18,10 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
 
   orderNameForm: UntypedFormGroup;
 
-  @Input()  canRemoveClient = false;
+  @Input()  canRemoveClient : boolean = false;
   @Input()  order           : IPOSOrder;
-  @Input()  mainPanel = false;
-  @Input()  disableActions  = false;
+  @Input()  mainPanel        : boolean = false;
+  @Input()  disableActions  : boolean;
   @Output() outPutOpenClient:   EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutRemoveClient:   EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutAssignCustomer:   EventEmitter<any> = new EventEmitter<any>();
