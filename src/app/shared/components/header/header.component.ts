@@ -40,7 +40,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('floorPlanTemplate') floorPlanTemplate: TemplateRef<any>;
   @ViewChild('menuButtonContainer') menuButtonContainer: TemplateRef<any>;
 
-
   @Output() outPutToggleSideBar:      EventEmitter<any> = new EventEmitter();
   @Output() outPutToggleSearchBar:    EventEmitter<any> = new EventEmitter();
   openOrderBar:                      boolean;

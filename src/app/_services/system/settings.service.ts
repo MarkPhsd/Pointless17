@@ -33,6 +33,7 @@ export interface ITerminalSettings {
   enableScale         : boolean;
   enableExitLabel     : boolean;
   ignoreTimer         : boolean;
+  defaultOrderTypeID: number;
 }
 
 @Injectable({

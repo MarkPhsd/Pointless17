@@ -1,17 +1,18 @@
-import { E } from '@angular/cdk/keycodes';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import {  UntypedFormGroup } from '@angular/forms';
-import {  Observable, Subscription, of, switchMap } from 'rxjs';
+import {  BehaviorSubject, Observable, Subscription, of, switchMap } from 'rxjs';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
-import { AWSBucketService, MenuService } from 'src/app/_services';
+import { AWSBucketService, AuthenticationService, MenuService } from 'src/app/_services';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-
+import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 @Component({
   selector: 'app-product-filter',
   templateUrl: './product-filter.component.html',
   styleUrls: ['./product-filter.component.scss']
 })
 export class ProductFilterComponent implements OnInit {
+
+  @ViewChild('accordionMenu')   accordionMenu: TemplateRef<any>;
 
   @ViewChild('subcategoryList') subcategoryList : TemplateRef<any>;
   toggleSubCategoryList: boolean;
@@ -44,9 +45,15 @@ export class ProductFilterComponent implements OnInit {
   searchModel : ProductSearchModel;
   bucket$: Observable<any>;
   gf: boolean;
-
+  phoneDevice: boolean;
   inputForm: UntypedFormGroup;
   uiSetting: UIHomePageSettings;
+  
+  // private _posPaymentStepSelection     = new BehaviorSubject<IPaymentMethod>(null);
+  // public posPaymentStepSelection$      = this._posPaymentStepSelection.asObservable();
+
+  _reset = new BehaviorSubject<boolean>(null);
+
   uiSetting$ =  this.uiSettingService.homePageSetting$.pipe(switchMap(data => {
     if (data) {
       this.uiSetting = data
@@ -63,15 +70,21 @@ export class ProductFilterComponent implements OnInit {
       this.searchModel = model;
       this.searchModel.gf = this.gf;
     })
-
   }
 
   constructor(
     private awsBucketService: AWSBucketService,
-    public uiSettingService: UISettingsService,
+    public  uiSettingService: UISettingsService,
+    private uiToolBarService: ToolBarUIService,
+    private authService: AuthenticationService,
     private menuService: MenuService) { }
 
   ngOnInit(): void {
+    const device = this.authService.deviceInfo
+    if (device) { 
+      this.phoneDevice = device.phoneDevice;
+    }
+
     this.initSearchModel();
     this.initSubscription();
   }
@@ -80,18 +93,16 @@ export class ProductFilterComponent implements OnInit {
     if (!this.searchModel) {
       // this.searchModel = {} as ProductSearchModel;
       this.searchModel = this.menuService.initSearchModel()
-
       this.gf = false;
     }
     this.searchModel.pageNumber = 1;
     this.searchModel.gf = this.gf
-    // console.log('update search modeul set gf', this.searchModel)
     this.menuService.updateSearchFilter(this.searchModel)
   }
 
   initSearchModel() {
     if (!this.menuService.searchModel) {
-      // this.menuService.updateSearchModel(this.searchModel)
+ 
     }
   }
 
@@ -100,6 +111,18 @@ export class ProductFilterComponent implements OnInit {
     this.gf = false;
     this.searchModel.gf = false
     this.menuService.updateSearchModel(this.searchModel)
+    this._reset.next(true)
+  }
+
+  hideToolbar() { 
+    this.uiToolBarService.hidetoolBars()
+  }
+
+  get accordionMenuView() { 
+    if (( this.uiSetting && this.uiSetting.accordionMenu )) {
+      return this.accordionMenu
+    }
+    return null
   }
 
   get toggleItemTypeView() {

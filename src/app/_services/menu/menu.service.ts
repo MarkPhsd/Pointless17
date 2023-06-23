@@ -35,6 +35,8 @@ export interface IDepartmentList {
   prodModifierType:       number;
   icon:                   string | string;
   slug                :   string;
+  active              : boolean;
+  webProduct          : boolean;
 }
 export interface Category {
   menuItem:               any[];
@@ -149,7 +151,6 @@ export class MenuService {
       this._searchModel.next(item);
       return;
     }
-    // console.log('update search model', item.categoryID)
     this._searchModel.next(item);
   }
 
@@ -164,6 +165,10 @@ export class MenuService {
     item.listSubCategoryID  = [] as number[];
     item.listSpecies  = [] as number[];
     item.listSize = [] as number[];
+    item.categoryID = 0;
+    item.departmentID = 0;
+    item.subCategoryID = 0;
+    item.itemTypeID  = 0;
     item.hideSubCategoryItems = false;
     item.pageNumber = 1;
     item.pageSize = 50;

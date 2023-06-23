@@ -1,0 +1,87 @@
+<div *ngIf="(categoryList$ | async) as categories"></div>
+
+<ng-content select="[header]"></ng-content>
+
+<div class="list" *ngIf="(list$ | async) as list ">
+  <!-- {{list | json}} -->
+</div>
+
+<div *ngIf="type ==='category'">
+  <!-- {{basicList | json}} -->
+</div>
+
+  <div  *ngFor         ="let item of basicList;
+                          let i =index;">
+  <div class="button-margin-5">
+      <button mat-button
+              [color]="themeColor"  
+              class='button button-height-50 font-weight-600 '
+              (click)="setValue(item.id)" >
+        <div class="list-grid">
+          <div class="img-icon">
+            <img
+              [src]     ="item.image"
+              onerror   = "this.src='assets/images/placeholderimage.png'"
+              class     ="product-image"
+              />
+          </div>
+
+          <div color="primary" class="font-size-1em font-weight-500">
+            {{item.name | truncateText: 30}}
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <ng-container  [ngTemplateOutlet]="isSelectedDepartment(item.id, selectedItem)" [ngTemplateOutletContext]="item.id"></ng-container>
+    <ng-template #categoryMenu let-item>
+      <div style="margin:5px">
+        <mat-divider></mat-divider>
+      </div>
+
+      <div style="margin-left:10px">
+        <category-menu-selector
+          [_reset]="_reset"
+          [themeColor]="'accent'"
+          [bucketName]="bucketName"
+          [inputForm]="inputForm"
+          [categories]="categories"
+          [departmentID]='selectedItem'
+          [type]="'category'">
+          <div header>
+            <h5>Cateogries</h5>
+          </div>
+        </category-menu-selector> 
+      </div>
+
+      <div style="margin:5px">
+        <mat-divider></mat-divider>
+      </div>
+    </ng-template>
+  </div>
+
+
+<ng-template #loading>
+  ...loading
+</ng-template>
+
+<!-- 
+<category-menu-selector
+  [bucketName]="bucketName"
+  [inputForm]="inputForm"
+  [departmentID]='item.id'
+  [type]="'category'">
+  <h3>Cateogries</h3>
+</category-menu-selector> -->
+
+<ng-template #image let-item>
+  <div class="round-container">
+    <img
+      [src]     ="item.image"
+      onerror   = "this.src='assets/images/placeholderimage.png'"
+      class     ="product-image"
+     />
+  </div>
+</ng-template>
+
+

@@ -114,8 +114,6 @@
             </mat-slide-toggle>
           </div>
 
-
-
           <div class="grid-view-sections">
             <div class="grid-views">
 
@@ -144,6 +142,7 @@
                 </mat-slide-toggle>
               </div>
 
+            
               <div class="toggle-fields">
                 <mat-slide-toggle
                           formControlName="brandsEnabled"
@@ -230,6 +229,8 @@
                 </mat-slide-toggle>
               </div>
 
+    
+
               <div class="toggle-fields">
                 <mat-slide-toggle
                           formControlName="staffBrandsEnabled"
@@ -310,10 +311,34 @@
                   <mat-label>Enable Category</mat-label>
                 </mat-slide-toggle>
               </div>
+              
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="accordionMenuSideBar"
+                        >
+                  <mat-label>Customer View Accordion Menu</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="staffAccordionMenuSideBar"
+                        >
+                  <mat-label>Staff View Accordion Menu</mat-label>
+                </mat-slide-toggle>
+              </div>
             </div>
 
             <div class="grid-views">
               <h4><mat-icon color="primary" style="margin-top:5px">manage_search</mat-icon>Product Filter Options</h4>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="accordionMenu"
+                          >
+                  <mat-label>Accordion Menu Style</mat-label>
+                </mat-slide-toggle>
+              </div>
 
               <div class="toggle-fields">
                 <mat-slide-toggle

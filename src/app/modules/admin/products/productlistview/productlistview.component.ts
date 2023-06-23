@@ -207,8 +207,6 @@ constructor(  private _snackBar              : MatSnackBar,
     this.categories$    = this.menuService.getListOfCategoriesAll(site).pipe(
       switchMap(data => {
 
-        // console.log('this.departmentID', this.departmentID)
-
         if (this.departmentID == undefined)  {
           this.categoriesList = data;
           return of(data)
@@ -216,11 +214,9 @@ constructor(  private _snackBar              : MatSnackBar,
 
         if (this.departmentID != 0 && this.departmentID != undefined) {
           this.categoriesList = data.filter(data => {return data.departmentID == this.departmentID});
-          console.log('filtered categories')
           return of(data)
         }
 
-        console.log('unfiltered categories',  data)
         this.categoriesList = data;
         return of(data)
       })
@@ -515,11 +511,11 @@ constructor(  private _snackBar              : MatSnackBar,
     if (this.itemName) {
       if (this.itemName.value)          { searchModel.name        = this.itemName.value  }
     }
-    if (this.subCategoryID )            { searchModel.subCategoryID  = this.subCategoryID.toString(); }
-    if (this.categoryID )               { searchModel.categoryID  = this.categoryID.toString(); }
-    if (this.productTypeSearch)         { searchModel.itemTypeID  = this.productTypeSearch.toString(); }
-    if (this.brandID)                   { searchModel.brandID     = this.brandID.toString(); }
-    if (this.departmentID)              { searchModel.departmentID= this.departmentID.toString()}
+    if (this.subCategoryID )            { searchModel.subCategoryID  = +this.subCategoryID.toString(); }
+    if (this.categoryID )               { searchModel.categoryID  = +this.categoryID.toString(); }
+    if (this.productTypeSearch)         { searchModel.itemTypeID  = +this.productTypeSearch.toString(); }
+    if (this.brandID)                   { searchModel.brandID     = +this.brandID.toString(); }
+    if (this.departmentID)              { searchModel.departmentID= +this.departmentID.toString()}
     searchModel.viewAll    = this.viewAll;
     searchModel.active     = this.active;
     searchModel.barcode    = searchModel.name
@@ -672,6 +668,7 @@ constructor(  private _snackBar              : MatSnackBar,
 
     this.selected = selected
     this.id = selectedRows[0].id;
+
     this.getItem(this.id)
 
   }
@@ -685,7 +682,6 @@ constructor(  private _snackBar              : MatSnackBar,
           return of(data)
         })
       )
-
     }
   }
 

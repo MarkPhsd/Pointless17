@@ -27,5 +27,10 @@ export class LabelingService {
     {id:0,name:'scanning', value:'Grace value allows a budtender to weigh out more than the specified amount, like 3.56 grams, but charge exactly for 3.5 grams..'},
   ]
 
+
+  terminalSettingsInfo =  [
+    {id:0,name:'scanning', value:'Use this button when physically present at the terminal. This will generate a windows folder with print settings for the label.'},
+  ]
+
   constructor() { }
 }

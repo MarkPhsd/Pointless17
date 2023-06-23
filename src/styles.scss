@@ -622,7 +622,7 @@ mat-dialog-container {
   margin: 5px;
 }
 
-button {
+.button {
   margin: 5px;
 }
 
@@ -672,8 +672,25 @@ button {
 .mat-tooltip {
   font-size: 1.1em;
 }
+.font-size-1-2em { 
+  font-weight: 1em;
+}
+.font-size-1-1em { 
+  font-weight: 1em;
+}
+.font-size-1em { 
+  font-weight: 1em;
+}
 
-
+.font-weight-400 { 
+  font-weight: 400;
+}
+.font-weight-500 { 
+  font-weight: 500;
+}
+.font-weight-600 { 
+  font-weight: 600;
+}
 /* In the component.css or app.css add Icon Color styles */
 .material-icons.color_green { color: #00FF00; }
 .material-icons.color_white { color: #FFFFFF; }

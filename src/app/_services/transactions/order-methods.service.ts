@@ -590,7 +590,7 @@ export class OrderMethodsService implements OnDestroy {
     if (!item) {   return false }
     const model =  {} as ProductSearchModel;
     if (item?.itemType?.name?.toLowerCase() == 'category') {
-      model.categoryID   = item.categoryID.toString()
+      model.categoryID   = item.categoryID
       this.menuService.updateSearchModel(model)
       this.router.navigate(["/menuitems-infinite/", {categoryID:item.id }])
       return true
@@ -604,14 +604,14 @@ export class OrderMethodsService implements OnDestroy {
     }
 
     if (item?.prodModifierType == 5) {
-      model.subCategory  = item.id.toString()
+      model.subCategoryID  = +item.id
       this.menuService.updateSearchModel(model)
       this.router.navigate(["/menuitems-infinite/", {subCategoryID:item.id }])
       return true
     }
 
     if (item?.prodModifierType == 6) {
-      model.departmentID = item.id.toString()
+      model.departmentID = item.id
       this.menuService.updateSearchModel(model)
       this.router.navigate(["/menuitems-infinite/", {departmentID:item.id }])
       return true

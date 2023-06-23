@@ -196,7 +196,9 @@
           <mat-label>Send Items for Prep at Order Close.</mat-label>
         </mat-slide-toggle>
       </div>
+      
 
+  
       <mat-divider></mat-divider>
       <h4>Barcode Options</h4>
 
@@ -359,7 +361,15 @@
             Grace Value
           </app-value-fields>
         </div>
-
+      
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="remove100thDecimalForPrice"
+                    >
+            <mat-label>Charge to the first decimal, no rounding.</mat-label>
+          </mat-slide-toggle>
+        </div>
+        
         <div>
           <mat-label  class="mat-label-design">Minimum Client Age.</mat-label>
           <app-value-fields

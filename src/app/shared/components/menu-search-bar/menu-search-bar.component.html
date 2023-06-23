@@ -14,20 +14,6 @@
             Search
         </div>
       </search-debounce-input>
-    </div>
-
-    <ng-container [ngTemplateOutlet]="isDisplaySubMenuOn"></ng-container>
-    <ng-template #displaySubMenu>
-        <price-schedule-menu-list></price-schedule-menu-list>
-    </ng-template>
-
-    <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container>
-
-    <ng-template #displayMenu>
-      <display-menu-menu></display-menu-menu>
-    </ng-template>
-    
-    <div class="ps-flex-group">
 
       <div  *ngIf="!isApp && (!smallDevice && !tinyDepartmentFilter)"
             class="search-buttons">
@@ -37,23 +23,45 @@
                   <mat-icon>keyboard</mat-icon></button>
         </div>
       </div>
+    </div>
 
-      <div *ngIf="isApp || (!smallDevice && !isApp)"
-          class="search-buttons">
-        <div>
-          <button mat-button
-                  (click)="resetAll()">
-            <mat-icon>refresh</mat-icon>
-          </button>
-        </div>
-      </div>     
-      
+   
+    <!-- <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container> -->
+    <!-- <ng-template #displayMenu>
+      <display-menu-menu></display-menu-menu>
+    </ng-template> -->
+
+    <ng-container *ngIf="uiHomePage && 
+                          (uiHomePage?.accordionMenuSideBar && isUser) ||
+                          (uiHomePage?.staffAccordionMenuSideBar && isStaff)">
+      <app-product-filter></app-product-filter>
+    </ng-container>     
+    
+    <ng-container [ngTemplateOutlet]="isDisplaySubMenuOn"></ng-container>
+    <ng-template #displaySubMenu>
+        <price-schedule-menu-list></price-schedule-menu-list>
+    </ng-template>
+
+    <div class="ps-flex-group">
+      <div *ngIf="uiHomePage && 
+            (!uiHomePage?.accordionMenuSideBar) &&
+            (!uiHomePage?.staffAccordionMenuSideBar)
+            ">
+        <div *ngIf="isApp || (!smallDevice && !isApp)"
+            class="search-buttons">
+          <div>
+            <button mat-button
+                    (click)="resetAll()">
+              <mat-icon>refresh</mat-icon>
+            </button>
+          </div>
+        </div>     
+      </div>
       <div>
         <ng-container [ngTemplateOutlet]="filter"></ng-container>
       </div>
       
     </div>
-
 
     <div *ngIf="uiHomePage &&  uiHomePage.sideToolbarEnableCategory">
       <mat-accordion multi>
@@ -176,10 +184,10 @@
 
 
 <ng-template #filter>
-  <ng-container >
+  <!-- <ng-container >
     <button mat-button color="accent" (click)="gotoFilter()"   >
       <mat-icon>manage_search</mat-icon>Filter
     </button>
-  </ng-container>
+  </ng-container> -->
 </ng-template>
 

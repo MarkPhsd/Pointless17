@@ -88,14 +88,7 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
     this.initStyle();
     this.backButtonEvent();
     this.devMode = isDevMode();
-
-    if (this.electronService.isElectronApp && !this.devMode) {
-      this.balanceSheetMethodsService.startScaleService()
-    }
     this.initKeyboardSubscriber();
-
-    // this.initializeApp();
-    // this.awsService.awsBucket();
   }
 
   // initializeApp() {

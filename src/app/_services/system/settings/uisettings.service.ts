@@ -84,6 +84,7 @@ export interface TransactionUISettings {
   defaultOrderTypeID: number;
   defaultNewOrderCategoryID: number;
   weightGraceValue: number;
+  remove100thDecimalForPrice: boolean;
 }
 
 export interface StripeAPISettings {
@@ -212,7 +213,10 @@ export interface UIHomePageSettings {
   categoryFilter: boolean;
   subCategoryFilter: boolean;
   disableSearchFeaturesInItemsList: boolean;
-
+  accordionMenu: boolean;
+  
+  accordionMenuSideBar: boolean;
+  staffAccordionMenuSideBar: boolean;
 }
 
 @Injectable({
@@ -428,6 +432,9 @@ export class UISettingsService {
     })
   }
 
+  get UIHomePageSettings() { 
+    return this.settingsService.getUIHomePageSettings() 
+  }
   getEmailModel() {
     if (!this.userAuthorizationService.user) {  this._emailModel.next(null)  }
     this.settingsService.getEmailModel().subscribe(data => {
@@ -603,7 +610,7 @@ export class UISettingsService {
 
       suppressItemsInStoreNavigation: [], //
       disableSearchFeaturesInItemsList: [], //
-
+      accordionMenu: [],
       colorFilter: [], //: boolean;
       sizeFilter: [], //: boolean;
       speciesFilter: [], //: boolean;
@@ -613,6 +620,8 @@ export class UISettingsService {
       departmentFilter: [], //: boolean;
       categoryFilter: [], //: boolean;
       subCategoryFilter: [], //: boolean;
+      accordionMenuSideBar: [],
+      staffAccordionMenuSideBar: [],
      })
     return fb
   }
@@ -773,6 +782,7 @@ export class UISettingsService {
       defaultOrderTypeID: [],
       defaultNewOrderCategoryID: [],
       weightGraceValue: [],
+      remove100thDecimalForPrice: [],
      })
 
 

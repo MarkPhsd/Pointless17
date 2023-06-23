@@ -618,7 +618,7 @@ export class PrintingService {
 
   printItemLabel(item: any, menuItem$: Observable<IMenuItem>, order: IPOSOrder, joinLabels: boolean ) {
     const site = this.siteService.getAssignedSite()
-    console.log('print item label', item)
+    // console.log('print item label', item)
     if (!menuItem$) {
       menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
     }

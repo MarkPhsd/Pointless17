@@ -10,6 +10,9 @@ import { Router } from '@angular/router';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
 @Component({
   selector: 'app-cart-button',
@@ -44,7 +47,8 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   gridflow            = 'grid-flow';
   @Input() hideAddNewOrder     = false
-
+  posDevice       : ITerminalSettings
+  _posDevice      : Subscription;
   href: string;
   deviceInfo : IDeviceInfo;
 
@@ -66,16 +70,23 @@ export class CartButtonComponent implements OnInit, OnDestroy {
         }
       }
     })
+
+    this._posDevice = this.uiSettings.posDevice$.subscribe(data => {
+       this.posDevice = data;
+    })
   }
 
+ 
   constructor(
     private siteService:            SitesService,
     public orderService:            OrdersService,
     private authenticationService : AuthenticationService,
     private toolbarServiceUI:       ToolBarUIService,
     private router                : Router,
+    private serviceTypeService: ServiceTypeService,
     private userSwitchingService: UserSwitchingService,
     public platFormService: PlatformService,
+    private uiSettings: UISettingsService,
     public orderMethodsService: OrderMethodsService,
     ) {
    }
@@ -87,9 +98,8 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     this.assignCurrentOrder();
     this.refreshOrderCheck();
     this.updateItemsPerPage();
-
     this.deviceInfo = this.authenticationService.deviceInfo
-
+    // this.device$ = this.
   }
 
   ngOnDestroy() {
@@ -97,7 +107,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     this.refreshCurrentOrderCheck = false
     this.openOrderBar             = false
     this.order                    = null
-
+    if (this._posDevice) {this._posDevice.unsubscribe()}
     if (this._order){
       this._order.unsubscribe()
     }
@@ -133,12 +143,26 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   addNewOrder() {
     const site = this.siteService.getAssignedSite();
+    if (this.posDevice) { 
+      if (this.posDevice.defaultOrderTypeID != 0) {
+        const serviceType$ = this.serviceTypeService.getType(site, this.posDevice.defaultOrderTypeID)
+        this.actionOrder$ = serviceType$.pipe(switchMap(data => { 
+            return of(data) 
+        })).pipe(switchMap(data => { 
+            const order$ = this.getNewOrder(site, data)
+            return order$
+        }))
+        return ;
+      }
+    }
+    this.actionOrder$  = this.getNewOrder(site, null)
+  }
 
-     this.actionOrder$ = this.orderMethodsService.newOrderWithPayloadMethod(site, null).pipe(
+  getNewOrder(site, serviceType) { 
+    return this.orderMethodsService.newOrderWithPayloadMethod(site, serviceType).pipe(
       switchMap(data => {
         return of(data)
-      })
-    )
+    }))
   }
 
   initOrderBarSubscription() {

@@ -31,8 +31,6 @@
   <mat-card-subtitle>
 
     <div *ngIf="inputForm && inputForm.controls?.name.invalid && (inputForm.controls?.name.dirty || inputForm.controls?.name.touched)">
-
-      <!-- {{inputForm.controls?.name.errors | json}} -->
       <div *ngIf="inputForm && inputForm.controls?.name.errors?.['required']">
         <mat-icon color="warn">warning</mat-icon>  Name is required.
       </div>
@@ -41,7 +39,10 @@
       </div>
 
     </div>
-    <button mat-button (click)="createZPLFolderData()">craete folder</button>
+    <mat-icon class="mat-label-info"
+              color="accent"
+              [matTooltip]="labelingService.terminalSettingsInfo[0].value">info</mat-icon>
+    <button  mat-button (click)="createZPLFolderData()">Create Folder</button>
   </mat-card-subtitle>
 
   <mat-card-content>
@@ -85,6 +86,8 @@
           </mat-form-field>
         </div>
 
+
+
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="enabled">
@@ -118,6 +121,22 @@
                     formControlName="ignoreTimer">
             <mat-label>Ignore Timer for Auto Log Off</mat-label>
           </mat-slide-toggle>
+        </div>
+        
+        <div *ngIf="(serviceType$ | async) as list ">
+          <mat-form-field style="width: 200px" class="fields"
+              appearance="outline">
+            <mat-label>Default Online Order Type</mat-label>
+              <mat-select
+                        type              = "number"
+                        formControlName   = "defaultOrderTypeID" >
+                <mat-option
+                    *ngFor="let item of list"
+                    [value]="item?.id">
+                    {{item?.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
         </div>
 
       </div>

@@ -19,6 +19,7 @@ export class PlatformService {
   private _apiUrl       : any;
 
   get isAppElectron() {
+    if (!this.ipcService) { return false }
     const info = this.ipcService.isElectronApp
     return  info
   }

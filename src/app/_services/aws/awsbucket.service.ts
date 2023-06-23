@@ -124,15 +124,17 @@ export class AWSBucketService {
     let path = ''
     if (imageName) {
 
-      if (`${bucket}`.substring(0, 16 ) ===  'https://https://') {
+      if (bucket && `${bucket}`.substring(0, 16 ) ===  'https://https://') {
         const result =  bucket.split('https://')
         bucket = result[1];
         console.log('fixed bucket ', bucket)
       }
 
-      bucket = bucket.replace('https//', '')
-
-      if (`${bucket}`.substring(0, 8 ) === 'https://') {
+      if (bucket) {
+        bucket = bucket.replace('https//', '')
+      }
+     
+      if (bucket && `${bucket}`.substring(0, 8 ) === 'https://') {
         path = `https://${bucket}${imageName}`
       } else {
         path = `https://${bucket}.s3.amazonaws.com/${imageName}`
@@ -140,7 +142,7 @@ export class AWSBucketService {
     
     } else {
     
-      if (`${bucket}`.substring(0, 8 ) === 'https://') {
+      if (bucket && `${bucket}`.substring(0, 8 ) === 'https://') {
         path = `${bucket}placeholderimage.png`
       } else {
         path = `https://${bucket}.s3.amazonaws.com/placeholderproduct.png`

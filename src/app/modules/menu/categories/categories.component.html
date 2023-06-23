@@ -18,7 +18,9 @@
         <ng-container [ngTemplateOutlet]="filter"></ng-container>
 
         <ng-template #filter>
-          <ng-container >
+          <ng-container  *ngIf="uiHomePage && 
+                              (uiHomePage?.accordionMenuSideBar && !isStaff) ||
+                              (uiHomePage?.staffAccordionMenuSideBar && isStaff)">
             <button mat-button color="accent" (click)="gotoFilter()"  >
               <mat-icon>manage_search</mat-icon>Filter
             </button>

@@ -19,6 +19,8 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 const { Keyboard } = Plugins;
 
 // https://codeburst.io/how-to-create-horizontal-scrolling-containers-d8069651e9c6
@@ -178,18 +180,24 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   action$: Observable<any>;
   classcontainer   : string;
   orderslist       : string
+  uiHomePage:  UIHomePageSettings;
+  uiHomePage$: Observable<UIHomePageSettings>;
+  isStaff = this.userAuth.isStaff
+
   getPlatForm() {  return Capacitor.getPlatform(); }
 
   constructor(
                 private menuService:     MenuService,
                 private awsBucket:       AWSBucketService,
-                private router:          Router,
-                private authSevice              : AuthenticationService,
-                private siteService             : SitesService,
-                private platFormService         : PlatformService,
-                private productEditButtonService: ProductEditButtonService,
-                public authenticationService    : AuthenticationService ,
-                private toolbarUIService        : ToolBarUIService,
+                private router                   : Router,
+                private authSevice               : AuthenticationService,
+                private siteService              : SitesService,
+                private platFormService          : PlatformService,
+                private productEditButtonService : ProductEditButtonService,
+                public  authenticationService    : AuthenticationService ,
+                private toolbarUIService         : ToolBarUIService,
+                public uiSettings                : UISettingsService,
+                private userAuth                : UserAuthorizationService,
    )
   {
     this.isApp = this.platFormService.isApp();
@@ -204,6 +212,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     if (this.authSevice && this.authSevice.deviceInfo && this.authSevice.deviceInfo.phoneDevice) {
       this.textLength = 24
     }
+  
   }
 
   getPlaceHolder() {
@@ -213,7 +222,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   init() {
     const site              = this.siteService.getAssignedSite()
     const searchModel       = {} as ProductSearchModel;
-    searchModel.itemTypeID  = this.itemTypeID.toString()
+    searchModel.itemTypeID  = this.itemTypeID;
     searchModel.pageSize    = 45;
     searchModel.currentPage = 1;
     searchModel.pageSize    = 1;
@@ -338,12 +347,12 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
     if (this.itemTypeID == 6) {
         productSearchModel.hideSubCategoryItems = true;
-      { productSearchModel.departmentID  = id.toString(); }
+      { productSearchModel.departmentID  = id }
     }
 
     if (this.itemTypeID == 4) {
        productSearchModel.hideSubCategoryItems = false;
-      { productSearchModel.categoryID  = id.toString(); }
+      { productSearchModel.categoryID  = id }
     }
     // console.log('init Product Search Model categories',productSearchModel)
     productSearchModel.pageSize   = 25
@@ -453,7 +462,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     this.searchModel.pageSize    = 25
     this.searchModel.pageNumber  = 1
     this.searchModel.currentPage = 1
-    this.searchModel.itemTypeID  = this.itemTypeID.toString()
+    this.searchModel.itemTypeID  = this.itemTypeID;
     await this.addToList(this.searchModel.pageSize, this.searchModel.pageNumber )
     return this._searchItems$
   }
@@ -480,6 +489,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   }
 
   gotoFilter() {
+    
     this.router.navigate(['filter'])
     this.toolbarUIService.hideToolbarSearchBar()
   }

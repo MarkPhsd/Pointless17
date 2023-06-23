@@ -2,13 +2,15 @@ import { C } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
 import * as _ from "lodash";
 import { DateHelperService } from '../reporting/date-helper.service';
-
+import { CurrencyPipe } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
 export class RenderingService {
 
-  constructor(private dateHelperService: DateHelperService) { }
+  constructor(
+    private currencyPipe: CurrencyPipe,
+    private dateHelperService: DateHelperService) { }
 
   interpolateText(item: any, text: string) {
     if (!item && !text) { return }
@@ -63,8 +65,7 @@ export class RenderingService {
   }
 
   removeUndefined(item: any) {
-    // console.log('item before remove nulls', item)
-    // console.log('removeUndefined')
+  
     const result = _.mapValues(item, v => _.isNil(v) ? '' : v)
     if (item) {
       item = this.setItemValues(item)
@@ -72,13 +73,37 @@ export class RenderingService {
     return item
   }
 
+  convertToCurrency(value: number): string {
+    return this.currencyPipe.transform(value, 'USD', 'symbol', '1.2-2');
+    this.currencyPipe.transform(value, 'USD', 'symbol', '1.2-2');
+  }
+
   setItemValues(item) {
+    // console.log('item', item)
     for (const key in item) {
 
       if (key === 'dateMade') {
         let value = this.checkDate(item[key])
-        // console.log('dateMade', value)
         item[key] = value
+      }
+      if (key === 'total') { 
+        // item[key] = convertToCurrency(item[key])
+        console.log('total converted to currency', this.convertToCurrency(item[key]))
+        console.log('item total', item[key])
+        item[key] = this.convertToCurrency(item[key])
+      }
+      if (key === 'subTotal') { 
+        // item[key] = convertToCurrency(item[key])
+        console.log('subTotal converted to currency', this.convertToCurrency(item[key]))
+        console.log('subTotal ', item[key])
+        item[key] = this.convertToCurrency(item[key])
+      }
+
+      if (key === 'unitPrice') { 
+        // item[key] = convertToCurrency(item[key])
+        console.log('unitPrice ', this.convertToCurrency(item[key]))
+        console.log('unitPrice ', item[key])
+        item[key] = this.convertToCurrency(item[key])
       }
 
       if (item[key] && isNaN(item[key])) {
@@ -88,11 +113,16 @@ export class RenderingService {
         }
 
         if (!result) {
+        
+
           if (this.isObject(item[key])) {
+      
             if (key === 'name') {
               item[key] = this.setItemValues(item[key])
               return item
             }
+       
+            
             if (key === 'unitName') {
               item[key] = this.setItemValues(item[key])
               return item
@@ -113,6 +143,7 @@ export class RenderingService {
               item[key] = this.setItemValues(item[key])
               return item
             }
+
             if (key === 'menuItem') {
               item[key] = this.setItemValues(item[key])
             }
@@ -132,7 +163,6 @@ export class RenderingService {
     try {
       if (e instanceof Date) {
         e = this.dateHelperService.format(e, 'MM-dd-yyyy')
-        // console.log('date', e)
         return e;
       }
     } catch (error) {
@@ -142,7 +172,6 @@ export class RenderingService {
     try {
       if (this.isIsoDate(e)) {
         e = this.dateHelperService.format(e,'MM-dd-yyyy')
-        // console.log('date', e)
         return e
       }
     } catch (error) {
@@ -152,7 +181,6 @@ export class RenderingService {
       if (e) {
         if (this.dateHelperService.isValidDate(e)) {
           e = this.dateHelperService.format(e, 'MM-dd-yyyy')
-          // console.log('date', e)
         }
       }
       } catch (error) {

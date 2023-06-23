@@ -32,19 +32,15 @@ mat-icon {
   overflow-x: hidden;
   overflow-y: auto ;
   height: calc(100vh - 80px);
+  max-height: 600px;
 }
 
-.stick-panel-top {
+.stick-panel { 
   position :sticky;
   top: 0;
-  max-height: 800px;
-
-  // padding-right: 10px;
-  // overflow-x: visible;
-  // position: fixed;
-  // right: 0px;
-  // max-width: 350px;
-  // width: 350px;
+}
+.div-max-800 {
+  max-height: 700px;
 }
 
 h4 h5 {

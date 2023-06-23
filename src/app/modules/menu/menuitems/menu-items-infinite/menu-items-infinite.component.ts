@@ -15,6 +15,7 @@ import { ISite } from 'src/app/_interfaces';
 import { HttpClient } from '@angular/common/http';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'menu-items-infinite',
@@ -95,8 +96,8 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   orderBar          : boolean;
   platForm          = this.getPlatForm()
   isApp             = false;
-  bucket$: Observable<string>;
-
+  bucket$: Observable<string>; 
+  uiHomePage$  : Observable<any>;
   style$     : Observable<any>;
   userAuths  = {} as IUserAuth_Properties;
   userAuths$ = this.authService.userAuths$.pipe(
@@ -110,7 +111,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   ordersListClass = 'grid-flow scroller'
   infiniteClassList = 'grid-flow scroller'
   infiniteItemClass = 'grid-item';
-
+  isStaff= this.userAuthorizationService.isStaff
   getPlatForm() { return Capacitor.getPlatform(); }
 
   initSubscriptions() {
@@ -144,6 +145,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
               private uiSettingService: UISettingsService,
               private toolbarUIService: ToolBarUIService,
               public  authService: AuthenticationService,
+              private userAuthorizationService: UserAuthorizationService,
               private fb: UntypedFormBuilder,
               private cd: ChangeDetectorRef,
       )
@@ -217,12 +219,21 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
     this.value      = 1;
     const homePage$ = this.uiSettingService.homePageSetting$;
-    const bucket$ =  this.awsBucketService.awsBucketURLOBS();
-    this.bucket$ = homePage$.pipe(switchMap(data => {
-      this.uiHomePage = data;
-      return bucket$
+    this.bucket$    = this.awsBucketService.awsBucketURLOBS().pipe(switchMap(data => { 
+      this.bucketName = data
+      return of(data)
+    }));
+
+    this.uiHomePage$ = homePage$.pipe(switchMap(data => {
+      if (!data) { 
+        return this.uiSettingService.UIHomePageSettings
+      }
+      return of(data)
     })) .pipe(switchMap(data => {
-        this.bucketName =  data
+        this.uiHomePage = data;
+        if (data.accordionMenuSideBar || data.staffAccordionMenuSideBar) { 
+          this.updateSearchOnModelChange = true;
+        }
         this.initComponent()
         return of(data)
     }),catchError(data => {
@@ -329,12 +340,12 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
   initModelParameters(model: ProductSearchModel): ProductSearchModel {
 
-    model.subCategoryID      = this.route.snapshot.paramMap.get('subCategoryID');
-    model.departmentID       = this.route.snapshot.paramMap.get('departmentID');
-    model.categoryID         = this.route.snapshot.paramMap.get('categoryID');
-    model.brandID            = this.route.snapshot.paramMap.get('brandID');
-    model.subCategoryID      = this.route.snapshot.paramMap.get('subCategoryID');
-    model.itemTypeID         = this.route.snapshot.paramMap.get('typeID');
+    model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
+    model.departmentID       = +this.route.snapshot.paramMap.get('departmentID');
+    model.categoryID         = +this.route.snapshot.paramMap.get('categoryID');
+    model.brandID            = +this.route.snapshot.paramMap.get('brandID');
+    model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
+    model.itemTypeID         = +this.route.snapshot.paramMap.get('typeID');
 
     this.departmentID  = this.route.snapshot.paramMap.get('departmentID');
     this.subCategoryID = this.route.snapshot.paramMap.get('subCategoryID');
@@ -431,16 +442,16 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
       }
     }
 
-    model.categoryID   = this.categoryID
-    model.departmentID = this.departmentID
-    model.subCategoryID = this.subCategoryID;
+    model.categoryID   = +this.categoryID
+    model.departmentID = +this.departmentID
+    model.subCategoryID = +this.subCategoryID;
 
     if (this.typeID) {
-      if (this.typeID) { model.itemTypeID     = this.typeID     }
+      if (this.typeID) { model.itemTypeID     = +this.typeID     }
     }
 
     if (this.brandID) {
-      if (this.brandID) { model.brandID       = this.brandID     }
+      if (this.brandID) { model.brandID       = +this.brandID     }
     }
 
     if ( (!this.categoryID && this.categoryID != "0") ||
@@ -448,7 +459,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
          (!this.subCategoryID && this.subCategoryID != "0") ||
          (!this.brandID && this.brandID != "0") )   {
     }
-    model.itemTypeID = "0"
+    model.itemTypeID = 0
     return model;
   }
 
@@ -519,7 +530,23 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   initFilterOption() {
     if (this.authService.deviceInfo) {
       const device = this.authService.deviceInfo
-      if (this.uiHomePage && this.uiHomePage.disableSearchFeaturesInItemsList) {
+
+      // if (device.phoneDevice || !this.isApp) {
+      //   const url =  this.router.url
+      //   if (url.substring(0, 'menuitems-infinite'.length + 1 ) === '/menuitems-infinite'){
+      //     this.enableFilter = true
+      //     return;
+      //   }
+      // }
+
+      if ((this.uiHomePage.staffAccordionMenuSideBar || this.uiHomePage.accordionMenuSideBar ||
+        this.uiHomePage.departmentFilter || this.uiHomePage.itemTypeFilter || this.uiHomePage.categoryFilter  )) { 
+          this.enableFilter = true
+          return;
+        }
+
+      if (this.uiHomePage && this.uiHomePage.disableSearchFeaturesInItemsList)
+         {
         this.enableFilter = false
         return false
       }
@@ -533,8 +560,8 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   }
 
   gotoFilter() {
-    this.router.navigate(['filter'])
-    this.toolbarUIService.hideToolbarSearchBar()
+    // this.router.navigate(['filter'])
+    this.toolbarUIService.showSearchSideBar()
   }
 
   getProcess(site: ISite, model: ProductSearchModel) {
@@ -543,11 +570,13 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
         switchMap(data => {
           this.currentPage += 1;
 
-          if (data.results && data.results.length == 0 || data == null || (!data || !data.results)) {
+          if (!data || data.results && data.results.length == 0 || data == null || (!data || !data.results)) {
             this.value = 100;
             this.loading = false;
             this.endOfRecords = true
-            this.totalRecords = 0;
+            // console.log('count', data, data.paging.totalRecordCount, data.paging.recordCount)
+
+            this.totalRecords = data?.paging?.totalRecordCount;
             return of(null)
           }
 
@@ -570,13 +599,12 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
                 this.loading = false;
                 this.value = 100;
                 this.cd.detectChanges()
-
                 return of(null)
               }
             }
 
             this.totalRecords = data.paging.totalRecordCount;
-
+           
             let catLength = 0
             if (this.categories && this.categories.length) {   catLength = this.categories.length }
 
@@ -602,7 +630,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
           this.pagingInfo = data.paging
 
           if (data) {
-            // console.log('new results 2 ', data.results, this.menuItems)
             this.menuItems = this.splitItemsIntType(data.results, this.menuItems)
             this.loading      = false
             this.value = 100;

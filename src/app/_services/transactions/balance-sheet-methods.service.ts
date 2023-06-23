@@ -371,14 +371,5 @@ export class BalanceSheetMethodsService {
   async openDrawerNoSale(sheet:IBalanceSheet) {
     await this.openDrawerOne()
   }
-
-  async  startScaleService() {
-    try {
-      const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-      const response        = await emvTransactions.startScaleService()
-    } catch (error) {
-
-    }
-  }
-
+ 
 }

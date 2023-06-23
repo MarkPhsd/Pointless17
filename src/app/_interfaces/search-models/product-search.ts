@@ -6,10 +6,10 @@ export interface ProductSearchModel {
   subCategory:                  string;
   category:                     string;
   department:                   string;
-  brandID:                      string;
-  categoryID:                   string;
-  departmentID:                 string;
-  subCategoryID:                 string;
+  brandID:                      number;
+  categoryID:                   number;
+  departmentID:                 number;
+  subCategoryID:                number;
   type:                         number;
   retail:                       number;
   viewAll                   : number;
@@ -23,11 +23,11 @@ export interface ProductSearchModel {
   currentPage:                  number;
   lastPage:                     number;
   recordCount:                  number;
-  itemTypeID :                  string;
+  itemTypeID :                  number;
   loadChildren     :            boolean;
   maxPrice                    : string;
   minPrice                    : string;
-  priceCategoryID             : string;
+  priceCategoryID             : number;
   //genereal descriptions not searching
   brandName                 : string;
   categoryName              : string;
@@ -41,7 +41,7 @@ export interface ProductSearchModel {
   webMode                    : boolean;
   exactNameMatch            : boolean;
   sku                       : string;
-  itemTypeIDList             : number[];
+  itemTypeIDList            : number[];
   hideSubCategoryItems      : boolean;
   gf: boolean;
   listTypeID: number[];

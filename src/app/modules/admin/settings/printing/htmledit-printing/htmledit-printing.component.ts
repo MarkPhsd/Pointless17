@@ -96,7 +96,7 @@ export class HTMLEditPrintingComponent implements OnInit {
       this.id = this.route.snapshot.paramMap.get('id');
     }
 
-    console.log('thisprinterDiwthValue', this.printerWidthValue)
+    // console.log('thisprinterDiwthValue', this.printerWidthValue)
     if (this.printerWidthValue) {
 
     }
@@ -215,7 +215,7 @@ export class HTMLEditPrintingComponent implements OnInit {
     if (!this.setting) {
       return
     }
-    console.log(this.setting.option9)
+    // console.log(this.setting.option9)
     this.printerWidthValue = parseInt(this.setting.option9);
     if (this.printerWidthValue == 58) {
       this.setPrinterWidthClass = "receipt-width-58"

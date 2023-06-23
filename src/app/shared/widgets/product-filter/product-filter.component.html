@@ -1,28 +1,45 @@
+
+
 <div class="flex-row" *ngIf="(uiSetting$ | async) as uiSetting">
   <ng-content *ngTemplateOutlet="filterPanel"></ng-content>
-  <mat-divider [vertical]="true"></mat-divider>
-  <ng-content *ngTemplateOutlet="menuItems"></ng-content>
+  <!-- <mat-divider [vertical]="true"></mat-divider> -->
+  <!-- <ng-content *ngTemplateOutlet="menuItems"></ng-content> -->
 </div>
 
-<ng-template #menuItems>
-  <div style="margin-left:5px;margin-right:5px;width:calc(100vw - 300px)">
-    <menu-items-infinite
-      [updateSearchOnModelChange]="true"
-    ></menu-items-infinite>
-  </div>
-</ng-template>
-
 <ng-template #filterPanel>
-  <div class="filter-panel  stick-panel-top">
+  <div class="stick-panel-top div-max-800">
     <div class="flex-column results" >
       <mat-icon>funnel</mat-icon>
       <div class="flex-row">
-        <button mat-button (click)="resetSearch()">
-          <mat-icon color="accent" style="font-size:1.2em;">restart_alt</mat-icon>
-          Reset
-        </button>
+        <div>
+          <button mat-button (click)="resetSearch()">
+            <mat-icon color="accent" style="font-size:1.2em;">restart_alt</mat-icon>
+            Reset
+          </button>
+        </div>
+        <div *ngIf="phoneDevice">
+          <button mat-button (click)="hideToolbar()">
+            <mat-icon color="accent" style="font-size:1.2em;">colapse</mat-icon>
+            Hide
+          </button>
+        </div>
       </div>
+      
+      <ng-container [ngTemplateOutlet]="accordionMenuView"> </ng-container>
 
+      <ng-template #accordionMenu>
+        
+        <category-menu-selector
+          [_reset]="_reset"
+          [bucketName]="bucketName"
+          [inputForm]="inputForm"
+          [type]="'department'">
+          <div header>
+            <h3>Departments</h3>
+          </div>
+        </category-menu-selector>
+      </ng-template>
+      
       <div class="flex-row" *ngIf="( uiSetting && uiSetting.brandFilter )">
         <button mat-button
             color="primary"
@@ -96,15 +113,16 @@
         </category-select-list-filter>
       </ng-template>
 
-      <!-- Item Type Filter -->
-      <div class="flex-row" *ngIf="( uiSetting && uiSetting.itemTypeFilter )">
-        <button mat-button
-                color="primary"
-                (click)="setItemType()">
-          <mat-icon color="primary" style="font-size:1.2em;">group_work</mat-icon>
-          Item Types
-        </button>
-      </div>
+      <ng-container *ngIf="( uiSetting && uiSetting.itemTypeFilter )">
+        <div class="flex-row" >
+          <button mat-button
+                  color="primary"
+                  (click)="setItemType()">
+            <mat-icon color="primary" style="font-size:1.2em;">group_work</mat-icon>
+            Item Types
+          </button>
+        </div>
+      </ng-container>
 
       <ng-container [ngTemplateOutlet]="toggleItemTypeView"></ng-container>
       <ng-template #itemTypeList>
@@ -115,15 +133,16 @@
         </category-select-list-filter>
       </ng-template>
 
-      <!-- Size Filter -->
-      <div class="flex-row" *ngIf="( uiSetting && uiSetting.sizeFilter )">
-        <button mat-button
-                color="primary"
-                (click)="setSizeList()">
-          <mat-icon color="primary" style="font-size:1.2em;">group_work</mat-icon>
-            Size
-        </button>
-      </div>
+      <ng-container   *ngIf="( uiSetting && uiSetting.sizeFilter )">
+        <div class="flex-row">
+          <button mat-button
+                  color="primary"
+                  (click)="setSizeList()">
+            <mat-icon color="primary" style="font-size:1.2em;">group_work</mat-icon>
+              Size
+          </button>
+        </div>
+      </ng-container>
 
       <ng-container [ngTemplateOutlet]="toggleSizeView"></ng-container>
       <ng-template #sizeList>
@@ -134,62 +153,68 @@
         </category-select-list-filter>
       </ng-template>
 
-      <!-- color Filter -->
-      <div class="flex-row" *ngIf="( uiSetting && uiSetting.colorFilter )">
-      <button mat-button
-              color="primary"
-              (click)="setColorList()">
-        <mat-icon color="primary" style="font-size:1.2em;">group_work</mat-icon>
-          Colors
-      </button>
+      <ng-container *ngIf="( uiSetting && uiSetting.colorFilter )">
+        <div class="flex-row" *ngIf="( uiSetting && uiSetting.colorFilter )">
+          <button mat-button
+            color="primary"
+            (click)="setColorList()">
+            <mat-icon color="primary" style="font-size:1.2em;">group_work</mat-icon>
+            Colors
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-container [ngTemplateOutlet]="toggleColorView"></ng-container>
+      <ng-template #colorList>
+        <category-select-list-filter
+            [bucketName]="bucketName"
+            [inputForm]="inputForm"
+            [type]="'color'" >
+        </category-select-list-filter>
+      </ng-template>
+    </div>
+    
+    <ng-container [ngTemplateOutlet]="limitsView"></ng-container>
+  </div>
+
+  <div>
+    <mat-divider [vertical]="true"></mat-divider>
+  </div>
+ 
+</ng-template>
+
+<ng-template #limitsView>
+  <h4>Limit To Selection:</h4>
+
+  <ng-container  *ngIf="(uiSetting && uiSetting.gluetenFilter )">
+    <div class="flex-row" *ngIf="( uiSetting && uiSetting.gluetenFilter )">
+      <mat-slide-toggle
+                (change)="setGF($event)"
+                [(ngModel)]="gf"
+                >
+        <mat-label>Gluten Free</mat-label>
+      </mat-slide-toggle>
+    </div>
+  </ng-container>
+
+  <ng-container [ngTemplateOutlet]="toggleGluetenOption"></ng-container>
+  <ng-template #gluetenOption>
+
+  </ng-template>
+
+    <div class="flex-row" *ngIf="( uiSetting && uiSetting.speciesFilter )">
+      <options-select-filter
+          [inputForm]="inputForm"
+          [type]="'species'" >
+          <div #head>
+            <h4>Species</h4>
+          </div>
+      </options-select-filter>
     </div>
 
-    <ng-container [ngTemplateOutlet]="toggleColorView"></ng-container>
-    <ng-template #colorList>
-      <category-select-list-filter
-          [bucketName]="bucketName"
-          [inputForm]="inputForm"
-          [type]="'color'" >
-      </category-select-list-filter>
+    <ng-container [ngTemplateOutlet]="toggleSpeciesView"></ng-container>
+    <ng-template #specieslList>
+
     </ng-template>
 
-    <!-- Glueten Filter -->
-    <h4>Limit To Selection:</h4>
-    <div class="flex-row" *ngIf="( uiSetting && uiSetting.gluetenFilter )">
-
-        <mat-slide-toggle
-                  (change)="setGF($event)"
-                  [(ngModel)]="gf"
-                  >
-          <mat-label>Gluten Free</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <ng-container [ngTemplateOutlet]="toggleGluetenOption"></ng-container>
-      <ng-template #gluetenOption>
-
-      </ng-template>
-
-      <!-- Species Filter -->
-      <div class="flex-row" *ngIf="( uiSetting && uiSetting.speciesFilter )">
-
-        <options-select-filter
-            [inputForm]="inputForm"
-            [type]="'species'" >
-            <div #head>
-              <h4>Species</h4>
-            </div>
-        </options-select-filter>
-      </div>
-
-      <ng-container [ngTemplateOutlet]="toggleSpeciesView"></ng-container>
-      <ng-template #specieslList>
-
-      </ng-template>
-
-    </div>
-    <div>
-      <mat-divider [vertical]="true"></mat-divider>
-    </div>
-  </div>
 </ng-template>

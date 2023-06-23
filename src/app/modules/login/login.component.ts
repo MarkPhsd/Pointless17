@@ -139,51 +139,30 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-
     const item = localStorage.getItem('loginAction')
     this.loginAction = JSON.parse(item)
-
     this.bucket = await this.awsBucketService.awsBucketURL()
-
     this.pinToken = localStorage.getItem('pinToken');
-
     if (localStorage.getItem('rememberMe') === 'true') {
       this.rememberMe = true;
     }
-
     this.initForm();
     this.initSubscriptions()
-
     if (!this.platformService.isApp())  { this.amI21 = true  }
     if ( this.platformService.isApp())  { this.amI21 = false }
-
     this.refreshTheme()
     this.statusMessage = ''
-
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-
     this.refreshUIHomePageSettings();
-
-    setTimeout(() => {
-      this.splashScreenStateService.stop();
-    }, 1000);
-
-    await this.initScale()
+   
   }
 
-  async initScale() { 
-    const scale = this.scaleSettings.getScaleSetup() ;
-    if (this.platformService.isAppElectron) { 
-      if (scale && scale.enabled) { 
-        try {
-          const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-          await emvTransactions.killScaleService();
-          await emvTransactions.startScaleService();
-        } catch (error) {
-          console.log('Scale Error', error)          
-        }
-      }
-    }
+
+
+  async  openDrawerOne() {
+    // console.log('open cash drawer one')
+    const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+    const response        = await emvTransactions.openCashDrawerOne()
   }
 
   refreshUIHomePageSettings() {

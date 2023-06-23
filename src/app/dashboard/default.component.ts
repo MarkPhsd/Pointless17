@@ -26,6 +26,7 @@ import { ElectronService } from 'ngx-electron';
 import { BalanceSheetService } from '../_services/transactions/balance-sheet.service';
 import { BalanceSheetMethodsService } from '../_services/transactions/balance-sheet-methods.service';
 import { UserIdleService } from 'angular-user-idle';
+import { ScaleService } from '../_services/system/scale-service.service';
 
 @Component({
   selector: 'app-default',
@@ -381,6 +382,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private balanceSheetService     : BalanceSheetService,
                private balanceSheetMethodService: BalanceSheetMethodsService,
                private settingService          : SettingsService,
+               private scaleService           : ScaleService,
                private userIdle               : UserIdleService,
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
@@ -397,19 +399,20 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     const site = this.siteService.getAssignedSite();
     this.splashLoader.stop()
     this.initDevice()
-
   }
 
   initDevice() {
     const site = this.siteService.getAssignedSite();
     const devicename = localStorage.getItem('devicename');
+    // console.log('terminal data', devicename)
+    if (!devicename) { return ;}
     this.posDevice$ = this.settingService.getPOSDeviceBYName(site, devicename).pipe(switchMap(data => {
       if (!data) { return of(null)}
       const device = JSON.parse(data.text) as ITerminalSettings;
       this.settingService.updateTerminalSetting(device)
-      if (device.enableScale && this.platFormService.isAppElectron) {
-        this.balanceSheetMethodService.startScaleService()
-      }
+      if (device.enableScale) { 
+          // this.scaleService.startScaleApp()
+      } 
       return of(device)
     }))
   }
@@ -633,7 +636,12 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     })
 
    // Start watching when user idle is starting.
-   this.userIdle.onTimerStart().subscribe(count => console.log(count));
+   this.userIdle.onTimerStart().subscribe(count => {
+        if (count) { 
+          console.log('usr idle', count)
+        }
+      }
+    );
 
    // Start watch when time is up.
    this.userIdle.onTimeout().subscribe(() =>

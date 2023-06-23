@@ -133,15 +133,15 @@ initGridOptionsFormated(pageSize: number, columnDefs: any) {
     productSearchModel.barcode = search
 
     if (categoryID && categoryID != 0) {
-      productSearchModel.categoryID  = categoryID.toString();
+      productSearchModel.categoryID  = categoryID;
     }
 
     if (itemTypeID && itemTypeID !=0) {
-      productSearchModel.itemTypeID = itemTypeID.toString();
+      productSearchModel.itemTypeID = itemTypeID;
     }
 
     if (brandID) {
-      productSearchModel.brandID = brandID.toString();
+      productSearchModel.brandID = brandID;
     }
 
     productSearchModel.pageSize   = pageSize

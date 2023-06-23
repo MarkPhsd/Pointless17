@@ -1,0 +1,40 @@
+mat-list-base mat-list-item, mat-list-base mat-list-option {
+  height: 55px;
+  margin-bottom:5px;
+}
+
+.list {
+  max-height: 700px;
+  overflow-x: auto;
+  overflow-x: hidden;
+  width: 250px;
+}
+
+.list-grid {
+ display: grid;
+ grid-template-columns: 50px 105px ;
+ gap: 10px;
+}
+
+.product-image  {
+  object-fit: cover;
+  max-height: 100%;
+  border-radius:25px;
+  width       : 100%;
+  white-space : normal;
+  overflow    : hidden;
+  margin-top    : 5px;
+}
+
+.img-icon {
+  // height: 2em
+  margin-right:4px;
+}
+
+// .text {
+//   font-size: .9em;
+// }
+
+mat-divider { 
+  border-top-width: 3px;
+}

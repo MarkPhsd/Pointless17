@@ -6,7 +6,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { ElectronService } from 'ngx-electron';
 import { Observable, of, switchMap } from 'rxjs';
 import { PointlessCCDSIEMVAndroidService } from 'src/app/modules/payment-processing/services';
-import { ISetting } from 'src/app/_interfaces';
+import { IServiceType, ISetting } from 'src/app/_interfaces';
 import { FileSystemService } from 'src/app/_services/fileSystem/file-system.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
@@ -15,6 +15,8 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ITerminalSettings,  SettingsService } from 'src/app/_services/system/settings.service';
 import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
+import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { LabelingService } from 'src/app/_labeling/labeling.service';
 
 @Component({
   selector: 'app-pos-edit-settings',
@@ -33,7 +35,7 @@ export class PosEditSettingsComponent implements OnInit {
   btPrinter: string;
   btPrinters$: any;
   btPrinters: any;
-
+  serviceType$    : Observable<IServiceType[]>;
   electronPrinterList : any;
   receiptPrinter: string;
 
@@ -54,6 +56,8 @@ export class PosEditSettingsComponent implements OnInit {
     private printingService     : PrintingService,
       private uiSettingService  : UISettingsService,
     private fileSystemService   : FileSystemService,
+    private serviceTypeService: ServiceTypeService,
+    public labelingService: LabelingService,  
     private dialogRef           : MatDialogRef<PosEditSettingsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number
   )
@@ -90,10 +94,12 @@ export class PosEditSettingsComponent implements OnInit {
     this.initForm()
     await this.listBTDevices();
     await this.getAndroidPrinterAssignment()
+    const site = this.sitesService.getAssignedSite()
+    this.serviceType$ = this.serviceTypeService.getAllServiceTypes(site);
   }
 
   async createZPLFolderData() {
-
+    // if (this.app)
     await this.fileSystemService.makeDirectory('c:\\pointless');
     await this.fileSystemService.makeFile('c:\\pointless', 'print.txt')
   }
@@ -136,6 +142,7 @@ export class PosEditSettingsComponent implements OnInit {
       enableExitLabel : [],
       enableScale: [],
       ignoreTimer: [],
+      defaultOrderTypeID: [],
     })
 
     if (this.terminal) {

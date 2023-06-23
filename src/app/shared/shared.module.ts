@@ -210,6 +210,10 @@ import { EditBarComponent } from '../modules/admin/report-designer/widgets/edit-
 import { MatSelectorComponent } from '../modules/admin/report-designer/widgets/mat-selector/mat-selector.component';
 import { FieldListTypeAssignerComponent } from '../modules/admin/report-designer/designer/field-list-type-assigner/field-list-type-assigner.component';
 import { UserBarComponent } from './components/user-bar/user-bar.component';
+import { CategoryMenuSelectorComponent } from './widgets/category-menu-selector/category-menu-selector.component';
+import { CategorySelectListFilterComponent } from './widgets/category-select-list-filter/category-select-list-filter.component';
+import { OptionsSelectFilterComponent } from './widgets/options-select-filter/options-select-filter.component';
+import { ProductFilterComponent } from './widgets/product-filter/product-filter.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -349,6 +353,13 @@ import { UserBarComponent } from './components/user-bar/user-bar.component';
     ProfileMedInfoComponent,
     ProgressBarComponent,
     PriceCategorySearchComponent,
+
+    //ProductFilterComponent
+    ProductFilterComponent,
+    CategorySelectListFilterComponent,
+    OptionsSelectFilterComponent,
+    CategoryMenuSelectorComponent,
+    //*** */
 
     PriceScheduleMenuListComponent,
     RewardsAvailibleComponent,
@@ -569,7 +580,15 @@ import { UserBarComponent } from './components/user-bar/user-bar.component';
     PrinterLocationSelectionComponent,
     PrinterLocationsComponent,
     PriceScheduleMenuListComponent,
-    
+
+    //ProductFilterComponent
+    ProductFilterComponent,
+    CategorySelectListFilterComponent,
+    OptionsSelectFilterComponent,
+    CategoryMenuSelectorComponent,
+    //*** */
+
+        
     ProfileMedInfoComponent,
     PaymentReportComponent,
     PosOrderItemComponent,

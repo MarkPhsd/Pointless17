@@ -1,97 +1,103 @@
 <div *ngIf="(style$ | async) as styles"></div>
-<div *ngIf="(bucket$ | async) as bucket"></div>
+<div *ngIf="(action$ | async)"></div>
 <div *ngIf="(userAuths$ | async) as userAuths"></div>
-<div class="parent-container" *ngIf="uiHomePage">
 
-  <div *ngIf="(action$ | async)"></div>
+<div *ngIf="(bucket$ | async) as bucket">
+  <div class="parent-container" 
+        *ngIf="(uiHomePage$ | async) as uiHomePage">
 
-  <div class="flex-row">
-    <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
-    <ng-container [ngTemplateOutlet]="isgridFlowOptionOn"></ng-container>
-    <ng-container [ngTemplateOutlet]="filter"></ng-container>
-  </div>
-
-  <div *ngIf="smallDevice">
-    <mat-divider></mat-divider>
-  </div>
-
-  <ng-container [ngTemplateOutlet]='categoryFilterView'></ng-container>
-  <ng-template #categoryFilter>
-    <div *ngIf="authService.isUser && !isApp">
-      <h3><mat-icon color="primary">category</mat-icon>Categories</h3>
+    <div  class="flex-row">
+      <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
+      <ng-container [ngTemplateOutlet]="isgridFlowOptionOn"></ng-container>
+      <ng-container  *ngIf="enableFilter" [ngTemplateOutlet]="filter"></ng-container>
     </div>
-    <div class="grid-flow"  *ngIf="categories && categories.length>0">
-      <div  *ngFor="let item of categories">
+
+    <div *ngIf="smallDevice">
+      <mat-divider></mat-divider>
+    </div>
+
+    <ng-container [ngTemplateOutlet]='categoryFilterView'></ng-container>
+    <ng-template #categoryFilter>
+      <div *ngIf="authService.isUser && !isApp">
+        <h3><mat-icon color="primary">category</mat-icon>Categories</h3>
+      </div>
+      <div class="grid-flow"  *ngIf="categories && categories.length>0">
+        <div  *ngFor="let item of categories">
+            <ng-container
+              [ngTemplateOutlet]="menuItemCard"
+              [ngTemplateOutletContext]="{$implicit: item}">
+            </ng-container>
+        </div>
+      </div>
+    </ng-template>
+
+    <div *ngIf="value" class="loader">
+      <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+    </div>
+
+    <div class="orders-container">
+      <div *ngIf="authService.isUser && !isApp" class="horizontal-view">
+      <div>
+        <h3><mat-icon color="primary">qr_code</mat-icon>Products & Services</h3>
+      </div>
+      <div style="margin-top:25px;">
+        Items found: {{this.totalRecords}}
+      </div>
+      </div>
+      <div  *ngIf="menuItems"
+            [class]="ordersListClass"
+            infiniteScroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="50"
+            (scrolled)="onScrollDown()"
+            (scrolledUp)="onScrollUp()"
+            [scrollWindow]="false">
+        <div *ngFor="let item of menuItems; let i = index">
           <ng-container
             [ngTemplateOutlet]="menuItemCard"
             [ngTemplateOutletContext]="{$implicit: item}">
           </ng-container>
+    
+        </div>
       </div>
     </div>
-  </ng-template>
 
-  <div *ngIf="value" class="loader">
-    <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
-  </div>
+    <ng-template #menuItemCard let-item>
+        <app-menu-item-card
+            *ngIf="item"
+            [allowEdit] ="userAuths?.editProduct"
+            [id]        ="item?.id"
+            [retail]    ="item?.retail"
+            [name]      ="item?.name"
+            [menuItem]  ="item"
+            [bucketName]="bucketName"
+            [class]     ="infiniteItemClass"
+            (outPutLoadMore)  ='moveNext($event)'
+        ></app-menu-item-card>
+    </ng-template>
 
-  <div class="orders-container">
-    <div *ngIf="authService.isUser && !isApp" class="horizontal-view">
-     <div>
-       <h3><mat-icon color="primary">qr_code</mat-icon>Products & Services</h3>
-     </div>
-     <div style="margin-top:25px;">
-       Items found: {{this.totalRecords}}
-     </div>
+    <div [hidden]="true"  class="slidein paging-alignment">
+        <div> {{searchDescription}} </div>
+        <div *ngIf="endOfRecords"> ...all items loaded.</div>
     </div>
-    <div  *ngIf="menuItems"
-          [class]="ordersListClass"
-          infiniteScroll
-          [infiniteScrollDistance]="2"
-          [infiniteScrollThrottle]="50"
-          (scrolled)="onScrollDown()"
-          (scrolledUp)="onScrollUp()"
-          [scrollWindow]="false">
-      <div *ngFor="let item of menuItems; let i = index">
-        <ng-container
-          [ngTemplateOutlet]="menuItemCard"
-          [ngTemplateOutletContext]="{$implicit: item}">
-        </ng-container>
-   
-      </div>
+
+    <div class="floating-info slidein loader"  *ngIf="loading && !endOfRecords" >
+      <mat-spinner></mat-spinner>
     </div>
-  </div>
-
-  <ng-template #menuItemCard let-item>
-      <app-menu-item-card
-          *ngIf="item"
-          [allowEdit] ="userAuths?.editProduct"
-          [id]        ="item?.id"
-          [retail]    ="item?.retail"
-          [name]      ="item?.name"
-          [menuItem]  ="item"
-          [bucketName]="bucketName"
-          [class]     ="infiniteItemClass"
-          (outPutLoadMore)  ='moveNext($event)'
-      ></app-menu-item-card>
-  </ng-template>
-
-  <div [hidden]="true"  class="slidein paging-alignment">
-      <div> {{searchDescription}} </div>
-      <div *ngIf="endOfRecords"> ...all items loaded.</div>
-  </div>
-
-  <div class="floating-info slidein loader"  *ngIf="loading && !endOfRecords" >
-    <mat-spinner></mat-spinner>
   </div>
 </div>
 
 <ng-template #gridFlowOptionView>
-  <div *ngIf="infiniteClassList == 'grid-flow scroller'">
-    <button style="height:50px" mat-button (click)="toggleListView()"><mat-icon>grid_view</mat-icon></button>
-  </div>
-  <div *ngIf="infiniteClassList != 'grid-flow scroller'">
-    <button style="height:50px" mat-button (click)="toggleListView()"><mat-icon>list</mat-icon></button>
-  </div>
+  <!-- <button style="height:50px" mat-button (click)="toggleListView()">
+    <mat-icon  *ngIf="infiniteClassList === 'grid-flow scroller'">list</mat-icon>
+    <mat-icon  *ngIf="infiniteClassList != 'grid-flow scroller'">grid_view</mat-icon>
+  </button> -->
+</ng-template>
+
+<ng-template #filter>
+    <button mat-button color="accent"  (click)="gotoFilter()">
+      <mat-icon>manage_search</mat-icon>Filter
+    </button>
 </ng-template>
 
 <ng-template #searchSelector>
@@ -105,10 +111,4 @@
   </div>
 </ng-template>
 
-<ng-template #filter>
-  <ng-container *ngIf="enableFilter">
-    <button mat-button color="accent"  (click)="gotoFilter()">
-      <mat-icon>manage_search</mat-icon>Filter
-    </button>
-  </ng-container>
-</ng-template>
+

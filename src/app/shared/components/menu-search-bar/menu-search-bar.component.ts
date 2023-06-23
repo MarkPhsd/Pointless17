@@ -1,7 +1,7 @@
 import { Component,  Output, OnInit,
   ViewChild ,ElementRef, AfterViewInit, EventEmitter,OnDestroy, HostListener, TemplateRef, } from '@angular/core';
 import { Router } from '@angular/router';
-import { AWSBucketService, ContactsService, MenuService, OrdersService } from 'src/app/_services';
+import { AWSBucketService, AuthenticationService, ContactsService, MenuService, OrdersService } from 'src/app/_services';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProductSearchResults } from 'src/app/_services/menu/menu.service';
@@ -162,9 +162,11 @@ constructor(
     public  platFormService     : PlatformService,
     public  uiSettingsService   : UISettingsService,
     private toolbarUIService    : ToolBarUIService,
+    private authService         : AuthenticationService,
     private userAuthorizationService: UserAuthorizationService,
   )
   {
+    
     this.initForm();
     if (this.platForm.toLowerCase() === 'android') {  this.keyboardDisplayOn = true }
     this.isApp = this.platFormService.isApp();
@@ -362,21 +364,21 @@ constructor(
   //and other things are required per grid.
   assignCategory(id: number) {
     let productSearchModel              = {} as ProductSearchModel;
-    productSearchModel.categoryID       = id.toString();
+    productSearchModel.categoryID       = id;
     this.applyProductSearchModel(productSearchModel);
     this.refreshSearch();
   }
 
   assignItemTypeID(id: number) {
     let productSearchModel                = {} as ProductSearchModel;
-    productSearchModel.itemTypeID         = id.toString();
+    productSearchModel.itemTypeID         = id;
     this.applyProductSearchModel(productSearchModel);
     this.refreshSearch();
   }
 
   assignDepartmentID(id: number) {
     let productSearchModel                = {} as ProductSearchModel;
-    productSearchModel.departmentID       = id.toString();
+    productSearchModel.departmentID       = id;
     this.applyProductSearchModel(productSearchModel);
     this.refreshSearch();
   }

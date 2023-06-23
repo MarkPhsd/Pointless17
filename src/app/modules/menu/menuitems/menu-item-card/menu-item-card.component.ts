@@ -225,10 +225,10 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   initProductSearchModel(id: number, itemTypeID: number): ProductSearchModel {
     let productSearchModel        = {} as ProductSearchModel;
     if (itemTypeID== 6) {
-     { productSearchModel.departmentID  = id.toString(); }
+     { productSearchModel.departmentID  = id; }
     }
     if (itemTypeID == 4) {
-      { productSearchModel.categoryID  = id.toString(); }
+      { productSearchModel.categoryID = id; }
     }
     productSearchModel.pageSize   = 25
     productSearchModel.pageNumber = 1

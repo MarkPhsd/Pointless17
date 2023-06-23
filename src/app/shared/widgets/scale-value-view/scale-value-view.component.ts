@@ -38,7 +38,14 @@ export class ScaleValueViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.scaleSetup = this.scaleService.getScaleSetup(); //get before subscriptions;
+    if (this.scaleSetup && this.scaleSetup.enabled) { 
+      this.initScale();
+    }
     this.scaleSubscriber();
+  }
+
+  initScale() { 
+    // this.scaleService.initScaleService();
   }
 
   get displayWeight()  {
@@ -48,4 +55,23 @@ export class ScaleValueViewComponent implements OnInit {
     return false
   }
 
+  restartScale() {
+    this.scaleService.initScaleService()
+  }
+
+  getIsScaleNaN(scale){
+    if (scale) {
+      if (scale && scale.value && scale.value.toLowerCase() === 'nan') {
+        return true
+      }
+      if (scale && scale.mode && scale.mode.toLowerCase() === 'nan') {
+        return true
+      }
+    }
+  }
+
+  killScale() { 
+    this.scaleService.killProcessByName('ScaleService.exe')
+    this.scaleService.killProcessByName('scaleservice')
+  }
 }

@@ -19,7 +19,7 @@ export class DisplayMenuTitleComponent implements OnInit {
   @Input() backgroundImage : string;
   @Input() hideLogo: boolean;
   @Input() repeat = 'repeat'
-  @Input() styleWidth = '100vw';
+  @Input() styleWidth = '100%';
   @Input() styleHeight ='calc(120% + 200px)';
   @Input() styleMinWidth = '450px'
   @Input() objectfit = 'cover';

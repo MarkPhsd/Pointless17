@@ -3,6 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
 import { PlatformService } from './platform.service';
 import { IPCService } from 'src/app/_services/system/ipc.service';
+import { Capacitor } from '@capacitor/core';
+import { T } from '@angular/cdk/keycodes';
 
 export interface ScaleInfo {
   value        : string;
@@ -24,6 +26,7 @@ export interface ScaleSetup {
 
 export class ScaleService  {
 
+  get platForm() {  return Capacitor.getPlatform(); }
   // private scaleSetup        = {} as ScaleSetup;
   // private scaleInfo         = {} as ScaleInfo;
   public scaleInfo : ScaleInfo;
@@ -31,6 +34,7 @@ export class ScaleService  {
   public scaleInfo$           = this._scaleInfo.asObservable();
   isApp                       = false;
   isElectronServiceInitiated  = false
+  private execProcess = null; // Store reference to process
 
   updateSubscription(scaleInfo: ScaleInfo) {
     this.scaleInfo = scaleInfo;
@@ -82,7 +86,6 @@ export class ScaleService  {
     if (!scaleInfo) { return }
     this.updateSubscription(scaleInfo)
     return  scaleInfo
-
   }
 
   getScaleWeighFormat(value: string, decimalPlaces: number): string {
@@ -105,11 +108,6 @@ export class ScaleService  {
 
   getScaleInfo(): ScaleInfo {
     if (this.IPCService.isElectronApp) {
-
-      // this.electronService.ipcRenderer.on('scaleInfo', (event, scaleInfo) => {
-      //   return scaleInfo
-      // });
-      // return this.IPCService.readScale()
     }
     return null
   }
@@ -117,13 +115,7 @@ export class ScaleService  {
   getScaleSetup(): ScaleSetup {
     if (!this.IPCService.isElectronApp) { return }
     let scaleSetup =  JSON.parse(localStorage.getItem('ScaleSetup')) as ScaleSetup;
-
     if (scaleSetup) { return scaleSetup; }
-
-    if (!scaleSetup) {
-      this.initializeScaleSetup();
-    }
-
     scaleSetup = JSON.parse(localStorage.getItem('ScaleSetup'))
     return  scaleSetup
   }
@@ -133,7 +125,6 @@ export class ScaleService  {
     let scaleSetup                  = {}  as ScaleSetup;
     scaleSetup.decimalPlaces      = 2;
     scaleSetup.timer              = 250;
-
     scaleSetup.enabled            = true;
     this.updateScaleSetup(scaleSetup);
     return scaleSetup;
@@ -141,6 +132,61 @@ export class ScaleService  {
 
   updateScaleSetup(scaleSetup: ScaleSetup) {
     localStorage.setItem('ScaleSetup', JSON.stringify(scaleSetup))
+  }
+
+  initScaleService() {
+    const scale = this.getScaleSetup()
+    if (scale &&  this.platformService.isAppElectron) {
+      if (scale && scale.enabled) {
+        this.startScaleApp();
+      }
+    }
+  }
+
+  startScaleApp() {
+    try {
+      if ( !this.platformService.isAppElectron) { return }
+    } catch (error) {
+      return;
+    }
+    if (!this.platformService.isAppElectron) { return }
+    const childProcess = this.electronService.remote.require('child_process');
+    const pathToExec = 'C:\\pointless\\scaleservice.exe'; // Update this to your executable path
+    this.execProcess = childProcess.exec(pathToExec, function (err, data) {
+      if(err) {
+        console.error(err);
+        return;
+      }
+      console.log(data.toString());
+    });
+  }
+
+  public killProcessByName(processName: string) {
+    try {
+      if (!this.platformService.isAppElectron) { return }
+    } catch (error) {
+      return;
+    }
+    const childProcess = this.electronService.remote.require('child_process');
+    // Command that gets the IDs of all processes with the given name
+    let command = `taskkill /F /IM ${processName} /T`;
+
+    try {
+      childProcess.exec(command, (err, stdout, stderr) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        if (stderr) {
+          console.error(stderr);
+          return;
+        }
+        console.log(stdout);
+      });
+    } catch (error) {
+
+    }
+
   }
 
 }
