@@ -1,42 +1,63 @@
+
 <ng-template #loading>
-  <div class="simple-icon">
-    <mat-icon
-      matBadge="0"
-      matBadgeColor="accent"
-      matBadgePosition="before">
-      mail_outline
-    </mat-icon>
+  <div class="ps-flex-group">
+    <div class="simple-icon">
+      <mat-icon
+        matBadge="0"
+        matBadgeColor="accent"
+        matBadgePosition="before">
+        mail_outline
+      </mat-icon>
+    </div>
+    <div>
+      <button 
+          mat-button
+          color="primary"
+          (click)="refreshMessages()" >
+          <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
   </div>
 </ng-template>
 
 <div *ngIf="(messages$ | async) as messages; else loading">
-  <button 
+  <div class="ps-flex-group">
+    <div>
+      <button 
           mat-raised-button
           color="primary"
           (click)="hideshowMessages = !hideshowMessages" >
-
-      <mat-icon
-            *ngIf="!hideshowMessages"
-            matBadge=" {{messages.length}}"
-            matBadgeColor="accent"
-            matBadgePosition="before">
-            mail
-      </mat-icon>
-
-      <mat-icon
-            *ngIf="hideshowMessages"
-            matBadge=" {{messages.length}}"
-            matBadgeColor="accent"
-            matBadgePosition="before">
-            mail
-      </mat-icon>
-      
-  </button>
+        <mat-icon
+              *ngIf="!hideshowMessages"
+              matBadge=" {{messages.length}}"
+              matBadgeColor="accent"
+              matBadgePosition="before">
+              mail
+        </mat-icon>
+        <mat-icon
+              *ngIf="hideshowMessages"
+              matBadge=" {{messages.length}}"
+              matBadgeColor="accent"
+              matBadgePosition="before">
+              mail
+        </mat-icon>
+      </button>
+    </div>
+    
+    <div>
+      <button 
+          mat-button
+          color="primary"
+          (click)="refreshMessages()" >
+          <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
 
   <div *ngIf="hideshowMessages">
     
     <mat-card *ngIf="!messages || messages.length == 0">
-      <h3>You have no messages</h3>
+      <mat-label color='accent'>You have no messages</mat-label>
     </mat-card>
 
     <mat-card *ngIf="messages && messages.length>0">
@@ -50,12 +71,15 @@
           <app-request-message
             (archiveEvent)="toggleArchive(item)"
             (actionEvent)="activeEvent(item)">
-            <div requested >{{item?.message}}</div>
+
+            <div message >{{item?.message}}</div>
             <div subject >{{item?.subject}}</div>
             <div body >{{item?.message}}</div>
-            [message]="item">
+
+                <!-- [message]="item" -->
           </app-request-message>
         </div>    
+
         <div *ngIf="(message$ | async) as message">
           {{message?.message}}
           <button mat-raised-button (click)="clearMessage()">Clear</button>

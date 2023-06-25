@@ -46,6 +46,9 @@ export class AuthenticationService {
     apiUrl                      : any;
     public  externalAPI         : boolean;
 
+    private _userTemp               = new BehaviorSubject<IUser>(null);
+    public  userTemp$               = this._userTemp.asObservable();
+
     private _user               = new BehaviorSubject<IUser>(null);
     public  user$               = this._user.asObservable();
 
@@ -129,7 +132,18 @@ export class AuthenticationService {
       this.updateUserX(userx)
     }
 
+    public overRideUser(user) {
+      this._userTemp.next(user);
+    }
+
     public get userValue(): IUser {
+
+      if (this._userTemp) {
+        if ( this._userTemp.value) {
+          return this._userTemp.value;
+        }
+      }
+
       if (!this._user.value) {
         const item = localStorage.getItem('user');
         if (item) {
@@ -142,6 +156,13 @@ export class AuthenticationService {
         }
       }
       return this._user.value;
+    }
+
+    setUserValue(user) {
+      this._user.next(user)
+    }
+    setUserNoSubscription(user) {
+
     }
 
     public get isAuthorized(): boolean {
@@ -275,11 +296,6 @@ export class AuthenticationService {
       localStorage.removeItem('userx');
       localStorage.removeItem('userAuth')
       localStorage.removeItem('orderSubscription');
-      
-      // if (!this.platFormservice.isApp()) {
-      //   localStorage.removeItem('storedApiUrl');
-      // }
-
       this.updateUser(null);
       this.updateUserX(null);
     }
@@ -302,10 +318,8 @@ export class AuthenticationService {
     };
 
     assignUserNameAndPassword(user: IUser): Observable<IUserExists>  {
-
       const api = this.siteSerivce.getAssignedSite().url
       const url = `${api}/users/CreateNewUserName`
-
       return  this.http.post<any>(url, user)
     };
 

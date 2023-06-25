@@ -1,5 +1,7 @@
 <div *ngIf="(style$ | async) as styles"></div>
-<div *ngIf="(action$ | async)"></div>
+
+<div *ngIf="(action$ | async) as list"></div>
+
 <div *ngIf="(userAuths$ | async) as userAuths"></div>
 
 <div *ngIf="(bucket$ | async) as bucket">
@@ -10,6 +12,7 @@
       <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isgridFlowOptionOn"></ng-container>
       <ng-container  *ngIf="enableFilter" [ngTemplateOutlet]="filter"></ng-container>
+      <!-- <button (click)="changeDetect()">DetectChanges</button>} -->
     </div>
 
     <div *ngIf="smallDevice">
@@ -37,13 +40,14 @@
 
     <div class="orders-container">
       <div *ngIf="authService.isUser && !isApp" class="horizontal-view">
-      <div>
-        <h3><mat-icon color="primary">qr_code</mat-icon>Products & Services</h3>
+        <div>
+          <h3><mat-icon color="primary">qr_code</mat-icon>Products & Services</h3>
+        </div>
+        <div *ngIf="!isApp" style="margin-top:25px;">
+          Items found: {{this.totalRecords}}
+        </div>
       </div>
-      <div style="margin-top:25px;">
-        Items found: {{this.totalRecords}}
-      </div>
-      </div>
+
       <div  *ngIf="menuItems"
             [class]="ordersListClass"
             infiniteScroll
@@ -57,7 +61,6 @@
             [ngTemplateOutlet]="menuItemCard"
             [ngTemplateOutletContext]="{$implicit: item}">
           </ng-container>
-    
         </div>
       </div>
     </div>

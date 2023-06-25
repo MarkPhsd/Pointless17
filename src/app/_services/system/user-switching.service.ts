@@ -279,6 +279,7 @@ export class UserSwitchingService implements  OnDestroy {
     const currentUser = {} as IUser;
     if (!user.roles)     { user.roles = 'user' }
     if (!user.firstName) { user.firstName = user.username }
+
     localStorage.setItem("ami21", 'true')
     currentUser.password     = password;
     currentUser.roles        = user?.roles.toLowerCase()
@@ -322,11 +323,8 @@ export class UserSwitchingService implements  OnDestroy {
     currentUser.authdata     = user.authdata
     localStorage.setItem('user', JSON.stringify(currentUser))
     this.authenticationService.updateUser(currentUser)
-
     return currentUser
-
   }
-
 
 
   setUserAuth(userAuth: string) {
@@ -349,7 +347,6 @@ export class UserSwitchingService implements  OnDestroy {
 
   openPIN(request: any) {
     if (!this.platformService.isApp) {return}
-
     let dialogRef: any;
     dialogRef = this.dialog.open(FastUserSwitchComponent,
       { width:        '550px',
@@ -359,6 +356,19 @@ export class UserSwitchingService implements  OnDestroy {
         data: request
       },
     )
+  }
+
+  authCheck(request: any) {
+    let dialogRef: any;
+    dialogRef = this.dialog.open(FastUserSwitchComponent,
+      { width:        '550px',
+        minWidth:     '550px',
+        height:       '600px',
+        minHeight:    '600px',
+        data: request
+      },
+    )
+    return dialogRef
   }
 
   swapMenuWithOrder(swap: boolean) {
@@ -425,7 +435,6 @@ export class UserSwitchingService implements  OnDestroy {
   loginApp(user) {
     const currentUser   = user.user
     const sheet         = user.sheet
-    // console.log('loginApp sheet.shiftStarted', sheet)
 
     if (sheet) {
       if (sheet.message) {
@@ -469,6 +478,7 @@ export class UserSwitchingService implements  OnDestroy {
       if (returnUrl === '/login') {  returnUrl = '/app-main-menu'}
     }
 
+    console.log('returnUrl', returnUrl)
     this.router.navigate([returnUrl]);
 
   }

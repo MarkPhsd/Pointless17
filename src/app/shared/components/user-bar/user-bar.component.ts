@@ -18,7 +18,8 @@ export class UserBarComponent implements OnInit {
   user  : IUser;
   currentMenu   : MenuGroup;
   accordionMenus: AccordionMenu[];
-
+  mailCount  = 0;
+  
   constructor(
     private navigationService   : NavigationService,
     private siteService         : SitesService,
@@ -44,6 +45,11 @@ export class UserBarComponent implements OnInit {
   }
   logOut() { 
     this.userSwitchingService.clearLoggedInUser();
+  }
+
+  
+  emailMailCount(event) {
+    this.mailCount = event
   }
 
   getMenuGroup(name: string) {

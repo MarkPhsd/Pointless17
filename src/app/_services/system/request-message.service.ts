@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ISite } from 'src/app/_interfaces';
+import { ISite, Paging } from 'src/app/_interfaces';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { UserAuthorizationService } from './user-authorization.service';
@@ -19,9 +19,24 @@ export interface IRequestMessageSearchModel {
   lastPage:                    number;
   useNameInAllFieldsForSearch: boolean;
   userID:                      number;
+  parameters      : string;
+	method          : string;
+  type            : string;
+  subject         : string;
+	roles           : string;
+	requestDate     : string;
+	requestCompleted: string;
+  payload         : string;
+  userRequested   : string;
+  senderName      : string;
+  senderID        : number;
+  archived        : boolean;
+  message         : string;
+  employeeID      : number;
+  orderID         : number;
+  orderItemID     : number;
+  name   : string;
 }
-
-
 
 export interface IRequestResponse {
   id     : number;
@@ -46,7 +61,20 @@ export interface IRequestMessage {
   archived        : boolean;
   message         : string;
   employeeID      : number;
+  orderID         : number;
+  orderItemID     : number;
 }
+
+export interface   IRequestMessagesResult {
+  errorMessage: string;
+  paging: Paging;
+  messages: IRequestMessage[]
+}
+
+
+
+// IRequestMessagesResult
+// SearchRequestsMessages
 
 @Injectable({
   providedIn: 'root'
@@ -117,7 +145,10 @@ export class RequestMessageService {
   getRequestMessagesByCurrentUser(site: ISite, searchModel: IRequestMessageSearchModel): Observable<IRequestMessage[]> {
     //this shouold perform the operation on the backend via the api.
 
-    if (!this.userAuthorization.user) { return of(null)}
+    if (!this.userAuthorization.user) { 
+      const item = [] as IRequestMessage[]
+      return of(item);
+    }
 
     const controller = "/RequestMessages/"
 
@@ -162,7 +193,23 @@ export class RequestMessageService {
 
   }
 
-  getRequestMessage(site: ISite, id: number): Observable<IRequestMessage[]> {
+  getRequestMessage(site: ISite, id: number): Observable<IRequestMessage> {
+    //this shouold perform the operation on the backend via the api.
+    if (!this.userAuthorization.user) { return of(null)}
+
+    const controller = "/RequestMessages/"
+
+    const endPoint = "getRequestMessage"
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<IRequestMessage>(url)
+
+  }
+
+  getRequestMessages(site: ISite, search: IRequestMessageSearchModel): Observable<IRequestMessagesResult> {
     //this shouold perform the operation on the backend via the api.
     if (!this.userAuthorization.user) { return of(null)}
 
@@ -174,16 +221,8 @@ export class RequestMessageService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.get<IRequestMessage[]>(url)
+    return  this.http.post<IRequestMessagesResult>(url,search )
 
-  }
-
-
-  notificationEvent(description, title){
-    this.snackBar.open ( description, title , {
-      duration: 2000,
-      verticalPosition: 'top'
-    })
   }
 
 }

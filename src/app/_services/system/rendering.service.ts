@@ -88,21 +88,21 @@ export class RenderingService {
       }
       if (key === 'total') { 
         // item[key] = convertToCurrency(item[key])
-        console.log('total converted to currency', this.convertToCurrency(item[key]))
-        console.log('item total', item[key])
+        // console.log('total converted to currency', this.convertToCurrency(item[key]))
+        // console.log('item total', item[key])
         item[key] = this.convertToCurrency(item[key])
       }
       if (key === 'subTotal') { 
         // item[key] = convertToCurrency(item[key])
-        console.log('subTotal converted to currency', this.convertToCurrency(item[key]))
-        console.log('subTotal ', item[key])
+        // console.log('subTotal converted to currency', this.convertToCurrency(item[key]))
+        // console.log('subTotal ', item[key])
         item[key] = this.convertToCurrency(item[key])
       }
 
       if (key === 'unitPrice') { 
         // item[key] = convertToCurrency(item[key])
-        console.log('unitPrice ', this.convertToCurrency(item[key]))
-        console.log('unitPrice ', item[key])
+        // console.log('unitPrice ', this.convertToCurrency(item[key]))
+        // console.log('unitPrice ', item[key])
         item[key] = this.convertToCurrency(item[key])
       }
 

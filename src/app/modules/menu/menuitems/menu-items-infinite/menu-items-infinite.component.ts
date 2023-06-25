@@ -1,7 +1,7 @@
 import {Component,  HostListener, OnInit, AfterViewInit,OnDestroy,
-        ViewChild, ElementRef, QueryList, ViewChildren, Input, TemplateRef, ChangeDetectorRef}  from '@angular/core';
+        ViewChild, ElementRef, QueryList, ViewChildren, Input, TemplateRef, ChangeDetectorRef, ChangeDetectionStrategy}  from '@angular/core';
 import {IMenuItem} from 'src/app/_interfaces/menu/menu-products';
-import {AWSBucketService, AuthenticationService, MenuService} from 'src/app/_services';
+import {AWSBucketService, AuthenticationService, IMenuItemsResultsPaged, MenuService} from 'src/app/_services';
 import {ActivatedRoute, Router} from '@angular/router';
 import { catchError, Observable, of, Subscription, switchMap} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -12,15 +12,14 @@ import { Title } from '@angular/platform-browser';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
-import { HttpClient } from '@angular/common/http';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-
 @Component({
   selector: 'menu-items-infinite',
   templateUrl: './menu-items-infinite.component.html',
-  styleUrls: ['./menu-items-infinite.component.scss']
+  styleUrls: ['./menu-items-infinite.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
   }
 )
 
@@ -51,7 +50,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   modalOpen        = false;
   endOfRecords     = false;
   pagingInfo        : any;
-  // p                 : any //html page
   items             = [];
   pageOfItems:      Array<any>;
   lengthOfArray:    number
@@ -86,7 +84,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   bucketName        :   string;
   scrollingInfo     :   string;
   endofItems        :   boolean;
-  loading           :   boolean;
+  loading           :   boolean = false;
   totalRecords      :   number;
   someValue         : any;
   searchDescription : string //for description of results
@@ -98,9 +96,9 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   isApp             = false;
   bucket$: Observable<string>; 
   uiHomePage$  : Observable<any>;
-  style$     : Observable<any>;
-  userAuths  = {} as IUserAuth_Properties;
-  userAuths$ = this.authService.userAuths$.pipe(
+  style$       : Observable<any>;
+  userAuths    = {} as IUserAuth_Properties;
+  userAuths$   = this.authService.userAuths$.pipe(
     switchMap(data =>
       { this.userAuths = data;
         return of(data)
@@ -108,10 +106,10 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     )
   )
 
-  ordersListClass = 'grid-flow scroller'
+  ordersListClass   = 'grid-flow scroller'
   infiniteClassList = 'grid-flow scroller'
   infiniteItemClass = 'grid-item';
-  isStaff= this.userAuthorizationService.isStaff
+  isStaff= this.userAuthorizationService.isStaff;
   getPlatForm() { return Capacitor.getPlatform(); }
 
   initSubscriptions() {
@@ -166,7 +164,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
         return this.categoryFilter
       }
     }
-    // this.uiHomePage.suppressItemsInStoreNavigation
     return undefined
   }
 
@@ -240,7 +237,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
       this.initComponent()
       return of(data)
     }));
-
   }
 
   initComponent() {
@@ -258,11 +254,9 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   }
 
   get isSearchSelectorOn() {
-
     if (this.uiHomePage && this.uiHomePage.disableSearchFeaturesInItemsList) {
       return null
     }
-
     if (!this.isApp || this.smallDevice || this.uiHomePage.storeNavigation) {
       return this.searchSelector
     }
@@ -292,7 +286,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
   //this is called from subject rxjs obversablve above constructor.
   refreshSearch(itemName) {
-    // console.log('item name', itemName)
     try {
       this.applyProductSearchModel(itemName);
       this.menuItems = [];
@@ -319,20 +312,14 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
   initSearchProcess() {
     try {
-
         if (!this.productSearchModel) {
-          // console.log('Search model is null')
           this.productSearchModel = this.menuService.initSearchModel()
-
-
-          //updates when the filter is enabled.
           if (this.router.url === '/filter') {
             this.initModelParameters(this.productSearchModel)
           }
           if (this.updateSearchOnModelChange) {
           }
         }
-
     } catch (error) {
       console.log('initSearchProcess Error', error)
     }
@@ -370,12 +357,10 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
   initSearchFromModel() {
     this._productSearchModel = this.menuService.searchModel$.subscribe( model => {
-
         this.productSearchModel = model;
-
         this.initSearchProcess();
         if (!model) {  model = this.menuService.initSearchModel() }
-
+        // console.log('search model update')
         this.productName  = model.name;
         model.web         = this.webMode
         model.webMode     = this.webMode;
@@ -402,10 +387,12 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
         model.active  = true;
 
         this.productSearchModel = model;
-        // console.log('updateSearchOnModelChange',this.updateSearchOnModelChange, model)
+        // console.log('update search results pre update')
+
         if (this.updateSearchOnModelChange) {
           model.hideSubCategoryItems = false;
           this.productSearchModel = model;
+          // console.log('update search results')
           this.updateSearchResults();
         }
 
@@ -463,14 +450,20 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     return model;
   }
 
-  addToListOBS(pageSize: number, pageNumber: number)  {
+  changeDetect() {
+    this.loading      = false
+    this.cd.detectChanges()
+  }
+
+  addToListOBS(pageSize: number, pageNumber: number) :Observable<IMenuItem[] | IMenuItemsResultsPaged>  {
 
     let model   = this.productSearchModel;
-    if (!model) { model = {} as ProductSearchModel }
+
+    if (!model) { model = {} as ProductSearchModel };
     const value = this.route.snapshot.paramMap.get('value');
     if (!pageNumber || pageNumber == null) {pageNumber = 1 }
     if (!pageSize   || pageSize   == null) {pageSize   = 50}
-
+    // console.log('Add to loist', model)
     if (model && !value)  {
       model = this.getListSearchModel(model)
     }
@@ -482,16 +475,20 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     const process$    = this.getProcess(site, model)
     this.loading      = true
 
+    // console.log('process')
     return process$.pipe(
       switchMap(data => {
+      // console.log('process 2')
         if (pageNumber == 1) {
           return  this.addToListOBS(this.pageSize, 2)
         }
       return of(data)
     })).pipe(switchMap(data => {
+      this.changeDetect()
       return of(data)
     }))
 
+    this.changeDetect()
   };
 
   splitItemsIntType(itemsIn: IMenuItem[], currentItems: IMenuItem[]){
@@ -531,14 +528,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     if (this.authService.deviceInfo) {
       const device = this.authService.deviceInfo
 
-      // if (device.phoneDevice || !this.isApp) {
-      //   const url =  this.router.url
-      //   if (url.substring(0, 'menuitems-infinite'.length + 1 ) === '/menuitems-infinite'){
-      //     this.enableFilter = true
-      //     return;
-      //   }
-      // }
-
       if ((this.uiHomePage.staffAccordionMenuSideBar || this.uiHomePage.accordionMenuSideBar ||
         this.uiHomePage.departmentFilter || this.uiHomePage.itemTypeFilter || this.uiHomePage.categoryFilter  )) { 
           this.enableFilter = true
@@ -565,7 +554,8 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   }
 
   getProcess(site: ISite, model: ProductSearchModel) {
-     const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
+   
+    const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
      return results$.pipe(
         switchMap(data => {
           this.currentPage += 1;
@@ -574,8 +564,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
             this.value = 100;
             this.loading = false;
             this.endOfRecords = true
-            // console.log('count', data, data.paging.totalRecordCount, data.paging.recordCount)
-
             this.totalRecords = data?.paging?.totalRecordCount;
             return of(null)
           }
@@ -589,7 +577,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
               };
             } catch (error) {
             }
-            this.cd.detectChanges()
+        
             this.menuItems = this.splitItemsIntType(data.results, this.menuItems);
 
             if (this.uiHomePage.suppressItemsInStoreNavigation) {
@@ -598,7 +586,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
                 this.endOfRecords = true;
                 this.loading = false;
                 this.value = 100;
-                this.cd.detectChanges()
                 return of(null)
               }
             }
@@ -615,28 +602,31 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
             }
 
             if ( this.value != 100 && this.value !=0 ) {
-              this.cd.detectChanges()
               const lastItem = this.getNextMenuItem();
               this.loading = false;
               this.menuItems.push(lastItem)
-              this.cd.detectChanges()
             }
-
+            
             this.value     = ((this.menuItems.length   / this.totalRecords ) * 100).toFixed(0)
             this.loading   = false
+
             return of(this.menuItems)
           }
 
           this.pagingInfo = data.paging
 
-          if (data) {
-            this.menuItems = this.splitItemsIntType(data.results, this.menuItems)
-            this.loading      = false
-            this.value = 100;
-          }
-          return of(data);
+        if (data) {
+          this.menuItems = this.splitItemsIntType(data.results, this.menuItems)
+          this.loading      = false
+          this.value = 100;
+        }
+
+        return of(data);
       }
-    ))
+    )).pipe(switchMap(data => { 
+      return of(data)
+    }))
+    
   }
 
   moveNext(event) {
@@ -658,7 +648,10 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   }
 
   nextPage() {
-    this.action$ = this.addToListOBS(this.pageSize, this.currentPage)
+    // this.action$ =
+    this.addToListOBS(this.pageSize, this.currentPage).subscribe(data => { 
+
+    })
   }
 
   scrollDown() {

@@ -217,10 +217,16 @@
                 </div>
 
                 <!-- ? || userAutService.changeItemPrice -->
-                <div *ngIf="userAuthService.isManagement">
+                <div *ngIf="userAuthService.isStaff">
                   <button mat-button  color="accent"  (click)="editPrice()">
                     <mat-icon  class="mat-icon-label" class="mat-icon-label">edit</mat-icon>
                     Price
+                  </button>
+                </div>
+
+                <div *ngIf="!userAuthService.isManagement && userAuthService.isStaff">
+                  <button mat-button  color="accent"  (click)="requestPriceChange(orderItem)">
+                    Change Request
                   </button>
                 </div>
 

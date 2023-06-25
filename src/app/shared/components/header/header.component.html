@@ -5,9 +5,9 @@
              [color]="matToolbarColor">
   <mat-toolbar-row>
       <!-- <div class="ps-flex-group"> -->
-        
+
       <ng-container [ngTemplateOutlet]="backButtonView"></ng-container>
-      
+
       <ng-container *ngIf="user && user.roles && (user.roles == 'employee' || user.roles === 'admin' || user.roles == 'manager') " [ngTemplateOutlet]="logoView"></ng-container>
       <ng-container [ngTemplateOutlet]="menuBarView"></ng-container>
       <ng-container *ngTemplateOutlet="showSearchMenuView"></ng-container>
@@ -16,13 +16,13 @@
       <ng-container [ngTemplateOutlet]="currentSite"></ng-container>
       <ng-container [ngTemplateOutlet]="networkStatus"></ng-container>
       <ng-container [ngTemplateOutlet]="siteSelectorView"></ng-container>
-      
+
       <div *ngIf="!isUserStaff || phoneDevice">
         <ng-container [ngTemplateOutlet]="userActionsPhoneDevice"></ng-container>
       </div>
-      
+
       <ng-container [ngTemplateOutlet]="posPanel"></ng-container>
-      
+
       <ng-container *ngIf="user && user.roles == 'user' " [ngTemplateOutlet]="logoView"></ng-container>
       <ng-container [ngTemplateOutlet]="companyHeader"></ng-container>
 
@@ -80,14 +80,14 @@
   </div>
 </ng-template>
 <ng-template #posPanel>
-  
+
   <div class="grid-flow"
        *ngIf="!phoneDevice">
     <mat-card class='panel-card'
             *ngIf="( (isUserStaff && platFormService.platForm !='web' )
                   || (isUserStaff) )">
       <ul class="ul-pos-panel fx-row" >
-        
+
         <li *ngIf="employeeName && !smallDevice">
           <div class="pos-name">
             <h2>  {{employeeName.toUpperCase() | truncateText : 8}} </h2>
@@ -282,101 +282,119 @@
             [overlapTrigger]="false"
             #menu="matMenu">
 
-    <div  class="mat-item">
-      <app-request-messages
-        [user]="user"
-        [hideshowMessages]="true"
-        (emitCount)="emailMailCount($event)">
-      </app-request-messages>
-    </div>
-
     <span (mouseleave)="menuTrigger.closeMenu()">
+      <div class="ps-flex-group-column">
 
-      <div  class="mat-item">
-        <button
-            mat-button
-            color="accent"
-            class="menu-button"
-            aria-label="logout"
-            (click)="logout()">
-          Log Out
-          <mat-icon>exit_to_app</mat-icon>
-        </button>
-        <mat-divider class="mat-divider"></mat-divider>
-      </div>
+        <!-- <div  class="mat-item">
+          <ng-container [ngTemplateOutlet]="userMessages"></ng-container>
+        </div> -->
 
-      <div *ngIf="smallDevice">
-        <app-cart-button
-          [smallDevice]="smallDevice">
-        </app-cart-button>
-      </div>
+        <app-request-messages
+          [user]="user"
+          [hideshowMessages]="true"
+          (emitCount)="emailMailCount($event)">
+        </app-request-messages>
 
-      <div  class="mat-item">
+        <div  class="mat-item">
           <button
               mat-button
               color="accent"
               class="menu-button"
-              aria-label="face"
-              routerLink="/app-profile">
-              {{ user?.lastName }} - {{userRoles}}
-            <mat-icon>face</mat-icon>
+              aria-label="logout"
+              (click)="logout()">
+            Log Out
+            <mat-icon>exit_to_app</mat-icon>
           </button>
-        <mat-divider class="mat-divider"></mat-divider>
-      </div>
+          <mat-divider class="mat-divider"></mat-divider>
+        </div>
 
-      <div>
-        <app-toggle-theme></app-toggle-theme>
-      </div>
+        <div *ngIf="smallDevice">
+          <app-cart-button
+            [smallDevice]="smallDevice">
+          </app-cart-button>
+        </div>
 
-      <div  mat-menu-item
-            *ngIf="smallDevice && siteName"
-            class="mat-item" >
-            <h2> {{ siteName  }} </h2>
-        <mat-divider class="mat-divider"></mat-divider>
-      </div>
+        <div  class="mat-item">
+            <button
+                mat-button
+                color="accent"
+                class="menu-button"
+                aria-label="face"
+                routerLink="/app-profile">
+                {{ user?.lastName }} - {{userRoles}}
+              <mat-icon>face</mat-icon>
+            </button>
+          <mat-divider class="mat-divider"></mat-divider>
+        </div>
 
-      <div  class="mat-item"
-          *ngIf="smallDevice">
-        <button
-              mat-raised-button
-              color="primary"
-              aria-label="location"
-              class="menu-button"
-              (click)="siteSelector()">
-          <mat-icon>location_on</mat-icon>
-        </button>
-        <mat-divider class="mat-divider"></mat-divider>
-      </div>
+        <div>
+          <app-toggle-theme></app-toggle-theme>
+        </div>
 
-      <div  class="mat-item"
-          *ngIf="user && user.roles === 'user'  && user?.username != 'user'">
+        <div  mat-menu-item
+              *ngIf="smallDevice && siteName"
+              class="mat-item" >
+              <h2> {{ siteName  }} </h2>
+          <mat-divider class="mat-divider"></mat-divider>
+        </div>
+
+        <div  class="mat-item"
+            *ngIf="smallDevice">
           <button
-                    mat-raised-button
-                    color="primary"
-                    aria-label="Order history"
-                    class="mat-item"
-                    (click)="navPOSOrders()">
-              My Orders<mat-icon>list</mat-icon>
+                mat-raised-button
+                color="primary"
+                aria-label="location"
+                class="menu-button"
+                (click)="siteSelector()">
+            <mat-icon>location_on</mat-icon>
           </button>
-      </div>
+          <mat-divider class="mat-divider"></mat-divider>
+        </div>
 
-      <div>
-        <ng-container [ngTemplateOutlet]="isClockInOutOn"></ng-container>
-      </div>
+        <div  class="mat-item"
+            *ngIf="user && user.roles === 'user'  && user?.username != 'user'">
+            <button
+                      mat-raised-button
+                      color="primary"
+                      aria-label="Order history"
+                      class="mat-item"
+                      (click)="navPOSOrders()">
+                My Orders<mat-icon>list</mat-icon>
+            </button>
+        </div>
 
-      <ng-container [ngTemplateOutlet]="posDevice"></ng-container>
+        <div>
+          <ng-container [ngTemplateOutlet]="isClockInOutOn"></ng-container>
+        </div>
+
+        <ng-container [ngTemplateOutlet]="posDevice"></ng-container>
+
+        <ng-container [ngTemplateOutlet]="lastOrderView"></ng-container>
+      </div>
     </span>
 
   </mat-menu>
 </ng-template>
 
+<ng-template #lastOrderView>
+
+  <ng-container *ngIf="orderMethodsService.lastOrder">
+
+    <mat-divider class="margin-5"></mat-divider>
+    <div  class="margin-5">
+      <button class='ps-button-150' mat-raised-button (click)="setLastOrder()">Last Order {{orderMethodsService.lastOrder.id}}</button>
+    </div>
+  </ng-container>
+</ng-template>
+
 <ng-template #posDevice>
-  <span  *ngIf="(posDevice$ | async) as device; else loadingDevice">
+<span  *ngIf="(posDevice$ | async) as device; else loadingDevice">
     <mat-divider></mat-divider>
     <li *ngIf="device  && (isAdmin || isManager) && !smallDevice">
     <br>
-    <div class='search-input'>
-      <button  mat-raised-button (click)="deviceInfo()">
+    <div  class="margin-5">
+      <button   class='ps-button-150'
+                mat-raised-button (click)="deviceInfo()">
         Device {{device?.name}}  <mat-icon>device_hub</mat-icon>
       </button>
     </div>
@@ -411,4 +429,12 @@
       <mat-icon>{{searchBar}}</mat-icon>
     </button>
   </div>
+</ng-template>
+
+<ng-template #userMessages>
+  <app-request-messages
+    [user]="user"
+    [hideshowMessages]="true"
+    (emitCount)="emailMailCount($event)">
+  </app-request-messages>
 </ng-template>

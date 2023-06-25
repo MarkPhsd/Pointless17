@@ -40,6 +40,16 @@
     </div>
 
     <mat-divider></mat-divider>
+  
+    <div class="button-margin-10">
+      <app-request-messages
+        [user]="user"
+        [hideshowMessages]="true"
+        (emitCount)="emailMailCount($event)">
+      </app-request-messages>
+    </div>
+
+    <mat-divider></mat-divider>
 
     <div class="button-margin-10">
       <app-toggle-theme></app-toggle-theme>

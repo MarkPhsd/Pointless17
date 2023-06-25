@@ -97,6 +97,8 @@ export class OrderMethodsService implements OnDestroy {
   public currentOrder$        = this._currentOrder.asObservable();
   public currentOrder         = {} as IPOSOrder
 
+  lastOrder : IPOSOrder;
+
   public order                    : IPOSOrder;
   _order                          : Subscription;
   subscriptionInitialized         : boolean;
@@ -982,6 +984,15 @@ export class OrderMethodsService implements OnDestroy {
     )
   }
 
+  getOrderFromItem(id: number) {
+    if (id) {
+      const site = this.siteService.getAssignedSite()
+      return  this.posOrderItemService.getPOSOrderItem(site,id).pipe(switchMap(data => {
+        return this.orderService.getOrder(site, data.orderID.toString(), false)
+      }))
+    }
+  }
+
   processItemPostResultsPipe(data) {
       // console.log('processItemPostResults', data);
       if (data) {
@@ -993,9 +1004,7 @@ export class OrderMethodsService implements OnDestroy {
       if (data?.message) {  this.notifyEvent(`Process Result: ${data?.message}`, 'Alert ')};
 
       if (data && data.resultErrorDescription && data.resultErrorDescription != null) {
-        // console.log('data.Error', data.resultErrorDescription)
-        // this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert');
-        this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red');
+         this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red');
         return;
       }
 
@@ -1005,18 +1014,17 @@ export class OrderMethodsService implements OnDestroy {
 
         if (this.siteService.phoneDevice) {
         } else {
-
           const order = data.order as IPOSOrder;
-
           if (order && order.service && order.service.retailType) {
             this.toggleOpenOrderBar(this.userAuthorization.isStaff)
             this.toolbarServiceUI.updateOrderBar(false)
             return;
           }
-
           if (order && order.posOrderItems.length == 1 ) {
-            // console.log('this toggle service ui ')
             this.toolbarServiceUI.updateOrderBar(true)
+          }
+          if (!this.toolbarServiceUI.orderBar) {
+            this.siteService.notify(`Item added ${data?.posItemMenuItem?.name}`, 'close', 1000, 'green')
           }
         }
 
@@ -1179,10 +1187,17 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
+  setLastOrder() {
+    if (this.order) {
+      const order = JSON.stringify(this.order)
+      this.lastOrder =  JSON.parse(order)// structuredClone(this.order);
+    }
+  }
+
   setActiveOrder(site, order: IPOSOrder) {
+
     if (order) {
-      //determine device type so we know how to respond.
-      // console.log('set active order',!this.authenticationService?.deviceInfo?.phoneDevice)
+
       if (!this.authenticationService?.deviceInfo?.phoneDevice) {
         this.toolbarServiceUI.updateOrderBar(true)
       }
@@ -1486,7 +1501,7 @@ export class OrderMethodsService implements OnDestroy {
      return of(null)
   }
 
-  exitOrder() { 
+  exitOrder() {
     this.clearOrder();
   }
 

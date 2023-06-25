@@ -86,7 +86,7 @@ export class PromptSubGroupPanelComponent implements OnInit, OnDestroy {
     this.promptWalkService.updateAccordionStep(0)
   }
   ngOnInit(): void {
-    console.log('')
+    // console.log('')
   }
 
   setStep(event) {

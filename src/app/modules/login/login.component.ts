@@ -154,10 +154,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.statusMessage = ''
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.refreshUIHomePageSettings();
-   
   }
-
-
 
   async  openDrawerOne() {
     // console.log('open cash drawer one')

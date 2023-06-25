@@ -169,13 +169,13 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this.printerLocations$ = this.printerService.getLocations()
   }
 
-  initCustomerView() { 
+  initCustomerView() {
     let user = this.userAuthorization.user;
-    if (!user) { 
+    if (!user) {
       user = this.authenticationService.userValue
     }
     if (!user) { return }
-    if (user.roles == 'user') { 
+    if (user.roles == 'user') {
       this.viewType = 2;
       this.setViewType(this.viewType)
     }
@@ -192,7 +192,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
       this.showAllOrderInstructions[0] = item;
       item = 'Press Show All Orders. This toggles showing all open orders versus just yours.';
       this.showAllOrderInstructions[1] = item;
-      this.initInstructions(this.user.userPreferences as UserPreferences)
+      if (this.user && this.user.userPreferences) {
+        this.initInstructions(this.user.userPreferences as UserPreferences)
+      }
     })
   }
 

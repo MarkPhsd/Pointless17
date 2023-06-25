@@ -35,6 +35,7 @@ export class ScaleService  {
   isApp                       = false;
   isElectronServiceInitiated  = false
   private execProcess = null; // Store reference to process
+  processID: number;
 
   updateSubscription(scaleInfo: ScaleInfo) {
     this.scaleInfo = scaleInfo;
@@ -151,7 +152,61 @@ export class ScaleService  {
     }
     if (!this.platformService.isAppElectron) { return }
     const childProcess = this.electronService.remote.require('child_process');
-    const pathToExec = 'C:\\pointless\\scaleservice.exe'; // Update this to your executable path
+    const pathToExec = 'C:\\pointless\\restartScale.bat'; // Update this to your executable path
+    this.execProcess = childProcess.exec(pathToExec, function (err, data) {
+      if(err) {
+        console.error(err);
+        return;
+      }
+      console.log(data.toString());
+    });
+    if (this.execProcess) { 
+      this.processID = this.execProcess.pid;
+    }
+  }
+
+  killScaleProcess() { 
+    console.log('pid', this.processID)
+    if (!this.processID) { 
+      console.log('processID')
+      return 
+    } 
+    this.killProcessById(this.processID)
+  }
+
+  public killProcessById(processId: number) {
+    if (!this.electronService.isElectronApp) { return}
+      const childProcess = this.electronService.remote.require('child_process');
+  
+      // Command that kills the process with the given process ID
+      let command = `taskkill /PID ${processId} /F`;
+  
+      childProcess.exec(command, (err, stdout, stderr) => {
+        
+        if (err) {
+          console.error('Error:', err);
+          return;
+        }
+
+        if (stderr) {
+          console.error('Stderr:', stderr);
+          return;
+        }
+       
+        console.log('std Out', stdout);
+      });
+    }
+  
+  
+  startProcess(name: string) {
+    try {
+      if ( !this.platformService.isAppElectron) { return }
+    } catch (error) {
+      return;
+    }
+    if (!this.platformService.isAppElectron) { return }
+    const childProcess = this.electronService.remote.require('child_process');
+    const pathToExec = `C:\\pointless\\${name}`; // Update this to your executable path
     this.execProcess = childProcess.exec(pathToExec, function (err, data) {
       if(err) {
         console.error(err);
@@ -160,6 +215,7 @@ export class ScaleService  {
       console.log(data.toString());
     });
   }
+ 
 
   public killProcessByName(processName: string) {
     try {

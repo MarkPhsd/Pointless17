@@ -243,9 +243,9 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
         const moveOnQuantity = currentSubPrompt.moveOnQuantity;
         const quantityMet  = currentSubPrompt.quantityMet;
-        console.log('moveOnQuantity', moveOnQuantity)
-        console.log('quantity met', quantityMet)
-        console.log('move on met',  moveOnQuantity == currentSubPrompt.itemsSelected.length)
+        // console.log('moveOnQuantity', moveOnQuantity)
+        // console.log('quantity met', quantityMet)
+        // console.log('move on met',  moveOnQuantity == currentSubPrompt.itemsSelected.length)
         if (quantityMet && moveOnQuantity == currentSubPrompt.itemsSelected.length) {
           this.nextStep()
           const lastGroupIndex = orderPromptGroup.selected_PromptSubGroups.length;

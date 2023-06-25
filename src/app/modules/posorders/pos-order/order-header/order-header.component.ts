@@ -96,6 +96,13 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
     this.orderMethodsService.clearOrder()
   }
 
+  refreshOrder() { 
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.ordersService.getOrder(site, this.order.id.toString(), this.order.history).pipe(switchMap(data => { 
+      this.orderMethodsService.updateOrder(data)
+      return of(data)
+    }))  
+  }
   assignPriceColumn(value: number){
     const site = this.siteService.getAssignedSite()
     if (this.order) {

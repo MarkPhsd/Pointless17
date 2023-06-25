@@ -23,17 +23,6 @@
           </mat-form-field>
         </div>
 
-        <!-- <div *ngIf="editField == 'serialCode'">
-          <mat-form-field appearance="outline"  >
-            <mat-label>Item Notes</mat-label>
-            <textarea matInput
-                  rows="1"
-                  cols="45"
-                  formControlName="modifierNote"
-            ></textarea>
-          </mat-form-field>
-        </div> -->
-
         <div *ngIf="menuItem && editField === 'quantity'">
           <app-key-pad
                   [inputForm]           = "inputForm"

@@ -47,6 +47,10 @@
           </split-entry-selector>
         </div>
 
+        <div *ngIf="isApp">
+          <button mat-button (click)='refreshOrder()'><mat-icon>refresh</mat-icon></button>
+        </div>
+
         <div >
           <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption && isSale && isUserStaff" >
             <value-from-list-selector

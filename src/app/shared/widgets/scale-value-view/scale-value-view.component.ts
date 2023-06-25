@@ -59,6 +59,7 @@ export class ScaleValueViewComponent implements OnInit {
     this.scaleService.initScaleService()
   }
 
+
   getIsScaleNaN(scale){
     if (scale) {
       if (scale && scale.value && scale.value.toLowerCase() === 'nan') {
@@ -71,7 +72,8 @@ export class ScaleValueViewComponent implements OnInit {
   }
 
   killScale() { 
-    this.scaleService.killProcessByName('ScaleService.exe')
-    this.scaleService.killProcessByName('scaleservice')
+    // this.scaleService.killProcessByName('ScaleService.exe')
+    this.scaleService.killScaleProcess()
+    // this.scaleService.killProcessByName('ScaleService (32 bit)')
   }
 }

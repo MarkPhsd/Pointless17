@@ -677,6 +677,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   //   this.scaleService.readScale();
   // }
 
+  setLastOrder() {
+    if (!this.orderMethodsService.lastOrder) { return }
+    this.orderMethodsService.setActiveOrder(null, this.orderMethodsService.lastOrder)
+    this.orderMethodsService.updateOrder(this.orderMethodsService.lastOrder)
+  }
+
   switchUser() {
     this.userSwitchingService.openPIN({request: 'switchUser'})
   }

@@ -25,7 +25,7 @@ export class ClientTableService {
 
   getClient(site: ISite, id: any) : Observable<IClientTable> {
 
-    if (id == 0) {return EMPTY}
+    if (id == 0) {return of({} as IClientTable)}
 
     const controller =  "/ClientTable/"
 

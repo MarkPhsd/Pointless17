@@ -26,6 +26,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
       const user = this.authenticationService.userValue;
 
       if (request.headers.has(InterceptorSkipHeader)) {

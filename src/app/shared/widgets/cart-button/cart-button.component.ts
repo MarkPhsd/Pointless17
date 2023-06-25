@@ -100,6 +100,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     this.updateItemsPerPage();
     this.deviceInfo = this.authenticationService.deviceInfo
     // this.device$ = this.
+    // this.actionOrder$ = null;
   }
 
   ngOnDestroy() {
@@ -144,7 +145,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   addNewOrder() {
     const site = this.siteService.getAssignedSite();
     if (this.posDevice) { 
-      if (this.posDevice.defaultOrderTypeID != 0) {
+      if (this.posDevice.defaultOrderTypeID  && this.posDevice.defaultOrderTypeID != 0) {
         const serviceType$ = this.serviceTypeService.getType(site, this.posDevice.defaultOrderTypeID)
         this.actionOrder$ = serviceType$.pipe(switchMap(data => { 
             return of(data) 

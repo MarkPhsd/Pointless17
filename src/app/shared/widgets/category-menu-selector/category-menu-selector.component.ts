@@ -177,7 +177,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
       if (this.type === 'department') {
         this.list$ = department$
           .pipe(switchMap(list => {
-            // console.log(list)
+            console.log(list)
             if (!this.userAuthService.isStaff) { 
               list = list.filter(data => {  
                 if (data.active && data.webProduct) { 
@@ -185,6 +185,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
                 }}
               )
             }
+            // console.log('this is the list ', list)
             list.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id, image: this.getItemSrc(item.urlImageMain)} ) })
             if (model == undefined) {   model = this.menuService.initSearchModel()   }     
             this.setSavedList(model)

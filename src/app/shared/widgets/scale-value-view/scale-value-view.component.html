@@ -4,6 +4,7 @@
     {{scale?.value}} {{scale?.mode}}
     <span *ngIf="getIsScaleNaN(scale)">
       <button mat-button (click)="restartScale()"><mat-icon>scale</mat-icon></button>
+      <!-- <button mat-button (click)="killScale()"><mat-icon>close</mat-icon></button> -->
     </span>
   </div>
 </div>

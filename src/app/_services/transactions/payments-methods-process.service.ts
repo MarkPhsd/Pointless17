@@ -222,7 +222,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         })).pipe(
           switchMap( order => {
           if (order) {
-            console.log(' prepPrintUnPrintedItems orderMethodsService.updateOrderSubscription')
+            // console.log(' prepPrintUnPrintedItems orderMethodsService.updateOrderSubscription')
             this.orderMethodsService.updateOrderSubscription(order)
             return of(order)
           }

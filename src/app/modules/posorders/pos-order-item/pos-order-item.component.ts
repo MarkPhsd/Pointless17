@@ -13,7 +13,7 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
-import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
+import { AWSBucketService, AuthenticationService, MenuService, OrdersService } from 'src/app/_services';
 import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -25,6 +25,9 @@ import { POSOrderItemService } from 'src/app/_services/transactions/posorder-ite
 import { MenuItemModalComponent } from '../../menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
 import { PosOrderItemEditComponent } from './pos-order-item-edit/pos-order-item-edit.component';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
+import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
+import { FastUserSwitchComponent } from '../../profile/fast-user-switch/fast-user-switch.component';
 export interface payload{
   index : number;
   item  : PosOrderItem;
@@ -207,10 +210,13 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                 private menuService        : MenuService,
                 private posOrderItemService: POSOrderItemService,
                 private inventoryService   : InventoryAssignmentService,
+                private userSwitchingService: UserSwitchingService,
                 private promptGroupservice : PromptGroupService,
                 private printingService    : PrintingService,
                 public  userAuthService    : UserAuthorizationService,
                 private fb                 : UntypedFormBuilder,
+                private authenticationService: AuthenticationService,
+                private requestMessageMethodsService: RequestMessageMethodsService,
               )
   {
   }
@@ -251,6 +257,18 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     this.updateCardStyle(this.mainPanel)
     this.refreshSidePanel()
     // this.orderItem.
+  }
+
+  requestPriceChange(item) {
+    if (this.order && this.userAuthService.user) {
+      this.action$ =  this.requestMessageMethodsService.requestPriceChange(item, this.order, this.userAuthService.user)
+    }
+  }
+
+  requestTotalPriceChange(item) {
+    if (this.order && this.userAuthService.user) {
+      this.action$ =  this.requestMessageMethodsService.requestPriceChange(item, this.order, this.userAuthService.user)
+    }
   }
 
   initEdit() {
@@ -380,15 +398,18 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   editProperties(editField: string, instructions: string) {
-    let dialogRef: any;
+
     if (!this.orderItem) {return}
     const site = this.siteService.getAssignedSite();
+
     this.menuService.getMenuItemByID(site, this.orderItem.productID).subscribe(data => {
         this.menuItem = data;
+
         if (!this.menuItem.itemType) {
           this.notifyEvent('Item type not defined', 'Alert')
           return;
         }
+
         let requireWholeNumber = false;
         if (editField == 'quantity') {
           requireWholeNumber = this.menuItem.itemType.requireWholeNumber
@@ -410,19 +431,58 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
           width   = '100vw'
         }
 
-        dialogRef = this.dialog.open(PosOrderItemEditComponent,
-          { width     : width,
-            minWidth  : '300px',
-            height    : height,
-            minHeight : height,
-            data      : item
-          },
-        )
-        dialogRef.afterClosed().subscribe(result => {
-        // this.refreshData();
-        // update order
-        });
+        if (editField == 'price' || editField == 'subTotal') {
+          console.log('trying', this.authenticationService.userAuths.changeItemPrice,this.authenticationService.userAuths)
+          if (!this.authenticationService.userAuths.changeItemPrice) {
+              console.log('authorize edit form')
+              const request =  {request: 'checkAuth' , action:'price'}
+              this.authorizeEdit(item, width, height, request);
+              return;
+          }
+        }
+
+        // if (this.authenticationService.userAuths.changeItemPrice) {
+          this.editDialog(item, width,height)
+        // }
     })
+  }
+
+  authorizeEdit(item, width,height, request) {
+    let dialogRef: any;
+    this.userSwitchingService.switchUser
+
+    dialogRef = this.dialog.open(FastUserSwitchComponent,
+      { width     : '600px',
+        minWidth  : '600px',
+        height    : '600px',
+        minHeight : height,
+        data      : request
+      },
+    )
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result) {
+        this.editDialog(item,width,height)
+      } else {
+        this.siteService.notify('Not authorized', 'close', 1000, 'red')
+      }
+    });
+  }
+
+  editDialog(item, width,height) {
+    let dialogRef: any;
+    dialogRef = this.dialog.open(PosOrderItemEditComponent,
+      { width     : width,
+        minWidth  : '300px',
+        height    : height,
+        minHeight : height,
+        data      : item
+      },
+    )
+    dialogRef.afterClosed().subscribe(result => {
+      this.authenticationService.overRideUser(null)
+    });
   }
 
   editSerial() {
