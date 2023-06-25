@@ -20,14 +20,6 @@ h3, .h3 {
   font-size: 1.2em;
 }
 
-// .label-image-grid {
-//   display: flex;
-//   flex-direction: row;
-//   flex-wrap: wrap;
-//   justify-content: space-between;
-// }
-
-
 .exit-label-button {
   max-width: 65px;
 }
@@ -42,9 +34,7 @@ h3, .h3 {
   font-size: 1.1em;
   background-blend-mode: lighten;
   padding: 5px 5px 5px 5px;
-  // width: 200px;
 }
-
 
 .product-name-alt {
   font-weight: 899;
@@ -90,23 +80,19 @@ button {
   }
 }
 
-.custom-card-modifier-prep {
+.custom-card-prep {
   padding      : 0px;
   padding-bottom: 10px;
   padding-top   : 10px;
   padding-left : 15px;
   margin       : 5px;
-  left         : 35px;
   width: 85%;
   height: auto;
-  min-height: 15px;
-  @include for-phone-only  {
-    margin       : 15px;
-    padding      : 15px;
-    padding-left : 15px;
-    left         : 25px;
-    width        : 95%;
-  }
+  min-height: 50px;
+}
+
+.custom-card-modifier-prep {
+  left         : 35px;
 }
 
 .custom-card-modifier {

@@ -28,6 +28,7 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { FastUserSwitchComponent } from '../../profile/fast-user-switch/fast-user-switch.component';
+import { DialogRef } from '@angular/cdk/dialog';
 export interface payload{
   index : number;
   item  : PosOrderItem;
@@ -149,9 +150,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     return false;
   }
 
-  refundItem() {
-    // this.orderItem.discountScheduleID
-  }
+
 
   initSubscriptions() {
     this.initAssignedItemSubscriber();
@@ -170,7 +169,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
       }
     })
   }
-
 
   initAssignedItemSubscriber() {
     //disabled  class style when added button for item functions
@@ -196,7 +194,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     if (this._assignedPOSItems) { this._assignedPOSItems.unsubscribe()}
   }
 
-  constructor(  private orderService: OrdersService,
+  constructor(
                 private orderMethodsService: OrderMethodsService,
                 private awsBucket          : AWSBucketService,
                 private _snackBar          : MatSnackBar,
@@ -209,8 +207,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                 private dialog             : MatDialog,
                 private menuService        : MenuService,
                 private posOrderItemService: POSOrderItemService,
-                private inventoryService   : InventoryAssignmentService,
-                private userSwitchingService: UserSwitchingService,
                 private promptGroupservice : PromptGroupService,
                 private printingService    : PrintingService,
                 public  userAuthService    : UserAuthorizationService,
@@ -354,6 +350,24 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     this.refreshSidePanel();
   }
 
+  refundItem(item) {
+    let refundAuthorized = false
+    if (this.authenticationService.userAuths && this.authenticationService.userAuths.refundItem) {
+      refundAuthorized = true
+    }
+    if (refundAuthorized) {
+      this.changeQuantity(-item.quantity)
+    } {
+      const request =  {request: 'checkAuth' , action:'refundItem'}
+      this.authorizeEdit(item, request);
+    }
+  }
+
+  requestRefundItem(item) {
+    this.action$ =  this.requestMessageMethodsService.requestRefund(item, this.order, this.userAuthService.user)
+    // this.requestMessageMethodsService.requestPriceChange(item, this.order,this.userAuthService.user)
+  }
+
   openModifierNote() {
     this.editProperties('modifierNote', 'Special Instructions')
   }
@@ -411,9 +425,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
         }
 
         let requireWholeNumber = false;
-        if (editField == 'quantity') {
-          requireWholeNumber = this.menuItem.itemType.requireWholeNumber
-        }
+        if (editField == 'quantity') {   requireWholeNumber = this.menuItem.itemType.requireWholeNumber }
         const item = {orderItem: this.orderItem,
                       editField: editField,
                       menuItem: this.menuItem,
@@ -432,38 +444,28 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
         }
 
         if (editField == 'price' || editField == 'subTotal') {
-          console.log('trying', this.authenticationService.userAuths.changeItemPrice,this.authenticationService.userAuths)
           if (!this.authenticationService.userAuths.changeItemPrice) {
-              console.log('authorize edit form')
-              const request =  {request: 'checkAuth' , action:'price'}
-              this.authorizeEdit(item, width, height, request);
-              return;
+            const request =  {request: 'checkAuth' , action:'price'}
+            this.authorizeEdit(item, request);
+            return;
           }
         }
 
         // if (this.authenticationService.userAuths.changeItemPrice) {
-          this.editDialog(item, width,height)
+        this.editDialog(item, width,height)
         // }
     })
   }
 
-  authorizeEdit(item, width,height, request) {
-    let dialogRef: any;
-    this.userSwitchingService.switchUser
+  checkAuthDialog(item,  request) {
+    return  this.orderMethodsService.checkAuthDialog(item,  request)
+  }
 
-    dialogRef = this.dialog.open(FastUserSwitchComponent,
-      { width     : '600px',
-        minWidth  : '600px',
-        height    : '600px',
-        minHeight : height,
-        data      : request
-      },
-    )
-
+  authorizeEdit(item, request) {
+    let dialogRef = this.checkAuthDialog(item, request)
     dialogRef.afterClosed().subscribe(result => {
-
       if (result) {
-        this.editDialog(item,width,height)
+        this.editDialog(item,'600px','600px')
       } else {
         this.siteService.notify('Not authorized', 'close', 1000, 'red')
       }
@@ -536,19 +538,26 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
         return
       }
     }
-
     if (this.orderItem) {
       this.router.navigate(["/menuitem/", {id: this.orderItem.productID}]);
     }
   }
 
   cancelItem(index: number, orderItem: PosOrderItem) {
-    // console.log('cancel item')
     let payload = {} as payload
     payload.index = index;
     payload.item  = orderItem;
+
+    // if (orderItem.printed) {
+    //   let dialogRef = this.checkAuthDialog(this.order, 'voidItem')
+    //   dialogRef.afterClosed().subscribe(data => {
+    //     if (data) {
+    //     }
+    //     }
+    //   )
+    //   return;
+    // }
     this.outputDelete.emit(payload)
-    // console.log('remove item should clear last item added')
     this.orderMethodsService.updateLastItemAdded(null)
   }
 
@@ -625,7 +634,10 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     }
 
     if (this.prepScreen) {
-      this.customcard       = 'custom-card-modifier-prep';
+      this.customcard = 'custom-card-prep';
+      if (this.orderItem.idRef != this.orderItem.id) {
+        this.customcard = 'custom-card-prep custom-card-modifier-prep';
+      }
     }
   }
 
@@ -702,7 +714,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   swipeOutItem(){
-    // console.log('swipe out')
+    console.log('swipe out')
     if (this.disableActions) {return}
     this.cancelItem(this.index,  this.orderItem)
   }

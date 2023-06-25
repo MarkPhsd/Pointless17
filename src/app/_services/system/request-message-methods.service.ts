@@ -17,6 +17,14 @@ export class RequestMessageMethodsService {
               private siteService           : SitesService) { }
 
   requestPriceChange(item: IPOSOrderItem, order: IPOSOrder, user: IUser) {
+    return  this.requestItemEdit(item, order,  user,'PC', 'Price Change Request - ' )
+  }
+
+  requestRefund(item: IPOSOrderItem, order: IPOSOrder, user: IUser) {
+    return this.requestItemEdit(item, order,  user, 'refundItem', 'Refund Item request - ' )
+  }
+
+  requestItemEdit(item: IPOSOrderItem, order: IPOSOrder, user: IUser, type: string, requestMessage: string) {
     if (!item) {}
     const site = this.siteService.getAssignedSite();
     const message = {} as IRequestMessage
@@ -34,7 +42,7 @@ export class RequestMessageMethodsService {
       serialCode = ` having a serial code of ${item.serialCode},`
     }
     message.message = `${user.username} is requesting Item ${item.productName} ${item.unitName},${serialCode} having a quantity of ${item.quantity}, have the price corrected.`
-    message.subject = `Price Change Request -  ${order.id} - ${tableName} -  ${orderName}`
+    message.subject = `${requestMessage} ${order.id} - ${tableName} -  ${orderName}`
     message.type    = 'PC'
     message.orderItemID = item.id;
     message.orderID = order.id

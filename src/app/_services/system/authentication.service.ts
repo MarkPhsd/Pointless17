@@ -55,16 +55,30 @@ export class AuthenticationService {
     private _userx              = new BehaviorSubject<IUser>(null);
     public  userx$              = this._userx.asObservable();
 
-    userAuths            : IUserAuth_Properties;
+    // userAuths            : IUserAuth_Properties;
     _userAuths           = new BehaviorSubject<IUserAuth_Properties>(null);
     public  userAuths$   = this._userAuths.asObservable();
 
     _deviceInfo: IDeviceInfo;
 
+
+    get userAuths() {
+
+      if (this._userAuths.value) {
+        return this._userAuths.value
+      }
+
+      const item = localStorage.getItem('userAuth');
+      if (!item) {
+        return {} as IUserAuth_Properties
+      }
+      return JSON.parse(item)
+    }
+
     updateUserAuths(userAuths : IUserAuth_Properties ) {
       this._userAuths.next(userAuths)
       if (userAuths) {
-        this.userAuths = userAuths;
+        // this.userAuths = userAuths;
         localStorage.setItem('userAuth', JSON.stringify(userAuths));
       }
     }

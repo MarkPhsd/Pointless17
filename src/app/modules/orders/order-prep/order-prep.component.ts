@@ -113,7 +113,8 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
       if(!this.order.itemCount) { this.order.itemCount = 0     }
       this.minutesOpen = this.getMinutesOpen(this.order)
       if (!this.order || !this.order.id) { return }
-      this.orderService.getOrder(this.site , this.order.id.toString(), false).subscribe( data => {
+
+      this.orderService.getOrder(this.site , this.order?.id.toString(), false).subscribe( data => {
         this.order = data
         const items = data.posOrderItems
         let count = 0;

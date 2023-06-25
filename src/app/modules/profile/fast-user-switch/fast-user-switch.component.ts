@@ -47,23 +47,23 @@ export class FastUserSwitchComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
     ) {
 
-    this.dialogRefOption = dialogRef
-    if (data) {
-      this.request = data.request
-      this.requestData = data
-    }
-    console.log(this.requestData)
-    const item = localStorage.getItem('loginAction')
-    this.loginAction = JSON.parse(item)
+      this.dialogRefOption = dialogRef
+      if (data) {
+        this.request = data.request
+        this.requestData = data
+      }
+      console.log(this.requestData, data)
 
-  }
+      const item = localStorage.getItem('loginAction')
+      this.loginAction = JSON.parse(item)
+
+    }
 
   ngOnInit(): void {
     console.log('')
   }
 
   enterPIN(event) {
-    console.log('1', this.request, this.requestData)
 
     if (this.request && this.request === 'checkAuth') {
       this.performTempUserAction(event)
@@ -87,7 +87,7 @@ export class FastUserSwitchComponent implements OnInit {
   }
 
   performTempUserAction(event)  {
-
+    console.log('this.requestData.action', this.requestData.action)
     if (this.requestData.action) {
       this.action$ = this.getAuthUserByPIN(event).pipe(switchMap(data => {
         if (data) {
@@ -113,6 +113,7 @@ export class FastUserSwitchComponent implements OnInit {
               if (data.voidOrder) { result = true  }
             }
 
+            console.log('result', result)
             if (result) {
               this.dialogRefOption.close(true);
             } else {

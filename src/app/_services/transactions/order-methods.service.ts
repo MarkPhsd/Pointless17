@@ -35,6 +35,8 @@ import { AbstractControl,  ValidationErrors, ValidatorFn } from '@angular/forms'
 import { BalanceSheetMethodsService } from './balance-sheet-methods.service';
 import { ServiceTypeService } from './service-type-service.service';
 import { StoreCreditMethodsService } from '../storecredit/store-credit-methods.service';
+import { UserSwitchingService } from '../system/user-switching.service';
+import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switch/fast-user-switch.component';
 
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -173,7 +175,6 @@ export class OrderMethodsService implements OnDestroy {
 
   updateLastItemAdded(item: IMenuItem) {
     this.lastItemAddedExists = false
-    // console.log('menuitem updating last', item?.name)
     if (!item || !item.urlImageMain) {
       this._lastItemAdded.next(null)
       return;
@@ -418,6 +419,7 @@ export class OrderMethodsService implements OnDestroy {
               private dialog                  : MatDialog,
               public  authenticationService    : AuthenticationService,
               private siteService             : SitesService,
+              private userSwitchingService    : UserSwitchingService,
               // private balanceSheetMethodsService    : BalanceSheetMethodsService,
               private editDialog              : ProductEditButtonService,
               private floorPlanService        : FloorPlanService,
@@ -1738,10 +1740,11 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   removeItemFromList(index: number, orderItem: PosOrderItem) {
+    console.log('removeItemFromList')
     if (orderItem) {
       const site = this.siteService.getAssignedSite()
       if (orderItem.printed || this.order.completionDate ) {
-        this.editDialog.openVoidItemDialog(orderItem)
+        this.getVoidAuth(orderItem)
         return
       }
 
@@ -1756,6 +1759,52 @@ export class OrderMethodsService implements OnDestroy {
         })
       }
     }
+  }
+
+  checkAuthDialog(item,  request) {
+    let dialogRef: any;
+    dialogRef =  this.dialog.open(FastUserSwitchComponent,
+      { width     : '600px',
+        minWidth  : '600px',
+        height    : '600px',
+        data      : request
+      },
+    )
+    return dialogRef;
+  }
+
+  getVoidAuth(item) {
+    console.log('getVoidAuth')
+
+    if (this.authenticationService.userAuths.voidItem) {
+      this.editDialog.openVoidItemDialog(item)
+      return
+    }
+
+    console.log('getVoidAuth void item auth check')
+    let  request = {action: 'voidItem', request: 'checkAuth'}
+    console.log('request', request)
+    let dialogRef = this.checkAuthDialog(item,  request)
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.editDialog.openVoidItemDialog(item)
+      } else {
+        this.siteService.notify('Not authorized', 'close', 1000, 'red')
+      }
+    });
+  }
+
+  getRefundAuth(item) {
+    let  request = {action: 'refundItem', request: 'checkAuth'}
+    let dialogRef = this.checkAuthDialog(item,  request)
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.editDialog.openVoidItemDialog(item)
+      } else {
+        this.siteService.notify('Not authorized', 'close', 1000, 'red')
+      }
+    });
   }
 
   changePrepStatus(index: number, orderItem: PosOrderItem) {
