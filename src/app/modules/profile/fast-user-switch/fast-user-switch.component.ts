@@ -87,16 +87,39 @@ export class FastUserSwitchComponent implements OnInit {
   }
 
   performTempUserAction(event)  {
-    // console.log('performTempUserAction')
-    if (this.requestData.action && (this.requestData.action === 'price' || this.requestData.action === 'subtotal')) {
-      console.log(this.request, this.requestData)
+
+    if (this.requestData.action) {
       this.action$ = this.getAuthUserByPIN(event).pipe(switchMap(data => {
         if (data) {
-            if (data.changeItemPrice) {
+            let result = false;
+
+            if (this.requestData.action === 'price' || this.requestData.action === 'subtotal') {
+              if (data.changeItemPrice) {  result = true }
+            }
+
+            if (this.requestData.action === 'refundItem') {
+              if (data.refundItem) {  result = true}
+            }
+
+            if (this.requestData.action === 'voidItem') {
+              if (data.voidItem) { result = true  }
+            }
+
+            if (this.requestData.action === 'voidPayment') {
+              if (data.voidPayment) { result = true  }
+            }
+
+            if (this.requestData.action === 'voidOrder') {
+              if (data.voidOrder) { result = true  }
+            }
+
+            if (result) {
               this.dialogRefOption.close(true);
             } else {
+              this.siteService.notify(`Not authorized`, 'Close', 2000,'red' )
               this.dialogRefOption.close(false);
             }
+
             return of(data)
           }
         }
