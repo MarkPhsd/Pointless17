@@ -223,8 +223,9 @@
                 </div>
 
                 <div *ngIf="userAuthService && !userAuthService?.isManagement && userAuthService.isStaff">
-                  <button mat-button  color="accent"  (click)="requestPriceChange(orderItem)">
-                    Change Request
+                  <button mat-raised-button  color="accent"  (click)="requestPriceChange(orderItem)">
+                    Request<br>
+                    Change Price
                   </button>
                 </div>
 
@@ -257,7 +258,7 @@
 
                 <div *ngIf="!showEdit && (uiConfig?.displayAdd) && (userAuths && userAuths?.refundItem)">
                   <button mat-raised-button    class="button"  color="warn" (click)="requestRefundItem(orderItem)">
-                    <mat-icon  class="warn" >delete</mat-icon>  <span *ngIf="!smallDevice">Request Refund </span>
+                    <mat-icon  class="warn" >delete</mat-icon>  <span *ngIf="!smallDevice"> Refund Request </span>
                   </button>
                 </div>
 
@@ -266,6 +267,13 @@
                     <mat-icon  class="mat-icon-label">delete</mat-icon> <span *ngIf="!smallDevice">Remove </span>
                   </button>
                 </div>
+
+                <div *ngIf="userAuthService && !userAuthService?.isManagement && userAuthService.isStaff">
+                  <button mat-raised-button  color="accent"  (click)="requestVoidItem(orderItem)">
+                    Void Request
+                  </button>
+                </div>
+
               <div>
 
               </div>

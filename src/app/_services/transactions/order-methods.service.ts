@@ -1136,7 +1136,7 @@ export class OrderMethodsService implements OnDestroy {
   //////////////////async await functions.
   newDefaultOrder(site: ISite)  {
     if (!site)        {  return }
-    this.newOrderWithPayload(site, null);
+    return this.newOrderWithPayload(site, null);
   }
 
   newOrderWithPayload(site: ISite, serviceType: IServiceType) {

@@ -59,13 +59,13 @@ export class RenderingService {
 
   getFormatedText(text: any) {
     let newValue = JSON.stringify(text)
-    newValue = newValue.replace('%', '')
+    newValue = newValue.replace('', '')
     const item  = JSON.parse(newValue)
     return item
   }
 
   removeUndefined(item: any) {
-  
+
     const result = _.mapValues(item, v => _.isNil(v) ? '' : v)
     if (item) {
       item = this.setItemValues(item)
@@ -86,25 +86,22 @@ export class RenderingService {
         let value = this.checkDate(item[key])
         item[key] = value
       }
-      if (key === 'total') { 
-        // item[key] = convertToCurrency(item[key])
-        // console.log('total converted to currency', this.convertToCurrency(item[key]))
-        // console.log('item total', item[key])
-        item[key] = this.convertToCurrency(item[key])
-      }
-      if (key === 'subTotal') { 
-        // item[key] = convertToCurrency(item[key])
-        // console.log('subTotal converted to currency', this.convertToCurrency(item[key]))
-        // console.log('subTotal ', item[key])
-        item[key] = this.convertToCurrency(item[key])
-      }
+      // if (key === 'total') {
+      //   // item[key] = convertToCurrency(item[key])
+      //   // console.log('total converted to currency', this.convertToCurrency(item[key]))
+      //   // console.log('item total', item[key])
+      //   item[key] = this.convertToCurrency(item[key])
+      // }
+      // if (key === 'subTotal') {
+      //   item[key] = this.convertToCurrency(item[key])
+      // }
 
-      if (key === 'unitPrice') { 
-        // item[key] = convertToCurrency(item[key])
-        // console.log('unitPrice ', this.convertToCurrency(item[key]))
-        // console.log('unitPrice ', item[key])
-        item[key] = this.convertToCurrency(item[key])
-      }
+      // if (key === 'unitPrice') {
+      //   // item[key] = convertToCurrency(item[key])
+      //   // console.log('unitPrice ', this.convertToCurrency(item[key]))
+      //   // console.log('unitPrice ', item[key])
+      //   item[key] = this.convertToCurrency(item[key])
+      // }
 
       if (item[key] && isNaN(item[key])) {
         let result;
@@ -113,16 +110,14 @@ export class RenderingService {
         }
 
         if (!result) {
-        
 
           if (this.isObject(item[key])) {
-      
+
             if (key === 'name') {
               item[key] = this.setItemValues(item[key])
               return item
             }
-       
-            
+
             if (key === 'unitName') {
               item[key] = this.setItemValues(item[key])
               return item

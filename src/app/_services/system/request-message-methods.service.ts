@@ -17,14 +17,19 @@ export class RequestMessageMethodsService {
               private siteService           : SitesService) { }
 
   requestPriceChange(item: IPOSOrderItem, order: IPOSOrder, user: IUser) {
-    return  this.requestItemEdit(item, order,  user,'PC', 'Price Change Request - ' )
+    return  this.requestItemEdit(item, order,  user,'PC', 'Price Change Request - ', ' have the price adjusted.' )
   }
 
   requestRefund(item: IPOSOrderItem, order: IPOSOrder, user: IUser) {
-    return this.requestItemEdit(item, order,  user, 'refundItem', 'Refund Item request - ' )
+    return this.requestItemEdit(item, order,  user, 'refundItem', 'Refund Item request - ', ' be refunded.' )
   }
 
-  requestItemEdit(item: IPOSOrderItem, order: IPOSOrder, user: IUser, type: string, requestMessage: string) {
+  requestVoidItem(item: IPOSOrderItem, order: IPOSOrder, user: IUser) {
+    return this.requestItemEdit(item, order,  user, 'voidItem', 'Void Item request - ', ' be voided.' )
+  }
+
+  requestItemEdit(item: IPOSOrderItem, order: IPOSOrder, user: IUser, type: string,
+                 requestMessage: string, operationDescription: string) {
     if (!item) {}
     const site = this.siteService.getAssignedSite();
     const message = {} as IRequestMessage
@@ -41,14 +46,17 @@ export class RequestMessageMethodsService {
     if (item.serialCode) {
       serialCode = ` having a serial code of ${item.serialCode},`
     }
-    message.message = `${user.username} is requesting Item ${item.productName} ${item.unitName},${serialCode} having a quantity of ${item.quantity}, have the price corrected.`
+
+
+    message.message = `${user.firstName} is requesting Item ${item.productName} ${item.unitName},${serialCode}
+                      having a quantity of ${item.quantity}, ${operationDescription}.`
     message.subject = `${requestMessage} ${order.id} - ${tableName} -  ${orderName}`
     message.type    = 'PC'
     message.orderItemID = item.id;
     message.orderID = order.id
     message.method  = `priceChange;id=${item.id}`
     message.userID  = user.id;
-    message.userRequested = user.username;
+    message.userRequested = user?.firstName + user?.lastName;
     if (this.userAuthorization.isStaff) {
       message.employeeID = order.employeeID;
     }

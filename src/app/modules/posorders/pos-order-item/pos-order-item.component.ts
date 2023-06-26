@@ -257,14 +257,40 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   requestPriceChange(item) {
     if (this.order && this.userAuthService.user) {
-      this.action$ =  this.requestMessageMethodsService.requestPriceChange(item, this.order, this.userAuthService.user)
+      const item$ = this.requestMessageMethodsService.requestPriceChange(item, this.order, this.userAuthService.user)
+      this.action$ =  item$.pipe(switchMap(data => {
+        this.siteService.notify("Request Sent", 'close', 2000, 'green')
+        return of(data)
+      }))
     }
   }
 
   requestTotalPriceChange(item) {
-    if (this.order && this.userAuthService.user) {
-      this.action$ =  this.requestMessageMethodsService.requestPriceChange(item, this.order, this.userAuthService.user)
-    }
+    if (!this.order || !this.userAuthService.user) { return }
+      const item$ =   this.requestMessageMethodsService.requestPriceChange(item, this.order, this.userAuthService.user)
+      this.action$ = item$.pipe(switchMap(data => {
+        this.siteService.notify("Request Sent", 'close', 2000, 'green')
+        return of(data)
+      }))
+
+  }
+
+  requestRefundItem(item) {
+    if (!this.order || !this.userAuthService.user) { return }
+    const item$ =   this.requestMessageMethodsService.requestRefund(item, this.order, this.userAuthService.user)
+    this.action$ = item$.pipe(switchMap(data => {
+      this.siteService.notify("Request Sent", 'close', 2000, 'green')
+      return of(data)
+    }))
+  }
+
+  requestVoidItem(item) {
+    if (!this.order || !this.userAuthService.user) { return }
+    const item$ =   this.requestMessageMethodsService.requestVoidItem(item, this.order, this.userAuthService.user)
+    this.action$ = item$.pipe(switchMap(data => {
+      this.siteService.notify("Request Sent", 'close', 2000, 'green')
+      return of(data)
+    }))
   }
 
   initEdit() {
@@ -363,10 +389,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     }
   }
 
-  requestRefundItem(item) {
-    this.action$ =  this.requestMessageMethodsService.requestRefund(item, this.order, this.userAuthService.user)
-    // this.requestMessageMethodsService.requestPriceChange(item, this.order,this.userAuthService.user)
-  }
+
 
   openModifierNote() {
     this.editProperties('modifierNote', 'Special Instructions')

@@ -10,7 +10,7 @@
       </mat-icon>
     </div>
     <div>
-      <button 
+      <button
           mat-button
           color="primary"
           (click)="refreshMessages()" >
@@ -23,7 +23,7 @@
 <div *ngIf="(messages$ | async) as messages; else loading">
   <div class="ps-flex-group">
     <div>
-      <button 
+      <button
           mat-raised-button
           color="primary"
           (click)="hideshowMessages = !hideshowMessages" >
@@ -43,9 +43,9 @@
         </mat-icon>
       </button>
     </div>
-    
+
     <div>
-      <button 
+      <button
           mat-button
           color="primary"
           (click)="refreshMessages()" >
@@ -55,15 +55,12 @@
   </div>
 
   <div *ngIf="hideshowMessages">
-    
+
     <mat-card *ngIf="!messages || messages.length == 0">
       <mat-label color='accent'>You have no messages</mat-label>
     </mat-card>
 
     <mat-card *ngIf="messages && messages.length>0">
-      <mat-card-subtitle>
- 
-      </mat-card-subtitle>
 
       <mat-card-content>
         <div *ngFor = "let item of messages"
@@ -78,7 +75,7 @@
 
                 <!-- [message]="item" -->
           </app-request-message>
-        </div>    
+        </div>
 
         <div *ngIf="(message$ | async) as message">
           {{message?.message}}
@@ -86,8 +83,8 @@
         </div>
       </mat-card-content>
     </mat-card>
-  
-  </div>  
+
+  </div>
 </div>
 
 <div *ngIf="(order$ | async) as order"></div>

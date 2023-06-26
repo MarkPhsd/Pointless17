@@ -291,28 +291,35 @@ export class PosOperationsComponent implements OnInit {
               return of(null)
             }
           }
+          if (!data) {
+            this.closeResult = ' Check if can close not successfull.'
+            return of(null)
+          }
           return this.transferDataService.closeAll(site);
         }
-      )).pipe(switchMap(data => { 
-        if (!data) { 
+      )).pipe(switchMap(data => {
+        if (!data) {
+          this.closeResult = this.closeResult + ' Data service not completed. '
+          this.runningClose = false;
           return of(null)
         }
-        return email$
+        return of(true)
       })).pipe(
-        switchMap(
-           data => {
-            if (!data) { 
-              return of(null)
+        switchMap(data => {
+            if (!data) {
+              this.closeResult  =  this.closeResult + '.Email not sent.'
             }
-            this.closeResult = 'Day closed. Closing balance Sheets.'
+            this.closeResult =  this.closeResult  + 'Email sent.'
             return this.balanceSheetService.closeAllSheets(site)
         }
       )).pipe(
         switchMap(data => {
-          if (!data) { 
+          if (!data) {
+            this.closeResult  =  this.closeResult + '.All balance sheets not closed.'
+            this.runningClose = false;
             return of(null)
           }
-          this.closeResult = 'Day closed. All balance sheets closed.'
+          this.closeResult = this.closeResult  + 'Day closed. All balance sheets closed.'
           this.balanceSheetsClosed = ''
           this.runningClose = false;
           return of(data)

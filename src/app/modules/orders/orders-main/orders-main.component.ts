@@ -393,7 +393,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async newOrder(){
     const site = this.siteService.getAssignedSite();
-    this.orderMethodsService.newDefaultOrder(site);
+    this.action$ = this.orderMethodsService.newDefaultOrder(site);
   }
 
   newOrderOptions() {

@@ -27,7 +27,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
 
   @Input() value          = '';
   @Input() instruction    = 'Enter Value';
-  @Input() inputTypeValue = 'password';
+  @Input() inputTypeValue = '';
   @Input() inputForm      : UntypedFormGroup;
   @Input() showInput      = false;
   @Input() formatted      : any;
@@ -52,6 +52,9 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    if (this.inputTypeValue) {
+      this.inputType = this.inputTypeValue;
+    }
     if (!this.fieldName) {this.fieldName = 'itemName'}
     this.initForm();
   }

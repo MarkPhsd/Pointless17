@@ -28,6 +28,7 @@ export class NewOrderTypeComponent  {
   updateItems = false;
   serviceType  : IServiceType;
   serviceTypes$: Observable<IServiceType[]>;
+  action$: Observable<any>;
 
   constructor(private siteService       : SitesService,
               private serviceTypeService: ServiceTypeService,
@@ -89,7 +90,6 @@ export class NewOrderTypeComponent  {
       this.changeOrderType(event);
       return
     }
-
     this.newOrderWithPayload(event);
    }
 
@@ -123,8 +123,12 @@ export class NewOrderTypeComponent  {
 
   newOrderWithPayload(serviceType: IServiceType){
     const site = this.siteService.getAssignedSite();
-    const order$ = this.orderMethodsService.newOrderWithPayload(site, serviceType)
-    this.close()
+    this.action$ = this.orderMethodsService.newOrderWithPayload(site, serviceType).pipe(
+      switchMap(data => {
+        this.close()
+        return of(data)
+      }
+    ))
   }
 
   notifyEvent(message: string, title: string) {
