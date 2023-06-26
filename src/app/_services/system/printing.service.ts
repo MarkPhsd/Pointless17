@@ -986,7 +986,6 @@ export class PrintingService {
       if (this.platFormService.androidApp) {
         const device = this.uiSettingsService.posDeviceInfo;
         if (autoPrint) {
-          console.log('auto printing')
           return this.printAuto(device.receiptPrinter, autoPrint)
         }
         this.printSub(device.receiptPrinter, autoPrint)

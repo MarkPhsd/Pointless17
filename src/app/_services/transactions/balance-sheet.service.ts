@@ -153,7 +153,7 @@ export interface CashDrop {
   id          : number;
   amount      : number;
   reportRunID : number;
-  dropTime: number;
+  dropTime: string;
   clientID: number;
 }
 

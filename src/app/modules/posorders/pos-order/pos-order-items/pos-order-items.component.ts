@@ -259,13 +259,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   }
 
-  // updateSubscription(orderID: number) {
-  //   const site = this.siteService.getAssignedSite();
-  //   this.orderService.getOrder(site, orderID.toString(), false).subscribe(order => {
-  //     this.orderService.updateOrderSubscription(order)
-  //   })
-  // }
-
   startAnimation(state) {
     if (!this.animationState) {
       this.animationState = state

@@ -211,10 +211,11 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                 private printingService    : PrintingService,
                 public  userAuthService    : UserAuthorizationService,
                 private fb                 : UntypedFormBuilder,
-                private authenticationService: AuthenticationService,
+                public authenticationService: AuthenticationService,
                 private requestMessageMethodsService: RequestMessageMethodsService,
               )
   {
+
   }
 
   async ngOnInit() {
@@ -468,7 +469,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
         if (editField == 'price' || editField == 'subTotal') {
           if (!this.authenticationService.userAuths.changeItemPrice) {
-            const request =  {request: 'checkAuth' , action:'price'}
+            const request =  {request: 'checkAuth' , action: editField}
             this.authorizeEdit(item, request);
             return;
           }
@@ -487,6 +488,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   authorizeEdit(item, request) {
     let dialogRef = this.checkAuthDialog(item, request)
     dialogRef.afterClosed().subscribe(result => {
+      console.log('recieving determined result is: ', result)
       if (result) {
         this.editDialog(item,'600px','600px')
       } else {

@@ -2,14 +2,12 @@ import { Component, EventEmitter, Inject, OnInit, Optional, Output } from '@angu
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-import { of ,Subscription,switchMap,BehaviorSubject, Observable, catchError } from 'rxjs';
+import { of ,switchMap,BehaviorSubject, Observable, catchError } from 'rxjs';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { AuthenticationService, } from 'src/app/_services';
 import { Router } from '@angular/router';
 import { ClientTypeService, IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
-import { IClientTable } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 
@@ -52,7 +50,8 @@ export class FastUserSwitchComponent implements OnInit {
         this.request = data.request
         this.requestData = data
       }
-      console.log(this.requestData, data)
+      // console.log(this.requestData, data)
+
 
       const item = localStorage.getItem('loginAction')
       this.loginAction = JSON.parse(item)
@@ -64,16 +63,15 @@ export class FastUserSwitchComponent implements OnInit {
   }
 
   enterPIN(event) {
+    const userName = localStorage.getItem('pinToken')
+    const login = {username: userName, password: event }
 
     if (this.request && this.request === 'checkAuth') {
       this.performTempUserAction(event)
       return;
     }
 
-    const userName = localStorage.getItem('pinToken')
-    const login = {username: userName, password: event }
-
-    if (this.request) {
+    if (userName && login) {
       this.submitLogin(userName, event)
       this.onCancel();
       return;
@@ -83,17 +81,18 @@ export class FastUserSwitchComponent implements OnInit {
       this.outPutLogin.emit(login);
       return;
     }
-
   }
 
   performTempUserAction(event)  {
-    console.log('this.requestData.action', this.requestData.action)
+    // console.log('this.requestData.action', this.requestData.action)
     if (this.requestData.action) {
       this.action$ = this.getAuthUserByPIN(event).pipe(switchMap(data => {
         if (data) {
             let result = false;
+            // console.log(this.requestData.action, data.changeItemPrice)
 
-            if (this.requestData.action === 'price' || this.requestData.action === 'subtotal') {
+            if (this.requestData.action === 'price' || this.requestData.action === 'subTotal') {
+              // console.log('things should be true now')
               if (data.changeItemPrice) {  result = true }
             }
 
@@ -112,16 +111,20 @@ export class FastUserSwitchComponent implements OnInit {
             if (this.requestData.action === 'voidOrder') {
               if (data.voidOrder) { result = true  }
             }
-
             console.log('result', result)
             if (result) {
+              // console.log('closeing and setting to true')
               this.dialogRefOption.close(true);
             } else {
-              this.siteService.notify(`Not authorized`, 'Close', 2000,'red' )
+              // this.siteService.notify(`Not authorized`, 'Close', 2000,'red' )
               this.dialogRefOption.close(false);
             }
 
             return of(data)
+          }
+          if (!data) {
+            this.siteService.notify(`Not authorized`, 'Close', 2000,'red' )
+            return of(null)
           }
         }
       ), catchError(data => {
@@ -138,21 +141,37 @@ export class FastUserSwitchComponent implements OnInit {
   //actually log out and log in.
   getAuthUserByPIN(pin: string): Observable<IUserAuth_Properties> {
     const site = this.siteService.getAssignedSite()
-    const userLogin =   { userName: pin, password: pin };
+
+    const userName = localStorage.getItem('pinToken')
+    // const login = {username: userName, password: event }
+
+    const userLogin =   { userName: userName, password: pin };
     const currentUser = this.userSwitchingService.user;
     let client = {} as any;
 
     return this.userSwitchingService.authenticate(userLogin).pipe(
       switchMap(data => {
+        // console.log('authentication result', data)
+        if (data && data.errorMessage) {
+          this.siteService.notify('Error: ' + data.errorMessage, 'close', 2000, 'red' )
+          return of(null)
+        }
         this.authenticationService.overRideUser(data)
-        // console.log('user', data)
+
         return this.clientTableService.getClient(site, data.id)
       })).pipe(switchMap(data => {
+        // console.log('client data', data)
         client = data
-        // console.log('client', data)
+        if (!data) {
+          this.siteService.notify('Client not found', 'close', 2000, 'red')
+          return of(null)
+        }
         return this.clientTypeService.getClientType(site, client.clientTypeID)
       })).pipe(switchMap(data => {
-        // console.log('Auths', data, data.jsonObject)
+        if (!data) {
+          this.siteService.notify('User auths not determined', 'close', 2000, 'red')
+          return of(null)
+        }
         const item = {} as IUserAuth_Properties
         if (!data || !data.jsonObject) { return of(item) }
         const auths = JSON.parse(data.jsonObject) as IUserAuth_Properties;
@@ -168,7 +187,7 @@ export class FastUserSwitchComponent implements OnInit {
     if (this.inputForm) {
       this.inputForm.patchValue({itemName: ''})
     }
-    console.log('closing on cancel')
+    // console.log('closing on cancel')
     try {
       this.dialog.closeAll();
       // this.dialogRef.close();
@@ -226,7 +245,7 @@ export class FastUserSwitchComponent implements OnInit {
                 this.userSwitchingService.processLogin(user, '')
               }
 
-              console.log('cancel 4')
+              // console.log('cancel 4')
               this.onCancel()
 
               return of('success')

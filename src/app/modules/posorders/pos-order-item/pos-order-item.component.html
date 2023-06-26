@@ -187,7 +187,7 @@
                   </button>
                 </div>
 
-                <div *ngIf="orderItem && orderItem.serialCode && !userAuthService?.isUser">
+                <div *ngIf="orderItem && orderItem.serialCode && userAuthService?.isStaff">
                   <button mat-button  color="accent"  (click)="editSerial()">
                     <mat-icon  class="mat-icon-label">edit</mat-icon>
                     Serial Edit
@@ -222,14 +222,7 @@
                   </button>
                 </div>
 
-                <div *ngIf="userAuthService && !userAuthService?.isManagement && userAuthService.isStaff">
-                  <button mat-raised-button  color="accent"  (click)="requestPriceChange(orderItem)">
-                    Request<br>
-                    Change Price
-                  </button>
-                </div>
-
-                <div *ngIf="userAuthService && userAuthService?.isManagement">
+                <div *ngIf="userAuthService && authenticationService?.isStaff">
                   <button mat-button  color="accent"  (click)="editSubTotal()">
                     <mat-icon  class="mat-icon-label">edit</mat-icon>
                     Total Price
@@ -256,23 +249,33 @@
                   </button>
                 </div>
 
-                <div *ngIf="!showEdit && (uiConfig?.displayAdd) && (userAuths && userAuths?.refundItem)">
-                  <button mat-raised-button    class="button"  color="warn" (click)="requestRefundItem(orderItem)">
-                    <mat-icon  class="warn" >delete</mat-icon>  <span *ngIf="!smallDevice"> Refund Request </span>
-                  </button>
-                </div>
-
                 <div *ngIf="(quantity && !orderItem?.voidReason)">
                   <button mat-raised-button  class="button" color="warn" (click)="swipeOutItem()" >
                     <mat-icon  class="mat-icon-label">delete</mat-icon> <span *ngIf="!smallDevice">Remove </span>
                   </button>
                 </div>
 
+                <mat-divider></mat-divider>
+
                 <div *ngIf="userAuthService && !userAuthService?.isManagement && userAuthService.isStaff">
                   <button mat-raised-button  color="accent"  (click)="requestVoidItem(orderItem)">
                     Void Request
                   </button>
                 </div>
+
+                <div *ngIf="!showEdit && (uiConfig?.displayAdd) && (userAuths && userAuths?.refundItem)">
+                  <button mat-raised-button    class="button"  color="warn" (click)="requestRefundItem(orderItem)">
+                    <mat-icon  class="warn" >delete</mat-icon>  <span *ngIf="!smallDevice"> Refund Request </span>
+                  </button>
+                </div>
+
+                <div *ngIf="userAuthService && !userAuthService?.isManagement && userAuthService.isStaff">
+                  <button mat-raised-button  color="accent"  (click)="requestPriceChange(orderItem)">
+                    Request<br>
+                    Change Price
+                  </button>
+                </div>
+
 
               <div>
 
