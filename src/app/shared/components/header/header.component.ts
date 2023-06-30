@@ -192,6 +192,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.initToobarServiceUI() ;
     this.initMainToolbarUI();
     this.initSiteSubscriber();
+    this.getUITransactionsSettings();
   }
 
   constructor(private authenticationService : AuthenticationService,
@@ -215,6 +216,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               public uiSettings            : UISettingsService,
               private fb                    : UntypedFormBuilder ) {
   }
+
+
 
   ngOnChanges() {
     this.getUserInfo();

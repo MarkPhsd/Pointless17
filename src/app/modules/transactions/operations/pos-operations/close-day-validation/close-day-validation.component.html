@@ -1,3 +1,5 @@
+
+
 <mat-card>
 
   <mat-card-subtitle>
@@ -20,6 +22,16 @@
       </div>
     </div>
 
+
+
+    <div *ngIf="(action$ | async) as action;else loading"></div>
+    <ng-template #loading>
+      <div *ngIf="actionOn">
+        ...deleting
+        <mat-spinner [diameter]="50"></mat-spinner>
+      </div>
+    </ng-template>
+
     <div *ngIf="closeDayValidation.openPaidOrders && closeDayValidation.openPaidOrders.length">
       <mat-label >{{closeDayValidation.openPaidOrders.length}} Partial Paid Orders </mat-label>
       <div class="grid-buttons" >
@@ -28,6 +40,10 @@
           {{item.id}}</button>
         </div>
       </div>
+    </div>
+
+    <div *ngIf="closeDayValidation.openPrintedOrders && closeDayValidation.openPrintedOrders.length">
+      <button  mat-raised-button color="warn" (click)="deleteUnPrinted()">Delete UnPrinted Orders<mat-icon>delete</mat-icon></button>
     </div>
 
     <div *ngIf="closeDayValidation.openPrintedOrders && closeDayValidation.openPrintedOrders.length">

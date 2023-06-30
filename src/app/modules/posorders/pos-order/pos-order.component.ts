@@ -441,7 +441,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private _bottomSheet     : MatBottomSheet,
               private inventoryAssignmentService: InventoryAssignmentService,
               private posOrderItemService: POSOrderItemService,
-           
+
               private manifestService: ManifestInventoryService,
               private productEditButtonService: ProductEditButtonService,
               private prepPrintingService: PrepPrintingServiceService,
@@ -663,7 +663,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   sendToPrep() {
     if (this.order) {
-      this.printAction$ = this.paymentsMethodsService.sendToPrep(this.order, true)
+      this.printAction$ = this.paymentsMethodsService.sendToPrep(this.order, true, this.uiTransactionSetting)
     }
   }
 

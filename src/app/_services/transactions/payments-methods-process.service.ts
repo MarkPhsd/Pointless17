@@ -31,16 +31,18 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   _initTransactionComplete = new BehaviorSubject<any>(null);
 
-  initSubscriptions() {
-    this.dialogSubject = this.dialogRef.afterClosed().pipe(
-      switchMap( result => {
-        if (result) {
-          return this.processSendOrder(this.orderMethodsService.currentOrder)
-        }
-    })).subscribe(data => {
-      return of(data)
-    })
-  }
+  // initSubscriptions() {
+
+  //   this.dialogSubject = this.dialogRef.afterClosed().pipe(
+  //     switchMap( result => {
+  //       if (result) {
+  //         return this.processSendOrder(this.orderMethodsService.currentOrder)
+  //       }
+  //   })).subscribe(data => {
+  //     return of(data)
+  //   })
+
+  // }
 
   ngOnDestroy(): void {
       if (this.dialogSubject){ this.dialogSubject.unsubscribe()}
@@ -145,7 +147,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       sendOrder$  = of(null);
 
       if (data.prepOrderOnClose) {
-        this.sendToPrep(order, true)
+        this.sendToPrep(order, true, data)
       }
       if (data.printLabelsOnclose) {
         return this.printingService.printLabels(order, true)
@@ -197,17 +199,25 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 }
 
-  sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean): Observable<any> {
+  sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean, uiTransactions: TransactionUISettings): Observable<any> {
+    console.log(uiTransactions)
     if (order) {
       const site = this.sitesService.getAssignedSite()
-      const item$ = this.prepPrintingService.printLocations(order,printUnPrintedOnly).pipe(
+      const expoPrinter = uiTransactions?.expoPrinter
+      const templateID = uiTransactions?.expoTemplateID;
+      console.log('sendToPrep', expoPrinter, templateID);
+      const prep$ = this.prepPrintingService.printLocations(order,printUnPrintedOnly,
+                                                            expoPrinter,
+                                                            templateID);
+      let item$ =  prep$.pipe(
         switchMap( data => {
           return  this.prepPrintUnPrintedItems(order.id)
-        })
-        ,catchError( data => {
+      })
+      ,catchError( data => {
           this.sitesService.notify('Error printing templates' + data.toString(), 'close', 5000, 'red')
           return of(data)
       }))
+
       return item$;
     }
     return of(null)
@@ -265,7 +275,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
                        order: IPOSOrder, amount: number,
                        paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
 
-    if (this.platFormService.isAppElectron) { 
+    if (this.platFormService.isAppElectron) {
       if (this.DSIEmvSettings.enabled) {
         this.processSubDSIEMVCreditPayment(order, amount, true)
         return
@@ -642,9 +652,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return of(null)
   }
 
-  processSendOrder(order: IPOSOrder) {
-    return this.sendToPrep(order, true)
-  }
+  // processSendOrder(order: IPOSOrder) {
+  //   return this.sendToPrep(order, true)
+  // }
 
   applyCardPointResponseToPayment(response: any, payment: IPOSPayment) {
 

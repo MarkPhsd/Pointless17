@@ -17,9 +17,16 @@
       <button mat-button (click)="newOrder()" *ngIf="isAuthorized || isStaff">
         <mat-icon>receipt</mat-icon><span>New Order</span>
       </button>
+
       <button mat-button (click)="newOrderOptions()" *ngIf="isAuthorized || isStaff">
         <mat-icon>add</mat-icon><span>Other New</span>
       </button>
+
+      <button mat-button (click)="setHouseAccountsOn()"
+            *ngIf="auths &&  auths.allowSuspendTransaction">
+        <mat-icon>accounts</mat-icon><span>House Account</span>
+      </button>
+
     </span>
 
     <ng-container [ngTemplateOutlet]="styleView"></ng-container>
@@ -49,6 +56,12 @@
     </div>
   </div>
 </div>
+
+<ng-template #houseAccountsList>
+  <house-accounts-list
+    (selectClient)="selectHouseAccountClient($event)"
+  ></house-accounts-list>
+</ng-template>
 
 <ng-template #orderPrep>
   <span *ngIf="viewType == 3 && (printerLocations$ | async) as printLocations">
@@ -137,9 +150,16 @@
 </ng-template>
 
 <ng-template #orderList>
-  <app-orders-list
-    [height]="listHeight">
-  </app-orders-list>
+  <div class="grid-view-container">
+    <div>
+      <ng-container [ngTemplateOutlet]="viewHouseAccountList"></ng-container>
+    </div>
+    <div>
+      <app-orders-list
+        [height]="listHeight">
+      </app-orders-list>
+    </div>
+  </div>
 </ng-template>
 
 <ng-template #orderPanel>

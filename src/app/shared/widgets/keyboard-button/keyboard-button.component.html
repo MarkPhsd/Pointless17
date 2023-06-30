@@ -1,12 +1,12 @@
 <ng-content></ng-content>
-
 <div *ngIf="!smallDevice && isApp && isUserStaff">
   <ng-container [ngTemplateOutlet]="keyboardView"></ng-container>
 </div>
 
 <ng-template #keyboardView>
-  <button aria-label="back" mat-button
-    (click)="toggleKeyboard()">
+  <button aria-label="back"
+          mat-button
+          (click)="toggleKeyboard()">
     <mat-icon aria-hidden="true">keyboard</mat-icon>
   </button>
 </ng-template>

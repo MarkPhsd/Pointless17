@@ -209,7 +209,7 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
         // console.log(outlet.getLastUrl)
         if (outlet && outlet.canGoBack()) {
           outlet.pop();
-        } else if (this.router.url === '/home') {
+        } else if (this.router.url === '/app-main-menu') {
           if (new Date().getTime() - this.lastTimeBackPress < this.timePeriodToExit) {
             // this.platform.exitApp(); // Exit from app
             navigator['app'].exitApp(); // work in ionic 4

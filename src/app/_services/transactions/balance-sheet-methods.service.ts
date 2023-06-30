@@ -196,15 +196,14 @@ export class BalanceSheetMethodsService {
     }
   }
 
-  closeSheet(sheet: IBalanceSheet): Observable<any> {
+  closeSheet(sheet: IBalanceSheet, navigateUrl: string): Observable<any> {
     if (sheet) {
       const site = this.sitesService.getAssignedSite();
       return  this.sheetService.closeShift(site, sheet).pipe(
         switchMap( data => {
           this.updateBalanceSheet(data)
-          this.router.navigateByUrl('/login')
+          this.router.navigateByUrl(navigateUrl)
           return of(data)
-          // this.notify('Sheet is closed.', 'Succes')
       }))
     }
   }
@@ -371,5 +370,5 @@ export class BalanceSheetMethodsService {
   async openDrawerNoSale(sheet:IBalanceSheet) {
     await this.openDrawerOne()
   }
- 
+
 }

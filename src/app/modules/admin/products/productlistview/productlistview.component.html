@@ -153,6 +153,8 @@
           [rowSelection]       ="rowSelection"
           [frameworkComponents]="frameworkComponents"
           (selectionChanged)   ="onSelectionChanged($event)"
+          (cellValueChanged)   ='cellValueChanged($event)'
+          (cellClicked)        ='onCellClicked($event)'
           (gridReady)          ="onGridReady($event)">
     </ag-grid-angular>
   </div>

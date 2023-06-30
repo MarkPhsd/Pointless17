@@ -45,7 +45,7 @@
 
 
         <div>
-          <button aria-label="Linked Info" mat-button (click)="toggleLinkedPrices = !toggleLinkedPrices"><mat-icon>keyboard_option_key</mat-icon>Linked Prices</button>
+          <button aria-label="Linked Info" mat-button (click)="toggleLinkedPrices = !toggleLinkedPrices"><mat-icon>keyboard_option_key</mat-icon>Linked Sizes/Prices</button>
         </div>
 
         <div>
@@ -196,7 +196,7 @@
 
                     <div *ngIf="sizeList">
                         <mat-form-field class="category-list" appearance="outline">
-                          <mat-label>Linked Price</mat-label>
+                          <mat-label>Linked Size/Price</mat-label>
                           <mat-select
                                       type="number"
                                       formControlName = "pizzaSize"

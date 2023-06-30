@@ -110,8 +110,7 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
     this.paymentMethod$ = this.paymentMethodService.getPaymentMethod(site, methodID)
   }
 
-
-   getItem(id: number) {
+  getItem(id: number) {
     const site      = this.siteService.getAssignedSite()
     this.payment$  = this.paymentService.getPOSPayment(site, id, false);
 
@@ -123,7 +122,6 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
       })).subscribe(data => {
         this.paymentMethod = data;
     })
-
 
   }
 

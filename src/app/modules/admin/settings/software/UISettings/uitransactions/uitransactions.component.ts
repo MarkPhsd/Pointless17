@@ -4,7 +4,8 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { Observable, switchMap, of } from 'rxjs';
 import { clientType, IProductCategory, IServiceType, ISetting } from 'src/app/_interfaces';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
-import { AuthenticationService, MenuService } from 'src/app/_services';
+import { AuthenticationService, IItemBasic, MenuService } from 'src/app/_services';
+import { PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -34,13 +35,16 @@ export class UITransactionsComponent implements OnInit {
   serviceType$    : Observable<IServiceType[]>;
   categories$:  Observable<IProductCategory[]>;
 
-  
+  receiptList$    :  Observable<IItemBasic[]>;
+  receiptList     : IItemBasic[];
+
   constructor(
       private uISettingsService: UISettingsService,
       private settingService   : SettingsService,
       private serviceTypeService: ServiceTypeService,
       private clientTypeService: ClientTypeService,
       private sitesService     : SitesService,
+      private printerLocationsService: PrinterLocationsService,
       private clienTableSerivce: ClientTableService,
       private menuService: MenuService,
       private fb: UntypedFormBuilder,
@@ -56,14 +60,14 @@ export class UITransactionsComponent implements OnInit {
     this.categories$     = this.menuService.getCategoryListNoChildren(site);
     this.initUITransactionSettings()
     this.saving$  = null;
-
     this.testForm = this.fb.group({
       testVariable: [localStorage.getItem('testVariable')],
     })
-
     this.testForm.valueChanges.subscribe(data => {
        localStorage.setItem('testVariable' ,  this.testForm.controls['testVariable'].value)
     })
+
+    this.receiptList$ = this.getReceiptList()
   }
 
   initUITransactionSettings() {
@@ -74,6 +78,15 @@ export class UITransactionsComponent implements OnInit {
         return of(data);
     }));
   }
+
+  getReceiptList() {
+    const site         = this.sitesService.getAssignedSite()
+    return this.settingService.getReceipts(site).pipe(switchMap(data => {
+      this.receiptList = data;
+      return of(data)
+    }))
+  }
+
 
   initFormData(data: TransactionUISettings) {
     this.inputForm = this.uISettingsService.initForm(this.inputForm);
@@ -110,9 +123,9 @@ export class UITransactionsComponent implements OnInit {
 
 
   resetTransactionSettings() {
-    if (!this.authenticationService.isAdmin) { 
+    if (!this.authenticationService.isAdmin) {
       this.sitesService.notify('Not authorized', 'Close', 2000)
-    } 
+    }
     const confirm = window.confirm('Resetting will remove all settings, email etc. You may want to backup your database before doing this. If your cache is enabled you may have to wait for a refresh. Please confirm')
     if (!confirm) {return}
     this.action$ = this.settingService.resetUITransactionSettings().pipe(switchMap(data => {

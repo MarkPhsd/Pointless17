@@ -14,6 +14,7 @@ import { InstructionDirective } from 'src/app/_directives/instruction.directive'
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 
 @Component({
   selector: 'app-orders-main',
@@ -26,7 +27,10 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('orderList')    orderList: TemplateRef<any>;
   @ViewChild('orderPanel')   orderPanel: TemplateRef<any>;
   @ViewChild('orderPrep')    orderPrep: TemplateRef<any>;
+  @ViewChild('houseAccountsList')    houseAccountsList: TemplateRef<any>;
   @ViewChildren(InstructionDirective) instructionDirectives: QueryList<InstructionDirective>;
+
+  viewHouseAccountListOn: boolean;
 
   @ViewChild('ordersSelectedView')    ordersSelectedView: TemplateRef<any>;
   mergeOrders: boolean;
@@ -56,7 +60,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
   searchModel: IPOSOrderSearchModel;
   _searchModel: Subscription;
-
+  auths: IUserAuth_Properties
   _UITransaction: Subscription;
   uiTransactions  = {} as TransactionUISettings;
   uiTransactions$  : Observable<ISetting>;
@@ -96,6 +100,39 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
         this.uiTransactions = data;
       }
     })
+  }
+
+  setHouseAccountsOn() {
+
+    this.viewHouseAccountListOn = true;
+    this.setViewType(0)
+    return;
+    this.viewHouseAccountListOn = !this.viewHouseAccountListOn;
+    // if (!this.viewHouseAccountListOn) {
+    //   this.viewHouseAccountListOn = true
+    // }
+
+    if (this.viewHouseAccountListOn) {
+      this.setViewType(1)
+    } else {
+      this.setViewType(0)
+    }
+
+  }
+  get viewHouseAccountList() {
+    if (this.viewHouseAccountListOn) {
+      return this.houseAccountsList
+    }
+    return null;
+  }
+
+  selectHouseAccountClient(id: number) {
+    this.searchModel = {} as IPOSOrderSearchModel
+    this.searchModel.suspendedOrder = 1;
+    this.searchModel.clientID = id;
+    this.searchModel.closedOpenAllOrders = 0;
+    console.log('update search', this.searchModel)
+    this.orderMethodsService.updateOrderSearchModelDirect(this.searchModel)
   }
 
   initSearchModelSubscriber() {
@@ -147,7 +184,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     private _bottomSheet     : MatBottomSheet,
     private siteService      : SitesService,
     public  userAuthorization : UserAuthorizationService,
-    private authenticationService: AuthenticationService,
+    public authenticationService: AuthenticationService,
     private printerService   : PrinterLocationsService,
     private printingService  : PrintingService,
     private changeDetectorRef: ChangeDetectorRef,
@@ -167,6 +204,8 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this.displayPanel(null)
     this.initSubscriptions();
     this.printerLocations$ = this.printerService.getLocations()
+    this.auths = this.authenticationService.userAuths;
+
   }
 
   initCustomerView() {

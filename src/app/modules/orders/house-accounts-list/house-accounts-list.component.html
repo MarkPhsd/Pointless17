@@ -1,0 +1,28 @@
+<ng-container [ngTemplateOutlet]="suspendedAccounts"></ng-container>
+
+
+<ng-template #suspendedAccounts>
+  <button mat-raised-button (click)="refresh()"><mat-icon>refresh</mat-icon></button>
+  <div class="container" *ngIf="(action$ | async) as list; else loadingHouse">
+    <div class="account-grid-items" >
+      <div>Edit</div>
+      <div>Name</div>
+      <div>Amount</div>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div *ngFor="let item of list">
+      <div class="account-grid-items" >
+        <div><button mat-raised-button (click)="setClient(item)"><mat-icon>edit</mat-icon></button></div>
+        <div>{{item?.company  }} - {{item?.lastName}}</div>
+        <div>{{item?.total | currency}}</div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #loadingHouse>
+  <div *ngIf="loadingHouseAccounts">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+</ng-template>

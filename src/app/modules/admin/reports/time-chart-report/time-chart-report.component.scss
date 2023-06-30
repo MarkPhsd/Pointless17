@@ -1,0 +1,39 @@
+@import "/src/mixins.scss";
+
+
+button {
+  margin-top: 5px;
+}
+
+.summary {
+  margin: 5px;
+  margin-left: 10px;
+  width: 350px;
+}
+
+button {
+  margin: 5px;
+}
+
+.emailing {
+  width: 100px;
+}
+
+.grid-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: left;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.grid-flow {
+  --gap: 20px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(370px, 1fr) );
+  margin-top: 5px;
+}
+
+
+

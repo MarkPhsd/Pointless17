@@ -47,7 +47,6 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
       this.isOrderClaimed = this.orderMethodsService.IsOrderClaimed
     })
 
-
   }
 
   ngOnInit() {
@@ -72,11 +71,10 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
       return false
     }
     return true
-
-
   }
+
   reSendOrder() {
-    this.action$ = this.paymentsMethodsProcessService.sendToPrep(this.order, true).pipe(
+    this.action$ = this.paymentsMethodsProcessService.sendToPrep(this.order, true, this.uiTransactionSettings).pipe(
       switchMap(data => {
         return of(data)
       })
@@ -84,7 +82,8 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
   }
 
   sendOrder() {
-    this.action$ = this.paymentsMethodsProcessService.sendToPrep(this.order, true).pipe(
+    // const expo$ = this.paymentsMethodsProcessService.sendToPrep
+    this.action$ = this.paymentsMethodsProcessService.sendToPrep(this.order, true, this.uiTransactionSettings).pipe(
       switchMap(data => {
         this.clearOrder()
         return of(data)
@@ -96,12 +95,12 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
     this.orderMethodsService.clearOrder()
   }
 
-  refreshOrder() { 
+  refreshOrder() {
     const site = this.siteService.getAssignedSite()
-    this.action$ = this.ordersService.getOrder(site, this.order.id.toString(), this.order.history).pipe(switchMap(data => { 
+    this.action$ = this.ordersService.getOrder(site, this.order.id.toString(), this.order.history).pipe(switchMap(data => {
       this.orderMethodsService.updateOrder(data)
       return of(data)
-    }))  
+    }))
   }
   assignPriceColumn(value: number){
     const site = this.siteService.getAssignedSite()

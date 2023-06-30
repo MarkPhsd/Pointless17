@@ -10,7 +10,7 @@ mat-card {
   overflow  : hidden;
 
   @include for-phone-only  {
-    border-radius: 100px;
+    // border-radius: 100px;
     // padding: 1px;
     max-height: 150px;
     min-height: 150px;
@@ -84,7 +84,7 @@ mat-card-subtitle {
   color: --ion-color-tertiary;
 }
 
-.total { 
+.total {
   font-size: 1.2em;
   font-weight: 600;
 }

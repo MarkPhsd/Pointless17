@@ -85,6 +85,14 @@
       <mat-divider></mat-divider>
       <h4>Order Options</h4>
 
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="displayItemPOSTTotal" >
+          <mat-label>Display Tax + Total Per Item In Order</mat-label>
+        </mat-slide-toggle>
+      </div>
+
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="displayEditCardOnHeader" >
@@ -196,11 +204,17 @@
           <mat-label>Send Items for Prep at Order Close.</mat-label>
         </mat-slide-toggle>
       </div>
-      
 
-  
       <mat-divider></mat-divider>
       <h4>Barcode Options</h4>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="disableBarcodScanning"
+                  >
+          <mat-label>Disable Barcode Scanning</mat-label>
+        </mat-slide-toggle>
+      </div>
 
       <div class="toggle-fields">
         <mat-slide-toggle
@@ -244,6 +258,39 @@
 
       <mat-divider></mat-divider>
       <h4>Default Selections</h4>
+
+      <div style="width:300px;">
+        <mat-icon class="mat-label-info"
+             color="accent"
+             [matTooltip]="labelingService.transactionInfo[1].value">info</mat-icon>
+          <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'expoPrinter'" >
+            Expo Printer
+          </app-value-fields>
+      </div>
+
+      <ng-container [ngTemplateOutlet]="electronPrintingDesignTemplate"></ng-container>
+
+      <ng-template #electronPrintingDesignTemplate>
+        <div *ngIf="(receiptList$ | async) as list" [formGroup]="inputForm">
+            <mat-form-field appearance="outline">
+              <mat-label>Expo Template</mat-label>
+                <mat-select
+                          type               ="number"
+                          formControlName    ='expoTemplateID'>
+                    <div>
+                    <mat-option [value]="">
+                     Clear
+                  </mat-option>
+                    <mat-option *ngFor="let item of list" [value]="item.id">
+                      {{ item.name }}
+                  </mat-option>
+                </div>
+              </mat-select>
+            </mat-form-field>
+        </div>
+      </ng-template>
 
       <div *ngIf="(clientTypes$ | async) as clientTypes ">
         <mat-form-field style="width: 200px" class="fields"
@@ -361,7 +408,7 @@
             Grace Value
           </app-value-fields>
         </div>
-      
+
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="remove100thDecimalForPrice"
@@ -369,7 +416,7 @@
             <mat-label>Charge to the first decimal, no rounding.</mat-label>
           </mat-slide-toggle>
         </div>
-        
+
         <div>
           <mat-label  class="mat-label-design">Minimum Client Age.</mat-label>
           <app-value-fields
@@ -443,6 +490,8 @@
               High Tip %
           </app-value-fields>
         </div>
+
+
 
       </div>
       </div>

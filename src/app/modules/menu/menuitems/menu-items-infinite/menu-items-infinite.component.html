@@ -5,14 +5,13 @@
 <div *ngIf="(userAuths$ | async) as userAuths"></div>
 
 <div *ngIf="(bucket$ | async) as bucket">
-  <div class="parent-container" 
+  <div class="parent-container"
         *ngIf="(uiHomePage$ | async) as uiHomePage">
 
     <div  class="flex-row">
       <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isgridFlowOptionOn"></ng-container>
       <ng-container  *ngIf="enableFilter" [ngTemplateOutlet]="filter"></ng-container>
-      <!-- <button (click)="changeDetect()">DetectChanges</button>} -->
     </div>
 
     <div *ngIf="smallDevice">

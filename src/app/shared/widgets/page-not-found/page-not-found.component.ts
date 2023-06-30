@@ -57,7 +57,7 @@ export class PageNotFoundComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigateByUrl('app-main-menu')
+    this.router.navigate(['/app-main-menu'])
   }
 
 }

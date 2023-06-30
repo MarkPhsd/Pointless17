@@ -16,6 +16,7 @@ import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balan
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 
 @Component({
   selector: 'app-balance-sheet-edit',
@@ -89,7 +90,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   startShiftInt    : number;
   balance          = 0;
   newBalance       = 0;
-
+  auths$: Observable<IUserAuth_Properties>;
   endOptionsDisabled   = false;
   startOptionsDisabled = false;
   ordersCount      = 0;
@@ -141,6 +142,11 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 private siteService: SitesService,
               )
   {
+
+    this.auths$ = this.authenticationService.userAuths$
+    this.auths$.subscribe(data => {
+      data.closeDay
+    })
     this.cashDropActive  = +this.route.snapshot.paramMap.get('cashdrop');
     if (this.cashDropActive) {
       this.selectedIndex = 1;
@@ -306,7 +312,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.updateItem(null)
   }
 
-  closeSheet() {
+  closeSheet(navigateUrl: string) {
     // this.printingService.updatePrintView(2);
 
     const print$ = this._print(null)
@@ -317,14 +323,13 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
         return this.sendGridService.sendBalanceSheet(this.sheet.id)
     })).pipe(
       switchMap( data => {
-        // return of(null)
-        // if (!data) { return of(null) }
-        return  this.sheetMethodsService.closeSheet(this.sheet)
+        return  this.sheetMethodsService.closeSheet(this.sheet, navigateUrl)
     })).pipe(
       switchMap( data => {
         // return of(null)
         return of (data)
     }))
+
   }
 
   setEnabledFeatures() {
@@ -418,7 +423,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.dollarStart.disable()
     this.fivesStart.disable()
   }
-
 
   deleteItem(event){
     this.sheetMethodsService.deleteItem(this.isAuthorized, this.sheet)

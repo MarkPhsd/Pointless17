@@ -1,0 +1,11 @@
+.container {
+  width: 300px;
+  overflow-x: auto;
+  max-height: 800px;
+}
+.account-grid-items {
+  display: grid;
+  grid-template-columns:  75px 100px 100px;
+  gap: 5px;
+  margin: 5px;
+}

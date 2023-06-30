@@ -23,7 +23,7 @@
 
     <div>
 
-      <div *ngIf="(isApp) || (!isApp  && isUserStaff)">
+      <div *ngIf="(isApp) || (!isApp  && isUserStaff) && uiTransactionSettings">
         <div class="button-row" *ngIf="(!qrOrder && !hideButtonOptions)">
           <div *ngIf="!mainPanel">
             <button  class="button" color="primary" mat-raised-button
@@ -41,6 +41,7 @@
 
       <div class="button-row" *ngIf="isUserStaff && isSale">
         <div>
+
           <split-entry-selector [order]="order"
                                 [isUserStaff]="isUserStaff"
                                 [uiTransactionSettings]="uiTransactionSettings">

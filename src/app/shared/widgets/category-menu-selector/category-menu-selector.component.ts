@@ -28,7 +28,7 @@ export interface IItemBasic{
 export class CategoryMenuSelectorComponent implements OnInit {
   @Input() themeColor = 'primary'
   @ViewChild('categoryMenu') categoryMenu: TemplateRef<any>;
- 
+
   @Input() _reset: Subject<boolean>;
   @Input() departmentID: number;
   @Output() selected    : EventEmitter<any> = new EventEmitter();
@@ -45,11 +45,11 @@ export class CategoryMenuSelectorComponent implements OnInit {
   searchModel : ProductSearchModel;
   categoryList = [] as IProductCategory[];
   subCategoryList = [] as IMenuItem[];
- 
+
   expandedDepartments = [] as IProductCategory[];
   expandedCategories = [] as IProductCategory[];
 
-  @Input() categories = [] as IMenuItem[];  
+  @Input() categories = [] as IMenuItem[];
   categoryList$: Observable<IMenuItem[]>;
   initialized: boolean
 
@@ -67,7 +67,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
   initSearchSubscription() {
     this._searchModel = this.menuService.searchModel$.subscribe( model => {
       if (!model) { model = this.menuService.initSearchModel()}
-      if (this.departmentID) { 
+      if (this.departmentID) {
         model.departmentID = this.departmentID;
         this.filterCategories(model);
       }
@@ -120,16 +120,16 @@ export class CategoryMenuSelectorComponent implements OnInit {
 
   ngOnInit(): void {
     this.initView();
-    if (this._reset) { 
-      this._reset.subscribe(data => { 
-        if (this.type === 'department') { 
+    if (this._reset) {
+      this._reset.subscribe(data => {
+        if (this.type === 'department') {
           this.initForm(this.searchModel)
         }
       })
     }
   }
 
-  initView() { 
+  initView() {
     this.initForm(this.searchModel)
     this.initSubscription();
     this.initSearchSubscription();
@@ -177,17 +177,17 @@ export class CategoryMenuSelectorComponent implements OnInit {
       if (this.type === 'department') {
         this.list$ = department$
           .pipe(switchMap(list => {
-            console.log(list)
-            if (!this.userAuthService.isStaff) { 
-              list = list.filter(data => {  
-                if (data.active && data.webProduct) { 
+            // console.log(list)
+            if (!this.userAuthService.isStaff) {
+              list = list.filter(data => {
+                if (data.active && data.webProduct) {
                   return data
                 }}
               )
             }
             // console.log('this is the list ', list)
             list.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id, image: this.getItemSrc(item.urlImageMain)} ) })
-            if (model == undefined) {   model = this.menuService.initSearchModel()   }     
+            if (model == undefined) {   model = this.menuService.initSearchModel()   }
             this.setSavedList(model)
           return of(list)
         }))
@@ -230,7 +230,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
     this.selectedItem = null;
     const site          = this.siteService.getAssignedSite()
 
-    if (this.categories && this.categories.length > 0) { 
+    if (this.categories && this.categories.length > 0) {
       this.refreshFilteredCategories(this.categories)
       return ;
     }
@@ -244,11 +244,11 @@ export class CategoryMenuSelectorComponent implements OnInit {
     )
   }
 
-  refreshFilteredCategories(list: IMenuItem[]) { 
-    if (this.type == 'category') { 
+  refreshFilteredCategories(list: IMenuItem[]) {
+    if (this.type == 'category') {
       this.basicList = []
-      list.forEach(item => { 
-        if (item.departmentID == this.departmentID) { 
+      list.forEach(item => {
+        if (item.departmentID == this.departmentID) {
           this.basicList.push( {name: item?.name, id: item?.id, image: this.getItemSrc(item.urlImageMain)})
         }
       })
@@ -271,12 +271,9 @@ export class CategoryMenuSelectorComponent implements OnInit {
     }
   }
 
-  isSelectedDepartment(id: number, selectedItem: number) { 
-    // if (selectedItem) { 
-    //   console.log('selected item', selectedItem, id)
-    // }
-    if (selectedItem && id) { 
-      if (selectedItem == id) { 
+  isSelectedDepartment(id: number, selectedItem: number) {
+    if (selectedItem && id) {
+      if (selectedItem == id) {
         return this.categoryMenu
       }
     }
@@ -286,16 +283,16 @@ export class CategoryMenuSelectorComponent implements OnInit {
   setValue(item: number) {
 
     this.router.navigate(['menuitems-infinite'])
-    if ( this.searchModel == undefined) {    this.searchModel = this.menuService.initSearchModel()   }   
+    if ( this.searchModel == undefined) {    this.searchModel = this.menuService.initSearchModel()   }
 
-    if (this.selectedItem == item && this.type === 'department') { 
+    if (this.selectedItem == item && this.type === 'department') {
       this.selectedItem = null;
       this.searchModel.categoryID = 0;
       this.searchModel.departmentID = 0;
       return;
     }
 
-    if (this.type === 'department') { 
+    if (this.type === 'department') {
       this.searchModel.departmentID = item;
       this.selectedItem = item;
       this.searchModel.listDepartmentID = [];
@@ -314,7 +311,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
     if(this.type === 'subcategory') {
       this.searchModel.subCategoryID = item;
     }
-    
+
     if(this.type === 'brand') {
     }
     if(this.type === 'itemType') {
@@ -324,7 +321,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
 
     // console.log('update model', this.searchModel)
     this.menuService.updateSearchModel(this.searchModel)
- 
+
   }
 
   setSavedList(model: ProductSearchModel) {

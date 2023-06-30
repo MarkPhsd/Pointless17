@@ -85,6 +85,10 @@ export interface TransactionUISettings {
   defaultNewOrderCategoryID: number;
   weightGraceValue: number;
   remove100thDecimalForPrice: boolean;
+  disableBarcodScanning: boolean;
+  displayItemPOSTTotal: boolean;
+  expoPrinter: string;
+  expoTemplateID: number;
 }
 
 export interface StripeAPISettings {
@@ -214,7 +218,6 @@ export interface UIHomePageSettings {
   subCategoryFilter: boolean;
   disableSearchFeaturesInItemsList: boolean;
   accordionMenu: boolean;
-  
   accordionMenuSideBar: boolean;
   staffAccordionMenuSideBar: boolean;
 }
@@ -432,8 +435,8 @@ export class UISettingsService {
     })
   }
 
-  get UIHomePageSettings() { 
-    return this.settingsService.getUIHomePageSettings() 
+  get UIHomePageSettings() {
+    return this.settingsService.getUIHomePageSettings()
   }
   getEmailModel() {
     if (!this.userAuthorizationService.user) {  this._emailModel.next(null)  }
@@ -783,6 +786,10 @@ export class UISettingsService {
       defaultNewOrderCategoryID: [],
       weightGraceValue: [],
       remove100thDecimalForPrice: [],
+      disableBarcodScanning: [],
+      displayItemPOSTTotal:[],
+      expoPrinter: [],
+      expoTemplateID:[],
      })
 
 

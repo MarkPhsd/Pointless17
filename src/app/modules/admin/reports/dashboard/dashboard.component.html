@@ -203,7 +203,6 @@
 </ng-template>
 
 <ng-template #reportsView>
-
   <div class="grid-flow" *ngIf="sites && showValues && dateFrom && dateTo">
     <div  *ngFor="let site of sites">
       <div style="margin-left:15px;width:350px;">
@@ -231,7 +230,6 @@
           </div>
           <mat-icon>summarize</mat-icon> Sales - {{site.name}}
         </sales-tax-report>
-
 
         <payment-report
                 [site]    ="site"
@@ -345,8 +343,10 @@
       <div [hidden]="displayReports != 'items'">
         <h3>{{site?.name}}</h3>
         <ng-container *ngTemplateOutlet="categorySalesView,context: {$implicit: site}"></ng-container>
+
         <ng-template #categorySales let-site>
           <div>
+
             <item-sales-card
                   [site]="site"
                   [dateFrom]="dateFrom"
@@ -360,6 +360,7 @@
                 </div>
             </item-sales-card>
           </div>
+
         </ng-template>
 
         <ng-container *ngTemplateOutlet="taxedCategorySalesView,context: {$implicit: site}"></ng-container>
@@ -420,8 +421,38 @@
       </div>
     </div>
   </div>
+</ng-template>
 
+<ng-container *ngIf="displayReports === 'items'">
+  <ng-container [ngTemplateOutlet]="productSalesCharts"></ng-container>
+</ng-container>
 
+<ng-container *ngIf="displayReports === 'financials'">
+  <ng-container [ngTemplateOutlet]="financialSalesCharts"></ng-container>
+</ng-container>
+
+<ng-template #emailing>
+  <div class="emailing" *ngIf="emailSending">
+    <mat-spinner [diameter]="50"></mat-spinner>
+    ...emailing
+  </div>
+</ng-template>
+
+<ng-template #metrcNetSalesSummary let-site>
+    <app-metrc-summary
+        [site]    ="site"
+        [dateFrom]="dateFrom"
+        [dateTo]  ="dateTo"
+        [type]    ="'metrcSummary'"
+        [counter]  ="count+1"
+        [notifier]="childNotifier"  >
+    <div summary>
+      <mat-icon >receipt</mat-icon> {{site?.name}} METRC:
+    </div>
+  </app-metrc-summary>
+</ng-template>
+
+<ng-template #financialSalesCharts>
   <div *ngIf="dateFrom && dateTo">
     <div class="grid-charts">
       <div>
@@ -471,31 +502,81 @@
           [notifier]="childNotifier"
         ></app-widget-card>
       </div>
+
+
     </div>
   </div>
+  <div *ngFor="let site of sites">
+    <time-chart-report
+      [dateFrom] ="dateFrom"
+      [dateTo]   ="dateTo"
+      [site]    ="site"
+      [counter]  ="count+1"
+      [groupBy]    ="'avgHourly'"
+      [notifier]="childNotifier">
+      <div title>
+      </div>
+      <div site><h4>{{site.name}}</h4></div>
+    </time-chart-report>
+  </div>
 
-</ng-template>
-
-<ng-template #emailing>
-  <div class="emailing" *ngIf="emailSending">
-    <mat-spinner [diameter]="50"></mat-spinner>
-    ...emailing
+  <div *ngFor="let site of sites">
+    <time-chart-report
+      [dateFrom] ="dateFrom"
+      [dateTo]   ="dateTo"
+      [site]    ="site"
+      [counter]  ="count+1"
+      [groupBy]    ="'avg15Min'"
+      [notifier]="childNotifier">
+      <div title>
+      </div>
+      <div site><h4>{{site.name}}</h4></div>
+    </time-chart-report>
   </div>
 </ng-template>
 
-<ng-template #metrcNetSalesSummary let-site>
-    <app-metrc-summary
+<ng-template #productSalesCharts>
+  <div *ngFor="let site of sites" class="ps-flex-group" >
+    <div class="margin-5" style="width:620px">
+      <product-chart-report
+        [dateFrom] ="dateFrom"
+        [dateTo]   ="dateTo"
         [site]    ="site"
-        [dateFrom]="dateFrom"
-        [dateTo]  ="dateTo"
-        [type]    ="'metrcSummary'"
         [counter]  ="count+1"
-        [notifier]="childNotifier"  >
-    <div summary>
-      <mat-icon >receipt</mat-icon> {{site?.name}} METRC:
+        [groupBy]    ="'category'"
+        [notifier]="childNotifier">
+        <div site><h4>{{site.name}}</h4></div>
+      </product-chart-report>
     </div>
-  </app-metrc-summary>
+  </div>
+
+  <div *ngFor="let site of sites" class="ps-flex-group" >
+    <div class="margin-5" style="width:620px">
+      <product-chart-report
+        style="width:500px"
+        [dateFrom] ="dateFrom"
+        [dateTo]   ="dateTo"
+        [site]    ="site"
+        [counter]  ="count+1"
+        [groupBy]    ="'department'"
+        [notifier]="childNotifier">
+        <div site><h4>{{site.name}}</h4></div>
+      </product-chart-report>
+    </div>
+  </div>
+
+  <div *ngFor="let site of sites" class="ps-flex-group" >
+    <div class="margin-5" style="width:620px">
+      <product-chart-report
+        style="width:500px"
+        [dateFrom] ="dateFrom"
+        [dateTo]   ="dateTo"
+        [site]    ="site"
+        [counter]  ="count+1"
+        [groupBy]    ="'type'"
+        [notifier]="childNotifier">
+        <div site><h4>{{site.name}}</h4></div>
+      </product-chart-report>
+    </div>
+  </div>
 </ng-template>
-
-
-

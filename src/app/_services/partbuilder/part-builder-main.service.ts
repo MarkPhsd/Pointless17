@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../system/authentication.service';
 import { SitesService } from '../reporting/sites.service';
 import { IProduct, ISite, Paging, UnitType } from 'src/app/_interfaces';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { Product } from 'electron/main';
 
@@ -115,13 +115,14 @@ export class PartBuilderMainService {
     if (!item.id) {
       return this.post(site, item);
     }
+    return of({} as PB_Main)
   }
 
   post(site: ISite,  item: PB_Main): Observable<PB_Main> {
 
     const controller = "/PB_Builder/"
 
-    const endPoint = `postItem`
+    const endPoint = `PostItem`
 
     const parameters = ''
 

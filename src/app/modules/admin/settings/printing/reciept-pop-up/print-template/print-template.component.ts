@@ -91,6 +91,7 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
     this._printOrder = this.printingService.printOrder$.subscribe(
       data => {
         if (data) {
+          console.log('print out data', data)
           this.order         = data.order;
           this.templateID    = data.location.templateID;
           this.printerName   = data.location.printer;

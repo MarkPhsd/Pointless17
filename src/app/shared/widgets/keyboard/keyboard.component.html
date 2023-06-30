@@ -2,7 +2,7 @@
   <div *ngIf="trackerService?.lastSelectedInput" >
     <!-- {{trackerService?.lastSelectedInput.value | json}}
     <br>
-    current value {{value}} -->
+    current value {{value | json}} -->
   </div>
   <div *ngIf="!trackerService?.lastSelectedInput" >
     <mat-label><ng-content></ng-content></mat-label>

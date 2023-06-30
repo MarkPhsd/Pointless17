@@ -383,6 +383,7 @@ import { NgxColorsModule } from 'ngx-colors';
 import { PartBuilderEditComponent } from '../modules/admin/products/part-builder/part-builder-edit/part-builder-edit.component';
 import { PartBuilderMainComponent } from '../modules/admin/products/part-builder/part-builder-main/part-builder-main.component';
 import { PartBuilderComponentEditComponent } from '../modules/admin/products/part-builder/part-builder-component-edit/part-builder-component-edit.component';
+import { HouseAccountsListComponent } from '../modules/orders/house-accounts-list/house-accounts-list.component';
 // import { PointlessReportingLibModule } from 'projects/pointess-reporting-lib/src/public-api';
 // import { ColorPickerModule } from 'ngx-color-picker';
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
@@ -484,7 +485,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     LinkedPriceSelectorComponent,
     PriceCategoriesComponent,
 
-  
+
 
     WicEBTCardPayBtnComponent,
     TriPOSCardPayBtnComponent,
@@ -561,6 +562,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     JobTypesEditComponent,
     JobTypesListComponent,
 
+    HouseAccountsListComponent,
     // ItemTypeCategoryAssignmentComponent,
     // ItemTypeDisplayAssignmentComponent,
     // ItemTypeComponent,

@@ -29,6 +29,7 @@ import { RequestMessageMethodsService } from 'src/app/_services/system/request-m
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { FastUserSwitchComponent } from '../../profile/fast-user-switch/fast-user-switch.component';
 import { DialogRef } from '@angular/cdk/dialog';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 export interface payload{
   index : number;
   item  : PosOrderItem;
@@ -150,8 +151,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     return false;
   }
 
-
-
   initSubscriptions() {
     this.initAssignedItemSubscriber();
     this.initBottomSheetSubscriber();
@@ -212,6 +211,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                 public  userAuthService    : UserAuthorizationService,
                 private fb                 : UntypedFormBuilder,
                 public authenticationService: AuthenticationService,
+                public platFormService : PlatformService,
                 private requestMessageMethodsService: RequestMessageMethodsService,
               )
   {

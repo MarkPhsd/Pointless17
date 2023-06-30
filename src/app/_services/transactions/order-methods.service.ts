@@ -292,6 +292,10 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
+  updateOrderSearchModelDirect(searchModel: IPOSOrderSearchModel) {
+    this._posSearchModel.next(searchModel);
+  }
+
   updateOrderSearchModel(searchModel: IPOSOrderSearchModel) {
     if (!searchModel) {
       this._posSearchModel.next(searchModel);
@@ -563,7 +567,8 @@ export class OrderMethodsService implements OnDestroy {
   ///1. List item. 2. Add Item 3. View Sub Groups of Items.   //either move to s
   menuItemActionObs(order: IPOSOrder, item: IMenuItem, add: boolean,
                     passAlongItem: PosOrderItem[]): Observable<ItemPostResults> {
-    const searchResults = this.updateMenuSearchModel(item)
+
+                      const searchResults = this.updateMenuSearchModel(item);
     if (add) {
       if (item && (item.itemType.requireInStock == true))  {
         this.listItem(item.id);
@@ -571,8 +576,11 @@ export class OrderMethodsService implements OnDestroy {
       }
       return  this.addItemToOrderObs(order, item, 1, 0, passAlongItem)
     }
+
     this.listItem(item.id);
+
     return of(null)
+
   }
 
   clearOrderFromFloorPlan(site, floorPlanID: number, tableUUID: string): Observable<any> {
@@ -591,6 +599,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   updateMenuSearchModel(item: IMenuItem) : boolean {
+    console.log('update menusearch model')
     if (!item) {   return false }
     const model =  {} as ProductSearchModel;
     if (item?.itemType?.name?.toLowerCase() == 'category') {
@@ -932,19 +941,25 @@ export class OrderMethodsService implements OnDestroy {
         if (item) {
           const deviceName  = localStorage.getItem('devicename')
           const splitGroupID = this.splitEntryValue;
-          let newItem     = { orderID: order.id, quantity: quantity, menuItem: item,
+          let newItem     = { orderID: order.id,
+                              quantity: quantity,
+                              menuItem: item,
                               passAlongItem: passAlongItem,
-                              packaging: packaging, portionValue: portionValue, barcode: '',
-                              weight: 1, itemNote: itemNote, deviceName: deviceName,
+                              packaging: packaging,
+                              portionValue: portionValue, barcode: '',
+                              weight: 1, itemNote: itemNote,
+                              deviceName: deviceName,
                               rewardAvailableID: rewardAvailableID,
-                              rewardGroupApplied: rewardGroupApplied, clientID: order.clientID, splitGroupID: splitGroupID,
+                              rewardGroupApplied: rewardGroupApplied,
+                              clientID: order.clientID,
+                              splitGroupID: splitGroupID,
+                              priceColumn : order?.priceColumn,
                               assignedPOSItems: passAlongItems }
 
           if (order.id == 0 || !order.id) {
             const orderPayload = this.getPayLoadDefaults(null)
             return this.orderService.postOrderWithPayload(site, orderPayload).pipe(
               switchMap(data => {
-                // console.log('post order', data)
                 if (!data) {
                   this.siteService.notify('No order started. There might be something wrong.', 'Close', 2000)
                   return of(null)

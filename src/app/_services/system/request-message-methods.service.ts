@@ -47,7 +47,6 @@ export class RequestMessageMethodsService {
       serialCode = ` having a serial code of ${item.serialCode},`
     }
 
-
     message.message = `${user.firstName} is requesting Item ${item.productName} ${item.unitName},${serialCode}
                       having a quantity of ${item.quantity}, ${operationDescription}.`
     message.subject = `${requestMessage} ${order.id} - ${tableName} -  ${orderName}`

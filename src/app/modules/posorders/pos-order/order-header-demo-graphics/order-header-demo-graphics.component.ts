@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Input, Output, OnChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, OnChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription, debounce } from 'rxjs';
@@ -44,6 +44,7 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
               private uiSettingsService: UISettingsService,
               private userAuthorization: UserAuthorizationService,
               private orderService: OrdersService,
+              private cd: ChangeDetectorRef,
               public orderMethodsService: OrderMethodsService,
             )
                { }
@@ -63,6 +64,7 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
 
   ngOnDestroy() {
     if (this._uiSettings) { this._uiSettings.unsubscribe()}
+
   }
 
   ngOnChanges(): void {
@@ -82,6 +84,9 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
   subscribeOrderNameForm() {
     if (this.orderNameForm) {
       this.orderNameForm.valueChanges.subscribe(data => {
+        // this.orderNameForm.controls['name'].setValue(data)
+        this.cd.detectChanges()
+        console.log('name update', data.name)
         this.saveOrderName(data.name)
       })
     }
@@ -105,7 +110,7 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
     // console.log(this.orderNameForm.value)
     // const orderName = this.orderNameForm.controls['name'].value;
     if (this.order) {
-      console.log(orderName)
+      // console.log(orderName)
       this.orderService.setOrderName(this.order.id, orderName).subscribe( data => {
         // this.orderNameForm = this.fb.group({
         //   name: [orderName],
@@ -147,7 +152,6 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
           this.order.clientID = client?.id;
           this.order.customerName = client?.lastName.substr(0,2) + ', ' + client?.firstName
         } catch (error) {
-
         }
       }
       this.orderService.putOrder(site, this.order).subscribe(data => {
@@ -166,7 +170,5 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
       })
    }
   }
-
-
 
 }

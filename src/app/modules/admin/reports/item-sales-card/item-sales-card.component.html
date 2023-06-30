@@ -2,6 +2,7 @@
 
 <div class="mat-card-container"
       *ngIf="site && (sales$ | async) as summary; else loading">
+
   <ng-container
                 [ngTemplateOutlet]="reportView"
                 [ngTemplateOutletContext]="{$implicit: summary}">

@@ -622,6 +622,13 @@ mat-dialog-container {
   margin: 5px;
 }
 
+.grid-view-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 5px;
+  margin: 5px;
+}
+
 .margin-5 {
   margin:5px;
 }
@@ -642,11 +649,34 @@ mat-dialog-container {
   margin: 10px;
 }
 
+.width-100 {
+  width: 100px;
+}
+
+.width-150 {
+  width: 150px;
+}
+.width-200 {
+  width: 100px;
+}
+
+.width-300 {
+  width: 300px;
+}
 .ps-flex-group {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
+  margin: 5px;
+  gap: 10px;
+}
+
+.ps-flex-group-nowrap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: start;
   margin: 5px;
   gap: 10px;
 }

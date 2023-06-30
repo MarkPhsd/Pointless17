@@ -1,0 +1,39 @@
+
+<mat-card >
+
+  <div class="container" >
+    <div>
+      <div class="warning"  *ngIf="sitesErrorMessage">
+        <mat-icon>alerts</mat-icon> {{sitesErrorMessage}}
+      </div>
+
+      <ng-content select="[site]"></ng-content>
+      <ng-content select="[title]"></ng-content>
+
+      <button mat-button (click)="showData = !showData"><mat-icon>data</mat-icon>Show Raw Data</button>
+      <div *ngIf="showData" class="data-view"> {{this.chartOptions  | json}}</div>
+
+      <button mat-button
+              (click)="refresh()">
+              <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+
+    <div *ngIf="(action$ | async) as data">
+      <div id="widget"
+          *ngIf="chartOptions">
+        <highcharts-chart
+            [Highcharts]="Highcharts"
+            [options]   ="chartOptions"
+            [oneToOne]  ="true">
+        </highcharts-chart>
+      </div>
+    </div>
+
+  </div>
+</mat-card>
+
+<div *ngFor="let observable of observablesArray$ | async">
+  <ng-container *ngIf="observable | async as value">
+  </ng-container>
+</div>

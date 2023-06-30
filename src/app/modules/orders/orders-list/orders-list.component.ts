@@ -125,6 +125,8 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     }
 
     this._searchModel = this.orderMethodsService.posSearchModel$.subscribe( data => {
+
+        console.log('search update', data)
         this.searchModel            = data
         if (!this.searchModel) {
           const searchModel       = {} as IPOSOrderSearchModel;
@@ -137,6 +139,8 @@ export class OrdersListComponent implements OnInit,OnDestroy {
           this.searchModel.clientID = clientID;
           this.searchModel.suspendedOrder = 0;
         }
+
+        console.log('search update 2', data)
         this.refreshSearch()
         return
       }
@@ -153,7 +157,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
                 private readonly datePipe       : DatePipe,
                 private orderService            : OrdersService,
                 public orderMethodsService: OrderMethodsService,
-    
+
               )
   {
   }

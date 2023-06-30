@@ -143,11 +143,9 @@ const routes: Routes = [
 
     { path: 'partBuilder',  component: PartBuilderMainComponent, data: { title: 'Part Builder', animation: 'isLeft'} },
     { path: 'partBuilderEdit',  component: PartBuilderEditComponent, data: { title: 'Part Builder', animation: 'isLeft'} },
-
     { path: 'printerslist',  component: InstalledPrintersComponent, data: { title: 'Print Settings', animation: 'isLeft'} },
     { path: 'blog-post-list',  component: BlogPostListComponent, data: { title: 'BlogPosts', animation: 'isLeft'} },
-    //  data : { title: 'Menu Board Layout', animation: 'isLeft'},
-    //  { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
+
     { path: 'menu-board',  component: GridManagerComponent,
         children: [
           // { path: '', component: GridManagerComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
@@ -162,7 +160,7 @@ const routes: Routes = [
 
     {path: '', component: DefaultComponent,
       children: [
-
+        { path: '', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
         { path: 'filter',  component: ProductFilterComponent, data: { title: 'Filter', animation: 'isLeft'} },
 
         // { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
@@ -183,7 +181,7 @@ const routes: Routes = [
         { path: 'report-viewer'  , component: ReportViewerComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
 
 
-        { path: '', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
+
         { path: 'swipedelete', component: IonicSwipeToDeleteComponent,   data: { animation: 'isLeft'} },
         { path: 'app-main-menu', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { title: 'Main Menu', animation: 'isLeft'} },
         { path: 'app-profile', component: ProfileComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },

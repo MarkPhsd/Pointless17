@@ -33,15 +33,23 @@
           <span *ngIf="quantity && !prepScreen">
             <div class="quantity"  *ngIf="subTotal >= 0">
               {{ quantity }} {{orderItem?.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
+              <span *ngIf="uiConfig.displayItemPOSTTotal">
+                | Tax: {{ orderItem?.taxTotal | currency }}  | Total: {{orderItem?.total | currency}}
+             </span>
             </div>
             <div class="quantity"   *ngIf="subTotal < 0"  style="color:crimson">
               {{ quantity }} {{orderItem?.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
+              <span *ngIf="uiConfig.displayItemPOSTTotal">
+                | Tax: {{ orderItem?.taxTotal | currency }}  | Total: {{orderItem?.total | currency}}
+             </span>
             </div>
           </span>
 
           <span *ngIf="purchaseOrderEnabled">
             Cost : {{ quantity }}  @  {{ wholeSale | currency }} = {{ wholeSale*quantity | currency}}
           </span>
+
+
           <span  *ngIf="( mainPanel || wideBar) && orderItem?.serialCode && !prepScreen && (orderItem?.serialCode != orderItem.id)">
             SN#/({{ orderItem?.serialCode }})
           </span>
@@ -229,6 +237,10 @@
                   </button>
                 </div>
 
+                <div *ngIf="!prepScreen">
+                  <ng-container [ngTemplateOutlet]="threeDotsLabel"></ng-container>
+                </div>
+
                 <div *ngIf="userAuthService && userAuthService?.isManagement && purchaseOrderEnabled">
                   <button mat-button  color="accent"  (click)="editCost()">
                     <mat-icon  class="mat-icon-label">edit</mat-icon>
@@ -263,9 +275,11 @@
                   </button>
                 </div>
 
-                <div *ngIf="!showEdit && (uiConfig?.displayAdd) && (userAuths && userAuths?.refundItem)">
+                <div *ngIf="!showEdit && (uiConfig?.displayAdd) && (userAuths && !userAuths?.refundItem)">
                   <button mat-raised-button    class="button"  color="warn" (click)="requestRefundItem(orderItem)">
-                    <mat-icon  class="warn" >delete</mat-icon>  <span *ngIf="!smallDevice"> Refund Request </span>
+                    <mat-icon  class="warn" >delete</mat-icon>
+                      Refund <br>
+                      Request
                   </button>
                 </div>
 
@@ -315,7 +329,17 @@
 </ng-template>
 
 <ng-template #exitlabelButtonView>
-  <div *ngIf="!userAuthService?.isUser && enableExitLabel && mainPanel && orderItem?.printLocation">
+  <div *ngIf="userAuthService?.isStaff && enableExitLabel && mainPanel && orderItem?.printLocation">
+    <button mat-button  class="exit-label-button" color="accent" (click)="printLabel(orderItem)">
+      <mat-icon>print</mat-icon>
+      <br>
+      Label
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #threeDotsLabel>
+  <div *ngIf="platFormService.isAppElectron && userAuthService?.isStaff && enableExitLabel && orderItem?.printLocation">
     <button mat-button  class="exit-label-button" color="accent" (click)="printLabel(orderItem)">
       <mat-icon>print</mat-icon>
       <br>

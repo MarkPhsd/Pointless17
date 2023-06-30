@@ -43,7 +43,7 @@ export class BalanceSheetReportComponent implements OnInit {
       search.completionDate_From = this.dateFrom;
       search.completionDate_To = this.dateTo;
     }
-    console.log('search', search)
+    // console.log('search', search)
     this.sheets$ = this.balanceSheetService.searchBalanceSheets(site, search).pipe(
       switchMap(data => {
          return  of(data)

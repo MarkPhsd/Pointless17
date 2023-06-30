@@ -124,6 +124,29 @@ export class OrdersService {
     return this.http.get<IListBoxItem[]>(url);
   }
 
+  getHouseAccountPendingOrders(site: ISite):  Observable<any[]> {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "getHouseAccountPendingOrders"
+
+    const parameters = ""
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any[]>(url);
+  }
+
+  deleteUnClosedUnPrintedOrders(site: ISite):  Observable<any[]> {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "deleteUnClosedUnPrintedOrders"
+
+    const parameters = ""
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any[]>(url);
+  }
 
   getTodaysOpenOrders(site: ISite):  Observable<IPOSOrder[]> {
     const controller = "/POSOrders/"

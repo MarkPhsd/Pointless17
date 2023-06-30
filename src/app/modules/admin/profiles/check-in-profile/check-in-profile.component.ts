@@ -263,7 +263,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     const searchModel    = {} as IPOSOrderSearchModel;
     searchModel.clientID = parseInt (this.id)
     searchModel.suspendedOrder        = 2;
-    this.orderMethodsService.updateOrderSearchModel(searchModel)
+    this.orderMethodsService.updateOrderSearchModelDirect(searchModel)
   }
 
   showOnlyOpenOrders() {
@@ -271,21 +271,28 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     search.suspendedOrder       = 0
     search.greaterThanZero      = 0
     search.closedOpenAllOrders  = 1;
-    search.suspendedOrder        = 2;
+    search.suspendedOrder       = 2;
     search.clientID             = parseInt(this.id)
     this.searchModel            = search;
-    this.orderMethodsService.updateOrderSearchModel(search)
+    this.orderMethodsService.updateOrderSearchModelDirect(search)
   }
 
   showClosedOrders() {
-    const search                = {} as IPOSOrderSearchModel
+    let search                = {} as IPOSOrderSearchModel
     search.suspendedOrder       = 0
     search.greaterThanZero      = 0
     search.closedOpenAllOrders  = 2;
     search.suspendedOrder        = 0;
     search.clientID             = parseInt(this.id)
+    search                      = this.getClosedDates(search)
     this.searchModel            = search;
-    this.orderMethodsService.updateOrderSearchModel(search)
+    this.orderMethodsService.updateOrderSearchModelDirect(search)
+  }
+
+  getClosedDates(search: IPOSOrderSearchModel) {
+    search.completionDate_From = this.dateFrom.toISOString() ;
+    search.completionDate_To   =  this.dateTo.toISOString()
+    return search
   }
 
   initForm() {

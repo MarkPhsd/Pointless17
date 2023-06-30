@@ -382,6 +382,12 @@ constructor(  private _snackBar              : MatSnackBar,
                   maxWidth: 200,
                 // flex: 2,
       },
+      {headerName: 'Department', field: 'department',     sortable: true,
+            width: 140,
+            minWidth: 140,
+            maxWidth: 200,
+          // flex: 2,
+      },
       {
                   headerName: "Active",
                   width:    100,
@@ -424,7 +430,7 @@ constructor(  private _snackBar              : MatSnackBar,
       field: 'id',
       cellRenderer: "btnCellRenderer",
                     cellRendererParams: {
-                      onClick: this.editProductFromGrid.bind(this),
+                    onClick: this.editProductFromGrid.bind(this),
                       label: this.buttonName,
                       getLabelFunction: this.getLabel.bind(this),
                       btnClass: 'btn btn-primary btn-sm'
@@ -437,25 +443,43 @@ constructor(  private _snackBar              : MatSnackBar,
                   width   : 175,
                   minWidth: 175,
                   maxWidth: 275,
+                  editable: true,
+                  singleClickEdit: true,
                   flex    : 1,
       },
       {headerName: 'Barcode',  field: 'barcode',      sortable: true,
                   width: 75,
                   minWidth: 125,
                   maxWidth: 150,
+                  editable: true,
+                  singleClickEdit: true,
                   // flex: 1,
       },
       {headerName: 'Count',    field: 'productCount', sortable: true,
                   width: 90,
                   minWidth: 90,
                   maxWidth: 90,
+                  editable: true,
+                  singleClickEdit: true,
                   // flex: 2,
+      },
+      {headerName: 'Department', field: 'department',     sortable: true,
+            width: 140,
+            minWidth: 140,
+            maxWidth: 200,
+          // flex: 2,
       },
       {headerName: 'Category', field: 'category',     sortable: true,
                   width: 140,
                   minWidth: 140,
                   maxWidth: 200,
                 // flex: 2,
+      },
+      {headerName: 'Sub Cat', field: 'subCategory',     sortable: true,
+            width: 140,
+            minWidth: 140,
+            maxWidth: 200,
+          // flex: 2,
       },
       {headerName: 'Type', field: 'type', sortable: true,
                   width: 100,
@@ -468,6 +492,8 @@ constructor(  private _snackBar              : MatSnackBar,
                   width: 100,
                   minWidth: 100,
                   maxWidth: 125,
+                  editable: true,
+                  singleClickEdit: true,
                   // flex: 2,
                   },
       { headerName: 'Image',
@@ -486,21 +512,79 @@ constructor(  private _snackBar              : MatSnackBar,
                   maxWidth: 100,
                   flex: 1,
                   field: "active",
+                  // editable: true,
+                  //   singleClickEdit: true,
+                  // cellRendererParams: {
+                   //   // btnClass: 'btn btn-primary btn-sm'
                   cellRenderer: function(params) {
-                    var input = document.createElement('input');
-                    input.type="checkbox";
-                    input.checked=params.value;
-                    input.disabled = true;
-                    input.addEventListener('click', function (event) {
-                        params.value=!params.value;
-                        params.node.data.fieldName = params.value;
-                    });
-                    return input;
+                      var input = document.createElement('input');
+                      input.type="checkbox";
+                      input.checked = params.value;
+                      input.disabled = false;
+                      input.addEventListener('click', function (event) {
+                        // params.value = !params.value;
+                        // params.node.data.fieldName = params.value;
+                        // input.checked = !params.value;
+                      });
+                      // input.checked = !input.checked;
+                      return input;
                   }
+                // },
+
         },
     ]
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
+
+  reverseValue(event) {
+    return !event.value
+  }
+  onCellClicked(event) {
+    // console.log('event' , event)
+    const colName = event?.column?.colId.toString() as string;
+    if (colName === 'active') {
+      let item = event.data
+      item.active = !event.value
+      this.action$ = this.updateValues(event.data.id, !event.value, 'active');
+      event.value = !event.value;
+      this.refreshGrid()
+      console.log(item)
+    }
+    // this.gridAPI.setRowData(item)
+  }
+
+  updateValues(id: number, itemValue: any, fieldName: string) {
+    const site = this.siteService.getAssignedSite();
+    return this.menuService.saveProductField(site, id, itemValue, fieldName)
+  }
+
+  cellValueChanged(event) {
+    console.log('event',event?.value)
+    const colName = event?.column?.colId.toString() as string;
+
+    const item = event.data as IProduct
+
+    // if (colName === 'retail') {
+    //   item.retail = event.value;
+    // }
+    // if (colName === 'count') {
+    //   item.productCount = event.value;
+    // }
+    // if (colName === 'barcode') {
+    //   item.barcode = event.value;
+    // }
+    // if (colName === 'name') {
+    //   item.name = event.value;
+    // }
+    // if (colName === 'active') {
+    //   item.active = event.value;
+    // }
+
+    this.action$ = this.updateValues(event.data?.id , event.value, colName)
+  }
+
+
+
 
   //initialize filter each time before getting data.
   //the filter fields are stored as variables not as an object since forms
@@ -605,7 +689,6 @@ constructor(  private _snackBar              : MatSnackBar,
       items$.subscribe(data =>
         {
             const resp         =  data.paging
-            // console.log('data', data)
             if (!resp)         {return}
             this.isfirstpage   = resp.isFirstPage
             this.islastpage    = resp.isFirstPage

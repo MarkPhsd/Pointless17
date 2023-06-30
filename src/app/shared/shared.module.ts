@@ -214,6 +214,9 @@ import { CategoryMenuSelectorComponent } from './widgets/category-menu-selector/
 import { CategorySelectListFilterComponent } from './widgets/category-select-list-filter/category-select-list-filter.component';
 import { OptionsSelectFilterComponent } from './widgets/options-select-filter/options-select-filter.component';
 import { ProductFilterComponent } from './widgets/product-filter/product-filter.component';
+import { CheckBoxCellComponent } from './widgets/check-box-cell/check-box-cell.component';
+import { TimeChartReportComponent } from '../modules/admin/reports/time-chart-report/time-chart-report.component';
+import { ProductChartReportComponent } from '../modules/admin/reports/product-chart-report/product-chart-report.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -255,6 +258,8 @@ import { ProductFilterComponent } from './widgets/product-filter/product-filter.
     CashValueCalcComponent,
     CashDrawerSettingsComponent,
     CardComponent,
+    TimeChartReportComponent,
+    ProductChartReportComponent,
     CardDashboardComponent,
     CompanyInfoHeaderComponent,
     ClientSearchSelectorComponent,
@@ -437,6 +442,7 @@ import { ProductFilterComponent } from './widgets/product-filter/product-filter.
     MatSelectorComponent,
     EditBarComponent,
     UserBarComponent,
+    CheckBoxCellComponent,
   ],
 
   imports: [
@@ -491,6 +497,8 @@ import { ProductFilterComponent } from './widgets/product-filter/product-filter.
     CashDrawerSettingsComponent,
     CallUsSelectorComponent,
     CardComponent,
+    TimeChartReportComponent,
+    ProductChartReportComponent,
     CardDashboardComponent,
     ColorPickerModule,
     CategorySelectComponent,
@@ -588,7 +596,7 @@ import { ProductFilterComponent } from './widgets/product-filter/product-filter.
     CategoryMenuSelectorComponent,
     //*** */
 
-        
+
     ProfileMedInfoComponent,
     PaymentReportComponent,
     PosOrderItemComponent,

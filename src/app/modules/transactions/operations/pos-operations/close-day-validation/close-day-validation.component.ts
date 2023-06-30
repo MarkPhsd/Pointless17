@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output,EventEmitter } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ICanCloseOrder } from 'src/app/_interfaces/transactions/transferData';
@@ -8,6 +8,7 @@ import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balan
 import { BalanceSheetService,  IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { BalanceSheetQuickViewComponent } from '../../../balanceSheets/balance-sheet-quick-view/balance-sheet-quick-view.component';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'close-day-validation',
@@ -17,6 +18,9 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 export class CloseDayValidationComponent implements OnInit {
 
   @Input()   closeDayValidation: ICanCloseOrder;
+  action$: Observable<any>;
+  actionOn: boolean;
+  @Output() refreshCloseCheck = new EventEmitter();
 
   constructor(
     private _snackBar               : MatSnackBar,
@@ -31,7 +35,7 @@ export class CloseDayValidationComponent implements OnInit {
   ngOnInit(): void {
 
     if (this.closeDayValidation) {
-      
+
     }
     const i = 0;
   }
@@ -50,13 +54,23 @@ export class CloseDayValidationComponent implements OnInit {
     }
   }
 
+  deleteUnPrinted() {
+    const site = this.siteService.getAssignedSite();
+    this.actionOn = true
+    this.action$ = this.orderService.deleteUnClosedUnPrintedOrders(site).pipe(switchMap(data => {
+      this.actionOn = false
+      this.refreshCloseCheck.emit(true)
+      return of(data)
+    }))
+  }
+
   quickView(sheet: IBalanceSheet) {
     if (sheet) {
       this.sheetMethodsService.updateBalanceSheet(sheet)
       this._bottomSheet.open(BalanceSheetQuickViewComponent)
     }
   }
-  
+
   setOrder(id: number) {
     if (id) {
       const site = this.siteService.getAssignedSite();

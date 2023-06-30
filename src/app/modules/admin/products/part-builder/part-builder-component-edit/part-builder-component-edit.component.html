@@ -3,12 +3,11 @@
     <div>
       Part Builder -  {{pb_Main?.name}}
     </div>
-
     <button color="primary" mat-button (click)="initData()">Example</button>
   </mat-card-title>
 
-  <mat-card-content>
-    <div *ngIf="pb_Main container"  >
+  <mat-card-content >
+    <div *ngIf="pb_Main">
       <ul class="ps-grid-items">
       <li>Item</li>
       <li>Unit</li>
@@ -35,21 +34,23 @@
 
 </mat-card>
 
-<mat-card *ngIf="pb_Component">
-  <div *ngIf="componentForm" [formGroup]="componentForm">
+<mat-card *ngIf="pb_Component && componentForm">
+  <div [formGroup]="componentForm">
+    <button mat-button (click)="saveEdit()">
+      <mat-icon>save</mat-icon>Save
+    </button>
+
     <mat-card>
       <mat-card-content>
-
         <app-product-search-selector
             class         = "fields"
             [itemType]    = 1
             [productName] = "productName"
             [searchForm]  = "searchForm"
             (itemSelect)  = "getItem($event)">
-          >
         </app-product-search-selector>
-
         <div class="ps-grid-items">
+
           <app-value-fields
               [inputForm]="componentForm"
               [fieldName]="'name'">
@@ -58,18 +59,21 @@
 
           <app-value-fields
               [inputForm]="componentForm"
+              [fieldType]="'number'"
               [fieldName]="'price'">
             Price
           </app-value-fields>
 
           <app-value-fields
               [inputForm]="componentForm"
+              [fieldType]="'number'"
               [fieldName]="'cost'">
             Cost
           </app-value-fields>
 
           <app-value-fields
               [inputForm]="componentForm"
+              [fieldType]="'number'"
               [fieldName]="'quantity'">
             Quantity
           </app-value-fields>
@@ -77,6 +81,9 @@
 
       </mat-card-content>
     </mat-card>
+
+    <!-- {{pb_Component | json}} -->
+
   </div>
 </mat-card>
 

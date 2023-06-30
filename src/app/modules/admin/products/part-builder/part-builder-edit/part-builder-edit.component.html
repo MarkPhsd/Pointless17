@@ -2,10 +2,24 @@
 <div *ngIf="pb_Main$ | async"></div>
 
 <mat-card>
-  <mat-card-title *ngIf="pb_Main">
-    <mat-icon>edit</mat-icon> {{pb_Main?.name}}
-    <mat-label>Last Edited: {{pb_Main?.dateUpdated}}</mat-label>
-    <mat-divider> </mat-divider>
+  <mat-card-title>
+    <div class="ps-flex-group">
+      <div>
+        <mat-icon>edit</mat-icon> {{pb_Main?.name}}
+        <mat-label>Last Edited: {{pb_Main?.dateUpdated}}</mat-label>
+        <mat-divider> </mat-divider>
+      </div>
+      <div>
+        <app-edit-buttons-standard
+          [enableCopy]            ="true"
+          (outputeupdateItem)     ="updateSave($event)"
+          (outputupdateItemExit)  ="updateItemExit($event)"
+          (outputupdatedeleteItem)="deleteItem($event)"
+          (outputupdateonCancel)  ="onCancel($event)"
+          (outputCopy)            ="copyItem($event)"
+        ></app-edit-buttons-standard>
+      </div>
+    </div>
   </mat-card-title>
 
   <mat-card-content>
@@ -19,5 +33,5 @@
     <part-builder-component-edit>
     </part-builder-component-edit>
   </mat-card-content>
-
 </mat-card>
+

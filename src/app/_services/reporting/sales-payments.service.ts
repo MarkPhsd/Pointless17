@@ -58,6 +58,34 @@ export interface PaymentSummary {
 })
 export class SalesPaymentsService {
 
+  getAvgWeekDayHourlySalesReport(site: ISite, startDate: string, endDate: string) : Observable<any> {
+
+    const controller = `/SalesPayments/`
+
+    const endPoint = `getAvgWeekDayHourlySalesReport`
+
+    const parameters = `?startDate=${startDate}&endDate=${endDate}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>(url)
+
+  }
+
+  getAverageSalesReportBy15Minutes(site: ISite, startDate: string, endDate: string) : Observable<any> {
+
+    const controller = `/SalesPayments/`
+
+    const endPoint = `GetAverageSalesReportBy15Minutes`
+
+    const parameters = `?startDate=${startDate}&endDate=${endDate}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>(url)
+
+  }
+
   constructor( private http: HttpClient,
                private auth: AuthenticationService,
    ) { }

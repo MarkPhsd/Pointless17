@@ -46,15 +46,14 @@
 
       <div class="header-grid info-width sub-title">
         <div>Employee</div> <div> {{item.employeeName }} </div>
-        <div>Open</div>    <div> {{item.orderDate }} </div>
-        <div>Closed </div> <div> {{item.completionDate  }} </div>
+        <div>Open</div>    <div> {{item.orderDate  | date: 'short' }} </div>
+        <div>Closed </div> <div> {{item.completionDate | date: 'short' }} </div>
       </div>
 
     </mat-card-subtitle>
 
     <mat-card-content>
       <mat-divider></mat-divider>
-
 
       <div *ngIf="inputForm"
             [formGroup]="inputForm"

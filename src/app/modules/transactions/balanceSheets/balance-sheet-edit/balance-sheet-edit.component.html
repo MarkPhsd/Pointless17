@@ -63,14 +63,24 @@
 
           </div>
 
-          <div *ngIf="!sheet.endTime">
-            <span *ngIf ="sheet.shiftStarted == 1 && ordersOpen == 0">
-              <button color="warn" mat-raised-button (click)="closeSheet()">Close Sheet</button>
-            </span>
-            <span *ngIf="ordersOpen>0">
-              {{ ordersOpen }} order(s) are open. Close orders to close sheet.
-            </span>
+          <div class="ps-flex-group-nowrap" >
+            <div   class="button" *ngIf="!sheet.endTime">
+              <span *ngIf ="sheet.shiftStarted == 1 && ordersOpen == 0">
+                <button  style="height:60px" color="warn" mat-raised-button (click)="closeSheet('/login')">Close Sheet</button>
+              </span>
+            </div>
+
+            <div class="button" *ngIf="(auths$ | async) as auths">
+              <span *ngIf ="sheet.shiftStarted == 1 && ordersOpen == 0 && (auths && auths?.closeDay)">
+                <button  style="height:60px; line-height:1em" color="warn" mat-raised-button (click)="closeSheet('/operations')">Close Sheet <br> & Day</button>
+              </span>
+            </div>
           </div>
+
+
+          <span *ngIf="ordersOpen>0">
+            {{ ordersOpen }} order(s) are open. Close orders to close sheet.
+          </span>
 
         </div>
       </div>

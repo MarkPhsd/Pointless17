@@ -65,6 +65,8 @@ export interface IProductSearchResults {
    barcode     : string;
    type        : string;
    active      : boolean;
+   department: string;
+   subCategory: string;
 }
 export interface IProductSearchResultsPaged {
   results: IProductSearchResults[]
@@ -90,6 +92,7 @@ export interface IItemBasicB{
   providedIn: 'root'
 })
 export class MenuService {
+
 
   public searchModel: ProductSearchModel
   private _searchModel       = new BehaviorSubject<ProductSearchModel>(null);
@@ -218,6 +221,19 @@ export class MenuService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
     const uri =  this.sitesService.getCacheURI(url)
     return  this.httpClient.put<any[]>(url, listofItems)
+
+  }
+
+  saveProductField(site: ISite, id: number, itemValue: string, fieldName: string): Observable<IProduct> {
+    const controller ="/products/"
+
+    const endPoint = `UpdateFieldValueProduct`
+
+    const parameters = `?id=${id}&fieldName=${fieldName}&value=${itemValue}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.get<any>(url)
 
   }
 

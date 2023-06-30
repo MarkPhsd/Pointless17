@@ -119,7 +119,8 @@
           <ng-container [ngTemplateOutlet]="barcodeScanner"></ng-container>
         </li>
 
-        <li *ngIf="!phoneDevice || !smallDevice">
+        <li *ngIf="(!phoneDevice || !smallDevice) &&
+                   (uiTransactionSetting && !uiTransactionSetting.disableBarcodScanning)">
           <list-product-search-input></list-product-search-input>
         </li>
 
@@ -127,13 +128,11 @@
           <scale-value-view></scale-value-view>
         </li>
 
-        <!--  -->
         <li *ngIf="platFormService.isApp() && userSwitching">
           <ng-container  [ngTemplateOutlet]="userSwitchingButtonView"></ng-container>
         </li>
 
         <li *ngIf="!userSwitching" >
-          <!-- <ng-container [ngTemplateOutlet]="menuButtonContainer"></ng-container> -->
           <ng-container [ngTemplateOutlet]="userLoginOptionView"></ng-container>
         </li>
 

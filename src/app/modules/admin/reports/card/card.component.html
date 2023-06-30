@@ -1,19 +1,21 @@
 <mat-card>
-  <!-- Date Range: {{dateFrom}} - {{dateTo}}
-  {{sites | json}}
-   -->
+
   <div class="container">
-    <div class="warning"  *ngIf="sitesErrorMessage">
-      <mat-icon>alerts</mat-icon> {{sitesErrorMessage}}
+    <div>
+      <div class="warning"  *ngIf="sitesErrorMessage">
+        <mat-icon>alerts</mat-icon> {{sitesErrorMessage}}
+      </div>
+
+      <ng-content></ng-content>
+
+      <button mat-button (click)="showData = !showData"><mat-icon>data</mat-icon>Show Raw Data</button>
+      <div *ngIf="showData" class="data-view"> {{this.chartOptions  | json}}</div>
+
+      <button mat-button
+              (click)="refresh()">
+              <mat-icon>refresh</mat-icon>
+      </button>
     </div>
-
-    <button mat-button (click)="showData = !showData"><mat-icon>data</mat-icon>Show Raw Data</button>
-    <div *ngIf="showData" class="data-view"> {{this.chartOptions  | json}}</div>
-
-    <button mat-button
-            (click)="refresh()">
-            <mat-icon>refresh</mat-icon>
-    </button>
 
     <div id="widget"
         *ngIf="chartOptions">

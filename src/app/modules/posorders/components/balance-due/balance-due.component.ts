@@ -97,7 +97,9 @@ export class ChangeDueComponent implements OnInit  {
    }
 
   processSendOrder(order: IPOSOrder) {
-    return this.paymentMethodProcessService.sendToPrep(order, true)
+
+    return this.paymentMethodProcessService.sendToPrep(order, true, this.uiTransactions)
+
   }
 
   changeStep() {

@@ -38,41 +38,41 @@
 <div *ngIf="printType === 'balanceSheetValues' || printType === 'balanceSheetFinal'">
   <h2>Remaining in Drawer</h2>
   <div class="balance-grid-summary">
-    <div>Dollars ({{sheet.onesEnd }})</div>
-    <div>{{sheet.onesEnd  | currency}}</div>
+    <div>Dollars ({{sheet?.onesEnd }})</div>
+    <div>{{sheet?.onesEnd  | currency}}</div>
 
-    <div>Five ({{sheet.fivesEnd }})</div>
-    <div>{{sheet.fivesEnd * 5 | currency}}</div>
+    <div>Five ({{sheet?.fivesEnd }})</div>
+    <div>{{sheet?.fivesEnd * 5 | currency}}</div>
 
-    <div>Ten ({{sheet.tensEnd }})</div>
-    <div>{{sheet.tensEnd * 10 | currency}}</div>
+    <div>Ten ({{sheet?.tensEnd }})</div>
+    <div>{{sheet?.tensEnd * 10 | currency}}</div>
 
-    <div>Twenty ({{sheet.twentiesEnd }})</div>
-    <div>{{sheet.twentiesEnd * 20 | currency}}</div>
+    <div>Twenty ({{sheet?.twentiesEnd }})</div>
+    <div>{{sheet?.twentiesEnd * 20 | currency}}</div>
 
-    <div>Fifty ({{sheet.fiftiesEnd }})</div>
-    <div>{{sheet.fiftiesEnd * 50 | currency}}</div>
+    <div>Fifty ({{sheet?.fiftiesEnd }})</div>
+    <div>{{sheet?.fiftiesEnd * 50 | currency}}</div>
 
-    <div>Hundreds ({{sheet.hundredsEnd }})</div>
-    <div>{{sheet.hundredsEnd * 100 | currency}}</div>
+    <div>Hundreds ({{sheet?.hundredsEnd }})</div>
+    <div>{{sheet?.hundredsEnd * 100 | currency}}</div>
 
-    <div>Penny ({{sheet.pennyEnd }})</div>
-    <div>{{sheet.pennyEnd * .01 | currency}}</div>
+    <div>Penny ({{sheet?.pennyEnd }})</div>
+    <div>{{sheet?.pennyEnd * .01 | currency}}</div>
 
-    <div>Nickle ({{sheet.nickelEnd }})</div>
-    <div>{{sheet.nickelEnd *.05 | currency}}</div>
+    <div>Nickle ({{sheet?.nickelEnd }})</div>
+    <div>{{sheet?.nickelEnd *.05 | currency}}</div>
 
-    <div>Dime  ({{sheet.dimeEnd }})</div>
-    <div>{{sheet.dimeEnd * .1 | currency}}</div>
+    <div>Dime  ({{sheet?.dimeEnd }})</div>
+    <div>{{sheet?.dimeEnd * .1 | currency}}</div>
 
-    <div>Quarter  ({{sheet.quarterEnd }})</div>
-    <div>{{sheet.quarterEnd  * .25  | currency}}</div>
+    <div>Quarter  ({{sheet?.quarterEnd }})</div>
+    <div>{{sheet?.quarterEnd  * .25  | currency}}</div>
 
-    <div>Half  ({{sheet.halfDollarEnd }})</div>
-    <div>{{sheet.halfDollarEnd * .5 | currency}}</div>
+    <div>Half  ({{sheet?.halfDollarEnd }})</div>
+    <div>{{sheet?.halfDollarEnd * .5 | currency}}</div>
 
-    <div>Coin Dollar ({{sheet.dollarEnd }}) </div>
-    <div>{{sheet.dollarEnd * 1  | currency}}</div>
+    <div>Coin Dollar ({{sheet?.dollarEnd }}) </div>
+    <div>{{sheet?.dollarEnd * 1  | currency}}</div>
   </div>
 </div>
 

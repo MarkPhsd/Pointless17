@@ -8,6 +8,8 @@ import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder
 import { IPrinterLocation, PrinterLocationsService } from '../menu/printer-locations.service';
 import { SitesService } from '../reporting/sites.service';
 import { SettingsService } from './settings.service';
+import { PrinterLocations } from '../menu/item-type.service';
+import { template } from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -23,11 +25,13 @@ export class PrepPrintingServiceService {
               private settingService: SettingsService,
               ) { }
 
-  printLocations(order: IPOSOrder, printUnPrintedOnly: boolean): Observable<any> {
+
+  printLocations(order: IPOSOrder, printUnPrintedOnly: boolean,  expoName: string, templateID: number): Observable<any> {
 
     const site = this.siteService.getAssignedSite();
     const locations$ = this.locationsService.getLocations();
     const printOrders = [] as IPrintOrders[]
+
     const posItems  = order.posOrderItems;
 
     const result$ = locations$.pipe(switchMap(data => {
@@ -36,7 +40,6 @@ export class PrepPrintingServiceService {
         data.forEach(location => {
           const newItems = [] as PosOrderItem[];
           posItems.forEach(data => {
-
             if (printUnPrintedOnly) {
               {if(data.printLocation == location.id && !data.printed) {
                   newItems.push(data)
@@ -46,16 +49,35 @@ export class PrepPrintingServiceService {
                   newItems.push(data)
               }}
             }
-            
             }
           )
-
           if (newItems.length > 0) {
             const item = this.setOrder(newItems, order, location)
             printOrders.push(item)
           }
         }
       )
+      // console.log('print orders Pre check Expo', templateID, expoName, printOrders)
+      //assign the expo
+      if (expoName && templateID) {
+        const location = {} as IPrinterLocation;
+        location.name = expoName;
+        location.printer = expoName;
+        location.templateID = templateID;
+
+        const printOrder = {} as IPrintOrders;
+        printOrder.order = order;
+        printOrder.location = location;
+
+        const list = posItems.filter(data => {
+          return !data.printed
+        })
+        if (list && list.length>0) {
+          printOrder.order.posOrderItems = list;
+          printOrders.push(printOrder)
+        }
+        // console.log('print orders', templateID, expoName, printOrders)
+      }
 
       return of(printOrders)
     })).pipe(switchMap(printOrders => {
@@ -65,7 +87,6 @@ export class PrepPrintingServiceService {
       this.siteService.notify('Error in printing' + data.toString(), 'Close', 5000, 'red')
       return of(data)
     }))
-
     return result$
   }
 

@@ -16,8 +16,6 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class PartBuilderComponentEditComponent implements OnInit {
 
-
-
   action$ : Observable<any>;
   @Input()  pb_Main: PB_Main;
   @Input() inputForm: FormGroup;
@@ -54,37 +52,47 @@ export class PartBuilderComponentEditComponent implements OnInit {
     const item = {} as PB_Main;
     item.name = 'Example'
     item.pb_Components = [] as PB_Components[]
-    item.id = 1;
+    item.id = -1;
 
     let comp = {} as PB_Components;
+    comp.id = 1;
     comp.cost = 5
     comp.price = 10;
     comp.quantity = 1;
-    comp.pb_MainID = 1
+    // comp.pb_MainID = 1
 
     item.pb_Components.push(comp)
     comp = {} as PB_Components;
+    comp.id = 2;
     comp.cost = 6
     comp.price = 12;
     comp.quantity = 1.2;
-    comp.pb_MainID = 1
+    // comp.pb_MainID = 1
 
     item.pb_Components.push(comp)
     comp = {} as PB_Components;
-    comp.cost = 3
+    comp.id = 3;
+    comp.cost = 3;
     comp.price = 5;
     comp.quantity = 1.1;
-    comp.pb_MainID = 1
+    // comp.pb_MainID = 1
 
     this.partBuilderMainMethodsService.updatePBMain(item)
     this.initSubscription()
     this.initSearchForm()
   }
 
-
   ngOnInit(): void {
     this.initSubscription()
     this.initSearchForm()
+  }
+
+  updateView() {
+    const item$ = this.partBuilderMainService.getItem(this.site, this.pb_Main.id).pipe(switchMap(data => {
+      this.partBuilderMainMethodsService.updatePBMain(data)
+      return of(data)
+    }))
+    return item$
   }
 
   enableEdit(item: PB_Components) {
@@ -102,6 +110,7 @@ export class PartBuilderComponentEditComponent implements OnInit {
       quantity:[],
       cost:[],
       price:[],
+      product: []
     })
     this.componentForm.patchValue(item)
   }
@@ -111,7 +120,6 @@ export class PartBuilderComponentEditComponent implements OnInit {
       productName: []
     })
   }
-
 
   edit(item) {
     this.action$ =  this.partBuilderComponent.save(this.site, item.id).pipe(switchMap(data => {
@@ -131,37 +139,48 @@ export class PartBuilderComponentEditComponent implements OnInit {
     }))
   }
 
-  updateView() {
-    const item$ = this.partBuilderMainService.getItem(this.site, this.pb_Main.id).pipe(switchMap(data => {
-      this.partBuilderMainMethodsService.updatePBMain(data)
-      return of(data)
-    }))
-    return item$
-  }
-
   getItem(event) {
     const item = event
     if (item && item.id) {
-      // console.log('get item')
+
       this.menuService.getMenuItemByID(this.site, item.id).subscribe(data => {
           this.menuItem = data
           this.pb_Component.price = data.retail;
           this.pb_Component.cost = data.wholeSale;
           this.pb_Component.productID = data.id;
           this.pb_Component.unitTypeID = data.unitTypeID;
+          this.pb_Component.name = data.name;
           this.pb_Component.quantity = this.componentForm.controls['quantity'].value;
           this.pb_Component.product = this.menuItem;
           this.componentForm.patchValue(this.pb_Component);
-
-          this.pb_Main.pb_Components.forEach(data => {
-            if (data.id == this.pb_Component.id) {
-              data = this.pb_Component;
-            }
-          })
-
+          this.setThisPBComponent(this.pb_Component)
           this.initSearchForm();
         }
       )
+    }
+  }
+
+  setThisPBComponent(component: PB_Components) {
+    const item = this.pb_Main.pb_Components.filter(data => {return data.id == component.id})
+    const result = this.pb_Main.pb_Components.find(data => {
+      if (data.id == component.id) {
+        this.pb_Main.pb_Components = this.replaceObject(component, this.pb_Main.pb_Components);
+      }
+    })
+
+    this.partBuilderMainMethodsService.updatePBMain(this.pb_Main)
+  }
+
+  replaceObject(newObj: any, list: any[]): any[] {
+    return list.map((obj) => obj.id === newObj.id ? newObj : obj);
+  }
+
+  saveEdit() {
+    if (this.componentForm) {
+      this.pb_Component = this.componentForm.value
+
+      this.setThisPBComponent(this.pb_Component);
+      this.componentForm = null
     }
   }
 

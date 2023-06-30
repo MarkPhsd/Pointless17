@@ -1,4 +1,3 @@
-import { T } from '@angular/cdk/keycodes';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input, OnChanges,  SimpleChanges, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -61,7 +60,8 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
   @Input() rangeValue   : number;
   @Input() itemNames    : string[];
   @Input() salesSummary : IReportItemSaleSummary;
-  @Input() reportItemSaleSummaries: IReportItemSaleSummary[]
+  @Input() reportItemSaleSummaries: IReportItemSaleSummary[];
+
   reportType: string;
   sales                  = []
   lastCounter: number;
@@ -96,7 +96,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
   initNotifierSubscription() {
     if (!this.notifier) {
       // this.refresh();
-      return 
+      return
     }
     this._changeNotifier = this.notifier.asObservable().subscribe(data => {
       this.refresh();
@@ -137,12 +137,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
       ) {
   }
 
-
   ngOnInit() {
-    // order of operations
-    // this.initSeriesLabels();
-    // this.initChart('values')
-    // this.initSeries();
     //only works for product sales so far.
     if (this.cardValueType && this.reportItemSaleSummaries) {
       const xAxis = this.initSeriesLabels();
@@ -205,8 +200,6 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
   }
 
   ngOnChanges() {
-
-
   }
 
   ngOnDestroy(): void {
@@ -280,8 +273,6 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
   }
 
   getCountVersion() {  }
-
-
 
   isProductSalesType(type) {
     if (!this.cardValueType) { return false }
@@ -394,7 +385,6 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     searchModel.endDate   = this.dateTo;
     searchModel.groupBy   = this.groupBy;
     searchModel.zrunID    = this.zrunID;
-    console.log('refresh Card Payment sales')
     const sales$  = this.salesPaymentService.getPaymentSales(site, searchModel);
     return sales$
   }
@@ -687,9 +677,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
       this.initSeriesLabels();
       for (let site of sites) {
         const sales$ = this.refreshSales(site);
-
         sales$.subscribe( summary => {
-          console.log('update chart metrcs')
           if (!summary) { return }
           if (summary.resultMessage === 'failed') { return }
           const sales = summary.paymentSummary;
@@ -698,7 +686,6 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
             employeesList.forEach( employeeName => {this.applyEmployeeSeries(employeeName, sales, this.groupBy) })
           }
         )
-
       }
     }
   }
