@@ -217,6 +217,7 @@ import { ProductFilterComponent } from './widgets/product-filter/product-filter.
 import { CheckBoxCellComponent } from './widgets/check-box-cell/check-box-cell.component';
 import { TimeChartReportComponent } from '../modules/admin/reports/time-chart-report/time-chart-report.component';
 import { ProductChartReportComponent } from '../modules/admin/reports/product-chart-report/product-chart-report.component';
+import { AverageHourlySalesLaborChartComponent } from '../modules/admin/reports/average-hourly-sales-labor-chart/average-hourly-sales-labor-chart.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -322,6 +323,7 @@ import { ProductChartReportComponent } from '../modules/admin/reports/product-ch
     MenuSearchBarComponent,
     MenuTinyComponent,
     MetrcSummaryComponent,
+    AverageHourlySalesLaborChartComponent,
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,
     NgControlAttributeDirective,
@@ -567,6 +569,8 @@ import { ProductChartReportComponent } from '../modules/admin/reports/product-ch
     MenuTinyComponent,
     UserBarComponent,
     MetrcSummaryComponent,
+    AverageHourlySalesLaborChartComponent,
+
     M22ResizableComponent,
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,

@@ -137,13 +137,13 @@ export class PosOperationsComponent implements OnInit {
     }))
   }
 
-
   get viewMetrcNetSales() {
     if (this.uiTransactions && (this.uiTransactions.recmedPricing || this.uiTransactions.enablMEDClients)) {
       return this.metrcNetSalesSummary;
     }
     return null
   }
+
   refreshClosingCheck() {
     const site = this.siteService.getAssignedSite();
     this.closingCheck$ = this.transferDataService.canCloseDay(site).pipe(
@@ -276,8 +276,11 @@ export class PosOperationsComponent implements OnInit {
     this.orderMethodsService.clearOrderSubscription();
     this.balanceSheetsClosed = ''
 
-    this.closingProcedure$ = closingCheck$.pipe(
-      switchMap( data => {
+    this.closingProcedure$ =
+       email$.pipe(switchMap(data => {
+        return closingCheck$
+        }
+      )).pipe(switchMap( data => {
           //determine if the day can be closed.
           //if it can't then return what is told from the webapi
           if (data){
@@ -306,11 +309,11 @@ export class PosOperationsComponent implements OnInit {
         return of(true)
       })).pipe(
         switchMap(data => {
-            if (!data) {
-              this.closeResult  =  this.closeResult + '.Email not sent.'
-            }
-            this.closeResult =  this.closeResult  + 'Email sent.'
-            return this.balanceSheetService.closeAllSheets(site)
+          if (!data) {
+            this.closeResult  =  this.closeResult + '.Email not sent.'
+          }
+          this.closeResult =  this.closeResult  + 'Email sent.'
+          return this.balanceSheetService.closeAllSheets(site)
         }
       )).pipe(
         switchMap(data => {

@@ -1,5 +1,4 @@
 <div  class="container" *ngIf="(uiTransactions$ | async) as value">
-
   <ng-container *ngTemplateOutlet="headerView"></ng-container>
 
   <div *ngIf="(email$ | async) as email; else emailing"></div>
@@ -84,35 +83,15 @@
       </ng-template>
 
       <ng-template #reportCategories>
-        <div class="ps-flex-group">
-           <div>
+        <div class="ps-flex-group" >
+          <div *ngFor="let report of reportGroupList">
             <button mat-flat-button
-                    style="width:205px;height:50px"
+                    style="width:165px;height:50px"
                     color="primary"
-                    (click)="toggleReports('financials')">
-            <mat-icon>money</mat-icon>Financials</button>
-          </div>
-          <div>
-            <button mat-flat-button
-                    style="width:205px;height:50px"
-                    color="primary"
-                    (click)="toggleReports('items')">
-            <mat-icon>products</mat-icon>Products & Services</button>
-          </div>
-          <div>
-            <button mat-flat-button
-                    style="width:205px;height:50px"
-                    color="primary"
-                    (click)="toggleReports('output')">
-            <mat-icon>inventory</mat-icon>Inventory & Menu</button>
-          </div>
-          <div>
-            <button mat-flat-button
-                    style="width:205px;height:50px"
-                    color="primary"
-                    (click)="toggleReports('audit')">
-            <mat-icon>inventory</mat-icon>Audit</button>
-          </div>
+                    (click)="toggleReports(report.value)">
+              <mat-icon>{{report.icon}}</mat-icon>{{report.name}}
+            </button>
+        </div>
         </div>
       </ng-template>
     <mat-divider></mat-divider>
@@ -129,10 +108,9 @@
     </div>
 
     <ng-template #itemReportButtons>
-      <div class="ps-flex-group">
-        <div>
+      <div class="ps-flex-group-nowrap" >
+        <div *ngFor="let item of itemReportList">
           <button mat-flat-button
-                 *ngFor="let item of itemReportList"
                   style="width:150px;height:50px" color="primary"
                   (click)="showView(item.id)">{{item.name}}</button>
         </div>
@@ -304,6 +282,7 @@
 
         <ng-container *ngTemplateOutlet="paymentRefundsView,context:
                                         {$implicit: site}"></ng-container>
+
         <ng-template #paymentRefunds let-site>
           <payment-report
                   [groupBy]="'deviceName'"
@@ -419,6 +398,12 @@
           </div>
         </ng-template>
       </div>
+
+      <div [hidden]="displayReports != 'labor'">
+
+        <button mat-raised-button color="primary" (click)="getAverageHourlySalesData()">Average Sales/Labor </button>
+
+      </div>
     </div>
   </div>
 </ng-template>
@@ -429,6 +414,10 @@
 
 <ng-container *ngIf="displayReports === 'financials'">
   <ng-container [ngTemplateOutlet]="financialSalesCharts"></ng-container>
+</ng-container>
+
+<ng-container *ngIf="displayReports === 'labor'">
+  <ng-container [ngTemplateOutlet]="laborReports"></ng-container>
 </ng-container>
 
 <ng-template #emailing>
@@ -579,4 +568,16 @@
       </product-chart-report>
     </div>
   </div>
+</ng-template>
+
+<ng-template #laborReports>
+  <ng-container *ngIf="averageHourlySales$ | async as dataArray;else loading">
+    <div *ngFor="let data of dataArray">
+      <average-hourly-sales-labor-chart [data]="data"></average-hourly-sales-labor-chart>
+    </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </ng-template>
 </ng-template>

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnChanges,  SimpleChange, Input, TemplateRef, ChangeDetectorRef } from '@angular/core';
-import { combineLatest, forkJoin, Observable, of, Subject, switchMap } from 'rxjs';
+import { combineLatest, forkJoin, Observable, of, shareReplay, Subject, switchMap } from 'rxjs';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { ReportingService} from 'src/app/_services/reporting/reporting.service';
 import { ISite,Item,IUser }  from 'src/app/_interfaces';
@@ -13,6 +13,7 @@ import { ClientTableService } from 'src/app/_services/people/client-table.servic
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
+import { SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -20,7 +21,9 @@ import { DateHelperService } from 'src/app/_services/reporting/date-helper.servi
 })
 
 export class DashboardComponent implements OnChanges,OnInit  {
+  averageHourlySales$: Observable<any[]>;
 
+  averageHourlySales = []
   dynamicData$      : any;
   // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   loadDynamicData:  boolean = false;
@@ -42,10 +45,11 @@ export class DashboardComponent implements OnChanges,OnInit  {
 
   reportGroupSelected: any;
   reportGroupList = [
-    {name: 'Financials', value: 'financials', id: 1, icon: ''},
-    {name: 'Products & Services', value: 'items', id: 2, icon: ''},
-    {name: 'Inventory / Menu', value: 'output', id: 3, icon: ''},
-    {name: 'Audit', value: 'audit', id: 4, icon: ''}
+    {name: 'Financials', value: 'financials', id: 1, icon: 'money'},
+    {name: 'Products & Services', value: 'items', id: 2, icon: 'list'},
+    {name: 'Inventory / Menu', value: 'output', id: 3, icon: 'inventory'},
+    {name: 'Labor', value: 'labor', id: '5', icon: 'people'},
+    {name: 'Audit', value: 'audit', id: 4, icon: 'inventory'}
   ]
 
   reportList = [
@@ -115,16 +119,17 @@ export class DashboardComponent implements OnChanges,OnInit  {
   constructor(
               private authentication  : AuthenticationService,
               private reportingService: ReportingService,
+              private salesPaymentsService: SalesPaymentsService,
               private sendGridService     :   SendGridService,
               private sitesService    : SitesService,
               private siteService        : SitesService,
               private menuService: MenuService,
-              public datepipe: DatePipe,
+              public  datepipe: DatePipe,
               private router: Router,
               private dateHelper: DateHelperService,
               private clientTableService: ClientTableService,
               private uISettingsService  : UISettingsService,
-              public authService: AuthenticationService,
+              public  authService: AuthenticationService,
               private cd: ChangeDetectorRef,
               private fb: FormBuilder,
           ) {
@@ -407,13 +412,19 @@ export class DashboardComponent implements OnChanges,OnInit  {
     if (report == 6) {
       this.dynamicData$ = this.clientTableService.GetNewClientsOverDateCount(site, 30)
     }
-
     this.loadDynamicData = true
+  }
 
+  getAverageHourlySalesData() {
+    console.log(this.sites)
+    const observablesArray: Observable<any>[] = this.sites.map(site =>
+        this.salesPaymentsService.getSalesAndLaborPeriodAverage(site, this.dateFrom, this.dateTo)
+    );
+    console.log(observablesArray.length)
+    this.averageHourlySales$ = forkJoin(observablesArray).pipe(shareReplay(1));
   }
 
   showView(view: any) {
-    console.log('show view', view)
     if (view == 0) {
       this.reportsListView.forEach(data => {
         data.visible = true

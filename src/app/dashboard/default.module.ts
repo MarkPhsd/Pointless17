@@ -8,13 +8,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { SitesComponent } from 'src/app/modules/sites/sites.component';
 import { ProfileComponent } from 'src/app/modules/profile/profile.component';
 import { AnimationCountService, AWSBucketService, DevService } from 'src/app/_services/';
-import { DashboardService } from 'src/app/_services/reporting/dashboard.service';
-import { ReportingService } from 'src/app/_services/';
-import { UserService } from 'src/app/_services/';
-import { MenuService } from 'src/app/_services/';
-import { AuthenticationService } from 'src/app/_services/';
 
-import { ContactsService, OrdersService, TextMessagingService, ThemesService } from 'src/app/_services';
 import { LoggingInterceptor } from 'src/app/_http-interceptors/loggin.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DefaultComponent } from './default.component';
@@ -24,7 +18,6 @@ import { SitepointsComponent } from 'src/app/modules/profile/details/sitepoints/
 import { CategoriesComponent } from 'src/app/modules/menu/categories/categories.component';
 import { ProducteditComponent } from 'src/app/modules/admin/products/productedit/productedit.component';
 import { AppRoutingModule } from 'src/app/app-routing.module';
-import { ItemsService } from 'src/app/_services/transactions/items.services';
 import { UsermessagesComponent } from 'src/app/shared/widgets/usermessages/usermessages.component';
 import { WishlistComponent } from 'src/app/modules/profile/wishlist/wishlist.component';
 import { DndDirective, ScrollableDirective } from 'src/app/_directives/';
@@ -44,20 +37,12 @@ import { SearchResultsComponent } from 'src/app/modules/menu/search-results/sear
 import { AdminComponent } from 'src/app/modules/admin/admin.component';
 import { SettingsComponent } from 'src/app/modules/admin/settings/settings.component';
 import { PosListComponent } from 'src/app/modules/admin/settings/pos-list/pos-list.component';
-import { AgGridModule } from 'ag-grid-angular';
-import { EmployeeService } from 'src/app/_services/people/employee-service.service';
-import { SettingsService } from 'src/app/_services/system/settings.service';
-import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ProductlistviewComponent } from 'src/app/modules/admin/products/productlistview/productlistview.component';
 import { SiteEditComponent } from 'src/app/modules/admin/settings/site-edit/site-edit.component';
-import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
-import { ReviewsService } from 'src/app/_services/people/reviews.service';
-import { InventoryLocationsService} from 'src/app/_services/inventory/inventory-locations.service';
 import { ReviewEditComponent } from 'src/app/modules/reviews/review-edit/review-edit.component';
 import { ReviewComponent } from 'src/app/modules/reviews/review/review.component';
 import { ReviewsComponent } from 'src/app/modules/reviews/reviews.component';
-import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { PosOrderListComponent } from 'src/app/modules/posorders/pos-order-list/pos-order-list.component';
 import { StickyHeaderComponent } from 'src/app/_components/sticky-header.component';
 import { ReportsComponent } from 'src/app/modules/admin/reports/reports.component';
@@ -78,13 +63,9 @@ import { METRCProductsAddComponent } from '../modules/admin/metrc/packages/metrc
 import { InventoryLocationsComponent } from '../modules/admin/inventory/inventory-locations/inventory-locations.component';
 import { ItemCategoriesListComponent } from '../modules/admin/metrc/items/item-categories-list/item-categories-list.component';
 import { ItemCategoriesEditComponent } from '../modules/admin/metrc/items/item-categories-edit/item-categories-edit.component';
-import { MetrcFacilitiesService } from 'src/app/_services/metrc/metrc-facilities.service';
-// import { FacilitiesListComponent } from '../modules/admin/metrc/facilities/facilities-list/facilities-list.component';
-import { InventoryAssignmentService } from '../_services/inventory/inventory-assignment.service';
 import { InventoryListComponent } from '../modules/admin/inventory/inventory-list/inventory-list/inventory-list.component';
 import { MetrcSalesListComponent } from '../modules/admin/metrc/metrc-sales-list/metrc-sales-list.component';
 // import { StrainProductEditComponent } from '../modules/admin/products/productedit/strain-product-edit/strain-product-edit.component';
-import { ItemTypeService } from '../_services/menu/item-type.service';
 import { ItemTypeComponent } from '../modules/admin/products/item-type/item-type.component';
 import { ItemTypeEditorComponent } from '../modules/admin/products/item-type/item-type-editor/item-type-editor.component';
 // import { FlatRateEditComponent } from '../modules/admin/products/flatRate/flat-rate-edit/flat-rate-edit.component';
@@ -102,8 +83,6 @@ import { CSVImportComponent } from '../modules/admin/settings/database/csv-impor
 import { InstalledPrintersComponent } from '../modules/admin/settings/printing/installed-printers/installed-printers.component';
 import { MenuItemsInfiniteComponent } from '../modules/menu/menuitems/menu-items-infinite/menu-items-infinite.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { PrintingService } from '../_services/system/printing.service';
-import { LabelaryService } from '../_services/labelary/labelary.service';
 import { HTMLEditPrintingComponent } from '../modules/admin/settings/printing/htmledit-printing/htmledit-printing.component';
 import { ReceiptLayoutComponent } from '../modules/admin/settings/printing/receipt-layout/receipt-layout.component';
 import { CacheSettingsComponent } from '../modules/admin/settings/database/cache-settings/cache-settings.component';
@@ -144,7 +123,6 @@ import { ProductInfoPanelComponent } from '../modules/admin/products/product-inf
 
 import { UseGroupTaxAssignmentComponent } from '../modules/admin/products/item-type/use-group-tax-assignment/use-group-tax-assignment.component';
 import { PriceScheduleListComponent } from '../modules/admin/products/price-schedule/price-schedule-list/price-schedule-list.component';
-import { AgGridToggleComponent } from '../_components/_aggrid/ag-grid-toggle/ag-grid-toggle.component';
 
 import { RouteReuseService } from '../_services/system/route-reuse.service';
 import { OrderFilterPanelComponent } from '../modules/orders/order-filter-panel/order-filter-panel.component';
@@ -384,6 +362,7 @@ import { PartBuilderEditComponent } from '../modules/admin/products/part-builder
 import { PartBuilderMainComponent } from '../modules/admin/products/part-builder/part-builder-main/part-builder-main.component';
 import { PartBuilderComponentEditComponent } from '../modules/admin/products/part-builder/part-builder-component-edit/part-builder-component-edit.component';
 import { HouseAccountsListComponent } from '../modules/orders/house-accounts-list/house-accounts-list.component';
+// import { AverageHourlySalesLaborChartComponent } from '../modules/admin/reports/average-hourly-sales-labor-chart/average-hourly-sales-labor-chart.component';
 // import { PointlessReportingLibModule } from 'projects/pointess-reporting-lib/src/public-api';
 // import { ColorPickerModule } from 'ngx-color-picker';
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
@@ -794,7 +773,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
     DateScheduleComponent,
     TimeScheduleComponent,
-
     //
    ],
 

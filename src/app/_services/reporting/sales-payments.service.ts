@@ -3,7 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { AuthenticationService } from '../system/authentication.service';
-
+interface ILaborSummary {
+  Weekday: string;
+  Hour: number | null;
+  AverageQuantity: number | null;
+  AveragePay: number | null;
+  AverageSales: number | null;
+}
 export interface IPaymentSalesSearchModel {
   startDate:    string;
   endDate:      string;
@@ -57,6 +63,21 @@ export interface PaymentSummary {
   providedIn: 'root'
 })
 export class SalesPaymentsService {
+
+
+  getSalesAndLaborPeriodAverage(site: ISite, startDate: string, endDate: string) : Observable<ILaborSummary[]> {
+
+    const controller = `/SalesPayments/`
+
+    const endPoint = `GetSalesAndLaborPeriodAverage`
+
+    const parameters = `?startDate=${startDate}&endDate=${endDate}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<ILaborSummary[]>(url)
+
+  }
 
   getAvgWeekDayHourlySalesReport(site: ISite, startDate: string, endDate: string) : Observable<any> {
 
