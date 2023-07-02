@@ -7,7 +7,7 @@
 
   <br> <mat-divider  class="section-gap"></mat-divider> <br>
 
-  <ng-container *ngTemplateOutlet="reportsView"></ng-container>
+  <ng-container [ngTemplateOutlet]="reportsOrChartsView"></ng-container>
 
   <ng-template #loadingSites>.... loading</ng-template>
 </div>
@@ -46,7 +46,7 @@
               style="margin-top: 10px"
               (click)="toggleShowValues()">
         <span *ngIf="showValues">
-          <mat-icon color="primary">analytics</mat-icon>Hide List Reports
+          <mat-icon color="primary">analytics</mat-icon>Toggle Charts
         </span>
       </button>
     </div>
@@ -83,10 +83,10 @@
       </ng-template>
 
       <ng-template #reportCategories>
-        <div class="ps-flex-group" >
+        <div class="ps-flex-group-content-start" >
           <div *ngFor="let report of reportGroupList">
-            <button mat-flat-button
-                    style="width:165px;height:50px"
+            <button mat-raised-button
+                    style="width:1y5px;height:50px"
                     color="primary"
                     (click)="toggleReports(report.value)">
               <mat-icon>{{report.icon}}</mat-icon>{{report.name}}
@@ -132,6 +132,7 @@
 
   <div [hidden]="displayReports != 'output'">
     <ng-container [ngTemplateOutlet]="reportDesignerOutPutView" ></ng-container>
+
     <ng-template #reportDesigner>
       <h3>Output Reports</h3>
       <div *ngIf="reportDesignerForm">
@@ -144,6 +145,7 @@
         </app-mat-select>
       </div>
     </ng-template>
+
   </div>
 
   <div [hidden]="displayReports != 'audit' ">
@@ -181,6 +183,7 @@
 </ng-template>
 
 <ng-template #reportsView>
+
   <div class="grid-flow" *ngIf="sites && showValues && dateFrom && dateTo">
     <div  *ngFor="let site of sites">
       <div style="margin-left:15px;width:350px;">
@@ -192,78 +195,80 @@
       </div>
 
       <div [hidden]="displayReports != 'financials'">
-        <div class="summary">
-          <ng-container *ngTemplateOutlet="viewMetrcNetSales, context: {$implicit: site}">
-          </ng-container>
-        </div>
+        <ng-container *ngIf="viewChartReports == 0">
+          <div class="summary">
+            <ng-container *ngTemplateOutlet="viewMetrcNetSales, context: {$implicit: site}">
+            </ng-container>
+          </div>
 
-        <sales-tax-report
+          <sales-tax-report
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [minimized]="'true'"
+                  [notifier]="childNotifier">
+            <div header>
+              <mat-icon >summarize</mat-icon> Sales - {{site.name}}
+            </div>
+            <mat-icon>summarize</mat-icon> Sales - {{site.name}}
+          </sales-tax-report>
+
+          <payment-report
+                  [site]    ="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]  ="dateTo"
+                  [notifier]="childNotifier">
+            <div header>
+              <mat-icon >summarize</mat-icon> Payments - {{site.name}}
+            </div>
+            <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
+          </payment-report>
+
+          <payment-report
+                  [groupBy]="'service'"
+                  [site]    ="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]  ="dateTo"
+                  [notifier]="childNotifier">
+            <div header>
+              <mat-icon >summarize</mat-icon> Sale Type - {{site.name}}
+            </div>
+            <mat-icon>credit_card</mat-icon> Sale Type - {{site.name}}
+          </payment-report>
+
+          <ng-container *ngTemplateOutlet="balanceSheetView,
+                                          context: {$implicit: {site: site}}">
+          </ng-container>
+
+          <ng-template #balanceSheetView>
+            <balance-sheet-report
                 [site]="site"
                 [dateFrom]="dateFrom"
                 [dateTo]="dateTo"
-                [minimized]="'true'"
-                [notifier]="childNotifier">
-          <div header>
-            <mat-icon >summarize</mat-icon> Sales - {{site.name}}
-          </div>
-          <mat-icon>summarize</mat-icon> Sales - {{site.name}}
-        </sales-tax-report>
+                [notifier]="childNotifier"
+                >
+            </balance-sheet-report>
+          </ng-template>
 
-        <payment-report
-                [site]    ="site"
-                [dateFrom]="dateFrom"
-                [dateTo]  ="dateTo"
-                [notifier]="childNotifier">
-          <div header>
-            <mat-icon >summarize</mat-icon> Payments - {{site.name}}
-          </div>
-          <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
-        </payment-report>
-
-        <payment-report
-                [groupBy]="'service'"
-                [site]    ="site"
-                [dateFrom]="dateFrom"
-                [dateTo]  ="dateTo"
-                [notifier]="childNotifier">
-          <div header>
-            <mat-icon >summarize</mat-icon> Sale Type - {{site.name}}
-          </div>
-          <mat-icon>credit_card</mat-icon> Sale Type - {{site.name}}
-        </payment-report>
-
-        <ng-container *ngTemplateOutlet="balanceSheetView,
-                                        context: {$implicit: {site: site}}">
+          <payment-report
+                  [groupBy]="'deviceName'"
+                  [site]    ="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]  ="dateTo"
+                  [notifier]="childNotifier">
+            <div header>
+              <mat-icon >summarize</mat-icon> Devices - {{site.name}}
+            </div>
+            <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
+          </payment-report>
         </ng-container>
-
-        <ng-template #balanceSheetView>
-          <balance-sheet-report
-              [site]="site"
-              [dateFrom]="dateFrom"
-              [dateTo]="dateTo"
-              [notifier]="childNotifier"
-              >
-          </balance-sheet-report>
-        </ng-template>
-
-        <payment-report
-                [groupBy]="'deviceName'"
-                [site]    ="site"
-                [dateFrom]="dateFrom"
-                [dateTo]  ="dateTo"
-                [notifier]="childNotifier">
-          <div header>
-            <mat-icon >summarize</mat-icon> Devices - {{site.name}}
-          </div>
-          <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
-        </payment-report>
-
       </div>
 
       <div [hidden]="displayReports != 'audit'">
 
         <ng-container *ngTemplateOutlet="paymentVoidsView,context:
                       {$implicit: site}"></ng-container>
+
         <ng-template #paymentVoids let-site>
           <payment-report
                   [groupBy]="'deviceName'"
@@ -300,6 +305,7 @@
         </ng-template>
 
         <ng-container *ngTemplateOutlet="itemVoidsView,context: {$implicit: site}"></ng-container>
+
         <ng-template #itemVoids let-site>
           <div>
             <item-sales-card
@@ -317,15 +323,20 @@
             </item-sales-card>
           </div>
         </ng-template>
+
       </div>
 
       <div [hidden]="displayReports != 'items'">
-        <h3>{{site?.name}}</h3>
-        <ng-container *ngTemplateOutlet="categorySalesView,context: {$implicit: site}"></ng-container>
+
+        <ng-container *ngIf="viewChartReports == 0">
+          <ng-container *ngTemplateOutlet="categorySalesView,context: {$implicit: site}"></ng-container>
+          <ng-container *ngTemplateOutlet="taxedCategorySalesView,context: {$implicit: site}"></ng-container>
+          <ng-container *ngTemplateOutlet="nonTaxedCategorySalesView,context: {$implicit: site}"></ng-container>
+          <ng-container *ngTemplateOutlet="itemSalesView,context: {$implicit: site}"></ng-container>
+        </ng-container>
 
         <ng-template #categorySales let-site>
           <div>
-
             <item-sales-card
                   [site]="site"
                   [dateFrom]="dateFrom"
@@ -342,7 +353,6 @@
 
         </ng-template>
 
-        <ng-container *ngTemplateOutlet="taxedCategorySalesView,context: {$implicit: site}"></ng-container>
         <ng-template #taxedCategorySales let-site>
           <div>
             <item-sales-card
@@ -361,7 +371,6 @@
           </div>
         </ng-template>
 
-        <ng-container *ngTemplateOutlet="nonTaxedCategorySalesView,context: {$implicit: site}"></ng-container>
         <ng-template #nonTaxedCategorySales let-site>
           <div>
             <item-sales-card
@@ -380,7 +389,6 @@
           </div>
         </ng-template>
 
-        <ng-container *ngTemplateOutlet="itemSalesView,context: {$implicit: site}"></ng-container>
         <ng-template #itemSales let-site>
           <div>
             <item-sales-card
@@ -397,27 +405,39 @@
             </item-sales-card>
           </div>
         </ng-template>
+
       </div>
 
       <div [hidden]="displayReports != 'labor'">
-
-        <button mat-raised-button color="primary" (click)="getAverageHourlySalesData()">Average Sales/Labor </button>
-
+        <div *ngIf="viewChartReports == 0">
+          <ng-container [ngTemplateOutlet]="laborReports"></ng-container>
+        </div>
       </div>
     </div>
   </div>
 </ng-template>
 
-<ng-container *ngIf="displayReports === 'items'">
-  <ng-container [ngTemplateOutlet]="productSalesCharts"></ng-container>
-</ng-container>
+<ng-container *ngIf="viewChartReports == 1">
 
-<ng-container *ngIf="displayReports === 'financials'">
-  <ng-container [ngTemplateOutlet]="financialSalesCharts"></ng-container>
-</ng-container>
+  <ng-container  *ngIf="displayReports === 'financials'" >
+    <ng-container [ngTemplateOutlet]="financialSalesCharts"></ng-container>
+  </ng-container>
 
-<ng-container *ngIf="displayReports === 'labor'">
-  <ng-container [ngTemplateOutlet]="laborReports"></ng-container>
+  <div  [hidden]="displayReports != 'labor'">
+
+    <div *ngIf="viewChartReports == 1">
+      <button mat-raised-button color="primary" (click)="getAverageHourlySalesData()">Average Sales/Labor </button>
+      <ng-container *ngIf="displayReports === 'labor'">
+        <ng-container [ngTemplateOutlet]="laborReports"></ng-container>
+      </ng-container>
+    </div>
+
+  </div>
+
+  <ng-container  *ngIf= "displayReports === 'items'">
+    <ng-container [ngTemplateOutlet]="productSalesCharts"></ng-container>
+  </ng-container>
+
 </ng-container>
 
 <ng-template #emailing>
@@ -525,9 +545,64 @@
 </ng-template>
 
 <ng-template #productSalesCharts>
-  <div *ngFor="let site of sites" class="ps-flex-group" >
+
+  <div class="margin">
+    <button style="width:175px; height:50px"
+            mat-raised-button
+            (click)="getTopProductCharts()">
+      Show Top Products
+    </button>
+  </div>
+
+  <ng-container *ngIf="showTopSales">
+
+    <ng-container *ngIf="topSalesByTotalPrice$ | async as dataArray;else loading">
+      <div  *ngFor="let data of dataArray;let i=index"  class="margin-5" style="width:620px">
+        <product-chart-report
+          style="width:375px"
+          [data]="data"
+          [site]="sites[i]"
+          [groupBy]="'product'"
+          [counter]  ="count+1"
+          [notifier]="childNotifier">
+          <div site><h4>{{sites[i].name}} - Top Product Sales</h4></div>
+        </product-chart-report>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="topSalesByQuantity$ | async as dataArray;else loading">
+      <div   *ngFor="let data of dataArray;let i=index"  class="margin-5" style="width:620px">
+        <product-chart-report
+          style="width:375px"
+          [data]="data"
+          [site]="sites[i]"
+          [groupBy]="'product'"
+          [counter]  ="count+1"
+          [notifier]="childNotifier">
+          <div site><h4>{{sites[i].name}} - Top Product Quantity</h4></div>
+        </product-chart-report>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="topSalesByProfit$ | async as dataArray;else loading">
+      <div *ngFor="let data of dataArray;let i=index"  class="margin-5" style="width:620px">
+        <product-chart-report
+          style="width:375px"
+          [data]="data"
+          [site]="sites[i]"
+          [groupBy]="'product'"
+          [counter]  ="count+1"
+          [notifier]="childNotifier">
+          <div site><h4>{{sites[i].name}} - Top Product Profit</h4></div>
+        </product-chart-report>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <div *ngFor="let site of sites" class="ps-flex-group-content-start" >
     <div class="margin-5" style="width:620px">
       <product-chart-report
+          style="width:375px"
         [dateFrom] ="dateFrom"
         [dateTo]   ="dateTo"
         [site]    ="site"
@@ -539,10 +614,10 @@
     </div>
   </div>
 
-  <div *ngFor="let site of sites" class="ps-flex-group" >
+  <div *ngFor="let site of sites" class="ps-flex-group-content-start" >
     <div class="margin-5" style="width:620px">
       <product-chart-report
-        style="width:500px"
+        style="width:375px"
         [dateFrom] ="dateFrom"
         [dateTo]   ="dateTo"
         [site]    ="site"
@@ -554,13 +629,13 @@
     </div>
   </div>
 
-  <div *ngFor="let site of sites" class="ps-flex-group" >
+  <div *ngFor="let site of sites"  class="ps-flex-group-content-start" >
     <div class="margin-5" style="width:620px">
       <product-chart-report
-        style="width:500px"
+        style="width:375px"
         [dateFrom] ="dateFrom"
         [dateTo]   ="dateTo"
-        [site]    ="site"
+        [site]     ="site"
         [counter]  ="count+1"
         [groupBy]    ="'type'"
         [notifier]="childNotifier">
@@ -568,16 +643,33 @@
       </product-chart-report>
     </div>
   </div>
+
+  <ng-template #loading><mat-spinner [diameter]="50"></mat-spinner></ng-template>
 </ng-template>
 
 <ng-template #laborReports>
-  <ng-container *ngIf="averageHourlySales$ | async as dataArray;else loading">
-    <div *ngFor="let data of dataArray">
-      <average-hourly-sales-labor-chart [data]="data"></average-hourly-sales-labor-chart>
-    </div>
+
+  <ng-container *ngIf="viewChartReports == 0">
+    <h2>Labor Reports</h2>
+    <employee-clock-list
+        [reportOnly] ="true"
+        [notifier]  ="childNotifier"
+        [startDate] ="dateFrom"
+        [counter]   ="count+1"
+        [endDate]   ="dateTo">
+    </employee-clock-list>
   </ng-container>
 
-  <ng-template #loading>
-    <mat-spinner [diameter]="50"></mat-spinner>
-  </ng-template>
+  <ng-container *ngIf="viewChartReports == 1">
+    <ng-container *ngIf="averageHourlySales$ | async as dataArray;else loading">
+      <div *ngFor="let data of dataArray">
+        <average-hourly-sales-labor-chart [data]="data"></average-hourly-sales-labor-chart>
+      </div>
+    </ng-container>
+
+    <ng-template #loading>
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </ng-template>
+  </ng-container>
+
 </ng-template>

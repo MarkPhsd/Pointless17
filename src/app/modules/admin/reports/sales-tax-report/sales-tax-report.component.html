@@ -65,6 +65,12 @@
             <div class="grid-item field_bold totals_label"> Gross (net + taxes  ) :</div>
             <div class="grid-item field_bold totals_label"> {{sale.grossSales | currency }}  </div>
           </div>
+
+          <div class="grid-footer" *ngIf="laborSummary">
+            <div class="grid-item field_bold totals_label"> Labor  :</div>
+            <div class="grid-item field_bold totals_label"> {{laborSummary?.otPay + laborSummary?.regPay | currency }}  </div>
+          </div>
+
         </mat-card-footer>
       </mat-card>
 

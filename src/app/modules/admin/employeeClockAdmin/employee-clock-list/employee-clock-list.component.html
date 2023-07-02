@@ -1,5 +1,5 @@
 <div class="container">
-  <div *ngIf="smallDevice">
+  <div *ngIf="smallDevice && !reportOnly">
     <button mat-button (click)="filterBottomSheet()">
       <mat-icon>search</mat-icon>
     </button>
@@ -15,7 +15,25 @@
       <div *ngIf="value" class="loader">
         <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
       </div>
-      
+
+      <div *ngIf="summary"  class="grid-headers">
+        <div>Total Hours</div>
+        <div>Total Pay</div>
+        <div>Reg Hours</div>
+        <div>Reg Pay</div>
+        <div>OT Hours</div>
+        <div>OT Pay</div>
+      </div>
+
+      <div *ngIf="summary"  class="grid-headers">
+        <div>{{summary?.regHours || 0 + summary.otHours || 0}}</div>
+        <div>{{summary?.otPay + summary.regPay  | currency}}</div>
+        <div>{{summary?.regHours || 0}}</div>
+        <div>{{summary?.regPay || 0 | currency}}</div>
+        <div>{{summary?.otHours || 0}}</div>
+        <div>{{summary?.otPay || 0  | currency}}</div>
+      </div>
+
       <ag-grid-angular
             #agGrid
             [style]              ="gridDimensions"
@@ -31,8 +49,7 @@
       </ag-grid-angular>
     </div>
 
-
-    <div class="filter-panel">
+    <div class="filter-panel" *ngIf="!reportOnly">
       <employee-clock-filter
           (outputRefreshSearch)="refreshSearchAny($event)">
       </employee-clock-filter>

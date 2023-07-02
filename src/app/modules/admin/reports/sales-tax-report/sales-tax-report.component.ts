@@ -1,8 +1,11 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { catchError, Observable, of, Subject, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
+import { EmployeeClock } from 'src/app/_interfaces/people/employeeClock';
+import { EmployeeClockResults, EmployeeClockSearchModel, EmployeeClockService } from 'src/app/_services/employeeClock/employee-clock.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
   selector: 'sales-tax-report',
@@ -27,9 +30,12 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   @Input() pendingTransactions: boolean;
   sales: ITaxReport;
   sales$ : Observable<ITaxReport>;
-
+  laborSummary$: Observable<EmployeeClock>;
+  laborSummary = {} as EmployeeClock;
   constructor(
     private popOutService: ProductEditButtonService,
+    private employeeClockService: EmployeeClockService,
+    private siteService: SitesService,
     private reportingItemsSalesService: ReportingItemsSalesService) { }
   processing: boolean;
 
@@ -46,17 +52,14 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   refreshSales() {
 
     this.processing = true;
-
+    this.laborSummary$ = this.getLaborSummary();
     let item = {startDate: this.dateFrom, endDate: this.dateTo, zrunID: this.zrunID,
                 pendingTransactions: this.pendingTransactions,
                 scheduleDateEnd: this.scheduleDateEnd,
                 scheduleDateStart: this.scheduleDateStart } as IReportingSearchModel;
 
     if (item.scheduleDateEnd && item.scheduleDateStart) {
-      console.log('performing schedule report')
-      this.sales$ =
-      this.reportingItemsSalesService.putSalesTaxReport
-        (this.site, item ).pipe(switchMap(data => {
+      this.sales$ =  this.reportingItemsSalesService.putSalesTaxReport(this.site, item ).pipe(switchMap(data => {
           this.sales = data;
           this.processing = false;
           return of(data)
@@ -68,9 +71,10 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
     }
 
     if (item.zrunID) {
-      this.sales$ =
-      this.reportingItemsSalesService.putSalesTaxReport
-        (this.site, item ).pipe(switchMap(data => {
+      this.sales$ = this.laborSummary$.pipe(switchMap(data => {
+        this.laborSummary = data;
+        return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
+      })).pipe(switchMap(data => {
           this.sales = data;
           this.processing = false;
           return of(data)
@@ -80,19 +84,35 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
 
     // console.log('performing range report')
 
-    this.sales$ =
-      this.reportingItemsSalesService.putSalesTaxReport
-        (this.site, item).pipe(switchMap(data => {
-          this.sales = data;
-          this.processing = false;
-          return of(data)
-      }))
+    this.sales$ =  this.laborSummary$.pipe(switchMap(data => {
+      this.laborSummary = data;
+      console.log('labor summary', data)
+      return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
+    })).pipe(switchMap(data => {
+        this.sales = data;
+        this.processing = false;
+        return of(data)
+    }))
   }
 
   dataGridView() {
     this.popOutService.openDynamicGrid(
       {data: this.sales, name: 'ITaxReport'}
     )
+  }
+
+  getLaborSummary():  Observable<EmployeeClock>  {
+    const site                = this.siteService.getAssignedSite()
+    if (this.dateFrom && this.dateTo) {
+      const search = {} as EmployeeClockSearchModel
+      search.pageNumber = 1;
+      search.pageSize =   500;
+      search.startDate =  this.dateFrom;
+      search.endDate   =  this.dateTo;
+      const laborSummary$ = this.employeeClockService.getTimeClockSummaryOnly(site, search)
+      return laborSummary$
+    }
+    return of({} as EmployeeClock)
   }
 
   downloadCSV() {

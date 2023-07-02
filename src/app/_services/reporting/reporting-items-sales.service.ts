@@ -245,6 +245,46 @@ export class ReportingItemsSalesService {
     return  this.http.post<unknown>(url, searchModel )
   }
 
+  getTopSalesByQuantity(site, startDate, endDate): Observable<IReportItemSales[]> {
+    const controller = `/ReportItemSales/`
+
+    const endPoint = `getTopSalesByQuantity`
+
+    const parameters = `?StartDate=${startDate}&endDate=${endDate}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<IReportItemSales[]>(url )
+
+  }
+
+  getTopSalesByTotalPrice(site, startDate, endDate): Observable<IReportItemSales[]> {
+    const controller = `/ReportItemSales/`
+
+    const endPoint = `getTopSalesByTotalPrice`
+
+    const parameters = `?StartDate=${startDate}&endDate=${endDate}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<IReportItemSales[]>(url )
+
+  }
+
+  getTopSalesByProfit(site, startDate, endDate): Observable<IReportItemSales[]> {
+    const controller = `/ReportItemSales/`
+
+    const endPoint = `getTopSalesByProfit`
+
+    const parameters = `?StartDate=${startDate}&endDate=${endDate}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<IReportItemSales[]>(url )
+
+  }
+
+
   getItemSalesReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSales[]> {
 
     IReportingSearchModel.productsOnly = true;

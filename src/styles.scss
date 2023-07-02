@@ -672,6 +672,16 @@ mat-dialog-container {
   gap: 10px;
 }
 
+.ps-flex-group-content-start {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content:flex-start;
+  margin: 5px;
+  gap: 10px;
+}
+
+
 .ps-flex-group-nowrap {
   display: flex;
   flex-direction: row;

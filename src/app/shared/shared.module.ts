@@ -218,6 +218,9 @@ import { CheckBoxCellComponent } from './widgets/check-box-cell/check-box-cell.c
 import { TimeChartReportComponent } from '../modules/admin/reports/time-chart-report/time-chart-report.component';
 import { ProductChartReportComponent } from '../modules/admin/reports/product-chart-report/product-chart-report.component';
 import { AverageHourlySalesLaborChartComponent } from '../modules/admin/reports/average-hourly-sales-labor-chart/average-hourly-sales-labor-chart.component';
+import { EmployeeClockListComponent } from '../modules/admin/employeeClockAdmin/employee-clock-list/employee-clock-list.component';
+import { EmployeeClockEditComponent } from '../modules/admin/employeeClockAdmin/employee-clock-edit/employee-clock-edit.component';
+import { EmployeeClockFilterComponent } from '../modules/admin/employeeClockAdmin/employee-clock-filter/employee-clock-filter.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -282,6 +285,10 @@ import { AverageHourlySalesLaborChartComponent } from '../modules/admin/reports/
     DynamicAgGridComponent,
     EmailSettingsComponent,
     EmailEntryComponent,
+    EmployeeClockListComponent,
+    EmployeeClockListComponent,
+    EmployeeClockEditComponent,
+    EmployeeClockFilterComponent,
     ExitLabelSelectionComponent,
     EditButtonsStandardComponent,
     FacilitySearchSelectorComponent,
@@ -526,6 +533,10 @@ import { AverageHourlySalesLaborChartComponent } from '../modules/admin/reports/
     DepartmentMenuComponent,
     DynamicAgGridComponent,
     EditButtonsStandardComponent,
+    EmployeeClockListComponent,
+    EmployeeClockEditComponent,
+    EmployeeClockFilterComponent,
+
     FacilitySearchSelectorComponent,
     FastUserSwitchComponent,
     FilterComponent,

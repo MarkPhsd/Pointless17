@@ -329,9 +329,9 @@ import { ReportViewerComponent } from '../modules/admin/devx-reporting/report-vi
 import { JobTypesEditComponent } from '../modules/admin/clients/jobs/job-types-edit/job-types-edit.component';
 import { JobTypesListComponent } from '../modules/admin/clients/jobs/job-types-list/job-types-list.component';
 import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/balanceSheets/balance-sheet-edit/balance-sheet-employee-sales/balance-sheet-employee-sales.component';
-import { EmployeeClockEditComponent } from '../modules/admin/employeeClockAdmin/employee-clock-edit/employee-clock-edit.component';
-import { EmployeeClockFilterComponent } from '../modules/admin/employeeClockAdmin/employee-clock-filter/employee-clock-filter.component';
-import { EmployeeClockListComponent } from '../modules/admin/employeeClockAdmin/employee-clock-list/employee-clock-list.component';
+// import { EmployeeClockEditComponent } from '../modules/admin/employeeClockAdmin/employee-clock-edit/employee-clock-edit.component';
+// import { EmployeeClockFilterComponent } from '../modules/admin/employeeClockAdmin/employee-clock-filter/employee-clock-filter.component';
+// import { EmployeeClockListComponent } from '../modules/admin/employeeClockAdmin/employee-clock-list/employee-clock-list.component';
 import { ClockBreaksTypesComponent } from '../modules/admin/employeeClockAdmin/clock-breaks-types/clock-breaks-types.component';
 import { DailyReportComponent } from '../modules/admin/settings/printing/daily-report/daily-report.component';
 import { QuickPayButtonsComponent } from '../modules/posorders/pos-order/quick-pay-buttons/quick-pay-buttons.component';
@@ -424,9 +424,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     BlogPostEditComponent,
     BlogPostSortComponent,
 
-    EmployeeClockEditComponent,
-    EmployeeClockListComponent,
-    EmployeeClockFilterComponent,
+    // EmployeeClockEditComponent,
+    // EmployeeClockListComponent,
+    // EmployeeClockFilterComponent,
 
     ClientTypeListComponent,
     ClientTypeEditComponent,

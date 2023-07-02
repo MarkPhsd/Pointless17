@@ -19,6 +19,17 @@
       </button>
     </div>
 
+    <div *ngIf="data; else loading">
+      <div id="widget"
+          *ngIf="chartOptions">
+        <highcharts-chart
+            [Highcharts]="Highcharts"
+            [options]   ="chartOptions"
+            [oneToOne]  ="true">
+        </highcharts-chart>
+      </div>
+    </div>
+
     <div *ngIf="(action$ | async) as data; else loading">
       <div id="widget"
           *ngIf="chartOptions">

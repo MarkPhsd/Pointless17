@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
+import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -22,6 +23,11 @@ import { SalesPaymentsService } from 'src/app/_services/reporting/sales-payments
 
 export class DashboardComponent implements OnChanges,OnInit  {
   averageHourlySales$: Observable<any[]>;
+  topSalesByQuantity$: Observable<any[]>;
+  topSalesByTotalPrice$ : Observable<any[]>;
+  topSalesByProfit$: Observable<any[]>;
+  showTopSales: boolean;
+  viewChartReports : number = 0;
 
   averageHourlySales = []
   dynamicData$      : any;
@@ -86,6 +92,11 @@ export class DashboardComponent implements OnChanges,OnInit  {
 
   @ViewChild('designReportButton')   designReportButton: TemplateRef<any> | undefined;
 
+  @ViewChild('reportsView')   reportsView: TemplateRef<any> | undefined;
+  @ViewChild('chartsView')   chartsView: TemplateRef<any> | undefined;
+
+
+
   emailSending           = false;
   showValues             = false;
   email$                 : Observable<any>;
@@ -117,10 +128,11 @@ export class DashboardComponent implements OnChanges,OnInit  {
   completionDateForm     : UntypedFormGroup;
 
   constructor(
-              private authentication  : AuthenticationService,
-              private reportingService: ReportingService,
-              private salesPaymentsService: SalesPaymentsService,
-              private sendGridService     :   SendGridService,
+              private authentication              : AuthenticationService,
+              private reportingService            : ReportingService,
+              private  reportingItemsSalesService : ReportingItemsSalesService,
+              private salesPaymentsService        : SalesPaymentsService,
+              private sendGridService             :   SendGridService,
               private sitesService    : SitesService,
               private siteService        : SitesService,
               private menuService: MenuService,
@@ -212,6 +224,15 @@ export class DashboardComponent implements OnChanges,OnInit  {
     return inputForm;
   }
 
+  get  reportsOrChartsView() {
+    if (this.viewChartReports == 0) {
+      return this.reportsView
+    }
+    if (this.viewChartReports == 1) {
+      return this.chartsView;
+    }
+  }
+
   toggleReports(type) {
     this._showValues(true)
     this.showValues = true;
@@ -281,8 +302,16 @@ export class DashboardComponent implements OnChanges,OnInit  {
   }
 
   toggleShowValues() {
-    this.showValues= !this.showValues
-    this._showValues(this.showValues)
+    if (this.viewChartReports == 0) {
+      this.viewChartReports = 1;
+      return
+    }
+    if (this.viewChartReports == 1) {
+      this.viewChartReports = 0;
+      return;
+    }
+    // this.showValues= !this.showValues
+    // this._showValues(this.showValues)
   }
 
   _showValues(result: boolean) {
@@ -336,7 +365,7 @@ export class DashboardComponent implements OnChanges,OnInit  {
 
   //gets filterShared Component and displays the chart data
   receiveData(event) {
-    console.log('event', event)
+    // console.log('event', event)
     this.dateFrom = "" // data[0]
     this.dateTo = ""
     this.dataFromFilter = event
@@ -416,12 +445,35 @@ export class DashboardComponent implements OnChanges,OnInit  {
   }
 
   getAverageHourlySalesData() {
-    console.log(this.sites)
+
     const observablesArray: Observable<any>[] = this.sites.map(site =>
         this.salesPaymentsService.getSalesAndLaborPeriodAverage(site, this.dateFrom, this.dateTo)
     );
-    console.log(observablesArray.length)
+
     this.averageHourlySales$ = forkJoin(observablesArray).pipe(shareReplay(1));
+  }
+
+
+  getTopProductCharts() {
+    this.showTopSales = true ;
+    const topProductsProfit: Observable<any>[] = this.sites.map(site =>
+      this.reportingItemsSalesService.getTopSalesByProfit(site, this.dateFrom, this.dateTo)
+    );
+
+    this.topSalesByProfit$ = forkJoin(topProductsProfit).pipe(shareReplay(1));
+
+    const topSalesByTotalPrice: Observable<any>[] = this.sites.map(site =>
+      this.reportingItemsSalesService.getTopSalesByTotalPrice(site, this.dateFrom, this.dateTo)
+    );
+
+    this.topSalesByTotalPrice$ = forkJoin(topSalesByTotalPrice).pipe(shareReplay(1));
+
+    const topSalesByQuantity: Observable<any>[] = this.sites.map(site =>
+      this.reportingItemsSalesService.getTopSalesByQuantity(site, this.dateFrom, this.dateTo)
+    );
+
+    this.topSalesByQuantity$ = forkJoin(topSalesByQuantity).pipe(shareReplay(1));
+
   }
 
   showView(view: any) {

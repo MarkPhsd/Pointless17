@@ -23,7 +23,7 @@ export class ProductChartReportComponent  implements OnInit {
   public observablesArray$ = this.observablesArraySubject.asObservable();
   @Input() chartType: string = 'column'
   @Input() chartHeight  = '350px'
-  @Input() chartWidth   = '1200'
+  @Input() chartWidth   = '350'
   @Input() notifier   : Subject<boolean>
   value               : boolean;
   tempVal             : boolean;
@@ -34,6 +34,7 @@ export class ProductChartReportComponent  implements OnInit {
   @Input() site      : ISite;
   @Input() counter: number;
   refreshing: boolean;
+  @Input() data: any;
 
   chartOptions: any;
   action$: Observable<any>;
@@ -57,7 +58,7 @@ export class ProductChartReportComponent  implements OnInit {
   dataSeriesValues : any[];
 
   scrollablePlotHeight = {
-    minWidth        : 1500,
+    minWidth        : this.chartWidth,
     opacity         : 0,
     scrollPositionX : -10
   }
@@ -66,42 +67,45 @@ export class ProductChartReportComponent  implements OnInit {
   sitesErrorMessage: string;
   _sites: Subscription;
 
-
   initNotifierSubscription() {
     if (!this.notifier) {
-      // this.refresh();
       return
     }
     this._changeNotifier = this.notifier.asObservable().subscribe(data => {
       this.refresh();
     })
   }
-  constructor(private  sitesService      : SitesService,
-    private  reportingService  : ReportingService,
-    public   route             : ActivatedRoute,
-    public   balanceSheetService : BalanceSheetService,
-    private  salesPaymentService: SalesPaymentsService,
-    public   layoutService      : GridsterLayoutService,
-    private reportingItemsSalesService: ReportingItemsSalesService,
-    private  datePipe           : DatePipe,
+
+  constructor(
+    public   route                     : ActivatedRoute,
+    public   balanceSheetService       : BalanceSheetService,
+    public   layoutService             : GridsterLayoutService,
+    private  reportingItemsSalesService: ReportingItemsSalesService,
   ) {
   }
 
   ngOnInit(): void {
     this.initNotifierSubscription();
+    if (this.data) {
+      this.initReport(this.data);
+      return
+    }
     this.refresh()
   }
 
   ngOnChanges() {
+    if (this.data) {
+      this.initReport(this.data);
+      return
+    }
     this.refresh()
   }
 
   refresh() {
-    this.refreshChartData(this.groupBy, this.site, this.dateFrom, this.dateTo)
+    this.refreshChartData(this.groupBy, this.site, this.dateFrom, this.dateTo, this.zrunID)
   }
 
-  refreshChartData(groupBy, site, dateFrom, dateTo) {
-
+  refreshChartData(groupBy, site, dateFrom, dateTo, zrunID) {
     const searchModel = {} as IReportingSearchModel
     if (groupBy === 'items') {
       searchModel.groupByProduct = true;
@@ -120,21 +124,25 @@ export class ProductChartReportComponent  implements OnInit {
       searchModel.groupByType = false;
     }
 
-    searchModel.startDate         = this.dateFrom;
-    searchModel.endDate           = this.dateTo;
-    searchModel.zrunID            = this.zrunID;
+    searchModel.startDate         = dateFrom;
+    searchModel.endDate           = dateTo;
+    searchModel.zrunID            = zrunID;
     this.refreshing = true
     if (this.site) {
       this.action$ = this.reportingItemsSalesService.groupItemSales(this.site, searchModel).pipe(switchMap(data => {
         const value = data as IReportItemSaleSummary;
         this.sitesErrorMessage = value.resultMessage;
-        const values = this.prepareAvgHourlyData(value.results)
-        this.prepareAvgHourlyData(value.results) ; // this.prepareData()
+        this.initReport(value.results)
         this.refreshing= false
         return of(data)
       }))
     }
     return
+  }
+
+  initReport(data) {
+    this.prepareAvgHourlyData(data)
+    this.prepareAvgHourlyData(data);
   }
 
   prepareAvgHourlyData(salesData: IReportItemSales[]) {
@@ -144,7 +152,6 @@ export class ProductChartReportComponent  implements OnInit {
     salesData.forEach(item => {
       newData.push({name:  item?.productName || 'Not Set' , y: item.itemTotal})
     })
-
     this.chartOptions = this.initChart( 'Group by ' + this.groupBy, newData);
   }
 
@@ -181,14 +188,12 @@ export class ProductChartReportComponent  implements OnInit {
     }
   }
 
-
-
   get  quarterHourArray() {
     return Array.from({length: 96}, (_, i) => {
       let hour = Math.floor(i / 4);
       let minutes = 15 * (i % 4);
       return `${hour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    }); // ['00:00', '00:15', ..., '23:45']
+    });
   }
 
 }
