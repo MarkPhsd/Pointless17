@@ -40,16 +40,6 @@
       </button>
     </div>
 
-    <div>
-      <button mat-raised-button
-              color="accent"
-              style="margin-top: 10px"
-              (click)="toggleShowValues()">
-        <span *ngIf="showValues">
-          <mat-icon color="primary">analytics</mat-icon>Toggle Charts
-        </span>
-      </button>
-    </div>
 
     <ng-container [ngTemplateOutlet]="designReportButtonView"></ng-container>
   </div>
@@ -68,6 +58,7 @@
   <div class="topics">
 
     <h3><mat-icon>list</mat-icon>Report Types</h3>
+
       <ng-container [ngTemplateOutlet]="reportCategoriesView"></ng-container>
 
       <ng-template #reportCategoriesList>
@@ -84,16 +75,35 @@
 
       <ng-template #reportCategories>
         <div class="ps-flex-group-content-start" >
-          <div *ngFor="let report of reportGroupList">
-            <button mat-raised-button
-                    style="width:1y5px;height:50px"
-                    color="primary"
-                    (click)="toggleReports(report.value)">
-              <mat-icon>{{report.icon}}</mat-icon>{{report.name}}
-            </button>
-        </div>
+            <div *ngFor="let report of reportGroupList">
+              <button mat-raised-button
+                      style="width:1y5px;height:50px"
+                      color="primary"
+                      (click)="toggleReports(report.value)">
+                <mat-icon>{{report.icon}}</mat-icon>{{report.name}}
+              </button>
+          </div>
+          <ng-container [ngTemplateOutlet]="toggleButtonView"></ng-container>
         </div>
       </ng-template>
+
+
+      <ng-template #toggleButtonView>
+        <button mat-raised-button
+                color="accent"
+                style="margin-top: 10px"
+                (click)="toggleShowValues()">
+          <span *ngIf="showValues">
+            <div *ngIf="viewChartReports == 0">
+              <mat-icon color="primary">analytics</mat-icon>Show Charts
+            </div>
+            <div *ngIf="viewChartReports == 1">
+              <mat-icon color="primary">list</mat-icon>Show Reports
+            </div>
+          </span>
+        </button>
+      </ng-template>
+
     <mat-divider></mat-divider>
   </div>
 
@@ -108,7 +118,7 @@
     </div>
 
     <ng-template #itemReportButtons>
-      <div class="ps-flex-group-nowrap" >
+      <div class="ps-flex-group-nowrap"  *ngIf="viewChartReports == 0" >
         <div *ngFor="let item of itemReportList">
           <button mat-flat-button
                   style="width:150px;height:50px" color="primary"

@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, catchError, of, switchMap } from 'rxjs';
 import { PartBuilderMainMethodsService } from 'src/app/_services/partbuilder/part-builder-main-methods.service';
 import { PB_Main, PartBuilderMainService } from 'src/app/_services/partbuilder/part-builder-main.service';
@@ -32,26 +32,41 @@ export class PartBuilderEditComponent implements OnInit {
   constructor(private siteService: SitesService,
               private fb: FormBuilder,
               public route: ActivatedRoute,
+              private router: Router,
               private partBuilderMainMethods: PartBuilderMainMethodsService,
               private partBuilderMainService: PartBuilderMainService,
               private dialogRef: MatDialogRef<PartBuilderEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
 
-      this.initForm()
-      if (data) {
-        this.initFormData(data)
-      } else {
-        this.id = +this.route.snapshot.paramMap.get('id');
-        this.pb_Main$ = this.partBuilderMainService.getItem(this.site, +this.id).pipe(switchMap(data => {
-          this.pb_Main = data;
-          this.initFormData(data)
-          this.partBuilderMainMethods.updatePBMain(data)
-          return of(data)
-        }
-      ))
+    this.initForm()
+
+    if (data && data.id) {
+      this.initFormData(data)
+      this.partBuilderMainMethods.updatePBMain(data)
+    } else {
+      this.id = +this.route.snapshot.paramMap.get('id');
+      if (this.id) {
+        this.refreshForm(this.id)
       }
-      this.initPBMainSubscription();
     }
+    this.initPBMainSubscription();
+  }
+
+  refreshForm(id) {
+      this.pb_Main$ = this.partBuilderMainService.getItem(this.site, +this.id).pipe(switchMap(data => {
+        this.setData(data)
+        return of(data)
+      }
+    ))
+  }
+
+  setData(data) {
+    this.pb_Main = data;
+    this.id = data.id;
+    this.initFormData(data)
+    this.partBuilderMainMethods.updatePBMain(data)
+    this.itemChanged = true;
+  }
 
   ngOnInit(): void {
     const i = 0;
@@ -84,15 +99,18 @@ export class PartBuilderEditComponent implements OnInit {
     const site = this.siteService.getAssignedSite()
     if (!this.pb_Main) { return }
     if (this.pb_Main) {
-      console.log(this.pb_Main.pb_Components)
+      console.log(this.pb_Main.pB_Components)
       this.pb_Main.name = this.inputForm.controls['name'].value;
+      if (this.id) {
+        this.pb_Main.id = this.id;
+      }
       this.action$ = this.partBuilderMainService.save(site, this.pb_Main).pipe(
         switchMap(data => {
-          this.itemChanged = true;
-          this.partBuilderMainMethods.updatePBMain(data)
-          this.siteService.notify('Saved', 'close', 1000, 'green')
-          if (close) {
-            this.dialogRef.close(true)
+          try {
+            this.setData(data)
+            this.siteService.notify('Saved', 'close', 1000, 'green')
+          } catch (error) {
+
           }
           return of(data)
       }), catchError(data => {
@@ -120,8 +138,9 @@ export class PartBuilderEditComponent implements OnInit {
 
   onCancel(event) {
     let result = false
+    console.log('on cancel')
+    this.router.navigate(['part-builder-list'])
     if (this.itemChanged) {result = true}
-    this.dialogRef.close(result)
   }
 
   copyItem(event) {

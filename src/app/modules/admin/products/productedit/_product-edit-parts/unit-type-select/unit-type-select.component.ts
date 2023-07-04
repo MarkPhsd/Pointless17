@@ -8,6 +8,7 @@ import { SearchModel } from 'src/app/_services/system/paging.service';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { UnitType } from 'src/app/_interfaces/menu/price-categories';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { PB_Components } from 'src/app/_services/partbuilder/part-builder-main.service';
 
 @Component({
   selector: 'unit-type-select',
@@ -18,6 +19,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
 
   @Input() productPrice       : ProductPrice;
   @Input() product            : IProduct;
+  @Input() pb_Component: PB_Components
   unitType$                   : Observable<UnitType[]>;
   unitTypes                   : UnitType[]
   @Input()  index             : number;
@@ -146,6 +148,10 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
     }
 
     if (!this.product) {
+
+    }
+
+    if (!this.product) {
       // const data = {unitTypeID: item.id, index: this.index, unitName: item.name, unitType: item }
       // this.itemSelect.emit(data)
       // item = { unitTypeID : item.id }
@@ -154,6 +160,14 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
       if (this.productPrice) {
         this.productPrice.unitTypeID = item.id;
         this.productPrice.unitType = item.name;
+      }
+
+      if (this.pb_Component) {
+        this.pb_Component.unitTypeID = item.id;
+        this.pb_Component.unitName = item.name;
+        this.pb_Component.unitType  = item;
+        this.searchForm.patchValue( {searchField: item.name} )
+        this.itemSelect.emit(item)
       }
 
       if (this.outputType === 'priceLine') {

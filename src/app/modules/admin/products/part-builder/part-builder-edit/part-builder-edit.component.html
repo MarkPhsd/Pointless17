@@ -3,10 +3,10 @@
 
 <mat-card>
   <mat-card-title>
-    <div class="ps-flex-group">
+    <div class="ps-flex-group-start">
       <div>
         <mat-icon>edit</mat-icon> {{pb_Main?.name}}
-        <mat-label>Last Edited: {{pb_Main?.dateUpdated}}</mat-label>
+        <h4><mat-label>Last Edited: {{pb_Main?.dateUpdated | date: 'short'}}</mat-label></h4>
         <mat-divider> </mat-divider>
       </div>
       <div>
@@ -25,6 +25,7 @@
   <mat-card-content>
     <div class="ps-flex-group-column">
       <app-value-fields
+          style="width:250px"
           [inputForm]="inputForm"
           [fieldName]="'name'">
         Name

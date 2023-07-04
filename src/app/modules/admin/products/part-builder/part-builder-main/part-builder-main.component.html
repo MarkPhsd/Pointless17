@@ -1,1 +1,46 @@
-<p>part-builder-main works!</p>
+<div *ngIf="(item$ | async) as item"></div>
+
+<div class="container">
+
+  <div class="ps-flex-group-content-start">
+    <div class="margin">
+      <button mat-button (click)="add()"><mat-icon>add</mat-icon>Add</button>
+    </div>
+    <div class="margin">
+      <button mat-button (click)="refreshList()"><mat-icon>refresh</mat-icon>Refresh</button>
+    </div>
+    <div class="margin">
+      <button mat-button (click)="onExportToCsv()"><mat-icon>download</mat-icon>CSV</button>
+    </div>
+  </div>
+
+  <div>
+    <mat-divider></mat-divider>
+  </div>
+  <div class="grid-list">
+    <div>
+      <div *ngIf="value" class="loader">
+        <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+      </div>
+
+      <ag-grid-angular
+            #agGrid
+            [style]              ="gridDimensions"
+            id                   ="myGrid"
+            [class]              ="agtheme"
+            [columnDefs]         ="columnDefs"
+            [defaultColDef]      ="defaultColDef"
+            [gridOptions]        ="gridOptions"
+            [rowSelection]       ="rowSelection"
+            [frameworkComponents]="frameworkComponents"
+            (selectionChanged)   ="onSelectionChanged($event)"
+            (gridReady)          ="onGridReady($event)">
+      </ag-grid-angular>
+    </div>
+
+    <div class="filter-panel">
+      <part-builder-filter
+          (outputRefreshSearch)="refreshSearchAny($event)">
+      </part-builder-filter>
+    </div>
+</div>

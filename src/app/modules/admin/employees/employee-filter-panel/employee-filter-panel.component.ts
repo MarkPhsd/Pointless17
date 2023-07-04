@@ -107,7 +107,7 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
     this.router.navigate(['job-type-list'])
   }
 
-  async initSearchForm() {
+  initSearchForm() {
     this.searchForm = this.fb.group({
       itemName : ['']
     })

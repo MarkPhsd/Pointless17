@@ -7,7 +7,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
-import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
+import { AgGridFormatingService, rowItem } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 // import "ag-grid-community/dist/styles/ag-grid.css";
@@ -23,17 +23,7 @@ import { EmployeeSearchModel, EmployeeSearchResults, EmployeeService } from 'src
 import { EmployeeEditComponent } from '../employee-edit/employee-edit.component';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
-export interface rowItem {
-  field: string,
-  cellRenderer: string,
-  cellRendererParams: any;
-  minWidth: number;
-  maxWidth: number;
-  width   : number;
-  flex: number;
-  headerName: string;
-  sortable: boolean;
-}
+
 @Component({
   selector: 'employee-list',
   templateUrl: './employee-list.component.html',
@@ -137,10 +127,8 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     this.initClasses()
     this.urlPath            = await this.awsService.awsBucketURL();
     this.rowSelection       = 'multiple'
-
     this.isAuthorized =  this.userAuthorization.isManagement// //('admin, manager')
     this.isStaff =  this.userAuthorization.isStaff // ('admin, manager, employee')
-
     this.updateItemsPerPage(); //run last in this process!
   };
 
@@ -187,12 +175,10 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     }
   }
 
-
   initSubscriptions() {
     try {
       this._searchModel = this.employeeService.searchModel$.subscribe( data => {
           this.searchModel            = data
-
           if (!this.searchModel) {
             const searchModel       = {} as EmployeeSearchModel;
             this.currentPage        = 1
@@ -243,7 +229,6 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
       const site = this.siteService.getAssignedSite();
 
       if (site.metrcURL ) {
-
         let item  =   {
           field: 'id',
           cellRenderer: "btnCellRenderer",
@@ -336,7 +321,7 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
 
     this.employeeService.searchModel$.subscribe(data => {
       this.searchModel = data;
-      console.log('update search', data)
+      // console.log('update search', data)
       return this.refreshSearch_sub()
     })
 
@@ -368,47 +353,12 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     return this.currentPage
   }
 
-  //ag-grid standard method.
-  getDataSource(params) {
-    return {
-    getRows: (params: IGetRowsParams) => {
-      const items$ = this.getRowData(params, params.startRow, params.endRow)
-      items$.subscribe(data =>
-        {
-            if (data.paging) {
-              const resp =  data.paging
-              this.isfirstpage   = resp.isFirstPage
-              this.islastpage    = resp.isFirstPage
-              this.currentPage   = resp.currentPage
-              this.numberOfPages = resp.pageCount
-              this.recordCount   = resp.recordCount
-            }
-            if (this.numberOfPages !=0 && this.numberOfPages) {
-              this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-            }
-            if (data.results) {
-              params.successCallback(data.results)
-
-              this.rowData = data.results
-            }
-
-          }, err => {
-            console.log(err)
-          }
-      );
-      }
-    };
-    if (this.numberOfPages !=0 && this.numberOfPages) {
-      this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-    }
-  }
-
   //ag-grid standard method
   getRowData(params, startRow: number, endRow: number):  Observable<EmployeeSearchResults>  {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
     this.searchModel.currentPage = this.currentPage;
     const searchModel         = this.initSearchModel();
-    console.log('search Model get row data', searchModel)
+    // console.log('search Model get row data', searchModel)
     const site                = this.siteService.getAssignedSite()
     return this.employeeService.getEmployeeBySearch(site, searchModel)
   }
@@ -455,7 +405,7 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
               this.rowData = results
             }
           }
-        );
+      );
       }
     };
 

@@ -4,7 +4,7 @@ import { ISite } from 'src/app/_interfaces';
 import { EmployeeClock } from 'src/app/_interfaces/people/employeeClock';
 import { EmployeeClockResults, EmployeeClockSearchModel, EmployeeClockService } from 'src/app/_services/employeeClock/employee-clock.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
+import { IReportingSearchModel,  ITaxReport, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
@@ -82,14 +82,13 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
       return
     }
 
-    // console.log('performing range report')
-
     this.sales$ =  this.laborSummary$.pipe(switchMap(data => {
       this.laborSummary = data;
-      console.log('labor summary', data)
+      // console.log('labor summary', data)
       return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
     })).pipe(switchMap(data => {
         this.sales = data;
+        // console.log('sales tax', data)
         this.processing = false;
         return of(data)
     }))

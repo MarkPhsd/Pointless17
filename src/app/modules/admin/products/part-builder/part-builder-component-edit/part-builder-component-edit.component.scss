@@ -34,3 +34,10 @@ li a:hover {
 .field-width {
   width: 200px;
 }
+
+
+.grid-units {
+  display: grid;
+  grid-template-columns: 95px 50px;
+  gap: 15px;
+}

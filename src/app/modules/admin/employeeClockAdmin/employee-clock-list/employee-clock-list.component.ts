@@ -124,6 +124,7 @@ export class EmployeeClockListComponent implements OnInit {
     }
     this._changeNotifier = this.notifier.asObservable().subscribe(data => {
       this.initGridColumns()
+      console.log('refresh')
       let search = {} as EmployeeClockSearchModel
       search.summary = true;
       search.endDate = this.endDate;
@@ -360,12 +361,16 @@ export class EmployeeClockListComponent implements OnInit {
 
   //ag-grid standard method
   async onGridReady(params: any) {
-    if (!params) { return }
-    if (params)  {
-      this.params  = params
-      this.gridApi = params.api;
-      params.api.sizeColumnsToFit();
-      this.autoSizeAll(false)
+    // if (!params) { return }
+    try {
+      if (params)  {
+        this.params  = params
+        this.gridApi = params.api;
+        params.api.sizeColumnsToFit();
+        this.autoSizeAll(false)
+      }
+    } catch (error) {
+
     }
 
     this.onFirstDataRendered(this.params)

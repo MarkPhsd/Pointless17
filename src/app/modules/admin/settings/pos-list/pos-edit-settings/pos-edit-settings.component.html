@@ -122,11 +122,11 @@
             <mat-label>Ignore Timer for Auto Log Off</mat-label>
           </mat-slide-toggle>
         </div>
-        
+
         <div *ngIf="(serviceType$ | async) as list ">
           <mat-form-field style="width: 200px" class="fields"
               appearance="outline">
-            <mat-label>Default Online Order Type</mat-label>
+            <mat-label>Order Type Default</mat-label>
               <mat-select
                         type              = "number"
                         formControlName   = "defaultOrderTypeID" >

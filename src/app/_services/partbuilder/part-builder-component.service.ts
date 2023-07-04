@@ -36,6 +36,21 @@ export class PartBuilderComponentService {
 
   }
 
+
+  deleteComponent(site: ISite, id: number): Observable<PB_Components> {
+
+    const controller = this.controller
+
+    const endPoint = `deleteComponent`
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.delete<any>(url)
+
+  }
+
   getItems(site: ISite) : Observable<PB_Components[]> {
 
     const controller = this.controller

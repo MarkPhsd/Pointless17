@@ -3,30 +3,34 @@
     <div>
       Part Builder -  {{pb_Main?.name}}
     </div>
-    <button color="primary" mat-button (click)="initData()">Example</button>
+    <!-- <button color="primary" mat-button (click)="initData()">Example</button> -->
+
+    <button color="primary" mat-button (click)="addItem()"><mat-icon>add</mat-icon>Add</button>
+
   </mat-card-title>
 
   <mat-card-content >
     <div *ngIf="pb_Main">
-      <ul class="ps-grid-items">
-      <li>Item</li>
-      <li>Unit</li>
-      <li>Price</li>
-      <li>Cost</li>
-      <li>Quantity</li>
-      <li>Edit</li>
-      <li>Delete</li>
+      <ul style="margin-bottom:5px;" class="ps-grid-items">
+        <li>Edit</li>
+        <li>Delete</li>
+        <li>Item</li>
+        <li>Unit</li>
+        <li>Price</li>
+        <li>Cost</li>
+        <li>Quantity</li>
       </ul>
 
-      <div *ngFor="let item of pb_Main.pb_Components">
+      <div *ngFor="let item of pb_Main.pB_Components">
         <ul class="ps-grid-items ">
-          <li>{{item?.product?.name}}</li>
-          <li>{{item?.unitType?.name}}</li>
+            <!-- {{item | json}} -->
+          <li><button mat-button color="accent" (click)="enableEdit(item)"><mat-icon>edit</mat-icon>Edit</button></li>
+          <li><button mat-button color="accent" (click)="delete(item)"><mat-icon>trash</mat-icon>Delete</button></li>
+          <li>{{item?.name}}</li>
+          <li>{{item?.unitName}}</li>
           <li>{{item?.price | currency}}</li>
           <li>{{item?.cost | currency}}</li>
           <li>{{item?.quantity}}</li>
-          <li><button mat-button color="accent" (click)="enableEdit(item)"><mat-icon>edit</mat-icon>Edit</button></li>
-          <li><button mat-button color="accent" (click)="delete(item)"><mat-icon>trash</mat-icon>Delete</button></li>
         </ul>
       </div>
     </div>
@@ -36,7 +40,7 @@
 
 <mat-card *ngIf="pb_Component && componentForm">
   <div [formGroup]="componentForm">
-    <button mat-button (click)="saveEdit()">
+    <button color="primary" mat-raised-button (click)="saveEdit()">
       <mat-icon>save</mat-icon>Save
     </button>
 
@@ -45,10 +49,11 @@
         <app-product-search-selector
             class         = "fields"
             [itemType]    = 1
-            [productName] = "productName"
+            [productName] = "pb_Component?.name"
             [searchForm]  = "searchForm"
             (itemSelect)  = "getItem($event)">
         </app-product-search-selector>
+
         <div class="ps-grid-items">
 
           <app-value-fields
@@ -56,6 +61,28 @@
               [fieldName]="'name'">
             Name
           </app-value-fields>
+
+          <ng-container [ngTemplateOutlet]="unitSelector"></ng-container>
+
+          <ng-template #unitSelector>
+            <div class="grid-units">
+              <div *ngIf="pb_Component">
+                <unit-type-select
+                  [inputForm]     = 'componentForm'
+                  [pb_Component]  = 'pb_Component'
+                  [name]          = "pb_Component.unitName"
+                  [id]            = 'pb_Component?.unitTypeID'
+                  [searchForm]    = 'unitSearchForm'
+                  (itemSelect)    = 'assignItem($event)'>
+                </unit-type-select>
+              </div>
+              <div style="margin-left:45px">
+                <button mat-button (click)="clearUnit()">
+                  <mat-icon color="warn">delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </ng-template>
 
           <app-value-fields
               [inputForm]="componentForm"
@@ -81,8 +108,6 @@
 
       </mat-card-content>
     </mat-card>
-
-    <!-- {{pb_Component | json}} -->
 
   </div>
 </mat-card>

@@ -2,7 +2,17 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { ButtonRendererComponent } from '../btn-renderer.component';
-
+export interface rowItem {
+  field: string,
+  cellRenderer: string,
+  cellRendererParams: any;
+  minWidth: number;
+  maxWidth: number;
+  width   : number;
+  flex: number;
+  headerName: string;
+  sortable: boolean;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -148,6 +158,7 @@ initGridOptionsFormated(pageSize: number, columnDefs: any) {
     productSearchModel.pageNumber = currentPage
     return productSearchModel
   }
+
 
 
 }

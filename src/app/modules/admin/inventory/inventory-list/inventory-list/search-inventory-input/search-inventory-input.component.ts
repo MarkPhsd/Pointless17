@@ -16,15 +16,18 @@ export class SearchInventoryInputComponent implements OnInit,AfterViewInit {
   @Output() itemSelect     = new EventEmitter();
   @Input()  searchForm:    UntypedFormGroup;
   @Input()  itemNameControl : string;
+  
   //search with debounce: also requires AfterViewInit()
   @ViewChild('input', {static: true}) input: ElementRef;
 
-  searchPhrase:      Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
-
+  
   private readonly onDestroy = new Subject<void>();
   // //search with debounce
   searchItems$  : Subject<IProductSearchResults[]> = new Subject();
+  
+  searchPhrase:      Subject<any> = new Subject();
+
   _searchItems$ = this.searchPhrase.pipe(
     debounceTime(250),
       distinctUntilChanged(),

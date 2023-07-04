@@ -44,6 +44,9 @@
             <div class="grid-item tax_label">Non-Taxable:</div>
             <div class="grid-item tax">{{sale.nonTaxableSalesTotal | currency}}</div>
 
+            <div class="grid-item tax_label"> Cost of Goods Sold : </div>
+            <div class="grid-item tax">{{sale.itemCost | currency }}  </div>
+
             <div class="grid-item tax_label"> Tax 1: </div>
             <div class="grid-item tax">{{sale.taxTotal1 | currency }}  </div>
 
@@ -63,12 +66,30 @@
         <mat-card-footer  *ngIf="!sale.resultsMessage" >
           <div class="grid-footer" >
             <div class="grid-item field_bold totals_label"> Gross (net + taxes  ) :</div>
-            <div class="grid-item field_bold totals_label"> {{sale.grossSales | currency }}  </div>
+            <div class="grid-item field_bold totals_label"> {{ sale.grossSales | currency }}  </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="grid-footer" >
+            <div class="grid-item totals_label">Profit (net - cost): </div>
+            <div class="grid-item tax">{{sale.netSales - sale.itemCost | currency }}  </div>
+          </div>
+
+          <div class="grid-footer" *ngIf="sale.netSales && sale.netSales != 0">
+            <div class="grid-item totals_label">Cost of Good %: </div>
+            <div class="grid-item tax"> % {{ (( sale.itemCost / sale.netSales )*100).toFixed(2) }}  </div>
           </div>
 
           <div class="grid-footer" *ngIf="laborSummary">
             <div class="grid-item field_bold totals_label"> Labor  :</div>
             <div class="grid-item field_bold totals_label"> {{laborSummary?.otPay + laborSummary?.regPay | currency }}  </div>
+          </div>
+
+
+          <div class="grid-footer" *ngIf="laborSummary && sale.netSales && sale.netSales != 0">
+            <div class="grid-item field_bold totals_label"> Labor % of Net Sales  :</div>
+            <div class="grid-item field_bold totals_label"> %{{ (((laborSummary?.otPay + laborSummary?.regPay) / (sale.netSales)) *100).toFixed(2)  }}  </div>
           </div>
 
         </mat-card-footer>

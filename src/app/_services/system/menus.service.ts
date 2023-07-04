@@ -16,7 +16,7 @@ export interface ResultCheck {
 })
 
 export class MenusService {
- 
+
 
   private _accordionMenu    = new BehaviorSubject<AccordionMenu>(null);
   public  accordionMenu$    = this._accordionMenu.asObservable();
@@ -57,7 +57,7 @@ export class MenusService {
         { name: 'Payments',  minimized: false, method: '',  routerLink: '/pos-payments', routerLinkActive: 'pos-payments', icon: 'credit_card', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Balance Sheets',  minimized: true, method: '',  routerLink: '/balance-sheets', routerLinkActive: 'balance-sheets', icon: 'list', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Balance Sheet',  minimized: false, method: '',  routerLink: '/balance-sheet-edit', routerLinkActive: 'balance-sheet-edit', icon: 'point_of_sale', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
-        { name: 'Operations',    minimized: false,  method: '' ,routerLink: '/operations', routerLinkActive: 'operations',   icon: 'article',   onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: 'Daily Report',    minimized: false,  method: '' ,routerLink: '/operations', routerLinkActive: 'operations',   icon: 'article',   onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
         { name: 'Tables' ,   minimized: true,  method: '' ,  routerLink: '/table-layout',     routerLinkActive: 'pos-orders',   icon: 'flatware',   onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
         { name: 'Gift/Credit',  minimized: false, method: '',  routerLink: '/store-credit', routerLinkActive: 'store-credit', icon: 'list', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
       ]
@@ -140,8 +140,8 @@ export class MenusService {
         { name: 'Catalog Schedule', method: '' ,  minimized: true, routerLink: '/price-schedule' ,       routerLinkActive: 'price-schedule', icon: 'calendar_month', onClick: '', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'TV Print Menu', method: '' ,   minimized:  false, routerLink:  '/admin-display-menu' ,       routerLinkActive: 'admin-display-menu', icon: 'monitor', onClick: '', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Price Tiers',    method: '' ,  minimized: false, routerLink: '/price-tier-list-edit' ,       routerLinkActive: 'price-schedule', icon: 'price_change', onClick: '', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Kits & Recipes',    method: '' ,  minimized: false, routerLink: '/part-builder-list' ,       routerLinkActive: 'part-builder-list', icon: 'list', onClick: '', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Unit Types',     method: '' ,  minimized: true, routerLink: '/unit-types',            routerLinkActive: 'unit-types', onClick: '', icon: 'list', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        // { name: 'Taxes and Fees', method: '' ,  minimized: false, routerLink: '/taxes' ,                routerLinkActive: 'taxes', icon: 'price_change', onClick: '', id: 0, sortOrder: 6, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Taxes and Fees',       method: '' ,  minimized: false, routerLink: '/taxes',       routerLinkActive: 'taxes', onClick: '', icon: 'price_change', id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Flat Tax',       method: '' ,  minimized: true, routerLink: '/flat-rate-taxes',       routerLinkActive: 'flat-rate-taxes', onClick: '', icon: 'list', id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Print Locations',method: '' ,  minimized: true, routerLink: '/printer-locations',     routerLinkActive: 'printer-locations', onClick: '', icon: 'printer', id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
@@ -433,7 +433,7 @@ export class MenusService {
     if (!user || !user.roles) {
       return null
     }
-  
+
 
     if (user.roles != 'admin') { return }
 

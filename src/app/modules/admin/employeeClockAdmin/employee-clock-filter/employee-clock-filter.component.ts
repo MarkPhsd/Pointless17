@@ -15,7 +15,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 export class EmployeeClockFilterComponent implements OnInit {
 
   @Output() outputRefreshSearch :   EventEmitter<any> = new EventEmitter();
-  
+
   pageSize = 25;
   dateRangeForm: UntypedFormGroup;
   dateTo: string;
@@ -78,9 +78,11 @@ export class EmployeeClockFilterComponent implements OnInit {
       })
     }
   }
-  
+
   refreshSearch() {
-    this.outputRefreshSearch.emit({ summary: false, pageSize: this.pageSize, employeeID:  this.employeeID, startDate: this.dateFrom, endDate: this.dateTo });
+    this.outputRefreshSearch.emit(
+      { summary: false, pageSize: this.pageSize, employeeID:  this.employeeID, startDate: this.dateFrom, endDate: this.dateTo }
+      );
   }
 
   emitDatePickerData(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement) {
@@ -106,15 +108,15 @@ export class EmployeeClockFilterComponent implements OnInit {
     this.refreshSearch()
   }
 
-  breakListEdit() { 
+  breakListEdit() {
     this.router.navigate(['break-types'])
   }
 
-  listResults() { 
+  listResults() {
     this.outputRefreshSearch.emit({ summary: false, pageSize: this.pageSize, employeeID:  this.employeeID, startDate: this.dateFrom, endDate: this.dateTo });
   }
 
-  getSummary() { 
+  getSummary() {
     this.outputRefreshSearch.emit({ summary: true, pageSize: this.pageSize, employeeID:  this.employeeID, startDate: this.dateFrom, endDate: this.dateTo });
   }
 }

@@ -141,8 +141,6 @@ import { PartBuilderEditComponent } from './modules/admin/products/part-builder/
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
 
-    { path: 'partBuilder',  component: PartBuilderMainComponent, data: { title: 'Part Builder', animation: 'isLeft'} },
-    { path: 'partBuilderEdit',  component: PartBuilderEditComponent, data: { title: 'Part Builder', animation: 'isLeft'} },
     { path: 'printerslist',  component: InstalledPrintersComponent, data: { title: 'Print Settings', animation: 'isLeft'} },
     { path: 'blog-post-list',  component: BlogPostListComponent, data: { title: 'BlogPosts', animation: 'isLeft'} },
 
@@ -160,6 +158,10 @@ const routes: Routes = [
 
     {path: '', component: DefaultComponent,
       children: [
+
+        { path: 'part-builder-list',  component: PartBuilderMainComponent, data: { title: 'Part Builder', animation: 'isLeft'} },
+        { path: 'part-builder-edit',  component: PartBuilderEditComponent, data: { title: 'Part Builder', animation: 'isLeft'} },
+        
         { path: '', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
         { path: 'filter',  component: ProductFilterComponent, data: { title: 'Filter', animation: 'isLeft'} },
 

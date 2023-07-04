@@ -15,7 +15,7 @@ export interface PB_SearchResults {
 export interface PB_Main  {
 	id: number;
 	name: string;
-	pb_Components: PB_Components[];
+	pB_Components: PB_Components[];
 	sort: number;
 	dateUpdated: Date;
 }
@@ -26,6 +26,7 @@ export interface PB_Components {
 	quantity: number;
 	productID: number;
 	unitTypeID: number;
+  unitName: string;
 	cost: number;
 	price: number;
   product: IMenuItem | Product;
@@ -150,12 +151,7 @@ export class PartBuilderMainService {
 
   }
 
-  searchMenuPrompts(site: ISite, searchName: string) : Observable<PB_SearchResults[]> {
-
-    if (searchName === 'undefined' || searchName === undefined) {
-      searchName = '';
-    }
-    const search = {name: searchName, pageNumber: 1, pageSize: 25}
+  searchMenuPrompts(site: ISite, search: any) : Observable<PB_SearchResults> {
 
     const controller = "/PB_Builder/"
 

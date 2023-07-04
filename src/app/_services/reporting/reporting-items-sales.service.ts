@@ -169,6 +169,7 @@ export interface ITaxReport {
   grossSales:               number;
   netSales:                 number;
   itemTotal:                number;
+  itemCost                : number;
   orderCashDiscount:        number;
   itemPercentDiscount:      number;
   itemCashDiscount:         number;
@@ -180,12 +181,12 @@ export interface ITaxReport {
   giftCardIssuances:        number;
   paidOuts:                 number;
   resultsMessage          : string;
-  productName              : string;
+  productName             : string;
   itemType                : string;
   category                : string;
   department              : string;
   scheduleDate            : string;
-  completed:boolean
+  completed               : boolean
 }
 
 export interface ITaxReportOptimized {

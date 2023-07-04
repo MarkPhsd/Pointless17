@@ -1,0 +1,77 @@
+@import "/src/mixins.scss";
+
+.grid-list-container {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 7px;
+  // overflow: hidden;
+  height: 95%;
+
+}
+
+.grid-list-item {
+  height: 95%;
+  min-height: 95%;
+  overflow: hidden;
+}
+
+.grid-container {
+
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 1fr 300px;
+
+  @include for-phone-only  {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 1fr;
+    // height: 60%;
+    width: 375px;
+  }
+
+}
+
+.grid-dimensions {
+  width: 100%;
+  height: 100%;
+}
+
+.loader {
+  margin-bottom: 5px;
+}
+
+.grid-list {
+
+  display: grid;
+  grid-template-columns: 1fr minmax(285px, 285px);
+  // height: 75vh;
+  height: 85vh;
+  gap: 10px;
+
+  @include for-phone-only  {
+    // display: grid;
+    // grid-template-columns: 1fr;
+    height: 100%;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    width: 350px;
+  }
+}
+
+.grid-header {
+  grid-column: span 2;
+}
+
+.filter-panel {
+  height: 85%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  @include for-phone-only  {
+    visibility: hidden;
+  }
+
+}
+
+

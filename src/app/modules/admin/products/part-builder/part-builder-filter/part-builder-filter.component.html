@@ -1,0 +1,18 @@
+<mat-card class="mat-card-view">
+  <mat-card-content>
+
+  <div class="grid-item" *ngIf="searchForm">
+    <search-debounce-input
+                          [itemNameControl] = "'itemName'"
+                          [searchForm]      = "searchForm"
+                        >
+      <div fieldDescription>
+          <mat-icon>search</mat-icon>
+          Search
+      </div>
+    </search-debounce-input>
+  </div>
+
+  </mat-card-content>
+</mat-card>
+<!-- (outPutMethod)    = "refreshSearchPhrase($event)" -->
