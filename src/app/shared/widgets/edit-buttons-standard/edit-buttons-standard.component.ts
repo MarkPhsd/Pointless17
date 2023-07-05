@@ -19,7 +19,7 @@ export class EditButtonsStandardComponent  {
   @Output() outPutAdd             : EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutEmail           : EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutReOpenOrder     : EventEmitter<any> = new EventEmitter<any>();
-
+  @Output() outPutRefresh         : EventEmitter<any> = new EventEmitter<any>();
   @Input() enableReOpen : boolean;
   @Input() emailOption : boolean;
   @Input() enableAdd  : boolean;
@@ -32,6 +32,7 @@ export class EditButtonsStandardComponent  {
   @Input() historyItem         : boolean;
   @Input() hideSave            : boolean;
   @Input() enableStartOrder    : boolean;
+  @Input() refresh: boolean;
 
   smallDevice = false;
 
@@ -107,6 +108,10 @@ export class EditButtonsStandardComponent  {
 
   onOutPutStartOrder(){
     this.outPutStartOrder.emit('demo')
+  }
+
+  refreshButton() {
+    this.outPutRefresh.emit('true')
   }
 
 }

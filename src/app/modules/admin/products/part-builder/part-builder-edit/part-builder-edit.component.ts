@@ -20,7 +20,7 @@ export class PartBuilderEditComponent implements OnInit {
   pb_Main$ : Observable<PB_Main>;
   inputForm: FormGroup;
   _pb_Main : Subscription;
-
+  loopDetected: boolean;
   site = this.siteService.getAssignedSite()
   id: number;
   initPBMainSubscription() {
@@ -31,7 +31,7 @@ export class PartBuilderEditComponent implements OnInit {
 
   constructor(private siteService: SitesService,
               private fb: FormBuilder,
-              public route: ActivatedRoute,
+              public  route: ActivatedRoute,
               private router: Router,
               private partBuilderMainMethods: PartBuilderMainMethodsService,
               private partBuilderMainService: PartBuilderMainService,
@@ -52,12 +52,23 @@ export class PartBuilderEditComponent implements OnInit {
     this.initPBMainSubscription();
   }
 
-  refreshForm(id) {
-      this.pb_Main$ = this.partBuilderMainService.getItem(this.site, +this.id).pipe(switchMap(data => {
-        this.setData(data)
-        return of(data)
+  refreshForm(event) {
+    if (!this.id) { return }
+    this.pb_Main$ = this._refreshForm()
+  }
+
+  _refreshForm() {
+    const site = this.siteService.getAssignedSite()
+    let pb_main = {} as PB_Main;
+    return this.partBuilderMainService.getItem(this.site, +this.id).pipe(switchMap(data => {
+      this.setData(data)
+        pb_main = data;
+        return this.partBuilderMainService.detectInfiniteLoop(site, data);
       }
-    ))
+    )).pipe(switchMap(data => {
+      this.loopDetected = data;
+      return of(pb_main)
+    }))
   }
 
   setData(data) {
@@ -91,6 +102,9 @@ export class PartBuilderEditComponent implements OnInit {
     this.save(false)
   }
 
+  saveUpdate(event) {
+    this.updateSave(event)
+  }
   updateItemExit(event ){
     this.save(true)
   }
@@ -99,20 +113,14 @@ export class PartBuilderEditComponent implements OnInit {
     const site = this.siteService.getAssignedSite()
     if (!this.pb_Main) { return }
     if (this.pb_Main) {
-      console.log(this.pb_Main.pB_Components)
+      // console.log(this.pb_Main.pB_Components)
       this.pb_Main.name = this.inputForm.controls['name'].value;
       if (this.id) {
         this.pb_Main.id = this.id;
       }
       this.action$ = this.partBuilderMainService.save(site, this.pb_Main).pipe(
         switchMap(data => {
-          try {
-            this.setData(data)
-            this.siteService.notify('Saved', 'close', 1000, 'green')
-          } catch (error) {
-
-          }
-          return of(data)
+          return this._refreshForm()
       }), catchError(data => {
         this.siteService.notify('Error' + data.toString, 'close', 1000, 'red')
         return of(data)
@@ -138,7 +146,7 @@ export class PartBuilderEditComponent implements OnInit {
 
   onCancel(event) {
     let result = false
-    console.log('on cancel')
+    // console.log('on cancel')
     this.router.navigate(['part-builder-list'])
     if (this.itemChanged) {result = true}
   }

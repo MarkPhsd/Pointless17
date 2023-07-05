@@ -151,13 +151,8 @@ export class ProductEditButtonService {
 
   openProductDialogObs(id: number) {
     const site = this.siteService.getAssignedSite();
-    console.log('openProductDialogObs id:', id)
-
-    // return this.menuService.getProduct(site, id)
-
     const item$ = this.menuService.getProduct(site, id).pipe(
       switchMap(product => {
-        // console.log('openProductDialogObs product', product,product.prodModifierType)
         if (product && !product.prodModifierType) {
           product.prodModifierType = 1
           return this.menuService.putProduct(site, product.id, product)
@@ -165,15 +160,12 @@ export class ProductEditButtonService {
         return of(product)
       }
     )).pipe(switchMap(product => {
-      // console.log('retrieving product', product)
       if (!product) {return of(null)  }
-      this.openProductEditor(product.id,  product.prodModifierType);
-      return of(product)
+      return this.openProductEditorOBS(product.id,  product.prodModifierType);
     }),catchError(data => {
       this.siteService.notify(`Error opening item. ${data}`, 'Close', 5000, 'red')
       return of(null)
     }))
-
     return item$
   }
 
@@ -326,20 +318,47 @@ export class ProductEditButtonService {
     return product$
   }
 
-  async openProductEditor(id: number,
-                          productTypeID: number,
-                         ) {
-
+  openProductEditorOBS(id: number,productTypeID: number ) {
     const site = this.siteService.getAssignedSite();
     const itemType$ =  this.itemTypeService.getItemType(site, productTypeID)
-    if (id != 0) {  this._opeEditProductEditor(id, productTypeID, itemType$, site); }
-    if (id == 0) {  this._openAddProductOpenEditor(id, productTypeID, itemType$, site); }
+    return  this._openAddProductOpenEditorOBS(id, productTypeID, itemType$, site);
+  }
 
+  _openAddProductOpenEditorOBS(id: number, productTypeID: number, itemType$: Observable<IItemType>, site: ISite) {
+    const product = {} as IProduct;
+    product.id = id
+    product.prodModifierType = productTypeID;
+    const product$ =  this.menuService.getProduct( site, id )
+    return  this._openProductEditorOBS(product$, itemType$)
+  }
+
+  _openProductEditorOBS(product$: Observable<IProduct>, itemType$: Observable<IItemType>): Observable<MatDialogRef<StrainProductEditComponent, any>> {
+      let product = {} as IProduct;
+      return product$.pipe(
+                switchMap( data => {
+                  product = data
+                  // console.log(product,data)
+                  return itemType$
+              }
+            )).pipe(switchMap( itemType => {
+            // console.log(product, itemType)
+            const data = { product, itemType}
+            return this.getFormEdit(data)
+          }
+      ))
+  }
+
+  async openProductEditor(id: number,productTypeID: number ) {
+    const site = this.siteService.getAssignedSite();
+    const itemType$ =  this.itemTypeService.getItemType(site, productTypeID)
+    if (id != 0) { return  this._opeEditProductEditor(id, productTypeID, itemType$, site); }
+    if (id == 0) { return  this._openAddProductOpenEditor(id, productTypeID, itemType$, site); }
+    return of(null)
   }
 
   private _opeEditProductEditor(id: number, productTypeID: number, itemType$: Observable<IItemType>, site: ISite) {
-      const product$ = this.getItemForNewEditor(id, productTypeID)
-      this._openProductEditor(product$,itemType$)
+    const product$ = this.getItemForNewEditor(id, productTypeID)
+    this._openProductEditor(product$,itemType$)
   }
 
   private _openAddProductOpenEditor(id: number, productTypeID: number, itemType$: Observable<IItemType>, site: ISite) {
@@ -347,16 +366,30 @@ export class ProductEditButtonService {
       product.id = 0
       product.prodModifierType = productTypeID;
       const product$ =  this.menuService.saveProduct( site, product )
-      this._openProductEditor(product$, itemType$)
+      return  this._openProductEditor(product$, itemType$)
+  }
+
+  getFormEdit(data) {
+    return of(this.dialog.open(StrainProductEditComponent,
+      { width:        '95%',
+        height:       '775px',
+        minHeight:    '775px',
+        data : data
+      },
+    ))
   }
 
   private _openProductEditor(product$: Observable<IProduct>, itemType$: Observable<IItemType>) {
 
+  //  return product$.pipe( concatMap( product => itemType$.pipe( map( itemType => {
+  //     this.openProductEditWindow(product, itemType)
+  //   } ))
+  //   ))
+
     product$.pipe( concatMap( product => itemType$.pipe( map( itemType => {
-      this.openProductEditWindow(product, itemType)
+      return this.openProductEditWindow(product, itemType)
     } ))
     )).subscribe()
-
   }
 
   openChangeDueDialog(payment, paymentMethod, order: IPOSOrder) {
@@ -456,7 +489,7 @@ export class ProductEditButtonService {
       case 57 :
       case 58 :
       case 59 :
-        dialogRef = this.dialog.open(StrainProductEditComponent,
+        return this.dialog.open(StrainProductEditComponent,
           { width:        '95%',
             height:       '775px',
             minHeight:    '775px',
@@ -466,7 +499,7 @@ export class ProductEditButtonService {
         break;
       default:
         {
-          dialogRef = this.dialog.open(StrainProductEditComponent,
+          return  this.dialog.open(StrainProductEditComponent,
             { width:        '95%',
               height:       '775px',
               minHeight:    '775px',

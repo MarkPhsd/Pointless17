@@ -37,6 +37,7 @@ export class PartBuilderComponentService {
   }
 
 
+
   deleteComponent(site: ISite, id: number): Observable<PB_Components> {
 
     const controller = this.controller

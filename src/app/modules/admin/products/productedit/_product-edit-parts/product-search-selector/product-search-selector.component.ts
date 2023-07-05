@@ -45,7 +45,7 @@ export class ProductSearchSelector2Component implements OnInit, AfterViewInit {
     )
   )
 
-  searchList(searchPhrase):  Observable<ProductSearchModel> {
+  searchList(searchPhrase):  Observable<any> {
     const site  = this.siteService.getAssignedSite();
     const model = this.initSearchModel(searchPhrase)
     return this.menuService.getProductsBySearch(site, model)

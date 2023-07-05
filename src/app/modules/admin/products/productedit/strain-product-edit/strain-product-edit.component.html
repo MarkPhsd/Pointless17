@@ -201,7 +201,7 @@
               <ng-container [ngTemplateOutlet]="productCount"></ng-container>
               <ng-container [ngTemplateOutlet]="reOrderAmount"></ng-container>
               <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
-            </div>
+             </div>
 
             <div *ngIf="itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'retail' )">
 
@@ -240,6 +240,8 @@
               <ng-container [ngTemplateOutlet]="productCount"></ng-container>
               <ng-container [ngTemplateOutlet]="reOrderAmount"></ng-container>
               <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
+              <ng-container [ngTemplateOutlet]="partBuilderSelector"></ng-container>
+
             </div>
           </div>
       </div>
@@ -260,10 +262,8 @@
    <mat-icon class="mat-label-info"
              color="accent"
              [matTooltip]="labelingService.productFieldTips[3].value">info</mat-icon>
-    <!-- <mat-label style="margin-left:5px;"
-               class="mat-label"
-               color="accent"
-               [matTooltip]="labelingService.productFieldTips[3].value">Info</mat-label> -->
+
+
   </div>
 </ng-template>
 
@@ -373,9 +373,9 @@
 </ng-template>
 
 <ng-template #gramCount>
-  <mat-label color="accent" class="mat-label-info" [matTooltip]="labelingService.productFieldTips[0].value"
-  >Info</mat-label>
-
+  <mat-icon class="mat-label-info"
+             color="accent"
+             [matTooltip]="labelingService.productFieldTips[0].value">info</mat-icon>
   <app-value-fields
         [inputForm]="productForm"
         [fieldName]="'gramCount'" >
@@ -433,5 +433,23 @@
         <mat-icon color="warn">delete</mat-icon>
       </button>
     </div>
+  </div>
+</ng-template>
+
+<ng-template #partBuilderSelector>
+  <field-value-selector
+    [inputForm]="productForm"
+    [searchType]="'pb_Main'"
+    [fieldProperty]="'pB_MainID'"
+    [friendlyName]="'Kit/Recipe'"
+    (itemSelect)="setPartBuilder($event)"
+    >
+    Kit/Recipe
+  </field-value-selector>
+
+  <div>
+    <button mat-button (click)="clearPB()">
+      <mat-icon color="warn">delete</mat-icon>
+    </button>
   </div>
 </ng-template>

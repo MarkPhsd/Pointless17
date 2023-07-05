@@ -637,7 +637,7 @@ export class MenuService {
 
 
   //for customer menu
-  getProductsBySearch(site: ISite, productSearchModel: ProductSearchModel): Observable<any> {
+  getProductsBySearch(site: ISite, productSearchModel: ProductSearchModel): Observable<IMenuItem[]> {
 
     const controller =  "/MenuItems/"
 
@@ -668,7 +668,6 @@ export class MenuService {
     const cacheTime = this.sitesService.getCurrentCache();
 
     let appCache =  JSON.parse(localStorage.getItem('appCache')) as any;
-    // console.log('appCache getMenuItemsBySearchPaged', appCache);
 
     if (appCache) {
       if (appCache?.value && appCache?.boolean) {
@@ -677,7 +676,6 @@ export class MenuService {
       }
     }
 
-    // console.log(url, productSearchModel)
     return  this.httpClient.post<any>(url, productSearchModel )
 
   }

@@ -22,7 +22,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 export class ButtonRendererComponent implements ICellRendererAngularComp {
 
   params: any;
-  getLabelFunction: any;
+  @Input() getLabelFunction: any;
   getIconFunction:  any;
   btnClass: string;
   @Input() label= 'Edit';
@@ -49,6 +49,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     if(this.getLabelFunction && this.getLabelFunction instanceof Function)
     {
 
+      // console.log(this.label, this.getLabelFunction)
       this.label = this.getLabelFunction(params.data);
 
       if (this.label === 'null') {
@@ -59,23 +60,28 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         this.icon = 'inventory'
         return
       }
-      if (this.label === 'Delete') {
+      if ( this.getLabelFunction == 'open' || this.label?.toLowerCase() === 'open') {
+        this.icon = 'expand'
+        return
+      }
+
+      if (this.label?.toLowerCase() === 'delete' || this.getLabelFunction == 'delete') {
         this.icon = 'delete'
         return
       }
-      if (this.label === 'Edit') {
+      if (this.label?.toLowerCase() ===  'edit') {
         this.icon = 'edit'
         return
       }
-      if (this.label === 'Add') {
+      if (this.label?.toLowerCase() ===   'add') {
         this.icon = 'add'
         return
       }
-      if (this.label === 'view') {
+      if (this.label?.toLowerCase() ===   'view') {
         this.icon = 'view'
         return
       }
-      if (this.label === 'Check In') {
+      if (this.label?.toLowerCase() ===   'check Iin') {
         // this.icon = 'add'
         return
       }

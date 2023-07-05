@@ -1,13 +1,13 @@
 <div class="buttons-format flex-container">
 
-      <div *ngIf="enableStartOrder" >
-        <button mat-raised-button
-          class="button"
-          color="primary"
-          (click)="onOutPutStartOrder()">
-          <mat-icon>add</mat-icon>Order
-        </button>
-      </div>
+    <div *ngIf="enableStartOrder" >
+      <button mat-raised-button
+        class="button"
+        color="primary"
+        (click)="onOutPutStartOrder()">
+        <mat-icon>add</mat-icon>Order
+      </button>
+    </div>
 
     <div *ngIf="enableAdd">
         <button
@@ -26,6 +26,13 @@
               (click)="onOutputViewOrder()">
               <mat-icon>expand</mat-icon>
         <span >View</span>
+      </button>
+    </div>
+
+    <div *ngIf="refresh">
+      <button  mat-button class="button"  (click)="refreshButton()">
+        <mat-icon>refresh</mat-icon>
+        <span *ngIf="!smallDevice">Refresh</span>
       </button>
     </div>
 
@@ -49,6 +56,7 @@
         <span *ngIf="!smallDevice">Email</span>
       </button>
     </div>
+
 
     <div *ngIf='!hideSave' >
       <button mat-button

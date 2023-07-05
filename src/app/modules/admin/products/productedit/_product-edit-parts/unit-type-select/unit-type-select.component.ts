@@ -73,7 +73,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
 
   getField() {
     let field = ""
-    if (this.product) { field ="searchField"  }
+    if (this.product)  { field ="searchField"  }
     if (!this.product) { field ="searchField"  }
     return field;
   }
@@ -152,11 +152,6 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
     }
 
     if (!this.product) {
-      // const data = {unitTypeID: item.id, index: this.index, unitName: item.name, unitType: item }
-      // this.itemSelect.emit(data)
-      // item = { unitTypeID : item.id }
-      // this.inputForm.patchValue(  unit  )
-      // console.log('select item', item)
       if (this.productPrice) {
         this.productPrice.unitTypeID = item.id;
         this.productPrice.unitType = item.name;

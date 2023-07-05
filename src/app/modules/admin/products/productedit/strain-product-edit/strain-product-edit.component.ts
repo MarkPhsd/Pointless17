@@ -13,7 +13,6 @@ import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.
 import { switchMap } from 'rxjs/operators';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods.service';
-
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { UnitTypeMethodsService } from 'src/app/_services/menu/unit-type-methods.service';
 import { SearchModel } from 'src/app/_services/system/paging.service';
@@ -161,6 +160,23 @@ export class StrainProductEditComponent implements OnInit {
     }
   }
 
+  assignItem(event) {
+    if (!event) { return }
+    if (!event.unitTypeID) {return}
+    this.product.unitTypeID = event.unitTypeID
+    this.productForm.patchValue({unitTypeID: event?.unitTypeID})
+    this.action$ = this.updateItem(null)
+  }
+
+
+  setPartBuilder(event) {
+    if (!event) { return }
+    console.log('event',event)
+    this.product.pB_MainID = event.id;
+    this.productForm.patchValue({ pB_MainID: event.id})
+    this.action$ = this.updateItem(null)
+  }
+
   copyItem($event) {
     //do confirm of delete some how.
     //then
@@ -199,18 +215,11 @@ export class StrainProductEditComponent implements OnInit {
       searchField: []
     })
   }
-
-  assignItem(event) {
-    if (!event) { return }
-    if (!event.unitTypeID) {return}
-    const unitTypeID = event.unitTypeID
-    const unitName   = event.unitName
-    const unitType   = event.unitType;
-    this.product.unitTypeID = event.unitTypeID
-
-
-    this.productForm.patchValue({unitTypeID: unitTypeID})
-    this.action$ = this.updateItem(null)
+  clearPB() {
+    this.productForm.patchValue({ pB_MainID: 0})
+    this.unitSearchForm = this.fb.group({
+      searchField: []
+    })
   }
 
   updateItem(event) {
@@ -221,11 +230,9 @@ export class StrainProductEditComponent implements OnInit {
       this.message = ""
       this.performingAction= true;
       this.product.json = this.JSONAsString ;
-      console.log(this.product.json)
       const product$ = this.menuService.saveProduct(site, this.product);
       return product$.pipe(switchMap(
           data => {
-            // console.log('save results')
             if (data) {
               if (data.errorMessage) {
                 this.notifyEvent('Save did not succeed: ' + data.errorMessage, 'Success')

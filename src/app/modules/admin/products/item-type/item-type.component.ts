@@ -92,14 +92,11 @@ export class ItemTypeComponent implements OnInit {
 
     this.itemTypeBasic            =  await this.itemTypeService.getBasicTypes(site).pipe().toPromise();
     this.selectedItemTypes        =  await this.itemTypeDisplay.getSortedList(site).pipe().toPromise();
-
     const step = this.route.snapshot.paramMap.get('accordionStep');
-    console.log('step', step)
     if (step) {
       this.accordionStep = +step;
       this.setStep(+step)
     }
-
   }
 
   initalizeTypes() {

@@ -1,0 +1,32 @@
+
+<div  class="mat-form-field"
+      [formGroup]="searchForm">
+  <mat-form-field class="formFieldClass"
+                  appearance="outline" >
+    <mat-label class="form-background">
+      <mat-icon>search</mat-icon><ng-content></ng-content>
+    </mat-label>
+    <input
+            #input
+            matInput
+            type              ="text"
+            class             ="input-field"
+            placeholder       = "friendlyName"
+            formControlName   ="searchField"
+            [matAutocomplete] ="auto">
+      <mat-autocomplete panelWidth    = "auto"
+                        #auto         = "matAutocomplete"
+                        (optionSelected)="onChange($event)">
+      <mat-option *ngFor="let item of (results$ | async)?.results"
+                  [value]="item">
+              {{item.name}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
+
+ <div hidden="true"
+      *ngIf="inputForm"
+      [formGroup]='inputForm'>
+  <input formControlName="fieldProperty">
+</div>

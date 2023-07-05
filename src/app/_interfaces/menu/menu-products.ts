@@ -113,6 +113,7 @@ export interface IMenuItem {
   producer  : IClientTable;
   lab       : IClientTable;
   json      : string;
+  pB_MainID: number;
   menuButtonJSON: menuButtonJSON;
 }
 

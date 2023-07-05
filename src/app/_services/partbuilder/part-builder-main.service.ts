@@ -67,6 +67,18 @@ export class PartBuilderMainService {
 
   }
 
+  detectInfiniteLoop(site, pb_Main: PB_Main): Observable<boolean> {
+    const controller = `/PB_Builder/`
+
+    const endPoint = `detectInfiniteLoop`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, pb_Main)
+  }
+
   getItems(site: ISite) : Observable<PB_Main[]> {
 
     const controller = "/PB_Builder/"

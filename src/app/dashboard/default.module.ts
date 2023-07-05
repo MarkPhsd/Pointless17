@@ -363,6 +363,8 @@ import { PartBuilderMainComponent } from '../modules/admin/products/part-builder
 import { PartBuilderComponentEditComponent } from '../modules/admin/products/part-builder/part-builder-component-edit/part-builder-component-edit.component';
 import { HouseAccountsListComponent } from '../modules/orders/house-accounts-list/house-accounts-list.component';
 import { PartBuilderFilterComponent } from '../modules/admin/products/part-builder/part-builder-filter/part-builder-filter.component';
+import { ProductSelectorComponent } from '../modules/admin/products/productedit/_product-edit-parts/product-selector/product-selector.component';
+import { PartBuilderSelectorComponent } from '../modules/admin/products/productedit/_product-edit-parts/part-builder-selector/part-builder-selector.component';
 // import { AverageHourlySalesLaborChartComponent } from '../modules/admin/reports/average-hourly-sales-labor-chart/average-hourly-sales-labor-chart.component';
 // import { PointlessReportingLibModule } from 'projects/pointess-reporting-lib/src/public-api';
 // import { ColorPickerModule } from 'ngx-color-picker';
@@ -486,6 +488,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     UnitTypeEditComponent,
     UnitTypePromptComponent,
     UnitTypeSelectComponent,
+    ProductSelectorComponent,
+    PartBuilderSelectorComponent,
     ServiceTypeEditComponent,
     ServiceTypeListComponent,
     StrainsAddComponent,

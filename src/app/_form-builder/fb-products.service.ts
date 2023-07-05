@@ -16,9 +16,8 @@ export class FbProductsService {
 
     setProductValues(product: IProduct, inputForm: UntypedFormGroup): IProduct {
     if (inputForm.valid) {
-      //first we set the value of the product from the form.
-      //then we can set values that aren't filled. we can do this in the api or on the app?
       product                 = inputForm.value;
+      console.log(product.pB_MainID, inputForm.controls['pB_MainID'].value)
       product.barCodeID       = product.barcode
       return product
     }
@@ -231,6 +230,7 @@ export class FbProductsService {
         mGTHC                  :   [''],
         parLevel               :   [''],
         slug                   :   [''],
+        pB_MainID               : [],
       })
       return fb;
     }

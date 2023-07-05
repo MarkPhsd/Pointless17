@@ -1,10 +1,14 @@
 import { T } from '@angular/cdk/keycodes';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output,EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { GridApi } from 'ag-grid-community';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
+import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
+import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { UnitType } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { MenuService } from 'src/app/_services';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { PartBuilderComponentService } from 'src/app/_services/partbuilder/part-builder-component.service';
 import { PartBuilderMainMethodsService } from 'src/app/_services/partbuilder/part-builder-main-methods.service';
 import { PB_Components, PB_Main, PartBuilderMainService } from 'src/app/_services/partbuilder/part-builder-main.service';
@@ -17,33 +21,66 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class PartBuilderComponentEditComponent implements OnInit {
 
-  action$  : Observable<any>;
   @Input()  pb_Main: PB_Main;
   @Input()  inputForm: FormGroup;
-  unitSearchForm: UntypedFormGroup;
-  _PB_Main: Subscription;
-  productName: string;
-  searchForm: FormGroup;
-  componentForm: FormGroup;
-  pb_Component: PB_Components;
+  action$  : Observable<any>;
+  @Output() outPutRefresh  : EventEmitter<any> = new EventEmitter<any>();
+  @Output() saveUpdate  : EventEmitter<any> = new EventEmitter<any>();
+  unitSearchForm   : UntypedFormGroup;
+  productSearchForm: UntypedFormGroup;
+  _PB_Main      : Subscription;
+  productName   : string;
+  searchForm    : FormGroup;
+  componentForm : FormGroup;
+  pb_Component  : PB_Components;
   pb_Components$: Observable<PB_Components>;
-  indexValue: number = 1;
-  menuItem: IMenuItem;
-  menuItem$: Observable<IMenuItem>;
+  indexValue    : number = 1;
+  menuItem      : IMenuItem;
+  menuItem$     : Observable<IMenuItem>;
+  product$      : Observable<any>;
 
   site = this.siteService.getAssignedSite()
   id: number;
 
+
+  gridApi:            GridApi;
+  // gridColumnApi:      GridAlignColumnsDirective;
+  searchGridOptions:  any;
+
+   // @ViewChild('agGrid') agGrid: AgGridAngular;
+   gridOptions:           any
+   columnDefs             = [];
+   defaultColDef;
+   frameworkComponents:   any;
+   rowDataClicked1        = {};
+   rowDataClicked2        = {};
+   public rowData:        any[];
+   public info:           string;
+
+   paginationSize          = 50
+   currentRow              = 1;
+   currentPage             = 1
+   pageNumber              = 1
+   pageSize                = 50
+   numberOfPages           = 1
+   rowCount                = 50
+   rowSelection;
+   loading_initTypes      : boolean;
+   selected               : any;
+
+
   initSubscription() {
     this._PB_Main = this.partBuilderMainMethodsService.PB_Main$.subscribe(data => {
       this.pb_Main = data;
-      console.log('data updated', data)
+      // console.log('data updated', data)
     })
   }
 
   constructor(private siteService: SitesService,
               private fb: FormBuilder,
+              private productEditButtonService: ProductEditButtonService,
               private partBuilderMainService: PartBuilderMainService,
+              private partBuilderComponentService: PartBuilderComponentService,
               private partBuilderMainMethodsService: PartBuilderMainMethodsService,
               private partBuilderComponent: PartBuilderComponentService,
               private menuService: MenuService,
@@ -51,41 +88,9 @@ export class PartBuilderComponentEditComponent implements OnInit {
   }
   ngOnInit(): void {
     this.initSubscription()
-    this.initSearchForm()
+    this.initSearchForm();
+    this.initGridResults()
   }
-
-  initData() {
-    const item = {} as PB_Main;
-    item.name = 'Example'
-    item.pB_Components = [] as PB_Components[]
-    item.id = -1;
-
-    let comp = {} as PB_Components;
-    comp.id = 1;
-    comp.cost = 5
-    comp.price = 10;
-    comp.quantity = 1;
-    // comp.pb_MainID = 1
-
-    item.pB_Components.push(comp)
-    comp = {} as PB_Components;
-    comp.id = 2;
-    comp.cost = 6
-    comp.price = 12;
-    comp.quantity = 1.2;
-    // comp.pb_MainID = 1
-
-    item.pB_Components.push(comp)
-    comp = {} as PB_Components;
-    comp.id = 3;
-    comp.cost = 3;
-    comp.price = 5;
-    comp.quantity = 1.1;
-    // comp.pb_MainID = 1
-
-    this.refreshData(item)
-  }
-
 
   addItem() {
     let item = {} as PB_Main;
@@ -110,14 +115,118 @@ export class PartBuilderComponentEditComponent implements OnInit {
     this.enableEdit(comp);
   }
 
+  initGridResults() {
+    this.initAGGridFeatures()
+    this.frameworkComponents = {
+      btnCellRenderer: ButtonRendererComponent
+    };
+    this.defaultColDef = {
+      flex: 1,
+      minWidth: 100,
+    };
+  }
+
+  editFromGrid(e) {
+    if (e.rowData.id)  {
+      this.enableEdit(e.rowData);
+    }
+  }
+
+  deleteItem(e) {
+    if (e.rowData.id)  {
+      this.delete(e.rowData);
+    }
+  }
+
+  openItem(e) {
+    if (e.rowData.id)  {
+      this.editItem(e.rowData);
+    }
+  }
+
+  getLabelDelete() {
+    return 'delete'
+  }
+  getLabelOpen() {
+    return 'open'
+  }
+
+  initAGGridFeatures() {
+    this.columnDefs =  [
+      { field: "id",
+        cellRenderer: "btnCellRenderer",
+        cellRendererParams: {
+          onClick: this.editFromGrid.bind(this),
+          label: 'edit',
+          getLabelFunction: 'edit',
+          btnClass: 'btn btn-primary btn-sm'
+        },
+        minWidth: 65,
+        width: 65
+      },
+
+      { field: "id",
+          cellRenderer: "btnCellRenderer",
+          cellRendererParams: {
+            onClick: this.editFromGrid.bind(this),
+            label: 'delete',
+            getLabelFunction: this.getLabelDelete.bind(this),
+            btnClass: 'btn btn-primary btn-sm'
+          },
+          minWidth: 65,
+          width: 65
+      },
+
+      { field: "id",
+          cellRenderer: "btnCellRenderer",
+          cellRendererParams: {
+            onClick: this.openItem.bind(this),
+            label: 'open',
+            getLabelFunction: this.getLabelOpen.bind(this),
+            btnClass: 'btn btn-primary btn-sm'
+          },
+          minWidth: 65,
+          width: 65
+      },
+
+      {headerName: 'Name',     field: 'name', sortable: true, minWidth: 150},
+      {headerName: 'Unit',     field: 'item.unitName',  sortable: true, },
+      {headerName: 'Quantity', field: 'quantity', sortable: true},
+      {headerName: 'Cost',     field: 'cost', sortable: true},
+      {headerName: 'Price',    field: 'price', sortable: true},
+      {headerName: 'Current Count',    field: 'product.productCount', sortable: true},
+    ]
+
+    this.rowSelection = 'multiple';
+    this.initGridOptions()
+    // this.pb_Component.product.productCount
+  }
+
+  initGridOptions()  {
+    this.gridOptions = {
+      pagination: true,
+      paginationPageSize: 50,
+      cacheBlockSize: 25,
+      maxBlocksInCache: 800,
+      rowModelType: 'infinite',
+      infiniteInitialRowCount: 2,
+      rowSelection: 'multiple',
+    }
+  }
+
   refreshData(item) {
-    this.partBuilderMainMethodsService.updatePBMain(item)
-    this.initSubscription()
-    this.initSearchForm()
+    const site = this.siteService.getAssignedSite()
+
+    this.partBuilderMainService.getItem(site, item.id).pipe(switchMap( data => {
+      this.partBuilderMainMethodsService.updatePBMain(item)
+      this.initSubscription()
+      this.initSearchForm()
+      return of(data)
+      }
+    ))
   }
 
   get index() {
-    // this.indexValue += 1
     return this.getRandomInt(1, 2000000)
   }
 
@@ -140,6 +249,14 @@ export class PartBuilderComponentEditComponent implements OnInit {
     this.initComponentForm(item)
   }
 
+  onGridReady(params) {
+    if (params) {
+      this.gridApi = params.api;
+      // this.gridColumnApi = params.columnApi;
+    }
+    if (!params)  { console.log('no params')}
+  }
+
   initComponentForm(item: PB_Components) {
     this.componentForm = this.fb.group({
       id: [],
@@ -155,6 +272,8 @@ export class PartBuilderComponentEditComponent implements OnInit {
 
     this.componentForm.patchValue(item);
     this.initUnitSearchForm(item)
+    this.initProductSearchForm(item)
+
   }
 
   initSearchForm() {
@@ -172,10 +291,20 @@ export class PartBuilderComponentEditComponent implements OnInit {
     }))
   }
 
+  editItem(item) {
+    if (!item) { return }
+    this.product$ = this.productEditButtonService.openProductDialogObs(item.productID).pipe(switchMap(data => {
+      const dialog = data
+      dialog.afterClosed().subscribe(result => {
+        this.outPutRefresh.emit(true)
+      })
+      return of(data)
+    }))
+  }
+
   delete(item) {
     if (this.pb_Main.pB_Components) {
       this.pb_Main.pB_Components = this.pb_Main.pB_Components.filter(data => {return data.id != item.id})
-
       this.action$ = this.partBuilderComponent.deleteComponent(this.site, item.id).pipe(switchMap(data => {
         if (!data || data.toString().toLowerCase() === 'not found') {
           this.siteService.notify(' Item not found or deleted', 'close', 2000, 'red')
@@ -184,6 +313,17 @@ export class PartBuilderComponentEditComponent implements OnInit {
       }))
     }
   }
+
+  assignProduct(event) {
+    if (this.pb_Component) {
+      this.pb_Component.product = event
+      this.pb_Component.productID = event.id;
+      this.pb_Component.name = event?.name
+      this.componentForm.patchValue(this.pb_Component);
+    }
+  }
+  // [searchForm]    = 'productSearchForm'
+  // (itemSelect)    = 'assignProduct($event)'>
 
   assignItem(event) {
     if (this.pb_Component) {
@@ -239,6 +379,18 @@ export class PartBuilderComponentEditComponent implements OnInit {
       searchField: [item?.unitType?.name]
     })
   }
+
+  initProductSearchForm(item: PB_Components) {
+    if (!item) {
+      this.clearUnit()
+      return
+    }
+    this.componentForm.patchValue({ productID: item.productID})
+    this.productSearchForm = this.fb.group({
+      searchField: [item?.name]
+    })
+  }
+
   clearUnit() {
     this.componentForm.patchValue({ unitTypeID: 0})
     this.unitSearchForm = this.fb.group({
@@ -246,11 +398,18 @@ export class PartBuilderComponentEditComponent implements OnInit {
     })
   }
 
+  clearProduct() {
+    this.componentForm.patchValue({ productID: 0})
+    this.productSearchForm = this.fb.group({
+      searchField: []
+    })
+  }
   saveEdit() {
     if (this.componentForm) {
       this.pb_Component = this.componentForm.value
       this.setThisPBComponent(this.pb_Component);
       this.componentForm = null
+      this.saveUpdate.emit(true)
     }
   }
 

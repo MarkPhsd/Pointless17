@@ -207,5 +207,6 @@ export interface IProduct {
   departmentName: string;
   errorMessage: string;
   json: string;
+  pB_MainID: number; number;
 }
 
