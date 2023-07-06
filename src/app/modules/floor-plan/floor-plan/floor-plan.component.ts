@@ -6,7 +6,6 @@ import { OrdersService } from 'src/app/_services';
 import { IPOSOrder, IUser } from 'src/app/_interfaces';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-// import { compress, decompress } from 'compress-json'
 
 export interface uuidList {
   uuID: string;
