@@ -52,12 +52,14 @@
         </form-select-list>
       </div>
     </span>
+
     <div class="grid-item">
       <app-brand-type-select
                         [inputForm]      = "searchForm"
                         [formFieldClass] = "'mat-form-field2'"
-                        [disableDelete]  ="true"
+                        [disableDelete]  = "true"
                         (itemSelect)     = "setBrandID($event)">
+                        Search Brands
       </app-brand-type-select>
     </div>
 
@@ -81,14 +83,13 @@
       </form-select-list>
     </div>
 
-    <div class="grid-item"
-          *ngIf="minQuantityFilter">
-        <form-select-list [formFieldName]   = "'productCountGreaterThanZero'"
-                          [searchForm]      = "searchForm"
-                          [list]            = "minQuantityFilter"
-                          (selectionChange) = "refreshMinQuantityFilter($event)"   >
-        <div fieldSearchDescription>Greater Than</div>
-        </form-select-list>
+    <div class="grid-item">
+        <app-value-fields
+          [inputForm]="searchForm"
+          [fieldsClass]="'font-smaller'"
+          [fieldName]="'minQuantityFilter'">
+          Greater Than
+        </app-value-fields>
     </div>
 
     <div class="grid-item">

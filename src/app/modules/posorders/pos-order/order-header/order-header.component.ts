@@ -1,4 +1,4 @@
-import { Component, Input , OnChanges, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import { Component, Input , OnChanges, OnInit, TemplateRef, ViewChild, OnDestroy} from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxPayPalModule } from 'ngx-paypal';
 import { of, switchMap, Observable, Subscription } from 'rxjs';
@@ -18,7 +18,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
   templateUrl: './order-header.component.html',
   styleUrls: ['./order-header.component.scss']
 })
-export class OrderHeaderComponent implements OnInit , OnChanges {
+export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   @Input() hideButtonOptions: boolean;
   @Input() qrOrder: boolean;
@@ -86,6 +86,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
 
   ngOnDestroy() {
     if (this._uiTransactionSettings) { this._uiTransactionSettings.unsubscribe()}
+    if (this._posDevice) { this._posDevice.unsubscribe()}
   }
 
   ngOnChanges() {

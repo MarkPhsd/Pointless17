@@ -131,13 +131,7 @@ subCategoriesList: IMenuItem[];
 categoriesList: IMenuItem[];
 departmentsList: IMenuItem[];
 
-minQuantityFilter = [
-  {name: '10', value: 10, id:10},
-  {name: '0', value: 0, id:0},
-  {name: '-1', value: -1, id:-1},
-  {name: '-10', value: -10, id:-10},
-  {name: '-20', value: -20, id:-20},
-]
+
 @Output() outputPromptItem = new EventEmitter();
 _promptSubGroup : Subscription;
 promptSubGroup  : PromptSubGroups;
@@ -162,7 +156,8 @@ constructor(  private _snackBar              : MatSnackBar,
               private dialog: MatDialog,
             )
   {
-    this.initForm();
+
+
     this.initAgGrid(this.pageSize);
   }
 
@@ -194,6 +189,8 @@ constructor(  private _snackBar              : MatSnackBar,
     if (!this.editOff) {
       this.buttonName = 'Edit'
     }
+    this.initForm();
+    this.formSubscriber();
   };
 
   refreshSubCategories() {
@@ -324,7 +321,20 @@ constructor(  private _snackBar              : MatSnackBar,
       departmentID      : [this.departmentID],
       subCategoryID:      [this.subCategoryID],
       viewAll           : [1],
+      minQuantityFilter : [],
     });
+  }
+
+  formSubscriber() {
+    this.searchForm.controls['minQuantityFilter'].valueChanges.subscribe(value => {
+      this.minQuantityFilterValue = value;
+      console.log(value)
+      this.refreshSearch(1)
+    });
+
+    this.searchForm.valueChanges.subscribe(data => {
+      console.log(data)
+    })
   }
 
   refreshSearchPhrase(event) {
@@ -616,7 +626,7 @@ constructor(  private _snackBar              : MatSnackBar,
     // }
     // if (colName === 'barcode') {
     //   item.barcode = event.value;
-    // }
+    // }f
     // if (colName === 'name') {
     //   item.name = event.value;
     // }
@@ -650,7 +660,7 @@ constructor(  private _snackBar              : MatSnackBar,
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
     searchModel.hideSubCategoryItems = false;
-    if (this.minQuantityFilterValue) {
+    if (this.searchForm.controls['minQuantityFilter'].value) {
       searchModel.minQuantityFilter = this.minQuantityFilterValue;
     }
     console.log('searchmodel', searchModel)
