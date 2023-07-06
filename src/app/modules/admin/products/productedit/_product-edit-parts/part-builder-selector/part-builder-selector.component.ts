@@ -63,8 +63,7 @@ export class PartBuilderSelectorComponent implements OnInit, AfterViewInit {
       const model = this.initSearchModel(searchPhrase, this.searchType);
       return this.menuService.getProductsBySearchForLists(site, model)
     }
-
-    if (this.searchType == 'pb_Main' ) {
+    if (this.searchType == 'pB_MainID' ) {
       const model = this.initSearchModel(searchPhrase, this.searchType);
       return this.partBuilderService.searchMenuPrompts(site, model)
     }
@@ -118,7 +117,7 @@ export class PartBuilderSelectorComponent implements OnInit, AfterViewInit {
     const site  = this.siteService.getAssignedSite();
     if(site) {
       let item$
-
+      console.log('get name partbuilder', this.id, id)
       //fieldProperty
       if (this.fieldProperty == 'productID') {
         item$ = this.menuService.getProduct(site, id)
@@ -131,6 +130,7 @@ export class PartBuilderSelectorComponent implements OnInit, AfterViewInit {
       }
 
       item$.subscribe(data => {
+        console.log('getname data', data)
         this.item = data;
         const price =  { searchField: data.name  }
         this.searchForm.patchValue( price )
@@ -165,11 +165,11 @@ export class PartBuilderSelectorComponent implements OnInit, AfterViewInit {
     if (this.fieldProperty === 'pB_MainID'  ) {
       if (this.item) {
         // this.item.unitTypeID = item.id;
-        this.item.pb_MainID = item.id;
+        this.item.pB_MainID = item.id;
       }
       const value =  { searchField: item.name  }
       this.searchForm.patchValue( value )
-      this.itemSelect.emit({ pb_MainID: item.id  })
+      this.itemSelect.emit({ pB_MainID: item.id  })
       return;
     }
 
@@ -239,9 +239,9 @@ export class PartBuilderSelectorComponent implements OnInit, AfterViewInit {
       })
     }
 
-    if (this.searchType == 'pb_Main'  ) {
+    if (this.searchType == 'pB_MainID'  ) {
       this.inputForm = this.fb.group({
-        pb_MainID: []
+        pB_MainID: []
       })
     }
   }

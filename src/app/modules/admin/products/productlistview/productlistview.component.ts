@@ -59,6 +59,7 @@ get itemName() {
 get platForm()         {  return Capacitor.getPlatform(); }
 get PaginationPageSize(): number {return this.pageSize;  }
 get gridAPI(): GridApi {  return this.gridApi;  }
+copy$: Observable<any>;
 
 //AgGrid
 params               : any;
@@ -103,6 +104,7 @@ inputForm        : UntypedFormGroup;
 categoryID       : number;
 subCategoryID    : number;
 productTypeSearch: number;
+minQuantityFilterValue: any;
 productTypeID    : number;
 departmentID     : number;
 typeID           : number;
@@ -129,7 +131,13 @@ subCategoriesList: IMenuItem[];
 categoriesList: IMenuItem[];
 departmentsList: IMenuItem[];
 
-
+minQuantityFilter = [
+  {name: '10', value: 10, id:10},
+  {name: '0', value: 0, id:0},
+  {name: '-1', value: -1, id:-1},
+  {name: '-10', value: -10, id:-10},
+  {name: '-20', value: -20, id:-20},
+]
 @Output() outputPromptItem = new EventEmitter();
 _promptSubGroup : Subscription;
 promptSubGroup  : PromptSubGroups;
@@ -411,6 +419,30 @@ constructor(  private _snackBar              : MatSnackBar,
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
 
+  getLabelCopy() {
+    return 'copy'
+  }
+
+  copyFromGrid(e) {
+    if (e.rowData.id)  {
+      this.copyItem(e.rowData);
+    }
+  }
+
+  copyItem(item: IProduct) {
+    this.product = item;
+    const site = this.siteService.getAssignedSite()
+    this.copy$ = this.menuService.getProduct(site, this.product.id).pipe(switchMap(data => {
+      data.name = this.product?.name + ' Copy '
+      data.barcode = '';
+      return this.menuService.postProduct(site, data)
+    })).pipe(switchMap(data => {
+        this.refreshGrid()
+        return of (data)
+      }
+    ))
+  }
+
   //ag-grid
   //standard formating for ag-grid.
   //requires addjustment of column defs, other sections can be left the same.
@@ -426,7 +458,7 @@ constructor(  private _snackBar              : MatSnackBar,
 
     this.columnDefs =  [
 
-      {
+      {headerName: '',
       field: 'id',
       cellRenderer: "btnCellRenderer",
                     cellRendererParams: {
@@ -505,6 +537,18 @@ constructor(  private _snackBar              : MatSnackBar,
                   autoHeight: true,
                   cellRenderer: AgGridImageFormatterComponent
                   },
+
+      { headerName: '', field: "id",
+                  cellRenderer: "btnCellRenderer",
+                  cellRendererParams: {
+                    onClick: this.copyFromGrid.bind(this),
+                    label: 'delete',
+                    getLabelFunction: this.getLabelCopy.bind(this),
+                    btnClass: 'btn btn-primary btn-sm'
+                  },
+                  minWidth: 65,
+                  width: 65
+              },
       {
                   headerName: "Active",
                   width:    100,
@@ -606,7 +650,10 @@ constructor(  private _snackBar              : MatSnackBar,
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
     searchModel.hideSubCategoryItems = false;
-    // console.log('searchmodel', searchModel)
+    if (this.minQuantityFilterValue) {
+      searchModel.minQuantityFilter = this.minQuantityFilterValue;
+    }
+    console.log('searchmodel', searchModel)
     return searchModel;
   }
 
@@ -635,6 +682,12 @@ constructor(  private _snackBar              : MatSnackBar,
 
   refreshActiveChange(event) {
     this.viewAll = event;
+    this.refreshSearch(1)
+  }
+
+  refreshMinQuantityFilter(event) {
+    console.log('event', event)
+    this.minQuantityFilterValue = event;
     this.refreshSearch(1);
   }
 

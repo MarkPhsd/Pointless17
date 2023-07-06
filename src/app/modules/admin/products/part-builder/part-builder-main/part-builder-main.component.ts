@@ -8,7 +8,7 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 import { PB_Main, PB_SearchResults, PartBuilderMainService } from 'src/app/_services/partbuilder/part-builder-main.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
-export interface IPartSearchModel { 
+export interface IPartSearchModel {
   name: string;
   pageNumber: number;
   pageSize: number;
@@ -23,7 +23,7 @@ export interface IPartSearchModel {
 export class PartBuilderMainComponent implements OnInit {
 
   partList$ : Observable<any>;
-  searchModel = {} as IPartSearchModel 
+  searchModel = {} as IPartSearchModel
 
   get platForm()         {  return Capacitor.getPlatform(); }
   get PaginationPageSize(): number {return this.pageSize;  }
@@ -76,12 +76,12 @@ export class PartBuilderMainComponent implements OnInit {
     this.rowSelection       = 'multiple'
   }
 
-  refreshSearchAny(search: any) { 
-    if (search) { 
+  refreshSearchAny(search: any) {
+    if (search) {
       search = this.initSearchModel()
     }
     // console.log('search', search)
-    if (search) { 
+    if (search) {
       const site = this.siteService.getAssignedSite()
       this.searchName  = search.name;
       this.partList$ = this.getRowData(this.params, 1, 50)
@@ -90,10 +90,10 @@ export class PartBuilderMainComponent implements OnInit {
         this.params.endRow       = this.pageSize;
       }
       this.onGridReady(this.params)
-    }  
+    }
   }
 
-  refreshList() { 
+  refreshList() {
     this.refreshSearchAny(this.searchModel)
   }
 
@@ -123,7 +123,7 @@ export class PartBuilderMainComponent implements OnInit {
     return this.pageNumber
   }
 
-  initAGGrid() { 
+  initAGGrid() {
 
     this.frameworkComponents = {
       btnCellRenderer: ButtonRendererComponent
@@ -150,7 +150,7 @@ export class PartBuilderMainComponent implements OnInit {
                     sortable: false,
     } as rowItem
     this.columnDefs.push(item);
-  
+
     item =   {headerName: 'Name',     field: 'name', sortable: true,
       width   : 100,
       minWidth: 200,
@@ -167,7 +167,7 @@ export class PartBuilderMainComponent implements OnInit {
       return this.buttonName
       else return this.buttonName
   }
-  
+
   editItemWithId(item:any) {
     if(!item) {
       // console.log(item)
@@ -190,11 +190,11 @@ export class PartBuilderMainComponent implements OnInit {
     }
   }
 
-  add() { 
+  add() {
     const site = this.siteService.getAssignedSite()
     const item = {name: 'New Item '} as PB_Main;
 
-    this.item$ = this.partBuilderService.post(site, item).pipe(switchMap(data => { 
+    this.item$ = this.partBuilderService.post(site, item).pipe(switchMap(data => {
       this.router.navigate(['part-builder-edit', {id:data.id}])
       return of(data)
     }))
@@ -221,7 +221,7 @@ export class PartBuilderMainComponent implements OnInit {
       items$.subscribe(data =>
 
         {
-            console.log('data', data)
+            // console.log('data', data)
             const resp         =  data.paging
             if (resp) {
               this.isfirstpage   = resp.isFirstPage
@@ -232,7 +232,7 @@ export class PartBuilderMainComponent implements OnInit {
               if (this.numberOfPages !=0 && this.numberOfPages) {
                 this.value = ((this.pageNumber / this.numberOfPages ) * 100).toFixed(0)
               }
-              if (data.results) { 
+              if (data.results) {
                 params.successCallback(data.results)
                 this.rowData = data.results;
               }

@@ -1,14 +1,15 @@
 import { Component, Input , OnChanges, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxPayPalModule } from 'ngx-paypal';
-import { of, switchMap, Observable } from 'rxjs';
+import { of, switchMap, Observable, Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
-import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
+import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 
@@ -18,6 +19,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
   styleUrls: ['./order-header.component.scss']
 })
 export class OrderHeaderComponent implements OnInit , OnChanges {
+
   @Input() hideButtonOptions: boolean;
   @Input() qrOrder: boolean;
   @Input() uiTransactionSettings  = {} as TransactionUISettings;
@@ -25,11 +27,37 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
   @Input() order: IPOSOrder
   @Input() isUserStaff = false
 
+  _posDevice: Subscription;
+  _uiTransactionSettings: Subscription;
+
+  posDevice       :  ITerminalSettings;
+  devicename = localStorage.getItem('devicename')
+
   isOrderClaimed: boolean;
   href: string;
   hidePrint = false;
   action$: Observable<any>;
   isApp = this.platFormService.isApp()
+
+  transactionUISettingsSubscriber() {
+    try {
+      this._uiTransactionSettings = this.uiSettingsService.transactionUISettings$.subscribe( data => {
+        if (data) {
+          this.uiTransactionSettings = data;
+        }
+      });
+    } catch (error) {
+
+    }
+
+    try {
+      this._posDevice = this.uiSettingsService.posDevice$.subscribe(data => {
+        this.posDevice = data;
+      })
+    } catch (error) {
+
+    }
+  }
 
   constructor(
              private ordersService:   OrdersService,
@@ -39,6 +67,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
              private orderMethodsService: OrderMethodsService,
              private paymentsMethodsProcessService: PaymentsMethodsProcessService,
              private siteService : SitesService,
+             private uiSettingsService: UISettingsService,
              public  authenticationService: AuthenticationService,
              public  prepPrintingService: PrepPrintingServiceService,
     ) {
@@ -46,12 +75,17 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
     this.orderMethodsService.currentOrder$.subscribe(data => {
       this.isOrderClaimed = this.orderMethodsService.IsOrderClaimed
     })
+    this.transactionUISettingsSubscriber();
 
   }
 
   ngOnInit() {
     this.href = this.router.url;
     this. refreshPrintOption()
+  }
+
+  ngOnDestroy() {
+    if (this._uiTransactionSettings) { this._uiTransactionSettings.unsubscribe()}
   }
 
   ngOnChanges() {
@@ -74,6 +108,12 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
   }
 
   reSendOrder() {
+    let extiOnFire : boolean
+    if (this.posDevice) {
+      if (this.posDevice.exitOrderOnFire) {
+        extiOnFire = this.posDevice.exitOrderOnFire
+      }
+    }
     this.action$ = this.paymentsMethodsProcessService.sendToPrep(this.order, true, this.uiTransactionSettings).pipe(
       switchMap(data => {
         return of(data)
@@ -83,9 +123,17 @@ export class OrderHeaderComponent implements OnInit , OnChanges {
 
   sendOrder() {
     // const expo$ = this.paymentsMethodsProcessService.sendToPrep
-    this.action$ = this.paymentsMethodsProcessService.sendToPrep(this.order, true, this.uiTransactionSettings).pipe(
+    let extiOnFire : boolean
+    if (this.posDevice) {
+      if (this.posDevice.exitOrderOnFire) {
+        extiOnFire = this.posDevice.exitOrderOnFire
+      }
+    }
+    this.action$ = this.paymentsMethodsProcessService.sendToPrep(this.order, true, this.uiTransactionSettings  ).pipe(
       switchMap(data => {
-        this.clearOrder()
+        if (extiOnFire) {
+          this.clearOrder()
+        }
         return of(data)
       })
     )

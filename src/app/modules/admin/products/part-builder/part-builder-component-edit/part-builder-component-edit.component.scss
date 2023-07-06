@@ -1,8 +1,12 @@
 
 .grid-container {
   display: grid;
-  grid-template-columns:  repeat(100px);
-  margin: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(165px, 1fr) );
+
+  // display: flex;
+  // flex-direction: row;
+  // flex-wrap: nowrap;
+  gap: 15px;
 }
 
 .container {
@@ -18,10 +22,14 @@
 }
 
 .grid-units {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  display: grid;
+  grid-template-columns: 100px 45px ;// repeat( auto-fit, minmax(165px, 1fr) );
+
+  // display: flex;
+  // flex-direction: row;
+  // flex-wrap: nowrap;
   gap: 15px;
 }
+
 
 

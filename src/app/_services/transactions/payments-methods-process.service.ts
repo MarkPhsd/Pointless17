@@ -200,12 +200,12 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 }
 
   sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean, uiTransactions: TransactionUISettings): Observable<any> {
-    console.log(uiTransactions)
+    // console.log(uiTransactions)
     if (order) {
       const site = this.sitesService.getAssignedSite()
       const expoPrinter = uiTransactions?.expoPrinter
       const templateID = uiTransactions?.expoTemplateID;
-      console.log('sendToPrep', expoPrinter, templateID);
+      // console.log('sendToPrep', expoPrinter, templateID);
       const prep$ = this.prepPrintingService.printLocations(order,printUnPrintedOnly,
                                                             expoPrinter,
                                                             templateID);

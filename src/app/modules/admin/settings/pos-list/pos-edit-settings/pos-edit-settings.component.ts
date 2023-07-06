@@ -57,7 +57,7 @@ export class PosEditSettingsComponent implements OnInit {
       private uiSettingService  : UISettingsService,
     private fileSystemService   : FileSystemService,
     private serviceTypeService: ServiceTypeService,
-    public labelingService: LabelingService,  
+    public labelingService: LabelingService,
     private dialogRef           : MatDialogRef<PosEditSettingsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number
   )
@@ -140,6 +140,7 @@ export class PosEditSettingsComponent implements OnInit {
       electronZoom       : [],
       triposLaneID       : [],
       enableExitLabel : [],
+      exitOrderOnFire: [],
       enableScale: [],
       ignoreTimer: [],
       defaultOrderTypeID: [],

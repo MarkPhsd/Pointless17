@@ -30,6 +30,8 @@ export class StrainProductEditComponent implements OnInit {
   managerProtected: boolean;
   productForm: UntypedFormGroup;
   unitSearchForm: UntypedFormGroup;
+  pbSearchForm: UntypedFormGroup;
+
   get f() { return this.productForm;}
   action$             :  Observable<any>;
   performingAction    : boolean;
@@ -171,9 +173,10 @@ export class StrainProductEditComponent implements OnInit {
 
   setPartBuilder(event) {
     if (!event) { return }
-    console.log('event',event)
-    this.product.pB_MainID = event.id;
-    this.productForm.patchValue({ pB_MainID: event.id})
+    console.log('event',event, event.value, event.pB_MainID)
+    this.product.pB_MainID = event.pB_MainID;
+    this.productForm.patchValue(event)
+    console.log(this.productForm.value);
     this.action$ = this.updateItem(null)
   }
 
@@ -209,17 +212,24 @@ export class StrainProductEditComponent implements OnInit {
     }))
   }
 
+  initPbSearchForm(){
+    this.pbSearchForm = this.fb.group({
+      searchField: [],
+    })
+  }
+
   clearUnit() {
     this.productForm.patchValue({ unitTypeID: 0})
+    this.product.unitTypeID = 0;
     this.unitSearchForm = this.fb.group({
       searchField: []
     })
   }
+
   clearPB() {
     this.productForm.patchValue({ pB_MainID: 0})
-    this.unitSearchForm = this.fb.group({
-      searchField: []
-    })
+    this.product.pB_MainID = 0;
+    this.initPbSearchForm();
   }
 
   updateItem(event) {

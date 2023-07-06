@@ -34,6 +34,7 @@ export interface ITerminalSettings {
   enableExitLabel     : boolean;
   ignoreTimer         : boolean;
   defaultOrderTypeID: number;
+  exitOrderOnFire   : boolean;
 }
 
 @Injectable({

@@ -437,19 +437,24 @@
 </ng-template>
 
 <ng-template #partBuilderSelector>
-  <field-value-selector
-    [inputForm]="productForm"
-    [searchType]="'pb_Main'"
-    [fieldProperty]="'pB_MainID'"
-    [friendlyName]="'Kit/Recipe'"
-    (itemSelect)="setPartBuilder($event)"
-    >
-    Kit/Recipe
-  </field-value-selector>
-
-  <div>
-    <button mat-button (click)="clearPB()">
-      <mat-icon color="warn">delete</mat-icon>
-    </button>
+  <div class="grid-container-3Column">
+    <div>
+      <field-value-selector
+        [inputForm]="productForm"
+        [searchForm]="pbSearchForm"
+        [searchType]="'pB_MainID'"
+        [fieldProperty]="'pB_MainID'"
+        [id]="product.pB_MainID"
+        [friendlyName]="'Kit/Recipe'"
+        (itemSelect)="setPartBuilder($event)">
+        Kit/Recipe
+      </field-value-selector>
+    </div>
+    <div></div>
+    <div>
+      <button mat-button (click)="clearPB()">
+        <mat-icon color="warn">delete</mat-icon>
+      </button>
+    </div>
   </div>
 </ng-template>

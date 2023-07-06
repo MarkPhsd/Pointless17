@@ -1,4 +1,6 @@
 <div *ngIf="(product$ | async) as product"></div>
+
+<div *ngIf="(copy$ | async) as copy"></div>
 <div
      class="grid-container"
      *ngIf="searchForm" >
@@ -77,6 +79,16 @@
                         (selectionChange) = "refreshActiveChange($event)"   >
         <div fieldSearchDescription>Status</div>
       </form-select-list>
+    </div>
+
+    <div class="grid-item"
+          *ngIf="minQuantityFilter">
+        <form-select-list [formFieldName]   = "'productCountGreaterThanZero'"
+                          [searchForm]      = "searchForm"
+                          [list]            = "minQuantityFilter"
+                          (selectionChange) = "refreshMinQuantityFilter($event)"   >
+        <div fieldSearchDescription>Greater Than</div>
+        </form-select-list>
     </div>
 
     <div class="grid-item">

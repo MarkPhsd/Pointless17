@@ -40,10 +40,11 @@
       <mat-card>
         <mat-card-content>
 
-          <div class="ps-grid-items">
+          <div class="grid-container">
             <ng-container [ngTemplateOutlet]="productSelector"></ng-container>
             <ng-template #productSelector>
               <div class="grid-units">
+
                 <div   *ngIf="pb_Component" style="width:100px">
                   <product-selector
                     [inputForm]     = 'componentForm'
@@ -54,6 +55,7 @@
                     (itemSelect)    = 'assignProduct($event)'>
                   </product-selector>
                 </div>
+
                 <div style="margin-left:45px">
                   <button mat-button (click)="clearUnit()">
                     <mat-icon color="warn">delete</mat-icon>
@@ -76,6 +78,7 @@
                     (itemSelect)    = 'assignItem($event)'>
                   </unit-type-select>
                 </div>
+
                 <div style="margin-left:45px">
                   <button mat-button (click)="clearUnit()">
                     <mat-icon color="warn">delete</mat-icon>

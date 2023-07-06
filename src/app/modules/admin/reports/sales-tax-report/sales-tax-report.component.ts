@@ -52,7 +52,18 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   refreshSales() {
 
     this.processing = true;
-    this.laborSummary$ = this.getLaborSummary();
+    this.laborSummary$ = this.getLaborSummary().pipe(
+      switchMap(data => {
+        return of(data)
+    }),catchError(data => {
+      const item = {} as EmployeeClock
+      item.payRate = 0;
+      item.otHours = 0;
+      item.regPay = 0;
+      this.siteService.notify('Error with time clock summary' + data.toString(), 'close', 2000, 'red')
+      return of(item)
+    }))
+
     let item = {startDate: this.dateFrom, endDate: this.dateTo, zrunID: this.zrunID,
                 pendingTransactions: this.pendingTransactions,
                 scheduleDateEnd: this.scheduleDateEnd,
@@ -84,7 +95,6 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
 
     this.sales$ =  this.laborSummary$.pipe(switchMap(data => {
       this.laborSummary = data;
-      // console.log('labor summary', data)
       return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
     })).pipe(switchMap(data => {
         this.sales = data;

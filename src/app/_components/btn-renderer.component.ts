@@ -7,11 +7,11 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-button-renderer',
-  template:     `<div [style]="showHide" *ngIf="label != 'null'" >
-                  <button
-                              class="mat-raised-button"
-                              type="button"
-                              (click)="onClick($event)">
+  template:     `<div [style]="showHide"  >
+                  <button   [style]="buttonStyle"
+                            class="mat-raised-button"
+                            type="button"
+                            (click)="onClick($event)">
                     <mat-icon *ngIf="icon"> {{icon}} </mat-icon>
                     {{label}}
                   </button>
@@ -28,6 +28,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   @Input() label= 'Edit';
   @Input() icon = 'edit';
   showHide = ''
+  buttonStyle: string;
 
   agInit(params: any): void {
 
@@ -77,6 +78,15 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         this.icon = 'add'
         return
       }
+      if (this.label?.toLowerCase() ===   'copy') {
+        this.icon = 'file_copy'
+        this.showHide = "width:55px;"
+        this.label = ''
+        this.buttonStyle = 'width:45px;'
+        console.log('icon', this.icon)
+        return
+      }
+
       if (this.label?.toLowerCase() ===   'view') {
         this.icon = 'view'
         return

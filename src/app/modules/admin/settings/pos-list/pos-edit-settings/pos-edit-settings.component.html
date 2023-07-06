@@ -123,6 +123,13 @@
           </mat-slide-toggle>
         </div>
 
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="exitOrderOnFire">
+            <mat-label>Exit Order on Fire Order</mat-label>
+          </mat-slide-toggle>
+        </div>
+
         <div *ngIf="(serviceType$ | async) as list ">
           <mat-form-field style="width: 200px" class="fields"
               appearance="outline">

@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output , OnChanges} from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-
 @Component({
   selector: 'form-select-list',
   templateUrl: './form-select-list.component.html',
@@ -29,14 +28,7 @@ export class FormSelectListComponent implements OnInit , OnChanges{
   }
 
   ngOnChanges(): void {
-    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-    //Add '${implements OnChanges}' to the class.
-    // if (this.list) {
-    //   this.itemList = this.list // this.list.map( ({ name, id, active }) =>   ({name: name, id: id,active: active })  );
-    //   this.setSelectValue()
-    //   return
-    // }
-    if (this.list) { 
+    if (this.list) {
       this.itemList = this.list;
       this.setSelectValue()
       return;
@@ -54,7 +46,7 @@ export class FormSelectListComponent implements OnInit , OnChanges{
       if (this.searchForm) {
         const item =   JSON.parse(JSON.stringify(this.formValue))
         this.searchForm.controls[this.formFieldName].setValue(this.formValue);
-        console.log('set form value', this.formValue)
+        // console.log('set form value', this.formValue)
       }
     }
   }
