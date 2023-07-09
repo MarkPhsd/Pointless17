@@ -6,6 +6,9 @@ import { OrdersService } from 'src/app/_services';
 import { IPOSOrder, IUser } from 'src/app/_interfaces';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { FloorPlanMethodService } from '../floor-plan.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { tableProperties } from '../models/helpers';
 
 export interface uuidList {
   uuID: string;
@@ -38,7 +41,7 @@ export class FloorPlanComponent implements OnInit {
   _floorPlan: Subject<IFloorPlan> = new Subject();
   _performOperations: Subject<any> = new Subject();
   changeObjectColor: Subject<any> = new Subject();
-  tableInfo: any;
+  tableInfo: tableProperties;
   orderInfo: any;
   _setTableInfo: Subject<any> = new Subject();
   _newOrder    : Subject<any> = new Subject();
@@ -47,11 +50,14 @@ export class FloorPlanComponent implements OnInit {
   loading: boolean;
   saving: boolean;
   zoomDefault: number
+  templateString: string;
   constructor(private siteService       : SitesService,
               private orderService      : OrdersService,
               public orderMethodsService: OrderMethodsService,
               public  userAuth : UserAuthorizationService,
+              protected sanitizer: DomSanitizer,
               private floorPlanSevice   : FloorPlanService,
+              private floorPlanMethodsService: FloorPlanMethodService,
          ) { }
 
   ngOnInit(): void {
@@ -64,13 +70,13 @@ export class FloorPlanComponent implements OnInit {
     this._zoom.next(this.zoomDefault);
   }
 
-
-
   initPlansList(site) {
     this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(site).pipe(
       switchMap(data => {
-        if (data) {
-          this._getFloorPlan(data[0])
+        //get the first plan since we are refreshing the whole list
+        if (data.length>0) {
+          const plan = data[0]
+          this._getFloorPlan(plan)
         }
         return of(data)
       })
@@ -118,20 +124,15 @@ export class FloorPlanComponent implements OnInit {
   refresher() {
     setInterval(function () {
       if (this.userMode) {
-        if ( this.floorPlan ) {
-          this._getFloorPlan(this.floorPlan)
-        }
+        if ( this.floorPlan ) {this._getFloorPlan(this.floorPlan)}
       }
     }, 60000);
   }
 
   saveFloorPlan(event) {
+    // console.log('saveFloorPlan', event.template.length, event?.template)
     if (!event) { return }
-
-    if (event.template) {
-      event.template = this.floorPlanSevice.replaceJSONText(event.template)
-    }
-
+    if (event.template) {event.template = this.floorPlanSevice.replaceJSONText(event.template)}
     const site = this.siteService.getAssignedSite();
     const plan = event as IFloorPlan;
     this.floorPlanSevice.saveFloorPlan(site, plan).subscribe(data => {
@@ -142,12 +143,15 @@ export class FloorPlanComponent implements OnInit {
   }
 
   saveFloorPlanfromOrder(event) {
+
+    // console.log('saveFloorPlanfromOrder', event.template.length)
+
     if (!event) { return }
     this.saving = true;
-
     if (event.template) {
       event.template = this.floorPlanSevice.replaceJSONText(event.template)
     }
+
 
     const site = this.siteService.getAssignedSite();
     const plan = event as IFloorPlan;
@@ -158,14 +162,6 @@ export class FloorPlanComponent implements OnInit {
         return this.floorPlanSevice.listFloorPlansNames(site);
       }
     ))
-  }
-
-  outPutJSONFull() {
-    this._performOperations.next('saveFullJson')
-  }
-
-  outPutJSON(event) {
-    console.log('outPutJSON', event)
   }
 
   clearPlan() {
@@ -205,7 +201,6 @@ export class FloorPlanComponent implements OnInit {
 
   setFloorPlan(item: IFloorPlan) {
     this.floorPlan = item;
-    this.floorPlan.template  = JSON.parse(this.floorPlan.template)
     this._floorPlan.next(item);
     if (this.userMode) {
       this._userMode.next(true)
@@ -232,20 +227,21 @@ export class FloorPlanComponent implements OnInit {
   }
 
   setTable(event) {
-    if (event) {
-      const value = event?.name.split(';')
-      if (value) {
-        const item = {uuid: value[0], orderID: value[1],  name: value[2], status: value[3] };
-        if (item) {
-          if (this.userMode) {
-            this.orderInfo = item;
-            this.tableInfo = event;
-            this.setActiveOrder(this.orderInfo.orderID, item.uuid, this.floorPlan.id, item.name )
-          }
+    if (!event) { return }
+    if (!event.name) { return }
+    const properties = event?.name;
+    if (properties) {
+      let item = this.floorPlanMethodsService.parseJSONTable(properties) as tableProperties;
+      if (item) {
+        if (this.userMode) {
+          this.orderInfo = item;
+          this.tableInfo = event;
+          this.setActiveOrder(this.orderInfo.orderID, item.uuid, this.floorPlan.id, item.name )
         }
       }
     }
   }
+
 
   setActiveOrder(id: string, uuID: string, floorPlanID: number, name: string) {
     const site   = this.siteService.getAssignedSite();
@@ -275,24 +271,26 @@ export class FloorPlanComponent implements OnInit {
       if (this.refresh) {
         if (orders && orders.length>0) {
           try {
-            this.floorPlan.template  = JSON.parse(this.floorPlan.template);
-            this.floorPlan.template  = JSON.parse(this.floorPlan.template);
           } catch (error) {
           }
           this.processActiveItems(orders);
         }
       }
-
     })
   }
 
   getOrderIDFromTable(item: any) {
-    const id = item?.orderID;
-    if (id == undefined || id === 'undefined' || !id || id === '' ||
-        id === 'orderid' || id === '0') {
-      return null
+    try {
+      const id = item?.orderID;
+      if (id == undefined || id === 'undefined' || !id || id === '' ||
+          id === 'orderid' || id === '0') {
+        return null
+      }
+      return id;
+    } catch (error) {
+      console.log(error)
+      return ''
     }
-    return id;
   }
 
   setOrder(event) {
@@ -311,44 +309,63 @@ export class FloorPlanComponent implements OnInit {
     if (!event) { return }
     let floorPlan$ : Observable<IFloorPlan>;
 
-    if (this.userMode) {
-      floorPlan$ = this.floorPlanSevice.getFloorPlanNoBackupCached(site, event.id);
-    }
-    if (!this.userMode) {
-      floorPlan$ = this.floorPlanSevice.getFloorPlan(site, event.id);
-    }
+    //this is just disabled for development.
+    //should be able to use the cache, because we aren't updating the
+    //table layout in user mode, we are just updating the refernce to the table
+    //but if we are in cached mode it's hard to see changes
+    // if (this.userMode) {
+    //   floorPlan$ = this.floorPlanSevice.getFloorPlanNoBackupCached(site, event.id);
+    // }
+    // if (!this.userMode) {
+    floorPlan$ = this.floorPlanSevice.getFloorPlan(site, event.id);
+    // }
 
     this.floorPlanRefresh$ = floorPlan$.pipe(
       switchMap(data => {
-
-        data.template  = JSON.stringify(data.template)
         try {
-          data.template  = JSON.parse(data.template)
-          data.template  = JSON.parse(data.template)
+          console.log('_getFloorPlan data.template', data?.template.length)
+          data.template  = data.template //JSON.parse(data.template)
         } catch (error) {
           console.log('error', error)
         }
         this.floorPlan = data;
-
         if (data) {
           return this.orderService.getActiveTableOrders(site, data.id)
         }
-
-        this._floorPlan.next(this.floorPlan);
         const orders = [] as IPOSOrder[]
         return of(orders)
-
     })).pipe(
       switchMap( orders => {
+
+        // if (this.userMode) {
+        //   // let arrayOptions = ['name', 'hasControls', 'selectable', 'hasBorders', 'evented', 'hoverCursor', 'moveCursor'];
+        //   // this.app.jsonValue.next( JSON.stringify( this.view.toJSON(arrayOptions) ));
+        //   //get the template without the controls options;
+        // }
+        // if (!this.userMode) {
+        //   let arrayOptions = ['name', 'hasControls', 'selectable', 'hasBorders', 'evented', 'hoverCursor'] //, 'moveCursor'];
+        //   const template =  JSON.stringify( this.floorPlanMethodsService.view.toJSON(arrayOptions) );
+        //   this.floorPlan.template = template;
+        //   this._floorPlan.next(this.floorPlan);
+        // }
+
+        if (this.floorPlan  && this.floorPlan.template) {
+          this._floorPlan.next(this.floorPlan);
+          this.setZoomOnTimer();
+        }
+
         if (orders && orders.length>0) {
           this.processActiveItems(orders);
           return of(orders)
         }
-        this._floorPlan.next(this.floorPlan);
-        this.setZoomOnTimer();
+
+        // this.setZoomOnTimer();
         return of(orders)
     }))
+  }
 
+  byPass(value: any, type: string) {
+    return  this.sanitizer.bypassSecurityTrustHtml(value)
   }
 
   setZoomDefault() {
@@ -359,33 +376,26 @@ export class FloorPlanComponent implements OnInit {
   }
 
   onZoom(event) {
-    localStorage.setItem('zoomDefault', event)
+    // localStorage.setItem('zoomDefault', event)
     this.zoomDefault = event;
     this._zoom.next(this.zoomDefault)
   }
 
   processActiveItems(orders: IPOSOrder[]) {
     if (orders && orders.length >0 ) {
-      // console.log('active orders', orders)
       orders.forEach(order => {
         const item = {uuID: order.tableUUID, color: 'red'};
-        this.floorPlan.template = this.floorPlanSevice.alterObjectColor(item.uuID,item.color, this.floorPlan.template)
+        this.floorPlan.template = this.floorPlanSevice.alterObjectColor(item.uuID, item.color, this.floorPlan.template)
       })
       this.floorPlan.template = JSON.stringify(this.floorPlan.template)
+      this._floorPlan.next(this.floorPlan);
+      this.setZoomOnTimer()
     }
-
-    this._floorPlan.next(this.floorPlan);
-    this.setZoomOnTimer()
-
   }
 
   setZoomOnTimer() {
     this.setZoomDefault()
     this._zoom.next(this.zoomDefault)
-    // setTimeout (() => {
-    //   this.setZoomDefault()
-    //   this._zoom.next(this.zoomDefault)
-    // }, 1000);
   }
 
   toggleUserMode() {
@@ -429,3 +439,4 @@ export class FloorPlanComponent implements OnInit {
   };
 
 }
+

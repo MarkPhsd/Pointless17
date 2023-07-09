@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods.service';
 import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-reasons.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { NavigationService } from 'src/app/_services/system/navigation.service';
 
 @Component({
   selector: 'app-inventory-settings',
@@ -22,6 +23,7 @@ export class InventoryComponent  {
 
   constructor(
     private router                 : Router,
+    private navigationService      : NavigationService,
     private itemTypeMethodsService : ItemTypeMethodsService,
     private adustmentReasonsService: AdjustmentReasonsService,
     public productButtonsService   : ProductEditButtonService,
@@ -78,4 +80,8 @@ export class InventoryComponent  {
     this.router.navigate(['/edit-payment-method-list'])
   }
 
+  navTableService() {
+    // this.smallDeviceLimiter();
+    this.navigationService.navTableService()
+  }
 }

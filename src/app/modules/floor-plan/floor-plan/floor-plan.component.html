@@ -1,51 +1,44 @@
 <div *ngIf="(floorPlanRefresh$ | async) as floorPlanRefresh"></div>
+<div *ngIf="(backupRestore$ | async)"></div>
+
 <div class="panel">
 
-  <button  class="button" *ngIf="isAdmin" mat-raised-button (click)="toggleUserMode()">Admin</button>
-  <button  class="button" *ngIf="isAdmin" mat-raised-button (click)="refreshPlans()"><mat-icon>refresh</mat-icon></button>
+  <ng-container [ngTemplateOutlet]="adminViewToolbar"></ng-container>
+  <ng-template #adminViewToolbar>
+    <button class="button"  *ngIf="isAdmin" mat-raised-button (click)="toggleUserMode()">Admin</button>
+    <button class="button"  *ngIf="!userMode && floorPlan" mat-raised-button (click)="backup()"><mat-icon>backup</mat-icon>Backup</button>
+    <button class="button"  *ngIf="!userMode && floorPlan" mat-raised-button (click)="restore()"><mat-icon>restore</mat-icon>Restore</button>
+    <button class="button"  *ngIf="!userMode" mat-raised-button (click)="newFloorPlan()"><mat-icon>add</mat-icon></button>
+    <button class="button"  *ngIf="!userMode  && floorPlan"
+            mat-raised-button (click)="displayImage = !displayImage"><mat-icon>image</mat-icon>
+    </button>
+    <button class="button" *ngIf="!userMode && floorPlan" mat-raised-button (click)="deleteFloorPlan()">
+      <mat-icon>delete</mat-icon>
+    </button>
+    <button class="button" *ngIf="!userMode && isAdmin" mat-raised-button (click)="clearPlan()">Clear</button>
+  </ng-template>
 
-  <button class="button" *ngIf="isAdmin && !userMode && floorPlan" mat-raised-button (click)="backup()"><mat-icon>backup</mat-icon>Backup</button>
-  <button class="button" *ngIf="isAdmin && !userMode && floorPlan" mat-raised-button (click)="restore()"><mat-icon>restore</mat-icon>Restore</button>
-
-  <button class="button" *ngIf="isAdmin && !userMode" mat-raised-button (click)="newFloorPlan()"><mat-icon>add</mat-icon></button>
-  <button class="button" *ngIf="isAdmin && !userMode  && floorPlan" mat-raised-button (click)="displayImage = !displayImage"><mat-icon>image</mat-icon></button>
-  <button class="button" *ngIf="isAdmin && !userMode && floorPlan" mat-raised-button (click)="deleteFloorPlan()"><mat-icon>delete</mat-icon></button>
-
-  <span *ngIf="(floorPlans$ | async) as floorPlans">
-    <span *ngFor="let item of floorPlans">
-      <button class="button" mat-raised-button (click)="_getFloorPlan(item)">{{item?.name}}</button>
-    </span>
-  </span>
+  <!-- list floor plans -->
+  <ng-container [ngTemplateOutlet]="floorPlanList"></ng-container>
   <button class="button"  mat-raised-button (click)="refreshPlans()"><mat-icon>refresh</mat-icon></button>
 
-  <button class="button" *ngIf="!userMode && isAdmin" mat-raised-button (click)="clearPlan()">Clear</button>
-  <!-- <button class="button" *ngIf="!userMode && isAdmin" mat-raised-button (click)="outPutJSONFull()">JSON</button> -->
-
-  <span *ngIf="saving">
-    <mat-icon>save</mat-icon>
-  </span>
+  <span *ngIf="saving">   <mat-icon>save</mat-icon> </span>
 
   <span>
     <zoom-floor-plan (zoomChange)="onZoom($event)" [zoom]="zoomDefault"></zoom-floor-plan>
   </span>
-
 </div>
 
 <div *ngIf="isAdmin && displayImage && floorPlan">
   <app-widget-uploader
       [(fileNames)]="floorPlan.image"
-      (messageOut) ="backgroudImage($event)"
-      >
-    Images
-</app-widget-uploader>
-</div>
-
-<div *ngIf="(backupRestore$ | async)">
-
+      (messageOut) ="backgroudImage($event)" >
+      Images
+  </app-widget-uploader>
 </div>
 
 <div *ngIf="!displayImage || loading">
-  <pointless-room-layout-designer
+  <floor-plan-designer
       [toggleButtonHidden] = true
       [isAdmin]        = "isAdmin"
       [userMode]       = "userMode"
@@ -59,12 +52,20 @@
       (setTable)          = 'setTable($event)'
       (getFloorPlan)      = "getFloorPlan($event)"
       (setOrder)          = "setOrder($event)"
-      (saveFloorPlan)     = "saveFloorPlanfromOrder($event)"
-    >
-  </pointless-room-layout-designer>
+      (saveFloorPlan)     = "saveFloorPlanfromOrder($event)">
+  </floor-plan-designer>
 </div>
-<!-- [changeObjectColor] = 'changeObjectColor' -->
-<!-- (outPutJSON)     = "outPutJSON($event)" -->
-<!-- [userMode]       = "userMode" -->
-<!-- [floorPlan]      = 'floorPlan' -->
-<!-- (saveFloorPlan)  = "saveFloorPlanfromOrder($event)" -->
+<!--
+<div *ngIf="floorPlan">
+  {{floorPlan?.name}}
+  <br>
+  {{floorPlan?.template}}
+</div> -->
+
+<ng-template #floorPlanList>
+  <span *ngIf="(floorPlans$ | async) as floorPlans">
+    <span *ngFor="let item of floorPlans">
+      <button class="button" mat-raised-button (click)="_getFloorPlan(item)">{{item?.name}}</button>
+    </span>
+  </span>
+</ng-template>

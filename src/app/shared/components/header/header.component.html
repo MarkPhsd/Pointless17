@@ -246,7 +246,6 @@
   </div>
 </ng-template>
 
-
 <ng-template #wizard>
   <span *ngIf="!smallDevice && !phoneDevice && isAdmin">
   <wizard-progress-button></wizard-progress-button>
@@ -258,7 +257,6 @@
      <clock-in-out [displayOnly]="true"></clock-in-out>
   </span>
 </ng-template>
-
 
 <ng-template #menuButtonContainer>
   <ng-content></ng-content>
@@ -283,10 +281,6 @@
 
     <span (mouseleave)="menuTrigger.closeMenu()">
       <div class="ps-flex-group-column">
-
-        <!-- <div  class="mat-item">
-          <ng-container [ngTemplateOutlet]="userMessages"></ng-container>
-        </div> -->
 
         <app-request-messages
           [user]="user"

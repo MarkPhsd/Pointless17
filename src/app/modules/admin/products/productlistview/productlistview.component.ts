@@ -637,9 +637,6 @@ constructor(  private _snackBar              : MatSnackBar,
     this.action$ = this.updateValues(event.data?.id , event.value, colName)
   }
 
-
-
-
   //initialize filter each time before getting data.
   //the filter fields are stored as variables not as an object since forms
   //and other things are required per grid.

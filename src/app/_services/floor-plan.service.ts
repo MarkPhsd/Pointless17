@@ -4,6 +4,7 @@ import { Observable, of, switchMap } from 'rxjs';
 import { HttpClientCacheService, HttpOptions } from '../_http-interceptors/http-client-cache.service';
 import { ISite } from '../_interfaces';
 import { AuthenticationService } from './system/authentication.service';
+import { tableProperties } from '../modules/floor-plan/models/helpers';
 
 export interface IFloorPlan {
   id            : number;
@@ -46,13 +47,24 @@ export class FloorPlanService {
 
   }
 
+  //this ensures that there aren't any leading or trailing quote's
+  //surrounding the Template. Then the view can properly process the template
+  //it also removes \ that can break the json of the template.
   replaceJSONText(template: any) {
-    template = JSON.stringify(template) as string
-    template = template.replace(/(^"|"$)/g, '');
-    template = template.replaceAll('\\', '');
-    return template
-  }
+    try {
+      // return;
+      console.log('replaceJSON Text')
+      if (template) {
+        template = JSON.stringify(template) as string
+        template = template.replace(/(^"|"$)/g, '');
+        template = template.replaceAll('\\', '');
+        return template
+      }
+    } catch (error) {
+    console.log('error replace json text',error )
+    }
 
+  }
 
   saveBackup(site: ISite, item: IFloorPlan ) {
 
@@ -222,18 +234,14 @@ export class FloorPlanService {
 
   alterObjectColor(uuID: string, color: string, view: any) {
     if (view) {
-      // console.log(view)
-      // console.log(JSON.parse(view))
-      // view = JSON.parse(view);
+      // return;
       if (view.objects) {
           view. objects.forEach(data => {
             if (data && data?.type  && (data?.type === 'group' ) ) {
-              const itemValue = data?.name.split(";")
-              // console.log(data?.name, uuID);
-              // console.log('itemValue', itemValue)
-              if (itemValue.length>0){
-                const itemUUID = itemValue[0];
-                if (uuID === itemUUID ) {
+              // const itemValue = data?.name.split(";")
+              let itemValue =  parseJSONTable(data.name) as tableProperties;
+              if (itemValue &&  itemValue.uuid){
+                if (uuID === itemValue.uuid ) {
                       // console.log('itemValue', itemValue)
                       let stroke = 5
                       if (color === 'red' || color ===  'rgb(200,10,10)') {
@@ -297,4 +305,28 @@ export class FloorPlanService {
   }
 
 
+}
+function parseJSONTable(str: string): any {
+  // Remove the leading and trailing curly braces
+  str = str.slice(1, -1);
+  // Split the string into key-value pairs
+  let pairs = str.split(', ');
+  let obj: any = {};
+  for (let pair of pairs) {
+    // Split the key and value
+    let [key, value] = pair.split(': ');
+    obj[key] = value;
+  }
+  return obj;
+}
+
+function stringifyJSONTable(obj: any): string {
+  let str = '{';
+  for (let key in obj) {
+    str += key + ': ' + obj[key] + ', ';
+  }
+  // Remove the trailing comma and space
+  str = str.slice(0, -2);
+  str += '}';
+  return str;
 }

@@ -221,6 +221,7 @@ import { AverageHourlySalesLaborChartComponent } from '../modules/admin/reports/
 import { EmployeeClockListComponent } from '../modules/admin/employeeClockAdmin/employee-clock-list/employee-clock-list.component';
 import { EmployeeClockEditComponent } from '../modules/admin/employeeClockAdmin/employee-clock-edit/employee-clock-edit.component';
 import { EmployeeClockFilterComponent } from '../modules/admin/employeeClockAdmin/employee-clock-filter/employee-clock-filter.component';
+import { ZoomComponent } from './widgets/zoom/zoom.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -452,6 +453,7 @@ import { EmployeeClockFilterComponent } from '../modules/admin/employeeClockAdmi
     EditBarComponent,
     UserBarComponent,
     CheckBoxCellComponent,
+    ZoomComponent,
   ],
 
   imports: [

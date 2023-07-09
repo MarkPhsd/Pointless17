@@ -245,7 +245,6 @@ import { CreditCardPaymentsPrintListComponent } from '../modules/transactions/ba
 import { AngularResizeEventModule } from 'angular-resize-event';
 import { ProductListByBarcodeComponent } from '../modules/menu/product-list-by-barcode/product-list-by-barcode.component';
 import { AppWizardStatusComponent } from '../modules/admin/settings/software/app-wizard-status/app-wizard-status.component';
-import { ViewComponent, RoomLayoutDesignerComponent, PointlessRoomLayoutModule} from 'pointless-room-layout';
 import { FloorPlanComponent } from '../modules/floor-plan/floor-plan/floor-plan.component';
 import { CardPointSettingsComponent } from '../modules/payment-processing/cardPointe/card-point-settings/card-point-settings.component';
 import { CardpointeTransactionsComponent } from '../modules/payment-processing/cardPointe/cardpointe-transactions/cardpointe-transactions.component';
@@ -365,9 +364,11 @@ import { HouseAccountsListComponent } from '../modules/orders/house-accounts-lis
 import { PartBuilderFilterComponent } from '../modules/admin/products/part-builder/part-builder-filter/part-builder-filter.component';
 import { ProductSelectorComponent } from '../modules/admin/products/productedit/_product-edit-parts/product-selector/product-selector.component';
 import { PartBuilderSelectorComponent } from '../modules/admin/products/productedit/_product-edit-parts/part-builder-selector/part-builder-selector.component';
-// import { AverageHourlySalesLaborChartComponent } from '../modules/admin/reports/average-hourly-sales-labor-chart/average-hourly-sales-labor-chart.component';
-// import { PointlessReportingLibModule } from 'projects/pointess-reporting-lib/src/public-api';
-// import { ColorPickerModule } from 'ngx-color-picker';
+import { RoomLayoutDesignerComponent } from '../modules/floor-plan/floor-plan-designer/floor-plan-designer.component';
+import { ChairsLayoutComponent } from '../modules/floor-plan/chairs-layout/chairs-layout.component';
+import { PreviewFurnitureComponent } from '../modules/floor-plan/preview-furniture/preview-furniture.component';
+import { PointlessFloorPlanViewComponent } from '../modules/floor-plan/pointless-floor-plan-view/pointless-floor-plan-view.component';
+
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
   useClass: LoggingInterceptor,
@@ -478,7 +479,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DSIEMVAndroidPayBtnComponent,
     CardPointeCardPayBtnComponent,
 
-
     PointlessMETRCSalesComponent,
     MetrcSalesFilterComponent,
 
@@ -537,7 +537,14 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     // FlatRateEditComponent,
     // FlatRateListComponent,
     // FlatTaxRateListComponent,
+    // PointlessViewComponent,
+    ZoomFloorPlanComponent,
+    ChairsLayoutComponent,
     FloorPlanComponent,
+    PreviewFurnitureComponent,
+    RoomLayoutDesignerComponent,
+    PointlessFloorPlanViewComponent,
+    // PointlessFloorPlanViewComponent,
     FunctionGroupListComponent,
     FunctionGroupEditComponent,
     FunctionGroupButtonEditComponent,
@@ -794,7 +801,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       HammerModule,
       IonicModule.forRoot(),
       InfiniteScrollModule,
-      PointlessRoomLayoutModule,
       NgPipesModule,
       ReactiveFormsModule,
       RouterModule,
