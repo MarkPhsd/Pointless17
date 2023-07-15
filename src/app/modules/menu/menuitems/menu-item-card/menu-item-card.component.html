@@ -1,4 +1,4 @@
-<div *ngIf="(action$  | async) as action"></div>
+ <div *ngIf="(action$  | async) as action"></div>
 
 <ng-container [ngTemplateOutlet]="enableEditItem"></ng-container>
 
@@ -6,7 +6,7 @@
            [style]="buttonColor"
            [class]="matCardClass">
 
-  <div class="container">
+  <div [class]="containerclass">
     <div class="image-container">
       <ng-container [ngTemplateOutlet]="menuButton"></ng-container>
       <ng-container [ngTemplateOutlet]="isImageButtonView"></ng-container>
@@ -32,21 +32,28 @@
   </div>
 
   <div class="footer">
+
+    <div *ngIf="isCategory && displayType === 'header-category'" class="header-category-title">
+      {{menuItem.name}}
+    </div>
+
     <ng-container #reviews *ngIf="menuItem"></ng-container>
+
     <div class="price-grid" *ngIf="isProduct">
       <ng-container [ngTemplateOutlet]="price"></ng-container>
       <div *ngIf="menuItem.itemType">
         <div *ngIf="isApp">
           <ng-container [ngTemplateOutlet]="openInNew"></ng-container>
         </div>
-        <div *ngIf="!isApp && !isCategory">
+        <div *ngIf="!isApp && !isCategory && displayType != 'header-category'">
           <ng-container [ngTemplateOutlet]="buttonAddItem"></ng-container>
         </div>
       </div>
     </div>
-    <div *ngIf="isCategory">
+    <div *ngIf="isCategory  && displayType != 'header-category'">
       <ng-container [ngTemplateOutlet]="seeMoreInCategory"></ng-container>
     </div>
+
   </div>
 </mat-card>
 
@@ -88,7 +95,7 @@
 
 <ng-template #imageButton>
   <div *ngIf="menuItem?.name === 'Load More'"
-    class="product-name-only" >
+        class="product-name-only" >
       <button mat-raised-button
               class="image-button"
               color="warn"

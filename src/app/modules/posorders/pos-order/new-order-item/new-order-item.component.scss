@@ -1,13 +1,12 @@
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat( auto-fit, minmax(165px, 1fr) );
-  gap: 15px;
+  grid-template-columns: 185px 185px 125px 125px 100px;
+  // gap: 15px;
 }
 
 .container {
-
-  max-height: 500px;
+  // max-height: 500px;
   overflow-y: auto;
   max-width: 800px;
   overflow-x: scroll;
@@ -24,4 +23,7 @@
 }
 
 
-
+mat-card {
+  padding: 5px;
+  margin: 5px;
+}

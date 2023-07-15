@@ -7,6 +7,10 @@
 
 <div  class="container" *ngIf="storeCredit;else loading">
 
+  <div *ngIf="inputForm && inputForm.controls?.cardNum.errors?.required && inputForm.controls?.cardNum.touched" class="error">
+    <mat-icon color="warn">warning</mat-icon> Card Number Required.
+  </div>
+
   <mat-card class="mat-card">
     <mat-card-title>
       <div class="header-container" >

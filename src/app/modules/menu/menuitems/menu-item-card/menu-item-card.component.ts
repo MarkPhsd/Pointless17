@@ -12,6 +12,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { UIHomePageSettings } from 'src/app/_services/system/settings/uisettings.service';
 
 // https://stackoverflow.com/questions/54687522/best-practice-in-angular-material-to-reuse-component-in-dialog
 export interface DialogData {
@@ -26,7 +27,7 @@ export interface DialogData {
 })
 export class MenuItemCardComponent implements OnInit, OnDestroy {
 
-  
+
   @ViewChild('imageButton')  imageButton :  TemplateRef<any> | undefined;
   @ViewChild('editItemView') editItemView :  TemplateRef<any>;
   @Output() outPutLoadMore = new EventEmitter()
@@ -38,6 +39,11 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   @Input() menuItem  : IMenuItem;
   @Input() bucketName: string;
   @Input() class     = 'grid-item'
+
+  @Input() uiHomePage: UIHomePageSettings;
+  @Input() displayType: string ='product'
+  containerclass: string = 'container'
+  @Output() outputRefresh = new EventEmitter()
   placeHolderImage   : String = "assets/images/placeholderimage.png"
   _order             : Subscription;
   order              : IPOSOrder;
@@ -73,22 +79,22 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     this.imageUrl  = this.getItemSrc(this.menuItem)
     this.getMenuItemObject(this.menuItem)
     this.initLayout()
+
+    // console.log('determine how to know if the page has navigated or is updated')
+
   };
 
-  get isImageButtonView() { 
-    if (this.menuItem.name.toLocaleLowerCase() === 'load more') { 
+  get isImageButtonView() {
+    if (this.menuItem.name.toLocaleLowerCase() === 'load more') {
       return this.imageButton
     }
     return undefined
   }
 
   initLayout() {
-    // this.matCardClass = this.class
-    // if (this.class === 'row-item') {
-    // }
-    // if (this.class === 'grid-item') {
-    //   this.matCardClass= 'mat-card-grid'
-    // }
+    if (this.displayType === 'header-category') {
+      this.containerclass = 'header-container'
+    }
   }
 
   getMenuItemObject(menuItem: IMenuItem) {
@@ -100,6 +106,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
       }
     }
   }
+
   get isDiscountItem() {
     const menuItem = this.menuItem;
     if (menuItem && menuItem.itemType && menuItem.itemType.type == 'discounts') {
@@ -182,6 +189,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   menuItemAction(add: boolean) {
+
     if (this.menuItem?.name.toLowerCase() === 'load more') {
       this.outPutLoadMore.emit('true')
       return ;
@@ -190,15 +198,46 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   menuItemActionObs(add : boolean, plusOne?: boolean) {
+    //options for actions are:
+    //load more items
+    //add item
+    //apply filter to display current category & department assigned.
+    //apply filter to display subcategory assigned, department and category.
+
+
+    //in order to accomplish some of these things, we need the header parameters.
+
+    // model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
+    // model.brandID            = +this.route.snapshot.paramMap.get('brandID');
+    // model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
+
+    if (this.displayType == 'header-category') {
+      let model = {} as ProductSearchModel;
+      const departmentID       = +this.route.snapshot.paramMap.get('departmentID');
+      const itemTypeID         = +this.route.snapshot.paramMap.get('typeID');
+      const categoryID = this.menuItem.id;
+      model.categoryID = categoryID;
+      model.departmentID = departmentID;
+      model.itemTypeID = itemTypeID;
+
+      console.log('updating model', model)
+      this.menuService.updateSearchModel(model)
+
+      return;
+    }
+
     if (this.menuItem?.name.toLowerCase() === 'load more') {
       this.outPutLoadMore.emit('true')
       return ;
     }
+
     if (this.isCategory) {
+
       this.listItems(this.menuItem.id,this.menuItem.itemType.id);
       add = false;
       return;
     }
+
     if (this.authenticationService.isCustomer) { add = false; }
 
     if (plusOne) { add = true; }
@@ -207,13 +246,35 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   listItems(id: number, typeID: number) {
-    if (this.menuService.searchModel) { this.menuService.searchModel = {} as ProductSearchModel}
+    if (!this.menuService.searchModel ) {
+      this.menuService.searchModel  = this.menuService.initSearchModel()
+    }
+    console.log( this.menuService.searchModel, this.menuItem?.id, this.menuItem?.itemType?.id, typeID )
+
     if (this.menuItem?.itemType?.id == 4) {
+
+      if (this.uiHomePage.storeNavigation) {
+        this.menuService.searchModel.categoryID = this.menuItem.id;
+        this.menuService.updateSearchModel(this.menuService.searchModel);
+        return;
+      }
+
+      console.log('emit refresh')
       this.router.navigate(["/menuitems-infinite/", {categoryID: id, hideSubCategoryItems: false }]);
+      this.outputRefresh.emit(true)
       return;
     }
     if (this.menuItem?.itemType?.id == 5) {
+
+      if (this.uiHomePage.storeNavigation) {
+        console.log('update model store nav')
+        this.menuService.searchModel.subCategoryID = this.menuItem.id;
+        this.menuService.updateSearchModel(this.menuService.searchModel);
+        return;
+      }
+      console.log('update model subcategory')
       this.router.navigate(["/menuitems-infinite/", {subCategoryID:id, hideSubCategoryItems: false}]);
+      this.outputRefresh.emit(true)
       return;
     }
     if (this.menuItem?.itemType?.id == 6) {

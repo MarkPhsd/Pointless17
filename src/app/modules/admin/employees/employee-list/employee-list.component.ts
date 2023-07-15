@@ -183,7 +183,7 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
             const searchModel       = {} as EmployeeSearchModel;
             this.currentPage        = 1
             searchModel.terminated  = "1"
-            searchModel.pageNumber  = 1;
+            searchModel.pageNumber  = 1
             searchModel.pageSize    = 25;
             this.searchModel        = searchModel
           }
@@ -299,26 +299,21 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
   //the filter fields are stored as variables not as an object since forms
   //and other things are required per grid.
   initSearchModel(): EmployeeSearchModel {
-
     let searchModel        = {} as EmployeeSearchModel;
+    if (this.searchModel) {
+      searchModel = this.searchModel
+    }
     searchModel.jobTypeID  = 0
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
     searchModel.terminated = "1"
-
     if (this.jobTypeID && this.jobTypeID !=0 ) {
       searchModel.jobTypeID  = this.jobTypeID;
     }
-
-    if (this.searchModel) {
-      searchModel = this.searchModel
-    }
-
     return searchModel
   }
 
   refreshSearchAny(event) {
-
     this.employeeService.searchModel$.subscribe(data => {
       this.searchModel = data;
       // console.log('update search', data)
@@ -350,21 +345,24 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     this.endRow        = endRow;
     if (tempStartRow > startRow) { return this.currentPage - 1 }
     if (tempStartRow < startRow) { return this.currentPage + 1 }
+    console.log('setCurrentPage', this.currentPage, startRow,tempStartRow)
     return this.currentPage
   }
 
-  //ag-grid standard method
+  //this is called from OnGridReady
+  // it instantes the currentpage
   getRowData(params, startRow: number, endRow: number):  Observable<EmployeeSearchResults>  {
+    console.log('this.currentpage', startRow, endRow, this.currentPage)
     this.currentPage          = this.setCurrentPage(startRow, endRow)
-    this.searchModel.currentPage = this.currentPage;
+    console.log('this.currentpage', this.currentPage)
     const searchModel         = this.initSearchModel();
-    // console.log('search Model get row data', searchModel)
+    console.log('search Model get row data', searchModel)
     const site                = this.siteService.getAssignedSite()
     return this.employeeService.getEmployeeBySearch(site, searchModel)
   }
 
   //ag-grid standard method
-  async onGridReady(params: any) {
+  onGridReady(params: any) {
     if (!params) { return }
     if (params)  {
       this.params  = params
@@ -375,8 +373,6 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     }
 
     this.onFirstDataRendered(this.params)
-
-    // if (!params) { return }
     if (params == undefined) { return }
     if (!params.startRow ||  !params.endRow) {
       params.startRow = 1
@@ -385,6 +381,7 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
 
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
+      console.log('params', params.startRow, params.endRow)
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
       items$.subscribe(data =>
         {
@@ -393,6 +390,7 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
               this.isfirstpage   = resp.isFirstPage
               this.islastpage    = resp.isFirstPage
               this.currentPage   = resp.currentPage
+              console.log('current page ' , this.currentPage)
               this.numberOfPages = resp.pageCount
               this.recordCount   = resp.recordCount
               if (this.numberOfPages !=0 && this.numberOfPages) {
@@ -400,9 +398,8 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
               }
             }
             if (data.results) {
-              let results  =  this.refreshImages(data.results)
-              params.successCallback(results)
-              this.rowData = results
+              params.successCallback(data.results)
+              this.rowData = data.results
             }
           }
       );
@@ -427,27 +424,9 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     }
    }
 
-  refreshImages(data) {
-    const urlPath = this.urlPath
-    if (urlPath) {
-      data.forEach( item =>
-        {
-          if (item.urlImageMain) {
-            const list = item.urlImageMain.split(',')
-            if (list[0]) {
-              item.imageName = `${urlPath}${list[0]}`
-            }
-          }
-        }
-      )
-    }
-    return data;
-  }
-
   //search method for debounce on form field
   displayFn(search) {
     this.selectItem(search)
-    console.log('displayFn', search)
     return search;
   }
 

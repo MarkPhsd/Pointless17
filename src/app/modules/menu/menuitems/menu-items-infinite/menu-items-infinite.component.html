@@ -1,7 +1,5 @@
 <div *ngIf="(style$ | async) as styles"></div>
-
 <div *ngIf="(action$ | async) as list"></div>
-
 <div *ngIf="(userAuths$ | async) as userAuths"></div>
 
 <div *ngIf="(bucket$ | async) as bucket">
@@ -23,14 +21,16 @@
       <div *ngIf="authService.isUser && !isApp">
         <h3><mat-icon color="primary">category</mat-icon>Categories</h3>
       </div>
-      <div class="grid-flow"  *ngIf="categories && categories.length>0">
-        <div  *ngFor="let item of categories">
+
+      <div class="grid-flow-categories"  *ngIf="categories && categories.length>0">
+        <div  *ngFor="let item of categories;trackBy: trackByFN">
             <ng-container
               [ngTemplateOutlet]="menuItemCard"
-              [ngTemplateOutletContext]="{$implicit: item}">
+              [ngTemplateOutletContext]="{$implicit: item, type: 'header-category'}">
             </ng-container>
         </div>
       </div>
+
     </ng-template>
 
     <div *ngIf="value" class="loader">
@@ -46,7 +46,7 @@
           Items found: {{this.totalRecords}}
         </div>
       </div>
-
+      <!-- {{menuItems | json}} -->
       <div  *ngIf="menuItems"
             [class]="ordersListClass"
             infiniteScroll
@@ -54,6 +54,7 @@
             [infiniteScrollThrottle]="50"
             (scrolled)="onScrollDown()"
             (scrolledUp)="onScrollUp()"
+            (outputRefresh)="refreshFromSelection($event)"
             [scrollWindow]="false">
         <div *ngFor="let item of menuItems; let i = index">
           <ng-container
@@ -64,9 +65,10 @@
       </div>
     </div>
 
-    <ng-template #menuItemCard let-item>
+    <ng-template #menuItemCard let-item let-type="type">
         <app-menu-item-card
             *ngIf="item"
+            [displayType]="type"
             [allowEdit] ="userAuths?.editProduct"
             [id]        ="item?.id"
             [retail]    ="item?.retail"
@@ -74,6 +76,8 @@
             [menuItem]  ="item"
             [bucketName]="bucketName"
             [class]     ="infiniteItemClass"
+            [uiHomePage]="uiHomePage"
+            (outputRefresh)="refreshFromSelection($event)"
             (outPutLoadMore)  ='moveNext($event)'
         ></app-menu-item-card>
     </ng-template>

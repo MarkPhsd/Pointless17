@@ -4,7 +4,11 @@
       <div *ngif="connectedToApi; else connected"></div>
       <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
 
-      <div *ngIf="homePageSetings && panelHeightSize; else loading">
+      <div *ngIf="(homePage$ | async) as homePageSettings; else loading">
+        <!-- {{homePageSetings | json}} -->
+        <!-- homePageSetings.staffDepartmentsEnabled {{homePageSetings.staffDepartmentsEnabled}}
+        <br>
+        homePageSetings.staffCategoriesEnabled {{homePageSetings.staffCategoriesEnabled}} -->
 
         <div>
           <blog-post-list [homePageSettings]="homePageSetings"
@@ -46,8 +50,10 @@
 </ng-template>
 
 <ng-template #departmentView>
+  <!-- departments -->
   <blog-post-list [group]="'department head'" [height] ="'100%'"  [viewType]="'grid'" ></blog-post-list>
   <div [style.height]="panelHeightSize">
+    <!-- display dearment -->
     <app-categories [panelHeightValue]="panelHeightValue" [itemTypeID]="6">
         Departments
     </app-categories>

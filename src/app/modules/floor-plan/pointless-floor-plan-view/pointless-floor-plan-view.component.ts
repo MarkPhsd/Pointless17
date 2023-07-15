@@ -3,6 +3,7 @@ import { fabric } from 'fabric';
 import * as _ from '../models/helpers';
 import { FloorPlanMethodService } from '../floor-plan.service';
 import { UUID } from 'angular2-uuid';
+import { FloorPlanService } from 'src/app/_services/floor-plan.service';
 
 const {
   RL_VIEW_WIDTH,
@@ -53,7 +54,8 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
     DEFAULT_CHAIR = null;
     REMOVE_DW = false;
 
-    constructor( public app: FloorPlanMethodService ) { }
+    constructor( public app: FloorPlanMethodService,
+                  public floorPlanService: FloorPlanService ) { }
 
     maincontainerClass = 'main-container'
 
@@ -344,7 +346,8 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
       }
 
       const active = this.view.getActiveObject();
-      // console.log(active)
+
+      this.refreshItemProperties(active)
       if (!this.view || !active) {
         console.log('active is undefined');
         return
@@ -358,21 +361,24 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
       } catch (error) {
       }
       this.app.selections = this.view.getActiveObjects();
-      this.setGroupableState();
+
+      if (this.app.roomEdit) {
+        this.setGroupableState();
+      }
     }
 
-    setSelectedObjectColor(item, color: string, saveState: boolean) {
-      // const item = this.view.getActiveObject();
-      if (!item) { return }
-      if (item.name) {
-        const uid  = item.name.split(';')[0];
-        // const json = this.alterObjectColor(item.name, color);
-        this.drawRoom();
-        this.saveState();
-        // this.view.loadFromJSON(json, function() { });
-      }
-      return;
-    }
+    // setSelectedObjectColor(item, color: string, saveState: boolean) {
+    //   // const item = this.view.getActiveObject();
+    //   if (!item) { return }
+    //   if (item.name) {
+    //     const uid  = item.name.split(';')[0];
+    //     // const json = this.alterObjectColor(item.name, color);
+    //     this.drawRoom();
+    //     this.saveState();
+    //     // this.view.loadFromJSON(json, function() { });
+    //   }
+    //   return;
+    // }
 
     setBackgroundImage(image: string) {
       if (!image || image === '') {
@@ -383,14 +389,14 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
     }
 
     getStatusDescription(orderID) {
-      console.log('get Status Description')
-      let status
+      let status = 'inactive'
       if (orderID) {
         if (status) {  status = 'active'   }
       }
       if (!orderID || orderID == '') {
         if (!status) {  status = 'inactive' }
       }
+      console.log('get Status Description', status)
       return status
     }
 
@@ -487,11 +493,22 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
       this.view.on('object:rotated', () => this.saveState());
 
       this.view.on('mouse:down:before', (e: fabric.IEvent) => {
+
         this.app.selections = [];
+
         const obj = e.target;
+
+        console.log(obj);
+
+        if (!obj) { return; }
+
         this.selectedObject = obj;
+
         this.app.selections.push(obj);
-        this.app.selectededObject.next(obj);
+
+        this.app.selectedObject.next( this.selectedObject );
+
+        this.refreshItemProperties(obj)
 
         if (this.app.roomEdit && obj && obj?.name.indexOf('WALL') > -1 && obj instanceof Line) {
           let { v1, v2, v1Id, v2Id } = cornersOfWall(obj);
@@ -624,6 +641,21 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
      * draw Rooms defined in Model
      * -------------------------------------------------------------------------------------------------------
      */
+
+    refreshItemProperties(obj) {
+      console.log('refresh item properties', obj)
+      if(obj && obj.type && (obj.type.toLowerCase() ==='table' || obj.type.toLowerCase() ==='group') && obj.name) {
+        // this
+        const item = parseJSONTable(obj?.name) as _.tableProperties;
+
+        console.log(obj.type, obj.name)
+        const type = JSON.stringify(obj.type)
+        if (type && type != '' && (item && item.name)) {
+          this.alterObjectColor(item.uuid, item.color)
+        }
+      }
+    }
+
     setRoom({ width, height }) {
       if (this.walls.length) {
         this.view.remove(...this.walls);
@@ -800,7 +832,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
     setItemStatus(type: string, object: any) {
       console.log('setItemStatus', type, object)
       if (object && type)  {
-        if (type === 'table') {
+        if (type.toLowerCase() === 'table' || type.toLowerCase() === 'group') {
           // console.log(type, object.name)
           if (object.name) {
             const items = object.split(';')
@@ -864,7 +896,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
 
       object =  this.setItemStatus(type, object);
       let group
-      if (type === 'table') {
+      if (type.toLowerCase()  === 'table' || type.toLowerCase() === 'group') {
         const chair = {} as any
         group = _.createTable(type, object, chair);
         console.log('new table', group)
@@ -1328,7 +1360,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
     subscribeTemplateUpdate() {
       this.app.jsonValue.subscribe(data => {
         if (!data) { return }
-        console.log('subscribeTemplateUpdate json value update',  data.length)
+        // console.log('subscribeTemplateUpdate json value update',  data.length)
         if (data && data.length) {
           this.reloadTemplate(data)
         }
@@ -1336,7 +1368,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
     }
 
     public reloadTemplate(data) {
-      console.log('refresh view', data.length)
+      // console.log('refresh view', data.length)
 
       if (this.userMode) {
         this.maincontainerClass = 'main-container-usermode'
@@ -1360,11 +1392,21 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
       try {
         console.log('refresh view', data.length)
         if (this.view) {
-          this.view.loadFromJSON(data, () => this.view.renderAll())
+          let template = this.floorPlanService.replaceJSONText(data)
+          if (template.length>0){
+            if ( template[0] === '"' ) {
+              template  = template.slice(1)
+            }
+            if (  template[template.length - 1] === '"' ) {
+              template  = template.slice(template.length - 1)
+            }
+          }
+          console.log(template)
+          this.view.loadFromJSON(template, () => this.view.renderAll())
         }
 
       } catch (error) {
-        console.log('error', error)
+        console.log('error', error, data)
       }
     }
 
@@ -1393,10 +1435,10 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
       const view = this.view;
       if (view) {
         console.log('uuid', uuID);
-        console.log(view._objects)
+        // console.log(view._objects)
         if (view._objects) {
             view._objects.forEach(data => {
-              if (data && data?.type  && (data?.type === 'group' || data?.type === 'table' ) ) {
+              if (data && data?.type  && (data?.type.toLowerCase() === 'group' || data?.type.toLowerCase() === 'table' ) ) {
                 if (!data.name) { return }
                 const itemValue = parseJSONTable(data?.name) as _.tableProperties;
                 console.log('itemvalue', itemValue)

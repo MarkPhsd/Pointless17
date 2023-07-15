@@ -120,15 +120,17 @@ export class RoomLayoutDesignerComponent implements OnInit, OnDestroy {
   _outPutJSON() {
     this.app.jsonValue.subscribe(data => {
       this.outPutJSON.emit(data)
-      this.floorPlan.template = data;
-      this.template  = data;
+      if (data && data.template) {
+        this.floorPlan.template = data;
+        this.template  = data;
+      }
     })
   }
 
   setTableInfo() {
     this._setTableInfo.subscribe(data => {
       console.log('setTableInfo' , data.name)
-      this.app.selectededObject.next(data);
+      this.app.selectedObject.next(data);
     })
   }
 
@@ -189,6 +191,7 @@ export class RoomLayoutDesignerComponent implements OnInit, OnDestroy {
       if ( list && list.length>0 ) {
           list.forEach(order => {
             const item = {uuID: order?.tableUUID, color: 'red'};
+            console.log('setting selected object color', item)
             this.app.setSelectedObjectColor.next(item)
           }
         )
@@ -202,7 +205,7 @@ export class RoomLayoutDesignerComponent implements OnInit, OnDestroy {
         const item = data;
         this.app.orderID = item.orderID;
         this.app.tableStatus = item.status;
-        this.app.setTableOrderID(item.orderID);
+        this.app.setTableOrderID(item.orderID, this.app.selectedObject);
       })
     } catch (error) {
     }
@@ -268,7 +271,7 @@ export class RoomLayoutDesignerComponent implements OnInit, OnDestroy {
         // data = data.replaceAll('\\', '');
         this.floorPlan.template = this.floorPlanService.replaceJSONText(data)
 
-        console.log('saving floor plan',) // this.floorPlan.template)
+        // console.log('saving floor plan',) // this.floorPlan.template)
         this.saveFloorPlan.emit(this.floorPlan)
       }
     }
@@ -329,12 +332,12 @@ export class RoomLayoutDesignerComponent implements OnInit, OnDestroy {
           if (data) {
             this.app.clearNextSelectedTable = data;
             if (data) {
-              this.app.setTableOrderID('')
+              this.app.setTableOrderID('',    this.app.clearNextSelectedTable)
               return;
             }
           }
           if (data) {
-            this.app.setTableOrderID('');
+            this.app.setTableOrderID('',    this.app.clearNextSelectedTable);
             this.app.clearNextSelectedTable = false;
           }
         })
@@ -345,8 +348,14 @@ export class RoomLayoutDesignerComponent implements OnInit, OnDestroy {
   }
 
   _setTable() {
-    this.app.selectededObject.subscribe(data => {
+    this.app.selectedObject.subscribe(data => {
       console.log('_setTable' , data?.name)
+      if (data ||   !data?.name || data?.name == '') {
+        this.app.tableName = ''
+        this.app.orderID = ''
+        // this.app.selectedObject.next(null);
+        // this.setTable.emit(null);
+      }
       if (data && data?.name) {
         this.setTable.emit(data);
       }

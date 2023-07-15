@@ -99,13 +99,14 @@ export class StoreCreditListComponent implements OnInit {
     private dialog: MatDialog,
   )
 {
-  this.initForm();
+
   this.initAgGrid(this.pageSize);
 }
 
 async ngOnInit() {
   this.updateScreenSize();
-
+  // this.initSearchForm();
+  this.initForm();
   const clientSearchModel       = {} as ClientSearchModel;
   clientSearchModel.pageNumber  = 1
   clientSearchModel.pageSize    = 1000;
@@ -187,6 +188,7 @@ async ngOnInit() {
     this.searchForm   = this.fb.group( {
       userName          : [''],
       cardNumber        : [''],
+      itemName          : [],
     });
   }
 
@@ -396,7 +398,7 @@ async ngOnInit() {
     if(!id) {
       return
     }
-    if (!this.userAuthorization.isManagement) { 
+    if (!this.userAuthorization.isManagement) {
       this.siteService.notify('Not Authorized', 'Alert', 2000)
       return;
     }

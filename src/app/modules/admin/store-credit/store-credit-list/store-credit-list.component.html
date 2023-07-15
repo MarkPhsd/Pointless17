@@ -4,15 +4,7 @@
   <div class="grid-container-selectors">
 
     <div class="grid-item">
-      <search-debounce-input
-                            [itemNameControl] = "'itemName'"
-                            [searchForm]      = "searchForm"
-                            (outPutMethod)    = "refreshSearchPhrase($event)">
-        <div fieldDescription>
-            <mat-icon>search</mat-icon>
-            Search
-        </div>
-      </search-debounce-input>
+      <ng-container [ngTemplateOutlet]="searchSelector"></ng-container>
     </div>
 
     <div class="grid-item">
@@ -84,3 +76,15 @@
 <div style="flex-grow:0">
   <span id="selectedRows"> </span>
 </div>
+
+<ng-template #searchSelector>
+  <search-debounce-input
+                      [itemNameControl] = "'itemName'"
+                      [searchForm]      = "searchForm"
+                      (outPutMethod)    = "refreshSearchPhrase($event)">
+    <div fieldDescription>
+        <mat-icon>search</mat-icon>
+        Search
+    </div>
+  </search-debounce-input>
+</ng-template>

@@ -212,7 +212,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     if (this.authSevice && this.authSevice.deviceInfo && this.authSevice.deviceInfo.phoneDevice) {
       this.textLength = 24
     }
-  
+
   }
 
   getPlaceHolder() {
@@ -329,12 +329,34 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
   listItems(id:number) {
     this.initProductSearchModel(id)
+
+    // let paramaters ;
+    // if (this.searchModel.categoryID != 0) {
+    //   paramaters = {departmentID: this.searchModel.departmentID}
+    //   this.router.navigate(['menuitems-infinite', paramaters])
+    // }
+    // if (this.searchModel.categoryID != 0) {
+    //   paramaters = {categoryID: this.searchModel.categoryID}
+    //   this.router.navigate(['menuitems-infinite', paramaters])
+    // }
+    // if (this.searchModel.subCategoryID != 0) {
+    //   paramaters = {subcategoryID: this.searchModel.subCategoryID}
+    //   this.router.navigate(['menuitems-infinite', paramaters])
+    // }
+
+
+    this.searchModel = this.menuService.initSearchModel()
+
     if (this.itemTypeID == 4) {
+      this.searchModel.categoryID = id;
       this.router.navigate(["/menuitems-infinite/", {categoryID:id,typeID:4, hideSubCategoryItems:true }]);
     }
     if (this.itemTypeID == 6) {
+      this.searchModel.departmentID = id;
       this.router.navigate(["/menuitems-infinite/", {departmentID:id,typeID:4}]);
     }
+
+
   }
 
 
@@ -489,7 +511,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   }
 
   gotoFilter() {
-    
+
     this.router.navigate(['filter'])
     this.toolbarUIService.hideToolbarSearchBar()
   }

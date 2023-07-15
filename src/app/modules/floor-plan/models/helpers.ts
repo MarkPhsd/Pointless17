@@ -1,6 +1,6 @@
-import { stringToArray } from '@ag-grid-community/core';
 import { UUID } from 'angular2-uuid';
 import { fabric } from 'fabric';
+import { itemsAnimation } from 'src/app/_animations/list-animations';
 const { Group, Rect, Line, Circle, Ellipse, Path, Polygon, Polyline, Triangle, Point } = fabric;
 export interface tableProperties {
   name: string;
@@ -11,12 +11,34 @@ export interface tableProperties {
   orderName: string;
 }
 const
-  RL_FILL = '#FFF',
-  RL_STROKE = '#000',
+  // RL_FILL = '#FFF',
+  // RL_STROKE = '#000',
+  // RL_PREVIEW_WIDTH = 140,
+  // RL_PREVIEW_HEIGHT = 120,
+  // RL_CHAIR_STROKE = '#999',
+  // RL_CHAIR_FILL = '#FFF',
+  // RL_CHAIR_TUCK = 6,
+  // RL_VIEW_WIDTH = 120,
+  // RL_VIEW_HEIGHT = 56,
+  // RL_FOOT = 12,
+  // RL_AISLEGAP = 12 * 3,
+  // RL_ROOM_OUTER_SPACING = 48,
+  // RL_ROOM_INNER_SPACING = 4,
+  // RL_ROOM_STROKE = '#000',
+  // RL_CORNER_FILL = '#88f',
+  // RL_UNGROUPABLES = ['CHAIR', 'MISCELLANEOUS', 'DOOR'],
+  // RL_CREDIT_TEXT = '',
+  // RL_CREDIT_TEXT_PARAMS = { fontSize: 12, fontFamily: 'Arial', fill: '#999', left: 12 };
+
+  RL_FILL = 'white',
+
+  RL_STROKE = 'green',
+  RL_STROKE_InUse = 'yellow',
+  RL_STROKE_NoReady = 'red',
   RL_PREVIEW_WIDTH = 140,
   RL_PREVIEW_HEIGHT = 120,
-  RL_CHAIR_STROKE = '#999',
-  RL_CHAIR_FILL = '#FFF',
+  RL_CHAIR_STROKE = 'white',
+  RL_CHAIR_FILL = 'purple',
   RL_CHAIR_TUCK = 6,
   RL_VIEW_WIDTH = 120,
   RL_VIEW_HEIGHT = 56,
@@ -29,6 +51,7 @@ const
   RL_UNGROUPABLES = ['CHAIR', 'MISCELLANEOUS', 'DOOR'],
   RL_CREDIT_TEXT = '',
   RL_CREDIT_TEXT_PARAMS = { fontSize: 12, fontFamily: 'Arial', fill: '#999', left: 12 };
+
 
 // All Create[Name]Object() functions should return a group
 
@@ -88,12 +111,14 @@ const createTable = (def: any, RL_DEFAULT_CHAIR: any, type: string = 'TABLE') =>
     components[index] = new fabric.Circle(tableCircle);
 
   } else if (def.shape == 'rect') {
+
+
     const tableRect = {
       width: def.width,
       height: def.height,
       fill: RL_FILL,
       stroke: RL_STROKE,
-      name: 'DESK'
+      name: def?.name + ';orderid;itemName;'
     };
 
     // calculate gap between chairs, with extra for gap to end of table
@@ -170,35 +195,51 @@ const createTable = (def: any, RL_DEFAULT_CHAIR: any, type: string = 'TABLE') =>
 
   const tableProperties  = {} as tableProperties;
   let tablePropertiesString = ''
-  console.log('type', type)
-  if (type.toLocaleLowerCase() === 'table' || type.toLocaleLowerCase() === 'group') {
-    tableProperties.name   = ``;
-    tableProperties.status = 'inactive';
-    tableProperties.color  = 'green';
-    tableProperties.uuid   = UUID.UUID();
-    // tableProperties.
+  // console.log('type', type)
+  // if (type) {
+  //   type = JSON.stringify(type)
+  //   if (type.toLowerCase() === 'table' || type.toLowerCase() === 'group') {
+      tableProperties.name   = ``;
+      tableProperties.status = 'inactive';
+      tableProperties.color  = 'green';
+      tableProperties.uuid   = UUID.UUID();
+      tablePropertiesString = stringifyJSONTable(tableProperties);
+      console.log('table properites being added',   tablePropertiesString)
+      // console.log(  parseJSONTable(tablePropertiesString))
+      return getTableGroup(components, tablePropertiesString,tableProperties)
+  //   }
+  // }
 
-    tablePropertiesString = stringifyJSONTable(tableProperties);
-    console.log(  tablePropertiesString)
-    console.log(  parseJSONTable(tablePropertiesString))
-  }
-
-  const tableGroup = new fabric.Group(components, {
-    left: 0,
-    top: 0,
-    hasControls: false,
-    // set origin for all groups to center
-    originX: 'center',
-    originY: 'center',
-    name: tablePropertiesString,
-  });
-
-  if (type == 'table') {
-    console.log('return table', tableGroup)
-  }
-  return tableGroup;
 
 };
+
+function getTableGroup(components : any[], properties: string, item: tableProperties) {
+  let tableGroup
+  if (!properties) {
+     tableGroup = new fabric.Group(components, {
+      left: 0,
+      top: 0,
+      hasControls: false,
+      originX: 'center',
+      originY: 'center',
+      name: properties,
+    });
+  }
+  if (properties) {
+     tableGroup = new fabric.Group(components, {
+      left: 0,
+      top: 0,
+      hasControls: false,
+      // set origin for all groups to center
+      originX: 'center',
+      originY: 'center',
+      stroke: 'red',
+      fill: 'red',
+      name: properties,
+    });
+  }
+  return tableGroup
+}
 
 function stringifyJSONTable(obj: any): string {
   let str = '{';

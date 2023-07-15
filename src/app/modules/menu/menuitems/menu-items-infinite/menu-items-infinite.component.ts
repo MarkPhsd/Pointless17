@@ -1,7 +1,7 @@
 import {Component,  HostListener, OnInit, AfterViewInit,OnDestroy,
         ViewChild, ElementRef, QueryList, ViewChildren, Input, TemplateRef, ChangeDetectorRef, ChangeDetectionStrategy}  from '@angular/core';
 import {IMenuItem} from 'src/app/_interfaces/menu/menu-products';
-import {AWSBucketService, AuthenticationService, IMenuItemsResultsPaged, MenuService} from 'src/app/_services';
+import {AWSBucketService, AuthenticationService, IMenuItemsResultsPaged, IProductSearchResults, MenuService} from 'src/app/_services';
 import {ActivatedRoute, Router} from '@angular/router';
 import { catchError, Observable, of, Subscription, switchMap} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -79,6 +79,9 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   @Input() productName   :  string;
   @Input() hideSubCategoryItems: boolean;
 
+  categorySearchModel    : ProductSearchModel
+
+
   _productSearchModel    : Subscription;
   productSearchModel     : ProductSearchModel;
   bucketName        :   string;
@@ -94,7 +97,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   orderBar          : boolean;
   platForm          = this.getPlatForm()
   isApp             = false;
-  bucket$: Observable<string>; 
+  bucket$: Observable<string>;
   uiHomePage$  : Observable<any>;
   style$       : Observable<any>;
   userAuths    = {} as IUserAuth_Properties;
@@ -213,44 +216,100 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     //before we move foward.
     //but if we move back, and have a category assigned but no department, we can't be
     //sure if we should accept the model, or the parameter from the page.
-
+    console.log('ngOnInit')
     this.value      = 1;
     const homePage$ = this.uiSettingService.homePageSetting$;
-    this.bucket$    = this.awsBucketService.awsBucketURLOBS().pipe(switchMap(data => { 
+    this.bucket$    = this.awsBucketService.awsBucketURLOBS().pipe(switchMap(data => {
       this.bucketName = data
       return of(data)
     }));
 
     this.uiHomePage$ = homePage$.pipe(switchMap(data => {
-      if (!data) { 
+      if (!data) {
         return this.uiSettingService.UIHomePageSettings
       }
       return of(data)
     })) .pipe(switchMap(data => {
+      if (!data) {
+        return this.uiSettingService.UIHomePageSettings
+      }
+      return of(data)
+    })).pipe(switchMap(data => {
         this.uiHomePage = data;
-        if (data.accordionMenuSideBar || data.staffAccordionMenuSideBar) { 
+        if (data.accordionMenuSideBar || data.staffAccordionMenuSideBar) {
           this.updateSearchOnModelChange = true;
         }
-        this.initComponent()
+        if (this.uiHomePage) {
+          this.initComponent()
+        }
         return of(data)
-    }),catchError(data => {
+    }))
+    ,catchError(data => {
       this.initComponent()
       return of(data)
-    }));
+    });
   }
 
   initComponent() {
     this.initSubscriptions();
     this.initSearchForm();
     this.initSearchProcess();
+    this.setTitle();
+    this.updateUILayout()
+
+    let subCategoryID = +this.route.snapshot.paramMap.get('subCategoryID');
+    if (subCategoryID !=0) {
+      console.log('init sub category parameters')
+      this.currentPage = 1;
+      const model = this.initViewFromParameters();
+      this.initSearchFromModel();
+      this.updateSearchResults();
+      return;
+    }
+
+    let categoryID = +this.route.snapshot.paramMap.get('categoryID')
+    if (categoryID !=0) {
+      console.log('init category parameters')
+      this.currentPage = 1;
+      const model = this.initViewFromParameters();
+      this.initSearchFromModel();
+      this.updateSearchResults();
+      return;
+    }
+
+    let departmentID = +this.route.snapshot.paramMap.get('departmentID')
+    if (departmentID !=0) {
+      console.log('init department parameters')
+      this.currentPage = 1;
+      const model = this.initViewFromParameters();
+      this.initSearchFromModel();
+      this.updateSearchResults();
+      return;
+    }
+
     this.initSearchFromModel();
-    this.setItemsPerPage();
-    this.updateItemsPerPage()
     this.currentPage = 1;
     this.menuItems = [] as IMenuItem[]
     this.nextPage();
-    this.setTitle();
+
     this.initFilterOption();
+  }
+
+  initViewFromParameters() {
+    let model = this.menuService.initSearchModel()
+    model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
+    model.departmentID       = +this.route.snapshot.paramMap.get('departmentID');
+    model.categoryID         = +this.route.snapshot.paramMap.get('categoryID');
+    model.brandID            = +this.route.snapshot.paramMap.get('brandID');
+    model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
+    model.itemTypeID         = +this.route.snapshot.paramMap.get('typeID');
+
+    if (model.departmentID != 0 || model.categoryID != 0 ||  model.subCategoryID != 0) {
+      console.log('initViewFromParameters', model)
+      this.menuService.updateSearchModel(model)
+    }
+
+    return model
   }
 
   get isSearchSelectorOn() {
@@ -271,7 +330,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   }
 
   @HostListener("window:resize", [])
-  updateItemsPerPage() {
+  updateUILayout() {
     this.smallDevice = false
     if ( window.innerWidth < 811 ) {
       this.smallDevice = true
@@ -297,6 +356,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
   ngAfterViewInit() {
     this.itemElements.changes.subscribe(_ => this.onItemElementsChanged());
+    console.log('after view initialized')
   }
 
   ngOnDestroy(): void {
@@ -355,12 +415,21 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
   }
 
+  refreshFromSelection(event) {
+
+    this.productSearchModel = this.getListSearchModel(this.productSearchModel);
+    console.log('refreshFromSelection', this.productSearchModel)
+    console.log(this.productSearchModel)
+    this.currentPage = 1;
+    this.updateSearchResults()
+  }
+
   initSearchFromModel() {
     this._productSearchModel = this.menuService.searchModel$.subscribe( model => {
         this.productSearchModel = model;
         this.initSearchProcess();
         if (!model) {  model = this.menuService.initSearchModel() }
-        // console.log('search model update')
+
         this.productName  = model.name;
         model.web         = this.webMode
         model.webMode     = this.webMode;
@@ -387,12 +456,10 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
         model.active  = true;
 
         this.productSearchModel = model;
-        // console.log('update search results pre update')
 
         if (this.updateSearchOnModelChange) {
           model.hideSubCategoryItems = false;
           this.productSearchModel = model;
-          // console.log('update search results')
           this.updateSearchResults();
         }
 
@@ -403,6 +470,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   }
 
   updateSearchResults() {
+    console.log('updateSearchResults')
     this.menuItems = [];
     this.nextPage();
   }
@@ -414,13 +482,18 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     return menuItem;
   }
 
+
   getListSearchModel(model : ProductSearchModel) {
     this.departmentID  = this.route.snapshot.paramMap.get('departmentID');
     this.categoryID    = this.route.snapshot.paramMap.get('categoryID');
     this.subCategoryID = this.route.snapshot.paramMap.get('subCategoryID');
     this.brandID       = this.route.snapshot.paramMap.get('brandID')
     this.typeID       = this.route.snapshot.paramMap.get('typeID')
+    return this.updateModel(model)
 
+  }
+
+  updateModel(model: ProductSearchModel) {
     if (this.updateSearchOnModelChange) {   model.hideSubCategoryItems = false; }
 
     if (this.uiHomePage && this.uiHomePage.suppressMenuItems) {
@@ -428,11 +501,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
         model.hideSubCategoryItems = this.route.snapshot.paramMap.get('hideSubCategoryItems') as unknown as boolean;
       }
     }
-
-    model.categoryID   = +this.categoryID
-    model.departmentID = +this.departmentID
-    model.subCategoryID = +this.subCategoryID;
-
     if (this.typeID) {
       if (this.typeID) { model.itemTypeID     = +this.typeID     }
     }
@@ -447,8 +515,25 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
          (!this.brandID && this.brandID != "0") )   {
     }
     model.itemTypeID = 0
+
+
     return model;
   }
+
+  setCategoryHeaders(model: ProductSearchModel) {
+    let catModel  = JSON.parse(JSON.stringify(model))
+    catModel.categoryID = 0
+    catModel.categoryName = ''
+    catModel.category = ''
+    catModel.itemTypeID = 4;
+    console.log('Cat search', catModel)
+    this.categorySearchModel = catModel
+  }
+
+  setSubCategoryHeaders() {
+    //do this when there is a sub category id in the model
+  }
+
 
   changeDetect() {
     this.loading      = false
@@ -463,33 +548,57 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     const value = this.route.snapshot.paramMap.get('value');
     if (!pageNumber || pageNumber == null) {pageNumber = 1 }
     if (!pageSize   || pageSize   == null) {pageSize   = 50}
-    // console.log('Add to loist', model)
-    if (model && !value)  {
-      model = this.getListSearchModel(model)
+
+    if (model && !value)  { model = this.getListSearchModel(model) }
+
+    const site        = this.siteService.getAssignedSite();
+
+    let displayCategories$ : Observable<IMenuItemsResultsPaged | IMenuItem[]>;
+    if (this.uiHomePage.storeNavigation) {
+      let catModel      = this.categorySearchModel;
+      if (catModel){
+        catModel.pageNumber = 1;
+        catModel.pageSize = 50;
+        model.active      = true;
+        displayCategories$ =  this.getProcess(site, catModel)
+      }
     }
 
     model.pageNumber  = pageNumber
     model.pageSize    = pageSize
     model.active      = true;
-    const site        = this.siteService.getAssignedSite();
+
+    if (this.uiHomePage.storeNavigation) {
+      // model.departmentID = 0;
+
+    }
+    this.productSearchModel = model;
+
     const process$    = this.getProcess(site, model)
     this.loading      = true
 
-    // console.log('process')
     return process$.pipe(
       switchMap(data => {
-      // console.log('process 2')
+        if (this.pagingInfo && this.pagingInfo.pageCount == 1) {
+          if (displayCategories$) {
+            return displayCategories$
+          }
+        }
+
         if (pageNumber == 1) {
           return  this.addToListOBS(this.pageSize, 2)
         }
-      return of(data)
+        if (displayCategories$) {
+          return displayCategories$
+        }
+        return of(data)
     })).pipe(switchMap(data => {
       this.changeDetect()
       return of(data)
     }))
 
-    this.changeDetect()
   };
+
 
   splitItemsIntType(itemsIn: IMenuItem[], currentItems: IMenuItem[]){
     currentItems.push(...itemsIn)
@@ -504,16 +613,18 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
         }) as IMenuItem[]
         this.categories.push(...categories)
       }
+
       if (!this.departmentID && this.categoryID && itemsIn) {
         const categories = itemsIn.filter(item => {
           if ( item.prodModifierType == 6 || item.prodModifierType == 5 || item.prodModifierType == 4 ) {
             return   item
           }
         }) as IMenuItem[]
-        this.categories.push(...categories)
+
       }
 
-      this.categories = Array.from(new Set(this.categories))
+
+      this.categories = this.removeDuplicates(this.categories)
       currentItems =  currentItems.filter( item => {
         if (item.prodModifierType != 6 && item.prodModifierType != 5 && item.prodModifierType != 4 ) {
           return   item
@@ -524,12 +635,21 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     return currentItems;
   }
 
+  removeDuplicates(array: IMenuItem[]) {
+    const uniqueArray = array.filter((obj, index, self) =>
+      index === self.findIndex((o) => o.id === obj.id && o.name === obj.name)
+    );
+
+    return uniqueArray;
+    console.log(uniqueArray);
+  }
+
   initFilterOption() {
     if (this.authService.deviceInfo) {
       const device = this.authService.deviceInfo
 
       if ((this.uiHomePage.staffAccordionMenuSideBar || this.uiHomePage.accordionMenuSideBar ||
-        this.uiHomePage.departmentFilter || this.uiHomePage.itemTypeFilter || this.uiHomePage.categoryFilter  )) { 
+        this.uiHomePage.departmentFilter || this.uiHomePage.itemTypeFilter || this.uiHomePage.categoryFilter  )) {
           this.enableFilter = true
           return;
         }
@@ -550,11 +670,18 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
   gotoFilter() {
     // this.router.navigate(['filter'])
-    this.toolbarUIService.showSearchSideBar()
+  //  this.toolbarUIService.showSearchSideBar()
+    this.toggleSearchMenu()
   }
 
+  toggleSearchMenu() {
+    // this.smallDeviceLimiter();
+    this.toolbarUIService.switchSearchBarSideBar()
+  }
+
+
   getProcess(site: ISite, model: ProductSearchModel) {
-   
+
     const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
      return results$.pipe(
         switchMap(data => {
@@ -577,7 +704,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
               };
             } catch (error) {
             }
-        
+
             this.menuItems = this.splitItemsIntType(data.results, this.menuItems);
 
             if (this.uiHomePage.suppressItemsInStoreNavigation) {
@@ -591,7 +718,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
             }
 
             this.totalRecords = data.paging.totalRecordCount;
-           
+
             let catLength = 0
             if (this.categories && this.categories.length) {   catLength = this.categories.length }
 
@@ -606,7 +733,8 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
               this.loading = false;
               this.menuItems.push(lastItem)
             }
-            
+
+            this.menuItems = this.removeDuplicates( this.menuItems )
             this.value     = ((this.menuItems.length   / this.totalRecords ) * 100).toFixed(0)
             this.loading   = false
 
@@ -623,10 +751,10 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
         return of(data);
       }
-    )).pipe(switchMap(data => { 
+    )).pipe(switchMap(data => {
       return of(data)
     }))
-    
+
   }
 
   moveNext(event) {
@@ -643,13 +771,10 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     this.scrollingInfo = 'scroll up'
   }
 
-  setItemsPerPage() {
-
-  }
 
   nextPage() {
     // this.action$ =
-    this.addToListOBS(this.pageSize, this.currentPage).subscribe(data => { 
+    this.addToListOBS(this.pageSize, this.currentPage).subscribe(data => {
 
     })
   }
@@ -727,6 +852,11 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
       return this.debugView
     }
     return true;
+  }
+
+
+  trackByFN(_, item: IMenuItem): IMenuItem {
+    return item;
   }
 }
 

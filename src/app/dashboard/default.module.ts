@@ -368,6 +368,7 @@ import { RoomLayoutDesignerComponent } from '../modules/floor-plan/floor-plan-de
 import { ChairsLayoutComponent } from '../modules/floor-plan/chairs-layout/chairs-layout.component';
 import { PreviewFurnitureComponent } from '../modules/floor-plan/preview-furniture/preview-furniture.component';
 import { PointlessFloorPlanViewComponent } from '../modules/floor-plan/pointless-floor-plan-view/pointless-floor-plan-view.component';
+import { NewOrderItemComponent } from '../modules/posorders/pos-order/new-order-item/new-order-item.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -636,6 +637,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PosEditSettingsComponent,
     PosOrderComponent,
     PosOrderItemEditComponent,
+    NewOrderItemComponent,
     PosOrderListComponent,
     PosOperationsComponent,
     PosPaymentsFilterComponent,

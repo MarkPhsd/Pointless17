@@ -53,7 +53,7 @@ export class FloorPlanService {
   replaceJSONText(template: any) {
     try {
       // return;
-      console.log('replaceJSON Text')
+      // console.log('replaceJSON Text')
       if (template) {
         template = JSON.stringify(template) as string
         template = template.replace(/(^"|"$)/g, '');
@@ -232,75 +232,62 @@ export class FloorPlanService {
     return  this.http.get<any>(url)
   }
 
-  alterObjectColor(uuID: string, color: string, view: any) {
+  alterObjectColor(uuID: string, color: string, template: any) {
+    // console.log('alter object color', template.objects)
+    let view = JSON.parse(template)
+    // console.log(view, template)
+    // return;
     if (view) {
-      // return;
+
       if (view.objects) {
           view. objects.forEach(data => {
-            if (data && data?.type  && (data?.type === 'group' ) ) {
-              // const itemValue = data?.name.split(";")
+            // console.log('object', data )
+            if (data && data?.type  && ( data?.type.toLowerCase() === 'group' ) ) {
+
               let itemValue =  parseJSONTable(data.name) as tableProperties;
-              if (itemValue &&  itemValue.uuid){
+              // console.log('altering color')
+              if (uuID && itemValue &&  itemValue.uuid){
                 if (uuID === itemValue.uuid ) {
-                      // console.log('itemValue', itemValue)
-                      let stroke = 5
-                      if (color === 'red' || color ===  'rgb(200,10,10)') {
-                        data.backgroundColor = color;
-                        data.borderColor =  color
-                        let stroke = 8
-                      }
+                    // console.log('itemValue', itemValue.color , data?.backgroundColor, data?.borderColor)
+                    let stroke = 4
+                    data.borderColor =  color;
+                    data.stroke = color;
+                    data.strokeWidth = stroke;
+                    data.fill = color;
 
-                      if (color === 'green' || color ===  'rgb(10,10,200)') {
-                        data.backgroundColor = color;
-                        data.borderColor =  color
-                        let stroke = 5
-                      }
+                    this.alterColor(color, data, stroke )
 
-                      if (color === 'yellow' || color ===  'rgb(10,10,200)') {
-                        data.backgroundColor = color;
-                        data.borderColor =  color
-                        let stroke = 5
-                      }
-
-                      if (data?.backgroundColor === 'purple' ||
-                          data?.backgroundColor === 'rgba(255,100,171,0.25)') {
-                        // console.log('name successful setting color', name, data?.backgroundColor, color);
-                        data.backgroundColor = color;
-                        data.borderColor =  color
-                        data.stroke = color
-                        data.strokeWidth = stroke
-                      }
-
-                      if (data?.backgroundColor === 'purple' ||
-                          data?.backgroundColor === 'rgba(255,100,171,0.25)') {
-                        // console.log('name successful setting color 2', name, data?.backgroundColor, color);
-                        data.backgroundColor = color;
-                        data.borderColor =  color
-                        data.stroke = color
-                        data.strokeWidth = stroke
-                      }
-
-                      this.alterColor(color, data, stroke -3 )
-                  //   }
-                  // }
                 };
               }
             }
           })
         }
       }
-      return view;
+      template   = this.replaceJSONText(JSON.stringify(view))
+      return template;
   }
 
   alterColor(color, obj, stroke) {
-    obj.borderColor =  color
-    obj.stroke = color
-    obj.strokeWidth = stroke
-    if (obj.objects && obj.objects.length > 0 ) {
+
+    // if (color != obj.color) {
+      obj.borderColor =  color
+      obj.stroke = color
+      obj.strokeWidth = stroke -1
+      if (obj && obj.type) {
+        // console.log('object type', obj?.type)
+      }
+      if (stroke == 5) {
+        // stroke = stroke - 4
+      }
+
+      if (obj.objects && obj.objects.length > 0 ) {
         obj.objects.forEach(item => {
-          this.alterColor(color, item, stroke)
-      })
-    }
+            if (obj.type === 'group') {
+              this.alterColor(color, item, stroke)
+            }
+        })
+      }
+    // }
     return obj
   }
 

@@ -5,7 +5,7 @@ import { GridApi } from 'ag-grid-community';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
-import { UnitType } from 'src/app/_interfaces';
+import { IProduct, UnitType } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { MenuService } from 'src/app/_services';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -42,7 +42,7 @@ export class PartBuilderComponentEditComponent implements OnInit {
   site = this.siteService.getAssignedSite()
   id: number;
 
-
+  menuItemSelected:           IMenuItem;
   gridApi:            GridApi;
   // gridColumnApi:      GridAlignColumnsDirective;
   searchGridOptions:  any;
@@ -217,13 +217,23 @@ export class PartBuilderComponentEditComponent implements OnInit {
   refreshData(item) {
     const site = this.siteService.getAssignedSite()
 
-    this.partBuilderMainService.getItem(site, item.id).pipe(switchMap( data => {
+    this.action$ =  this.partBuilderMainService.getItem(site, item.id).pipe(switchMap( data => {
       this.partBuilderMainMethodsService.updatePBMain(item)
       this.initSubscription()
       this.initSearchForm()
       return of(data)
       }
     ))
+  }
+
+  private getMenuItemSelected(id) {
+    const site = this.siteService.getAssignedSite()
+    if (!id) { return }
+    this.action$ = this.menuService.getMenuItemByID(site, id).pipe(switchMap(data => {
+        this.menuItemSelected = data;
+        return of(data)
+      })
+    )
   }
 
   get index() {
@@ -247,6 +257,7 @@ export class PartBuilderComponentEditComponent implements OnInit {
   enableEdit(item: PB_Components) {
     this.pb_Component = item;
     this.initComponentForm(item)
+    this.getMenuItemSelected(item?.productID)
   }
 
   onGridReady(params) {
@@ -316,12 +327,23 @@ export class PartBuilderComponentEditComponent implements OnInit {
 
   assignProduct(event) {
     if (this.pb_Component) {
-      this.pb_Component.product = event
-      this.pb_Component.productID = event.id;
-      this.pb_Component.name = event?.name
-      this.componentForm.patchValue(this.pb_Component);
+
+      //then we want to ensure we get tthe actual product.
+      const site = this.siteService.getAssignedSite()
+      this.action$ = this.menuService.getMenuItemByID(site, event.id).pipe(switchMap(data => {
+        this.pb_Component.product = event
+        this.pb_Component.productID = event.id;
+        this.pb_Component.price = event.retail;
+        this.pb_Component.cost = event.wholeSale;
+        this.pb_Component.name = event?.name
+
+        this.menuItemSelected = data;
+        this.componentForm.patchValue(this.pb_Component);
+        return of(data)
+      }))
     }
   }
+
   // [searchForm]    = 'productSearchForm'
   // (itemSelect)    = 'assignProduct($event)'>
 
@@ -330,6 +352,12 @@ export class PartBuilderComponentEditComponent implements OnInit {
       this.pb_Component.unitType = event
       this.pb_Component.unitTypeID = event.id;
       this.pb_Component.unitName = event?.name
+
+      // if (this.menuService.getPricesFromProductPrices)
+      //if this menuItemSelected exists, then we can set the
+      //to a matching product unit price if it exists.
+
+
       this.componentForm.patchValue(this.pb_Component);
     }
   }

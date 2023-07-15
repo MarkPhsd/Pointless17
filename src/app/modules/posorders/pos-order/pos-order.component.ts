@@ -73,6 +73,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @ViewChild('importPurchaseOrder')   importPurchaseOrder: TemplateRef<any>;
   @ViewChild('purchaseItemHistory') purchaseItemHistory: TemplateRef<any>;
 
+  @ViewChild('newItemEntry') newItemEntry: TemplateRef<any>;
+  newItemEnabled: boolean;
+
   action$: Observable<any>;
   deleteOrder$: Observable<any>;
   printLabels$:  Observable<any>;
@@ -911,6 +914,18 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
         this.orderMethodService.notifyEvent('Email not sent. Check email settings', 'Failed')
       }
     })
+  }
+
+  hideNewItemEntryForm(event) {
+    this.newItemEnabled = false
+  }
+
+  get newItemEntryView() {
+
+    if (!this.order.completionDate || this.order.history ) {
+      return this.newItemEntry
+    }
+    return null
   }
 
 }

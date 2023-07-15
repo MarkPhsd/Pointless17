@@ -1,5 +1,5 @@
-  import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { IProductSearchResults } from 'src/app/_services';
@@ -13,12 +13,12 @@ export class SearchDebounceInputComponent implements AfterViewInit,OnInit {
 
   @ViewChild('searchFormView') searchFormView: TemplateRef<any>;
   @ViewChild('input', {static: true}) input: ElementRef;
-  get itemName() { return this.searchForm.get(this.itemNameControl) as UntypedFormControl;}
+  get itemName() { return this.searchForm.get(this.itemNameControl) as FormControl;}
 
   @Input()  itemNameInput: string;
   @Output() outPutMethod   = new EventEmitter();
   @Output() itemSelect     = new EventEmitter();
-  @Input()  searchForm:    UntypedFormGroup;
+  @Input()  searchForm:    FormGroup;
   @Input()  itemNameControl : string;
 
   searchPhrase:      Subject<any> = new Subject();

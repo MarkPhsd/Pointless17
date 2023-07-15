@@ -3,55 +3,26 @@
 
 <ng-container [ngTemplateOutlet]="editForm"></ng-container>
 
-<mat-card>
-  <mat-card-title>
-    <button color="primary" mat-raised-button (click)="addItem()">
-      <mat-icon>add</mat-icon>Add
-    </button>
-
-  </mat-card-title>
-
-  <mat-card-content *ngIf="pb_Main && pb_Main.pB_Components" >
-    <div *ngIf="pb_Main.pB_Components as components">
-      <ag-grid-angular
-            #agGrid
-            style="width: 100%; height: 35vh;"
-            id="mySearchGrid"
-            class="ag-theme-material"
-            [columnDefs]="columnDefs"
-            [defaultColDef]="defaultColDef"
-            [rowSelection]="rowSelection"
-            [rowData]="components"
-            [frameworkComponents]="frameworkComponents"
-            (gridReady)="onGridReady($event)"
-        >
-      </ag-grid-angular>
-    </div>
-  </mat-card-content>
-
-</mat-card>
-
 <ng-template #editForm>
-  <mat-card *ngIf="pb_Component && componentForm">
-    <div [formGroup]="componentForm">
-      <button color="primary" mat-raised-button (click)="saveEdit()">
-        <mat-icon>save</mat-icon>Save
-      </button>
+  <mat-card *ngIf="inputForm">
+    <div [formGroup]="inputForm">
+
 
       <mat-card>
         <mat-card-content>
 
           <div class="grid-container">
+            <ng-container [ngTemplateOutlet]="addButtonView"></ng-container>
             <ng-container [ngTemplateOutlet]="productSelector"></ng-container>
             <ng-template #productSelector>
               <div class="grid-units">
 
-                <div   *ngIf="pb_Component" style="width:100px">
+                <div   *ngIf="posOrderItem" style="width:100px">
                   <product-selector
-                    [inputForm]     = 'componentForm'
-                    [pb_Component]  = 'pb_Component'
-                    [name]          = "pb_Component.name"
-                    [id]            = 'pb_Component?.productID'
+                    [inputForm]     = 'inputForm'
+                    [posOrderItem]  = 'posOrderItem'
+                    [name]          = "posOrderItem.productName"
+                    [id]            = 'posOrderItem?.productID'
                     [searchForm]    = 'productSearchForm'
                     (itemSelect)    = 'assignProduct($event)'>
                     Select product
@@ -65,17 +36,17 @@
                 </div>
               </div>
             </ng-template>
-
-            <ng-container [ngTemplateOutlet]="unitSelector"></ng-container>
+          </div>
+            <!-- <ng-container [ngTemplateOutlet]="unitSelector"></ng-container>
 
             <ng-template #unitSelector>
               <div class="grid-units">
-                <div *ngIf="pb_Component"    style="width:100px">
+                <div *ngIf="posOrderItem"    style="width:100px">
                   <unit-type-select
-                    [inputForm]     = 'componentForm'
-                    [pb_Component]  = 'pb_Component'
-                    [name]          = "pb_Component.unitName"
-                    [id]            = 'pb_Component?.unitTypeID'
+                    [inputForm]     = 'inputForm'
+                    [posOrderItem]  = 'posOrderItem'
+                    [name]          = "posOrderItem.unitName"
+                    [id]            = 'posOrderItem?.unitType'
                     [searchForm]    = 'unitSearchForm'
                     (itemSelect)    = 'assignItem($event)'>
                   </unit-type-select>
@@ -87,30 +58,29 @@
                   </button>
                 </div>
               </div>
-            </ng-template>
+            </ng-template> -->
 
-
-            <app-value-fields
-                [inputForm]="componentForm"
+            <!-- <app-value-fields
+                [inputForm]="inputForm"
                 [fieldType]="'number'"
                 [fieldName]="'price'">
               Price
             </app-value-fields>
 
             <app-value-fields
-                [inputForm]="componentForm"
+                [inputForm]="inputForm"
                 [fieldType]="'number'"
                 [fieldName]="'cost'">
               Cost
             </app-value-fields>
 
             <app-value-fields
-                [inputForm]="componentForm"
+                [inputForm]="inputForm"
                 [fieldType]="'number'"
                 [fieldName]="'quantity'">
               Quantity
             </app-value-fields>
-          </div>
+          </div> -->
 
         </mat-card-content>
       </mat-card>
@@ -118,7 +88,11 @@
     </div>
   </mat-card>
 </ng-template>
-
-<ng-template #editItemView>
-
+<ng-template #addButtonView>
+  <button color="primary"
+      style="height:50px"
+      mat-raised-button
+      (click)="addItem()">
+    <mat-icon>add</mat-icon>Add
+    </button>
 </ng-template>

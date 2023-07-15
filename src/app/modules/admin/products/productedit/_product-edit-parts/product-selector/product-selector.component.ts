@@ -2,9 +2,9 @@ import { Component, OnInit, Input, ElementRef, EventEmitter, Output, ViewChild, 
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject, debounceTime, distinctUntilChanged, filter, fromEvent, switchMap, tap } from 'rxjs';
-import { IProduct, ISite, UnitType } from 'src/app/_interfaces';
+import { IProduct, ISite, PosOrderItem } from 'src/app/_interfaces';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
-import { IProductSearchResults, MenuService } from 'src/app/_services';
+import { MenuService } from 'src/app/_services';
 import { PB_Components } from 'src/app/_services/partbuilder/part-builder-main.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
@@ -17,6 +17,7 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
 
   @Input() product            : IProduct;
   @Input() pb_Component       : PB_Components
+  @Input() posOrderItem:      PosOrderItem;
   product$                   : Observable<IProduct[]>;
   products                   : IProduct[]
   @Input()  index             : number;
@@ -29,7 +30,6 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
   @Input() inputForm:         UntypedFormGroup;
   @Input() searchForm:        UntypedFormGroup;
   @Input() formGroupName      : UntypedFormGroup
-  // @Input() formGroupName: string
   @Input() searchField:       UntypedFormControl;
   @Input() id                 : number;
   @Input() name:              string;
@@ -134,6 +134,14 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
 
   selectItem(item){
     if (!item) {return}
+
+    if (this.posOrderItem) {
+      this.posOrderItem.productID = item.id;
+      this.posOrderItem.productName = item.name;
+      this.searchForm.patchValue( {searchField: item.name} )
+      this.itemSelect.emit(item)
+      return;
+    }
     if (this.pb_Component) {
       this.pb_Component.productID = item.id;
       this.pb_Component.name = item.name;
@@ -171,7 +179,6 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
     const model = {} as ProductSearchModel
     model.pageSize    = 100;
     model.currentPage = 1;
-    // model.id = id;
     return model;
   }
 

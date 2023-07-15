@@ -25,25 +25,25 @@
       </div>
     </div>
 
-   
+
     <!-- <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container> -->
     <!-- <ng-template #displayMenu>
       <display-menu-menu></display-menu-menu>
     </ng-template> -->
 
-    <ng-container *ngIf="uiHomePage && 
+    <ng-container *ngIf="uiHomePage &&
                           (uiHomePage?.accordionMenuSideBar && isUser) ||
                           (uiHomePage?.staffAccordionMenuSideBar && isStaff)">
       <app-product-filter></app-product-filter>
-    </ng-container>     
-    
+    </ng-container>
+
     <ng-container [ngTemplateOutlet]="isDisplaySubMenuOn"></ng-container>
     <ng-template #displaySubMenu>
         <price-schedule-menu-list></price-schedule-menu-list>
     </ng-template>
 
     <div class="ps-flex-group">
-      <div *ngIf="uiHomePage && 
+      <div *ngIf="uiHomePage &&
             (!uiHomePage?.accordionMenuSideBar) &&
             (!uiHomePage?.staffAccordionMenuSideBar)
             ">
@@ -55,12 +55,12 @@
               <mat-icon>refresh</mat-icon>
             </button>
           </div>
-        </div>     
+        </div>
       </div>
       <div>
         <ng-container [ngTemplateOutlet]="filter"></ng-container>
       </div>
-      
+
     </div>
 
     <div *ngIf="uiHomePage &&  uiHomePage.sideToolbarEnableCategory">

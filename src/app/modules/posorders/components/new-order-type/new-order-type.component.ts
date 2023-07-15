@@ -70,11 +70,12 @@ export class NewOrderTypeComponent  {
     try {
       this.orderMethodsService.toggleChangeOrderType = false;
       if (this.dialogRef) {
+
         this.dialogRef.close();
       }
     } catch (error) {
 
-      console.log(error)
+      // console.log(error)
     }
 
     this.onCancel();

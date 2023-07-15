@@ -9,6 +9,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { FloorPlanMethodService } from '../floor-plan.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { tableProperties } from '../models/helpers';
+import { UUID } from 'angular2-uuid';
 
 export interface uuidList {
   uuID: string;
@@ -279,6 +280,29 @@ export class FloorPlanComponent implements OnInit {
     })
   }
 
+  processActiveItems(orders: IPOSOrder[]) {
+    console.log(orders.length)
+    // return;
+    if (orders && orders.length >0 ) {
+      orders.forEach(order => {
+        const item = {uuID: order.tableUUID, color: 'red'};
+        // console.log('order', item)
+        if (!this.floorPlan.template) {
+          console.log('missing template')
+        }
+        if (order.tableUUID && this.floorPlan.template) {
+          this.floorPlan.template = this.floorPlanSevice.alterObjectColor(item.uuID, item.color, this.floorPlan.template)
+        } else {
+
+        }
+
+      })
+      // this.floorPlan.template = JSON.stringify(this.floorPlan.template)
+      this._floorPlan.next(this.floorPlan);
+      this.setZoomOnTimer()
+    }
+  }
+
   getOrderIDFromTable(item: any) {
     try {
       const id = item?.orderID;
@@ -354,6 +378,7 @@ export class FloorPlanComponent implements OnInit {
           this.setZoomOnTimer();
         }
 
+        console.log('active items count ',orders.length)
         if (orders && orders.length>0) {
           this.processActiveItems(orders);
           return of(orders)
@@ -381,17 +406,7 @@ export class FloorPlanComponent implements OnInit {
     this._zoom.next(this.zoomDefault)
   }
 
-  processActiveItems(orders: IPOSOrder[]) {
-    if (orders && orders.length >0 ) {
-      orders.forEach(order => {
-        const item = {uuID: order.tableUUID, color: 'red'};
-        this.floorPlan.template = this.floorPlanSevice.alterObjectColor(item.uuID, item.color, this.floorPlan.template)
-      })
-      this.floorPlan.template = JSON.stringify(this.floorPlan.template)
-      this._floorPlan.next(this.floorPlan);
-      this.setZoomOnTimer()
-    }
-  }
+
 
   setZoomOnTimer() {
     this.setZoomDefault()

@@ -37,6 +37,36 @@
   // gap: 10px;
 }
 
+.grid-flow-categories {
+  --gap: 5px;
+  margin-top: 2px;
+  margin-right: 2px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fill, minmax(75px, 1fr) );
+  overflow-y: visible;
+
+  @include for-tablet-landscape-up {
+    --gap: 5px;
+    margin-top: 2px;
+    margin-right: 2px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fill, minmax(75px, 1fr) );
+    overflow-y: visible;
+  }
+
+  @include for-phone-only {
+    --gap: 5px;
+    margin-top: 2px;
+    margin-right: 2px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fill, minmax(75px, 1fr) );
+    overflow-y: visible;
+  }
+}
+
 .grid-flow {
   --gap: 5px;
   margin-top: 2px;

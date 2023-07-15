@@ -7,15 +7,15 @@
 
     <div *ngIf="item">
         <div class="grid-totals">
-          <div *ngIf="item && item.cardNum && item?.cardNum.trim() != ''">Card #</div>
-          <div *ngIf="item && item.cardNum &&  item?.cardNum.trim() != ''">{{item?.cardNum}} </div>
-          <div *ngIf="item && item.value"> Credit </div>
-          <div *ngIf="item">{{item?.value | currency}} </div>
-          <span *ngIf="showBalance">
+          <div *ngIf="!showCreditValueOnly && item && item.cardNum && item?.cardNum.trim() != ''">Card #</div>
+          <div *ngIf="!showCreditValueOnly &&item && item.cardNum &&  item?.cardNum.trim() != ''">{{item?.cardNum}} </div>
+          <div *ngIf="item && item.value">Credit <br> {{item?.value | currency}} </div>
+
+          <span *ngIf="!showCreditValueOnly &&  showBalance">
             <div>Order Balance</div>
             <div *ngIf="order">{{order.balanceRemaining | currency}}</div>
           </span>
-          <div *ngIf="showPayment">
+          <div *ngIf="!showCreditValueOnly && showPayment">
             <div *ngIf="order && order.balanceRemaining != 0  &&
                         !showIssueMoney && item?.value > 0">
               <button  mat-raised-button (click)="applyAsPayment(item)">
@@ -25,7 +25,7 @@
           </div>
         </div>
 
-        <div *ngIf="storeCreditValue && storeCreditValue.results && storeCreditValue.results[0]?.id && storeCreditValue.results[0]?.id > 0 && showIssueMoney && search">
+        <div *ngIf=" !storeCreditValue && storeCreditValue.results && storeCreditValue.results[0]?.id && storeCreditValue.results[0]?.id > 0 && showIssueMoney && search">
           Issuing for Card: {{search.cardNumber | json}}
           <div *ngIf="purchaseOrderItem && !purchaseOrderItem.gcid && showIssueMoney">
             <button  mat-raised-button
@@ -40,8 +40,8 @@
   </div>
 </div>
 
-<div *ngIf="storeCreditValue && 
-            storeCreditValue.results && 
+<div *ngIf="storeCreditValue &&
+            storeCreditValue.results &&
             storeCreditValue.results[0] != null &&
             storeCreditValue.results[0]?.id == 0 &&
             showIssueMoney &&
@@ -49,7 +49,7 @@
   <ng-container [ngTemplateOutlet]="issueMoneyView"></ng-container>
 </div>
 
-<div *ngIf="storeCreditValue && storeCreditValue.results && 
+<div *ngIf="storeCreditValue && storeCreditValue.results &&
            ( !storeCreditValue.results || storeCreditValue.results.length == 0 ) &&
             showIssueMoney &&
             search">

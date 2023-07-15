@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ThumbnailsPosition } from '@ngx-gallery/core';
 import { Observable, Subject, Subscription, of, switchMap } from 'rxjs';
-import { IProduct, IProductCategory, IUserProfile } from 'src/app/_interfaces';
+import { IProductCategory, IUserProfile } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { AWSBucketService, ContactsService } from 'src/app/_services';
@@ -177,7 +176,6 @@ export class CategoryMenuSelectorComponent implements OnInit {
       if (this.type === 'department') {
         this.list$ = department$
           .pipe(switchMap(list => {
-            // console.log(list)
             if (!this.userAuthService.isStaff) {
               list = list.filter(data => {
                 if (data.active && data.webProduct) {
@@ -282,8 +280,8 @@ export class CategoryMenuSelectorComponent implements OnInit {
 
   setValue(item: number) {
 
-    this.router.navigate(['menuitems-infinite'])
     if ( this.searchModel == undefined) {    this.searchModel = this.menuService.initSearchModel()   }
+    this.searchModel.pageNumber = 1;
 
     if (this.selectedItem == item && this.type === 'department') {
       this.selectedItem = null;
@@ -318,8 +316,23 @@ export class CategoryMenuSelectorComponent implements OnInit {
     }
 
     this.searchModel.pageNumber = 1;
+    this.router.navigate(['menuitems-infinite'])
 
-    // console.log('update model', this.searchModel)
+    let paramaters ;
+    if (this.searchModel.categoryID != 0) {
+      paramaters = {departmentID: this.searchModel.departmentID}
+      this.router.navigate(['menuitems-infinite', paramaters])
+    }
+    if (this.searchModel.categoryID != 0) {
+      paramaters = {categoryID: this.searchModel.categoryID}
+      this.router.navigate(['menuitems-infinite', paramaters])
+    }
+    if (this.searchModel.subCategoryID != 0) {
+      paramaters = {subcategoryID: this.searchModel.subCategoryID}
+      this.router.navigate(['menuitems-infinite', paramaters])
+    }
+
+
     this.menuService.updateSearchModel(this.searchModel)
 
   }

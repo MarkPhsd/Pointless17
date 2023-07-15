@@ -98,6 +98,10 @@ export class MenuService {
   private _searchModel       = new BehaviorSubject<ProductSearchModel>(null);
   public  searchModel$       = this._searchModel.asObservable();
 
+  public infiniteModel: ProductSearchModel
+  private _infiniteModel       = new BehaviorSubject<ProductSearchModel>(null);
+  public  infiniteModel$       = this._infiniteModel.asObservable();
+
   public searchFilter: ProductSearchModel
   // private _searchFilter       = new BehaviorSubject<ProductSearchModel>(null);
   public  searchFilter$       = this._searchModel.asObservable();
@@ -148,7 +152,18 @@ export class MenuService {
     this._searchModel.next(search)
   }
 
+  // updateInfiniteModel(item: ProductSearchModel) {
+  //   if (!item) {
+  //     item = this.initSearchModel();
+  //     this._searchModel.next(item);
+  //     return;
+  //   }
+  //   this._searchModel.next(item);
+  // }
+
+
   updateSearchModel(item: ProductSearchModel) {
+    console.log('updating searchmodel')
     if (!item) {
       item = this.initSearchModel();
       this._searchModel.next(item);

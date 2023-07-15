@@ -22,6 +22,7 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 
 export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  @Input() showCreditValueOnly: boolean;
   @Input() clientID     : number;
   @Input() accountNumber: string;
   @Input() userName     : string;

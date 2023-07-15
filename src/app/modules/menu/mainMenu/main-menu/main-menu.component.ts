@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, ObservableLike, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, ISite } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -37,7 +37,7 @@ export class MainMenuComponent implements OnInit  {
   @ViewChild('viewOverlay')    viewOverlay: TemplateRef<any>;
   @ViewChild('displayMenu')    displayMenu: TemplateRef<any>;
 
-
+  homePage$: Observable<UIHomePageSettings>;
   homePageSetings: UIHomePageSettings;
   smoke   = "./assets/video/smoke.mp4"
   isStaff = false;
@@ -80,6 +80,9 @@ export class MainMenuComponent implements OnInit  {
 
   setPanelHeight(item: UIHomePageSettings) {
     let value = 0
+    let height = (100 / value).toFixed(0);
+
+    this.panelHeightSize   = `calc(${height}vh - 65px)`
 
     if (!this.userAuthorizationService.isStaff) {
       // if(item.menuEnabled  ) {value = value + 1}
@@ -103,7 +106,7 @@ export class MainMenuComponent implements OnInit  {
     if (value > 1) {value = 2;}
 
     if (value != 0) {
-      const height = (100 / value).toFixed(0);
+      height = (100 / value).toFixed(0);
       this.panelHeightValue  =  +height;
       this.panelHeightSize   = `calc(${height}vh - 65px)`
     }
@@ -115,16 +118,16 @@ export class MainMenuComponent implements OnInit  {
       this.searchForm = this.fb.group( {
         itemName: ''
       })
+
       this.initSiteSubscriber();
       this.isStaff = false;
       this.isUser = this.userAuthorizationService.isUser;
       this.isStaff = this.userAuthorizationService.isCurrentUserStaff()
-      this.uiSettings.getSetting('UIHomePageSettings').subscribe( data => {
 
-        if (data && data.text) {
-          this.homePageSetings  = JSON.parse(data.text) as UIHomePageSettings;
-          this.setPanelHeight( this.homePageSetings )
-        }
+      this.homePage$ = this.uiSettings.UIHomePageSettings.pipe(switchMap( data => {
+        // console.log('UIHomePageSettings', data )
+        this.homePageSetings  = data as UIHomePageSettings;
+        this.setPanelHeight( this.homePageSetings )
         if (!data) {
           this.homePageSetings = {} as UIHomePageSettings
           this.homePageSetings.departmentsEnabled = true;
@@ -133,7 +136,8 @@ export class MainMenuComponent implements OnInit  {
           this.homePageSetings.tierMenuEnabled   = true;
           this.setPanelHeight( this.homePageSetings )
         }
-      })
+        return of(data)
+      }));
 
     // console.log('main menu user:', this.userAuthorizationService.user)
     if (this.userAuthorizationService.user) {
@@ -186,21 +190,20 @@ export class MainMenuComponent implements OnInit  {
 
   get isCategoryViewOn() {
     if ((this.isStaff && this.homePageSetings.staffCategoriesEnabled) ||
-        (this.isStaff == false &&  this.homePageSetings.categoriesEnabled)) {
+        (!this.isStaff  &&  this.homePageSetings.categoriesEnabled)) {
       return this.categoryView
     }
+
     return null;
   }
 
   get isDepartmentViewOn() {
     if ((this.isStaff && this.homePageSetings.staffDepartmentsEnabled) ||
-         (this.isStaff == false &&  this.homePageSetings.departmentsEnabled)) {
+         (!this.isStaff   &&  this.homePageSetings.departmentsEnabled)) {
           return this.departmentView
     }
 
-    // console.log('is staff', this.isStaff)
-
-    if  (this.isStaff == false &&  this.homePageSetings.departmentsEnabled) {
+    if  (!this.isStaff  &&  this.homePageSetings.departmentsEnabled) {
       return this.departmentView
     }
 

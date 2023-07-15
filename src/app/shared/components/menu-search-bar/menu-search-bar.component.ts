@@ -166,7 +166,7 @@ constructor(
     private userAuthorizationService: UserAuthorizationService,
   )
   {
-    
+
     this.initForm();
     if (this.platForm.toLowerCase() === 'android') {  this.keyboardDisplayOn = true }
     this.isApp = this.platFormService.isApp();
@@ -453,7 +453,6 @@ constructor(
     this.clearAll()
     this.clearDeparment()
     this.category = item
-
     this.refreshSearch()
   }
 
@@ -507,9 +506,19 @@ constructor(
 
   listItems(model: ProductSearchModel) {
     this.searchIncrementer = this.searchIncrementer + 1;
+
+    let item = {}
+    item = {  value: this.searchIncrementer};
+    if (model.categoryID && model.categoryID != 0) {
+      item = {categoryID: model.categoryID, value: this.searchIncrementer}
+    }
+    if (model.subCategoryID && model.subCategoryID != 0) {
+      item = {subCategoryID: model.subCategoryID, value: this.searchIncrementer}
+    }
+    console.log('list items',item,  model)
     this.router.navigate(
       [
-        "/menuitems-infinite", { value: this.searchIncrementer}
+        "/menuitems-infinite", item
       ]
     )
     ;

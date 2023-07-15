@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { table } from 'console';
 import { Subject } from 'rxjs';
 export interface uuidList {
   uuID: string;
@@ -33,7 +34,9 @@ export class FloorPlanMethodService {
 
   ungroupable = false;
   currenObject : any;
-  selectededObject: Subject<any> = new Subject<any>();
+
+  selectedObject: Subject<any> = new Subject<any>();
+
   setSelectedObjectColor: Subject<any> = new Subject<any>();
   selectedBackGroundImage: Subject<any> = new Subject<any>();
   performOperation: Subject<any> = new Subject<any>();
@@ -70,7 +73,7 @@ export class FloorPlanMethodService {
   }
 
   updateCurrentObjet() {
-    this.selectededObject.subscribe(data => {
+    this.selectedObject.subscribe(data => {
       this.currenObject = data;
     })
   }
@@ -102,7 +105,7 @@ export class FloorPlanMethodService {
 
   //setFillColor
   setObjectFillColor(color: any) {
-    console.log(color)
+    console.log('setObjectFillColor', color)
     this.setSelectedObjectColor.next(color);
   }
 
@@ -110,8 +113,8 @@ export class FloorPlanMethodService {
     this.performOperation.next('PASTE');
   }
 
-  setTableOrderID(item) {
-    if (!this.selections.length) { return; }
+  setTableOrderID(item, selected) {
+    if (!selected) { return; }
     if (item.trim() === '') {
       this.clearNextSelectedTable = true;
     }
@@ -122,8 +125,13 @@ export class FloorPlanMethodService {
     this.performOperation.next('setOrderID');
   }
 
-  setTable(tableName) {
-    if (!this.selections.length) { return; }
+  setTable(tableName, selected) {
+    console.log('tableName', tableName)
+    this.tableName = tableName;
+    if (!selected) {
+      console.log('no table selected')
+      return;
+    }
     this.performOperation.next('setTableName');
   }
 

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
@@ -105,7 +105,7 @@ getStoreCreditForm(inputForm:UntypedFormGroup): UntypedFormGroup {
     cardData:       [''],
     track1:         [''],
     track2:         [''],
-    cardNum:        [''],
+    cardNum:        ['',Validators.required],
     orderID:        [''],
     type:           [''],
     identifier:     [''],

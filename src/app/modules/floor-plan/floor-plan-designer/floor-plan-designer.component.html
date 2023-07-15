@@ -208,14 +208,6 @@ userMode {{userMode}} -->
           <button class="buttons"
                   mat-raised-button
                   color="primary"
-                  (click)="app.setTableOrderID(orderID)">
-            Set Order #</button>
-        </div>
-
-        <div>
-          <button class="buttons"
-                  mat-raised-button
-                  color="primary"
                   (click)="clearLayout()">
            Clear Layout</button>
         </div>
@@ -459,11 +451,11 @@ userMode {{userMode}} -->
           <input matInput
                 type="text"
                 [(ngModel)]="app.orderID"
-                (change)="app.setTableOrderID(app.orderID)"
+                (change)="app.setTableOrderID(app.orderID, selected)"
                 class="form-control" >
           </mat-form-field>
           <span>
-            <button mat-raised-button (click)="app.setTableOrderID('')">Clear</button>
+            <button mat-raised-button (click)="app.setTableOrderID('', selected)">Clear</button>
           </span>
         </span>
         <span *ngIf="selected && selected?.name">
@@ -472,11 +464,11 @@ userMode {{userMode}} -->
           <input matInput
                 type="text"
                 [(ngModel)]="app.tableName"
-                (change)="app.setTable(app.tableName)"
+                (change)="app.setTable(app.tableName, selected)"
                 class="form-control" >
           </mat-form-field>
           <span>
-            <button mat-raised-button (click)="app.setTable('')">Clear</button>
+            <button mat-raised-button (click)="app.setTable('', selected)">Clear</button>
           </span>
         </span>
       </div>

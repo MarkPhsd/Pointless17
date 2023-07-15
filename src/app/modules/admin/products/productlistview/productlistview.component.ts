@@ -293,12 +293,6 @@ constructor(  private _snackBar              : MatSnackBar,
     this.agtheme  = 'ag-theme-material';
     if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
     if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
-
-    //height: 72vh; 1180
-    //greater than 900 and less than  should be 73vh
-    //less than 900 should be 67vh
-    //393  < 42vh
-
   }
 
   listAll(){
@@ -693,7 +687,7 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   refreshMinQuantityFilter(event) {
-    console.log('event', event)
+    // console.log('event', event)
     this.minQuantityFilterValue = event;
     this.refreshSearch(1);
   }
@@ -736,7 +730,6 @@ constructor(  private _snackBar              : MatSnackBar,
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
-      // this.gridColumnApi = params.columnApi;
       params.api.sizeColumnsToFit();
     }
 
@@ -745,13 +738,13 @@ constructor(  private _snackBar              : MatSnackBar,
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
-
       items$.subscribe(data =>
         {
             const resp         =  data.paging
             if (!resp)         {return}
             this.isfirstpage   = resp.isFirstPage
             this.islastpage    = resp.isFirstPage
+            console.log('get rows' , resp.currentPage, this.currentPage)
             this.currentPage   = resp.currentPage
             this.numberOfPages = resp.pageCount
             this.recordCount   = resp.recordCount

@@ -297,13 +297,8 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
     refreshSearch(): Observable<ClientSearchModel[]> {
       this.currentPage         = 1
       const site               = this.siteService.getAssignedSite()
-      // const searchModel        = this.initSearchModel();
-      if (!this.searchModel) {
-        this.initSearchModel();
-      }
-      this.searchModel.name = this.itemName.value;
-      this.params.startRow     = 1;
-      this.params.endRow       = this.pageSize;
+      if (!this.searchModel)  { this.initSearchModel(); }
+      this.searchModel.name    = this.itemName.value;
       if (!this.params) {return}
       this.onGridReady(this.params)
       return this._searchItems$
@@ -318,7 +313,7 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this.itemName.value) { searchModel.name = this.itemName.value  }
       searchModel.pageSize   = this.pageSize
       searchModel.pageNumber = this.currentPage
-      this.contactService.updateSearchModel(searchModel)
+      this.contactService.updateSearchModel(searchModel);
       return searchModel
     }
 
@@ -332,73 +327,65 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
       return this.currentPage
     }
 
-  //ag-grid standard method
-  getRowData(params, startRow: number, endRow: number):  Observable<ClientSearchResults>  {
-    this.currentPage          = this.setCurrentPage(startRow, endRow)
-    const searchModel  =        this.initSearchModel();
-    const site                = this.siteService.getAssignedSite()
-    return this.contactService.getContactBySearchModel(site, searchModel)
-  }
-
-  //ag-grid standard method
-  async onGridReady(params: any) {
-    if (params)  {
-      this.params  = params
-      this.gridApi = params.api;
-      // this.gridColumnApi = params.columnApi;
-      params.api.sizeColumnsToFit();
+    //ag-grid standard method
+    getRowData(params, startRow: number, endRow: number):  Observable<ClientSearchResults>  {
+      this.currentPage          = this.setCurrentPage(startRow, endRow)
+      // console.log('search model, current page', this.currentPage)
+      const searchModel  =        this.initSearchModel();
+      const site                = this.siteService.getAssignedSite()
+      return this.contactService.getContactBySearchModel(site, searchModel)
     }
 
-    // if (!params) { return }
-    if (params == undefined) { return }
+    //ag-grid standard method
+    async onGridReady(params: any) {
+      if (params)  {
+        this.params  = params
+        this.gridApi = params.api;
+        params.api.sizeColumnsToFit();
+      }
 
-    if (!params.startRow ||  !params.endRow) {
-      params.startRow = 1
-      params.endRow = this.pageSize;
-    }
+      if (params == undefined) { return }
 
-    let datasource =  {
-      getRows: (params: IGetRowsParams) => {
-      const items$ =  this.getRowData(params, params.startRow, params.endRow)
-      items$.subscribe(data =>
-        {
-            const resp         = data.paging
-            if (resp) {
+      let datasource =  {
+        getRows: (params: IGetRowsParams) => {
+          const items$ =  this.getRowData(params, params.startRow, params.endRow)
+        items$.subscribe(data =>
+          {
+              const resp         = data.paging
+              if (!resp)         { return }
               this.isfirstpage   = resp.isFirstPage
               this.islastpage    = resp.isFirstPage
-              this.currentPage   = resp.currentPage
+              // console.log('get rows' , resp.currentPage, this.currentPage)
+              // this.currentPage   = resp.currentPage
               this.numberOfPages = resp.pageCount
               this.recordCount   = resp.recordCount
+              if (this.numberOfPages !=0 && this.numberOfPages) {
+                this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
+              }
+              if (data.results) {
+                let unique = [...new Set(data.results)];
+                unique  =  this.refreshImages(unique)
+                params.successCallback(unique)
+              }
             }
-            if (this.numberOfPages !=0 && this.numberOfPages) {
-              this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-            }
-            if (data.results) {
-              console.log('data', data)
-              let unique = [...new Set(data.results)];
-              console.log('unique', unique)
-              unique  =  this.refreshImages(unique)
-              params.successCallback(unique)
-            }
-          }
-        );
-      }
-    };
-
-    if (!datasource)   { return }
-    if (!this.gridApi) { return }
-    this.gridApi.setDatasource(datasource);
-  }
-
-  getItem(id: number) {
-    if (id) {
-      const site = this.siteService.getAssignedSite();
-      this.contactService.getContact(site, this.id).subscribe(data => {
-         this.product = data;
+          );
         }
-      )
+      };
+
+      if (!datasource)   { return }
+      if (!this.gridApi) { return }
+      this.gridApi.setDatasource(datasource);
     }
-  }
+
+    getItem(id: number) {
+      if (id) {
+        const site = this.siteService.getAssignedSite();
+        this.contactService.getContact(site, this.id).subscribe(data => {
+          this.product = data;
+          }
+        )
+      }
+    }
 
   onExportToCsv() {
     this.gridApi.exportDataAsCsv();

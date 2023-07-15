@@ -1,5 +1,5 @@
 import { Component, OnInit, Input , EventEmitter, Output, ViewChild, ElementRef, AfterViewInit, } from '@angular/core';
-import {  IProduct, ISite, ProductPrice,  } from 'src/app/_interfaces';
+import {  IProduct, ISite, PosOrderItem, ProductPrice,  } from 'src/app/_interfaces';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, of } from 'rxjs';
@@ -19,7 +19,8 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
 
   @Input() productPrice       : ProductPrice;
   @Input() product            : IProduct;
-  @Input() pb_Component: PB_Components
+  @Input() pb_Component       : PB_Components
+  @Input() posOrderItem       : PosOrderItem;
   unitType$                   : Observable<UnitType[]>;
   unitTypes                   : UnitType[]
   @Input()  index             : number;
@@ -155,6 +156,14 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
       if (this.productPrice) {
         this.productPrice.unitTypeID = item.id;
         this.productPrice.unitType = item.name;
+      }
+
+      if (this.posOrderItem) {
+        this.posOrderItem.unitType = item.id;
+        this.posOrderItem.unitName = item.name;
+        // this.posOrderItem.unitType  = item;
+        this.searchForm.patchValue( {searchField: item.name} )
+        this.itemSelect.emit(item)
       }
 
       if (this.pb_Component) {

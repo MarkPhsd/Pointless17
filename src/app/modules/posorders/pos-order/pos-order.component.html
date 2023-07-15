@@ -177,6 +177,12 @@
 </ng-template>
 
 <ng-template #listViewType>
+<!--
+  <div *ngIf="!newItemEnabled">
+    <button mat-raised-button (click)="newItemEnabled = true">Enter Item</button>
+  </div> -->
+
+  <ng-container [ngTemplateOutlet]="newItemEntryView"></ng-container>
   <pos-order-item-list
          [userAuths] ='userAuths'
   ></pos-order-item-list>
@@ -250,8 +256,7 @@
 </ng-template>
 
 <ng-template #giftCardPayButton>
-  <!-- <div *ngIf="
-  (!paymentsEqualTotal && !order.completionDate && order?.balanceRemaining != 0)"> -->
+
     <gift-card-pay-btn
       [order]="order"
       [devicename]="devicename"
@@ -261,27 +266,23 @@
       [paymentAmount]="order.balanceRemaining"
       (setStep) ="setStep(1)">
     </gift-card-pay-btn>
-  <!-- </div> -->
+
 </ng-template>
 
 <ng-template #storeCreditPaybutton>
-  <!-- <div *ngIf="
-    (!paymentsEqualTotal && !order.completionDate && order?.balanceRemaining != 0)"> -->
     <store-credit-info
-        [order]        ="order"
-        [clientID]     ="order?.clientID"
-        [accountNumber]="order?.clients_POSOrders?.accountNumber"
-        [userName]     ="order?.clients_POSOrders?.userName"
-        [showPayment]  ="true"
+        [order]         ="order"
+        [clientID]      ="order?.clientID"
+        [accountNumber] ="order?.clients_POSOrders?.accountNumber"
+        [userName]      ="order?.clients_POSOrders?.userName"
+        [showPayment]   ="false"
         [showIssueMoney]="false"
-        [showBalance] = "false">
+        [showCreditValueOnly]="true"
+        [showBalance]   = "false">
     </store-credit-info>
-  <!-- </div> -->
 </ng-template>
 
 <ng-template #wicEBTButton>
-  <!-- <div *ngIf="
-  (!paymentsEqualTotal && !order.completionDate && order?.balanceRemaining != 0)"> -->
   <wic-ebtcard-pay-btn
       [order]="order"
       [devicename]="devicename"
@@ -291,7 +292,6 @@
       [paymentAmount]="order.balanceRemaining"
       (setStep) ="setStep(1)">
   </wic-ebtcard-pay-btn>
-  <!-- </div> -->
 </ng-template>
 
 <ng-template #houseAccountButton>
@@ -452,4 +452,11 @@
   <app-csv-import [order]="order" [purchaseOrderImport]="true">
   </app-csv-import>
 
+</ng-template>
+
+<ng-template #newItemEntry>
+  <new-order-item
+    (saveUpdate)="hideNewItemEntryForm($event)"
+    [order]="order"
+  ></new-order-item>
 </ng-template>
