@@ -206,8 +206,8 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
 
     let textColumn = {headerName: 'Name',   field: 'productName',
               sortable: true,
-              width   : 225,
-              minWidth: 225,
+              width   : 205,
+              minWidth: 205,
               flex    : 2,
     }
     columnDefs.push(textColumn);
@@ -265,8 +265,37 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     columnDefs.push(currencyTotalColumn);
 
+    let itemDelete =  { headerName: '', field: "id",
+        cellRenderer: "btnCellRenderer",
+        cellRendererParams: {
+          onClick: this.deleteItem.bind(this),
+          label: 'delete',
+          getLabelFunction: 'delete',
+          btnClass: 'btn btn-primary btn-sm'
+        },
+        minWidth: 100,
+        width: 100,
+        flex: 2,
+    }
+    columnDefs.push(itemDelete);
+
     this.columnDefs = columnDefs;
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
+  }
+
+  deleteItem(e) {
+    const orderItem = e.rowData;
+    const index = this.getSelectedIndex()
+    this.orderMethodsService.removeItemFromList(index, orderItem)
+  }
+
+  getSelectedIndex() {
+    let selectedRows       = this.gridApi.getSelectedRows();
+    let selectedIndex = 0
+    selectedRows.forEach(function (selectedRow, index) {
+      selectedIndex  = index
+    } )
+    return selectedIndex;
   }
 
   autoSizeAll(skipHeader) {
@@ -434,7 +463,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       this.id = item.id;
       const history = item.history
     }
-
     // console.log('item selected', event)
   }
 

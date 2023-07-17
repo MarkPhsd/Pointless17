@@ -53,35 +53,7 @@ export class CategorySelectListFilterComponent implements OnInit {
 
   initSearchSubscription() {
     this._searchModel = this.menuService.searchModel$.subscribe( model => {
-
       if (!model) { model = this.menuService.initSearchModel()}
-
-      // if (!model.listBrandID || model.listBrandID.length == 0 )  {
-      //   this.savedList = []
-      // }
-      // if (!model.listDepartmentID || model.listDepartmentID.length == 0) {
-      //   this.savedList = []
-      // }
-      // if (!model.listCategoryID || model.listCategoryID.length == 0) {
-      //   console.log('clearing saved list', model.listCategoryID)
-      //   this.savedList = []
-      // }
-      // if (!model.listSubCategoryID || model.listSubCategoryID.length == 0) {
-      //   this.savedList = []
-      // }
-      // if (!model.listPublisherID || model.listPublisherID.length == 0) {
-      //   this.savedList = []
-      // }
-      // if (!model.listSpecies || model.listSpecies.length == 0) {
-      //   this.savedList = []
-      // }
-      // if (!model.listArtistID || model.listArtistID.length == 0) {
-      //   this.savedList = []
-      // }
-
-      // this.filterCategories(model);
-      // this.filterSubcategories(model);
-      // this.setSavedList(model)
     })
   }
 
@@ -144,17 +116,6 @@ export class CategorySelectListFilterComponent implements OnInit {
     }
     if (this._searchModel) { this._searchModel.unsubscribe()}
   }
-
-  // if ( this.type === 'species') {
-  //   list = this.searchModel.listSubCategoryID    // this.searchModel.listSubCategoryID = []
-  //  }
-  //  if ( this.type === 'size') {
-  //   list = this.searchModel.listSize    // this.searchModel.listSubCategoryID = []
-  //  }
-
-  // if ( this.type === 'color') {
-  //  list = this.searchModel.listColor    // this.searchModel.listSubCategoryID = []
-  // }
 
   initForm(model: ProductSearchModel) {
     const site = this.siteService.getAssignedSite();

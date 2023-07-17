@@ -126,7 +126,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
 
     this._searchModel = this.orderMethodsService.posSearchModel$.subscribe( data => {
 
-        console.log('search update', data)
+        // console.log('search update', data)
         this.searchModel            = data
         if (!this.searchModel) {
           const searchModel       = {} as IPOSOrderSearchModel;
@@ -140,7 +140,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
           this.searchModel.suspendedOrder = 0;
         }
 
-        console.log('search update 2', data)
+        // console.log('search update 2', data)
         this.refreshSearch()
         return
       }
@@ -349,7 +349,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
     const searchModel         = this.initSearchModel();
     const site                = this.siteService.getAssignedSite()
-    // console.log('searchModel get row data', searchModel)
+    // console.log(searchModel)
     return this.orderService.getOrderBySearchPaged(site, searchModel)
   }
 

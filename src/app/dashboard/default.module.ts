@@ -369,6 +369,7 @@ import { ChairsLayoutComponent } from '../modules/floor-plan/chairs-layout/chair
 import { PreviewFurnitureComponent } from '../modules/floor-plan/preview-furniture/preview-furniture.component';
 import { PointlessFloorPlanViewComponent } from '../modules/floor-plan/pointless-floor-plan-view/pointless-floor-plan-view.component';
 import { NewOrderItemComponent } from '../modules/posorders/pos-order/new-order-item/new-order-item.component';
+import { PartBuilderUsageListComponent } from '../modules/admin/products/part-builder/part-builder-usage-list/part-builder-usage-list.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -469,8 +470,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     LinkedPriceSelectorComponent,
     PriceCategoriesComponent,
 
-
-
     WicEBTCardPayBtnComponent,
     TriPOSCardPayBtnComponent,
     StripeCardPayBtnComponent,
@@ -491,6 +490,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     UnitTypeSelectComponent,
     ProductSelectorComponent,
     PartBuilderSelectorComponent,
+
     ServiceTypeEditComponent,
     ServiceTypeListComponent,
     StrainsAddComponent,
@@ -826,6 +826,12 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     // ColorPickerModule,
     // NumericDirective,
     // RoomLayout,
+
+    PartBuilderMainComponent,
+    PartBuilderEditComponent,
+    PartBuilderFilterComponent,
+    PartBuilderComponentEditComponent,
+
   ],
 
   providers: [

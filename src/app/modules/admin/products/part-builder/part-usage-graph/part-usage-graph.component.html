@@ -1,0 +1,15 @@
+<div *ngIf="(action$ | async) as data">
+  <div *ngIf="data.errorMessage">
+    <mat-icon color="warn">alert</mat-icon>{{data.errorMessage}}
+  </div>
+  <div *ngIf="data.results">
+    <div style="width: 100%; min-width: 1000px;"
+         *ngIf="chartOptions">
+    <highcharts-chart
+        [Highcharts]="Highcharts"
+        [options]   ="chartOptions"
+        [oneToOne]  ="true">
+    </highcharts-chart>
+  </div>
+
+</div>

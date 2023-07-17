@@ -1,0 +1,96 @@
+<div *ngIf="(product$ | async) as product"></div>
+
+<div *ngIf="(copy$ | async) as copy"></div>
+<div
+     class="grid-container"
+     *ngIf="searchForm" >
+  <div class="grid-container-selectors">
+
+    <div class="grid-item">
+      <search-debounce-input
+                            [itemNameControl] = "'itemName'"
+                            [searchForm]      = "searchForm"
+                            (outPutMethod)    = "refreshSearchPhrase($event)">
+        <div fieldDescription>
+            <mat-icon>search</mat-icon>
+            Search
+        </div>
+      </search-debounce-input>
+    </div>
+
+    <div *ngIf="(categories$ | async) as lists">
+      <!-- {{lists | json}} -->
+      <div class="grid-item">
+        <form-select-list [searchForm]      = "searchForm"
+                          [formFieldName]   = "'categoryID'"
+                          [list]            = "lists"
+                          [showActiveInactive]="true"
+                          (selectionChange) = "refreshCategoryChange($event)">
+        <div fieldSearchDescription>Category</div>
+        </form-select-list>
+      </div>
+    </div>
+
+    <div class="grid-item">
+      <button mat-button (click)="refreshGrid()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<div *ngIf="action$ | async as item; else opening"></div>
+
+<ng-template #opening>
+  <div *ngIf="openingProduct">
+    <mat-spinner [diameter]="40"></mat-spinner>
+  </div>
+</ng-template>
+<div>
+    <mat-icon color="warn">alert</mat-icon> {{errorMessage}}
+</div>
+<mat-divider></mat-divider>
+
+<div class="grid-list">
+  <div>
+
+    <div *ngIf="value" class="loader">
+      <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+    </div>
+
+    <ag-grid-angular
+          #agGrid
+          [style]              ="gridDimensions"
+          id                   ="myGrid"
+          [class]              ="agtheme"
+          [columnDefs]         ="columnDefs"
+          [defaultColDef]      ="defaultColDef"
+          [gridOptions]        ="gridOptions"
+          [rowSelection]       ="rowSelection"
+          [frameworkComponents]="frameworkComponents"
+          (selectionChanged)   ="onSelectionChanged($event)"
+          (cellValueChanged)   ='cellValueChanged($event)'
+          (cellClicked)        ='onCellClicked($event)'
+          (gridReady)          ="onGridReady($event)">
+    </ag-grid-angular>
+  </div>
+
+  <div>
+    <!-- <app-product-info-panel *ngIf="product"
+                            class="grid-list-item"
+                            [setProduct]="product"
+                            [id]="id">
+    </app-product-info-panel> -->
+  </div>
+</div>
+
+<div>
+  {{productID}}
+  <part-usage-graph [productID]="productID"></part-usage-graph>
+</div>
+
+<div style="flex-grow:0">
+  <span id="selectedRows"> </span>
+</div>

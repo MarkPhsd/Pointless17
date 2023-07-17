@@ -7,18 +7,23 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { AWSBucketService, ContactsService } from 'src/app/_services';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
-import { MenuService } from 'src/app/_services/menu/menu.service';
+import { IItemBasic, MenuService } from 'src/app/_services/menu/menu.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { ItemBasic } from 'src/app/modules/admin/report-designer/interfaces/reports';
 
-export interface IItemBasic{
-  name: string;
-  id  : number;
+// export interface IItemBasic{
+//   name: string;
+//   id  : number;
+
+// }
+
+export interface IItemBasicProduct extends IItemBasic{
+  active: boolean;
+  webEnabled: boolean;
   icon?: string;
   image?: string;
 }
-
 @Component({
   selector: 'category-menu-selector',
   templateUrl: './category-menu-selector.component.html',
@@ -38,7 +43,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
   array  : unknown[];
   list   =   [];
 
-  basicList = [] as IItemBasic[]
+  basicList = [] as IItemBasicProduct[]
   selectedItem: number;
   _searchModel: Subscription;
   searchModel : ProductSearchModel;
@@ -80,30 +85,47 @@ export class CategoryMenuSelectorComponent implements OnInit {
         this.basicList = []
         let list = new Set(dept);
         let filteredItems = this.categoryList.filter(item => list.has(item.departmentID));
-        filteredItems.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
-                                                              image: this.getItemSrc(item?.urlImageMain)} ) })
+          filteredItems.forEach(item => {
+            this.pushItem(item)
+          }
+        )
       }
     } else {
-      this.categoryList.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
-        image: this.getItemSrc(item?.urlImageMain)} ) })
+      this.categoryList.forEach(item => {
+        this.pushItem(item)
+      })
     }
   }
+
+  pushItem(item) {
+    let itemValue
+    if (this.userAuthService.isUser  && item.webEnabled && item.active) {
+      let value = item
+      itemValue = {name: item?.name, id: item?.id ,active: item.active, webEnabled: item.webEnabled,
+        image: this.getItemSrc(item?.urlImageMain)}
+    }
+    if (this.userAuthService.isStaff  && item.active) {
+      itemValue = {name: item?.name, id: item?.id ,active: item.active, webEnabled: item.webEnabled,
+          image: this.getItemSrc(item?.urlImageMain)}
+    }
+
+    if (itemValue) {
+      this.basicList.push(itemValue)
+    }
+  }
+
 
   filterSubcategories(model: ProductSearchModel) {
     const cat = model.listCategoryID
     if (cat && cat.length > 0) {
       if (this.type === 'subcategory') {
         this.basicList = []
-
         let list = new Set(cat);
-        // console.log('filter subcategory', cat, this.subCategoryList)
         let filteredItems = this.subCategoryList.filter(item => list.has(item.categoryID));
-        filteredItems.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
-                                                              image: this.getItemSrc(item?.urlImageMain)} ) })
+        filteredItems.forEach(item => {  this.pushItem(item) } )
       }
     } else {
-      this.subCategoryList.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
-        image: this.getItemSrc(item?.urlImageMain)} ) })
+      this.subCategoryList.forEach(item => {  this.pushItem(item) } )
     }
   }
 
@@ -148,7 +170,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
 
     if (this.type === 'species') {
       this.list$ = of(this.menuService.getSpeciesType()).pipe(switchMap(list => {
-          list.forEach(item => {  this.basicList.push({name: item.name, id: item.id} ) })
+          list.forEach(item => {  this.pushItem(item) })
           this.setSavedList(model)
           return of(list)
       }))
@@ -156,7 +178,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
 
     if (this.type === 'itemType') {
       this.list$ = this.itemTypeService.getItemTypesByUseType(site, 'product').pipe(switchMap(list => {
-          list.forEach(item => {  this.basicList.push({name: item.name, id: item.id} ) })
+          list.forEach(item => {  this.pushItem(item) })
           this.setSavedList(model)
           return of(list)
       }))
@@ -176,15 +198,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
       if (this.type === 'department') {
         this.list$ = department$
           .pipe(switchMap(list => {
-            if (!this.userAuthService.isStaff) {
-              list = list.filter(data => {
-                if (data.active && data.webProduct) {
-                  return data
-                }}
-              )
-            }
-            // console.log('this is the list ', list)
-            list.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id, image: this.getItemSrc(item.urlImageMain)} ) })
+            list.forEach(item => {  this.pushItem(item) })
             if (model == undefined) {   model = this.menuService.initSearchModel()   }
             this.setSavedList(model)
           return of(list)
@@ -196,8 +210,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
         this.list$ = subCategory$
         .pipe(switchMap(list => {
           this.subCategoryList  = list
-          list.forEach(item => {  this.basicList.push({name: item?.name, id: item?.id ,
-                                                      image: this.getItemSrc(item?.urlImageMain)} ) })
+          list.forEach(item => {  this.pushItem(item) })
           this.setSavedList(model)
           return of(list)
         }))
@@ -247,7 +260,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
       this.basicList = []
       list.forEach(item => {
         if (item.departmentID == this.departmentID) {
-          this.basicList.push( {name: item?.name, id: item?.id, image: this.getItemSrc(item.urlImageMain)})
+          this.pushItem(item)
         }
       })
     }
@@ -258,7 +271,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
     if (item.company) {   value = value.concat(item.company + ' ') }
     const name =  value
     if (name && name.trim() != '') {
-      return  {name: name, id: item.id} as ItemBasic
+      return  {name: name, id: item.id } as IItemBasicProduct;
     }
     return null
   }
@@ -375,7 +388,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
       list = model.listBrandID
     }
      const typeList = this.basicList;
-    let newList : IItemBasic[] = [];
+    let newList : IItemBasicProduct[] = [];
 
     if (!list) {return}
 
@@ -383,7 +396,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
       if (typeList) {
         const  item  = typeList.find( info => data == info.id)
         if (item) {
-          newList.push({name: item.name, id: item.id, image: item.image })
+          newList.push({name: item.name, id: item.id, image: item.image, active: item.active, webEnabled: item.webEnabled })
         }
       }
     });

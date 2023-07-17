@@ -1175,7 +1175,7 @@ export class OrderMethodsService implements OnDestroy {
   //   this.notifyEvent(`Error submitting Order # ${catchError}`, "Posted")
   // }
 
-  newOrderFromTable(site: ISite, serviceType: IServiceType, uuID: string, floorPlanID: number, name: string): Observable<IPOSOrder> {
+  newOrderFromTable(site: ISite, serviceType: IServiceType, uuID: string, floorPlanID: number, name: string, orderName?: string): Observable<IPOSOrder> {
     if (!site) { return }
     let orderPayload = this.getPayLoadDefaults(serviceType)
     if (!orderPayload.order) {
@@ -1183,8 +1183,13 @@ export class OrderMethodsService implements OnDestroy {
     }
     orderPayload.order.tableUUID = uuID;
     orderPayload.order.floorPlanID = floorPlanID;
-    orderPayload.order.customerName = name;
+    // orderPayload.order.customerName = name;
+    if (orderName) {
+      orderPayload.order.customerName = orderName;
+    }
     orderPayload.order.tableName = name;
+
+    // if ()
     return  this.orderService.postOrderWithPayload(site, orderPayload)
   }
 
@@ -1755,7 +1760,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   removeItemFromList(index: number, orderItem: PosOrderItem) {
-    console.log('removeItemFromList')
+    // console.log('removeItemFromList')
     if (orderItem) {
       const site = this.siteService.getAssignedSite()
       if (orderItem.printed || this.order.completionDate ) {
@@ -1773,6 +1778,8 @@ export class OrderMethodsService implements OnDestroy {
           }
         })
       }
+
+      this.updateLastItemAdded(null)
     }
   }
 

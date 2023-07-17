@@ -112,6 +112,7 @@ export class NewOrderItemComponent implements OnInit {
 
         this.menuItemSelected = data;
         this.inputForm.patchValue(this.posOrderItem);
+
         return of(data)
       }))
     }
@@ -158,9 +159,12 @@ export class NewOrderItemComponent implements OnInit {
   addItem() {
     if (this.inputForm) {
       this.posOrderItem = this.inputForm.value
-      this.setThisItem(this.posOrderItem);
-      this.inputForm = null
-
+      this.action$  =  this.setThisItem(this.posOrderItem).pipe(switchMap(data => {
+        console.log('assing product initi search')
+        this.clearProduct();
+        this.clearUnit()
+        return of(data)
+      }))
     }
   }
 
@@ -177,8 +181,9 @@ export class NewOrderItemComponent implements OnInit {
     newItem.deviceName = localStorage.getItem('devicename');
     newItem.clientID = this.order?.clientID;
 
-    this.action$  = this.orderItemService.addItemToOrderWithBarcode(site, newItem).pipe(switchMap(data => {
-      // console.log('order update, data', data)
+    return this.orderItemService.addItemToOrderWithBarcode(site, newItem).pipe(
+      switchMap(data => {
+        // console.log('order update, data', data)
       const result = data
       if (!data.resultErrorDescription) {
         if (data.order) {
@@ -209,9 +214,19 @@ export class NewOrderItemComponent implements OnInit {
 
   initProductSearchForm(item: PosOrderItem) {
     if (!item) {
-      this.clearUnit()
-      return
+      this.clearUnit();
+      return;
     }
+
+    // if (!item) {
+    //   this.posOrderItem = {} as PosOrderItem;
+    //   this.inputForm.patchValue({ productID: 0})
+    //   this.productSearchForm = this.fb.group({
+    //     searchField: ['']
+    //   })
+    //   return;
+    // }
+
     this.inputForm.patchValue({ productID: item?.productID})
     this.productSearchForm = this.fb.group({
       searchField: [item?.productName]

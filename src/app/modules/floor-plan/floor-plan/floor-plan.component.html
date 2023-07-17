@@ -1,7 +1,7 @@
 <div *ngIf="(floorPlanRefresh$ | async) as floorPlanRefresh"></div>
 <div *ngIf="(backupRestore$ | async)"></div>
 
-<div class="panel">
+<div class="panel" *ngIf="(uiTransaction$ | async) as uiTransaction">
 
   <ng-container [ngTemplateOutlet]="adminViewToolbar"></ng-container>
   <ng-template #adminViewToolbar>
@@ -18,7 +18,6 @@
     <button class="button" *ngIf="!userMode && isAdmin" mat-raised-button (click)="clearPlan()">Clear</button>
   </ng-template>
 
-  <!-- list floor plans -->
   <ng-container [ngTemplateOutlet]="floorPlanList"></ng-container>
   <button class="button"  mat-raised-button (click)="refreshPlans()"><mat-icon>refresh</mat-icon></button>
 

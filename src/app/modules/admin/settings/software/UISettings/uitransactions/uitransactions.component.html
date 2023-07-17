@@ -116,13 +116,24 @@
         </mat-slide-toggle>
       </div>
 
-      <mat-label>Side Order Bar Option</mat-label>
+      <mat-label>Appy Table as Order Name</mat-label>
       <div class="toggle-fields">
+        <mat-icon class="mat-label-info"
+              color="accent"
+              [matTooltip]="labelingService.transactionInfo[2].value">info</mat-icon>
         <mat-slide-toggle
-                  formControlName="showCustomerOption">
-          <mat-label>Show Customer Option</mat-label>
+                  formControlName="applyTableNameToOrderName">
+          <mat-label>Apply Table Name to Order Name</mat-label>
         </mat-slide-toggle>
       </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="scanIncreaseQuantity">
+          <mat-label>Increase Items Quantity on Duplicate Scan</mat-label>
+        </mat-slide-toggle>
+      </div>
+
 
       <mat-label>Show Split Entry List - Allows users to enter the split group as they enter items into the order.</mat-label>
       <div class="toggle-fields">
@@ -260,9 +271,7 @@
       <h4>Default Selections</h4>
 
       <div style="width:300px;">
-        <mat-icon class="mat-label-info"
-             color="accent"
-             [matTooltip]="labelingService.transactionInfo[1].value">info</mat-icon>
+
           <app-value-fields
                 [inputForm]="inputForm"
                 [fieldName]="'expoPrinter'" >

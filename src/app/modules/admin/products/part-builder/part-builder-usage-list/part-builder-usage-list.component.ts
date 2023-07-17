@@ -1,49 +1,31 @@
-import { Component,   Input, Output, OnInit,
-  EventEmitter,
-  HostListener,
-  OnDestroy} from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
+import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AWSBucketService, ContactsService, MenuService } from 'src/app/_services';
-import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IItemBasicB, IProductSearchResultsPaged } from 'src/app/_services/menu/menu.service';
+import { Capacitor } from '@capacitor/core';
+import { GridApi, IGetRowsParams } from 'ag-grid-community';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
+import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
+import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
+import { IUserProfile, IProduct, ClientSearchModel } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
+import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
+import { IItemBasicB, MenuService, ContactsService, AWSBucketService, IProductSearchResultsPaged } from 'src/app/_services';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-
-import { Observable, of, switchMap } from 'rxjs';
-import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-import { IGetRowsParams, GridApi } from 'ag-grid-community';
-import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
-import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
-
-import { ClientSearchModel, IProduct, IUserProfile } from 'src/app/_interfaces';
-
-import { Capacitor,  } from '@capacitor/core';
-import { Subscription } from 'rxjs';
 import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
-import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
-import { EditSelectedItemsComponent } from '../productedit/edit-selected-items/edit-selected-items.component';
-import { MatDialog } from '@angular/material/dialog';
-
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AgGridService } from 'src/app/_services/system/ag-grid-service';
+import { ButtonRendererComponent } from '../../../report-designer/widgets/button-renderer/button-renderer.component';
+import { EditSelectedItemsComponent } from '../../productedit/edit-selected-items/edit-selected-items.component';
 
 @Component({
-  selector: 'app-productlistview',
-  templateUrl: './productlistview.component.html',
-  styleUrls: ['./productlistview.component.scss'],
-  // animations:  [ fadeInAnimation ],
+  selector: 'app-part-builder-usage-list',
+  templateUrl: './part-builder-usage-list.component.html',
+  styleUrls: ['./part-builder-usage-list.component.scss']
 })
-export class ProductlistviewComponent  implements OnInit, OnDestroy  {
-
-//for list selecting.
-@Input() hideAdd         : boolean;
-@Input() hideEditSelected: boolean;
-@Input() editOff         : boolean;
-buttonName: string;
-gridlist = "grid-list"
-
+export class PartBuilderUsageListComponent implements OnInit {
 //needed for search component
 searchForm:    UntypedFormGroup;
 get itemName() {
@@ -56,7 +38,7 @@ get platForm()         {  return Capacitor.getPlatform(); }
 get PaginationPageSize(): number {return this.pageSize;  }
 get gridAPI(): GridApi {  return this.gridApi;  }
 copy$: Observable<any>;
-
+productID = 0;
 //AgGrid
 params               : any;
 private gridApi      : GridApi;
@@ -78,7 +60,7 @@ endRow                  = 0;
 recordCount             = 0;
 isfirstpage             : boolean;
 islastpage              : boolean;
-
+errorMessage: string;
 //This is for the filter Section//
 brands           : IUserProfile[];
 categories$      : Observable<IMenuItem[]>;
@@ -107,7 +89,7 @@ typeID           : number;
 brandID          : number;
 active           : boolean;
 viewAll           = 1;
-
+graphVisible    : boolean;
 selected        : any[];
 selectedRows    : any;
 agtheme         = 'ag-theme-material';
@@ -132,18 +114,15 @@ departmentsList: IMenuItem[];
 _promptSubGroup : Subscription;
 promptSubGroup  : PromptSubGroups;
 
-initSubscriptions() {
-  this._promptSubGroup = this.promptSubGroupService.promptSubGroup$.subscribe(data => {
-     this.promptSubGroup = data;
-  })
- }
+buttonName: string;
+editOff: boolean;
+gridlist: string;
+
 
 constructor(  private _snackBar              : MatSnackBar,
-              private promptSubGroupService  : PromptSubGroupsService,
               private menuService            : MenuService,
               private itemTypeService        : ItemTypeService,
               private contactsService        :  ContactsService,
-              private agGridService          : AgGridService,
               private fb                     : UntypedFormBuilder,
               private siteService            : SitesService,
               private productEditButtonService: ProductEditButtonService,
@@ -167,10 +146,10 @@ constructor(  private _snackBar              : MatSnackBar,
     this.urlPath        = await this.awsService.awsBucketURL();
     const site          = this.siteService.getAssignedSite()
 
-    this.refreshSubCategories()
+    // this.refreshSubCategories()
     this.refreshDepartments()
     this.refreshCategories()
-    this.productTypes$  = this.itemTypeService.getBasicTypes(site)
+    this.productTypes$       = this.itemTypeService.getBasicTypes(site)
     const brandResults$       = this.contactsService.getBrands(site, clientSearchModel)
 
     brandResults$.subscribe(data => {
@@ -179,7 +158,6 @@ constructor(  private _snackBar              : MatSnackBar,
 
     if (this.editOff) {
       this.buttonName = 'Assign'
-      this.initSubscriptions();
       this.gridlist = "grid-list-nopanel"
     }
     if (!this.editOff) {
@@ -189,23 +167,23 @@ constructor(  private _snackBar              : MatSnackBar,
     this.formSubscriber();
   };
 
-  refreshSubCategories() {
-    const site          = this.siteService.getAssignedSite()
-    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(
-      switchMap(data => {
-        if (this.categoryID != 0  && this.categoryID != undefined) {
-          this.categoriesList = data.filter(data => {return data.categoryID == this.categoryID});
-          return of(data)
-        }
-        this.subCategoriesList = data;
-        return of(data)
-      })
-    )
-  }
+  // refreshSubCategories() {
+  //   const site          = this.siteService.getAssignedSite()
+  //   this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(
+  //     switchMap(data => {
+  //       if (this.categoryID != 0  && this.categoryID != undefined) {
+  //         this.categoriesList = data.filter(data => {return data.categoryID == this.categoryID});
+  //         return of(data)
+  //       }
+  //       this.subCategoriesList = data;
+  //       return of(data)
+  //     })
+  //   )
+  // }
 
   refreshCategories() {
     const site          = this.siteService.getAssignedSite()
-    this.categories$    = this.menuService.getListOfCategoriesAll(site).pipe(
+    this.categories$    = this.menuService.getRecipeCategories(site).pipe(
       switchMap(data => {
 
         if (this.departmentID == undefined)  {
@@ -233,6 +211,7 @@ constructor(  private _snackBar              : MatSnackBar,
       })
     )
   }
+
   setBrandID(event) {
     if (event && event.id) {
       this.brandID = event.id
@@ -241,7 +220,7 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   ngOnDestroy(): void {
-    if(this._promptSubGroup){this._promptSubGroup.unsubscribe()}
+
   }
 
   @HostListener("window:resize", [])
@@ -285,10 +264,19 @@ constructor(  private _snackBar              : MatSnackBar,
 
   initClasses()  {
     const platForm      = this.platForm;
-    this.gridDimensions =  'width: 100%; height: 90%;'
+    this.setGridDimensions()
     this.agtheme  = 'ag-theme-material';
     if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
     if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
+  }
+
+  setGridDimensions()  {
+    if (this.graphVisible) {
+      this.gridDimensions =  'width: 100%; height: calc( 95vh - 450px );'
+      return
+    }
+
+    this.gridDimensions =  'width: 100%; height: calc( 95vh - 150px );'
   }
 
   listAll(){
@@ -318,12 +306,12 @@ constructor(  private _snackBar              : MatSnackBar,
   formSubscriber() {
     this.searchForm.controls['minQuantityFilter'].valueChanges.subscribe(value => {
       this.minQuantityFilterValue = value;
-      console.log(value)
+      // console.log(value)
       this.refreshSearch(1)
     });
 
     this.searchForm.valueChanges.subscribe(data => {
-      console.log(data)
+      // console.log(data)
     })
   }
 
@@ -333,41 +321,8 @@ constructor(  private _snackBar              : MatSnackBar,
     this.refreshSearch(1);
   }
 
-
   getLabelCopy() {
     return 'copy'
-  }
-
-  deleteItem(e) {
-    if (e.rowData.id)  {
-      const site = this.siteService.getAssignedSite()
-      const warn = window.confirm('Hey are you sure you want to delete this item?');
-      if (!warn) { return }
-      this.copy$ =  this.menuService.deleteProduct(site, e.rowData.id).pipe(switchMap(data => {
-        this.refreshGrid()
-        return of(data)
-      }))
-    }
-  }
-
-  copyFromGrid(e) {
-    if (e.rowData.id)  {
-      this.copyItem(e.rowData);
-    }
-  }
-
-  copyItem(item: IProduct) {
-    this.product = item;
-    const site = this.siteService.getAssignedSite()
-    this.copy$ = this.menuService.getProduct(site, this.product.id).pipe(switchMap(data => {
-      data.name = this.product?.name + ' Copy '
-      data.barcode = '';
-      return this.menuService.postProduct(site, data)
-    })).pipe(switchMap(data => {
-        this.refreshGrid()
-        return of (data)
-      }
-    ))
   }
 
   //ag-grid
@@ -394,31 +349,24 @@ constructor(  private _snackBar              : MatSnackBar,
                       getLabelFunction: this.getLabel.bind(this),
                       btnClass: 'btn btn-primary btn-sm'
                     },
-                    minWidth: 125,
-                    maxWidth: 125,
+                    minWidth: 155,
+                    width: 155,
+                    maxWidth: 255,
                     flex: 2,
       },
       {headerName: 'Name',     field: 'name',         sortable: true,
                   width   : 175,
                   minWidth: 175,
                   maxWidth: 275,
-                  editable: true,
+                  editable: false,
                   singleClickEdit: true,
                   flex    : 1,
-      },
-      {headerName: 'Barcode',  field: 'barcode',      sortable: true,
-                  width: 75,
-                  minWidth: 125,
-                  maxWidth: 150,
-                  editable: true,
-                  singleClickEdit: true,
-                  // flex: 1,
       },
       {headerName: 'Count',    field: 'productCount', sortable: true,
                   width: 90,
                   minWidth: 90,
                   maxWidth: 90,
-                  editable: true,
+                  editable: false,
                   singleClickEdit: true,
                   // flex: 2,
       },
@@ -440,81 +388,7 @@ constructor(  private _snackBar              : MatSnackBar,
             maxWidth: 200,
           // flex: 2,
       },
-      {headerName: 'Type', field: 'type', sortable: true,
-                  width: 100,
-                  minWidth: 100,
-                  maxWidth: 125,
-                  // flex: 2,
-                  },
-      {headerName: 'Retail',   field: 'retail',       sortable: true,
-                  cellRenderer: this.agGridService.currencyCellRendererUSD,
-                  width: 100,
-                  minWidth: 100,
-                  maxWidth: 125,
-                  editable: true,
-                  singleClickEdit: true,
-                  // flex: 2,
-                  },
-      { headerName: 'Image',
-                  field: 'imageName',
-                  width: 75,
-                  minWidth: 75,
-                  maxWidth: 75,
-                  sortable: false,
-                  autoHeight: true,
-                  cellRenderer: AgGridImageFormatterComponent
-                  },
 
-      { headerName: '', field: "id",
-                  cellRenderer: "btnCellRenderer",
-                  cellRendererParams: {
-                    onClick: this.copyFromGrid.bind(this),
-                    label: 'copy',
-                    getLabelFunction: this.getLabelCopy.bind(this),
-                    btnClass: 'btn btn-primary btn-sm'
-                  },
-                  minWidth: 65,
-                  width: 65
-      },
-
-      {
-                  headerName: "Active",
-                  width:    100,
-                  minWidth: 100,
-                  maxWidth: 100,
-                  flex: 1,
-                  field: "active",
-                  // editable: true,
-                  //   singleClickEdit: true,
-                  // cellRendererParams: {
-                   //   // btnClass: 'btn btn-primary btn-sm'
-                  cellRenderer: function(params) {
-                      var input = document.createElement('input');
-                      input.type="checkbox";
-                      input.checked = params.value;
-                      input.disabled = false;
-                      input.addEventListener('click', function (event) {
-                        // params.value = !params.value;
-                        // params.node.data.fieldName = params.value;
-                        // input.checked = !params.value;
-                      });
-                      // input.checked = !input.checked;
-                      return input;
-                  }
-                // },
-
-      },
-      { headerName: '', field: "id",
-        cellRenderer: "btnCellRenderer",
-        cellRendererParams: {
-          onClick: this.deleteItem.bind(this),
-          label: 'delete',
-              getLabelFunction: this.getLabelCopy.bind(this),
-              btnClass: 'btn btn-primary btn-sm'
-            },
-            minWidth: 65,
-            width: 65
-    },
     ]
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
@@ -522,6 +396,7 @@ constructor(  private _snackBar              : MatSnackBar,
   reverseValue(event) {
     return !event.value
   }
+
   onCellClicked(event) {
     // console.log('event' , event)
     const colName = event?.column?.colId.toString() as string;
@@ -544,25 +419,7 @@ constructor(  private _snackBar              : MatSnackBar,
   cellValueChanged(event) {
     console.log('event',event?.value)
     const colName = event?.column?.colId.toString() as string;
-
     const item = event.data as IProduct
-
-    // if (colName === 'retail') {
-    //   item.retail = event.value;
-    // }
-    // if (colName === 'count') {
-    //   item.productCount = event.value;
-    // }
-    // if (colName === 'barcode') {
-    //   item.barcode = event.value;
-    // }f
-    // if (colName === 'name') {
-    //   item.name = event.value;
-    // }
-    // if (colName === 'active') {
-    //   item.active = event.value;
-    // }
-
     this.action$ = this.updateValues(event.data?.id , event.value, colName)
   }
 
@@ -601,14 +458,14 @@ constructor(  private _snackBar              : MatSnackBar,
   refreshCategoryChange(event) {
     this.categoryID = event;
     this.refreshSearch(1);
-    this.refreshSubCategories();
+    // this.refreshSubCategories();
   }
 
   refreshDepartmentChange(event) {
     this.departmentID = event;
     this.refreshSearch(1);
     this.refreshCategories();
-    this.refreshSubCategories()
+    // this.refreshSubCategories()
   }
 
   refreshProductTypeChange(event) {
@@ -638,7 +495,7 @@ constructor(  private _snackBar              : MatSnackBar,
   refreshGrid() {
     this.refreshDepartments()
     this.refreshCategories();
-    this.refreshSubCategories()
+    // this.refreshSubCategories()
     this.onGridReady(this.params)
   }
 
@@ -657,7 +514,10 @@ constructor(  private _snackBar              : MatSnackBar,
     this.currentPage          = this.setCurrentPage(startRow, endRow)
     const productSearchModel  = this.initSearchModel();
     const site                = this.siteService.getAssignedSite()
-    return this.menuService.getProductsBySearchForListsPaging(site, productSearchModel)
+    if (this.categoryID) {
+      return this.menuService.getRecipeUsageListFiltered(site, productSearchModel)
+    }
+    return this.menuService.getRecipeUsageList(site, productSearchModel)
   }
 
   //ag-grid standard method
@@ -679,7 +539,7 @@ constructor(  private _snackBar              : MatSnackBar,
             if (!resp)         {return}
             this.isfirstpage   = resp.isFirstPage
             this.islastpage    = resp.isFirstPage
-            console.log('get rows' , resp.currentPage, this.currentPage)
+            this.errorMessage  = data.errorMessage
             this.currentPage   = resp.currentPage
             this.numberOfPages = resp.pageCount
             this.recordCount   = resp.recordCount
@@ -718,29 +578,20 @@ constructor(  private _snackBar              : MatSnackBar,
   //mutli select method for selection change.
   onSelectionChanged(event) {
 
+    console.log('event')
     let selectedRows       = this.gridApi.getSelectedRows();
     let selectedRowsString = '';
     let maxToShow          = this.pageSize;
     let selected           = []
 
-    if (selectedRows.length == 0) { return }
-    selectedRows.forEach(function (selectedRow, index) {
-    if (index >= maxToShow) { return; }
-    if (index > 0) {  selectedRowsString += ', ';  }
-      selected.push(selectedRow.id)
-      selectedRowsString += selectedRow.name;
-    });
 
-    if (selectedRows.length > maxToShow) {
-    let othersCount = selectedRows.length - maxToShow;
-    selectedRowsString +=
-      ' and ' + othersCount + ' other' + (othersCount !== 1 ? 's' : '');
+    console.log(this.productID, selectedRows[0].id)
+    if (selectedRows[0].id) {
+      this.productID = selectedRows[0].id;
     }
+    console.log(this.productID)
 
-    this.selected = selected
-    this.id = selectedRows[0].id;
 
-    this.getItem(this.id)
 
   }
 
@@ -872,4 +723,5 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
 }
+
 

@@ -6,8 +6,6 @@
 <ng-template #editForm>
   <mat-card *ngIf="inputForm">
     <div [formGroup]="inputForm">
-
-
       <mat-card>
         <mat-card-content>
 
@@ -17,7 +15,7 @@
             <ng-template #productSelector>
               <div class="grid-units">
 
-                <div   *ngIf="posOrderItem" style="width:100px">
+                <div   *ngIf="posOrderItem" style="width:125px;margin-left:15px">
                   <product-selector
                     [inputForm]     = 'inputForm'
                     [posOrderItem]  = 'posOrderItem'
@@ -29,11 +27,14 @@
                   </product-selector>
                 </div>
 
-                <div style="margin-left:45px">
-                  <button mat-button (click)="clearUnit()">
-                    <mat-icon color="warn">delete</mat-icon>
-                  </button>
-                </div>
+              </div>
+            </ng-template>
+            <ng-container [ngTemplateOutlet]="deleteButton"></ng-container>
+            <ng-template #deleteButton>
+              <div style="margin-left:45px">
+                <button mat-button (click)="clearUnit()">
+                  <mat-icon color="warn">delete</mat-icon>
+                </button>
               </div>
             </ng-template>
           </div>
@@ -89,10 +90,12 @@
   </mat-card>
 </ng-template>
 <ng-template #addButtonView>
-  <button color="primary"
-      style="height:50px"
-      mat-raised-button
-      (click)="addItem()">
-    <mat-icon>add</mat-icon>Add
+  <div style="margin-left:15px">
+    <button color="primary"
+        style="height:50px"
+        mat-raised-button
+        (click)="addItem()">
+      <mat-icon>add</mat-icon>Add
     </button>
+  </div>
 </ng-template>

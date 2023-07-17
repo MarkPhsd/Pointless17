@@ -53,7 +53,9 @@ export class UITransactionsComponent implements OnInit {
   ) {
   }
 
+
   ngOnInit() {
+
     const site           = this.sitesService.getAssignedSite();
     this.clientTypes$    = this.clientTypeService.getClientTypes(site);
     this.serviceType$    = this.serviceTypeService.getAllServiceTypes(site)

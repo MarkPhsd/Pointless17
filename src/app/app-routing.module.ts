@@ -137,6 +137,7 @@ import { DesignerEditorComponent } from './modules/admin/report-designer/designe
 import { ProductFilterComponent } from './shared/widgets/product-filter/product-filter.component';
 import { PartBuilderMainComponent } from './modules/admin/products/part-builder/part-builder-main/part-builder-main.component';
 import { PartBuilderEditComponent } from './modules/admin/products/part-builder/part-builder-edit/part-builder-edit.component';
+import { PartBuilderUsageListComponent } from './modules/admin/products/part-builder/part-builder-usage-list/part-builder-usage-list.component';
 
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
@@ -161,7 +162,8 @@ const routes: Routes = [
 
         { path: 'part-builder-list',  component: PartBuilderMainComponent, data: { title: 'Part Builder', animation: 'isLeft'} },
         { path: 'part-builder-edit',  component: PartBuilderEditComponent, data: { title: 'Part Builder', animation: 'isLeft'} },
-        
+        { path: 'part-usage-list',  component: PartBuilderUsageListComponent, data: { title: 'Part Builder', animation: 'isLeft'} },
+
         { path: '', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
         { path: 'filter',  component: ProductFilterComponent, data: { title: 'Filter', animation: 'isLeft'} },
 

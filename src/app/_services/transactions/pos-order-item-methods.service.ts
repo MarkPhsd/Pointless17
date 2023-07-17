@@ -38,8 +38,8 @@ export class PosOrderItemMethodsService {
               if (data.resultMessage) {
                 this.siteService.notify(data.resultMessage, 'Alert', 1500)
               }
+              this.orderMethodsService.updateOrderSubscription(data)
             }
-        
             return of(data)
           }))
         }

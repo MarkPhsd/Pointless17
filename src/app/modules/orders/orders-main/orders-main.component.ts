@@ -131,7 +131,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this.searchModel.suspendedOrder = 1;
     this.searchModel.clientID = id;
     this.searchModel.closedOpenAllOrders = 0;
-    console.log('update search', this.searchModel)
+    // console.log('update search', this.searchModel)
     this.orderMethodsService.updateOrderSearchModelDirect(this.searchModel)
   }
 

@@ -12,6 +12,9 @@
     <div class="margin">
       <button mat-button (click)="onExportToCsv()"><mat-icon>download</mat-icon>CSV</button>
     </div>
+    <div class="margin">
+      <button mat-button (click)="navUsage()"><mat-icon>list</mat-icon>Usage</button>
+    </div>
   </div>
 
   <div>
@@ -39,8 +42,10 @@
     </div>
 
     <div class="filter-panel">
+
       <part-builder-filter
           (outputRefreshSearch)="refreshSearchAny($event)">
       </part-builder-filter>
     </div>
+
 </div>

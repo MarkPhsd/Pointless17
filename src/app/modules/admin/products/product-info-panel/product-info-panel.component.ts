@@ -1,10 +1,8 @@
 import { Component,  Input,  OnInit } from '@angular/core';
-import { MatDialog} from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProduct, ISetting } from 'src/app/_interfaces';
-import { SettingsService } from 'src/app/_services/system/settings.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ElectronService } from 'ngx-electron';
 import { RenderingService } from 'src/app/_services/system/rendering.service';

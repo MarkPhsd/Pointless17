@@ -373,6 +373,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   orderSearch(searchPhrase) {
     if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel }
     this.searchModel.orderID = parseInt( searchPhrase)
+    this.searchModel.description = searchPhrase
+
     this.updateOrderSearch(this.searchModel)
   }
 

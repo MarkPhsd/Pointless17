@@ -222,6 +222,8 @@ import { EmployeeClockListComponent } from '../modules/admin/employeeClockAdmin/
 import { EmployeeClockEditComponent } from '../modules/admin/employeeClockAdmin/employee-clock-edit/employee-clock-edit.component';
 import { EmployeeClockFilterComponent } from '../modules/admin/employeeClockAdmin/employee-clock-filter/employee-clock-filter.component';
 import { ZoomComponent } from './widgets/zoom/zoom.component';
+import { PartBuilderUsageListComponent } from '../modules/admin/products/part-builder/part-builder-usage-list/part-builder-usage-list.component';
+import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/part-usage-graph/part-usage-graph.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -348,6 +350,9 @@ import { ZoomComponent } from './widgets/zoom/zoom.component';
     PaymentReportCardComponent,
     PaymentReportDataComponent,
     PieComponent,
+
+    PartBuilderUsageListComponent,
+
     PosOrderItemComponent,
     PosOrderItemsComponent,
     PosCheckOutButtonsComponent,
@@ -368,7 +373,7 @@ import { ZoomComponent } from './widgets/zoom/zoom.component';
     ProfileMedInfoComponent,
     ProgressBarComponent,
     PriceCategorySearchComponent,
-
+    PartUsageGraphComponent,
     //ProductFilterComponent
     ProductFilterComponent,
     CategorySelectListFilterComponent,
@@ -583,7 +588,7 @@ import { ZoomComponent } from './widgets/zoom/zoom.component';
     UserBarComponent,
     MetrcSummaryComponent,
     AverageHourlySalesLaborChartComponent,
-
+    PartBuilderUsageListComponent,
     M22ResizableComponent,
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,
@@ -613,6 +618,7 @@ import { ZoomComponent } from './widgets/zoom/zoom.component';
     CategoryMenuSelectorComponent,
     //*** */
 
+    PartUsageGraphComponent,
 
     ProfileMedInfoComponent,
     PaymentReportComponent,

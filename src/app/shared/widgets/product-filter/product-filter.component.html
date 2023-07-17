@@ -24,22 +24,22 @@
           </button>
         </div>
       </div>
-      
+
       <ng-container [ngTemplateOutlet]="accordionMenuView"> </ng-container>
 
       <ng-template #accordionMenu>
-        
+
         <category-menu-selector
           [_reset]="_reset"
           [bucketName]="bucketName"
           [inputForm]="inputForm"
           [type]="'department'">
           <div header>
-            <h3>Departments</h3>
+            <h3 style="align-items:center;justify-content:center">Locator</h3>
           </div>
         </category-menu-selector>
       </ng-template>
-      
+
       <div class="flex-row" *ngIf="( uiSetting && uiSetting.brandFilter )">
         <button mat-button
             color="primary"
@@ -173,14 +173,14 @@
         </category-select-list-filter>
       </ng-template>
     </div>
-    
+
     <ng-container [ngTemplateOutlet]="limitsView"></ng-container>
   </div>
 
   <div>
     <mat-divider [vertical]="true"></mat-divider>
   </div>
- 
+
 </ng-template>
 
 <ng-template #limitsView>

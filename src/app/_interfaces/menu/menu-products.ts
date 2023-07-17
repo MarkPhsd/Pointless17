@@ -99,6 +99,7 @@ export interface IMenuItem {
   promptGroupID           : number;
   abv                     : string;
   active:                   boolean;
+  webEnabled: boolean;
   thcContent              : number;
   glutenFree              : boolean;
   itemType:                 ItemType;

@@ -37,6 +37,7 @@ export interface IDepartmentList {
   slug                :   string;
   active              : boolean;
   webProduct          : boolean;
+  webEnabled: boolean;
 }
 export interface Category {
   menuItem:               any[];
@@ -68,9 +69,25 @@ export interface IProductSearchResults {
    department: string;
    subCategory: string;
 }
+
+export interface IComponentUsageResults {
+  results: IComponentUsage[];
+  errorMessage: string;
+}
+export interface IComponentUsage {
+  total: any;
+  cost: any;
+  productID: number;
+  name: string;
+  month: number;
+  year: number;
+  totalComponentQuantity : number
+}
+
 export interface IProductSearchResultsPaged {
   results: IProductSearchResults[]
   paging: IPagedList
+  errorMessage: string;
 }
 export interface IMenuItemsResultsPaged {
   results: IMenuItem[]
@@ -294,6 +311,20 @@ export class MenuService {
 
   }
 
+  getComponentUsageByMonth(site, startDate, endDate, productID): Observable<IComponentUsageResults> {
+
+    const controller = "/MenuItems/"
+
+    const endPoint = "GetComponentUsageByMonth"
+
+    const parameters = `?startDate=${startDate}&endDate=${endDate}&productID=${productID}`
+
+    const uri = `${site.url}${controller}${endPoint}${parameters}`
+
+    // const url = { url: uri, cacheMins: 0}
+
+    return  this.httpClient.get<IComponentUsageResults>(uri)
+  }
 
   getProductList(site: ISite): Observable<IMenuItem[]> {
 
@@ -708,6 +739,48 @@ export class MenuService {
     // console.log(url)
 
     return this.httpClient.post<IProductSearchResultsPaged>(url, productSearchModel)
+
+  }
+
+  getRecipeUsageListFiltered(site: ISite, productSearchModel: ProductSearchModel): Observable<IProductSearchResultsPaged> {
+
+    const controller =  "/MenuItems/"
+
+    const endPoint = "getRecipeUsageListFiltered"
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.post<any>(url, productSearchModel)
+
+  }
+
+  getRecipeUsageList(site: ISite, productSearchModel: ProductSearchModel): Observable<IProductSearchResultsPaged> {
+
+    const controller =  "/MenuItems/"
+
+    const endPoint = "GetRecipeUsageList"
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.post<any>(url, productSearchModel)
+
+  }
+
+  getRecipeCategories(site: ISite): Observable<IMenuItem[]> {
+
+    const controller =  "/MenuItems/"
+
+    const endPoint = "GetRecipeCategories"
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.get<any>(url)
 
   }
 

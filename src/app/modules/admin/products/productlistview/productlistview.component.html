@@ -143,6 +143,7 @@
 </div>
 
 <div *ngIf="action$ | async as item; else opening"></div>
+
 <ng-template #opening>
   <div *ngIf="openingProduct">
     <mat-spinner [diameter]="40"></mat-spinner>

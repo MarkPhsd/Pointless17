@@ -572,18 +572,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     let payload = {} as payload
     payload.index = index;
     payload.item  = orderItem;
-
-    // if (orderItem.printed) {
-    //   let dialogRef = this.checkAuthDialog(this.order, 'voidItem')
-    //   dialogRef.afterClosed().subscribe(data => {
-    //     if (data) {
-    //     }
-    //     }
-    //   )
-    //   return;
-    // }
     this.outputDelete.emit(payload)
-    this.orderMethodsService.updateLastItemAdded(null)
+
   }
 
   async addItemToOrder() {

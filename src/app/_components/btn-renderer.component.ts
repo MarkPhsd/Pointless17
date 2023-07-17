@@ -42,16 +42,28 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     this.getLabelFunction = this.params.getLabelFunction;
     this.getIconFunction = this.params.getIconFunction;
 
-    if(this.getIconFunction && this.getIconFunction instanceof Function)
-    {
-      this.icon = this.getIconFunction(params.data);
+    // console.log(this.label, this.getLabelFunction)
+
+    if (this.label === 'null') {
+      this.icon = ''
+      return
+    }
+    if (this.label?.toLowerCase() === 'delete' || this.getLabelFunction == 'delete') {
+      this.icon = 'delete'
+      return
     }
 
-    if(this.getLabelFunction && this.getLabelFunction instanceof Function)
-    {
+
+    // if(this.getIconFunction && this.getIconFunction instanceof Function)
+    // {
+    //   this.icon = this.getIconFunction(params.data);
+    // }
+
+    // if(this.getLabelFunction && this.getLabelFunction instanceof Function)
+    // {
 
       // console.log(this.label, this.getLabelFunction)
-      this.label = this.getLabelFunction(params.data);
+
 
       if (this.label === 'null') {
         this.icon = ''
@@ -66,8 +78,13 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         return
       }
 
+
       if (this.label?.toLowerCase() === 'delete' || this.getLabelFunction == 'delete') {
         this.icon = 'delete'
+        this.icon = 'file_copy'
+        this.showHide = "width:55px;"
+        this.label = ''
+        this.buttonStyle = 'width:55px;'
         return
       }
       if (this.label?.toLowerCase() ===  'edit') {
@@ -82,8 +99,8 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         this.icon = 'file_copy'
         this.showHide = "width:55px;"
         this.label = ''
-        this.buttonStyle = 'width:45px;'
-        console.log('icon', this.icon)
+        this.buttonStyle = 'width:55px;'
+        // console.log('icon', this.icon)
         return
       }
 
@@ -100,7 +117,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         return
       }
 
-    }
+    // }
   }
 
   refresh(params?: any): boolean {

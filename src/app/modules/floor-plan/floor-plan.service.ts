@@ -105,7 +105,7 @@ export class FloorPlanMethodService {
 
   //setFillColor
   setObjectFillColor(color: any) {
-    console.log('setObjectFillColor', color)
+    // console.log('setObjectFillColor', color)
     this.setSelectedObjectColor.next(color);
   }
 
@@ -126,7 +126,7 @@ export class FloorPlanMethodService {
   }
 
   setTable(tableName, selected) {
-    console.log('tableName', tableName)
+    // console.log('tableName', tableName)
     this.tableName = tableName;
     if (!selected) {
       console.log('no table selected')

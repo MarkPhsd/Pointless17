@@ -76,6 +76,10 @@ export class PartBuilderMainComponent implements OnInit {
     this.rowSelection       = 'multiple'
   }
 
+  navUsage() {
+    this.router.navigate(['part-usage-list'])
+  }
+
   refreshSearchAny(search: any) {
     if (search) {
       search = this.initSearchModel()

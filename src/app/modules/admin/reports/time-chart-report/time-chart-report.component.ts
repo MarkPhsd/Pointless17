@@ -5,9 +5,8 @@ import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
 import { BehaviorSubject, Observable, Subject, Subscription, finalize, forkJoin, of, switchMap, take } from 'rxjs';
 import { ISalesPayments, ISite }  from 'src/app/_interfaces';
-import { ReportingService, rowValue } from 'src/app/_services';
-import { IReportItemSaleSummary} from 'src/app/_services/reporting/reporting-items-sales.service';
-import { IPaymentSalesSearchModel, PaymentSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
+import { ReportingService,  } from 'src/app/_services';
+import { SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
 import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
@@ -152,7 +151,6 @@ export class TimeChartReportComponent implements OnInit {
   init15MinuteChart() {
     const title = 'Average Sales per 15 Minute, by Weekday and Hour';
     const list = this.initBasicChart(this.quarterHourArray, title);
-    console.log('list', list)
     this.chartOptions = list
   }
 

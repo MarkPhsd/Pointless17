@@ -89,6 +89,7 @@ export interface TransactionUISettings {
   displayItemPOSTTotal: boolean;
   expoPrinter: string;
   expoTemplateID: number;
+  applyTableNameToOrderName: boolean;
 }
 
 export interface StripeAPISettings {
@@ -428,6 +429,10 @@ export class UISettingsService {
     })
   }
 
+
+  getUITransactionSetting() {
+    return this.settingsService.getUITransactionSetting()
+  }
   getUIHomePageSettings() {
     if (!this.userAuthorizationService.user) {  this._homePageSetting.next(null)  }
     this.settingsService.getUIHomePageSettings().subscribe(data => {
@@ -790,6 +795,7 @@ export class UISettingsService {
       displayItemPOSTTotal:[],
       expoPrinter: [],
       expoTemplateID:[],
+      applyTableNameToOrderName: [],
      })
 
 

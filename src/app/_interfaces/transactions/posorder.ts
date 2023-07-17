@@ -36,6 +36,7 @@ export interface IPOSOrderSearchModel {
   scheduleDate_From :          string;
   prepStatus        :          number;
   printLocation     :          number;
+  description: string;
 }
 
 export interface IPOSOrder {
