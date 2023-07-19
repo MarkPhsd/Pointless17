@@ -79,4 +79,13 @@ export class OrderCardComponent implements OnInit {
     }
   }
 
+  getOrderID(order: IPOSOrder) {
+    if (!order.history) {
+      return order.id;
+    }
+    if (order.history) {
+      return order.orderID_Temp;
+    }
+  }
+
 }

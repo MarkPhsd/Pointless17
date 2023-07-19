@@ -31,15 +31,14 @@
 
       <div class="grid-totals">
 
-        <div class="field-center">
-          <div class="orderID && !order.history">
-            {{order.id}}
-          </div>
+        <div *ngIf="order" class="field-center">
 
-          <div class="order && order.orderID_Temp && order.history">
-           (h) {{order.orderID_Temp}}
+          <div *ngIf="order.history">
+            (h) {{ order.orderID_Temp }}
           </div>
-
+          <div >
+            {{ order.id }}
+          </div>
         </div>
 
         <div class="field-center" *ngIf="!phoneDevice || (phoneDevice && order?.customerName)
