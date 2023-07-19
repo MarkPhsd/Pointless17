@@ -253,7 +253,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.isStaff  = this.userAuthorization.isUserAuthorized('admin,manager,employee');
     this.isUser  = this.userAuthorization.isUserAuthorized('user');
     if (this.isUser) {
-      // this.showScheduleFilter = true;
+
       this.showDateFilter = true;
     }
   }
@@ -313,6 +313,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.toggleOrdersGreaterThanZero = "0";
     this.toggleOpenClosedAll         = "1"
     this.toggleTypeEmployee          = "0"
+
     this.value = ''
     if (this.user.roles==='user'){
       this.value = '1';
@@ -472,10 +473,18 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       this.completionDateForm = null;
       return
     }
-    this.completionDateForm  = this.getFormRangeInitial(this.scheduleDateForm)
+    this.completionDateForm  = this.getEmptyRange() //this.getFormRangeInitial(this.scheduleDateForm)
     this.searchModel.completionDate_From = this.completionDateForm.get("start").value;
     this.searchModel.completionDate_To   = this.completionDateForm.get("end").value;
+    this.searchModel.searchOrderHistory = false
     this.subscribeToCompletionDatePicker();
+  }
+
+  getEmptyRange() {
+    return  this.fb.group({
+      start: [],
+      end: []
+    })
   }
 
   initScheduledDateForm() {

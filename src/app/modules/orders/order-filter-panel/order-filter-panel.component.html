@@ -73,15 +73,27 @@
       </app-key-pad>
     </div>
 
-    <div *ngIf="(isAuthorized || isUser) && toggleOpenClosedAll == '2'" class="fields">
-      <button mat-raised-button
-              class="date-filter-buttton"
-              (click)="toggleDateRangeFilter()">
-              Completed Dates<mat-icon>date_range</mat-icon>
-            </button>
-      <mat-date-range
-        [inputForm] ="completionDateForm">
-      </mat-date-range>
+    <div *ngIf="(isAuthorized || isUser) && toggleOpenClosedAll == '2'" class="grid-fields fields">
+      <div>
+        <button mat-raised-button
+                class="date-filter-buttton"
+                (click)="toggleDateRangeFilter()">
+                Completed Dates<mat-icon>date_range</mat-icon>
+              </button>
+        <mat-date-range
+          [inputForm] ="completionDateForm">
+        </mat-date-range>
+      </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  (change)="updateOrderSearch(searchModel)"
+                  [(ngModel)]="searchModel.searchOrderHistory"
+                  >
+          <mat-label>History</mat-label>
+        </mat-slide-toggle>
+      </div>
+
     </div>
     <!-- (outputDateRange)="emitDatePickerData($event)" -->
 

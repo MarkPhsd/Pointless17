@@ -296,7 +296,14 @@ export class OrdersListComponent implements OnInit,OnDestroy {
             minWidth: 0,
             maxWidth: 0,
             // flex: 2,
-        },
+      },
+      {headerName: 'Orignal ID', field: 'orderID_Temp', sortable: true,
+            visible : false,
+            width   : 100,
+            minWidth: 100,
+            maxWidth: 100,
+            // flex: 2,
+      },
     ]
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }

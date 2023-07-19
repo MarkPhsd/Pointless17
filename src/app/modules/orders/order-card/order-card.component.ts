@@ -74,10 +74,6 @@ export class OrderCardComponent implements OnInit {
   }
 
   get clientNameOfOrder() {
-    // console.log('order ', this.order?.clients_POSOrders?.lastName + ', ' + this.order?.clients_POSOrders?.firstName)
-    // if (this.order && this.order?.clientID) {
-    //   return this.order?.clients_POSOrders?.lastName + ', ' + this.order?.clients_POSOrders?.firstName
-    // }
     if (this.order) {
       return this.order?.customerName
     }

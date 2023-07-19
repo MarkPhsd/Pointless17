@@ -2,12 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IComponentUsage, MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
-
+import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 @Component({
   selector: 'part-usage-graph',
   templateUrl: './part-usage-graph.component.html',
@@ -19,7 +19,7 @@ export class PartUsageGraphComponent implements OnInit {
   chartData       : any[];
   chart           : Highcharts.Chart;
   chartCategories : any[];
-
+  errorMessage: string;
   @Input() productID = 0;
   action$: Observable<any>;
   chartOptions: any;
@@ -28,6 +28,7 @@ export class PartUsageGraphComponent implements OnInit {
     private menuService            : MenuService,
     private fb                     : UntypedFormBuilder,
     private siteService            : SitesService,
+    private dateHelper: DateHelperService,
     private dialog: MatDialog,
   )
 { }
@@ -46,11 +47,19 @@ export class PartUsageGraphComponent implements OnInit {
     if (!this.productID || this.productID ==0) {return }
     const site = this.siteService.getAssignedSite()
     let today = new Date();
-    let startDate = new Date(today.setMonth(today.getMonth() - 12));
-    let endDate = new Date();
+    let dtstartDate = new Date(today.setMonth(today.getMonth() - 12));
+    let startDate = this.dateHelper.format(dtstartDate, 'MM/dd/yyyy')
+    let endDate = this.dateHelper.format(new Date(), 'MM/dd/yyyy')
+
+    this.errorMessage = '';
     this.action$ = this.menuService.getComponentUsageByMonth(site, startDate,endDate,this.productID).pipe(
       switchMap(data => {
-        this.refreshChartUI(data.results)
+        if (data && data.errorMessage) {
+          this.errorMessage = data.errorMessage;
+        }
+        if (data && data.results){
+          this.refreshChartUI(data.results)
+        }
         return of(data)
       }))
   }
@@ -103,13 +112,5 @@ export class PartUsageGraphComponent implements OnInit {
     }
   }
 
-
-}
-function switchMap(arg0: (data: any) => any): import("rxjs").OperatorFunction<import("src/app/_services").IComponentUsageResults, any> {
-  throw new Error('Function not implemented.');
-}
-
-function of(data: any) {
-  throw new Error('Function not implemented.');
 }
 

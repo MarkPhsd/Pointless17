@@ -26,7 +26,8 @@ export class LabelingService {
   transactionInfo =  [
     {id:0,name:'scanning', value:'Grace value allows a budtender to weigh out more than the specified amount, like 3.56 grams, but charge exactly for 3.5 grams..'},
     {id:1,name:'expo', value:'Name of printer for Windows Expo Printer'},
-    {id:2, name:'appyToTable', value:'Not Recommended'}
+    {id:2, name:'appyToTable', value:'Not Recommended'},
+    {id:3, name:'searchOrderHistory', value:'Searches on dates closed.'}
   ]
 
   terminalSettingsInfo =  [

@@ -1,6 +1,6 @@
 <div *ngIf="(action$ | async) as data">
-  <div *ngIf="data.errorMessage">
-    <mat-icon color="warn">alert</mat-icon>{{data.errorMessage}}
+  <div *ngIf="errorMessage">
+    <mat-icon color="warn">alert</mat-icon>{{errorMessage}}
   </div>
   <div *ngIf="data.results">
     <div style="width: 100%; min-width: 1000px;"

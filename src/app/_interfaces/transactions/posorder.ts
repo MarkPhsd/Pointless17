@@ -37,6 +37,7 @@ export interface IPOSOrderSearchModel {
   prepStatus        :          number;
   printLocation     :          number;
   description: string;
+  searchOrderHistory: boolean;
 }
 
 export interface IPOSOrder {
@@ -109,6 +110,7 @@ export interface IPOSOrder {
   voidReason            : string;
   resultMessage         : string;
   history               : boolean;
+  orderID_Temp          : string;
   orderLocked:            string;
   wicTotal              : number;//    As Double
   ebtTotal              : number;// As Double

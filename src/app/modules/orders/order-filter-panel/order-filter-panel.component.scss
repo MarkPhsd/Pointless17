@@ -70,6 +70,12 @@ mat-card {
   margin-top: 5px;
   margin-left: 5px;
 }
+.grid-fields {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 5px;
+}
 
 .button-grid {
   --gap       : 5px;
