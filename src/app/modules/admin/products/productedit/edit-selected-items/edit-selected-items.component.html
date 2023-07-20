@@ -45,8 +45,17 @@
       <div>
         <app-species-list        [inputForm]="inputForm"></app-species-list>
       </div>
+
       <div>
        <prompt-group-select      [inputForm]="inputForm"    ></prompt-group-select>
+      </div>
+
+      <div>
+        <prompt-group-select      [inputForm]="inputForm"    ></prompt-group-select>
+      </div>
+
+      <div>
+        <ng-container [ngTemplateOutlet]="partBuilderSelector"></ng-container>
       </div>
 
       <mat-label>If you want a group of items to show up at the top of a list, you can put 0 or negative values here.</mat-label>
@@ -92,3 +101,22 @@
   </mat-card-content>
 
 </mat-card>
+
+
+
+<ng-template #partBuilderSelector>
+  <div class="grid-container-3Column">
+    <div>
+      <field-value-selector
+        [inputForm]="inputForm"
+        [searchForm]="pbSearchForm"
+        [searchType]="'pB_MainID'"
+        [fieldProperty]="'pB_MainID'"
+        [id]="pB_MainID"
+        [friendlyName]="'Kit/Recipe'"
+        (itemSelect)="setPartBuilder($event)">
+        Kit/Recipe
+      </field-value-selector>
+    </div>
+  </div>
+</ng-template>

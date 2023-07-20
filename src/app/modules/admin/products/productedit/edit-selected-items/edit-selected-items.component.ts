@@ -26,10 +26,12 @@ export class EditSelectedItemsComponent implements OnInit {
   get sortOrder()     { return this.inputForm.get("sortOrder") as UntypedFormControl;}
   get webWorkRequired()       { return this.inputForm.get("webWorkRequired") as UntypedFormControl;}
 
+  pbSearchForm: UntypedFormGroup;
 
   // constructor(
   //   private fb: FormBuilder) { }
   selected  : any[];
+  pB_MainID = 0;
 
   constructor(
       private menuService: MenuService,
@@ -70,6 +72,7 @@ export class EditSelectedItemsComponent implements OnInit {
       active:           [],
       webProduct:       [],
       webWorkRequired:  [],
+      pB_MainID: [],
       sortOrder: [],
     })
 
@@ -106,6 +109,12 @@ export class EditSelectedItemsComponent implements OnInit {
     )
   }
 
+  initPbSearchForm(){
+    this.pbSearchForm = this.fb.group({
+      searchField: [],
+    })
+  }
+
   exit () {
     this.dialogRef.close()
   }
@@ -117,7 +126,7 @@ export class EditSelectedItemsComponent implements OnInit {
       const promptGroupID = this.inputForm.controls['promptGroupID'].value;
       const subCategoryID = this.inputForm.controls['promptGroupID'].value;
       let value : any;
-      
+
       if (promptGroupID !=0 &&  promptGroupID != undefined) {
         // this.updateCategoryID(this.categoryID.value, this.selected)
         this.updateField(promptGroupID, this.selected, 'promptGroupID');
@@ -159,7 +168,7 @@ export class EditSelectedItemsComponent implements OnInit {
 
   }}
 
-  sortCategoriesSubCategoriesFirst() { 
+  sortCategoriesSubCategoriesFirst() {
     const site   =  this.siteService.getAssignedSite();
     const items$ =  this.menuService.sortCategoriesSubCategoriesFirst(site)
     this.updates(items$)
@@ -177,6 +186,17 @@ export class EditSelectedItemsComponent implements OnInit {
       return of(data)
     }))
   }
+
+
+  setPartBuilder(event) {
+    if (!event) { return }
+    // console.log('event',event, event.value, event.pB_MainID)
+    this.pB_MainID = event.pB_MainID;
+    this.inputForm.patchValue(event)
+    console.log(this.inputForm.value);
+    this.updateField(this.pB_MainID, this.selected, 'pB_MainID')
+  }
+
 
 }
 
