@@ -351,8 +351,6 @@ import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/
     PaymentReportDataComponent,
     PieComponent,
 
-    PartBuilderUsageListComponent,
-
     PosOrderItemComponent,
     PosOrderItemsComponent,
     PosCheckOutButtonsComponent,
@@ -588,7 +586,6 @@ import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/
     UserBarComponent,
     MetrcSummaryComponent,
     AverageHourlySalesLaborChartComponent,
-    PartBuilderUsageListComponent,
     M22ResizableComponent,
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,

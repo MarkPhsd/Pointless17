@@ -194,9 +194,10 @@ export class EditSelectedItemsComponent implements OnInit {
     this.pB_MainID = event.pB_MainID;
     this.inputForm.patchValue(event)
     console.log(this.inputForm.value);
+    const warn = window.confirm('Do you want to set the selected items to this kit?')
+    if (!warn) { return }
     this.updateField(this.pB_MainID, this.selected, 'pB_MainID')
   }
-
 
 }
 

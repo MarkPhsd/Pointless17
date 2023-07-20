@@ -135,6 +135,7 @@ import { PointlessMETRCSalesComponent } from './modules/admin/metrc/pointless-me
 import { DesignerListComponent } from './modules/admin/report-designer/designer/designer-list/designer-list.component';
 import { DesignerEditorComponent } from './modules/admin/report-designer/designer/designer-editor/designer-editor.component';
 import { ProductFilterComponent } from './shared/widgets/product-filter/product-filter.component';
+
 import { PartBuilderMainComponent } from './modules/admin/products/part-builder/part-builder-main/part-builder-main.component';
 import { PartBuilderEditComponent } from './modules/admin/products/part-builder/part-builder-edit/part-builder-edit.component';
 import { PartBuilderUsageListComponent } from './modules/admin/products/part-builder/part-builder-usage-list/part-builder-usage-list.component';

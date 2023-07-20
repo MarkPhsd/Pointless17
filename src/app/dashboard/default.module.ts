@@ -470,6 +470,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     LinkedPriceSelectorComponent,
     PriceCategoriesComponent,
 
+
+
     WicEBTCardPayBtnComponent,
     TriPOSCardPayBtnComponent,
     StripeCardPayBtnComponent,
@@ -490,7 +492,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     UnitTypeSelectComponent,
     ProductSelectorComponent,
     PartBuilderSelectorComponent,
-
     ServiceTypeEditComponent,
     ServiceTypeListComponent,
     StrainsAddComponent,
@@ -616,6 +617,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PartBuilderEditComponent,
     PartBuilderFilterComponent,
     PartBuilderComponentEditComponent,
+    PartBuilderUsageListComponent,
 
     PackageListComponent,
     PackageSearchSelectorComponent,
@@ -826,12 +828,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     // ColorPickerModule,
     // NumericDirective,
     // RoomLayout,
-
-    PartBuilderMainComponent,
-    PartBuilderEditComponent,
-    PartBuilderFilterComponent,
-    PartBuilderComponentEditComponent,
-
   ],
 
   providers: [

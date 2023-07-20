@@ -69,7 +69,7 @@
           [defaultColDef]      ="defaultColDef"
           [gridOptions]        ="gridOptions"
           [rowSelection]       ="rowSelection"
-          [frameworkComponents]="frameworkComponents"
+        [frameworkComponents]="frameworkComponents"
           (selectionChanged)   ="onSelectionChanged($event)"
           (cellValueChanged)   ='cellValueChanged($event)'
           (cellClicked)        ='onCellClicked($event)'
@@ -77,18 +77,17 @@
     </ag-grid-angular>
   </div>
 
-  <div>
-    <!-- *ngIf="product"
-                            class="grid-list-item"
-                            [setProduct]="product"
-                            [id]="id" -->
-    <!-- <app-product-info-panel >
-    </app-product-info-panel> -->
+  <div *ngIf="product">
+    <app-product-info-panel
+          class="grid-list-item"
+          [setProduct]="product"
+          [id]="id"
+          >
+    </app-product-info-panel>
   </div>
 </div>
 
 <div>
-
   <part-usage-graph [productID]="productID"></part-usage-graph>
 </div>
 
