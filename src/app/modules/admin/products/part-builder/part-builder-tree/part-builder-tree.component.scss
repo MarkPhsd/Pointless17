@@ -1,0 +1,18 @@
+/* recipe.component.css */
+.tree-container {
+  height: 400px;
+  overflow: auto;
+}
+
+.mat-tree-node {
+  display: block;
+  padding: 4px;
+}
+
+.mat-tree-node.tree-node-children {
+  padding-left: 20px; /* Adjust the padding based on your desired indentation */
+}
+
+.mat-tree-node.mat-tree-node-expanded .mat-tree-node {
+  padding-left: 20px; /* Adjust the padding based on your desired indentation */
+}

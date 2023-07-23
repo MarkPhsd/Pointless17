@@ -19,7 +19,6 @@
     </div>
 
     <div *ngIf="(categories$ | async) as lists">
-      <!-- {{lists | json}} -->
       <div class="grid-item">
         <form-select-list [searchForm]      = "searchForm"
                           [formFieldName]   = "'categoryID'"
@@ -34,6 +33,12 @@
     <div class="grid-item">
       <button mat-button (click)="refreshGrid()">
         <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+
+    <div class="grid-item">
+      <button mat-button (click)="navKits()">
+        <mat-icon>list</mat-icon> Edit Kits
       </button>
     </div>
 
@@ -52,8 +57,7 @@
     <mat-icon color="warn">alert</mat-icon> {{errorMessage}}
 </div>
 <mat-divider></mat-divider>
-
-<div class="grid-list">
+<div class="grid-list" [style]="gridListHeight">
   <div>
 
     <div *ngIf="value" class="loader">
@@ -69,7 +73,7 @@
           [defaultColDef]      ="defaultColDef"
           [gridOptions]        ="gridOptions"
           [rowSelection]       ="rowSelection"
-        [frameworkComponents]="frameworkComponents"
+          [frameworkComponents]="frameworkComponents"
           (selectionChanged)   ="onSelectionChanged($event)"
           (cellValueChanged)   ='cellValueChanged($event)'
           (cellClicked)        ='onCellClicked($event)'
@@ -91,6 +95,6 @@
   <part-usage-graph [productID]="productID"></part-usage-graph>
 </div>
 
-<div style="flex-grow:0">
+<div style="flex-grow">
   <span id="selectedRows"> </span>
 </div>

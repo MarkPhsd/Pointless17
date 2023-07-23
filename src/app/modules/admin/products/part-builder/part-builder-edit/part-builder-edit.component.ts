@@ -23,6 +23,7 @@ export class PartBuilderEditComponent implements OnInit {
   loopDetected: boolean;
   site = this.siteService.getAssignedSite()
   id: number;
+
   initPBMainSubscription() {
    this._pb_Main = this.partBuilderMainMethods.PB_Main$.subscribe(data => {
       this.pb_Main = data;

@@ -370,6 +370,7 @@ import { PreviewFurnitureComponent } from '../modules/floor-plan/preview-furnitu
 import { PointlessFloorPlanViewComponent } from '../modules/floor-plan/pointless-floor-plan-view/pointless-floor-plan-view.component';
 import { NewOrderItemComponent } from '../modules/posorders/pos-order/new-order-item/new-order-item.component';
 import { PartBuilderUsageListComponent } from '../modules/admin/products/part-builder/part-builder-usage-list/part-builder-usage-list.component';
+import { PartBuilderTreeComponent } from '../modules/admin/products/part-builder/part-builder-tree/part-builder-tree.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -618,6 +619,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PartBuilderFilterComponent,
     PartBuilderComponentEditComponent,
     PartBuilderUsageListComponent,
+    PartBuilderTreeComponent,
 
     PackageListComponent,
     PackageSearchSelectorComponent,

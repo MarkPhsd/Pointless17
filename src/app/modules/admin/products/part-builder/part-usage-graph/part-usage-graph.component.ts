@@ -23,6 +23,20 @@ export class PartUsageGraphComponent implements OnInit {
   @Input() productID = 0;
   action$: Observable<any>;
   chartOptions: any;
+  loading: boolean;
+
+  scrollablePlotHeight = {
+    minWidth        : 1500,
+    opacity         : 0,
+    scrollPositionX : -10
+  }
+
+  @Input() chartType = 'column'
+  @Input() chartHeight = '300'
+  @Input() chartWidth = '1000'
+
+  results
+  usageResults: IComponentUsage;
   constructor(
     private _snackBar              : MatSnackBar,
     private menuService            : MenuService,
@@ -33,7 +47,6 @@ export class PartUsageGraphComponent implements OnInit {
   )
 { }
 
-
   ngOnInit(): void {
     this.refreshChartData()
 
@@ -43,8 +56,10 @@ export class PartUsageGraphComponent implements OnInit {
     console.log('on changes', this.productID)
     this.refreshChartData()
   }
+
   refreshChartData() {
-    if (!this.productID || this.productID ==0) {return }
+    if (!this.productID || this.productID == 0) {return }
+
     const site = this.siteService.getAssignedSite()
     let today = new Date();
     let dtstartDate = new Date(today.setMonth(today.getMonth() - 12));
@@ -52,22 +67,39 @@ export class PartUsageGraphComponent implements OnInit {
     let endDate = this.dateHelper.format(new Date(), 'MM/dd/yyyy')
 
     this.errorMessage = '';
-    this.action$ = this.menuService.getComponentUsageByMonth(site, startDate,endDate,this.productID).pipe(
+
+    this.loading = true
+    this.action$ = this.menuService.getComponentUsageByMonth(site, startDate, endDate, this.productID).pipe(
       switchMap(data => {
         if (data && data.errorMessage) {
           this.errorMessage = data.errorMessage;
         }
         if (data && data.results){
-          this.refreshChartUI(data.results)
+          this.chartOptions =  this.refreshChartUI(data.results)
         }
+        this.results = data;
+        this.loading = false;
         return of(data)
       }))
   }
 
-  refreshChartUI(data: IComponentUsage[]) {
+  refreshChartUI(data: any[]) {
+
+    const scrollablePlot = {
+      minWidth        : +this.chartWidth,
+      opacity         : 0,
+      scrollPositionX : -10
+    }
+
+    if (!this.chartWidth) { this.chartWidth = '1200'}
+
     return {
       chart: {
-        type: 'column'
+        type: this.chartType,
+        scrollablePlotArea: scrollablePlot,
+        backgroundColor: null,
+        borderWidth: 0,
+        height: this.chartHeight,
       },
       title: {
         text: 'Component Usage'
@@ -103,8 +135,8 @@ export class PartUsageGraphComponent implements OnInit {
         enabled: false
       },
       series: [{
-        name: 'Total',
-        data: data.map(item => item.total)
+        name: 'Quantity',
+        data: data.map(item => item.quantity)
       }, {
         name: 'Cost',
         data: data.map(item => item.cost)

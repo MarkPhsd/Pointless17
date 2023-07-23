@@ -14,7 +14,6 @@ export interface IPartSearchModel {
   pageSize: number;
 }
 
-
 @Component({
   selector: 'app-part-builder-main',
   templateUrl: './part-builder-main.component.html',

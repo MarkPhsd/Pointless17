@@ -1,15 +1,25 @@
-<div *ngIf="(action$ | async) as data">
+<div *ngIf="(action$ | async) as data; else loading">
   <div *ngIf="errorMessage">
     <mat-icon color="warn">alert</mat-icon>{{errorMessage}}
   </div>
-  <div *ngIf="data.results">
-    <div style="width: 100%; min-width: 1000px;"
-         *ngIf="chartOptions">
-    <highcharts-chart
-        [Highcharts]="Highcharts"
-        [options]   ="chartOptions"
-        [oneToOne]  ="true">
-    </highcharts-chart>
-  </div>
 
+  <!-- {{results | json}} -->
+  <div *ngIf="data.results">
+    <div style="width: 100%; min-width: 1000px;height:300px;"
+         *ngIf="chartOptions">
+      <highcharts-chart
+          [Highcharts]="Highcharts"
+          [options]   ="chartOptions"
+          [oneToOne]  ="true">
+      </highcharts-chart>
+    </div>
+  </div>
 </div>
+
+<ng-template #loading>
+
+  <div *ngIf="loading && productID != 0">
+    ...loading
+    <div><mat-spinner [diameter]="50"></mat-spinner></div>
+  </div>
+</ng-template>

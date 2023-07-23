@@ -1,0 +1,26 @@
+<!-- recipe.component.html
+<div class="tree-container">
+  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+      <li class="mat-tree-node">
+        {{ node?.name }}
+        <ul [class.tree-node-children]="node?.pb_MainID_Associations.length > 0">
+          <ng-container matTreeNodeOutlet></ng-container>
+        </ul>
+      </li>
+    </mat-tree-node>
+
+    <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodeToggle>
+      <li class="mat-tree-node">
+        {{ node?.name }}
+        <ul [class.tree-node-children]="node?.pb_MainID_Associations.length > 0">
+          <ng-container matTreeNodeOutlet></ng-container>
+        </ul>
+      </li>
+    </mat-tree-node>
+  </mat-tree>
+</div> -->
+<button mat-button (click)="viewDetails = !viewDetails">View Details</button>
+<div *ngIf="viewDetails">
+  <ngx-json-viewer [json]="pb_Main"></ngx-json-viewer>
+</div>

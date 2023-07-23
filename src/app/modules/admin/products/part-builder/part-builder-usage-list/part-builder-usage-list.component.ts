@@ -9,16 +9,14 @@ import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-form
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { IUserProfile, IProduct, ClientSearchModel } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
-import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { IItemBasicB, MenuService, ContactsService, AWSBucketService, IProductSearchResultsPaged } from 'src/app/_services';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ButtonRendererComponent } from '../../../report-designer/widgets/button-renderer/button-renderer.component';
 import { EditSelectedItemsComponent } from '../../productedit/edit-selected-items/edit-selected-items.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-part-builder-usage-list',
@@ -94,6 +92,7 @@ selected        : any[];
 selectedRows    : any;
 agtheme         = 'ag-theme-material';
 gridDimensions
+gridListHeight
 urlPath:        string;
 value           : any;
 id              : number;
@@ -111,8 +110,8 @@ departmentsList: IMenuItem[];
 
 
 @Output() outputPromptItem = new EventEmitter();
-_promptSubGroup : Subscription;
-promptSubGroup  : PromptSubGroups;
+// _promptSubGroup : Subscription;
+// promptSubGroup  : PromptSubGroups;
 
 buttonName: string;
 editOff: boolean;
@@ -124,6 +123,7 @@ constructor(  private _snackBar              : MatSnackBar,
               private itemTypeService        : ItemTypeService,
               private contactsService        :  ContactsService,
               private fb                     : UntypedFormBuilder,
+              private router                  :Router,
               private siteService            : SitesService,
               private productEditButtonService: ProductEditButtonService,
               private agGridFormatingService : AgGridFormatingService,
@@ -134,6 +134,10 @@ constructor(  private _snackBar              : MatSnackBar,
 
 
     this.initAgGrid(this.pageSize);
+  }
+
+  navKits() {
+    this.router.navigate(['part-builder-list'])
   }
 
   async ngOnInit() {
@@ -273,10 +277,12 @@ constructor(  private _snackBar              : MatSnackBar,
   setGridDimensions()  {
     if (this.graphVisible) {
       this.gridDimensions =  'width: 100%; height: calc( 95vh - 450px );'
+      this.gridListHeight =  'height: calc( 95vh - 425px );'
       return
     }
 
-    this.gridDimensions =  'width: 100%; height: calc( 95vh - 150px );'
+    this.gridListHeight =  'height: calc( 95vh - 175px );'
+    this.gridDimensions =  'width: 100%; height: calc( 95vh - 200px );'
   }
 
   listAll(){
@@ -577,22 +583,16 @@ constructor(  private _snackBar              : MatSnackBar,
 
   //mutli select method for selection change.
   onSelectionChanged(event) {
-
-    console.log('event')
     let selectedRows       = this.gridApi.getSelectedRows();
     let selectedRowsString = '';
     let maxToShow          = this.pageSize;
     let selected           = []
 
-
-    console.log(this.productID, selectedRows[0].id)
     if (selectedRows[0].id) {
       this.productID = selectedRows[0].id;
     }
-    console.log(this.productID)
-
-
-
+    this.graphVisible = true;
+    this.setGridDimensions()
   }
 
   getItem(id: number) {
@@ -643,13 +643,13 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   onBtnClick2(e) {
-    console.log('on button click2')
+    // console.log('on button click2')
     this.rowDataClicked2 = e.rowData;
   }
 
   editProductFromGrid(e) {
     if (!e) {
-      console.log('edit product from grid no data')
+      // console.log('edit product from grid no data')
       return
     }
     if (e.rowData.id)  {
@@ -677,9 +677,7 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   assignItem(e){
-    if (this.promptSubGroup) {
       this.outputPromptItem.emit(e.rowData.id)
-    }
   }
 
   getProductTypeID(event) {
