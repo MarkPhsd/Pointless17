@@ -17,6 +17,7 @@ import { catchError, of, switchMap, Observable } from 'rxjs';
 })
 export class ServiceTypeEditComponent implements OnInit {
 
+  serviceColor: string;
   id                     : number;
   serviceType            : IServiceType;
   bucketName             : string;
@@ -38,7 +39,7 @@ export class ServiceTypeEditComponent implements OnInit {
     if (data) {
       this.id = data
     }
-    if (!data || data == 0) { 
+    if (!data || data == 0) {
       this.id = 0
     }
   }
@@ -50,8 +51,7 @@ export class ServiceTypeEditComponent implements OnInit {
     };
 
     initializeForm()  {
-      
-      // console.log('this.id', this.id)
+
       this.initFormFields()
       const site = this.siteService.getAssignedSite();
       let service$ : Observable<unknown>;
@@ -60,19 +60,20 @@ export class ServiceTypeEditComponent implements OnInit {
         // console.log('this id =0')
         const service = {} as IServiceTypePOSPut;
         service$  = this.serviceTypeService.postServiceType(site, service)
+
       }
 
-      if (this.id != 0) { 
+      if (this.id != 0) {
         // console.log('this id !0')
         service$  = this.serviceTypeService.getType(site, this.id)  //as Observable<IServiceType>;
       }
 
       this.action$ = service$.pipe(switchMap(data => {
             this.serviceType = {} as IServiceType;
-            console.log('data', data)
-            if (data) { 
+            if (data) {
               this.serviceType = data as unknown as IServiceType;
               this.id          = this.serviceType.id;
+              this.serviceColor = this.serviceType.serviceColor
             }
             this.inputForm.patchValue(this.serviceType)
             return of(data)
@@ -81,7 +82,7 @@ export class ServiceTypeEditComponent implements OnInit {
           this.snack.open(`Issue. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
           return of(error)
         })
-      
+
       // }
 
     };
@@ -95,6 +96,9 @@ export class ServiceTypeEditComponent implements OnInit {
       if (!this.inputForm.valid) { return }
       const site = this.siteService.getAssignedSite()
       let serviceType = this.inputForm.value ;
+      if (this.serviceType) {
+        serviceType.serviceColor = this.serviceColor;
+      }
 
       const item$ = this.serviceTypeService.saveServiceType(site, serviceType)
       if (serviceType.retailServiceType) {
@@ -129,12 +133,12 @@ export class ServiceTypeEditComponent implements OnInit {
       this.dialogRef.close();
     }
 
-    deleteDefaultProductID1() { 
+    deleteDefaultProductID1() {
       this.inputForm.patchValue({defaultProductID1: 0})
       this.updateItem(null)
     }
 
-    deleteDefaultProductID2() { 
+    deleteDefaultProductID2() {
       this.inputForm.patchValue({defaultProductID2: 0})
       this.updateItem(null)
     }

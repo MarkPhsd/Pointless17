@@ -11,6 +11,7 @@ import { SitesService } from '../reporting/sites.service';
 
 export class ServiceTypeService {
 
+  list: IServiceType[];
   constructor( private http        : HttpClient,
                 private httpCache  : HttpClientCacheService,
                 private siteService: SitesService) { }

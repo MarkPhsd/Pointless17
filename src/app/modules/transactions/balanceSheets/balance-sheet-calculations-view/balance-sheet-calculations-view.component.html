@@ -14,8 +14,8 @@
       {{sheet.overUnderTotal | currency}}
     </span>
   </div>
- 
-  <div class="header-grid" *ngIf="(auths$ | async) as auths"> 
+
+  <div class="header-grid" *ngIf="(auths$ | async) as auths">
     <div *ngIf="!auths?.blindBalanceSheet">Total Sales</div>  <div  *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{sheet.salesTotal     | currency}} </div>
     <div *ngIf="!auths?.blindBalanceSheet">Cash</div>         <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{sheet.cashIn         | currency}} </div>
     <div *ngIf="!auths?.blindBalanceSheet">Credit</div>       <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{sheet.creditIn       | currency}} </div>
@@ -24,7 +24,7 @@
 
   <div class="item-span cashdrop-border" *ngIf="drops">
     <div class="title">Cash Drops</div>
-  
+
     <div *ngFor="let item of drops">
       <div  class="cash-drop-grid">
           <div>{{item.id}}</div>

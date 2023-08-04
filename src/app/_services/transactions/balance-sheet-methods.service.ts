@@ -150,7 +150,7 @@ export class BalanceSheetMethodsService {
 
   getSheetObservable(sheetID: string) {
 
-    if(!sheetID) { return }
+    if(!sheetID) { return of(null) }
     const deviceName = this.getDeviceName()
     const id = parseInt(sheetID)
     const site = this.sitesService.getAssignedSite()
@@ -159,6 +159,7 @@ export class BalanceSheetMethodsService {
         return  this.sheetService.getSheetCalculations(site, sheet)
     })).pipe(switchMap(data => {
       this.updateBalanceSheet(data)
+      console.log('getSheetObservable', data)
       return of(data)
     }))
   }
@@ -171,15 +172,12 @@ export class BalanceSheetMethodsService {
     return deviceName;
   }
 
-  updateSheet(inputForm: UntypedFormGroup, startShiftInt: number): Observable<any> {
+  updateSheet(sheet: IBalanceSheet, startShiftInt: number): Observable<any> {
     const site = this.sitesService.getAssignedSite();
-    if (inputForm.valid) {
-
-      const sheet  = inputForm.value
       if (sheet.shiftStarted  != 1) {
         sheet.shiftStarted = startShiftInt;
       }
-      // console.table (sheet)
+
       return this.sheetService.putSheet(site, sheet).pipe(
         switchMap(
           data => {
@@ -194,7 +192,7 @@ export class BalanceSheetMethodsService {
         )
       )
     }
-  }
+
 
   closeSheet(sheet: IBalanceSheet, navigateUrl: string): Observable<any> {
     if (sheet) {

@@ -80,7 +80,7 @@
                   type             ="text"
                   formControlName  ="showOrderType"
                   class="form-control" >
-              <mat-hint> Not all transactions should be shown on the POS. 
+              <mat-hint> Not all transactions should be shown on the POS.
                         Enabling shows on the POS.</mat-hint>
             </mat-checkbox>
           </div>
@@ -168,7 +168,7 @@
             </product-search-selector2>
 
             <div><button color="warn" mat-raised-button (click)="deleteDefaultProductID1()"> <mat-icon>delete</mat-icon> </button></div>
-          </div>    
+          </div>
 
           <div *ngIf="serviceType" class="grid-items">
             <product-search-selector2
@@ -178,7 +178,7 @@
               [description]        = "'Default Item 2'"
               >
             </product-search-selector2>
-            
+
             <div><button color="warn"  mat-raised-button (click)="deleteDefaultProductID2()"> <mat-icon>delete</mat-icon> </button></div>
           </div>
 
@@ -192,6 +192,11 @@
               <mat-hint>Uses pre-tax sub total.</mat-hint>
             </mat-form-field>
           </div>
+
+          <div>
+            <ng-container [ngTemplateOutlet]="serviceColorPicker"></ng-container>
+          </div>
+
 
           <!-- <div>
             <mat-form-field appearance="outline">
@@ -267,3 +272,14 @@
   </mat-card>
 
 </div>
+
+
+<ng-template #serviceColorPicker>
+  <div *ngIf="serviceType">
+    <h3>Color</h3>
+    <ngx-colors ngx-colors-trigger [(ngModel)]="serviceColor"></ngx-colors>
+    <mat-form-field>
+      <input matInput [(ngModel)]="serviceColor">
+    </mat-form-field>
+  </div>
+</ng-template>

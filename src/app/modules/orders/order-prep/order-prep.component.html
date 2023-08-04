@@ -1,5 +1,7 @@
+
+<div *ngIf="(serviceType$ | async) as serviceTYpe"></div>
 <div class="container">
-  <mat-card>
+  <mat-card class="mat-card" [style]="serviceColor">
     <mat-card-content class="center">
       <div *ngIf="!smallDevice" class="grid-orderproperties">
         <div class='date-header' *ngIf="order.orderDate">
@@ -9,6 +11,7 @@
 
         <div class="orderType">
             {{order.serviceType | truncateText : 15}}
+            <span style="margin-left: 5px;" *ngIf="order.tableName">{{order.tableName}}</span>
         </div>
 
         <div class="employee-name">
@@ -81,5 +84,4 @@
           [order]        ="orderItems">
         </pos-order-items>
   </div>
-
 </div>

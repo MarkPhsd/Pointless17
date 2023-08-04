@@ -11,6 +11,7 @@ import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-o
 import { Observable, of, switchMap } from 'rxjs';
 import { InputTrackerService } from 'src/app/_services/system/input-tracker.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'app-pos-order-item-edit',
@@ -32,6 +33,7 @@ export class PosOrderItemEditComponent  {
   action$: Observable<IPOSOrder>;
 
   constructor(
+      public platFormService: PlatformService,
       private orderMethodsService : OrderMethodsService,
       private siteService         : SitesService,
       private _fb                 : UntypedFormBuilder,
@@ -162,7 +164,7 @@ export class PosOrderItemEditComponent  {
     if (this.posOrderItem) {
       const item = this.getItemValue();
       this.action$ = this.saveSub(item, this.editField).pipe(switchMap(data => {
-        if (!data) { 
+        if (!data) {
           this.onCancel();
           return of(null)
         }
@@ -176,7 +178,7 @@ export class PosOrderItemEditComponent  {
   saveSub(item: PosOrderItem, editField: string): Observable<IPOSOrder> {
     const order$ = this.posOrderItemMethodsService.saveSub(item, editField).pipe(
       switchMap(data => {
-        if (!data) { 
+        if (!data) {
           this.onCancel();
           return of(null)
         }

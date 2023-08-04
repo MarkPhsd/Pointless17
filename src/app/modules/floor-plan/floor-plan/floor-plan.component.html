@@ -54,12 +54,6 @@
       (saveFloorPlan)     = "saveFloorPlanfromOrder($event)">
   </floor-plan-designer>
 </div>
-<!--
-<div *ngIf="floorPlan">
-  {{floorPlan?.name}}
-  <br>
-  {{floorPlan?.template}}
-</div> -->
 
 <ng-template #floorPlanList>
   <span *ngIf="(floorPlans$ | async) as floorPlans">

@@ -1,7 +1,7 @@
 {
   "name": "pointlesspos",
-  "version": "1.85.8",
-  "description": "P6int of Sale Ecommerce Kiosk",
+  "version": "1.86.4",
+  "description": "Point of Sale Ecommerce Kiosk",
   "main": "index.js",
   "CompanyName": "Pointless POS",
   "author": "Coast to Coast Business Solutions, Inc.",

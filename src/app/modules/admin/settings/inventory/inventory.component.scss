@@ -1,7 +1,7 @@
 
-
 .features {
-  width: 350px;
+  // width: 350px;
+  // padding: 10px;
 }
 
 .grid-loader {
@@ -14,9 +14,9 @@ button {
   margin: 3px;
 }
 
-
 .grid-buttons {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  // grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
   gap: 10px
 }

@@ -220,14 +220,26 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   ngOnInit() {
     const site           = this.siteService.getAssignedSite();
     this.employees$      = this.orderService.getActiveEmployees(site);
-    this.serviceTypes$   = this.serviceTypes.getSaleTypes(site);
+
     this.initAuthorization();
     this.initCompletionDateForm();
     this.initScheduledDateForm();
     this.initForm();
-    if (this.isAuthorized) {
-      this.serviceTypes$   = this.serviceTypes.getAllServiceTypes(site);
+
+    if (!this.isAuthorized) {
+      this.serviceTypes$   = this.serviceTypes.getSaleTypes(site).pipe(switchMap(data => {
+        this.serviceTypes.list = data;
+        return of(data)
+      }))
     }
+
+    if (this.isAuthorized) {
+      this.serviceTypes$   = this.serviceTypes.getAllServiceTypes(site).pipe(switchMap(data => {
+        this.serviceTypes.list = data;
+        return of(data)
+      }))
+    }
+
     this.refreshSearch();
     this.updateItemsPerPage();
     this.subscribeToScheduledDatePicker()

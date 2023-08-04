@@ -57,22 +57,29 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
   }
 
   ngOnInit(): void {
+    console.log('ngOninit')
     this.initValues()
     this.initSubscriptions();
   }
 
   initValues() {
-    if (this.sheet) {
+
+    if (this.sheet && this.sheet.id) {
       this.balanceSheetMethodsService.getOrdersOpen( this.sheet.id ).subscribe( data => {
-        this.ordersOpen = (data.count).toString()
-        this.balanceSheetMethodsService.updateOpenOrders(data.count)
+        if (data) {
+          this.ordersOpen = (data.count).toString()
+          this.balanceSheetMethodsService.updateOpenOrders(data.count)
+        }
       })
 
       this.balanceSheetMethodsService.getOrderCount( this.sheet ).subscribe( data => {
-        this.ordersCount = (data.count).toString();
-        this.balanceSheetMethodsService.updateOrderCount(data.count)
+        if (data)  {
+          this.ordersCount = (data.count).toString();
+          this.balanceSheetMethodsService.updateOrderCount(data.count)
+        }
       })
     }
+
   }
 
   ngOnDestroy() {

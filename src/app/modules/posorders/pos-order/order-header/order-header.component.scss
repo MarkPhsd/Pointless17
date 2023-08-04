@@ -7,10 +7,11 @@ mat-card {
 
 .button {
   height: 50px;
-  // margin: 5px;
-  // margin: 4px;
 }
 
+.button-margin {
+  margin-left: 5px;
+}
 .container {
   display: grid;
   grid-template-columns: 150px 125px;
@@ -18,12 +19,12 @@ mat-card {
 }
 
 .button-row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: true;
-  row-gap: 5px;
-  column-gap: 5px;
+  display: grid;
+  grid-template-columns:  repeat( auto-fit, minmax(45px, 1fr) );
+  gap: 5px;
+  // margin-left: 5px;
   margin-bottom: 5px;
+  max-width: 135px;
 }
 
 

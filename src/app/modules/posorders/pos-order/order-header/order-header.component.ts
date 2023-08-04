@@ -1,9 +1,9 @@
 import { Component, Input , OnChanges, OnInit, TemplateRef, ViewChild, OnDestroy} from '@angular/core';
 import { Router } from '@angular/router';
-import { NgxPayPalModule } from 'ngx-paypal';
 import { of, switchMap, Observable, Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
+import { PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
@@ -20,6 +20,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 })
 export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
+  printLabels$: Observable<any>;
   @Input() hideButtonOptions: boolean;
   @Input() qrOrder: boolean;
   @Input() uiTransactionSettings  = {} as TransactionUISettings;
@@ -39,6 +40,10 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   action$: Observable<any>;
   isApp = this.platFormService.isApp()
 
+  site = this.siteService.getAssignedSite();
+  locations$ = this.locationsService.getLocationsCached();
+
+
   transactionUISettingsSubscriber() {
     try {
       this._uiTransactionSettings = this.uiSettingsService.transactionUISettings$.subscribe( data => {
@@ -53,6 +58,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     try {
       this._posDevice = this.uiSettingsService.posDevice$.subscribe(data => {
         this.posDevice = data;
+        // data?.labelPrinter
       })
     } catch (error) {
 
@@ -67,6 +73,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
              private orderMethodsService: OrderMethodsService,
              private paymentsMethodsProcessService: PaymentsMethodsProcessService,
              private siteService : SitesService,
+             private locationsService: PrinterLocationsService,
              private uiSettingsService: UISettingsService,
              public  authenticationService: AuthenticationService,
              public  prepPrintingService: PrepPrintingServiceService,
@@ -137,6 +144,16 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
         }
         return of(data)
       })
+    )
+  }
+
+  printLabels() {
+    this.printLabels$ = this.printingService.printLabels(this.order , true).pipe(
+      switchMap(data => {
+          this.printingService.printJoinedLabels();
+          return of(data)
+        }
+      )
     )
   }
 

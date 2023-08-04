@@ -30,6 +30,8 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   @ViewChild('imageButton')  imageButton :  TemplateRef<any> | undefined;
   @ViewChild('editItemView') editItemView :  TemplateRef<any>;
+  @ViewChild('viewItemView') viewItemView: TemplateRef<any> | undefined;
+
   @Output() outPutLoadMore = new EventEmitter()
   @Input() allowEdit : boolean;
   @Input() id        : number;
@@ -62,7 +64,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     private orderService: OrdersService,
     private _snackBar: MatSnackBar,
     private orderMethodsService: OrderMethodsService,
-    private platFormService   : PlatformService,
+    public platFormService   : PlatformService,
     private menuService: MenuService,
     private authenticationService: AuthenticationService,
     private productEditButtonService: ProductEditButtonService,
@@ -79,9 +81,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     this.imageUrl  = this.getItemSrc(this.menuItem)
     this.getMenuItemObject(this.menuItem)
     this.initLayout()
-
-    // console.log('determine how to know if the page has navigated or is updated')
-
   };
 
   get isImageButtonView() {
@@ -128,6 +127,16 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     }
     return null;
   }
+
+  get enableViewItem() {
+    if (this.isApp && this.authenticationService.isAdmin || this.allowEdit && this.isApp) {
+      if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
+        return this.viewItemView
+      }
+    }
+    return null;
+  }
+
 
   getIsNonProduct(menuItem: IMenuItem): boolean {
     if (!menuItem) { return false}
@@ -189,7 +198,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   menuItemAction(add: boolean) {
-
     if (this.menuItem?.name.toLowerCase() === 'load more') {
       this.outPutLoadMore.emit('true')
       return ;
@@ -215,14 +223,12 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
       let model = {} as ProductSearchModel;
       const departmentID       = +this.route.snapshot.paramMap.get('departmentID');
       const itemTypeID         = +this.route.snapshot.paramMap.get('typeID');
-      const categoryID = this.menuItem.id;
-      model.categoryID = categoryID;
+      const categoryID   = this.menuItem.id;
+      model.categoryID   = categoryID;
       model.departmentID = departmentID;
-      model.itemTypeID = itemTypeID;
-
-      console.log('updating model', model)
+      model.itemTypeID   = itemTypeID;
+      // console.log('updating model', model)
       this.menuService.updateSearchModel(model)
-
       return;
     }
 
@@ -232,7 +238,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     }
 
     if (this.isCategory) {
-
       this.listItems(this.menuItem.id,this.menuItem.itemType.id);
       add = false;
       return;
@@ -241,8 +246,15 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     if (this.authenticationService.isCustomer) { add = false; }
 
     if (plusOne) { add = true; }
+    if (this.isApp) {add = true }
     this.action$ = this.orderMethodsService.menuItemActionObs(this.order,this.menuItem, add,
                                                             this.orderMethodsService.assignPOSItems);
+  }
+
+  viewItem() {
+
+    if (!this.menuItem || !this.menuItem.id) { return }
+    this.orderMethodsService.listItem(this.menuItem.id)
   }
 
   listItems(id: number, typeID: number) {
@@ -259,7 +271,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
         return;
       }
 
-      console.log('emit refresh')
       this.router.navigate(["/menuitems-infinite/", {categoryID: id, hideSubCategoryItems: false }]);
       this.outputRefresh.emit(true)
       return;
@@ -267,12 +278,12 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     if (this.menuItem?.itemType?.id == 5) {
 
       if (this.uiHomePage.storeNavigation) {
-        console.log('update model store nav')
+        // console.log('update model store nav')
         this.menuService.searchModel.subCategoryID = this.menuItem.id;
         this.menuService.updateSearchModel(this.menuService.searchModel);
         return;
       }
-      console.log('update model subcategory')
+      // console.log('update model subcategory')
       this.router.navigate(["/menuitems-infinite/", {subCategoryID:id, hideSubCategoryItems: false}]);
       this.outputRefresh.emit(true)
       return;

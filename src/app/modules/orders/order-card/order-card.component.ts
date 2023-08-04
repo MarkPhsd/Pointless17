@@ -1,5 +1,8 @@
 import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Observable } from 'rxjs';
+import { IServiceType } from 'src/app/_interfaces';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
+import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
 // https://www.freecodecamp.org/news/everything-you-need-to-know-about-ng-template-ng-content-ng-container-and-ngtemplateoutlet-4b7b51223691/
 
@@ -10,12 +13,15 @@ import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 })
 export class OrderCardComponent implements OnInit {
 
+  serviceColor: string;
+  serviceType$ : Observable<IServiceType>;
   phoneDevice: boolean;
   @Input() order : IPOSOrder;
   smallDevice : boolean;
   minutesOpen: number;
+  orderNameLength: number = 15;
 
-  constructor() {
+  constructor(private serviceTypeService: ServiceTypeService) {
     this.updateItemsPerPage();
    }
 
@@ -26,7 +32,8 @@ export class OrderCardComponent implements OnInit {
        this.smallDevice = true
      }
      if (window.innerWidth < 599) {
-       this.phoneDevice = true
+      this.orderNameLength = 12
+      this.phoneDevice = true
      }
    }
 
@@ -39,7 +46,20 @@ export class OrderCardComponent implements OnInit {
         this.order.itemCount = 0
       }
       this.minutesOpen = this.getMinutesOpen(this.order)
+
+      if (this.order.serviceTypeID) {
+        const id = this.order.serviceTypeID;
+        if (this.serviceTypeService.list) {
+          const item = this.serviceTypeService.list.filter(data => {return data.id == id})
+          if (item) {
+            // this.serviceColor = item[0]?.serviceColor
+            this.serviceColor = `background-color:${item[0].serviceColor};`
+          }
+        }
+
+      }
     }
+
     // console.log('order?.clients_POSOrders?', this.order?.clients_POSOrders  )
 
   }

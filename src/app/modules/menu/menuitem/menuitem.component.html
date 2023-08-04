@@ -1,8 +1,8 @@
-<div *ngIf="(action$ | async) as action"></div>
+  <div *ngIf="(action$ | async) as action"></div>
 
-<ng-template #loading><mat-spinner
-          [diameter]="75"></mat-spinner>
-</ng-template>
+  <ng-template #loading><mat-spinner
+            [diameter]="75"></mat-spinner>
+  </ng-template>
 
 <div *ngIf="menuItem; else loading" >
     <mat-card>
@@ -16,211 +16,284 @@
         </div>
       </mat-card-title>
 
-      <mat-card-subtitle >
+      <mat-card-content >
+
         <div class="grid">
           <div class="grid-header">
             <div class="grid-demographics">
+
                 <div class="item-span" >
-                  <span *ngIf="menuItem && menuItem.species">
-                    <button mat-raised-button color="accent">
-                      {{ menuItem?.species }}
-                    </button>
-                  </span>
-                  <div>
-                    <h1>
-                      {{ menuItem?.name.toUpperCase() }}
-                    </h1>
-                  </div>
+                  <ng-container [ngTemplateOutlet]="nameView"></ng-container>
+                  <ng-container [ngTemplateOutlet]="speciesView"></ng-container>
+                  <ng-container [ngTemplateOutlet]="barcodeView"></ng-container>
+                  <ng-container [ngTemplateOutlet]="companyNameView"></ng-container>
                 </div>
 
-                <div class="item-span"
-                     id="brand-name"
-                     *ngIf="brand$ | async as brand">
-                  {{ brand?.companyName }}
+                <div class="features-span">
+                  <ng-container [ngTemplateOutlet]="pricesView"></ng-container>
+
+                  <ng-container [ngTemplateOutlet]="productCountView"></ng-container>
+
+                  <ng-container [ngTemplateOutlet]="inStockView"></ng-container>
+
+                  <ng-container [ngTemplateOutlet]="addButtonsView"></ng-container>
                 </div>
 
-                <div class="item-span"
-                    *ngIf="menuItem.barcode"
-                     id="barcode">{{ menuItem?.barcode}}
-                </div>
+                <ng-container [ngTemplateOutlet]="instructionsView"></ng-container>
 
-                <div class="item-span">
+                <ng-container [ngTemplateOutlet]="packagingView"></ng-container>
 
-                  <div class="prices"
-                      *ngIf="isUserStaff">
-                    <menu-item-extended-prices
-                      [isUserStaff]="isUserStaff"
-                      [menuItem]="menuItem">
-                    </menu-item-extended-prices>
-                  </div>
-
-                  <div *ngIf="menuItem && menuItem.itemType
-                              && !menuItem.itemType.requireInStock">
-                    <menu-item-product-count
-                      [productCount]='menuItem.productCount'
-                      [isUserStaff] ='isUserStaff'>
-                    </menu-item-product-count>
-                  </div>
-
-                  <div class="item-span instock-option"
-                    *ngIf="menuItem && menuItem.itemType
-                          && menuItem.itemType.requireInStock">
-                    <inventory-counts-view
-                        [showList]      ="false"
-                        [showAddButton] ="!priceTiersShown"
-                        [productID]     ="menuItem.id"
-                        (outPutAddItem) ="addItemByCodeOBS($event)">
-                        Add to Cart
-                    </inventory-counts-view>
-                  </div>
-
-                  <div class="grid-save-add-buttons"
-                      *ngIf="menuItem && menuItem.itemType
-                        && !menuItem.itemType.requireInStock
-                        && !priceTiers">
-
-                      <div id="addItemToOrder">
-                        <button  mat-raised-button
-                                  class="button"
-                                  (click)="addItemToOrder()">
-                          <mat-icon>add</mat-icon>Add To Order</button>
-                      </div>
-
-                      <div *ngIf="productForm"
-                            class="column-3-span">
-                          <app-quantiy-selector
-                            [inputForm]  = "productForm"
-                            (outPutValue)="changeQuantity($event)">
-                        </app-quantiy-selector>
-                      </div>
-                  </div>
-
-                </div>
-
-                <div  *ngIf="menuItem.itemType && menuItem.itemType.instructions"
-                      class="item-span"
-                      [innerHTML]="menuItem?.itemType.instructions">
-                </div>
-
-                <div  class="mat-packaging"
-                      *ngIf="packagingMaterial && packagingMaterial.length>0">
-                  <div *ngIf='packaging'>
-                    {{packaging}} assigned.
-                  </div>
-                  <div *ngIf='!packaging'>
-                    <mat-label >Choose Packaging Material</mat-label>
-                  </div>
-                  <div *ngFor="let item of packagingMaterial">
-                    <button class="package-buttons"
-                            mat-raised-button color="accent"
-                            (click)="packaging=item">{{item}}</button>
-                  </div>
-                </div>
-
-                <div class="item-span mat-packaging"
-                      *ngIf="menuItem
-                            && menuItem.itemType
-                            && menuItem.itemType.portionValue">
-                    <mat-form-field appearance="outline"
-                                    class="form-fields">
-                      <mat-label>
-                        Portion Value
-                      </mat-label>
-                      <mat-select
-                                  type="'text'"
-                                  [(ngModel)]       = "portionValue"
-                                  formControlName   = "portionValue">
-                          <mat-option [value]="">
-                            Clear
-                          </mat-option>
-                          <mat-option *ngFor="let item of menuItem.itemType.portionValue.split(',')"
-                                      [value]="item">
-                            {{ item }}
-                          </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                </div>
-
-                <div  class="item-span mat-packaging"
-                      [formGroup]="productForm"
-                      *ngIf="productForm && menuItem
-                            && menuItem.itemType
-                            && menuItem.itemType.enableCustomNote">
-                    <mat-form-field appearance="outline"
-                        id="customer-notes">
-                      <mat-label>Input notes to help prepare this item.</mat-label>
-                      <textarea matInput
-                                  rows="10"
-                                  columns="40"
-                                  formControlName="itemNote"
-                        ></textarea>
-                    </mat-form-field>
-                </div>
+                <ng-container [ngTemplateOutlet]="prepNotesView"></ng-container>
 
               </div>
           </div>
 
           <div>
 
-            <div  *ngIf="menuItem.onlineShortDescription || menuItem.metaTags"
-                  class="onlineShortDescription"
-                  [innerHTML]="menuItem?.onlineShortDescription">
-            </div>
+            <ng-container [ngTemplateOutlet]="shortdescriptionView"></ng-container>
 
-            <div class="item-span"
-                 *ngIf="menuItem && menuItem.itemType
-                        &&  priceTiers">
-                <tier-price-line
-                    (outputNewItem)="addItemWithTierPrice($event)"
-                    [menuPopup]    ="true"
-                    [menuItem]     ="menuItem"
-                    [priceTiers]   ="priceTiers">
-                </tier-price-line>
-            </div>
+            <ng-container [ngTemplateOutlet]="tierPriceView"></ng-container>
 
             <div class="center gf-chips">
-              <span *ngIf="menuItem.glutenFree || menuItem.metaTags">
-                <button mat-fab color="warn" aria-label="Gluten Free">
-                  GF
-                </button>
-              </span>
-              <app-chips-display
-                [items]="menuItem.metaTags">
-              </app-chips-display>
+              <ng-container [ngTemplateOutlet]="metaTagsView"></ng-container>
             </div>
           </div>
 
-        </div>
-      </mat-card-subtitle>
 
-      <mat-card-content >
-        <!-- <div class="flex"> -->
           <div class="grid">
-            <div class="gallery"  *ngIf="menuItem.urlImageMain || menuItem.urlImageOther">
-              <app-menu-item-gallery [menuItem]="menuItem"></app-menu-item-gallery>
-            </div>
+
+            <ng-container [ngTemplateOutlet]="galleryView"></ng-container>
 
             <div>
-              <div  *ngIf=" menuItem.onlineDescription"
-                    id="onlineDescription"
-                    class="grid-item-gallery"
-                    [innerHTML]="menuItem?.onlineDescription">
-              </div>
 
-              <div class="center">
-                <app-chemical-spinners
-                  [menuItem]="menuItem">
-                </app-chemical-spinners>
-              </div>
+              <ng-container [ngTemplateOutlet]="descriptionView"></ng-container>
+
+              <ng-container [ngTemplateOutlet]="chemicalSpinnerView"></ng-container>
+
             </div>
 
-            <div *ngIf="menuItem.specialDescription">
-              <div id="specialDescription"> {{ menuItem?.specialDescription }} </div>
-            </div>
+            <ng-container [ngTemplateOutlet]="specialDescriptionView"></ng-container>
 
           </div>
-        <!-- </div> -->
+        </div>
+
       </mat-card-content>
     </mat-card>
+
+    <ng-template #speciesView>
+      <span *ngIf="menuItem && menuItem.species">
+        <button mat-raised-button color="accent">
+          {{ menuItem?.species }}
+        </button>
+      </span>
+    </ng-template>
+
+    <ng-template #nameView>
+      <div class="title">
+        <h1>
+          {{ menuItem?.name.toUpperCase() }}
+        </h1>
+      </div>
+    </ng-template>
+
+    <ng-template #companyNameView>
+      <div class="item-span"
+          id="brand-name"
+          *ngIf="brand$ | async as brand">
+        {{ brand?.companyName }}
+      </div>
+    </ng-template>
+
+    <ng-template #barcodeView>
+      <div class="item-span"
+          *ngIf="menuItem.barcode"
+          id="barcode">{{ menuItem?.barcode}}
+      </div>
+    </ng-template>
+
+    <ng-template #addButtonsView>
+      <div class="grid-save-add-buttons"
+          *ngIf="menuItem && menuItem.itemType
+            && !menuItem.itemType.requireInStock
+            && !priceTiers">
+
+          <div id="addItemToOrder">
+            <button  mat-raised-button
+                      class="button"
+                      (click)="addItemToOrder()">
+              <mat-icon>add</mat-icon>Add To Order</button>
+          </div>
+
+          <div *ngIf="productForm"
+                class="column-3-span">
+              <app-quantiy-selector
+                [inputForm]  = "productForm"
+                (outPutValue)="changeQuantity($event)">
+            </app-quantiy-selector>
+          </div>
+      </div>
+    </ng-template>
+
+    <ng-template #specialDescriptionView>
+      <div *ngIf="menuItem.specialDescription">
+        <div id="specialDescription"> {{ menuItem?.specialDescription }} </div>
+      </div>
+    </ng-template>
+
+    <ng-template #pricesView>
+      <div class="prices"
+          *ngIf="isUserStaff">
+        <menu-item-extended-prices
+          [isUserStaff]="isUserStaff"
+          [menuItem]="menuItem">
+        </menu-item-extended-prices>
+      </div>
+    </ng-template>
+
+    <ng-template #productCountView>
+      <div *ngIf="menuItem && menuItem.itemType
+                  && !menuItem.itemType.requireInStock">
+        <menu-item-product-count
+          [productCount]='menuItem.productCount'
+          [isUserStaff] ='isUserStaff'>
+        </menu-item-product-count>
+      </div>
+    </ng-template>
+
+    <ng-template #inStockView>
+      <div class="item-span instock-option"
+        *ngIf="menuItem && menuItem.itemType
+              && menuItem.itemType.requireInStock">
+        <inventory-counts-view
+            [showList]      ="false"
+            [showAddButton] ="!priceTiersShown"
+            [productID]     ="menuItem.id"
+            (outPutAddItem) ="addItemByCodeOBS($event)">
+            Add to Cart
+        </inventory-counts-view>
+      </div>
+    </ng-template>
+
+    <ng-template #instructionsView>
+      <div  *ngIf="menuItem.itemType && menuItem.itemType.instructions"
+            class="item-span"
+            [innerHTML]="menuItem?.itemType.instructions">
+      </div>
+    </ng-template>
+
+    <ng-template #tierPriceView>
+      <div class="item-span"
+           *ngIf="menuItem && menuItem.itemType
+                  &&  priceTiers">
+          <tier-price-line
+              (outputNewItem)="addItemWithTierPrice($event)"
+              [menuPopup]    ="true"
+              [menuItem]     ="menuItem"
+              [priceTiers]   ="priceTiers">
+          </tier-price-line>
+      </div>
+    </ng-template>
+
+    <ng-template #chemicalSpinnerView>
+      <div class="center">
+        <app-chemical-spinners
+          [menuItem]="menuItem">
+        </app-chemical-spinners>
+      </div>
+    </ng-template>
+
+    <ng-template #packagingView>
+      <div  class="mat-packaging"
+            *ngIf="packagingMaterial && packagingMaterial.length>0">
+        <div *ngIf='packaging'>
+          {{packaging}} assigned.
+        </div>
+        <div *ngIf='!packaging'>
+          <mat-label >Choose Packaging Material</mat-label>
+        </div>
+        <div *ngFor="let item of packagingMaterial">
+          <button class="package-buttons"
+                  mat-raised-button color="accent"
+                  (click)="packaging=item">{{item}}</button>
+        </div>
+      </div>
+      <div class="item-span mat-packaging"
+            *ngIf="menuItem
+                  && menuItem.itemType
+                  && menuItem.itemType.portionValue">
+          <mat-form-field appearance="outline"
+                          class="form-fields">
+            <mat-label>
+              Portion Value
+            </mat-label>
+            <mat-select
+                        type="'text'"
+                        [(ngModel)]       = "portionValue"
+                        formControlName   = "portionValue">
+                <mat-option [value]="">
+                  Clear
+                </mat-option>
+                <mat-option *ngFor="let item of menuItem.itemType.portionValue.split(',')"
+                            [value]="item">
+                  {{ item }}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
+      </div>
+    </ng-template>
+
+    <ng-template #prepNotesView>
+      <div  class="item-span mat-packaging"
+            [formGroup]="productForm"
+            *ngIf="productForm && menuItem
+                  && menuItem.itemType
+                  && menuItem.itemType.enableCustomNote">
+          <mat-form-field appearance="outline"
+              id="customer-notes">
+            <mat-label>Input notes to help prepare this item.</mat-label>
+            <textarea matInput
+                        rows="10"
+                        columns="40"
+                        formControlName="itemNote"
+              ></textarea>
+          </mat-form-field>
+      </div>
+    </ng-template>
+
+    <ng-template #descriptionView>
+      <div  *ngIf=" menuItem.onlineDescription"
+            id="onlineDescription"
+            class="grid-item-gallery"
+            [innerHTML]="menuItem?.onlineDescription">
+      </div>
+    </ng-template>
+
+    <ng-template #shortdescriptionView>
+      <div  *ngIf="menuItem.onlineShortDescription || menuItem.metaTags"
+            class="onlineShortDescription"
+            [innerHTML]="menuItem?.onlineShortDescription">
+      </div>
+    </ng-template>
+
+    <ng-template #metaTagsView>
+      <span *ngIf="menuItem.glutenFree || menuItem.metaTags">
+        <button mat-fab color="warn" aria-label="Gluten Free">
+          GF
+        </button>
+      </span>
+
+      <app-chips-display
+        [items]="menuItem.metaTags">
+      </app-chips-display>
+    </ng-template>
+
+    <ng-template #galleryView>
+      <div class="gallery"  *ngIf="menuItem.urlImageMain || menuItem.urlImageOther">
+        <app-menu-item-gallery [menuItem]="menuItem"></app-menu-item-gallery>
+      </div>
+    </ng-template>
+
+
 </div>
+
 

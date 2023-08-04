@@ -1030,6 +1030,7 @@ export class OrderMethodsService implements OnDestroy {
         this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem, data.priceCategoryID);
 
         if (this.siteService.phoneDevice) {
+          this.notifyItemAdded(data)
         } else {
           const order = data.order as IPOSOrder;
           if (order && order.service && order.service.retailType) {
@@ -1040,9 +1041,7 @@ export class OrderMethodsService implements OnDestroy {
           if (order && order.posOrderItems.length == 1 ) {
             this.toolbarServiceUI.updateOrderBar(true)
           }
-          if (!this.toolbarServiceUI.orderBar) {
-            this.siteService.notify(`Item added ${data?.posItemMenuItem?.name}`, 'close', 1000, 'green')
-          }
+          this.notifyItemAdded(data)
         }
 
       } else {
@@ -1055,6 +1054,12 @@ export class OrderMethodsService implements OnDestroy {
         // this.notification('Item added to cart.', 'Check Cart');
       }
 
+  }
+
+  notifyItemAdded(data) {
+    if (!this.toolbarServiceUI.orderBar || !this.isApp) {
+      this.siteService.notify(`Item added ${data?.posItemMenuItem?.name}`, 'close', 1000, 'green')
+    }
   }
 
   toggleOpenOrderBar(isStaff: boolean) {

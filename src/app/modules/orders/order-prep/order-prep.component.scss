@@ -75,8 +75,13 @@ mat-card-subtitle {
   }
 }
 
+.mat-card {
+  min-height: 155px;
+  max-height: 165px;
+}
+
 .center {
-  padding: 1px;
+  padding: 3px;
   @include for-phone-only  {
     display        : flex;
     justify-content: space-evenly;

@@ -65,14 +65,14 @@
                 color="primary"
                 (click)="onCancel()"><mat-icon>close</mat-icon>Cancel
         </button>
-        <!-- <app-keyboard-button [smallDevice]="false" [isApp]="true" [isUserStaff]="true"></app-keyboard-button> -->
       </div>
 
     </mat-card-actions>
   </mat-card>
 </div>
 
-<div *ngIf="editField == 'modifierNote'">
+<div *ngIf="editField == 'modifierNote' && platFormService.isApp()">
+  <!-- {{platFormService.isApp()}}s -->
   <app-keyboard [disableClose]= "true"> </app-keyboard>
 </div>
 

@@ -5,11 +5,6 @@
       <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
 
       <div *ngIf="(homePage$ | async) as homePageSettings; else loading">
-        <!-- {{homePageSetings | json}} -->
-        <!-- homePageSetings.staffDepartmentsEnabled {{homePageSetings.staffDepartmentsEnabled}}
-        <br>
-        homePageSetings.staffCategoriesEnabled {{homePageSetings.staffCategoriesEnabled}} -->
-
         <div>
           <blog-post-list [homePageSettings]="homePageSetings"
                           [group]    ="'Main Page'"

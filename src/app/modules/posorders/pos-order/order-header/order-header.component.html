@@ -5,6 +5,7 @@
         <h4>
           <span  *ngIf="!isOrderClaimed && order.id" > <mat-icon color="warn">lock</mat-icon>
           </span> Order {{order?.id | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
+          <div *ngIf="order.tableName">{{order.tableName}}</div>
         </h4>
       </div>
       <div class="total-card">
@@ -21,25 +22,39 @@
 
     <div>
 
-      <div *ngIf="(isApp) || (!isApp  && isUserStaff) && uiTransactionSettings">
-        <div class="button-row" *ngIf="(!qrOrder && !hideButtonOptions)">
-          <div *ngIf="!mainPanel">
-            <button  class="button" color="primary" mat-raised-button
-            (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>
-          </div>
+      <div *ngIf="(isApp) || (!isApp  && isUserStaff) && uiTransactionSettings ">
 
-          <div *ngIf="isSale && isUserStaff">
-            <button  class="button" color="warn" mat-raised-button
-              (click)="sendOrder()">
-              <mat-icon>local_fire_department</mat-icon>
+        <div class="button-row" *ngIf="(!qrOrder && !hideButtonOptions)">
+
+          <div   class="button-margin" *ngIf="!mainPanel">
+            <button  class="button" color="primary" mat-raised-button
+              (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon>
             </button>
           </div>
+
+          <div   class="button-margin" *ngIf="(locations$ | async) as locations">
+            <div *ngIf="locations.length>0">
+              <div *ngIf="isSale && isUserStaff && posDevice && posDevice.labelPrinter">
+                <button   class="button" color="warn" mat-raised-button
+                  (click)="sendOrder()">
+                  <mat-icon>local_fire_department</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div   class="button-margin" *ngIf="isSale && isUserStaff ">
+            <button   class="button" color="warn" mat-raised-button
+              (click)="printLabels()">
+              <mat-icon>book</mat-icon>
+            </button>
+          </div>
+
         </div>
       </div>
 
       <div class="button-row" *ngIf="isUserStaff && isSale">
-        <div>
-
+        <div class="button-margin">
           <split-entry-selector [order]="order"
                                 [isUserStaff]="isUserStaff"
                                 [uiTransactionSettings]="uiTransactionSettings">
@@ -65,4 +80,4 @@
 </span>
 
 <div *ngIf="(action$ | async) as result"></div>
-
+<div *ngIf="(printLabels$  | async) as printLabels"></div>

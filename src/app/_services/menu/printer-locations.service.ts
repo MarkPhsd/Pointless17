@@ -2,8 +2,9 @@ import { Injectable, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../system/authentication.service';
 import { Observable } from 'rxjs';
-import { ISite}  from 'src/app/_interfaces';
+import { ISetting, ISite}  from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 
 export interface IPrinterLocation {
   id: number;
@@ -34,11 +35,38 @@ export class PrinterLocationsService {
 
   constructor(
       private http: HttpClient,
+      private httpCache: HttpClientCacheService,
       private auth: AuthenticationService,
       private siteService: SitesService)
     {
     }
 
+
+  getLocationsCached(): Observable<IPrinterLocation[]> {
+
+    const site = this.siteService.getAssignedSite()
+
+    const controller =  `/PrinterLocations/`
+
+    const endPoint = `GetLocations`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const uri = { url: url, cacheMins: 120}
+
+    let appCache =  JSON.parse(localStorage.getItem('appCache')) as ISetting
+    if (appCache) {
+      if (appCache?.value && appCache?.boolean) {
+        const url = { url: uri, cacheMins: appCache.value}
+        return  this.httpCache.get<IPrinterLocation[]>(uri)
+      }
+    }
+
+    return  this.http.get<IPrinterLocation[]>(url)
+
+}
 
   getLocations(): Observable<IPrinterLocation[]> {
 

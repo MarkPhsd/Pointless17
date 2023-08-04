@@ -487,10 +487,12 @@ mat-dialog-container {
   display: grid;
   gap: 4px;
   grid-template-columns: 25px 1fr;
-  min-width: 193px;
+  min-width: 185  px;
+  margin-left: 5px;
 }
 
 .grid-image-button-group {
+  width: 195px;
   margin: 5px;
   height: 45px;
 }
@@ -707,6 +709,17 @@ mat-dialog-container {
   opacity: .5;
   z-index: 100;
 }
+
+.view-float-button {
+  position: relative;
+  z-index: 105;
+  top: 5px;
+  right: -80px;
+  margin-bottom: -35px;
+  opacity: .5;
+  z-index: 100;
+}
+
 
 .mat-label-info {
   font-size: 1.2em;

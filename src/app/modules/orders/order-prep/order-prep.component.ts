@@ -1,11 +1,13 @@
 import { Component, OnInit, Input, HostListener,OnDestroy, Output ,EventEmitter} from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { ISite } from 'src/app/_interfaces';
+import { SelectControlValueAccessor } from '@angular/forms';
+import { Observable, Subscription, of, switchMap } from 'rxjs';
+import { IServiceType, ISite } from 'src/app/_interfaces';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import { OrdersService } from 'src/app/_services';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-
+import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
 @Component({
   selector: 'app-order-prep',
@@ -15,6 +17,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 
 export class OrderPrepComponent implements OnInit,OnDestroy {
 
+  serviceColor: string;
   @Output() outPutSetVisibility  = new EventEmitter<any>();
   @Input() site: ISite;
   @Input() order: IPOSOrder;
@@ -33,7 +36,7 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
   _printLocation: Subscription;
 
   orderItems$    : Observable<IPOSOrder>;
-
+  serviceType$: Observable<IServiceType>;
   viewType: number;
   _viewType: Subscription;
   prepScreen: boolean;
@@ -83,6 +86,8 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
 
   constructor(private orderService: OrdersService,
               private printingService: PrintingService,
+              private siteService: SitesService,
+              private serviceTypeService: ServiceTypeService,
               private orderMethodsService: OrderMethodsService,) {
     this.updateItemsPerPage();
   }
@@ -121,6 +126,8 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
         data.posOrderItems = items.filter(item => {
             let display = false;
             let printLocation = false;
+
+            this.setColor(data.serviceTypeID)
 
             if (this.prepStatus == 0) {
               if (!item.itemPrepped && !item.printed) {
@@ -165,6 +172,21 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
         this.orderItems = data;
       })
     }
+  }
+
+  setColor(id: number) {
+    const site = this.siteService.getAssignedSite()
+    if (this.serviceTypeService.list) {
+      const item = this.serviceTypeService.list.filter(data => { return data.id == id } )
+      if (item) {
+        this.serviceColor = `background-color:${item[0].serviceColor};`
+      }
+    }
+
+    this.serviceType$ = this.serviceTypeService.getType(site, id).pipe(switchMap(data => {
+      this.serviceColor = `background-color:${data.serviceColor};`
+      return of(data)
+    }))
   }
 
   getMinutesOpen(order) : number {

@@ -17,6 +17,7 @@ import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { L } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-balance-sheet-edit',
@@ -103,12 +104,15 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   initSubscriptions() {
     this.loading = true
     this._sheet = this.sheetMethodsService.balanceSheet$.subscribe( data => {
-      // console.log('updating sheet data', data)
+      console.log('getting sheet subscription', data)
       this.sheet = data;
       if (data) {
         this.getSheetType(data)
       }
+
       this.loading = false;
+      this.inputForm       = this.sheetMethodsService.initForm(this.inputForm);
+
       if (this.inputForm) {
         this.inputForm.patchValue(this.sheet)
       }
@@ -151,10 +155,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     if (this.cashDropActive) {
       this.selectedIndex = 1;
     }
-    this.inputForm       = this.sheetMethodsService.initForm(this.inputForm);
-
-    let sheet = {} as IBalanceSheet
-
   }
 
   ngOnInit() {
@@ -167,9 +167,11 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     if(!this.id) {
       this.newBalanceSheet();
     }
+
     if (this.id) {
       this.getSheet(this.id)
     }
+
   };
 
   initDepositForms() {
@@ -193,29 +195,36 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   newBalanceSheet() {
     //we have to initialize the balance sheet.
     //we should just be sending maybe the device, and the user.
-    // console.log('new balance Sheet')
+    console.log('new balance Sheet')
     this.balanceSheet$ = this.sheetMethodsService.getCurrentBalanceSheet().pipe(
       switchMap(data => {
-        // this.sheet = data;
-        // console.log(data)
+        console.log('get sheet',data)
         this.getSheetType(data)
+        this.sheet = data;
+        this.initForm(data)
         return of(data)
     }))
   }
 
   getSheet(id: string) {
-    // console.log('getSheet')
+
     this.balanceSheet$ = this.sheetMethodsService.getSheetObservable(id).pipe(switchMap(data => {
       this.getSheetType(data);
-      // console.log(data)
       this.sheet = data;
+      this.initForm(this.sheet);
+      console.log('getsheet', data)
       return of(data)
     }))
   }
 
-    _updateItem() {
-    return this.sheetMethodsService.updateSheet(this.inputForm, this.startShiftInt).pipe(switchMap(data => {
-      // console.log('updating sheet data', data)
+  _updateItem() {
+
+    let sheet = this.inputForm.value as IBalanceSheet;
+    sheet.overUnderTotal = this.getCurrentBalance()
+    console.log(this.getCurrentBalance(), sheet.overUnderTotal)
+    console.log(sheet)
+
+    return this.sheetMethodsService.updateSheet(sheet, this.startShiftInt).pipe(switchMap(data => {
       this.sheet = data;
       return of(data)
     }))
@@ -270,6 +279,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   initForm(sheet: IBalanceSheet) {
+    console.log('patch form data', sheet)
     try {
       const form = this.inputForm // this.sheetService.initForm(this.inputForm);
       if (!form)
@@ -434,7 +444,9 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
   _print(event): Observable<any> {
     this.printingService.updatePrintView(2);
-    return this.sheetMethodsService.updateSheet(this.inputForm, this.startShiftInt).pipe(
+    const sheet = this.inputForm.value as IBalanceSheet
+    sheet.overUnderTotal = this.getCurrentBalance()
+    return this.sheetMethodsService.updateSheet(sheet, this.startShiftInt).pipe(
       switchMap(data => {
         if (!data) { return of(null)}
         return this.printingService.previewReceipt(true)
@@ -447,7 +459,9 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
   printEndingValues(event){
     this.printingService.updatePrintView(3);
-    this.balanceSheet$ = this.sheetMethodsService.updateSheet(this.inputForm, this.startShiftInt).pipe(
+    let sheet = this.inputForm.value as IBalanceSheet
+    sheet.overUnderTotal = this.getCurrentBalance()
+    this.balanceSheet$ = this.sheetMethodsService.updateSheet(sheet, this.startShiftInt).pipe(
       switchMap(data => {
         this.printingService.previewReceipt(true)
         return of(data)

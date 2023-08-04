@@ -1,9 +1,9 @@
 
 <div class="features" *ngIf="role == 'admin'">
-  <div class="grid-buttons">
+
   <div class="grid-buttons">
 
-    <div>
+    <div >
       <button mat-raised-button
               color  = "primary"
               class ="grid-image-button-group "
@@ -100,7 +100,7 @@
 
   </div>
 
-    <div>
+  <div>
       <div>
         <button mat-raised-button
             color  = "primary"
@@ -114,6 +114,7 @@
       <div  *ngIf="showInitializer">
         <p>This feature is intended for initial setup. It should not be used if you are operating already.</p>
       </div>
+
       <div *ngIf="showInitializer">
           <button mat-raised-button
                 color  = "warn"
@@ -130,8 +131,11 @@
           </div>
         </button>
       </div>
-    </div>
   </div>
-  <br>
-  <mat-divider></mat-divider>
+
 </div>
+
+<br>
+
+<mat-divider></mat-divider>
+

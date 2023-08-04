@@ -395,7 +395,7 @@
 </ng-template>
 
 <ng-template #editCartButtons>
-  <div  class="check-out-button" *ngIf="uiTransactionSetting && uiTransactionSetting?.displayEditCardOnHeader" >
+  <div  class="check-out-button" *ngIf="!smallDevice && !phoneDevice && uiTransactionSetting && uiTransactionSetting?.displayEditCardOnHeader" >
     <pos-check-out-buttons
       [order]="order"
       [phoneDevice]="phoneDevice"
@@ -415,7 +415,7 @@
 </ng-template>
 
 <ng-template #searchMenuView>
-  <div>
+  <div *ngIf="homePageSetings && !homePageSetings.staffHideSearchBar">
     <button aria-label="search"
             mat-button
             (click)="toggleSearchMenu()">

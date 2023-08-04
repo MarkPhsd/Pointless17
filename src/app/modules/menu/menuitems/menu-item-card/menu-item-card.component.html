@@ -1,6 +1,8 @@
  <div *ngIf="(action$  | async) as action"></div>
+<!-- isApp {{ this.platFormService.isApp() }} -->
 
 <ng-container [ngTemplateOutlet]="enableEditItem"></ng-container>
+<ng-container [ngTemplateOutlet]="enableViewItem"></ng-container>
 
 <mat-card  *ngIf="menuItem"
            [style]="buttonColor"
@@ -33,7 +35,7 @@
 
   <div class="footer">
 
-    <div *ngIf="isCategory && displayType === 'header-category'" class="header-category-title">
+    <div (click)="menuItemActionObs(true)" *ngIf="isCategory && displayType === 'header-category'" class="header-category-title">
       {{menuItem.name}}
     </div>
 
@@ -64,6 +66,17 @@
         color="accent"
         (click)="editItem()" >
       <mat-icon  color="primary">info</mat-icon>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #viewItemView>
+  <div class="view-float-button">
+    <button
+        mat-mini-fab
+        color="accent"
+        (click)="viewItem()" >
+      <mat-icon  color="primary">open_in_new</mat-icon>
     </button>
   </div>
 </ng-template>
@@ -135,7 +148,7 @@
         [src]     ="imageUrl"
         onerror   = "this.src='assets/images/placeholderimage.png'"
         class     ="product-image"
-        (click)="menuItemActionObs(true)"/>
+        (click)="menuItemActionObs(false)"/>
 </ng-template>
 
 <ng-template #categoryImage>

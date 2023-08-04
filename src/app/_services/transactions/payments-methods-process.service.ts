@@ -199,13 +199,12 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 }
 
-  sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean, uiTransactions: TransactionUISettings): Observable<any> {
+ sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean, uiTransactions: TransactionUISettings): Observable<any> {
     // console.log(uiTransactions)
     if (order) {
       const site = this.sitesService.getAssignedSite()
       const expoPrinter = uiTransactions?.expoPrinter
       const templateID = uiTransactions?.expoTemplateID;
-      // console.log('sendToPrep', expoPrinter, templateID);
       const prep$ = this.prepPrintingService.printLocations(order,printUnPrintedOnly,
                                                             expoPrinter,
                                                             templateID);
@@ -232,7 +231,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         })).pipe(
           switchMap( order => {
           if (order) {
-            // console.log(' prepPrintUnPrintedItems orderMethodsService.updateOrderSubscription')
             this.orderMethodsService.updateOrderSubscription(order)
             return of(order)
           }
@@ -241,29 +239,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return of(null)
   }
   // Error in processing cash paymentTypeError: Cannot read properties of undefined (reading 'pipe')
-
-
-  // processResults(paymentResponse: IPaymentResponse) {
-  //   let result = 0
-  //   if (paymentResponse?.paymentSuccess || paymentResponse?.orderCompleted) {
-  //     if (paymentResponse?.orderCompleted) {
-  //       this.action$ =   this.orderMethodsService.finalizeOrderProcesses(paymentResponse, this.paymentMethod, paymentResponse.order).pipe(switchMap(data => {
-  //         result =  this.orderMethodsService.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
-  //         return of(data)
-  //       }))
-  //     }
-  //   }
-
-  //   this.resetPaymentMethod();
-
-  //   if (paymentResponse?.paymentSuccess || paymentResponse?.responseMessage.toLowerCase() === 'success') {
-  //     this.orderService.updateOrderSubscription(paymentResponse.order)
-  //     this.notify(`Payment succeeded: ${paymentResponse.responseMessage}`, 'Success', 1000)
-  //   } else {
-  //     this.notify(`Payment failed because: ${paymentResponse?.responseMessage}`, 'Something unexpected happened.',3000)
-  //   }
-  // }
-
 
   //openDrawerFromBalanceSheet
   processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder,

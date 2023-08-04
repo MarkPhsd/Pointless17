@@ -37,6 +37,29 @@
   // gap: 10px;
 }
 
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 5px;
+}
+
+div.mat-chip-list-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+
+  .mat-chip {
+    flex: 0 0 auto;
+  }
+}
+
+
+.justify-content {
+  justify-content: center;
+  align-items: center;
+}
+
 .grid-flow-categories {
   --gap: 5px;
   margin-top: 2px;

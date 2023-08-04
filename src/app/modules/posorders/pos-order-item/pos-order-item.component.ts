@@ -499,6 +499,11 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   editDialog(item, width,height) {
     let dialogRef: any;
+
+    if (!this.platFormService.isApp()){
+      height =  "550px";
+    }
+
     dialogRef = this.dialog.open(PosOrderItemEditComponent,
       { width     : width,
         minWidth  : '300px',
@@ -510,6 +515,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       this.authenticationService.overRideUser(null)
     });
+
   }
 
   editSerial() {

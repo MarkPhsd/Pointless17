@@ -1,7 +1,5 @@
-<mat-card>
-
+<mat-card  [style]="serviceColor">
   <mat-card-content class="center">
-
     <div *ngIf="!smallDevice" class="grid-orderproperties">
 
       <div class='date-header' *ngIf="order.orderDate">
@@ -24,15 +22,11 @@
             class="time">
             {{order.completionDate |  date: 'shortTime'}}
       </div>
-
     </div>
 
     <div class="center">
-
       <div class="grid-totals">
-
         <div *ngIf="order" class="field-center">
-
           <div *ngIf="order.history">
             (h) {{ order.orderID_Temp }}
           </div>
@@ -40,18 +34,14 @@
             {{ order.id }}
           </div>
         </div>
-
-        <div class="field-center" *ngIf="!phoneDevice || (phoneDevice && order?.customerName)
-                                         || order.tableName">
+<!-- *ngIf="!phoneDevice || (phoneDevice && order?.customerName)
+                                         || order.tableName" -->
+        <div class="field-center" >
           <div class="order-name">
-            <div *ngIf="smallDevice">
-              <span *ngIf="order?.customerName"> {{ order?.customerName.trim() | truncateText : 15}}</span>
-              <span *ngIf="order?.tableName">{{order?.tableName.trim()}}</span>
-            </div>
-            <div *ngIf="!smallDevice">
-              <span *ngIf="order?.customerName"> {{ order?.customerName.trim() | truncateText : 12}}</span>
-              <span *ngIf="order?.tableName">{{order?.tableName.trim()}}</span>
-            </div>
+              <!--  -->
+              <span *ngIf="order.customerName" style="height: 25px"> {{ order?.customerName.trim() | truncateText : orderNameLength}}</span>
+              <!-- *ngIf="order?.tableName" -->
+              <span *ngIf="order.tableName" style="height: 25px">{{order?.tableName.trim()}}</span>
           </div>
         </div>
 
@@ -70,5 +60,4 @@
       </div>
     </div>
   </mat-card-content>
-
 </mat-card>

@@ -101,6 +101,11 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   uiHomePage$  : Observable<any>;
   style$       : Observable<any>;
   userAuths    = {} as IUserAuth_Properties;
+
+  subCategories$: Observable<any[]>;
+  categoriesList
+  subCategoriesList: any[];
+
   userAuths$   = this.authService.userAuths$.pipe(
     switchMap(data =>
       { this.userAuths = data;
@@ -216,7 +221,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     //before we move foward.
     //but if we move back, and have a category assigned but no department, we can't be
     //sure if we should accept the model, or the parameter from the page.
-    console.log('ngOnInit')
+    // console.log('ngOnInit')
     this.value      = 1;
     const homePage$ = this.uiSettingService.homePageSetting$;
     this.bucket$    = this.awsBucketService.awsBucketURLOBS().pipe(switchMap(data => {
@@ -259,7 +264,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
     let subCategoryID = +this.route.snapshot.paramMap.get('subCategoryID');
     if (subCategoryID !=0) {
-      console.log('init sub category parameters')
+      // console.log('init sub category parameters')
       this.currentPage = 1;
       const model = this.initViewFromParameters();
       this.initSearchFromModel();
@@ -269,7 +274,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
     let categoryID = +this.route.snapshot.paramMap.get('categoryID')
     if (categoryID !=0) {
-      console.log('init category parameters')
+      // console.log('init category parameters')
       this.currentPage = 1;
       const model = this.initViewFromParameters();
       this.initSearchFromModel();
@@ -279,7 +284,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
     let departmentID = +this.route.snapshot.paramMap.get('departmentID')
     if (departmentID !=0) {
-      console.log('init department parameters')
+      // console.log('init department parameters')
       this.currentPage = 1;
       const model = this.initViewFromParameters();
       this.initSearchFromModel();
@@ -303,12 +308,9 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     model.brandID            = +this.route.snapshot.paramMap.get('brandID');
     model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
     model.itemTypeID         = +this.route.snapshot.paramMap.get('typeID');
-
     if (model.departmentID != 0 || model.categoryID != 0 ||  model.subCategoryID != 0) {
-      console.log('initViewFromParameters', model)
       this.menuService.updateSearchModel(model)
     }
-
     return model
   }
 
@@ -356,7 +358,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
   ngAfterViewInit() {
     this.itemElements.changes.subscribe(_ => this.onItemElementsChanged());
-    console.log('after view initialized')
   }
 
   ngOnDestroy(): void {
@@ -416,17 +417,26 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   }
 
   refreshFromSelection(event) {
-
     this.productSearchModel = this.getListSearchModel(this.productSearchModel);
-    console.log('refreshFromSelection', this.productSearchModel)
-    console.log(this.productSearchModel)
     this.currentPage = 1;
-    this.updateSearchResults()
+    this.updateSearchResults();
   }
+
+  setSubcategoryID(id) {
+    if (id) {
+      this.productSearchModel.subCategoryID = id;
+    }
+    this.productSearchModel = this.getListSearchModel(this.productSearchModel);
+    this.currentPage = 1;
+    this.updateSearchResults();
+  }
+
 
   initSearchFromModel() {
     this._productSearchModel = this.menuService.searchModel$.subscribe( model => {
         this.productSearchModel = model;
+        this.refreshSubCategories(model?.categoryID)
+
         this.initSearchProcess();
         if (!model) {  model = this.menuService.initSearchModel() }
 
@@ -470,7 +480,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   }
 
   updateSearchResults() {
-    console.log('updateSearchResults')
     this.menuItems = [];
     this.nextPage();
   }
@@ -482,7 +491,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     return menuItem;
   }
 
-
   getListSearchModel(model : ProductSearchModel) {
     this.departmentID  = this.route.snapshot.paramMap.get('departmentID');
     this.categoryID    = this.route.snapshot.paramMap.get('categoryID');
@@ -490,7 +498,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     this.brandID       = this.route.snapshot.paramMap.get('brandID')
     this.typeID       = this.route.snapshot.paramMap.get('typeID')
     return this.updateModel(model)
-
   }
 
   updateModel(model: ProductSearchModel) {
@@ -515,8 +522,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
          (!this.brandID && this.brandID != "0") )   {
     }
     model.itemTypeID = 0
-
-
     return model;
   }
 
@@ -526,7 +531,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     catModel.categoryName = ''
     catModel.category = ''
     catModel.itemTypeID = 4;
-    console.log('Cat search', catModel)
+    // console.log('Cat search', catModel)
     this.categorySearchModel = catModel
   }
 
@@ -554,7 +559,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     const site        = this.siteService.getAssignedSite();
 
     let displayCategories$ : Observable<IMenuItemsResultsPaged | IMenuItem[]>;
-    if (this.uiHomePage.storeNavigation) {
+    if (this.uiHomePage && this.uiHomePage.storeNavigation) {
       let catModel      = this.categorySearchModel;
       if (catModel){
         catModel.pageNumber = 1;
@@ -568,9 +573,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     model.pageSize    = pageSize
     model.active      = true;
 
-    if (this.uiHomePage.storeNavigation) {
-      // model.departmentID = 0;
-
+    if (this.uiHomePage && this.uiHomePage.storeNavigation) {
     }
     this.productSearchModel = model;
 
@@ -584,7 +587,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
             return displayCategories$
           }
         }
-
         if (pageNumber == 1) {
           return  this.addToListOBS(this.pageSize, 2)
         }
@@ -596,9 +598,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
       this.changeDetect()
       return of(data)
     }))
-
   };
-
 
   splitItemsIntType(itemsIn: IMenuItem[], currentItems: IMenuItem[]){
     currentItems.push(...itemsIn)
@@ -639,10 +639,30 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     const uniqueArray = array.filter((obj, index, self) =>
       index === self.findIndex((o) => o.id === obj.id && o.name === obj.name)
     );
-
     return uniqueArray;
-    console.log(uniqueArray);
   }
+
+  refreshSubCategories(categoryID: number) {
+    const site             = this.siteService.getAssignedSite()
+    this.subCategoriesList = null;
+    if (categoryID == 0  || categoryID == undefined) {
+      // this.subCategoriesList = null;
+      return
+    }
+    this.categoryID = categoryID.toString();
+
+    // console.log('this.category', this.categoryID, categoryID)
+    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(
+      switchMap(data => {
+        this.subCategoriesList = data;
+        // console.log(data)
+        this.subCategoriesList = data.filter(data => {return data.categoryID == categoryID});
+        // console.log('list', this.subCategoriesList)
+        return of(data)
+      })
+    )
+  }
+
 
   initFilterOption() {
     if (this.authService.deviceInfo) {
@@ -681,7 +701,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
 
   getProcess(site: ISite, model: ProductSearchModel) {
-
     const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
      return results$.pipe(
         switchMap(data => {
@@ -737,7 +756,6 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
             this.menuItems = this.removeDuplicates( this.menuItems )
             this.value     = ((this.menuItems.length   / this.totalRecords ) * 100).toFixed(0)
             this.loading   = false
-
             return of(this.menuItems)
           }
 
