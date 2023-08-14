@@ -30,6 +30,7 @@ export interface ITerminalSettings {
   bluetoothDeviceName : string;
   electronZoom        : string;
   triposLaneID        : string;
+  triPOSMarketCode    : number;
   enableScale         : boolean;
   enableExitLabel     : boolean;
   ignoreTimer         : boolean;

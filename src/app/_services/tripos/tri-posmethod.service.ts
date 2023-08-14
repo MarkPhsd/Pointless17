@@ -30,8 +30,12 @@ import { ITriPOSPatch, TriposResult } from './triposModels';
     marketCode: string;
     ticketNumber: string;
     allowDebit: boolean;
+    configuration: AuthConfig;
   }
 
+  export interface AuthConfig {
+    marketCode: any;
+  }
 @Injectable({
   providedIn: 'root'
 })
@@ -186,8 +190,6 @@ export class TriPOSMethodService {
     return this.http.post<TriposResult>(url,  item)
 
   }
-
-
 
 
   displayTextView(site: ISite,item: authorizationPOST): Observable<TriposResult> {

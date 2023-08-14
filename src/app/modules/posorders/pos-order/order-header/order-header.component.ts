@@ -43,7 +43,6 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   site = this.siteService.getAssignedSite();
   locations$ = this.locationsService.getLocationsCached();
 
-
   transactionUISettingsSubscriber() {
     try {
       this._uiTransactionSettings = this.uiSettingsService.transactionUISettings$.subscribe( data => {
@@ -154,7 +153,9 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
           return of(data)
         }
       )
-    )
+    ).pipe(switchMap(data => {
+      return  this._refreshOrder()
+    }))
   }
 
   clearOrder() {
@@ -162,12 +163,17 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   }
 
   refreshOrder() {
+    this.action$ = this._refreshOrder()
+  }
+
+  _refreshOrder() {
     const site = this.siteService.getAssignedSite()
-    this.action$ = this.ordersService.getOrder(site, this.order.id.toString(), this.order.history).pipe(switchMap(data => {
+    return this.ordersService.getOrder(site, this.order.id.toString(), this.order.history).pipe(switchMap(data => {
       this.orderMethodsService.updateOrder(data)
       return of(data)
     }))
   }
+
   assignPriceColumn(value: number){
     const site = this.siteService.getAssignedSite()
     if (this.order) {

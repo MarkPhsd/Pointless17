@@ -63,7 +63,6 @@ export class PosEditSettingsComponent implements OnInit {
   )
  {
 
-
     if (data) {
       this.setting = data
       if (!this.setting.text) {
@@ -144,6 +143,7 @@ export class PosEditSettingsComponent implements OnInit {
       enableScale: [],
       ignoreTimer: [],
       defaultOrderTypeID: [],
+      triPOSMarketCode: [],
     })
 
     if (this.terminal) {

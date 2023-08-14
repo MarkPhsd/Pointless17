@@ -14,7 +14,7 @@ export class TriposSettingsComponent implements OnInit {
   jsonData: any;
   inputForm: UntypedFormGroup
   @Input() laneID: number;
-  
+
   constructor(private triposMethodService: TriPOSMethodService,
               private siteService: SitesService,
               private fb: UntypedFormBuilder) { }
@@ -24,7 +24,7 @@ export class TriposSettingsComponent implements OnInit {
     this.inputForm = this.fb.group({
       laneID: [this.laneID],
       activationCode: [],
-      marketCode: ['4'],
+      marketCode: [''],
       terminalID: ['001'],
     })
   }
@@ -34,7 +34,7 @@ export class TriposSettingsComponent implements OnInit {
 
   getLane() {
     console.log(this.laneID)
-    // if (this.laneID) { 
+    // if (this.laneID) {
       const laneID = this.laneID.toString();
       const site = this.siteService.getAssignedSite()
       this.action$ = this.triposMethodService.getLane(site , laneID).pipe(switchMap(data => {
@@ -44,7 +44,7 @@ export class TriposSettingsComponent implements OnInit {
     // }
   }
 
-  getLanes() { 
+  getLanes() {
     const site = this.siteService.getAssignedSite()
     this.action$ = this.triposMethodService.getLanes(site).pipe(switchMap(data => {
       this.jsonData = data;

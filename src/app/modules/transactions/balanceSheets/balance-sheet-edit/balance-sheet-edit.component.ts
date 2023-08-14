@@ -457,6 +457,13 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     }));
   }
 
+  previewSheet() {
+    this.printingService.updatePrintView(2);
+    const sheet = this.inputForm.value as IBalanceSheet
+    sheet.overUnderTotal = this.getCurrentBalance()
+    this.balanceSheet$ = this.printingService.previewReceipt(false)
+  }
+
   printEndingValues(event){
     this.printingService.updatePrintView(3);
     let sheet = this.inputForm.value as IBalanceSheet

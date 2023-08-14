@@ -174,7 +174,7 @@ export class RequestMessagesComponent implements OnInit {
 
     if (event.type.toLocaleLowerCase() === "pc") {
       //navigate to order
-      console.log('event', event)
+      // console.log('event', event)
       const methods  = event?.method.split('=');
       if (methods[1]) {
         const value = methods[1];

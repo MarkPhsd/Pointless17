@@ -370,9 +370,7 @@
 </ng-template>
 
 <ng-template #lastOrderView>
-
   <ng-container *ngIf="orderMethodsService.lastOrder">
-
     <mat-divider class="margin-5"></mat-divider>
     <div  class="margin-5">
       <button class='ps-button-150' mat-raised-button (click)="setLastOrder()">Last Order {{orderMethodsService.lastOrder.id}}</button>
@@ -402,8 +400,7 @@
       [smallDevice]="smallDevice"
       [isStaff]="isUserStaff"
       [uiSettings]="homePageSetings"
-      [mainPanel]="false"
-      >
+      [mainPanel]="false"  >
     </pos-check-out-buttons>
   </div>
 </ng-template>

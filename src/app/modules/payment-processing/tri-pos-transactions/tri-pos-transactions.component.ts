@@ -104,13 +104,14 @@ export class TriPosTransactionsComponent implements OnInit {
     item.laneId = this.terminalSettings.triposLaneID;
 
     // console.log('form value', this.inputForm.value)
-    if (!this.tipValue) {this.tipValue = '0'}
+    if (!this.tipValue) {this.tipValue = null}
     // item.tipAmount     = this._tipValue;
 
     item.transactionId = this.posPayment.respcode;
     item.tipAmount = this.tipValue;
     item.transactionAmount = (this.posPayment.amountPaid + +this.tipValue).toFixed(2).toString();
     item.ticketNumber = this.posPayment.id.toString();
+
     this.processing = true;
     this.errorMessage = ''
     return item;
@@ -196,24 +197,28 @@ export class TriPosTransactionsComponent implements OnInit {
   initTransaction( posPayment: IPOSPayment, terminal: ITerminalSettings) : authorizationPOST {
     const authorizationPOST = {} as authorizationPOST;
     if (!posPayment.tipAmount) { posPayment.tipAmount = 0}
-    if (this.tipValue) { posPayment.tipAmount = +this.tipValue}
+
+    if (!this.tipValue || +this.tipValue == 0) { authorizationPOST.tipAmount = null}
+    if (this.tipValue && +this.tipValue != 0)  { authorizationPOST.tipAmount =  this.tipValue}
 
     authorizationPOST.transactionAmount = Math.abs(this.posPayment.amountPaid + posPayment.tipAmount ).toFixed(2).toString();
-    if (!this.tipValue) {this.tipValue = '0'}
-    authorizationPOST.tipAmount = posPayment.tipAmount.toString();
+
     authorizationPOST.laneId            = terminal.triposLaneID;
     authorizationPOST.ticketNumber      = this.posPayment.id.toString();
-    // console.log('authorization Post', authorizationPOST)
+    authorizationPOST.referenceNumber   = this.posPayment.id.toString();
     return authorizationPOST;
   }
 
   authorizeAmount() {
     if (!this.validateTransaction()) { return }
     if (this.posPayment && this.terminalSettings.triposLaneID) {
-      const item = this.initTransaction(this.posPayment, this.terminalSettings);
+      let item = this.initTransaction(this.posPayment, this.terminalSettings);
+      item.configuration = {marketCode : this.MarketCode};
+
       const site = this.siteService.getAssignedSite();
       this.processing = true;
       this.errorMessage = ''
+      console.log('transaction request', item)
       this.processing$ =  this.methodsService.authorizeAmount( site, item ).pipe(switchMap(data => {
         console.log('transactionID', data.transactionId, data)
         if (data._hasErrors || !data.isApproved) {
@@ -231,17 +236,34 @@ export class TriPosTransactionsComponent implements OnInit {
     }
   }
 
+  private get MarketCode() {
+    let  marketCode = 'Retail'
+
+      //Those value should be a string of alpha characters, and not numeric. TriPOS “FoodRestaurant” translates to market code 4 on Express, and triPOS “Retail” translates to market code 7 on Express.
+      // if (this.terminalSettings.)
+
+    if (this.terminalSettings && this.terminalSettings.triPOSMarketCode == 7) {
+      return 'FoodRestaurant'
+    }
+    if (this.terminalSettings && this.terminalSettings.triPOSMarketCode == 4) {
+      return  'Retail'
+    }
+
+    return marketCode;
+  }
   payAmount() {
     if (!this.validateTransaction()) { return }
     if (this.posPayment && this.terminalSettings.triposLaneID) {
+      let item = this.initTransaction(this.posPayment, this.terminalSettings);
 
-      const item = this.initTransaction(this.posPayment, this.terminalSettings);
+      item.configuration = {marketCode : this.MarketCode};
       item.transactionId   = this.posPayment.refNumber;
       const site = this.siteService.getAssignedSite();
       this.processing   = true;
       this.errorMessage = ''
       item.allowDebit = true;
 
+      console.log('transaction request', item)
       this.processing$  =  this.methodsService.sale(site, item )
         .pipe(switchMap(data => {
             console.log('transactionID', data.transactionId, data)
@@ -292,11 +314,9 @@ export class TriPosTransactionsComponent implements OnInit {
     trans._errors.forEach(item => {
       this.errorMessage = `${item?.exceptionMessage} ${this.errorMessage}`
     })
-
     if (trans & trans.processor && trans.process.expressResponseMessage) {
       this.errorMessage = this.errorMessage + ' ' + trans.process.expressResponseMessage
     }
-
     this.siteService.notify(`Response not approved. Response given ${trans?.statusCode}. Reason: ${trans?._processor?.expressResponseMessage} ` , 'Failed', 3000)
   }
 

@@ -162,6 +162,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
                 order: IPOSOrder): number {
 
   // this.printingService.printJoinedLabels() ;
+
+  this.orderMethodsService.setLastOrder(order)
+
   if (!paymentResponse ) {
     this.sitesService.notify(`No payment response `, 'close', 3000, 'red');
     return 0

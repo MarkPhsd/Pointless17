@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BehaviorSubject, catchError,Observable, of, Subscription, switchMap } from 'rxjs';
-import { IClientTable, IPaymentResponse, IPOSOrder, IPOSOrderSearchModel, IPOSPayment, IPurchaseOrderItem, IServiceType, PaymentMethod, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
+import { IClientTable,  IPOSOrder, IPOSOrderSearchModel, IPOSPayment, IPurchaseOrderItem, IServiceType, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
@@ -1204,8 +1204,6 @@ export class OrderMethodsService implements OnDestroy {
       return
     }
     this.setActiveOrder(site, order)
-
-    // console.log('processsorderresult', categoryID)
     if (categoryID) {
       this.navToCategory(categoryID)
     }
@@ -1214,7 +1212,12 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
-  setLastOrder() {
+  setLastOrder(order?) {
+    console.log('set last order', order)
+    if (order ) {
+      const order = JSON.stringify(this.order)
+      this.lastOrder =  JSON.parse(order)// structuredClone(this.order);
+    }
     if (this.order) {
       const order = JSON.stringify(this.order)
       this.lastOrder =  JSON.parse(order)// structuredClone(this.order);
@@ -1222,9 +1225,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   setActiveOrder(site, order: IPOSOrder) {
-
     if (order) {
-
       if (!this.authenticationService?.deviceInfo?.phoneDevice) {
         this.toolbarServiceUI.updateOrderBar(true)
       }
