@@ -52,39 +52,34 @@
 
       <div class="toggle-fields">
         <mat-slide-toggle
-                  formControlName="displayQuantity"
-                  >
+                  formControlName="displayQuantity"  >
           <mat-label>Display Quantity</mat-label>
         </mat-slide-toggle>
       </div>
 
       <div class="toggle-fields">
         <mat-slide-toggle
-                  formControlName="mixMatchTierPricing"
-                  >
+                  formControlName="mixMatchTierPricing" >
           <mat-label>Mix/Match Tier Pricing</mat-label>
         </mat-slide-toggle>
       </div>
 
       <div class="toggle-fields">
         <mat-slide-toggle
-                  formControlName="displayAdd"
-                >
+                  formControlName="displayAdd"  >
           <mat-label>Display Add Button</mat-label>
         </mat-slide-toggle>
       </div>
 
       <div class="toggle-fields">
         <mat-slide-toggle
-                  formControlName="displayView"
-                  >
+                  formControlName="displayView"  >
           <mat-label>Display View</mat-label>
         </mat-slide-toggle>
       </div>
 
       <mat-divider></mat-divider>
       <h4>Order Options</h4>
-
 
       <div class="toggle-fields">
         <mat-slide-toggle
@@ -107,8 +102,18 @@
         </mat-slide-toggle>
       </div>
 
-
       <mat-label>Side Order Bar Option</mat-label>
+
+      <div class="toggle-fields">
+        <mat-icon class="mat-label-info"
+                  color="accent"
+                  [matTooltip]="labelingService.transactionInfo[4].value">info</mat-icon>
+        <mat-slide-toggle
+                  formControlName="showNumberPad">
+          <mat-label>Show Number Pad In Order</mat-label>
+        </mat-slide-toggle>
+      </div>
+
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="showOrderName">

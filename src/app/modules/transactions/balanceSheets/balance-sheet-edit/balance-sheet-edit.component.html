@@ -29,7 +29,6 @@
           </balance-sheet-employee-sales>
         </div>
 
-        <button mat-raised-button color="primary" (click)="previewSheet()">Preview</button>
 
         <div>
           <app-edit-buttons-standard
@@ -41,7 +40,9 @@
               (outPutEmail)           ="email($event)"
               [emailOption]           ="true"
               [printOption]           ="true"
-            ></app-edit-buttons-standard>
+            >
+          </app-edit-buttons-standard>
+          <button mat-raised-button color="primary" (click)="previewSheet()">Preview</button>
         </div>
       </div>
 
@@ -50,41 +51,41 @@
     </mat-card-subtitle>
 
     <mat-card-content>
-      <div *ngIf="sheet" class="grid-container">
-        <div>
-          <h4><mat-icon>edit</mat-icon> Edit </h4>
-          <div *ngIf="!sheet.endTime">
-            <span *ngIf ="sheet.shiftStarted != 1">
-              <button color="warn" mat-raised-button (click)="startShift()">Start Sheet</button>
-            </span>
-            <div *ngIf="platFormService.isApp">
-              <button class="margins"  mat-raised-button color="primary" (click)="openCashDrawer(1)">
-                <mat-icon>point_of_sale</mat-icon> Drawer
-              </button>
-            </div>
 
+        <div  *ngIf="sheet" class="ps-flex-group-nowrap">
+
+          <div>
+            <h4><mat-icon>edit</mat-icon> Edit </h4>
           </div>
 
-          <div class="ps-flex-group-nowrap" >
-            <div   class="button" *ngIf="!sheet.endTime">
-              <span *ngIf ="sheet.shiftStarted == 1 && ordersOpen == 0">
-                <button  style="height:60px" color="warn" mat-raised-button (click)="closeSheet('/login')">Close Sheet</button>
-              </span>
-            </div>
+          <div class="button" style="margin-left:15px" *ngIf ="!sheet.endTime && sheet.shiftStarted != 1">
+            <button style="height:60px; line-height:1em" color="warn" mat-raised-button (click)="startShift()">Start Sheet</button>
+          </div>
 
+          <div  class="button"  style="margin-left:5px" *ngIf="!sheet.endTime  && platFormService.isApp">
+            <button style="height:60px; line-height:1em" mat-raised-button color="primary" (click)="openCashDrawer(1)">
+              <mat-icon>point_of_sale</mat-icon> Drawer
+            </button>
+          </div>
+
+          <div   class="button" *ngIf="!sheet.endTime">
+            <span *ngIf ="sheet.shiftStarted == 1 && ordersOpen == 0">
+              <button  style="height:60px" color="warn" mat-raised-button (click)="closeSheet('/login')">Close Sheet</button>
+            </span>
+          </div>
+
+          <div  *ngIf="!sheet.endTime">
             <div class="button" *ngIf="(auths$ | async) as auths">
               <span *ngIf ="sheet.shiftStarted == 1 && ordersOpen == 0 && (auths && auths?.closeDay)">
                 <button  style="height:60px; line-height:1em" color="warn" mat-raised-button (click)="closeSheet('/operations')">Close Sheet <br> & Day</button>
               </span>
             </div>
-          </div>
-
-
-          <span *ngIf="ordersOpen>0">
-            {{ ordersOpen }} order(s) are open. Close orders to close sheet.
-          </span>
-
         </div>
+
+        <div *ngIf="ordersOpen>0">
+          {{ ordersOpen }} order(s) are open. Close orders to close sheet.
+        </div>
+
       </div>
 
       <mat-tab-group mat-align-tabs="start"

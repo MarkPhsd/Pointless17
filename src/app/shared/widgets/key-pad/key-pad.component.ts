@@ -1,7 +1,9 @@
 import { Component, OnInit,OnChanges, EventEmitter, Output, Input, ElementRef, ViewChild, ChangeDetectionStrategy, SimpleChange } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
+import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { TagChipsProductsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/tag-chips-products/tag-chips-products.component';
 
 // https://market.ionicframework.com/plugins/ion-numeric-keyboard
 @Component({
@@ -24,7 +26,8 @@ export class KeyPadComponent implements OnInit, OnChanges {
   @Output() outPutCheckEntry  = new EventEmitter();
   //returns on enter press
   @Output() outPutReturnEnter = new EventEmitter();
-
+  @Output() outPutFocus   = new EventEmitter();
+  @Input() _value        : Subscription;
   @Input() value          = '';
   @Input() instruction    = 'Enter Value';
   @Input() inputTypeValue = '';
@@ -32,19 +35,22 @@ export class KeyPadComponent implements OnInit, OnChanges {
   @Input() showInput      = false;
   @Input() formatted      : any;
   @Input() fieldName      : string;
-
+  @Input() disableFocus: boolean;
   formattedValue          : any;
   inputType               = 'text';
   showPassword            : boolean;
   showDoubleZero          = false // for faster entry.
   cashValue: any;
-
+  quantityValue$: any;
+  placeHolder: string;
   @Input() numberbuttons  = 'number-buttons button-sized-1';
   @Input() alternateClass = 'grid-keypad'
   @Input() decimals       = 0;
   @Input() requireWholeNumber: boolean;
 
-  constructor(  private fb: UntypedFormBuilder) {
+  constructor(
+    private orderMethodsService: OrderMethodsService,
+    private fb: UntypedFormBuilder) {
     if (this.formatted) {
       if (this.inputTypeValue.toLowerCase() === 'decimal')
       { this.showDoubleZero = true}
@@ -57,11 +63,26 @@ export class KeyPadComponent implements OnInit, OnChanges {
     }
     if (!this.fieldName) {this.fieldName = 'itemName'}
     this.initForm();
+
+    this.quantityValue$ = this.orderMethodsService.quantityValue$.pipe(switchMap(data => {
+      this.placeHolder = 'Quantity'
+
+      if (data != this.inputForm.controls['itemName'].value) {
+        if (data == 1) {
+          this.inputForm.controls['itemName'].setValue(null)
+          return of(data)
+        }
+        this.inputForm.controls['itemName'].setValue(data)
+      }
+
+      this.setFocusOnScanner();
+      return of(data)
+    }))
+
   }
 
   formSubscriber() {
     if (this.inputForm) {
-
       this.inputForm.controls['itemName'].valueChanges.subscribe(data => {
         if (data) {
           this.onChangeValueUpdate(data)
@@ -84,8 +105,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this.cashValue = ''
     this.formattedValue = ''
     this.outPutValue.emit('')
-
-    // console.log('updated display out put check entry', this.formatted)
     this.outPutCheckEntry.emit(null)
     this.initForm()
   }
@@ -108,6 +127,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this.inputForm = this.fb.group({
       itemName: [],
     })
+
   }
 
   resetValues() {
@@ -130,6 +150,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
     let change: SimpleChange = changes['data'];
     this.value     = ''
     this.formatted = ''
+
   }
 
   initSearchOption() {
@@ -143,14 +164,28 @@ export class KeyPadComponent implements OnInit, OnChanges {
         tap((event:KeyboardEvent) => {
           if (this.input.nativeElement.value) {
             const search  = this.input.nativeElement.value
-            this.input.nativeElement.focus();
+
             if (search > 1) {
               this.outPutValue.emit(search)
             }
+
+            this.setFocusOnScanner();
+
           }
         })
       )
       .subscribe();
+    }
+  }
+
+  setFocusOnScanner() {
+    // if (this.disableFocus) {
+    //   console.log('focusing')
+    //   this.outPutFocus.emit(true)
+    //   return;
+    // }
+    if (this.input) {
+      this.input.nativeElement.focus();
     }
   }
 
@@ -159,7 +194,8 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this.formatted = data
     this.value     = this.formatted
     this.outPutValue.emit(this.formatted)
-    this.outPutCheckEntry.emit(this.formatted)
+    this.outPutCheckEntry.emit(this.formatted);
+
   }
 
   enterValue(event) {
@@ -183,7 +219,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
       this.refreshDisplay()
       this.outPutValue.emit(this.formatted)
     }
-    // this.outPutCheckEntry.emit(this.formatted)
   }
 
   deleteLastItem() {
@@ -194,15 +229,12 @@ export class KeyPadComponent implements OnInit, OnChanges {
       return
     }
     if (len > 0) {  this.value = this.value.substring(0, len -1) }
-
     this.updateDisplayOutput();
   }
 
   refreshDisplay() {
-
     if (this.value)
     {
-
       if (this.inputTypeValue === 'password') {
         if (this.showPassword) {
           this.inputType = 'password'
@@ -210,11 +242,9 @@ export class KeyPadComponent implements OnInit, OnChanges {
           this.inputType = 'text'
         }
       }
-
       if (this.inputTypeValue != 'password') {
         this.inputType = this.inputTypeValue
       }
-
       //decimal
       let divider = 0
       if (!this.decimals) {
@@ -256,7 +286,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
 
       if (this.inputTypeValue == 'text' ) {
         const numVal = parseInt( this.value)
-        this.formatted = this.value //Number(numVal).toLocaleString('en', this.options);
+        this.formatted = this.value
       }
 
       //password
@@ -273,12 +303,9 @@ export class KeyPadComponent implements OnInit, OnChanges {
     } else {
 
       if (this.inputTypeValue == 'text' ) {
-        // const numVal = parseInt( this.value)
         this.formatted = this.value //Number(numVal).toLocaleString('en', this.options);
-
       } else {
         this.formatted = Number(0).toLocaleString('en', this.options);
-
       }
     }
 
@@ -289,35 +316,28 @@ export class KeyPadComponent implements OnInit, OnChanges {
     }
 
     if (this.formatted != undefined) {
-      //{this.fieldName: this.formatted }
       const fieldName = this.fieldName
       const value     = this.formatted
       const item      = { itemName:  this.formatted, packageQuantity: this.formatted, }
       this.inputForm.patchValue(item)
-
     } else {
       this.initForm();
     }
-
   }
 
   returnEnterPress(){
-
     if (!this.value && this.cashValue) {
       this.outPutReturnEnter.emit(this.cashValue);
-
       return;
     }
 
     if (!this.formatted) {
       this.outPutReturnEnter.emit(this.value)
-
       return
     }
 
     this.refreshDisplay()
     this.outPutReturnEnter.emit(this.formatted)
-
   }
 
   updateDisplayOutput() {
@@ -326,8 +346,8 @@ export class KeyPadComponent implements OnInit, OnChanges {
     if (this.formatted && this.formatted.length > 1) {
       this.outPutValue.emit(this.formatted)
     }
-    // console.log('updated display out put check entry', this.formatted)
     this.outPutCheckEntry.emit(this.formatted)
+
   }
 
 }

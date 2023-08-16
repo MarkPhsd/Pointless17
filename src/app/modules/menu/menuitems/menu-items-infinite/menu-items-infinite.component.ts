@@ -167,7 +167,8 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   }
 
   get categoryFilterView(){
-    if (this.uiHomePage && this.uiHomePage.suppressMenuItems) {
+
+    if (this.uiHomePage && this.uiHomePage.suppressMenuItems && this.uiHomePage.storeNavigation) {
       if (this.categories && this.categories.length) {
         return this.categoryFilter
       }

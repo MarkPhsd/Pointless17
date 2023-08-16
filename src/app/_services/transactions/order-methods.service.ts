@@ -75,6 +75,9 @@ export class OrderMethodsService implements OnDestroy {
 
   processItem : ProcessItem
 
+  public _quantityValue = new BehaviorSubject<number>(1);
+  public  quantityValue$ = this._quantityValue.asObservable();
+
   private _assingedPOSItems = new BehaviorSubject<PosOrderItem[]>(null);
   public  assignedPOSItems$ = this._assingedPOSItems.asObservable();
   public  assignPOSItems       : PosOrderItem[];
@@ -574,7 +577,10 @@ export class OrderMethodsService implements OnDestroy {
         this.listItem(item.id);
         return of(null)
       }
+
+
       return  this.addItemToOrderObs(order, item, 1, 0, passAlongItem)
+
     }
 
     this.listItem(item.id);
@@ -755,7 +761,7 @@ export class OrderMethodsService implements OnDestroy {
     if (passAlongItem && passAlongItem[0]) {
       passAlong = passAlongItem[0]
     }
-    return this.processItemPOSObservable(order, null, item, 1, null , 0, 0,
+    return this.processItemPOSObservable(order, null, item, quantity, null , 0, 0,
                                           passAlong, this.assignPOSItems )
   }
 
@@ -837,7 +843,7 @@ export class OrderMethodsService implements OnDestroy {
     const valid = this.validateUser();
     if (!valid) { return };
     this.initItemProcess();
-    if (quantity === 0 ) { quantity = 1};
+    quantity = this.setQuantityValue(1)
     if (!this.validateItem(item, barcode)) { return }
     let passAlongItem;
 
@@ -884,6 +890,17 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
+  setQuantityValue(quantity) {
+    if (quantity === 0 ) { quantity = 1 };
+    if (this._quantityValue.value != 1 && this._quantityValue.value != 0) {
+      quantity = this._quantityValue.value ;
+      this._quantityValue.next(1)
+      console.log('quantity value', this._quantityValue.value)
+      return quantity
+    }
+    return quantity
+  }
+
   processItemPOSObservable(
                             order : IPOSOrder ,
                             barcode: string,
@@ -903,7 +920,8 @@ export class OrderMethodsService implements OnDestroy {
     };
 
     this.initItemProcess();
-    if (quantity === 0 ) { quantity = 1 };
+    console.log('processItemPOSObservable', quantity, this._quantityValue.value)
+    quantity = this.setQuantityValue(1)
 
     if (!this.validateItem(item, barcode)) {
       return of(null)
@@ -1045,7 +1063,6 @@ export class OrderMethodsService implements OnDestroy {
         }
 
       } else {
-        // console.log('data.Error 2 ', data)
         this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red');
         return;
       }

@@ -63,6 +63,7 @@ export interface BoltInfo {
   merchID: string;
   deviceName: string;
   apiURL: string;
+  id: number;
 }
 
 export interface CardPointGateWay {

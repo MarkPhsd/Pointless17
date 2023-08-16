@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PaymentMethod } from '@stripe/stripe-js';
 import { of, switchMap,catchError,Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -10,6 +9,7 @@ import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transac
 import { BoltInfo } from './../../models/models';
 import { CardPointMethodsService } from   './../../services/index';
 import { DeviceInfoService } from  './../../services/index';
+import { LabelingService } from 'src/app/_labeling/labeling.service';
 
 @Component({
   selector: 'card-point-settings',
@@ -18,35 +18,77 @@ import { DeviceInfoService } from  './../../services/index';
 })
 export class CardPointSettingsComponent implements OnInit {
 
+  boltInfo: BoltInfo;
   deviceName : string;
   inputForm : UntypedFormGroup;
-  methodType$: Observable<IPaymentMethod>;
+  // methodType$: Observable<IPaymentMethod>;
+  boltInfo$: Observable<any>;
 
   constructor(
     private fb: UntypedFormBuilder,
     private siteService: SitesService,
     private settingsService: SettingsService,
+    public  labelingService: LabelingService,
     private matSnackBar         : MatSnackBar,
-    public methodsService: CardPointMethodsService,
-    private paymentMethodsService: PaymentMethodsService,
-    public deviceInfoService: DeviceInfoService) {
+    public  methodsService: CardPointMethodsService,
+    public  deviceInfoService: DeviceInfoService) {
   }
 
   ngOnInit(): void {
     this.deviceName = this.deviceInfoService.deviceName;
-    const item      = localStorage.getItem('boltInfo');
-    const boltInfo  =  JSON.parse(item) as BoltInfo;
+    this.boltInfo$ = this.initSetting().pipe(switchMap(data => {
+      this.initForm();
+      if (data) {
+        let boltInfo = data as BoltInfo ;
+        this.inputForm.patchValue(boltInfo);
+      }
+      this.inputForm.patchValue(null);
+      return of(data)
+    }))
 
-    this.initForm();
+  }
 
-    if (boltInfo) {
-      this.inputForm.patchValue(boltInfo);
-    }
-    if (!boltInfo) {
-      const item = {} as BoltInfo
-      this.inputForm.patchValue(item);
-    }
-    // this.initCreditMethodType();
+  initSetting() {
+    const site  = this.siteService.getAssignedSite()
+
+    const setting  = {} as ISetting;
+    setting.name = 'boltInfo';
+
+    let boltInfo = {} as BoltInfo;
+    let item = JSON.stringify(boltInfo)
+    setting.text = item
+
+    const boltInfo$ = this.settingsService.getSettingByName(site, 'boltInfo');
+
+    return boltInfo$.pipe(
+      switchMap(data => {
+        if (data) {
+          let item
+          if (data.text) {
+             item = JSON.parse(data?.text) as BoltInfo;
+          }
+          if (!data.text) {
+             item = {} as BoltInfo;
+          }
+          item.id = data?.id;
+          this.boltInfo = item;
+          return of(data)
+        } {
+          return this.settingsService.postSetting(site, setting)
+        }
+      }
+    )).pipe(
+      switchMap(data => {
+        if (data) {
+          let item = JSON.parse(data?.text) as BoltInfo;
+          this.boltInfo = item;
+          this.boltInfo.id = data.id;
+          return of(this.boltInfo)
+        }
+        return of(null)
+       }
+    ))
+
   }
 
   get creditMethod(){
@@ -57,45 +99,38 @@ export class CardPointSettingsComponent implements OnInit {
     return item
   }
 
-  // initCreditMethodType(){
-  //   const site = this.siteService.getAssignedSite()
-  //   this.methodType$ = this.paymentMethodsService.getPaymentMethodByName(site, 'credit').pipe(
-  //     switchMap(data => {
-  //         return  this.paymentMethodsService.saveItem(site, data)
-  //       }),
-  //       catchError((e) => {
-  //         return of(this.creditMethod)
-  //         //  return this.paymentMethodsService.saveItem(site, this.creditMethod)
-  //     }));
-  // }
-
   initForm() {
     this.inputForm = this.fb.group({
       deviceName: [],
       hsn: [],
       merchID: [],
       apiURL: [],
+      id: []
     })
     return this.inputForm;
   }
 
   save() {
-    const bolt = this.inputForm.value as BoltInfo;
+    let bolt = this.inputForm.value as BoltInfo;
     if (bolt) {
-      const item = JSON.stringify(bolt)
-      localStorage.setItem('boltInfo', item)
-      this.methodsService.boltInfo = bolt;
+      localStorage.setItem('boltInfo', JSON.stringify(bolt))
 
+      this.methodsService.boltInfo = bolt;
       this.deviceInfoService.setDeviceName(this.deviceName);
       const site  = this.siteService.getAssignedSite()
 
       const setting  = {} as ISetting;
       setting.name = 'boltInfo';
-      setting.text = item
 
-      this.settingsService.saveSettingObservable(site, setting).subscribe(data =>{
-        this.matSnackBar.open('Saved', 'Saved', {duration:2000})
-      })
+      const boltInfo$ = this.settingsService.getSettingByName(site, 'boltInfo');
+
+      this.boltInfo$ = boltInfo$.pipe(switchMap(data => {
+        bolt.id = data.id;
+        let item = JSON.stringify(bolt)
+        data.text = item;
+        return  this.settingsService.saveSettingObservable(site, data)
+      }))
+
     }
   }
 

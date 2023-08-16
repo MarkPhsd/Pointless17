@@ -29,29 +29,25 @@
         </form-select-list>
     </div>
 
-    <span *ngIf="(categories$ | async) as lists">
-      <div class="grid-item">
-        <form-select-list [searchForm]      = "searchForm"
-                          [formFieldName]   = "'categoryID'"
-                          [list]            = "lists"
-                          [showActiveInactive]="true"
-                          (selectionChange) = "refreshCategoryChange($event)">
-        <div fieldSearchDescription>Category</div>
-        </form-select-list>
-      </div>
-    </span>
+    <div class="grid-item" *ngIf="(categories$ | async) as lists">
+      <form-select-list [searchForm]      = "searchForm"
+                        [formFieldName]   = "'categoryID'"
+                        [list]            = "lists"
+                        [showActiveInactive]="true"
+                        (selectionChange) = "refreshCategoryChange($event)">
+      <div fieldSearchDescription>Category</div>
+      </form-select-list>
+    </div>
 
-    <span *ngIf="(subCategories$ | async) as lists">
-      <div class="grid-item">
-        <form-select-list [searchForm]      = "searchForm"
-                          [formFieldName]   ="'subCategoryID'"
-                          [list]            = "subCategoriesList"
-                          [showActiveInactive]="true"
-                          (selectionChange) = "refreshSubCategoryChange($event)">
-        <div fieldSearchDescription>Sub Category</div>
-        </form-select-list>
-      </div>
-    </span>
+    <div class="grid-item" *ngIf="(subCategories$ | async) as lists">
+      <form-select-list [searchForm]      = "searchForm"
+                        [formFieldName]   ="'subCategoryID'"
+                        [list]            = "subCategoriesList"
+                        [showActiveInactive]="true"
+                        (selectionChange) = "refreshSubCategoryChange($event)">
+      <div fieldSearchDescription>Sub Category</div>
+      </form-select-list>
+    </div>
 
     <div class="grid-item">
       <app-brand-type-select
@@ -119,19 +115,19 @@
       </button>
     </div>
 
-    <div *ngIf="!hideAdd" class="header-items">
+    <div *ngIf="!hideAdd" class="grid-item">
       <button mat-button
               (click)="childAddItem()">
         <mat-icon>add_box</mat-icon>Add</button>
     </div>
 
-    <div *ngIf="editOff" class="header-items">
+    <div *ngIf="editOff" class="grid-item">
       <button mat-button
               (click)="editSelectedItem()">
         <mat-icon>edit</mat-icon>Edit</button>
     </div>
 
-    <div *ngIf="!hideEditSelected"  class="header-items">
+    <div *ngIf="!hideEditSelected" class="grid-item">
       <button mat-button
               (click)="editSelectedItems()">
         <mat-icon>edit</mat-icon>

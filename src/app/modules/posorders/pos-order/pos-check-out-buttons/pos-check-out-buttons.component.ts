@@ -41,29 +41,28 @@ export class PosCheckOutButtonsComponent implements OnInit, OnDestroy {
       this.isStaff, this.order)
   }
 
-  ngOnInit() { 
-
+  ngOnInit() {
     this.disableCheckOut = false;
     this.disableViewCart = false;
-    this._router = this.router.events.subscribe(data => { 
+    this._router = this.router.events.subscribe(data => {
       this.disableCheckOut = false;
       this.disableViewCart = false;
-  
-      if(data instanceof NavigationEnd) { 
-      // console.log('data.url', data.url)
-       if ( data.url.substring(0, 'pos-payment'.length + 1) === '/pos-payment') { 
-        this.disableCheckOut = true;
-       } 
 
-       if ( data.url.substring(0, 'currentorder'.length + 1) === '/currentorder') { 
+      if(data instanceof NavigationEnd) {
+      // console.log('data.url', data.url)
+       if ( data.url.substring(0, 'pos-payment'.length + 1) === '/pos-payment') {
+        this.disableCheckOut = true;
+       }
+
+       if ( data.url.substring(0, 'currentorder'.length + 1) === '/currentorder') {
         this.disableViewCart = true;
-       } 
-       
+       }
+
       }
-      
+
     })
   }
-  ngOnDestroy() { 
+  ngOnDestroy() {
     if (this._router) { this._router.unsubscribe()}
   }
 

@@ -1,3 +1,4 @@
+  <div *ngIf="(quantityValue$ | async) as value"></div>
   <div class="header">
     <ng-content select="[info]"> </ng-content>
   </div>
@@ -13,19 +14,38 @@
             </mat-label>
         </div>
         <mat-form-field  appearance="outline">
-            <input  matInput
-                    #input
-                    appAutoFocusInput
-                    [(ngModel)]        ="cashValue"
-                    [type]             ="inputType"
-                    [formControlName]  ="fieldName"
-                    class="form-control" >
+            <!-- appAutoFocusInput -->
+
+            <div *ngIf="disableFocus">
+              <input  matInput
+              #input
+
+              [placeholder]="placeHolder"
+              aria-label="Number"
+              [(ngModel)]        ="cashValue"
+              [type]             ="inputType"
+              [formControlName]  ="fieldName"
+              class="form-control" >
+            </div>
+            <div *ngIf="!disableFocus">
+              <input  matInput
+              #input
+              appAutoFocusInput
+              [placeholder]="placeHolder"
+              aria-label="Number"
+              [(ngModel)]        ="cashValue"
+              [type]             ="inputType"
+              [formControlName]  ="fieldName"
+              class="form-control" >
+            </div>
+
+
             <button *ngIf="cashValue"
-                    matSuffix
-                    mat-icon-button aria-label="Clear"
-                   (click)="clearInput()">
-            <mat-icon>close</mat-icon>
-          </button>
+                      matSuffix
+                      mat-icon-button aria-label="Clear"
+                    (click)="clearInput()">
+              <mat-icon>close</mat-icon>
+            </button>
         </mat-form-field>
     </div>
 

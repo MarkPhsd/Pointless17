@@ -43,7 +43,7 @@
             </div>
           </div>
 
-          <div   class="button-margin" *ngIf="isSale && isUserStaff ">
+          <div   class="button-margin" *ngIf="!mainPanel && isSale && isUserStaff ">
             <button   class="button" color="warn" mat-raised-button
               (click)="printLabels()">
               <mat-icon>book</mat-icon>

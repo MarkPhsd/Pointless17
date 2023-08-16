@@ -45,11 +45,11 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   keyboardOption      = false;
   keyboardDisplayOn   = false;
   toggleButton        = 'toggle-buttons-wide';
-  _order              :   Subscription;
-  order               :   IPOSOrder;
+  _order              :  Subscription;
+  order               : IPOSOrder;
 
-  transactionUISettings:TransactionUISettings;
-  requireEnter         : boolean;
+  transactionUISettings : TransactionUISettings;
+  requireEnter          : boolean;
 
   addObservable(newObservable: Observable<any>): void {
     const currentObservables = this.observablesArraySubject.getValue();
@@ -105,7 +105,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
 
   constructor(
     private fb             :        UntypedFormBuilder,
-    private orderService   :        OrdersService,
     private menuItemService :       MenuService,
     private orderMethodService    : OrderMethodsService,
     private settingService        : SettingsService,
@@ -118,18 +117,18 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   ngOnInit() {
     const site = this.siteService.getAssignedSite()
     this.initForm();
-    this.initSubscriptions()
+    this.initSubscriptions();
+
     if (this.searchForm)  {
       try {
         this.settingService.getSettingByName(site, 'UITransactionSetting').subscribe( data => {
 
           if (data && data.text) {
               this.transactionUISettings =  JSON.parse(data.text) as  TransactionUISettings;
-
               this.requireEnter = this.transactionUISettings.requireEnterTabBarcodeLookup;
               if (!this.requireEnter) {   this.initSearchSubscription() }
-              this.hideKeyboardTimeOut();
 
+              this.hideKeyboardTimeOut();
               if ( this.platForm != 'android') {return}
               this.keyboardDisplayOn = true
               if (this.platForm != 'android') {  }
@@ -219,11 +218,19 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   }
 
   hideKeyboardTimeOut() {
-    if ( this.platForm != 'android' ) {return}
-    if (this.platForm != 'android') {
+    // if ( this.platForm != 'android' ) {return}
+    if (this.platForm  != 'android') {
       setTimeout(()=> {
+          // console.log('focus')
           this.input.nativeElement.focus();
-          Keyboard.hide()
+          if (this.platForm != 'android' || this.platForm.toLowerCase() == 'electron') {
+            console.log(this.platForm)
+            try {
+              // Keyboard.hide()
+            } catch (error) {
+
+            }
+          }
       }, 200 )
     }
   }

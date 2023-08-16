@@ -17,10 +17,27 @@
                 [purchaseOrderEnabled]="purchaseOrderEnabled"
                 [mainPanel]="mainPanel"
                 [order]="order">
+
               <div image>
                 <ng-container *ngTemplateOutlet="isLastImageDisplayOn"></ng-container>
               </div>
+
             </pos-order-transaction-data>
+
+          <div *ngIf="uiTransactionSettings.showNumberPad && isStaff"
+                style="margin-top:15px;margin-bottom:5px">
+            <div *ngIf="orderMethodsService.quantityValue$ | async as value">
+              <div *ngIf="quantityEntryValue as value">
+                <app-key-pad [requireWholeNumber]= "false"
+                            (outPutValue)="setKeyPadValue($event)"
+                            [value]  ="value"
+                            (outPutFocus)="setScannerFocus($event)"
+                            [disableFocus] = "true"
+                            [_value] = "orderMethodsService._quantityValue">
+                </app-key-pad>
+              </div>
+            </div>
+          </div>
 
           <div *ngIf="order?.clientID">
             <store-credit-info
@@ -42,6 +59,7 @@
         </div>
 
         <div  (resized)="onResizedorderCustomerPanel($event)"
+
               [class]="gridheaderitem"
               *ngIf="((wideBar || mainPanel) || (phoneDevice && !isUser)) &&
                      !isUser">

@@ -5,14 +5,9 @@
       <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
 
       <div *ngIf="(homePage$ | async) as homePageSettings; else loading">
-        <div>
-          <blog-post-list [homePageSettings]="homePageSetings"
-                          [group]    ="'Main Page'"
-                          [height]    ="'100%'"
-                          [viewType] ="'grid'" >
-          </blog-post-list>
-        </div>
 
+
+        <ng-container [ngTemplateOutlet]="blogPostMainView"></ng-container>
         <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container>
         <ng-container [ngTemplateOutlet]="isDepartmentViewOn"></ng-container>
         <ng-container [ngTemplateOutlet]="isCategoryViewOn"></ng-container>
@@ -32,6 +27,17 @@
   </div>
 </ng-template>
 
+
+<ng-template #blogPostMainView>
+  <div *ngIf="!isStaff">
+    <blog-post-list [homePageSettings]="homePageSetings"
+                    [group]    ="'Main Page'"
+                    [height]    ="'100%'"
+                    [viewType] ="'grid'" >
+    </blog-post-list>
+  </div>
+</ng-template>
+
 <ng-template #searchSelector>
   <div>
     <search-debounce-input
@@ -46,7 +52,7 @@
 
 <ng-template #departmentView>
   <!-- departments -->
-  <blog-post-list [group]="'department head'" [height] ="'100%'"  [viewType]="'grid'" ></blog-post-list>
+  <blog-post-list *ngIf="!isStaff" [group]="'department head'" [height] ="'100%'"  [viewType]="'grid'" ></blog-post-list>
   <div [style.height]="panelHeightSize">
     <!-- display dearment -->
     <app-categories [panelHeightValue]="panelHeightValue" [itemTypeID]="6">
@@ -57,7 +63,7 @@
 </ng-template>
 
 <ng-template #categoryView>
-  <blog-post-list [group]="'category head'" [height] ="'100%'" [viewType]="'grid'" ></blog-post-list>
+  <blog-post-list *ngIf="!isStaff" [group]="'category head'" [height] ="'100%'" [viewType]="'grid'" ></blog-post-list>
   <div [style.height]="panelHeightSize">
     <app-categories [panelHeightValue]="panelHeightValue" [itemTypeID]="4">
       Categories
@@ -67,14 +73,14 @@
 </ng-template>
 
 <ng-template #brandView>
-  <blog-post-list [group]="'brand head'" [height] ="'100%'" [viewType]="'grid'"></blog-post-list>
+  <blog-post-list *ngIf="!isStaff" [group]="'brand head'" [height] ="'100%'" [viewType]="'grid'"></blog-post-list>
   <div [style.height]="panelHeightSize">
     <app-brandslist [panelHeightValue]="panelHeightValue"  ></app-brandslist>
   </div>
 </ng-template>
 
 <ng-template #tierMenuView>
-  <blog-post-list [group]="'tier head'" [height] ="'100%'" [viewType]="'grid'" ></blog-post-list>
+  <blog-post-list *ngIf="!isStaff" [group]="'tier head'" [height] ="'100%'" [viewType]="'grid'" ></blog-post-list>
   <div>
      <app-tier-menu></app-tier-menu>
   </div>

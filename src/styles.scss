@@ -624,6 +624,11 @@ mat-dialog-container {
   margin: 5px;
 }
 
+.mat-tooltip.tooltip {
+  // background-color: darkblue;
+  font-size: 1em;
+}
+
 .grid-view-container {
   display: grid;
   grid-template-columns: auto 1fr;

@@ -60,8 +60,6 @@ export class CardPointMethodsService {
   public boltTerminalInitialized: boolean
   observer$         : Observable<IBoltInfo>
   boltInfo$         : Observable<any>;
-  terminalSettings$ : Observable<any>;
-
   dialogSubject: Subscription;
   dialogRef: any;
 
@@ -92,56 +90,48 @@ export class CardPointMethodsService {
     public  printingService     : PrintingService,
     private dialogOptions       : ProductEditButtonService,
     private matSnackBar         : MatSnackBar) {
+  }
 
-    this.initBoltServices()
+  getBolt() : Observable<BoltInfo> {
+    let   boltInfo  = {} as BoltInfo;
+    const device = localStorage.getItem('devicename');
+
     const site = this.siteService.getAssignedSite()
-    const deviceName = localStorage.getItem('devicename');
-    this.boltInfo$ = this.settingsService.getSettingByName(site, 'boltInfo');
-    this.terminalSettings$ = this.settingsService.getSettingByName(site, deviceName ) ;
+    return this.settingsService.getSettingByNameCached(site, 'boltInfo').pipe(switchMap(data => {
+      const item = JSON.parse(data.text) as BoltInfo;
 
-  }
-
-  initBoltServices() {
-    this.boltInfo =  JSON.parse(localStorage.getItem('boltInfo'));
-    if (this.boltInfo) {
-    }
-  }
-
-  getBoltTerminalInfo(): Observable<ITerminalSettings> {
-    return this.terminalSettings$.pipe(
-      switchMap( data => {
-      this.boltTerminal = {} as BoltTerminal;
-      const item = JSON.parse(data.text) as ITerminalSettings;
-      console.log(item)
-      this.terminalSettings = item
-      this.boltTerminal.hsn = item?.cardPointeHSN;
+      if (!this.boltInfo) { this.boltInfo = {} as BoltInfo };
+      this.boltInfo.apiURL = item?.apiURL;
+      this.boltInfo.merchID = item?.merchID;
       return of(item)
     }))
   };
 
-  getBolt() : Observable<BoltInfo> {
-    const site      = this.siteService.getAssignedSite()
-    const item$ = this.settingsService.getSettingByName(site, 'boltInfo');
-    return item$.pipe(
-      switchMap( data => {
-        let   boltInfo  = JSON.parse(data.text) as BoltInfo;
-        const device = localStorage.getItem('devicename');
-        boltInfo.deviceName =device;
-        console.log('string bolt', boltInfo);
-        return of(boltInfo)
-    }))
-  };
-
   getBoltInfo() {
-    const terminal$ = this.getBoltTerminalInfo()
+    const site = this.siteService.getAssignedSite()
+    const deviceName = localStorage.getItem('devicename');
+
+    const terminal$ = this.getBoltTerminalInfo(deviceName, site)
     const boltInfo$ = this.getBolt(); //
     return boltInfo$.pipe(
       switchMap((boltInfo) =>
         forkJoin({
           terminal: terminal$,
-          boltInfo: of(boltInfo)
+          boltInfo: of(boltInfo) //boltInfo$
       })
     ))
+  };
+
+  getBoltTerminalInfo(deviceName: string, site: ISite): Observable<ITerminalSettings> {
+    const settings$ =   this.settingsService.getDeviceSettings( deviceName )
+    return  settings$.pipe(
+      switchMap( data => {
+        this.boltTerminal = {} as BoltTerminal;
+        const item = JSON.parse(data.text) as ITerminalSettings;
+        console.log('getBoltTerminalInfo', data.text)
+        this.boltTerminal.hsn = item?.cardPointeHSN;
+        return of(item)
+    }))
   };
 
   init() {
@@ -216,8 +206,12 @@ export class CardPointMethodsService {
   sendDisconnect() {
     this.init()
     const bolt = this.boltTerminal
-    this.disconnect$ = this.cardPointBoltService.disconnect( bolt.url, this.boltTerminal.hsn, bolt.xSessionKey)
+    if (bolt.url && this.boltTerminal.hsn && bolt.xSessionKey) {
+      this.disconnect$ = this.cardPointBoltService.disconnect( bolt.url, this.boltTerminal.hsn, bolt.xSessionKey)
+    }
+    this.disconnect$ = of(null)
   }
+
   getDisconnect() {
     this.sendDisconnect();
     return this.disconnect$
@@ -238,7 +232,6 @@ export class CardPointMethodsService {
   sendconnect() {
     this.init()
     const bolt = this.boltInfo;
-    console.log('connecting')
     this.cardPointBoltService.connect( bolt.apiURL, this.boltTerminal.hsn).subscribe(
       data => {
         this.connect = data;

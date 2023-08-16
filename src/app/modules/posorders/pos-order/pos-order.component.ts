@@ -33,6 +33,7 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { Capacitor } from '@capacitor/core';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { eventNames } from 'process';
 
 @Component({
 selector: 'app-pos-order',
@@ -140,6 +141,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   uiSettings : UIHomePageSettings;
   wideBar    =  true;
   enableLimitsView : boolean;
+
+  uiTransactionSetting$ : Observable<TransactionUISettings>;
+  uiTransactionSetting  : TransactionUISettings;
   _uiTransactionSettings: Subscription;
   uiTransactionSettings : TransactionUISettings;
   uiTransactions
@@ -156,14 +160,29 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   enableExitLabel : boolean;
   prepOrderOnClose: boolean;
   refundItemsAvalible;
-  uiTransactionSetting$: Observable<TransactionUISettings>;
-  uiTransactionSetting : TransactionUISettings;
+
+  _quantitySubscriptions: Subscription;
+  quantityEntryValue : number = 1;
 
   get stripePayButtonView() {
     if ( this.order && this.order.balanceRemaining != 0 && !this.platFormService.isApp() ) {
       return this.stripePayButton
     }
     return null;
+  }
+
+  setKeyPadValue(event) {
+    // set this value for Scanning Items. ;
+    // reset this value when order changes, when item is added.
+    // when leaving this screen.
+    // when modifying anything else.
+    // when screen refreshes.
+    // this.
+    console.log(event, event.value)
+    // return;
+    if (event) {
+      this.orderMethodsService._quantityValue.next(event)
+    }
   }
 
   get wicEBTButtonView() {
@@ -251,7 +270,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   initAssignedItemsSubscriber() {
-    this._items = this.orderMethodService.assignedPOSItems$.subscribe(data => {
+    this._items = this.orderMethodsService.assignedPOSItems$.subscribe(data => {
       this.assignedItems = data;
       if (data && data.length>0) {
         this.refundItemsAvalible = true;
@@ -338,6 +357,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.resizePanel()
   }
 
+
   resizePanel() {
     this.uiSettingsService.remainingHeight$.subscribe(data => {
       if (this.mainPanel) {
@@ -394,6 +414,14 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.resizePanel();
     this.initAssignedItemsSubscriber();
     this.userAuthSubscriber();
+
+    try {
+      this._quantitySubscriptions =  this.orderMethodsService.quantityValue$.subscribe(data => {
+        this.quantityEntryValue = data;
+      })
+    } catch (error) {
+
+    }
   }
 
   initBarSubscription() {
@@ -435,7 +463,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private siteService       : SitesService,
               private toolbarUIService  : ToolBarUIService,
               private bottomSheet       : MatBottomSheet,
-              private orderMethodService: OrderMethodsService,
               public  userAuthorization : UserAuthorizationService,
               private authenticationService: AuthenticationService,
               public  uiSettingsService  : UISettingsService,
@@ -533,6 +560,11 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
+  setScannerFocus(event) {
+    console.log('set scanner focus')
+    this.orderMethodsService.setScanner()
+  }
+
   getDeviceInfo() {
     const devicename = localStorage.getItem('devicename')
     if (devicename && this.isApp) {
@@ -593,7 +625,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   //check order status:
   refreshOrder() {
     if (this.order) {
-      this.orderMethodService.refreshOrder(this.order.id)
+      this.orderMethodsService.refreshOrder(this.order.id)
     }
   }
 
@@ -712,7 +744,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   clearOrder(event) {
-    this.orderMethodService.clearOrder()
+    this.orderMethodsService.clearOrder()
   }
 
   voidOrder() {
@@ -730,7 +762,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   deleteOrder(event) {
-    this.deleteOrder$ = this.orderMethodService.deleteOrder(this.order.id, false).pipe(switchMap(data => {
+    this.deleteOrder$ = this.orderMethodsService.deleteOrder(this.order.id, false).pipe(switchMap(data => {
       return of(data)
     }))
   }
@@ -751,7 +783,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   suspendOrder() {
     if (this.order) {
-      this.action$ = this.orderMethodService.suspendOrder(this.order)
+      this.action$ = this.orderMethodsService.suspendOrder(this.order)
     };
   }
 
@@ -807,7 +839,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   houseAccountPayment() {
-    this.action$ =  this.orderMethodService.suspendOrder(this.order)
+    this.action$ =  this.orderMethodsService.suspendOrder(this.order)
   }
 
   //loop the items
@@ -890,13 +922,13 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   textNotify() {
     // this.outPutTextNotify.emit(true)
-    this.orderMethodService.sendSSMSOrderISReady(this.order)
+    this.orderMethodsService.sendSSMSOrderISReady(this.order)
   }
 
   emailNotifyOrder(event) {
-    this.orderMethodService.emailOrder(this.order).subscribe(data => {
+    this.orderMethodsService.emailOrder(this.order).subscribe(data => {
       // if (data.isSuccessStatusCode  || data === 'success') {
-      this.orderMethodService.notifyEvent('Email Sent', 'Sent');
+      this.orderMethodsService.notifyEvent('Email Sent', 'Sent');
       //   this.orderMethodService.notifyEvent('Email Sent', 'Success')
       //  }
       // if (!data.isSuccessStatusCode) {
@@ -906,12 +938,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   emailOrder(event) {
-    this.orderMethodService.emailOrder(this.order).subscribe(data => {
+    this.orderMethodsService.emailOrder(this.order).subscribe(data => {
       if (data.isSuccessStatusCode) {
-        this.orderMethodService.notifyEvent('Email Sent', 'Success')
+        this.orderMethodsService.notifyEvent('Email Sent', 'Success')
        }
       if (!data.isSuccessStatusCode) {
-        this.orderMethodService.notifyEvent('Email not sent. Check email settings', 'Failed')
+        this.orderMethodsService.notifyEvent('Email not sent. Check email settings', 'Failed')
       }
     })
   }

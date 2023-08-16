@@ -4,7 +4,6 @@ import { ElectronService } from 'ngx-electron';
 import { PlatformService } from './platform.service';
 import { IPCService } from 'src/app/_services/system/ipc.service';
 import { Capacitor } from '@capacitor/core';
-import { T } from '@angular/cdk/keycodes';
 
 export interface ScaleInfo {
   value        : string;
@@ -52,33 +51,27 @@ export class ScaleService  {
   }
 
   readScaleEvent() {
-    try {
-      const scaleSetup = this.getScaleSetup()
-      // console.log('scale setup', scaleSetup, this.platformService.isAppElectron)
-      if (!scaleSetup || !scaleSetup.enabled) { return }
-      // console.log('active')
-      if (this.platformService.isAppElectron) {
+    if (!this.IPCService.isElectronApp) { return }
+    const scaleSetup = this.getScaleSetup()
+    if (!scaleSetup || !scaleSetup.enabled) { return }
 
-        // console.log('electron ')
-        this.electronService.ipcRenderer.on('scaleInfo', (event, args) =>
-
-          {
-            // console.log('events', event, args)
-            const info         = {} as ScaleInfo;
-            info.value         = this.getScaleWeighFormat(args.weight, scaleSetup.decimalPlaces);
-            info.type          = args.type;
-            info.mode          = args.mode;
-            info.scaleStatus   = args.status;
-            info.valueToDivide = args.valueToDivide
-
-            // console.log('scale info', info)
-            this.updateSubscription(info)
-          },
-        );
+    this.electronService.ipcRenderer.on('scaleInfo', (event, args) =>
+      {
+        this.updateScaleValues(args, scaleSetup.decimalPlaces)
       }
-    } catch (error) {
-      console.log('error read scale' , error)
-    }
+    );
+  }
+
+
+  updateScaleValues(args, decimalPlaces) {
+    if (!args.weight) { args.weight = 0}
+    const info         = {} as ScaleInfo;
+    info.value         = this.getScaleWeighFormat(args?.weight, decimalPlaces);
+    info.type          = args.type;
+    info.mode          = args.mode;
+    info.scaleStatus   = args.status;
+    info.valueToDivide = args.valueToDivide;
+    this.updateSubscription(info)
   }
 
   async readScale() {
@@ -145,12 +138,7 @@ export class ScaleService  {
   }
 
   startScaleApp() {
-    try {
-      if ( !this.platformService.isAppElectron) { return }
-    } catch (error) {
-      return;
-    }
-    if (!this.platformService.isAppElectron) { return }
+    if ( !this.platformService.isAppElectron) { return }
     const childProcess = this.electronService.remote.require('child_process');
     const pathToExec = 'C:\\pointless\\restarter.exe scaleservice.exe'; // Update this to your executable path
     this.execProcess = childProcess.exec(pathToExec, function (err, data) {
@@ -158,17 +146,15 @@ export class ScaleService  {
         console.error(err);
         return;
       }
-      console.log(data.toString());
     });
+
     if (this.execProcess) {
       this.processID = this.execProcess.pid;
     }
   }
 
   killScaleProcess() {
-    console.log('pid', this.processID)
     if (!this.processID) {
-      console.log('processID')
       return
     }
     this.killProcessById(this.processID)
@@ -177,23 +163,15 @@ export class ScaleService  {
   public killProcessById(processId: number) {
     if (!this.electronService.isElectronApp) { return}
       const childProcess = this.electronService.remote.require('child_process');
-
-      // Command that kills the process with the given process ID
       let command = `taskkill /PID ${processId} /F`;
-
       childProcess.exec(command, (err, stdout, stderr) => {
-
         if (err) {
           console.error('Error:', err);
           return;
         }
-
         if (stderr) {
-          console.error('Stderr:', stderr);
           return;
         }
-
-        console.log('std Out', stdout);
       });
     }
 
@@ -215,7 +193,6 @@ export class ScaleService  {
       console.log(data.toString());
     });
   }
-
 
   public killProcessByName(processName: string) {
     try {
@@ -244,7 +221,6 @@ export class ScaleService  {
     }
 
   }
-
 }
 
       // this.electronService.ipcRenderer.on('scaleType', (event, args) => {

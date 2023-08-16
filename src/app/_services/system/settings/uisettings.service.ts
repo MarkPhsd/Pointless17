@@ -90,6 +90,7 @@ export interface TransactionUISettings {
   expoPrinter: string;
   expoTemplateID: number;
   applyTableNameToOrderName: boolean;
+  showNumberPad: boolean;
 }
 
 export interface StripeAPISettings {
@@ -796,6 +797,7 @@ export class UISettingsService {
       expoPrinter: [],
       expoTemplateID:[],
       applyTableNameToOrderName: [],
+      showNumberPad: [],
      })
 
 

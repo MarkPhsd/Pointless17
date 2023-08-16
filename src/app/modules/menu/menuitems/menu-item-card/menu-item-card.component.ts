@@ -227,7 +227,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
       model.categoryID   = categoryID;
       model.departmentID = departmentID;
       model.itemTypeID   = itemTypeID;
-      // console.log('updating model', model)
       this.menuService.updateSearchModel(model)
       return;
     }

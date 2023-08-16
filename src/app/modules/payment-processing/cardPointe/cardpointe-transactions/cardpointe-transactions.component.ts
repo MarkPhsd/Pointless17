@@ -18,6 +18,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   styleUrls: ['./cardpointe-transactions.component.scss']
 })
 export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
+
   processingTransaction: boolean;
   action$: Observable<any>;
   toggleData: boolean;
@@ -32,25 +33,47 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
   private _sale               = new BehaviorSubject<any>(null);
   public itemProcessSection$  = this._sale.asObservable();
   public _connect     = new BehaviorSubject<any>(null);
+  terminalSettings$ : Observable<any>;
 
   initConnectSubscriber() {
-    this._connect.subscribe(data => {
+    this._connect.subscribe(
+     data => {
       if (data) {
-        // console.log('_connectSubscriber', data)
-        this.boltSubscriber();
+        // return this.boltSubscriberObs()
+        this.boltSubscriber()
         this._connect.unsubscribe()
       }
-    })
+      }
+    )
   }
 
   boltSubscriber() {
     // console.log('bolt connect called ', this.methodsService.connect)
     this.methodsService.getConnect().subscribe( data => {
       this.methodsService.connect = data
+      console.log('connection data', data.xSessionKey, data.expiry)
+
+      if (data.errorMessage) {
+        this.siteService.notify("Error Connecting: " + data?.errorCode + " " + data?.errorMessage, 'Close', 5000, 'red');
+        return
+      }
       this.methodsService.initTerminal(data.xSessionKey, data.expiry);
       this.saleSubscriber();
       this.initFinalizer();
     })
+  }
+
+  boltSubscriberObs() {
+    // console.log('bolt connect called ', this.methodsService.connect)
+    return  this.methodsService.getConnect().pipe(
+      switchMap(data => {
+      console.log('connection data', data.xSessionKey, data.expiry)
+      this.methodsService.connect = data
+      this.methodsService.initTerminal(data.xSessionKey, data.expiry);
+      this.saleSubscriber();
+      this.initFinalizer();
+      return of(data)
+    }))
   }
 
   saleSubscriber() {
@@ -120,7 +143,6 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
       void$ = this.methodsService.voidByRetRef(this.methodsService.payment.retref.toString())
     }
     if (this.methodsService.payment && !this.methodsService.payment.retref) {
-      // this.methodsService.payment.retref.toString()
       void$ = of('success')
     }
     return void$
@@ -135,7 +157,7 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
                 private orderService        : OrdersService,
                 @Inject(MAT_DIALOG_DATA) public data: any,
                 @Optional() private dialogRef  : MatDialogRef<CardpointeTransactionsComponent>,
-              ) {
+    ) {
 
     this.methodsService.orderID = data?.data?.id;
     this.methodsService.retRef = data?.data?.retref;
@@ -151,30 +173,31 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
       this.methodsService.amount  =  data.payment?.amountPaid;
       this.methodsService.transactionUISettings  = data?.setting;
     }
-
   }
 
   ngOnInit()  {
+    this.terminalSettings$ =  this.methodsService.getBoltInfo().pipe(
+      switchMap(data => {
+        console.log('data result')
+        if (data.boltInfo && data.terminal) {
+          console.log('boltInfo', data.boltInfo)
+          console.log('terminal', data.terminal)
 
-    this.methodsService.getBoltInfo().subscribe(data => {
-      if (data.boltInfo && data.terminal) {
-        this.methodsService.boltTerminal = {} as BoltTerminal;
-        if (!this.methodsService.boltInfo) {
-          this.methodsService.boltInfo = {} as BoltInfo;
+          this.methodsService.boltTerminal = {} as BoltTerminal;
+          if (!this.methodsService.boltInfo) {   this.methodsService.boltInfo = {} as BoltInfo;  }
+          this.methodsService.boltInfo = data.boltInfo ;
+          this.methodsService.boltTerminal.hsn = data.terminal.cardPointeHSN;
+          this.methodsService.boltInfo.hsn     = data.terminal.cardPointeHSN;
+          this.methodsService.boltInfoInitialized = true;
+          this.methodsService.boltTerminalInitialized = true;
+          this.initConnectSubscriber();
+          this._connect.next(true);
+        } else {
+          console.log('not initiaited', data)
+          this.orderService.notificationEvent('Info not initialized. Please close and reopen window.', 'Alert')
         }
-        this.methodsService.boltInfo = data.boltInfo ;
-        this.methodsService.boltTerminal.hsn = data.terminal.cardPointeHSN;
-        this.methodsService.boltInfo.hsn     = data.terminal.cardPointeHSN;
-        this.methodsService.boltInfoInitialized = true;
-        this.methodsService.boltTerminalInitialized = true;
-        this.initConnectSubscriber();
-        this._connect.next(true);
-      } else {
-        //terminal info not initialized.
-        console.log('not initiaited', data)
-        this.orderService.notificationEvent('Info not initialized. Please close and reopen window.', 'Alert')
-      }
-    });
+        return of(data)
+    }));
   }
 
   cancel() {
@@ -224,13 +247,10 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
 
   }
 
-
-
   //preserve failed payments
   getPaymentFailed(): IPOSPayment {
     return null
   }
-
 
   processVoid(retRef) {
     this.methodsService.processing = true;
@@ -248,7 +268,6 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
 
   refundByRetRef(retRef) {
     this.methodsService.processing = false;
-    // console.log('refund by RetRef')
     this.methodsService.refundByRetRef(retRef)
     .subscribe(data => {
       this.methodsService.processing = true;
@@ -262,13 +281,11 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
     this.methodsService.processing = true;
     // this.methodsService.sendAuthCard(null, true)
     const authCard$ =  this.methodsService.sendAuthCard(null, true, manual);
-
     authCard$.subscribe(data => {
       this.methodsService.processing = false;
       this.methodsService.transaction = data;
       this.methodsService.retRef = data?.retref
     })
-
   }
 
   sendAuthCardOnly(manual: boolean) {

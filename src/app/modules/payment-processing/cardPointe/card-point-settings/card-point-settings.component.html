@@ -1,17 +1,15 @@
-<mat-card>
+<mat-card *ngIf="(boltInfo$ | async) as bolt;else loading">
   <mat-card-title>
     <ng-content></ng-content>
   </mat-card-title>
   <mat-card-subtitle>
-    <div>
-       <div *ngIf="methodType$ | async as item"></div>
-    </div>
 
   </mat-card-subtitle>
   <mat-card-content>
     <div *ngIf="inputForm"
          [formGroup]="inputForm" >
-      <div>
+
+      <!-- <div>
         <mat-form-field appearance="outline">
         <mat-label >Device Name</mat-label>
         <input matInput
@@ -19,9 +17,12 @@
               formControlName="deviceName"
               class="form-control" >
         </mat-form-field>
-      </div>
+      </div> -->
 
       <div>
+        <mat-icon class="mat-label-info"
+                  color="accent"
+                  [matTooltip]="labelingService.boltCardPoint[0].value">info</mat-icon>
         <mat-form-field appearance="outline">
         <mat-label >HSN</mat-label>
         <input matInput
@@ -32,6 +33,9 @@
       </div>
 
       <div>
+        <mat-icon class="mat-label-info"
+                  color="accent"
+                  [matTooltip]="labelingService.boltCardPoint[3].value">info</mat-icon>
         <mat-form-field appearance="outline">
         <mat-label >MerchID</mat-label>
         <input matInput
@@ -42,6 +46,9 @@
       </div>
 
       <div>
+        <mat-icon class="mat-label-info"
+                  color="accent"
+                  [matTooltip]="labelingService.boltCardPoint[1].value">info</mat-icon>
         <mat-form-field appearance="outline">
         <mat-label >API Url</mat-label>
         <input matInput
@@ -62,3 +69,7 @@
   Info    {{deviceInfoService.deviceInfo | json}}
 </mat-card>
 
+<ng-template #loading>
+  ...loading
+  <mat-spinner [diameter]="50"></mat-spinner>
+</ng-template>

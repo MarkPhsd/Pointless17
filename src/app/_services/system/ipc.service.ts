@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IpcRenderer } from 'electron';
 import { ScaleInfo } from './scale-service.service';
-import { ipcRenderer, webFrame } from 'electron';
+import { ipcRenderer, webFrame, IpcRenderer } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
 

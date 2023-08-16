@@ -318,12 +318,12 @@ constructor(  private _snackBar              : MatSnackBar,
   formSubscriber() {
     this.searchForm.controls['minQuantityFilter'].valueChanges.subscribe(value => {
       this.minQuantityFilterValue = value;
-      console.log(value)
+      // console.log(value)
       this.refreshSearch(1)
     });
 
     this.searchForm.valueChanges.subscribe(data => {
-      console.log(data)
+      // console.log(data)
     })
   }
 
@@ -531,7 +531,7 @@ constructor(  private _snackBar              : MatSnackBar,
       this.action$ = this.updateValues(event.data.id, !event.value, 'active');
       event.value = !event.value;
       this.refreshGrid()
-      console.log(item)
+      // console.log(item)
     }
     // this.gridAPI.setRowData(item)
   }
@@ -542,7 +542,7 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   cellValueChanged(event) {
-    console.log('event',event?.value)
+    // console.log('event',event?.value)
     const colName = event?.column?.colId.toString() as string;
 
     const item = event.data as IProduct
@@ -589,7 +589,7 @@ constructor(  private _snackBar              : MatSnackBar,
     if (this.searchForm.controls['minQuantityFilter'].value) {
       searchModel.minQuantityFilter = this.minQuantityFilterValue;
     }
-    console.log('searchmodel', searchModel)
+    // console.log('searchmodel', searchModel)
     return searchModel;
   }
 
@@ -679,7 +679,7 @@ constructor(  private _snackBar              : MatSnackBar,
             if (!resp)         {return}
             this.isfirstpage   = resp.isFirstPage
             this.islastpage    = resp.isFirstPage
-            console.log('get rows' , resp.currentPage, this.currentPage)
+            // console.log('get rows' , resp.currentPage, this.currentPage)
             this.currentPage   = resp.currentPage
             this.numberOfPages = resp.pageCount
             this.recordCount   = resp.recordCount
@@ -757,7 +757,7 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   editSelectedItem() {
-    console.log('selected Items', this.selected)
+    // console.log('selected Items', this.selected)
     let id = 0;
     if (this.product) { id = this.product.id}
     if (this.selected){ id = this.selected[0]};
@@ -787,18 +787,18 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   onBtnClick1(e) {
-    console.log('on button click1')
+    // console.log('on button click1')
     this.rowDataClicked1 = e.rowData;
   }
 
   onBtnClick2(e) {
-    console.log('on button click2')
+    // console.log('on button click2')
     this.rowDataClicked2 = e.rowData;
   }
 
   editProductFromGrid(e) {
     if (!e) {
-      console.log('edit product from grid no data')
+      // console.log('edit product from grid no data')
       return
     }
     if (e.rowData.id)  {
@@ -818,7 +818,7 @@ constructor(  private _snackBar              : MatSnackBar,
     this.productEditButtonService.openProductDialogObs(id).subscribe(
       // switchMap(
         data => {
-        console.log('product', data)
+        // console.log('product', data)
         this.openingProduct = false
         return of(data)
       })
@@ -844,7 +844,7 @@ constructor(  private _snackBar              : MatSnackBar,
       this._snackBar.open('No items selected. Use Shift + Click or Ctrl + Cick to choose multiple items.', 'oops!', {duration: 2000})
       return
     }
-    console.log(this.selected)
+    // console.log(this.selected)
     let dialogRef: any;
     const site = this.siteService.getAssignedSite();
     dialogRef = this.dialog.open(EditSelectedItemsComponent,

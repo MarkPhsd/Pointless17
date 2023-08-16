@@ -1,9 +1,9 @@
 
 <div  class="side-panel-buttons-container"
       [style.width]="deviceWidthPercentage"
-      *ngIf="order && !mainPanel && !smallDevice && (uiSettings && uiSettings.wideOrderBar)" >
+      *ngIf="order && !mainPanel && !smallDevice  " >
     <div *ngIf="!phoneDevice">
-      <button 
+      <button
               [disabled]="disableViewCart"
               mat-raised-button
               color="accent"
@@ -20,7 +20,7 @@
       </button>
     </div>
     <div>
-    
+
       <button  mat-raised-button
               [disabled]="disableCheckOut"
               color="accent"
