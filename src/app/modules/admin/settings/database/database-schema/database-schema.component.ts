@@ -14,6 +14,7 @@ import { ISetting } from 'src/app/_interfaces';
 export class DatabaseSchemaComponent implements AfterViewInit, OnInit{
 
   version$: Observable<ISetting>;
+  apiVersion$: Observable<string>;
   updateSections = ['GetSyncDatabaseSchema', 'CreateAPIViews', 'CreateViews', 'CreateTablesA', 'CreateTablesB', 'createAPIReportviews']
   schemaResults : any[] ;
   schema$:              Observable<SchemaUpdateResults[]>;
@@ -34,7 +35,8 @@ export class DatabaseSchemaComponent implements AfterViewInit, OnInit{
   }
 
   ngOnInit() {
-    const site = this.sitesService.getAssignedSite()
+    const site = this.sitesService.getAssignedSite();
+    this.apiVersion$ = this.systemService.getAPIVersion(site);
     this.version$ = this.settingService.getSettingByName(site, 'PointlessAPIVersion');
   }
 

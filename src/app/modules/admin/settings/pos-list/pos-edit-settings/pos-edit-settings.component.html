@@ -4,7 +4,7 @@
   ...saving
 </ng-template>
 
-<mat-card >
+<mat-card *ngIf="(uisettings$ | async) as settings">
   <mat-card-title>
     <div class="header-container">
       <div><mat-icon>computer</mat-icon>
@@ -130,6 +130,13 @@
           </mat-slide-toggle>
         </div>
 
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="enablePrepView">
+            <mat-label>Enable Prep View</mat-label>
+          </mat-slide-toggle>
+        </div>
+        
         <div *ngIf="(serviceType$ | async) as list ">
           <mat-form-field style="width: 200px" class="fields"
               appearance="outline">
@@ -183,8 +190,10 @@
        </div>
 
       <h2><mat-icon>credit_card</mat-icon>Payment Processing Settings</h2>
+
       <div class='grid-container'>
-        <div>
+
+        <div *ngIf="uiSettings.dsiEMVNeteEpayEnabled">
           <mat-form-field appearance="standard">
             <mat-label>Netepay Secure Device</mat-label>
             <input matInput type="text"
@@ -193,16 +202,41 @@
           </mat-form-field>
         </div>
 
-        <div>
+        <!-- <div *ngIf="uiSettings.cardPointBoltEnabled">
           <mat-form-field appearance="standard">
             <mat-label >Cardpointe HSN</mat-label>
             <input matInput type="text"
                     formControlName="cardPointeHSN"
                     class="form-control" >
           </mat-form-field>
+        </div> -->
+
+        <div *ngIf="uiSettings.cardPointBoltEnabled">
+            <div *ngIf="(cardPointTerminals$ | async) as terminals">
+              <button mat-button (click)="setCardPointTermialsObservable()"><mat-icon>refresh</mat-icon></button>
+
+              <mat-form-field style="width: 200px" class="fields"
+                  appearance="outline">
+                <mat-label>Cardpointe HSN</mat-label>
+                  <mat-select
+                            type              = "string"
+                            formControlName   = "cardPointeHSN" >
+                    <mat-option
+                        *ngFor="let item of cardPointTerminals"
+                        [value]="item">
+                        {{item}}
+                    </mat-option>
+                  </mat-select>
+              </mat-form-field>
+
+              <button mat-button (click)="pingTermialObservable()"><mat-icon>link</mat-icon> Ping </button>
+              <span *ngIf="(pingCardPointTerminals$ | async) as result">
+                  Connected {{result?.connected | json}}
+              </span>
+            </div>
         </div>
 
-        <div>
+        <div *ngIf="uiSettings.triposEnabled">
           <mat-form-field appearance="standard">
             <mat-label>TriPOSLaneID</mat-label>
             <input matInput type="text"
@@ -211,18 +245,22 @@
           </mat-form-field>
         </div>
 
-        <div>
-          <mat-icon class="mat-label-info"
-                    color="accent"
-                    [matTooltip]="labelingService.terminalSettingsInfo[1].value">info
-          </mat-icon>
-          <mat-form-field appearance="standard">
-            <mat-label>TriPOS Market Code</mat-label>
-            <input matInput type="number"
-                    formControlName="triPOSMarketCode"
-                    class="form-control" >
+        <div  *ngIf="uiSettings.triposEnabled">
+          <mat-form-field  appearance="outline">
+            <mat-label>TRIPOS Market Code</mat-label>
+            <mat-select  type="number"
+                          formControlName ="triPOSMarketCode"  >
+                <span *ngIf="triPOSMarkets">
+                  <mat-option
+                        *ngFor="let item of triPOSMarkets"
+                        [value]="item.id">
+                    {{item.name}}
+                  </mat-option>
+                </span>
+              </mat-select>
           </mat-form-field>
         </div>
+
       </div>
 
       <ng-template #androidPrintingTemplate>
@@ -244,7 +282,7 @@
         </mat-form-field>
       </ng-template>
 
-      <div *ngIf="blueToothDeviceList && blueToothDeviceList.length>0">
+      <div *ngIf="blueToothDeviceList && blueToothDeviceList.length>0 && uiSettings.dsiEMVAndroidEnabled">
         <h3><mat-icon>android</mat-icon>Android Secure Device</h3>
          <mat-label>This feature must be set from the device itself.</mat-label>
          <div>
@@ -261,7 +299,7 @@
          </div>
       </div>
 
-      <h2><mat-icon>grid_view</mat-icon>Inteface Settings </h2>
+      <h2><mat-icon>grid_view</mat-icon>UI zoom </h2>
       <div>
         <mat-label>Installed Windows App Only</mat-label><br>
         <electron-zoom-control (valueEmit)="setZoomValue($event)" [zoomValue]="terminal.electronZoom"></electron-zoom-control>

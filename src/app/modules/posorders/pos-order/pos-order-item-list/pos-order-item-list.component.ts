@@ -20,6 +20,7 @@ import { POSOrderItemService } from 'src/app/_services/transactions/posorder-ite
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
 @Component({
   selector: 'pos-order-item-list',
@@ -97,9 +98,13 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   itemsPerPage      = 20
   smallDevice : boolean;
   //list height
+  openingProduct: boolean;
 
   message = ''
   @Input() height = "84vh"
+  purchaseOrderEnabled: boolean;
+  showCost : boolean;
+  showRetail: boolean;
 
   initSubscriptions() {
     let clientID: number;
@@ -113,8 +118,15 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     this._order = this.orderMethodsService.currentOrder$.subscribe(
       data => {
       this.order = data
+
+      if (this.order.serviceType.toLowerCase() == 'purchase order' || this.order.serviceType.toLowerCase() === 'conversion') {
+        this.purchaseOrderEnabled = true;
+      }
       this.refreshSearch()
-      return of(data.posOrderItems)
+      if (data.posOrderItems) {
+        return of(data.posOrderItems)
+      }
+      return of([])
     })
 
   }
@@ -130,6 +142,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                 private orderService            : OrdersService,
                 private posOrderItemMethodsService: PosOrderItemMethodsService,
                 private posOrderItemService    : POSOrderItemService,
+                private productEditButtonService: ProductEditButtonService,
                 private orderMethodsService: OrderMethodsService,
               )
   {
@@ -212,6 +225,14 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     columnDefs.push(textColumn);
 
+    textColumn = {headerName: 'UOM',   field: 'unitName',
+        sortable: true,
+        width   : 100,
+        minWidth: 100,
+        flex    : 2,
+    }
+    columnDefs.push(textColumn);
+
     let nextColumn =  {headerName: 'Quantity',     field: 'quantity',
           sortable: true,
           width   : 100,
@@ -232,7 +253,9 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                     editable: true,
                     singleClickEdit: true
                   }
-    columnDefs.push(currencyColumn);
+    if (!this.purchaseOrderEnabled || this.showRetail) {
+      columnDefs.push(currencyColumn);
+    }
 
     currencyColumn = {headerName: 'Cost',     field: 'wholeSale', sortable: true,
         cellRenderer: this.agGridService.currencyCellRendererUSD,
@@ -243,7 +266,9 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         editable: true,
         singleClickEdit: true
     }
-    columnDefs.push(currencyColumn);
+    if (this.purchaseOrderEnabled || this.showCost) {
+      columnDefs.push(currencyColumn);
+    }
 
     let wholeSaleCostTotal = {headerName: 'Cost Total',    field: 'wholeSaleCost', sortable: true,
         cellRenderer: this.agGridService.currencyCellRendererUSD,
@@ -254,7 +279,9 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         editable: true,
         singleClickEdit: true
     }
-    columnDefs.push(wholeSaleCostTotal);
+    if (this.purchaseOrderEnabled || this.showCost) {
+      columnDefs.push(wholeSaleCostTotal);
+    }
 
     let currencyTotalColumn = {headerName: 'Total',    field: 'total', sortable: true,
                 cellRenderer: this.agGridService.currencyCellRendererUSD,
@@ -263,16 +290,35 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                 maxWidth: 100,
                 flex: 2,
     }
-    columnDefs.push(currencyTotalColumn);
+    if (!this.purchaseOrderEnabled || this.showRetail) {
+      columnDefs.push(currencyTotalColumn);
+    }
+
+    let editButtonColumn = {headerName: 'Edit',  field: 'productID',
+      cellRenderer: "btnCellRenderer",
+      cellRendererParams: {
+        onClick: this.editProductFromGrid.bind(this),
+        label: 'edit',
+        getLabelFunction: this.getLabel.bind(this),
+        btnClass: 'btn btn-primary btn-sm'
+      },
+      minWidth: 125,
+      maxWidth: 125,
+      flex: 2,
+    }
+
+    if (this.purchaseOrderEnabled || this.showRetail) {
+      columnDefs.push(editButtonColumn);
+    }
 
     let itemDelete =  { headerName: '', field: "id",
         cellRenderer: "btnCellRenderer",
         cellRendererParams: {
           onClick: this.deleteItem.bind(this),
           label: 'delete',
-          getLabelFunction: 'delete',
+          getLabelFunction: this.getLabel.bind(this),
           btnClass: 'btn btn-primary btn-sm'
-        },
+      },
         minWidth: 100,
         width: 100,
         flex: 2,
@@ -309,6 +355,30 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   //initialize filter each time before getting data.
   //the filter fields are stored as variables not as an object since forms
   //and other things are required per grid.
+  editProductFromGrid(e) {
+    if (!e) {
+      // console.log('edit product from grid no data')
+      return
+    }
+
+    if (e.rowData.productID)  {
+      this.editItemWithId(e.rowData.productID);
+    }
+  }
+
+  editItemWithId(id:number) {
+    if(!id) { return }
+    console.log(id)
+    this.productEditButtonService.openProductDialogObs(id).subscribe(
+        data => {
+          this.openingProduct = false
+          return of(data)
+      }
+    )
+  }
+
+
+
 
   refreshSearchAny(event) {
     this.refreshSearch();

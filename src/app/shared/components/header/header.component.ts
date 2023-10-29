@@ -1,5 +1,5 @@
-import { Component, OnInit, Output, EventEmitter,
-        HostBinding, Renderer2, HostListener, OnDestroy, OnChanges, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter,QueryList,
+        HostBinding, Renderer2, HostListener, OnDestroy, OnChanges, TemplateRef, ViewChild, ViewChildren, ElementRef, AfterViewInit } from '@angular/core';
 import { UntypedFormBuilder,UntypedFormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CompanyService,AuthenticationService, OrdersService, MessageService, } from 'src/app/_services';
@@ -22,6 +22,8 @@ import { FloorPlanService, IFloorPlan } from 'src/app/_services/floor-plan.servi
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { CoachMarksService,CoachMarksClass } from '../../widgets/coach-marks/coach-marks.service';
 
 interface IIsOnline {
   result: string;
@@ -33,12 +35,20 @@ interface IIsOnline {
   styleUrls: ['./header.component.scss']
 })
 
-export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
+export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewInit {
   @ViewChild('clockInOut')      clockInOut: TemplateRef<any>;
   @ViewChild('userActions')       userActions: TemplateRef<any>;
   @ViewChild('searchMenuView')       searchMenuView: TemplateRef<any>;
   @ViewChild('floorPlanTemplate') floorPlanTemplate: TemplateRef<any>;
   @ViewChild('menuButtonContainer') menuButtonContainer: TemplateRef<any>;
+
+  @ViewChild('coachingTableLayout', {read: ElementRef}) coachingTableLayout: ElementRef;
+  @ViewChild('coachingLogin', {read: ElementRef}) coachingLogin: ElementRef;
+  @ViewChild('coachingPosTerminalIcon', {read: ElementRef}) coachingPosTerminalIcon: ElementRef;
+  @ViewChild('coachingIDScanner', {read: ElementRef}) coachingIDScanner: ElementRef;
+
+  // @ViewChildren('coachingPosTerminalIcon', {read: ElementRef}) coaching: QueryList<ElementRef>;
+
 
   @Output() outPutToggleSideBar:      EventEmitter<any> = new EventEmitter();
   @Output() outPutToggleSearchBar:    EventEmitter<any> = new EventEmitter();
@@ -62,6 +72,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   toggleTheme              : string;
   id:                        any;
   company$:                  Observable<ICompany>;
+
+  userSave$                 : Observable<any>;
+
   subscription              :   Subscription;
   messages:       any[] = [];
   showSearchForm: boolean;
@@ -185,6 +198,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
+
+
   initSubscriptions() {
     this.initOrderSubscriber()
     this.initOrderBarSubscriber();
@@ -196,6 +211,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   constructor(private authenticationService : AuthenticationService,
+              private userAuthService         :UserAuthorizationService,
               private userSwitchingService  : UserSwitchingService,
               private pollingService        : PollingService,
               private dialog:                 MatDialog,
@@ -203,7 +219,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private companyService:         CompanyService,
               private _renderer:              Renderer2,
               public  orderService:           OrdersService,
-              public orderMethodsService: OrderMethodsService,
+              public  orderMethodsService: OrderMethodsService,
               private messageService:         MessageService,
               public  breakpointObserver:     BreakpointObserver,
               private siteService:            SitesService,
@@ -213,14 +229,17 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               public  platFormService       : PlatformService,
               private router                : Router,
               private floorPlanSevice       : FloorPlanService,
-              public uiSettings            : UISettingsService,
+              public  uiSettings             : UISettingsService,
+              public  coachMarksService      : CoachMarksService,
               private fb                    : UntypedFormBuilder ) {
   }
 
 
 
   ngOnChanges() {
-    this.getUserInfo();
+    const user = this.getUserInfo();
+  }
+  ngAfterViewInit() {
   }
 
   ngOnInit() {
@@ -254,6 +273,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (this.smallDevice || this.phoneDevice) {
       return null
     }
+    if (this.homePageSetings && this.homePageSetings?.hideSearchBar) {return null}
     return this.searchMenuView;
   }
 
@@ -262,18 +282,24 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (devicename && this.isApp) {
       this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
         switchMap(data => {
-          try {
-            const posDevice = JSON.parse(data.text) as ITerminalSettings;
-            this.uiSettings.updatePOSDevice(posDevice)
-            this.terminalSetting = data;
-            if (this.platformService.isAppElectron) {
-              if (posDevice && posDevice.electronZoom && posDevice.electronZoom != '0') {
-                this.uiSettings.electronZoom(posDevice.electronZoom)
+          // console.log('data', 'get pos device info.', data)
+          if (data.text) {
+            try {
+              const posDevice = JSON.parse(data.text) as ITerminalSettings;
+
+              // console.log('pos device', posDevice)
+              this.uiSettings.updatePOSDevice(posDevice)
+
+              this.terminalSetting = data;
+              if (this.platformService.isAppElectron) {
+                if (posDevice && posDevice.electronZoom && posDevice.electronZoom != '0') {
+                  this.uiSettings.electronZoom(posDevice.electronZoom)
+                }
               }
+              return of(posDevice)
+            } catch (error) {
+              this.siteService.notify('Error setting device info.' + error, 'Close', 10000, 'yellow')
             }
-            return of(posDevice)
-          } catch (error) {
-            this.siteService.notify('Error setting device info.' + error, 'Close', 5000, 'yellow')
           }
           return of(null)
         }
@@ -525,6 +551,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.isUserStaff) {
       this.gridlayout = this.gridlayoutNoStaff
     }
+
+    return user
   }
 
   initUserInfo() {
@@ -605,6 +633,19 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.navigationService.navTableService()
   }
 
+  toggleCoaching() {
+    if (this.user && this.user.userPreferences ) {
+      if (this.user.userPreferences.enableCoachMarks) {
+        this.user.userPreferences.enableCoachMarks = false;
+      } else {
+        this.user.userPreferences.enableCoachMarks = true;
+
+      }
+      this.userSave$ = this.userAuthService.setUserObs(this.user)
+    }
+  }
+
+
   toggleSideBar() {
     if (this.userSwitchingService.swapMenuWithOrderBoolean) {
       if (this.openOrderBar) {
@@ -676,10 +717,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-  // readScale() {
-  //   this.scaleService.readScale();
-  // }
-
   setLastOrder() {
     if (!this.orderMethodsService.lastOrder) { return }
     this.orderMethodsService.setActiveOrder(null, this.orderMethodsService.lastOrder)
@@ -694,5 +731,39 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (!image) { return }
   }
 
+  get logoViewEnabled() {
+    const user = this.user
+    if (!user) { return true }
+
+    if (user && user.roles && (user.roles == 'user' || user.roles == 'guest'))  {
+      return true;
+    }
+
+
+  }
+
+
+  initPopover() {
+    if (this.user?.userPreferences && this.user?.userPreferences?.enableCoachMarks ) {
+      this.coachMarksService.clear()
+      if (this.isUserStaff && this.coachingPosTerminalIcon) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingPosTerminalIcon.nativeElement, "Cash Register: The cash register shows all of your orders, or other users orders if you enable filters."));
+      }
+      if (this.isUserStaff && this.coachingIDScanner) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingIDScanner.nativeElement, "ID Scanning: If you are using an android tablet, you will have an icon to scan drivers licenses."));
+      }
+      if (this.isfloorPlan && this.coachingTableLayout) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingTableLayout.nativeElement, "Restaurant: If you see the The Knife and Fork, it is an icon to use the Restaurant or Dinining Table Layout. "));
+      }
+      if (this.isUserStaff && this.coachingLogin) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingLogin.nativeElement, "Switch User: The running user is an icon to login or switch user accounts."));
+      }
+      this.coachMarksService.showCurrentPopover();
+    }
+  }
+
 }
 
+// @ViewChild('coachingTableLayout', {read: ElementRef}) button1View: ElementRef;
+// @ViewChild('coachingLogin', {read: ElementRef}) button2View: ElementRef;
+// @ViewChildren('coaching', {read: ElementRef}) textView: QueryList<ElementRef>;

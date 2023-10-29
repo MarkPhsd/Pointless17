@@ -81,6 +81,7 @@ export class ClientSearchSelectorComponent implements OnInit, AfterViewInit  {
 
   displayFn(item) {
     if (item) {
+      console.log('display fn')
       this.selectItem(item)
       this.item = item
       return item.name;

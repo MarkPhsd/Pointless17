@@ -1,3 +1,7 @@
+
+<!-- <div *ngIf="uiTransactions || !uiTransactions.payPalClientID">
+  No Paypal Client Configured.
+</div> -->
 <span *ngIf="(platForm === 'web') &&
             uiTransactions?.payPalEnabled &&
             (order && order?.balanceRemaining != 0)">

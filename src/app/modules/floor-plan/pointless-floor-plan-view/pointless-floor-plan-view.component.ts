@@ -205,7 +205,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
       try {
         // if (this.app.setSelectedObjectColor) {
           this.app.setSelectedObjectColor.subscribe(data => {
-             console.log('assigning color', data.color, data)
+            //  console.log('assigning color', data.color, data)
              return;
              this.alterObjectColor(data.uuid, data.color);
           })
@@ -341,7 +341,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
 
     onSelected() {
       if (!this.view) {
-        console.log('view is undefined')
+        // console.log('view is undefined')
         return
       }
 
@@ -349,7 +349,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
 
       this.refreshItemProperties(active)
       if (!this.view || !active) {
-        console.log('active is undefined');
+        // console.log('active is undefined');
         return
       }
 
@@ -396,7 +396,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
       if (!orderID || orderID == '') {
         if (!status) {  status = 'inactive' }
       }
-      console.log('get Status Description', status)
+      // console.log('get Status Description', status)
       return status
     }
 
@@ -413,7 +413,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
     }
 
     setValue(value: string, type: string) {
-      console.log(value, type)
+      // console.log(value, type)
       let itemValue = parseJSONTable(this.selectedObject?.name) as _.tableProperties;
       if (type === 'orderid') {
         itemValue.orderID = value;
@@ -457,25 +457,25 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
 
       this.view.on('selection:created', (e: fabric.IEvent) => {
         if (this.app.roomEdit) {
-          console.log('exit selection:created', this.app.roomEdit)
+          // console.log('exit selection:created', this.app.roomEdit)
           return;
         }
-        console.log('continue to onSelected', this.app.roomEdit)
+        // console.log('continue to onSelected', this.app.roomEdit)
         this.onSelected();
       });
 
       this.view.on('selection:updated', (e: fabric.IEvent) => {
         if (this.app.roomEdit) {
-          console.log('init exit early selections updated' )
+          // console.log('init exit early selections updated' )
           return;
         }
         this.onSelected();
-        console.log('continue to onSelected', this.app.roomEdit)
+        // console.log('continue to onSelected', this.app.roomEdit)
       });
 
       this.view.on('selection:cleared', (e: fabric.IEvent) => {
         if (this.app.roomEdit) {
-          console.log('init exit early selections cleared' )
+          // console.log('init exit early selections cleared' )
           return;
         }
         this.app.selections = [];
@@ -498,7 +498,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
 
         const obj = e.target;
 
-        console.log(obj);
+        // console.log(obj);
 
         if (!obj) { return; }
 
@@ -643,12 +643,12 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
      */
 
     refreshItemProperties(obj) {
-      console.log('refresh item properties', obj)
+      // console.log('refresh item properties', obj)
       if(obj && obj.type && (obj.type.toLowerCase() ==='table' || obj.type.toLowerCase() ==='group') && obj.name) {
         // this
         const item = parseJSONTable(obj?.name) as _.tableProperties;
 
-        console.log(obj.type, obj.name)
+        // console.log(obj.type, obj.name)
         const type = JSON.stringify(obj.type)
         if (type && type != '' && (item && item.name)) {
           this.alterObjectColor(item.uuid, item.color)
@@ -780,7 +780,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
     /**********************************************************************************************************/
     editRoom() {
       if (!this.view) {
-        console.log('no view')
+        // console.log('no view')
         return
       }
 
@@ -804,13 +804,13 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
           });
        }
       if (this.app.roomEditStates.length === 0)
-      console.log('editRoom')
+      // console.log('editRoom')
       this.saveState();
     }
 
     cancelRoomEdition() {
       if (!this.view) {
-        console.log('no view')
+        // console.log('no view')
         return
       }
 
@@ -830,7 +830,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
     }
 
     setItemStatus(type: string, object: any) {
-      console.log('setItemStatus', type, object)
+      // console.log('setItemStatus', type, object)
       if (object && type)  {
         if (type.toLowerCase() === 'table' || type.toLowerCase() === 'group') {
           // console.log(type, object.name)
@@ -899,7 +899,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
       if (type.toLowerCase()  === 'table' || type.toLowerCase() === 'group') {
         const chair = {} as any
         group = _.createTable(type, object, chair);
-        console.log('new table', group)
+        // console.log('new table', group)
       }
       if (type != 'table') {
         group = _.createFurniture(type, object, this.DEFAULT_CHAIR);
@@ -1140,7 +1140,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
         this.view.discardActiveObject();
         this.view.requestRenderAll();
       } catch (error) {
-        console.log('error', error)
+        // console.log('error', error)
       }
       this.saveState();
     }
@@ -1227,7 +1227,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
     move(direction, increament = 6) {
 
       if ( this.userMode ) {
-        console.log('user mode should exit')
+        // console.log('user mode should exit')
         return;
       }
 
@@ -1390,7 +1390,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
 
       if (!this.view) { this.initView(); }
       try {
-        console.log('refresh view', data.length)
+        // console.log('refresh view', data.length)
         if (this.view) {
           let template = this.floorPlanService.replaceJSONText(data)
           if (template.length>0){
@@ -1401,7 +1401,7 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
               template  = template.slice(template.length - 1)
             }
           }
-          console.log(template)
+          // console.log(template)
           this.view.loadFromJSON(template, () => this.view.renderAll())
         }
 
@@ -1431,21 +1431,21 @@ export class PointlessFloorPlanViewComponent implements OnInit, AfterViewInit {
     }
 
     alterObjectColor(uuID: string, color: string) {
-      console.log('alter color', uuID, color)
+      // console.log('alter color', uuID, color)
       const view = this.view;
       if (view) {
-        console.log('uuid', uuID);
+        // console.log('uuid', uuID);
         // console.log(view._objects)
         if (view._objects) {
             view._objects.forEach(data => {
               if (data && data?.type  && (data?.type.toLowerCase() === 'group' || data?.type.toLowerCase() === 'table' ) ) {
                 if (!data.name) { return }
                 const itemValue = parseJSONTable(data?.name) as _.tableProperties;
-                console.log('itemvalue', itemValue)
+                // console.log('itemvalue', itemValue)
                 if (!itemValue) { return }
                 if (itemValue.uuid){
                   if (uuID === itemValue.uuid ) {
-                        console.log('itemValue update ', itemValue)
+                        // console.log('itemValue update ', itemValue)
                         let stroke = 5
                         if (color === 'red' || color ===  'rgb(200,10,10)') {
                           data.backgroundColor = 'rgb(200,10,10)' // color;

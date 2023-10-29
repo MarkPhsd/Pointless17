@@ -1,6 +1,11 @@
 
 <div class="item-container header">
-  <h3>Enter PIN Code to Change User</h3>
+  <div>
+    <h3>Enter PIN Code to Change User</h3>
+  </div>
+  <div style="margin:5px">
+    <button class="payment-buttons" mat-button (click)="logout()"><mat-icon>lock</mat-icon>Lock</button>
+  </div>
 </div>
 
 <div class="item-container">
@@ -8,6 +13,7 @@
     [inputForm]        ="inputForm"
     [inputTypeValue]   ="'password'"
     [showInput]        ="true"
+    [placeHolder]      = "'pin'"
     [alternateClass]   ="'grid-keypad-alternate'"
     [numberbuttons]    ="'number-buttons button-sized-2'"
     (outPutReturnEnter)="enterPIN($event)">

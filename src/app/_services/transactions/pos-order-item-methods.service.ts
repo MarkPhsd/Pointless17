@@ -98,5 +98,13 @@ export class PosOrderItemMethodsService {
     return obs$;
   }
 
+  saveItem(item: PosOrderItem, editField: string) { 
+    const site = this.siteService.getAssignedSite()
+    if (editField == 'modifierNote') {
+      return this.posOrderItemService.putItem(site, item )
+    }
+    return of(null)
+  }
+
 
 }

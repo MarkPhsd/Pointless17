@@ -1,0 +1,154 @@
+<div *ngIf="(action$ | async) as item; else action"></div>
+
+<ng-template #action>
+  <div *ngIf="performingAction">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+</ng-template>
+
+<mat-card>
+  <mat-card-title>
+    <div class="header-container">
+      <div *ngIf="requestMessage">
+         {{requestMessage?.subject}}
+      </div>
+      <div>
+      <app-edit-buttons-standard
+            [enableCopy]            ="false"
+            [enableDelete]="false"
+            (outputeupdateItem)     ="updateSave($event)"
+            (outputupdateItemExit)  ="updateItemExit($event)"
+            (outputupdatedeleteItem)="archiveItem($event)"
+            (outputupdateonCancel)  ="onCancel($event)"
+         ></app-edit-buttons-standard>
+      </div>
+    </div>
+  </mat-card-title>
+
+  <mat-card-subtitle>
+    <div class="message-grid" style="margin-bottom:10px">
+      <div>Type: </div>
+      <div>{{ getMessageType(requestMessage?.type)?.name}}</div>
+
+      <div>Sender</div>
+      <div>{{requestMessage?.senderName}}</div>
+
+      <div>Created</div>
+      <div>{{requestMessage?.requestDate | date : 'short'}}</div>
+
+      <div>Completed</div>
+      <div>{{requestMessage?.requestCompleted | date : 'short'}}</div>
+
+      <div>Order ID</div>
+      <div>{{requestMessage?.orderID}}</div>
+    </div>
+  </mat-card-subtitle>
+
+  <mat-card-content  *ngIf="requestMessage && inputForm" [formGroup]="inputForm">
+    <div class="header">
+      <h4><mat-icon>subject</mat-icon> Features
+      </h4>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div class="grid-container-sections">
+
+      <div class="grid-item">
+          <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'name'">
+            Name
+          </app-value-fields>
+      </div>
+      <div class="grid-item">
+          <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'subject'">
+            Subject
+        </app-value-fields>
+      </div>
+
+      <div *ngIf="inputForm"
+          class="grid-item"
+          [formGroup]="inputForm" >
+        <mat-slide-toggle
+              name="archived"
+              class="mat-label"
+              formControlName="archived">
+            <mat-label  >Archived</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div *ngIf="inputForm"
+          class="grid-item"
+          [formGroup]="inputForm" >
+          <mat-icon class="mat-label-info"
+          color="accent"
+          [matTooltip]="labelingService.messagingService[1].value">info</mat-icon>
+        <mat-slide-toggle
+              name="template"
+              class="mat-label"
+              formControlName="template">
+            <mat-label  >Template</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div *ngIf="inputForm"
+          class="grid-item"
+          [formGroup]="inputForm" >
+          <mat-icon class="mat-label-info"
+          color="accent"
+          [matTooltip]="labelingService.messagingService[0].value">info</mat-icon>
+        <mat-slide-toggle
+              name="template"
+              class="mat-label"
+              formControlName="balanceZero">
+            <mat-label>Balance Is Zero</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="grid-item">
+        <mat-icon class="mat-label-info"
+        color="accent"
+        [matTooltip]="labelingService.messagingService[2].value">info</mat-icon>
+        <mat-form-field  appearance="outline">
+            <mat-select
+                  type="number"
+                  placeholder="Communication Type"
+                  [formControlName] ="'type'">
+              <span *ngIf="typeList">
+                <mat-option
+                      *ngFor="let item of typeList"
+                      [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </span>
+            </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div  class="grid-item">
+
+        <mat-form-field
+            style="width:600px"
+            appearance="outline"  >
+            <mat-label>Message</mat-label>
+              <textarea matInput
+                        style="font-size:1.2em"
+                        rows="10"
+                        columns="100"
+                        formControlName="message"
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </mat-card-content>
+
+</mat-card>
+
+<mat-card >
+
+
+</mat-card>
+

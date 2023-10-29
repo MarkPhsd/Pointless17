@@ -1,5 +1,5 @@
 import { Component, OnInit,OnChanges, EventEmitter, Output, Input, ElementRef, ViewChild, ChangeDetectionStrategy, SimpleChange } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -24,6 +24,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   //returns on number input
   @Output() outPutValue   = new EventEmitter();
   @Output() outPutCheckEntry  = new EventEmitter();
+  @Output() outputOnChange  = new EventEmitter();
   //returns on enter press
   @Output() outPutReturnEnter = new EventEmitter();
   @Output() outPutFocus   = new EventEmitter();
@@ -42,7 +43,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   showDoubleZero          = false // for faster entry.
   cashValue: any;
   quantityValue$: any;
-  placeHolder: string;
+  @Input() placeHolder: string;
   @Input() numberbuttons  = 'number-buttons button-sized-1';
   @Input() alternateClass = 'grid-keypad'
   @Input() decimals       = 0;
@@ -65,7 +66,9 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this.initForm();
 
     this.quantityValue$ = this.orderMethodsService.quantityValue$.pipe(switchMap(data => {
-      this.placeHolder = 'Quantity'
+      if (!this.placeHolder) {
+        this.placeHolder = ''
+      }
 
       if (data != this.inputForm.controls['itemName'].value) {
         if (data == 1) {
@@ -115,6 +118,10 @@ export class KeyPadComponent implements OnInit, OnChanges {
       this.inputForm.addControl( this.fieldName,new UntypedFormControl([]) );
       this.formSubscriber()
       this.inputForm.controls[this.fieldName].valueChanges.subscribe(data => {
+
+        this.outputOnChange.emit(data)
+        // console.log(this.inputForm.value, data)
+        // console.log(this.inputForm.controls)
         if (data == '' || data == undefined) {
           this.returnEnter(data);
         }
@@ -124,10 +131,14 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   _initForm() {
-    this.inputForm = this.fb.group({
-      itemName: [],
-    })
-
+    // // this.inputForm = this.fb.group({})
+    // this.inputForm = this.fb.group({
+    //   itemName: [],
+    // })
+    const group = new FormGroup({})
+    group.addControl(this.fieldName ,new FormControl())
+    this.inputForm = group;
+    // console.log('initForm')
   }
 
   resetValues() {
@@ -232,88 +243,85 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this.updateDisplayOutput();
   }
 
-  refreshDisplay() {
-    if (this.value)
-    {
-      if (this.inputTypeValue === 'password') {
-        if (this.showPassword) {
-          this.inputType = 'password'
-        } else {
-          this.inputType = 'text'
-        }
-      }
-      if (this.inputTypeValue != 'password') {
-        this.inputType = this.inputTypeValue
-      }
-      //decimal
-      let divider = 0
-      if (!this.decimals) {
-        this.decimals = 2
-        divider = 100
-      }
-      if (this.decimals = 1) {
-        divider = 10
-      }
-      if (this.decimals = 2) {
-        divider = 100
-      }
-      if (this.decimals = 0) {
-        divider = 1
-      }
-
-      if ( (this.inputTypeValue == 'number' &&  this.requireWholeNumber) || this.inputTypeValue == 'decimal' ) {
-        if (this.requireWholeNumber) {
-          const numVal = parseInt( this.value)
-          this.formatted = Number(numVal).toLocaleString('en', this.options);
-        }
-        if (!this.requireWholeNumber) {
-          const numVal = parseInt( this.value) / divider
-          this.formatted = Number(numVal).toLocaleString('en', this.options);
-        }
-      }
-
-      //wholeValue
-      if ( this.decimals > 0 && (this.inputTypeValue == 'wholeValue' || this.inputTypeValue == 'number' || this.requireWholeNumber) ) {
-        if (this.requireWholeNumber) {
-          const numVal = parseInt( this.value)
-          this.formatted = Number(numVal).toLocaleString('en', this.options);
-        }
-        if (!this.requireWholeNumber) {
-          const numVal = parseInt( this.value) / 1 * this.decimals
-          this.formatted = Number(numVal).toLocaleString('en', this.options);
-        }
-      }
-
-      if (this.inputTypeValue == 'text' ) {
-        const numVal = parseInt( this.value)
-        this.formatted = this.value
-      }
-
-      //password
-      if (this.inputTypeValue == 'password') {
-        if (this.showPassword) {
-          this.inputType = 'text'
-        }
-        if (!this.showPassword) {
-          this.inputType = 'password'
-        }
-        this.formatted = this.value;
-      }
-
+  setDefault() {
+    if (this.inputTypeValue == 'text' ) {
+      this.formatted = this.value //Number(numVal).toLocaleString('en', this.options);
     } else {
-
-      if (this.inputTypeValue == 'text' ) {
-        this.formatted = this.value //Number(numVal).toLocaleString('en', this.options);
-      } else {
-        this.formatted = Number(0).toLocaleString('en', this.options);
-      }
+      this.formatted = Number(0).toLocaleString('en', this.options);
     }
+  }
 
-    if (this.formatted == undefined || !this.formatted) {
-      const item      = { itemName:  this.value }
-      this.inputForm.patchValue(item)
+  refreshDisplay() {
+    if (!this.value)  {
+      this.setDefault();
       return
     }
+
+    if (this.inputTypeValue === 'password') {
+      if (this.showPassword) {
+        this.inputType = 'password'
+      } else {
+        this.inputType = 'text'
+      }
+    }
+    if (this.inputTypeValue != 'password') {
+      this.inputType = this.inputTypeValue
+    }
+    //decimal
+    let divider = 0
+    if (!this.decimals) {
+      this.decimals = 2
+      divider = 100
+    }
+    if (this.decimals = 1) {
+      divider = 10
+    }
+    if (this.decimals = 2) {
+      divider = 100
+    }
+    if (this.decimals = 0) {
+      divider = 1
+    }
+
+    if ( (this.inputTypeValue == 'number' &&  this.requireWholeNumber) || this.inputTypeValue == 'decimal' ) {
+      if (this.requireWholeNumber) {
+        const numVal = parseInt( this.value)
+        this.formatted = Number(numVal).toLocaleString('en', this.options);
+      }
+      if (!this.requireWholeNumber) {
+        const numVal = parseInt( this.value) / divider
+        this.formatted = Number(numVal).toLocaleString('en', this.options);
+      }
+    }
+
+    //wholeValue
+    if ( this.decimals > 0 && (this.inputTypeValue == 'wholeValue' || this.inputTypeValue == 'number' || this.requireWholeNumber) ) {
+      if (this.requireWholeNumber) {
+        const numVal = parseInt( this.value)
+        this.formatted = Number(numVal).toLocaleString('en', this.options);
+      }
+      if (!this.requireWholeNumber) {
+        const numVal = parseInt( this.value) / 1 * this.decimals
+        this.formatted = Number(numVal).toLocaleString('en', this.options);
+      }
+    }
+
+    if (this.inputTypeValue == 'text' ) {
+      const numVal = parseInt( this.value)
+      this.formatted = this.value
+    }
+
+    //password
+    if (this.inputTypeValue == 'password') {
+      if (this.showPassword) {
+        this.inputType = 'text'
+      }
+      if (!this.showPassword) {
+        this.inputType = 'password'
+      }
+      this.formatted = this.value;
+    }
+
 
     if (this.formatted != undefined) {
       const fieldName = this.fieldName
@@ -323,6 +331,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
     } else {
       this.initForm();
     }
+
   }
 
   returnEnterPress(){

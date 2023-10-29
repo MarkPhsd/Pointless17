@@ -35,6 +35,7 @@ import { ITriPOSPatch, TriposResult } from './triposModels';
 
   export interface AuthConfig {
     marketCode: any;
+    allowDebit: boolean;
   }
 @Injectable({
   providedIn: 'root'

@@ -19,7 +19,7 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
   @Input() mainPanel = false;
   @Input() disableActions: boolean;
   @Input() refreshTime = 1;
-  
+
   _uiSettings : Subscription;
   uiSettings  : UIHomePageSettings;
   transactionDataClass ="transaction-data"
@@ -28,7 +28,7 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
   @Input()  purchaseOrderEnabled: boolean;
 
   homePageSubscriber(){
-    
+
     try {
       this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
         this.uiSettings = data;
@@ -61,13 +61,16 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
       this.cost = 0;
       if (data) {
         this.order = data;
+        this.purchaseOrderEnabled = false;
+        if (this.order.serviceType.toLowerCase() == 'purchase order' || this.order.serviceType.toLowerCase() === 'conversion') {
+          this.purchaseOrderEnabled = true;
+        }
       }
     })
   }
 
   constructor(
       private uiSettingsService   : UISettingsService,
-      private orderService        : OrdersService,
       private orderMethodsService : OrderMethodsService,
       public  route               : ActivatedRoute) {
     const outPut = this.route.snapshot.paramMap.get('mainPanel');

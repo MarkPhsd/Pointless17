@@ -5,6 +5,7 @@ import { HttpClientCacheService, HttpOptions } from '../_http-interceptors/http-
 import { ISite } from '../_interfaces';
 import { AuthenticationService } from './system/authentication.service';
 import { tableProperties } from '../modules/floor-plan/models/helpers';
+import { SitesService } from './reporting/sites.service';
 
 export interface IFloorPlan {
   id            : number;
@@ -25,7 +26,8 @@ export interface IFloorPlan {
 export class FloorPlanService {
 
   constructor( private http: HttpClient,
-              private httpCache: HttpClientCacheService,
+               private siteService: SitesService,
+               private httpCache: HttpClientCacheService,
                private auth: AuthenticationService) { }
 
   pageNumber = 1;
@@ -87,9 +89,59 @@ export class FloorPlanService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.get<IFloorPlan>(url)
+    const cache =  this.siteService.getCacheURI(url)
+
+    if (cache) {
+      console.log('cache', cache)
+      return  this.httpCache.get<IFloorPlan>(cache)
+    }
+
+    return  this.http.get<IFloorPlan>(url);
 
   }
+
+  getCacheURI(url: string) {
+
+    const  cache = this.getCurrentCache();
+
+    if (cache == null) {  return  { url: url, cacheMins: 0 }   }
+
+    return { url: url, cacheMins: cache }
+
+  }
+
+
+  getCurrentCache(): number {
+
+    if (this.siteService.userValue) {
+      if (this?.siteService.userValue?.roles === 'user' || this?.siteService.userValue?.roles === '') {
+        return 10
+      }
+    }
+
+    if (!this.siteService.userValue) {
+      return 10
+    }
+
+    try {
+      const appCache = JSON.parse(localStorage.getItem('appCache'));
+
+      if (!appCache || appCache == 0) {
+        if (this?.siteService.userValue?.roles  === 'user')  {
+          return 10
+        }
+      }
+
+      return  appCache
+
+    } catch (error) {
+
+    }
+
+    return 0
+
+  }
+
   getFloorPlanNoBackup(site: ISite, id: number) : Observable<IFloorPlan> {
 
     const controller =  "/floorplans/"

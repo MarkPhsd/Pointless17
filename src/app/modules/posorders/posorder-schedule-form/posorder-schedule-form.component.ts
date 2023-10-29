@@ -6,7 +6,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { Observable, } from 'rxjs';
-
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 @Component({
   selector: 'app-posorder-schedule-form',
   templateUrl: './posorder-schedule-form.component.html',
@@ -16,7 +16,7 @@ export class POSOrderScheduleFormComponent implements OnInit {
 
   @Output() OutPutSaveShippingTime = new EventEmitter();
   @Input() order     : IPOSOrder;
-  @Input() inptuForm : UntypedFormGroup;
+  @Input() inputForm : UntypedFormGroup;
   scheduledDate       : string;
   serviceType$        : Observable<IServiceType>;
   @Input()  serviceType       : IServiceType;
@@ -25,6 +25,7 @@ export class POSOrderScheduleFormComponent implements OnInit {
     private serviceTypeService: ServiceTypeService,
     private sitesService      : SitesService,
     public platFormService    : PlatformService,
+    public orderMethodsService: OrderMethodsService,
    ) { }
 
   ngOnInit(): void {
@@ -39,7 +40,11 @@ export class POSOrderScheduleFormComponent implements OnInit {
   }
 
   saveShippingTime() {
-    this.OutPutSaveShippingTime.emit(this.scheduledDate)
+    this.OutPutSaveShippingTime.emit(this.inputForm.controls['preferredScheduleDate'].value)
+  }
+
+  requestPrep() {
+
   }
 
 }

@@ -24,6 +24,8 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
   @Input()  outputType        = ''
   formfieldValue: UntypedFormGroup;
 
+  @Output() clearInputsEmit = new EventEmitter();
+
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
   itemNameInput: string; //for clear button
@@ -182,4 +184,7 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
     return model;
   }
 
+  clearInput() {
+    this.clearInputsEmit.emit('true')
+  }
 }

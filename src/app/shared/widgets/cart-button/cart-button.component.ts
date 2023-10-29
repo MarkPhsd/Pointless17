@@ -13,6 +13,7 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 
 @Component({
   selector: 'app-cart-button',
@@ -76,7 +77,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     })
   }
 
- 
+
   constructor(
     private siteService:            SitesService,
     public orderService:            OrdersService,
@@ -88,6 +89,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     public platFormService: PlatformService,
     private uiSettings: UISettingsService,
     public orderMethodsService: OrderMethodsService,
+    public paymentMethodsProcess: PaymentsMethodsProcessService,
     ) {
    }
 
@@ -144,12 +146,14 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   addNewOrder() {
     const site = this.siteService.getAssignedSite();
-    if (this.posDevice) { 
+    if (this.posDevice) {
       if (this.posDevice.defaultOrderTypeID  && this.posDevice.defaultOrderTypeID != 0) {
+
+
         const serviceType$ = this.serviceTypeService.getType(site, this.posDevice.defaultOrderTypeID)
-        this.actionOrder$ = serviceType$.pipe(switchMap(data => { 
-            return of(data) 
-        })).pipe(switchMap(data => { 
+        this.actionOrder$ = serviceType$.pipe(switchMap(data => {
+            return of(data)
+        })).pipe(switchMap(data => {
             const order$ = this.getNewOrder(site, data)
             return order$
         }))
@@ -159,11 +163,16 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     this.actionOrder$  = this.getNewOrder(site, null)
   }
 
-  getNewOrder(site, serviceType) { 
-    return this.orderMethodsService.newOrderWithPayloadMethod(site, serviceType).pipe(
+  getNewOrder(site, serviceType) {
+    let sendOrder$ = this.paymentMethodsProcess.sendOrderOnExit(this.order)
+
+    return sendOrder$.pipe(switchMap(data => {
+      return this.orderMethodsService.newOrderWithPayloadMethod(site, serviceType)
+      })).pipe(
       switchMap(data => {
-        return of(data)
-    }))
+          return of(data)
+      })
+    )
   }
 
   initOrderBarSubscription() {

@@ -5,7 +5,8 @@ import { AuthenticationService } from 'src/app/_services';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MenusService } from 'src/app/_services/system/menus.service';
-import { AccordionMenu, IUser, MenuGroup, SubMenu } from 'src/app/_interfaces';
+import { AccordionMenu, IClientTable, IUser, MenuGroup, SubMenu } from 'src/app/_interfaces';
+import { ClientTableService } from 'src/app/_services/people/client-table.service';
 
 @Component({
   selector: 'user-bar',
@@ -14,25 +15,31 @@ import { AccordionMenu, IUser, MenuGroup, SubMenu } from 'src/app/_interfaces';
 })
 export class UserBarComponent implements OnInit {
   customerMenu = 'customer'
-  user$ : Observable<IUser>;
+  user$ : Observable<any>;
   user  : IUser;
   currentMenu   : MenuGroup;
   accordionMenus: AccordionMenu[];
   mailCount  = 0;
-  
+  client: IClientTable;
+
   constructor(
     private navigationService   : NavigationService,
     private siteService         : SitesService,
     private menusService: MenusService,
+    private clientService: ClientTableService,
     private userSwitchingService: UserSwitchingService,
     private authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
+    const site = this.siteService.getAssignedSite()
     this.user$ = this.authenticationService.user$.pipe(
-    switchMap(data => { 
-      this.user = data
-      return of(data)
-    }))
+        switchMap(data => {
+          this.user = data
+          return this.clientService.getClient(site, this.user.id)
+        })).pipe(switchMap(data => {
+          this.client = data;
+          return of(data)
+        }))
     this.getMenuGroup('customer')
   }
 
@@ -43,11 +50,11 @@ export class UserBarComponent implements OnInit {
   navProfile() {
     this.navigationService.navProfile()
   }
-  logOut() { 
+  logOut() {
     this.userSwitchingService.clearLoggedInUser();
   }
 
-  
+
   emailMailCount(event) {
     this.mailCount = event
   }
@@ -57,11 +64,11 @@ export class UserBarComponent implements OnInit {
     if (!this.user) {return}
     const menu$ = this.menusService.getMainMenuByName(site, name);
     const accordionMenu$ = menu$.pipe(
-      switchMap(data => { 
+      switchMap(data => {
         this.currentMenu = data;
         return this.menusService.getMenuGroupByNameForEdit(site, name);
       }
-    )).pipe(switchMap(data => { 
+    )).pipe(switchMap(data => {
       this.accordionMenus = data
       return of(data)
     }));

@@ -89,6 +89,10 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
     this.searchForm = this.fb.group({
       searchField: []
     })
+    this.initUnitForm();
+  }
+
+  initUnitForm() {
     this.formfieldValue = this.fb.group({
       unitTypeID: []
     })
@@ -109,6 +113,12 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
     this.searchForm = this.fb.group({
       searchField: [],
     })
+  }
+
+  clearInput() {
+    this.initForm();
+    this.initUnitForm();
+    this.itemSelect.emit({})
   }
 
   ngOnInit() {

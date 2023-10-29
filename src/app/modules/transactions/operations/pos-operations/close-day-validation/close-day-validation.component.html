@@ -23,7 +23,6 @@
     </div>
 
 
-
     <div *ngIf="(action$ | async) as action;else loading"></div>
     <ng-template #loading>
       <div *ngIf="actionOn">

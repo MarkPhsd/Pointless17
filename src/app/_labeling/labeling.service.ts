@@ -8,6 +8,8 @@ export interface IToolTips {
   providedIn: 'root'
 })
 export class LabelingService {
+
+  //  {id:0, name:'', value:''},
  homePageToolTips = [
     {id:0,name:'storeNav', value:'This feature establishes a hierarchy.  Navigation moves from Department, to Category to Subcategory to Items '}
   ] as IToolTips[];
@@ -29,6 +31,7 @@ export class LabelingService {
     {id:2, name:'appyToTable', value:'Not Recommended'},
     {id:3, name:'searchOrderHistory', value:'Searches on dates closed.'},
     {id:4, name:'numberPad', value:'Allows quantity entry prior to scan or button press.'},
+    {id:4, name:'splitEntry', value:'This makes split checks easier. Allows servers to select the customer / group they are entering the item to, prior to payment. '},
   ]
 
   terminalSettingsInfo =  [
@@ -36,11 +39,31 @@ export class LabelingService {
     {id:2,name:'triPOSMarketCode', value:'Tripos market codes are 4 for Retail, 7 for Food Service.'},
   ]
 
+  profile = [
+    {id:0,name:'scanning', value:'Accounts that are disabled can not have new orders added. ' },
+    {id:1,name:'scanning', value:'Accounts that are locked are when the account has failed to log in too many times. ' },
+    {id:2,name:'scanning', value:'Price level indicates the price column that will be default. This can improve pricing for the customer. '},
+  ]
+
   boltCardPoint =  [
     {id:0,name:'hsn', value:'The ID located on the device, on the screen after the device loads.'},
     {id:1,name:'APIURL', value:'The processor site'},
     {id:2,name:'boltURL', value:'Should be your Comapny Domain'},
     {id:3,name:'MerchantID', value:'Provided by your vendor.'},
+    {id:4,name:'MerchantID', value:'Apply the merchant info in the Credit Card Processing Section in the lower expansion ribbon (outisde of this section).'},
+  ]
+
+  //  <mat-label></mat-label>
+
+  triPOSCard =  [
+    {id:0,name:'hsn', value:'Its recommended you set this feature at the terminal physically. However, you may setup the terminal from any computer provided you have the activation code.'},
+  ]
+
+  messagingService = [
+    {id:0,name:'balanceZero', value:'Used for templates when the order is paid for.'},
+    {id:1,name:'template', value:'Used for communications between customers and staff and staff and staff.'},
+    {id:2,name:'types', value:'Types of communications.'},
+
   ]
 
   constructor() { }

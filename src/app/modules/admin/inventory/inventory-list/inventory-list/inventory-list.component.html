@@ -1,4 +1,6 @@
 <div *ngIf="(action$ | async) as action"></div>
+<div *ngIf="(urlPath$ | async) as urlPath"></div>
+
 <ng-template #action>
   ...processing
   <mat-spinner [diameter]="50"></mat-spinner>
@@ -101,8 +103,7 @@
           <mat-select
                     type="number"
                     (selectionChange)="getManifestStatus($event)"
-                    formControlName="manifestAssigned"
-                  >
+                    formControlName="manifestAssigned"  >
           <div>
             <mat-option *ngFor="let item of manifestAssignedList" [value]="item.id">
               {{ item.name }}
@@ -132,7 +133,6 @@
       </div>
     </div>
 
-
     <div  *ngIf="!listOnly">
         <button mat-button
                 (click)="listAll()">
@@ -141,7 +141,7 @@
     </div>
 
     <div>
-      <button mat-button
+      <button mat-raised-button
             (click)="refreshSearch()">
           <mat-icon>refresh</mat-icon>Refresh
       </button>
@@ -149,7 +149,7 @@
 
     <div  *ngIf="!listOnly">
       <button class="info-buttons"
-              mat-button
+              mat-raised-button
               (click)="addInventoryItem()">
           <mat-icon>add</mat-icon> Add
       </button>
@@ -157,7 +157,7 @@
 
     <div *ngIf="currentManifest && !listOnly">
       <button class="info-buttons"
-              mat-button
+              mat-raised-button
               (click)="addItemsToManifest()">
           <mat-icon>add</mat-icon>Assign to Manifest
       </button>
@@ -165,14 +165,26 @@
 
     <div *ngIf="!currentManifest && !listOnly">
       <button class="info-buttons"
-              mat-button
+               mat-raised-button
               (click)="addToNewManifest()">
           <mat-icon>add</mat-icon>Make Manifest
       </button>
     </div>
 
+    <div *ngIf="listOnly && isSiteSatellite">
+      <button mat-raised-button color="primary"
+        (click)="setAcceptedAll()"><mat-icon>thumb_up</mat-icon>Receive All
+      </button>
+    </div>
+
+    <div *ngIf="listOnly && isSiteSatellite">
+      <button mat-raised-button color="primary"
+        (click)="setAcceptedSelected()"><mat-icon>thumb_up</mat-icon>Receive Selected
+      </button>
+    </div>
+
     <div *ngIf="listOnly">
-        <button color="warn" mat-button
+        <button color="warn" mat-raised-button
           (click)="removeSelectedFromManifest()">
           <mat-icon>delete</mat-icon>Remove Selected
         </button>
@@ -180,7 +192,7 @@
 
     <div *ngIf="!currentManifest && !listOnly">
       <button class="info-buttons"
-              mat-button
+              mat-raised-button
               (click)="addItemsToManifest()">
           <mat-icon>add</mat-icon>Add to Manifest
       </button>
@@ -188,43 +200,32 @@
 
     <div *ngIf="currentManifest && !listOnly">
       <button class="info-buttons"
-              mat-button
+              mat-raised-button
               (click)="clearAssignedManifest()">
           <mat-icon>remove</mat-icon>Exit Manifest
       </button>
     </div>
 
     <div *ngIf="listOnly && isDistributor">
-      <button mat-button color="warn"
+      <button mat-raised-button color="warn"
         (click)="removeSelectedFromManifest()">
         <mat-icon>refresh</mat-icon>Remove Selected
       </button>
     </div>
 
     <div *ngIf="listOnly && isSiteSatellite">
-      <button mat-button color="warn"
+      <button mat-raised-button color="warn"
         (click)="rejectFromManifest()">
         <mat-icon>thumb_down_alt</mat-icon>Reject Selected
       </button>
     </div>
 
     <div *ngIf="listOnly && isSiteSatellite">
-      <button mat-button color="warn"
+      <button mat-raised-button color="warn"
         (click)="rejectAllFromManifest()"><mat-icon>thumb_down_alt</mat-icon>Reject All
       </button>
     </div>
 
-    <div *ngIf="listOnly && isSiteSatellite">
-      <button mat-button color="primary"
-        (click)="setAcceptedAll()"><mat-icon>thumb_up</mat-icon>Receive All
-      </button>
-    </div>
-
-    <div *ngIf="listOnly && isSiteSatellite">
-      <button mat-button color="primary"
-        (click)="setAcceptedSelected()"><mat-icon>thumb_up</mat-icon>Receive Selected
-      </button>
-    </div>
 </div>
 
 <mat-divider></mat-divider>

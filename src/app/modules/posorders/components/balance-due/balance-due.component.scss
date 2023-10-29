@@ -5,6 +5,14 @@
   // margin: 5px;
 }
 
+.grid-items {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 45px);
+  justify-content: space-around;
+}
+
+
 
 .h3 {
   font-size:  2.5em;
@@ -94,11 +102,6 @@ mat-icon {
   }
 }
 
-.grid-items {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
 
 .center-panel  {
   min-width: 300px;

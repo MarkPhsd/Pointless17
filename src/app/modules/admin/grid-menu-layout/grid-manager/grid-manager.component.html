@@ -1,3 +1,5 @@
+<div *ngIf="(action$ | async) as action"></div>
+
 <div *ngIf="!hideMenu">
   <mat-toolbar   [color]="matToolbarColor">
     <mat-toolbar-row>

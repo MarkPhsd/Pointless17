@@ -37,7 +37,9 @@ import { ServiceTypeService } from './service-type-service.service';
 import { StoreCreditMethodsService } from '../storecredit/store-credit-methods.service';
 import { UserSwitchingService } from '../system/user-switching.service';
 import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switch/fast-user-switch.component';
-
+import * as uuid from 'uuid';
+import { RequestMessagesComponent } from 'src/app/modules/admin/profiles/request-messages/request-messages.component';
+import { IRequestMessage } from '../system/request-message.service';
 export interface ProcessItem {
   order   : IPOSOrder;
   item    : IMenuItem;
@@ -63,6 +65,16 @@ export class DateValidators {
   providedIn: 'root'
 })
 export class OrderMethodsService implements OnDestroy {
+
+  emailSubjects = [
+    {name: 'Please Complete', subject: 'Please review this order for prep. I would like it completed. I agree to pay when it the order is completed.', id: 1},
+    {name: 'Please Review for Prep', subject: 'Please review this order for prep. I would like it confirmed and then please contact me.', id: 2},
+    {name: 'Ready for Pickup', subject: 'Your order has been completed for Pickup.', id: 3},
+    {name: 'Please Review for Prep', subject: 'Your order has been completed. We will notify you when it is en route for delivery.', id: 4},
+    {name: 'Order Ready for Delivery', subject: 'Your order has been completed. We will notify you when it is en route for delivery.', id: 5},
+    {name: 'Please Pay', subject: 'Your order has been completed. Please complete payment so we may schedule pickup or delivery.', id: 6},
+    {name: 'Order Can Not be Completed', subject: 'Your order can not be completed. We will notify you of why in a separate email.', id: 7},
+  ]
 
   public toggleChangeOrderType: boolean;
 
@@ -217,6 +229,7 @@ export class OrderMethodsService implements OnDestroy {
 
   getCost(order: IPOSOrder) {
     if (order ) {
+      if (order.toString() == 'not found') { return; }
       order.cost = 0
       if (order.posOrderItems && order.posOrderItems.length>0) {
         order.posOrderItems.forEach(data => {
@@ -245,6 +258,11 @@ export class OrderMethodsService implements OnDestroy {
     this._scanner.next(true)
   }
 
+  updateOrderSubscriptionOnly(order: IPOSOrder) {
+    this.currentOrder = order;
+    this._currentOrder.next(order);
+  }
+
   updateOrderSubscription(order: IPOSOrder) {
     this.updateOrder(order);
     if (order == null) {
@@ -261,9 +279,14 @@ export class OrderMethodsService implements OnDestroy {
     this.storeCreditMethodService.updateSearchModel(null);
     this.setScanner()
     const site = this.siteService.getAssignedSite();
-    const devicename = localStorage.getItem('devicename')
-    if (order?.deviceName === devicename) { return }
+    const devicename = localStorage.getItem('devicename');
+
+    if (order?.deviceName === devicename) { return };
+
     this.orderClaimed = false;
+
+    // console.log('updateOrderSubscription',order.id, order?.balanceRemaining)
+
     if (order && order.id ) {
       const order$ = this.orderService.claimOrder(site, order.id.toString(), order.history)
       if (!order$) {
@@ -320,7 +343,11 @@ export class OrderMethodsService implements OnDestroy {
         searchModel.clientID = user.id
       }
     }
+    if (!searchModel.onlineOrders) {
+      searchModel.onlineOrders = false;
+    }
     this.posSearchModel = searchModel
+    // console.log('searchModel ',searchModel, searchModel.onlineOrders)
     this._posSearchModel.next(searchModel);
   }
 
@@ -426,8 +453,6 @@ export class OrderMethodsService implements OnDestroy {
               private dialog                  : MatDialog,
               public  authenticationService    : AuthenticationService,
               private siteService             : SitesService,
-              private userSwitchingService    : UserSwitchingService,
-              // private balanceSheetMethodsService    : BalanceSheetMethodsService,
               private editDialog              : ProductEditButtonService,
               private floorPlanService        : FloorPlanService,
               private menuService             : MenuService,
@@ -577,14 +602,9 @@ export class OrderMethodsService implements OnDestroy {
         this.listItem(item.id);
         return of(null)
       }
-
-
       return  this.addItemToOrderObs(order, item, 1, 0, passAlongItem)
-
     }
-
     this.listItem(item.id);
-
     return of(null)
 
   }
@@ -605,7 +625,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   updateMenuSearchModel(item: IMenuItem) : boolean {
-    console.log('update menusearch model')
+    // console.log('update menusearch model')
     if (!item) {   return false }
     const model =  {} as ProductSearchModel;
     if (item?.itemType?.name?.toLowerCase() == 'category') {
@@ -672,8 +692,135 @@ export class OrderMethodsService implements OnDestroy {
     });
   }
 
+  openOrderMessages(order: IPOSOrder) {
+
+    let dialogRef: any;
+    dialogRef = this.dialog.open(RequestMessagesComponent,
+      { width:        '100%',
+        minWidth:     '100%',
+        maxWidth:     'max-width: 100vw !important',
+        height:       '90vh',
+        minHeight:    '90vh',
+        data : order
+      },
+    )
+  }
+
   listItem(id:number) {
     this.router.navigate(["/menuitem/", {id:id}]);
+  }
+
+
+
+  //customer
+  sendRequestToPrep(order) {
+    this.sendNotification(order, 1)
+  }
+ //customer
+  sendRequestToCheck(order) {
+    this.sendNotification(order, 2)
+  }
+  //biz
+  sendNotifyOrderCompleted(order) {
+    this.sendNotification(order, 7)
+  }
+
+ //biz
+  sendNotifyForDelivery(order) {
+    this.sendNotification(order, 6)
+  }
+
+ //biz
+  sendNotifyForPayment(order) {
+    this.sendNotification(order, 6)
+  }
+
+ //biz
+ sendNotifyForCancelation(order) {
+    this.sendNotification(order, 7)
+ }
+
+ sendNotification(order: IPOSOrder, id: number) {
+    const item = this.emailSubjects.filter(items => { return items.id == id})[0];
+    if (!item) {
+      // console.log('no item!')
+      return
+    }
+    return this.sendTemplateOrder(order, '', item.name, item.subject).subscribe()
+  }
+
+  sendNotificationObs(order: IPOSOrder, id: number) {
+    const item = this.emailSubjects.filter(items => { return items.id == id})[0];
+    if (!item) {
+      // console.log('no item!')
+      return
+    }
+    return this.sendTemplateOrder(order, '', item.name, item.subject)
+  }
+
+  sendTemplateOrder(order: IPOSOrder, template: string, title: string, subject: string, method?: string):Observable<any> {
+
+    if (!method) { method = ''}
+    if (this.order && this.order.clients_POSOrders && this.order.clients_POSOrders.email) {
+        const email = this.order.clients_POSOrders.email;
+
+        return this.sendGridService.sendTemplateOrder(order.id, order.history, email, email, 'request', title,  subject ,method).pipe(
+          switchMap(data => {
+
+            // console.log(data)
+            let response = 'Request Sent.'
+            if (this.userAuthorization.user.roles =='user') {
+              response = 'Request Sent. You may exit the order or application and wait for the response.'
+            }
+
+            if ((data && data?.isSuccessStatusCode) || data === 'Success') {
+              this.siteService.notify(response, 'Close', 10000)
+              return of(data)
+            }
+
+            if (!data || !data.isSuccessStatusCode) {
+              this.siteService.notify('Email not sent. Check email settings, or contact store.', 'Close', 5000)
+            }
+
+            return of (data)
+          }
+        )
+      )
+    }
+    this.siteService.notify('Request not sent, no email associated with this account', 'Close', 3000)
+    return of ({})
+  }
+
+  sendOrderForMessageService(item : IRequestMessage, order: IPOSOrder, method?: string) {
+    if (!method) { method = ''}
+    if (this.order && this.order.clients_POSOrders && this.order.clients_POSOrders.email) {
+        const email = this.order.clients_POSOrders.email;
+
+        return this.sendGridService.sendTemplateOrder(order.id, order.history, email, this.order.clients_POSOrders.userName,
+                                                      'request', item.subject,  item.message , method).pipe(
+          switchMap(data => {
+
+            let response = 'Request Sent.'
+            if (this.userAuthorization.user.roles =='user') {
+              response = 'Request Sent. You may exit the order or application and wait for the response.'
+            }
+
+            if ((data && data?.isSuccessStatusCode) || data === 'Success') {
+              this.siteService.notify(response, 'Close', 10000)
+              return of(data)
+            }
+
+            if (!data || !data.isSuccessStatusCode) {
+              this.siteService.notify('Email not sent. Check email settings, or contact store.', 'Close', 5000)
+            }
+
+            return of (data)
+          }
+        )
+      )
+    }
+    this.siteService.notify('Request not sent, no email associated with this account', 'Close', 3000)
+    return of ({})
   }
 
   emailOrderByEntry(order: IPOSOrder) {
@@ -708,13 +855,13 @@ export class OrderMethodsService implements OnDestroy {
 
   emailNotifyOrder(order: IPOSOrder) : Observable<any> {
     if (order && order.clientID) {
-
       if (order.clients_POSOrders.email) {
         const clientName = `${order?.clients_POSOrders?.firstName} ${order?.clients_POSOrders?.lastName}`
         if (this.uiSettingService.homePageSetting) {
           const set = this.uiSettingService.homePageSetting;
           const template = set.sendGridOrderReadyNotificationTemplate
-          return  this.sendGridService.sendTemplateOrder(order.id, order.history, order.clients_POSOrders.email, clientName, template, "Your order is ready."  )
+          return  this.sendGridService.sendTemplateOrder(order.id, order.history, order.clients_POSOrders.email,
+                                                        clientName, template, "Your order is ready.", "Your order is ready.", ""  )
         }
       }
     }
@@ -728,7 +875,8 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number,
-                   portionValue: string, packaging: string, assignedPOSItems: PosOrderItem[]): Observable<ItemPostResults> {
+                   portionValue: string, packaging: string, assignedPOSItems: PosOrderItem[]
+                   ,unitTypeID?): Observable<ItemPostResults> {
 
     if (!barcode) { return null;}
     if (!order) {const order = {} as IPOSOrder}
@@ -743,11 +891,11 @@ export class OrderMethodsService implements OnDestroy {
 
     const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging,
                       portionValue: portionValue, deviceName: deviceName, passAlongItem: passAlongItem,
-                      clientID: order.clientID , priceColumn : order.priceColumn, assignedPOSItems: assignedPOSItems } as NewItem;
+                      clientID: order.clientID , priceColumn : order.priceColumn, assignedPOSItems: assignedPOSItems,
+                      unitTypeID: unitTypeID } as NewItem;
 
-    // console.log(newItem)
     return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem).pipe(switchMap(data => {
-      // console.log('data', data)
+
       return of(data)
     }))
   }
@@ -765,19 +913,36 @@ export class OrderMethodsService implements OnDestroy {
                                           passAlong, this.assignPOSItems )
   }
 
+  addItemToOrderFromBarcode(barcode: string, input, assignedItem, inputQuantity?, unitTypeID?) {
+    const site = this.siteService.getAssignedSite();
+    const item$ = this.menuService.getMenuItemByBarcode(site, barcode, this.order?.clientID);
 
+    let quantity = 1;
+    if (inputQuantity) {  quantity = inputQuantity }
 
-  // refreshOrder(id: number, history) {
-  //   if (this.order) {
-  //     const site = this.siteService.getAssignedSite();
-  //     const order$ = this.orderService.getOrder(site, this.order.id.toString() ,
-  //                                                this.order.history)
+    return   item$.pipe(switchMap( data => {
+      if ( !data ) {
+          return this.processItemPOSObservable( this.order, barcode, null, quantity, input, 0, 0,
+                                                                   assignedItem, this.assignPOSItems, unitTypeID)
+        } else
+        {
+          if (data.length == 1 || data.length == 0) {
+            return this.processItemPOSObservable(this.order, barcode, data[0], quantity,
+                                                                    input, 0, 0, assignedItem,
+                                                                    this.assignPOSItems, unitTypeID);
+          } else {
+            this.listBarcodeItems(data, this.order)
+          }
+        }
+        return of(data);
+      })
+    )
+  }
 
-  //     order$.subscribe( data => {
-  //         this.updateOrderSubscription(data)
-  //     })
-  //   }
-  // }
+  listBarcodeItems(items: IMenuItem[], order: IPOSOrder) {
+    if (items.length == 0) { return }
+    this.openProductsByBarcodeList(items, order)
+  }
 
   refreshOrder(id: number) {
     if (this.order) {
@@ -843,11 +1008,13 @@ export class OrderMethodsService implements OnDestroy {
     const valid = this.validateUser();
     if (!valid) { return };
     this.initItemProcess();
-    quantity = this.setQuantityValue(1)
+
+
+    quantity = this.setQuantityValue(quantity)
+
+
     if (!this.validateItem(item, barcode)) { return }
     let passAlongItem;
-
-    // console.log('processAddItem assigned items', this.assignedPOSItem);
 
     if (this.assignedPOSItem) {  passAlongItem  = this.assignedPOSItem; };
 
@@ -895,9 +1062,9 @@ export class OrderMethodsService implements OnDestroy {
     if (this._quantityValue.value != 1 && this._quantityValue.value != 0) {
       quantity = this._quantityValue.value ;
       this._quantityValue.next(1)
-      console.log('quantity value', this._quantityValue.value)
       return quantity
     }
+    this._quantityValue.next(quantity)
     return quantity
   }
 
@@ -910,7 +1077,8 @@ export class OrderMethodsService implements OnDestroy {
                             rewardAvailableID: number,
                             rewardGroupApplied: number,
                             passAlongItem: PosOrderItem,
-                            passAlongItems: PosOrderItem[]) : Observable<ItemPostResults> {
+                            passAlongItems: PosOrderItem[],
+                            unitTypeID?) : Observable<ItemPostResults> {
 
 
     const valid = this.validateUser();
@@ -920,24 +1088,19 @@ export class OrderMethodsService implements OnDestroy {
     };
 
     this.initItemProcess();
-    console.log('processItemPOSObservable', quantity, this._quantityValue.value)
-    quantity = this.setQuantityValue(1)
-
-    if (!this.validateItem(item, barcode)) {
-      return of(null)
-    }
-
-    if (this.assignedPOSItem && !passAlongItem) {  passAlongItem  = this.assignedPOSItem[0]; };
-
+    if (!this.validateItem(item, barcode)) {  return of(null)  }
+    if (this.assignedPOSItem && !passAlongItem) { passAlongItem  = this.assignedPOSItem[0]; };
     order = this.validateOrder();
 
     if (order) {
-
+      // console.log('begin processing 1' )
       const site       = this.siteService.getAssignedSite();
       if (barcode)  {
+        // console.log('begin processing barcode' )
         return this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,
                                     input?.portionValue,
-                                    passAlongItems).pipe(switchMap(
+                                    passAlongItems,
+                                    unitTypeID).pipe(switchMap(
           data => {
             this.processItemPostResultsPipe(data)
             return of(data);
@@ -954,7 +1117,6 @@ export class OrderMethodsService implements OnDestroy {
           portionValue     = input?.portionValue;
           itemNote         = input?.itemNote;
         }
-
 
         if (item) {
           const deviceName  = localStorage.getItem('devicename')
@@ -979,6 +1141,8 @@ export class OrderMethodsService implements OnDestroy {
             return this.orderService.postOrderWithPayload(site, orderPayload).pipe(
               switchMap(data => {
                 if (!data) {
+                  // this.updateOrderSubscription(data)
+                  this.order = data;
                   this.siteService.notify('No order started. There might be something wrong.', 'Close', 2000)
                   return of(null)
                 }
@@ -986,12 +1150,15 @@ export class OrderMethodsService implements OnDestroy {
                 return this.posOrderItemService.postItem(site, newItem)
               })).pipe(
                 switchMap(data => {
-                  this.processItemPostResultsPipe(data)
+                  // if (this.order.service.filterType || this.order.service.filterType == 0) {
+                    this.processItemPostResultsPipe(data)
+                  // }
                   return of(data);
               })
             )
           }
 
+          // console.log('begin processing 2' )
           return  this.posOrderItemService.postItem(site, newItem).pipe(switchMap(
             data=> {
               this.processItemPostResultsPipe(data)
@@ -1029,37 +1196,37 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   processItemPostResultsPipe(data) {
-      // console.log('processItemPostResults', data);
-      if (data) {
-      }
 
       this.assignPOSItems = [];
-      // this.assignPOSItems.push(null);
-
       if (data?.message) {  this.notifyEvent(`Process Result: ${data?.message}`, 'Alert ')};
 
       if (data && data.resultErrorDescription && data.resultErrorDescription != null) {
-         this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red');
+        if (data && data.order) {   this.updateOrderSubscription(data.order);  }
+        this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red');
         return;
       }
 
       if (data.order) {
         this.updateOrderSubscription(data.order);
+        if (!data || !data.order) { return };
+
         this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem, data.priceCategoryID);
 
         if (this.siteService.phoneDevice) {
-          this.notifyItemAdded(data)
+          this.notifyItemAdded(data);
         } else {
+
           const order = data.order as IPOSOrder;
           if (order && order.service && order.service.retailType) {
-            this.toggleOpenOrderBar(this.userAuthorization.isStaff)
-            this.toolbarServiceUI.updateOrderBar(false)
+            this.toggleOpenOrderBar(this.userAuthorization.isStaff);
             return;
           }
+
           if (order && order.posOrderItems.length == 1 ) {
-            this.toolbarServiceUI.updateOrderBar(true)
+            this.toolbarServiceUI.updateOrderBar(true);
           }
-          this.notifyItemAdded(data)
+
+          this.notifyItemAdded(data);
         }
 
       } else {
@@ -1068,7 +1235,7 @@ export class OrderMethodsService implements OnDestroy {
       }
 
       if (this.openDialogsExist) {
-        // this.notification('Item added to cart.', 'Check Cart');
+
       }
 
   }
@@ -1083,10 +1250,10 @@ export class OrderMethodsService implements OnDestroy {
     let schedule = 'currentorder'
     if (isStaff) { schedule = '/currentorder/' }
     this.router.navigate([ schedule , {mainPanel:true}]);
+
     this.toolbarServiceUI.updateOrderBar(false)
     this.toolbarServiceUI.resetOrderBar(true)
   }
-
 
   notification(message: string, title: string)  {
     if (this.openDialogsExist()) {
@@ -1118,33 +1285,47 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   scanBarcodeAddItemObservable(barcode: string, quantity: number, input: any, passAlongItem: PosOrderItem[]) {
+    if ( quantity == 0 ) { quantity = 1 }
     return this.processItemPOSObservable(this.order, barcode, null, quantity, input, 0, 0, passAlongItem[0],
                                          passAlongItem);
  }
 
    newOrderWithPayloadMethod(site: ISite, serviceType: IServiceType): Observable<any> {
-    // console.log('new order with payload')
-
     if (!site) { return of(null) }
     if (!this.userAuthorization.user) {
       this.siteService.notify('user required', 'Alert', 1000)
       return of(null)
     }
-    const orderPayload = this.getPayLoadDefaults(serviceType)
+
+    let orderPayload = this.getPayLoadDefaults(serviceType)
     let order: any;
+
+    if (this.userAuthorization.isUser) {
+      orderPayload.order.suspendedOrder = true;
+      orderPayload.order.onlineOrderID  = uuid.v4();
+    }
+
+
+
     const order$ = this.orderService.postOrderWithPayload(site, orderPayload);
 
-    return order$.pipe(
-      switchMap( data => {
+    return order$.pipe(switchMap( data => {
         order = data
-        this.processOrderResult(order, site)
+        if (data.resultMessage) {
+          return of(null)
+        }
+        this.processOrderResult(order, site, serviceType?.retailType)
         return this.navToDefaultCategory()
       })).pipe(switchMap( item => {
-        this.processOrderResult(order, site, item?.id)
+        if (item) {
+          this.processOrderResult(order, site, serviceType?.retailType, item?.id)
+        }
         return of(order)
       }),
         catchError(data => {
-        this.siteService.notify(`Order not started. ${data}`, 'Alert', 2000, 'red')
+        // console.log('newOrderWithPayloadMethod', data)
+
+        this.siteService.notify(`Order not started. ${data.toString()}`, 'Alert', 2000, 'red')
         return of(data)
       }))
 
@@ -1157,14 +1338,16 @@ export class OrderMethodsService implements OnDestroy {
     return order$.pipe(
           switchMap( data => {
             order = data
-            this.processOrderResult(order, site)
+            this.processOrderResult(order, site, serviceType?.retailType)
             return this.navToDefaultCategory()
           })).pipe(switchMap( item => {
-            this.processOrderResult(order, site, item?.id)
+            this.processOrderResult(order, site, serviceType?.retailType, item?.id)
             return of(order)
           }),
-          catchError(data => {
-          this.siteService.notify(`Order not started. ${data}`, 'Alert', 2000, 'red')
+        catchError(data => {
+          // console.log('newOrderWithPayloadObs', data?.resultMessage)
+
+          this.siteService.notify(`Order not started. ${data.toString()}`, 'Alert', 2000, 'red')
           return of(data)
         }))
   }
@@ -1181,14 +1364,23 @@ export class OrderMethodsService implements OnDestroy {
     const order$ = this.newOrderWithPayloadMethod(site, serviceType )
     let order: IPOSOrder;
 
+    // console.log('newOrderWithPayload', serviceTfconsoleype, serviceType?.retailType)
+
     return order$.pipe(
       switchMap(data =>
         {
           order = data;
-          return  this.navToDefaultCategory()
+          if (!serviceType.retailType) {
+            return  this.navToDefaultCategory()
+          }
+          return of({id: 0})
         }
       )).pipe(switchMap( data => {
-        this.processOrderResult(order, site,  data?.id)
+        let id = 0
+        if (data && data?.id) {
+          id = data?.id;
+        }
+        this.processOrderResult(order, site, serviceType?.retailType, id)
         return of(data)
     }))
   }
@@ -1215,22 +1407,30 @@ export class OrderMethodsService implements OnDestroy {
     return  this.orderService.postOrderWithPayload(site, orderPayload)
   }
 
-  processOrderResult(order: IPOSOrder, site: ISite, categoryID?: number ) {
-    if (order.resultMessage != undefined) {
-      this.siteService.notify(`Error submitting Order ${order.resultMessage}`, "Posted", 2000)
+  processOrderResult(order: IPOSOrder, site: ISite,  retailType: boolean, categoryID?: number, ) {
+    if (order.resultMessage != undefined || order.resultMessage) {
+
+
+      this.siteService.notify(`Error submitting Order ${order.resultMessage}`, "Close", 2000)
       return
     }
     this.setActiveOrder(site, order)
-    if (categoryID) {
+    if (categoryID && categoryID != 0) {
       this.navToCategory(categoryID)
     }
-    if (!categoryID) {
-      this.navToMenu();
+    if (!retailType) {
+      if (!categoryID) {
+        this.navToMenu();
+      }
+    }
+    if (retailType) {
+      //nav to pos order.
+      this.router.navigate(["currentorder", {mainPanel:true}])
     }
   }
 
   setLastOrder(order?) {
-    console.log('set last order', order)
+    // console.log('set last order', order)
     if (order ) {
       const order = JSON.stringify(this.order)
       this.lastOrder =  JSON.parse(order)// structuredClone(this.order);
@@ -1284,27 +1484,27 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   navToDefaultCategory(): Observable<IMenuItem> {
-
     return this.uiSettingService.transactionUISettings$.pipe(switchMap(data => {
-      // console.log('transaction ui settings', data)
       const site = this.siteService.getAssignedSite()
       if (data && data.defaultNewOrderCategoryID) {
+        this.router.navigate(["/menuitems-infinite/", {categoryID: data.defaultNewOrderCategoryID}]);
         return this.menuService.getMenuItemByID(site, data.defaultNewOrderCategoryID)
       }
-      // console.log('no default categoryID')
       return of(null)
-    })).pipe(switchMap(data => {
-      ///nav to category
-      if (!data) {
-        // console.log('no category')
-        return of(null)
-      }
-
-      if (data) {
-        this.router.navigate(["/menuitems-infinite/", {categoryID:data.id}]);
-      }
-      return of(data)
     }))
+    // .pipe(switchMap(data => {
+    //   ///nav to category
+    //   if (!data) {
+    //     // console.log('no category')
+    //     return of(null)
+    //   }
+
+    //   if (data) {
+    //     // console.log('nav  category', data.id)
+    //     this.router.navigate(["/menuitems-infinite/", {categoryID: data.id}]);
+    //   }
+    //   return of(data)
+    // }))
   }
 
 
@@ -1339,6 +1539,7 @@ export class OrderMethodsService implements OnDestroy {
     if (id) {
       if ( (menuItem && menuItem.itemType.requiresSerial) || editOverRide)
       {
+
         const dialogRef = this.dialog.open(RequiresSerialComponent,
           {
             width:     '300px',
@@ -1349,12 +1550,19 @@ export class OrderMethodsService implements OnDestroy {
             data       : { id: id, serial: serial}
           }
         )
+
         dialogRef.afterClosed().subscribe(data => {
-          if (data && data.order) {
-            this.order = data.order
-            this.updateOrderSubscription(this.order)
+
+          // console.log('afterclosed', data);
+
+          if (data && data.result) {
+            this.initItemProcess();
+
+            return ;
           }
+
           if (data && data.result)  { this.updateProcess (); }
+
           if (!data || !data.result) {
             if (data.id){
               this.cancelItem(data.id, false);
@@ -1368,7 +1576,7 @@ export class OrderMethodsService implements OnDestroy {
 
     return false;
 
-  }
+ }
 
   async  promptOpenPriceOption(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem): Promise<boolean> {
 
@@ -1450,9 +1658,10 @@ export class OrderMethodsService implements OnDestroy {
     if (id) {
       this.posOrderItemService.deletePOSOrderItem(site, id).subscribe(result => {
         if (result.scanResult) {
-          // this.notifyWithOption('Item Deleted', 'Notice', notify)
         } else  {
+
           this.siteService.notify('Item must be voided', 'Notice', 1500, 'yellow')
+
         }
         if (result && result.order) {
           this.updateOrderSubscription(result.order);
@@ -1588,14 +1797,10 @@ export class OrderMethodsService implements OnDestroy {
    }
   }
 
-
-
-
   openPromptWalkThrough(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
     if (!posItem || posItem.promptGroupID == 0 || !posItem.promptGroupID) { return }
     const prompt = this.promptGroupService.getPrompt(site, item.promptGroupID).subscribe ( prompt => {
-      // console.log('openPromptWalkThrough', prompt, posItem)
       this.openPromptWalkThroughWithItem(prompt, posItem);
     })
   }
@@ -1610,7 +1815,6 @@ export class OrderMethodsService implements OnDestroy {
       return
     })
   }
-
 
 
  addedItemOptions(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem, priceCategoryID : number) {
@@ -1635,11 +1839,16 @@ export class OrderMethodsService implements OnDestroy {
       return
     }
 
-    if ( !this.itemProcessSection && this.processItem?.item?.itemType?.type.toLowerCase() === 'store credit'.toLowerCase()) {
-      process = 4;
-      this.itemProcessSection = 4;
+    if (this.order.service.filterType == 1) {
+      if (this.processItem?.item?.itemType?.requiresSerial) {
+        if  (!this.promptSerial(this.processItem.item, this.processItem.posItem.id, false, '')) {
+          return
+        }
+      }
+      return;
     }
 
+    // console.log('process', process)
     switch(process) {
       case  0: {
           if (!this.priceCategoryID || this.priceCategoryID == 0) {
@@ -1650,7 +1859,14 @@ export class OrderMethodsService implements OnDestroy {
           break;
         }
       case  1: {
-          if (!this.processItem.posItem.serialCode) {
+        // console.log('handle process 1')
+          if (this.order.service.filterType == 1) {
+            this.updateProcess();
+            break;
+          }
+
+          if (this.processItem?.item?.itemType?.requiresSerial) {
+            // console.log('case 1 requires serialCode', this.processItem?.item?.requiresSerial, this.processItem.posItem.serialCode)
             if  (!this.promptSerial(this.processItem.item, this.processItem.posItem.id, false, '')) {
               this.updateProcess();
             }
@@ -1660,14 +1876,32 @@ export class OrderMethodsService implements OnDestroy {
           break;
         }
       case  2: {
-        this.openPromptWalkThrough(this.order,this.processItem.item,this.processItem.posItem)
+        if (this.order.service.filterType == 1) {
+          this.updateProcess();
+          break;
+        }
+
+        this.openQuantityPrompt(this.order, this.processItem.item, this.processItem.posItem);
+        break;
+
+      }
+      case 3: {
+        if (this.order.service.filterType == 1) {
+          this.updateProcess();
+          break;
+        }
+        // console.log('price change')
+        this.openPriceChangePrompt(this.order,this.processItem.item,this.processItem.posItem);
         break;
       }
-      case  3: {
-        this.openQuantityPrompt(this.order,this.processItem.item,this.processItem.posItem);
-        break;
-      }
-      case  4: {
+      case 4:
+      case  5: {
+
+        if (this.order.service.filterType == 1) {
+          this.updateProcess();
+          break;
+        }
+
         if (
               this.processItem?.item?.itemType?.type.toLowerCase() === 'store credit'.toLowerCase() ||
               this.processItem?.item?.itemType?.type.toLowerCase() === 'gift card'.toLowerCase()
@@ -1677,33 +1911,30 @@ export class OrderMethodsService implements OnDestroy {
             return
           }
           this.updateProcess()
-        break;
-      }
-      case 5: {
-        this.openPriceChangePrompt(this.order,this.processItem.item,this.processItem.posItem);
-        break;
-      }
+          break;
+        }
       case 6: {
-        this.updateOrderSubscription(this.order);
+        if (this.order.service.filterType == 1) {
+          this.updateProcess();
+          break;
+        }
+
+        this.openPromptWalkThrough(this.order,this.processItem.item,this.processItem.posItem)
         break;
+
       }
       case 7: {
-
-        // this.orderService.updateOrderSubscription(this.order);
-        // console.log('Handle Process Item updateOrderSubscription', 6)
-        // this.initItemProcess();
-        break;
-      }
-      default: {
+          // this.orderService.updateOrderSubscription(this.order);
+          // console.log('Handle Process Item updateOrderSubscription', 6)
+          // this.initItemProcess();
+          break;
+        }
+        default: {
         break;
       }
     }
   }
 
-  openPriceChangePrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
-    const site = this.siteService.getAssignedSite()
-    this.updateProcess() //
-  }
 
   openGiftCardPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
@@ -1730,15 +1961,66 @@ export class OrderMethodsService implements OnDestroy {
     });
 
     this.updateProcess() //
-
     return;
 
   }
 
-  openQuantityPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
-    const site = this.siteService.getAssignedSite()
-    this.updateProcess() //
+  openPriceChangePrompt(order: IPOSOrder, menuItem: IMenuItem, posItem: IPurchaseOrderItem) {
+    if (posItem) {
+      if ( (menuItem && menuItem.itemType.pricePrompt))
+      {
+        const item = {
+          orderItem: posItem,
+          editField: 'price',
+          menuItem: menuItem,
+          // requireWholeNumber: menuItem.itemType.requireWholeNumber,
+          instructions: 'Input Price'
+        }
+        this.fieldPrompt(item)
+        return true;
+      }
+    }
+    this.updateProcess();
+    return false;
   }
+
+  openQuantityPrompt(order: IPOSOrder, menuItem: IMenuItem, posItem: IPurchaseOrderItem): boolean {
+      if (posItem) {
+        if ( (menuItem && menuItem.itemType.promptQuantity))
+        {
+          const item = {orderItem: posItem,
+            editField: 'quantity',
+            menuItem: menuItem,
+
+            requireWholeNumber: menuItem.itemType.requireWholeNumber,
+            instructions: 'Input Quantity'
+
+          }
+          this.fieldPrompt(item)
+          return true;
+        }
+      }
+      this.updateProcess();
+      return false;
+  }
+
+   fieldPrompt(item) {
+      let dialogRef =  this.editDialog.editDialog(item, '500px', '500px');
+      dialogRef.afterClosed().subscribe(data => {
+        if (data && data.result) {
+          this.updateProcess();
+          return ;
+        }
+        if (data && data.result)  { this.updateProcess(); }
+
+        if (!data || !data.result) {
+          if (data && data.id){
+            this.cancelItem(data.id, false);
+          }
+          this.updateProcess();
+        }
+      });
+   }
 
   openPromptWalkThroughWithItem(prompt: IPromptGroup, posItem: IPurchaseOrderItem) {
     if (prompt) {
@@ -1783,7 +2065,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   removeItemFromList(index: number, orderItem: PosOrderItem) {
-    // console.log('removeItemFromList')
+
     if (orderItem) {
       const site = this.siteService.getAssignedSite()
       if (orderItem.printed || this.order.completionDate ) {
@@ -1819,16 +2101,16 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   getVoidAuth(item) {
-    console.log('getVoidAuth')
+    // console.log('getVoidAuth')
 
     if (this.authenticationService.userAuths.voidItem) {
       this.editDialog.openVoidItemDialog(item)
       return
     }
 
-    console.log('getVoidAuth void item auth check')
+    // console.log('getVoidAuth void item auth check')
     let  request = {action: 'voidItem', request: 'checkAuth'}
-    console.log('request', request)
+    // console.log('request', request)
     let dialogRef = this.checkAuthDialog(item,  request)
 
     dialogRef.afterClosed().subscribe(result => {

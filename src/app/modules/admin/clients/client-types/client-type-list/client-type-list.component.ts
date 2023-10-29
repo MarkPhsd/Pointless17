@@ -9,7 +9,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Observable, Subject ,fromEvent } from 'rxjs';
+import { Observable, Subject ,fromEvent, of } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
@@ -89,7 +89,7 @@ selected        : any[];
 selectedRows    : any;
 agtheme         = 'ag-theme-material';
 urlPath:        string;
-
+urlPath$: Observable<string>;
 constructor(
           private clientTypeService       : ClientTypeService,
           private _snackBar               : MatSnackBar,
@@ -102,11 +102,18 @@ constructor(
           private router                  : Router,
 ) { }
 
-async ngOnInit() {
+ ngOnInit() {
   const site          = this.siteService.getAssignedSite();
   this.rowSelection   = 'multiple'
   this.initAgGrid(this.pageSize);
-  this.urlPath        = await this.awsService.awsBucketURL();
+
+  this.urlPath$  =  this.awsService.awsBucketURLOBS().pipe(
+    switchMap(data => {
+      this.urlPath = data;
+      return of(data)
+    }
+  ))
+
   this.clientTypes$   = this.clientTypeService.getClientTypes(site);
   this.initForm();
 }

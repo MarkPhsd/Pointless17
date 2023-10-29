@@ -180,7 +180,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   action$: Observable<any>;
   classcontainer   : string;
   orderslist       : string
-  uiHomePage:  UIHomePageSettings;
+  @Input() uiHomePage:  UIHomePageSettings;
   uiHomePage$: Observable<UIHomePageSettings>;
   isStaff = this.userAuth.isStaff
 
@@ -235,9 +235,6 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   setPanelSyle() {
     if ( this.singlePage ) {
       this.panelHeightStyle =  `calc(100vh - 225px)`
-      // if (this.panelHeightValue !=0) {
-      //   this.panelHeightStyle =  `calc(${this.panelHeightValue}vh - 135px)`
-      // }
     }
     if ( !this.singlePage ) {
       this.panelHeightStyle =  `calc(25vh - 95px)`
@@ -303,8 +300,6 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   }
 
   getBucket() {
-    // this.bucket =   await this.awsBucket.awsBucket();
-
     this.bucket$ = this.awsBucket.getAWSBucketObservable().pipe(
       switchMap( data => {
         this.bucket = data.preassignedURL;
@@ -329,33 +324,40 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
   listItems(id:number) {
     this.initProductSearchModel(id)
-
-    // let paramaters ;
-    // if (this.searchModel.categoryID != 0) {
-    //   paramaters = {departmentID: this.searchModel.departmentID}
-    //   this.router.navigate(['menuitems-infinite', paramaters])
-    // }
-    // if (this.searchModel.categoryID != 0) {
-    //   paramaters = {categoryID: this.searchModel.categoryID}
-    //   this.router.navigate(['menuitems-infinite', paramaters])
-    // }
-    // if (this.searchModel.subCategoryID != 0) {
-    //   paramaters = {subcategoryID: this.searchModel.subCategoryID}
-    //   this.router.navigate(['menuitems-infinite', paramaters])
-    // }
-
-
     this.searchModel = this.menuService.initSearchModel()
+
 
     if (this.itemTypeID == 4) {
       this.searchModel.categoryID = id;
-      this.router.navigate(["/menuitems-infinite/", {categoryID:id,typeID:4, hideSubCategoryItems:true }]);
-    }
-    if (this.itemTypeID == 6) {
-      this.searchModel.departmentID = id;
-      this.router.navigate(["/menuitems-infinite/", {departmentID:id,typeID:4}]);
     }
 
+    if (this.itemTypeID == 5) {
+      this.searchModel.subCategoryID = id;
+    }
+
+    if (this.itemTypeID == 6) {
+      this.searchModel.departmentID = id;
+    }
+
+    if (this.uiHomePage && this.uiHomePage.storeNavigation ) {
+      this.router.navigate(["/menuitems-infinite/"]);
+      return;
+    }
+
+    if (this.itemTypeID == 4) {
+      this.router.navigate(["/menuitems-infinite/", {categoryID:id, hideSubCategoryItems: false}]);
+      return;
+    }
+
+    if (this.itemTypeID == 5) {
+      this.router.navigate(["/menuitems-infinite/", {subCategoryID:id, hideSubCategoryItems: false}]);
+      return;
+    }
+
+    if (this.itemTypeID == 6) {
+      this.router.navigate(["/menuitems-infinite/", {departmentID:id, hideSubCategoryItems: false}]);
+      return;
+    }
 
   }
 
@@ -381,7 +383,6 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     productSearchModel.pageNumber = 1
     this.menuService.updateSearchModel(productSearchModel)
     return productSearchModel;
-
   }
 
   initSearchModel():      ProductSearchModel {
@@ -499,6 +500,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   }
 
   editItem(menuItem) {
+    console.log('edit item', menuItem?.name)
     if (!menuItem) { return }
     this.action$ = this.productEditButtonService.openProductDialogObs(menuItem.id);
   }

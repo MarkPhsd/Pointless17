@@ -13,7 +13,6 @@ import { Location } from '@angular/common';
 import { PlatformService } from '../system/platform.service';
 import { ElectronService } from 'ngx-electron';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -42,14 +41,13 @@ export class BalanceSheetMethodsService {
     private sitesService                   : SitesService,
     private sheetService                   : BalanceSheetService,
     private _fb                            : UntypedFormBuilder,
-    private _snackBar                      : MatSnackBar,
     private router                         : Router,
     private location                       : Location,
     public  platformService                : PlatformService,
     private electronService                : ElectronService,
-    private siteService: SitesService,
-    private balanceSheetService: BalanceSheetService,
-    private balancesheetMethodService: BalanceSheetMethodsService,
+    private siteService                     : SitesService,
+    private balanceSheetService             : BalanceSheetService,
+
   ) {
     if ( this.platForm  === "Electron" || this.platForm === "android" || this.platForm === "capacitor")
     { this.isApp = true }
@@ -78,8 +76,11 @@ export class BalanceSheetMethodsService {
     }
   }
 
-  updateBalanceSheet(BalanceSheet:  IBalanceSheet) {
-    this._balanceSheet.next(BalanceSheet);
+  updateBalanceSheet(data:  IBalanceSheet) {
+    if (!data) {
+      console.trace('No Balannce Sheet Data!')
+    }
+    this._balanceSheet.next(data);
   }
 
   updateBalanceSearchModel(searchModel:  BalanceSheetSearchModel) {
@@ -159,7 +160,7 @@ export class BalanceSheetMethodsService {
         return  this.sheetService.getSheetCalculations(site, sheet)
     })).pipe(switchMap(data => {
       this.updateBalanceSheet(data)
-      console.log('getSheetObservable', data)
+      // console.log('getSheetObservable', data)
       return of(data)
     }))
   }
@@ -182,7 +183,6 @@ export class BalanceSheetMethodsService {
         switchMap(
           data => {
             this.updateBalanceSheet(data)
-
             return of(data)
           }),
           catchError(err => {
@@ -318,7 +318,7 @@ export class BalanceSheetMethodsService {
     const electron = this.platformService.isAppElectron
     const android = this.platformService.isApp()
 
-    console.log('openDrawerFromBalanceSheet', android, electron)
+    // console.log('openDrawerFromBalanceSheet', android, electron)
     //if we are doing online sales, no balance sheet is used.
     if (!android && !electron) {
       return of(null)
@@ -327,7 +327,7 @@ export class BalanceSheetMethodsService {
     //then if is app
     if (!deviceName) {
       this.siteService.notify('Please start a balance sheet. This message will appear until one is started.', 'close', 2000, 'yellow')
-      console.log('returning no balance sheet observable, opening drawer');
+      // console.log('returning no balance sheet observable, opening drawer');
       this.openDrawerOne()
       return of(null)
     }
@@ -356,13 +356,13 @@ export class BalanceSheetMethodsService {
   async  openDrawerOne() {
     // console.log('open cash drawer one')
     const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-    const response        = await emvTransactions.openCashDrawerOne()
+    const response        = await emvTransactions.openCashDrawerOne();
   }
 
   async  openDrawerTwo() {
     // console.log('open cash drawer one')
     const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-    const response        = await emvTransactions.openCashDraweTwo()
+    const response        = await emvTransactions.openCashDraweTwo();
   }
 
   async openDrawerNoSale(sheet:IBalanceSheet) {

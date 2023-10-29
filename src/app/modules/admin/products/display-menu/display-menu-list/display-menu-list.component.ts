@@ -37,7 +37,7 @@ export class AdminDisplayMenuListComponent implements OnInit {
   searchPhrase:         Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
-
+  buttonName: string;
   gridDimensions = "height: 90%; min-height:600px"
   // //search with debounce
   searchItems$              : Subject<IPromptResults> = new Subject();
@@ -98,13 +98,13 @@ export class AdminDisplayMenuListComponent implements OnInit {
               private productEditButtonService: ProductEditButtonService,
               private priceScheduleService: PriceScheduleService,) { }
 
-  async ngOnInit() {
-    this.initClasses();
-    this.initForm();
-    this.initAgGrid(50);
-    this.urlPath        = await this.awsService.awsBucketURL();
+   ngOnInit() {
+     this.initClasses();
+     this.initForm();
     const site          = this.siteService.getAssignedSite()
-    this.rowSelection   = 'multiple'
+    this.rowSelection   = 'multiple';
+    this.buttonName = 'edit'
+    this.initAgGrid(50);
   };
 
   initClasses()  {
@@ -115,19 +115,17 @@ export class AdminDisplayMenuListComponent implements OnInit {
     if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%; min-height:600px;' }
   }
 
-  async initForm() {
+  initForm() {
     this.searchForm   = this.fb.group( {
       itemName          : [''],
     });
   }
 
   buttoncellrender(params: any) {
-
     this.buttonVisible = true;
     if (isNaN(params) != true)  {
       this.buttonVisible = false
     }
-
   }
 
   //ag-grid
@@ -140,23 +138,37 @@ export class AdminDisplayMenuListComponent implements OnInit {
 
     this.defaultColDef = {
       flex: 2,
-      // minWidth: 100,
+      sortable: false,
     };
 
     // cellRenderer: this.agGridService.currencyCellRendererUSD,
     this.columnDefs =  [
-      {
-      field: 'id',
-      cellRenderer: "btnCellRenderer",
-                      cellRendererParams: {
-                        cellRenderer: this.buttoncellrender,
-                        onClick: this.editProductFromGrid.bind(this),
-                        getLabelFunction: this.getLabel.bind(this),
-                        btnClass: 'btn btn-primary btn-sm'
-                      },
-                      minWidth: 125,
-                      maxWidth: 125,
-                      flex: 2,
+      // {
+      // field: 'id',
+      // cellRenderer: "btnCellRenderer",
+      //                 cellRendererParams: {
+      //                   cellRenderer: this.buttoncellrender,
+      //                   onClick: this.editProductFromGrid.bind(this),
+      //                   getLabelFunction: this.getLabel.bind(this),
+      //                   btnClass: 'btn btn-primary btn-sm'
+      //                 },
+      //                 minWidth: 125,
+      //                 maxWidth: 125,
+      //                 flex: 2,
+      // },
+
+      {   headerName: '',
+          field: 'id',
+          cellRenderer: "btnCellRenderer",
+                  cellRendererParams: {
+                    onClick: this.editProductFromGrid.bind(this),
+                    label: this.buttonName,
+                    getLabelFunction: this.getLabel.bind(this),
+                    btnClass: 'btn btn-primary btn-sm'
+                  },
+                  minWidth: 125,
+                  maxWidth: 125,
+                  flex: 2,
       },
       {headerName: 'Name',     field: 'name',         sortable: true,
                     width   : 275,
@@ -166,7 +178,7 @@ export class AdminDisplayMenuListComponent implements OnInit {
       },
     ]
 
-    this.gridOptions = this.agGridFormatingService.initGridOptions( 25, this.columnDefs );
+    this.gridOptions = this.agGridFormatingService.initGridOptions( 25, this.columnDefs, false );
     return this.columnDefs;
 
   }
@@ -313,10 +325,11 @@ export class AdminDisplayMenuListComponent implements OnInit {
 
     getLabel(rowData)
     {
-      if(rowData && rowData.hasIndicator)
-        return 'Edit';
-        else return 'Edit';
+      if(rowData && rowData.hasIndicator) {
+        return this.buttonName
+      } else return this.buttonName
     }
+
 
     onBtnClick1(e) {
       this.rowDataClicked1 = e.rowData;
@@ -328,7 +341,6 @@ export class AdminDisplayMenuListComponent implements OnInit {
 
     editProductFromGrid(e) {
       if (e.rowData.id)  {
-        console.log(e.rowData)
         this.editItem(e.rowData);
       }
     }
@@ -336,11 +348,9 @@ export class AdminDisplayMenuListComponent implements OnInit {
     editItem(data) {
       const dialog =   this.productEditButtonService.openDisplayMenuEditor(data);
       dialog.afterClosed(data => {
-        console.log('updated')
         this.listAll()
       })
     }
-
 
     addNew()  {
       const dialog =  this.productEditButtonService.openDisplayMenuEditor(null);

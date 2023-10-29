@@ -34,6 +34,7 @@
           <ng-container *ngFor="let order of orders; let i = index">
             <app-order-prep
                 (outPutSetVisibility)="setThisCardInVisible($event)"
+                (ouPutSetActive)="setActiveOrderObs($event)"
                 *ngIf="isOrderVisible(i)"
                 [order]="order"
                 [site] ="site"

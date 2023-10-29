@@ -42,7 +42,8 @@ export class CacheSettingsComponent implements OnInit {
 
   initCacheTime(){
     const site        = this.sitesService.getAssignedSite();
-    this.cacheTimeSetting$ =  this.settingsService.initCacheTimeObs(site).pipe(switchMap(data => { 
+
+    this.cacheTimeSetting$ =  this.settingsService.initCacheTimeObs(site).pipe(switchMap(data => {
       this.cacheTimeSetting = data;
       if (this.cacheTimeSetting ) {
         this.cacheForm  = this.fbSettingsService.initForm(this.cacheForm)
@@ -50,6 +51,7 @@ export class CacheSettingsComponent implements OnInit {
       }
       return of(data)
     }))
+
   }
 
   deleteLocalStorage() {
@@ -61,15 +63,18 @@ export class CacheSettingsComponent implements OnInit {
     if (this.cacheTimeSetting && this.cacheForm) {
       const site = this.sitesService.getAssignedSite();
       this.cacheTimeSetting = this.cacheForm.value;
-      if (this.cacheTimeSetting.webEnabled) { 
+
+      if (this.cacheTimeSetting.webEnabled) {
         this.cacheTimeSetting.webEnabled = 1
-      } else { 
+      } else {
         this.cacheTimeSetting.webEnabled = 0
       }
-      console.log(this.cacheTimeSetting)
+
+
       this.settingsService.putSetting(site, this.cacheTimeSetting.id, this.cacheTimeSetting ).subscribe( data => {
         this.cacheTimeSetting = data
         localStorage.setItem('appCache', JSON.stringify(data));
+        console.log('set app cache', localStorage.getItem('appCache'))
         this.currentCache = data
       })
     }

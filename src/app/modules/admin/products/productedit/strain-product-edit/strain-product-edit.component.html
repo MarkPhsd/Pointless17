@@ -67,7 +67,8 @@
               <app-value-fields
                     [inputForm]="productForm"
                     [fieldName]="'name'">
-                Name
+                <div  > Name </div>
+
               </app-value-fields>
 
               <app-category-select   [inputForm]="productForm"
@@ -116,11 +117,13 @@
                     [fieldName]="'sku'">
                 SKU
               </app-value-fields>
+
               <app-value-fields
                     [inputForm]="productForm"
                     [fieldName]="'prodSecondLanguage'">
                 Alt Language
               </app-value-fields>
+
           </div>
 
           <div class="grid-item" >
@@ -161,9 +164,7 @@
               <h4> <mat-icon>list</mat-icon> {{ itemType.name }}</h4>
             </div>
 
-             <div *ngIf="itemType && itemType.name && (
-                        itemType.type?.toLowerCase() === 'retail liquor' ||
-                        itemType.type?.toLowerCase() === 'service liquor'   )">
+             <div *ngIf="fbProductsService.isLiquor(itemType)">
                 <ng-container [ngTemplateOutlet]="countryOfOrigin"></ng-container>
                 <ng-container [ngTemplateOutlet]="proof"></ng-container>
                 <ng-container [ngTemplateOutlet]="yearsOld"></ng-container>
@@ -182,6 +183,7 @@
               </div>
 
             </div>
+
             <div *ngIf="itemType && itemType.useType && (itemType.type?.toLowerCase() === 'grocery' ||
                           itemType.type?.toLowerCase() === 'restaurant')">
               <ng-container [ngTemplateOutlet]="gluetenFree"></ng-container>
@@ -203,7 +205,7 @@
               <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
              </div>
 
-            <div *ngIf="itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'retail' )">
+            <div *ngIf="fbProductsService.isRetail(itemType)">
 
               <retail-product-edit
                 [inputForm]="productForm">
@@ -211,37 +213,33 @@
 
               <ng-container [ngTemplateOutlet]="countryOfOrigin"></ng-container>
 
-              <div *ngIf="itemType && itemType.type">
-                <ng-container [ngTemplateOutlet]="promptGroupSelector"></ng-container>
-              </div>
+            </div>
+
+            <div *ngIf="itemType && itemType.type">
+              <ng-container [ngTemplateOutlet]="promptGroupSelector"></ng-container>
+            </div>
+
+            <div *ngIf="fbProductsService.isGrouping(itemType)">
 
             </div>
 
-            <div *ngIf="itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'modifier' )">
-
-            </div>
-
-            <div *ngIf="itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'grouping' )">
-
-            </div>
-
-            <div  *ngIf="itemType && itemType.type &&
-                        (itemType.type?.toLowerCase() === 'cannabis' ||
-                        itemType.type?.toLowerCase()  === 'med-cannabis')">
+            <div  *ngIf="fbProductsService.isCannabis(itemType)">
               <cannabis-item-edit [product]  ="product"
                                   [inputForm]="productForm">
               </cannabis-item-edit>
             </div>
 
-            <div *ngIf="itemType && itemType.useType &&  (
-                        itemType.useType?.toLowerCase() == 'product' )">
+            <div *ngIf="fbProductsService.isWeightedItem(itemType)">
+              <ng-container [ngTemplateOutlet]="tareValueView"></ng-container>
+            </div>
+
+            <div *ngIf="fbProductsService.isProduct(itemType)">
               <ng-container [ngTemplateOutlet]="unitSelector"></ng-container>
               <ng-container [ngTemplateOutlet]="gramCount"></ng-container>
               <ng-container [ngTemplateOutlet]="productCount"></ng-container>
               <ng-container [ngTemplateOutlet]="reOrderAmount"></ng-container>
               <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
               <ng-container [ngTemplateOutlet]="partBuilderSelector"></ng-container>
-
             </div>
           </div>
       </div>
@@ -255,15 +253,11 @@
     <mat-slide-toggle
       class="mat-label"
       [(ngModel)]="managerProtected">
-
       <mat-label class="mat-label">Manager Protected</mat-label>
-
-  </mat-slide-toggle>
-   <mat-icon class="mat-label-info"
+    </mat-slide-toggle>
+    <mat-icon class="mat-label-info"
              color="accent"
              [matTooltip]="labelingService.productFieldTips[3].value">info</mat-icon>
-
-
   </div>
 </ng-template>
 
@@ -280,7 +274,7 @@
 <ng-template #priceCategorySelector>
   <app-price-category-select
     [itemType]        ="itemType"
-    [priceCategoryID] ="product.priceCategory"
+    [priceCategoryID] ="product?.priceCategory"
     [inputForm]       ="productForm" >
   </app-price-category-select>
 </ng-template>
@@ -443,8 +437,8 @@
         [searchForm]="pbSearchForm"
         [searchType]="'pB_MainID'"
         [fieldProperty]="'pB_MainID'"
-        [id]="product.pB_MainID"
-        [friendlyName]="'Kit/Recipe'"
+        [placeHolder]="'Kit/Recipe'"
+        [id]="product?.pB_MainID"
         (itemSelect)="setPartBuilder($event)">
         Kit/Recipe
       </field-value-selector>
@@ -456,4 +450,18 @@
       </button>
     </div>
   </div>
+</ng-template>
+
+<ng-template #tareValueView>
+  <app-value-fields
+      [inputForm]="jsonForm"
+      [fieldName]="'tareValue'">
+    Tare Value
+  </app-value-fields>
+
+  <app-value-fields
+      [inputForm]="jsonForm"
+      [fieldName]="'pieceWeight'">
+    Piece Weight
+  </app-value-fields>
 </ng-template>

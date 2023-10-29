@@ -1,6 +1,6 @@
 import { Component, Inject,  OnInit,} from '@angular/core';
 import { MenuService } from 'src/app/_services';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,} from '@angular/forms';
+import { FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IProduct } from 'src/app/_interfaces/raw/products';
 import { Observable, of } from 'rxjs';
@@ -26,12 +26,12 @@ import { LabelingService } from 'src/app/_labeling/labeling.service';
 })
 export class StrainProductEditComponent implements OnInit {
 
-
   managerProtected: boolean;
   productForm: UntypedFormGroup;
   unitSearchForm: UntypedFormGroup;
   pbSearchForm: UntypedFormGroup;
 
+  jsonForm: FormGroup;
   get f() { return this.productForm;}
   action$             :  Observable<any>;
   performingAction    : boolean;
@@ -49,27 +49,33 @@ export class StrainProductEditComponent implements OnInit {
   productJSONObject: menuButtonJSON;
 
   constructor(private menuService: MenuService,
-              public route: ActivatedRoute,
-              public fb: UntypedFormBuilder,
+              public  route: ActivatedRoute,
+              public  fb: UntypedFormBuilder,
               private _snackBar: MatSnackBar,
               private itemTypeService  : ItemTypeService,
               private priceCategoryService: PriceCategoriesService,
               private siteService: SitesService,
-              private fbProductsService: FbProductsService,
+              public fbProductsService: FbProductsService,
               private productEditButtonService: ProductEditButtonService,
-              private dialogRef: MatDialogRef<StrainProductEditComponent>,
               private itemTypeMethodsService: ItemTypeMethodsService,
               private unitTypeMethodsService: UnitTypeMethodsService,
-              public labelingService: LabelingService,
+              public  labelingService: LabelingService,
               private unitTypeService: UnitTypesService,
+              private dialogRef: MatDialogRef<StrainProductEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any
     )
   {
+
+    //init all search forms that are not bound to data.
+    this.initPbSearchForm();
+    this.initUnitForm();
+
     if (data) {
       if (data.product) {
         this.product = data.product as IProduct
         if (this.product.id) {
-          this.initMenuButtonJson(this.product)
+          this.initMenuButtonJson(this.product);
+          this.initJSONForm(this.product.json)
           this.id = this.product.id.toString();
           if (this.product && data.itemType && data.itemType.id) {
             if (!this.product.prodModifierType ) {
@@ -87,6 +93,15 @@ export class StrainProductEditComponent implements OnInit {
     }
   }
 
+  initJSONForm(prodJSON: string) {
+    this.jsonForm = this.fb.group({
+       tareValue: [],
+       pieceWeight: []
+    })
+    const item = JSON.parse(prodJSON)
+    this.jsonForm.patchValue(item);
+  }
+
   initMenuButtonJson(product: IProduct) {
     // console.log('init product', product)
     if (product && !product.json) {
@@ -94,6 +109,8 @@ export class StrainProductEditComponent implements OnInit {
       this.productJSONObject.buttonColor = '';
       this.productJSONObject.backColor = '';
       this.productJSONObject.managerProtected = false;
+      this.productJSONObject.pieceWeight = 0;
+      this.productJSONObject.tareValue = 0;
       return
     }
     if (product.json) {
@@ -104,8 +121,14 @@ export class StrainProductEditComponent implements OnInit {
 
   get JSONAsString() {
     if (this.product) {
-      this.productJSONObject.managerProtected = this.managerProtected;
+      if (this.jsonForm) {
+        this.productJSONObject.tareValue = this.jsonForm.controls['tareValue'].value
+        this.productJSONObject.pieceWeight =  this.jsonForm.controls['pieceWeight'].value
 
+      }
+
+
+      this.productJSONObject.managerProtected = this.managerProtected;
       return JSON.stringify(this.productJSONObject) ;
     }
     return ''
@@ -122,7 +145,9 @@ export class StrainProductEditComponent implements OnInit {
       return  this.itemTypeService.getItemType(site, this.product.prodModifierType)
       })).pipe(switchMap(data => {
         this.itemType = data
-        this.initializeForm()
+
+        this.initializeForm();
+        this.initJSONForm(this.product.json)
         return of(this.product)
     }))
   }
@@ -139,7 +164,6 @@ export class StrainProductEditComponent implements OnInit {
       });
     }
   }
-
 
   initializeForm()  {
     const site = this.siteService.getAssignedSite();
@@ -221,6 +245,10 @@ export class StrainProductEditComponent implements OnInit {
   clearUnit() {
     this.productForm.patchValue({ unitTypeID: 0})
     this.product.unitTypeID = 0;
+    this.initUnitForm();
+  }
+
+  initUnitForm() {
     this.unitSearchForm = this.fb.group({
       searchField: []
     })
@@ -240,6 +268,9 @@ export class StrainProductEditComponent implements OnInit {
       this.message = ""
       this.performingAction= true;
       this.product.json = this.JSONAsString ;
+
+      this.product = this.menuService.cleanProduct(this.product)
+
       const product$ = this.menuService.saveProduct(site, this.product);
       return product$.pipe(switchMap(
           data => {

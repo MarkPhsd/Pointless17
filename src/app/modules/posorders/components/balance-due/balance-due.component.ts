@@ -42,6 +42,7 @@ export class ChangeDueComponent implements OnInit  {
   changeDue             : any;
   serviceType           : IServiceType;
 
+
   constructor(
               private paymentService: POSPaymentService,
               private siteService: SitesService,
@@ -50,18 +51,17 @@ export class ChangeDueComponent implements OnInit  {
               private toolbarServiceUI: ToolBarUIService,
               private snackBar : MatSnackBar,
               private fb       : UntypedFormBuilder,
-              private router   : Router,
-               private uISettingsService: UISettingsService,
+              private uISettingsService: UISettingsService,
               private printingService: PrintingService,
               private paymentMethodProcessService: PaymentsMethodsProcessService,
               private methodsService: CardPointMethodsService,
               private orderMethodService: OrderMethodsService,
-              private prepPrintingService: PrepPrintingServiceService ,
               private changeDetect : ChangeDetectorRef,
               private dialogRef: MatDialogRef<ChangeDueComponent>,
               @Inject(MAT_DIALOG_DATA) public data: IBalanceDuePayload
             )
   {
+
     if (data) {
       this.order = data.order
       this.payment = data.payment
@@ -71,8 +71,8 @@ export class ChangeDueComponent implements OnInit  {
       if (!this.paymentMethod?.isCreditCard && !this.payment.account) {
         this.step = 2
       }
-      this.printing$ = this.processSendOrder(data.order)
     }
+
     this.initForm();
     this.orderMethodsService.setScanner( )
   }
@@ -90,16 +90,14 @@ export class ChangeDueComponent implements OnInit  {
     const site = this.siteService.getAssignedSite();
     this.action$ = this.orderMethodsService.newOrderWithPayloadMethod(site, null).pipe(
      switchMap(data => {
-      this.dialogRef.close()
-       return of(data)
-     })
-   )
-   }
+        this.dialogRef.close()
+        return of(data)
+      })
+    )
+  }
 
   processSendOrder(order: IPOSOrder) {
-
     return this.paymentMethodProcessService.sendToPrep(order, true, this.uiTransactions)
-
   }
 
   changeStep() {
@@ -131,6 +129,14 @@ export class ChangeDueComponent implements OnInit  {
           this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
           return of(this.uiTransactions)
         }
+    })).pipe(switchMap(data => {
+      this.printing$ = this.processSendOrder(this.order)
+      return of(data)
+    })).pipe(switchMap(data => {
+      if (this.uiTransactions.autoPrintReceiptOnClose) {
+        this.printingService.previewReceipt(true, this.order)
+      }
+      return of(data)
     }))
   }
 
@@ -163,7 +169,6 @@ export class ChangeDueComponent implements OnInit  {
     // this.router.navigateByUrl('/')
     this.orderMethodService.clearOrder();
     this.dialogRef.close()
-
   }
 
   customTipAmount(amount) {
@@ -207,12 +212,10 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   capture(item: IPOSPayment) {
-
     if (this.order) {
       this.methodsService.processCapture(item, this.order.balanceRemaining,
                                                    this.uiTransactions)
     }
-
   }
 
   notify(message: string, title: string, duration: number) {

@@ -36,6 +36,7 @@ export interface ITerminalSettings {
   ignoreTimer         : boolean;
   defaultOrderTypeID: number;
   exitOrderOnFire   : boolean;
+  enablePrepView: boolean;
 }
 
 @Injectable({
@@ -318,8 +319,6 @@ export class SettingsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    // const options = { url: url, cacheMins: 60};
-
     return this.http.get<DSIEMVSettings>(url);
 
   }
@@ -405,16 +404,12 @@ export class SettingsService {
   }
 
   getUITransactionSetting():  Observable<TransactionUISettings> {
-
     const item = {} as TransactionUISettings
     if (!this.userAuthorizationService.user) {  of(item)  }
-    // console.log(this.userAuthorizationService.user, 'getUITransactionsSetting')
 
     const user = this.userAuthorizationService?.user;
 
     if (!user || !user.roles ) {return  of(item) };
-
-    // console.log(user, 'getUITransactionsSetting')
 
     const site =  this.siteService.getAssignedSite();
 
@@ -451,7 +446,6 @@ export class SettingsService {
     if (appCache) {
       if (appCache?.value && appCache?.boolean) {
         const uri = { url: url, cacheMins: appCache.value}
-        // console.log('getting url via cache' , uri)
         return  this.httpCache.get<unknown>(uri)
       }
     }

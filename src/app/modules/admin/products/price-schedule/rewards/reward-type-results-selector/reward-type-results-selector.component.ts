@@ -138,10 +138,13 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
   }
 
   initGridOptions()  {
+
     this.frameworkComponents  = this.agGridService.initFrameworkComponents();
     this.defaultColDef        = this.agGridService.initDefaultColumnDef();
     this.rowSelection         = 'multiple';
+
     this.columnDefs           = this.initColumnDefs();
+
     this.gridOptions = {
       pagination: true,
       paginationPageSize: this.pageSize,
@@ -169,7 +172,7 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
         cellRenderer: "btnCellRenderer",
         cellRendererParams: {
           onClick: this.selectItemFromGrid.bind(this),
-          label: `<span><i class="material-icons">edit</i></span> Select`,
+          label: `Assign`,
           getLabelFunction: this.getLabel.bind(this),
           btnClass: 'btn btn-primary btn-sm'
         },
@@ -378,19 +381,22 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
 
   selectItemFromGrid(e) {
     if (e.rowData.id)  {
-      this.enableItem(e.rowData);
+      this.assigItem(e.rowData);
       this.lastSelectedItem = e.rowData;
     }
   }
 
-  enableItem(item) {
+  assigItem(item) {
 
     this.lastSelectedItem = null
     if (!item)                 { return }
     if (item.id == undefined)  { return }
 
     const itemID = parseInt( item.id );
-
+    console.log(this.itemDiscounts)
+    if (!this.itemDiscounts) {
+      this.itemDiscounts = [] as DiscountInfo[]
+    }
     if (this.itemDiscounts) {
       const array = this.itemDiscounts
       const index = array.findIndex( data =>  data.itemID === itemID)
@@ -402,7 +408,8 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
         newItem.itemID   =  itemID;
         newItem.name     =  item.name;
         newItem.quantity =  1;
-        this.itemDiscounts.push(newItem)
+        this.itemDiscounts.push(newItem);
+        console.log(newItem);
         this.applyChanges(newItem);
         this.lastSelectedItem = newItem
       } else {

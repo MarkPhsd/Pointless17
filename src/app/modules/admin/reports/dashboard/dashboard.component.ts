@@ -8,13 +8,14 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DatePipe } from '@angular/common'
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { IDeviceInfo, MenuService } from 'src/app/_services';
+import { IDeviceInfo, MenuService, OrdersService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
-import { SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
+import { IPaymentSalesSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -28,21 +29,25 @@ export class DashboardComponent implements OnChanges,OnInit  {
   topSalesByProfit$: Observable<any[]>;
   showTopSales: boolean;
   viewChartReports : number = 0;
-
+  auditPayment$ : Observable<IPaymentSalesSummary>;
+  auditPayment  : IPaymentSalesSummary;
   averageHourlySales = []
   dynamicData$      : any;
   // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   loadDynamicData:  boolean = false;
 
   reportsListView = [
-    {id: 1, visible: false },
-    {id: 2, visible: false },
-    {id: 3, visible: false },
-    {id: 4, visible: false },
-    {id: 5, visible: false },
-    {id: 6, visible: false },
-    {id: 7, visible: false },
-    {id: 8, visible: false }
+    {id: 1, visible: false, name: 's' },
+    {id: 2, visible: false ,name: ''},
+    {id: 3, visible: false, name: '' },
+    {id: 4, visible: false, name: '' },
+    {id: 5, visible: false, name: '' },
+    {id: 6, visible: false, name: '' },
+    {id: 7, visible: false, name: '' },
+    {id: 8, visible: false, name: '' },
+    {id: 9, visible: false, name: 'itemTypeSales' },
+    {id:10, visible: false, name: 'ServiceFees'}
+
   ]
 
   reportCategoriesListForm: UntypedFormGroup;
@@ -62,6 +67,7 @@ export class DashboardComponent implements OnChanges,OnInit  {
     {name: 'Re Order List', id: '1', icon: ''},
     {name: 'Department Values', id: '2', icon: ''},
     {name: 'Category Values', id: '3', icon: ''},
+    {name: 'Department Values', id: '7', icon: ''},
     {name: 'Item Values', id: '4', icon: ''},
     {name: 'New Customer Count Today', id: '5', icon: ''},
     {name: 'New Customer Count 30 Days', id: '6', icon: ''},
@@ -69,17 +75,24 @@ export class DashboardComponent implements OnChanges,OnInit  {
 
   itemReportList = [
     {name: 'All Details', id: '0', icon: ''},
+    {name: 'Departments', id: '7', icon: ''},
     {name: 'Categories', id: '1', icon: ''},
     {name: 'Taxed ', id: '2', icon: ''},
     {name: 'Non Taxed', id: '3', icon: ''},
     {name: 'All Items', id: '4', icon: ''},
+    {name: 'Item Types', id: '9', icon:''},
+    {name: 'Service Fees', id: '10', icon:''}
   ]
 
   @ViewChild('customReport')      customReport: TemplateRef<any> | undefined;
+  @ViewChild('departmentSales')       departmentSales: TemplateRef<any> | undefined;
   @ViewChild('categorySales')         categorySales: TemplateRef<any> | undefined;
   @ViewChild('taxedCategorySales')    taxedCategorySales: TemplateRef<any> | undefined;
   @ViewChild('nonTaxedCategorySales') nonTaxedCategorySales: TemplateRef<any> | undefined;
   @ViewChild('itemSales')       itemSales: TemplateRef<any> | undefined;
+  @ViewChild('itemTypeSales')       itemTypeSales: TemplateRef<any> | undefined;
+  @ViewChild('serviceFees')       serviceFees: TemplateRef<any> | undefined;
+
   @ViewChild('itemVoids')       itemVoids: TemplateRef<any> | undefined;
 
   @ViewChild('siteReports')      siteReports: TemplateRef<any> | undefined;
@@ -89,13 +102,11 @@ export class DashboardComponent implements OnChanges,OnInit  {
 
   @ViewChild('reportCategories')     reportCategories: TemplateRef<any> | undefined;
   @ViewChild('reportCategoriesList') reportCategoriesList: TemplateRef<any> | undefined;
-
+  @ViewChild('reportDepartmentsList') reportDepartmentsList: TemplateRef<any> | undefined;
   @ViewChild('designReportButton')   designReportButton: TemplateRef<any> | undefined;
 
   @ViewChild('reportsView')   reportsView: TemplateRef<any> | undefined;
   @ViewChild('chartsView')   chartsView: TemplateRef<any> | undefined;
-
-
 
   emailSending           = false;
   showValues             = false;
@@ -143,7 +154,10 @@ export class DashboardComponent implements OnChanges,OnInit  {
               private uISettingsService  : UISettingsService,
               public  authService: AuthenticationService,
               private cd: ChangeDetectorRef,
+              private paymentReportService: SalesPaymentsService,
               private fb: FormBuilder,
+              private orderService: OrdersService,
+              private orderMethodsService: OrderMethodsService
           ) {
 
     this.reportCategoriesListForm = this.fb.group({
@@ -157,6 +171,7 @@ export class DashboardComponent implements OnChanges,OnInit  {
     })
   }
 
+
   ngOnInit(): void {
     this.deviceInfo = this.authService.deviceInfo;
     const showValues = localStorage.getItem('showValues')
@@ -167,6 +182,17 @@ export class DashboardComponent implements OnChanges,OnInit  {
     this.initDateFilter();
     this.initSettings();
   };
+
+
+  setOrder(id: number, history) {
+    if (id) {
+      const site = this.siteService.getAssignedSite();
+      this.orderService.getOrder(site, id.toString(), true).subscribe(data => {
+        this.orderMethodsService.setActiveOrder(site, data)
+        }
+      )
+    }
+  }
 
   initDateFilter() {
     this.completionDateForm  = this.getFormRangeInitial(this.completionDateForm);
@@ -211,7 +237,6 @@ export class DashboardComponent implements OnChanges,OnInit  {
     return form
   }}
 
-
   getFormRangeInitial(inputForm: UntypedFormGroup) {
     const today = new Date();
     const month = today.getMonth();
@@ -237,6 +262,9 @@ export class DashboardComponent implements OnChanges,OnInit  {
     this._showValues(true)
     this.showValues = true;
     this.displayReports = type;
+    if (type == 'items') {
+      this.showView(1)
+    }
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -257,8 +285,16 @@ export class DashboardComponent implements OnChanges,OnInit  {
   }
 
   refreshReports() {
+    this.count = +this.count+1
     this.getUser()
-    this.notifyChild()
+    this.notifyChild();
+    // this.refreshCompletionDateSearch();
+    // this.refreshCompletionDateSearch();
+
+  }
+
+  refreshReportsSub() {
+    this.refreshCompletionDateSearch();
   }
 
   get designReportButtonView() {
@@ -310,8 +346,6 @@ export class DashboardComponent implements OnChanges,OnInit  {
       this.viewChartReports = 0;
       return;
     }
-    // this.showValues= !this.showValues
-    // this._showValues(this.showValues)
   }
 
   _showValues(result: boolean) {
@@ -322,14 +356,11 @@ export class DashboardComponent implements OnChanges,OnInit  {
   }
 
   initSettings() {
-
     const sites$ = this.sitesService.getSites().pipe(switchMap(data => {
       this.sites = data;
       return of(data)
     }))
-
     const uiTransactions$ =  this.uISettingsService.getSetting('UITransactionSetting')
-
     this.uiTransactions$ =
         sites$.pipe(switchMap(data => {
             return uiTransactions$
@@ -355,7 +386,6 @@ export class DashboardComponent implements OnChanges,OnInit  {
     this.currentUser    = user;
   }
 
-
   get viewMetrcNetSales() {
     if (this.uiTransactions && (this.uiTransactions.recmedPricing || this.uiTransactions.enablMEDClients)) {
       return this.metrcNetSalesSummary;
@@ -365,7 +395,6 @@ export class DashboardComponent implements OnChanges,OnInit  {
 
   //gets filterShared Component and displays the chart data
   receiveData(event) {
-    // console.log('event', event)
     this.dateFrom = "" // data[0]
     this.dateTo = ""
     this.dataFromFilter = event
@@ -445,11 +474,9 @@ export class DashboardComponent implements OnChanges,OnInit  {
   }
 
   getAverageHourlySalesData() {
-
     const observablesArray: Observable<any>[] = this.sites.map(site =>
         this.salesPaymentsService.getSalesAndLaborPeriodAverage(site, this.dateFrom, this.dateTo)
     );
-
     this.averageHourlySales$ = forkJoin(observablesArray).pipe(shareReplay(1));
   }
 
@@ -471,12 +498,11 @@ export class DashboardComponent implements OnChanges,OnInit  {
     const topSalesByQuantity: Observable<any>[] = this.sites.map(site =>
       this.reportingItemsSalesService.getTopSalesByQuantity(site, this.dateFrom, this.dateTo)
     );
-
     this.topSalesByQuantity$ = forkJoin(topSalesByQuantity).pipe(shareReplay(1));
-
   }
 
   showView(view: any) {
+    // console.log('view', view)
     if (view == 0) {
       this.reportsListView.forEach(data => {
         data.visible = true
@@ -487,7 +513,14 @@ export class DashboardComponent implements OnChanges,OnInit  {
         data.visible = true
       }
     })
-    console.log(view, this.reportsListView)
+  }
+
+  get departmentSalesView() {
+    const filteredData = this.reportsListView.filter(data => data.id === 7 && data.visible);
+    if (filteredData.length > 0) {
+      return this.departmentSales;
+    }
+    return null
   }
 
   get categorySalesView() {
@@ -518,6 +551,14 @@ export class DashboardComponent implements OnChanges,OnInit  {
     const filteredData = this.reportsListView.filter(data => data.id === 4 && data.visible);
     if (filteredData.length > 0) {
       return this.itemSales
+    }
+    return null
+  }
+
+  get itemTypeSalesView() {
+    const filteredData = this.reportsListView.filter(data => data.id === 9 && data.visible);
+    if (filteredData.length > 0) {
+      return this.itemTypeSales
     }
     return null
   }

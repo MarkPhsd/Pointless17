@@ -38,6 +38,7 @@ export interface IPOSOrderSearchModel {
   printLocation     :          number;
   description: string;
   searchOrderHistory: boolean;
+  onlineOrders: boolean;
 }
 
 export interface IPOSOrder {
@@ -125,7 +126,7 @@ export interface IPOSOrder {
   cashDiscountFee       : number;
   creditBalanceRemaining: number;
   priceColumn           : number;
-
+  serviceArea: string;
 }
 
 export interface ClientsPOSOrders {
@@ -169,6 +170,8 @@ export interface ClientsPOSOrders {
   age:                       number;
   loyaltyPointValue:         number;
   medLicenseNUmber: number;
+  oomp: string;
+  oompb: string;
   mramCountMonthly: number;
   medGramLimit: number;
   medConcentrateLimit: number;

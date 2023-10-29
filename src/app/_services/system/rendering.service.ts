@@ -13,6 +13,7 @@ export class RenderingService {
     private dateHelperService: DateHelperService) { }
 
   interpolateText(item: any, text: string) {
+    // console.log('object interpolating', item)
     if (!item && !text) { return }
 
     try {

@@ -1,36 +1,17 @@
-<div *ngIf="isApp && order ">
-    <button 
+<div *ngIf="isApp && order">
+    <button
             [ngClass]="themeClass"
             class="buttons payment-buttons"
-            mat-raised-button 
+            mat-raised-button
             (click)="applyCashPayment(paymentAmount)">
-            <ng-content></ng-content>
-            <span *ngIf="paymentAmount != 0">{{paymentAmount | currency}}</span>
+
+     <ng-content></ng-content>
+      <span *ngIf="paymentAmount != 0">
+              {{paymentAmount | currency}}</span>
     </button>
 </div>
-
-
 
 <span *ngIf="(action$ | async) as action">
 
 </span>
 
-
-<!-- <div>
-  <button class="payment-buttons" color="primary" mat-raised-button (click)="cashPayment()">Cash</button>
-</div>
-
-<div *ngIf="uiTransactions.enableExactChange" >
-  <button class="payment-buttons" color="primary" mat-raised-button (click)="applyCashPayment(order.balanceRemaining)">Pay Balance </button>
-</div>
-
-<div>
-  <button class="payment-buttons" color="primary" mat-raised-button (click)="applyCashPayment(5)">$5.00</button>
-</div>
-<div>
-  <button class="payment-buttons" color="primary" mat-raised-button (click)="applyCashPayment(10)">$10.00</button>
-</div>
-<div>
-  <button class="payment-buttons" color="primary" mat-raised-button
-          (click)="applyCashPayment(20)">$20.00</button>
-</div> -->

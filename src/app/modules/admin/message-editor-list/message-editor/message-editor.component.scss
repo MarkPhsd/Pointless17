@@ -1,0 +1,8 @@
+.message-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 5px;
+}
+.grid-item {
+  margin-left: 5px;
+}

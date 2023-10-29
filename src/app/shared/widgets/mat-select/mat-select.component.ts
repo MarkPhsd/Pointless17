@@ -11,15 +11,15 @@ export class MatSelectComponent {
 
   @ViewChild('formView')      formView: TemplateRef<any>;
 
-  @Input()  style = ''
-  @Input()  class='mat-form-field'
-  @Input()  inputForm: UntypedFormGroup;
-  @Input()  fieldName: string;
-  @Input()  list$    : Observable<any>;
-  @Input()  list     : any[]
+  @Input()  style      = ''
+  @Input()  class      = 'mat-form-field'
+  @Input()  inputForm  : UntypedFormGroup;
+  @Input()  fieldName  : string;
+  @Input()  list$      : Observable<any>;
+  @Input()  list       : any[]
   @Output() outputItem = new EventEmitter<any>();
-  @Input()  hideClear: boolean;
-
+  @Input()  hideClear  : boolean;
+  @Input() placeHolder: string;
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {

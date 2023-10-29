@@ -1,9 +1,11 @@
 <div *ngIf="(closingProcedure$ | async) as closingProcedures"></div>
+<div *ngIf="(balanceSheet$  | async) as balanceSheet"></div>
+
 <mat-card *ngIf="(uiTransactions$ | async) as uiTransactions">
 
   <mat-card-title></mat-card-title>
   <mat-card-subtitle>
-    POS Operations
+    POS Operations   <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
   </mat-card-subtitle>
 
   <mat-card-content>
@@ -12,7 +14,7 @@
       Refresh Sales Reports</button>
     </span>
 
-    <span>
+    <span #coachingCloseDay>
       <button mat-raised-button (click)="closeDay()">Close Day</button>
     </span>
 
@@ -42,6 +44,7 @@
       <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
     </span>
 
+    <span #coachingUnClosedBalanceSheets></span>
     <span *ngIf="balanceSheetsClosed">
       {{balanceSheetsClosed}}.
     </span>
@@ -85,12 +88,17 @@
       </div>
     </ng-template>
 
+    <span #coachingUnpaidOrders></span>
+
     <div *ngIf="closingCheck$ | async as closing">
       <div>
         <close-day-validation
           (refreshCloseCheck)="refreshClosingCheck()"
           [closeDayValidation]="closing">
         </close-day-validation>
+      </div>
+      <div>
+          <ng-container [ngTemplateOutlet]="paymentDiscrepancy"></ng-container>
       </div>
     </div>
 
@@ -185,13 +193,27 @@
     </mat-card>
 </div>
 
-<ng-template #balanceSheetView>
-  <balance-sheet-report
-      [site]="localSite"
+<ng-template #paymentDiscrepancy>
+  <div *ngIf="iBalanceSheet">
+    <app-audit-payment
+      [site]="site"
       [dateFrom]="dateFrom"
       [dateTo]="dateTo"
-      [zrunID]="iBalanceSheet.id" >
-  </balance-sheet-report>
+      [zrunID]="iBalanceSheet.id"
+      [notifier] ="childNotifier"
+    ></app-audit-payment>
+  </div>
+</ng-template>
+
+<ng-template #balanceSheetView>
+  <div *ngIf="iBalanceSheet && iBalanceSheet.id">
+    <balance-sheet-report
+        [site]="localSite"
+        [dateFrom]="dateFrom"
+        [dateTo]="dateTo"
+        [zrunID]="iBalanceSheet.id" >
+    </balance-sheet-report>
+  </div>
 </ng-template>
 
 <ng-template #pendingTransactions>
@@ -324,10 +346,9 @@
 </ng-template>
 
 <ng-template #itemSalesReport>
+
   <item-sales-card
       [site]="localSite"
-      [dateFrom]="dateFrom"
-      [dateTo]="dateTo"
       [zrunID]="iBalanceSheet.id"
       [removeGiftCard]="true"
       [viewType] = "'sales'"
@@ -358,3 +379,10 @@
   </div>
 </ng-template>
 
+<ng-template #helpButton>
+  <div style="margin:5px">
+    <coach-marks-button
+          (initPopOver)="initPopOver()"
+          [enabled]="user && user?.userPreferences &&  user?.userPreferences?.enableCoachMarks"></coach-marks-button>
+  </div>
+</ng-template>

@@ -1,15 +1,15 @@
 <mat-card  *ngIf="user">
     <mat-card-header>
         <mat-card-subtitle>
-            <h3>Welcome {{'hello' }} ,</h3>
+            <h3>Welcome  {{user?.firstName}} {{user?.lastName}}, </h3>
         </mat-card-subtitle>
         <mat-card-title >
-          <h2 *ngIf="user.id !=0 && user.id != undefined">
-              <button mat-icon-button
+          <div *ngIf="user.id !=0 && user.id != undefined">
+              <button mat-raised-button
                     (click)="editProfile()">
-              <mat-icon >edit</mat-icon>
+              Edit <mat-icon >edit</mat-icon>
              </button>
-             {{user?.firstName}} {{user?.lastName}}</h2>
+          </div>
         </mat-card-title>
     </mat-card-header>
 

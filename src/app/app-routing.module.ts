@@ -139,6 +139,7 @@ import { ProductFilterComponent } from './shared/widgets/product-filter/product-
 import { PartBuilderMainComponent } from './modules/admin/products/part-builder/part-builder-main/part-builder-main.component';
 import { PartBuilderEditComponent } from './modules/admin/products/part-builder/part-builder-edit/part-builder-edit.component';
 import { PartBuilderUsageListComponent } from './modules/admin/products/part-builder/part-builder-usage-list/part-builder-usage-list.component';
+import { MessageEditorListComponent } from './modules/admin/message-editor-list/message-editor-list.component';
 
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
@@ -161,6 +162,8 @@ const routes: Routes = [
     {path: '', component: DefaultComponent,
       children: [
 
+        { path: 'message-list',  component: MessageEditorListComponent, data: { title: 'Message List', animation: 'isLeft'} },
+
         { path: 'part-builder-list',  component: PartBuilderMainComponent, data: { title: 'Part Builder', animation: 'isLeft'} },
         { path: 'part-builder-edit',  component: PartBuilderEditComponent, data: { title: 'Part Builder', animation: 'isLeft'} },
         { path: 'part-usage-list',  component: PartBuilderUsageListComponent, data: { title: 'Part Builder', animation: 'isLeft'} },
@@ -168,24 +171,12 @@ const routes: Routes = [
         { path: '', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
         { path: 'filter',  component: ProductFilterComponent, data: { title: 'Filter', animation: 'isLeft'} },
 
-        // { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
-        // { path: '/menu-board',  component: GridManagerComponent, pathMatch: 'full', data : { title: 'Menu Board Layout', animation: 'isLeft'},
-        //     children: [
-        //       { path: '', component: GridManagerComponent, data: {animation: 'isLeft'} },
-        //       { path: 'menu-board', component: GridManagerComponent, data: {animation: 'isLeft'} },
-        //       { path: 'menu-board/grid-menu-layout', component: GridMenuLayoutComponent, data: {animation: 'isLeft'} },
-        //     ]
-        // },
-        //
         { path: 'ps-designer-list', component: DesignerListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
         { path: 'ps-report-editor', component: DesignerEditorComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
 
         //pointless reporting
-
         { path: 'report-designer', component: DevxReportDesignerComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
         { path: 'report-viewer'  , component: ReportViewerComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
-
-
 
         { path: 'swipedelete', component: IonicSwipeToDeleteComponent,   data: { animation: 'isLeft'} },
         { path: 'app-main-menu', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { title: 'Main Menu', animation: 'isLeft'} },

@@ -1,18 +1,19 @@
 <span *ngIf="(uiTransactionSetting$ | async) as item"></span>
 <span *ngIf="(uiHomePageSetting$ | async) as item"></span>
+<span *ngIf="( userSave$  | async) as pref"></span>
 
 <mat-toolbar [class]="mattoolbar"
              [color]="matToolbarColor">
   <mat-toolbar-row>
-      <!-- <div class="ps-flex-group"> -->
 
       <ng-container [ngTemplateOutlet]="backButtonView"></ng-container>
 
-      <ng-container *ngIf="user && user.roles && (user.roles == 'employee' || user.roles === 'admin' || user.roles == 'manager') " [ngTemplateOutlet]="logoView"></ng-container>
-      <ng-container [ngTemplateOutlet]="menuBarView"></ng-container>
-      <ng-container *ngTemplateOutlet="showSearchMenuView"></ng-container>
-      <ng-container [ngTemplateOutlet]="goHomeView"></ng-container>
+      <ng-container *ngIf="logoViewEnabled"
+                    [ngTemplateOutlet]="logoView"></ng-container>
 
+      <ng-container [ngTemplateOutlet]="menuBarView"></ng-container>
+      <ng-container [ngTemplateOutlet]="showSearchMenuView"></ng-container>
+      <ng-container [ngTemplateOutlet]="goHomeView"></ng-container>
       <ng-container [ngTemplateOutlet]="currentSite"></ng-container>
       <ng-container [ngTemplateOutlet]="networkStatus"></ng-container>
       <ng-container [ngTemplateOutlet]="siteSelectorView"></ng-container>
@@ -22,17 +23,12 @@
       </div>
 
       <ng-container [ngTemplateOutlet]="posPanel"></ng-container>
-
-      <ng-container *ngIf="user && user.roles == 'user' " [ngTemplateOutlet]="logoView"></ng-container>
-      <ng-container [ngTemplateOutlet]="companyHeader"></ng-container>
-
       <ng-container *ngIf="!phoneDevice && !isUserStaff" [ngTemplateOutlet]="userSpacer"></ng-container>
-
       <ng-container [ngTemplateOutlet]="wizard"></ng-container>
       <ng-container [ngTemplateOutlet]="clockIn"></ng-container>
       <ng-container [ngTemplateOutlet]="keyboardButton"></ng-container>
       <ng-container [ngTemplateOutlet]="editCartButtons"></ng-container>
-
+      <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
       <ng-container [ngTemplateOutlet]="appCart"></ng-container>
       <ng-container [ngTemplateOutlet]="userInfoScreen"></ng-container>
 
@@ -40,13 +36,20 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
+<ng-template #helpButton>
+  <coach-marks-button
+        (initPopOver)="initPopover()"
+        [enabled]="user?.userPreferences?.enableCoachMarks">
+  </coach-marks-button>
+</ng-template>
+
 <ng-template #backButtonView>
   <div *ngIf="!smallDevice && isApp">
     <button aria-label="back" mat-button
             (click)="goBack()">
       <mat-icon aria-hidden="true">keyboard_arrow_left</mat-icon>
     </button>
-</div>
+  </div>
 </ng-template>
 
 <ng-template #logoView>
@@ -56,7 +59,7 @@
 </ng-template>
 
 <ng-template #menuBarView>
-  <div *ngIf="user">
+  <div *ngIf="user ">
     <button aria-label="menu"
             mat-button
             (click)="toggleSideBar()">
@@ -79,8 +82,8 @@
   <div class="spacer" >
   </div>
 </ng-template>
-<ng-template #posPanel>
 
+<ng-template #posPanel>
   <div class="grid-flow"
        *ngIf="!phoneDevice">
     <mat-card class='panel-card'
@@ -102,7 +105,7 @@
           </div>
         </li>
 
-        <li *ngIf="!smallDevice">
+        <li #coachingPosTerminalIcon *ngIf="!smallDevice">
           <div class='search-input'>
             <button mat-button
                     color="accent"
@@ -115,9 +118,11 @@
 
         <ng-container [ngTemplateOutlet]="isfloorPlan"></ng-container>
 
-        <li *ngIf="platFormService.androidApp">
-          <ng-container [ngTemplateOutlet]="barcodeScanner"></ng-container>
-        </li>
+        <span #coachingIDScanner>
+          <li  *ngIf="platFormService.androidApp">
+            <ng-container [ngTemplateOutlet]="barcodeScanner"></ng-container>
+          </li>
+        </span>
 
         <li *ngIf="(!phoneDevice || !smallDevice) &&
                    (uiTransactionSetting && !uiTransactionSetting.disableBarcodScanning)">
@@ -128,7 +133,7 @@
           <scale-value-view></scale-value-view>
         </li>
 
-        <li *ngIf="platFormService.isApp() && userSwitching">
+        <li #coachingLogin *ngIf="platFormService.isApp() && userSwitching">
           <ng-container  [ngTemplateOutlet]="userSwitchingButtonView"></ng-container>
         </li>
 
@@ -142,14 +147,12 @@
 </ng-template>
 
 <ng-template #userSwitchingButtonView>
-  <!-- <div class='search-input'> -->
-    <button mat-button
-            aria-label="transfer_within_a_station"
-            color="accent"
-            (click)="switchUser()">
-      <mat-icon>transfer_within_a_station</mat-icon>
-    </button>
-  <!-- </div> -->
+  <button mat-button
+          aria-label="transfer_within_a_station"
+          color="accent"
+          (click)="switchUser()">
+    <mat-icon>transfer_within_a_station</mat-icon>
+  </button>
 </ng-template>
 
 <ng-template #currentSite>
@@ -163,13 +166,11 @@
 </ng-template>
 
 <ng-template #siteSelectorView>
-  <!-- <div class="simple-row" > -->
-    <button aria-label="location_on"
-            mat-button
-            (click)="siteSelector()">
-      <mat-icon>location_on</mat-icon>
-    </button>
-  <!-- </div> -->
+  <button aria-label="location_on"
+          mat-button
+          (click)="siteSelector()">
+    <mat-icon>location_on</mat-icon>
+  </button>
 </ng-template>
 
 <ng-template #networkStatus>
@@ -192,17 +193,17 @@
 </ng-template>
 
 <ng-template #keyboardButton>
-  <!-- <app-keyboard-button
+  <app-keyboard-button
     [smallDevice]="smallDevice"
     [isApp]="platFormService.isApp()"
     [isUserStaff]="isUserStaff"
-  ></app-keyboard-button> -->
+  ></app-keyboard-button>
 </ng-template>
 
 <ng-template #floorPlanTemplate>
-  <li>
+  <li #coachingTableLayout>
     <span *ngIf="floorPlans$ | async as floorPlan"  class='search-input'>
-      <div *ngIf="floorPlan.length>0">
+      <div  *ngIf="floorPlan.length > 0">
         <button mat-button
                 color="accent"
                 (click)="navTableService()"
@@ -288,6 +289,8 @@
           (emitCount)="emailMailCount($event)">
         </app-request-messages>
 
+        <ng-container [ngTemplateOutlet]="lastOrderView"></ng-container>
+
         <div  class="mat-item">
           <button
               mat-button
@@ -347,11 +350,11 @@
         <div  class="mat-item"
             *ngIf="user && user.roles === 'user'  && user?.username != 'user'">
             <button
-                      mat-raised-button
-                      color="primary"
-                      aria-label="Order history"
-                      class="mat-item"
-                      (click)="navPOSOrders()">
+                    mat-raised-button
+                    color="primary"
+                    aria-label="Order history"
+                    class="mat-item"
+                    (click)="navPOSOrders()">
                 My Orders<mat-icon>list</mat-icon>
             </button>
         </div>
@@ -361,8 +364,7 @@
         </div>
 
         <ng-container [ngTemplateOutlet]="posDevice"></ng-container>
-
-        <ng-container [ngTemplateOutlet]="lastOrderView"></ng-container>
+        <ng-container [ngTemplateOutlet]="coachMarks"></ng-container>
       </div>
     </span>
 
@@ -379,10 +381,9 @@
 </ng-template>
 
 <ng-template #posDevice>
-<span  *ngIf="(posDevice$ | async) as device; else loadingDevice">
+  <span  *ngIf="(posDevice$ | async) as device; else loadingDevice">
+
     <mat-divider></mat-divider>
-    <li *ngIf="device  && (isAdmin || isManager) && !smallDevice">
-    <br>
     <div  class="margin-5">
       <button   class='ps-button-150'
                 mat-raised-button (click)="deviceInfo()">
@@ -392,8 +393,24 @@
   </span>
 </ng-template>
 
+<ng-template #coachMarks>
+  <span *ngIf="user && user?.userPreferences">
+      <mat-divider></mat-divider>
+      <div  class="margin-5">
+        <button   class='ps-button-150'
+                  mat-raised-button (click)="toggleCoaching()">
+          Training <mat-icon>on_device_training</mat-icon>
+          <span *ngIf="user?.userPreferences?.enableCoachMarks">On</span>
+          <span *ngIf="!user?.userPreferences?.enableCoachMarks">Off</span>
+        </button>
+      </div>
+    </span>
+</ng-template>
+
 <ng-template #editCartButtons>
-  <div  class="check-out-button" *ngIf="!smallDevice && !phoneDevice && uiTransactionSetting && uiTransactionSetting?.displayEditCardOnHeader" >
+  <div  class="check-out-button"
+        *ngIf="!smallDevice && !phoneDevice && uiTransactionSetting
+              && uiTransactionSetting?.displayEditCardOnHeader" >
     <pos-check-out-buttons
       [order]="order"
       [phoneDevice]="phoneDevice"

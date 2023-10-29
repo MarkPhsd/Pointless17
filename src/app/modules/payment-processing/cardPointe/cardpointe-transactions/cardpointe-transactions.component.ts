@@ -34,6 +34,7 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
   public itemProcessSection$  = this._sale.asObservable();
   public _connect     = new BehaviorSubject<any>(null);
   terminalSettings$ : Observable<any>;
+  processCardPointResonse$: Observable<any>;
 
   initConnectSubscriber() {
     this._connect.subscribe(
@@ -51,7 +52,7 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
     // console.log('bolt connect called ', this.methodsService.connect)
     this.methodsService.getConnect().subscribe( data => {
       this.methodsService.connect = data
-      console.log('connection data', data.xSessionKey, data.expiry)
+      // console.log('connection data', data.xSessionKey, data.expiry)
 
       if (data.errorMessage) {
         this.siteService.notify("Error Connecting: " + data?.errorCode + " " + data?.errorMessage, 'Close', 5000, 'red');
@@ -67,7 +68,7 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
     // console.log('bolt connect called ', this.methodsService.connect)
     return  this.methodsService.getConnect().pipe(
       switchMap(data => {
-      console.log('connection data', data.xSessionKey, data.expiry)
+      // console.log('connection data', data.xSessionKey, data.expiry)
       this.methodsService.connect = data
       this.methodsService.initTerminal(data.xSessionKey, data.expiry);
       this.saleSubscriber();
@@ -83,6 +84,9 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
       if (this.methodsService.connect && !this.methodsService.connect?.xSessionKey)  { return }
       const response = data.response;
       const request = data.request;
+
+      // console.log('data.response', data.response);
+      // console.log('data.request', data.request);
 
       //if  already captured.
       if (request?.capture) {
@@ -108,32 +112,34 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
       )
       .subscribe(data => {
         if (data && data?.respstat.toLowerCase() == 'b') {
-          this.orderService.notificationEvent('Please retry. Transaction failed to run correctly and has not been processed.', 'Alert')
+          const message = 'Please retry. Transaction failed to run correctly and has not been processed.'
+          this.siteService.notify(message, 'close', 3000, 'red')
           return;
         }
         if (data && data?.respstat.toLowerCase() == 'c') {
-          this.orderService.notificationEvent('Declined.', 'Alert')
+          this.siteService.notify('Declined', 'close', 3000, 'red')
           return;
         }
         this._finalizeSale.next(data);
         this._sale = new BehaviorSubject<number>(null)
     })
-
   }
 
   initFinalizer() {
     this._finalizeSale.subscribe(data => {
       if (!data) {return}
       this.processingTransaction = true
-      this.action$ = this.paymentMethodsService.processCardPointResponse( data, this.methodsService.payment,
-                                                            this.orderMethodsService.currentOrder).pipe(
-                                                              switchMap(data => {
-                                                                this.processingTransaction = false
-                                                                return of(data)
-                                                              })
-                                                            )
-      this.methodsService.initValues();
-      this.dialogRef.close(null)
+
+      const order =  this.orderMethodsService.currentOrder;
+      const payment = this.methodsService.payment;
+
+      this.processCardPointResonse$ = this.paymentMethodsService.processCardPointResponse( data, payment, order).pipe(switchMap( data => {
+          // console.log('processCardPointResponse', data)
+          this.processingTransaction = false;
+          this.methodsService.initValues();
+          this.dialogRef.close(null)
+          return of(data)
+      }))
     })
   }
 
@@ -178,10 +184,8 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
   ngOnInit()  {
     this.terminalSettings$ =  this.methodsService.getBoltInfo().pipe(
       switchMap(data => {
-        console.log('data result')
+        console.log('data result', data.boltInfo, data.terminal)
         if (data.boltInfo && data.terminal) {
-          console.log('boltInfo', data.boltInfo)
-          console.log('terminal', data.terminal)
 
           this.methodsService.boltTerminal = {} as BoltTerminal;
           if (!this.methodsService.boltInfo) {   this.methodsService.boltInfo = {} as BoltInfo;  }
@@ -245,7 +249,7 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
       this._sale.next(item)
     })
 
-  }
+ }
 
   //preserve failed payments
   getPaymentFailed(): IPOSPayment {
@@ -330,8 +334,6 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
       })
     }
   }
-
-
 
   applyBalance() {
     if ( this.balanceRemaining) {

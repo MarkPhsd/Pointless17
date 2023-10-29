@@ -1,74 +1,41 @@
-<div *ngIf="(style$ | async) as styles"></div>
-<div *ngIf="(action$ | async) as list"></div>
-<div *ngIf="(userAuths$ | async) as userAuths"></div>
-
-<div *ngIf="(subCategories$ | async) as subCategories">
-  <!-- {{subCategoresList}} -->
-</div>
-
 <div *ngIf="(bucket$ | async) as bucket">
-  <div class="parent-container"
+  <div  class="parent-container"
         *ngIf="(uiHomePage$ | async) as uiHomePage">
 
     <div  class="flex-row">
       <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
-      <ng-container [ngTemplateOutlet]="isgridFlowOptionOn"></ng-container>
+      <ng-container [ngTemplateOutlet]='departmentsFilter'></ng-container>
+
+      <div>
+        <ng-container [ngTemplateOutlet]="isgridFlowOptionOn"></ng-container>
+      </div>
+
       <ng-container  *ngIf="enableFilter" [ngTemplateOutlet]="filter"></ng-container>
     </div>
 
-    <div *ngIf="smallDevice">
-      <mat-divider></mat-divider>
-    </div>
+    <ng-container [ngTemplateOutlet]='divider'></ng-container>
 
     <ng-container [ngTemplateOutlet]='categoryFilterView'></ng-container>
-    <ng-template #categoryFilter>
-      <div *ngIf="authService.isUser && !isApp">
-        <h3><mat-icon color="primary">category</mat-icon>Categories</h3>
-      </div>
-      <div class="grid-flow-categories"  *ngIf="categories && categories.length>0">
-        <div  *ngFor="let item of categories;trackBy: trackByFN">
-            <ng-container
-              [ngTemplateOutlet]="menuItemCard"
-              [ngTemplateOutletContext]="{$implicit: item, type: 'header-category'}">
-            </ng-container>
-        </div>
-      </div>
-    </ng-template>
 
     <ng-container [ngTemplateOutlet]='subcategoryFilter'></ng-container>
-
-    <ng-template #subcategoryFilter>
-      <div  style="margin-top:15px" *ngIf="uiHomePage.storeNavigation && subCategoriesList && subCategoriesList.length>0">
-        <mat-card style="padding:0px;margin-top:5px">
-          <div class="flex-row">
-            <div  class="justify-content" style="position:relative;top:5px;margin:10px"><mat-icon>zoom_in</mat-icon></div>
-            <div>
-              <mat-chip-list  class="flex-row"
-                              style="margin:5px">
-                  <mat-chip   *ngFor="let item of subCategoriesList" color="primary" style="width:100px;justify-content:center;text-align:center" (click)="setSubcategoryID(item.id)">{{item?.name}}</mat-chip>
-              </mat-chip-list>
-            </div>
-          </div>
-        </mat-card>
-      </div>
-    </ng-template>
 
     <div *ngIf="value" class="loader">
       <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
     </div>
 
     <div class="orders-container">
-      <div *ngIf="authService.isUser && !isApp" class="horizontal-view">
+      <!-- <div *ngIf="authService.isUser && !isApp" class="horizontal-view">
         <div>
           <h3><mat-icon color="primary">qr_code</mat-icon>Products & Services</h3>
         </div>
         <div *ngIf="!isApp" style="margin-top:25px;">
           Items found: {{this.totalRecords}}
         </div>
-      </div>
+      </div> -->
+
       <div  *ngIf="menuItems"
-            [class]="ordersListClass"
             infiniteScroll
+            [class]="ordersListClass"
             [infiniteScrollDistance]="2"
             [infiniteScrollThrottle]="50"
             (scrolled)="onScrollDown()"
@@ -84,35 +51,23 @@
       </div>
     </div>
 
-    <ng-template #menuItemCard let-item let-type="type">
-        <app-menu-item-card
-            *ngIf="item"
-            [displayType]="type"
-            [allowEdit] ="userAuths?.editProduct"
-            [id]        ="item?.id"
-            [retail]    ="item?.retail"
-            [name]      ="item?.name"
-            [menuItem]  ="item"
-            [bucketName]="bucketName"
-            [class]     ="infiniteItemClass"
-            [uiHomePage]="uiHomePage"
-            (outputRefresh)="refreshFromSelection($event)"
-            (outPutLoadMore)  ='moveNext($event)' >
-        </app-menu-item-card>
-    </ng-template>
-
     <div [hidden]="true"  class="slidein paging-alignment">
         <div> {{searchDescription}} </div>
         <div *ngIf="endOfRecords"> ...all items loaded.</div>
     </div>
 
-    <!-- loading {{loading}} endOfRecords {{endOfRecords}} -->
     <div class="floating-info slidein loader"  *ngIf="loading " >
       <mat-spinner></mat-spinner>
     </div>
 
   </div>
 </div>
+
+<ng-template #divider>
+  <div *ngIf="smallDevice">
+    <mat-divider></mat-divider>
+  </div>
+</ng-template>
 
 <ng-template #gridFlowOptionView>
   <!-- <button style="height:50px" mat-button (click)="toggleListView()">
@@ -138,4 +93,86 @@
   </div>
 </ng-template>
 
+<div *ngIf="(style$ | async) as styles"></div>
+<div *ngIf="(action$ | async) as list"></div>
+<div *ngIf="(userAuths$ | async) as userAuths"></div>
+<div *ngIf="(subCategories$ | async) as subCategories"></div>
+<div *ngIf="(categories$ | async) as categories"></div>
+<div *ngIf="(departments$ | async) as departments"></div>
+<div *ngIf="(nextPage$ | async) as page"></div>
 
+<ng-template #departmentFilterView>
+  <div  style="margin-left:10px" *ngIf="uiHomePage.storeNavigation && departments && departments.length>0">
+    <!--  <div *ngIf="authService.isUser && !isApp">
+      <div class="flex-row"> <h5> <mat-icon color="primary">category</mat-icon> Departments</h5></div>
+    </div> -->
+    <mat-card style="padding:0px;margin-top:0px">
+      <div class="flex-row">
+        <div>
+          <mat-chip-list  class="flex-row"
+                          style="margin:5px">
+              <mat-chip   *ngFor="let item of departments" color="primary"
+                          style="width:100px;justify-content:center;text-align:center"
+                          (click)="setDepartmentID(item.id)">{{item?.name}}</mat-chip>
+          </mat-chip-list>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</ng-template>
+
+<ng-template #categoryFilter>
+  <!-- <div *ngIf="authService.isUser && !isApp">
+    <h5><mat-icon color="primary">category</mat-icon>Categories</h5>
+  </div> -->
+  <!-- <div style="margin-top:15px;" > -->
+    <div class="grid-flow-categories"
+        style="margin-top:15px;"
+         *ngIf="categories && categories.length>0">
+      <div  *ngFor="let item of categories;trackBy: trackByFN">
+          <ng-container
+            [ngTemplateOutlet]="menuItemCard"
+            [ngTemplateOutletContext]="{$implicit: item, type: 'header-category'}">
+          </ng-container>
+      </div>
+    </div>
+  <!-- </div> -->
+</ng-template>
+
+<ng-template #subcategoryFilter>
+  <div  style="margin-top:15px" *ngIf="uiHomePage.storeNavigation && subCategoriesList && subCategoriesList.length>0">
+    <mat-card style="padding:0px;margin-top:5px">
+      <div class="flex-row">
+        <div  class="justify-content" style="position:relative;top:5px;margin:10px"><mat-icon>zoom_in</mat-icon></div>
+        <div>
+          <mat-chip-list  class="flex-row"
+                          style="margin:5px">
+              <mat-chip   *ngFor="let item of subCategoriesList" color="primary"
+                          style="width:100px;justify-content:center;text-align:center"
+                          (click)="setSubcategoryID(item.id)">{{item?.name}}</mat-chip>
+          </mat-chip-list>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</ng-template>
+
+<ng-template #menuItemCard let-item let-type="type">
+  <!-- <div style="height:250px;"> -->
+    <app-menu-item-card
+        *ngIf             ="item"
+        [displayType]     ="type"
+        [allowEdit]       ="userAuths?.editProduct"
+        [id]              ="item?.id"
+        [retail]          ="item?.retail"
+        [name]            ="item?.name"
+        [menuItem]        ="item"
+        [bucketName]      ="bucketName"
+        [class]           ="infiniteItemClass"
+        [uiHomePage]      ="uiHomePage"
+        (outPutUpdateCategory)="setCategoryID($event)"
+        (outputRefresh)   ="refreshFromSelection($event)"
+        (outPutLoadMore)  ='moveNext($event)' >
+    </app-menu-item-card>
+  <!-- </div> -->
+</ng-template>

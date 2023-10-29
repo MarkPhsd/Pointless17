@@ -1,6 +1,6 @@
 <mat-card *ngIf="order">
   <mat-card-title>
-    Plan Order
+    Plan Order <span style="margin-left:5px" *ngIf="processingUpdate"><mat-spinner [diameter]="25"> </mat-spinner></span>
   </mat-card-title>
 
   <mat-card-subtitle>
@@ -18,19 +18,21 @@
       </div>
     </div>
 
+    <div *ngFor="let item of messages" style="width:300px" >
+      <mat-icon color="warn">feedback</mat-icon><mat-label color="warn">   {{item}}   </mat-label>
+    </div>
   </mat-card-subtitle>
 
   <mat-card-content *ngIf="serviceType">
-
-    <mat-tab-group  mat-align-tabs="start"
+    <mat-tab-group  class="mat-tab-group" mat-align-tabs="start"
                     [(selectedIndex)]="selectedIndex"
                     (selectedIndexChange)="selectChange()">
 
-        <mat-tab label="Sale Type"
+        <mat-tab label="Choose Sale Type"
                  class="sale-type-tab">
           <posorder-service-type
-            (outPutSelectServiceType)='selectedServiceType($event)'>
-            Select Service Type
+              [textLength]="100"
+              (outPutSelectServiceType)='selectedServiceType($event)'>
           </posorder-service-type>
         </mat-tab>
 
@@ -50,35 +52,87 @@
         <mat-tab (click)="selectedIndex == 2"
                 *ngIf   ="serviceType && serviceType?.promptScheduleTime"
                  label  ="Schedule Information">
-          <app-posorder-schedule-form
+          <div style="margin:5px">
+            <app-posorder-schedule-form
+                [inputForm]="scheduleForm"
+                [serviceType]="serviceType"
+                [order]="order"
+                (OutPutSaveShippingTime)="saveShippingTime($event)">
+            </app-posorder-schedule-form>
+          </div>
+        </mat-tab>
+
+        <mat-tab *ngIf="serviceType"
+                 (click)="selectedIndex == 3"
+                 label="Special Requests">
+          <div class="ps-flex-group">
+            <pos-order-notes
               [serviceType]="serviceType"
               [order]="order"
-              (OutPutSaveShippingTime)="saveShippingTime($event)">
-          </app-posorder-schedule-form>
-        </mat-tab>
-
-        <mat-tab (click)="selectedIndex == 3"
-                 label="Special Requests">
-          <pos-order-notes
-            [serviceType]="serviceType"
-            [order]="order"
-            [inputForm]="inputFormNotes">
-          </pos-order-notes>
+              [inputForm]="inputFormNotes">
+            </pos-order-notes>
+          </div>
         </mat-tab>
     </mat-tab-group>
-
   </mat-card-content>
 
-  <mat-card-actions>
-    <div *ngIf="(selectedIndex == 3 ||
-                 selectedIndex == 2) || 
-                (showSaveButton && selectedIndex != 0)">
-      <button mat-raised-button
-              color="primary"
-              (click)="save()">
-        <mat-icon aria-label="save">save</mat-icon>Save and Continue
-      </button>
+  <mat-card-actions  *ngIf="serviceType?.allowRequestPrep && selectedIndex == 3 ||
+                            saveValid"  >
+
+    <h3>Actions</h3>
+
+    <mat-divider style="margin:5px"></mat-divider>
+
+    <div *ngIf="serviceType"
+          class="action-grid">
+      <div>
+        <mat-card  class="communication-grid"
+                   *ngIf="!isStaff && serviceType?.allowRequestPrep && selectedIndex == 3" >
+          <mat-card-title>Send us a message about this order and we'll respond.</mat-card-title>
+          <mat-card-content>
+            <div *ngIf="serviceType"
+                  class="action-grid">
+              <div *ngIf="( messages$ | async) as list">
+                <div *ngFor="let item of list">
+                  <div>
+                    <button
+                            style="margin-bottom:10px;width:200px;height:50px"
+                            mat-raised-button
+                            color="primary"
+                            (click)="sendMessage(item, order)">
+                            <mat-icon>email</mat-icon> {{item?.subject}}
+                    </button>
+                  </div>
+                    <div style="width:300px">
+                      <mat-label style="margin:10px;">{{item?.message}}</mat-label>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div *ngIf="saveValid">
+        <button style="float: left;height:75px;width:125px"
+                mat-raised-button
+                color   ="primary"
+                (click) ="save()">
+          <mat-icon aria-label="save">credit_card</mat-icon> Pay
+        </button>
+      </div>
     </div>
   </mat-card-actions>
 </mat-card>
+
+<div class="instructions" *ngIf="!platFormService.isApp()">
+  <div  *ngIf="serviceType" >
+    <div *ngIf="serviceType">
+      <div *ngIf="instructions"
+           style="margin:10px"
+           [innerHtml]="serviceType?.instructions"></div>
+    </div>
+  </div>
+</div>
+
 <div *ngIf="(action$ | async) as action"></div>

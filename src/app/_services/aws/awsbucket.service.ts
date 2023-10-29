@@ -67,9 +67,12 @@ export class AWSBucketService {
   }
 
   awsBucketURLOBS(): Observable<string> {
-    return this.getAWSBucketObservable().pipe(switchMap(data => {
-      return of(`https://${data.preassignedURL}.s3.amazonaws.com/`)
-    }))
+    return this.getAWSBucketObservable().pipe(
+      switchMap(data => {
+          return of(`https://${data.preassignedURL}.s3.amazonaws.com/`)
+        }
+      )
+    )
   }
 
   constructor(private http            : HttpClient,
@@ -133,23 +136,23 @@ export class AWSBucketService {
       if (bucket) {
         bucket = bucket.replace('https//', '')
       }
-     
+
       if (bucket && `${bucket}`.substring(0, 8 ) === 'https://') {
         path = `https://${bucket}${imageName}`
       } else {
         path = `https://${bucket}.s3.amazonaws.com/${imageName}`
       }
-    
+
     } else {
-    
+
       if (bucket && `${bucket}`.substring(0, 8 ) === 'https://') {
         path = `${bucket}placeholderimage.png`
       } else {
         path = `https://${bucket}.s3.amazonaws.com/placeholderproduct.png`
       }
-     
+
     }
-   
+
     // console.log('path', `${bucket}`.substring(0, 8 ), `${bucket}`, path)
 
     return path;

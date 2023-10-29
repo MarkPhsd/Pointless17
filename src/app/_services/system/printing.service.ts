@@ -4,7 +4,6 @@ import { ITerminalSettings, SettingsService } from 'src/app/_services/system/set
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IClientTable, IPurchaseOrderItem, ISetting, ISite, IUser } from 'src/app/_interfaces';
 import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ElectronService } from 'ngx-electron';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import  html2canvas from 'html2canvas';
@@ -20,8 +19,7 @@ import { PlatformService } from './platform.service';
 import { UserAuthorizationService } from './user-authorization.service';
 import { MenuService, OrdersService } from 'src/app/_services';
 import { POSOrderItemService } from '../transactions/posorder-item-service.service';
-import { OrderMethodsService } from '../transactions/order-methods.service';
-import { HttpBackend, HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { UISettingsService } from './settings/uisettings.service';
 import { PrintingAndroidService} from  './printing-android.service';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
@@ -135,7 +133,7 @@ export class PrintingService {
         this.currentGroupID = groupID;
         this.printOrder = data;
         this.previewReceipt();
-         return of(data);
+        return of(data);
     }))
   }
 
@@ -474,19 +472,19 @@ export class PrintingService {
   printElectron(contents: string, printerName: string, options: printOptions) : boolean {
 
     if (!this.platFormService.isAppElectron) { return }
+
     let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
     if (options.silent) { printWindow.hide(); }
 
-      printWindow.loadURL(contents)
+       printWindow.loadURL(contents)
       .then( e => {
-        // console.log('result of load', e)
         if (options.silent) { printWindow.hide(); }
         if (!options) {  options = this.getdefaultOptions(printerName)  }
 
         printWindow.webContents.print(
           options,
           (success, failureReason) => {
-            console.log('Print Window : printing, success, failurereason', success, failureReason);
+            console.log('Print Window : printing ', success, failureReason);
             printWindow.close();
             printWindow = null;
             return true
@@ -494,7 +492,7 @@ export class PrintingService {
         )
 
         }).catch( err => {
-          // console.log('Print window Load URL error:', err, options)
+          console.log('Print window Load URL error:', err, options)
           this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
           printWindow.close();
           printWindow = null;
@@ -505,6 +503,41 @@ export class PrintingService {
     return false;
 
   }
+
+   async printElectronAsync(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
+    if (!this.platFormService.isAppElectron) { return }
+    let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
+    if (options.silent) { printWindow.hide(); }
+    let result = true;
+    await printWindow.loadURL(contents)
+      .then( e => {
+        if (options.silent) { printWindow.hide(); }
+        if (!options) {  options = this.getdefaultOptions(printerName)  }
+        printWindow.webContents.print(
+          options,
+          (success, failureReason) => {
+            // console.log('Print Window : printing ', success, failureReason);
+            printWindow.close();
+            printWindow = null;
+            result = false
+          }
+        )
+        }).catch( err => {
+          console.log('Print window Load URL error:', err, options)
+          this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
+          printWindow.close();
+          printWindow = null;
+          result = false
+      }
+    )
+    return result;
+  }
+
+  async printElectronIPCAsync(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
+    if (!this.platFormService.isAppElectron) { return }
+    this.electronService.ipcRenderer.send('print', { contents, printerName, options });
+  }
+
 
   printDocuments(printOrderList: IPrintOrders[]): Observable<any> {
 
@@ -618,7 +651,6 @@ export class PrintingService {
 
   printItemLabel(item: any, menuItem$: Observable<IMenuItem>, order: IPOSOrder, joinLabels: boolean ) {
     const site = this.siteService.getAssignedSite()
-    // console.log('print item label', item)
     if (!menuItem$) {
       menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
     }
@@ -640,6 +672,19 @@ export class PrintingService {
       }
     )).pipe(switchMap(menuItem => {
       item.menuItem = menuItem;
+      return this.menuItemService.getProduct(site, item.menuItem.id)
+    })).pipe(switchMap(data => {
+        console.log('packager', data.packager, data)
+        if (data.packager) {
+          return this.getContact(site, data.packager)
+        }
+        return of(null);
+      }
+    )).pipe(switchMap(data => {
+      if (data) {
+        item.lab = data;
+      }
+      console.log('lab', item.lab )
       return this.printLabel(item,  order.history, joinLabels)
     }))
   }
@@ -970,7 +1015,7 @@ export class PrintingService {
   }
 
   previewReceipt(autoPrint?: boolean, order?: IPOSOrder, ) {
-    //get device settings;
+
     if (this.uiSettingsService.posDeviceInfo) {
       if (this.platFormService.androidApp) {
         const device = this.uiSettingsService.posDeviceInfo;
@@ -979,16 +1024,15 @@ export class PrintingService {
         return of(null)
       }
     }
-    //if android
 
-    //if
     if (this.uiSettingsService.posDeviceInfo) {
       if (this.platFormService.androidApp) {
         const device = this.uiSettingsService.posDeviceInfo;
         if (autoPrint) {
           return this.printAuto(device.receiptPrinter, autoPrint)
         }
-        this.printSub(device.receiptPrinter, autoPrint)
+        this.printSub(device.receiptPrinter, autoPrint);
+        return of(null)
       }
     }
 

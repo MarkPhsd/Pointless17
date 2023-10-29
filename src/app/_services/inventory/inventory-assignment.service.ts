@@ -148,6 +148,7 @@ export interface InventoryStatusList {
 })
 
 export class InventoryAssignmentService {
+
   inventoryStatusList  = [
     {id: 1, name: 'In Stock - For Sale'},
     {id: 2, name: 'In Stock - Not for Sale'},
@@ -172,6 +173,8 @@ export class InventoryAssignmentService {
     private siteService: SitesService)
   {
   }
+
+
 
   createManifestFromOrder(site: ISite, manifest: InventoryManifest, order: IPOSOrder): Observable<InventoryManifest> {
 
@@ -399,11 +402,26 @@ export class InventoryAssignmentService {
 
   }
 
-  postInventoryAssignmentList(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment[]): Observable<IInventoryAssignment[]> {
+  assignDefaultLocation(site: ISite, id: number) : Observable<IInventoryAssignment[]> {
+
+    if (site == null) { return null}
+
+    const controller =  `/InventoryAssignments/`
+
+    const endPoint = `assignDefaultLocation`
+
+    const parameters = `?manifestID=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<IInventoryAssignment[]>(url)
+  }
+
+  postInventoryAssignmentList(site: ISite, id: number, list: IInventoryAssignment[]): Observable<IInventoryAssignment[]> {
 
     if (id == null) { return null}
 
-    if (iInventoryAssignment == null) { return null}
+    if (list == null) { return null}
 
     if (site == null) { return null}
 
@@ -415,7 +433,7 @@ export class InventoryAssignmentService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.post<IInventoryAssignment[]>(url, iInventoryAssignment)
+    return  this.http.post<IInventoryAssignment[]>(url, list)
 
   }
 

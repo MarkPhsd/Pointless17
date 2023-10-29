@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -17,7 +17,7 @@ import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
-import { L } from '@angular/cdk/keycodes';
+import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 
 @Component({
   selector: 'app-balance-sheet-edit',
@@ -57,6 +57,15 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   get fivesStart()        { return this.inputForm.get('fivesStart') as UntypedFormControl; }
 
   get platForm()          { return Capacitor.getPlatform(); }
+
+  @ViewChild('coachingInfo', {read: ElementRef}) coachingInfo: ElementRef;
+  @ViewChild('coachingClosedOrders', {read: ElementRef}) coachingClosedOrders: ElementRef;
+  @ViewChild('coachingOpenOrders', {read: ElementRef}) coachingOpenOrders: ElementRef;
+  @ViewChild('coachingStartShift', {read: ElementRef}) coachingStartShift: ElementRef;
+  @ViewChild('coachingCloseShift', {read: ElementRef}) coachingCloseShift: ElementRef;
+
+  // this.coachMarksService.add(new CoachMarksClass(this.coachingStartShift.nativeElement,  list[3]));
+  //     this.coachMarksService.add(new CoachMarksClass(this.coachingCoseShift.nativeElement,  list[4]));
 
   balanceSheet$:   Observable<any>;
   searchForm      : UntypedFormGroup;
@@ -104,8 +113,8 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   initSubscriptions() {
     this.loading = true
     this._sheet = this.sheetMethodsService.balanceSheet$.subscribe( data => {
-      console.log('getting sheet subscription', data)
       this.sheet = data;
+      // console.log('data', this.sheet)
       if (data) {
         this.getSheetType(data)
       }
@@ -143,18 +152,17 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 private sendGridService         :  SendGridService,
                 private printingService         : PrintingService,
                 public platFormService     : PlatformService,
+                public coachMarksService: CoachMarksService,
                 private siteService: SitesService,
               )
   {
 
     this.auths$ = this.authenticationService.userAuths$
     this.auths$.subscribe(data => {
-      data.closeDay
+
     })
     this.cashDropActive  = +this.route.snapshot.paramMap.get('cashdrop');
-    if (this.cashDropActive) {
-      this.selectedIndex = 1;
-    }
+    if (this.cashDropActive) {   this.selectedIndex = 1;  }
   }
 
   ngOnInit() {
@@ -184,21 +192,19 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   ngOnDestroy() {
-    this.sheetMethodsService.updateBalanceSheet(null)
+    // this.sheetMethodsService.updateBalanceSheet(null)
     if (this._openOrders)  { this._openOrders.unsubscribe()}
     if (this._ordersCount) { this._ordersCount.unsubscribe()}
     if (this._searchModel) { this._searchModel.unsubscribe()}
     if (this._user)        { this._user.unsubscribe()}
-    if (this._sheet)       { this._sheet.unsubscribe()}
+    // if (this._sheet)       { this._sheet.unsubscribe()}
   }
 
   newBalanceSheet() {
     //we have to initialize the balance sheet.
     //we should just be sending maybe the device, and the user.
-    console.log('new balance Sheet')
     this.balanceSheet$ = this.sheetMethodsService.getCurrentBalanceSheet().pipe(
       switchMap(data => {
-        console.log('get sheet',data)
         this.getSheetType(data)
         this.sheet = data;
         this.initForm(data)
@@ -207,23 +213,17 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   getSheet(id: string) {
-
     this.balanceSheet$ = this.sheetMethodsService.getSheetObservable(id).pipe(switchMap(data => {
       this.getSheetType(data);
       this.sheet = data;
       this.initForm(this.sheet);
-      console.log('getsheet', data)
       return of(data)
     }))
   }
 
   _updateItem() {
-
     let sheet = this.inputForm.value as IBalanceSheet;
     sheet.overUnderTotal = this.getCurrentBalance()
-    console.log(this.getCurrentBalance(), sheet.overUnderTotal)
-    console.log(sheet)
-
     return this.sheetMethodsService.updateSheet(sheet, this.startShiftInt).pipe(switchMap(data => {
       this.sheet = data;
       return of(data)
@@ -279,7 +279,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   initForm(sheet: IBalanceSheet) {
-    console.log('patch form data', sheet)
     try {
       const form = this.inputForm // this.sheetService.initForm(this.inputForm);
       if (!form)
@@ -287,7 +286,8 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
         return
       }
       if (!sheet)
-       { console.log('form not initiated')
+       {
+        console.log('form not initiated')
         return
       }
 
@@ -304,6 +304,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   updateItem(event) {
     this.balanceSheet$ = this._updateItem().pipe(switchMap(data => {
       // this.router.navigate(['app-main-menu'])
+
       return of(data)
     }))
   }
@@ -315,31 +316,23 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     }))
   }
 
-
-
   startShift() {
     this.startShiftInt = 1;
     this.updateItem(null)
   }
 
   closeSheet(navigateUrl: string) {
-    // this.printingService.updatePrintView(2);
-
     const print$ = this._print(null)
-    this.action$ =
-    print$.pipe(
+    this.action$ = print$.pipe(
       switchMap( data => {
-        // return of(null)
         return this.sendGridService.sendBalanceSheet(this.sheet.id)
     })).pipe(
       switchMap( data => {
         return  this.sheetMethodsService.closeSheet(this.sheet, navigateUrl)
     })).pipe(
       switchMap( data => {
-        // return of(null)
         return of (data)
     }))
-
   }
 
   setEnabledFeatures() {
@@ -448,21 +441,30 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     sheet.overUnderTotal = this.getCurrentBalance()
     return this.sheetMethodsService.updateSheet(sheet, this.startShiftInt).pipe(
       switchMap(data => {
-        if (!data) { return of(null)}
-        return this.printingService.previewReceipt(true)
+        if (!data) {
+          this.siteService.notify('Balance Sheet not assigned for print out.', 'close', 2000, 'red')
+          return of(null)
+        }
+        return of(data)
       }
     )).pipe(
       switchMap(result => {
-        return of(result)
+        if (!result) {
+          this.siteService.notify('Balance Sheet not assigned for print out.', 'close', 2000, 'red')
+          return of(null)
+        }
+
+        this.sheetMethodsService.updateBalanceSheet(result)
+        return this.printingService.previewReceipt(true)
     }));
   }
 
-  previewSheet() {
-    this.printingService.updatePrintView(2);
-    const sheet = this.inputForm.value as IBalanceSheet
-    sheet.overUnderTotal = this.getCurrentBalance()
-    this.balanceSheet$ = this.printingService.previewReceipt(false)
-  }
+  // previewSheet() {
+  //   this.printingService.updatePrintView(2);
+  //   const sheet = this.inputForm.value as IBalanceSheet
+  //   sheet.overUnderTotal = this.getCurrentBalance()
+  //   this.balanceSheet$ = this.printingService.previewReceipt(false)
+  // }
 
   printEndingValues(event){
     this.printingService.updatePrintView(3);
@@ -571,4 +573,29 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     async openCashDrawer(value: number) {
       await this.sheetMethodsService.openDrawerOne()
     }
+
+    initPopOver() {
+      if (this.user?.userPreferences?.enableCoachMarks ) {
+        this.coachMarksService.clear()
+        this.addCoachingList()
+        this.coachMarksService.showCurrentPopover();
+      }
+    }
+
+
+    addCoachingList() {
+      const list =['Balance Sheets: This is where you count your money at the beginging of the shift, and end. This will help management determine the balance of the drawer.' ,
+                  'Open Orders: This is where you see the number of orders you have closed. ',
+                  'Closed Orders: If you have any Open Orders you may not close your shift. If you are unable to close your shift, remember to check this area. ',
+                  'Start Sheet: You should be taken to this screen when the drawer or your balance sheet have not yet been counted. Once you input the values below, you would press Start Sheet',
+                  'Close Sheet: At the end of the shift you would return to this screen. To get here, go to POS from the side menu, then balance sheet. Instead of Start Sheet, you would see Close Sheet.',
+                ]
+      this.coachMarksService.add(new CoachMarksClass(this.coachingInfo.nativeElement,  list[0]));
+      this.coachMarksService.add(new CoachMarksClass(this.coachingOpenOrders.nativeElement, list[1]));
+      this.coachMarksService.add(new CoachMarksClass(this.coachingClosedOrders.nativeElement,  list[2]));
+      this.coachMarksService.add(new CoachMarksClass(this.coachingStartShift.nativeElement,  list[3]));
+      this.coachMarksService.add(new CoachMarksClass(this.coachingCloseShift.nativeElement,  list[4]));
+    }
 }
+
+

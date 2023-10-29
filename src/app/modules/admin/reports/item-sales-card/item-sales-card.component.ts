@@ -34,10 +34,11 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
   @Input() reportName: string;
   @Input() removeGiftCard= true;
   @Input() taxFilter = 0;
+  @Input() includeDepartments: boolean;
 
   adjustments$:  Observable<unknown>;
-  action$ :  Observable<unknown>;
   adjustments: IReportItemSaleSummary;
+  action$ :  Observable<unknown>;
   sales$:  Observable<unknown>;
   showAll: boolean;
   sales: IReportItemSaleSummary
@@ -74,6 +75,10 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     }
 
     const searchModel = {} as IReportingSearchModel
+    if (this.groupBy === 'serviceFees') {
+      searchModel.groupByProduct = true;
+      searchModel.getServiceFees = true
+    }
     if (this.groupBy === 'items') {
       searchModel.groupByProduct = true;
     }
@@ -86,9 +91,12 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     if (this.groupBy === 'type') {
       searchModel.groupByType = true;
     }
+
     if (this.removeGiftCard) {
 
     }
+
+
 
     if (this.groupBy === 'void') {
       searchModel.groupByType = false;
@@ -124,27 +132,6 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     if (this.adjustments) {
       let itemList = list as  IReportItemSales[]
       this.adjustments.results = itemList.sort((a, b) => (a.employee < b.employee ? 1 : -1));
-    }
-  }
-
-  sortName(list) {
-    if (this.sales) {
-      this.sales.results = list.sort((a, b) => (a.productName < b.productName ? 1 : -1));
-    }
-    if (this.adjustments) {
-      let itemList = list as  IReportItemSales[]
-      this.adjustments.results = itemList.sort((a, b) => (a.productName < b.productName ? 1 : -1));
-    }
-  }
-
-  sortSales(list) {
-    if (this.sales) {
-      this.sales.results = list.sort((a, b) => (a.itemTotal < b.itemTotal ? 1 : -1));
-    }
-
-    if (this.adjustments) {
-      let itemList = list as  IReportItemSales[]
-      this.adjustments.results = itemList.sort((a, b) => (a.originalPrice < b.originalPrice ? 1 : -1));
     }
   }
 
@@ -204,6 +191,26 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
       return of(null)
   }
 
+  sortName(list) {
+    if (this.sales) {
+      this.sales.results = list.sort((a, b) => (a.productName < b.productName ? 1 : -1));
+    }
+    if (this.adjustments) {
+      let itemList = list as  IReportItemSales[]
+      this.adjustments.results = itemList.sort((a, b) => (a.productName < b.productName ? 1 : -1));
+    }
+  }
+
+  sortSales(list) {
+    if (this.sales) {
+      this.sales.results = list.sort((a, b) => (a.itemTotal < b.itemTotal ? 1 : -1));
+    }
+
+    if (this.adjustments) {
+      let itemList = list as  IReportItemSales[]
+      this.adjustments.results = itemList.sort((a, b) => (a.originalPrice < b.originalPrice ? 1 : -1));
+    }
+  }
 
 
 }

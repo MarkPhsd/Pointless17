@@ -9,8 +9,11 @@
       </mat-card-title>
 
       <mat-card-subtitle *ngIf="methodsService.connect">
-        <div *ngIf="(action$ | async) as action; else processing">
-        </div>
+
+        <div *ngIf="(processCardPointResonse$ | async) as processCardPointResonse; else processing"> </div>
+
+        <!-- <div *ngIf="(action$ | async) as action; else processing">
+        </div> -->
         <ng-template #processing>
           <div *ngIf="processingTransaction">
             <mat-spinner [diameter]="50"></mat-spinner>

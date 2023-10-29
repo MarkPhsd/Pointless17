@@ -1,10 +1,10 @@
 <div>
-  <button mat-button (click)="refreshSearch()"><mat-icon>refresh</mat-icon></button> 
+  <button mat-button (click)="refreshSearch()"><mat-icon>refresh</mat-icon></button>
 
-  <button mat-button (click)="breakListEdit()"><mat-icon>settings</mat-icon>Breaks</button> 
+  <button mat-button (click)="breakListEdit()"><mat-icon>settings</mat-icon>Breaks</button>
 
-  <button mat-button (click)="getSummary()"><mat-icon>report</mat-icon>Summary</button> 
-  <button mat-button (click)="listResults()"><mat-icon>list</mat-icon>List</button> 
+  <button mat-button (click)="getSummary()"><mat-icon>report</mat-icon>Summary</button>
+  <button mat-button (click)="listResults()"><mat-icon>list</mat-icon>List</button>
 
 </div>
 
@@ -37,6 +37,15 @@
   </mat-form-field>
 </div>
 
+<div >
+  <button
+      mat-button
+      (click)="reset()">
+      Reset
+  </button>
+</div>
+
+
 <div *ngIf="(employees$ | async) as list"
       class="toggle-selector">
   <app-mat-toggle-selector
@@ -46,11 +55,13 @@
   </app-mat-toggle-selector>
 </div>
 
+
+
 <!-- <div>
   <mat-form-field   appearance="outline">
     <mat-label>Page Size</mat-label>
-     <input 
-       type="number" 
+     <input
+       type="number"
        [(ngModel)]="pageSize"
        >
   </mat-form-field>

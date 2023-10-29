@@ -99,7 +99,8 @@ export class SendGridService {
 
   }
 
-  sendTemplateOrder(id: number, history: boolean, emailTo: string, customerName: string, template: string, subject: string): Observable<any> {
+  sendTemplateOrder(id: number, history: boolean, emailTo: string, customerName: string, template: string,
+                    subject: string, message: string, method: string): Observable<any> {
 
     const site = this.siteService.getAssignedSite()
 
@@ -107,7 +108,7 @@ export class SendGridService {
 
     const endPoint = `sendTemplateOrder`
 
-    const parameters = `?id=${id}&history=${history}&emailTo=${emailTo}&emailReceiverName=${customerName}&template=${template}`
+    const parameters = `?id=${id}&history=${history}&emailTo=${emailTo}&emailReceiverName=${customerName}&template=${template}&subject=${subject}&message=${message}&method=${method}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 

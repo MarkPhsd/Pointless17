@@ -57,7 +57,7 @@ export class PrepPrintingServiceService {
           }
         }
       )
-      // console.log('print orders Pre check Expo', templateID, expoName, printOrders)
+
       //assign the expo
       if (expoName && templateID) {
         const location = {} as IPrinterLocation;
@@ -76,7 +76,6 @@ export class PrepPrintingServiceService {
           printOrder.order.posOrderItems = list;
           printOrders.push(printOrder)
         }
-        // console.log('print orders', templateID, expoName, printOrders)
       }
 
       return of(printOrders)
@@ -84,6 +83,7 @@ export class PrepPrintingServiceService {
       if (!printOrders || printOrders.length == 0) { return of(null)}
       return this.printElectronTemplateOrder(printOrders)
     }),catchError(data => {
+
       this.siteService.notify('Error in printing' + data.toString(), 'Close', 5000, 'red')
       return of(data)
     }))
@@ -95,6 +95,7 @@ export class PrepPrintingServiceService {
       const site = this.siteService.getAssignedSite()
       const styles$ = this.appyStylesCachedObservable(site)
       return styles$.pipe(switchMap(data => {
+        // console.log ('printing printElectronTemplateOrder', data)
         return this.dialog.open(PrintTemplatePopUpComponent,
           { width:        '450px',
             minWidth:     '450px',
@@ -107,6 +108,7 @@ export class PrepPrintingServiceService {
     } catch (error) {
       this.siteService.notify('error printElectronTemplateOrder :' + error.toString(), 'close', 5000, 'red')
     }
+    console.log ('nothing printing')
     return of(null)
   }
 

@@ -80,6 +80,7 @@ export class MenusService {
         { name: 'Employees',       method: '' ,minimized: false, routerLink:  '/employee-list',  routerLinkActive:    'employee-list',  icon: 'groups', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Job Types',       method: '' ,minimized: false, routerLink:  '/job-type-list',  routerLinkActive:    'job-type-list',  icon: 'groups', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Clock',           method: '' ,minimized: false, routerLink:  '/employee-clock',  routerLinkActive:   'employee-clock',  icon: 'schedule', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Messaging',       method: '' ,minimized: false, routerLink:  '/message-list',  routerLinkActive:   'message-list',     icon: 'message', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
     {

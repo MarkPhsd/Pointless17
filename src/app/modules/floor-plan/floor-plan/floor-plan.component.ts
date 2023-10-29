@@ -10,6 +10,7 @@ import { FloorPlanMethodService } from '../floor-plan.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { tableProperties } from '../models/helpers';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { IpcSocketConnectOpts } from 'net';
 
 export interface uuidList {
   uuID: string;
@@ -22,8 +23,8 @@ export interface uuidList {
 })
 export class FloorPlanComponent implements OnInit {
 
-  floorPlanRefresh$ : Observable<IPOSOrder[]>;
-
+  floorPlanRefresh$ : Observable<any>;
+  orders$ : Observable<any>;
   displayImage: boolean;
 
   isUserStaff         =   false;
@@ -218,9 +219,7 @@ export class FloorPlanComponent implements OnInit {
   setFloorPlan(item: IFloorPlan) {
     this.floorPlan = item;
     this._floorPlan.next(item);
-    if (this.userMode) {
-      this._userMode.next(true)
-    }
+    if (this.userMode) {  this._userMode.next(true)  }
   }
 
   backup() {
@@ -305,7 +304,6 @@ export class FloorPlanComponent implements OnInit {
     if (orders && orders.length >0 ) {
       orders.forEach(order => {
         const item = {uuID: order.tableUUID, color: 'red'};
-        // console.log('order', item)
         if (!this.floorPlan.template) {
           this.siteService.notify('Template is missing.', 'Close', 2000, 'yellow' )
         }
@@ -316,7 +314,6 @@ export class FloorPlanComponent implements OnInit {
         }
 
       })
-      // this.floorPlan.template = JSON.stringify(this.floorPlan.template)
       this._floorPlan.next(this.floorPlan);
       this.setZoomOnTimer()
     }
@@ -352,32 +349,18 @@ export class FloorPlanComponent implements OnInit {
     if (!event) { return }
     let floorPlan$ : Observable<IFloorPlan>;
 
-    //this is just disabled for development.
-    //should be able to use the cache, because we aren't updating the
-    //table layout in user mode, we are just updating the refernce to the table
-    //but if we are in cached mode it's hard to see changes
-    // if (this.userMode) {
-    //   floorPlan$ = this.floorPlanSevice.getFloorPlanNoBackupCached(site, event.id);
-    // }
-    // if (!this.userMode) {
     floorPlan$ = this.floorPlanSevice.getFloorPlan(site, event.id);
-    // }
 
     this.floorPlanRefresh$ = floorPlan$.pipe(
       switchMap(data => {
-        try {
-          console.log('_getFloorPlan data.template', data?.template.length)
-          data.template  = data.template //JSON.parse(data.template)
-        } catch (error) {
-          console.log('error', error)
-        }
         this.floorPlan = data;
         if (data) {
           return this.orderService.getActiveTableOrders(site, data.id)
         }
         const orders = [] as IPOSOrder[]
-        return of(orders)
-    })).pipe(
+        return of(orders);
+      }
+    )).pipe(
       switchMap( orders => {
 
         if (this.floorPlan  && this.floorPlan.template) {
@@ -385,15 +368,14 @@ export class FloorPlanComponent implements OnInit {
           this.setZoomOnTimer();
         }
 
-        // console.log('active items count ',orders.length)
         if (orders && orders.length>0) {
           this.processActiveItems(orders);
           return of(orders)
         }
 
-        // this.setZoomOnTimer();
-        return of(orders)
+        return of({} as IPOSOrder[]);
     }))
+
   }
 
   byPass(value: any, type: string) {

@@ -158,16 +158,47 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
     this._snackBar.open(message, title, {duration: 2000, verticalPosition: 'bottom'})
   }
 
+  areDatesSame(date1: Date, date2: Date): boolean {
+    return date1.getDate() === date2.getDate() &&
+           date1.getMonth() === date2.getMonth() &&
+           date1.getFullYear() === date2.getFullYear();
+ }
+
+  refreshSearchByName(event) {
+    if (! this.searchModel) {  this.searchModel = {} as PointlessMetrcSearchModel }
+    this.searchModel.name = event;
+    console.log(event)
+  }
+
+  resetSearch() {
+    this.outputClearExceptions.emit(true)
+    this.initSearchModel();
+    this.assignDateSettings()
+    this.pointlessMetrcSalesReport.updateSearchModel( this.searchModel )
+  }
+
   refreshSearch() {
-    this.searchModel.currentDay = false;
+    this.outputClearExceptions.emit(true)
     if (! this.searchModel) {  this.searchModel = {} as PointlessMetrcSearchModel }
     this.searchModel.currentPage = 1;
-    this.outputClearExceptions.emit(true)
+    this.searchModel.currentDay = false;
+    this.assignDateSettings();
     this.pointlessMetrcSalesReport.updateSearchModel( this.searchModel )
   }
 
   reportCurrentSales() {
+    let name = null
+    if (this.searchModel && this.searchModel.name) {
+      if (name) {
+        name = this.searchModel.name;
+        if (name.trim() === '') {
+          this.searchModel.name = null
+        }
+      }
+    }
     this.searchModel = {} as PointlessMetrcSearchModel
+    this.initDateForm()
+    this.searchModel.name = name;
     this.searchModel.currentDay  = true;
     this.searchModel.pageNumber  = 1;
     this.searchModel.currentPage = 1;
@@ -176,15 +207,14 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
     this.pointlessMetrcSalesReport.updateSearchModel( this.searchModel )
   }
 
-  reportZRUNIDSales(id:number) {
+  reportZRUNIDSales(search:string) {
     if (! this.searchModel) {  this.searchModel = {} as PointlessMetrcSearchModel }
     this.searchModel.currentDay = false;
     this.searchModel.startDate = null;
     this.searchModel.endDate = null;
     this.searchModel.employeeID = null;
-    this.searchModel.name= null;
-    this.searchModel.orderID = 0;
-    this.searchModel.zRUN = id.toString();
+    this.searchModel.name= search;
+    this.searchModel.orderID = +search;
     this.searchModel.currentPage = 1;
     this.outputClearExceptions.emit(true)
     this.pointlessMetrcSalesReport.updateSearchModel( this.searchModel )
@@ -194,19 +224,19 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
     this.reportZRUNIDSales(event)
   }
 
+
+
   initSearchModel() {
     const site = this.siteService.getAssignedSite()
     if (!site) { return }
     this.searchModel = {} as PointlessMetrcSearchModel
-    console.log('initSearchModel Filter')
-    this.pointlessMetrcSalesReport.updateSearchModel(this.searchModel)
-    this.searchModel.employeeID  = 0
+    this.initSearchForm();
+    this.initDateForm()
     this.searchModel.pageNumber  = 1;
     this.searchModel.currentPage = 1;
     this.searchModel.pageSize    = 1000;
+    this.searchModel.currentDay = true;
     this.employees$      = this.employeeService.getAllActiveEmployees(site)
-    this.initSearchForm();
-    this.initDateForm()
   }
 
   refreshDateSearch() {
@@ -214,12 +244,6 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
     this.refreshSearch()
   }
 
-  resetSearch() {
-    this.outputClearExceptions.emit(true)
-    this.initSearchModel();
-    this.assignDateSettings()
-    this.refreshSearch();
-  }
 
   initSearchForm() {
     this.searchForm = this.fb.group({
@@ -233,7 +257,6 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
   }
 
   initDateForm() {
-    console.log('init Date Form')
     this.dateRangeForm = new UntypedFormGroup({
       startDate: new UntypedFormControl(),
       endDate  : new UntypedFormControl()
@@ -291,11 +314,14 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
       this.dateFrom = this.dateRangeForm.get("startDate").value
       this.dateTo   = this.dateRangeForm.get("endDate").value
       this.searchModel.zRUN = ''
-      if (this.dateTo && this.dateFrom) {
+      if (this.dateFrom && this.dateTo) {
         this.searchModel.startDate = this.dateHelper.format(this.dateFrom.toISOString(), 'MM/dd/yyyy');
+        if (this.areDatesSame(this.dateFrom , this.dateTo)) {
+          this.dateTo = this.dateHelper.add('d', 1, this.dateFrom)
+        }
         this.searchModel.endDate = this.dateHelper.format(this.dateTo.toISOString(), 'MM/dd/yyyy');
-        return
       }
+      return;
     }
     if (!this.dateRangeForm || !this.dateFrom || !this.dateTo) {
       this.searchModel.startDate = '';

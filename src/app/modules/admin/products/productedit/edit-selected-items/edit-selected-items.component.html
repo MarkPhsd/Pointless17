@@ -102,8 +102,6 @@
 
 </mat-card>
 
-
-
 <ng-template #partBuilderSelector>
   <div class="grid-container-3Column">
     <div>
@@ -113,7 +111,7 @@
         [searchType]="'pB_MainID'"
         [fieldProperty]="'pB_MainID'"
         [id]="pB_MainID"
-        [friendlyName]="'Kit/Recipe'"
+        [placeHolder]="'Kit/Recipe'"
         (itemSelect)="setPartBuilder($event)">
         Kit/Recipe
       </field-value-selector>

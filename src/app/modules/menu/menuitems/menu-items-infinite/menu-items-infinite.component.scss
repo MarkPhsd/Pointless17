@@ -3,6 +3,8 @@
 .parent-container {
   overflow: auto;
   height: 100%;
+  // display: flex;
+  // flex-direction: row;
 }
 
 .card-container {
@@ -32,9 +34,28 @@
 .flex-row {
   display: flex;
   flex-direction: row;
-  // justify-content: center;
-  flex-flow: row wrap
-  // gap: 10px;
+  flex-flow: row wrap;
+
+  @include for-tablet-landscape-up {
+    --gap: 5px;
+    margin-top: 2px;
+    margin-right: 2px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fill, minmax(325px, 1fr) );
+    overflow-y: visible;
+  }
+
+  @include for-phone-only {
+    --gap: 5px;
+    margin-top: 2px;
+    margin-right: 2px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fill, minmax(325px, 1fr) );
+    overflow-y: visible;
+  }
+
 }
 
 .flex-row {
@@ -54,7 +75,6 @@ div.mat-chip-list-wrapper {
   }
 }
 
-
 .justify-content {
   justify-content: center;
   align-items: center;
@@ -62,32 +82,14 @@ div.mat-chip-list-wrapper {
 
 .grid-flow-categories {
   --gap: 5px;
-  margin-top: 2px;
+  top: 0px;
+  position: inherit;
+  margin-top: 5px;
   margin-right: 2px;
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fill, minmax(75px, 1fr) );
   overflow-y: visible;
-
-  @include for-tablet-landscape-up {
-    --gap: 5px;
-    margin-top: 2px;
-    margin-right: 2px;
-    display: grid;
-    gap: var(--gap);
-    grid-template-columns: repeat( auto-fill, minmax(75px, 1fr) );
-    overflow-y: visible;
-  }
-
-  @include for-phone-only {
-    --gap: 5px;
-    margin-top: 2px;
-    margin-right: 2px;
-    display: grid;
-    gap: var(--gap);
-    grid-template-columns: repeat( auto-fill, minmax(75px, 1fr) );
-    overflow-y: visible;
-  }
 }
 
 .grid-flow {
@@ -96,28 +98,28 @@ div.mat-chip-list-wrapper {
   margin-right: 2px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat( auto-fill, minmax(150px, 1fr) );
+  grid-template-columns: repeat( auto-fill, minmax(125px, 1fr) );
   overflow-y: visible;
 
-  @include for-tablet-landscape-up {
-    --gap: 5px;
-    margin-top: 2px;
-    margin-right: 2px;
-    display: grid;
-    gap: var(--gap);
-    grid-template-columns: repeat( auto-fill, minmax(125px, 1fr) );
-    overflow-y: visible;
-  }
+  // @include for-tablet-landscape-up {
+  //   --gap: 5px;
+  //   margin-top: 2px;
+  //   margin-right: 2px;
+  //   display: grid;
+  //   gap: var(--gap);
+  //   grid-template-columns: repeat( auto-fill, minmax(125px, 1fr) );
+  //   overflow-y: visible;
+  // }
 
-  @include for-phone-only {
-    --gap: 5px;
-    margin-top: 2px;
-    margin-right: 2px;
-    display: grid;
-    gap: var(--gap);
-    grid-template-columns: repeat( auto-fill, minmax(115px, 1fr) );
-    overflow-y: visible;
-  }
+  // @include for-phone-only {
+  //   --gap: 5px;
+  //   margin-top: 2px;
+  //   margin-right: 2px;
+  //   display: grid;
+  //   gap: var(--gap);
+  //   grid-template-columns: repeat( auto-fill, minmax(115px, 1fr) );
+  //   overflow-y: visible;
+  // }
 }
 
 .grid-flow-app-margins {
@@ -129,17 +131,19 @@ div.mat-chip-list-wrapper {
 }
 
 .grid-item {
-  max-height: 150px;
-  min-height: 150px;
-  height:     150px;
-  overflow-x: scroll;
+  // max-height: 150px;
+  // min-height: 150px;
+  padding-top     : 2px;
+  padding-bottom  : 2px;
+  height          : 165px;
+  // overflow-x: scroll;
 }
 
 .orders-container {
-  overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-x   : hidden;
+  overflow-y   : hidden;
   padding-right: 5px;
-  margin: 5px;
+  margin       : 5px;
 }
 
 .orders-list-single {

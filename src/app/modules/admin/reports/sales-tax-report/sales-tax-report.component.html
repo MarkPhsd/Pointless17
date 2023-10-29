@@ -38,14 +38,17 @@
         <mat-card-content>
           <div *ngIf="sale.resultsMessage"> <mat-icon>warning</mat-icon>{{sale.resultsMessage}} </div>
           <div class="grid" *ngIf="!sale.resultsMessage" >
-            <div class="grid-item totals_label">Net (pre-tax):</div>
-            <div class="grid-item tax">{{sale.netSales | currency }}  </div>
+            <div class="grid-item totals_label" *ngIf="sale.netSales && sale.netSales !=0 ">Net (pre-tax):</div>
+            <div class="grid-item tax" *ngIf="sale.netSales && sale.netSales !=0 ">{{sale.netSales | currency }}  </div>
 
             <div class="grid-item tax_label">Non-Taxable:</div>
             <div class="grid-item tax">{{sale.nonTaxableSalesTotal | currency}}</div>
 
             <div class="grid-item tax_label"> C.O.G.S. : </div>
             <div class="grid-item tax">{{sale.itemCost | currency }}  </div>
+
+            <div class="grid-item totals_label">All Taxes:</div>
+            <div class="grid-item tax">{{sale.taxTotal1 + sale.taxTotal2 + sale.taxTotal3 | currency }}  </div>
 
             <div class="grid-item tax_label"> Tax 1: </div>
             <div class="grid-item tax">{{sale.taxTotal1 | currency }}  </div>
@@ -54,7 +57,7 @@
             <div class="grid-item tax"> {{sale.taxTotal2 | currency }} </div>
 
             <div class="grid-item tax_label"> Tax 3: </div>
-            <div class="grid-item tax">{{sale.taxTotal3 | currency }}  </div>
+            <div class="grid-item tax"> {{sale.taxTotal3 | currency }}  </div>
 
             <div class="grid-item tax_label" > CRV: </div>
             <div class="grid-item tax"> {{sale.crv | currency }}  </div>
@@ -70,6 +73,10 @@
           </div>
 
           <mat-divider></mat-divider>
+          <div class="grid-footer" >
+            <div class="grid-item other_label">Service Fee/Grat:</div>
+            <div class="grid-item other">{{sale.gratuity | currency }} </div>
+          </div>
 
           <div class="grid-footer" >
             <div class="grid-item totals_label">Profit (net - cost): </div>
@@ -142,6 +149,8 @@
 
             <div class="grid-item other_label">Gift Card:</div>
             <div class="grid-item other">{{sale.giftCardIssuances | currency }} </div>
+
+
 
           </div>
 

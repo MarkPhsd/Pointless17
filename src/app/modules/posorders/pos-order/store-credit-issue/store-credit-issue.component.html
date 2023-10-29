@@ -30,6 +30,7 @@
   </mat-card>
 </div>
 
+<!-- this should be if ther eis a value assigned . it should show information about adding the item -->
 <ng-template #storeCreditInfoView>
   <store-credit-info
     [showPayment]   ="false"
@@ -37,6 +38,7 @@
     [purchaseOrderItem]="purchaseOrderItem"
     [order]         ="order"
     (closeDialog)   ="onCancel($event)" >
+    Issue / Update Info
   </store-credit-info>
 </ng-template>
 
@@ -51,4 +53,5 @@
       Change Value
     </app-key-pad>
 </ng-template>
+
 <div *ngIf="(action$ | async) as action"></div>

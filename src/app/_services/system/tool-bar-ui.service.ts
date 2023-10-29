@@ -111,8 +111,10 @@ export class ToolBarUIService {
       this._orderBar.next(false)
       return
     }
+
     this.orderBar = value
-    this._orderBar.next(value)
+    this._orderBar.next(value);
+
     this.resizeWindow();
   }
 

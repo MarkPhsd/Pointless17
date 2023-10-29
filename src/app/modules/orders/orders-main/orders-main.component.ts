@@ -1,4 +1,4 @@
-import {Component,  OnInit, OnDestroy, AfterViewInit, HostListener, TemplateRef, ViewChild, ChangeDetectorRef, QueryList, ViewChildren,
+import {Component,  OnInit, OnDestroy, AfterViewInit, HostListener, TemplateRef, ViewChild, ChangeDetectorRef, QueryList, ViewChildren, ElementRef,
   }  from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
 import { OrderFilterPanelComponent } from '../order-filter-panel/order-filter-panel.component';
@@ -15,6 +15,9 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
+import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'app-orders-main',
@@ -28,7 +31,17 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('orderPanel')   orderPanel: TemplateRef<any>;
   @ViewChild('orderPrep')    orderPrep: TemplateRef<any>;
   @ViewChild('houseAccountsList')    houseAccountsList: TemplateRef<any>;
+  @ViewChild('houseAccountView') houseAccountView: TemplateRef<any>;
+  @ViewChild('mergeView') mergeView: TemplateRef<any>;
+
   @ViewChildren(InstructionDirective) instructionDirectives: QueryList<InstructionDirective>;
+
+  @ViewChild('coachingSearch', {read: ElementRef}) coachingSearch: ElementRef;
+  @ViewChild('coachingOtherNew', {read: ElementRef}) coachingOtherNew: ElementRef;
+  @ViewChild('coachingHouseAccount', {read: ElementRef}) coachingHouseAccount: ElementRef;
+  @ViewChild('coachingListView', {read: ElementRef}) coachingListView: ElementRef;
+  @ViewChild('coachingPrep', {read: ElementRef}) coachingPrep: ElementRef;
+  @ViewChild('coachingMergeView', {read: ElementRef}) coachingMergeView: ElementRef;
 
   viewHouseAccountListOn: boolean;
 
@@ -37,6 +50,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   posOrdersSelectedList: IPOSOrder[]
   action$: Observable<any>;
 
+  isApp: boolean;
   smallDevice  : boolean;
   site         = this.siteService.getAssignedSite()
   isAuthorized : boolean;
@@ -62,12 +76,17 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   _searchModel: Subscription;
   auths: IUserAuth_Properties
   _UITransaction: Subscription;
+  _terminalSettings: Subscription;
   uiTransactions  = {} as TransactionUISettings;
   uiTransactions$  : Observable<ISetting>;
   scheduleDateStart: string;
   scheduleDateEnd: string;
   showAllOrderInstructions = []  as string[];
-  interval
+  interval;
+
+  // this.uiSettingService.updatePOSDevice(item)
+  terminalSettings: ITerminalSettings;
+
   setPrepInterval() {
     // if (this.viewType == 3) {
     //   this.interval = setInterval(() => {
@@ -76,6 +95,33 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     //   return;
     // }
     // clearInterval(this.interval)
+  }
+
+
+
+  initPopover() {
+    if (this.user?.userPreferences && this.user?.userPreferences?.enableCoachMarks ) {
+      this.coachMarksService.clear()
+      if (this.isStaff && this.coachingSearch) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingSearch.nativeElement, "Search Orders toggles a panel of filters to find orders. "));
+      }
+      if (this.isStaff && this.coachingOtherNew) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingOtherNew.nativeElement, "Other new shows kinds of orders you can start."));
+      }
+      if (this.isStaff && this.coachingHouseAccount) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingHouseAccount.nativeElement, "House Accounts are orders made for special customers with accounts that have delayed payment. "));
+      }
+      if (this.isStaff && this.coachingListView) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingListView.nativeElement, "Toggles the views for orders."));
+      }
+      if (this.isStaff && this.coachingPrep) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingPrep.nativeElement, "Toggles the prep display for kitchen prep / delivery etc.."));
+      }
+      if (this.isStaff && this.coachingMergeView) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingMergeView.nativeElement, "If you are allowed to merge orders, you will see a button that allows you to group orders together and merge them."));
+      }
+      this.coachMarksService.showCurrentPopover();
+    }
   }
 
   initStatusSubscriber() {
@@ -98,6 +144,12 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this._UITransaction = this.uISettingsService.transactionUISettings$.subscribe( data => {
       if (data) {
         this.uiTransactions = data;
+      }
+    })
+
+    this._terminalSettings = this.uISettingsService.posDevice$.subscribe(data => { 
+      if (data) { 
+        this.terminalSettings = data;
       }
     })
   }
@@ -168,6 +220,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initPrintLocationSubscriber();
     this.initSearchModelSubscriber();
     this.initViewTypeSubscriber();
+    this.initUITransactionsSubscriber()
   }
 
   destroySubscriptions() {
@@ -190,6 +243,8 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     private changeDetectorRef: ChangeDetectorRef,
     private uISettingsService: UISettingsService,
     public orderMethodsService: OrderMethodsService,
+    public coachMarksService : CoachMarksService,
+    private platFormService: PlatformService,
     private orderService     : OrdersService)
   {
     this.initAuthorization();
@@ -205,6 +260,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initSubscriptions();
     this.printerLocations$ = this.printerService.getLocations()
     this.auths = this.authenticationService.userAuths;
+    this.isApp = (this.platFormService.isAppElectron || this.platFormService.androidApp)
 
   }
 
@@ -288,6 +344,115 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  refreshSearch() {
+    this.orderMethodsService.updateOrderSearchModel(this.searchModel)
+  }
+
+  // closedOpenAllOrders: 1
+  // completionDate_From: ""
+  // completionDate_To: ""
+  // employeeID: 0
+  // greaterThanZero: 0
+  // onlineOrders: false
+  // pageNumber: 1
+  // pageSize: 50
+  // prepStatus: 1
+  // printLocation: 0
+  // scheduleDate_From: null
+  // scheduleDate_To: null
+  // suspendedOrder: 0
+
+  get filterIsSet() { 
+    let filterIsSetOption = false
+
+    if (this.searchModel) { 
+
+      const search =  this.searchModel
+      
+      if (search.closedOpenAllOrders && search.closedOpenAllOrders != 1) { 
+        filterIsSetOption = true
+        // console.log('closedOpenAllOrders', search.closedOpenAllOrders)
+        return true
+      }
+
+      if (search.closedOpenAllOrders == 0) { 
+        // console.log('closedOpenAllOrders', search.closedOpenAllOrders)
+        return true
+      }
+
+      if (search.completionDate_From || search.completionDate_To) { 
+        if (search.completionDate_From != '') { 
+          // console.log('completion', search.completionDate_From)
+          return true
+        }
+      }
+      
+      if (search.serviceTypeID && search.serviceTypeID !=0  ) { 
+        // console.log('service')
+        return true
+      }
+
+      if (search.employeeID && search.employeeID !=0  ) { 
+        // console.log('employee')
+        return true
+      }
+
+      if (search.suspendedOrder == 1 ) { 
+        // console.log('suspended',search.suspendedOrder)
+        return true
+      }
+
+      if (search.scheduleDate_From  || search.scheduleDate_To) { 
+        // console.log('scheduleDate_From',search.scheduleDate_From)
+        return true
+      }
+      if (search.searchOrderHistory) { 
+        // console.log('searchOrderHistory',search.searchOrderHistory)
+        return true
+      }
+
+      if (search.prepStatus && search.prepStatus != 1) { 
+        // console.log(search)
+        return true
+      }
+      if (search.onlineOrders) { 
+        // console.log(search)
+        return true
+      }
+
+      if (search.orderID) { 
+        // console.log(search)
+        return true
+      }
+      
+      if (search.greaterThanZero && search.greaterThanZero != 0) { 
+        // console.log(search)
+        return true
+      }
+
+    }
+
+    return filterIsSetOption;
+  }
+
+  showAllOpenOrders() { 
+    this.searchModel.closedOpenAllOrders = 1
+    this.searchModel.completionDate_From = null;
+    this.searchModel.completionDate_To = null;
+    this.searchModel.orderID = null;
+    this.searchModel.employeeID = 0;
+    this.searchModel.pageSize = 25;
+    this.searchModel.pageNumber = 1;
+    this.searchModel.searchOrderHistory = false
+    this.searchModel.prepStatus  = null;
+    this.searchModel.onlineOrders = null;
+    this.searchModel.serviceTypeID = null;
+    this.searchModel.suspendedOrder  = 0;
+    this.searchModel.routeDetailID  = null;
+    this.searchModel.greaterThanZero = 0;
+    this.orderMethodsService.updateOrderSearchModel(this.searchModel)
+  }
+
   refreshPrep() {
     this.searchModel.printLocation = this.printLocation;
     this.searchModel.prepStatus = this.prepStatus
@@ -331,6 +496,21 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
       return this.ordersSelectedView;
     }
     this.posOrdersSelectedList = []
+  }
+
+  get houseAccount() { 
+    // this.auths.hou
+    if (this.auths && this.auths.houseAccountPayment) { 
+      return this.houseAccountView
+    }
+    return null;
+  }
+
+  get mergeViewEnabled() { 
+    if (this.auths && this.auths.houseAccountPayment) { 
+      return this.mergeView
+    }
+    return null;
   }
 
   addOrderToSelectedList(order: IPOSOrder) {

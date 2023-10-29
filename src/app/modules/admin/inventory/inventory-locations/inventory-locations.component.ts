@@ -36,7 +36,7 @@ export class InventoryLocationsComponent implements OnInit, AfterViewInit, OnCha
   imgName: string;
   location: IInventoryLocation;
 
-  columnsToDisplay = ['id', 'name', 'activeLocation', 'edit'];
+  columnsToDisplay = ['id', 'name', 'defaultLocation', 'activeLocation', 'edit'];
 
   constructor(
             private _snackBar: MatSnackBar,
@@ -88,6 +88,7 @@ export class InventoryLocationsComponent implements OnInit, AfterViewInit, OnCha
       name: ['', Validators.required],
       activeLocation: [false],
       id: [''],
+      defaultLocation: [],
     })
     this.imgName = ""
   }

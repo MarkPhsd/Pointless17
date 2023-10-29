@@ -1,6 +1,9 @@
+
+<div *ngIf="(action$ | async) as action"></div>
 <mat-card *ngIf="product"
           class="mat-card-view">
   <mat-card-content>
+
     <div class="grid-container grids-container">
       <button class="info-buttons"  mat-button color="accent" (click)="editWebProduct()"><mat-icon>web</mat-icon>Web Info</button>
       <button class="info-buttons"  mat-button color="accent" (click)="editProduct()"><mat-icon>info</mat-icon>Item Edit</button>
@@ -11,6 +14,7 @@
           class="toggle-view"
           [(ngModel)]="toggleLabelEvents"
       >
+      <mat-button-toggle value="events" (click)="onToggleLabelEvents('info')">Info</mat-button-toggle>
       <mat-button-toggle value="labels" (click)="onToggleLabelEvents('labels')">Labels</mat-button-toggle>
       <mat-button-toggle value="events" (click)="onToggleLabelEvents('events')">Events</mat-button-toggle>
       <mat-button-toggle value="events" (click)="onToggleLabelEvents('inv')">INV</mat-button-toggle>
@@ -68,6 +72,11 @@
         </div>
 
     </div>
+
+    <div  *ngIf="toggleLabelEvents == 'info'">
+      <ng-container [ngTemplateOutlet]="info"></ng-container>
+    </div>
+
   </mat-card-content>
 
 </mat-card>
@@ -76,3 +85,112 @@
   <mat-spinner></mat-spinner>
 </ng-template>
 
+<ng-template #info>
+  <!-- <div *ngIf="product">
+    <button mat-button color="primary" (click)="saveProduct()"><mat-icon>save</mat-icon>Save</button>
+  </div> -->
+
+  <div *ngIf="product && (itemType$ | async) as itemType" class="info-panel">
+    <ng-container [ngTemplateOutlet]="productBasics"></ng-container>
+    <ng-container [ngTemplateOutlet]="priceCategorySelector"></ng-container>
+    <ng-container [ngTemplateOutlet]="cannabis"></ng-container>
+    <ng-container [ngTemplateOutlet]="liquor"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #productBasics>
+  <!-- <ng-container [ngTemplateOutlet]="productCount"></ng-container> -->
+  <ng-container [ngTemplateOutlet]="reOrderAmount"></ng-container>
+  <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
+</ng-template>
+
+<ng-template #cannabis>
+  <div *ngIf="fbProductsService.isCannabis(iItemType)">
+    <cannabis-item-edit [product]  ="product"
+      [inputForm]="productForm">
+    </cannabis-item-edit>
+  </div>
+</ng-template>
+
+<ng-template #liquor>
+  <div *ngIf="fbProductsService.isLiquor(iItemType)">
+    <ng-container [ngTemplateOutlet]="countryOfOrigin"></ng-container>
+    <ng-container [ngTemplateOutlet]="proof"></ng-container>
+    <ng-container [ngTemplateOutlet]="yearsOld"></ng-container>
+    <ng-container [ngTemplateOutlet]="abv"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #productCount>
+  <app-value-fields
+        [inputForm]="productForm"
+        [fieldName]="'productCount'">
+      Count
+  </app-value-fields>
+</ng-template>
+
+<ng-template #proof>
+  <app-value-fields
+        [inputForm]="productForm"
+        [fieldName]="'proof'">
+      Proof
+  </app-value-fields>
+</ng-template>
+
+<ng-template #reOrderAmount>
+  <app-value-fields
+    [inputForm]="productForm"
+    [fieldName]="'reOrderAmount'" >
+    Re-Order Amount
+  </app-value-fields>
+</ng-template>
+
+<ng-template #priceCategorySelector>
+  <div *ngIf="fbProductsService.usesPriceCategory(iItemType)">
+    <app-price-category-select
+      [itemType]        ="iItemType"
+      [priceCategoryID] ="product?.priceCategory"
+      [inputForm]       ="productForm" >
+    </app-price-category-select>
+  </div>
+</ng-template>
+
+<ng-template #reOrderLevel>
+  <app-value-fields
+      [inputForm]="productForm"
+      [fieldName]="'reOrderLevel'">
+      Re Order Level
+  </app-value-fields>
+</ng-template>
+
+<ng-template #abv>
+  <app-value-fields
+      [inputForm]="productForm"
+      [fieldName]="'abv'" >
+    ABV
+  </app-value-fields>
+</ng-template>
+
+<ng-template #yearsOld>
+  <app-value-fields
+    [inputForm]="productForm"
+    [fieldName]="'yearsOld'" >
+    Year Made
+  </app-value-fields>
+</ng-template>
+
+<ng-template #style>
+  <app-value-fields
+    [inputForm]="productForm"
+    [fieldName]="'style'">
+    Value
+  </app-value-fields>
+</ng-template>
+
+<ng-template #countryOfOrigin>
+  <app-value-fields
+  [inputForm]="productForm"
+  [fieldName]="'countryOfOrigin'">
+  Country Of Origin
+  </app-value-fields>
+</ng-template>

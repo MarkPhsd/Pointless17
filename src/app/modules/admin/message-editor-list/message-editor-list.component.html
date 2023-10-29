@@ -1,0 +1,227 @@
+<div *ngIf="(action$ | async) as action"></div>
+<div  class="grid-container">
+
+  <div  [formGroup]="searchForm"
+        class="grid-item" >
+    <mat-form-field appearance="outline" class="form-fields">
+        <mat-label >Search Items</mat-label>
+          <input
+                  #input
+                  matInput
+                  type           ="text"
+                  id             ="name"
+                  formControlName="itemName">
+    </mat-form-field>
+  </div>
+
+  <div class="grid-item">
+    <ng-container [ngTemplateOutlet]="typeListSelector"></ng-container>
+  </div>
+
+  <div class="grid-item" [formGroup]="searchForm">
+    <div>
+      <mat-label  >Template</mat-label>
+    </div>
+    <div>
+      <mat-slide-toggle
+            name="template"
+            class="mat-label"
+            (change)="refreshSearch()"
+            formControlName="template">
+      </mat-slide-toggle>
+    </div>
+  </div>
+
+  <div class="grid-item" [formGroup]="searchForm">
+    <div>
+      <mat-label>Archived</mat-label>
+    </div>
+    <div>
+      <mat-slide-toggle
+            name="template"
+            class="mat-label"
+            (change)="refreshSearch()"
+            formControlName="archived">
+      </mat-slide-toggle>
+    </div>
+  </div>
+
+  <div class="grid-item">
+    <button mat-button
+      class="assign-button"
+      (click)="listAll()"> <mat-icon>refresh</mat-icon>Refresh</button>
+  </div>
+
+  <div class="grid-item">
+    <button mat-button
+      class="assign-button"
+      (click)="addNew()"> <mat-icon>add</mat-icon>
+      Add </button>
+  </div>
+
+  <div class="grid-item">
+    <button mat-button (click)="initMessageListDefault()"><mat-icon>edit</mat-icon>Create <br> Default Templates</button>
+  </div>
+
+  <div class="grid-item">
+    <button mat-button (click)="viewSettings = !viewSettings"><mat-icon>settings</mat-icon> <br>Settings</button>
+  </div>
+  {{viewSettings}}
+
+</div>
+
+
+<mat-divider></mat-divider>
+
+<div *ngIf="value" class="loader">
+  <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+</div>
+
+<div class="grid-list-container">
+
+  <div class="grid-list-dimensions" >
+
+    <!-- <div> height: calc(90vh - 200px) -->
+      <div>
+        <ag-grid-angular
+              #agGrid
+              [style]              ="'width: 100%; height: calc(90vh - 150px)'"
+              id                   ="myGrid"
+              [class]              ="agtheme"
+              [columnDefs]         ="columnDefs"
+              [defaultColDef]      ="defaultColDef"
+              [gridOptions]        ="gridOptions"
+              [rowSelection]       ="rowSelection"
+              [frameworkComponents]="frameworkComponents"
+              (selectionChanged)   ="onSelectionChanged($event)"
+              (gridReady)          ="onGridReady($event)">
+      </ag-grid-angular>
+    </div>
+
+  </div>
+  <div>
+    <ng-container [ngTemplateOutlet]="settingsView"></ng-container>
+    <ng-container [ngTemplateOutlet]="messageInfoView"></ng-container>
+  </div>
+</div>
+
+<ng-template #typeListSelector>
+  <div *ngIf="searchForm" [formGroup]="searchForm">
+    <mat-form-field  appearance="outline">
+        <mat-select
+              type="number"
+              (selectionChange)="refreshSearch()"
+              [formControlName] ="'type'">
+          <mat-option   [value]="">
+            Clear
+          </mat-option>
+          <span *ngIf="typeList">
+            <mat-option
+                  *ngFor="let item of typeList"
+                  [value]="item.id">
+              {{item.name}}
+            </mat-option>
+          </span>
+        </mat-select>
+    </mat-form-field>
+  </div>
+</ng-template>
+
+
+<ng-template #messageSettings>
+
+  <save-changes-button
+            *ngIf="settingsForm"
+            [inputForm]="settingsForm"
+            (updateSetting)="updateSetting()">
+  </save-changes-button>
+
+  <mat-card>
+
+    <mat-card-content
+            *ngIf="settingsForm"
+            [formGroup]="settingsForm"
+            class="grid-view-sections" >
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="autoNotifyOnItemCompletion"  >
+            <mat-label>Auto Notify On Item Completion</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+    </mat-card-content>
+
+  </mat-card>
+
+  <div *ngIf="savingSettings$">
+    <div *ngIf="(savingSettings$ | async) as item; else saving">
+      {{message}}
+    </div>
+  </div>
+
+  <mat-divider class="margin-5px"></mat-divider>
+</ng-template>
+
+<ng-template #saving>
+  <div class="saving-container">
+    <mat-spinner [diameter]="50"></mat-spinner>
+    ..saving
+  </div>
+</ng-template>
+
+<ng-template #messageInfoView>
+  <mat-card *ngIf="(requestMessage$ | async) as item" >
+
+    <button class="margin-5px" mat-raised-button color="primary" (click)="openMessage(item)"><mat-icon>open_in_new</mat-icon>Open </button>
+    <button style="float:right" class="margin-5px" mat-raised-button color="warn" (click)="delete(item)"><mat-icon>delete</mat-icon>Delete </button>
+
+    <div class="message-grid" style="margin-bottom:10px">
+      <div>Type </div>
+      <div>{{ getMessageType(item?.type)?.name}}</div>
+
+      <div>Sender</div>
+      <div>{{item?.senderName}}</div>
+
+      <div>Created</div>
+      <div>{{item?.requestDate | date : 'short'}}</div>
+
+      <div>Completed</div>
+      <div>{{item?.requestCompleted | date : 'short'}}</div>
+
+      <div>Order ID</div>
+      <div>{{item?.orderID}}</div>
+
+      <div>
+        <mat-label  >Template</mat-label>
+      </div>
+      <div>
+        <mat-slide-toggle
+              name="template"
+              class="mat-label"
+              [ngModel]="item?.template">
+        </mat-slide-toggle>
+      </div>
+
+      <div>
+        <mat-label  >Archived</mat-label>
+      </div>
+      <div>
+        <mat-slide-toggle
+              name="template"
+              class="mat-label"
+
+              [ngModel]="item?.archived">
+
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div style="margin-top:15px">
+      {{item?.message}}
+    </div>
+
+  </mat-card>
+</ng-template>

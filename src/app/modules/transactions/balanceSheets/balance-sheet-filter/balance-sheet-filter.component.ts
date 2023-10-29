@@ -1,6 +1,6 @@
 import {Component,  Output,
   OnInit,  ViewChild, ElementRef, EventEmitter, OnDestroy}  from '@angular/core';
-import { IUser } from 'src/app/_interfaces';
+import { ISite, IUser } from 'src/app/_interfaces';
 import { IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EmployeeService} from 'src/app/_services/people/employee-service.service';
@@ -52,6 +52,8 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
   dateRange     : string;
   counter       : number;
 
+  site: ISite;
+
   initSubscriptions() {
       this._searchModel = this.sheetMethodsService.balanceSearchModelSheet$.subscribe( data => {
         this.searchModel  = data
@@ -75,6 +77,7 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.site           = this.siteService.getAssignedSite()
     this.initPlatForm();
     this.initDateForm()
     this.initSearchForm();
@@ -140,16 +143,16 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
 
   initEmployeeList(){
     this.refreshEmployees();
-    const site           = this.siteService.getAssignedSite()
+    const site           = this.siteService.getAssignedSite();
     if (site) {
       setInterval(this.refreshEmployees,  (60*1000) *5);
     }
    }
 
   refreshEmployees() {
-    const site           = this.siteService.getAssignedSite()
-    if (site) {
-      this.employees$      = this.orderService.getActiveEmployees(site)
+    //
+    if (this.site) {
+      this.employees$ = this.employeeService.getAllActiveEmployees(this.site)
     }
   }
 

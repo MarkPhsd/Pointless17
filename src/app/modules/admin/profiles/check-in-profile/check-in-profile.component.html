@@ -1,23 +1,17 @@
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(clientType$ | async) as clientType"></div>
+<div *ngIf="( bottomSheet$ | async) as sheet"></div>
 <div *ngIf="clientTable && inputForm && transactionUISettings; else loading" >
 
-  <div *ngIf="inputForm.controls?.firstName.errors?.required && inputForm.controls?.firstName.touched" class="error">
-    <mat-icon color="warn">warning</mat-icon> Full Name required in basic tab.
+  <span #coachingAlertMessages></span>
+  <div *ngIf="inputForm">
+    <div *ngIf="inputForm.controls?.firstName.errors?.required && inputForm.controls?.firstName.touched" class="error">
+      <mat-icon color="warn">warning</mat-icon> Full Name required in basic tab.
+    </div>
+    <div *ngIf="inputForm.controls?.lastName.errors?.required && inputForm.controls?.lastName.touched" class="error">
+      <mat-icon color="warn">warning</mat-icon> Name required in basic tab.
+    </div>
   </div>
-  <div *ngIf="inputForm.controls?.lastName.errors?.required && inputForm.controls?.lastName.touched" class="error">
-    <mat-icon color="warn">warning</mat-icon> Name required in basic tab.
-  </div>
-
-  <!-- //medPrescriptionExpiration -->
-
-  <!-- <div *ngIf="inputForm.controls?.medLicenseNUmber.errors?.required && inputForm.controls?.medLicenseNUmber.touched" class="error">
-    <mat-icon color="warn">warning</mat-icon> Pattern required 00-000-000-AA
-  </div> -->
-
-  <!-- <div *ngIf="inputForm.controls?.medLicenseNUmber?.errors">
-    {{inputForm.controls?.medLicenseNUmber?.errors | json}}
-  </div> -->
 
   <mat-card>
     <mat-card-title>
@@ -25,9 +19,9 @@
           <div>
             <div>
               <h3>Profile Editor</h3>
+              <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
             </div>
             <div>
-
               <div *ngIf="accountDisabled" >
                 <h3 >Alert - Account is Disabled - Orders can't be processed.</h3>
                 <mat-label  class="error" color="warn" >
@@ -50,7 +44,7 @@
                 (outputupdateonCancel)  ="navUserList($event)"
                 (outPutStartOrder)      ="startOrder($event)"
                 [enableDelete]= "true"
-                [enableStartOrder]="true"
+                [enableStartOrder]="enableStartOrder"
               ></app-edit-buttons-standard>
             </div>
 
@@ -59,6 +53,10 @@
                  class="grid-buttons toggle-container" >
 
               <div>
+                <mat-icon class="mat-label-info"
+                color="accent"
+                [matTooltip]="labelingService.profile[0].value">info</mat-icon>
+
                 <mat-slide-toggle
                         name="accountDisabled"
                         formControlName="accountDisabled">
@@ -67,6 +65,10 @@
               </div>
 
               <div>
+                <mat-icon class="mat-label-info"
+                color="accent"
+                [matTooltip]="labelingService.profile[1].value">info</mat-icon>
+
                 <mat-slide-toggle
                         name="accountLocked"
                         formControlName="accountLocked">
@@ -98,14 +100,25 @@
                       (swipeleft)="swipe(1, $event.type)"
                       (swiperight)="swipe(1, $event.type)">
 
-              <span *ngIf="transactionUISettings">
+              <span *ngIf="transactionUISettings" >
+
                 <app-profile-demographics
                   [client]      ="clientTable"
                   [inputForm]   ="inputForm"
                   [isAuthorized]="isAuthorized"
                   [enableMEDClients]="enableMEDClients"
                   [isStaff]="isStaff">
+
+                  <div id="coachingMedical">
+                    <div  #coachingMedical></div>
+                  </div>
+
+                  <div id="coachingDisabledMessage">
+                    <span #coachingDisabledMessage></span>
+                  </div>
+
                 </app-profile-demographics>
+
               </span>
             </mat-tab>
 
@@ -139,63 +152,57 @@
             <mat-tab label="Transactions"
                     (swipeleft)="swipe(1, $event.type)"
                      (swiperight)="swipe(1, $event.type)">
-              <div class="order-panel">
-                <div class="grid-ranges">
-                  <div>
+
+              <div class="ps-flex-group-content-start" >
+                  <div class="margin-5">
+                    <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+
+                      <mat-button-toggle value="Pending Orders"
+                                          (click)="showOnlyOpenOrders()">Pending Orders</mat-button-toggle>
+
+                      <mat-button-toggle  (click)="showClosedOrders()"
+                                          value="Closed Orders">Closed Orders</mat-button-toggle>
+
+                      <mat-button-toggle  (click)="showSuspendedOrders()"
+                                        value="suspended Orders">Suspended Orders</mat-button-toggle>
+
+                    </mat-button-toggle-group>
+                  </div>
+
+                  <div class="margin-5"
+                       *ngIf="searchModel && searchModel.closedOpenAllOrders == 2">
                     <mat-date-range
                       [inputForm]      ="dateRangeForm"
                       (outputDateRange)="emitDatePickerData($event)">
                     </mat-date-range>
                   </div>
 
-                  <div class="grid-selecttype" >
-                    <div>
-                    </div>
-                      <div>
-                        <app-mat-select
-                          style="
-                                      margin-top: 5px;
-                                      height: 1em;
-                                      font-size: 1em;"
-                                      class="app-mat-select" [list]="dateRangeList"
-                                      [inputForm] ="selectForm"
-                                      [fieldName]="'rangeSelect'"
-                                      (outputItem)="chooseDateRangeValue($event)">
-                                      Select Range</app-mat-select>
-                      </div>
+                  <div class="margin-5">
+                    <app-mat-select
+                        style=" height: 1em; font-size: 1em;"
+                        [list]="dateRangeList"
+                        [inputForm] ="selectForm"
+                        [fieldName]="'rangeSelect'"
+                        (outputItem)="chooseDateRangeValue($event)">
+                        Select Range
+                    </app-mat-select>
                   </div>
 
-                  <div class="filter-buttons">
-                    <div>
-                      <button
-                          mat-raised-button
-                          color="primary"
-                          class="pending-button"
-                          (click)="showOnlyOpenOrders()">Pending Orders
-                      </button>
-                    </div>
-
-                    <div>
-                      <button
-                        mat-raised-button
-                        color="primary"
-                        class="pending-button"
-                        (click)="showClosedOrders()">Closed Orders
-                      </button>
-                    </div>
+                  <div class="margin-5">
+                    <button mat-raised-button
+                            style="margin-top:5px"
+                            [disabled]="closedOrdersEnabled"
+                            color="primary"
+                            (click)="consolidateClientOrders()">Consolidate House Account Orders
+                    </button>
                   </div>
-
                 </div>
 
                 <div *ngIf="isAuthorized">
-                  <button mat-raised-button
-                          color="primary"
-                          (click)="consolidateClientOrders()">Consolidate House Account Orders</button>
                    <app-orders-list
                       [height]="'47vh'"
                   ></app-orders-list>
                 </div>
-              </div>
             </mat-tab>
 
             <mat-tab *ngIf="isAuthorized"
@@ -255,4 +262,10 @@
   <mat-spinner></mat-spinner>
 </ng-template>
 
+<ng-template #helpButton>
+  <coach-marks-button
+        (initPopOver)="initPopover()"
+        [enabled]="user?.userPreferences?.enableCoachMarks">
+  </coach-marks-button>
+</ng-template>
 

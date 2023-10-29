@@ -35,7 +35,7 @@ export class UIHomePageSettingsComponent implements OnInit {
 
     this.saving$  = null;
     this. uiHomePage$ = this.settingsService.getUIHomePageSettingsNoCache().pipe(
-      switchMap(
+    switchMap(
         data => {
         if (data) {
           this.inputForm = this.uISettingsService.initHomePageForm(this.inputForm)

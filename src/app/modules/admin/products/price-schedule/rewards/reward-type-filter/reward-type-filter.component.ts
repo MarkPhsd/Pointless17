@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, TemplateRef, ViewChildren } from '@angular/core';
 import { CheckboxRequiredValidator, FormArray, FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule,  DiscountInfo } from 'src/app/_interfaces/menu/price-schedule';
@@ -50,10 +50,12 @@ import { trigger, transition,  animate, animation, style, state, keyframes, quer
       ])
     ])
   ]
-
 })
 
 export class RewardTypeFilterComponent  implements OnInit {
+
+  @ViewChild('itemTypeView') itemTypeView: TemplateRef<any>;
+  @ViewChild('noItemList') noItemList: TemplateRef<any>;
 
   @Input() inputForm : UntypedFormGroup;
   @Input() item      : IPriceSchedule;
@@ -110,6 +112,19 @@ export class RewardTypeFilterComponent  implements OnInit {
     }
   }
 
+  get itemTypeViewList() {
+    if (this.priceScheduleTracking && this.priceScheduleTracking.type != 'Menu List') {
+      return this.itemTypeView
+    }
+    return null
+  }
+
+  get noItemListView() {
+    if (this.priceScheduleTracking && this.priceScheduleTracking.type != 'Menu List') {
+      return null
+    }
+    return this.noItemList
+  }
 
   resetSearch() {
     this.lastSelectedCategory     = null ; "lastSelectedCategory"

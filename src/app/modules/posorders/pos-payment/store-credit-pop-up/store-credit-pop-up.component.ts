@@ -41,7 +41,6 @@ export class StoreCreditPopUpComponent implements OnInit,OnDestroy {
   }
 
   constructor(
-    private orderService             : OrdersService,
     public orderMethodsService       : OrderMethodsService,
     private storeCreditMethodsService: StoreCreditMethodsService,
     private dialogRef                : MatDialogRef<StoreCreditPopUpComponent>,
@@ -105,7 +104,7 @@ export class StoreCreditPopUpComponent implements OnInit,OnDestroy {
     }
 
     if (this.searchModel) {
-      console.log('returning current template, gifcard scan')
+      // console.log('returning current template, gifcard scan')
     }
     return this.currentTemplate
   }

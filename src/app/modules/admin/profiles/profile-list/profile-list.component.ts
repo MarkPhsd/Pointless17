@@ -1,5 +1,5 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit, Input,
-         AfterViewInit,ElementRef, HostListener, OnDestroy } from '@angular/core';
+         AfterViewInit,ElementRef, HostListener, OnDestroy, TemplateRef } from '@angular/core';
 import { ClientSearchModel, ClientSearchResults, Item,  IUserProfile, }  from 'src/app/_interfaces';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,6 +18,8 @@ import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { SettingsService } from 'src/app/_services/system/settings.service';
 
 @Component({
   selector: 'app-profile-list',
@@ -34,7 +36,9 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() notifier:          Subject<boolean>
     gridlist = "grid-list"
     @ViewChild('input', {static: true}) input: ElementRef;
+    @ViewChild('keyboardView') keyboardView : TemplateRef<any>;
 
+    enableKeyboard: boolean;
     dataSource:                 any;
     item:                       Item; //for routing
     id:                         string;
@@ -52,6 +56,15 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
            this.refreshSearch()
       )
     )
+
+
+
+    get enableKeyboardView() {
+      if (this.enableKeyboard) {
+        return this.keyboardView;
+      }
+      return;
+    }
 
     get platForm() {  return Capacitor.getPlatform(); }
     get PaginationPageSize(): number {return this.pageSize;  }
@@ -92,7 +105,6 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
     currentCountOfPendingOrders:  any;
 
     expandedElement:              IUserProfile | null;
-    columnsToDisplay = ['firstName', 'lastName', 'phone', 'edit', 'checkIn', 'cancelCheckIn', 'openOrder', 'id'];
 
     selected        : any[];
     selectedRows    : any;
@@ -104,7 +116,8 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
     _searchModel  : Subscription;
     searchModel   : ClientSearchModel;
     smallDevice: boolean;
-
+    uiSettings$ : Observable<TransactionUISettings>;
+    uiSettings: TransactionUISettings;
     buttoncheckInName = 'Check In'
     buttonName        = 'Edit' //if edit off then it's 'Assign'
       //Do this next!!
@@ -128,22 +141,24 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
                 private siteService: SitesService,
                 private agGridFormatingService: AgGridFormatingService,
                 private awsService: AWSBucketService,
+                private settingsService: SettingsService,
+                private uiSettingsService: UISettingsService,
               ) {
-
-      this.initForm();
-      this.initAgGrid(this.pageSize);
 
     }
 
-    async ngOnInit() {
-      this.urlPath        = await this.awsService.awsBucketURL();
+    ngOnInit() {
+      // this.urlPath        = await this.awsService.awsBucketURL();
       const site          = this.siteService.getAssignedSite()
+      this.initForm();
+      this.initClasses();
 
       this.buttonName        = 'Edit'
-      this.buttoncheckInName = 'Check In'
-      this.initClasses()
-      this.initSubscriptions();
+      this.buttoncheckInName = 'Check In';
+      this.pageSize = 25;
 
+      this.initUiSettings();
+      this.initSubscriptions();
       if (this.params && this.gridApi && this.searchModel) {
         this.refreshSearch()
       }
@@ -151,13 +166,44 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this.itemName && this.searchModel && this.searchForm) {
         this.itemName.setValue(this.searchModel.name)
       }
+
+      this.initKeyboard()
     };
 
+    initKeyboard() {
+
+        // this.enableKeyboard = !this.enableKeyboard
+        const item = localStorage.getItem('enableProfileKeyboard')
+        if (item) {
+          if (item == 'true') {
+
+            this.enableKeyboard = true;
+          }
+        }
+
+    }
+
+    initUiSettings() {
+      this.uiSettings$ = this.uiSettingsService.transactionUISettings$.pipe(switchMap(data => {
+        if (data) {
+          this.uiSettings = data;
+          this.initAgGrid(this.pageSize);
+        }
+        return of(data)
+      }))
+    }
+
+    initForm() {
+      this.searchForm   = this.fb.group( {
+        itemName          : [''],
+      });
+    }
     ngOnDestroy(): void {
       //Called once, before the instance is destroyed.
       //Add 'implements OnDestroy' to the class.
       if (this._searchModel){this._searchModel.unsubscribe()}
     }
+
         // sort(users, 'name', '-age', 'id')
     @HostListener("window:resize", [])
     updateScreenSize() {
@@ -180,12 +226,6 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
 
-    initForm() {
-      this.searchForm   = this.fb.group( {
-        itemName          : [''],
-      });
-    }
-
     ngAfterViewInit() {
       if (this.input) {
         fromEvent(this.input.nativeElement,'keyup')
@@ -200,13 +240,24 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
         )
         .subscribe();
       }
+    }
 
+
+    enterSearch() {
+      this.refreshSearch();
+    }
+
+    toggleKeyboard() {
+      this.enableKeyboard = !this.enableKeyboard
+      localStorage.setItem('enableProfileKeyboard', this.enableKeyboard.toString())
     }
 
     //ag-grid
     //standard formating for ag-grid.
     //requires addjustment of column defs, other sections can be left the same.
     initAgGrid(pageSize: number) {
+
+      if (!this.uiSettings) { return }
       this.frameworkComponents = {
         btnCellRenderer: ButtonRendererComponent
       };
@@ -216,10 +267,11 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
         // minWidth: 100,
       };
 
-      this.columnDefs =  [
-        {
-        field: 'id',
-        cellRenderer: "btnCellRenderer",
+      let item = {}
+      this.columnDefs =  []
+        item =      {
+          field: 'id',
+          cellRenderer: "btnCellRenderer",
                   cellRendererParams: {
                       onClick: this.editProductFromGrid.bind(this),
                       label: this.buttonName,
@@ -229,45 +281,85 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
                     minWidth: 125,
                     maxWidth: 125,
                     flex: 2,
-        },
-        {
+        }
+        this.columnDefs.push(item)
+
+        item =  {
           field: 'id',
           cellRenderer: "btnCellRenderer",
                     cellRendererParams: {
                         onClick: this.checkIn.bind(this),
-                        label: this.buttoncheckInName,
+                        label: 'Assign',
                         getLabelFunction: this.getCheckInLabel.bind(this),
                         btnClass: 'btn btn-primary btn-sm'
                       },
                       minWidth: 125,
                       maxWidth: 125,
                       flex: 2,
-        },
-        {headerName: 'First',     field: 'firstName',         sortable: true,
+        }
+        this.columnDefs.push(item)
+
+        item = {headerName: 'First',     field: 'firstName',         sortable: true,
                     width   : 175,
                     minWidth: 175,
                     maxWidth: 275,
                     flex    : 1,
-        },
-        {headerName: 'Last',  field: 'lastName',      sortable: true,
+        }
+        this.columnDefs.push(item)
+
+        item = {headerName: 'Last',  field: 'lastName',      sortable: true,
                     width   : 175,
                     minWidth: 175,
                     maxWidth: 275,
                     // flex: 1,
-        },
-        {headerName: 'Phone',  field: 'phone',      sortable: true,
+        }
+        this.columnDefs.push(item)
+
+        item =  {headerName: 'Phone',  field: 'phone',      sortable: true,
                 width   : 175,
                 minWidth: 175,
                 maxWidth: 275,
                 // flex: 1,
-        },
-        {headerName: 'Account',  field: 'lastName',      sortable: true,
+        }
+        this.columnDefs.push(item)
+
+        item =  {headerName: 'Type',  field: 'clientType.name',      sortable: true,
                 width   : 175,
                 minWidth: 175,
-                maxWidth: 175,
-                // flex: 1,
-        },
-        { headerName: 'Image',
+                maxWidth: 275,
+                flex: 1,
+        }
+        this.columnDefs.push(item);
+
+        if (!this.uiSettings.enablMEDClients) {
+          item =  {headerName: 'Account',  field: 'account',      sortable: true,
+              width   : 175,
+              minWidth: 175,
+              maxWidth: 175,
+              // flex: 1,
+          }
+          this.columnDefs.push(item)
+        }
+
+        if (this.uiSettings.enablMEDClients) {
+          item =  {headerName: 'OOMP/OOMPB',  field: 'medLicenseNumber',      sortable: true,
+              width   : 175,
+              minWidth: 175,
+              maxWidth: 175,
+              // flex: 1,
+          }
+          this.columnDefs.push(item)
+
+          item =  {headerName: 'OOMPB',  field: 'insTertiaryNum',      sortable: true,
+                  width   : 175,
+                  minWidth: 175,
+                  maxWidth: 175,
+                  // flex: 1,
+          }
+          this.columnDefs.push(item)
+        }
+
+        item =  { headerName: 'Image',
                     field: 'urlImageMain',
                     width: 100,
                     minWidth: 100,
@@ -275,10 +367,11 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
                     sortable: false,
                     autoHeight: true,
                     cellRendererFramework: AgGridImageFormatterComponent
-                  }
-      ]
+        }
+        this.columnDefs.push(item)
 
-      this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
+
+        this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
 
     }
 
@@ -298,7 +391,9 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.currentPage         = 1
       const site               = this.siteService.getAssignedSite()
       if (!this.searchModel)  { this.initSearchModel(); }
-      this.searchModel.name    = this.itemName.value;
+      if (this.itemName) {
+        this.searchModel.name    = this.itemName.value;
+      }
       if (!this.params) {return}
       this.onGridReady(this.params)
       return this._searchItems$
@@ -428,8 +523,29 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
     if(!e) {
       return
     }
-    console.log('post new checkin')
-    this.postNewCheckIn(e.rowData.id);
+    // this.postNewCheckIn(e.rowData.id);
+    this.assignClientID(e.rowData)
+  }
+
+  assignClientID(client) {
+    let order = this.orderMethodsService.order
+    if (!order || !client) {
+      this.siteService. notify('No Order in use.', 'close', 4000, 'red')
+      return
+    }
+    if (order) {
+      const site = this.siteService.getAssignedSite();
+      if (client) {
+        try {
+          order.clientID = client?.id;
+          order.customerName = client?.lastName.substr(0,2) + ', ' + client?.firstName
+        } catch (error) {
+        }
+      }
+      this.orderService.putOrder(site, order).subscribe(data => {
+        this.orderMethodsService.updateOrderSubscription(data)
+      })
+    }
   }
 
   assignItem(e){

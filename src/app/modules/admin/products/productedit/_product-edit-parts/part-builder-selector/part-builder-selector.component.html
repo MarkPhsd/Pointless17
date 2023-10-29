@@ -11,7 +11,7 @@
             matInput
             type              ="text"
             class             ="input-field"
-            placeholder       = "friendlyName"
+            [placeholder]     = "placeHolder"
             formControlName   ="searchField"
             [matAutocomplete] ="auto">
       <mat-autocomplete panelWidth    = "auto"
@@ -28,5 +28,5 @@
  <div hidden="true"
       *ngIf="inputForm"
       [formGroup]='inputForm'>
-  <input formControlName="fieldProperty">
+  <input [formControlName]="fieldProperty">
 </div>

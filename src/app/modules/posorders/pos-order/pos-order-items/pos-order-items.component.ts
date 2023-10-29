@@ -256,7 +256,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     const item =  this.order.posOrderItems[index]
     if (!item)  { return }
     this.orderMethodService.removeItemFromList(index, item)
-
   }
 
   startAnimation(state) {

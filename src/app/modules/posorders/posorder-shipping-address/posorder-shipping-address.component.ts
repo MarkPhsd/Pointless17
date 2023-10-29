@@ -1,12 +1,11 @@
 import { Component, OnInit, Input,OnDestroy, EventEmitter, Output } from '@angular/core';
-import { UntypedFormGroup,UntypedFormBuilder } from '@angular/forms';
-import { Observable, of, Subscription } from 'rxjs';
-import { IPOSOrder, IServiceType, ISite } from 'src/app/_interfaces';
-import { OrdersService } from 'src/app/_services';
+import { Observable, Subscription } from 'rxjs';
+import { IPOSOrder, IServiceType } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { UntypedFormGroup,UntypedFormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'posorder-shipping-address',
@@ -31,7 +30,6 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private orderService      : OrdersService,
     public orderMethodsService: OrderMethodsService,
     private serviceTypeService: ServiceTypeService,
     private sitesService      : SitesService,
@@ -40,9 +38,9 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initSubscriptions();
-    this.initForm();
     this.initServiceTypeInfo();
    }
+
    ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
@@ -56,59 +54,40 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
   }
 
 
-
-  initForm() {
-    if (this.order && this.order.clients_POSOrders) {
-      const client = this.order.clients_POSOrders;
-      this.inputForm = this.fb.group({
-        address  :[client.address],
-        city     :[client.city],
-        address2 :[''],
-        state    :[client.state],
-        zip      :[client.zip],
-      })
-      this.errorMessage = ''
-      return
-    }
-    this.initEmptyForm();
-  }
-
-  initEmptyForm() {
+  resetForm() {
     this.inputForm = this.fb.group({
-      address  :[''],
+      address  :['', Validators.required],
       address2 :[''],
-      city     :[''],
-      state    :[''],
-      zip      :[''],
+      city     :['', Validators.required],
+      state    :['', Validators.required],
+      zip      :['', Validators.required],
     })
     this.errorMessage = ''
   }
 
   save() {
     this.saveShippingAddress();
-
   }
 
   delete() {
-
-    this.initEmptyForm()
+    this.resetForm()
     this.order.shipAddress     = '';
     this.order.shipAddress2    = '';
     this.order.shipCity        = '';
     this.order.shipPostal      = '';
     this.order.shipPostalCode  =  '';
     this.order.shipCity        = '';
-
+    this.order.shipState = '';
   }
 
   saveShippingAddress() {
 
     if (this.inputForm) {
-      const address = this.inputForm.controls['address'].value;
+      const address  = this.inputForm.controls['address'].value;
       const address2 = this.inputForm.controls['address2'].value;
-      const state = this.inputForm.controls['state'].value;
-      const zip = this.inputForm.controls['zip'].value;
-      const city = this.inputForm.controls['city'].value;
+      const state    = this.inputForm.controls['state'].value;
+      const zip      = this.inputForm.controls['zip'].value;
+      const city     = this.inputForm.controls['city'].value;
 
       if (this.order) {
         this.order.shipAddress = address;
@@ -116,10 +95,9 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
         this.order.shipCity = city;
         this.order.shipPostal = zip;
         this.order.shipPostalCode  = zip;
-        this.order.shipCity = city;
+        this.order.shipState = state;
         this.orderMethodsService.updateOrderSubscription(this.order)
         this.outPutSaveAddress.emit(this.order)
-        console.log('update order')
       }
     }
 

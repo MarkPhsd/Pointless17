@@ -16,9 +16,11 @@ export class QuantiySelectorComponent {
 
   changeQuantity(value: number) {
     if (!this.inputForm) { return}
-    console.log('value', value)
-    console.log(' this.quantity ',  this.quantity )
-    this.quantity = value + this.quantity 
+
+    this.quantity = value + this.quantity
+
+    if (this.quantity  == 0 || this.quantity < 0) { this.quantity = 1}
+    // this.outPutValue.emit(this.quantity)
     this.inputForm.patchValue({quantity: this.quantity})
   }
 }

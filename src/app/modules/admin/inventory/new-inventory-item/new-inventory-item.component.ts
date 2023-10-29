@@ -34,6 +34,8 @@ export class NewInventoryItemComponent implements OnInit {
   inventoryLocation:         IInventoryLocation;
   inventoryLocationID:       number;
   menuItem                   :IMenuItem;
+  facilityLicenseNumber:     string;
+  facility:                  any;
 
   constructor(
     private _snackBar    : MatSnackBar,
@@ -54,7 +56,31 @@ export class NewInventoryItemComponent implements OnInit {
     }
   }
 
+  get itemTypeDescription() { 
+    
+    if (!this.menuItem) { return } 
+    if (!this.menuItem.itemType) { return } 
+    if (!this.menuItem?.itemType?.useGroups) { return };
 
+    return this.menuItem?.itemType?.useGroups?.name.toLowerCase();
+   
+  }
+
+  get isCannabis() { 
+
+    if (!this.menuItem) { return } 
+    if (!this.menuItem.itemType) { return } 
+    if (!this.menuItem?.itemType?.useGroups) { return };
+
+    if (this.menuItem?.itemType?.useGroups?.name.toLowerCase() === 'cannabis') {
+      return true
+    }
+
+    if (this.menuItem?.itemType?.useGroups?.name.toLowerCase() === 'med-cannabis') {
+      return true
+    }            
+
+  }
 
   ngOnInit() {
     this.locations$ = this.inventoryLocationsService.getLocations().pipe(switchMap(data => {
@@ -96,6 +122,14 @@ export class NewInventoryItemComponent implements OnInit {
           this.inputForm.patchValue(this.item)
         })
       }
+    }
+  }
+
+  getVendor(event) {
+    const facility = event
+    if (facility) {
+      this.facilityLicenseNumber = `${facility.displayName} `
+      this.facility = event;
     }
   }
 

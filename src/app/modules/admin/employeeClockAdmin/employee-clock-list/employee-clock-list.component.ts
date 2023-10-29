@@ -319,6 +319,7 @@ export class EmployeeClockListComponent implements OnInit {
   refreshSearchAny(data:any) {
     this.startDate = this.dateHelper.format(data?.startDate, 'MM/dd/yyyy');
     this.endDate =this.dateHelper.format(data?.endDate, 'MM/dd/yyyy');
+    this.employeeID = data?.employeeID;
     this.refreshSearch(data)
   }
 
@@ -329,7 +330,7 @@ export class EmployeeClockListComponent implements OnInit {
       if (data) {
         search.employeeID = data?.employeeID;
       }
-      // this.employeeID   = data?.employeeID;
+
       if (data?.pageSize) {
         if (+data?.pageSize != 0) {
           this.pageSize = data?.pageSize

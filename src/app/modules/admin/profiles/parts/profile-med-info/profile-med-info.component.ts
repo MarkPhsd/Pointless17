@@ -36,16 +36,15 @@ export class ProfileMedInfoComponent implements OnInit {
         if (status) {
           this.medPatient = true;
         }
-       
       }
-    ) 
+    )
 
-    if (this.inputForm) { 
+    if (this.inputForm) {
       this.inputForm.controls['clientTypeID'].valueChanges.subscribe(data => {
-        console.log('clientTypeID  changes', data) 
+        console.log('clientTypeID  changes', data)
         const clientTypeID = data// this.inputForm.controls['clientTypeID'].value;
-        if (clientTypeID) { 
-          this.clientType$   = this.clientTypeService.getClientTypeCached(this.site, clientTypeID).pipe(switchMap(data => { 
+        if (clientTypeID) {
+          this.clientType$   = this.clientTypeService.getClientTypeCached(this.site, clientTypeID).pipe(switchMap(data => {
             this.clientType = data;
             this.setMedType(this.inputForm, this.clientType)
             return of(data)
@@ -57,17 +56,17 @@ export class ProfileMedInfoComponent implements OnInit {
 
   }
 
-  setMedType(form: UntypedFormGroup, clientType: ClientType) { 
-    if (clientType &&  form && clientType.name && (clientType.name.toLowerCase() === 'patient' || 
-                                                   clientType.name.toLowerCase() === 'caregiver' )) { 
+  setMedType(form: UntypedFormGroup, clientType: ClientType) {
+    if (clientType &&  form && clientType.name && (clientType.name.toLowerCase() === 'patient' ||
+                                                   clientType.name.toLowerCase() === 'caregiver' )) {
       form.patchValue({patientRecOption: true})
       console.log('set patient rect option true')
-      return 
+      return
     }
 
     form.patchValue({patientRecOption: false})
   }
-  
+
   get isMedPatient() {
     if (this.inputForm) {
       if (this.inputForm.controls['patientRecOption'].value) {

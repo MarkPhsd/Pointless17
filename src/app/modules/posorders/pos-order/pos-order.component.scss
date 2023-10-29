@@ -47,16 +47,16 @@
 }
 
 .grid-header-item {
+  margin-top: 5px;
   margin    : 1px;
-  // width: 100%;
   max-width: 355px;
   @include for-phone-only  {
     margin: 5px;
-    // width: 100%;
   }
 }
 
 .grid-header-item-main {
+  margin-top: 5px;
   margin    : 1px;
   @include for-phone-only  {
     margin: 5px;
@@ -92,7 +92,7 @@
   justify-content:  space-between;
 
   @include for-phone-only  {
-    max-height: 250px;
+    // max-height: 250px;
     overflow: auto;
   }
 
@@ -130,18 +130,19 @@
 .grid-po-helper {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .po-info {
-  width: 395px;
+  width: 325px;
   height: 225px;
   overflow-y: auto;
   overflow-x: auto;
   margin:5px;
 }
+
 .po-info-sales {
-  width: 320px;
+  width: 245px;
   height: 225px;
   overflow-y: auto;
   overflow-x: hidden;

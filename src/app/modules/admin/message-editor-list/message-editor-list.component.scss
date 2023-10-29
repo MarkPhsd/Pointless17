@@ -1,0 +1,39 @@
+.grid-list-container {
+  display   : grid;
+  grid-template-columns: 800px auto;
+  gap       : 7px;
+  min-height: 600px;
+  height    : calc(90vh - 150px);
+}
+
+.grid-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
+.grid-list-dimensions {
+  width: 100%;
+  margin: 5px;
+}
+
+.grid-nav {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 5px;
+}
+
+.grid-item {
+  margin-left: 5px;
+}
+
+.message-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 5px;
+}
+
+.margin-5px {
+  margin:5px;
+}

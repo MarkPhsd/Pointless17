@@ -16,6 +16,7 @@ export interface SchemaUpdateResults {
 })
 export class SystemService {
 
+
   // GetSyncDatabaseSchema
   // CreateAPIViews
   // CreateViews
@@ -39,6 +40,15 @@ export class SystemService {
     const parameters = ''
     const url = `${site.url}${controller}${endPoint}${parameters}`
     return this.http.get<SchemaUpdateResults[]>(url);
+   }
+
+
+   getAPIVersion(site: ISite): Observable<string> {
+    const controller = "/System/"
+    const endPoint = 'getAPIVersion'
+    const parameters = ''
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+    return this.http.get<string>(url);
    }
 
    updateDatabase(site:ISite, section: string):  Observable<SchemaUpdateResults[]> {

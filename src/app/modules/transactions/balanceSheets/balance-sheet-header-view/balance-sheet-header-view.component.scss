@@ -21,14 +21,6 @@
   font-weight: 700px;
 }
 
-.span-col {
-  grid-column: 2 / span 3;
-}
-
-.item-span {
-  grid-column: 1 / span 2;
-}
-
 .header-grid {
   --gap: 5px;
   display: grid;

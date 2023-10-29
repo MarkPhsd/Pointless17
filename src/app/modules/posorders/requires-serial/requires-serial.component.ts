@@ -2,10 +2,10 @@ import { Component, ElementRef, EventEmitter, Inject, OnDestroy, OnInit, Output,
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
-import { IPurchaseOrderItem } from 'src/app/_interfaces';
+import { Observable, Subject, of, switchMap } from 'rxjs';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { OrdersService } from 'src/app/_services';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { __asyncValues } from 'tslib';
 
@@ -19,6 +19,7 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect                     = new EventEmitter();
 
+  action$ : Observable<any>;
   inputForm         : UntypedFormGroup;
   searchPhrase      :  Subject<any> = new Subject();
   get serialCode() { return this.inputForm.get("serial") as UntypedFormControl;}
@@ -34,6 +35,7 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
               private orderService                : OrdersService,
               private snackBar                    : MatSnackBar,
               private fb                          : UntypedFormBuilder,
+              private siteService                 : SitesService,
               private dialogRef                   : MatDialogRef<RequiresSerialComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
       )
@@ -54,8 +56,10 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
 
   initFormSubscription() {
     this.inputForm.controls['serial'].valueChanges.subscribe(value => {
+      console.log('value.length', value.length)
       if (value.length == 24) {
-        const item = value.toString().substr(0,24)
+        const item = value.toString().substr(0, 24)
+        console.log('item', item)
         this.applySerial(value)
       }
     });
@@ -69,14 +73,21 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
   }
 
   applySerial(serial: string) {
+    const site = this.siteService.getAssignedSite()
+    let id : number;
+
     if (this.id && serial) {
-      this.orderMethodsService.appylySerial(this.id, serial).subscribe(data =>{
-        if (data.order) {
-         
-          this.orderMethodsService.updateOrderSubscription(data.order)
-          this.dialogRef.close({id: this.id, result : true, order: data.order});
-        }
-      })
+      this.action$ =  this.orderMethodsService.appylySerial(this.id, serial).pipe(
+        switchMap(data => {
+          id = data.posItem.id
+          const value = {order: data.order, id: data.posItem.id, result: true, posItem: data.posItem }
+          // return this.orderService.getOrder(site, this.orderMethodsService?.order.id.toString(), false )
+
+          console.log('value', value)
+          this.orderMethodsService.updateOrder(data.order)
+          this.dialogRef.close(value);
+          return of(data)
+      }))
     }
   }
 

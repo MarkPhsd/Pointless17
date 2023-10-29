@@ -31,13 +31,9 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
   @Input() devicename : string;
 
   constructor(
-    private uISettingsService: UISettingsService,
     private sitesService    : SitesService,
-    private dialog          : MatDialog,
     private dsiProcess      : DSIProcessService,
     private paymentsMethodsService: PaymentsMethodsProcessService,
-    private orderMethodsService: OrderMethodsService,
-    private paymentMethodService: PaymentMethodsService,
     public  platFormService : PlatformService,) { }
 
   ngOnInit(): void {

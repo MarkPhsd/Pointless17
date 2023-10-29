@@ -30,6 +30,7 @@ import { UserSwitchingService } from 'src/app/_services/system/user-switching.se
 import { FastUserSwitchComponent } from '../../profile/fast-user-switch/fast-user-switch.component';
 import { DialogRef } from '@angular/cdk/dialog';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 export interface payload{
   index : number;
   item  : PosOrderItem;
@@ -48,6 +49,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   payload: payload;
 
   @ViewChild('imageDisplay') imageDisplay: TemplateRef<any>;
+  @ViewChild('getWeightView') getWeightView : TemplateRef<any>;
+
   @Output() outputDelete   :  EventEmitter<any> = new EventEmitter();
   @Output() outputSelectedItem : EventEmitter<any> = new EventEmitter();
   @Input() uiConfig : TransactionUISettings;
@@ -75,7 +78,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   @Input() mainPanel      : boolean;
   @Input() wideBar        = false;
   @Input() disableActions = false;
-  @Input() prepScreen     : string;
+  @Input() prepScreen     : boolean;
   @Input() enableExitLabel : boolean;
 
   morebutton               = 'more-button';
@@ -136,6 +139,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
         item.itemOrderPercentageDiscount ) {
           return true;
     }
+
+
     return false;
 
   }
@@ -149,6 +154,50 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
       return true;
     }
     return false;
+  }
+
+  get showWeight() {
+    console.log('showWeight (1)', this.prepScreen , this.mainPanel , this.orderItem.isWeightedItem)
+    if (this.order && this.order.balanceRemaining != 0 &&
+                      this.orderItem.isWeightedItem &&
+                      !this.prepScreen) {
+      // console.log('showWeight (2)',this.userAuthService?.isStaff , this.mainPanel , this.orderItem?.printLocation)
+      if (this.userAuthService?.isStaff &&  this.mainPanel ) {
+        return this.getWeightView
+      }
+    }
+    return null
+  }
+
+  getWeight() {
+    const item = this.posOrderItemService.scaleInfo;
+    if (item) {
+      if (item.scaleStatus) {
+        // console.log(item.scaleStatus)
+      }
+
+      // this.
+    //then update the quantity of the current item.
+    // console.log('itemw eight', item.value)
+    if (+item.value>0) {
+      this.orderItem.quantity = +item.value;
+      this.orderItem.quantityView = item.value;
+      this.action$ = this.saveSub(this.orderItem, 'quantity')
+     }
+    }
+  }
+
+  saveSub(item: PosOrderItem, editField: string): Observable<IPOSOrder> {
+    const order$ = this.posOrderItemMethodsService.saveSub(item, 'quantity').pipe(
+      switchMap(data => {
+        if (!data) {
+          return of(null)
+        }
+        this.orderMethodsService.updateOrder(data)
+        return of(data)
+      }
+    ))
+    return order$
   }
 
   initSubscriptions() {
@@ -205,13 +254,15 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                 private siteService        : SitesService,
                 private dialog             : MatDialog,
                 private menuService        : MenuService,
-                private posOrderItemService: POSOrderItemService,
+                public posOrderItemService: POSOrderItemService,
+                private posOrderItemMethodsService: PosOrderItemMethodsService,
                 private promptGroupservice : PromptGroupService,
                 private printingService    : PrintingService,
                 public  userAuthService    : UserAuthorizationService,
                 private fb                 : UntypedFormBuilder,
                 public authenticationService: AuthenticationService,
                 public platFormService : PlatformService,
+                private orderService: OrdersService,
                 private requestMessageMethodsService: RequestMessageMethodsService,
               )
   {
@@ -310,9 +361,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   displayPrintLabel(item) {
-    // console.log('displayPrintLabel', item) //item?.itemType?.name, item?.itemType?.labelTypeID )//labelID)
-    // if (this.ui)
-    // console.log('item type' , item?.itemType)
     const labelID =  item?.itemType?.labelTypeID
     if (labelID && labelID != 0) {
       return true
@@ -320,7 +368,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   destroyEdit() {
-    // if (this.lockEdit) { return }
     if ( this.orderMethodsService.isItemAssigned( this.orderItem.id ) ) { return }
     this.itemEdit = false;
     this.inputForm = null;
@@ -389,8 +436,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
       this.authorizeEdit(item, request);
     }
   }
-
-
 
   openModifierNote() {
     this.editProperties('modifierNote', 'Special Instructions')
@@ -475,9 +520,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
           }
         }
 
-        // if (this.authenticationService.userAuths.changeItemPrice) {
-        this.editDialog(item, width,height)
-        // }
+        this.editDialog(item, width, height)
+
     })
   }
 
@@ -579,7 +623,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     payload.index = index;
     payload.item  = orderItem;
     this.outputDelete.emit(payload)
-
   }
 
   async addItemToOrder() {
@@ -621,13 +664,26 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   removeDiscount() {
-    if (this.orderItem && this.menuItem) {
+    if (this.orderItem) {
       const site = this.siteService.getAssignedSite();
       let item$ = this.posOrderItemService.removeItemDiscount(site, this.orderItem, this.menuItem);
-      item$.subscribe(data => {
-        this.orderMethodsService.updateOrderSubscription(data);
-      })
+      item$.pipe(
+        switchMap(data => {
+          this.orderMethodsService.updateOrderSubscription(data);
+          return of(data)
+      })).pipe(switchMap(data => {
+        return this._refreshOrder() //site, this.orderItem.id, false)
+      }))
+      this.action$ = item$;
     }
+  }
+
+  _refreshOrder() {
+    const site = this.siteService.getAssignedSite()
+    return this.orderService.getOrder(site, this.order.id.toString(), this.order.history).pipe(switchMap(data => {
+      this.orderMethodsService.updateOrder(data)
+      return of(data)
+    }))
   }
 
   updateCardStyle(option: boolean)  {
@@ -731,7 +787,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                                                             this.order, false).pipe(switchMap(data => {
                                                               this.orderMethodsService.updateOrder(data)
                                                               return of(data)
-                                                            })) // this.menuItem$)
+                                                           }))
   }
 
   swipeOutItem(){

@@ -1,6 +1,6 @@
-import { Component, OnInit,OnDestroy } from '@angular/core';
+import { Component, OnInit,OnDestroy, Inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subscription, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
@@ -29,10 +29,11 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
   sendDate:              string;
   scheduleDate:          string;
   acceptedDate:          string;
-  paidDate    :          string;
+  paidDate          : string;
   type$             : Observable<ManifestType[]>;
   status$           : Observable<ManifestStatus[]>;
-  sites: ISite[];
+  sites             : ISite[];
+  autoReceive       : boolean;
 
   get isWarehouse(): boolean {
     return this.manifestService.isWarehouse;
@@ -90,8 +91,17 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
     private matSnack: MatSnackBar,
     private manifestTypeService: ManifestTypesService,
     private manifestStatusService: ManifestStatusService,
+
+    private manifestService: ManifestInventoryService,
     private dialogRef: MatDialogRef<MainfestEditorComponent>,
-    private manifestService: ManifestInventoryService) { }
+    @Inject(MAT_DIALOG_DATA) public data: any
+    ) {
+      if (data) {
+        if (data.autoReceive)  {
+          this.autoReceive = true;
+        }
+      }
+    }
 
   ngOnInit(): void {
     const i = 0;
@@ -100,17 +110,10 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
     this.status$ = this.manifestStatusService.listAll();
     this.type$   = this.manifestTypeService.listAll();
     this.initForm()
-    this.initSubscriptions()
+    this.initSubscriptions();
   }
 
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    // if (this.currentManifest$) { this.currentManifest$.unsubscribe()}
-    // if (this.currentManifestSite$) {
-    //   this.manifestService.updateSelectedManifestSite(null)
-    //   // this.currentManifestSite$.unsubscribe()
-    // }\
     if (this.currentManifestSite$) { this.currentManifestSite$.unsubscribe()}
     const i = 0;
   }
@@ -135,17 +138,15 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
   }
 
   applyType(event) {
-    console.log(event);
+    // console.log(event);
     if (event) {
       if (this.currentManifest) {
-        // this.inputForm.controls['type'].setValue(event.name)
         this.currentManifest.type = event.value;
       }
     }
   }
 
   applyStatus(event) {
-    console.log(event);
     if (event) {
       if (this.currentManifest) {
         this.currentManifest.type = event.value.name;
@@ -184,7 +185,7 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
 
     if (!this.validateDispatch(sourceSite, destSite)) { return };
 
-    console.log('valid')
+    // console.log('valid')
     if (sourceSite.url === destSite.url) {
       const result = (window.confirm('Both the destination and source sites are the same, are you sure you want to continue?'))
       if (!result) { return };
@@ -194,7 +195,6 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
 
     source$.pipe(
       switchMap( data => {
-        console.log(data)
         return this.manifestService.sendTransfer(destSite, data);
       })).subscribe(
         {

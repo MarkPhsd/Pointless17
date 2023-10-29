@@ -81,8 +81,24 @@ export class EmployeeClockFilterComponent implements OnInit {
 
   refreshSearch() {
     this.outputRefreshSearch.emit(
-      { summary: false, pageSize: this.pageSize, employeeID:  this.employeeID, startDate: this.dateFrom, endDate: this.dateTo }
-      );
+      { summary: false,
+        pageSize: this.pageSize,
+        employeeID:  this.employeeID,
+        startDate: this.dateFrom,
+        endDate: this.dateTo
+      }
+    );
+  }
+
+  reset() {
+    this.outputRefreshSearch.emit(
+      { summary: false,
+        pageSize: this.pageSize,
+        employeeID:  0,
+        startDate: this.dateFrom,
+        endDate: this.dateTo
+      }
+    );
   }
 
   emitDatePickerData(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement) {

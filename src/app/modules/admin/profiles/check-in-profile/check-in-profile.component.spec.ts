@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CheckInProfileComponent } from './check-in-profile.component';
+import { CheckInProfileComponent } from './CheckInProfileComponent';
 
 describe('CheckInProfileComponent', () => {
   let component: CheckInProfileComponent;

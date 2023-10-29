@@ -51,6 +51,8 @@ import { JobTypesEditComponent } from 'src/app/modules/admin/clients/jobs/job-ty
 import { EmployeeClockEditComponent } from 'src/app/modules/admin/employeeClockAdmin/employee-clock-edit/employee-clock-edit.component';
 import { TriPosTransactionsComponent } from 'src/app/modules/payment-processing/tri-pos-transactions/tri-pos-transactions.component';
 import { DynamicAgGridComponent } from 'src/app/shared/widgets/dynamic-ag-grid/dynamic-ag-grid.component';
+import { MessageEditorComponent } from 'src/app/modules/admin/message-editor-list/message-editor/message-editor.component';
+import { PosOrderItemEditComponent } from 'src/app/modules/posorders/pos-order-item/pos-order-item-edit/pos-order-item-edit.component';
 
 @Injectable({
   providedIn: 'root'
@@ -151,12 +153,14 @@ export class ProductEditButtonService {
 
   openProductDialogObs(id: number) {
     const site = this.siteService.getAssignedSite();
+    console.log(id)
     const item$ = this.menuService.getProduct(site, id).pipe(
       switchMap(product => {
         if (product && !product.prodModifierType) {
           product.prodModifierType = 1
           return this.menuService.putProduct(site, product.id, product)
         }
+        console.log('product', product)
         return of(product)
       }
     )).pipe(switchMap(product => {
@@ -235,6 +239,22 @@ export class ProductEditButtonService {
     return dialogRef
   }
 
+
+  editDialog(item, width,height) {
+    let dialogRef: any;
+
+    dialogRef = this.dialog.open(PosOrderItemEditComponent,
+      { width     : width,
+        minWidth  : '300px',
+        height    : height,
+        minHeight : height,
+        data      : item
+      },
+    )
+
+    return dialogRef
+  }
+
   openUnitTypeEditor(data: UnitType): MatDialogRef<UnitTypeEditComponent> {
     let dialogRef: any;
 
@@ -289,6 +309,20 @@ export class ProductEditButtonService {
     return dialogRef;
   }
 
+  openMessageEditor(data) {
+    let dialogRef: any;
+
+    dialogRef = this.dialog.open(MessageEditorComponent,
+      { width:        '90vw',
+        minWidth:     '1000px',
+        height:       '850px',
+        minHeight:    '850px',
+        data:          data
+      },
+    )
+    return dialogRef;
+  }
+
   openDisplayMenuEditor(data) {
     let dialogRef: any;
 
@@ -321,6 +355,7 @@ export class ProductEditButtonService {
   openProductEditorOBS(id: number,productTypeID: number ) {
     const site = this.siteService.getAssignedSite();
     const itemType$ =  this.itemTypeService.getItemType(site, productTypeID)
+    console.log('open product')
     return  this._openAddProductOpenEditorOBS(id, productTypeID, itemType$, site);
   }
 

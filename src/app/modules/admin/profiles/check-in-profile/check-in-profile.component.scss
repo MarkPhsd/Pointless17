@@ -45,14 +45,14 @@
   grid-template-columns: repeat( auto-fit, minmax(95px, 1fr) );
 }
 
-.grid-selecttype { 
+.grid-selecttype {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
   grid-template-columns: 50px 190px;
 }
 
-.filter-buttons { 
+.filter-buttons {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
@@ -66,18 +66,16 @@
 .grid-ranges {
   display : grid;
   gap     : 5px;
-  grid-template-columns: 255px 255px 1fr 1fr;
+  grid-template-columns:  395px 255px 1fr 1fr 1fr 1fr;
 
   @include for-phone-only  {
     grid-template-columns: 1fr ;
   }
-   ///' repeat( auto-fit, minmax(235px, 1fr) );
-  // max-width: 650px;
 
 }
- 
+
 .toggle-container {
-  max-width: 250px;
+  max-width: 275px;
 }
 
 .error {

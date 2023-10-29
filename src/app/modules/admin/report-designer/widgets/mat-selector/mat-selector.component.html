@@ -1,35 +1,29 @@
 <ng-content select="label"></ng-content>
-<div  *ngIf="isFormView != undefined" >
-  <ng-container [ngTemplateOutlet]="isFormView">
-
-  </ng-container>
-</div>
-
+<ng-container [ngTemplateOutlet]="isFormView"></ng-container>
+<!--    [placeHolder]='placeHolder' -->
 <ng-template #formView>
   <div [formGroup]="inputForm"
-        *ngIf="inputForm"
         class="grid-container">
-      <mat-form-field  appearance="outline">
-        <mat-label> <ng-content></ng-content> </mat-label>
-          <mat-select
-                type="text"
-                [formControlName] ="fieldName"
-                (selectionChange)="setItem($event.value)" >
+    <mat-form-field  appearance="outline">
+      <mat-label> <ng-content></ng-content> </mat-label>
+        <mat-select
+              type="text"
+              [formControlName] ="fieldName"
 
-            <mat-option value="emptyItem" *ngIf="!hideClear">
-              Clear
+              (selectionChange)="setItem($event.value)" >
+
+          <mat-option value="emptyItem" *ngIf="!hideClear">
+            Clear
+          </mat-option>
+          <span *ngIf="list">
+            <mat-option
+                  *ngFor="let item of list"
+                  [value]="item.name">
+              {{item.name}}
             </mat-option>
-
-            <span *ngIf="list">
-              <mat-option
-                    *ngFor="let item of list"
-                    [value]="item.name">
-                {{item.name}}
-              </mat-option>
-            </span>
-          </mat-select>
-      </mat-form-field>
-
+          </span>
+        </mat-select>
+    </mat-form-field>
   </div>
 </ng-template>
 

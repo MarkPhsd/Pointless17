@@ -56,6 +56,7 @@ export interface TransactionUISettings {
   dsiEMVAndroidEnabled   : boolean;
   dsiEMVNeteEpayEnabled  : boolean;
   dsiEMVIP               : boolean;
+  dsiTipPrompt: boolean;
   payPalEnabled          : boolean;
   payPalClientID        : string;
   payPalCurrency        : string;
@@ -91,6 +92,13 @@ export interface TransactionUISettings {
   expoTemplateID: number;
   applyTableNameToOrderName: boolean;
   showNumberPad: boolean;
+  enableTransactionTypeChoice: boolean;
+  autoPrintReceiptOnClose: boolean;
+  disableMenuItemExpandInApp: boolean;
+  enableRounding: boolean;
+  autoNotifyOnItemCompletion: boolean;
+  singlePrintReceipt: boolean;
+  prepOrderOnExit: boolean;
 }
 
 export interface StripeAPISettings {
@@ -117,6 +125,7 @@ export interface DSIEMVSettings {
   SequenceNo: string;
   DisplayTextHandle: string;
   enabled: boolean;
+  partialAuth: boolean;
 }
 
 export interface DSIEMVAndroidSettings {
@@ -222,6 +231,8 @@ export interface UIHomePageSettings {
   accordionMenu: boolean;
   accordionMenuSideBar: boolean;
   staffAccordionMenuSideBar: boolean;
+
+  minQuantityFilter: number;
 }
 
 @Injectable({
@@ -276,7 +287,7 @@ export class UISettingsService {
   private  _posDevice               = new BehaviorSubject<ITerminalSettings>(null);
   public  posDevice$               = this._posDevice.asObservable();
 
-  private _transactionUISettings  = new BehaviorSubject<TransactionUISettings>(null);
+  public _transactionUISettings  = new BehaviorSubject<TransactionUISettings>(null);
   public  transactionUISettings$  = this._transactionUISettings.asObservable();
 
   private _homePageSetting         = new BehaviorSubject<UIHomePageSettings>(null);
@@ -296,6 +307,22 @@ export class UISettingsService {
   public  relativeValue$        = this._relativeValue.asObservable();
 
   //.updateRelativeValue(value)
+
+  get theme() {
+    // if (this.toggleTheme === 'dark-theme' ) {
+    //   localStorage.setItem('angularTheme', 'light-theme')
+    // } else {
+    //  const theme = localStorage.getItem('angularTheme')
+    // }
+    const theme = localStorage.getItem('angularTheme');
+    if (theme == 'dark-theme') {
+      return 'dark'
+    }
+    if (theme == 'light-theme') {
+      return 'light'
+    }
+    return 'light'
+  }
 
   updateRelativeValue(value: unknown) {
     this._relativeValue.next(value)
@@ -413,23 +440,17 @@ export class UISettingsService {
   }
 
   getTransactionUISettings() {
-
     if (!this.userAuthorizationService.user) {
       return;
     }
-
     if (this.userAuthorizationService.user.username === 'Temp') {
       return;
     }
-
     const item = this.userAuthorizationService.currentUser()
-    // console.log('item', item)
-
     this.settingsService.getUITransactionSetting().subscribe(data => {
       this._transactionUISettings.next(data)
     })
   }
-
 
   getUITransactionSetting() {
     return this.settingsService.getUITransactionSetting()
@@ -444,6 +465,7 @@ export class UISettingsService {
   get UIHomePageSettings() {
     return this.settingsService.getUIHomePageSettings()
   }
+
   getEmailModel() {
     if (!this.userAuthorizationService.user) {  this._emailModel.next(null)  }
     this.settingsService.getEmailModel().subscribe(data => {
@@ -475,12 +497,16 @@ export class UISettingsService {
   }
 
   getDSSIEmvSettings() {
+    if (!this.userAuthorizationService.user) { return }
+    if (!this.electronService.isElectronApp) { return }
+
     if (!this.userAuthorizationService.user) {
       this._DSIEMVSettings.next(null)
       return;
     }
-     if (!this.userAuthorizationService.user) { return }
+
      this.settingsService.getDSIEMVSettings().subscribe(data => {
+      if (!data) { return }
       this._DSIEMVSettings.next(data)
     })
   }
@@ -631,6 +657,7 @@ export class UISettingsService {
       subCategoryFilter: [], //: boolean;
       accordionMenuSideBar: [],
       staffAccordionMenuSideBar: [],
+      minQuantityFilter: [],
      })
     return fb
   }
@@ -691,7 +718,8 @@ export class UISettingsService {
       PinPadIpAddress  : [config.PinPadIpAddress],
       PinPadIpPort     : [config.PinPadIpPort],
       SequenceNo       : [config.SequenceNo],
-      DisplayTextHandle: [config.DisplayTextHandle]
+      DisplayTextHandle: [config.DisplayTextHandle],
+      partialAuth      : [config.partialAuth]
     })
     return fb
   }
@@ -714,6 +742,7 @@ export class UISettingsService {
       SequenceNo:  ['0010010010'],
       DisplayTextHandle: [''],
       enabled:     [''],
+      partialAuth: [],
     })
     return fb
   }
@@ -764,6 +793,7 @@ export class UISettingsService {
       dsiEMVAndroidEnabcardPointPreAuthled   : [''],
       dsiEMVNeteEpayEnabled  : [''],
       dsiEMVIP               : [''],
+      dsiTipPrompt           : [''],
       payPalEnabled          : [ ],
       payPalClientID         : [''],
       payPalCurrency         : [ ],
@@ -798,17 +828,15 @@ export class UISettingsService {
       expoTemplateID:[],
       applyTableNameToOrderName: [],
       showNumberPad: [],
+      enableTransactionTypeChoice: [],
+      autoPrintReceiptOnClose: [],
+      disableMenuItemExpandInApp: [],
+      enableRounding: [],
+      autoNotifyOnItemCompletion: [],
+      singlePrintReceipt: [],
+      prepOrderOnExit: [],
      })
-
-
   }
-
-  // initContactFieldOptions(config: ContactFieldOptions: fb: UntypedFormGroup) {
-  //   return this._fb.group({
-  //     id : [],
-
-  //   })
-  //  }
 
   initUITransactionsForm(config: TransactionUISettings, fb: UntypedFormGroup): UntypedFormGroup {
     fb = this.initForm(fb);

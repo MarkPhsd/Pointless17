@@ -1,6 +1,6 @@
 import { Component, OnInit ,OnDestroy,Optional } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IPOSPayment } from 'src/app/_interfaces';
+import { IPOSPayment, PaymentMethod } from 'src/app/_interfaces';
 import { OrdersService  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -35,6 +35,8 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
   payment         : IPOSPayment;
   _payment        : Subscription;
 
+  paymentMethods$: Observable<PaymentMethod[]>;
+
   initSubscriptions() {
     this._payment = this.paymentService.currentPayment$.subscribe( payment => {
       this.payment   = payment
@@ -55,6 +57,7 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
       private _snackBar           : MatSnackBar,
       private _bottomSheet        : MatBottomSheet,
       private printingService     : PrintingService,
+      private paymentMethodsService: PaymentMethodsService,
       @Optional() private dialogRef  : MatDialogRef<PosPaymentEditComponent>,
 
   ) {
@@ -69,6 +72,9 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
       this.id = this.payment.id.toString();
     }
     this.getItem(parseInt(this.id));
+
+    const site = this.siteService.getAssignedSite()
+    this.paymentMethods$ =  this.paymentMethodService.getCacheList(site)
   }
 
   ngOnDestroy(): void {
@@ -183,9 +189,7 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
   }
 
   reOpenOrder(id: number) {
-    if (!this.payment) {
-      return
-    }
+    if (!this.payment) {  return }
     const site      = this.siteService.getAssignedSite()
     const order$    = this.orderService.getOrder(site, this.payment.orderID.toString(), false)
 

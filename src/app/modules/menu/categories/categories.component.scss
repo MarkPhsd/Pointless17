@@ -46,10 +46,8 @@ $white: #efefef;
   font-size: 1.3em;
   height: 2em;
   font-weight: 500;
-
   z-index: 99;
   position: relative;
-
 
   @include for-phone-only  {
     font-weight: 500;
@@ -146,6 +144,7 @@ mat-card {
     grid-template-columns: 50% 50%;
     gap: 10px;
   }
+  z-index: 100;
 }
 
 img:hover {

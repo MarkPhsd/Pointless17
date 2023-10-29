@@ -1,172 +1,21 @@
-@import "/src/mixins.scss";
-
 .grid-list-container {
   display: grid;
   grid-template-columns: 1fr 200px;
   gap: 7px;
-  // overflow: hidden;
-  height: 95%;
 
-}
-
-.grid-list-item {
-  height: 95%;
-  min-height: 95%;
-  overflow: hidden;
-}
-
-.grid-container {
-
-  --gap: 5px;
-  display: grid;
-  gap: var(--gap);
-  grid-template-columns: 1fr 300px;
-
-  @include for-phone-only  {
-    --gap: 5px;
-    display: grid;
-    gap: var(--gap);
-    grid-template-columns: 1fr;
-    // height: 60%;
-    width: 375px;
-  }
-
-}
-
-.grid-dimensions {
-  width: 100%;
-  height: 100%;
-}
-
-.grid-dimensions-electron {
-  width: 90%;
-  height: 95%;
-  min-height: 95%;
-}
-
-.grid-dimensions-capacitor {
-  width: 90%;
-  height: 90%;
-}
-
-.loader {
-  margin-bottom: 5px;
-  // margin-top: 5px;
 }
 
 .grid-list {
-
   display: grid;
-  grid-template-columns: 1fr minmax(285px, 285px);
-  // height: 75vh;
-  height: 85vh;
-  gap: 10px;
-
-  @include for-phone-only  {
-    // display: grid;
-    // grid-template-columns: 1fr;
-    height: 100%;
-    margin-top: 3px;
-    margin-bottom: 3px;
-    width: 350px;
-    // gap: 7px;
-  }
-}
-
-.grid-header {
-  grid-column: span 2;
-}
-
-.admin-filter-container {
-  --gap: 5px;
-  display: grid;
-  gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
-}
-
-mat-form-field{
-  font-size: .9em;
-}
-
-.filter-panel {
-  height: calc(100vh - 100px);
-  overflow-y: auto;
-  overflow-x: hidden;
-  @include for-phone-only  {
-    visibility: hidden;
-  }
-
+  grid-template-columns: 1fr 20vw;
+  gap: 7px;
+  height: calc(100vh - 150px);
 }
 
 .mat-card {
   margin-bottom: 5px;
 }
 
-.form-fields {
-  margin: 0;
-  padding: 0;
+.header-items {
+  float: left;
 }
-
-
-table
-{
-  width: 100%;
-}
-
-  .agGridButton {
-    font-size: 1em;
-    padding: -1px 1px;
-    margin: -1px 1px;
-    line-height: 1.2
-  }
-
-  button {
-    padding: 3px 3px 3px 3px;
-    margin: 3px 3px 3px 3px;
-    // height: 38px;
-  }
-
-  .header-items {
-    float: left;
-  }
-
-  // ::ng-deep .mat-form-field .mat-form-field-wrapper {
-  //   font-size: .8em;
-  //   padding: -3px -3px;
-  //   margin: 4px 4px 4px 4px;
-  // }
-
-  .form-controls {
-    font-size: .8em;
-  }
-  mat-form-field {
-    font-size: .9em;
-    margin: 3px 3px 3px 3px;
-  }
-  .form-fields {
-    margin: 0;
-    padding: 0;
-  }
-
-
-
-  .view-items {
-    float: left;
-    margin-top: 13px;
-  }
-  .view-button {
-    // float: right;
-    margin-top: 9px;
-  }
-
-  .grid-nav {
-    display: grid;
-    grid-template-columns: 150px 1fr;
-    gap: 5px;
-  }
-
-  .mini-nav {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 3px;
-  }

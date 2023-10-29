@@ -19,6 +19,7 @@ export interface IReportItemSaleSummary {
 export interface  ReportItemSalesOptimized {
   productName:             string;
   itemTotal:               number;
+  NetSales                : number;
   taxTotal1:               number;
   taxTotal2:               number;
   taxTotal3:               number;
@@ -142,6 +143,7 @@ export interface IReportingSearchModel {
   pageNumber:                   number;
   groupByEmployee:              boolean;
   groupByProduct:               boolean;
+  getServiceFees              : boolean;
   groupByCategory:              boolean;
   groupByDepartment:            boolean;
   groupByType                 : boolean;
@@ -168,6 +170,7 @@ export interface ITaxReport {
   taxTotal3:                number;
   grossSales:               number;
   netSales:                 number;
+  taxTotal                : number;
   itemTotal:                number;
   itemCost                : number;
   orderCashDiscount:        number;
@@ -186,6 +189,7 @@ export interface ITaxReport {
   category                : string;
   department              : string;
   scheduleDate            : string;
+  gratuity                : number;
   completed               : boolean
 }
 
@@ -204,6 +208,7 @@ export interface ITaxReportOptimized {
   itemType                : string;
   category                : string;
   department              : string;
+  gratuity                : number;
 }
 
 
@@ -380,7 +385,7 @@ export class ReportingItemsSalesService {
     // console.log(searchModel)
     if (!site || !site.url) { return of(null)}
 
-    searchModel.productsOnly = true;
+    // searchModel.productsOnly = true;
 
     const controller = `/ReportItemSales/`
 

@@ -37,11 +37,13 @@ export class RecieptPopUpComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('')
   }
 
   exit(event) {
-    console.log('auto closing receipt pop up')
+    if (this.autoPrint) {
+      this.dialogRef.close('true');
+      return;
+    }
     this.dialogRef.close();
   }
 }

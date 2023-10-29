@@ -2,9 +2,8 @@
 
 
     <div class="pricing-box" *ngIf="menuItem?.retail" >
-      <!-- <div id="unitDescription"> {{ menuItem?.unitDescription }}</div> -->
-      <div id="price"> Price {{ menuItem?.retail | currency }}
-        <span *ngIf="menuItem?.unitDescription">
+      <div id="price" color="warn">  {{ menuItem?.retail | currency }}
+        <span *ngIf="menuItem?.unitDescription" color="warn">
           / {{menuItem?.unitDescription}}
         </span>
       </div>

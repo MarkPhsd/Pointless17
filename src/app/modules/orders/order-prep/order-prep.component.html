@@ -1,5 +1,7 @@
 
 <div *ngIf="(serviceType$ | async) as serviceTYpe"></div>
+<div *ngIf="(action$ | async) as action"></div>
+
 <div class="container">
   <mat-card class="mat-card" [style]="serviceColor">
     <mat-card-content class="center">
@@ -48,6 +50,15 @@
                       <mat-icon>print</mat-icon>
                 </button>
               </span>
+
+              <span *ngIf="prepScreen ">
+                <button
+                      mat-raised-button color='primary'
+                      (click)="openOrder()">
+                      <mat-icon>open_in_new</mat-icon>
+                </button>
+              </span>
+
             </div>
           </div>
 

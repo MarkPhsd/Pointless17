@@ -11,19 +11,21 @@ body {
   overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
+.centered-flex {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 .site-name {
   font-weight: 500;
   font-size: 1.2em;
   width: 100%;
   white-space: nowrap;
-  // overflow: hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;
-  // float: left;
   margin: 0px 5px 5px 5px;
   padding: 0px 5px 5px 5px;
   align-items: baseline;
-  // line-height: 1em;
   align-content: center;
 }
 

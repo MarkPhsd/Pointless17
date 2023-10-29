@@ -4,7 +4,9 @@ import { Product } from 'electron/main';
 import { Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { MenuService, OrdersService } from 'src/app/_services';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { NewItem, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
@@ -33,12 +35,12 @@ export class NewOrderItemComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private menuService: MenuService,
               private siteService: SitesService,
+              private productEditButtonService: ProductEditButtonService,
               private orderService: OrderMethodsService,
               private orderItemService: POSOrderItemService) { }
 
   ngOnInit(): void {
     this.initInputForm(null);
-
   }
 
   initInputForm(item: PosOrderItem) {
@@ -50,7 +52,7 @@ export class NewOrderItemComponent implements OnInit {
       productName: [],
       unitTypeID:[],
       unitName: [],
-      quantity:[],
+      quantity:[1],
       cost:[],
       price:[],
     })
@@ -60,6 +62,9 @@ export class NewOrderItemComponent implements OnInit {
     this.initProductSearchForm(item)
   }
 
+  clearInputs(event) {
+    this.initInputForm(null)
+  }
 
   initSearchForm() {
     this.searchForm = this.fb.group( {
@@ -101,7 +106,6 @@ export class NewOrderItemComponent implements OnInit {
 
   assignProduct(event) {
     if (this.posOrderItem) {
-
       //then we want to ensure we get tthe actual product.
       const site = this.siteService.getAssignedSite()
       this.action$ = this.menuService.getMenuItemByID(site, event.id).pipe(switchMap(data => {
@@ -109,31 +113,21 @@ export class NewOrderItemComponent implements OnInit {
         this.posOrderItem.unitPrice = event.retail;
         this.posOrderItem.wholeSale = event.wholeSale;
         this.posOrderItem.productName = event?.name
-
         this.menuItemSelected = data;
         this.inputForm.patchValue(this.posOrderItem);
-
         return of(data)
       }))
     }
   }
 
-  // [searchForm]    = 'productSearchForm'
-  // (itemSelect)    = 'assignProduct($event)'>
-
   assignItem(event) {
-    // if (this.pb_Component) {
-    //   this.pb_Component.unitType = event
-    //   this.pb_Component.unitTypeID = event.id;
-    //   this.pb_Component.unitName = event?.name
-
-    //   // if (this.menuService.getPricesFromProductPrices)
-    //   //if this menuItemSelected exists, then we can set the
-    //   //to a matching product unit price if it exists.
-
-
-    //   this.inputForm.patchValue(this.pb_Component);
-    // }
+    if (event) {
+      const unit  = event;
+      // if (this.menuService.getPricesFromProductPrices)
+      //if this menuItemSelected exists, then we can set the
+      //to a matching product unit price if it exists.
+      this.inputForm.patchValue({unitName: event?.name, unitTypeID: event?.id});
+    }
   }
 
   getItem(event) {
@@ -160,7 +154,6 @@ export class NewOrderItemComponent implements OnInit {
     if (this.inputForm) {
       this.posOrderItem = this.inputForm.value
       this.action$  =  this.setThisItem(this.posOrderItem).pipe(switchMap(data => {
-        console.log('assing product initi search')
         this.clearProduct();
         this.clearUnit()
         return of(data)
@@ -168,12 +161,24 @@ export class NewOrderItemComponent implements OnInit {
     }
   }
 
+  makenewProduct() {
+    let diag = this.productEditButtonService.openNewItemSelector()
+    // diag.onClose(data => {
+    //   console.log('closed', data)
+    // })
+  }
+
   setThisItem(item: PosOrderItem) {
     const site = this.siteService.getAssignedSite()
     let newItem : NewItem;
     newItem = {} as NewItem;
     this.posOrderItem = this.inputForm.value as PosOrderItem;
+
     newItem.menuItem = this.menuItemSelected;
+    if (!this.menuItemSelected) {
+
+    }
+
     newItem.quantity = this.posOrderItem?.quantity;
     newItem.orderID = this.order?.id;
     newItem.barcode = this.menuItem?.barcode;
@@ -181,19 +186,30 @@ export class NewOrderItemComponent implements OnInit {
     newItem.deviceName = localStorage.getItem('devicename');
     newItem.clientID = this.order?.clientID;
 
-    return this.orderItemService.addItemToOrderWithBarcode(site, newItem).pipe(
-      switchMap(data => {
-        // console.log('order update, data', data)
-      const result = data
-      if (!data.resultErrorDescription) {
-        if (data.order) {
-          this.orderService.updateOrder(data.order)
-          this.initInputForm(null)
-          // this.saveUpdate.emit(true)
-        }
-      }
-      return of(true)
+    const searchModel = {name: this.posOrderItem.productName } as ProductSearchModel;
+    let quantity = +this.inputForm.controls['quantity'].value;
+
+    //unitName: event?.name, unitTypeID: event?.id
+
+    if (this.inputForm.controls['quantity'].value) {
+      const unitName = this.inputForm.controls['unitName'].value
+      const unitTypeID = this.inputForm.controls['unitTypeID'].value
+      newItem.menuItem.unitTypeID = unitTypeID;
+    }
+
+
+    if (!newItem.menuItem.barcode) {
+      this.siteService.notify('Item requires barcode to be added through purchase orders. Open the catalog, find the item and assign it a barcode.', 'Close',  6000, 'red');
+      return of({})
+    }
+
+    return this.orderService.addItemToOrderFromBarcode( newItem.menuItem.barcode, null, null,
+                                                        quantity,
+                                                        newItem?.menuItem?.unitTypeID).pipe( switchMap (data => {
+      this.initInputForm(null)
+      return of({})
     }))
+
   }
 
   replaceObject(newObj: any, list: any[]): any[] {
@@ -211,22 +227,11 @@ export class NewOrderItemComponent implements OnInit {
     })
   }
 
-
   initProductSearchForm(item: PosOrderItem) {
     if (!item) {
       this.clearUnit();
       return;
     }
-
-    // if (!item) {
-    //   this.posOrderItem = {} as PosOrderItem;
-    //   this.inputForm.patchValue({ productID: 0})
-    //   this.productSearchForm = this.fb.group({
-    //     searchField: ['']
-    //   })
-    //   return;
-    // }
-
     this.inputForm.patchValue({ productID: item?.productID})
     this.productSearchForm = this.fb.group({
       searchField: [item?.productName]
@@ -241,6 +246,7 @@ export class NewOrderItemComponent implements OnInit {
   }
 
   clearProduct() {
+    this.menuItemSelected = null;
     this.inputForm.patchValue({ productID: 0})
     this.productSearchForm = this.fb.group({
       searchField: []

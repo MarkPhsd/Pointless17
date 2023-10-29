@@ -5,6 +5,7 @@
   </mat-card>
 </ng-template>
 
+<div *ngIf="(action$ | async) as action"></div>
 <div  class="container" *ngIf="storeCredit;else loading">
 
   <div *ngIf="inputForm && inputForm.controls?.cardNum.errors?.required && inputForm.controls?.cardNum.touched" class="error">

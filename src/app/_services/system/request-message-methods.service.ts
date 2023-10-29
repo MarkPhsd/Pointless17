@@ -16,6 +16,42 @@ export class RequestMessageMethodsService {
               private userAuthorization     : UserAuthorizationService,
               private siteService           : SitesService) { }
 
+  communicationRequest(order: IPOSOrder, user: IUser, name: string,  message: string) {
+    return  this.orderCommunication( order,  user, 'oc', name, message )
+  }
+
+  orderCommunication(order: IPOSOrder, user: IUser, type: string,
+                    name: string, requestMessage: string,) {
+
+    const site = this.siteService.getAssignedSite();
+    const message = {} as IRequestMessage;
+
+    let tableName = ''
+    if (order.tableName) {tableName = order.tableName };
+    let orderName = ''
+    if (order.customerName) { orderName = order.customerName};
+
+    message.message = requestMessage
+
+    // `${user.firstName} is requesting Item ${item.productName} ${item.unitName},${serialCode}
+    //                   having a quantity of ${item.quantity}, ${operationDescription}.`
+
+    message.subject = `${requestMessage} ${order.id} - ${tableName} -  ${orderName}`;
+    message.type    = 'OC'
+    message.orderID = order.id
+    message.method  = `openOrder;id=${order.id}`
+    message.userID  = user.id;
+    message.userRequested = user?.firstName + user?.lastName;
+    if (this.userAuthorization.isStaff) {
+      message.employeeID = order?.employeeID;
+    }
+    if (this.userAuthorization.user) {
+      message.senderID = this.userAuthorization.user?.id;
+      message.senderName = `${this.userAuthorization?.user?.firstName}  ${this.userAuthorization?.user?.lastName}`
+    }
+    return this.requestMessageService.saveMessage(site, message );
+  }
+
   requestPriceChange(item: IPOSOrderItem, order: IPOSOrder, user: IUser) {
     return  this.requestItemEdit(item, order,  user,'PC', 'Price Change Request - ', ' have the price adjusted.' )
   }

@@ -1,3 +1,7 @@
+<div *ngIf="(action$  | async) as action">
+
+</div>
+
 <div    [style.height]="pixelHeight"
         [style.max-height]="pixelHeight"
          *ngIf="layoutService.dashboardModel">
@@ -6,7 +10,6 @@
             [style.opacity]="opacity/100"
             [style.background-blend-mode]="backgroundblendmode"
             [style.background-image]="'url('+ image +')'"
-
             [style.background-position] = "'center'"
             [style.background-repeat]   = "'no-repeat'"
             [style.background-size]     = "'cover'"
@@ -51,6 +54,5 @@
         </div>
     </gridster-item>
   </gridster>
-
 
 </div>

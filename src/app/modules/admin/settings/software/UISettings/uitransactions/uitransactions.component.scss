@@ -25,16 +25,26 @@ mat-card {
   width: 200px;
 }
 
+
 .grid-views {
 
-  --gap: 5px;
-  margin-top: 2px;
-  margin-right: 2px;
-  margin-bottom: 5px;
+  margin:5px;
+  // display: grid;
+  // gap: var(--gap);
+  // // grid-template-columns: repeat( auto-fit, minmax(120px, 1fr) );
+  // overflow-y: visible;
+  // max-width: 200px;
+}
+
+
+.grid-view-sections {
+  margin: 5px;
   display: grid;
-  gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  gap: 5px;
+  grid-template-columns: repeat( auto-fit, minmax(500px, 1fr) );
+  grid-auto-flow: row;
   overflow-y: visible;
+
 
 }
 

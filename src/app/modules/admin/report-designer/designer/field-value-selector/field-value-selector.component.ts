@@ -10,10 +10,12 @@ import { ItemBasic } from '../../interfaces/reports';
 export class FieldValueSelectorComponent implements OnInit {
 
   @Output() outputItem = new EventEmitter<any>();
-  @Input() inputForm: UntypedFormGroup | undefined;
+  @Input() inputForm: UntypedFormGroup;
   // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   @Input() fieldName: string = '';
+  @Input() placeHolder  = ''
   @Input() list: ItemBasic[] | unknown;
+
   constructor() { }
 
   ngOnInit(): void {

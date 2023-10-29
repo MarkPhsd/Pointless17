@@ -11,7 +11,11 @@
   <mat-card-title>
     <div class="header-container">
       <div *ngIf="displayMenu">
-        <button mat-button color="primary" (click)="openDisplayMenu()"> {{displayMenu?.name}} <mat-icon>open_in_new</mat-icon></button>
+        <button mat-button color="primary"
+                (click)="openDisplayMenu()">
+            {{displayMenu?.name}}
+          <mat-icon>open_in_new</mat-icon>
+        </button>
       </div>
       <div>
         <app-edit-buttons-standard

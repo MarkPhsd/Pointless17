@@ -51,6 +51,7 @@ export interface OrderActionResult {
 
 export class OrdersService {
 
+
   get platForm() {  return Capacitor.getPlatform(); }
 
   constructor(
@@ -335,6 +336,20 @@ export class OrdersService {
     return this.http.get<any>(url);
   }
 
+  roundOrder(site: ISite, id: number):  Observable<IPOSOrder> {
+
+    const controller = "/POSOrderItems/"
+
+    const endPoint  = "roundOrder"
+
+    const parameters = `?ID=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
+
+  }
+
   getOrder(site: ISite, id: string, history: boolean):  Observable<IPOSOrder>  {
 
     if (history === undefined) {history = false};
@@ -443,14 +458,18 @@ export class OrdersService {
     return this.http.post<IPOSOrder>(url, orderPayload).pipe( switchMap (
       data => {
 
+        // console.log('post orer with payload', data?.resultMessage)
+
+        if (data.resultMessage){
+          this.siteService.notify(`Order was not submitted ${data?.resultMessage}`, "Error", 2000, 'yellow' )
+          return of(data)
+        }
+
         if (!data || +data.id == 0) {
           this.siteService.notify(`Order was not submitted`, "Error", 2000, 'yellow' )
           return of(null)
         }
-        if (data.resultMessage){
-          this.siteService.notify(`Order was not submitted ${JSON.stringify(data.resultMessage)}`, "Error", 2000, 'yellow' )
-          return of(null)
-        }
+
         return of(data)
       })
     )
@@ -715,7 +734,7 @@ export class OrdersService {
 
   notificationEvent(description, title){
     this._SnackBar.open ( description, title , {
-      duration: 2000,
+      duration: 5000,
       verticalPosition: 'top'
     })
   }

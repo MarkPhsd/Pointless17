@@ -11,6 +11,9 @@ import { catchError, switchMap } from 'rxjs/operators';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { Observable } from 'rxjs';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
+import { InputTrackerService } from 'src/app/_services/system/input-tracker.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-prompt-walk-through',
   templateUrl: './prompt-walk-through.component.html',
@@ -40,6 +43,8 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
   _posItem         : Subscription;
   smallDevice      : boolean;
   phoneDevice       : boolean;
+  noteForm         : FormGroup;
+  saveNotes$: Observable<any>;
 
   intSubscriptions() {
     this.initPOSItemSubscription();
@@ -57,6 +62,7 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
   initSaveSubscription() {
     this._savePrompt = this.promptWalkThroughService.savePromptSelection$.subscribe(data => {
       if (data) {
+
         this.applyChoices()
       }
     })
@@ -72,13 +78,11 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
           this.promptGroup = data;
           return this.orderMethodsService.currentOrder$
       })).subscribe(data => {
-        // console.log('order', data)
 
         if (data) { this.order = data;}
         if (this.promptGroup) {
           this.orderPromptGroup = this.promptGroup;
           this.orderPromptGroup.orderID = this.order.id
-          // console.log('Order Prompt Group', this.orderPromptGroup)
           return of(this.orderPromptGroup)
         }
         return of(null)
@@ -111,9 +115,12 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
     private sitesService             : SitesService,
     private posOrderItemService      : POSOrderItemService,
     private orderService             : OrdersService,
-    public orderMethodsService: OrderMethodsService,
+    public orderMethodsService       : OrderMethodsService,
     private promptGroupService       : PromptGroupService,
     private promptWalkThroughService : PromptWalkThroughService,
+    public platformService           : PlatformService,
+    private trackerService           : InputTrackerService,
+    private _fb: FormBuilder,
     private dialogRef                : MatDialogRef<PromptWalkThroughComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     )
@@ -130,6 +137,13 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
     this.intSubscriptions()
     this.updateScreenSize()
     this.initSaveSubscription()
+    this.initNoteForm();
+  }
+
+  initNoteForm() {
+    this.noteForm = this._fb.group({
+      modifierNote : []
+    })
   }
 
   @HostListener("window:resize", [])
@@ -143,7 +157,6 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
       this.phoneDevice = true
     }
   }
-
 
   reset() {
     // this.orderPromptGroup.prompts.
@@ -228,22 +241,14 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
   }
 
   get smallScreenButtons() {
-    // if (this.phoneDevice) {
-    //   return this.buttonDisplay;
-    // }
     return null;
   }
 
-  // @ViewChild('largeDisplay')    largeDisplay: TemplateRef<any>;
-  // @ViewChild('smallDisplay')    smallDisplay: TemplateRef<any>;
-
   applyChoices() {
-
-    // console.log('Prompt', this.orderPromptGroup);
 
     if (this.orderPromptGroup) {
       const site = this.sitesService.getAssignedSite();
-      this.setNotes();
+      const saveAction$ =  this.setNotes();
 
       let time = 500
       let message = ''
@@ -256,13 +261,11 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
            }
         })
 
-       // console.log('message', message, quantityMetValidation)
         if (message != '') {
           this.sitesService.notify(message, 'Close', time * quantityMetValidation.length, 'yellow', 'top');
           return;
         }
       }
-
 
       const result =   this.promptWalkThroughService.validateSelections(this.orderPromptGroup)
       if (result && result.length  > 0) {
@@ -275,10 +278,11 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
       }
 
       const prompt$ = this.posOrderItemService.postPromptItems(site, this.orderPromptGroup);
-
       this.processing = true;
 
-      this.action$ =  prompt$.pipe(
+      this.action$ =  saveAction$.pipe(switchMap(data => {
+        return prompt$
+      })).pipe(
           switchMap( data  => {
               return  this.orderService.getOrder(site, data.orderID.toString(), false)
              }
@@ -300,9 +304,19 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
   }
 
   setNotes() {
-    if (this.modifierNote && this.orderPromptGroup.posOrderItem) {
-      this.orderPromptGroup.posOrderItem.modifierNote = this.modifierNote;
+    let modifierNote = ''
+    if ( this.noteForm) {
+      modifierNote = this.noteForm.controls['modifierNote'].value;
     }
+
+    if (modifierNote && this.orderPromptGroup.posOrderItem) {
+         this.orderPromptGroup.posOrderItem.modifierNote =  modifierNote;
+        const site = this.sitesService.getAssignedSite()
+        console.log('modifiernote',  this.orderPromptGroup.posOrderItem.modifierNote )
+        return  this.posOrderItemService.putItem(site, this.orderPromptGroup.posOrderItem)
+    }
+
+    return of({})
   }
 
 }

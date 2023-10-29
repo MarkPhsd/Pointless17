@@ -53,7 +53,7 @@
     </div>
 
     <div *ngIf="!isInventory && showMorePrices">
-      <app-value-fields
+        <app-value-fields
           *ngIf="!isInventory && !itemType.disableSimplePrice"
           [fieldsClass]="'font-medium'"
           [inputForm]= "inputForm"
@@ -76,6 +76,13 @@
         </app-value-fields>
     </div>
 
+    <!-- <app-value-fields
+       *ngIf="!isInventory && !itemType.disableSimplePrice"
+      [fieldsClass]="'font-medium'"
+      [inputForm]= "inputForm"
+      [fieldName]="'price'">
+      Price
+    </app-value-fields> -->
     <app-value-fields
         *ngIf="!isInventory"
         [fieldsClass]="'font-medium'"
@@ -84,21 +91,13 @@
       Cost
     </app-value-fields>
 
-    <app-value-fields
-       *ngIf="!isInventory && !itemType.disableSimplePrice"
-      [fieldsClass]="'font-medium'"
-      [inputForm]= "inputForm"
-      [fieldName]="'price'">
-      Price
-    </app-value-fields>
-
-    <app-value-fields
+    <!-- <app-value-fields
         *ngIf="isInventory"
         [fieldsClass]="'font-medium'"
         [inputForm]= "inputForm"
         [fieldName]="'cost'">
       Cost
-    </app-value-fields>
+    </app-value-fields> -->
 
 
     <div *ngIf="!isInventory && itemType && itemType.type && !itemType.disableSimplePrice">

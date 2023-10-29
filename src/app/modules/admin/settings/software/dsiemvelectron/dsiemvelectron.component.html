@@ -159,13 +159,22 @@
           <div class="toggle-fields">
             <div>
               <mat-slide-toggle
+                formControlName="partialAuth"
+                >
+                <mat-label>Partial Auth</mat-label>
+              </mat-slide-toggle>
+            </div>
+          </div>
+
+          <div class="toggle-fields">
+            <div>
+              <mat-slide-toggle
                 formControlName="enabled"
                 >
                 <mat-label>Enable</mat-label>
               </mat-slide-toggle>
             </div>
             <div>Enabled on each device.</div>
-
           </div>
 
       </div>

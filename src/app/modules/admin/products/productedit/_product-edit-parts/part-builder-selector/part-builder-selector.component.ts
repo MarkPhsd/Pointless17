@@ -14,18 +14,18 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class PartBuilderSelectorComponent implements OnInit, AfterViewInit {
 
-  @Input() inputForm: UntypedFormGroup;
-  @Input() searchForm: UntypedFormGroup;
-  @Input() searchField:       UntypedFormControl;
-  @Input() index             : number;
-  @Input() outputType        = ''
-
-  @Input() id                 : number;
-  @Input() name:              string;
+  @Input() inputForm  : UntypedFormGroup;
+  @Input() searchForm : UntypedFormGroup;
+  @Input() searchField: UntypedFormControl;
+  @Input() index      : number;
+  @Input() outputType  = ''
+  @Input() placeHolder = ''
+  @Input() id          : number;
+  @Input() name        : string;
 
   @Input() searchType : string = 'product';
   @Input() fieldProperty: string;
-  @Input() friendlyName: string;
+
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
 
@@ -74,24 +74,6 @@ export class PartBuilderSelectorComponent implements OnInit, AfterViewInit {
     return  "searchField";
   }
 
-  ngAfterViewInit() {
-    fromEvent(this.input.nativeElement,'keyup')
-      .pipe(
-          filter(Boolean),
-          debounceTime(225),
-          distinctUntilChanged(),
-          tap((event:KeyboardEvent) => {
-            const search  = this.input.nativeElement.value
-            this.refreshSearch(search);
-          })
-      )
-    .subscribe();
-  }
-
-  refreshSearch(search: any){
-    if (search) {this.searchPhrase.next( search ) }
-  }
-
   constructor(
           private siteService      : SitesService,
           private menuService : MenuService,
@@ -112,6 +94,29 @@ export class PartBuilderSelectorComponent implements OnInit, AfterViewInit {
     if (this.id) { this.getName(this.id)  }
   }
 
+  ngAfterViewInit() {
+    try {
+      fromEvent(this.input.nativeElement,'keyup')
+      .pipe(
+          filter(Boolean),
+          debounceTime(225),
+          distinctUntilChanged(),
+          tap((event:KeyboardEvent) => {
+            const search  = this.input.nativeElement.value
+            this.refreshSearch(search);
+          })
+      )
+    .subscribe();
+    } catch (error) {
+      console.log('afterview init error', error)
+    }
+
+  }
+
+  refreshSearch(search: any){
+    if (!this.searchPhrase) { return }
+    if (search) {this.searchPhrase.next( search ) }
+  }
   getName(id: number) {
     if (!id)             {return null}
     const site  = this.siteService.getAssignedSite();

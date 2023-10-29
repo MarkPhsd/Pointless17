@@ -55,7 +55,6 @@
       </div>
     </mat-card-content>
     <mat-card-actions >
-      <!-- fxFlexFill flex -->
       <div class="button-container">
         <button *ngIf="editField != 'quantity' && editField != 'price'"
                 mat-raised-button color='primary' (click)="save()">
@@ -72,7 +71,6 @@
 </div>
 
 <div *ngIf="editField == 'modifierNote' && platFormService.isApp()">
-  <!-- {{platFormService.isApp()}}s -->
   <app-keyboard [disableClose]= "true"> </app-keyboard>
 </div>
 
@@ -83,7 +81,6 @@
               [decimals]            =  decimals
               [showInput]           = "true"
               [requireWholeNumber]  = "false"
-
               (outPutReturnEnter)   = "savePriceChange($event)"
               (closeOnEnterPress)   = "onClose($event)">
        <ng-content select="name"></ng-content>

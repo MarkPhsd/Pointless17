@@ -16,9 +16,10 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
 })
 
 export class OrderPrepComponent implements OnInit,OnDestroy {
-
+  action$ : Observable<any>;
   serviceColor: string;
   @Output() outPutSetVisibility  = new EventEmitter<any>();
+  @Output() ouPutSetActive  = new EventEmitter<any>();
   @Input() site: ISite;
   @Input() order: IPOSOrder;
   @Input() index: number;
@@ -60,6 +61,7 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
   initViewType() {
     this._viewType = this.orderMethodsService.viewOrderType$.subscribe(data => {
       this.viewType = data;
+      this.prepScreen = false;
       if (this.viewType) {
         this.prepScreen = true;
       }
@@ -211,7 +213,13 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
   }
 
   setItemsAsPrepped() {
+    // console.log('set items as prepped', this.printLocation)
+    if (!this.printLocation || this.printLocation == 0) {
+      this.siteService.notify('Please first selct a print location.', 'close', 4000, 'red')
+      return;
+    }
     if (this.order && this.printLocation && this.printLocation != 0) {
+      // console.log('set items as prepped')
       const order$ =  this.orderMethodsService.setItemsAsPrepped(this.order.id, this.printLocation);
       order$.subscribe( order => {
         if (order) {
@@ -222,6 +230,10 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
     }
   }
 
+  openInNew() {
+    this.setActiveOrderObs(this.order)
+  }
+
   printOrder() {
     this.orderMethodsService.updateOrderSubscription(this.order)
     this.printingService.previewReceipt()
@@ -229,10 +241,22 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
 
   openOrder() {
     if (this.order) {
-      //open cart
-      //slide card panel from right
-      // this.order.serviceType
+      this.ouPutSetActive.emit(this.order)
     }
+  }
+
+  setActiveOrderObs(order) {
+    const site  = this.siteService.getAssignedSite();
+    const order$ =  this.orderService.getOrder(site, order.id, order.history )
+    this.action$ =  order$.pipe(switchMap(data =>
+      {
+        if (data) {
+          // this.orderOutPut.emit(data)
+          this.orderMethodsService.setActiveOrder(site, data)
+        }
+        return of(data)
+      }
+    ))
   }
 
 }

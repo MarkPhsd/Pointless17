@@ -1,56 +1,26 @@
-@import "/src/mixins.scss";
+// @import "/src/mixins.scss";
 
 .gallery-container {
   align-items: center;
   justify-content: center;
   vertical-align: top;
   margin:  5px;
-  // border-radius: 3px;
+  border-radius: 15px;
 }
 
 img {
-  width: 95%;
-  max-width: 400px;
-  margin: 5px;
-  @include for-phone-only {
-    width: 75%;
-    margin-left: 5px;
-    max-width: 400px;
-  }
-}
-
-.gallery {
-  border-radius: 10px;
+  border-radius: 25px;
+  border: 0;
+  object-fit: contain;
+  object-position: 50% 50%;
+  width: 100%;
+  max-height: 400px;
 }
 
 .grid-item-gallery {
-  grid-row     : 1 / 2;
-  width        : 95%;
-  margin-left  : 10px;
-  max-height   : 400px;
-
-
-  @media only screen and (min-width: 992px) {
-    grid-row: 1 / 2;
-    width   : 95%;
-    margin  : 10px;
-    max-height: 400px;
-    // background-color: aqua;
-  }
-
-  @media only screen and (min-width: 1200px) {
-    grid-row: 1 / 2;
-    width   : 95%;
-    margin  : 10px;
-    max-height: 400px;
-    // background-color: rgb(0, 255, 13);
-  }
-
-  // @media only screen and (min-width: 1400px) {
-  //   grid-row: 1 / 2;
-  //   width   : 95%;
-  //   margin  : 10px;
-  //   border-radius: 5px;
-  //   max-height: 400px;
-  // }
+  grid-row: 1/2;
+  width: 95%;
+  margin-left: 10px;
+  max-height: 400px;
+  overflow: hidden;
 }

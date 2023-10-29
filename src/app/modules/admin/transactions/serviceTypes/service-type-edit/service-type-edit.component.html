@@ -10,7 +10,7 @@
         </div>
         <div>
           <app-edit-buttons-standard
-          (outputeupdateItem)     ="updateItem($event)"
+          (outputeupdateItem)     ="updateItem(false)"
           (outputupdateItemExit)  ="updateItemExit($event)"
           (outputupdatedeleteItem)="deleteItem($event)"
           (outputupdateonCancel)  ="onCancel($event)"
@@ -118,7 +118,18 @@
                   formControlName  ="onlineOrder"
                   class="form-control" >
               <mat-hint>This enables the order as an option for online users.</mat-hint>
+            </mat-checkbox>
+          </div>
 
+          <div>
+            <mat-label >Allow Request to Prepare Order</mat-label>
+          </div>
+          <div >
+            <mat-checkbox
+                  type             ="text"
+                  formControlName  ="allowRequestPrep"
+                  class="form-control" >
+              <mat-hint>Users can request the order be prepared before they pay.</mat-hint>
             </mat-checkbox>
           </div>
 

@@ -6,8 +6,15 @@
         Balance Sheet
     </mat-card-title>
     <mat-card-subtitle>
+      <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
+      <span #coachingInfo></span>
+
       <div *ngIf="sheet.message">
         {{sheet.message }}
+      </div>
+
+      <div *ngIf="sheet.errorMessage">
+        {{sheet.errorMessage }}
       </div>
 
       <div class="header-grid">
@@ -17,6 +24,8 @@
             [sheet]    ="sheet">
             <h4>Sheet Info</h4>
           </balance-sheet-header-view>
+          <div #coachingOpenOrders></div>
+          <div #coachingClosedOrders></div>
         </div>
 
         <div>
@@ -42,8 +51,7 @@
               [printOption]           ="true"
             >
           </app-edit-buttons-standard>
-          <button mat-raised-button color="primary" (click)="previewSheet()">Preview</button>
-        </div>
+          </div>
       </div>
 
       <mat-divider class="mat-dividers"></mat-divider>
@@ -58,6 +66,8 @@
             <h4><mat-icon>edit</mat-icon> Edit </h4>
           </div>
 
+          <span #coachingStartShift></span>
+
           <div class="button" style="margin-left:15px" *ngIf ="!sheet.endTime && sheet.shiftStarted != 1">
             <button style="height:60px; line-height:1em" color="warn" mat-raised-button (click)="startShift()">Start Sheet</button>
           </div>
@@ -68,6 +78,7 @@
             </button>
           </div>
 
+          <span #coachingCloseShift></span>
           <div   class="button" *ngIf="!sheet.endTime">
             <span *ngIf ="sheet.shiftStarted == 1 && ordersOpen == 0">
               <button  style="height:60px" color="warn" mat-raised-button (click)="closeSheet('/login')">Close Sheet</button>
@@ -108,6 +119,7 @@
 </div>
 
 <ng-template #loading >
+
   <button mat-raised-button (click)="newBalanceSheet()">Start Sheet</button>
   <mat-spinner></mat-spinner>
 </ng-template>
@@ -396,4 +408,10 @@
     </div>
   </div>
 
+</ng-template>
+
+<ng-template #helpButton>
+  <coach-marks-button
+        (initPopOver)="initPopOver()"
+        [enabled]="user?.userPreferences?.enableCoachMarks"></coach-marks-button>
 </ng-template>

@@ -5,7 +5,6 @@ import { Observable, switchMap, of } from 'rxjs';
 import { clientType, IProductCategory, IServiceType, ISetting } from 'src/app/_interfaces';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { AuthenticationService, IItemBasic, MenuService } from 'src/app/_services';
-import { PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -33,7 +32,7 @@ export class UITransactionsComponent implements OnInit {
   vipCustomer$    : Observable<any>;
   action$         : Observable<unknown>;
   serviceType$    : Observable<IServiceType[]>;
-  categories$:  Observable<IProductCategory[]>;
+  categories$     :  Observable<IProductCategory[]>;
 
   receiptList$    :  Observable<IItemBasic[]>;
   receiptList     : IItemBasic[];
@@ -44,7 +43,6 @@ export class UITransactionsComponent implements OnInit {
       private serviceTypeService: ServiceTypeService,
       private clientTypeService: ClientTypeService,
       private sitesService     : SitesService,
-      private printerLocationsService: PrinterLocationsService,
       private clienTableSerivce: ClientTableService,
       private menuService: MenuService,
       private fb: UntypedFormBuilder,
@@ -57,9 +55,16 @@ export class UITransactionsComponent implements OnInit {
   ngOnInit() {
 
     const site           = this.sitesService.getAssignedSite();
-    this.clientTypes$    = this.clientTypeService.getClientTypes(site);
+
+    console.log('userValue', this.authenticationService.userValue)
+    if (this.authenticationService.userValue) {
+      this.clientTypes$    = this.clientTypeService.getClientTypes(site);
+    }
+
     this.serviceType$    = this.serviceTypeService.getAllServiceTypes(site)
+
     this.categories$     = this.menuService.getCategoryListNoChildren(site);
+
     this.initUITransactionSettings()
     this.saving$  = null;
     this.testForm = this.fb.group({
@@ -68,7 +73,6 @@ export class UITransactionsComponent implements OnInit {
     this.testForm.valueChanges.subscribe(data => {
        localStorage.setItem('testVariable' ,  this.testForm.controls['testVariable'].value)
     })
-
     this.receiptList$ = this.getReceiptList()
   }
 
@@ -76,6 +80,7 @@ export class UITransactionsComponent implements OnInit {
     this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
       switchMap( data => {
         this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+        // console.log(data.text, this.uiTransactions)
         this.initFormData(  this.uiTransactions )
         return of(data);
     }));

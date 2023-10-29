@@ -80,22 +80,30 @@
                 (click)="toggleDateRangeFilter()">
                 Completed Dates<mat-icon>date_range</mat-icon>
               </button>
-        <mat-date-range
-          [inputForm] ="completionDateForm">
-        </mat-date-range>
+
+          <mat-date-range
+            [inputForm] ="completionDateForm">
+          </mat-date-range>
+
       </div>
 
       <div class="toggle-fields">
+        <mat-label>History</mat-label>
         <mat-slide-toggle
                   (change)="updateOrderSearch(searchModel)"
-                  [(ngModel)]="searchModel.searchOrderHistory"
-                  >
-          <mat-label>History</mat-label>
+                  [(ngModel)]="searchModel.searchOrderHistory"  >
         </mat-slide-toggle>
       </div>
-
     </div>
-    <!-- (outputDateRange)="emitDatePickerData($event)" -->
+
+    <div class="toggle-fields">
+      <mat-label>Online Orders</mat-label>
+      <mat-slide-toggle
+                (change)="updateOrderSearch(searchModel)"
+                [(ngModel)]="searchModel.onlineOrders"  >
+      </mat-slide-toggle>
+    </div>
+
 
     <div class="date-filter-buttton" *ngIf="isAuthorized || isUser" class="fields">
       <button mat-raised-button
@@ -107,10 +115,12 @@
     </div>
 
     <div *ngIf="showScheduleFilter && scheduleDateForm">
-      <mat-date-range
-          [inputForm]      ="scheduleDateForm" >
-          Schedule Dates
-      </mat-date-range>
+      <div  style="width:185px">
+        <mat-date-range
+            [inputForm]      ="scheduleDateForm" >
+            Schedule Dates
+        </mat-date-range>
+      </div>
     </div>
     <!-- (outputDateRange)="emitScheduledDatePickerData($event)" -->
 
@@ -181,9 +191,6 @@
     <div *ngIf="isStaff"
          [hidden]="toggleTypeEmployee === '1' && searchModel"
          class="toggle-selector">
-
-
-
       <app-mat-toggle-selector
             *ngIf     ="searchModel"
             [id]      ="searchModel.serviceTypeID"

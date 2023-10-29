@@ -7,14 +7,11 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap,filter,tap,  } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-// import 'ag-grid-community/dist/styles/ag-theme-material.css';
+import {of} from 'rxjs';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
@@ -88,6 +85,7 @@ export class PromptSubGroupsComponent implements OnInit, AfterViewInit {
   id             : number;
   prompt         : PromptSubGroups;
   gridlist       = 'grid-list'
+  urlPath$: Observable<string>;
 
   initWindowState() {
     const editWindowState = {} as editWindowState;
@@ -114,9 +112,16 @@ export class PromptSubGroupsComponent implements OnInit, AfterViewInit {
   }
 
 
-async ngOnInit() {
+ ngOnInit() {
   this.initClasses()
-  this.urlPath        = await this.awsService.awsBucketURL();
+
+  this.urlPath$  =  this.awsService.awsBucketURLOBS().pipe(
+    switchMap(data => {
+      this.urlPath = data;
+      return of(data)
+    }
+  ))
+
   const site          = this.siteService.getAssignedSite()
   this.rowSelection   = 'multiple'
 };

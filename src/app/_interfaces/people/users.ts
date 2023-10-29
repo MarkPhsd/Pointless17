@@ -35,7 +35,9 @@ export interface UserPreferences {
 
   firstTime_notifyShowAllOrders: boolean;
   firstTime_FilterOrderInstruction: boolean;
+  enableCoachMarks: boolean;
 
+  contactPreference: number;
 
 }
 

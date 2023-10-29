@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { clientType, ClientType, IClientTable, IUserProfile } from 'src/app/_interfaces';
+import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -27,6 +28,7 @@ export class ProfileDemographicsComponent implements OnInit, OnDestroy {
   constructor(
     private siteService       : SitesService,
     private clientTypeService : ClientTypeService,
+    public labelingService: LabelingService,
     private uiSettingsService : UISettingsService,) { }
 
   ngOnInit(): void {

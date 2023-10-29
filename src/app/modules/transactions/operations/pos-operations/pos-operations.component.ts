@@ -1,11 +1,11 @@
-import { Component, ElementRef, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransferDataService } from 'src/app/_services/transactions/transfer-data.service';
 import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ITaxReport} from 'src/app/_services/reporting/reporting-items-sales.service';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject, Subscription } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
@@ -17,20 +17,28 @@ import { ICanCloseOrder } from 'src/app/_interfaces/transactions/transferData';
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { AuthenticationService, OrdersService } from 'src/app/_services';
+import { AuthenticationService, OrdersService, ReportingService } from 'src/app/_services';
 import { HttpClient } from '@angular/common/http';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
+import { IPaymentSalesSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 
 @Component({
   selector: 'pos-operations',
   templateUrl: './pos-operations.component.html',
   styleUrls: ['./pos-operations.component.scss']
 })
-export class PosOperationsComponent implements OnInit {
+export class PosOperationsComponent implements OnInit, OnDestroy {
 
   closingProcedure$: Observable<any>
   @ViewChild('printsection') printsection: ElementRef;
   @ViewChild('metrcNetSalesSummary') metrcNetSalesSummary: TemplateRef<any>;
+
+  //coaching
+  @ViewChild('coachingCloseDay', {read: ElementRef}) coachingCloseDay: ElementRef;
+  @ViewChild('coachingUnClosedBalanceSheets', {read: ElementRef}) coachingUnClosedBalanceSheets: ElementRef;
+  @ViewChild('coachingUnpaidOrders', {read: ElementRef}) coachingUnpaidOrders: ElementRef;
+
   printAction$: Observable<any>
   styles: string;
   @Input() site    : ISite;
@@ -48,11 +56,13 @@ export class PosOperationsComponent implements OnInit {
   closeResult     = '';
   runningClose :  boolean;
   balanceSheets:  IBalanceSheet[]
+  user          : any;
+  _user: Subscription;
 
   balanceSheetsClosed    = '';
   canCloseOrderResults: any;
   sale: ITaxReport;
-
+  balanceSheet$  : Observable<any>;
   iBalanceSheet: IBalanceSheet;
   zrunID: any;
   dsiEMVSettings      : Transaction;
@@ -65,10 +75,16 @@ export class PosOperationsComponent implements OnInit {
   uiTransactions$: Observable<TransactionUISettings>;
   auths$: Observable<IUserAuth_Properties>;
   auths: IUserAuth_Properties;
-
+  auditPayment$ : Observable<IPaymentSalesSummary>;
+  auditPayment  : IPaymentSalesSummary;
   scheduleDateStart  = new Date
-  scheduleDateEnd = new Date
+  scheduleDateEnd = new Date;
 
+  userSubscriber() {
+    this._user = this.authenticationService.user$.subscribe(data => {
+      this.user = data;
+    })
+  }
   get isElectronApp() {
     return this.platFormService.isAppElectron
   }
@@ -79,22 +95,29 @@ export class PosOperationsComponent implements OnInit {
     private balanceSheetService: BalanceSheetService,
     private router             : Router,
     private orderMethodsService: OrderMethodsService,
+    private orderService       : OrdersService,
     private platFormService    : PlatformService,
     private printingService    : PrintingService,
     private dsiProcess         : DSIProcessService,
     private sendGridService    : SendGridService,
     private matSnack           : MatSnackBar,
     private uISettingsService  : UISettingsService,
-    private orderService       : OrdersService,
     private httpClient: HttpClient,
+    private coachMarksService: CoachMarksService,
     private authenticationService: AuthenticationService,
+    private paymentReportService: SalesPaymentsService,
   ) {
     if (!this.site) {
       this.site = this.siteService.getAssignedSite();
     }
   }
 
+  ngOnDestroy() {
+    if (this._user) { this._user.unsubscribe()}
+  }
+
   ngOnInit(): void {
+    this.userSubscriber();
     const item  = localStorage.getItem('DSIEMVSettings');
     if (item) {
       this.dsiEMVSettings = JSON.parse(item) as Transaction;
@@ -110,11 +133,15 @@ export class PosOperationsComponent implements OnInit {
     this.notifyChild();
   }
 
-  initAuthentication() {
+  refreshAudit(zrunID: number) {
+    const site = this.siteService.getAssignedSite()
+    return this.paymentReportService.getPaymentDiscrepancy(site, zrunID, '','')
+  }
+
+   initAuthentication() {
     this.auths$ =  this.authenticationService.userAuths$.pipe(
       switchMap(data => {
       this.auths = data;
-      // data.blin
       return of(data)
     }));
   }
@@ -193,6 +220,18 @@ export class PosOperationsComponent implements OnInit {
     this.getUser();
     this.refreshSales();
     this.refreshClosingCheck();
+    const site = this.siteService.getAssignedSite()
+    this.auditPayment$ = this.paymentReportService.getPaymentDiscrepancy(site, this.zrunID, '','')
+  }
+
+  setOrder(id: number) {
+    if (id) {
+      const site = this.siteService.getAssignedSite();
+      this.orderService.getOrder(site, id.toString(), false).subscribe(data => {
+        this.orderMethodsService.setActiveOrder(site, data)
+        }
+      )
+    }
   }
 
   addDates(StartDate: any, NumberOfDays : number): Date{
@@ -209,17 +248,28 @@ export class PosOperationsComponent implements OnInit {
   refreshSales() {
     const site = this.siteService.getAssignedSite();
     this.site = site
-    this.balanceSheetService.getZRUNBalanceSheet(site).subscribe( data => {
-      this.dateFrom = data.startTime
-      if (!data.endTime) {
-        this.dateTo = data.endTime
-      }
-      if (data.endTime) {
-        this.dateTo = new Date().toString()
-      }
-      this.iBalanceSheet = data;
-      this.zrunID = data.id;
-    })
+    this.balanceSheet$ = this.balanceSheetService.getZRUNBalanceSheet(site).pipe(
+      switchMap(data => {
+        this.dateFrom = data.startTime
+        if (!data.endTime) {
+          this.dateTo = data.endTime
+        }
+        if (data.endTime) {
+          this.dateTo = new Date().toString()
+        }
+        this.iBalanceSheet = data;
+        this.zrunID = data.id;
+        console.log('balance Sheet', data)
+        return of(data)
+    }))
+
+    // .pipe(switchMap(data => {
+    //    return this.refreshAudit(data.id)
+    // })).pipe(switchMap(data => {
+    //   // console.log('audit data', data)
+    //   this.auditPayment = data;
+    //   return of(data)
+    // }))
   }
 
   getUser() {
@@ -247,13 +297,10 @@ export class PosOperationsComponent implements OnInit {
   }
 
   async closeDay() {
-
     const result = window.confirm('Are you sure you want to close the day.');
     if (!result) {return}
-
     const site = this.siteService.getAssignedSite();
     this.runningClose = true;
-
     //run through checks. do all the closing checks on theWebapi.
     //return a can or not and reason why.
     try {
@@ -335,7 +382,6 @@ export class PosOperationsComponent implements OnInit {
     this.value = !this.value;
     this.childNotifier.next(this.value);
   }
-
 
   ordersWindow() {
     this.router.navigateByUrl('/pos-orders')
@@ -447,6 +493,20 @@ export class PosOperationsComponent implements OnInit {
     // this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
     // this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
     // this.printingAndroidService.printTestAndroidReceipt( this.btPrinter)
+  }
+
+  initPopOver() {
+    if (this.user?.userPreferences?.enableCoachMarks ) {
+      this.coachMarksService.clear()
+      this.addCoachingList()
+      this.coachMarksService.showCurrentPopover();
+    }
+  }
+
+  addCoachingList() {
+    this.coachMarksService.add(new CoachMarksClass(this.coachingCloseDay.nativeElement, "Close Day - Submits sales to Credit Card Batch, emails data. Clears Sales."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingUnClosedBalanceSheets.nativeElement, "Balance Sheets Open - If cashiers or servers haven't closed their balance sheets, buttons will appear that require they be closed before closing the day. The buttons will take you directly to the balance sheet to close."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingUnpaidOrders.nativeElement, "Orders with Unpaid Items: If orders have been submitted with items unpaid on them, you will need to delete, void or remove those orders before you may close the day."));
   }
 
 }

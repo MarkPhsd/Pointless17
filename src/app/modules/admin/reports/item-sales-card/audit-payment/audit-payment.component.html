@@ -1,0 +1,47 @@
+
+<button mat-button (click)="refresh()">
+  <mat-icon>refresh</mat-icon>
+</button>
+
+
+<ng-template #loading>
+  ...loading
+  <mat-spinner [diameter]="50"></mat-spinner>
+</ng-template>
+<div *ngIf="(auditPayment$ | async) as auditPayment;else loading" style="max-width: 355px;">
+  <mat-card *ngIf="auditPayment && (auditPayment.resultMessage || auditPayment.paymentSummary.length>0)">
+    <mat-card-subtitle>
+      Discrepancies - Payments do not match order total.
+    </mat-card-subtitle>
+    <mat-card-content>
+
+      <div *ngIf="auditPayment as summary">
+        <div *ngIf="summary && summary.resultMessage">
+          <mat-icon color="warn">warning</mat-icon> <mat-label color="warn">{{summary.resultMessage}}</mat-label>
+          <mat-label *ngIf="dateFrom && dateTo">
+            Range: {{dateFrom }} to {{dateTo}}
+          </mat-label>
+          <mat-label *ngIf="zrunID">
+            ID: {{zrunID}}
+          </mat-label>
+        </div>
+
+        <div  class="grid-container-selectors"  *ngIf="summary && summary.paymentSummary">
+          <div>Order ID</div>
+          <div>Paid </div>
+          <div>Order Total</div>
+          <!-- <div>Hist.</div> -->
+        </div>
+        <div  class="grid-container-selectors"  *ngFor="let item of summary.paymentSummary">
+          <button mat-button color="warn" (click)="setOrder(item.orderID, item.history)">
+            <mat-icon>open_in_new</mat-icon>
+            {{item.orderID}}</button>
+          <div class="margin-5" style="position:relative;top:5px">{{item.amountPaid | currency}}</div>
+          <div class="margin-5" style="position:relative;top:5px">{{item.orderTotal | currency}}</div>
+          <!-- <div class="margin-5" style="position:relative;top:5px">{{item.history}}</div> -->
+
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

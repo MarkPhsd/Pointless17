@@ -270,10 +270,10 @@ export class InventoryHistoryListComponent implements OnInit, OnDestroy {
   ///move to inventoryAssignemtnService
   openInventoryDialog(id: number) {
     const dialogRef = this.dialog.open(NewInventoryItemComponent,
-      { width:        '800px',
-        minWidth:     '800px',
-        height:       '750px',
-        minHeight:    '750px',
+      { width:        '900px',
+        minWidth:     '900px',
+        height:       '90vh',
+        minHeight:    '900px',
         data : {id: id}
       },
     )

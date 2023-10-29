@@ -5,7 +5,7 @@
         <button class="button grid-item"
                 mat-raised-button
                 (click)="reportCurrentSales()">
-          Current Sales  {{zrun.id}}
+          Un Closed {{zrun.id}}
         </button>
       </div>
 
@@ -32,13 +32,20 @@
         </button>
       </div>
 
+      <div *ngIf="searchModel">
+        <mat-slide-toggle [(ngModel)]="searchModel.currentDay">
+          Current
+        </mat-slide-toggle>
+      </div>
+
       <div *ngIf="searchModel"
-          class="keypad fields">
+          class="margin-5 keypad fields"
+          >
         <app-key-pad
           [inputForm]     ="searchForm"
           [inputTypeValue]="'text'"
-          (outPutValue)   ="refreshBalanceSearch($event)">
-          Report ID
+          (outPutValue)   ="refreshSearchByName($event)">
+            Search
         </app-key-pad>
       </div>
 
@@ -71,14 +78,14 @@
         </mat-form-field>
       </div>
 
-      <div *ngIf="(employees$ | async) as employees"
+      <!-- <div *ngIf="(employees$ | async) as employees"
            class="toggle-selector-employee">
         <app-mat-toggle-selector
                 [list]="employees"
                 (outPutID)="setEmployee($event)">
                 Employee
         </app-mat-toggle-selector>
-      </div>
+      </div> -->
 
     </div>
   </mat-card-content>

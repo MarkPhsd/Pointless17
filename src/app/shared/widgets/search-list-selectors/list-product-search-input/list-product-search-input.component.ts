@@ -10,11 +10,11 @@ import { IPOSOrder,  } from 'src/app/_interfaces';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { SettingsService } from 'src/app/_services/system/settings.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { finalize, take } from 'rxjs/operators';
+import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 // https://github.com/rednez/angular-user-idle
 const { Keyboard } = Plugins;
 
@@ -28,7 +28,8 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   obs$ : Observable<unknown>[];
   barcodeScanner$ : Observable<unknown>;
   _scanners = new ReplaySubject <unknown>()
-
+  posDevice       : ITerminalSettings
+  _posDevice      : Subscription;
   private observablesArraySubject = new BehaviorSubject<Observable<any>[]>([]);
   public observablesArray$ = this.observablesArraySubject.asObservable();
 
@@ -73,6 +74,10 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
       this.input.nativeElement.focus();
     })
 
+    this._posDevice = this.uiSettingService.posDevice$.subscribe(data => {
+      this.posDevice = data;
+   })
+
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       if (!data) {
         this.order = null
@@ -105,12 +110,12 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
 
   constructor(
     private fb             :        UntypedFormBuilder,
-    private menuItemService :       MenuService,
     private orderMethodService    : OrderMethodsService,
     private settingService        : SettingsService,
     private siteService           : SitesService,
     private uiSettingService      : UISettingsService,
     public orderMethodsService: OrderMethodsService,
+    private serviceTypeService: ServiceTypeService,
   )
   {   }
 
@@ -118,7 +123,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     const site = this.siteService.getAssignedSite()
     this.initForm();
     this.initSubscriptions();
-
     if (this.searchForm)  {
       try {
         this.settingService.getSettingByName(site, 'UITransactionSetting').subscribe( data => {
@@ -127,7 +131,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
               this.transactionUISettings =  JSON.parse(data.text) as  TransactionUISettings;
               this.requireEnter = this.transactionUISettings.requireEnterTabBarcodeLookup;
               if (!this.requireEnter) {   this.initSearchSubscription() }
-
               this.hideKeyboardTimeOut();
               if ( this.platForm != 'android') {return}
               this.keyboardDisplayOn = true
@@ -135,7 +138,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
             }
           }
         )
-
       } catch (error) {
         console.log('search Items', error)
       }
@@ -187,6 +189,31 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
         }
       ))
     }
+    return of(this.order)
+  }
+
+  addNewOrder() {
+    const site = this.siteService.getAssignedSite();
+    if (this.posDevice) {
+      if (this.posDevice.defaultOrderTypeID  && this.posDevice.defaultOrderTypeID != 0) {
+        const serviceType$ = this.serviceTypeService.getType(site, this.posDevice.defaultOrderTypeID)
+        return serviceType$.pipe(switchMap(data => {
+            return of(data)
+        })).pipe(switchMap(data => {
+            const order$ = this.getNewOrder(site, data)
+            return order$
+        }))
+      }
+    }
+    return this.getNewOrder(site, null)
+  }
+
+  getNewOrder(site, serviceType) {
+    if (this.order) { return of(this.order)}
+    return this.orderMethodsService.newOrderWithPayloadMethod(site, serviceType).pipe(
+      switchMap(data => {
+        return of(data)
+    }))
   }
 
   scan(barcode: string){
@@ -194,43 +221,23 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   }
 
   addItemToOrder(barcode: string): Observable<unknown> {
-    const site = this.siteService.getAssignedSite();
-    this.initForm()
-    const item$ = this.menuItemService.getMenuItemByBarcode(site, barcode, this.order?.clientID);
 
-    return   item$.pipe(switchMap( data => {
-        if ( !data ) {
-          return this.orderMethodService.processItemPOSObservable( this.order, barcode, null, 1, this.input, 0, 0,
-                                                                   this.assignedItem, this.orderMethodService.assignPOSItems)
-        } else
-        {
-          if (data.length == 1 || data.length == 0) {
-            return this.orderMethodService.processItemPOSObservable(this.order, barcode, data[0], 1,
-                                                                    this.input, 0, 0, this.assignedItem,
-                                                                    this.orderMethodService.assignPOSItems);
-          } else {
-            this.listBarcodeItems(data, this.order)
-          }
-        }
-        return of(data);
-      })
-    )
+    this.initForm()
+
+    const order$ = this.addNewOrder()
+
+    const newItem$ =  this.orderMethodService.addItemToOrderFromBarcode(barcode, this.input, this.assignedItem)
+
+    return order$.pipe(switchMap(data => {
+      return  newItem$
+    }))
+
   }
 
   hideKeyboardTimeOut() {
-    // if ( this.platForm != 'android' ) {return}
     if (this.platForm  != 'android') {
       setTimeout(()=> {
-          // console.log('focus')
           this.input.nativeElement.focus();
-          if (this.platForm != 'android' || this.platForm.toLowerCase() == 'electron') {
-            console.log(this.platForm)
-            try {
-              // Keyboard.hide()
-            } catch (error) {
-
-            }
-          }
       }, 200 )
     }
   }
@@ -243,14 +250,9 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   get assignedItem() {
     let assignedItems
     if (this.orderMethodService.assignPOSItems && this.orderMethodService.assignPOSItems[0]) {
-      assignedItems =this.orderMethodService.assignPOSItems[0]
+      assignedItems = this.orderMethodService.assignPOSItems[0]
     }
     return assignedItems
-  }
-
-  listBarcodeItems(items: IMenuItem[], order: IPOSOrder) {
-    if (items.length == 0) { return }
-    this.orderMethodService.openProductsByBarcodeList(items, order)
   }
 
 }

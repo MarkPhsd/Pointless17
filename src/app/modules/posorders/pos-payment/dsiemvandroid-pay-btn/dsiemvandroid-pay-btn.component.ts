@@ -31,12 +31,7 @@ export class DSIEMVAndroidPayBtnComponent implements OnInit {
     @Input() devicename : string;
 
     constructor(
-      private uISettingsService: UISettingsService,
-      private sitesService: SitesService,
-      private dialog: MatDialog,
       private paymentsMethodsService: PaymentsMethodsProcessService,
-      private orderMethodsService: OrderMethodsService,
-      private paymentMethodService: PaymentMethodsService,
       public  platFormService : PlatformService,) { }
 
     ngOnInit(): void {

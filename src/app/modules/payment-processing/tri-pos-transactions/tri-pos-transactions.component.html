@@ -42,13 +42,14 @@
         <div><button class="payment-buttons" mat-raised-button (click)="addTipPercent(18)">18 % Tip</button></div>
         <div><button class="payment-buttons" mat-raised-button (click)="addTipPercent(20)">20 % Tip</button></div>
         <div>
-          <!-- [showInput]        ="false" -->
+
           <app-key-pad
             [inputForm]        ="inputForm"
+            [fieldName]        ="'itemName'"
             [inputTypeValue]   ="'decimal'"
             [numberbuttons]    ="'number-buttons button-sized-scaled'"
             [alternateClass]   ="'grid-keypad-alternate'"
-            (outPutReturnEnter)="applyTipAmount($event)">
+            (outputOnChange)   ="applyTipAmount($event)">
             Other Tip Amount
           </app-key-pad>
         </div>

@@ -30,7 +30,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
   styleUrls: ['./store-credit-list.component.scss']
 })
 export class StoreCreditListComponent implements OnInit {
-  buttonName: string; //if edit off then it's 'Assign'
+  buttonName: string = 'edit' //if edit off then it's 'Assign'
   gridlist = "grid-list"
   editOff = false;
     //needed for search component
@@ -335,18 +335,18 @@ async ngOnInit() {
 
     this.columnDefs =  [
 
-      {
-      field: 'id',
-      cellRenderer: "btnCellRenderer",
-                    cellRendererParams: {
-                      onClick: this.editFromGrid.bind(this),
-                      label: this.buttonName,
-                      getLabelFunction: this.getLabel.bind(this),
-                      btnClass: 'btn btn-primary btn-sm'
-                    },
-                    minWidth: 175,
-                    maxWidth: 175,
-                    flex: 2,
+      { headerName: '',
+        field: 'id',
+        cellRenderer: "btnCellRenderer",
+            cellRendererParams: {
+              onClick: this.editFromGrid.bind(this),
+              label: this.buttonName,
+              getLabelFunction: this.getLabel.bind(this),
+              btnClass: 'btn btn-primary btn-sm'
+          },
+        minWidth: 125,
+        maxWidth: 125,
+        flex: 2,
       },
 
       {headerName: 'Card Number',     field: 'cardNum',         sortable: true,
@@ -386,11 +386,12 @@ async ngOnInit() {
   editFromGrid(e) {
     if (!e) {return}
     if (e.rowData.id)  {
-      if (this.buttonName === 'Edit') {
-        this.editItemWithId(e.rowData.id);
-       } else {
-          this.assignItem(e)
-      }
+      this.editItemWithId(e.rowData.id);
+      // if (this.buttonName === 'Edit') {
+
+      //  } else {
+      //     this.assignItem(e)
+      // }
     }
   }
 
@@ -410,7 +411,7 @@ async ngOnInit() {
   }
 
   getLabel() {
-    return 'Edit'
+    return 'edit'
   }
 
   assignItem(e){

@@ -3,10 +3,10 @@ import { GridsterLayoutService   } from 'src/app/_services/system/gridster-layou
 import { DashboardModel  } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 import { GridManagerEditComponent } from '../grid-manager-edit/grid-manager-edit.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 
 @Component({
@@ -26,9 +26,11 @@ export class GridManagerComponent implements OnInit, OnDestroy {
   inputForm: UntypedFormGroup;
   allowDesign: boolean;
   hideMenu   : boolean;
-
+  action$:Observable<any>;
   _dashboard : Subscription;
   isSafari        : any;
+
+  pathID: string;
   constructor(
               private dialog             : MatDialog,
               private router             : Router,
@@ -37,6 +39,7 @@ export class GridManagerComponent implements OnInit, OnDestroy {
               private auth               : AuthenticationService,
               private navigationService  : NavigationService,
               private _renderer          : Renderer2,
+              public route              : ActivatedRoute,
               ){};
 
 	// On component init we store Widget Marketplace in a WidgetModel array
@@ -53,6 +56,25 @@ export class GridManagerComponent implements OnInit, OnDestroy {
     this.initSubscriptions();
 
 	}
+
+  autoRoute(data) {
+    this.pathID = this.route.snapshot.paramMap.get('id');
+
+    if (data && this.pathID)  {
+
+    }
+    if (!data && this.pathID) {
+      this.action$ = this.layoutService.getDataOBS(+this.pathID , true).pipe(switchMap(data => {
+        this.layoutService.forceRefresh(+this.pathID)
+        return of(data)
+      }))
+      return;
+    }
+
+    if (this.pathID) {
+      this.layoutService.forceRefresh(+this.pathID)
+    }
+  }
 
   renderTheme() {
     const theme = localStorage.getItem('angularTheme')
@@ -73,7 +95,11 @@ export class GridManagerComponent implements OnInit, OnDestroy {
 
   initSubscriptions() {
     this._dashboard = this.layoutService._dashboardModel.subscribe(data => {
-      this.dashboardModel = data
+      this.dashboardModel = data;
+      // console.log('data', data)
+
+      this.autoRoute(data)
+
     })
   }
 
@@ -103,7 +129,7 @@ export class GridManagerComponent implements OnInit, OnDestroy {
 
   setStep(value: number) {
     this.accordionStep = value
-    console.log(value)
+    // console.log(value)
   }
 
 	onDrag(event, identifier) {

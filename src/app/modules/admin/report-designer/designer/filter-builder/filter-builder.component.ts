@@ -13,6 +13,7 @@ export class FilterBuilderComponent implements OnInit {
   whereForm: UntypedFormGroup | undefined;
  //  @Input() viewBuilder_View_Field_Values = [] as viewBuilder_View_Field_Values[];
   @Input() allFields = [] as viewBuilder_View_Field_Values[];
+  @Input() placeHolder = ''
   _report: Subscription | undefined;
   _fieldList: Subscription | undefined;
 

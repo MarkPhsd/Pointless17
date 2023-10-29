@@ -43,7 +43,7 @@ export class TierPriceLineComponent  implements OnDestroy{
   ) {
     this.initSubscriptions();
   }
-  
+
   ngOnDestroy(): void {
       if(this._menuService) { this._menuService.unsubscribe()}
   }
@@ -62,14 +62,15 @@ export class TierPriceLineComponent  implements OnDestroy{
 
     if (!valid) { return }
 
-    const newItem = {} as NewItem;
+    let newItem = {} as NewItem;
 
     if (this.menuItem) {
       newItem.menuItem = this.menuItem
       if (newItem.menuItem) {
         newItem.menuItem.priceTierID  = this.priceTiers.id
-        newItem.weight = +item.flatQuantity;
-        newItem.quantity = 1
+        newItem.weight = item.flatQuantity
+        newItem.quantity = 1;
+        //  newItem = {quantity: item.flatQuantity, weight: item.flatQuantity, menuItem: this.menuItem}
         this.outputNewItem.emit(newItem)
         return
       }

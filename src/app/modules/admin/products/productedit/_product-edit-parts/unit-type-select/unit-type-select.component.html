@@ -21,11 +21,18 @@
               {{item.name}}
       </mat-option>
     </mat-autocomplete>
+
+    <button   *ngIf="itemNameInput && itemNameInput.length>0"
+          matSuffix
+          mat-icon-button aria-label="Clear"
+          (click)="clearInput()">
+        <mat-icon>close</mat-icon>
+    </button>
   </mat-form-field>
 </div>
 
  <div hidden="true"
-      *ngIf="formfieldValue"
-      [formGroup]='formfieldValue'>
+      *ngIf="inputForm"
+      [formGroup]='inputForm'>
   <input formControlName="unitTypeID">
 </div>

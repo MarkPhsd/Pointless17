@@ -78,6 +78,12 @@ app-inventory-history-item {
   // margin: 2px 2px 2px 2px;
 }
 
+.info-panel {
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 5px;
+}
 .product-buttons {
   float: center;
   width: 100px;

@@ -24,7 +24,6 @@
     "paths": {
       "PointlessReporting": [
         "dist/pointless-reporting",
-        "dist/pointless-reporting"
       ],
       "PointlessReportingLib": [
         "dist/pointless-reporting-lib"

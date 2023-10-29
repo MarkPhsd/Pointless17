@@ -19,6 +19,7 @@ import { ToolBarUIService } from './tool-bar-ui.service';
 import { UISettingsService } from './settings/uisettings.service';
 import { ClientTypeService, IUserAuth_Properties } from '../people/client-type.service';
 import { OrderMethodsService } from '../transactions/order-methods.service';
+import { UserIdleService } from 'angular-user-idle';
 
 export interface ElectronDimensions {
   height: string;
@@ -48,6 +49,9 @@ export class UserSwitchingService implements  OnDestroy {
 
   private _loginStatus         = new BehaviorSubject<number>(0);
   public  loginStatus$         = this._loginStatus.asObservable();
+
+  private _clearloginStatus         = new BehaviorSubject<boolean>(null);
+  public  clearloginStatus$         = this._clearloginStatus.asObservable();
 
   updateLoginStatus(value: number) {
     this._loginStatus.next(value)
@@ -84,6 +88,7 @@ export class UserSwitchingService implements  OnDestroy {
     private uiSettingService: UISettingsService,
     private electronService  : ElectronService,
     private clientTypeService: ClientTypeService,
+    private userIdle: UserIdleService,
   ) {
     this.initSubscriptions();
     this.initializeAppUser();
@@ -145,6 +150,7 @@ export class UserSwitchingService implements  OnDestroy {
     this.orderMethodService.updateOrderSubscriptionClearOrder(0)
     this.orderMethodService.updateOrderSearchModel(null);
     this.toolbarUIService.updateDepartmentMenu(0);
+    this._clearloginStatus.next(true)
     this.authenticationService.logout();
   }
 
@@ -200,12 +206,13 @@ export class UserSwitchingService implements  OnDestroy {
     const site = this.siteService.getAssignedSite()
     const userLogin = { userName, password } as userLogin;
     const timeOut   = 3 * 1000;
-
+    // console.log('login', userLogin)
     return  this.authenticate(userLogin)
       .pipe(
         switchMap(
           user => {
 
+            // console.log('authenticate', user)
             if (user && user.errorMessage) {
               const message = user?.errorMessage;
               this.snackBar.open(message, 'Failed Login', {duration: 1500})
@@ -231,7 +238,6 @@ export class UserSwitchingService implements  OnDestroy {
         // console.log('Sending user getting contact', data)
         if (data?.message === 'failed') { return of(data)}
         return this.contactsService.getContact(site, data?.id)
-
       })).pipe(switchMap(data => {
           if ( !data ) {
               const user = {} as IUser
@@ -402,6 +408,7 @@ export class UserSwitchingService implements  OnDestroy {
     }
     // console.log('processlogin5')
     this.setAppUser()
+    this.userIdle.resetTimer()
   }
 
   loginToURL(path) {
@@ -445,15 +452,17 @@ export class UserSwitchingService implements  OnDestroy {
         }
       }
 
+      //router
 
       if (!sheet.shiftStarted || sheet.shiftStarted == 0 ||  (sheet.shiftStarted == 1 && sheet.endTime)) {
         this.router.navigate(['/balance-sheet-edit', {id:sheet.id}]);
         return true
       }
+      if (sheet.shiftStarted) {
+        this.router.navigate(['/main-menu']);
+      }
     }
-
     return false
-
   }
 
   initUserFeatures() {
@@ -478,7 +487,7 @@ export class UserSwitchingService implements  OnDestroy {
       if (returnUrl === '/login') {  returnUrl = '/app-main-menu'}
     }
 
-    console.log('returnUrl', returnUrl)
+    // console.log('returnUrl', returnUrl)
     this.router.navigate([returnUrl]);
 
   }

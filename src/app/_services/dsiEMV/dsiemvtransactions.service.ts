@@ -56,6 +56,7 @@ export interface Transaction {
   BatchNo:                         string;
   BatchItemCount:                  string;
   NetBatchTotal:                   string;
+  partialAuth : boolean;s
 }
 
 export interface Avs {

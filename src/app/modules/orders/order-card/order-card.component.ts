@@ -2,6 +2,7 @@ import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IServiceType } from 'src/app/_interfaces';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
+import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
 // https://www.freecodecamp.org/news/everything-you-need-to-know-about-ng-template-ng-content-ng-container-and-ngtemplateoutlet-4b7b51223691/
@@ -19,11 +20,14 @@ export class OrderCardComponent implements OnInit {
   @Input() order : IPOSOrder;
   smallDevice : boolean;
   minutesOpen: number;
-  orderNameLength: number = 15;
+  orderNameLength: number = 10;
 
-  constructor(private serviceTypeService: ServiceTypeService) {
+  tableFont = 'font-dark-green font-1-4em font-weight-500';
+
+  constructor(private serviceTypeService: ServiceTypeService,
+              private uiSettingService: UISettingsService,) {
     this.updateItemsPerPage();
-   }
+  }
 
   @HostListener("window:resize", [])
    updateItemsPerPage() {
@@ -52,16 +56,22 @@ export class OrderCardComponent implements OnInit {
         if (this.serviceTypeService.list) {
           const item = this.serviceTypeService.list.filter(data => {return data.id == id})
           if (item) {
-            // this.serviceColor = item[0]?.serviceColor
-            this.serviceColor = `background-color:${item[0].serviceColor};`
+            if (item[0] && item[0].serviceColor) {
+              this.serviceColor = `background-color:${item[0].serviceColor};`
+            }
           }
         }
 
       }
     }
+    this.initTheme();
+  }
 
-    // console.log('order?.clients_POSOrders?', this.order?.clients_POSOrders  )
-
+  initTheme() {
+    // console.log('theme', this.uiSettingService.theme)
+    if (this.uiSettingService.theme === 'dark') {
+      this.tableFont = 'font-light-green font-1-4em font-weight-500';
+    }
   }
 
   getMinutesOpen(order) : number {

@@ -70,23 +70,22 @@ export class TriPosTransactionsComponent implements OnInit {
     if (this.posPayment.amountPaid<0) {
       this.transactionType = 'Refund'
     }
-
-    this.initForm()
-
   }
 
   initForm() {
     this.inputForm = this.fb.group({
-      itemName: []
+      itemName: ['0.00']
     })
   }
 
   ngOnInit(): void {
+    this.initForm()
     const i = 0;
   }
 
   applyTipAmount(event) {
     this.tipValue = event;
+    console.log('apply tip amount', this.tipValue, event)
   }
 
   addTipPercent(value) {
@@ -99,18 +98,29 @@ export class TriPosTransactionsComponent implements OnInit {
     }
   }
 
-  setTransactionInfo() {
-    const item = {} as authorizationPOST;
+  // laneId: "003"
+  // ticketNumber: "256718"
+  // tipAmount: null
+  // transactionAmount: "10.00"
+  // transactionId: "282092629"
+
+  setTransactionInfo(): authorizationPOST {
+    let item = {} as authorizationPOST;
     item.laneId = this.terminalSettings.triposLaneID;
 
-    // console.log('form value', this.inputForm.value)
+    console.log('set tip amount', this.tipValue)
     if (!this.tipValue) {this.tipValue = null}
-    // item.tipAmount     = this._tipValue;
+    item.tipAmount = this.tipValue;
+    item.configuration = {allowDebit: true, marketCode: this.MarketCode}
 
     item.transactionId = this.posPayment.respcode;
-    item.tipAmount = this.tipValue;
+
+    if (!item.tipAmount) {
+      item.tipAmount = '0'
+    }
     item.transactionAmount = (this.posPayment.amountPaid + +this.tipValue).toFixed(2).toString();
     item.ticketNumber = this.posPayment.id.toString();
+    item = this.setConfig(item)
 
     this.processing = true;
     this.errorMessage = ''
@@ -118,14 +128,16 @@ export class TriPosTransactionsComponent implements OnInit {
   }
 
   get _tipValue() {
-
-    console.log('inputFormValue', this.inputForm.value)
-    if (this.inputForm) {
-     const value =  this.inputForm.controls['itemName'].value
-     this.tipValue = value;
-     return value;
+    // console.log('inputFormValue', this.inputForm.value)
+    // if (this.inputForm) {
+    //  const value =  this.inputForm.controls['itemName'].value
+    //  this.tipValue = value;
+    //  return value;
+    // }
+    if (!this.tipValue) {
+      this.tipValue = '0.00'
     }
-    return 0;
+    return this.tipValue;
   }
 
   reverseAuthorization() {
@@ -134,12 +146,14 @@ export class TriPosTransactionsComponent implements OnInit {
     let item = this.setTransactionInfo()
     item.paymentType = 'credit'
     this.processing$ =  this.methodsService.reversal(site, item ).pipe(switchMap(data => {
-      console.log('reverse authorisation response', data)
+      console.log('reverse authorisation response', data.transactionId)
       this.errorMessage = ''
-      if (data._hasErrors) {
-        this.displayErrors(data)
-        return of (null)
+
+      if ((data._hasErrors  || data._errors.length>0 ) && !data.isApproved) {
+        this.displayErrors(data);
+        return of (null);
       }
+
       this.posPayment.saleType        = 0;
       this.posPayment.amountPaid      = 0
       this.posPayment.amountReceived  = 0
@@ -159,13 +173,15 @@ export class TriPosTransactionsComponent implements OnInit {
     if (this.posPayment && this.terminalSettings.triposLaneID) {
       const site = this.siteService.getAssignedSite();
       const item = this.setTransactionInfo()
+      item.tipAmount = this._tipValue;
+
       const authorizationCompletion$ = this.methodsService.authorizationCompletion(site, item );
 
-      // console.log('request', item)
+      console.log('request', item)
 
       this.processing$ =  authorizationCompletion$.pipe(
         switchMap(data => {
-          console.log('Complete Auth', data.transactionId, data)
+          // console.log('Complete Auth', data.transactionId, data)
           this.errorMessage = ''
           if (data._hasErrors || !data.isApproved) {
             this.displayErrors(data)
@@ -202,7 +218,6 @@ export class TriPosTransactionsComponent implements OnInit {
     if (this.tipValue && +this.tipValue != 0)  { authorizationPOST.tipAmount =  this.tipValue}
 
     authorizationPOST.transactionAmount = Math.abs(this.posPayment.amountPaid + posPayment.tipAmount ).toFixed(2).toString();
-
     authorizationPOST.laneId            = terminal.triposLaneID;
     authorizationPOST.ticketNumber      = this.posPayment.id.toString();
     authorizationPOST.referenceNumber   = this.posPayment.id.toString();
@@ -212,16 +227,15 @@ export class TriPosTransactionsComponent implements OnInit {
   authorizeAmount() {
     if (!this.validateTransaction()) { return }
     if (this.posPayment && this.terminalSettings.triposLaneID) {
-      let item = this.initTransaction(this.posPayment, this.terminalSettings);
-      item.configuration = {marketCode : this.MarketCode};
-
-      const site = this.siteService.getAssignedSite();
+      let item        = this.initTransaction(this.posPayment, this.terminalSettings);
+      item                 = this.setConfig(item)
+      const site      = this.siteService.getAssignedSite();
       this.processing = true;
       this.errorMessage = ''
       console.log('transaction request', item)
       this.processing$ =  this.methodsService.authorizeAmount( site, item ).pipe(switchMap(data => {
         console.log('transactionID', data.transactionId, data)
-        if (data._hasErrors || !data.isApproved) {
+        if ((data._hasErrors && data._errors.length>0) || !data.isApproved) {
           this.displayErrors(data)
           return of (null)
         }
@@ -251,24 +265,30 @@ export class TriPosTransactionsComponent implements OnInit {
 
     return marketCode;
   }
+
+  setConfig(item: authorizationPOST ):authorizationPOST {
+    item.configuration= {allowDebit: true, marketCode : this.MarketCode};
+    return item;
+  }
+
   payAmount() {
     if (!this.validateTransaction()) { return }
     if (this.posPayment && this.terminalSettings.triposLaneID) {
-      let item = this.initTransaction(this.posPayment, this.terminalSettings);
-
-      item.configuration = {marketCode : this.MarketCode};
+      let item             = this.initTransaction(this.posPayment, this.terminalSettings);
+      item.tipAmount       = this._tipValue;
+      item                 = this.setConfig(item)
       item.transactionId   = this.posPayment.refNumber;
-      const site = this.siteService.getAssignedSite();
-      this.processing   = true;
-      this.errorMessage = ''
-      item.allowDebit = true;
+      const site           = this.siteService.getAssignedSite();
+      this.processing      = true;
+      this.errorMessage    = ''
+      item.allowDebit      = true;
 
       console.log('transaction request', item)
       this.processing$  =  this.methodsService.sale(site, item )
         .pipe(switchMap(data => {
             console.log('transactionID', data.transactionId, data)
             this.errorMessage = ''
-            if (data._hasErrors || !data.isApproved) {
+            if ((data._hasErrors && data._errors.length>0) || !data.isApproved) {
               this.processing = false;
               this.displayErrors(data)
               return of (null)
@@ -311,13 +331,31 @@ export class TriPosTransactionsComponent implements OnInit {
   }
 
   displayErrors(trans) {
+    let message = ''
+
+    console.log('displayErrors', trans, trans._errors)
     trans._errors.forEach(item => {
-      this.errorMessage = `${item?.exceptionMessage} ${this.errorMessage}`
+      if (item.exceptionMessage) {
+        message = `${message} Exception: ${item?.exceptionMessage}`
+      }
+      if (item.developerMessage) {
+        message = `${message} Developer  ${item?.developerMessage}`
+      }
+      if (item.userMessage) {
+        message = `${message} User Message  ${item?.userMessage}`
+      }
     })
+
+    // console.log('message', message)
+    if (message != '') {
+      this.errorMessage = `${message}`
+    }
+
     if (trans & trans.processor && trans.process.expressResponseMessage) {
       this.errorMessage = this.errorMessage + ' ' + trans.process.expressResponseMessage
     }
-    this.siteService.notify(`Response not approved. Response given ${trans?.statusCode}. Reason: ${trans?._processor?.expressResponseMessage} ` , 'Failed', 3000)
+
+    this.siteService.notify(`Response not approved. Response given ${trans?.statusCode}. Messages: ${message}. ` , 'Failed', 3000)
   }
 
   refundAmount() {
@@ -330,8 +368,9 @@ export class TriPosTransactionsComponent implements OnInit {
       this.posPayment.saleType = 3;
       this.processing$ =  this.methodsService.refund(site, item ).pipe(
         switchMap(data => {
+          console.log('refundAmount response', data.transactionId)
           this.errorMessage = ''
-          if (data._hasErrors || !data.isApproved) {
+          if ((data._hasErrors && data._errors.length>0) || !data.isApproved) {
             this.displayErrors(data)
             return of (null)
           }

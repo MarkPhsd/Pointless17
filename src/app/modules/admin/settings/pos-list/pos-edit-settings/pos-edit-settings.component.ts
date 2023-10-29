@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { ElectronService } from 'ngx-electron';
 import { Observable, of, switchMap } from 'rxjs';
-import { PointlessCCDSIEMVAndroidService } from 'src/app/modules/payment-processing/services';
+import { CardPointBoltService, PointlessCCDSIEMVAndroidService } from 'src/app/modules/payment-processing/services';
 import { IServiceType, ISetting } from 'src/app/_interfaces';
 import { FileSystemService } from 'src/app/_services/fileSystem/file-system.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -13,7 +13,7 @@ import { BtPrintingService } from 'src/app/_services/system/bt-printing.service'
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ITerminalSettings,  SettingsService } from 'src/app/_services/system/settings.service';
-import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
@@ -24,6 +24,9 @@ import { LabelingService } from 'src/app/_labeling/labeling.service';
   styleUrls: ['./pos-edit-settings.component.scss']
 })
 export class PosEditSettingsComponent implements OnInit {
+
+  triPOSMarkets = [{name: 'FoodRestaurant', id:7},{name: 'Retail', id:4}]
+
   @ViewChild('androidPrintingTemplate') androidPrintingTemplate: TemplateRef<any>;
   inputForm: UntypedFormGroup;
   setting  : any;
@@ -38,7 +41,11 @@ export class PosEditSettingsComponent implements OnInit {
   serviceType$    : Observable<IServiceType[]>;
   electronPrinterList : any;
   receiptPrinter: string;
-
+  uisettings$: Observable<TransactionUISettings>;
+  uiSettings: TransactionUISettings;
+  pingCardPointTerminals$: Observable<any>;
+  cardPointTerminals$ : Observable<any>;
+  cardPointTerminals = [] as string[]
   medOrRecStoreList = [
     {id:0,name:'Any'},  {id:1,name:'Med'},  {id:2,name:'Rec'}
   ]
@@ -58,10 +65,23 @@ export class PosEditSettingsComponent implements OnInit {
     private fileSystemService   : FileSystemService,
     private serviceTypeService: ServiceTypeService,
     public labelingService: LabelingService,
+    private cardPointBoltService: CardPointBoltService,
     private dialogRef           : MatDialogRef<PosEditSettingsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number
   )
  {
+
+    this.uisettings$ = this.settingsService.getUITransactionSetting().pipe(switchMap(data => {
+      this.uiSettings = data;
+      // data.dsiEMVNeteEpayEnabled
+
+      if (data.cardPointBoltEnabled) {
+        this.setCardPointTermialsObservable()
+      }
+      return of(data)
+    }))
+
+
 
     if (data) {
       this.setting = data
@@ -87,6 +107,28 @@ export class PosEditSettingsComponent implements OnInit {
         }
       }
     }
+ }
+
+ pingTermialObservable() {
+  const site = this.sitesService.getAssignedSite()
+
+  const hsn = this.inputForm.controls['cardPointeHSN'].value;
+  if (hsn) {
+    this.pingCardPointTerminals$ = this.cardPointBoltService.ping(site.url, hsn)
+  }
+
+ }
+
+ setCardPointTermialsObservable() {
+  const site = this.sitesService.getAssignedSite()
+  this.cardPointTerminals$ = this.cardPointBoltService.listTerminals(site.url).pipe(switchMap(data => {
+    // console.log('setCardPointTermialsObservable', data)
+    this.cardPointTerminals = []
+    data?.terminals.forEach(item => {
+      this.cardPointTerminals.push(item)
+    });
+    return of(data)
+  }))
  }
 
   async ngOnInit() {
@@ -138,12 +180,14 @@ export class PosEditSettingsComponent implements OnInit {
       bluetoothDeviceName: [],
       electronZoom       : [],
       triposLaneID       : [],
-      enableExitLabel : [],
-      exitOrderOnFire: [],
-      enableScale: [],
-      ignoreTimer: [],
+      enableExitLabel    : [],
+      exitOrderOnFire    : [],
+      enableScale        : [],
+      ignoreTimer        : [],
       defaultOrderTypeID: [],
       triPOSMarketCode: [],
+      enablePrepView: [],
+
     })
 
     if (this.terminal) {
@@ -169,13 +213,14 @@ export class PosEditSettingsComponent implements OnInit {
 
     const setting = this.setting;
 
-    console.log(id, setting)
+    // console.log(id, setting)
     this.saving$ = this.settingsService.putSetting(site, id, setting).pipe(
       switchMap( data => {
       if (close) {
         this.onCancel(true);
       }
       this.saving = true;
+      this.uiSettingService.updatePOSDevice(item)
       return of(data)
     }));
 

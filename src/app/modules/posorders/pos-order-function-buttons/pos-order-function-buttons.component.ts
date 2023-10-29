@@ -1,16 +1,16 @@
 import { Component, OnInit, Output, Input,EventEmitter, HostListener, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Observable,  Subscription } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
-import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
+import { ITerminalSettings} from 'src/app/_services/system/settings.service';
 import { AuthenticationService } from 'src/app/_services';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { IRequestMessage, RequestMessageService } from 'src/app/_services/system/request-message.service';
 @Component({
   selector: 'pos-order-function-buttons',
   templateUrl: './pos-order-function-buttons.component.html',
@@ -38,6 +38,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   @ViewChild('listItemsView')  listItemsView: TemplateRef<any>;
   @ViewChild('adjustmentOptionsView')  adjustmentOptionsView: TemplateRef<any>;
   @ViewChild('balanceSheetMenuView')  balanceSheetMenuView: TemplateRef<any>;
+  @ViewChild('communicationsView')  communicationsView: TemplateRef<any>;
 
   @ViewChild('cancelButton') cancelButton: TemplateRef<any>;
   @Input() devicename: string;
@@ -100,6 +101,10 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   _userAuths      : Subscription;
   assignedItems   : Subscription;
   refundItems     : boolean;
+  action$ : Observable<any>;
+  messagesNotZero$ = this.requestMessageService.getTemplateBalanceIsNotZeroMessages()  // Observable<IRequestMessage[]>;
+  messagesZero$ = this.requestMessageService.getTemplateBalanceIsZeroMessages() //   Observable<IRequestMessage[]>;
+
   transactionUISettingsSubscriber() {
     this._transactionUI = this.uiSettingsService.transactionUISettings$.subscribe( data => {
       if (data) {
@@ -116,21 +121,21 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     });
   }
 
-
   userAuthSubscriber() {
     this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
       if (data) {
         this.userAuths = data;
+        // this.
       }
     })
   }
   constructor(private platFormService: PlatformService,
               public userAuthorizationService: UserAuthorizationService,
               private authenticationService: AuthenticationService,
-              private orderMethodsService: OrderMethodsService,
+              public orderMethodsService: OrderMethodsService,
               private router: Router,
+              private requestMessageService: RequestMessageService,
               private uiSettingsService: UISettingsService,
-              private balanceSheetService: BalanceSheetService,
               private balanceSheetMethods: BalanceSheetMethodsService ) { }
 
   ngOnInit() {
@@ -326,6 +331,13 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  get communications() {
+    if (this.order && this.order.clients_POSOrders && this.order.clients_POSOrders.email) {
+      return this.communicationsView
+    }
+    return null;
+  }
+
   get istextOptionView() {
     if (this.ssmsOption && !this.isUser) {
       return this.textOptionView
@@ -422,6 +434,10 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
 
   async openCashDrawer(value: number) {
     await this.balanceSheetMethods.openDrawerOne()
+  }
+
+  sendMessage(item, order) {
+    this.action$ = this.orderMethodsService.sendOrderForMessageService(item, order)
   }
 
 }

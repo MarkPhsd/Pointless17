@@ -30,7 +30,6 @@ export class HttpClientCacheService {
 	}
 
 	post<T>(options: HttpOptions, model: any): Observable<T> {
-    // console.log('post  cache', options)
     options.body = model;
 		return this.httpCall(Verbs.POST, options)
 	}
@@ -50,7 +49,7 @@ export class HttpClientCacheService {
         }
       }
     } catch (error) {
-      // console.log(error)
+
     }
 
     if (key == '') {
@@ -71,13 +70,9 @@ export class HttpClientCacheService {
     options.body = options.body || null
     options.cacheMins = options.cacheMins || 0
     const  key = this.getKey(verb, options)
-    // console.log(key)
-    // console.log(options )
 
     if (options.cacheMins > 0) {
       const data = this._cacheService.load(key)
-      // console.log(data )
-      // Return data from cache
       if (data !== null) {
         return of<T>(data)
       }
@@ -101,12 +96,10 @@ export class HttpClientCacheService {
         )
     }
 
-
     return this.http.request<T>(verb, options.url, {observe: 'body'})
       .pipe(
         switchMap(response => {
           if (options.cacheMins > 0) {
-            // Data will be cached
             this._cacheService.save({
               key: key ,
               data: response,

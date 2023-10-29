@@ -1,4 +1,4 @@
-import { Component,  Input} from '@angular/core';
+import { Component,  Input, TemplateRef, ViewChild} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ResizedEvent } from 'angular-resize-event';
 import { IPOSOrder } from 'src/app/_interfaces';
@@ -13,6 +13,8 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   styleUrls: ['./pos-order-transaction-data.component.scss']
 })
 export class PosOrderTransactionDataComponent{
+
+  @ViewChild('scheduleInfoView')    scheduleInfoView: TemplateRef<any>;
   @Input() uiTransactionSettings : TransactionUISettings;
   @Input() order    : IPOSOrder;
   @Input() mainPanel: boolean;
@@ -41,6 +43,13 @@ export class PosOrderTransactionDataComponent{
    notify(message: string, title: string, duration: number) {
     if (duration == 0 ) {duration = 3000}
     this.matSnackBar.open(message, title, {duration: duration, verticalPosition: 'top'})
+  }
+
+  get scheduleInfo() {
+    if (this.order.preferredScheduleDate || this.order.shipAddress) {
+      return this.scheduleInfoView
+    }
+    return null
   }
 
 

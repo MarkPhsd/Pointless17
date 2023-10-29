@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 import { ClientTypeService, IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
+import { IUserProfile } from 'src/app/_interfaces';
+import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 
 @Component({
   selector: 'app-fast-user-switch',
@@ -17,7 +19,8 @@ import { ClientTableService } from 'src/app/_services/people/client-table.servic
   styleUrls: ['./fast-user-switch.component.scss']
 })
 export class FastUserSwitchComponent implements OnInit {
-
+  phoneDevice         : boolean;
+  smallDevice         :   boolean;
   public _pinCode            = new BehaviorSubject<string>(null);
   public pinCode$            = this._pinCode.asObservable();
   action$: Observable<any>;
@@ -37,10 +40,11 @@ export class FastUserSwitchComponent implements OnInit {
     private clientTypeService      : ClientTypeService,
     private clientTableService     : ClientTableService,
     private siteService            : SitesService,
-    private router                 : Router,
     private fb                     : UntypedFormBuilder,
     private _snackBar              : MatSnackBar,
+    private router                 : Router,
     public  platformService        : PlatformService,
+    private toolbarUIService       : ToolBarUIService,
     @Optional()  dialogRef         : MatDialogRef<FastUserSwitchComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
     ) {
@@ -50,21 +54,26 @@ export class FastUserSwitchComponent implements OnInit {
         this.request = data.request
         this.requestData = data
       }
-      // console.log(this.requestData, data)
-
-
       const item = localStorage.getItem('loginAction')
       this.loginAction = JSON.parse(item)
-
-    }
+  }
 
   ngOnInit(): void {
-    console.log('')
+    this.smallDevice = false
+    this.phoneDevice = false;
+    if (811 >= window.innerWidth ) {
+      this.smallDevice = true
+    }
+    if (500 >= window.innerWidth ) {
+      this.smallDevice = false;
+      this.phoneDevice = true
+    }
   }
 
   enterPIN(event) {
     const userName = localStorage.getItem('pinToken')
-    const login = {username: userName, password: event }
+    const login    = {username: userName, password: event }
+    this.initForm();
 
     if (this.request && this.request === 'checkAuth') {
       this.performTempUserAction(event)
@@ -73,7 +82,6 @@ export class FastUserSwitchComponent implements OnInit {
 
     if (userName && login) {
       this.submitLogin(userName, event)
-      this.onCancel();
       return;
     }
 
@@ -84,15 +92,11 @@ export class FastUserSwitchComponent implements OnInit {
   }
 
   performTempUserAction(event)  {
-    // console.log('this.requestData.action', this.requestData.action)
     if (this.requestData.action) {
       this.action$ = this.getAuthUserByPIN(event).pipe(switchMap(data => {
         if (data) {
             let result = false;
-            // console.log(this.requestData.action, data.changeItemPrice)
-
             if (this.requestData.action === 'price' || this.requestData.action === 'subTotal') {
-              // console.log('things should be true now')
               if (data.changeItemPrice) {  result = true }
             }
 
@@ -111,12 +115,10 @@ export class FastUserSwitchComponent implements OnInit {
             if (this.requestData.action === 'voidOrder') {
               if (data.voidOrder) { result = true  }
             }
-            console.log('result', result)
+
             if (result) {
-              // console.log('closeing and setting to true')
               this.dialogRefOption.close(true);
             } else {
-              // this.siteService.notify(`Not authorized`, 'Close', 2000,'red' )
               this.dialogRefOption.close(false);
             }
 
@@ -141,11 +143,8 @@ export class FastUserSwitchComponent implements OnInit {
   //actually log out and log in.
   getAuthUserByPIN(pin: string): Observable<IUserAuth_Properties> {
     const site = this.siteService.getAssignedSite()
-
-    const userName = localStorage.getItem('pinToken')
-    // const login = {username: userName, password: event }
-
-    const userLogin =   { userName: userName, password: pin };
+    const userName    = localStorage.getItem('pinToken')
+    const userLogin   = { userName: userName, password: pin };
     const currentUser = this.userSwitchingService.user;
     let client = {} as any;
 
@@ -157,7 +156,6 @@ export class FastUserSwitchComponent implements OnInit {
           return of(null)
         }
         this.authenticationService.overRideUser(data)
-
         return this.clientTableService.getClient(site, data.id)
       })).pipe(switchMap(data => {
         // console.log('client data', data)
@@ -180,27 +178,42 @@ export class FastUserSwitchComponent implements OnInit {
 
   }
 
+  logout() {
+    this.userSwitchingService.clearLoggedInUser();
+    this.smallDeviceLimiter();
+  }
+
+  smallDeviceLimiter() {
+    if (this.smallDevice) { this.toolbarUIService.updateOrderBar(false) }
+  }
+
   onCancel() {
+
+    this.initForm();
+    try {
+      this.dialog.closeAll();
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  initForm() {
     this.inputForm = this.fb.group({
       itemName: []
     })
     if (this.inputForm) {
       this.inputForm.patchValue({itemName: ''})
     }
-    // console.log('closing on cancel')
-    try {
-      this.dialog.closeAll();
-      // this.dialogRef.close();
-    } catch (error) {
-      console.log('error', error)
-    }
   }
 
   submitLogin(userName: string, password: string) {
 
     this.loginAction$ = this.userSwitchingService.login(userName, password).pipe(
-      switchMap(user =>
+      switchMap(data =>
         {
+          let user = {} as IUserProfile
+          if (data.user) {  user = data.user } else {  user = data;   }
+
           this._pinCode.next('');
 
           if (user && user.errorMessage) {
@@ -211,24 +224,23 @@ export class FastUserSwitchComponent implements OnInit {
           if (user) {
             this.spinnerLoading = false;
             if (user.message && user.message === 'failed' ||
-                (user.errorMessage ||
-                (user.user && user.user.errorMessage))) {
+                (user.errorMessage )) {
               this.authenticationService.updateUser(null);
               this.onCancel()
               return of('failed')
             }
 
-          if (this.platformService.isApp()) {
-            if (this.loginApp(user)) {
-              this.userSwitchingService.loginApp(user)
+            if (this.platformService.isApp()) {
+              if (this.loginApp(user)) {
+              } else {
+                this.router.navigate(['/app-main-menu']);
+              }
               this.onCancel()
               return of('success')
             }
-          }
 
           if (user.message && user.message.toLowerCase() === 'success') {
               if (!this.loginAction) {
-                // console.log('cancel 2')
                 this.userSwitchingService.assignCurrentOrder(user)
               }
 
@@ -244,9 +256,6 @@ export class FastUserSwitchComponent implements OnInit {
               if (!pass) {
                 this.userSwitchingService.processLogin(user, '')
               }
-
-              // console.log('cancel 4')
-              this.onCancel()
 
               return of('success')
             }

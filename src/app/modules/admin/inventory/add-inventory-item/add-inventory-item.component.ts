@@ -50,8 +50,8 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
 
   inventoryLocationID:       number;
   facilityLicenseNumber:     string;
-  menuItem:                  IMenuItem;
   facility:                  any;
+  menuItem:                  IMenuItem;
   productName               = "";
 
   initSubscriptions() {

@@ -324,18 +324,22 @@ export class UnitTypeListComponent implements OnInit, AfterViewInit {
     })
   }
 
-  childAddItem() {
-    // this.productEditButtonService.addItem(this.productTypeID)
-    this.productEditButtonService.openNewItemSelector()
+  addItem() {
+    const site = this.siteService.getAssignedSite();
+    const item = {} as UnitType;
+    const price$ = this.unitTypesService.post(site, item)
+    price$.subscribe( data => {
+      this.productEditButtonService.openUnitTypeEditor(data)
+    })
   }
 
-  editSelectedItems() {
-    if (!this.selected) {
-      this._snackBar.open('No items selected. Use Shift + Click or Ctrl + Cick to choose multiple items.', 'oops!', {duration: 2000})
-      return
-    }
-    this.productEditButtonService.editTypes(this.selected)
-  }
+  // editSelectedItems() {
+  //   if (!this.selected) {
+  //     this._snackBar.open('No items selected. Use Shift + Click or Ctrl + Cick to choose multiple items.', 'oops!', {duration: 2000})
+  //     return
+  //   }
+  //   this.productEditButtonService.editTypes(this.selected)
+  // }
 
   deleteSelected() {
     this.delete();
@@ -365,8 +369,8 @@ export class UnitTypeListComponent implements OnInit, AfterViewInit {
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-    duration: 2000,
-    verticalPosition: 'top'
+      duration: 2000,
+      verticalPosition: 'top'
     });
   }
 

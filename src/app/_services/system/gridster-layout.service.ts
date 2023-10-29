@@ -5,7 +5,7 @@ import { CardComponent } from 'src/app/modules/admin/reports/card/card.component
 import { DashBoardComponentProperties, DashboardContentModel, DashboardModel, DashBoardProperties, WidgetModel, widgetRoles } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 import { GridsterDataService } from '../gridster/gridster-data.service';
 import { SitesService } from '../reporting/sites.service';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { StrainBoardComponent } from 'src/app/modules/tv-menu/strainBoard/strain-board/strain-board.component';
@@ -124,7 +124,7 @@ export class GridsterLayoutService {
     { name: "OrderTotal"  , componentInstance: OrderTotalBoardComponent },
     { name: "Limits"      , componentInstance: LimitValuesCardComponent },
     { name: "lastItemAdded" , componentInstance: LastImageDisplayComponent },
-    
+
     { name: "Iframe"      , componentInstance: IFrameComponent },
     { name: "YouTube"     , componentInstance: YoutubePlayerComponent },
     // { name: "youtube"       , componentInstance: YoutubePlayerComponent },
@@ -192,7 +192,7 @@ export class GridsterLayoutService {
       this.dashboardArray = dashboard.dashboard;
     }
     this._dashboardModel.next(dashboard)
-    if (dashboard) { 
+    if (dashboard) {
       this.refreshCollection();
     }
   }
@@ -267,7 +267,7 @@ export class GridsterLayoutService {
     this.dashboardModel = null
     let forceRefreshList = false;
     if (model.id == 0) { forceRefreshList = true}
-    console.log(model)
+    // console.log(model)
     this.gridDataService.saveGrid(site, model).subscribe(
       {
         next: data => {
@@ -320,18 +320,18 @@ export class GridsterLayoutService {
 
     if (this.authService.isAuthorized)  {
       this.designerMode = mode
-      
-      const designerMode = localStorage.getItem('dashBoardDesignerMode') 
+
+      const designerMode = localStorage.getItem('dashBoardDesignerMode')
       if (designerMode === 'true' || designerMode === 'false') {
         mode = (designerMode == 'true')
-        if (designerMode) { 
+        if (designerMode) {
           this.designerMode = mode
         }
       }
 
 
     }  else {
-      this.designerMode = false; 
+      this.designerMode = false;
     }
 
     this.options.draggable = { enabled: mode}
@@ -339,8 +339,8 @@ export class GridsterLayoutService {
     this.changedOptions();
   }
 
-  initGridDesignerMode() { 
-    const designerMode = localStorage.getItem('dashBoardDesignerMode') 
+  initGridDesignerMode() {
+    const designerMode = localStorage.getItem('dashBoardDesignerMode')
     let mode = (designerMode == 'true')
     this.designerMode = mode;
     this.options.draggable = { enabled: mode}
@@ -355,14 +355,14 @@ export class GridsterLayoutService {
   }
 
   forceChangeOptions(): void {
-    this.initGridDesignerMode();  
+    this.initGridDesignerMode();
     this.options.api.optionsChanged();
   }
 
   reloadRoute(route) {
     this.router.navigateByUrl('/menu-board', { skipLocationChange: true }).then(() => {
         this.router.navigate(route);
-    }); 
+    });
   }
 
   forceRefresh(id: number) {
@@ -374,8 +374,6 @@ export class GridsterLayoutService {
       const route = [path, item]
       this.reloadRoute(route);
       this.router.navigate([path, item]);
-      // this.router.navigateByUrl(path, { skipLocationChange: true }).then(() => {
-      //  }); 
     }
   }
 
@@ -495,7 +493,7 @@ export class GridsterLayoutService {
 
   onDrop(ev) {
 		const componentType = ev.dataTransfer.getData("widgetIdentifier");
-    console.log(componentType)
+    // console.log(componentType)
 
     if (!this.dashboardArray) {
       this.dashboardArray = [] as DashboardContentModel[]
@@ -545,7 +543,7 @@ export class GridsterLayoutService {
 
   applyItem(id: number, name: string, componentName: string, component: any) {
     if (!this.dashboardArray) { return }
-    console.log(name,componentName)
+    // console.log(name,componentName)
     const properties = {} as DashBoardComponentProperties;
     properties.name = componentName;
     let jsonString = ''
@@ -653,7 +651,7 @@ export class GridsterLayoutService {
         if (this.dashboardModel.userName) {
           this.dashboardProperties = JSON.parse(data.userName)  as DashBoardProperties
         }
-  
+
         if (this.dashboardModel.widgetRolesJSON) {
           this.dashboardModel.widgetRoles = JSON.parse(data.widgetRolesJSON)  as widgetRoles[]
         }
@@ -674,6 +672,56 @@ export class GridsterLayoutService {
     })
 	}
 
+  getDataOBS(id: number, ignoreManager?: boolean): Observable<DashboardModel> {
+    const site = this.siteService.getAssignedSite();
+
+    if (id == 0 || id == undefined) {
+      if (ignoreManager) {
+        this.router.navigateByUrl('/menu-manager')
+        // return of(null)
+        // console.log('ignore managemr')
+      }
+    }
+
+    let gridData$ = this.gridDataService.getGrid(site, id)
+    // console.log('getDataOBS')
+
+    return gridData$.pipe(
+      switchMap( data => {
+        // console.log('site', site.url);
+        // console.log('grd data', data);
+        this.dashboardModel = data
+        this.dashboardProperties = {}  as DashBoardProperties
+        if (this.dashboardModel.userName) {
+          this.dashboardProperties = JSON.parse(data.userName)  as DashBoardProperties
+        }
+
+        if (this.dashboardModel.widgetRolesJSON) {
+          this.dashboardModel.widgetRoles = JSON.parse(data.widgetRolesJSON)  as widgetRoles[]
+        }
+
+        this.parseJson(data)
+        this.dashboardArray =  data.dashboard;
+        this.dashboardArray.forEach(data => {
+          data.layerIndex = 1;
+          if (data.properties) {
+            data.object = JSON.parse(data.properties)
+            if (data?.object?.layerIndex)  {
+              data.layerIndex = data?.object?.layerIndex
+            }
+          }
+        })
+
+        // console.log('dashboard model', data)
+        this.updateDashboardModel(data)
+
+        return of(data)
+      })
+    );
+
+    return gridData$;
+	}
+
   removeCard(item) {
     const dashBoard = this.dashboardModel;
     const list = dashBoard.dashboard.filter( data => data.id != item.id)
@@ -681,28 +729,6 @@ export class GridsterLayoutService {
     this.dashboardArray = list;
     this.dashboardModel.dashboard = list;
   }
-
-  // // Super TOKENIZER 2.0 POWERED BY NATCHOIN
-	// parseJson(dashboardModel: DashboardModel) {
-	// 	// We loop on our dashboardCollection
-  //   if (!dashboardModel || !dashboardModel.dashboard) {
-  //     return;
-  //   }
-	// 	dashboardModel.dashboard.forEach(dashboard => {
-	// 		// We loop on our componentCollection
-  //     dashboard = this.initComponentComplexData(dashboard)
-	// 		this.componentCollection.forEach(component => {
-	//       // We check if component key in our dashboardCollection
-	// 			// is equal to our component name key in our componentCollection
-  //       console.log(dashboard.componentName.toLowerCase() ,component.name.toLowerCase())
-  //       if (dashboard.componentName.toLowerCase() === component.name.toLowerCase()) {
-  //         dashboard.component = component.componentInstance;
-  //       }
-	// 		});
-	// 	});
-  //   this.updateDashboardModel(dashboardModel)
-  //   this.dashboardModel = dashboardModel
-	// }
 
   parseJson(dashboardModel: DashboardModel) {
 		// We loop on our dashboardCollection
@@ -725,7 +751,7 @@ export class GridsterLayoutService {
 
   initComponentComplexData(item: DashboardContentModel): DashboardContentModel {
     const properties = JSON.parse(item.properties)
-    console.log(properties)
+    // console.log(properties)
     item.object = this.getDateRange(properties);
     return item;
   }

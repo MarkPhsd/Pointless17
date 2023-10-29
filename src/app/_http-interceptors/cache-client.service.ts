@@ -17,7 +17,11 @@ export class CacheClientService {
         expiration: expirationMS !== 0 ? new Date().getTime() + expirationMS : null,
         hasExpiration: expirationMS !== 0 ? true : false
       }
-      localStorage.setItem(options.key, JSON.stringify(record))
+      try {
+        localStorage.setItem(options.key, JSON.stringify(record))
+      } catch (error) {
+        console.log('cache storage exceeded')
+      }
     }
 
     load(key: string) {
@@ -29,7 +33,7 @@ export class CacheClientService {
         if ((!record || !record.value )|| (record.hasExpiration && record.expiration <= now)) {
           return null
         } else {
-          if (!record.value) { 
+          if (!record.value) {
             return null
           }
           try {

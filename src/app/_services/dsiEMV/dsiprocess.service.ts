@@ -173,7 +173,7 @@ export class DSIProcessService {
                        paymentID: number, manual: boolean,
                        tipPrompt: boolean, TranType: string ): Promise<any> {
 
-    const item  = localStorage.getItem('DSIEMVSettings');
+    const item  = localStorage.getItem('DSIEMVSettings') //as unknown as DSIEMVSettings;
     if (!item) {
       const response = 'no dsiemvSettings'
       return this.getRStreamAsResponse(response)
@@ -197,7 +197,7 @@ export class DSIProcessService {
     }
 
     if (transactiontemp?.SecureDevice.toLowerCase() === 'test') {
-      console.log('test sale')
+      // console.log('test sale')
       const result = this.testSale(tranCode, amount, paymentID, manual, tipPrompt, TranType)
       return result;
     }
@@ -229,7 +229,11 @@ export class DSIProcessService {
       transaction.Amount.Gratuity = 'Prompt'
     }
 
-    console.log('request', transaction)
+    if (transactiontemp.partialAuth  && tranCode == 'EMVSale') {
+      transaction.PartialAuth = 'Allow'
+    }
+
+    console.log('request', transaction, transactiontemp, tranCode)
     const result =  await this.dsi.emvTransaction(transaction)
     console.log('DSIProcess.service EMVTransaction Response RStream', result?.RStream)
     return result?.RStream;

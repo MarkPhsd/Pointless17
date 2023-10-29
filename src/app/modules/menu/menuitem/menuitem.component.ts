@@ -2,7 +2,7 @@ import { Component,  Input,  OnInit, OnDestroy, EventEmitter, Output} from '@ang
 import {  MenuService, OrdersService } from 'src/app/_services';
 import { IMenuItem,   }  from 'src/app/_interfaces/menu/menu-products';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EMPTY, Observable, Subject, Subscription } from 'rxjs';
+import { EMPTY, Observable, Subject, Subscription, of } from 'rxjs';
 import { DomSanitizer, Title } from '@angular/platform-browser';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -17,8 +17,9 @@ import { TvMenuPriceTierService, IFlowerMenu } from 'src/app/_services/menu/tv-m
 import { PriceTierService } from 'src/app/_services/menu/price-tier.service';
 import { switchMap } from 'rxjs/operators';
 import { PriceTiers } from 'src/app/_interfaces/menu/price-categories';
-import { NewItem } from 'src/app/_services/transactions/posorder-item-service.service';
+import { NewItem, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { AvalibleInventoryResults, IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
+import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 
 // https://www.npmjs.com/package/ngx-gallery
 // Possible additional info options
@@ -41,6 +42,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     quantity:               number;
     id:                     string;
     action$  : Observable<any>;
+    addItem$ : Observable<any>;
     menuItem :               IMenuItem;
     menuItem$:              Observable<IMenuItem>;
     brand$:                 Observable<IClientTable>;
@@ -83,6 +85,8 @@ export class MenuitemComponent implements OnInit, OnDestroy {
           private priceTierService  : PriceTierService,
           private titleService     : Title,
           private tierPriceService  : TvMenuPriceTierService,
+          private posorderitemMethodsService: PosOrderItemMethodsService,
+          private posOrderItemService: POSOrderItemService,
           private inventoryAssignmentService: InventoryAssignmentService,
 
          )
@@ -171,11 +175,44 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       }
     }
 
-    async addItemToOrder() {
-      // if (this.order) {
-        console.log('assigned items', this.orderMethodsService.assignPOSItems)
-        this.orderMethodsService.addItemToOrder(this.order, this.menuItem, this.quantity)
-      // }
+    getNotes() {
+      let notes = ''
+      if (this.productForm) {
+        notes = this.productForm.controls['itemNote'].value;
+      }
+
+      if (this.portionValue) {
+        notes = `${notes} ${this.portionValue}`
+      }
+      return notes
+    }
+
+   addItemToOrder() {
+      let quantity = this.productForm.controls['quantity'].value
+      if (!quantity) {  quantity = 1  }
+      const site = this.siteService.getAssignedSite()
+      this.addItem$ = this.orderMethodsService.addItemToOrderObs(this.order, this.menuItem, quantity, 0, null).pipe(switchMap(data => {
+
+        const notes = this.getNotes();
+
+        const item = { id: +data.posItem.id, modifierNote: notes};
+
+        // console.log('notes', notes)
+
+        if (notes && notes != '' ) {
+          const items =  data.order.posOrderItems
+          if (items.length > 0) {
+            data.order.posOrderItems[items.length-1].modifierNote = notes
+            this.orderMethodsService.updateOrder(data.order)
+          }
+          return this.posOrderItemService.setModifierNote(site, item)
+        }
+
+        return of(data)
+      })).pipe(switchMap(data => {
+
+        return of(data)
+      }))
     }
 
     getQuantity() {
@@ -203,17 +240,23 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
       const menuItem = this.menuItem;
 
-      const quantity       = +newItem.quantity * newItem.weight;
+      const quantity       = +newItem.quantity * +newItem.weight;
+      this.quantity        = quantity;
+      const lastQuantity = quantity;
       newItem.quantity     = this.getQuantity();
+
+      console.log('quantity', lastQuantity, newItem.quantity)
 
       const stockRequired = this.getIsStockRequired(menuItem);
       const stockAvalible = this.validateInventoryRequirement(menuItem,quantity);
 
       if (!stockRequired && menuItem.barcode) {
         const  site      = this.siteService.getAssignedSite();
-        await  this.orderMethodsService.scanBarcodeAddItem(menuItem.barcode , quantity, null)
+        console.log(' newItem.quantity',  newItem.quantity)
+        await  this.orderMethodsService.scanBarcodeAddItem(menuItem.barcode ,  newItem.quantity, null)
         return
       }
+
       if (this.inventoryAssignmentService && this.inventoryAssignmentService.avalibleInventoryResults) {
         const data = this.inventoryAssignmentService.avalibleInventoryResults;
         if (data) {
@@ -224,7 +267,6 @@ export class MenuitemComponent implements OnInit, OnDestroy {
               newItem          = this.setItemValuesFromInput(newItem)
               const  site      = this.siteService.getAssignedSite();
               const addResult =  this.orderMethodsService.scanBarcodeAddItem(newItem.barcode , quantity, null)
-
               return
             }
           }
@@ -287,12 +329,15 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       // this.dialogRef.close();
     }
 
-    changeQuantity(quantity) {
-      if (quantity == -1) { if (this.quantity == 1) { return  } }
-      this.quantity = this.quantity + quantity;
+    changeQuantity(event) {
+      console.log(event)
+      this.quantity = this.quantity + event;
+      if (this.quantity < 0) { this.quantity = 1}
       this.productForm = this.fb.group({
         quantity: this.quantity
       });
+      this.quantity = this.productForm.controls['quantity'].value;
+      console.log('quantity', this.quantity)
     }
 
     getItem(id: any) {
@@ -333,13 +378,14 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     }
 
     addItemByCodeOBS(item) {
+
+      console.log('add item obs', item.quantity, item.weight)
       if (item) {
-        console.log('this.orderMethodsService.assignPOSItems, ', this.orderMethodsService.assignPOSItems)
-        this.action$ = this.orderMethodsService.scanBarcodeAddItemObservable(item.barcode, 1,
+
+        this.action$ = this.orderMethodsService.scanBarcodeAddItemObservable(item.barcode, item.quantity,
               {packaging: this.packaging, portionValue: this.portionValue}, this.orderMethodsService.assignPOSItems )
       }
     }
-
 
     goBackToList() {
       try {

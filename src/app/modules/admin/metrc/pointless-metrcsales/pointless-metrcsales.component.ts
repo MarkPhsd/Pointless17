@@ -80,6 +80,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
    private gridApi      : GridApi;
    // private gridColumnApi: GridAlignColumnsDirective;
    gridOptions          : any
+   gridOptionsInfinite: any;
    columnDefs           = [];
    defaultColDef        ;
    frameworkComponents  : any;
@@ -150,10 +151,12 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
           }
 
           if (data) {
-            if (!this.searchModel.currentDay) {
-              this.gridOptions = this.agGridFormatingService.initGridOptions(1000000, this.columnDefs);
-            }
+            // if (!this.searchModel.currentDay || this.searchModel.name) {
+            this.gridOptionsInfinite = this.agGridFormatingService.initGridOptions(1000000, this.columnDefs, false);
+            // }
+
             this.refreshSearch_sub()
+            console.log('gridOptions', this.gridOptions)
           }
         }
       )
@@ -237,13 +240,14 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       flex: 1,
       minWidth: 100
     };
+
     this.columnDefs =  [
       {
         field: 'orderID',
         cellRenderer: "btnCellRenderer",
                       cellRendererParams: {
                         onClick: this.editProductFromGrid.bind(this),
-                        label: this.getLabel.bind(this),
+                        label: `View `   ,
                         getLabelFunction: this.getLabel.bind(this),
                         btnClass: 'btn btn-primary btn-sm'
                       },
@@ -289,7 +293,11 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       minWidth: 155,
       maxWidth: 225,
       flex: 2,
-      },
+        cellRenderer: 'showMultiline',
+        wrapText: true,
+        cellStyle: {'white-space': 'normal', 'line-height': '1em'},
+        autoHeight: true,
+     },
       {headerName: 'Quantity', field: 'quantityTotal', sortable: true,
         width: 90,
         minWidth: 90,
@@ -434,6 +442,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
   getRowData(params, startRow: number, endRow: number):  Observable<METRCSalesReportPaged>  {
     const site                = this.siteService.getAssignedSite()
+
     if (this.searchModel && this.searchModel.currentDay) {
       if (this.currentDayRan) {
         this.processing = false
@@ -444,10 +453,11 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       this.currentDayRan = true;
       return this.pointlessMetrcSalesReport.getUnclosedSalesReport(site, this.searchModel)
     }
-    this.currentPage            = this.setCurrentPage(startRow, endRow)
+
     if (!this.searchModel) { this.searchModel = {}  as PointlessMetrcSearchModel};
-    this.searchModel.pageSize   = this.pageSize
-    this.searchModel.pageNumber = this.currentPage;
+    this.searchModel.pageSize   = 100000
+    this.searchModel.pageNumber = 1;
+    console.log('getRowData filters report', this.searchModel)
     return this.pointlessMetrcSalesReport.getSalesReport(site, this.searchModel)
   }
 
@@ -462,17 +472,17 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
   //ag-grid standard method
   onGridReady(params: any) {
+
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
       params.api.sizeColumnsToFit();
       this.autoSizeAll(false);
     }
+
     this.onFirstDataRendered(this.params)
 
-    if (params == undefined) {
-      return;
-    }
+    if (params == undefined) { return }
 
     if (!params.startRow ||  !params.endRow) {
       params.startRow = 1;
@@ -480,8 +490,8 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     }
 
     this.processing = true;
-
     if (this.searchModel.currentDay) {
+      console.log('refresh 1')
       this.pageSize = 100000;
       this.initColumnDefs(1000000);
       this.gridOptions = this.agGridFormatingService.initGridOptionsClientType(this.recordCount , this.columnDefs);
@@ -501,6 +511,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       return;
     }
 
+    console.log('refresh 2')
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
       const items$    = this.getRowData(params, params.startRow, params.endRow)
@@ -570,6 +581,8 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
   editProductFromGrid(e) {
     let history = false
     // const historyValue =
+    // console.log(e)
+    console.log(e.rowData, e.rowData?.history)
 
     if ( +e.rowData?.history == 1) {
       history = true;
@@ -663,7 +676,12 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
     getLabel(rowData)
     {
+
+      console.log('get label rowData', rowData)
+      return rowData
+
       if(rowData) {
+        return rowData
         if (!rowData.orderID) {return 'Unknown'}
         const value = rowData.orderID.toString().substr(-5);
         return value

@@ -98,7 +98,6 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
       return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
     })).pipe(switchMap(data => {
         this.sales = data;
-        // console.log('sales tax', data)
         this.processing = false;
         return of(data)
     }))
@@ -126,7 +125,6 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
 
   downloadCSV() {
     if (!this.sales) { return }
-    console.log('sales', this.sales)
     const item = [] as unknown as ITaxReport[];
     item.push (this.sales)
     this.reportingItemsSalesService.downloadFile(item, 'SalesTaxReport')

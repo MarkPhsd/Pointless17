@@ -67,7 +67,9 @@
               class ="grid-image-button-group "
               (click)="companyEdit()">
         <div class="grid-image-button">
-          <div class="mat-grid-icon">  <mat-icon>store</mat-icon> </div>
+          <div class="mat-grid-icon">
+            <mat-icon>store</mat-icon>
+          </div>
           <div>
             Edit Company
           </div>
@@ -81,7 +83,9 @@
               class   ="grid-image-button-group "
               (click) ="blogListEdit()">
         <div class="grid-image-button">
-          <div class="mat-grid-icon">  <mat-icon>content_paste</mat-icon> </div>
+          <div class="mat-grid-icon">
+            <mat-icon>content_paste</mat-icon>
+          </div>
           <div>
             Content Settings
           </div>
@@ -90,11 +94,19 @@
     </div>
 
     <div>
-      <button mat-button
-            color="accent"
-            (click)="navTableService()"
-            aria-label="dining">
-      <mat-icon>restaurant</mat-icon>
+      <button mat-raised-button
+              color   = "primary"
+              class   = "grid-image-button-group"
+              (click) = "navTableService()"
+              aria-label="dining">
+        <div class="grid-image-button">
+          <div class="mat-grid-icon">
+            <mat-icon>restaurant</mat-icon>
+          </div>
+          <div>
+            Dining Layout
+          </div>
+        </div>
       </button>
     </div>
 

@@ -225,6 +225,7 @@ export class ClientTypeService {
 
   saveClientType(site: ISite, clientType: clientType): Observable<clientType> {
 
+    clientType.limitConcentrates = clientType.limitConcentrate
     if (!clientType.id || clientType.id == 0) {
       return this.postClientType(site, clientType)
     }

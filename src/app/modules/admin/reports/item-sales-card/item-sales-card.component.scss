@@ -99,7 +99,7 @@ mat-card-title {
 
 .grid-body-header {
   display              : grid;
-  grid-template-columns: 125px 125px ; //90px;
+  grid-template-columns: 125px auto ; //90px;
   grid-template-rows   : auto;
   grid-gap             : 2px;
   justify-content      : space-between;
@@ -142,7 +142,7 @@ mat-card-title {
 
 .grid-body {
   display              : grid;
-  grid-template-columns: 135px 90px 50px 75px; //90px;
+  grid-template-columns: 135px 90px 60px 85px; //90px;
   grid-template-rows   : auto;
   grid-gap             : 2px;
   justify-content      : space-between;
@@ -151,7 +151,7 @@ mat-card-title {
   font-size            : 1em;
 
   @include for-phone-only {
-    grid-template-columns: 125px 90px 50px 75px; //90px;
+    grid-template-columns: 125px 90px 60px 85px; //90px;
   }
 
 }
@@ -173,22 +173,13 @@ mat-card-title {
 
 .totals {
   font-size     : 1em;
-  // white-space   : nowrap;
-  // overflow      : hidden;
-  // text-overflow : ellipsis;
-  // text-transform: capitalize;
   float         : right;
   justify-content: right;
-  // align-items   : flex-end;
   text-align    : right;
 }
 
 .totalslabel {
   font-size     : 1em;
-  // white-space   : nowrap;
-  // overflow      : hidden;
-  // text-overflow : ellipsis;
-  // text-transform: capitalize;
   float         : right;
   align-items   : flex-end;
   text-align    : left;

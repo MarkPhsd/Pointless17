@@ -1,32 +1,29 @@
 <div class="canvas">
+
   <div class="overlay-items">
+    <div *ngif="connectedToApi; else connected"></div>
+    <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
 
-      <div *ngif="connectedToApi; else connected"></div>
-      <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
+    <div *ngIf="(homePage$ | async) as homePageSettings; else loading">
+      <ng-container [ngTemplateOutlet]="blogPostMainView"></ng-container>
+      <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container>
+      <ng-container [ngTemplateOutlet]="isDepartmentViewOn"></ng-container>
+      <ng-container [ngTemplateOutlet]="isCategoryViewOn"></ng-container>
+      <ng-container [ngTemplateOutlet]="isBrandListViewOn"></ng-container>
+      <ng-container [ngTemplateOutlet]="isTierMenuViewOn"></ng-container>
+    </div>
 
-      <div *ngIf="(homePage$ | async) as homePageSettings; else loading">
-
-
-        <ng-container [ngTemplateOutlet]="blogPostMainView"></ng-container>
-        <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container>
-        <ng-container [ngTemplateOutlet]="isDepartmentViewOn"></ng-container>
-        <ng-container [ngTemplateOutlet]="isCategoryViewOn"></ng-container>
-        <ng-container [ngTemplateOutlet]="isBrandListViewOn"></ng-container>
-        <ng-container [ngTemplateOutlet]="isTierMenuViewOn"></ng-container>
-      </div>
-
-      <ng-template #loading>
-        <mat-spinner [diameter]="50"></mat-spinner>
-      </ng-template>
+    <ng-template #loading>
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </ng-template>
   <div>
 </div>
 
 <ng-template #displayMenu>
-  <div  >
+  <div>
     <display-menu-main [gridItemWidth]="'275px'"></display-menu-main>
   </div>
 </ng-template>
-
 
 <ng-template #blogPostMainView>
   <div *ngIf="!isStaff">
@@ -51,11 +48,11 @@
 </ng-template>
 
 <ng-template #departmentView>
-  <!-- departments -->
   <blog-post-list *ngIf="!isStaff" [group]="'department head'" [height] ="'100%'"  [viewType]="'grid'" ></blog-post-list>
   <div [style.height]="panelHeightSize">
-    <!-- display dearment -->
-    <app-categories [panelHeightValue]="panelHeightValue" [itemTypeID]="6">
+    <app-categories
+        [uiHomePage]="homePageSetings"
+        [panelHeightValue]="panelHeightValue" [itemTypeID]="6">
         Departments
     </app-categories>
     <mat-divider></mat-divider>
@@ -65,7 +62,9 @@
 <ng-template #categoryView>
   <blog-post-list *ngIf="!isStaff" [group]="'category head'" [height] ="'100%'" [viewType]="'grid'" ></blog-post-list>
   <div [style.height]="panelHeightSize">
-    <app-categories [panelHeightValue]="panelHeightValue" [itemTypeID]="4">
+    <app-categories
+        [uiHomePage]="homePageSetings"
+        [panelHeightValue]="panelHeightValue" [itemTypeID]="4">
       Categories
     </app-categories>
     <mat-divider></mat-divider>

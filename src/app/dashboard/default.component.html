@@ -1,4 +1,7 @@
+<div *ngIf="(uiTransactions$ | async) as settings"></div>
+
 <div *ngIf="(posDevice$ | async) as posDevice"></div>
+
 <div *ngIf="!hideAppHeader">
   <app-header> </app-header>
 </div>
@@ -80,7 +83,6 @@
 <ng-template #userBarView>
   <user-bar></user-bar>
 </ng-template>
-
 
 <ng-template #menuBarView>
   <div  [hidden]="toolbarTiny">

@@ -6,7 +6,7 @@ import { AWSBucketService,  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
+import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { AgGridFormatingService, rowItem } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
@@ -98,7 +98,7 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
   isAuthorized    :   boolean;
   isStaff         :   boolean;
   smallDevice       = false;
-
+  urlPath$: Observable<string>;
   buttonName      = 'Edit';
   metrcButtonName = 'METRC'
 
@@ -123,9 +123,16 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     if (this._searchModel) {this._searchModel.unsubscribe()}
   }
 
-  async ngOnInit() {
+   ngOnInit() {
     this.initClasses()
-    this.urlPath            = await this.awsService.awsBucketURL();
+
+    this.urlPath$  =  this.awsService.awsBucketURLOBS().pipe(
+      switchMap(data => {
+        this.urlPath = data;
+        return of(data)
+      }
+    ))
+
     this.rowSelection       = 'multiple'
     this.isAuthorized =  this.userAuthorization.isManagement// //('admin, manager')
     this.isStaff =  this.userAuthorization.isStaff // ('admin, manager, employee')

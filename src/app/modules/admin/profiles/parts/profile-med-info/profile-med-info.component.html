@@ -4,6 +4,7 @@
   <div class="name-fields">
     <div *ngIf="inputForm" [formGroup]="inputForm">
       <mat-slide-toggle
+
               name="medTempLicense"
               formControlName="patientRecOption">
         <mat-label >Med Patient / Caregiver</mat-label>
@@ -13,7 +14,9 @@
 
   <mat-card *ngIf="isMedPatient">
     <mat-card-subtitle>MED Info</mat-card-subtitle>
-    <div  *ngIf="isStaff">
+
+    <div class="ps-flex-group-column" *ngIf="isStaff">
+
       <div *ngIf="inputForm"
            [formGroup]="inputForm">
 
@@ -74,17 +77,19 @@
         </div>
       </div>
 
+      <div>
+        <div>
+          <mat-card class="image-container">
+            <app-widget-uploader
+                [(fileNames)]="fileList"
+                (imageUrl)   ="updateFileList($event)">
+              File Uploads
+            </app-widget-uploader>
+          </mat-card>
+        </div>
+      </div>
     </div>
 
-    <div>
-      <mat-card class="image-container">
-        <app-widget-uploader
-            [(fileNames)]="fileList"
-            (imageUrl)   ="updateFileList($event)">
-          File Uploads
-        </app-widget-uploader>
-      </mat-card>
-    </div>
   </mat-card>
 
 </div>

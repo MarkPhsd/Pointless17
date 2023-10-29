@@ -4,98 +4,95 @@
 <ng-container [ngTemplateOutlet]="editForm"></ng-container>
 
 <ng-template #editForm>
-  <mat-card *ngIf="inputForm">
-    <div [formGroup]="inputForm">
-      <mat-card>
-        <mat-card-content>
+  <mat-card *ngIf="inputForm" [formGroup]="inputForm">
+    <mat-card>
+      <mat-card-content>
 
-          <div class="grid-container">
-            <ng-container [ngTemplateOutlet]="addButtonView"></ng-container>
-            <ng-container [ngTemplateOutlet]="productSelector"></ng-container>
-            <ng-template #productSelector>
-              <div class="grid-units">
+        <div class="grid-container">
+          <ng-container [ngTemplateOutlet]="newProduct"></ng-container>
+          <ng-container [ngTemplateOutlet]="addButtonView"></ng-container>
+          <ng-container [ngTemplateOutlet]="productSelector"></ng-container>
+          <ng-container [ngTemplateOutlet]="unitSelector"></ng-container>
+          <ng-container [ngTemplateOutlet]="quantity"></ng-container>
+          <ng-container [ngTemplateOutlet]="deleteButton"></ng-container>
+        </div>
 
-                <div   *ngIf="posOrderItem" style="width:125px;margin-left:15px">
-                  <product-selector
-                    [inputForm]     = 'inputForm'
-                    [posOrderItem]  = 'posOrderItem'
-                    [name]          = "posOrderItem.productName"
-                    [id]            = 'posOrderItem?.productID'
-                    [searchForm]    = 'productSearchForm'
-                    (itemSelect)    = 'assignProduct($event)'>
-                    Select product
-                  </product-selector>
-                </div>
-
-              </div>
-            </ng-template>
-            <ng-container [ngTemplateOutlet]="deleteButton"></ng-container>
-            <ng-template #deleteButton>
-              <div style="margin-left:45px">
-                <button mat-button (click)="clearUnit()">
-                  <mat-icon color="warn">delete</mat-icon>
-                </button>
-              </div>
-            </ng-template>
-          </div>
-            <!-- <ng-container [ngTemplateOutlet]="unitSelector"></ng-container>
-
-            <ng-template #unitSelector>
-              <div class="grid-units">
-                <div *ngIf="posOrderItem"    style="width:100px">
-                  <unit-type-select
-                    [inputForm]     = 'inputForm'
-                    [posOrderItem]  = 'posOrderItem'
-                    [name]          = "posOrderItem.unitName"
-                    [id]            = 'posOrderItem?.unitType'
-                    [searchForm]    = 'unitSearchForm'
-                    (itemSelect)    = 'assignItem($event)'>
-                  </unit-type-select>
-                </div>
-
-                <div style="margin-left:45px">
-                  <button mat-button (click)="clearUnit()">
-                    <mat-icon color="warn">delete</mat-icon>
-                  </button>
-                </div>
-              </div>
-            </ng-template> -->
-
-            <!-- <app-value-fields
-                [inputForm]="inputForm"
-                [fieldType]="'number'"
-                [fieldName]="'price'">
-              Price
-            </app-value-fields>
-
-            <app-value-fields
-                [inputForm]="inputForm"
-                [fieldType]="'number'"
-                [fieldName]="'cost'">
-              Cost
-            </app-value-fields>
-
-            <app-value-fields
-                [inputForm]="inputForm"
-                [fieldType]="'number'"
-                [fieldName]="'quantity'">
-              Quantity
-            </app-value-fields>
-          </div> -->
-
-        </mat-card-content>
-      </mat-card>
-
-    </div>
+      </mat-card-content>
+    </mat-card>
   </mat-card>
 </ng-template>
+
+<ng-template #deleteButton>
+  <div style="">
+      <button mat-button (click)="clearInputs(null)">
+        Reset
+      </button>
+  </div>
+</ng-template>
+
+<ng-template #productSelector>
+  <div   *ngIf="posOrderItem" style="width:125px">
+    <product-selector
+      [inputForm]     = 'inputForm'
+      [posOrderItem]  = 'posOrderItem'
+      [name]          = "posOrderItem.productName"
+      [id]            = 'posOrderItem?.productID'
+      [searchForm]    = 'productSearchForm'
+      (clearInputsEmit) = 'clearInputs($event)'
+      (itemSelect)    = 'assignProduct($event)'>
+      Select product
+    </product-selector>
+  </div>
+</ng-template>
+
+<ng-template #unitSelector>
+  <div *ngIf="posOrderItem && menuItemSelected"    style="width:100px">
+    <unit-type-select
+      [inputForm]     = 'inputForm'
+      [posOrderItem]  = 'posOrderItem'
+      [name]          = "posOrderItem.unitName"
+      [id]            = 'posOrderItem?.unitType'
+      [searchForm]    = 'unitSearchForm'
+      (itemSelect)    = 'assignItem($event)'>
+    </unit-type-select>
+  </div>
+</ng-template>
+
+
+
+<ng-template #quantity>
+  <div style="width:75px;">
+      <app-value-fields
+          [inputForm]   ="inputForm"
+          [fieldsClass] ="'font-small'"
+          [fieldType]   ="'number'"
+          [fieldName]  ="'quantity'">
+        Quantity
+      </app-value-fields>
+  </div>
+</ng-template>
+
 <ng-template #addButtonView>
-  <div style="margin-left:15px">
+  <div style="margin-left:15px;width:100px">
     <button color="primary"
+        *ngIf="menuItemSelected"
         style="height:50px"
         mat-raised-button
         (click)="addItem()">
       <mat-icon>add</mat-icon>Add
     </button>
+
+    <button color="primary"
+        *ngIf="!menuItemSelected"
+        style="height:50px"
+        mat-raised-button
+        (click)="makenewProduct()">
+      <mat-icon>add</mat-icon>New
+    </button>
+
   </div>
+</ng-template>
+
+<ng-template #newProduct>
+
 </ng-template>

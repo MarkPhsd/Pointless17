@@ -25,17 +25,17 @@
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
 .item-container {
-  margin-top: 10px;
-  margin-left: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  // align-content: center;
-  row-gap: 5px;
-  column-gap: 15px;
-  justify-content:flex-start;
-  width: 100%;
+  margin-top      : 10px;
+  margin-left     : 10px;
+  display         : flex;
+  flex-wrap       : wrap;
+  flex-direction  : row;
+  row-gap         : 5px;
+  column-gap      : 15px;
+  justify-content : flex-start;
+  width           : 100%;
 }
 
 

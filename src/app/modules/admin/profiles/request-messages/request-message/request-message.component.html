@@ -1,3 +1,5 @@
+
+
 <div class="grid-header">
   <div>
     <h4>
@@ -6,17 +8,19 @@
   </div>
 
   <div>
-    <ng-content select="[subject | date:'shortTime']"></ng-content>
+    <ng-content select="[completed]"></ng-content>
+  </div>
+
+  <div>
+    <ng-content select="[requestCompleted]"></ng-content>
   </div>
 </div>
 
-<p>
-  <ng-content select="[message]"></ng-content>
-</p>
+<ng-content select="[message]"></ng-content>
 
-<mat-card-actions>
+<mat-card-actions *ngIf="enableActions">
   <div class="grid-buttons">
-    <div>
+    <div >
       <button mat-raised-button (click)="toggleArchive()">
         <div *ngIf="message?.archived">
           <mat-icon>activate</mat-icon>Activate

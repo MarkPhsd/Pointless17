@@ -25,13 +25,13 @@ export class CardPointBoltService {
 
   }
 
-  ping(apiURL: string, hsn: string, sessionID: string): Observable<any> {
+  ping(apiURL: string, hsn: string): Observable<any> {
 
     const controller = '/CardPointeBolt/'
 
     const endPoint = "PingTerminal"
 
-    const parameters = `?hsn=${hsn}&sessionID=${sessionID}`
+    const parameters = `?hsn=${hsn}`
 
     const url = `${apiURL}${controller}${endPoint}${parameters}`
 
@@ -55,13 +55,13 @@ export class CardPointBoltService {
 
   }
 
-  listTerminals(apiURL: string, hsn: string, sessionID: string): Observable<any> {
+  listTerminals(apiURL: string): Observable<any> {
 
     const controller = '/CardPointeBolt/'
 
     const endPoint = "listTerminals"
 
-    const parameters = `?hsn=${hsn}&sessionID=${sessionID}`
+    const parameters = ``
 
     const url = `${apiURL}${controller}${endPoint}${parameters}`
 
@@ -83,13 +83,13 @@ export class CardPointBoltService {
 
   }
 
-  terminalDetails(apiURL: string, hsn: string, sessionID: string): Observable<any> {
+  terminalDetails(apiURL: string): Observable<any> {
 
     const controller = '/CardPointeBolt/'
 
     const endPoint = "terminalDetails"
 
-    const parameters = `?hsn=${hsn}&sessionID=${sessionID}`
+    const parameters = ``
 
     const url = `${apiURL}${controller}${endPoint}${parameters}`
 

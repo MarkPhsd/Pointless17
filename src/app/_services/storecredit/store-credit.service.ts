@@ -24,12 +24,13 @@ export class StoreCreditService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.httpClient.get<any>(url)
+    return this.httpClient.delete<any>(url)
 
   }
 
   search(site: ISite, searchModel: IStoreCreditSearchModel): Observable<StoreCreditResultsPaged> {
 
+    // console.log('searchModel', searchModel)
     const controller = "/StoreCredits/"
 
     const endPoint = "SearchItems"

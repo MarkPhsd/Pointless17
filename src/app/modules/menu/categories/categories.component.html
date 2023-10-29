@@ -18,7 +18,7 @@
         <ng-container [ngTemplateOutlet]="filter"></ng-container>
 
         <ng-template #filter>
-          <ng-container  *ngIf="uiHomePage && 
+          <ng-container  *ngIf="uiHomePage &&
                               (uiHomePage?.accordionMenuSideBar && !isStaff) ||
                               (uiHomePage?.staffAccordionMenuSideBar && isStaff)">
             <button mat-button color="accent" (click)="gotoFilter()"  >
@@ -42,63 +42,67 @@
     </mat-card-subtitle>
 
     <mat-card-content *ngIf="(bucket$ | async) as bucketItem">
+
       <div   [style.height]="panelHeightStyle" [class]="classcontainer" >
-            <div  *ngIf="categories"
-                  [class]="orderslist"
-                  infiniteScroll
-                  [infiniteScrollDistance]="2"
-                  [infiniteScrollThrottle]="50"
-                  (scrolled)              ="onScrollDown()"
-                  (scrolledUp)            ="onScrollUp()"
-                  [scrollWindow]          ="false">
+        <div  *ngIf="categories"
+              [class]="orderslist"
+              infiniteScroll
+              [infiniteScrollDistance]="2"
+              [infiniteScrollThrottle]="50"
+              (scrolled)              ="onScrollDown()"
+              (scrolledUp)            ="onScrollUp()"
+              [scrollWindow]          ="false">
 
-                <div  class="grid-flow">
-                  <div *ngFor="let item of categories; let i = index">
+            <div  class="grid-flow">
+              <div *ngFor="let item of categories; let i = index">
 
-                      <div  class="edit-float-button" *ngIf="this.authenticationService.isAdmin" >
-                        <button
-                            mat-mini-fab
-                            color  ="accent"
-                            (click)="editItem(item)" >
-                          <mat-icon  color="primary">info</mat-icon>
-                        </button>
-                      </div>
+                <ng-template #editButtonView>
+                  <div  class="edit-float-category-button"
+                        *ngIf="this.authenticationService.isAdmin" >
+                    <button
+                        mat-mini-fab
+                        color  ="accent"
+                        (click)="editItem(item)" >
+                      <mat-icon  color="primary">info</mat-icon>
+                    </button>
+                  </div>
+                </ng-template>
 
-                      <div  *ngIf="item.id != -1"
-                            class="grid-display-device"
-                            (click)= "listItems(item.id)">
+                <div  *ngIf="item.id != -1"
+                      class="grid-display-device"
+                      (click)= "listItems(item.id)">
 
+                  <!-- <ng-container [ngTemplateOutlet]="editButtonView"></ng-container> -->
 
-                        <div class="text">{{item.name  | truncateText: textLength  }}</div>
+                  <div class="text">{{item.name  | truncateText: textLength  }}</div>
 
-
-                        <div class="grid-item">
-                          <img
-                              loading   = "lazy"
-                              draggable = "false"
-                              [src]     = "getItemSrc(item?.urlImageMain)"
-                              err-SRC   = "getPlaceHolder()"
-                              onerror   = "this.src='assets/images/placeholderimage.png'"
-                              (click)   = "listItems(item.id)"
-                              class     = 'item-image'
-                              [alt]     = "item?.description">
-                        </div>
-                      </div>
-
-                      <div *ngIf="item.id == -1">
-                         <div class="text">{{item.name  | truncateText: textLength  }}</div>
-                        <div class="grid-item-button">
-                          <button mat-raised-button
-                                color="warn"
-                              (click)  ="nextPage()">
-                            <div class="text">Load More...</div>
-                          </button>
-                        </div>
-                      </div>
-
+                  <div class="grid-item">
+                    <img
+                        loading   = "lazy"
+                        draggable = "false"
+                        [src]     = "getItemSrc(item?.urlImageMain)"
+                        err-SRC   = "getPlaceHolder()"
+                        onerror   = "this.src='assets/images/placeholderimage.png'"
+                        (click)   = "listItems(item.id)"
+                        class     = 'item-image'
+                        [alt]     = "item?.description">
                   </div>
                 </div>
+
+                <div *ngIf="item.id == -1">
+                    <div class="text">{{item.name  | truncateText: textLength  }}</div>
+                  <div class="grid-item-button">
+                    <button mat-raised-button
+                          color="warn"
+                        (click)  ="nextPage()">
+                      <div class="text">Load More...</div>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
             </div>
+        </div>
       </div>
     </mat-card-content>
 

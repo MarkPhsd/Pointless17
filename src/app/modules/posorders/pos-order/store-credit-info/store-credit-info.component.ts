@@ -29,23 +29,25 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
   @Input() showBalance  = true ;
   @Input() showPayment  = true ;
   @Input() order        : IPOSOrder;
+  @Input()  searchModel: IStoreCreditSearchModel
+  @Input()  showIssueMoney      : boolean;
+  @Input() search     : any;
+  @Input() purchaseOrderItem : IPurchaseOrderItem;
 
   @Output() closeDialog = new EventEmitter();
   @Output() issueToStoreCredit = new EventEmitter();
   action$ : Observable<any>
-  @Input()  searchModel: IStoreCreditSearchModel
-  @Input()  showIssueMoney      : boolean;
-  @Input() search     : any;
-  storeCreditValue: any;
+  storeCreditValue    : any;
   _search             : Subscription;
   _order              : Subscription;
   _issueItem          : Subscription;
   posIssueItem        : PosOrderItem;
   _posIssuePurchaseItem: Subscription;
-  // @Input() posIssuePurchaseItem : IPurchaseOrderItem;
-  @Input() purchaseOrderItem : IPurchaseOrderItem;
-  storeCreditSearch$ : Observable<any>
 
+
+  storeCreditSearch$ : Observable<any>
+  searchResults = ''
+  addMethod$ :  Observable<any>;
   uiTransaction  : TransactionUISettings;
   uiTransaction$ : Observable<TransactionUISettings>;
   getUITransactionsSettings() {
@@ -61,25 +63,33 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
     try {
       this._search       = this.storeCreditMethodService.searchModel$.subscribe(data => {
         this.search      = data;
-        // console.log('update subscritpion in store creddit info', data)
-        this.storeCreditValue = null;
 
         if (!data) {
+
+          // console.log('data 1', data)
           this.search              = null;
           this.storeCreditSearch$  = null;
-          this.setObservable(null)
-          return;
+          // this.setObservable(null)
+          // return;
         }
 
         this.clientID = this.order?.clientID
-        if ((this.clientID != this.order?.clientID) || !this.storeCreditValue)  {
+        // console.log('initSubscription', this.order?.clientID, this.clientID)
 
+        if (this.clientID && this.clientID !=0 ) {
+          if (!data) {
+            data= {} as IStoreCreditSearchModel
+          }
+          data.clientID = this.clientID
+        }
+
+        if (data && data.clientID != 0 || (data && data.clientID == 0 && !this.storeCreditValue) )  {
+          // console.log('data 2', data)
           this.setObservable(data)
         } else {
           this.setObservable(null)
+          return null
         }
-
-
 
       })
     } catch (error) {
@@ -119,7 +129,6 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   constructor(
-
     private storeCreditService       : StoreCreditService,
     private orderService   :           OrdersService,
     private settingsService          : SettingsService,
@@ -133,8 +142,7 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
     @Inject(MAT_DIALOG_DATA) public data: any
 
   ) {
-    // console.log('search Model', this.searchModel)
-    // console.log('ngOnInit with search', this.search)
+
   }
 
   ngOnInit(): void {
@@ -142,19 +150,15 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
     this.uiTransaction$
     this.initSubscription()
     if (this.clientID && this.clientID != 0) {
-      const search = {} as IStoreCreditSearchModel;
-      search.clientID = this.clientID;
-      // console.log('set observable 0 from store credit')
-      this.setObservable(search);
-      this.initSubscription()
-      return
-    }
+      this.initSubscription();
+      return;
+    };
   }
 
   ngOnDestroy(): void {
     if (this._search) {
-      this.storeCreditMethodService.updateSearchModel(null)
-      this._search.unsubscribe()
+      this.storeCreditMethodService.updateSearchModel(null);
+      this._search.unsubscribe();
     }
   }
 
@@ -167,7 +171,6 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
       switchMap(data =>  {
           this.storeCreditValue = data;
 
-          // console.log(data.results, data.results.length)
           if (data.results == null
             || data.results[0] == null
             || data.results.length == 0
@@ -195,7 +198,6 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
             data = results;
           }
 
-          // console.log('search Results for Store Credit', data);
           return of(data)
         }
       )
@@ -203,11 +205,18 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   setObservable(search: IStoreCreditSearchModel ){
-    // console.log('setObservable', search)
+    this.searchResults =  ''
     if (search) {
       const site = this.siteService.getAssignedSite();
       this.searchModel = search;
-      this.storeCreditSearch$ = this.applyStoreCreditObs(site, search)
+      if (!search || search == null) {   return ;  }
+
+      this.storeCreditSearch$ = this.applyStoreCreditObs(site, search).pipe(switchMap(data => {
+        if (!data) {
+          this.searchResults = 'Not found.'
+        }
+        return of(data)
+      }))
       return
     }
 
@@ -216,16 +225,28 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
       const site = this.siteService.getAssignedSite();
       searchModel.clientID = this.clientID;
       this.searchModel = search;
-      this.storeCreditSearch$ = this.applyStoreCreditObs(site, searchModel)
+      this.storeCreditSearch$ = this.applyStoreCreditObs(site, searchModel).pipe(switchMap(data => {
+        // console.log('Store Obs', data)
+        if (!data) {
+          this.searchResults = 'Not found.'
+        }
+        return of(data)
+      }))
       return
     };
 
     if (this.clientID && this.clientID !=0 ) {
       const site = this.siteService.getAssignedSite();
       searchModel.clientID = this.clientID;
-      this.storeCreditSearch$ = this.applyStoreCreditObs(site, searchModel)
+      this.storeCreditSearch$ = this.applyStoreCreditObs(site, searchModel).pipe(switchMap(data => {
+        // console.log('Store Obs', data)
+        if (!data) {
+          this.searchResults = 'Not found.'
+        }
+
+        return of(data)
+      }))
       this.searchModel = search;
-      // console.log('search Model 3', search)
       return
     };
 
@@ -236,29 +257,32 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
 
   issueMoney(credit: StoreCredit) {
     if (!credit) { credit = {} as StoreCredit }
+    // console.log('current credit', credit, this.purchaseOrderItem)
 
     if (credit) {
-      if (this.order) {
-        credit.orderID = this.order.id;
-      }
-      if (!credit.value) { credit.value = 0}
+      if (this.order)    { credit.orderID = this.order.id;  }
+      if (!credit.value) { credit.value = 0 }
 
       if (!this.purchaseOrderItem  ) {
         this.storeCreditMethodService.notifyEvent('No item associated', 'Alert')
         return;
-      }
+      };
+
       const site = this.siteService.getAssignedSite();
-      if (this.purchaseOrderItem  ) {
-        credit.value = this.purchaseOrderItem.unitPrice + credit.value
-        credit.cardData = this.searchModel.cardNumber;
-        credit.cardNum =  this.searchModel.cardNumber;
+
+      if (this.purchaseOrderItem) {
+        credit.value    = +this.purchaseOrderItem.unitPrice + +credit.value
+        credit.cardData =  this.searchModel.cardNumber;
+        credit.cardNum  =  this.searchModel.cardNumber;
+
+        // console.log('new credit', credit)
         this.storeCreditMethodService.updateStoreCredit(credit)
-        // this.storeCreditMethodService.updateSearchModel(this.searchModel)
+
         const item$ = this.storeCreditMethodService.issueToStoreCredit(this.order, credit, this.purchaseOrderItem.id)
         this.action$ =  item$.pipe(
           switchMap(data => {
             this.storeCreditMethodService.notifyEvent('Card Issued', 'Alert')
-            this.showIssueMoney = false;
+            this.initComponent();
             this.orderMethodService.updatePOSIssuePurchaseItem(this.purchaseOrderItem);
             return of(data)
           }
@@ -266,12 +290,15 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
           return this.orderService.getOrder(site, this.order.id.toString(), false)
         })).pipe(switchMap( data => {
           this.orderMethodService.updateOrderSubscription(data)
-          this.closeDialog.emit(true)
+          this.initComponent();
+          // this.closeDialog.emit(true)
+          this.cancel(null);
           return of(data)
         }))
       }
     }
   }
+
 
   applyAsPayment(credit: StoreCredit) {
     //get order total
@@ -280,7 +307,7 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
     const order = this.order;
     if (this.order && credit) {
       let type = 'store credit'
-      if (credit.type == 1 ) { type = 'gift card' }
+      if (credit.type == 1 ) { type = 'gift card' };
 
       const creditAmount = this.getCreditAmountToApply(credit.value, order.balanceRemaining)
       if (creditAmount >0) {
@@ -293,33 +320,37 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
           switchMap( paymentMethod => {
             if (!paymentMethod) {
               const paymentMethod = { name: 'Store Credit', companyCredit: true} as IPaymentMethod
-              this.action$ =   this.paymentMethodService.saveItem(site, paymentMethod);
+              this.addMethod$ = this.paymentMethodService.saveItem(site, paymentMethod);
               this.matSnack.open('Store Credit payment not configured. Please setup store credit and gift card payments.')
               return of(null)
             }
             payment.giftCardID = credit.id;
             payment.cardNum = credit.cardNum;
+            payment.gcBalance = credit.value - creditAmount;
             return this.paymentService.makePayment(site, payment, order, creditAmount, paymentMethod);
           }),
           catchError((e) => {
             // handle e and return a safe value or re-throw
             const paymentMethod = { name: 'Store Credit', companyCredit: true} as IPaymentMethod
-            this.action$ =   this.paymentMethodService.saveItem(site, paymentMethod);
+            // return  this.paymentMethodService.saveItem(site, paymentMethod);
             this.matSnack.open('Store Credit payment not configured. Please try again and if it does not work, please setup store credit and gift card payments.')
             return of(null)
          })
         ).pipe(
-          switchMap( data => {
-            if (data && data.paymentSuccess) {
-              credit.value = credit.value - creditAmount;
-              this.order = data.order
-              return this.storeCreditService.putStoreCredit(site, credit.cardNum, credit);
+          switchMap( data =>
+            {
+              if (data && data.paymentSuccess) {
+                credit.value = credit.value - creditAmount;
+                this.order = data.order;
+                return this.storeCreditService.putStoreCredit(site, credit.cardNum, credit);
+              }
+
+              if (!data || !data.paymentSuccess) {
+                this.orderMethodService.notifyEvent(`Payment to apply ${data.responseMessage}`, 'Failed')
+                return of(null)
+              }
+
             }
-            if (!data || !data.paymentSuccess) {
-              this.orderMethodService.notifyEvent(`Payment to apply ${data.responseMessage}`, 'Failed')
-              return of(null)
-            }
-          }
           ),
             catchError((e) => {
               this.matSnack.open('Make Payment failed: ' + e.toString(), 'Alert')
@@ -340,12 +371,21 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
     }
   }
 
+  initComponent() {
+    this.showIssueMoney = false;
+    this.showCreditValueOnly = false;
+    this.initSearches();
+  }
+
   initSearches() {
     this.search = null;
     this.searchModel = null;
     this.clientID = 0;
     this.accountNumber = null;
     this.storeCreditSearch$ = null;
+    this.showPayment = null
+    this.showIssueMoney = null
+    this.showCreditValueOnly = null
     this.storeCreditMethodService.updateStoreCredit(null)
     this.storeCreditMethodService.updateSearchModel(null);
   }
@@ -361,11 +401,17 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
   cancel(item: IPurchaseOrderItem) {
     if (item) {
       this.orderMethodService.cancelItem(item.id, false)
-      this.closeDialog.emit(true)
+      this.closeDialog.emit(true);
+      return;
     }
     if (!item) {
       this.closeDialog.emit(true)
     }
+    this.dialogRef.close()
+  }
+
+  close() {
+    this.closeDialog.emit(true)
     this.dialogRef.close()
   }
 

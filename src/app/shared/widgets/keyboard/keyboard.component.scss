@@ -1,8 +1,8 @@
 @import "/src/mixins.scss";
 
-.keyboard-layout { 
+.keyboard-layout {
   top: 50px;
-  height: 500px;
+
   width: 100%;
 
   @include for-phone-only  {
@@ -31,7 +31,7 @@
   color: rgb(78, 74, 74);
 }
 
-.menu { 
+.menu {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;

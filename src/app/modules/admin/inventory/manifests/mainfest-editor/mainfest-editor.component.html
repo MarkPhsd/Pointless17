@@ -11,7 +11,17 @@
   <mat-tab-group mat-align-tabs="start"
                 md-stretch-tabs >
 
-    <!-- Created: {{currentManifest.createdDate}} -->
+    <mat-tab label="Items" >
+      <mat-card *ngIf="currentManifest && manifestID !=0 ">
+        <app-inventory-list
+          [manifestID]="manifestID"
+          [siteID]    ="site"
+          [gridlist]  ="'grid-list-nopanel'"
+          [autoReceive]="autoReceive"
+          [listOnly]  ="true">
+        </app-inventory-list>
+      </mat-card>
+    </mat-tab>
 
     <mat-tab label="Properties" *ngIf="inputForm" >
       <div class="grid-container" >
@@ -151,17 +161,6 @@
         </div>
       </div>
 
-    </mat-tab>
-
-    <mat-tab label="Items" >
-      <mat-card *ngIf="currentManifest && manifestID !=0 ">
-        <app-inventory-list
-          [manifestID]="manifestID"
-          [siteID]    ="site"
-          [gridlist]  ="'grid-list-nopanel'"
-          [listOnly]  ="true">
-        </app-inventory-list>
-      </mat-card>
     </mat-tab>
 
   </mat-tab-group>

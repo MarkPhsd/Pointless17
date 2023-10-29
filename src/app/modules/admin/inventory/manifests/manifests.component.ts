@@ -526,7 +526,7 @@ export class ManifestsComponent implements OnInit {
 
   editItemFromGrid(e) {
     if (e.rowData.id)  {
-      this.inventoryManifestService.openManifestForm(e.rowData.id);
+      this.inventoryManifestService.openManifestForm(e.rowData.id, false);
     }
   }
 

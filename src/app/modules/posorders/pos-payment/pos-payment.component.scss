@@ -97,10 +97,9 @@ mat-card {
 
 //delete
 .transaction-data {
-
   border-radius         : 3px;
   margin-right          : 50px;
-  margin-top: 5px;
+  // margin-top: 5px;
   margin-left: 10px;
   margin-bottom: 10px;
   @include for-phone-only  {
@@ -110,20 +109,12 @@ mat-card {
 
 
 .grid-header-item {
-
-  margin    : 2px;
+  // margin    : 2px;
   width     : 100%;
-  // min-width : 435px;
-  // max-width : 455px;
-  overflow-x: hidden  ;
+  overflow-x: hidden ;
   @include for-phone-only  {
-    margin: 5px;
-    // display: flex;
-    // flex-direction: row;
-    // align-content: center;
-    // justify-content: left;
+    // margin: 5px;
     width: 95%;
-    // width     : 100%;
   }
 }
 

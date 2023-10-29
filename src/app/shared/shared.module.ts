@@ -224,6 +224,13 @@ import { EmployeeClockFilterComponent } from '../modules/admin/employeeClockAdmi
 import { ZoomComponent } from './widgets/zoom/zoom.component';
 import { PartBuilderUsageListComponent } from '../modules/admin/products/part-builder/part-builder-usage-list/part-builder-usage-list.component';
 import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/part-usage-graph/part-usage-graph.component';
+import { CoachMarksComponent } from './widgets/coach-marks/coach-marks.component';
+import { CoachMarksButtonComponent } from './widgets/coach-marks-button/coach-marks-button.component';
+import { SalesItemsComponent } from '../modules/admin/reports/item-sales-card/sales-items/sales-items.component';
+import { DerpPipe } from '../_pipes/derp.pipe';
+import { POSOrderScheduleCardComponent } from '../modules/posorders/posorder-schedule/posorder-schedule-card/posorder-schedule-card.component';
+import { AuditPaymentComponent } from '../modules/admin/reports/item-sales-card/audit-payment/audit-payment.component';
+
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -239,6 +246,7 @@ import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/
     ArrayFilterPipe,
     ArraySortPipe,
     BackgroundUrlPipe,
+    DerpPipe,
     BrandTypeSelectComponent,
     AccordionComponent,
     AdjustmentReasonsComponent,
@@ -253,7 +261,7 @@ import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/
     BlogPostListComponent,
     BlogPostComponent,
     ChangeDueComponent,
-
+    CoachMarksComponent,
     BackgroundCoverComponent,
     AgIconFormatterComponent,
     ButtonRendererComponent,
@@ -309,6 +317,7 @@ import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/
     IonicGeoLocationComponent,
     ItemTypeSortComponent,
     ItemSalesCardComponent,
+    SalesItemsComponent,
     ImageSwiperComponent,
     ImageContainerComponent,
     InstructionDirective,
@@ -350,7 +359,7 @@ import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/
     PaymentReportCardComponent,
     PaymentReportDataComponent,
     PieComponent,
-
+    POSOrderScheduleCardComponent,
     PosOrderItemComponent,
     PosOrderItemsComponent,
     PosCheckOutButtonsComponent,
@@ -379,6 +388,7 @@ import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/
     CategoryMenuSelectorComponent,
     //*** */
 
+    AuditPaymentComponent,
     PriceScheduleMenuListComponent,
     RewardsAvailibleComponent,
     RetailProductEditComponent,
@@ -457,9 +467,12 @@ import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/
     UserBarComponent,
     CheckBoxCellComponent,
     ZoomComponent,
+    CoachMarksComponent,
+    CoachMarksButtonComponent,
   ],
 
   imports: [
+    IonicModule.forRoot(),
     AgGridModule,
     AppRoutingModule,
     DashBoardRoutingModule,
@@ -468,11 +481,11 @@ import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/
     CommonModule,
     BrowserAnimationsModule,
     HighchartsChartModule,
-    // FlexLayoutModule,
+
     FormsModule,
     GalleryModule,
     HammerModule,
-    IonicModule.forRoot(),
+
     ColorPickerModule,
     GridsterModule,
     RouterModule,
@@ -482,13 +495,17 @@ import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/
   ],
 
   exports: [
+
     AgGridModule,
     DragDropModule,
     SafeHtmlPipe,
     ArrayFilterPipe,
     ArraySortPipe,
     BackgroundUrlPipe,
+    DerpPipe,
     BrandTypeSelectComponent,
+
+    AuditPaymentComponent,
     AccordionComponent,
     AdjustPaymentComponent,
     AreaComponent,
@@ -504,6 +521,7 @@ import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/
     UserAuthorizedDirective,
     CashValueCalcComponent,
     ChangeDueComponent,
+    CoachMarksComponent,
     AgIconFormatterComponent,
     ButtonRendererComponent,
     BtBlueToothScannerComponent,
@@ -515,6 +533,7 @@ import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/
     ProductChartReportComponent,
     CardDashboardComponent,
     ColorPickerModule,
+    CoachMarksButtonComponent,
     CategorySelectComponent,
     ClientSearchSelectorComponent,
     ExitLabelSelectionComponent,
@@ -560,6 +579,7 @@ import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/
     InstructionDirective,
     ItemTypeSortComponent,
     ItemSalesCardComponent,
+    SalesItemsComponent,
     ImageSwiperComponent,
     KeyPadComponent,
     KeyboardComponent,
@@ -607,6 +627,8 @@ import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/
     PrinterLocationSelectionComponent,
     PrinterLocationsComponent,
     PriceScheduleMenuListComponent,
+
+    POSOrderScheduleCardComponent,
 
     //ProductFilterComponent
     ProductFilterComponent,

@@ -1,4 +1,5 @@
-  <div *ngIf="(action$ | async) as action"></div>
+<div *ngIf="(action$ | async) as action"></div>
+<div *ngIf="(addItem$ | async) as action"></div>
 
   <ng-template #loading><mat-spinner
             [diameter]="75"></mat-spinner>
@@ -18,64 +19,67 @@
 
       <mat-card-content >
 
-        <div class="grid">
-          <div class="grid-header">
-            <div class="grid-demographics">
+          <div class="grid">
+            <div>
+              <ng-container [ngTemplateOutlet]="galleryView"></ng-container>
+            </div>
 
+            <div>
+              <div class="grid-demographics">
                 <div class="item-span" >
                   <ng-container [ngTemplateOutlet]="nameView"></ng-container>
                   <ng-container [ngTemplateOutlet]="speciesView"></ng-container>
-                  <ng-container [ngTemplateOutlet]="barcodeView"></ng-container>
+
+                  <div class="flex-row">
+                    <div>
+                      <ng-container [ngTemplateOutlet]="barcodeView"></ng-container>
+                    </div>
+                    <div>
+                      <ng-container [ngTemplateOutlet]="productCountView"></ng-container>
+                    </div>
+                    <div>
+                      <ng-container [ngTemplateOutlet]="inStockView"></ng-container>
+                    </div>
+                  </div>
+
                   <ng-container [ngTemplateOutlet]="companyNameView"></ng-container>
+                  <ng-container [ngTemplateOutlet]="shortdescriptionView"></ng-container>
                 </div>
 
                 <div class="features-span">
                   <ng-container [ngTemplateOutlet]="pricesView"></ng-container>
-
-                  <ng-container [ngTemplateOutlet]="productCountView"></ng-container>
-
-                  <ng-container [ngTemplateOutlet]="inStockView"></ng-container>
+                  <ng-container [ngTemplateOutlet]="tierPriceView"></ng-container>
 
                   <ng-container [ngTemplateOutlet]="addButtonsView"></ng-container>
                 </div>
 
+                <div class="center gf-chips">
+                  <ng-container [ngTemplateOutlet]="metaTagsView"></ng-container>
+                </div>
+
                 <ng-container [ngTemplateOutlet]="instructionsView"></ng-container>
-
                 <ng-container [ngTemplateOutlet]="packagingView"></ng-container>
-
                 <ng-container [ngTemplateOutlet]="prepNotesView"></ng-container>
-
               </div>
-          </div>
-
-          <div>
-
-            <ng-container [ngTemplateOutlet]="shortdescriptionView"></ng-container>
-
-            <ng-container [ngTemplateOutlet]="tierPriceView"></ng-container>
-
-            <div class="center gf-chips">
-              <ng-container [ngTemplateOutlet]="metaTagsView"></ng-container>
             </div>
           </div>
 
+          <mat-divider style="margin:15px;padding:10"></mat-divider>
 
-          <div class="grid">
+          <mat-tab-group mat-align-tabs="start"
+                        class="mat-tab-group"
+                         md-stretch-tabs   >
 
-            <ng-container [ngTemplateOutlet]="galleryView"></ng-container>
-
-            <div>
-
+            <mat-tab label="Description">
               <ng-container [ngTemplateOutlet]="descriptionView"></ng-container>
-
+            </mat-tab>
+            <mat-tab label="Special">
+              <ng-container [ngTemplateOutlet]="specialDescriptionView"></ng-container>
+            </mat-tab>
+            <mat-tab label="Ingredients">
               <ng-container [ngTemplateOutlet]="chemicalSpinnerView"></ng-container>
-
-            </div>
-
-            <ng-container [ngTemplateOutlet]="specialDescriptionView"></ng-container>
-
-          </div>
-        </div>
+            </mat-tab>
+          </mat-tab-group>
 
       </mat-card-content>
     </mat-card>
@@ -105,27 +109,32 @@
     </ng-template>
 
     <ng-template #barcodeView>
-      <div class="item-span"
-          *ngIf="menuItem.barcode"
-          id="barcode">{{ menuItem?.barcode}}
-      </div>
+      <div style="margin-left:10px;margin-top:10px;" *ngIf="menuItem.barcode" >
+        <div>
+          Barcode
+        </div>
+
+        <div>
+          {{ menuItem?.barcode}}
+        </div>
+       </div>
     </ng-template>
 
     <ng-template #addButtonsView>
-      <div class="grid-save-add-buttons"
+      <div class="flex-row"
           *ngIf="menuItem && menuItem.itemType
             && !menuItem.itemType.requireInStock
             && !priceTiers">
 
-          <div id="addItemToOrder">
-            <button  mat-raised-button
+          <div style="margin: 5px;">
+            <button   mat-raised-button
+                      color="warn"
                       class="button"
                       (click)="addItemToOrder()">
-              <mat-icon>add</mat-icon>Add To Order</button>
+              <mat-icon>add</mat-icon>Add</button>
           </div>
 
-          <div *ngIf="productForm"
-                class="column-3-span">
+          <div style="margin: 5px;">
               <app-quantiy-selector
                 [inputForm]  = "productForm"
                 (outPutValue)="changeQuantity($event)">
@@ -153,10 +162,12 @@
     <ng-template #productCountView>
       <div *ngIf="menuItem && menuItem.itemType
                   && !menuItem.itemType.requireInStock">
+
         <menu-item-product-count
-          [productCount]='menuItem.productCount'
-          [isUserStaff] ='isUserStaff'>
+            [productCount]='menuItem.productCount'
+            [isUserStaff] ='isUserStaff'>
         </menu-item-product-count>
+
       </div>
     </ng-template>
 
@@ -228,12 +239,11 @@
             </mat-label>
             <mat-select
                         type="'text'"
-                        [(ngModel)]       = "portionValue"
-                        formControlName   = "portionValue">
+                        [(ngModel)]       = "portionValue"  >
                 <mat-option [value]="">
                   Clear
                 </mat-option>
-                <mat-option *ngFor="let item of menuItem.itemType.portionValue.split(',')"
+                <mat-option *ngFor="let item of menuItem?.itemType?.portionValue.split(',')"
                             [value]="item">
                   {{ item }}
                 </mat-option>

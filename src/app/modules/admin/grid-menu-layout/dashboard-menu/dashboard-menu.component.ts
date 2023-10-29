@@ -63,9 +63,9 @@ export class DashboardMenuComponent implements OnInit, OnDestroy {
   }
 
   forceRefresh(item) {
-    // console.log(item)
     if (!item.id) {return }
     this.layoutService.forceRefresh(item.id)
+    console.log('refresh')
   }
 
 

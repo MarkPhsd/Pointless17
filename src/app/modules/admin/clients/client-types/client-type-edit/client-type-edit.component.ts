@@ -139,22 +139,14 @@ export class ClientTypeEditComponent implements OnInit {
       this.message =  ''
       this.action$ =  item$.pipe(
         switchMap( data =>  {
-            this.message = "Saved"
-            this.clientType = data;
-            this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'top'})
-              if (close) {this.onCancel(null); }
-              return of(data)
-            }
-          // ,
-          // error: error => {
-          //   this.snack.open(`Update item. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
-          //   }
-          // }
-        ));
-
-      }
-
-
+          this.message = "Saved"
+          this.clientType = data;
+          this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'top'})
+            if (close) {this.onCancel(null); }
+            return of(data)
+          }
+      ));
+    }
   };
 
   initUserAuth(item: IUserAuth_Properties) : IUserAuth_Properties{

@@ -3,51 +3,58 @@
   <button  mat-raised-button (click) ="email$ = null">Clear</button>
 </div>
 
-<div *ngIf="(printAction$ | async) as printAction"></div>
+  <div *ngIf="printView">
 
-<div *ngIf="printView">
-  <div *ngIf="(refreshView$ | async) as layout">
+    <div *ngIf="(printAction$ | async) as printAction"></div>
 
-      <div class="buttons-grid">
-        <div *ngIf="platFormService.isApp()">
-          <button  mat-button (click)="print()">
-            <span *ngIf="printerName">
-              <mat-icon>print</mat-icon>{{printerName}}
-            </span>
-          </button>
+    <div *ngIf="(refreshView$ | async) as layout">
+
+        <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
+
+        <div #coachingReceiptView class="buttons-grid">
+
+          <div *ngIf="platFormService.isApp()">
+            <button  mat-button (click)="print()">
+              <span *ngIf="printerName">
+                <mat-icon>print</mat-icon>{{printerName}}
+              </span>
+            </button>
+          </div>
+
+          <div *ngIf="!hideExit">
+            <button mat-button (click)="exit()">
+              <mat-icon>close</mat-icon> Exit
+            </button>
+          </div>
+
         </div>
 
-        <div *ngIf="!hideExit">
-          <button mat-button (click)="exit()">
-            <mat-icon>close</mat-icon> Exit
-          </button>
+        <div class="buttons-grid">
+          <span #coachingLink></span>
+          <span #coachingPDF></span>
+          <div>
+            <button *ngIf="order" mat-button (click)="email()"><mat-icon>email</mat-icon>Email </button>
+            <button mat-button
+                    [disabled]="!order || !order?.orderCode"
+                    *ngIf="!isElectronApp"
+                    (click)="openLink()">
+                <mat-icon>link</mat-icon>Link
+            </button>
+          </div>
+
+          <button  mat-button (click)="convertToPDF()"><mat-icon>pdf</mat-icon> PDF </button>
         </div>
-      </div>
 
-      <div class="buttons-grid">
-        <div *ngIf="(order$ | async) as order">
-          <button *ngIf="order" mat-button (click)="email()"><mat-icon>email</mat-icon>Email </button>
-
-          <button mat-button
-                  [disabled]="!order || !order?.orderCode"
-                  *ngIf="!isElectronApp"
-                  (click)="openLink()">
-              <mat-icon>link</mat-icon>Link
-          </button>
+        <div>
         </div>
-        <button mat-button (click)="convertToPDF()"><mat-icon>pdf</mat-icon> PDF </button>
-      </div>
 
-      <div>
-      </div>
-
-      <div class="mat-card-white">
-        <ng-container>
-          <ng-container [ngTemplateOutlet]="currentView"></ng-container>
-        </ng-container>
-      </div>
+        <div class="mat-card-white">
+          <ng-container>
+            <ng-container [ngTemplateOutlet]="currentView"></ng-container>
+          </ng-container>
+        </div>
+    </div>
   </div>
-</div>
 
 <ng-template #balanceSheetTemplate>
   <balance-sheet-view
@@ -60,7 +67,8 @@
 </ng-template>
 
 <ng-template #receiptTemplate>
-  <div *ngIf="receiptLayoutSetting && ((headerText &&  itemsText) || order)"
+<div *ngIf="(order$ | async) as order">
+  <div *ngIf="receiptStyles && receiptLayoutSetting && ((headerText &&  itemsText) || order)"
        class="border-section">
     <app-receipt-layout id="printsection"
                         [headerText]  ="headerText"
@@ -77,9 +85,12 @@
                         [orderType]   ="orderTypes"
                         [testdata]    ="false"
                         [liveEdit]    ="false"
-                        [styles]      ="receiptStyles">
+                        [styles]      ="receiptStyles"
+                        (printReady)  ="setPrintReady($event)"
+                        >
     </app-receipt-layout>
   </div>
+</div>
 </ng-template>
 
 <ng-template #balanceSheetValues>
@@ -103,4 +114,12 @@
       id="printsection"
       [disableAuditButton]="true">
   </balance-sheet-view>
+</ng-template>
+
+<ng-template #helpButton>
+  <!-- <div style="margin:5px">
+    <coach-marks-button
+          (initPopOver)="initPopOver()"
+          [enabled]="user && user?.userPreferences &&  user?.userPreferences?.enableCoachMarks"></coach-marks-button>
+  </div> -->
 </ng-template>

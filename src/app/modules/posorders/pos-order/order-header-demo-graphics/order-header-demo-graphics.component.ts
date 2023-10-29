@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output, OnChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subscription, debounce } from 'rxjs';
+import { Observable, Subscription, debounce, of, switchMap } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { ContactsService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -17,6 +17,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDestroy  {
 
   orderNameForm: UntypedFormGroup;
+  saveAction$: Observable<any>;
 
   @Input()  canRemoveClient : boolean = false;
   @Input()  order           : IPOSOrder;
@@ -25,6 +26,10 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
   @Output() outPutOpenClient:   EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutRemoveClient:   EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutAssignCustomer:   EventEmitter<any> = new EventEmitter<any>();
+
+  isAuthorized: boolean;
+  isStaff : boolean;
+  isUser: boolean;
 
   _uiSettings : Subscription;
   uiSettings  : UIHomePageSettings;
@@ -35,6 +40,16 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
     this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
       this.uiSettings = data;
     })
+    // this.order.customerName;
+  }
+
+  initAuthorization() {
+    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
+    this.isStaff  = this.userAuthorization.isUserAuthorized('admin,manager,employee');
+    this.isUser  = this.userAuthorization.isUserAuthorized('user');
+    if (this.isUser) {
+
+    }
   }
 
   constructor(private router: Router,
@@ -60,6 +75,8 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
       this.canRemoveClient = true;
     }
     this.homePageSubscriber();
+    this.initOrderFormName();
+    this.initAuthorization();
   }
 
   ngOnDestroy() {
@@ -69,25 +86,35 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
 
   ngOnChanges(): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    this.initOrderFormName()
+  }
+
+  initOrderFormName() {
     //Add '${implements OnChanges}' to the class.
     this.orderNameForm = this.fb.group({
       name: [''],
     })
     if (this.order) {
+      // console.log('initOrderFormName', this.order.serviceArea)
       this.orderNameForm = this.fb.group({
         name: [this.order.customerName],
       })
     }
+
     this.subscribeOrderNameForm()
   }
 
   subscribeOrderNameForm() {
     if (this.orderNameForm) {
       this.orderNameForm.valueChanges.subscribe(data => {
-        // this.orderNameForm.controls['name'].setValue(data)
+        const item = data?.name;
         this.cd.detectChanges()
-        console.log('name update', data.name)
-        this.saveOrderName(data.name)
+        this.saveAction$ = this.orderService.setOrderName(this.order.id, item).pipe(switchMap(data => {
+          this.order.customerName = item;
+          this.order.serviceArea = item;
+          this.orderMethodsService.updateOrderSubscriptionOnly(this.order)
+          return of(data)
+        }))
       })
     }
   }
@@ -107,17 +134,15 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
   }
 
   saveOrderName(orderName) {
-    // console.log(this.orderNameForm.value)
-    // const orderName = this.orderNameForm.controls['name'].value;
+
     if (this.order) {
-      // console.log(orderName)
       this.orderService.setOrderName(this.order.id, orderName).subscribe( data => {
-        // this.orderNameForm = this.fb.group({
-        //   name: [orderName],
-        // })
+
       })
     }
   }
+
+
 
   addClient(){
     const site = this.siteService.getAssignedSite();
@@ -139,8 +164,11 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
   }
 
   assignCustomer(client) {
+
     if (client) {
-      this.assignClientID(client)
+      if (client.id && client.id != 0) {
+        this.assignClientID(client)
+      }
     }
   }
 
@@ -172,3 +200,4 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
   }
 
 }
+

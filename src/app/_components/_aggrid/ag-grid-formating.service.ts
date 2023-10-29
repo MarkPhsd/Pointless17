@@ -91,7 +91,13 @@ get rowClasses() {
 
 }
 
-initGridOptions(pageSize: number, columnDefs: any)  {
+initGridOptions(pageSize: number, columnDefs: any, enableSorting?: boolean)  {
+
+  let sorting: boolean 
+  sorting = true;
+  if (enableSorting) { 
+    sorting = enableSorting;
+  }
   return {
     pagination: true,
     paginationPageSize: pageSize,
@@ -101,7 +107,9 @@ initGridOptions(pageSize: number, columnDefs: any)  {
     infiniteInitialRowCount: 0,
     columnDefs: columnDefs,
     rowSelection: 'multiple',
-    rowClassRules: this.rowClasses
+    rowClassRules: this.rowClasses,
+    enableFilter: true,
+    enableSorting: sorting,
   }
 
 }
@@ -120,6 +128,7 @@ initGridOptionsFormated(pageSize: number, columnDefs: any) {
     infiniteInitialRowCount: 0,
     columnDefs: columnDefs,
     rowSelection: 'multiple',
+    enableSorting: true,
     rowClassRules: {
       "row-fail": params => params.api.getValue("packageCountRemaining", params.node) < 10,
       "row-pass": params => params.api.getValue("packageCountRemaining", params.node) >= 10,

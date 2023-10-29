@@ -6,7 +6,7 @@ import { DashBoardComponentProperties, DashboardContentModel, DashBoardPropertie
 // COMPONENTS
 import { MatDialog } from '@angular/material/dialog';
 import { GridComponentPropertiesComponent } from './grid-component-properties/grid-component-properties.component';
-import { Subscription } from 'rxjs';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { AuthenticationService, AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISite } from 'src/app/_interfaces';
@@ -20,6 +20,7 @@ import { NavigationService } from 'src/app/_services/system/navigation.service';
 })
 export class GridMenuLayoutComponent implements OnInit {
 
+  action$: Observable<any>;
   @Input() layoutID : any;
 
   get options(): GridsterConfig {
@@ -54,7 +55,7 @@ export class GridMenuLayoutComponent implements OnInit {
 		onSomething: (type) => alert(type)
   }
 
-  backgroundblendmode = ''
+  backgroundblendmode = 'normal'
   backgroundColor     = '#82a1ad';
   opacity             = 1;
   image               = ''
@@ -77,49 +78,45 @@ export class GridMenuLayoutComponent implements OnInit {
   )
   {}
 
-  async	ngOnInit() {
-    this.initSubscription();
-    this.bucket = await this.awsservice.awsBucketURL();
+  ngOnInit() {
+    // this.initSubscription();
     const id = this.route.snapshot.paramMap.get('id');
-    // if (!id || !this.layoutService.dashboardCollection) { 
-    //   this.navigationService.navDashboard()
-    //   return;
-    // }
-    this.initSites(id);
-  
-  }
-
-  initDesigerMode() {
-    const designerMode = localStorage.getItem('dashBoardDesignerMode') 
-    if (designerMode === 'true' || designerMode === 'false') {
-      const mode = (designerMode == 'true')
-      if (designerMode) { 
-        this.designerMode = mode
-        this.layoutService.designerMode = mode;
-      }
+    // const value = this.layoutService._dashboardModel.value;
+    // console.log('grid menu layout - ngOnInit', id)
+    if (id) {
+      const site = this.sitesService.getAssignedSite();
+      console.log('using default site')
+      this.action$ = this.initGrid(+id)
+      return;
     }
+    this.initSites(id);
   }
 
   initSites(id) {
-    this.sitesService.getSites().subscribe(
-      { next: data => {
+    console.log('initSites')
+    this.action$ =  this.sitesService.getSites().pipe(
+      switchMap( data => {
         this.sites  = data;
         this.layoutService.sites = data;
-        this.initGridsterSettings()
-        if ( id ) {
-          this.layoutService.getData(+id) //(this.id);
-          return
-        }
-      },
-        error: err =>  {
-          console.log('siets not retrieved')
-          this.initGridsterSettings()
-        }
+        return of(null)
       }
-    )
+    )).pipe(switchMap(data => {
+      return this.initGrid(+id)
+    }))
 	}
 
+  //if we don't have to do sites.
+  initGrid(id: number) {
+    this.initGridsterSettings()
+    console.log('initGrid', id)
+    if ( id ) {
+      console.log('initGrid')
+      return  this.layoutService.getDataOBS(+id)
+    }
+  }
+
   initGridsterSettings() {
+    console.log('initGridsterSettings',)
     this.initDesigerMode()
     this.updateGridsterUserMode(this.designerMode);
     this.initSubscription();
@@ -127,40 +124,28 @@ export class GridMenuLayoutComponent implements OnInit {
     this.layoutService.changedOptions();
   }
 
-  saveChanges() {
-    this.itemChange()
-  }
-
-  updateGridsterUserMode(mode: boolean) {
-    this.layoutService.designerMode    = mode;
-    if (mode) {
-      this.gridsteritemclass= 'gridster-item';
-    }
-    if (!mode) {
-      this.gridsteritemclass= 'gridster-item-user';
-    }
-  }
-
   initSubscription() {
     this.sitesService.sites$.subscribe(data => {
       this.sites = data
     })
+
     this._dashboard = this.layoutService._dashboardModel.subscribe(data => {
       this.layoutService.dashboardModel = data;
+
       if (!data) {
-        console.log('null')
-        this.layoutService.forceRefresh(null);
+        console.log('no layout service subscription')
         return;
       }
 
       if (data.userName) {
         this.layoutService.dashboardProperties = JSON.parse(data.userName) as DashBoardProperties
       }
+
       this.backgroundblendmode = 'normal'
       this.backgroundColor     = 'white';
       this.opacity             = 1;
       this.image               = ''
-   
+
 
       if (this.layoutService.dashboardProperties) {
 
@@ -168,7 +153,7 @@ export class GridMenuLayoutComponent implements OnInit {
         this.opacity         = this.layoutService.dashboardProperties.opacity;
         this.backgroundblendmode = this.layoutService.dashboardProperties.backgroundblendmode;
         this.image  = this.bucket + this.layoutService.dashboardProperties.image;
- 
+
         this.pixelminHeight     = '100%';
         this.pixelHeight        = 'calc(100vh - 1em - 50px)'
         this.pixelWidth         = '100%'
@@ -198,6 +183,32 @@ export class GridMenuLayoutComponent implements OnInit {
         this.layoutService.changedOptions();
       }
     })
+  }
+
+  initDesigerMode() {
+    const designerMode = localStorage.getItem('dashBoardDesignerMode')
+    if (designerMode === 'true' || designerMode === 'false') {
+      const mode = (designerMode == 'true')
+      if (designerMode) {
+        this.designerMode = mode
+        this.layoutService.designerMode = mode;
+      }
+    }
+  }
+
+
+  saveChanges() {
+    this.itemChange()
+  }
+
+  updateGridsterUserMode(mode: boolean) {
+    this.layoutService.designerMode    = mode;
+    if (mode) {
+      this.gridsteritemclass= 'gridster-item';
+    }
+    if (!mode) {
+      this.gridsteritemclass= 'gridster-item-user';
+    }
   }
 
 	openItemSettings(item) {

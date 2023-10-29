@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { EMPTY, of, Subscription, Observable } from 'rxjs';
+import { of, Subscription, Observable } from 'rxjs';
 import { ISetting, ISite } from 'src/app/_interfaces';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import { MenuService, OrdersService } from 'src/app/_services';
@@ -63,7 +63,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   @Input() interpolatedPaymentsTexts  = [] as string[];
   @Input() interpolatedCreditPaymentsTexts = [] as string[];
   @Input() interpolatedWICEBTPaymentsTexts = [] as string[];
-
+  @Output() printReady = new EventEmitter()
   autoPrinted = false;
   setPrinterWidthClass = "receipt-width-80"
   gridReceiptClass     = 'receipt-width-85'
@@ -71,6 +71,8 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   _printOrder          : Subscription;
   printOrder$: Observable<any>;
   printOrder: IPrintOrders;
+
+  enabledPrintReady: boolean;
 
   initSubscriptions() {
     this.site = this.siteService.getAssignedSite();
@@ -110,7 +112,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
           this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes, 'ordertypes');
         }
         this.getInterpolatedData();
-        this.printingService.updatePrintReady({ready: true, index: this.index})
+
         if (this.order?.service?.defaultProductID1 && this.displayFeeInFooter) {
           return this.menuService.getMenuItemByID(this.site,this.order.service.defaultProductID1)
         }
@@ -120,7 +122,9 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
       if (data && data.name) {
         this.order.service.menuItem1 = data;
       }
-      
+
+      // this.printingService.updatePrintReady({ready: true, index: this.index});
+      this.outputPrint();
       return of(data)
     }))
   }
@@ -131,7 +135,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
         if (data) {
           this.printOrder    = data;
           this.order = data.order
-          // console.log('template Subscription', data.order.posOrderItems.length)
           this.action$ = this.initTemplateData(data.order)
         }
       }
@@ -181,16 +184,17 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       const prtContent     = document.getElementById('printsection');
       if (!prtContent) {
-        // console.log('no prtContent', this.index)
         return
       }
       const content        = `${prtContent.innerHTML}`
       if (!content) {
-        // console.log('not out put in content', this.index)
         return
       }
+      // if (this.enabledPrintReady) { return }
+      // this.enabledPrintReady = true;
+      this.printingService.updatePrintReady({ready: true, index: this.index});
+      this.outPutPrintReady.emit({ready: true, index: this.index})
 
-      this.outPutPrintReady.emit(content)
     }, 500)
   }
 
@@ -235,6 +239,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
+    this.enabledPrintReady = false;
     if ( this._order) {  this._order.unsubscribe()}
   }
 

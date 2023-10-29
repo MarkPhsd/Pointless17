@@ -355,6 +355,10 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
             }
 
             if (this.settings.cardPointBoltEnabled) {
+              if (!this.voidPayment.respstat) {
+                this.siteService.notify('No respstat for CardPoint Transaction', 'close', 6000, 'red')
+                return of({})
+              }
               if ( this.voidPayment.respstat) {
                 const voidByRef$ = this.cardPointMethdsService.voidByRetRef(this.voidPayment.retref);
 

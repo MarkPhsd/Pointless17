@@ -22,7 +22,9 @@ body {
 }
 
 .large {
-  width: 125px;
+  // width: 125px;
+  min-width: 125px;
+  min-height: 125px;
 }
 
 .small-button {

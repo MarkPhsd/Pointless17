@@ -1,15 +1,27 @@
 <div class="grid-container">
+  <div *ngIf="inputForm" [formGroup]="inputForm">
 
-  <div>
-    <mat-form-field appearance="outline">
-      <mat-label>Choose a date</mat-label>
-        <input matInput
-            [matDatepicker]="picker"
-            [(ngModel)]= "scheduledDate"
-            >
+    <mat-form-field class="form-field">
+      <input matInput
+             class="form-field"
+             [ngxMatDatetimePicker]="picker"
+             placeholder="Choose a date"
+             formControlName="preferredScheduleDate"   >
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+      <ngx-mat-datetime-picker #picker
+         [showSpinners]="true"
+         [showSeconds]="false"
+         [stepHour]="true"
+         [stepMinute]="true"
+         [stepSecond]="false"
+         [touchUi]="true"
+         [color]="'primary'"
+         [enableMeridian]="true"
+         [disableMinute]="true"
+         [hideTime]="false">
+      </ngx-mat-datetime-picker>
+   </mat-form-field>
+
   </div>
 
   <div *ngIf="!platFormService.isApp()">
@@ -21,11 +33,11 @@
       </mat-hint>
     </div>
   </div>
-
 </div>
 
 <div>
-  <button mat-raised-button
+  <button style="height:75px;width:125px"
+          mat-raised-button
           color="primary"
          (click)="saveShippingTime()">
   <mat-icon aria-label="save">save</mat-icon> Next

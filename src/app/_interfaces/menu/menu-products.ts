@@ -122,6 +122,8 @@ export interface menuButtonJSON {
   backColor: string;
   buttonColor: string;
   managerProtected: boolean;
+  tareValue: number;
+  pieceWeight: number;
 }
 
 //also in itemtype service - should consolidate
@@ -159,6 +161,7 @@ export interface ItemType {
   wicebt             : number;
   requireWholeNumber : boolean;
   pricePrompt        : boolean;
+  promptQuantity    : boolean;
 }
 
 export interface ItemTypeCategory {

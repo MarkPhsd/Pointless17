@@ -272,9 +272,10 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     let amount = 0
     if (!this.order || !this.order.posPayments) {return}
 
-    if (this.uiTransactions.triposEnabled) {
+    if (this.uiTransactions && this.uiTransactions?.triposEnabled) {
       amount = this.triposMethodService.getAuthTotal(this.order.posPayments)
     }
+
     this.totalAuthTriPOSPayments = amount;
     return amount;
   }

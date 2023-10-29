@@ -1,4 +1,4 @@
-import { Component, OnInit, Output,EventEmitter } from '@angular/core';
+import { Component, OnInit, Output,EventEmitter,Input } from '@angular/core';
 import { IRequestMessage } from 'src/app/_services/system/request-message.service';
 
 @Component({
@@ -10,20 +10,20 @@ export class RequestMessageComponent implements OnInit {
 
   @Output() actionEvent = new EventEmitter();
   @Output() archiveEvent = new EventEmitter();
-  
+  @Input() enableActions : boolean
   message: IRequestMessage
-  
+
   constructor() { }
 
   ngOnInit(): void {
     const i = 0
   }
 
-  action() { 
+  action() {
     this.actionEvent.emit(this.message)
   }
 
-  toggleArchive() { 
+  toggleArchive() {
     this.archiveEvent.emit(this.message)
   }
 }

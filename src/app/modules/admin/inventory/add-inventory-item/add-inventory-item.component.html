@@ -49,10 +49,7 @@
           <div [formGroup]="inputForm"
               *ngIf="menuItem"
               class="grid-container">
-
-              <!-- useGroups {{menuItem.itemType?.useGroups?.name.toLowerCase()}} <br>
-              type  {{menuItem.itemType?.type?.toLowerCase()}} -->
-            <div *ngIf="menuItem.itemType.useGroups.name.toLowerCase() === 'cannabis'">
+            <div >
               <app-facility-search-selector
                   [item]="facility"
                   [searchForm]="inputForm"
@@ -60,7 +57,7 @@
               </app-facility-search-selector>
             </div>
 
-            <div *ngIf="menuItem.itemType.useGroups.name.toLowerCase() === 'cannabis'">
+            <div >
               <mat-form-field appearance="outline" >
                 <mat-label>Test Date</mat-label>
                 <input  matInput

@@ -30,6 +30,7 @@ export class DisplayMenuListComponent implements OnInit {
   containerStyle = ``
   containerBackground = 'cemement.png';
   backgroundURL = `url(backgroundURL.png)`;
+  backGroundStyle: string;
 
   getContainerBackground(backgroundImage: string) {
     this.containerStyle = ''
@@ -82,6 +83,9 @@ export class DisplayMenuListComponent implements OnInit {
     this.orderSubscriber();
     if (this.menu && !this.menu.backcolorOpacity) {
       this.menu.backcolorOpacity = '0';
+    }
+    if (this.menu) {
+      this.backGroundStyle  = `rgba(0, 0, 0, ${this.menu.backcolorOpacity})`
     }
     const i =0
     const site   = this.siteService.getAssignedSite();

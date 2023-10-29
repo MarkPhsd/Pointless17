@@ -1,5 +1,5 @@
 <div *ngIf="(action$ | async) as item; else loading"></div>
-
+<div *ngIf="( saveNotes$ | async) as item"></div>
 <div *ngIf="promptGroup && posItem">
 
   <mat-card class="mat-card">
@@ -37,18 +37,18 @@
 
     <ng-container [ngTemplateOutlet]="largeScreenButtons"></ng-container>
 
-    <mat-card-actions>
-      <div>
+    <mat-card-actions *ngIf="noteForm">
+      <div  [formGroup]="noteForm">
         <mat-form-field  class="notes" appearance="outline">
           <mat-label>Notes</mat-label>
             <textarea matInput
                       rows="4"
                       columns="40"
-                      [(ngModel)]="modifierNote"
+                      formControlName="modifierNote"
             ></textarea>
         </mat-form-field>
       </div>
-      <app-keyboard [disableClose]= "true"> </app-keyboard>
+      <ng-container [ngTemplateOutlet]="keyboardDisplay"></ng-container>
     </mat-card-actions>
 
   </mat-card>
@@ -67,6 +67,12 @@
         <mat-icon>approval</mat-icon>Save & Close
       </h5>
     </button>
+  </div>
+</ng-template>
+
+<ng-template #keyboardDisplay>
+  <div *ngIf="platformService.isApp()">
+    <app-keyboard [disableClose]= "true"> </app-keyboard>
   </div>
 </ng-template>
 

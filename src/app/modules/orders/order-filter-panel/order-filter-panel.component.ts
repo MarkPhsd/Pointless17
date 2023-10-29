@@ -100,7 +100,10 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     switchMap(searchPhrase =>
       this.refreshSearch()
     )
+
   )
+
+
 
   uiTransactions  = {} as TransactionUISettings;
   uiTransactions$  : Observable<ISetting>;
@@ -125,6 +128,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
         this.uiTransactions = data;
       }
     })
+
   }
   initTerminalSettingSubscriber() {
     this.settingService.terminalSettings$.subscribe(data => {
@@ -164,6 +168,20 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     try {
       this._searchModel = this.orderMethodsService.posSearchModel$.subscribe( data => {
         this.searchModel = data
+        if (data) { 
+          if (!data.suspendedOrder || data.suspendedOrder == 0) { 
+            this.toggleSuspendedOrders = '0'
+          } else { 
+            this.toggleSuspendedOrders = '1'
+          }
+  
+          if (!data.greaterThanZero || data.greaterThanZero == 0) { 
+            this.toggleOrdersGreaterThanZero = '0'
+          } else { 
+            this.toggleOrdersGreaterThanZero = '1'
+          }
+        }
+        
         this.initFilter(data)
       })
     } catch (error) {
@@ -247,7 +265,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   displayPanel()  {
     const show =  localStorage.getItem('OrderFilterPanelVisible')
-    console.log(show)
+    // console.log(show)
     if (!show || show === 'true') {
       localStorage.setItem('OrderFilterPanelVisible', 'false')
       this.outPutHidePanel.emit(true)
@@ -352,6 +370,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   updateOrderSearch(searchModel: IPOSOrderSearchModel) {
+
     this.orderMethodsService.updateOrderSearchModel( searchModel )
   }
 
@@ -398,6 +417,12 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     }
 
     let search               = this.searchModel;
+
+    if (this.toggleOpenClosedAll == "1") {
+      // this.completionDateForm
+      this.initCompletionDateForm()
+    }
+
     search.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
     search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
     search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
@@ -407,7 +432,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     }
 
     search = this.getCompletionDateSearch(search);
-
     search.printLocation       = 0;
     search.prepStatus          = 1;
     if (this.viewType ==3) {

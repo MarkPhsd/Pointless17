@@ -1,14 +1,18 @@
-<div class="container" *ngIf="toggleListGrid">
+<div *ngIf="(urlPath$ | async) as urlPath"></div>
+
+<div class="grid-container-selectors" *ngIf="toggleListGrid">
   <div *ngIf="smallDevice">
     <button mat-button (click)="filterBottomSheet()">
       <mat-icon>search</mat-icon>
     </button>
   </div>
- <div *ngIf="smallDevice">
-   <mat-divider></mat-divider>
- </div>
+</div>
 
-  <div class="grid-list">
+<div *ngIf="smallDevice">
+  <mat-divider></mat-divider>
+</div>
+
+<div class="grid-list-container">
     <div>
       <div *ngIf="value" class="loader">
         <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>

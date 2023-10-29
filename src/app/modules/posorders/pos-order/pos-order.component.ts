@@ -34,6 +34,9 @@ import { Capacitor } from '@capacitor/core';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { eventNames } from 'process';
+import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
+import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
+import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 
 @Component({
 selector: 'app-pos-order',
@@ -68,6 +71,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @ViewChild('triPOSPaymentButton')   triPOSPaymentButton: TemplateRef<any>;
   @ViewChild('payButton')   payButton: TemplateRef<any>;
   @ViewChild('stripePayButton')   stripePayButton: TemplateRef<any>;
+  @ViewChild('roundOrder') roundOrder : TemplateRef<any>;
 
   //purchaseItemSales
   @ViewChild('purchaseItemSales') purchaseItemSales: TemplateRef<any>;
@@ -75,6 +79,18 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @ViewChild('purchaseItemHistory') purchaseItemHistory: TemplateRef<any>;
 
   @ViewChild('newItemEntry') newItemEntry: TemplateRef<any>;
+
+  //Coaching Elements
+  @ViewChild('coachingstoreCredit', {read: ElementRef}) coachingstoreCredit: ElementRef;
+  @ViewChild('coachingCustomerInfo', {read: ElementRef}) coachingCustomerInfo: ElementRef;
+  @ViewChild('coachingpurchaseOrderView', {read: ElementRef}) coachingpurchaseOrderView: ElementRef;
+  @ViewChild('coachingpayOptions', {read: ElementRef}) coachingpayOptions: ElementRef;
+  @ViewChild('coachingchangeType', {read: ElementRef}) coachingchangeType: ElementRef;
+  @ViewChild('coachingexitButton', {read: ElementRef}) coachingexitButton: ElementRef;
+  @ViewChild('coachingSuspend', {read: ElementRef}) coachingSuspend: ElementRef;
+  @ViewChild('coachingAdjustment', {read: ElementRef}) coachingAdjustment: ElementRef;
+  @ViewChild('coachingListView', {read: ElementRef}) coachingListView: ElementRef;
+
   newItemEnabled: boolean;
 
   action$: Observable<any>;
@@ -178,7 +194,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     // when modifying anything else.
     // when screen refreshes.
     // this.
-    console.log(event, event.value)
+    // console.log(event, event.value)
     // return;
     if (event) {
       this.orderMethodsService._quantityValue.next(event)
@@ -280,13 +296,21 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   gettransactionUISettingsSubscriber() {
-    this.uiTransactionSetting$ = this.settingService.getUITransactionSetting().pipe(
-      switchMap( data => {
-        this.uiSettingsService.updateUISubscription(data);
-        this.prepOrderOnClose = data?.prepOrderOnClose;
+    this.uiTransactionSetting$ =  this.uiSettingsService.transactionUISettings$.pipe(switchMap(data => {
+      // console.log('enableRounding', data?.enableRounding)
+      if (data) {
         return of(data)
-      })
-    )
+      }
+      return this.settingService.getUITransactionSetting()
+    })).pipe(switchMap(data => {
+      // console.log('enableRounding- cached', data?.enableRounding)
+      if (data) {
+        this.uiTransactionSetting = data;
+        this.prepOrderOnClose = data?.prepOrderOnClose;
+      }
+      return of(data)
+    }))
+
   }
 
   homePageSettingSubscriber() {
@@ -387,12 +411,18 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       const site = this.siteService.getAssignedSite()
       this.serviceType$ = this.serviceTypeService.getType (site,id).pipe(
         switchMap(data => {
-          this.purchaseOrderEnabled = false
+          // console.log('initPurchaseOrderOption', data?.filterType)
+          // this.purchaseOrderEnabled = false
+          if (data && data.filterType == null) {
+            this.listView = false;
+          }
           if (data) {
             if ( data?.filterType == 1  ||  data.filterType == -1 ) {
               this.purchaseOrderEnabled = true
+              this.listView = true;
             }
           }
+
           return of(data)
         })
       )
@@ -455,6 +485,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private navigationService : NavigationService,
               private orderService      : OrdersService,
               public orderMethodsService: OrderMethodsService,
+              private paymentService    : POSPaymentService,
               private awsBucket         : AWSBucketService,
               private printingService   : PrintingService,
               private _snackBar         : MatSnackBar,
@@ -471,7 +502,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private _bottomSheet     : MatBottomSheet,
               private inventoryAssignmentService: InventoryAssignmentService,
               private posOrderItemService: POSOrderItemService,
-
+              private coachMarksService: CoachMarksService,
               private manifestService: ManifestInventoryService,
               private productEditButtonService: ProductEditButtonService,
               private prepPrintingService: PrepPrintingServiceService,
@@ -522,7 +553,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   toggleListView(event) {
-    console.log(event)
     this.listView = event;
   }
 
@@ -560,9 +590,27 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
+  get roundOrderView() {
+    if (this.uiTransactionSetting && this.uiTransactionSetting.enableRounding) {
+      if (!this.paymentsEqualTotal && (!this.order?.service?.filterType || this.order?.service?.filterType == 0)) {
+        return this.roundOrder
+      }
+    }
+  }
+
   setScannerFocus(event) {
-    console.log('set scanner focus')
+    // console.log('set scanner focus')
     this.orderMethodsService.setScanner()
+  }
+
+  receiveOrder() {
+    if (this.order) {
+      this.action$ = this._makeManifest().pipe(switchMap(data => {
+        // const value = {id: data.id, autoReceive: true}
+        this.manifestService.openManifestForm(data.id, true)
+        return of(data)
+      }))
+    }
   }
 
   getDeviceInfo() {
@@ -661,29 +709,30 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     const site = this.siteService.getAssignedSite()
     const action$ = this.serviceTypeService.getType(site, this.order.serviceTypeID).pipe(switchMap(data => {
       if (data.filterType == 1 || data.filterType == -1) {
-        const manifest = {} as InventoryManifest
-        manifest.description = this.order.id.toString()
-        manifest.type = this.order.serviceType
-        manifest.sourceSiteID = site.id
-        manifest.sourceSiteName = site.name
-        manifest.sourceSiteURL = site.url
-        manifest.destinationID = site.id
-        manifest.destinationSiteName = site.name
-        manifest.destinationURL = site.url
-        return this.inventoryAssignmentService.createManifestFromOrder( site, manifest, this.order  )
-
+        return this._makeManifest()
       }
       this.notifyEvent('Order must be of a purchase order type to create a manifest.', 'Alert')
-      return of(null)
+      return of(null);
     })).pipe(switchMap(data => {
-      //navigate to inventory open manifest.
-      // this.openManifestEditor(data)
       if (!data) { return  of(null)}
-      this.manifestService.openManifestForm(data?.id)
+      this.manifestService.openManifestForm(data?.id, false)
       return of(data)
     }))
     this.action$ = action$;
+  }
 
+  _makeManifest() {
+    const site = this.siteService.getAssignedSite()
+    const manifest = {} as InventoryManifest
+    manifest.description = this.order.id.toString()
+    manifest.type = this.order.serviceType
+    manifest.sourceSiteID = site.id
+    manifest.sourceSiteName = site.name
+    manifest.sourceSiteURL = site.url
+    manifest.destinationID = site.id
+    manifest.destinationSiteName = site.name
+    manifest.destinationURL = site.url
+    return this.inventoryAssignmentService.createManifestFromOrder( site, manifest, this.order  )
   }
 
   checkIfPaymentsMade() {
@@ -916,6 +965,22 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
+  closeOrder() {
+    if (this.order && this.order.id) {
+      const site = this.siteService.getAssignedSite();
+      const result$ = this.orderService.forceCompleteOrder(site, this.order.id)
+      this.action$ = result$.pipe(switchMap(data =>  {
+        this.paymentService.updatePaymentSubscription(null)
+        this.orderMethodsService.updateOrderSubscription(null)
+        this.toolbarUIService.updateOrderBar(false)
+        return of(data)
+      })).pipe(switchMap(data => {
+      this.router.navigateByUrl('/pos-orders')
+      return of(data)
+      }))
+   }
+  }
+
   openReceiptView() {
     this.printingService.previewReceipt()
   }
@@ -958,6 +1023,34 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       return this.newItemEntry
     }
     return null
+  }
+
+  initPopOver() {
+    if (this.user?.userPreferences && this.user?.userPreferences?.enableCoachMarks ) {
+      this.coachMarksService.clear()
+      this.addCoachingList()
+      this.coachMarksService.showCurrentPopover();
+    }
+  }
+
+  roundOrderComplete() {
+    const site = this.siteService.getAssignedSite()
+    this.action$ =  this.orderService.roundOrder(site, this.order.id).pipe(switchMap(data => {
+      this.orderMethodsService.updateOrder(data)
+      return of(data)
+    }))
+  }
+
+  addCoachingList() {
+    this.coachMarksService.add(new CoachMarksClass(this.coachingstoreCredit.nativeElement, "Store Credit:  When a customer is assigned to the order, and there is store credit associated with them, you will automatically see that here."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingCustomerInfo.nativeElement, "Order Name or Customer Identifier: This section helps name or describe the order, or assign a customer or purchase order to the company you are buying from."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingpurchaseOrderView.nativeElement, "Purchase Orders: When in purchase orders you will see the purchase history of items you are buying."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingpayOptions.nativeElement, "Payment Options: Allows to do more than just choose credit or cash. Split check, pay with multiple tenders."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingchangeType.nativeElement, "Sale or Transaction Type:  Change the order name, and behavior of the order, to a different sale type, like Take Out vs. Dine In. Or converts the sale to a Purchase Order."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingexitButton.nativeElement, " Exit: Leaves the order but does not delete it."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingSuspend.nativeElement, "Suspending Order:  Suspend the order so that it will not be deleted when the day is closed. This holds it for later payment."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingAdjustment.nativeElement, "Adjustment: Void, and Refunds"));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingListView.nativeElement, "Item View Toggle: Changes the layout of how you see the items on the order."));
   }
 
 }

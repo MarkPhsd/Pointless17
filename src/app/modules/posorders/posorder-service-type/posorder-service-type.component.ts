@@ -23,7 +23,7 @@ export class POSOrderServiceTypeComponent implements OnDestroy  {
   serviceTypes         : IServiceType[]
   @Output() outPutSelectServiceType = new EventEmitter();
   item: any;
-
+  @Input() textLength = 20;
   user: IUser;
 
   initSubscriptions() {

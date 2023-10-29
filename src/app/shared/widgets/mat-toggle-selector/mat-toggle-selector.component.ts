@@ -17,7 +17,7 @@ export class MatToggleSelectorComponent implements OnChanges {
   @Input()  id                : number;
   @Input()  list$             : Observable<any>;
   @Input()  hideAllOption     : boolean;
-  @Input()  textLength        = 20
+  @Input()  textLength        : number;
   @Input()  toggleWidth       = ''
   @Input()  toggleDimensions  = 'toggle-group'
   @Input()  toggleButtonClass = 'toggle-button'
@@ -37,7 +37,11 @@ export class MatToggleSelectorComponent implements OnChanges {
   departmentID: number;
   subscribed : boolean;
   @Input() styleHeight = ''
+
   constructor() {
+    if (this.textLength == 0) {
+      this.textLength = 20
+    }
   }
 
   @HostListener("window:resize", [])
@@ -82,13 +86,13 @@ export class MatToggleSelectorComponent implements OnChanges {
       return list
     }
   }
-  convertJSONList(list: IMenuItem[]) { 
+  convertJSONList(list: IMenuItem[]) {
     if (this.type =='menuItem') {
       list = list as unknown as IMenuItem[]
-      list.forEach(data => { 
-        if (data.json && data.json != '') { 
+      list.forEach(data => {
+        if (data.json && data.json != '') {
           data.menuButtonJSON = JSON.parse(data.json)
-          console.log(data.menuButtonJSON)
+          // console.log(data.menuButtonJSON)
         }
         if (!data.json) { data.menuButtonJSON = {}  as menuButtonJSON}
       })

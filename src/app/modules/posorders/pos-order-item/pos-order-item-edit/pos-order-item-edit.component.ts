@@ -35,7 +35,6 @@ export class PosOrderItemEditComponent  {
   constructor(
       public platFormService: PlatformService,
       private orderMethodsService : OrderMethodsService,
-      private siteService         : SitesService,
       private _fb                 : UntypedFormBuilder,
       private posOrderItemMethodsService: PosOrderItemMethodsService,
       private dialogRef           : MatDialogRef<PosOrderItemEditComponent>,
@@ -71,7 +70,6 @@ export class PosOrderItemEditComponent  {
         this.inputForm = this._fb.group({
           modifierNote: [this.posOrderItem.modifierNote],
         })
-        // this.inputTrackerService.setField(this.inputForm.controls['modifierNote'])
       }
 
       if (this.editField == 'quantity') {
@@ -81,7 +79,7 @@ export class PosOrderItemEditComponent  {
         })
       }
 
-      if (this.editField == 'price') {
+      if (this.editField == 'price' || this.editField == 'retail')  {
         this.inputForm = this._fb.group({
           quantity: [this.posOrderItem.quantity],
           itemName: [],

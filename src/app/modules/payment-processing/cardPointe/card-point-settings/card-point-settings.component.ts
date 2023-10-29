@@ -63,16 +63,22 @@ export class CardPointSettingsComponent implements OnInit {
     return boltInfo$.pipe(
       switchMap(data => {
         if (data) {
-          let item
+          let item = {} as BoltInfo
+
           if (data.text) {
              item = JSON.parse(data?.text) as BoltInfo;
+             item.id = data.id;
           }
-          if (!data.text) {
+
+          if (!data.text || data.text == null) {
              item = {} as BoltInfo;
+             item.id = data.id;
           }
-          item.id = data?.id;
+
           this.boltInfo = item;
-          return of(data)
+
+          return of(data);
+
         } {
           return this.settingsService.postSetting(site, setting)
         }
@@ -82,7 +88,16 @@ export class CardPointSettingsComponent implements OnInit {
         if (data) {
           let item = JSON.parse(data?.text) as BoltInfo;
           this.boltInfo = item;
-          this.boltInfo.id = data.id;
+
+          // console.log('data', item)
+          if (!item || item == null) {
+            item = {} as BoltInfo
+            this.boltInfo = item;
+          }
+
+          if (data) {
+            this.boltInfo.id = data.id;
+          }
           return of(this.boltInfo)
         }
         return of(null)
@@ -126,9 +141,11 @@ export class CardPointSettingsComponent implements OnInit {
 
       this.boltInfo$ = boltInfo$.pipe(switchMap(data => {
         bolt.id = data.id;
+        bolt.apiURL = site.url;
         let item = JSON.stringify(bolt)
         data.text = item;
-        return  this.settingsService.saveSettingObservable(site, data)
+        // console.log('save setting', data)
+        return  this.settingsService.putSetting(site, data.id, data)
       }))
 
     }

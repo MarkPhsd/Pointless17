@@ -168,7 +168,7 @@ getStoreCreditForm(inputForm:UntypedFormGroup): UntypedFormGroup {
       let posItem = {} as IPurchaseOrderItem
       posItem.id = POSItemID;
       posItem.modifierNote = "Store credit issued."
-     return storeCredit$.pipe(
+      return storeCredit$.pipe(
           switchMap( data => {
             posItem.gcid = data.id.toString();
             posItem.modifierNote = `${data?.cardNum}`

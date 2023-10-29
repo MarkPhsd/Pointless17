@@ -75,14 +75,16 @@
         <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
       </div>
 
-      <ag-grid-angular *ngIf="!searchModel.currentDay"
+      <!-- -->
+
+      <ag-grid-angular  *ngIf="!searchModel.currentDay"
             #agGrid
             [style]              ="gridDimensions"
             id                   ="myGrid"
             [class]              ="agtheme"
             [columnDefs]         ="columnDefs"
             [defaultColDef]      ="defaultColDef"
-            [gridOptions]        ="gridOptions"
+            [gridOptions]        ="gridOptionsInfinite"
             [rowSelection]       ="rowSelection"
             [frameworkComponents]="frameworkComponents"
             (selectionChanged)   ="onSelectionChanged($event)"
@@ -101,13 +103,13 @@
             [rowSelection]       ="rowSelection"
             [frameworkComponents]="frameworkComponents"
             (selectionChanged)   ="onSelectionChanged($event)"
-            (gridReady)          ="onGridReady($event)"
-            >
+            (gridReady)          ="onGridReady($event)"  >
       </ag-grid-angular>
     </div>
 
     <div class="filter-panel" [style]="filterDimensions">
-      <metrc-sales-filter (outputClearExceptions)="clearExceptions($event)">
+      <metrc-sales-filter
+        (outputClearExceptions)="clearExceptions($event)">
       </metrc-sales-filter>
     </div>
   </div>

@@ -3,9 +3,10 @@
 mat-card {
   padding: 3px;
   object-fit: cover;
-  height: 100%;
-  overflow-y: hidden;
-  overflow-x: hidden;
+  // height: 100%;
+  // overflow-y: hidden;
+  // overflow-x: hidden;
+  margin-bottom: 2px;
 }
 
 .mat-card-row {
@@ -15,6 +16,8 @@ mat-card {
 
 .mat-card-grid {
   // max-width: 200px;
+  // height: 165px;
+  padding: 0px;
 }
 
 mat-card:hover {
@@ -39,7 +42,7 @@ mat-card:active {
   height: 100%;
   min-height: 125px;
   max-height: 125px;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 .header-container {
@@ -52,11 +55,16 @@ mat-card:active {
 
 }
 
+//  style="max-width:75px;max-height:2em;"
 .header-category-title {
   font-size: 1em;
   font-weight: 450;
   text-align: center;
   justify-content: center;
+  text-wrap: wrap;
+  max-height: 2em;
+  width: 70px;
+  overflow: hidden;
 }
 
 .grid-item {
@@ -67,9 +75,10 @@ mat-card:active {
 }
 
 .footer {
-  margin-top: 1px;
-  height: 45px;
+  margin-top: 10px;
+  // height: 45px;
   z-index: 99;
+  height: 2em;
 }
 
 .text-max-width {
@@ -88,7 +97,6 @@ mat-card:active {
   white-space:normal;
   overflow: hidden;
   text-transform: capitalize;
-  //used to maintain the height for buttons compared to images.
   min-height  : 100px;
   max-height  : 100px;
   overflow: hidden;
@@ -124,27 +132,19 @@ mat-card:active {
 
 .image-container {
   width: 100%;
-  @include for-phone-only          {min-height: 15vh; max-height: 100px;}
-  @include for-tablet-landscape-up {min-height: 13vh; max-height: 100px;}
-  @include for-tablet-portrait-up  {min-height: 13vh; max-height: 100px;}
-  @include for-tablet-portrait-up  {min-height: 13vh; max-height: 100px;}
+  max-height: 75px;
+  border-radius: 15px;
 }
 
 .product-image  {
   object-fit: cover;
-  max-height: 100%;
-  transition: box-shadow 400ms;
-  border-radius: 5px;
-  font-weight : 475;
-  font-size   : 1em;
-  text-align  : center;
+  border-radius: 15px;
   width       : 100%;
   white-space : normal;
   overflow    : hidden;
-  text-overflow: ellipsis;
-  text-transform: capitalize;
+
   max-height: 85px;
-  min-height: 85px;
+  // min-height: 85px;
 }
 
 .product-name {
@@ -245,21 +245,23 @@ mat-card:active {
   margin-top:    .8em;
   // line-height:   1em;
   text-align:    left;
-  font-weight:   425;
+  font-weight:   500;
   font-size:     .9em;
   float:         left;
+  // margin-top     :4px
 }
 
 .item-name-center {
   text-align: center;
   justify-content: center;
-  min-height: 2.2em;
   z-index: 102;
+  height: 2.4em;
+  // overflow: hidden;
+  margin-bottom: 3px;
   @supports (-webkit-touch-callout: none) {
     /* CSS specific to iOS devices */
     font-size: .8em;
  }
-
 }
 
 .uom {
@@ -278,12 +280,10 @@ mat-card:active {
   padding-right: 2px;
 }
 
-
-
 button  {
   margin-right: 1px;
-  margin-left: 1px;
-  padding: 1px;
+  margin-left : 1px;
+  padding     : 1px;
 }
 
 .category-img {

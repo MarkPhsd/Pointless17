@@ -99,7 +99,7 @@ export class CardPointMethodsService {
     const site = this.siteService.getAssignedSite()
     return this.settingsService.getSettingByNameCached(site, 'boltInfo').pipe(switchMap(data => {
       const item = JSON.parse(data.text) as BoltInfo;
-
+      console.log('get bolt', item)
       if (!this.boltInfo) { this.boltInfo = {} as BoltInfo };
       this.boltInfo.apiURL = item?.apiURL;
       this.boltInfo.merchID = item?.merchID;
@@ -112,7 +112,9 @@ export class CardPointMethodsService {
     const deviceName = localStorage.getItem('devicename');
 
     const terminal$ = this.getBoltTerminalInfo(deviceName, site)
-    const boltInfo$ = this.getBolt(); //
+
+    const boltInfo$ = this.getBolt();
+
     return boltInfo$.pipe(
       switchMap((boltInfo) =>
         forkJoin({
@@ -128,7 +130,7 @@ export class CardPointMethodsService {
       switchMap( data => {
         this.boltTerminal = {} as BoltTerminal;
         const item = JSON.parse(data.text) as ITerminalSettings;
-        console.log('getBoltTerminalInfo', data.text)
+        // console.log('getBoltTerminalInfo', data.text)
         this.boltTerminal.hsn = item?.cardPointeHSN;
         return of(item)
     }))
@@ -200,14 +202,16 @@ export class CardPointMethodsService {
   sendterminalDetails() {
     this.init()
     const bolt = this.boltTerminal
-    this.listTerminals$ = this.cardPointBoltService.terminalDetails( bolt.url, this.boltTerminal.hsn, bolt.xSessionKey)
+    const site = this.siteService.getAssignedSite()
+    this.listTerminals$ = this.cardPointBoltService.terminalDetails( site.url)
   }
 
   sendDisconnect() {
     this.init()
     const bolt = this.boltTerminal
-    if (bolt.url && this.boltTerminal.hsn && bolt.xSessionKey) {
-      this.disconnect$ = this.cardPointBoltService.disconnect( bolt.url, this.boltTerminal.hsn, bolt.xSessionKey)
+    const site = this.siteService.getAssignedSite()
+    if (site.url && this.boltTerminal.hsn && bolt.xSessionKey) {
+      this.disconnect$ = this.cardPointBoltService.disconnect( site.url, this.boltTerminal.hsn, bolt.xSessionKey)
     }
     this.disconnect$ = of(null)
   }
@@ -220,19 +224,22 @@ export class CardPointMethodsService {
   sendPing() {
     this.init()
     const bolt = this.boltTerminal
-    this.ping$ = this.cardPointBoltService.ping(bolt.url, this.boltTerminal.hsn, bolt.xSessionKey)
+    const site = this.siteService.getAssignedSite()
+    this.ping$ = this.cardPointBoltService.ping(site.url, this.boltTerminal.hsn)
   }
 
   sendlistTerminals() {
     this.init()
     const bolt = this.boltTerminal
-    this.listTerminals$ = this.cardPointBoltService.listTerminals( bolt.url, this.boltTerminal.hsn, bolt.xSessionKey)
+    const site = this.siteService.getAssignedSite()
+    this.listTerminals$ = this.cardPointBoltService.listTerminals( site.url)
   }
 
   sendconnect() {
     this.init()
     const bolt = this.boltInfo;
-    this.cardPointBoltService.connect( bolt.apiURL, this.boltTerminal.hsn).subscribe(
+    const site = this.siteService.getAssignedSite()
+    this.cardPointBoltService.connect( site.url, this.boltTerminal.hsn).subscribe(
       data => {
         this.connect = data;
         this.initTerminal(data.xSessionKey, data.expiry)
@@ -243,6 +250,7 @@ export class CardPointMethodsService {
   //auth and payments
   sendReadCard() {
     // this.init()
+    const site = this.siteService.getAssignedSite()
     const item = {
         "merchantId" : this.boltInfo.merchID,
         "hsn" :this.boltInfo.hsn,
@@ -265,7 +273,7 @@ export class CardPointMethodsService {
         switchMap(data =>  {
             this.connect = data;
             this.initTerminal(data.xSessionKey, data.expiry)
-            return this.cardPointBoltService.readCard( bolt.url, item, data.xSessionKey )
+            return this.cardPointBoltService.readCard( site.url, item, data.xSessionKey )
           }
         )
       ).subscribe(data => {
@@ -276,6 +284,7 @@ export class CardPointMethodsService {
 
   resetAll() {
     this.init();
+    const site = this.siteService.getAssignedSite()
     this.initTransactions();
     this.sale = null;
     this.transaction = null;
@@ -284,7 +293,7 @@ export class CardPointMethodsService {
       if (this.cardPointBoltService && this.boltTerminal) {
         if (this.boltTerminal.xSessionKey) {
             const session = this.boltTerminal.xSessionKey;
-            this.cardPointBoltService.cancel( bolt.url, this.boltTerminal.hsn, session).subscribe(data => {
+            this.cardPointBoltService.cancel( site.url, this.boltTerminal.hsn, session).subscribe(data => {
           })
         };
       }
@@ -392,18 +401,19 @@ export class CardPointMethodsService {
   }
 
   authCapture() {
+    const site = this.siteService.getAssignedSite()
     const invalid = this.validateAuth();
     if (invalid) { return of(invalid) }
     const item = this.getAuthCaptureRequest(this.transaction);
 
     if (!item) {
-      console.log('Error 3 Auth Capture')
+      console.log('Error  Auth Capture')
       this.sale = {errorMessage: 'Failed, no auth request response', errorCode: -1}
       return of({errorMessage: 'Failed, no auth auth request response', errorCode: -1})
     }
 
     const bolt = this.initTerminal(this.connect.xSessionKey, this.connect.expiry);
-    const sale$ = this.cardPointService.authCapture( bolt.url, item );
+    const sale$ = this.cardPointService.authCapture( site.url, item );
     sale$.subscribe(data => {
       this.request = item;
       this.sale =   data;
@@ -426,61 +436,45 @@ export class CardPointMethodsService {
   }
 
   refundByRetRef(retref: any) {
-    let boltInfo = this.boltInfo
-    if (!boltInfo) {
-      boltInfo = JSON.parse(localStorage.getItem('boltInfo'))
-    }
-    let boltTerminal = this.boltTerminal
-    if (!boltTerminal) {
-      boltInfo = JSON.parse(localStorage.getItem('boltTerminal'))
-    }
-    const item = { retref: retref, merchID: boltInfo.merchID }
-    return this.cardPointService.refundWithReference(boltInfo.apiURL, item )
+    const site =   this.siteService.getAssignedSite()
+    const item = { retref: retref, merchID: '' }
+    return this.cardPointService.refundWithReference(site.url, item )
   }
 
   voidByRetRef(retref: any) {
-    let boltInfo = this.boltInfo
-    if (!boltInfo) {
-      boltInfo = JSON.parse(localStorage.getItem('boltInfo'))
-    }
-
-    const item = { retref: retref, merchID: boltInfo.merchID }
-    console.log( item  )
-    return this.cardPointService.void(boltInfo.apiURL, item )
+    const site =   this.siteService.getAssignedSite()
+    const item = { retref: retref, merchID: '' }
+    return this.cardPointService.void(site.url, item )
   }
 
   voidByOrderID(orderID: any) {
-    let boltInfo = this.boltInfo
-    if (!boltInfo) {
-      boltInfo = JSON.parse(localStorage.getItem('boltInfo'))
-    }
-
-    const item = { orderid: orderID, merchID: boltInfo.merchID }
-    return this.cardPointService.voidByOrderId(boltInfo.apiURL, item )
+    const site =   this.siteService.getAssignedSite()
+    const item = { orderid: orderID, merchID: '' }
+    return this.cardPointService.voidByOrderId(site.url, item )
   }
 
   processSale(auth: any, url: string) {
     if (!url) {
       const bolt = this.initTerminal(this.connect.xSessionKey, this.connect.expiry);
       if (!bolt) {
-        console.log('no bolt terminal')
+        this.siteService.notify('Error locating HSN Information', 'Close', 6000, 'red')
         return
       }
-      url = bolt.url;
     }
-    return this.cardPointService.authCapture(url, auth)
+    const site = this.siteService.getAssignedSite()
+    return this.cardPointService.authCapture(site.url, auth)
   }
 
   getProcessTip(session: string) {
+    const site = this.siteService.getAssignedSite()
     const bolt = this.initTerminal(this.connect.xSessionKey, this.connect.expiry);
     if (!bolt) {
       return
     }
-    return this.cardPointBoltService.tip(bolt.url, this.boltTerminal.hsn, this.connect.xSessionKey)
+    return this.cardPointBoltService.tip(site.url, this.boltTerminal.hsn, this.connect.xSessionKey)
   }
 
   getAuthCaptureRequest(data) {
-
     let token = data?.token;
     if (!token) {
       token = data?.account
@@ -501,7 +495,6 @@ export class CardPointMethodsService {
       "capture": "y",
       "receipt": "y",
     }
-    // console.log('getAuthCaptureRequest', item)
     this.request = item;
     return item
   }
@@ -568,11 +561,9 @@ export class CardPointMethodsService {
 
   initTerminal(sessionID: string, expiry: string) {
     if (!this.boltInfo && this.boltTerminal) {
-      console.log('no bolt info')
       return
     };
     if (!this.boltTerminal) {
-      console.log('no bolt terminal info')
       return
     };
     const  terminal = {} as BoltTerminal;
@@ -582,8 +573,7 @@ export class CardPointMethodsService {
     terminal.xSessionKey = sessionID;
     terminal.expiry      = expiry;
     this.boltTerminal    = terminal;
-
-    this.processing = false;
+    this.processing      = false;
     return terminal;
   }
 
@@ -602,7 +592,7 @@ export class CardPointMethodsService {
     const site = this.siteService.getAssignedSite();
     const  posPayment = {} as IPOSPayment;
     posPayment.orderID = order.id;
-    posPayment.zrun = order.zrun;
+    posPayment.zrun   = order.zrun;
     posPayment.reportRunID = order.reportRunID;
 
     this.amount       = amount;
@@ -628,9 +618,7 @@ export class CardPointMethodsService {
     //we can't get the type of payment before we get the PaymentID.
     //so we just have to request the ID, and then we can establish everything after that.
     this.amount       = payment.amountPaid + payment.tipAmount;
-    // this.manualPrompt = manualPrompt;
     this.orderID      = payment.orderID;
-
     const site = this.siteService.getAssignedSite();
     const  posPayment = {} as IPOSPayment;
     posPayment.id = payment.id;
@@ -645,7 +633,6 @@ export class CardPointMethodsService {
     //so we just have to request the ID, and then we can establish everything after that.
     this.amount       = payment.amountPaid + payment.tipAmount;
     this.orderID      = payment.orderID;
-
     this.dialogRef = this.dialogOptions.openCardPointBoltTransaction({payment: payment, setting: setting,balanceRemaining: balanceRemaining });
     this._dialog.next(this.dialogRef)
   }

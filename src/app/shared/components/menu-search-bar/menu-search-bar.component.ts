@@ -427,7 +427,7 @@ constructor(
     model.barcode    = model.name
     model.pageSize   = this.pageSize
     model.pageNumber = this.currentPage
-    // console.log(model.categoryID, model.categoryName);
+    // console.log('menu bar', model.categoryID, model.categoryName);
     this.menuService.updateSearchModel(model)
     return model
 
@@ -515,7 +515,8 @@ constructor(
     if (model.subCategoryID && model.subCategoryID != 0) {
       item = {subCategoryID: model.subCategoryID, value: this.searchIncrementer}
     }
-    console.log('list items',item,  model)
+
+    // console.log('listItems', this.router.url)
     this.router.navigate(
       [
         "/menuitems-infinite", item

@@ -1,15 +1,17 @@
-import {Component, Input, OnInit, OnDestroy } from '@angular/core';
+import {Component, Input, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, of, Subscription } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
-import { clientType, IClientTable, IUserProfile } from 'src/app/_interfaces';
+import { clientType, IClientTable, IUser, IUserProfile } from 'src/app/_interfaces';
 import { ClientType } from 'src/app/_interfaces/menu/price-schedule';
 import { IPOSOrder, IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
-import { AWSBucketService, ContactsService, OrdersService } from 'src/app/_services';
+import { LabelingService } from 'src/app/_labeling/labeling.service';
+import { AWSBucketService, AuthenticationService, ContactsService, OrdersService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { IStatuses} from 'src/app/_services/people/status-type.service';
@@ -18,6 +20,8 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { NewOrderTypeComponent } from 'src/app/modules/posorders/components/new-order-type/new-order-type.component';
+import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 
 @Component({
   selector: 'app-check-in-profile',
@@ -27,6 +31,15 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 
 export class CheckInProfileComponent implements OnInit, OnDestroy {
+
+  @ViewChild('coachingAlertMessages', {read: ElementRef}) coachingAlertMessages: ElementRef;
+  @ViewChild('coachingDisabledMessage', {read: ElementRef}) coachingDisabledMessage: ElementRef;
+  @ViewChild('coachingMedical', {read: ElementRef}) coachingMedical: ElementRef;
+
+  pendingOrdersEnabled = false
+  closedOrdersEnabled = false
+  enableDateRange = false;
+  enableStartOrder: boolean;
 
   selectForm: UntypedFormGroup;
   dateRangeList =
@@ -41,7 +54,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   bucketName  :  string;
   awsBucketURL:  string;
   profile     :  IUserProfile;
-
+  bottomSheet$: Observable<any>;
   statuses$   : Observable<IStatuses[]>;
   client$     : Observable<IClientTable>;
   clientType$: Observable<clientType>;
@@ -77,6 +90,8 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 
   password1
   password2
+  _user: Subscription;
+  user: IUser;
 
   initSubscriptions() {
     this._currentOrder = this.orderMethodsService.currentOrder$.subscribe(data=> {
@@ -86,6 +101,30 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
       this.searchModel = data
       this.initFilter(data)
     })
+  }
+
+  initUserSubscriber() {
+    this._user = this.authenticationService.user$.subscribe( data => {
+      this.user  = data
+      this.getUserInfo()
+    })
+  }
+
+  getUserInfo() {
+    let user: IUser;
+    if (this.user) { user = this.user  }
+    if (!this.user) {
+       user = JSON.parse(localStorage.getItem('user')) as IUser;
+       this.user = user;
+
+       this.enableStartOrder = true
+       if (user && user.roles) {
+         if (user.roles != 'user' && user.roles != 'guest') {
+           this.enableStartOrder = true
+         }
+       }
+
+    }
   }
 
   constructor(
@@ -103,8 +142,12 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
               private userAuthorization   : UserAuthorizationService,
               private uiSettingsService   : UISettingsService,
               private orderMethodsService : OrderMethodsService,
-              private clientTypeService:    ClientTypeService,
-              private dateHelperService         : DateHelperService,
+              private clientTypeService   :    ClientTypeService,
+              private dateHelperService   : DateHelperService,
+              public coachMarksService     : CoachMarksService,
+              private _bottomSheet         : MatBottomSheet,
+              private authenticationService: AuthenticationService,
+              public labelingService: LabelingService,
 
 
               ) {
@@ -113,7 +156,8 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     this.isStaff      =  this.userAuthorization.isUserAuthorized('admin,manager,employee');
     this.isUser       =  this.userAuthorization.isUserAuthorized('user');
     this.initSubscriptions();
-    this.refreshOrderSearch(null)
+    this.refreshOrderSearch(null);
+    this.initUserSubscriber();
   }
 
   async ngOnInit() {
@@ -211,7 +255,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   }
 
   emitDatePickerData(event) {
-    this.refreshDateSearch()
+    // this.refreshDateSearch()
   }
 
   chooseDateRangeValue(value: any) {
@@ -248,7 +292,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
       switchMap(data => {
         if (!data.id) {
           this.orderService.notificationEvent('Orders not consolidated.' + data.toString(), 'Alert')
-          console.log(data.toString())
+          // console.log(data.toString())
           return of(null)
         }
       return  this.orderService.getOrder(site, data.id.toString(), false)
@@ -266,40 +310,74 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     this.orderMethodsService.updateOrderSearchModelDirect(searchModel)
   }
 
+  updateOrderOptionsStatus(search: IPOSOrderSearchModel) {
+    this.closedOrdersEnabled = false;
+    this.pendingOrdersEnabled = false
+    if (search) {
+      if (search.completionDate_From) {
+        this.closedOrdersEnabled = true;
+      }  else {
+        this.pendingOrdersEnabled = true
+      }
+    }
+  }
+
   showOnlyOpenOrders() {
     const search                = {} as IPOSOrderSearchModel
-    search.suspendedOrder       = 0
-    search.greaterThanZero      = 0
+    search.greaterThanZero      = 1
     search.closedOpenAllOrders  = 1;
-    search.suspendedOrder       = 2;
+    search.suspendedOrder       = 0;
     search.clientID             = parseInt(this.id)
     this.searchModel            = search;
     this.orderMethodsService.updateOrderSearchModelDirect(search)
+    this.updateOrderOptionsStatus(search)
   }
 
   showClosedOrders() {
     let search                = {} as IPOSOrderSearchModel
-    search.suspendedOrder       = 0
-    search.greaterThanZero      = 0
-    search.closedOpenAllOrders  = 2;
+    search.greaterThanZero       = 1
+    search.closedOpenAllOrders   = 2;
     search.suspendedOrder        = 0;
     search.clientID             = parseInt(this.id)
     search                      = this.getClosedDates(search)
     this.searchModel            = search;
     this.orderMethodsService.updateOrderSearchModelDirect(search)
+    this.updateOrderOptionsStatus(search)
+  }
+
+  showSuspendedOrders() {
+    let search                = {} as IPOSOrderSearchModel
+    search.greaterThanZero       = 1
+    search.closedOpenAllOrders   = 1;
+    search.suspendedOrder        = 1;
+    search.clientID             = parseInt(this.id)
+    this.searchModel            = search;
+    this.orderMethodsService.updateOrderSearchModelDirect(search)
+    this.updateOrderOptionsStatus(search)
   }
 
   getClosedDates(search: IPOSOrderSearchModel) {
-    search.completionDate_From = this.dateFrom.toISOString() ;
-    search.completionDate_To   =  this.dateTo.toISOString()
+
+    if (this.dateRangeForm) {
+
+      // // console.log(this.dateRangeForm.value)
+      // console.log('start value',  this.dateRangeForm.controls['start'].value.toISOString())
+      this.dateFrom =  this.dateRangeForm.controls['start'].value.toISOString();
+      this.dateTo =  this.dateRangeForm.controls['end'].value.toISOString();
+
+      search.completionDate_From = this.dateFrom ;
+      search.completionDate_To   = this.dateTo
+    }
+
     return search
+
   }
 
   initForm() {
     this.inputForm = this.fbContactsService.initForm(this.inputForm)
     if (this.inputForm) {
       this.inputForm.valueChanges.subscribe( data => {
-        console.log(data)
+        // console.log(data)
         if (data && this.transactionUISettings &&   this.transactionUISettings.validateCustomerLicenseID) {
           this.checkValidity(this.inputForm.value,  this.transactionUISettings.validateCustomerLicenseID)
         }
@@ -336,12 +414,12 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 
   subscribeToDatePicker() {
     if (this.dateRangeForm) {
-      this.dateRangeForm.valueChanges.subscribe(res=>{
+      this.dateRangeForm.valueChanges.subscribe( res => {
         if (this.dateRangeForm.get('start').value && this.dateRangeForm.get('end').value) {
-          this.dateFrom = this.dateRangeForm.get('start').value
-          this.dateTo = this.dateRangeForm.get('end').value
+          this.dateFrom = this.dateRangeForm.controls['start'].value
+          this.dateTo = this.dateRangeForm.controls['end'].value
           this.searchModel.completionDate_From = this.dateFrom.toISOString() ;
-          this.searchModel.completionDate_To   =  this.dateTo.toISOString()
+          this.searchModel.completionDate_To   =  this.dateTo.toISOString();
           this.refreshDateSearch()
         }
       })
@@ -350,10 +428,6 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 
   refreshDateSearch() {
     if (!this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
-    if (this.dateFrom != null && this.dateTo != null) {
-      this.searchModel.completionDate_From = this.dateFrom.toISOString()
-      this.searchModel.completionDate_To   = this.dateTo.toISOString()
-    }
     this.refreshOrderSearch(this.searchModel)
   }
 
@@ -415,8 +489,23 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     const site = this.siteService.getAssignedSite()
     const payload = this.orderMethodsService.getPayLoadDefaults(null)
     payload.order.clientID = this.clientTable.id;
-    const postOrder$ = this.orderService.postOrderWithPayload(site, payload)
+
+    const postOrder$ = this.orderService.postOrderWithPayload(site, payload).pipe(switchMap(data => {
+      this.orderMethodsService.updateOrder(data)
+      this.changeTransactionType(null)
+      return of(data)
+    }))
     return postOrder$
+  }
+
+  changeTransactionType(event) {
+    this.orderMethodsService.toggleChangeOrderType = true;
+    const bottomSheet = this._bottomSheet.open(NewOrderTypeComponent)
+    this.bottomSheet$ = bottomSheet.afterDismissed()
+    this.bottomSheet$.subscribe(data => {
+      this.orderMethodsService.updateOrder(null)
+      this.orderMethodsService.toggleChangeOrderType = false;
+    })
   }
 
   updateUser(event): void {
@@ -484,7 +573,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   }
 
   selectChange(): void{
-    console.log("Selected INDEX: " + this.selectedIndex);
+    // console.log("Selected INDEX: " + this.selectedIndex);
   }
 
   // Action triggered when user swipes
@@ -535,11 +624,45 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
           this.notifyEvent(result.resultMessage, 'Failed');
           return of(null)
         }
-        return   this.postNewCheckIn()
 
+        return   this.postNewCheckIn()
     }))
 
   }
 
+  initPopover() {
+    if (this.user?.userPreferences && this.user?.userPreferences?.enableCoachMarks ) {
+      this.coachMarksService.clear()
+
+      const items = [
+      {id: 1, name: 'alerts', subject: 'Alert Messages will appear here. If the user requires license numbers, or cards are expired, you will see that info here.'},
+      {id: 2, name: 'disabled', subject: 'Client Type defines certain settings about the profile. Patiens require special information be filled out and you will see additional fields.'},
+      {id: 3, name: 'coachingMedical', subject: 'Medical Information: If the Client Type is Patient or Caregiver, additional fields will show that you will need to complete. '},
+      {id: 4, name: '', subject: ''},
+      {id: 5, name: '', subject: ''},
+      {id: 6, name: '', subject: ''},
+      ]
+
+      if (this.isStaff && this.coachingAlertMessages) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingAlertMessages.nativeElement, items[0].subject));
+      }
+
+      if (this.isStaff && this.coachingDisabledMessage) {
+          this.coachMarksService.add(new CoachMarksClass(this.coachingDisabledMessage.nativeElement, items[1].subject));
+        }
+
+      if (this.isStaff && this.coachingMedical) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingMedical.nativeElement, items[2].subject));
+      }
+
+	  this.coachMarksService.showCurrentPopover();
+    }
+
+  }
+
+
+  // @ViewChild('coachingAlertMessages', {read: ElementRef}) coachingAlertMessages: ElementRef;
+  // @ViewChild('coachingDisabledMessage', {read: ElementRef}) coachingDisabledMessage: ElementRef;
+  // @ViewChild('coachingMedical', {read: ElementRef}) coachingMedical: ElementRef;
 
 }

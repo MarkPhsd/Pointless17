@@ -2,7 +2,6 @@
 
 <div class="mat-card-container"
       *ngIf="site && (sales$ | async) as summary; else loading">
-
   <ng-container
                 [ngTemplateOutlet]="reportView"
                 [ngTemplateOutletContext]="{$implicit: summary}">
@@ -58,7 +57,6 @@
             <div>
               <ng-container [ngTemplateOutlet]="headerView"></ng-container>
             </div>
-
             <div  class="totals_label">
               <ng-container [ngTemplateOutlet]="buttonsView"></ng-container>
               <div *ngIf="summary.resultMessage">
@@ -66,11 +64,10 @@
                 {{summary.resultMessage}}
               </div>
             </div>
-
           </div>
         </mat-card-title>
 
-        <mat-card-subtitle>
+        <mat-card-subtitle *ngIf="!includeDepartments">
           <div class="grid-body-header">
             <div class="totalslabel">PreTax Total   </div>
              <div class="totals">{{summary?.summary?.itemTotal | currency }}  </div>
@@ -88,38 +85,20 @@
             <div class="totals">{{summary?.summary?.quantity }}              </div>
             <div class="totals">{{summary?.summary?.cost | currency }}   </div>
           </div>
-
         </mat-card-subtitle>
 
         <mat-card-content >
-          <button mat-raised-button color="accent" (click)="sortSales(sales)">Sort By Value</button>
-          <button mat-raised-button color="accent" (click)="sortName(sales)">Sort By Name</button>
-          <div class="grid-body">
-            <div class="totalslabel">Item :    </div>
-            <div class="totals">     Pre Tax :</div>
-            <div class="totals">     #         </div>
-            <div class="totals">     Cost :</div>
-          </div>
-
-          <div class="margin-divider">
-            <mat-divider></mat-divider>
-          </div>
-
-          <div  class="grid-body"
-                *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
-              <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
-              <div class="totals">{{sale?.itemTotal | currency }}   </div>
-              <div class="totals">{{sale?.quantity }}               </div>
-              <div class="totals">{{sale?.cost | currency }}   </div>
-          </div>
-
-          <div class="margin-divider">
-            <mat-divider></mat-divider>
-          </div>
+          <app-sales-items
+            [adjustments]="adjustments"
+            [sales]="sales"
+            [showSort]="true"
+            [includeDepartments]="includeDepartments"
+            [showAll]="showAll">
+          </app-sales-items>
         </mat-card-content>
+
       </mat-card>
   </div>
-
 </ng-template>
 
 <ng-template #adjustmentView let-summary>
@@ -155,10 +134,9 @@
 
           <div class="grid-adjustment">
             <div class="totalslabel">Item :    </div>
-            <div class="totals">Order         </div>
-            <div class="totals">Value         </div>
+            <div class="totals">     Order         </div>
+            <div class="totals">     Value         </div>
             <div class="totalslabel">User :</div>
-
             <div class="totalslabel">Reason :</div>
           </div>
           <div class="margin-divider">
@@ -171,7 +149,6 @@
               <div class="totals">      {{ sale?.orderID }}               </div>
               <div class="totals">      {{ sale?.originalPrice | currency }}   </div>
               <div class="product-name">{{ sale?.employee | truncateText: 8 }}   </div>
-
               <div class="item-span product-name">{{ sale?.voidReason }}   </div>
             </div>
         </mat-card-content>
@@ -179,6 +156,7 @@
       </mat-card>
   </div>
 </ng-template>
+
 <ng-template #buttonsView>
   <span>
     <button mat-raised (click)="togglesShowAll()">

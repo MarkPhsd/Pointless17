@@ -1,64 +1,101 @@
- <div *ngIf="(action$  | async) as action"></div>
-<!-- isApp {{ this.platFormService.isApp() }} -->
 
-<ng-container [ngTemplateOutlet]="enableEditItem"></ng-container>
-<ng-container [ngTemplateOutlet]="enableViewItem"></ng-container>
+ <mat-card  *ngIf="menuItem"
+             [style]="buttonColor"
+             [class]="matCardClass">
 
-<mat-card  *ngIf="menuItem"
-           [style]="buttonColor"
-           [class]="matCardClass">
+    <ng-container [ngTemplateOutlet]="enableViewItem"></ng-container>
+    <ng-container [ngTemplateOutlet]="enableEditItem"></ng-container>
+    <ng-container [ngTemplateOutlet]="addItemView"></ng-container>
 
-  <div [class]="containerclass">
-    <div class="image-container">
-      <ng-container [ngTemplateOutlet]="menuButton"></ng-container>
-      <ng-container [ngTemplateOutlet]="isImageButtonView"></ng-container>
-      <div *ngIf="!isDiscountItem && imageUrl" >
-        <button mat-flat-button>
-          <ng-container [ngTemplateOutlet]="productImage"></ng-container>
-          <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>
-          <div class="item-name-center"
-                *ngIf="!isDiscountItem && imageUrl" >
-              {{ menuItem.name  | truncateText: 30   }}
-            <div *ngIf="menuItem?.prodSecondLanguage">
-              {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}
-            </div>
-          </div>
-        </button>
-      </div>
-    </div>
+    <div [class]="containerclass">
+      <div class="image-container">
 
-    <span *ngIf="menuItem?.id != -1">
-      <div  class="product-name" *ngIf="!menuItem.itemType" >
-        Type Required.
-      </div>
-    </span>
-  </div>
+        <ng-container [ngTemplateOutlet]="isImageButtonView"></ng-container>
+        <ng-container [ngTemplateOutlet]="menuButton"></ng-container>
 
-  <div class="footer">
+        <span *ngIf="!isApp">
+          <button   mat-flat-button
+                    style="width:100%"
+                    class="image-button"
+                    (click)="altMethod(false)">
 
-    <div (click)="menuItemActionObs(true)" *ngIf="isCategory && displayType === 'header-category'" class="header-category-title">
-      {{menuItem.name}}
-    </div>
+              <div *ngIf="!menuItem.urlImageMain">
+                <ng-container [ngTemplateOutlet]="menuItemName" ></ng-container>
+              </div>
 
-    <ng-container #reviews *ngIf="menuItem"></ng-container>
+              <div *ngIf="menuItem.urlImageMain">
+                <ng-container [ngTemplateOutlet]="productImage"></ng-container>
+                <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>
+              </div>
 
-    <div class="price-grid" *ngIf="isProduct">
-      <ng-container [ngTemplateOutlet]="price"></ng-container>
-      <div *ngIf="menuItem.itemType">
-        <div *ngIf="isApp">
-          <ng-container [ngTemplateOutlet]="openInNew"></ng-container>
+              <ng-container [ngTemplateOutlet]="discountItemDescription"></ng-container>
+          </button>
+        </span>
+
+        <span *ngIf="isApp">
+          <button   mat-flat-button
+                    style="width:100%"
+                    class="image-button"
+                    (click)="altMethod(true)">
+
+              <div *ngIf="!menuItem.urlImageMain">
+                <ng-container [ngTemplateOutlet]="menuItemName" ></ng-container>
+              </div>
+
+              <div *ngIf="menuItem.urlImageMain">
+                <ng-container [ngTemplateOutlet]="productImage"></ng-container>
+                <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>
+              </div>
+
+              <ng-container [ngTemplateOutlet]="discountItemDescription"></ng-container>
+          </button>
+        </span>
+
+        <div *ngIf="menuItem.urlImageMain">
+          <ng-container [ngTemplateOutlet]="menuItemName" ></ng-container>
         </div>
-        <div *ngIf="!isApp && !isCategory && displayType != 'header-category'">
-          <ng-container [ngTemplateOutlet]="buttonAddItem"></ng-container>
-        </div>
+
+        <ng-container [ngTemplateOutlet]="imageButtonInfo" ></ng-container>
+
       </div>
-    </div>
-    <div *ngIf="isCategory  && displayType != 'header-category'">
-      <ng-container [ngTemplateOutlet]="seeMoreInCategory"></ng-container>
+
+      <span *ngIf="menuItem?.id != -1">
+        <div  class="product-name" *ngIf="!menuItem.itemType" >
+          Type Required.
+        </div>
+      </span>
     </div>
 
-  </div>
+    <div class="footer">
+
+      <button mat-button (click)="altMethod(true)"
+              *ngIf="isCategory && displayType === 'header-category'"
+          class="header-category-title">
+        {{menuItem?.name}}
+      </button>
+
+      <ng-container #reviews *ngIf="menuItem"></ng-container>
+
+      <div class="price-grid" *ngIf="isProduct">
+        <ng-container [ngTemplateOutlet]="price"></ng-container>
+      </div>
+
+      <div *ngIf="isCategory  && displayType != 'header-category'">
+        <ng-container [ngTemplateOutlet]="seeMoreInCategory"></ng-container>
+      </div>
+
+    </div>
+
 </mat-card>
+
+<ng-template #menuItemName>
+  <div class="item-name-center"  >
+    {{ menuItem?.name  | truncateText: 30   }}
+    <div *ngIf="menuItem?.prodSecondLanguage">
+      {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}
+    </div>
+  </div>
+</ng-template>
 
 <ng-template #editItemView>
   <div class="edit-float-button">
@@ -68,6 +105,15 @@
         (click)="editItem()" >
       <mat-icon  color="primary">info</mat-icon>
     </button>
+  </div>
+</ng-template>
+
+<ng-template #addItemView>
+  <div class="view-float-button"
+    *ngIf="menuItem && menuItem.itemType">
+    <div *ngIf="!isCategory && displayType != 'header-category'">
+     <ng-container [ngTemplateOutlet]="buttonAddItem"></ng-container>
+    </div>
   </div>
 </ng-template>
 
@@ -83,38 +129,30 @@
 </ng-template>
 
 <ng-template #menuButton>
-  <div *ngIf="menuItem?.name != 'Load More' && ((isApp && !imageUrl) || !imageUrl)"
-      class="product-name-only" >
+  <div *ngIf="menuItem?.name != 'Load More' && ((isApp && !imageUrl) ||
+              !imageUrl) && menuItem?.icon"
+        class="product-name-only" >
       <button mat-button
               class="image-button"
-              (click)="menuItemActionObs(true)">
-        <div *ngIf="isDiscountItem && !isApp">
-          <div *ngIf="menuItem.itemType.name.toLowerCase() == 'Discount % Entire Order' ||
-                      menuItem.itemType.name.toLowerCase() == 'Discount % One Item'">
-              {{menuItem?.itemType?.name }} - {{ menuItem?.cannabisType }}
-          </div>
-          <div *ngIf="menuItem.itemType.name.toLowerCase() == 'cash discount on order'.toLowerCase() ||
-                      menuItem.itemType.name.toLowerCase() == 'Cash Discount on Item'.toLowerCase()">
-              {{menuItem?.itemType?.name }} - {{menuItem?.cannabisType | currency}}
-          </div>
-        </div>
-        {{ menuItem.name  | truncateText: 30  }}
-        <div *ngIf="menuItem?.prodSecondLanguage">
-          {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}
-        </div>
-        <mat-icon *ngIf="menuItem?.icon">{{menuItem?.icon}}</mat-icon>
+              (click)="altMethod(true)">
+        <ng-container [ngTemplateOutlet]="imageButtonInfo" ></ng-container>
       </button>
   </div>
 </ng-template>
 
-<ng-template #imageButton>
-  <div *ngIf="menuItem?.name === 'Load More'"
-        class="product-name-only" >
+<ng-template #imageButtonInfo>
+  <mat-icon *ngIf="menuItem?.icon">{{menuItem?.icon}}</mat-icon>
+</ng-template>
+
+<ng-template #loadMoreButton>
+  <div  *ngIf="menuItem?.name === 'Load More'"
+        class="product-name-only"
+        style="padding-top:5px" >
       <button mat-raised-button
               class="image-button"
               color="warn"
               fxFill
-              (click)="menuItemActionObs(true)">
+              (click)="altMethod(true)">
         {{ menuItem.name  | truncateText: 30  }}
         <div *ngIf="menuItem?.prodSecondLanguage">
           {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}
@@ -125,21 +163,19 @@
 </ng-template>
 
 <ng-template #reviews>
-  <div  class="product-name" id="star-rating"
-      *ngIf="!isApp && (isProduct && menuItem?.ratingAverage && menuItem?.ratingCount &&
-              menuItem?.ratingAverage != 0 && menuItem?.ratingCount != 0)">
-    reviews:  {{menuItem?.ratingAverage}} rating: {{menuItem?.ratingCount}}
-    </div>
+  <div  class="product-name"
+        id="star-rating"
+        *ngIf="!isApp && (isProduct && menuItem?.ratingAverage && menuItem?.ratingCount &&
+                        menuItem?.ratingAverage != 0 && menuItem?.ratingCount != 0)">
+      reviews:  {{menuItem?.ratingAverage}} rating: {{menuItem?.ratingCount}}
+  </div>
 </ng-template>
 
 <ng-template #price>
   <div id="price">
-    {{menuItem.retail | currency}}
+    {{menuItem?.retail | currency}}
     <span class="uom" *ngIf="menuItem?.unitDescription">
-      /
-      <div>
-        {{menuItem?.unitDescription | truncateText: 5 }}
-      </div>
+      /  {{menuItem?.unitDescription | truncateText: 5 }}
     </span>
   </div>
 </ng-template>
@@ -148,8 +184,7 @@
   <img  *ngIf     ="!isCategory"
         [src]     ="imageUrl"
         onerror   = "this.src='assets/images/placeholderimage.png'"
-        class     ="product-image"
-        (click)="menuItemActionObs(false)"/>
+        class     ="product-image"/>
 </ng-template>
 
 <ng-template #categoryImage>
@@ -157,35 +192,27 @@
     <img  *ngIf ="isCategory"
       [src]     ="imageUrl"
       onerror   = "this.src='assets/images/placeholderimage.png'"
-      class     ="product-image"
-      (click)   ="menuItemActionObs(false)"/>
+      class     ="product-image" />
   </div>
 </ng-template>
 
 <ng-template #buttonAddItem>
-  <button
-      mat-mini-fab
-      class="add-button"
-      color="warn"
-      (click)="menuItemActionObs(true, true)" >
-    <div *ngIf="!isProduct">
-      <mat-icon>open_in_new</mat-icon>
-      View
-    </div>
-    <div *ngIf="isProduct">
-      <mat-icon>plus_one</mat-icon>
-    </div>
-  </button>
-</ng-template>
+  <div *ngIf="!isApp" >
+      <button
+          mat-mini-fab
+          class="add-button"
+          color="warn"
+          (click)="menuItemActionObs(true, true)" >
 
-<ng-template #openInNew>
-  <button
-      mat-mini-fab
-      class="add-button"
-      color="warn"
-      (click)="menuItemActionObs(false)" >
-    <mat-icon>open_in_new</mat-icon>
-  </button>
+        <div *ngIf="!isProduct">
+          <mat-icon>open_in_new</mat-icon>
+        </div>
+
+        <div *ngIf="isProduct">
+          <mat-icon>plus_one</mat-icon>
+        </div>
+      </button>
+  </div>
 </ng-template>
 
 <ng-template #discountItemDescription>
@@ -208,3 +235,7 @@
     </button>
   </div>
 </ng-template>
+
+<span *ngIf="(action$  | async) as action"></span>
+
+

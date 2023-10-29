@@ -33,6 +33,7 @@ export class PrintTemplatePopUpComponent implements OnInit, OnDestroy {
               )
   {
     if (data) {
+      // console.log('submiting this info for printing', data, data.length)
       this.printOrders = data as IPrintOrders[];
       this.printOrder  = this.printOrders[this.index]
       this.printingService._printOrder.next(this.printOrder)
@@ -42,6 +43,7 @@ export class PrintTemplatePopUpComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const i = 0;
+    // console.log('open print template')
   }
 
   exit() {
@@ -53,13 +55,17 @@ export class PrintTemplatePopUpComponent implements OnInit, OnDestroy {
   }
 
   printingCompleted(event) {
+    this.index = event.index;
+    this.index = this.index + 1;
     this.hideTemplate = true
     this.currentView = null;
-    this.printOrder = this.printOrders[this.index+1]
+    this.printOrder = this.printOrders[this.index]
     this.printingService._printOrder.next(this.printOrder)
     this.currentView = this.printTemplate;
-    this.hideTemplate = false
-    this.index = this.index + 1;
+    this.hideTemplate = false;
+
+    // console.log('printingCompleted', this.index, this.printOrders.length);
+
     if (this.index + 1 > this.printOrders.length) {
       this.exit()
       return;
@@ -72,7 +78,5 @@ export class PrintTemplatePopUpComponent implements OnInit, OnDestroy {
     return this.currentView
   }
 
-  printingComplete(){
-    this.dialogRef.close('sucess')
-  }
 }
+

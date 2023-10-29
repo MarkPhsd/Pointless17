@@ -25,7 +25,7 @@
       <button mat-raised-button
               style="margin-top: 10px"
               color="primary"
-              (click)="refreshReports()">
+              (click)="refreshReportsSub()">
         <span *ngIf="largeDevice">Refresh</span>
         <span *ngIf="!largeDevice"><mat-icon>refresh</mat-icon></span>
       </button>
@@ -39,8 +39,6 @@
         Email <mat-icon>email</mat-icon>
       </button>
     </div>
-
-
     <ng-container [ngTemplateOutlet]="designReportButtonView"></ng-container>
   </div>
 
@@ -87,18 +85,17 @@
         </div>
       </ng-template>
 
-
       <ng-template #toggleButtonView>
         <button mat-raised-button
-                color="accent"
+                color="primary"
                 style="margin-top: 10px"
                 (click)="toggleShowValues()">
           <span *ngIf="showValues">
             <div *ngIf="viewChartReports == 0">
-              <mat-icon color="primary">analytics</mat-icon>Show Charts
+              <mat-icon >analytics</mat-icon>Show Charts
             </div>
             <div *ngIf="viewChartReports == 1">
-              <mat-icon color="primary">list</mat-icon>Show Reports
+              <mat-icon >list</mat-icon>Show Reports
             </div>
           </span>
         </button>
@@ -159,6 +156,9 @@
   </div>
 
   <div [hidden]="displayReports != 'audit' ">
+
+
+
     <div>
       <button mat-flat-button  style="width:150px;height:50px"color="warn"
               (click)="showView(8)">Payment Voids</button>
@@ -276,8 +276,9 @@
 
       <div [hidden]="displayReports != 'audit'">
 
-        <ng-container *ngTemplateOutlet="paymentVoidsView,context:
-                      {$implicit: site}"></ng-container>
+        <ng-container *ngTemplateOutlet="paymentDiscrepancy,context: {$implicit: site}"></ng-container>
+
+        <ng-container *ngTemplateOutlet="paymentVoidsView, context: {$implicit: site}"></ng-container>
 
         <ng-template #paymentVoids let-site>
           <payment-report
@@ -339,16 +340,56 @@
       <div [hidden]="displayReports != 'items'">
 
         <ng-container *ngIf="viewChartReports == 0">
+          <ng-container *ngTemplateOutlet="departmentSalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="categorySalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="taxedCategorySalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="nonTaxedCategorySalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="itemSalesView,context: {$implicit: site}"></ng-container>
+          <ng-container *ngTemplateOutlet="itemTypeSalesView,context: {$implicit: site}"></ng-container>
         </ng-container>
+
+        <ng-template #departmentSales let-site>
+
+          <div>
+            <item-sales-card
+                  [site]="site"
+                  [notifier]="count"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [viewType] = "'sales'"
+                  [groupBy]="'department'">
+                <div class="header">
+                  <mat-icon>menu</mat-icon>  Department Sales
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
+          </div>
+
+          <div>
+            <item-sales-card
+                  [site]="site"
+                  [notifier]="count"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [viewType] = "'sales'"
+                  [includeDepartments]="true"
+                  [groupBy]="'category'">
+                <div class="header">
+                  <mat-icon>menu</mat-icon>  Department Breakdown
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
+          </div>
+
+        </ng-template>
 
         <ng-template #categorySales let-site>
           <div>
             <item-sales-card
                   [site]="site"
+                  [notifier]="count"
                   [dateFrom]="dateFrom"
                   [dateTo]="dateTo"
                   [removeGiftCard]="true"
@@ -360,12 +401,12 @@
                 </div>
             </item-sales-card>
           </div>
-
         </ng-template>
 
         <ng-template #taxedCategorySales let-site>
           <div>
             <item-sales-card
+                  [notifier]="count"
                   [site]="site"
                   [dateFrom]="dateFrom"
                   [dateTo]="dateTo"
@@ -384,6 +425,7 @@
         <ng-template #nonTaxedCategorySales let-site>
           <div>
             <item-sales-card
+                  [notifier]="count"
                   [site]="site"
                   [dateFrom]="dateFrom"
                   [dateTo]="dateTo"
@@ -402,6 +444,7 @@
         <ng-template #itemSales let-site>
           <div>
             <item-sales-card
+                  [notifier]="count"
                   [site]="site"
                   [dateFrom]="dateFrom"
                   [dateTo]="dateTo"
@@ -416,6 +459,59 @@
           </div>
         </ng-template>
 
+        <ng-template #serviceFees let-site>
+          <div>
+            <item-sales-card
+                  [notifier]="count"
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [viewType] = "'sales'"
+                  [groupBy]="'serviceFees'">
+                <div class="header">
+                  <mat-icon>menu</mat-icon> Service Fees
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
+          </div>
+        </ng-template>
+
+        <ng-template #itemSales let-site>
+          <div>
+            <item-sales-card
+                  [notifier]="count"
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [viewType] = "'sales'"
+                  [groupBy]="'items'">
+                <div class="header">
+                  <mat-icon>menu</mat-icon> Item Sales
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
+          </div>
+        </ng-template>
+
+        <ng-template #itemTypeSales let-site>
+          <div>
+            <item-sales-card
+                  [notifier]="count"
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [viewType] = "'sales'"
+                  [groupBy]="'type'">
+                <div class="header">
+                  <mat-icon>menu</mat-icon> Item Type
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
+          </div>
+        </ng-template>
       </div>
 
       <div [hidden]="displayReports != 'labor'">
@@ -682,4 +778,13 @@
     </ng-template>
   </ng-container>
 
+</ng-template>
+
+<ng-template #paymentDiscrepancy let-site>
+
+  <app-audit-payment
+    [site]="site"
+    [dateFrom]="dateFrom"
+    [dateTo]="dateTo"
+  ></app-audit-payment>
 </ng-template>

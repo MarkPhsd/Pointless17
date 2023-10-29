@@ -38,14 +38,14 @@ export class ScaleValueViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.scaleSetup = this.scaleService.getScaleSetup(); //get before subscriptions;
-    if (this.scaleSetup && this.scaleSetup.enabled) { 
+    if (this.scaleSetup && this.scaleSetup.enabled) {
       this.initScale();
     }
     this.scaleSubscriber();
   }
 
-  initScale() { 
-    // this.scaleService.initScaleService();
+  initScale() {
+    this.scaleService.initScaleService();
   }
 
   get displayWeight()  {
@@ -71,7 +71,7 @@ export class ScaleValueViewComponent implements OnInit {
     }
   }
 
-  killScale() { 
+  killScale() {
     // this.scaleService.killProcessByName('ScaleService.exe')
     this.scaleService.killScaleProcess()
     // this.scaleService.killProcessByName('ScaleService (32 bit)')

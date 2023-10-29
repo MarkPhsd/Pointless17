@@ -1,6 +1,6 @@
 import { AuthenticationService} from 'src/app/_services';
 import { ICompany }  from 'src/app/_interfaces';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -13,7 +13,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
   templateUrl: './register-account-main.component.html',
   styleUrls: ['./register-account-main.component.scss']
 })
-export class RegisterAccountMainComponent implements OnInit {
+export class RegisterAccountMainComponent implements OnInit,OnDestroy {
 
   backgroundImage: any;
   result$: Observable<any>;
@@ -31,6 +31,7 @@ export class RegisterAccountMainComponent implements OnInit {
   loginForm: UntypedFormGroup;
   bucket: string;
   uiHomePageSetting: UIHomePageSettings;
+  message: string;
 
   initUIService() {
     this.uiSettings.getSetting('UIHomePageSettings').subscribe( data => {
@@ -56,26 +57,30 @@ export class RegisterAccountMainComponent implements OnInit {
     if (this.authenticationService.userValue) {
       this.router.navigate(['/app-main-menu']);
     }
+  }
 
+  ngOnDestroy() {
+    this.message = ''
+    this.submitted = false;
   }
 
   goBack(){
+    this.submitted = false;
     this.router.navigate(['/login'])
   }
 
   initSubscription() {
     this._uISettings = this.uiSettingService.homePageSetting$.subscribe( data => {
-      if (data) {
-        const image  = `${this.bucket}${data.backgroundImage}`
-        this.assingBackGround(image)
-        this.uiHomePageSetting = data;
-
-        if (data.logoHomePage) {
-          this.logo = `${this.bucket}${data.logoHomePage}`;
+        if (data) {
+          const image  = `${this.bucket}${data.backgroundImage}`
+          this.assingBackGround(image)
+          this.uiHomePageSetting = data;
+          if (data.logoHomePage) {
+            this.logo = `${this.bucket}${data.logoHomePage}`;
+          }
         }
       }
-    }
-  )
+    )
   }
 
   assingBackGround(image: string) {
@@ -89,6 +94,8 @@ export class RegisterAccountMainComponent implements OnInit {
 
  ngOnInit() {
     this.initUIService()
+    this.message = ''
+    this.submitted = false;
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
     });
@@ -105,22 +112,25 @@ export class RegisterAccountMainComponent implements OnInit {
     const userName = this.f.username.value;
     const auth$ =this.authenticationService.requestUserSetupToken(userName);
 
-    const result$ = auth$.pipe(
+    this.result$ = auth$.pipe(
       switchMap(data => {
-      if (data)  {
-        console.log('registerToken,', data)
-        if (data.userExists ) {
-          this.notifyEvent("User exists, you must request a new password.", "Alert")
-          this.router.navigate(['/resetpassword'])
-          return;
-        }
-        this.router.navigate(['/register-token', { data: userName } ]);
-      }
-      this.submitted = false
-      return of(data)
-    }))
-
-    this.result$ = result$;
+        this.submitted = false;
+            if (data)  {
+              if (data.message) {
+                this.message = data.message;
+                return of(data)
+              }
+              if (data.userExists ) {
+                this.notifyEvent("User exists, you must request a new password.", "Alert")
+                this.router.navigate(['/resetpassword'])
+                return of(data)
+              }
+              this.router.navigate(['/register-token', { data: userName } ]);
+            }
+            return of(data)
+          }
+        )
+      )
 
   }
 

@@ -173,7 +173,7 @@ export class SitesService {
       return site
     } catch (error) {
       console.log('get assigned site error: ' + error)
-      return null;
+      return {} as ISite;
     }
 
     return null;
@@ -238,7 +238,7 @@ export class SitesService {
     localStorage.removeItem("site.phone") //, site.phone)
     this.clearBucket();
   }
-  clearBucket() { 
+  clearBucket() {
     localStorage.removeItem('awsbucket')
   }
 
@@ -259,8 +259,6 @@ export class SitesService {
 
   getCurrentCache(): number {
 
-    // console.log('auth user authentication', this.userValue)
-
     if (this.userValue) {
       if (this?.userValue?.roles === 'user' || this?.userValue?.roles === '') {
         return 10
@@ -271,18 +269,18 @@ export class SitesService {
     }
 
     try {
-      const appCache = JSON.parse(localStorage.getItem('appCache'));
-
-      if (!appCache || appCache == 0) {
+      const appCache = JSON.parse(localStorage.getItem('appCache')) as ISetting;
+      appCache.value
+      if (!appCache || +appCache?.value == 0) {
         if (this?.userValue?.roles  === 'user')  {
           return 10
         }
       }
 
-      return  appCache
+      return   +appCache.value
 
     } catch (error) {
-      // console.log(error)
+
     }
 
     return 0
@@ -294,6 +292,7 @@ export class SitesService {
     const  cache = this.getCurrentCache();
 
     if (cache == null) {  return  { url: url, cacheMins: 0 }   }
+    if (cache == 0)    {  return  { url: url, cacheMins: 0 }   }
 
     return { url: url, cacheMins: cache }
 
@@ -302,7 +301,6 @@ export class SitesService {
   get userValue(): IUser {
     if (!this._user.value) {
       const item = localStorage.getItem('user');
-      // console.log('get item', item)
       if (item) {
         const nextUser =  JSON.parse(item)
         this._user.next(nextUser)
@@ -313,7 +311,6 @@ export class SitesService {
       }
     }
     return this._user.value;
-
   }
 
   setAssignedSiteByID(id: any): Observable<ISite> {
@@ -349,5 +346,8 @@ export class SitesService {
     this.notify(message,title, time, color, vPOS)
     return of(null)
   }
+
+
+
 
 }

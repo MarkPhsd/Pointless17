@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { IProduct } from '../_interfaces';
-
+import { IItemType } from 'src/app/_services/menu/item-type.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -225,13 +225,79 @@ export class FbProductsService {
         active:                       [''],
         glutenFree                 :  [''],
         terpenes                   :  [''],
-        childProof             :   [''],
-        mGCBD                  :   [''],
-        mGTHC                  :   [''],
-        parLevel               :   [''],
-        slug                   :   [''],
-        pB_MainID               : [],
+        childProof                 :   [''],
+        mGCBD                      :   [''],
+        mGTHC                      :   [''],
+        parLevel                   :   [''],
+        slug                       :   [''],
+        pB_MainID                   : [],
       })
       return fb;
+    }
+
+    usesPriceCategory(itemType: IItemType) {
+      if (itemType && itemType.name && (
+          !itemType.disablePriceCategory ))
+          {
+            return true;
+          }
+
+        return false;
+    }
+
+    isLiquor(itemType: IItemType) {
+      if (itemType && itemType.name && (
+        itemType.type?.toLowerCase() === 'retail liquor' ||
+        itemType.type?.toLowerCase() === 'service liquor'   ))
+          {
+            return true;
+          }
+
+        return false;
+    }
+
+    isCannabis(itemType: IItemType) {
+      if (itemType && itemType.type &&
+                      (itemType.type?.toLowerCase() === 'cannabis' ||
+                      itemType.type?.toLowerCase()  === 'med-cannabis'))
+          {
+            return true;
+          }
+
+        return false;
+    }
+
+    isProduct(itemType: IItemType) {
+      if (itemType && itemType.useType &&  (
+             itemType.useType?.toLowerCase() == 'product' ))
+          {
+            return true;
+          }
+
+        return false;
+    }
+
+    isWeightedItem(itemType: IItemType) {
+      if (itemType && itemType.weightedItem) {
+        return true;
+      }
+    }
+
+    isRetail(itemType: IItemType) {
+      if (itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'retail' )) {
+        return true;
+      }
+    }
+
+    isModifier(itemType: IItemType) {
+      if (itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'modifier' )) {
+        return true;
+      }
+    }
+
+    isGrouping(itemType: IItemType) {
+      if (itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'grouping' )) {
+        return true;
+      }
     }
 }

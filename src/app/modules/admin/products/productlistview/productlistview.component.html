@@ -1,12 +1,9 @@
 <div *ngIf="(product$ | async) as product"></div>
-
 <div *ngIf="(copy$ | async) as copy"></div>
-<div
-     class="grid-container"
-     *ngIf="searchForm" >
+<div *ngIf="(urlPath$ | async) as urlPath"></div>
+<div *ngIf="searchForm" >
   <div class="grid-container-selectors">
-
-    <div class="grid-item">
+    <div >
       <search-debounce-input
                             [itemNameControl] = "'itemName'"
                             [searchForm]      = "searchForm"
@@ -18,9 +15,9 @@
       </search-debounce-input>
     </div>
 
-    <div class="grid-item"
+    <div
           *ngIf="(departments$ | async) as list">
-        <form-select-list [searchForm]      = "searchForm"
+      <form-select-list [searchForm]      = "searchForm"
                           [formFieldName]   ="'departmentID'"
                           [list]           = "departmentsList"
                           [showActiveInactive]="true"
@@ -29,7 +26,7 @@
         </form-select-list>
     </div>
 
-    <div class="grid-item" *ngIf="(categories$ | async) as lists">
+    <div *ngIf="(categories$ | async) as lists">
       <form-select-list [searchForm]      = "searchForm"
                         [formFieldName]   = "'categoryID'"
                         [list]            = "lists"
@@ -39,7 +36,7 @@
       </form-select-list>
     </div>
 
-    <div class="grid-item" *ngIf="(subCategories$ | async) as lists">
+    <div *ngIf="(subCategories$ | async) as lists">
       <form-select-list [searchForm]      = "searchForm"
                         [formFieldName]   ="'subCategoryID'"
                         [list]            = "subCategoriesList"
@@ -49,7 +46,7 @@
       </form-select-list>
     </div>
 
-    <div class="grid-item">
+    <div>
       <app-brand-type-select
                         [inputForm]      = "searchForm"
                         [formFieldClass] = "'mat-form-field2'"
@@ -59,7 +56,7 @@
       </app-brand-type-select>
     </div>
 
-    <div class="grid-item"
+    <div
         *ngIf="productTypes$">
       <form-select-list [formFieldName]   = "'productTypeSearch'"
                         [searchForm]      = "searchForm"
@@ -69,7 +66,7 @@
       </form-select-list>
     </div>
 
-    <div class="grid-item"
+    <div
         *ngIf="viewOptions$">
       <form-select-list [formFieldName]   = "'viewAll'"
                         [searchForm]      = "searchForm"
@@ -79,16 +76,25 @@
       </form-select-list>
     </div>
 
-    <div class="grid-item">
+    <div>
+        <app-mat-select   [fieldName]       = "'webWorkRequired'"
+                          [inputForm]       = "searchForm"
+                          [list$]            = "requiresWorkList$"
+                          (outputItem)      = "refreshRequiredWork($event)"   >
+          <div fieldSearchDescription>Work</div>
+        </app-mat-select>
+    </div>
+
+    <div >
         <app-value-fields
           [inputForm]="searchForm"
           [fieldsClass]="'font-smaller'"
           [fieldName]="'minQuantityFilter'">
-          Greater Than
+          Count Greater Than
         </app-value-fields>
     </div>
 
-    <div class="grid-item">
+    <div  class="margin-left-5 ">
       <button mat-button
               class="assign-button"
               (click)="listAll()">
@@ -97,7 +103,7 @@
       </button>
     </div>
 
-    <div class="grid-item">
+    <div  class="margin-left-5 ">
       <button mat-button
               class="assign-button"
               (click)="refreshGrid()">
@@ -106,7 +112,7 @@
       </button>
     </div>
 
-    <div class="grid-item">
+    <div *ngIf="!hideAdd" class="margin-left-5 ">
       <button mat-button
               class="assign-button"
               (click)="onExportToCsv()">
@@ -115,24 +121,67 @@
       </button>
     </div>
 
-    <div *ngIf="!hideAdd" class="grid-item">
+    <div   class="margin-left-5 ">
       <button mat-button
               (click)="childAddItem()">
         <mat-icon>add_box</mat-icon>Add</button>
     </div>
 
-    <div *ngIf="editOff" class="grid-item">
+    <div *ngIf="editOff"  class="margin-left-5 ">
       <button mat-button
               (click)="editSelectedItem()">
         <mat-icon>edit</mat-icon>Edit</button>
     </div>
 
-    <div *ngIf="!hideEditSelected" class="grid-item">
+    <div *ngIf="!hideEditSelected" class="margin-left-5 ">
       <button mat-button
               (click)="editSelectedItems()">
         <mat-icon>edit</mat-icon>
         Edit Selected
       </button>
+    </div>
+
+    <div  class="margin-5 ">
+      <button mat-button (click)="advanced = !advanced">
+        <mat-icon>settings</mat-icon>
+      </button>
+    </div>
+
+    <div  class="grid-container-selectors">
+      <div *ngIf="advanced && pagingForm">
+        <app-value-fields
+              [fieldsClass]="'fields-small'"
+              [inputForm]="pagingForm"
+              [fieldName]="'pageNumber'">
+          Page
+        </app-value-fields>
+      </div>
+
+      <div *ngIf="advanced && pagingForm">
+        <app-value-fields
+              [fieldsClass]="'fields-small'"
+              [inputForm]="pagingForm"
+              [fieldName]="'pageSize'">
+           Page Size
+        </app-value-fields>
+      </div>
+
+      <div *ngIf="advanced && pagingForm">
+        <div  *ngIf="sortList" [formGroup]="pagingForm">
+          <mat-form-field style="font-size:1em;" appearance="outline">
+            <mat-label>Sort By</mat-label>
+            <mat-select
+                        formControlName ="sort"
+                         >
+                <mat-option
+                      *ngFor="let item of sortList"
+                      [value]="item">
+                  {{item}}
+                </mat-option>
+              </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -168,6 +217,7 @@
           (cellClicked)        ='onCellClicked($event)'
           (gridReady)          ="onGridReady($event)">
     </ag-grid-angular>
+
   </div>
 
   <div *ngIf="!hideAdd" >
@@ -182,5 +232,4 @@
 <div style="flex-grow:0">
   <span id="selectedRows"> </span>
 </div>
-
 

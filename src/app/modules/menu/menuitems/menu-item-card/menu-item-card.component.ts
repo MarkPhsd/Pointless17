@@ -4,7 +4,7 @@ import { AWSBucketService, AuthenticationService, MenuService, OrdersService } f
 import { ActivatedRoute, Router,  } from '@angular/router';
 import * as _  from "lodash";
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Capacitor } from '@capacitor/core';
@@ -12,7 +12,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { UIHomePageSettings } from 'src/app/_services/system/settings/uisettings.service';
+import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 // https://stackoverflow.com/questions/54687522/best-practice-in-angular-material-to-reuse-component-in-dialog
 export interface DialogData {
@@ -27,12 +27,12 @@ export interface DialogData {
 })
 export class MenuItemCardComponent implements OnInit, OnDestroy {
 
-
-  @ViewChild('imageButton')  imageButton :  TemplateRef<any> | undefined;
+  @ViewChild('loadMoreButton')  loadMoreButton :  TemplateRef<any> | undefined;
   @ViewChild('editItemView') editItemView :  TemplateRef<any>;
   @ViewChild('viewItemView') viewItemView: TemplateRef<any> | undefined;
 
   @Output() outPutLoadMore = new EventEmitter()
+  @Output() outPutUpdateCategory = new EventEmitter();
   @Input() allowEdit : boolean;
   @Input() id        : number;
   @Input() retail    : number;
@@ -42,19 +42,25 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   @Input() bucketName: string;
   @Input() class     = 'grid-item'
 
-  @Input() uiHomePage: UIHomePageSettings;
-  @Input() displayType: string ='product'
+  @Input() uiHomePage        : UIHomePageSettings;
+  @Input() categoryIDSelected: number;
+  @Input() displayType      : string ='product';
+
   containerclass: string = 'container'
   @Output() outputRefresh = new EventEmitter()
   placeHolderImage   : String = "assets/images/placeholderimage.png"
   _order             : Subscription;
   order              : IPOSOrder;
   action$          : Observable<any>;
+  modelSearch: Observable<any>;
   menuButtonJSON   : menuButtonJSON;
   buttonColor = ''
   isApp     = false;
   isProduct : boolean;
   matCardClass = 'mat-card-grid'
+  uiSettings$: Observable<any>;
+  uiSettings: TransactionUISettings;
+  noImage: boolean;
 
   getPlatForm() {  return Capacitor.getPlatform(); }
 
@@ -66,8 +72,9 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     private orderMethodsService: OrderMethodsService,
     public platFormService   : PlatformService,
     private menuService: MenuService,
-    private authenticationService: AuthenticationService,
+    public authenticationService: AuthenticationService,
     private productEditButtonService: ProductEditButtonService,
+    private uiSettingsService: UISettingsService,
     private router: Router,
     )
   {
@@ -79,13 +86,21 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     if (!this.menuItem) {return }
     this.isProduct = this.getIsNonProduct(this.menuItem)
     this.imageUrl  = this.getItemSrc(this.menuItem)
+    if (!this.menuItem.urlImageMain) {
+      this.noImage = true
+    }
     this.getMenuItemObject(this.menuItem)
-    this.initLayout()
+    this.initLayout();
+    this.uiSettings$ = this.uiSettingsService.transactionUISettings$.pipe(data => {
+      return of(data)
+    })
+
+    // this.
   };
 
   get isImageButtonView() {
-    if (this.menuItem.name.toLocaleLowerCase() === 'load more') {
-      return this.imageButton
+    if (this.menuItem &&  this.menuItem?.name && this.menuItem?.name.toLowerCase() === 'load more') {
+      return this.loadMoreButton
     }
     return undefined
   }
@@ -101,8 +116,12 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
       const item = JSON.parse(menuItem.json) as menuButtonJSON;
       this.menuButtonJSON = item
       if (this.menuButtonJSON.buttonColor) {
-        this.buttonColor = `background-color:${this.menuButtonJSON.buttonColor};`
+        this.buttonColor = `background-color:${this.menuButtonJSON.buttonColor} `
       }
+    }
+    if (this.categoryIDSelected != 0 && this.categoryIDSelected == this.id) {
+      const box = ''
+      this.buttonColor = `background-color: #e1f5fe`
     }
   }
 
@@ -205,29 +224,28 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
    this.orderMethodsService.menuItemAction(this.order,this.menuItem, add)
   }
 
-  menuItemActionObs(add : boolean, plusOne?: boolean) {
+  altMethod(action){
+    // action = true;
+    if (this.displayType === 'header-category') {
+
+      this.menuItemActionObs(true, false, this.menuItem);
+      return
+    }
+    this.menuItemActionObs(action)
+  }
+
+  menuItemActionObs(add : boolean, plusOne?: boolean, menuItem?:  IMenuItem) {
     //options for actions are:
     //load more items
     //add item
     //apply filter to display current category & department assigned.
     //apply filter to display subcategory assigned, department and category.
-
-
     //in order to accomplish some of these things, we need the header parameters.
-
-    // model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
-    // model.brandID            = +this.route.snapshot.paramMap.get('brandID');
-    // model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
+    // console.log('add', add )
 
     if (this.displayType == 'header-category') {
-      let model = {} as ProductSearchModel;
-      const departmentID       = +this.route.snapshot.paramMap.get('departmentID');
-      const itemTypeID         = +this.route.snapshot.paramMap.get('typeID');
-      const categoryID   = this.menuItem.id;
-      model.categoryID   = categoryID;
-      model.departmentID = departmentID;
-      model.itemTypeID   = itemTypeID;
-      this.menuService.updateSearchModel(model)
+      if (!menuItem || !menuItem?.id) { return }
+      this.outPutUpdateCategory.emit(menuItem.id);
       return;
     }
 
@@ -237,21 +255,20 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     }
 
     if (this.isCategory) {
-      this.listItems(this.menuItem.id,this.menuItem.itemType.id);
+      this.listItems(this.menuItem.id, this.menuItem.itemType.id);
       add = false;
       return;
     }
 
-    if (this.authenticationService.isCustomer) { add = false; }
-
     if (plusOne) { add = true; }
-    if (this.isApp) {add = true }
+
     this.action$ = this.orderMethodsService.menuItemActionObs(this.order,this.menuItem, add,
-                                                            this.orderMethodsService.assignPOSItems);
+                                                            this.orderMethodsService.assignPOSItems).pipe(switchMap(data => {
+      return of(data)
+    }))
   }
 
   viewItem() {
-
     if (!this.menuItem || !this.menuItem.id) { return }
     this.orderMethodsService.listItem(this.menuItem.id)
   }
@@ -260,37 +277,58 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     if (!this.menuService.searchModel ) {
       this.menuService.searchModel  = this.menuService.initSearchModel()
     }
-    console.log( this.menuService.searchModel, this.menuItem?.id, this.menuItem?.itemType?.id, typeID )
+
+    if (this.updateStoreNavigation()) { return  }
 
     if (this.menuItem?.itemType?.id == 4) {
-
-      if (this.uiHomePage.storeNavigation) {
-        this.menuService.searchModel.categoryID = this.menuItem.id;
-        this.menuService.updateSearchModel(this.menuService.searchModel);
-        return;
-      }
-
-      this.router.navigate(["/menuitems-infinite/", {categoryID: id, hideSubCategoryItems: false }]);
-      this.outputRefresh.emit(true)
+      this.router.navigate(["/menuitems-infinite/", {categoryID:id, hideSubCategoryItems: false }]);
+      // this.outputRefresh.emit(true)
       return;
     }
+
     if (this.menuItem?.itemType?.id == 5) {
-
-      if (this.uiHomePage.storeNavigation) {
-        // console.log('update model store nav')
-        this.menuService.searchModel.subCategoryID = this.menuItem.id;
-        this.menuService.updateSearchModel(this.menuService.searchModel);
-        return;
-      }
-      // console.log('update model subcategory')
       this.router.navigate(["/menuitems-infinite/", {subCategoryID:id, hideSubCategoryItems: false}]);
-      this.outputRefresh.emit(true)
+      // this.outputRefresh.emit(true)
       return;
     }
+
     if (this.menuItem?.itemType?.id == 6) {
       this.router.navigate(["/menuitems-infinite/", {departmentID:id}]);
       return;
     }
+  }
+
+  updateStoreNavigation() {
+
+    if (!this.uiHomePage.storeNavigation) { return false }
+
+    if (!this.menuService.searchModel ) {
+      this.menuService.searchModel  = this.menuService.initSearchModel()
+    }
+
+    if (this.menuItem?.itemType?.id == 4) {
+      if (this.uiHomePage.storeNavigation) {
+        this.menuService.searchModel.categoryID = this.menuItem.id;
+        this.menuService.updateSearchModel(this.menuService.searchModel);
+        return true;
+      }
+    }
+
+    if (this.menuItem?.itemType?.id == 5) {
+      if (this.uiHomePage.storeNavigation) {
+        this.menuService.searchModel.subCategoryID = this.menuItem.id;
+        this.menuService.updateSearchModel(this.menuService.searchModel);
+        return true;
+      }
+    }
+
+    if (this.menuItem?.itemType?.id == 6) {
+        this.menuService.searchModel.departmentID = this.menuItem.id;
+        this.menuService.updateSearchModel(this.menuService.searchModel);
+        return true;
+    }
+
+    return false;
   }
 
   initProductSearchModel(id: number, itemTypeID: number): ProductSearchModel {

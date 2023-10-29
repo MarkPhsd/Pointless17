@@ -140,7 +140,6 @@ export class OrdersListComponent implements OnInit,OnDestroy {
           this.searchModel.suspendedOrder = 0;
         }
 
-        // console.log('search update 2', data)
         this.refreshSearch()
         return
       }
@@ -290,19 +289,20 @@ export class OrdersListComponent implements OnInit,OnDestroy {
             maxWidth: 150,
             flex: 2,
       },
-      {headerName: 'History', field: 'history', sortable: true,
-            visible : false,
-            width   : 0,
-            minWidth: 0,
-            maxWidth: 0,
-            // flex: 2,
-      },
+
       {headerName: 'Orignal ID', field: 'orderID_Temp', sortable: true,
-            visible : false,
+            visible : true,
             width   : 100,
             minWidth: 100,
             maxWidth: 100,
-            // flex: 2,
+            flex: 2,
+      },
+      {headerName: 'History', field: 'history', sortable: true,
+            visible : true,
+            width   : 50,
+            minWidth: 50,
+            maxWidth: 50,
+            flex: 2,
       },
     ]
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);

@@ -1,15 +1,15 @@
-.grid-header { 
+.grid-header {
   display: grid;
-  grid-template-columns: 1fr 75px;
+  grid-template-columns: 1fr auto;
 }
 
-.grid-buttons { 
+.grid-buttons {
   display: flex;
   flex-direction: row;
   justify-content:  space-between;
 }
 
-button { 
+button {
   width:  100px;
   height: 50px;
   // margin: 15px;

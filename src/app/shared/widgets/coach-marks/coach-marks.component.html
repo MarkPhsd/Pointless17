@@ -1,0 +1,51 @@
+<mat-card class='coach-marks'>
+    <div class="header-close">
+      <button mat-mini-fab
+              aria-label="close circle"
+              (click)="close()" >
+        <mat-icon color="warn">close</mat-icon>
+      </button>
+    </div>
+
+    <mat-card-content>
+
+      <div class="one" [innerHtml]="text"></div>
+
+      <div class="ps-flex-group-nowrap">
+        <div >
+          <button mat-button (click)="previous()"
+                  *ngIf="isTheFirst">
+            Back
+          </button>
+        </div>
+        <div >
+          <button mat-button (click)="next()"
+                  *ngIf="!isTheLast">
+            Next
+          </button>
+        </div>
+        <div >
+          <button mat-button (click)="close()"
+                  *ngIf="isTheLast">
+            Close
+          </button>
+        </div>
+      </div>
+
+      <div class="ps-flex-group-nowrap">
+       <div  *ngFor="let item of coachMarksService.popovers; let i = index">
+        <div
+          *ngIf="item.componentProps.index == coachMarksService.currentPopover"
+          style="color:#ADD8E6" >
+          <h3>&#x2022;</h3>
+        </div>
+        <div
+          *ngIf="item.componentProps.index != coachMarksService.currentPopover"
+          style="color:blue"
+        >
+          <h3>&#x2022;</h3>
+        </div>
+      </div>
+    </div>
+   </mat-card-content>
+</mat-card>

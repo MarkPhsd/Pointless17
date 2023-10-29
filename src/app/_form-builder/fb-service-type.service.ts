@@ -49,6 +49,7 @@ export class FbServiceTypeService {
             scheduleInstructions  : [''],
             shippingInstructions  : [''],
             filterType            : [],
+            allowRequestPrep        : [],
           }
         )
         return fb

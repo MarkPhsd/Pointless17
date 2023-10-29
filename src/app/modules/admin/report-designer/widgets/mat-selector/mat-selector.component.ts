@@ -9,9 +9,10 @@ import { UntypedFormGroup } from '@angular/forms';
 export class MatSelectorComponent implements OnInit {
 
     @Output() selectItem = new EventEmitter();
-    @Input() inputForm: UntypedFormGroup | undefined;
+    @Input() inputForm: UntypedFormGroup;
     // eslint-disable-next-line @typescript-eslint/no-inferrable-types
     @Input() fieldName: string = ''
+    @Input() placeHolder = ''
     // eslint-disable-next-line @typescript-eslint/no-inferrable-types
     @Input() hideClear: boolean  = false;
     @Input() list: any;
@@ -37,7 +38,7 @@ export class MatSelectorComponent implements OnInit {
       if (this.inputForm) {
         return this.formView
       }
-      return undefined;
+      return ;
     }
 
     setItem(item:any) {

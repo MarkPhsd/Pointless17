@@ -1,9 +1,9 @@
-import { Component,  Input,  OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component,  Input,  OnChanges,  OnInit } from '@angular/core';
+import { Observable, debounceTime, of, switchMap } from 'rxjs';
 import { ActivatedRoute, } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IProduct, ISetting } from 'src/app/_interfaces';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { IProduct, ISetting, ISite } from 'src/app/_interfaces';
+import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ElectronService } from 'ngx-electron';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -11,6 +11,8 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { MenuService } from 'src/app/_services';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
+import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 
 @Component({
   selector: 'app-product-info-panel',
@@ -18,7 +20,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./product-info-panel.component.scss'],
   // animations: [slideInOutAnimation]
 })
-export class ProductInfoPanelComponent implements OnInit {
+export class ProductInfoPanelComponent implements OnInit, OnChanges {
 
   @Input() products            : IProduct[];
   @Input() id                  : number;
@@ -38,6 +40,12 @@ export class ProductInfoPanelComponent implements OnInit {
   electronEnabled  = false;
   lastLabelPrinter = ""
 
+  productForm: FormGroup;
+
+  action$: Observable<any>;
+  itemType$ : Observable<IItemType>;
+  iItemType: IItemType;
+
   constructor(
        public route              : ActivatedRoute,
        private menuService       : MenuService,
@@ -49,6 +57,8 @@ export class ProductInfoPanelComponent implements OnInit {
        private inventoryEditButon: InventoryEditButtonService,
        private productEditButton : ProductEditButtonService,
        private _snackBar         : MatSnackBar,
+       public fbProductsService: FbProductsService,
+       private itemTypeService: ItemTypeService,
        )
   {
     // this.toggleLabelEvents = false;
@@ -65,11 +75,44 @@ export class ProductInfoPanelComponent implements OnInit {
     if (this.product) {
       const site = this.siteService.getAssignedSite();
       this.product.productCount = number;
-      this.menuService.putProduct(site, this.product.id, this.product).subscribe(data => {
-        this.notifyEvent('Count updated, you may need to refresh your search to see updates.', 'Success')
-      })
+      this.action$ = this._saveProduct(site).pipe(
+        switchMap(data => {
+           this.notifyEvent('Count updated, you may need to refresh your search to see updates.', 'Success');
+          return of(data)
+      }));
     }
   }
+
+  ngOnChanges() {
+    this.iItemType = null
+    this.initForm()
+    if (this.product) {
+      const site = this.siteService.getAssignedSite()
+      this.itemType$ = this.itemTypeService.getItemType(site, this.product.prodModifierType).pipe(switchMap(data => {
+        this.iItemType = data;
+        return of(data)
+      }))
+    }
+  }
+
+  _saveProduct(site: ISite) {
+    return this.menuService.putProduct(site, this.product.id, this.productForm.value)
+  }
+
+  saveProduct() {
+    const site = this.siteService.getAssignedSite();
+    this.action$ = this._saveProduct(site).pipe(
+      switchMap(data => {
+         this.notifyEvent('Updated.', 'Success');
+        return of(data)
+    }));
+  }
+
+
+  initFormFields() {
+    this.productForm  = this.fbProductsService.initForm(this.productForm)
+  }
+
 
   getLastPrinterName(): string {
     return this.printingService.getLastLabelPrinter()
@@ -80,7 +123,7 @@ export class ProductInfoPanelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.toggleLabelEvents = "labels"
+    this.toggleLabelEvents = "info"
 
     const site = this.siteService.getAssignedSite();
     if (this.id) {
@@ -89,7 +132,7 @@ export class ProductInfoPanelComponent implements OnInit {
       })
     }
 
-    this.initForm()
+
     this.electronEnabled =  this.electronService.isElectronApp
     this.printerName = this.getLastPrinterName();
     this.labelID = this.printingService.getLastLabelUsed();
@@ -97,6 +140,21 @@ export class ProductInfoPanelComponent implements OnInit {
 
   initForm() {
     if (this.product) {
+      this.initFormFields();
+      if (this.productForm && this.product) {
+        this.productForm.patchValue(this.product)
+      }
+
+      // this.productForm.valueChanges.subscribe(data =>  {
+      //   this.saveProduct()
+      //   }
+      // )
+      this.productForm.valueChanges
+          .pipe(debounceTime(500)) // Adjust the debounce time as needed (in milliseconds)
+          .subscribe(data => {
+            this.saveProduct();
+      });
+
       this.printForm = this.fb.group({
         printQuantity: [this.product.productCount]
       } )

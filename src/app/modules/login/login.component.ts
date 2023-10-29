@@ -1,4 +1,4 @@
-﻿import { CompanyService, AuthenticationService, AWSBucketService, ThemesService, OrdersService} from 'src/app/_services';
+﻿import { CompanyService, AuthenticationService, AWSBucketService, ThemesService, OrdersService, UserService} from 'src/app/_services';
 import { ICompany, IPOSOrder, IUser, IUserProfile }  from 'src/app/_interfaces';
 import { Component, Inject, Input, OnDestroy, OnInit, Optional, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -18,6 +18,7 @@ import { SplashScreenStateService } from 'src/app/_services/system/splash-screen
 import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { ScaleService } from '../../_services/system/scale-service.service';
 import { ElectronService } from 'ngx-electron';
+import { UserIdleService } from 'angular-user-idle';
 // import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY } from '@angular/cdk/overlay/overlay-directives';
 
 @Component({
@@ -122,6 +123,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private awsBucketService     : AWSBucketService,
         private splashScreenStateService: SplashScreenStateService,
         private orderMethodsService:   OrderMethodsService,
+
         private scaleSettings        : ScaleService,
         private electronService: ElectronService,
         @Optional() private dialogRef  : MatDialogRef<LoginComponent>,
@@ -408,6 +410,10 @@ export class LoginComponent implements OnInit, OnDestroy {
           //if is not app then result is the user.
           let user = result?.user ;
           let sheet = result?.sheet as IBalanceSheet;
+
+          if (user) {
+            console.log('user success')
+          }
           //if there is a sheet we login here with the user to prompt the sheet if needed.
           if (sheet) {
             if (this.loginApp(result)) {

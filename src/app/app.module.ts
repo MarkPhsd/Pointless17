@@ -62,13 +62,26 @@ import { GridcomponentPropertiesDesignComponent } from './modules/admin/grid-men
 import * as Sentry from "@sentry/angular";
 import { BrowserTracing } from "@sentry/tracing";
 import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-loading.component';
-import {  UserIdleModule } from 'angular-user-idle';
+import { UserIdleModule } from 'angular-user-idle';
 import { DragAndDropModule } from 'angular-draggable-droppable';
 import { ResizeDirective } from './_directives/resize.directive';
 import { DashBoardRoutingModule } from './dash-board-routing.module';
 
 // Sentry.init({
 //   dsn: "https://ba163a19cdcf43ca80217e835d0f06bc@o1342227.ingest.sentry.io/6616061",
+//   debug: false,
+
+//   // beforeSend: (event, hint) => {
+//   //   if (true) {
+//   //     console.error(hint.originalException || hint.syntheticException);
+//   //     return null; // this drops the event and nothing will be sent to sentry
+//   //   }
+//   //   return event;
+//   //  },
+//   // beforeSend: (event, hint) => {
+//   //   setTimeout(() => console.error(hint.originalException || hint.syntheticException), 0);
+//   //   return event;
+//   // },
 //   integrations: [
 //     new BrowserTracing({
 //       tracingOrigins: ["localhost", "https://yourserver.io/api"],
@@ -76,10 +89,10 @@ import { DashBoardRoutingModule } from './dash-board-routing.module';
 //     }),
 //   ],
 
-//   // Set tracesSampleRate to 1.0 to capture 100%
-//   // of transactions for performance monitoring.
-//   // We recommend adjusting this value in production
-//   tracesSampleRate: 3.0,
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  // tracesSampleRate: 3.0,
 // });
 
 enableProdMode();

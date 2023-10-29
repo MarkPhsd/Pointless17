@@ -36,608 +36,705 @@
 
   <mat-card-content
           *ngIf="inputForm"
-          [formGroup]="inputForm"  >
+          [formGroup]="inputForm"
+          class="grid-view-sections" >
 
-    <div class="grid-items">
+      <div class="grid-views">
+        <div class="grid-views">
+          <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Item Options</h4>
 
-      <h4>Item Options</h4>
-      <mat-label>These are options that display during the order to modify the item.</mat-label>
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="displayNotes"
-                  >
-          <mat-label>Display Notes</mat-label>
-        </mat-slide-toggle>
-      </div>
+          <mat-label>These are options that display during the order to modify the item.</mat-label>
+          <div class="toggle-fields">
+            <mat-slide-toggle  formControlName="displayNotes"  >
+              <mat-label>Display Notes</mat-label>
+            </mat-slide-toggle>
+          </div>
 
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="displayQuantity"  >
-          <mat-label>Display Quantity</mat-label>
-        </mat-slide-toggle>
-      </div>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="displayQuantity"  >
+              <mat-label>Display Quantity</mat-label>
+            </mat-slide-toggle>
+          </div>
 
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="mixMatchTierPricing" >
-          <mat-label>Mix/Match Tier Pricing</mat-label>
-        </mat-slide-toggle>
-      </div>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="mixMatchTierPricing" >
+              <mat-label>Mix/Match Tier Pricing</mat-label>
+            </mat-slide-toggle>
+          </div>
 
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="displayAdd"  >
-          <mat-label>Display Add Button</mat-label>
-        </mat-slide-toggle>
-      </div>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="displayAdd"  >
+              <mat-label>Display Add Button</mat-label>
+            </mat-slide-toggle>
+          </div>
 
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="displayView"  >
-          <mat-label>Display View</mat-label>
-        </mat-slide-toggle>
-      </div>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="displayView"  >
+              <mat-label>Display View</mat-label>
+            </mat-slide-toggle>
+          </div>
 
-      <mat-divider></mat-divider>
-      <h4>Order Options</h4>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="disableMenuItemExpandInApp"  >
+              <mat-label>Disable Menu Item Expanded View</mat-label>
+            </mat-slide-toggle>
+          </div>
 
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="displayItemPOSTTotal" >
-          <mat-label>Display Tax + Total Per Item In Order</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="displayEditCardOnHeader" >
-          <mat-label>Display Edit Cart Buttons on Header</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="toggleUserOrAllOrders" >
-          <mat-label>Show Filter for All Orders Or 'Just Mine'</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <mat-label>Side Order Bar Option</mat-label>
-
-      <div class="toggle-fields">
-        <mat-icon class="mat-label-info"
-                  color="accent"
-                  [matTooltip]="labelingService.transactionInfo[4].value">info</mat-icon>
-        <mat-slide-toggle
-                  formControlName="showNumberPad">
-          <mat-label>Show Number Pad In Order</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="showOrderName">
-          <mat-label>Show Order Name Option</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <mat-label>Appy Table as Order Name</mat-label>
-      <div class="toggle-fields">
-        <mat-icon class="mat-label-info"
-              color="accent"
-              [matTooltip]="labelingService.transactionInfo[2].value">info</mat-icon>
-        <mat-slide-toggle
-                  formControlName="applyTableNameToOrderName">
-          <mat-label>Apply Table Name to Order Name</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="scanIncreaseQuantity">
-          <mat-label>Increase Items Quantity on Duplicate Scan</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-
-      <mat-label>Show Split Entry List - Allows users to enter the split group as they enter items into the order.</mat-label>
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="splitEntry">
-          <mat-label>Split Entry</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="enableLimitsView"
-                  >
-          <mat-label>Enable Limits View</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="splitCheckByItem"
-                  >
-          <mat-label>Enable Split Check By Item</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="onlyAllowInventory"
-                  >
-          <mat-label>Allow sales of inventoried items only</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="applyTaxChangesToDiscountedItems"
-                  >
-          <mat-label>Update tax on Discounted Items</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="updateInventoryOnScan"
-                  >
-          <mat-label>Update Inventory On Scan</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="enableExactChange"
-                  >
-          <mat-label>Enable Exact Change</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="startNewOrderOnCloseOrder"
-                  >
-          <mat-label>Start New Order On Order Close</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="printLabelsOnclose"
-                  >
-          <mat-label>Print Un Printed Labels at Close of Order</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="prepOrderOnClose"
-                  >
-          <mat-label>Send Items for Prep at Order Close.</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <mat-divider></mat-divider>
-      <h4>Barcode Options</h4>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="disableBarcodScanning"
-                  >
-          <mat-label>Disable Barcode Scanning</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="fuzzyMatchBarcodeLookup"
-                  >
-          <mat-label>Fuzzy Match Barcode Lookup (exact match not required)</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="assignBarcodeAsSerial">
-          <mat-label>Assign Barcode as Serial</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="preventDuplicateBarcodes">
-          <mat-label>Prevent Duplicate Barcoded Items</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="scanIncreaseQuantity">
-          <mat-label>Increase Items Quantity on Duplicate Scan</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="requireEnterTabBarcodeLookup"
-                  >
-          <mat-label>Require Enter/Tab to Lookup</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <mat-divider></mat-divider>
-
-      <mat-divider></mat-divider>
-      <h4>Default Selections</h4>
-
-      <div style="width:300px;">
-
-          <app-value-fields
-                [inputForm]="inputForm"
-                [fieldName]="'expoPrinter'" >
-            Expo Printer
-          </app-value-fields>
-      </div>
-
-      <ng-container [ngTemplateOutlet]="electronPrintingDesignTemplate"></ng-container>
-
-      <ng-template #electronPrintingDesignTemplate>
-        <div *ngIf="(receiptList$ | async) as list" [formGroup]="inputForm">
-            <mat-form-field appearance="outline">
-              <mat-label>Expo Template</mat-label>
-                <mat-select
-                          type               ="number"
-                          formControlName    ='expoTemplateID'>
-                    <div>
-                    <mat-option [value]="">
-                     Clear
-                  </mat-option>
-                    <mat-option *ngFor="let item of list" [value]="item.id">
-                      {{ item.name }}
-                  </mat-option>
-                </div>
-              </mat-select>
-            </mat-form-field>
         </div>
-      </ng-template>
 
-      <div *ngIf="(clientTypes$ | async) as clientTypes ">
-        <mat-form-field style="width: 200px" class="fields"
-            appearance="outline">
-          <mat-label>Default Client Type</mat-label>
-            <mat-select
-                      type              = "number"
-                      formControlName   = "defaultClientTypeID" >
-              <mat-option
-                  *ngFor="let item of clientTypes"
-                  [value]="item?.id">
-                  {{item?.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+        <div class="grid-views">
+
+          <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Barcode Options</h4>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="disableBarcodScanning"
+                      >
+              <mat-label>Disable Barcode Scanning</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="fuzzyMatchBarcodeLookup"
+                      >
+              <mat-label>Fuzzy Match Barcode Lookup (exact match not required)</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="assignBarcodeAsSerial">
+              <mat-label>Assign Barcode as Serial</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="preventDuplicateBarcodes">
+              <mat-label>Prevent Duplicate Barcoded Items</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="scanIncreaseQuantity">
+              <mat-label>Increase Items Quantity on Duplicate Scan</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="requireEnterTabBarcodeLookup"
+                      >
+              <mat-label>Require Enter/Tab to Lookup</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+        </div>
+
+        <div class="grid-views">
+
+          <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Default Selections</h4>
+
+          <div *ngIf="(clientTypes$ | async) as clientTypes ">
+            <mat-form-field style="width: 200px" class="fields"
+                appearance="outline">
+              <mat-label>Default Client Type</mat-label>
+                <mat-select
+                          type              = "number"
+                          formControlName   = "defaultClientTypeID" >
+                  <mat-option
+                      *ngFor="let item of clientTypes"
+                      [value]="item?.id">
+                      {{item?.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+
+          <div *ngIf="(serviceType$ | async) as list ">
+            <mat-form-field style="width: 200px" class="fields"
+                appearance="outline">
+              <mat-label>Default Online Order Type</mat-label>
+                <mat-select
+                          type              = "number"
+                          formControlName   = "defaultOrderTypeID" >
+                  <mat-option
+                      *ngFor="let item of list"
+                      [value]="item?.id">
+                      {{item?.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+
+          <div *ngIf="(categories$ | async) as list ">
+            <mat-form-field style="width: 200px" class="fields"
+                appearance="outline">
+              <mat-label>Default Category On New Order</mat-label>
+                <mat-select
+                          type              = "number"
+                          formControlName   = "defaultNewOrderCategoryID" >
+                    <mat-option
+                          [value]="0">
+                      Clear
+                  </mat-option>
+                  <mat-option
+                      *ngFor="let item of list"
+                      [value]="item?.id">
+                      {{item?.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="grid-views">
+
+          <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Expo Settings</h4>
+
+          <div style="width:300px;">
+              <app-value-fields
+                    [inputForm]="inputForm"
+                    [fieldName]="'expoPrinter'" >
+                Expo Printer
+              </app-value-fields>
+          </div>
+
+          <ng-container [ngTemplateOutlet]="electronPrintingDesignTemplate"></ng-container>
+
+          <ng-template #electronPrintingDesignTemplate>
+            <div *ngIf="(receiptList$ | async) as list" [formGroup]="inputForm">
+                <mat-form-field appearance="outline">
+                  <mat-label>Expo Template</mat-label>
+                    <mat-select
+                              type               ="number"
+                              formControlName    ='expoTemplateID'>
+                        <div>
+                        <mat-option [value]="">
+                        Clear
+                      </mat-option>
+                        <mat-option *ngFor="let item of list" [value]="item.id">
+                          {{ item.name }}
+                      </mat-option>
+                    </div>
+                  </mat-select>
+                </mat-form-field>
+            </div>
+          </ng-template>
+
+        </div>
+
+        <div class="grid-views">
+
+          <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Operation Settings</h4>
+
+          <div class="grid-small">
+            <div>
+              <mat-label class="mat-label-design">Gift card character length.</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'giftCardLength'">
+                Max Orders
+              </app-value-fields>
+            </div>
+          <div>
+
+            <div>
+              <mat-icon class="mat-label-info"
+                    color="accent"
+                    [matTooltip]="labelingService.transactionInfo[0].value">info</mat-icon>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'weightGraceValue'">
+                Grace Value
+              </app-value-fields>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="remove100thDecimalForPrice"
+                        >
+                <mat-label>Charge to the first decimal, no rounding.</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div>
+              <mat-label  class="mat-label-design">Minimum Client Age.</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'minClientAge'">
+                 Minumum Client Age
+              </app-value-fields>
+            </div>
+
+
+            <div>
+              <mat-label class="mat-label-design">Prefix for Order Prep Labels.</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'prefixBarcodeLabel'">
+                  Barcode Prefix for Transfer Items.
+              </app-value-fields>
+            </div>
+
+            <div>
+              <mat-label class="mat-label-design">Pre fix for intaken inventory items.</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'lotPreBarCode'">
+                  Lot Pre code prefix.
+              </app-value-fields>
+            </div>
+
+            <div>
+              <mat-label class="mat-label-design">Percentage of Buyer Amount.</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'buyerAmountDiscount'">
+                  Buyer Amount
+              </app-value-fields>
+            </div>
+
+            <div>
+              <mat-label class="mat-label-design">(Beta) Log out time in minutes of inactivity.</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'idleTime'">
+                  Idle Log Out Time
+              </app-value-fields>
+            </div>
+
+            <!-- enableRounding -->
+
+
+            <div>
+              <mat-label class="mat-label-design">Minimum value of credit card payment.</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'creditRecieptMinimum'">
+                  Credit Payment Min.
+              </app-value-fields>
+            </div>
+
+
+            <div>
+              <mat-label class="mat-label-design">Cash Discount - Credit Card Percentage fee. Enter as Whole Number.</mat-label>
+
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'creditCardFee'">
+                   Credit Card Fee
+              </app-value-fields>
+            </div>
+
+            <div>
+              <mat-label class="mat-label-design">High tip warning on percentage compared of payment.</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'highTipInputPercentage'">
+                  High Tip %
+              </app-value-fields>
+            </div>
+          </div>
+          </div>
+
+        </div>
+
+        <div class="grid-views">
+          <h4><mat-icon color="primary" style="margin-top:5px">credit_card</mat-icon>Credit Card Processing</h4>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="payPalEnabled"
+                      [(ngModel)]="payPalEnabled"
+                      >
+              <mat-label>PayPal Enabled</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div *ngIf="payPalEnabled">
+            <div>
+              <mat-label>Currency Code.</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'payPalCurrency'">
+                PayPal Currency Code
+              </app-value-fields>
+            </div>
+          </div>
+
+          <div *ngIf="payPalEnabled">
+            <div>
+              <mat-label>PayPal ClientID</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'payPalClientID'">
+                Pay Pay ClientID
+              </app-value-fields>
+            </div>
+          </div>
+
+          <mat-card>
+            <div class="toggle-fields">
+              <mat-icon class="mat-label-info"
+                          color="accent"
+                          [matTooltip]="labelingService.boltCardPoint[4].value">info</mat-icon>
+              <mat-slide-toggle
+                        formControlName="cardPointBoltEnabled"
+                        >
+                <mat-label>CardPointe Bolt / Ingenico Enabled</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="cardPointAndroidEnabled"
+                        >
+                <mat-label>CardPointe Android Enabled</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="cardPointRequestTip"
+                        >
+                <mat-label>CardPointe Request Tip on Auth</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="cardPointPreAuth"
+                        >
+                <mat-label>CardPointe Allow Pre-Auth</mat-label>
+              </mat-slide-toggle>
+            </div>
+          </mat-card>
+
+          <mat-card>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="dsiEMVAndroidEnabled"
+                        >
+                <mat-label>Data Cap EMV Android</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="dsiEMVNeteEpayEnabled"
+                        >
+                <mat-label>Data Cap Netepay PDCX</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="dsiEMVIP"
+                        >
+                <mat-label>Datacap EMV IP</mat-label>
+              </mat-slide-toggle>
+            </div>
+          </mat-card>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="dsiTipPrompt"
+                      >
+              <mat-label>Data Cap Prompt Tip</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+
+          <mat-card>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="triposEnabled"
+                        >
+                <mat-label>Tri POS (FISGlobal)</mat-label>
+              </mat-slide-toggle>
+            </div>
+          </mat-card>
+
+          <h4>Gift Card Store Credit</h4>
+          <mat-label>Pointless can handle multiple locations for gift cards. Please see documentation.</mat-label>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="enableGiftCards"
+                      >
+              <mat-label>Enable Gift Cards</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+        </div>
+
+        <div class="grid-views">
+          <h3>API Connectors</h3>
+          <div>
+            <mat-label  class="mat-label-design">Contact API.</mat-label>
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'contactAPI'">
+              Contact API
+            </app-value-fields>
+          </div>
+          <div>
+            <mat-label  class="mat-label-design">Store Credit API.</mat-label>
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'storeCreditAPI'">
+              Store Credit API
+            </app-value-fields>
+          </div>
+        </div>
       </div>
 
-      <div *ngIf="(serviceType$ | async) as list ">
-        <mat-form-field style="width: 200px" class="fields"
-            appearance="outline">
-          <mat-label>Default Online Order Type</mat-label>
-            <mat-select
-                      type              = "number"
-                      formControlName   = "defaultOrderTypeID" >
-              <mat-option
-                  *ngFor="let item of list"
-                  [value]="item?.id">
-                  {{item?.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-      </div>
+      <div class="grid-views">
 
-      <div *ngIf="(categories$ | async) as list ">
-        <mat-form-field style="width: 200px" class="fields"
-            appearance="outline">
-          <mat-label>Default Category On New Order</mat-label>
-            <mat-select
-                      type              = "number"
-                      formControlName   = "defaultNewOrderCategoryID" >
-                <mat-option
-                      [value]="0">
-                   Clear
-              </mat-option>
-              <mat-option
-                  *ngFor="let item of list"
-                  [value]="item?.id">
-                  {{item?.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-      </div>
-
-      <mat-divider></mat-divider>
-      <h4>Contact Validations</h4>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="validateCustomerLicenseID">
-          <mat-label>Validate Customer License/ID</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="enablMEDClients"
-                  >
-          <mat-label>Enable MED Patients</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="ordersRequireCustomer"
-                  >
-          <mat-label>Orders require a customer</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div>
-        <mat-icon class="mat-label-info"
-                  color="accent"
-                  [matTooltip]="labelingService.contactInfo[0].value">info</mat-icon>
+        <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Order Options</h4>
 
         <div class="toggle-fields">
           <mat-slide-toggle
-                    formControlName="idParseOnlyAgeConfirmation" >
-            <mat-label>Only Validate ID</mat-label>
+                    formControlName="displayItemPOSTTotal" >
+            <mat-label>Display Tax + Total Per Item In Order</mat-label>
           </mat-slide-toggle>
         </div>
-      </div>
 
-      <mat-divider></mat-divider>
-      <h3>Operation Settings</h3>
-
-      <div class="grid-small">
-        <div>
-          <mat-label class="mat-label-design">Gift card character length.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'giftCardLength'">
-            Max Orders
-          </app-value-fields>
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="displayEditCardOnHeader" >
+            <mat-label>Display Edit Cart Buttons on Header</mat-label>
+          </mat-slide-toggle>
         </div>
-        <div>
 
-        <div>
-          <!-- <mat-label class="mat-label-design"></mat-label> -->
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="toggleUserOrAllOrders" >
+            <mat-label>Show Filter for All Orders Or 'Just Mine'</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <mat-label>Side Order Bar Option</mat-label>
+        <div class="toggle-fields">
+          <mat-icon class="mat-label-info"
+                    color="accent"
+                    [matTooltip]="labelingService.transactionInfo[4].value">info</mat-icon>
+          <mat-slide-toggle
+                    formControlName="showNumberPad">
+            <mat-label>Show Number Pad In Order</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="showOrderName">
+            <mat-label>Show Order Name Option</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="showCustomerOption">
+            <mat-label>Show Customer Option</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <mat-label>Appy Table as Order Name</mat-label>
+        <div class="toggle-fields">
           <mat-icon class="mat-label-info"
                 color="accent"
-                [matTooltip]="labelingService.transactionInfo[0].value">info</mat-icon>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'weightGraceValue'">
-            Grace Value
-          </app-value-fields>
+                [matTooltip]="labelingService.transactionInfo[2].value">info</mat-icon>
+          <mat-slide-toggle
+                    formControlName="applyTableNameToOrderName">
+            <mat-label>Apply Table Name to Order Name</mat-label>
+          </mat-slide-toggle>
         </div>
 
         <div class="toggle-fields">
           <mat-slide-toggle
-                    formControlName="remove100thDecimalForPrice"
-                    >
-            <mat-label>Charge to the first decimal, no rounding.</mat-label>
+                    formControlName="scanIncreaseQuantity">
+            <mat-label>Increase Items Quantity on Duplicate Scan</mat-label>
           </mat-slide-toggle>
         </div>
 
-        <div>
-          <mat-label  class="mat-label-design">Minimum Client Age.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'minClientAge'">
-             Minumum Client Age
-          </app-value-fields>
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="enableLimitsView"
+                    >
+            <mat-label>Enable Limits View</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="onlyAllowInventory"
+                    >
+            <mat-label>Allow sales of inventoried items only</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="applyTaxChangesToDiscountedItems"
+                    >
+            <mat-label>Update tax on Discounted Items</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="updateInventoryOnScan"
+                    >
+            <mat-label>Update Inventory On Scan</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="startNewOrderOnCloseOrder"
+                    >
+            <mat-label>Start New Order On Order Close</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="printLabelsOnclose"
+                    >
+            <mat-label>Print Un Printed Labels at Close of Order</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="singlePrintReceipt"
+                    >
+            <mat-label>Print Receipt Without Preview</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="prepOrderOnClose"
+                    >
+            <mat-label>Send Items for Prep at Order Close.</mat-label>
+          </mat-slide-toggle>
         </div>
 
 
-        <div>
-          <mat-label class="mat-label-design">Prefix for Order Prep Labels.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'prefixBarcodeLabel'">
-              Barcode Prefix for Transfer Items.
-          </app-value-fields>
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="prepOrderOnExit"
+                    >
+            <mat-label>Send Items for Prep at when exiting order.</mat-label>
+          </mat-slide-toggle>
         </div>
-
-        <div>
-          <mat-label class="mat-label-design">Pre fix for intaken inventory items.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'lotPreBarCode'">
-              Lot Pre code prefix.
-          </app-value-fields>
-        </div>
-
-        <div>
-          <mat-label class="mat-label-design">Percentage of Buyer Amount.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'buyerAmountDiscount'">
-              Buyer Amount
-          </app-value-fields>
-        </div>
-
-        <div>
-          <mat-label class="mat-label-design">(Beta) Log out time in minutes of inactivity.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'idleTime'">
-              Idle Log Out Time
-          </app-value-fields>
-        </div>
-
-        <div>
-          <mat-label class="mat-label-design">Minimum value of credit card payment.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'creditRecieptMinimum'">
-              Credit Payment Min.
-          </app-value-fields>
-        </div>
-
-        <div>
-          <mat-label class="mat-label-design">Cash Discount - Credit Card Percentage fee. Enter as Whole Number.</mat-label>
-
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'creditCardFee'">
-               Credit Card Fee
-          </app-value-fields>
-        </div>
-
-        <div>
-          <mat-label class="mat-label-design">High tip warning on percentage compared of payment.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'highTipInputPercentage'">
-              High Tip %
-          </app-value-fields>
-        </div>
-
-
-
       </div>
+
+      <div class="grid-views">
+        <div class="grid-views">
+
+          <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Payment Options</h4>
+
+          <div class="toggle-fields">
+            <mat-label class="mat-label-design">Button for Balance Due - adds item to transaction that rounds order total to nearest dollar.</mat-label>
+            <mat-slide-toggle
+                      formControlName="enableRounding"
+                      >
+              <mat-label>Enable Rounding</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="enableExactChange"
+                      >
+              <mat-label>Enable Exact Change</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <mat-label>Show Split Entry List - Allows users to enter the split group as they enter items into the order.</mat-label>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="splitEntry">
+              <mat-label>Split Entry</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="splitCheckByItem"
+                      >
+              <mat-label>Enable Split Check By Item</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div>
+            <mat-label>
+              <mat-slide-toggle
+                        formControlName="enableTransactionTypeChoice" >
+                <mat-label>Choose Order Type On Close</mat-label>
+              </mat-slide-toggle>
+            </mat-label>
+          </div>
+
+          <div>
+            <mat-label>
+              <mat-slide-toggle
+                        formControlName="autoPrintReceiptOnClose" >
+                <mat-label>Print On Close</mat-label>
+              </mat-slide-toggle>
+            </mat-label>
+          </div>
+
+        </div>
+
+        <div class="grid-views">
+
+          <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Contact Validations</h4>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="validateCustomerLicenseID">
+              <mat-label>Validate Customer License/ID</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="enablMEDClients"
+                      >
+              <mat-label>Enable MED Patients</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="ordersRequireCustomer"
+                      >
+              <mat-label>Orders require a customer</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-icon class="mat-label-info"
+                      color="accent"
+                      [matTooltip]="labelingService.contactInfo[0].value">info</mat-icon>
+            <mat-slide-toggle
+                      formControlName="idParseOnlyAgeConfirmation" >
+              <mat-label>Only Validate ID</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+        </div>
       </div>
-    </div>
 
-    <mat-divider></mat-divider>
-
-
-    <h4>Credit Card Processing</h4>
-
-    <div class="toggle-fields">
-      <mat-slide-toggle
-                formControlName="payPalEnabled"
-                [(ngModel)]="payPalEnabled"
-                >
-        <mat-label>PayPal Enabled</mat-label>
-      </mat-slide-toggle>
-    </div>
-
-    <div *ngIf="payPalEnabled">
-      <div>
-        <mat-label>Currency Code.</mat-label>
-        <app-value-fields
-            [inputForm]="inputForm"
-            [fieldName]="'payPalCurrency'">
-          PayPal Currency Code
-        </app-value-fields>
-      </div>
-    </div>
-
-    <div *ngIf="payPalEnabled">
-      <div>
-        <mat-label>PayPal ClientID</mat-label>
-        <app-value-fields
-            [inputForm]="inputForm"
-            [fieldName]="'payPalClientID'">
-          Pay Pay ClientID
-        </app-value-fields>
-      </div>
-    </div>
-
-    <div class="toggle-fields">
-      <mat-slide-toggle
-                formControlName="cardPointBoltEnabled"
-                >
-        <mat-label>CardPointe Bolt / Ingenico Enabled</mat-label>
-      </mat-slide-toggle>
-    </div>
-    <div class="toggle-fields">
-      <mat-slide-toggle
-                formControlName="cardPointAndroidEnabled"
-                >
-        <mat-label>CardPointe Android Enabled</mat-label>
-      </mat-slide-toggle>
-    </div>
-
-    <div class="toggle-fields">
-      <mat-slide-toggle
-                formControlName="cardPointRequestTip"
-                >
-        <mat-label>CardPointe Request Tip on Auth</mat-label>
-      </mat-slide-toggle>
-    </div>
-
-    <div class="toggle-fields">
-      <mat-slide-toggle
-                formControlName="cardPointPreAuth"
-                >
-        <mat-label>CardPointe Allow Pre-Auth</mat-label>
-      </mat-slide-toggle>
-    </div>
-
-    <div class="toggle-fields">
-      <mat-slide-toggle
-                formControlName="dsiEMVAndroidEnabled"
-                >
-        <mat-label>Data Cap EMV Android</mat-label>
-      </mat-slide-toggle>
-    </div>
-
-    <div class="toggle-fields">
-      <mat-slide-toggle
-                formControlName="dsiEMVNeteEpayEnabled"
-                >
-        <mat-label>Data Cap Netepay PDCX</mat-label>
-      </mat-slide-toggle>
-    </div>
-
-    <div class="toggle-fields">
-      <mat-slide-toggle
-                formControlName="dsiEMVIP"
-                >
-        <mat-label>Datacap EMV IP</mat-label>
-      </mat-slide-toggle>
-    </div>
-
-    <div class="toggle-fields">
-      <mat-slide-toggle
-                formControlName="triposEnabled"
-                >
-        <mat-label>Tri POS Enabled (FISGlobal)</mat-label>
-      </mat-slide-toggle>
-    </div>
-
-    <h4>Gift Card Store Credit</h4>
-    <mat-label>Pointless can handle multiple locations for gift cards. Please see documentation.</mat-label>
-    <div class="toggle-fields">
-      <mat-slide-toggle
-                formControlName="enableGiftCards"
-                >
-        <mat-label>Enable Gift Cards</mat-label>
-      </mat-slide-toggle>
-    </div>
-
-    <h3>API Connectors</h3>
-    <div>
-      <mat-label  class="mat-label-design">Contact API.</mat-label>
-      <app-value-fields
-          [inputForm]="inputForm"
-          [fieldName]="'contactAPI'">
-        Contact API
-      </app-value-fields>
-    </div>
-
-    <div>
-      <mat-label  class="mat-label-design">Store Credit API.</mat-label>
-      <app-value-fields
-          [inputForm]="inputForm"
-          [fieldName]="'storeCreditAPI'">
-        Store Credit API
-      </app-value-fields>
-    </div>
 
   </mat-card-content>
 

@@ -359,6 +359,8 @@ export class BalanceSheetService {
 
   putSheet(site: ISite, balanceSheet: IBalanceSheet)  : Observable<IBalanceSheet> {
 
+    console.log('balance sheet', balanceSheet)
+
     const controller = '/BalanceSheets/'
 
     const endPoint  = "putSheet"

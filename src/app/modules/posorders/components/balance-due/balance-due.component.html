@@ -59,7 +59,7 @@
         <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
       </mat-card-actions>
 
-      <div class="action-center">
+      <div class="action-center" *ngIf="uiTransactions.enableTransactionTypeChoice">
         <new-order-type
                   [order]        ="order"
                   [payment]      ="payment"

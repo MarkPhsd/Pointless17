@@ -45,7 +45,6 @@ mat-drawer-content {
   @include for-phone-only  {
     height: calc(100% - 215px );
   }
-
 }
 
 mat-drawer-container {
@@ -83,11 +82,6 @@ mat-drawer-inner-container {
   -webkit-overflow-scrolling: touch;
 }
 
-mat-sidebar {
-  border-right: 1px solid #eee;
-  box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
-  background-color:rgb(55, 55, 59);
-}
 
 .mat-orderBar {
   min-width: 200px !important;

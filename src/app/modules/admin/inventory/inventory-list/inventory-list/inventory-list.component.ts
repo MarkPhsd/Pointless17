@@ -44,6 +44,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   @Input()  listOnly = false;
   @Input()  manifestID  : number;
   @Input()  siteID : ISite;
+  @Input()  autoReceive: boolean;
 
   resultMessage: string;
   inventorLocationID: number;
@@ -163,6 +164,9 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   //This is for the search Section//
   _currentManifest: Subscription;
 
+  inventoryReception$ : Observable<any>;
+  urlPath$: Observable<string>;
+
   get searchProductsValue() { return this.searchForm.get("searchProducts") as UntypedFormControl;}
   get selectedSiteValue()   { return this.searchForm.get("selectedSiteID") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
@@ -199,13 +203,13 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     this.initForm()
   }
 
-  async ngOnInit() {
+  ngOnInit() {
 
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
     this.initSubscriptions();
     this.initClasses();
     this.sites$         = this.siteService.getSites();
-   this.locations$ = this.locationService.getLocations().pipe(switchMap(data => {
+    this.locations$ = this.locationService.getLocations().pipe(switchMap(data => {
       this.locations = data;
       return of(data)
     }))
@@ -214,7 +218,13 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     clientSearchModel.pageNumber  = 1
     clientSearchModel.pageSize    = 1000;
 
-    this.urlPath        = await this.awsService.awsBucketURL();
+    this.urlPath$  =  this.awsService.awsBucketURLOBS().pipe(
+      switchMap(data => {
+        this.urlPath = data;
+        return of(data)
+      }
+    ))
+
     const site          = this.siteService.getAssignedSite()
     this.rowSelection   = 'multiple'
     this.categories$    = this.menuService.getListOfCategories(site)
@@ -238,9 +248,9 @@ export class InventoryListComponent implements OnInit, OnDestroy {
         }
       }
     )
+
     if (!this.search) { this.search = ''}
-
-
+    if (this.autoReceive) {  this.setAcceptedAll() }
 
   };
 
@@ -356,6 +366,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     //notAvalibleForSale
     item = {headerName: 'notAvalibleForSale',  sortable: true, field: 'notAvalibleForSale',  hide: true, } as any;
     this.columnDefs.push(item)
+
     item = {headerName: 'active',  sortable: true, field: 'active',  hide: true, } as any;
     this.columnDefs.push(item)
 
@@ -428,9 +439,11 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
     item =     {
       field: 'manifestID',
+      headerName: 'Manifest',
       cellRenderer: "btnCellRenderer",
                     cellRendererParams: {
                       onClick: this.editManifest.bind(this),
+                      label: 'warehouse',
                       getIconFunction: this.getManifestIcon.bind(this),
                       btnClass: 'btn btn-primary btn-sm'
                     },
@@ -438,6 +451,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
                     maxWidth: 125,
                     flex: 2,
     }
+    // this.columnDefs.push(item)
+
     if (!this.listOnly) {
       this.columnDefs.push(item)
     }
@@ -458,10 +473,9 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   }
 
   editManifest(e) {
-
     if (!e) {return}
     if (e.rowData.id)  {
-      this.manifestService.openManifestForm(e.rowData.manifestID);
+      this.manifestService.openManifestForm(e.rowData.manifestID, false);
     }
   }
 
@@ -650,9 +664,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
         this.refreshSearch();
       }
     })
-    // this.locationService.getLocation(id).subscribe( data => {
-    //   this.inventoryLocation = data
-    // })
   }
 
   getInventoryStatus(event) {
@@ -690,7 +701,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   getRowData(params, startRow: number, endRow: number):  Observable<InventorySearchResultsPaged>  {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
     const searchModel         = this.initSearchModel();
-    let  site                = this.siteService.getAssignedSite()
+    let  site                 = this.siteService.getAssignedSite()
     if (this.site) { site = this.site}
     return this.inventoryAssignmentService.getInventory(site, searchModel)
   }
@@ -700,7 +711,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
-      // this.gridColumnApi = params.columnApi;
       params.api.sizeColumnsToFit();
     }
 
@@ -739,11 +749,9 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     if (!this.gridApi) { return }
     this.gridApi.setDatasource(datasource);
 
-    // this.setRefreshAgGrid(2000)
   }
 
-
-    //mutli select method for selection change.
+  //mutli select method for selection change.
   onSelectionChanged(event) {
     let selectedRows       = this.gridApi.getSelectedRows();
     let selectedRowsString = '';
@@ -754,7 +762,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     selectedRows.forEach(function (selectedRow, index) {
     if (index >= maxToShow) { return; }
     if (index > 0) {  selectedRowsString += ', ';  }
-      // console.log('selected Row', selectedRow)
       selected.push(selectedRow)
       selectedRowsString += selectedRow.name;
     });
@@ -787,14 +794,12 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   getLabel(rowData)
   {
-    // if(rowData && rowData.hasIndicator) {
-      return 'edit';
-    // }
-    return '';
+    return 'edit';
   }
 
   getManifestIcon(rowData) {
     if ( rowData && rowData.manifestID != 0 ) {
+      console.log('warehouse')
       return 'warehouse'
     }
     return ''
@@ -906,7 +911,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     items.forEach( inv => {
       const item = inv  as IInventoryAssignment;
       if (item) {
-        // console.log(item?.manifestID, item.manifestID)
         if (item.manifestID != null && item.manifestID != 0) {
           this.notifyEvent('You have selected items already assigned to a manifest. Please reselect items.', 'Alert')
           result = false
@@ -982,12 +986,12 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     if (!this.currentManifest) { return  }
     let  selectedRows = this.gridApi.getSelectedRows();
     let  selected     = selectedRows as IInventoryAssignment[];
-    this.acceptItemsFromManifest(selected);
+    this.acceptItemsFromManifest(selected, false);
   }
 
   setAcceptedAll() {
     if (!this.currentManifest) { return }
-    this.acceptItemsFromManifest(this.currentManifest.inventoryAssignments)
+    this.acceptItemsFromManifest(this.currentManifest.inventoryAssignments, true)
   }
 
   //reject manifest
@@ -1090,13 +1094,14 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     return newList
   }
 
-  acceptItemsFromManifest(selected: IInventoryAssignment[]) {
+  acceptItemsFromManifest(selected: IInventoryAssignment[], assignDefaultLocation: boolean) {
     // const result = this.validateRevoval()
     if (!this.currentManifest) {
       this.notifyEvent('No Current Manifest', 'Alert')
       return
     }
 
+    const site = this.siteService.getAssignedSite()
     let destination = {} as ISite;
     destination.url = this.currentManifest.destinationURL;
 
@@ -1115,17 +1120,22 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     })
 
     const assignMent$ =    this.inventoryAssignmentService.postInventoryAssignmentList(destination, originatorID, selected);
-      assignMent$.subscribe(
-          {next: data => {
-            this.selected = data;
-            this.notifyEvent('Items Accepted', 'Completed')
-            this.refreshGrid();
-          },
-          error: error => {
-            this.notifyEvent(`Error ${error}`, 'Error Occured')
-          }
-      });
 
+    this.action$ = assignMent$.pipe(
+      switchMap( data => {
+          this.selected = data;
+          if (assignDefaultLocation) {
+            const manifestID = data[0].manifestID;
+            return this.inventoryAssignmentService.assignDefaultLocation(site, manifestID)
+          }
+          return of(data)
+        }
+      )).pipe(switchMap(data => {
+        this.siteService.notify('Items Accepted', 'Completed', 3000, 'green' )
+        this.refreshGrid();
+        return of(data)
+      })
+    )
   }
 
   setLocation(selection) {
@@ -1259,10 +1269,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
       //     data : manifest
       // })
       // return dialogRef
-      this.manifestService.openManifestForm(manifest.id)
+      this.manifestService.openManifestForm(manifest.id, false)
     }
-
-
   }
 
   formatToolTip(params: any) {

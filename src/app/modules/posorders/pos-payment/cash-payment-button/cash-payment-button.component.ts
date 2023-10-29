@@ -1,13 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Navigation, Router } from '@angular/router';
+import { Component,  Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { IPaymentMethod } from 'ngx-paypal';
 import { catchError, Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
@@ -40,7 +39,6 @@ export class CashPaymentButtonComponent implements OnInit {
 
   constructor(
     private sitesService    : SitesService,
-    private orderService    : OrdersService,
     private paymentsMethodsService: PaymentsMethodsProcessService,
     private orderMethodsService: OrderMethodsService,
     private paymentMethodService: PaymentMethodsService,

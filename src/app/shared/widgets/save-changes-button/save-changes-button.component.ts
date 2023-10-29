@@ -17,17 +17,16 @@ export class SaveChangesButtonComponent implements OnInit{
   constructor() { }
 
   ngOnInit(): void {
-      this.checkChanges()
-
+    this.checkChanges()
   }
 
   checkChanges() {
     this.inputForm.valueChanges.subscribe(data => {
-      if (!this.firstChange) {
-        this.changesMade = false;
-        this.firstChange = true;
-        return;
-      }
+      // if (!this.firstChange) {
+      //   this.changesMade = false;
+      //   this.firstChange = true;
+      //   return;
+      // }
       this.changesMade = true;
     })
   }

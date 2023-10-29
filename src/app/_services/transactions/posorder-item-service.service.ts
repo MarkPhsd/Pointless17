@@ -61,6 +61,7 @@ export interface NewItem            {
   clientID: number;
   priceColumn: number;
   assignedPOSItems:  PosOrderItem[];
+  unitTypeID: number;
 }
 export interface NewInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number, portionValue: string, packaging: string,  itemNote: string}
 export interface NewSerializedItem  { orderID: number, quantity: number, menuItem: Serial, barcode: string,  weight: number, portionValue: string, packaging:string,  itemNote: string}
@@ -117,6 +118,7 @@ export interface ItemWithAction {
 
 export class POSOrderItemService {
 
+
   get platForm() {  return Capacitor.getPlatform(); }
 
   private _posOrderItem       = new BehaviorSubject<PosOrderItem>(null);
@@ -128,7 +130,6 @@ export class POSOrderItemService {
 
   _scaleInfo: Subscription;
   scaleInfo : ScaleInfo;
-
 
   updateItemWithAction(item: ItemWithAction ) {
     this._itemWithActions.next(item);
@@ -173,6 +174,21 @@ export class POSOrderItemService {
     return newItem;
   }
 
+
+  setModifierNote(site: ISite, item: { id: number; modifierNote: string; }) :  Observable<any> {
+
+      const controller = "/POSOrderItems/"
+
+      const endPoint  = "setModifierNotes"
+
+      const parameters = ``
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return this.http.post<any>(url, item );
+
+  }
+
   addItemToOrderWithBarcode(site: ISite, newItem: NewItem):  Observable<ItemPostResults> {
 
     if (!newItem ) {
@@ -180,7 +196,9 @@ export class POSOrderItemService {
       return
     }
 
-    newItem = this.getNewItemWeight(newItem);
+    if (newItem.quantity == 1) {
+      newItem = this.getNewItemWeight(newItem);
+    }
 
     const controller = "/POSOrderItems/"
 
@@ -247,6 +265,21 @@ export class POSOrderItemService {
   putItem(site: ISite, newItem: any): Observable<ItemPostResults> {
 
     newItem = this.getNewItemWeight(newItem);
+
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "PutItem";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.put<ItemPostResults>(url , newItem)
+
+  }
+
+
+  putItemNoWeight(site: ISite, newItem: any): Observable<ItemPostResults> {
 
     const controller = "/POSOrderItems/";
 
@@ -547,7 +580,7 @@ export class POSOrderItemService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    const payLoad = { posOrderItem: posOrderItem, menuItem: menuItem }
+    const payLoad = { posOrderItem: posOrderItem }
 
     return  this.http.post<IPOSOrder>(url, payLoad)
 

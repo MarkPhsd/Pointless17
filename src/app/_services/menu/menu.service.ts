@@ -1,11 +1,11 @@
 import { Injectable, Input } from '@angular/core';
 import { AuthenticationService } from '../system/authentication.service';
 import { BehaviorSubject, EMPTY, Observable, Subject, of, throwError  } from 'rxjs';
-import { IProduct, IProductCategory, ISite }  from 'src/app/_interfaces';
+import { IProduct, IProductCategory, ISetting, ISite }  from 'src/app/_interfaces';
 import { IMenuItem } from '../../_interfaces/menu/menu-products';
 import { ProductSearchModel } from '../../_interfaces/search-models/product-search';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
+import { HttpClientCacheService, HttpOptions } from 'src/app/_http-interceptors/http-client-cache.service';
 import { SitesService } from '../reporting/sites.service';
 import { IPagedList } from '../system/paging.service';
 import { DiscountInfo } from 'src/app/_interfaces/menu/price-schedule';
@@ -111,8 +111,8 @@ export interface IItemBasicB{
 export class MenuService {
 
 
-  public searchModel: ProductSearchModel
-  private _searchModel       = new BehaviorSubject<ProductSearchModel>(null);
+  public searchModel         : ProductSearchModel
+  public _searchModel       = new BehaviorSubject<ProductSearchModel>(null);
   public  searchModel$       = this._searchModel.asObservable();
 
   public infiniteModel: ProductSearchModel
@@ -169,18 +169,8 @@ export class MenuService {
     this._searchModel.next(search)
   }
 
-  // updateInfiniteModel(item: ProductSearchModel) {
-  //   if (!item) {
-  //     item = this.initSearchModel();
-  //     this._searchModel.next(item);
-  //     return;
-  //   }
-  //   this._searchModel.next(item);
-  // }
-
-
   updateSearchModel(item: ProductSearchModel) {
-    console.log('updating searchmodel')
+    // console.log('updating searchmodel')
     if (!item) {
       item = this.initSearchModel();
       this._searchModel.next(item);
@@ -245,6 +235,18 @@ export class MenuService {
 
   }
 
+  cleanProduct(product: IProduct): IProduct {
+
+    if (product.barcode) {product.barcode = product.barcode.trim()}
+    if (product.name) {product.name = product.name.trim()}
+    if (product.sku) {product.sku = product.sku.trim()}
+    if (product.barCodeAlt) {product.barCodeAlt = product.barCodeAlt.trim()}
+    if (product.barCodeID) {product.barCodeID = product.barCodeID.trim()}
+
+    return product
+  }
+
+
   // this.menuService.updateField('DepartmentID', id, listOfItems)
   updateField(site: ISite, fieldName: string,value: any, listofItems: any[] ) {
     const controller =  "/Products/"
@@ -253,10 +255,10 @@ export class MenuService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
     const uri =  this.sitesService.getCacheURI(url)
     return  this.httpClient.put<any[]>(url, listofItems)
-
   }
 
   saveProductField(site: ISite, id: number, itemValue: string, fieldName: string): Observable<IProduct> {
+
     const controller ="/products/"
 
     const endPoint = `UpdateFieldValueProduct`
@@ -279,7 +281,6 @@ export class MenuService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.httpClient.get<any>(url)
-
   }
 
   // this.menuService.updateField('DepartmentID', id, listOfItems)
@@ -369,7 +370,9 @@ export class MenuService {
 
     const uri = `${site.url}${controller}${endPoint}${parameters}`
 
-    const url = { url: uri, cacheMins: 0}
+    // const url = { url: uri, cacheMins: 0}
+
+    const url =  this.sitesService.getCacheURI(uri)
 
     return  this.httpCache.get<IMenuItem[]>(url)
 
@@ -507,13 +510,26 @@ export class MenuService {
 
     return  this.httpCache.get<any[]>(uri)
 
-    // return  this.httpClient.get<IProductCategory[]>(url)
+  };
 
-    // const uri = {url: url, cacheMins: 1 }
+  getCategoryListNoChildrenByDepartmentPaging(site: ISite, id: Number, webMode: boolean): Observable<IMenuItem[]> {
 
-    // return  this.httpCache.get<IProductCategory[]>(uri)
+    // eslint-disable-next-line no-restricted-syntax
+    // console.trace('hey there')
+    const controller =  "/menuItems/"
+
+    const endPoint = "getCategoryListNoChildrenByDepartmentPaging"
+
+    const parameters = `?pageNumber=1&pageSize=50&departmentID=${id}&webmode=${webMode}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const uri =  this.sitesService.getCacheURI(url)
+
+    return  this.httpCache.get<IMenuItem[]>(uri)
 
   };
+
 
   getCategoryListNoChildrenPaging(site: ISite, pageNumber: number, pageSize: number): Observable<any> {
 
@@ -550,6 +566,7 @@ export class MenuService {
 
 
   getGetCategoriesListActive(site: ISite, type: string, option: number):  Observable<IMenuItem[]>  {
+
     const controller =  '/MenuItems/'
 
     const endPoint = 'getGetCategoriesListActive'
@@ -558,13 +575,8 @@ export class MenuService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    // const uri =  this.sitesService.getCacheURI(url)
-
     const uri =  this.sitesService.getCacheURI(url)
 
-    // console.log('getGetCategoriesListActive', uri)
-
-    // return this.httpClient.get<IMenuItem[]>(url)
     return  this.httpCache.get<any[]>(uri)
 
   }
@@ -713,11 +725,18 @@ export class MenuService {
 
     const cacheTime = this.sitesService.getCurrentCache();
 
-    let appCache =  JSON.parse(localStorage.getItem('appCache')) as any;
+    let appCache = JSON.parse(localStorage.getItem('appCache')) as ISetting;
+
+    if (productSearchModel.pageNumber > 1 || !appCache) {
+      return  this.httpClient.post<any>(url, productSearchModel )
+    }
 
     if (appCache) {
       if (appCache?.value && appCache?.boolean) {
-        const uri = { url: url, cacheMins: appCache.value}
+        let uri = {} as HttpOptions
+        uri.cacheMins = +appCache.value;
+        uri.url = url;
+        productSearchModel.pageSize = 50;
         return this.httpCache.post<any>(uri, productSearchModel)
       }
     }
@@ -735,8 +754,6 @@ export class MenuService {
     const parameters = ''
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
-
-    // console.log(url)
 
     return this.httpClient.post<IProductSearchResultsPaged>(url, productSearchModel)
 
@@ -980,6 +997,8 @@ export class MenuService {
   };
 
    saveProduct(site: ISite, product:IProduct): Observable<IProduct> {
+
+    product = this.cleanProduct(product);
 
     if (product.id && product.id != 0) {
       return  this.putProduct(site, product.id, product);

@@ -3,6 +3,7 @@
       <mat-card-subtitle>
         Delivery Address
 
+      <div *ngIf="inputForm">
         <div *ngIf="inputForm.controls?.address.errors?.required && inputForm.controls?.address.touched" class="error">
           <mat-icon color="warn">warning</mat-icon> Address required.
         </div>
@@ -15,7 +16,8 @@
         <div *ngIf="inputForm.controls?.zip.errors?.required && inputForm.controls?.zip.touched" class="error">
           <mat-icon color="warn">warning</mat-icon> Zip required.
         </div>
-      
+      </div>
+
       </mat-card-subtitle>
       <mat-card-content>
         <div class="grid-container">
@@ -37,7 +39,7 @@
             <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'city'">
-            City
+              City
             </app-value-fields>
 
             <app-value-fields
@@ -65,8 +67,10 @@
           </div>
 
         </div>
+
         <mat-card-actions>
           <button mat-raised-button
+                  style="height:75px;width:125px"
                   color='primary'
                   aria-label="save"
                   (click)="save()">

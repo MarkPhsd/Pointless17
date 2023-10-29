@@ -35,6 +35,7 @@ export interface IPaymentSalesSummary {
   tipAmount     : number;
   count         : number;
   creditTotal   : number;
+
 }
 
 export interface PaymentSummary {
@@ -57,12 +58,26 @@ export interface PaymentSummary {
   voidAmount   : string;
   serviceType: string;
   deviceName: string;
+  history: boolean;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class SalesPaymentsService {
+
+  getPaymentDiscrepancy(site: any, zrunID: number, dateFrom: string, dateTo: string): Observable<IPaymentSalesSummary> {
+    const controller = `/SalesPayments/`
+
+    const endPoint = `getPaymentDiscrepancy`
+
+    const model = {zrunID:  zrunID, startDate: dateFrom, endDate: dateTo}
+
+    const parameters = ``;
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<IPaymentSalesSummary>(`${url}`, model)
+  }
 
 
   getSalesAndLaborPeriodAverage(site: ISite, startDate: string, endDate: string) : Observable<ILaborSummary[]> {

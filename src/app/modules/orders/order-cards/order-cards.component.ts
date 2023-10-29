@@ -8,6 +8,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ISite } from 'src/app/_interfaces';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 
 // import { share } from 'rxjs/operators';
 
@@ -111,6 +112,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     private orderService: OrdersService,
     public orderMethodsService: OrderMethodsService,
     public route: ActivatedRoute,
+    public paymentMethodsProcess: PaymentsMethodsProcessService,
     private siteService: SitesService,
     private toolbarServiceUI : ToolBarUIService,
     )
@@ -243,16 +245,28 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
   setActiveOrderObs(order) {
     const site  = this.siteService.getAssignedSite();
-    const order$ =  this.orderService.getOrder(site, order.id, order.history )
-    this.action$ =  order$.pipe(switchMap(data =>
-      {
-        if (data) {
-          this.orderOutPut.emit(data)
-          this.orderMethodsService.setActiveOrder(site, data)
+
+
+    let sendOrder$ = this.paymentMethodsProcess.sendOrderOnExit(this.orderMethodsService.order)
+    let order$  =   this.orderService.getOrder(site, order.id, order.history )
+    let newOrder$ : Observable<any>;
+
+    newOrder$ = sendOrder$.pipe(
+      switchMap( data => {
+        return order$
+      })).pipe(
+        switchMap(data => {
+        {
+          if (data) {
+            this.orderOutPut.emit(data)
+            this.orderMethodsService.setActiveOrder(site, data)
+          }
         }
         return of(data)
-      }
-    ))
+      })
+    )
+    // this.action$ =  order$.pipe(switchMap(data =>
+    this.action$ = newOrder$
   }
 
   addToList(pageSize: number, pageNumber: number, reset : boolean)  {

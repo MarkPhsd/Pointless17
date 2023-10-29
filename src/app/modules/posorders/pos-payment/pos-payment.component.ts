@@ -5,7 +5,8 @@ import { Component,
          OnDestroy,
          ViewChild,
          TemplateRef,
-         ChangeDetectorRef} from '@angular/core';
+         ChangeDetectorRef,
+         ElementRef} from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -30,6 +31,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { DateAdapter } from '@angular/material/core';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 
 @Component({
   selector: 'app-pos-payment',
@@ -41,6 +43,16 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   @ViewChild('receiptView') receiptView: TemplateRef<any>;
   @ViewChild('splitItemsView') splitItemsView: TemplateRef<any>;
   @ViewChild('processingPayment') processingPayment: TemplateRef<any>;
+
+
+  //coaching
+  @ViewChild('coachingPaymentsMade', {read: ElementRef}) coachingPaymentsMade: ElementRef;
+  @ViewChild('coachingAuthorization', {read: ElementRef}) coachingAuthorization: ElementRef;
+  @ViewChild('coachingAdjustAuth', {read: ElementRef}) coachingAdjustAuth: ElementRef;
+  @ViewChild('coachingSplitGroups', {read: ElementRef}) coachingSplitGroups: ElementRef;
+  @ViewChild('coachingPaymentFull', {read: ElementRef}) coachingPaymentFull: ElementRef;
+  @ViewChild('coachingPaymentPartial', {read: ElementRef}) coachingPaymentPartial: ElementRef;
+
 
   process$: Observable<any>;
   @Input() order  :   IPOSOrder;
@@ -103,6 +115,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   serviceIsScheduled: boolean;
   orderAction$  : Observable<any>;
   saleProcess$  : Observable<any>;
+  user          : any;
+  _user: Subscription;
 
   get isProcessingPayment() {
     if (this.processing) {
@@ -138,10 +152,13 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       }
       return of(null)
       }
-
     )).subscribe(data => {
       this.serviceType = data
-      if (data && data.scheduleInstructions || (this.order && this.order.preferredScheduleDate) || ( data && data.shippingInstructions) ) {
+      if ( data && data.scheduleInstructions ||
+         ( this.order && this.order.preferredScheduleDate) ||
+         ( data && data.shippingInstructions) ||
+         ( data?.deliveryService )
+         ) {
         this.serviceIsScheduled = true
       }
       this.processPaymentReady(data)
@@ -155,6 +172,13 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       if (data) {
         this.userAuths = data;
       }
+    })
+  }
+
+
+  userSubscriber() {
+    this._user = this.authenticationService.user$.subscribe(data => {
+      this.user = data;
     })
   }
 
@@ -174,6 +198,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
               private authenticationService: AuthenticationService,
               private changeDetectorRef: ChangeDetectorRef,
               private printingservice: PrintingService,
+              private coachMarksService: CoachMarksService,
               private router          : Router,
               private fb              : UntypedFormBuilder) { }
 
@@ -186,6 +211,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.initForms();
     this.initSubscriptions();
     this.getPaymentMethods(site)
+    this.userSubscriber();
 
     try {
       this.dsiEMVEnabled = this.paymentsMethodsService.DSIEmvSettings?.enabled;
@@ -224,7 +250,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.loginAction = JSON.parse(item)
   }
 
-  exitOrder() { 
+  exitOrder() {
     this.orderMethodsService.exitOrder();
   }
   initAuthorization() {
@@ -254,7 +280,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (this._order) { this._order.unsubscribe()}
     if (this._searchModel) { this._searchModel.unsubscribe()}
     if (this._currentPayment) { this._currentPayment.unsubscribe()}
-    if (this._userAuths) { this._userAuths.unsubscribe()}
+    if (this._userAuths) { this._userAuths.unsubscribe()};
+    if (this._user) { this._user.unsubscribe()}
   }
 
   getPaymentMethods(site: ISite) {
@@ -341,6 +368,10 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.checkNumberForm = this.fb.group( {
       itemName   : [''],
     })
+  }
+
+  navSchedule() {
+    this.router.navigate(['pos-order-schedule'])
   }
 
   processPaymentReady(serviceType: IServiceType) {
@@ -599,7 +630,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (this.order && this.order.clientID) {
       const dialog = this.storeCreditMethodsService.openStoreCreditPopUp(0, this.order?.clientID, 'payment');
       dialog.subscribe(data => {
-
+        console.log('store credit close')
       })
     }
   }
@@ -746,6 +777,24 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.orderMethodsService.updateOrderSubscription(null)
     this.router.navigate(['/app-main-menu'])
   }
+  initPopOver() {
+    if (this.user?.userPreferences?.enableCoachMarks ) {
+      this.coachMarksService.clear()
+      this.addCoachingList()
+      this.coachMarksService.showCurrentPopover();
+    }
+  }
+
+  addCoachingList() {
+    this.coachMarksService.add(new CoachMarksClass(this.coachingPaymentsMade.nativeElement, "Payments Made: If payments exist you will see options to void or print the payment."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingAuthorization.nativeElement, "Credit Authorization: If you have done an Authorization Credit Card sale, here you will find a button to complete the authorization."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingAdjustAuth.nativeElement, "Credit Adjust Authorization: If you need to add payment to a prior auth, for example the bar order was 50 dollars, and they ordered 5 more drinks, you would use the button that appears to add payment to the authorization."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingSplitGroups.nativeElement, "Split Checks by Item: If you have assigned items to different groups, you will see those as separate totals, with their items to make split payments to the order."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingPaymentFull.nativeElement, "Pay in Full: If you want to complete the transaction, you may use the buttons above."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingPaymentPartial.nativeElement, "Partial Payments: If you want to add a payment amount you specify for a certain type of payment methods, like check or cash, you may press the button and then enter the amount."));
+
+  }
+
 
 }
 

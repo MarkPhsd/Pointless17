@@ -10,6 +10,9 @@
   <div *ngFor="let item of items">
     <div class="grid-items" >
       <div>
+        <span *ngIf="!item?.clientID">
+          No vendor
+        </span>
         <app-client-info [clientID]="item?.clientID"> </app-client-info>
       </div>
       <div>{{item?.cost | currency}}</div>

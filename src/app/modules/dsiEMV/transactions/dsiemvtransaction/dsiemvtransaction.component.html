@@ -1,5 +1,8 @@
 <div *ngIf="(action$ | async) as emvTransaction; else emvTransaction"></div>
 
+<div *ngIf="!uiSettings">
+  No DSI Settings Enabled.
+</div>
 <ng-template #emvTransaction>
   <div *ngIf="processingResults">
     ...processing.
@@ -11,7 +14,6 @@
   <mat-card-title>
     <div>
       Transaction Type: {{type}}
-       <!-- - {{action}} -->
     </div>
 
     <div class="grid-totals">
@@ -49,7 +51,7 @@
     <div class="action-buttons">
         <div *ngIf="!processing">
           <button mat-raised-button
-            [disabled]="!this.userAuthorization.isStaff"
+            [disabled]="!this.userAuthorization.isStaff || processingResults"
             (click)="process()">
           <mat-icon>credit_card</mat-icon>Process
         </button>
@@ -62,6 +64,7 @@
           <mat-icon>credit_card</mat-icon>Manual
         </button>
       </div>
+
       <div *ngIf="!processing">
         <button class="payment-buttons"
             mat-raised-button

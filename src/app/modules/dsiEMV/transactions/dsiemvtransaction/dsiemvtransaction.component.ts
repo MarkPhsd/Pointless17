@@ -46,8 +46,8 @@ export class DSIEMVTransactionComponent implements OnInit {
   //preauth capture = 7
   //force = 4;
   order: IPOSOrder;
- 
-
+  uiSetting$: Observable<TransactionUISettings>;
+  uiSettings: TransactionUISettings;
   constructor(
     private paymentsMethodsProcess: PaymentsMethodsProcessService,
     private dsiProcess            : DSIProcessService,
@@ -91,7 +91,6 @@ export class DSIEMVTransactionComponent implements OnInit {
           this.action = 3;
           this.type = 'EMVReturn'
           this.processing = false;
-
         }
       }
 
@@ -105,6 +104,9 @@ export class DSIEMVTransactionComponent implements OnInit {
         // },100);
       }
     })
+
+    this.uiSettings = this.uISettingsService._transactionUISettings.value;
+
   }
 
   get isAuthorized() {
@@ -129,16 +131,16 @@ export class DSIEMVTransactionComponent implements OnInit {
       //action = 7 = WIC
   }
 
-  async process() {
+  process() {
     this.processing = true;
     this.message  = 'Please check the device for input if required.'
     this.resultMessage = '';
-    await this.processTransation();
+    this.processTransation();
   }
 
-  async processManual() {
+  processManual() {
     this.manualPrompt = true;
-    await this.process()
+    this.process()
   }
 
   async dsiResetDevice() {
@@ -147,7 +149,6 @@ export class DSIEMVTransactionComponent implements OnInit {
     this.message = 'Device Reset'
     this.processing = false;
   }
-
 
   async testProcess() {
     const amount = this.amount
@@ -192,26 +193,7 @@ export class DSIEMVTransactionComponent implements OnInit {
       return
     }
 
-    // if (this.action == 3) {
-    //   this.processRefundCard();
-    //   return
-    // }
-    // if (this.action == 4) {
-    //   this.procesPreAuthCard();
-    //   return
-    // }
-    // if (this.action == 5) {
-    //   this.procesPreAuthCard();
-    //   return
-    // }
-    // if (this.action == 6) {
-    //   this.procesPreAuthCard();
-    //   return
-    // }
-    // if (this.action == 7) {
-    //   this.procesPreAuthCard();
-    //   return
-    // }
+
   }
   processTestResponse(){
     //testDevice
@@ -222,7 +204,7 @@ export class DSIEMVTransactionComponent implements OnInit {
     const payment = this.payment
     if (!this.order) { return }
     this.processingResults = true;
-    const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
+    const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, this.uiSettings.dsiTipPrompt );
     this.processingResults = false;
     this.processResults(response)
   };
@@ -387,7 +369,7 @@ export class DSIEMVTransactionComponent implements OnInit {
       return
     }
     if (this.readResult(response?.CmdResponse)) {
-      console.log('processing');
+      // console.log('processing');
 
       const item$ = this.paymentsMethodsProcess.processCreditCardResponse(response,
                     this.payment,
@@ -407,6 +389,8 @@ export class DSIEMVTransactionComponent implements OnInit {
   }
 
   readResult(cmdResponse: CmdResponse): boolean {
+
+    console.log('readresult', cmdResponse?.TextResponse, cmdResponse)
 
     if (!cmdResponse) {
       this.message = 'Processing failed, no command response.'
@@ -430,13 +414,16 @@ export class DSIEMVTransactionComponent implements OnInit {
 
     //"AP*", "Approved", "Approved, Partial AP"
     const response = cmdResponse?.TextResponse.toLowerCase();
+
     const len = 'Transaction rejected because the referenced original transaction is invalid'.length;
     if (response.substring(0, len) === 'Transaction rejected because the referenced original transaction is invalid.') {
-      // this.cancel();
       return false;
     }
 
-    if (response === 'Approved'.toLowerCase() || response === 'AP*'.toLowerCase()
+    // this.paymentsMethodsProcess.isApproved(response)
+    console.log('response', response)
+    if (response === 'Approved'.toLowerCase() || response === 'AP*'.toLowerCase() ||
+         response === 'captured'.toLowerCase() || response === 'approval'.toLowerCase()
        || response === 'Approved, Partial AP'.toLowerCase()
 
     ) {

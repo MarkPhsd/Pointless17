@@ -57,7 +57,7 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
   }
 
   ngOnInit(): void {
-    console.log('ngOninit')
+    // console.log('ngOninit')
     this.initValues()
     this.initSubscriptions();
   }

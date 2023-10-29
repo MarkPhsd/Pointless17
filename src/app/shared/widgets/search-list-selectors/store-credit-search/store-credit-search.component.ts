@@ -59,7 +59,6 @@ export class StoreCreditSearchComponent implements OnInit,OnDestroy {
 
   constructor(
     private fb                       : UntypedFormBuilder,
-    private orderService             : OrdersService,
     private sitesService             : SitesService,
     public orderMethodsService       : OrderMethodsService,
     private storeCreditMethodsService: StoreCreditMethodsService,
@@ -120,7 +119,6 @@ export class StoreCreditSearchComponent implements OnInit,OnDestroy {
       console.log(error)
     }
     return;
-    this.searchForm.patchValue({itemName: ''})
   }
 
   getResults(scan: string) {

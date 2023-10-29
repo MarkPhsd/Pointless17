@@ -1,21 +1,24 @@
+
 <span *ngIf="order">
   <div class="container">
     <div>
-      <div class="total-card">
+
+      <div>
         <h4>
           <span  *ngIf="!isOrderClaimed && order.id" > <mat-icon color="warn">lock</mat-icon>
           </span> Order {{order?.id | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
           <div *ngIf="order.tableName">{{order.tableName}}</div>
         </h4>
       </div>
-      <div class="total-card">
+      <div>
         <div  *ngIf="order.employeeName">{{order?.employeeName}}  </div>
       </div>
 
-      <div  class="total-card">
+      <div>
         Started  {{order.orderDate | date: 'shortDate'}} - {{order?.orderDate | date: 'shortTime'}}
       </div>
-      <div *ngIf="order.completionDate" class="total-card">
+
+      <div *ngIf="order.completionDate">
         Completed  {{order.completionDate | date: 'shortDate'}} - {{order?.completionDate | date: 'shortTime'}}
       </div>
     </div>
@@ -28,40 +31,45 @@
 
           <div   class="button-margin" *ngIf="!mainPanel">
             <button  class="button" color="primary" mat-raised-button
-              (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon>
+              (click)="printingService.previewReceipt(uiTransactionSettings.singlePrintReceipt)"><mat-icon>print</mat-icon>
             </button>
           </div>
 
-          <div   class="button-margin" *ngIf="(locations$ | async) as locations">
-            <div *ngIf="locations.length>0">
-              <div *ngIf="isSale && isUserStaff && posDevice && posDevice.labelPrinter">
-                <button   class="button" color="warn" mat-raised-button
-                  (click)="sendOrder()">
-                  <mat-icon>local_fire_department</mat-icon>
-                </button>
+          <span #coachingFire >
+            <div  class="button-margin" *ngIf="(locations$ | async) as locations">
+              <div *ngIf="locations.length>0">
+                <div *ngIf="isSale && isUserStaff">
+                  <button   class="button" color="warn" mat-raised-button
+                    (click)="sendOrder()">
+                    <mat-icon>local_fire_department</mat-icon>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          </span>
 
-          <div   class="button-margin" *ngIf="!mainPanel && isSale && isUserStaff ">
-            <button   class="button" color="warn" mat-raised-button
-              (click)="printLabels()">
-              <mat-icon>book</mat-icon>
-            </button>
-          </div>
-
+          <span #coachingLabel >
+            <div   class="button-margin" *ngIf="!mainPanel && isSale && isUserStaff && (posDevice && posDevice.labelPrinter && posDevice.enableExitLabel)">
+              <button   class="button" color="warn" mat-raised-button
+                (click)="printLabels()">
+                <mat-icon>book</mat-icon>
+              </button>
+            </div>
+          </span>
         </div>
       </div>
 
-      <div class="button-row" *ngIf="isUserStaff && isSale">
-        <div class="button-margin">
+      <div #coachingSplit class="button-row" *ngIf="isUserStaff && isSale">
+        <div  class="button-margin">
           <split-entry-selector [order]="order"
                                 [isUserStaff]="isUserStaff"
                                 [uiTransactionSettings]="uiTransactionSettings">
           </split-entry-selector>
         </div>
 
-        <div *ngIf="isApp">
+        <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
+
+        <div #coachingRefresh *ngIf="isApp">
           <button mat-button (click)='refreshOrder()'><mat-icon>refresh</mat-icon></button>
         </div>
 
@@ -81,3 +89,11 @@
 
 <div *ngIf="(action$ | async) as result"></div>
 <div *ngIf="(printLabels$  | async) as printLabels"></div>
+
+<ng-template #helpButton>
+  <div class="margin-5">
+    <coach-marks-button
+          (initPopOver)="initPopOver()"
+          [enabled]="user && user?.userPreferences &&  user?.userPreferences?.enableCoachMarks"></coach-marks-button>
+  </div>
+</ng-template>

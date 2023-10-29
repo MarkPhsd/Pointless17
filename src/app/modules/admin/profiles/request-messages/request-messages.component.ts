@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, Output,EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output,EventEmitter, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { catchError, delay, Observable, of, repeatWhen, switchMap, throwError } from 'rxjs';
 import { IPOSOrder, IUser } from 'src/app/_interfaces';
@@ -21,11 +22,27 @@ export class RequestMessagesComponent implements OnInit {
   searchModel: IRequestMessageSearchModel;
   @Input() hideshowMessages: boolean; //hideshowMessages
 
+  @Input() enableActions: boolean;
+  @Input() orderID: number;
+
   // action$: Observable<any>;
   messages$: Observable<IRequestMessage[]>;
   message$: Observable<IRequestResponse>;
   refreshTime = 1
   order$: Observable<IPOSOrder>;
+
+
+  refreshOrderMessages() {
+    console.log("refreshOrderMessages")
+    const site     = this.siteService.getAssignedSite();
+    const search   = {  }   as IRequestMessageSearchModel;
+    search.orderID = this.orderID;
+    this.messages$ = this.requestMessageService.getOpenRequestMessagesByOrder(site, search).pipe(switchMap(data => {
+      console.log('messages', data)
+      return of(data)
+    }))
+    this.hideshowMessages = true;
+  }
 
   refreshMessagingService(user) {
     this._refreshMessagingService(user)
@@ -37,7 +54,6 @@ export class RequestMessagesComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     const search = {} as IRequestMessageSearchModel;
     if (user?.id) {
-
       search.userID = user.id;
       return this.getMessages().pipe(
         repeatWhen(notifications =>
@@ -54,7 +70,13 @@ export class RequestMessagesComponent implements OnInit {
   }
 
   refreshMessages() {
-    this.messages$ = this.getMessages()
+    console.log("refreshMessages 1" )
+    if (this.orderID) {
+      this.refreshOrderMessages();
+      return
+    }
+    console.log("refreshMessages 2" )
+    this.messages$ = this.getMessages();
   }
 
   getMessages(): Observable<IRequestMessage[]> {
@@ -68,6 +90,7 @@ export class RequestMessagesComponent implements OnInit {
       messages$ = this.getManagerMessages()
       check = true
     }
+
     if (this.user.roles === 'user') {
       messages$ = this.requestMessageService.getRequestMessagesByCurrentUser(site, search)
       check = true
@@ -112,15 +135,36 @@ export class RequestMessagesComponent implements OnInit {
               private router: Router,
               private orderMethodsService: OrderMethodsService,
               private orderService       : OrdersService,
-              private requestMessageMehodsService: RequestMessageMethodsService) { }
+              private dialogRef: MatDialogRef<RequestMessagesComponent>,
+              private requestMessageMehodsService: RequestMessageMethodsService,
+              @Inject(MAT_DIALOG_DATA) public data: any
+     )
+  {
+
+    if (data && data.id) {
+      this.orderID = data.id;
+      this.enableActions = false
+      return;
+    }
+    this.enableActions = true
+  }
 
   ngOnInit(): void {
     let user = this.userAuthService.user
-    if (this.user) {
-      user = this.user;
+    if (this.user) { user = this.user; }
+
+    // get only order messages;
+    if (this.orderID) {
+      this.refreshOrderMessages()
+      return;
     }
+
     this.refreshMessagingService(user)
     this.initUserSubscriber()
+  }
+
+  exit() {
+    this.dialogRef.close();
   }
 
   toggleArchive(message) {
@@ -159,10 +203,77 @@ export class RequestMessagesComponent implements OnInit {
     }))
   }
 
+  _openOrderFromItemMessage(event: IRequestMessage) {
+    //navigate to order
+    const methods  = event?.method.split('=');
+
+    if (methods[1]) {
+      const value = methods[1];
+      this.orderMethodsService.setLastOrder()
+
+      // console.log('event', value)
+      if (!value) { return };
+      const site = this.siteService.getAssignedSite();
+
+      return this.orderMethodsService.getOrderFromItem(+value).pipe(
+        switchMap(data => {
+            // console.log('data', data)
+            this.orderMethodsService.setActiveOrder(site, data)
+            return of(data)
+          }
+        ),catchError(data => {
+          this.siteService.notify(`Error ${data}`, 'close', 2000, 'red')
+          return of({} as IPOSOrder)
+          }
+      )).pipe(switchMap(data => {
+        return of({} as IPOSOrder)
+      }))
+    }
+
+    return of({} as IPOSOrder)
+  }
+
+  _openOrderFromOrderMessage(event: IRequestMessage) {
+    //navigate to order
+    // console.log('event', event)
+    const methods  = event?.method.split('=');
+    // console.log('event', methods)
+
+    if (methods[1]) {
+
+      const value =  methods[1] //event.orderID
+      this.orderMethodsService.setLastOrder()
+//
+      // console.log('_openOrderFromOrderMessage', event, value, methods[1]);
+      if (!value) { return };
+
+      const site = this.siteService.getAssignedSite();
+
+      return this.orderService.getOrder(site, value.toString(), false).pipe(
+        switchMap(data => {
+            // console.log('data', data)
+            this.orderMethodsService.setActiveOrder(site, data)
+            return of(data)
+          }
+        ),catchError(data => {
+          this.siteService.notify(`Error ${data}`, 'close', 2000, 'red')
+          return of({} as IPOSOrder)
+        }
+      )).pipe(switchMap(data => {
+
+        return of({} as IPOSOrder)
+      }))
+    }
+
+    return of({} as IPOSOrder);
+
+  }
+
   activeEvent(event: IRequestMessage) {
     if (!event) { return  }
     if (!event.type) { return  }
 
+    console.log('event', event?.type, event)
     if (event.type.toLocaleLowerCase()  === "ir") {
       this.router.navigate(['menuitems',{id: event.method}])
     }
@@ -172,33 +283,12 @@ export class RequestMessagesComponent implements OnInit {
       this.archiveMessage(event)
     }
 
+    if (event.type.toLocaleLowerCase()  === "oc") {
+      this.order$ =   this._openOrderFromOrderMessage(event)
+    }
+
     if (event.type.toLocaleLowerCase() === "pc") {
-      //navigate to order
-      // console.log('event', event)
-      const methods  = event?.method.split('=');
-      if (methods[1]) {
-        const value = methods[1];
-
-        this.orderMethodsService.setLastOrder()
-
-        if (!value) { return }
-        const site = this.siteService.getAssignedSite()
-        this.order$ =  this.orderMethodsService.getOrderFromItem(+value).pipe(
-          switchMap(data => {
-            console.log('data', data)
-              this.orderMethodsService.setActiveOrder(site, data)
-              return of(data)
-            }
-          ),catchError(data => {
-            this.siteService.notify(`Error ${data}`, 'close', 2000, 'red')
-            return of({} as IPOSOrder)
-           }
-        )).pipe(switchMap(data => {
-          // this.archiveMessage(event)
-          return of({} as IPOSOrder)
-        }))
-        return;
-      }
+      this.order$ =   this._openOrderFromItemMessage(event)
     }
 
     if (event.type.toLocaleLowerCase()  === "payment") {

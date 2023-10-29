@@ -63,7 +63,7 @@
 }
 
 .mat-input-element {
-  font-size: small;
+  font-size: medium;
 }
 
 mat-raised-button {
@@ -82,7 +82,7 @@ app-widget-uploader {
 }
 
 mat-label {
-  padding:5px;
+  padding: 5px;
   font-size: 1.0em;
 }
 
@@ -110,7 +110,6 @@ mat-form-field {
   // float: left;
   width: 100px !important;
 }
-
 
 .price-values {
   width: 145px;
@@ -164,7 +163,6 @@ h1 {
 }
 
 #remove_email {
-  // color: red;
   margin: 5px;
 }
 
@@ -187,10 +185,6 @@ h1 {
 .item-info {
   float: right;
 }
-
-// .ng-valid:not(form) {
-//   border-left: 3px solid greenyellow;
-// }
 
 img {
   width: 150px;
@@ -217,7 +211,7 @@ img {
 body{ overflow-x: hidden;}
 
 mat-form-field {
-  font-size: .8em;
+  font-size: 1em;
 }
 
 .checmical-values {

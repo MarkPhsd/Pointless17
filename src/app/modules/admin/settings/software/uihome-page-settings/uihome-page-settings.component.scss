@@ -1,35 +1,9 @@
-button {
-  margin: 8px
-}
-
-mat-divider {
-  margin-bottom: 4px;
-}
-
-.grid-views {
-
-    --gap: 5px;
-    margin-top: 2px;
-    margin-right: 2px;
-    margin-bottom: 5px;
-    display: grid;
-    gap: var(--gap);
-    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
-    overflow-y: visible;
-    max-width: 200px;
+  button {
+    margin: 8px
   }
 
-  .grid-view-sections {
-    // width: 425px;
-    // max-width: 425px;
-    --gap: 5px;
-    margin-top: 2px;
-    margin-right: 2px;
-    margin-bottom: 5px;
-    display: grid;
-    gap: var(--gap);
-    grid-template-columns: repeat( auto-fit, minmax(220px, 1fr) );
-    overflow-y: visible;
+  mat-divider {
+    margin-bottom: 4px;
   }
 
   grid-item {

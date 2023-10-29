@@ -194,7 +194,6 @@ import { SearchInventoryInputComponent } from '../modules/admin/inventory/invent
 import { POSOrderServiceTypeComponent } from '../modules/posorders/posorder-service-type/posorder-service-type.component';
 import { POSOrderScheduleComponent } from '../modules/posorders/posorder-schedule/posorder-schedule.component';
 import { POSOrderShippingAddressComponent } from '../modules/posorders/posorder-shipping-address/posorder-shipping-address.component';
-import { POSOrderScheduleCardComponent } from '../modules/posorders/posorder-schedule/posorder-schedule-card/posorder-schedule-card.component';
 import { InventoryCountsViewComponent } from '../modules/admin/inventory/inventory-counts-view/inventory-counts-view.component';
 import { InventoryHeaderValuesComponent } from '../modules/admin/inventory/inventory-header-values/inventory-header-values.component';
 import { EmployeeMetrcKeyEntryComponent } from '../modules/admin/employees/employee-metrc-key-entry/employee-metrc-key-entry.component';
@@ -371,6 +370,9 @@ import { PointlessFloorPlanViewComponent } from '../modules/floor-plan/pointless
 import { NewOrderItemComponent } from '../modules/posorders/pos-order/new-order-item/new-order-item.component';
 import { PartBuilderUsageListComponent } from '../modules/admin/products/part-builder/part-builder-usage-list/part-builder-usage-list.component';
 import { PartBuilderTreeComponent } from '../modules/admin/products/part-builder/part-builder-tree/part-builder-tree.component';
+import { MessageEditorListComponent } from '../modules/admin/message-editor-list/message-editor-list.component';
+import { MessageEditorComponent } from '../modules/admin/message-editor-list/message-editor/message-editor.component';
+import { UserIdleModule, UserIdleService } from 'angular-user-idle';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -446,6 +448,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DevxReportDesignerComponent,
     ReportViewerComponent,
 
+
+    MessageEditorListComponent,
+    MessageEditorComponent,
     ManifestEditorHeaderComponent,
     ManifestsComponent,
     MainfestFilterComponent,
@@ -651,7 +656,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     POSOrderScheduleComponent,
     POSOrderServiceTypeComponent,
     POSOrderShippingAddressComponent,
-    POSOrderScheduleCardComponent,
+
     PosOrderNotesComponent,
     POSOrderScheduleFormComponent,
     PosOrderPriceScheduleInfoComponent,
@@ -819,7 +824,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ],
 
   exports: [
-
     AdjustItemComponent,
     BrowserAnimationsModule,
     RouterModule,
@@ -834,36 +838,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
   providers: [
     AgGridService,
-    AnimationCountService,
     DatePipe,
     LoggingInterceptor,
-    // AuthenticationService,
-    // AWSBucketService,
-    // ClientTypeService,
-    // ContactsService,
-    // DashboardService,
-    // DevService,
-    // EmployeeService,
-    // InventoryLocationsService,
-    // ItemsService,
-    // PrepPrintingServiceService,
-    // LabelaryService,
-    // MenuService,
-    // PrintingService,
-    // ReportingService,
-    // ReviewsService,
-    // SettingsService,
-    // ServiceTypeService,
-    // InventoryAssignmentService,
-    // TextMessagingService,
-    // ThemesService,
-    // UserService,
-    // ItemTypeService,
-    // ViewComponent,
-    // RoomLayoutDesignerComponent,
-    // PrintingService,
-   {provide: RouteReuseStrategy , useClass: RouteReuseService},
-
+    {provide: RouteReuseStrategy , useClass: RouteReuseService},
   ],
 })
 

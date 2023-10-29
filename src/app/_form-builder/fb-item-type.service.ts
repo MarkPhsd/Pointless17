@@ -46,6 +46,7 @@ export class FbItemTypeService {
       pricePrompt:          [''],
       disablePriceCategory: [''],
       disableSimplePrice: [''],
+      promptQuantity: [''],
     })
     return inputForm
   }

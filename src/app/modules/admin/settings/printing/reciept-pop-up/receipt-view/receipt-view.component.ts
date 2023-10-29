@@ -4,12 +4,12 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSOrder,   ISetting, PosPayment } from 'src/app/_interfaces';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
-
-import { OrdersService } from 'src/app/_services';
+import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { Router } from '@angular/router';
+import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 @Component({
   selector: 'app-receipt-view',
   templateUrl: './receipt-view.component.html',
@@ -22,6 +22,11 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   @ViewChild('balanceSheetTemplate',{static: false})  balanceSheetTemplate: TemplateRef<any>;
   @ViewChild('balanceSheetValues',{static: false})    balanceSheetValues: TemplateRef<any>;
   @ViewChild('cashDropView',{static: false})          cashDropView:   TemplateRef<any>;
+
+  @ViewChild('coachingReceiptView', {read: ElementRef}) coachingReceiptView: ElementRef;
+  @ViewChild('coachingPDF', {read: ElementRef}) coachingPDF: ElementRef;
+  @ViewChild('coachingLink', {read: ElementRef}) coachingLink: ElementRef;
+
 
   @Input() autoPrint : boolean;
   @Input() hideExit = false;
@@ -95,7 +100,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   printAction$: Observable<any>;
   layout$: Observable<any>;
   order$ : Observable<any>;
-
+  user          : any;
+  _user: Subscription;
   tempPayments: PosPayment[];
 
   printView: number;
@@ -115,16 +121,39 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     )
 
     this._printReady = this.printingService.printReady$.subscribe(status => {
-      if (status) {
+      if(!this.receiptStyles) { return }
+      if (status && status.ready) {
           if ((this.options && this.options.silent) || this.autoPrint) {
-            this.print();
-            this.autoPrinted = true;
+            if (this.autoPrinted) { return }
+            if (this.print()) {
+              this.autoPrinted = true;
+            }
           }
         }
       }
     )
   }
 
+  setPrintReady(event) {
+    // if (!this.autoPrinted && this.autoPrint) {
+    //   if (this.print()) {
+    //     this.autoPrinted = true;
+    //   }
+    // }
+  }
+
+  async printViewCompleted(event) {
+    if (this.autoPrint) {
+      await this.print();
+      this.exit()
+    }
+  }
+
+  userSubscriber() {
+    this._user = this.authenticationService.user$.subscribe(data => {
+      this.user = data;
+    })
+  }
   constructor(
     public orderService           : OrdersService,
     public orderMethodsService    : OrderMethodsService,
@@ -133,7 +162,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     public platFormService        : PlatformService,
     public  printingService       : PrintingService,
     private orderMethodService    : OrderMethodsService,
-
+    private coachMarksService     : CoachMarksService,
+    private authenticationService : AuthenticationService,
     private router: Router
     )
   {}
@@ -142,6 +172,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     this.isElectronApp = this.platFormService.isAppElectron
     this.initPrintView() //done
     this.intSubscriptions();
+    this.userSubscriber();
   }
 
   ngOnDestroy(): void {
@@ -149,6 +180,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     if(this._order) { this._order.unsubscribe() }
     this.printingService.currentGroupID = 0;
     this.printingService.printOrder = null;
+    if (this._user) { this._user.unsubscribe()}
   }
 
   refreshViewObservable(){
@@ -183,15 +215,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
             this.siteService.notify('Error receipt view' + e, 'Alert', 2000)
             return of(null)
       }))
-
-  }
-
-  printViewCompleted(event) {
-    console.log('print View Completed Fired')
-    if (this.autoPrint) {
-      this.print();
-      this.exit()
-    }
   }
 
   getDefaultPrinterOb(): Observable<any> {
@@ -219,8 +242,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   //Step 1
   getDefaultReceipt() {
-    const site        = this.siteService.getAssignedSite();
-    this.receiptName  =  'defaultElectronReceiptPrinterName'
+    const site            = this.siteService.getAssignedSite();
+    this.receiptName      =  'defaultElectronReceiptPrinterName'
     const defaultReceipt$ = this.settingService.getSettingByNameCachedNoRoles(site, this.receiptName)
     return defaultReceipt$.pipe(
       switchMap(data => {
@@ -306,10 +329,12 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   applyStylesObservable(): Observable<ISetting> {
+    // console.log('applyStylesObservable()')
     const site  = this.siteService.getAssignedSite();
     return this.printingService.appyStylesCachedObservable(site).pipe(
         switchMap( data => {
           this.receiptStyles  =  data
+          console.log('receipts', this.receiptStyles.text)
           this.applyStyle(data)
           return of(data)
         }
@@ -369,11 +394,12 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   getReceiptContents(styles: string) {
 
     let  prtContent = document.getElementById('printsection');
-
     if ( prtContent == null) { return }
     if ( !prtContent )       { return }
     const content        = `${ prtContent.innerHTML }`
     if (!content)            { return }
+
+    if (content === '<!---->') { return }
 
     const  title   = 'Receipt';
     const loadView = ({ title }) => {
@@ -397,36 +423,67 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     return file
   }
 
-  print() {
-    if (!this.printerName) {
-      if (this.platFormService.webMode) { this.convertToPDF() }
-      return
-    }
+  async print() {
+
     if (this.platFormService.isAppElectron) {
-      const result = this.printElectron()
+      return await this.printElectron();
+    }
+
+    if (!this.printerName) {
+      this.convertToPDF()
       return
     }
-    if (this.platFormService.webMode)    {this.convertToPDF() }
+
+    if (this.platFormService.webMode)    { this.convertToPDF() }
   }
 
-  printElectron() {
+  async printElectron() {
     let styles
+
+    if (!this.receiptStyles) {
+      this.siteService.notify('No Print Styles, please contact admin', 'close', 3000, 'red' )
+    }
+
     if (this.receiptStyles) {
       styles = this.receiptStyles.text;
+
+      // console.log('styles', styles)
       const contents = this.getReceiptContents(styles)
-      if (!contents) { return }
+
+      if (!contents) { return false}
+
       const options  = {
         silent: true,
         printBackground: false,
         deviceName: this.printerName
       } as printOptions;
-      if (!contents) { console.log('no contents in print electron')}
-      if (!options) { console.log('no options in print electron')}
-      if (!this.printerName) { console.log('no printerName in print electron')}
-      if (contents && this.printerName, options) {
-          this.printingService.printElectron( contents, this.printerName, options)
+
+      // console.log('printElectron()', options);
+
+      if (!contents) {
+        this.siteService.notify('No content determined for receipt.', 'close', 3000, 'red' )
+        // console.log('no contents in print electron');
+        return;
       }
+
+      if (!options) {
+        //  console.log('no options in print electron')
+         return;
+      }
+
+      if (!this.printerName) {
+        this.siteService.notify('No Printer name set for this terminal.', 'close', 3000, 'red' )
+        // console.log('no printerName in print electron');
+        return;
+      }
+
+      if (contents && this.printerName, options) {
+        const printResult = await this.printingService.printElectronAsync( contents, this.printerName, options)
+        return printResult
+      }
+
     }
+    return false
   }
 
   savePDF() {
@@ -438,6 +495,10 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   exit() {
+    if (this.autoPrint) {
+      this.outPutExit.emit('false');
+      return ;
+    }
     this.outPutExit.emit('true')
   }
 
@@ -522,6 +583,23 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       })
     )
   }
+
+
+  initPopOver() {
+    if (this.user?.userPreferences?.enableCoachMarks ) {
+      this.coachMarksService.clear()
+      this.addCoachingList()
+      this.coachMarksService.showCurrentPopover();
+    }
+  }
+
+
+    addCoachingList() {
+      this.coachMarksService.add(new CoachMarksClass(this.coachingReceiptView.nativeElement, "Receipt View: The Receipt View gives you an option to print."));
+      this.coachMarksService.add(new CoachMarksClass(this.coachingPDF.nativeElement, "PDF: Save as PDF"));
+      this.coachMarksService.add(new CoachMarksClass(this.coachingLink.nativeElement, "Link: If you are in a browser, a link button will appear. This will allow customers to pay for the order using Stripe or PayPal."));
+    }
+
 }
 
   // async printAndroid() {

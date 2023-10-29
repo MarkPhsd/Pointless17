@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
+import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 @Component({
@@ -17,6 +18,7 @@ export class TriposSettingsComponent implements OnInit {
 
   constructor(private triposMethodService: TriPOSMethodService,
               private siteService: SitesService,
+              public labelingService: LabelingService,
               private fb: UntypedFormBuilder) { }
 
   ngOnInit(): void {

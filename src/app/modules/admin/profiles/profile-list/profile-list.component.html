@@ -1,4 +1,4 @@
-<div class="header-flex">
+<div  class="grid-container-selectors">
 
   <div  *ngIf="searchForm"
         [formGroup]="searchForm"
@@ -14,7 +14,7 @@
     </search-debounce-input>
   </div>
 
-  <div>
+  <div class="grid-item">
     <span>
       <button mat-button (click)="gotoAddClient()">
           <mat-icon>add</mat-icon>New Profile</button>
@@ -30,34 +30,49 @@
     </button>
   </div>
 
+  <div class="grid-item">
+     <button mat-button (click)="toggleKeyboard()">
+      <mat-icon>keyboard</mat-icon>
+    </button>
+  </div>
+
+
 </div>
+
 
 <mat-divider></mat-divider>
 
+
 <div [class]="gridlist">
+
   <div>
+    <div>
+      <ng-container [ngTemplateOutlet]="enableKeyboardView"></ng-container>
+    </div>
 
     <div *ngIf="value" class="loader">
       <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
     </div>
 
-    <ag-grid-angular
-          #agGrid
-          [style]              ="gridDimensions"
-          id                   ="myGrid"
-          [class]              ="agtheme"
-          [columnDefs]         ="columnDefs"
-          [defaultColDef]      ="defaultColDef"
-          [gridOptions]        ="gridOptions"
-          [rowSelection]       ="rowSelection"
-          [frameworkComponents]="frameworkComponents"
-          (selectionChanged)   ="onSelectionChanged($event)"
-          (gridReady)          ="onGridReady($event)">
-    </ag-grid-angular>
+    <div *ngIf="(uiSettings$ | async) as uiSettings">
+      <ag-grid-angular
+            #agGrid
+            [style]              ="gridDimensions"
+            id                   ="myGrid"
+            [class]              ="agtheme"
+            [columnDefs]         ="columnDefs"
+            [defaultColDef]      ="defaultColDef"
+            [gridOptions]        ="gridOptions"
+            [rowSelection]       ="rowSelection"
+            [frameworkComponents]="frameworkComponents"
+            (selectionChanged)   ="onSelectionChanged($event)"
+            (gridReady)          ="onGridReady($event)">
+      </ag-grid-angular>
+
+    </div>
   </div>
 
   <div *ngIf="!hideAdd" >
-
   </div>
 </div>
 
@@ -66,3 +81,11 @@
 </div>
 
 <div *ngIf="(action$ | async) as action"></div>
+
+<ng-template #keyboardView>
+  <button mat-raised-button color="primary" (click)="enterSearch()">Enter</button>
+  <app-keyboard
+      [keyboardHeight] = "'300px'"
+      [disableClose]= "true"
+    > </app-keyboard>
+</ng-template>

@@ -47,15 +47,6 @@
 
       </div>
 
-      <ion-item-options *ngIf="item?.printed && !prepScreen">
-        <ion-item-option color="accent">
-          <button mat-button color="primary" (click)="removeItemFromList(i)" >
-            <mat-icon>remove_shopping_cart</mat-icon>
-            Void
-          </button>
-        </ion-item-option>
-      </ion-item-options>
-
       <ion-item-options *ngIf="prepScreen">
         <ion-item-option color="warn">
           <button mat-button color="primary" (click)="setAsPrepped(i)" >
@@ -65,15 +56,24 @@
         </ion-item-option>
       </ion-item-options>
 
-      <ion-item-options *ngIf="!item?.printed && !prepScreen">
+      <ion-item-options >
         <ion-item-option color="warn">
           <button mat-button color="primary" (click)="removeItemFromList(i)" >
-            <mat-icon>delete</mat-icon>
-            Delete
+            <span *ngIf="!item?.printed && !prepScreen">
+              <mat-icon>delete</mat-icon>
+              Delete
+            </span>
+            <span *ngIf="item?.printed && !prepScreen">
+              <mat-icon>remove_shopping_cart</mat-icon>
+                Void
+            </span>
           </button>
         </ion-item-option>
       </ion-item-options>
+
+
     </ion-item-sliding>
+
 </div>
 
 

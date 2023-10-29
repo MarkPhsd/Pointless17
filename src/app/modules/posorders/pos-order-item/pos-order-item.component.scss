@@ -247,7 +247,7 @@ font-style: italic;
 .grid-items-main-panel {
   display: grid;
   gap: 10px;
-  grid-template-columns: .9fr 65px 65px auto;
+  grid-template-columns: .9fr 65px 65px 65px auto;
   @include for-phone-only  {
      grid-template-columns: 1fr 65px;
   }

@@ -84,6 +84,7 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
   }
 
   getClientType() {
+
     const site = this.siteService.getAssignedSite();
     if (this.order && this.order.clients_POSOrders && this.order.clients_POSOrders.client_Type) {
       return of(this.order.clients_POSOrders.client_Type).pipe(switchMap(data => {
@@ -93,7 +94,8 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
       }))
     }
 
-    return this.clientTypeService.getClientTypeByNameCached(site, 'Client').pipe(switchMap(data => {
+    // if (this.)
+    return this.clientTypeService.getClientTypeByNameCached(site, 'Consumer').pipe(switchMap(data => {
       this.clientType = data;
       this.refreshLimitProgress(this.order);
       return of(data)
@@ -122,13 +124,13 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
     let type = {} as clientType;
 
     let gramRatio = 28;
-    let concentrateCountRatio = 28;
-    let extractRatio = 28;
-    let seedCountRatio = 28;
-    let liquidCountRatio = 28;
-    let plantCountratio = 28
-    let combinedCateogryRatio = 5;
-    let solidCountRatio = 28;
+    let concentrateCountRatio = 1;
+    let extractRatio = 1;
+    let seedCountRatio = 1;
+    let liquidCountRatio = 1;
+    let plantCountratio = 1
+    let combinedCateogryRatio = 1;
+    let solidCountRatio = 1;
 
     if (this.clientType) {
       const type = this.clientType;
@@ -168,22 +170,21 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
 
             if (client.medConcentrateLimit && client.medConcentrateLimit != 0){
               concentrateCountRatio = client.medConcentrateLimit
+              // console.log('concentrate', client.medConcentrateLimit, concentrateCountRatio)
             }
+
 
             if (client.medPlantLimit && client.medPlantLimit != 0){
-              plantCountratio = client.medPlantLimit
+              plantCountratio =   client.medPlantLimit
             }
 
-            if (client.medConcentrateLimit && client.medConcentrateLimit != 0){
-              concentrateCountRatio = client.medConcentrateLimit
-            }
 
             if (client.combinedCategoryLimit && client.combinedCategoryLimit != 0){
               combinedCateogryRatio = client.combinedCategoryLimit
             }
 
             if (client.solidCountLimit && client.solidCountLimit != 0){
-              solidCountRatio = client.solidCountLimit
+              solidCountRatio =  client.solidCountLimit
             }
 
           }
@@ -197,7 +198,8 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
         this.seedCountProgress         = ((order.seedCount / seedCountRatio  ) * 100).toFixed(0)
       }
       if (order.concentrateCount != 0) {
-        this.concentrateCountProgress  = ((order.concentrateCount / concentrateCountRatio ) * 100).toFixed(0)
+        // console.log('concentrate ratio', concentrateCountRatio)
+        this.concentrateCountProgress  = ((order.concentrateCount / concentrateCountRatio ) * 100 ).toFixed(0)
       }
       if (order.extractCount != 0) {
         this.extractCountProgress      = ((order.extractCount / extractRatio ) * 100).toFixed(0)
@@ -219,7 +221,9 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
       this.extractRatio = extractRatio;//: number;
       this.liquidCountRatio = liquidCountRatio;//: number;
       this.seedCountRatio = seedCountRatio;//: number;
-      this.concentrateCountRatio  = this.concentrateCountProgress; //: number;
+      this.concentrateCountRatio = concentrateCountRatio;
+      // console.log('concentrate ratio', concentrateCountRatio)
+
     }
   }
 

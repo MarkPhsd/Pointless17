@@ -321,19 +321,25 @@ export class ManifestInventoryService {
 
   }
 
-
-  openManifestForm(id: number) {
+  openManifestForm(id: number, autoReceive : boolean) {
     let dialogRef: any;
     const site = this.siteService.getAssignedSite();
     this.get(site,id).subscribe(data => {
-      this.updateCurrentInventoryManifest(data)
+      this.updateCurrentInventoryManifest(data);
+      const auto =  {autoReceive: autoReceive};
+
       dialogRef = this.dialog.open(MainfestEditorComponent,
         { width:        '90vw',
           minWidth:     '90vw',
           height:       '90vh',
           minHeight:    '90vh',
+          data : auto
         },
       )
+
+      dialogRef.afterClosed().subscribe(result => {
+
+      });
     })
   }
 

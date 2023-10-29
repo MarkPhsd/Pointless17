@@ -68,7 +68,7 @@ export class LabelViewSelectorComponent implements OnInit {
 
   }
 
-  async refreshDefaultLabel() {
+  refreshDefaultLabel() {
     const site = this.siteService.getAssignedSite();
     const zplTemp$ = this.settingService.getSettingByName(site, 'ZPLTemplate');
     zplTemp$.subscribe(data => {
@@ -84,7 +84,6 @@ export class LabelViewSelectorComponent implements OnInit {
     }
     const site = this.siteService.getAssignedSite();
     const zplTemp$ = this.settingService.getSetting(site, id);
-    // console.log('id', id)
     this.outPutLabelID.emit(id)
     zplTemp$.subscribe(data => {
       if (!data){ return }
@@ -93,28 +92,27 @@ export class LabelViewSelectorComponent implements OnInit {
     })
   }
 
-  async refreshLabelImage(zplSetting: ISetting) {
+  refreshLabelImage(zplSetting: ISetting) {
     const site = this.siteService.getAssignedSite();
-    if (!this.zplSetting) { return }
+    if (!zplSetting) { return }
     if(this.inventoryItem) {
-      this.refreshLabel(this.zplSetting.text, this.inventoryItem)
+      this.refreshLabel(zplSetting, this.inventoryItem)
       return
     }
     if (this.product) {
-      // console.log('this product', this.zplSetting)
-      this.refreshLabel(this.zplSetting.text, this.product)
+      this.refreshLabel(zplSetting, this.product)
       return
     }
     const item  =  this.fakeData.getInventoryItemTestData();
-    this.refreshLabel(this.zplSetting.text, item)
+    this.refreshLabel(zplSetting, item)
   }
 
-  refreshLabel(text: string, item: any) {
-    if (!this.zplSetting) { return }
-    this.printingService.refreshInventoryLabel(this.zplSetting.text, item).then(
+  refreshLabel(zplSetting: ISetting, item: any) {
+    if (!zplSetting) { return }
+    this.printingService.refreshInventoryLabel(zplSetting.text, item).then(
       data => {
-       this.outPutLabelID.emit(this.zplSetting.id);
-       this.outputLabelSetting.emit(this.zplSetting);
+       this.outPutLabelID.emit(zplSetting.id);
+       this.outputLabelSetting.emit(zplSetting);
        this.labelImage64 = data
       }
     )

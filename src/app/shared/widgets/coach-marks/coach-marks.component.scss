@@ -1,0 +1,11 @@
+ul > li {
+  display: inline-block;
+  /* You can also add some margins here to make it look prettier */
+  zoom: 1;
+  *display: inline;
+  /* this fix is needed for IE7- */
+}
+
+.coach-marks {
+  z-index: 2000;
+}

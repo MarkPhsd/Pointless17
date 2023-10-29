@@ -1,9 +1,12 @@
-import {  Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
 import { PlatformService } from './platform.service';
 import { IPCService } from 'src/app/_services/system/ipc.service';
 import { Capacitor } from '@capacitor/core';
+// import { ipcRenderer } from 'electron';
+import { NgZone } from '@angular/core';
+
 
 export interface ScaleInfo {
   value        : string;
@@ -18,6 +21,15 @@ export interface ScaleSetup {
   decimalPlaces     : number;
   enabled           : boolean;
 }
+
+// declare global {
+//   interface Window {
+//     electron: {
+//       readScaleEvent: (callback: (args: any) => void) => void;
+//     };
+//   }
+// }
+
 
 @Injectable({
   providedIn: 'root'
@@ -44,7 +56,8 @@ export class ScaleService  {
   constructor(
     private electronService: ElectronService,
     private platformService: PlatformService,
-    public IPCService :     IPCService
+    public IPCService :     IPCService,
+    private _ngZone: NgZone
     ) {
     if (!this.IPCService.isElectronApp) { return }
     this.readScaleEvent();
@@ -55,13 +68,37 @@ export class ScaleService  {
     const scaleSetup = this.getScaleSetup()
     if (!scaleSetup || !scaleSetup.enabled) { return }
 
-    this.electronService.ipcRenderer.on('scaleInfo', (event, args) =>
-      {
-        this.updateScaleValues(args, scaleSetup.decimalPlaces)
-      }
-    );
+    this.outSizeAngular(scaleSetup)
+
+    // this.electronService.ipcRenderer.on('scaleInfo', (event, args) =>
+    //   {
+    //     this.updateScaleValues(args, scaleSetup.decimalPlaces)
+    //   }
+    // );
+
   }
 
+
+  outSizeAngular(scaleSetup) {
+    this._ngZone.runOutsideAngular(() => {
+      this.electronService.ipcRenderer.on('scaleInfo', (event, args) =>
+      {
+          this.updateScaleValues(args, scaleSetup.decimalPlaces)
+        }
+      );
+    })
+  }
+
+  //move to feature service.
+  //  readScaleEventIPC(): ScaleInfo {
+  //   if (!this.IPCService.isElectronApp) { return }
+
+  //   this.electronService.ipcRenderer.on('scaleWeight', (event, args) => {
+  //     console.log(args);
+  //   });
+  //   // If you need to request data from the main process:
+  //   this.electronService.ipcRenderer.send('request-scaleWeight');
+  // }
 
   updateScaleValues(args, decimalPlaces) {
     if (!args.weight) { args.weight = 0}

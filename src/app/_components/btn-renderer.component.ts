@@ -42,34 +42,28 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     this.getLabelFunction = this.params.getLabelFunction;
     this.getIconFunction = this.params.getIconFunction;
 
-    // console.log(this.label, this.getLabelFunction)
+      //getIconFunction
 
-    if (this.label === 'null') {
-      this.icon = ''
-      return
-    }
-    if (this.label?.toLowerCase() === 'delete' || this.getLabelFunction == 'delete') {
-      this.icon = 'delete'
-      return
-    }
+      if (!this.label || this.label === 'null') {
+        this.icon = ''
+        return
+      }
 
+      if (this.label && (this.label === 'delete' || this.label === 'Delete')) {
+        this.icon = 'delete'
+        return
+      }
 
-    // if(this.getIconFunction && this.getIconFunction instanceof Function)
-    // {
-    //   this.icon = this.getIconFunction(params.data);
-    // }
-
-    // if(this.getLabelFunction && this.getLabelFunction instanceof Function)
-    // {
-
-      // console.log(this.label, this.getLabelFunction)
-
+      if (this.label && (this.label === 'warehouse' || this.label === 'Warehouse')) {
+        this.icon = 'warehouse'
+        return
+      }
 
       if (this.label === 'null') {
         this.icon = ''
         return
       }
-      if (this.label ==='Intake') {
+      if (this.label ==='Intake' || this.label ==='intake') {
         this.icon = 'inventory'
         return
       }
@@ -78,8 +72,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         return
       }
 
-
-      if (this.label?.toLowerCase() === 'delete' || this.getLabelFunction == 'delete') {
+      if (this.label === 'delete' || this.label?.toLowerCase() === 'delete' || this.getLabelFunction == 'delete') {
         this.icon = 'delete'
         this.icon = 'file_copy'
         this.showHide = "width:55px;"
@@ -87,14 +80,22 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         this.buttonStyle = 'width:55px;'
         return
       }
-      if (this.label?.toLowerCase() ===  'edit') {
+
+      if (this.label?.substring(0,4).toLowerCase() ===  'view') {
+        this.icon = 'open_in_new'
+        return
+      }
+
+      if (this.label?.toLowerCase() ===  'edit' || this.label === 'Edit') {
         this.icon = 'edit'
         return
       }
+
       if (this.label?.toLowerCase() ===   'add') {
         this.icon = 'add'
         return
       }
+
       if (this.label?.toLowerCase() ===   'copy') {
         this.icon = 'file_copy'
         this.showHide = "width:55px;"

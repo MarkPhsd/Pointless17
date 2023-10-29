@@ -3,30 +3,38 @@
   <ng-container [ngTemplateOutlet]="blogView"></ng-container>
 
   <ng-template #loading>
-    <div >
+    <div>
       <mat-spinner [diameter]="50"></mat-spinner>
     </div>
   </ng-template>
 
   <ng-template #gridView>
+
     <div class="grid-view" *ngIf="(blogs$ | async) as blogs">
-      <div  *ngFor="let item of blogs">
-        <mat-card [class]="class" [style.height]="height" >
-          <mat-card-title>
-            {{item?.title}}
-          </mat-card-title>
-          <div [class]="gridClass"  [innerHtml]="item[0]?.content?.rendered"></div>
-        </mat-card>
-      </div>
+      <mat-card>
+        <div  *ngFor="let item of blogs">
+          <mat-card [class]="class" [style.height]="height" >
+            <mat-card-title>
+              {{item?.title}}
+            </mat-card-title>
+            <div [class]="gridClass"  [innerHtml]="item[0]?.content?.rendered"></div>
+          </mat-card>
+        </div>
+      </mat-card>
     </div>
+
   </ng-template>
 
   <ng-template #listView>
+
     <div *ngIf="(blogs$ | async) as blogs">
-      <ul class="list-view" *ngFor="let item of blogs">
-        <li [innerHtml]="item[0]?.content?.rendered"></li>
-      </ul>
+      <mat-card>
+        <ul class="list-view" *ngFor="let item of blogs">
+          <li [innerHtml]="item[0]?.content?.rendered"></li>
+        </ul>
+      </mat-card>
     </div>
+
   </ng-template>
 
 

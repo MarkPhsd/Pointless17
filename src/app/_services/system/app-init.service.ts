@@ -55,7 +55,7 @@ export class AppInitService  {
     this.apiUrl      = this.getLocalApiUrl();
     const rememberMe = localStorage.getItem('rememberMe')
     const isApp      = this.platFormService.isApp();
-  
+
     if (!rememberMe) {
       if (!this.initialized && isApp ) {
         this.clearUserSettings();
@@ -72,7 +72,7 @@ export class AppInitService  {
       //we can use this for the online free site so anyone can use a site for their own store.
       if (  config.apiUrl === undefined ||  config.apiUrl === 'domain'){
         this.useAppGate = false
-        console.log('navigating to app setting from init: APIURL Defined', this.apiUrl, config)
+        // console.log('navigating to app setting from init: APIURL Defined', this.apiUrl, config)
         this.router.navigate(['/apisetting']);
         return
       }
@@ -90,7 +90,7 @@ export class AppInitService  {
       this.appConfig  = config ;
 
       // if someone already set the api.
-      if (!this.apiUrl) { 
+      if (!this.apiUrl) {
         this.apiUrl     = config.apiUrl;
         return;
       }
@@ -99,7 +99,7 @@ export class AppInitService  {
     }
 
     if ( isApp && !this.apiUrl ) {
-     
+
     }
 
     if ( isApp && !this.apiUrl ) {
@@ -183,7 +183,7 @@ export class AppInitService  {
       return   this.apiUrl
     }
 
-    if (urlSaved) { 
+    if (urlSaved) {
       return urlSaved;
     }
 

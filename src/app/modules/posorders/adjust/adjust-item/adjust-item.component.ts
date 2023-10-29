@@ -1,4 +1,3 @@
-import { T } from '@angular/cdk/keycodes';
 import { Component, Inject, OnInit,OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -66,7 +65,6 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
         this.getVoidReasons();
       })
     }
-
   }
 
   ngOnInit(): void {
@@ -78,7 +76,6 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   }
 
   getVoidReasons() {
-    // console.log('action', this.itemWithAction.action)
     const site = this.siteService.getAssignedSite();
     if (!this.itemWithAction) { return }
     if (this.itemWithAction?.typeOfAction.toLowerCase()  === 'VoidOrder'.toLowerCase() ) {
@@ -102,21 +99,20 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     }
 
     if (+this.itemWithAction.action  == 10) {
-      console.log('orderr fund')
+      // console.log('order fund')
       this.posItems = this.itemWithAction?.order?.posOrderItems;
       this.list$  = this.settingsService.getVoidReasons(site, this.itemWithAction?.action);
       return
     }
 
     if (+this.itemWithAction.action  == 11) {
-      console.log('item refund')
+      // console.log('item refund')
       this.posItems = this.itemWithAction?.items;
       this.list$  = this.settingsService.getVoidReasons(site, this.itemWithAction?.action);
       return
     }
 
     this.list$  = this.settingsService.getVoidReasons(site, this.itemWithAction.action );
-
   }
 
   closeDialog() {
@@ -146,7 +142,6 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   voidOrder(setting) {
     if (setting) {
       const site = this.siteService.getAssignedSite();
-
       this.itemWithAction.returnToInventory  = this.inventoryReturnDiscard
       this.itemWithAction.voidReason = setting.name
       this.itemWithAction.voidReasonID = setting.id
@@ -206,17 +201,14 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
       let response$
 
       const value = this.itemWithAction.action as number;
-      // console.log('itemWithAction', this.itemWithAction, value)
 
       if (this.itemWithAction) {
         switch (value) {
           case 1: //void
             response$ =  this.itemService.voidPOSOrderItem(site, this.itemWithAction)
-            // console.log('this.action', this.itemWithAction)
             this.actionResponse$ = response$.pipe(switchMap(
               data => {
                   if (data === 'Item voided') {
-
                     this.updateSubscription()
                     this.notifyEvent('Item voided', 'Result')
                     this.closeDialog();
@@ -236,7 +228,6 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
             const item = {} as OrderActionResult
             this.actionResponse$ = this.orderMethodService.refundOrder(this.itemWithAction).pipe(
               switchMap( data => {
-
                   if (data?.errorMessage) {
                     this.notifyEvent(data.errorMessage, 'Result')
                   }
@@ -265,8 +256,6 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
                   this.notifyEvent(data?.message, 'Result')
                 }
                 this.updateOrderSub(data?.order)
-                // this.orderService.updateOrderSubscription(data?.order)
-                // this.closeDialog();
                 return of(data)
               })
             )

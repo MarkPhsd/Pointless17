@@ -30,31 +30,35 @@ export class BalanceSheetViewComponent implements OnInit {
   @Output() renderComplete = new EventEmitter<any>();
   //maybe set setup a chain of items that needs to be rendered.
   printReadList = []
+  sheet$: Observable<any>;
 
   initSubscriptions() {
-    this._sheet      = this.sheetMethodsService.balanceSheet$.subscribe( data => {
-      if (data) {
-        this.sheet     = data;
-        this.sheetType = this.sheetService.getSheetType(this.sheet);
+    this._sheet = this.sheetMethodsService.balanceSheet$.subscribe(
+       data => {
+        console.log('balance sheet view subscriber', data)
+        if (data) {
+          this.sheet     = data;
+          this.sheetType = this.sheetService.getSheetType(this.sheet);
 
-        const site  = this.siteService.getAssignedSite();
-        const search = {} as IPaymentSearchModel;
-        search.pageSize = 500;
+          const site  = this.siteService.getAssignedSite();
+          const search = {} as IPaymentSearchModel;
+          search.pageSize = 500;
 
-        search.reportRunID = this.sheet.id
-        this.list$ = this.paymentService.searchPayments(site, search).pipe(
-          switchMap(data => {
-            return of(data)
+          search.reportRunID = this.sheet.id
+          this.list$ = this.paymentService.searchPayments(site, search).pipe(
+            switchMap(data => {
+              return of(data)
+            }
+          ))
+
+          try {
+            const balance  = this.sheet.cashDeposit - this.sheet.cashIn - this.sheet.cashDropTotal
+            this.balance   = balance
+          } catch (error) {
           }
-        ))
-
-        try {
-          const balance  = this.sheet.cashDeposit - this.sheet.cashIn - this.sheet.cashDropTotal
-          this.balance   = balance
-        } catch (error) {
         }
-      }
     })
+
   }
 
   constructor(  private userAuth: AuthenticationService,
@@ -74,18 +78,15 @@ export class BalanceSheetViewComponent implements OnInit {
   }
 
   renderCompleted(event) {
-    console.log('render Complete', event)
     if (!this.printReadList)  {
       this.printReadList = []
     }
     this.printReadList.push(event)
     if (this.printReadList.length>0) {
-      console.log(`printed ${this.printReadList.length} sections`)
     }
     if (this.printReadList.length == 3) {
       this.renderComplete.emit(event)
     }
   }
-
 
 }

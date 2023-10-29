@@ -28,7 +28,6 @@ export interface ProductSearchModel {
   maxPrice                    : string;
   minPrice                    : string;
   priceCategoryID             : number;
-  //genereal descriptions not searching
   brandName                 : string;
   categoryName              : string;
   itemTypeName              : string;
@@ -55,4 +54,6 @@ export interface ProductSearchModel {
   listSize           : number[];
   listColor          : number[];
   minQuantityFilter  : number;
+  webWorkRequired: boolean;
+  sort: string;
 }

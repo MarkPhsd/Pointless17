@@ -49,7 +49,6 @@
             Cost : {{ quantity }}  @  {{ wholeSale | currency }} = {{ wholeSale*quantity | currency}}
           </span>
 
-
           <span  *ngIf="( mainPanel || wideBar) && orderItem?.serialCode && !prepScreen && (orderItem?.serialCode != orderItem.id)">
             SN#/({{ orderItem?.serialCode }})
           </span>
@@ -87,7 +86,7 @@
           <div class="void-icon void-info" *ngIf="(orderItem?.voidReason ||
                                                   (orderItem?.itemReturn != 1 && orderItem?.itemReturn != 0) ) &&
                                                   prepScreen && !isModifier">
-            <span *ngIf="orderItem?.printed && !prepScreen">  <mat-icon   class="mat-icon-label" color="warn">lock</mat-icon>  </span>
+            <span *ngIf="orderItem?.printed && !prepScreen">  <mat-icon class="mat-icon-label" color="warn">lock</mat-icon>  </span>
 
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
               <b  style="color:crimson">return {{ orderItem?.itemReturn }} Item voided:  {{ orderItem?.voidReason }}</b>
@@ -159,6 +158,10 @@
 
       <div *ngIf="(mainPanel && !bottomSheetOpen) && !prepScreen">
         <ng-container [ngTemplateOutlet]="exitlabelButtonView"></ng-container>
+      </div>
+
+      <div *ngIf="(menuItem && menuItem?.itemType?.weightedItem || orderItem.isWeightedItem) &&  (mainPanel && !bottomSheetOpen) && !prepScreen && platFormService.isAppElectron && posOrderItemService.scaleInfo">
+        <ng-container [ngTemplateOutlet]="getWeightView"></ng-container>
       </div>
 
       <div class="label-image-grid"  *ngIf="(mainPanel && !bottomSheetOpen) && !prepScreen">
@@ -290,7 +293,6 @@
                   </button>
                 </div>
 
-
               <div>
 
               </div>
@@ -336,6 +338,12 @@
       Label
     </button>
   </div>
+</ng-template>
+
+<ng-template #getWeightView>
+  <button  color="primary" style="margin:5px;margin-top:10px; width: 50px;" mat-raised-button (click)="getWeight()">
+    <mat-icon  >scale</mat-icon>
+  </button>
 </ng-template>
 
 <ng-template #threeDotsLabel>

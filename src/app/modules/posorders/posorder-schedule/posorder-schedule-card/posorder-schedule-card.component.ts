@@ -1,14 +1,10 @@
 import { Component, OnInit, Input,OnDestroy } from '@angular/core';
-import { FormGroup,FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, of, Subscription } from 'rxjs';
-import { IPOSOrder, IServiceType, ISite } from 'src/app/_interfaces';
+import { Subscription } from 'rxjs';
+import { IPOSOrder} from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
 @Component({
   selector: 'posorder-schedule-card',
@@ -45,8 +41,8 @@ export class POSOrderScheduleCardComponent implements OnInit, OnDestroy {
     }
   }
 
-  getOrderSchedule(order: IPOSOrder) { 
-
+  getOrderSchedule(order: IPOSOrder) {
+    return  this.dateService.format(order?.preferredScheduleDate, 'mm/dd/yyyy');
     return null;
     if (order && order.preferredScheduleDate ) {
       return  this.dateService.format(order.preferredScheduleDate, 'mm/dd/yyyy');

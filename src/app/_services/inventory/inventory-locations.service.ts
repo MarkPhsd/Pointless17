@@ -9,6 +9,7 @@ export interface IInventoryLocation {
   id: number;
   name: string;
   activeLocation: boolean;
+  defaultLocation: boolean;
 }
 
 @Injectable({

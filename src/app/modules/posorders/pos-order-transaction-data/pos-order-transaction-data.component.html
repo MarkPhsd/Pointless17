@@ -1,7 +1,6 @@
-
 <div class="grid-container">
 
-  <div >
+  <div>
     <mat-card *ngIf="order"
               (resized)="onResizedOrderPanel($event)">
       <mat-card-subtitle>
@@ -25,11 +24,19 @@
     </mat-card>
   </div>
 
-  <div class="image-display" image [style]="orderPanelHeight">
-    <div *ngIf="orderMethodsService.lastItemAddedExists">
-      <mat-card>
-        <ng-content [select]="image"></ng-content>
-      </mat-card>
-    </div>
+  <div  *ngIf="orderMethodsService.lastItemAddedExists" class="image-display" image [style]="orderPanelHeight">
+    <mat-card style="margin:5px;overflow:hidden">
+      <ng-content [select]="image"></ng-content>
+    </mat-card>
+
+    <ng-container [ngTemplateOutlet]="scheduleInfo"></ng-container>
+
   </div>
 </div>
+
+<ng-template #scheduleInfoView>
+  <mat-card>
+    <posorder-schedule-card
+      ></posorder-schedule-card>
+  </mat-card>
+</ng-template>

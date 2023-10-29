@@ -1,14 +1,15 @@
 
+
+
 <div *ngIf="inputForm">
   <div [formGroup]="inputForm">
     <mat-form-field
+          *ngIf="enabled"
           [class]="fieldsClass"
           appearance="outline">
 
         <mat-label>
-          <div #itemText>
-             <ng-content></ng-content>
-          </div>
+          <ng-content></ng-content>
           {{itemHeader | titlecase}}
         </mat-label>
         <div *ngIf="type === 'input' && passwordMask">
@@ -20,14 +21,24 @@
                 [type]="fieldType"
                 [formControlName]="fieldName">
         </div>
+
         <div *ngIf="type === 'input' && !passwordMask">
           <input matInput
                 [class]="fieldsClass"
+                [disabled] ='!enabled'
                 [type]="fieldType"
                 ngDefaultControl
                 [formControlName]="fieldName">
         </div>
+
     </mat-form-field>
+  </div>
+
+  <div   *ngIf="!enabled">
+    <h3>
+      <!-- <ng-content></ng-content>  -->
+      {{itemHeader | titlecase}} : {{inputForm.controls[fieldName].value}}
+    </h3>
   </div>
 
   <div [formGroup]="inputForm"

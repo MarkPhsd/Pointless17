@@ -1,11 +1,15 @@
 .small {
   // width: 35px;
-  min-width: 25px;
-  min-height: 25px;
+  max-width: 35px;
+  max-height: 35px;
+  min-width: 35px;
+  min-height: 35px;
 }
 
 .large {
-  width: 125px;
+  // width: 125px;
   min-width: 125px;
   min-height: 125px;
+  max-width: 125px;
+  max-height: 125px;
 }

@@ -1,8 +1,8 @@
 
 .grid-container {
   display: grid;
-  grid-template-columns: 185px 185px 125px 125px 100px;
-  // gap: 15px;
+  grid-template-columns: 105px 185px 225px 75px 75px;
+  gap: 15px;
 }
 
 .container {
@@ -16,15 +16,3 @@
   width: 200px;
 }
 
-.grid-units {
-  display: grid;
-  grid-template-columns: 100px 45px ;
-  gap: 15px;
-
-}
-
-
-mat-card {
-  padding: 5px;
-  margin: 5px;
-}

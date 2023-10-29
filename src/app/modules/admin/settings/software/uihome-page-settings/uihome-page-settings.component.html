@@ -122,7 +122,7 @@
                 <mat-slide-toggle
                           formControlName="hideSearchBar"
                         >
-                  <mat-label>Hide Search bar</mat-label>
+                  <mat-label>Disable Search Bar</mat-label>
                 </mat-slide-toggle>
               </div>
 
@@ -273,11 +273,10 @@
                 <mat-slide-toggle
                           formControlName="disableSearchFeaturesInItemsList"
                           >
-                  <mat-label>Hide search features <br>  above item list  <br> in app.</mat-label>
+                  <mat-label>Hide search features <br> (in app)</mat-label>
                 </mat-slide-toggle>
               </div>
             </div>
-
 
             <div class="grid-views">
               <h4><mat-icon color="primary" style="margin-top:5px">search</mat-icon>Side Bar</h4>
@@ -361,7 +360,6 @@
               </div>
               <div class="toggle-fields">
                 <mat-slide-toggle
-
                           formControlName="itemTypeFilter"
                           >
                   <mat-label>Item Type</mat-label>
@@ -425,22 +423,24 @@
             </mat-slide-toggle>
           </div>
 
-          <div class="toggle-fields">
+          <div>
             <mat-slide-toggle
-                      formControlName="timeOut"
-                      >
+                      formControlName="timeOut"  >
               <mat-label>Time Out (3 Minutes)</mat-label>
-              <mat-hint>Will log out after 3 minutes no use.</mat-hint>
+              <mat-hint>App Only - Will log out after 3 minutes no use.</mat-hint>
             </mat-slide-toggle>
           </div>
 
-          <app-value-fields
-              [fieldType]     ="'number'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'timeOutValue'">
-              Time out in Seconds
-          </app-value-fields>
+          <div class="toggle-fields" style="width:200px">
+            <app-value-fields
+                [fieldType]     ="'number'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'timeOutValue'">
+                Time out in Seconds
+            </app-value-fields>
+          </div>
         </div>
+
 
       </div>
 
@@ -449,7 +449,7 @@
         <h4>Images</h4>
         <mat-divider></mat-divider>
 
-        <div class="grid-views">
+        <div class="grid-settings-views">
           <div class="grid-item">
             <mat-card >
               <app-widget-uploader
@@ -482,6 +482,19 @@
               </app-widget-uploader>
             </mat-card>
           </div>
+        </div>
+      </div>
+
+      <div>
+        <h3>Menu Options</h3>
+        <mat-label>Min Stock Value to Show on Menu</mat-label>
+        <div style="width:200px">
+          <app-value-fields
+              [fieldType]     ="'number'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'minQuantityFilter'">
+              Min Quantity
+          </app-value-fields>
         </div>
       </div>
 

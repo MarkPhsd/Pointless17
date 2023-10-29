@@ -440,6 +440,7 @@ export class ReportingService {
     return dateRange;
   }
 
+
   //SalesReportingOrders?DateFrom=1/1/2020&DateTo=1/15/2020&GroupBY=Range
   getSalesOrderSummary(site: ISite,dateFrom: string, dateTo: string, groupBY: string): Observable<ISalesReportingOrdersSummary[]> {
 

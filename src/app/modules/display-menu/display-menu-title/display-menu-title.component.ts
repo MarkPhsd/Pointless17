@@ -23,6 +23,10 @@ export class DisplayMenuTitleComponent implements OnInit {
   @Input() styleHeight ='calc(120% + 200px)';
   @Input() styleMinWidth = '450px'
   @Input() objectfit = 'cover';
+
+  backGroundStyle: string;
+
+
   getItemSrc(nameArray: string) {
     if (!this.bucket) { return }
     return this.awsBucket.getImageURLFromNameArray(this.bucket, nameArray)
@@ -36,14 +40,11 @@ export class DisplayMenuTitleComponent implements OnInit {
 
   ngOnInit(): void {
     const i = 0
-    if (this.menu) {
-      if (this.menu.backcolorOpacity) {
-        this.menu.backcolorOpacity = "1"
-      }
-
-    }
     this.loadStyles();
     this.applyBackground();
+    if (this.menu) {
+      this.backGroundStyle  = `rgba(0, 0, 0, ${this.menu?.backcolorOpacity})`
+    }
   }
 
   applyBackground() {

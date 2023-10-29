@@ -2,29 +2,40 @@
 
 mat-card {
   width: 100%;
+  height: calc(90vh - 125px);
   margin: 10px;
-  // @include for-phone-only  {
-  //   width: 350px;
-  //   display: flex;
-  //   flex-direction: row;
-  //   flex-wrap: wrap;
-  //   justify-content: center;
-  //   align-content: center;
-  //   justify-content: space-between;
-  // }
+  overflow-y: auto;
+  @include for-phone-only  {
+    height: calc(80vh - 125px);
+  }
 }
+
+mat-tab {
+  overflow: hidden;
+}
+
 #customer-notes {
   margin:  5;
   object-fit: cover;
-  // width: 400px;
+}
+
+.action-grid {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+}
+
+.communication-grid {
+  width:90%;
+  // max-height:px;
 }
 
 .grid-container {
   --gap: 10px;
   display: grid;
   gap: var(--gap);
-  // grid-template-columns: repeat(2, 1fr);
-  grid-template-columns: repeat( auto-fit, minmax(350, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(350px, 1fr) );
 
   @include for-phone-only  {
     display: flex;
@@ -46,6 +57,13 @@ mat-card {
   max-height: 350px;
 }
 
-mat-tab {
-  overflow: hidden;
+.instructions {
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.save-button {
+  position:absolute;
+  right:   25px;
+  bottom:  25px;
 }

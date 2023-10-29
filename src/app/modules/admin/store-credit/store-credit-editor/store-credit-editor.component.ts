@@ -3,7 +3,7 @@ import { Component,  Inject, OnInit,
 import { AWSBucketService, ContactsService,   } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UntypedFormGroup } from '@angular/forms';
-import { tap } from 'rxjs/operators';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { ClientTypeService, IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { clientType, IUserProfile } from 'src/app/_interfaces';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -11,7 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FbClientTypesService } from 'src/app/_form-builder/fb-client-types.service';
 import { StoreCredit, StoreCreditMethodsService } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { StoreCreditService } from 'src/app/_services/storecredit/store-credit.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
@@ -28,7 +28,7 @@ export class StoreCreditEditorComponent implements OnInit {
   jsonObjectForm         : UntypedFormGroup;
   storeCredit            : StoreCredit;
   client$   : Observable<IUserProfile>;
-
+  action$: Observable<any>;
   constructor(
     private storeCreditService      : StoreCreditService,
     private storeCreditMethodsService: StoreCreditMethodsService,
@@ -57,10 +57,14 @@ export class StoreCreditEditorComponent implements OnInit {
       this.storeCreditService.getStoreCredit(site, this.id).subscribe(data =>
         {
           this.storeCredit = data
+          if (data.cardNum) {
+            data.cardNum =  data.cardNum.trim()
+          }
           this.id         = data.id
           if (this.storeCredit.clientID) {
             this.client$    = this.contactsService.getContact(site,this.storeCredit.clientID.toString())
           }
+
           this.inputForm.patchValue(data)
         }
       )
@@ -123,7 +127,8 @@ export class StoreCreditEditorComponent implements OnInit {
             this.onCancel(event);
         },
       error: error => {
-        this.snack.open(`Update item. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
+        // this.snack.open(`Update item. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
+        this.siteService.notify('Error:' + error.toString(), "close", 5000, 'red', 'top' )
         }
       }
     )
@@ -139,10 +144,15 @@ export class StoreCreditEditorComponent implements OnInit {
       this.snack.open("Item note initiated", "Success", {duration:2000, verticalPosition: 'top'})
       return
     }
-    this.storeCreditService.delete(site,this.storeCredit.cardNum).subscribe( data =>{
+    this.action$ = this.storeCreditService.delete(site,this.storeCredit.cardNum).pipe(
+      switchMap( data =>{
         this.snack.open("Item deleted", "Success", {duration:2000, verticalPosition: 'top'})
         this.onCancel(event)
-    })
+        return of(data)
+    }),catchError(data => {
+      this.siteService.notify('Error:' + data.toString(), "close", 5000, 'red', 'top' )
+      return of(data)
+    }))
   }
 
   copyItem(event) {

@@ -1,6 +1,7 @@
 
 <ng-template #loading>
-  <div class="ps-flex-group">
+
+  <div class="ps-flex-group-nowrap">
     <div class="simple-icon">
       <mat-icon
         matBadge="0"
@@ -18,10 +19,15 @@
       </button>
     </div>
   </div>
+
 </ng-template>
 
 <div *ngIf="(messages$ | async) as messages; else loading">
   <div class="ps-flex-group">
+    <div *ngIf="orderID">
+      <h2 > OrderID {{orderID}} </h2>
+    </div>
+
     <div>
       <button
           mat-raised-button
@@ -52,34 +58,44 @@
           <mat-icon>refresh</mat-icon>
       </button>
     </div>
+
+    <div *ngIf="orderID">
+      <button mat-button
+              (click)="exit()">
+        <mat-icon>exit</mat-icon>
+        Close
+      </button>
+    </div>
+
   </div>
 
   <div *ngIf="hideshowMessages">
-
     <mat-card *ngIf="!messages || messages.length == 0">
-      <mat-label color='accent'>You have no messages</mat-label>
+      <mat-label color='accent'>There are no messages</mat-label>
     </mat-card>
 
-    <mat-card *ngIf="messages && messages.length>0">
-
+    <mat-card *ngIf="messages && messages.length > 0">
       <mat-card-content>
         <div *ngFor = "let item of messages"
               class = "message-list">
           <app-request-message
+            [enableActions]="enableActions"
             (archiveEvent)="toggleArchive(item)"
             (actionEvent)="activeEvent(item)">
-
-            <div message >{{item?.message}}</div>
-            <div subject >{{item?.subject}}</div>
-            <div body >{{item?.message}}</div>
-
-                <!-- [message]="item" -->
+            <div message > {{item?.message}} </div>
+            <div subject > {{item?.subject}} </div>
+            <div body >    {{item?.message}} - {{item?.type}} </div>
+            <div *ngIf="item.requestDate" completed >   {{item?.requestDate | date: 'short'}} </div>
+            <div *ngIf="item.requestCompleted" requested >   {{item?.requestCompleted | date: 'short'}} </div>
           </app-request-message>
         </div>
 
-        <div *ngIf="(message$ | async) as message">
-          {{message?.message}}
-          <button mat-raised-button (click)="clearMessage()">Clear</button>
+        <div  *ngIf="(message$ | async) as message">
+          <button *ngIf="enableActions"
+                   mat-raised-button
+                  (click)="clearMessage()">
+              Clear
+          </button>
         </div>
       </mat-card-content>
     </mat-card>

@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit,  ViewChild, Input,AfterViewInit, Output, EventEmitter, TemplateRef, OnDestroy } from '@angular/core';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IPOSOrder,  IPOSPayment,  ISetting, PosPayment } from 'src/app/_interfaces';
+import { IPOSOrder,  ISetting, PosPayment } from 'src/app/_interfaces';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { OrdersService } from 'src/app/_services';
@@ -91,7 +91,7 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
     this._printOrder = this.printingService.printOrder$.subscribe(
       data => {
         if (data) {
-          console.log('print out data', data)
+          // console.log('print out data', data)
           this.order         = data.order;
           this.templateID    = data.location.templateID;
           this.printerName   = data.location.printer;
@@ -104,23 +104,37 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
       }
     )
 
-    this._printReady = this.printingService.printReady$.subscribe(status => {
-      if (this.index == null) { return };
-      if (this.options) {
-        // {autoPrint: true, printerName: printerName}
-      }
-
-      if (status) {
-        if (this.autoPrinted) { return }
-        if (status.index == this.index) {
-            if (status.ready) {
-              this.outPutPrinted.emit()
-              this.autoPrinted = true;
-            }
-          }
-        }
-    })
+    // this._printReady = this.printingService.printReady$.subscribe(status => {
+    //   if(!this.receiptStyles) { return }
+    //   if (status && status.ready) {
+    //       if ((this.options && this.options.silent) || this.autoPrint) {
+    //         if (this.autoPrinted) { return }
+    //         const result = this.print()
+    //         if (result) {
+    //           this.autoPrinted = true;
+    //         }
+    //       }
+    //     }
+    //   }
+    // )
   }
+
+  async printHTML(html) {
+    if (!html) {
+      // console.log('no html', this.index)
+    }
+    if (!this.receiptStyles) {
+      // console.log('no receipt styles', this.index)
+    }
+
+    if (this.receiptStyles) {
+      const file = this.printHtmlWindow(html, this.receiptStyles.text)
+      await this.printElectron()
+      this.outPutPrinted.emit({status: true, index: this.index})
+    }
+  }
+
+
 
   constructor(
     public orderService           : OrdersService,
@@ -248,63 +262,105 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
     return file
   }
 
-  print() {
-    if (!this.printerName) { return }
-    console.log('print', this.printerName)
+  async print() {
+
     if (this.platFormService.isAppElectron) {
-      const result = this.printElectron()
+      return await this.printElectron();
+    }
+
+    if (!this.printerName) {
+      this.convertToPDF()
       return
     }
+
+    if (this.platFormService.webMode)    { this.convertToPDF() }
   }
 
-  printHTML(html) {
-    if (!html) {
-      // console.log('no html', this.index)
-    }
+  convertToPDF() {
+    this.printingService.convertToPDF( document.getElementById('printsection') )
+  }
+
+  async printElectron() {
+    let styles
+
     if (!this.receiptStyles) {
-      // console.log('no receipt styles', this.index)
+      this.siteService.notify('No Print Styles, please contact admin', 'close', 3000, 'red' )
     }
 
     if (this.receiptStyles) {
-      const file = this.printHtmlWindow(html, this.receiptStyles.text)
-      this.printElectronHTML(file)
-      this.outPutPrinted.emit('true')
+      styles = this.receiptStyles.text;
+
+      const contents = this.getReceiptContents(styles)
+
+      if (!contents) { return false}
+
+      const options  = {
+        silent: true,
+        printBackground: false,
+        deviceName: this.printerName
+      } as printOptions;
+
+
+      if (!contents) {
+        this.siteService.notify('No content determined for receipt.', 'close', 3000, 'red' )
+        console.log('no contents in print electron');
+        return;
+      }
+
+      if (!options) {
+         console.log('no options in print electron')
+         return;
+      }
+
+      if (!this.printerName) {
+        this.siteService.notify('No Printer name set for this terminal.', 'close', 3000, 'red' )
+        // console.log('no printerName in print electron');
+        return;
+      }
+
+      if (contents && this.printerName, options) {
+        const printResult =   await this.printingService.printElectronAsync( contents, this.printerName, options)
+        // console.log('printed?' ,printResult)
+        return printResult
+      }
+
     }
+    return false
   }
 
-  printElectron() {
-    if (this.receiptStyles) {
-      const file = this.getReceiptHTML(this.receiptStyles.text)
-      this.printElectronHTML(file)
-      this.outPutPrinted.emit('true')
+  getReceiptContents(styles: string) {
+
+    let  prtContent = document.getElementById('printsection');
+
+    if ( prtContent == null) { return }
+    if ( !prtContent )       { return }
+    const content        = `${ prtContent.innerHTML }`
+    if (!content)            { return }
+
+    if (content === '<!---->') { return }
+
+    const  title   = 'Receipt';
+    const loadView = ({ title }) => {
+      return (`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>${styles}</style>
+            <title>${title}</title>
+            <meta charset="UTF-8">
+          </head>
+          <body>
+            <div id="view">${content}</div>
+          </body>
+        </html>
+      `)
     }
+    const file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
+      title: "Receipt"
+    }));
+    return file
   }
 
-  printElectronHTML(contents) {
-
-    if (!contents) {
-      console.log('no contents in print electron')
-      return;
-    }
-    if (!this.printerName) {
-      console.log('no printerName in print electron')
-      return;
-    }
-    const options  = {
-      silent: true,
-      printBackground: false,
-      deviceName: this.printerName
-    } as printOptions;
-
-    if (!options) {
-      console.log('no options in print electron')
-      return;
-    }
-    // console.log('All good to print')
-    if (contents && this.printerName, options) {
-        this.printingService.printElectron( contents, this.printerName, options)
-    }
-  }
 
   exit() {
     this.outPutExit.emit('true')

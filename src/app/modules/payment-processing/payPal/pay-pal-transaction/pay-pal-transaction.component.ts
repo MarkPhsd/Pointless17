@@ -45,6 +45,8 @@ export class PayPalTransactionComponent implements OnInit {
   payment: IPOSPayment;
   settings: TransactionUISettings;
   message = ''
+  _transactionUI: Subscription;
+
   currentOrderSusbcriber() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
@@ -52,6 +54,18 @@ export class PayPalTransactionComponent implements OnInit {
       this.checkIfPaymentsMade()
     })
   }
+
+  getUITransactionsSettings() {
+    this._transactionUI = this.uiSettingsService.transactionUISettings$.subscribe( data => {
+      if (data) {
+
+        this.uiTransactionSetting = data;
+        this.clientID = this.uiTransactionSetting.payPalClientID;
+        this.currencyCode = this.settings.payPalCurrency;
+      }
+    });
+  }
+
 
   constructor(private orderService        : OrdersService,
               public  uiSettingsService   : UISettingsService,
@@ -63,18 +77,18 @@ export class PayPalTransactionComponent implements OnInit {
               @Optional() private dialogRef  : MatDialogRef<PayPalTransactionComponent>,
             ) {
 
-    console.log(data)
+
     this.order    = data.order;
     this.payment  = data.payment;
     this.settings = data.settings;
+
+    this.getUITransactionsSettings();
     this.amount   = this.payment.amountPaid.toString();
-    this.clientID = this.settings.payPalClientID;
-    this.currencyCode = this.settings.payPalCurrency;
-    console.log( 'cientID',   this.clientID )
+
     if (data) {
       this.message = 'transaction initialized'
       this.initConfig()
-    }
+    };
   }
 
   ngOnInit(): void {
@@ -90,7 +104,6 @@ export class PayPalTransactionComponent implements OnInit {
     // this.clientID = this.settings.payPayClientID;
 
   }
-
 
   cancel() {
     this.dialogRef.close()
@@ -196,7 +209,7 @@ export class PayPalTransactionComponent implements OnInit {
 
 
   private initConfig(): void {
-    console.log('process sale')
+    // console.log('process sale')
     this.payPalConfig = {
         currency: this.currencyCode,
         clientId: this.clientID,

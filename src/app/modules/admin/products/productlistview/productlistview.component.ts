@@ -10,7 +10,7 @@ import { IItemBasicB, IProductSearchResultsPaged } from 'src/app/_services/menu/
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 import { Observable, of, switchMap } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -28,6 +28,43 @@ import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
 import { EditSelectedItemsComponent } from '../productedit/edit-selected-items/edit-selected-items.component';
 import { MatDialog } from '@angular/material/dialog';
 
+function myComparator(value1, value2) {
+  if (value1 === null && value2 === null) {
+    return 0;
+  }
+  if (value1 === null) {
+    return -1;
+  }
+  if (value2 === null) {
+    return 1;
+  }
+  return value1 - value2;
+}
+
+function sortData(data, sortModel) {
+  console.log(data, sortModel)
+  let comparator;
+  const resultOfSort = data.slice();
+  resultOfSort.sort(function (a, b) {
+    for (let k = 0; k < sortModel.length; k++) {
+      const sortColModel = sortModel[k];
+      const valueA = a[sortColModel.colId];
+      const valueB = b[sortColModel.colId];
+
+      if (valueA == valueB) {
+        continue;
+      }
+      const sortDirection = sortColModel.sort === 'asc' ? 1 : -1;
+      if (valueA > valueB) {
+        return sortDirection;
+      } else {
+        return sortDirection * -1;
+      }
+    }
+    return 0;
+  });
+  return resultOfSort;
+}
 
 @Component({
   selector: 'app-productlistview',
@@ -37,6 +74,12 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class ProductlistviewComponent  implements OnInit, OnDestroy  {
 
+sortList  =['name', 'type',  'department' , 'category', 'subcategory', 'count', 'retail'];
+pagingForm: FormGroup;
+advanced: boolean;
+
+requiresWorkList  = [{name: 'Yes', value: true}, {name: 'All', value: false}]
+requiresWorkList$: Observable<any>;
 //for list selecting.
 @Input() hideAdd         : boolean;
 @Input() hideEditSelected: boolean;
@@ -69,7 +112,7 @@ rowSelection         = 'multiple'
 rowDataClicked1      = {};
 rowDataClicked2      = {};
 rowData:             any[];
-pageSize                = 20
+pageSize                = 50
 currentRow              = 1;
 currentPage             = 1
 numberOfPages           = 1
@@ -107,7 +150,7 @@ typeID           : number;
 brandID          : number;
 active           : boolean;
 viewAll           = 1;
-
+requiresWork    : boolean;
 selected        : any[];
 selectedRows    : any;
 agtheme         = 'ag-theme-material';
@@ -127,10 +170,13 @@ subCategoriesList: IMenuItem[];
 categoriesList: IMenuItem[];
 departmentsList: IMenuItem[];
 
-
+urlPath$: Observable<string>;
 @Output() outputPromptItem = new EventEmitter();
 _promptSubGroup : Subscription;
 promptSubGroup  : PromptSubGroups;
+webWorkRequired: boolean;
+
+
 
 initSubscriptions() {
   this._promptSubGroup = this.promptSubGroupService.promptSubGroup$.subscribe(data => {
@@ -151,43 +197,65 @@ constructor(  private _snackBar              : MatSnackBar,
               private awsService             : AWSBucketService,
               private dialog: MatDialog,
             )
-  {
+  {  }
 
+   ngOnInit() {
 
-    this.initAgGrid(this.pageSize);
-  }
-
-  async ngOnInit() {
     this.updateScreenSize();
 
     const clientSearchModel       = {} as ClientSearchModel;
     clientSearchModel.pageNumber  = 1
     clientSearchModel.pageSize    = 1000;
 
-    this.urlPath        = await this.awsService.awsBucketURL();
-    const site          = this.siteService.getAssignedSite()
+    this.urlPath$  =  this.awsService.awsBucketURLOBS().pipe(
+      switchMap(data => {
+        this.urlPath = data;
+        return of(data)
+      }
+    ))
 
-    this.refreshSubCategories()
-    this.refreshDepartments()
-    this.refreshCategories()
-    this.productTypes$  = this.itemTypeService.getBasicTypes(site)
+    const site          = this.siteService.getAssignedSite()
+    this.refreshSubCategories();
+    this.refreshDepartments();
+    this.refreshCategories();
+    this.productTypes$        = this.itemTypeService.getBasicTypes(site)
     const brandResults$       = this.contactsService.getBrands(site, clientSearchModel)
 
     brandResults$.subscribe(data => {
       this.brands = data.results
     })
 
+    this.initForm();
+    this.formSubscriber();
+
+    this.buttonName = 'Edit'
+
     if (this.editOff) {
       this.buttonName = 'Assign'
       this.initSubscriptions();
       this.gridlist = "grid-list-nopanel"
     }
-    if (!this.editOff) {
-      this.buttonName = 'Edit'
-    }
-    this.initForm();
-    this.formSubscriber();
+
+    this.initAgGrid(this.pageSize);
+    this.requiresWorkList$ = of(this.requiresWorkList);
+
+    this.initPaging();
   };
+
+  initPaging() {
+    this.pagingForm = this.fb.group({
+      pageSize  : [],
+      pageNumber: [],
+      sort      : []
+    })
+    this.pagingForm.patchValue(this.initSearchModel());
+    this.pagingForm.valueChanges.subscribe(data => {
+      this.currentPage = this.pagingForm.controls['pageNumber'].value;
+      this.pageSize = this.pagingForm.controls['pageSize'].value;
+      this.gridOptions = this.agGridFormatingService.initGridOptions(this.pageSize , this.columnDefs, false);
+      this.refreshGrid()
+    })
+  }
 
   refreshSubCategories() {
     const site          = this.siteService.getAssignedSite()
@@ -282,7 +350,6 @@ constructor(  private _snackBar              : MatSnackBar,
     }
   }
 
-
   initClasses()  {
     const platForm      = this.platForm;
     this.gridDimensions =  'width: 100%; height: 90%;'
@@ -312,6 +379,7 @@ constructor(  private _snackBar              : MatSnackBar,
       subCategoryID:      [this.subCategoryID],
       viewAll           : [1],
       minQuantityFilter : [],
+      webWorkRequired   : [false],
     });
   }
 
@@ -332,7 +400,6 @@ constructor(  private _snackBar              : MatSnackBar,
     this.searchForm.patchValue(item)
     this.refreshSearch(1);
   }
-
 
   getLabelCopy() {
     return 'copy'
@@ -361,10 +428,14 @@ constructor(  private _snackBar              : MatSnackBar,
     const site = this.siteService.getAssignedSite()
     this.copy$ = this.menuService.getProduct(site, this.product.id).pipe(switchMap(data => {
       data.name = this.product?.name + ' Copy '
+      data.wholesale = 0;
+      data.caseWholeSale = 0;
+      data.productCount = 0;
       data.barcode = '';
       return this.menuService.postProduct(site, data)
     })).pipe(switchMap(data => {
-        this.refreshGrid()
+        this.refreshGrid();
+        this.editItemWithId(data.id);
         return of (data)
       }
     ))
@@ -380,148 +451,171 @@ constructor(  private _snackBar              : MatSnackBar,
 
     this.defaultColDef = {
       flex: 2,
-      // minWidth: 100,
+      sortable: false,
     };
 
     this.columnDefs =  [
 
-      {headerName: '',
-      field: 'id',
-      cellRenderer: "btnCellRenderer",
-                    cellRendererParams: {
-                    onClick: this.editProductFromGrid.bind(this),
-                      label: this.buttonName,
-                      getLabelFunction: this.getLabel.bind(this),
-                      btnClass: 'btn btn-primary btn-sm'
-                    },
-                    minWidth: 125,
-                    maxWidth: 125,
-                    flex: 2,
+      {headerName: 'ID',  field: 'id',
+            cellRenderer: "btnCellRenderer",
+            cellRendererParams: {
+              onClick: this.editProductFromGrid.bind(this),
+              label: this.buttonName,
+              getLabelFunction: this.getLabel.bind(this),
+              btnClass: 'btn btn-primary btn-sm'
+            },
+            minWidth: 125,
+            maxWidth: 125,
+            flex: 2,
       },
-      {headerName: 'Name',     field: 'name',         sortable: true,
-                  width   : 175,
-                  minWidth: 175,
-                  maxWidth: 275,
-                  editable: true,
-                  singleClickEdit: true,
-                  flex    : 1,
-      },
-      {headerName: 'Barcode',  field: 'barcode',      sortable: true,
-                  width: 75,
-                  minWidth: 125,
-                  maxWidth: 150,
-                  editable: true,
-                  singleClickEdit: true,
-                  // flex: 1,
-      },
-      {headerName: 'Count',    field: 'productCount', sortable: true,
-                  width: 90,
-                  minWidth: 90,
-                  maxWidth: 90,
-                  editable: true,
-                  singleClickEdit: true,
-                  // flex: 2,
-      },
-      {headerName: 'Department', field: 'department',     sortable: true,
-            width: 140,
-            minWidth: 140,
-            maxWidth: 200,
-          // flex: 2,
-      },
-      {headerName: 'Category', field: 'category',     sortable: true,
-                  width: 140,
-                  minWidth: 140,
-                  maxWidth: 200,
-                // flex: 2,
-      },
-      {headerName: 'Sub Cat', field: 'subCategory',     sortable: true,
-            width: 140,
-            minWidth: 140,
-            maxWidth: 200,
-          // flex: 2,
-      },
-      {headerName: 'Type', field: 'type', sortable: true,
-                  width: 100,
-                  minWidth: 100,
-                  maxWidth: 125,
-                  // flex: 2,
-                  },
-      {headerName: 'Retail',   field: 'retail',       sortable: true,
-                  cellRenderer: this.agGridService.currencyCellRendererUSD,
-                  width: 100,
-                  minWidth: 100,
-                  maxWidth: 125,
-                  editable: true,
-                  singleClickEdit: true,
-                  // flex: 2,
-                  },
-      { headerName: 'Image',
-                  field: 'imageName',
-                  width: 75,
-                  minWidth: 75,
-                  maxWidth: 75,
-                  sortable: false,
-                  autoHeight: true,
-                  cellRenderer: AgGridImageFormatterComponent
-                  },
 
-      { headerName: '', field: "id",
-                  cellRenderer: "btnCellRenderer",
-                  cellRendererParams: {
-                    onClick: this.copyFromGrid.bind(this),
-                    label: 'copy',
-                    getLabelFunction: this.getLabelCopy.bind(this),
-                    btnClass: 'btn btn-primary btn-sm'
-                  },
-                  minWidth: 65,
-                  width: 65
+      {headerName: 'Name',     field: 'name',
+                  // sortable: true,
+            width   : 175,
+            minWidth: 175,
+            maxWidth: 275,
+            editable: true,
+            singleClickEdit: true,
+            flex    : 1,
+            cellRenderer: 'showMultiline',
+            wrapText: true,
+            cellStyle: {'white-space': 'normal', 'line-height': '1em'},
+            autoHeight: true,
+      },
+
+      {headerName: 'Barcode',  field: 'barcode',
+                  // sortable: true,
+            width: 75,
+            minWidth: 125,
+            maxWidth: 150,
+            editable: true,
+            singleClickEdit: true,
+            cellRenderer: 'showMultiline',
+            wrapText: true,
+            cellStyle: {'white-space': 'normal', 'line-height': '1em'},
+            autoHeight: true,
+      },
+
+      {headerName: 'Count',    field: 'productCount',
+                  // sortable: true,
+            width: 90,
+            minWidth: 90,
+            maxWidth: 90,
+            editable: true,
+            singleClickEdit: true,
+            comparator: myComparator,
+            // flex: 2,
+      },
+
+      {headerName: 'Department', field: 'department',
+            // sortable: true,
+            width: 140,
+            minWidth: 140,
+            maxWidth: 200,
+            comparator: myComparator,
+          // flex: 2,
+      },
+
+      {headerName: 'Category', field: 'category',
+          // sortable: true,
+          width: 140,
+          minWidth: 140,
+          maxWidth: 200,
+          comparator: myComparator,
+        // flex: 2,
+      },
+
+      {headerName: 'Sub Cat', field: 'subCategory',
+          // sortable: true,
+          width: 140,
+          minWidth: 140,
+          comparator: myComparator,
+          maxWidth: 200,
+        // flex: 2,
+      },
+      {headerName: 'Type', field: 'type',
+          // sortable: true,
+          width: 100,
+          minWidth: 100,
+          maxWidth: 125,
+          comparator: myComparator,
+          // flex: 2,
+      },
+
+      {headerName: 'Retail',   field: 'retail',
+          // sortable: true,
+          cellRenderer: this.agGridService.currencyCellRendererUSD,
+          width: 100,
+          minWidth: 100,
+          maxWidth: 125,
+          editable: true,
+          comparator: myComparator,
+          singleClickEdit: true,
+          // flex: 2,
+      },
+
+      { headerName: 'Image',
+          field: 'imageName',
+          width: 75,
+          minWidth: 75,
+          maxWidth: 75,
+          sortable: false,
+          autoHeight: true,
+          comparator: myComparator,
+          cellRenderer: AgGridImageFormatterComponent
+      },
+
+      { headerName: 'Copy', field: "id",
+          cellRenderer: "btnCellRenderer",
+          cellRendererParams: {
+            onClick: this.copyFromGrid.bind(this),
+            label: 'copy',
+            getLabelFunction: this.getLabelCopy.bind(this),
+            btnClass: 'btn btn-primary btn-sm'
+          },
+          minWidth: 85,
+          width: 85
       },
 
       {
-                  headerName: "Active",
-                  width:    100,
-                  minWidth: 100,
-                  maxWidth: 100,
-                  flex: 1,
-                  field: "active",
-                  // editable: true,
-                  //   singleClickEdit: true,
-                  // cellRendererParams: {
-                   //   // btnClass: 'btn btn-primary btn-sm'
-                  cellRenderer: function(params) {
-                      var input = document.createElement('input');
-                      input.type="checkbox";
-                      input.checked = params.value;
-                      input.disabled = false;
-                      input.addEventListener('click', function (event) {
-                        // params.value = !params.value;
-                        // params.node.data.fieldName = params.value;
-                        // input.checked = !params.value;
-                      });
-                      // input.checked = !input.checked;
-                      return input;
-                  }
-                // },
-
+        headerName: "Active",
+          width:    100,
+          minWidth: 100,
+          maxWidth: 100,
+          flex: 1,
+          field: "active",
+          comparator: myComparator,
+          cellRenderer: function(params) {
+              var input = document.createElement('input');
+              input.type="checkbox";
+              input.checked = params.value;
+              input.disabled = false;
+              input.addEventListener('click', function (event) {  });
+              return input;
+          }
       },
-      { headerName: '', field: "id",
-        cellRenderer: "btnCellRenderer",
-        cellRendererParams: {
-          onClick: this.deleteItem.bind(this),
-          label: 'delete',
+
+      {       headerName: 'Delete', field: "id",
+            cellRenderer: "btnCellRenderer",
+            cellRendererParams: {
+              onClick: this.deleteItem.bind(this),
+              label: 'delete',
               getLabelFunction: this.getLabelCopy.bind(this),
               btnClass: 'btn btn-primary btn-sm'
             },
             minWidth: 65,
             width: 65
-    },
+      },
     ]
-    this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
+
+    this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs, false);
+
   }
 
   reverseValue(event) {
     return !event.value
   }
+
   onCellClicked(event) {
     // console.log('event' , event)
     const colName = event?.column?.colId.toString() as string;
@@ -586,10 +680,16 @@ constructor(  private _snackBar              : MatSnackBar,
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
     searchModel.hideSubCategoryItems = false;
+    searchModel.webWorkRequired = this.webWorkRequired
     if (this.searchForm.controls['minQuantityFilter'].value) {
       searchModel.minQuantityFilter = this.minQuantityFilterValue;
     }
-    // console.log('searchmodel', searchModel)
+    if (this.pagingForm) {
+      const sort = this.pagingForm.controls['sort'].value;
+      if (sort) {
+        searchModel.sort = sort;
+      }
+    }
     return searchModel;
   }
 
@@ -618,6 +718,17 @@ constructor(  private _snackBar              : MatSnackBar,
 
   refreshActiveChange(event) {
     this.viewAll = event;
+    this.refreshSearch(1)
+  }
+
+  refreshRequiredWork(event: any) {
+    console.log(event, event.value)
+    if (!event || !event.value) {
+      this.webWorkRequired = false;
+      this.refreshSearch(1)
+      return;
+    }
+    this.webWorkRequired = event.value;
     this.refreshSearch(1)
   }
 
@@ -666,6 +777,8 @@ constructor(  private _snackBar              : MatSnackBar,
       this.params  = params
       this.gridApi = params.api;
       params.api.sizeColumnsToFit();
+      params.api.sizeColumnsToFit();
+      params.api.resetRowHeights();
     }
 
     if (params == undefined) { return }
@@ -679,7 +792,6 @@ constructor(  private _snackBar              : MatSnackBar,
             if (!resp)         {return}
             this.isfirstpage   = resp.isFirstPage
             this.islastpage    = resp.isFirstPage
-            // console.log('get rows' , resp.currentPage, this.currentPage)
             this.currentPage   = resp.currentPage
             this.numberOfPages = resp.pageCount
             this.recordCount   = resp.recordCount
@@ -696,6 +808,9 @@ constructor(  private _snackBar              : MatSnackBar,
     if (!datasource)   { return }
     if (!this.gridApi) { return }
     this.gridApi.setDatasource(datasource);
+
+    params.api.sizeColumnsToFit();
+    params.api.resetRowHeights();
   }
 
   refreshImages(data) {
@@ -781,9 +896,9 @@ constructor(  private _snackBar              : MatSnackBar,
 
   getLabel(rowData)
   {
-    if(rowData && rowData.hasIndicator)
+    if(rowData && rowData.hasIndicator) {
       return this.buttonName
-      else return this.buttonName
+    } else return this.buttonName
   }
 
   onBtnClick1(e) {

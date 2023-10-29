@@ -72,8 +72,11 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
 
     try {
       this._issueItem = this.orderMethodService.posIssueItem$.subscribe(data => {
+
+        console.log('positem', data)
         if (!data) {
-      }
+          console.log('no item issued')
+        }
         if (data) {
           this.posIssueItem = data;
           this.initCredit()
@@ -85,6 +88,8 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
 
     try {
       this._issueItem = this.orderMethodService.posIssuePurchaseItem$.subscribe(data => {
+
+        console.log('posIssuePurchaseItem', data)
         if (!data) {
         }
         if (data) {
@@ -115,7 +120,13 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
     private siteService              : SitesService,
     private dialogRef                : MatDialogRef<StoreCreditIssueComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
-  {   this.currentTemplate = this.noItems  }
+
+
+  {
+
+    console.log('initalized' , data)
+
+    this.currentTemplate = this.noItems  }
 
   ngOnInit() {
     this.currentTemplate = this.noItems
@@ -137,10 +148,12 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
   }
 
   onCancel(event) {
+    // console.log('close dialog store credit issue')
     this.dialogRef.close()
   }
 
   setResults(event) {
+    console.log('set results', event)
     if (event) {
       const cardNum = event?.cardNum
       this.cardNum = event?.cardNum;
@@ -163,11 +176,15 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
     }
 
     if (!this.posIssueItem) {
-      console.log('no pos issue item')
+      // this.siteService.notify('No Item assigned to this issuance. Please close and retry to add item.', 'close', 5000, 'red')
+      // console.log('no pos issue item')
+
     }
 
     if (!this.purchaseOrderItem) {
-      console.log('no purchaseOrderItem item')
+      // this.siteService.notify('No Item assigned to this issuance. Please close and retry to add item.', 'close', 5000, 'red')
+      // console.log('no pos issue item')
+
     }
 
     if (this.posIssueItem) {

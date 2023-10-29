@@ -1,9 +1,57 @@
-
-  .margin-small {
-    maring-left:  0.25cm;
-    maring-right: 0.25cm;
+  @media print {
+   .address ,  .companyName,  {
+        font-size: 13px;
+        font-weight: 600;
+		align-items: center;
+		position: relative;
+		text-align: center;
+		font-size: .8em;
+    }
+  }
+  
+  @media print {
+    .itemName, itemprice, .description, .quantity, .address ,  .companyName, .amountPaid, .total,  .item-price,.name, .method {
+        font-size: 13px;
+        font-weight: 600;
+    }
+  }
+  
+  .printsection {
+    font-size: .8em;
   }
 
+  .printsection-58 {
+    font-size: .8em;
+  }
+  
+  .address ,  .companyName {
+    align-items: center;
+    font-size: .8em;
+	align-items: center;
+	position: relative;
+	text-align: center;
+	font-size: .8em;
+  }
+
+  .itemName, itemprice, .quantity, 
+    align-items: center;
+    font-size: .8em;
+  }
+
+  .amountPaid, .total,  .item-price {
+    font-size: .8em;
+    text-align: right;
+  }
+
+  .name, .method {
+    font-size: .8em;
+  }
+
+  .description {
+     font-size: .8em;
+  }
+
+  
   .grid-receipt  {
     display: grid;
     grid-template-columns: 50px auto 80px;
@@ -101,135 +149,16 @@
       bottom: 0;
   }
 
-  .printsection {
-    font-size: .8em;
-    @media : print {
-      font-size: 12pt;
-      font-family: 'FontA11'
-      font-weight: bold ;
-    }
-  }
-
-  .printsection-58 {
-    font-size: .8em;
-    @media : print {
-      font-size: 12pt;
-      font-family: 'FontA11'
-      font-weight: bold ;
-    }
-  }
-
-  .companyName {
-    text-align: center;
-    font-size: 1.2em;
-    font-weight: bold;
-    @media : print {
-      font-size: 14pt;
-      font-family: 'FontA11'
-      font-weight: bold ;
-    }
-  }
-
-  .med-license{
-    text-align: center;
-    font-size: .9em;
-    font-weight: bold;
-    @media : print {
-      font-size: 12pt;
-      font-family: 'FontA11'
-      font-weight: bold ;
-    }
-  }
-
-  .address {
-    text-align: center;
-    font-size: .8em;
-    @media : print {
-      font-size: 12pt;
-      font-family: 'FontA11'
-      font-weight: bold ;
-    }
-  }
-
-  .itemName, itemprice {
-    align-items: center;
-    font-size: .8em;
-    @media : print {
-      font-size: 12pt;
-      font-family: 'FontA11'
-      font-weight: bold ;
-    }
-  }
-
-  .quantity {
-    align-items: center;
-    font-size: .8em;
-    @media : print {
-      font-size: 12pt;
-      font-family: 'FontA11'
-      font-weight: bold ;
-    }
-  }
-
-  .item-price {
-    text-align: right;
-    font-size: .8em;
-    @media : print {
-      font-size: 12pt;
-      font-family: 'FontA11'
-      font-weight: bold ;
-    }
-  }
-
-  .total {
-      text-align: right;
-      font-size: .8em;
-      @media : print {
-      font-size: 12pt;
-      font-family: 'FontA11'
-      font-weight: bold ;
-      }
-  }
-
-  .method {
-    font-size: .8em;
-    @media : print {
-      font-size: 12pt;
-      font-family: 'FontA11'
-      font-weight: bold ;
-    }
-  }
-
-  .amountPaid {
-    font-size: .8em;
-    text-align: right;
-    @media : print {
-      font-size: 12pt;
-      font-family: 'FontA11'
-      font-weight: bold ;
-    }
-  }
-
-  .name {
-    font-size: .8em;
-    @media : print {
-      font-size: 12pt;
-      font-family: 'FontA11'
-      font-weight: bold ;
-    }
-  }
-
-  .description {
-      font-size: .8em;
-      @media : print {
-      font-size: 12pt;
-      font-family: 'FontA11'
-      font-weight: bold ;
-      }
-  }
-
   .items-span-columns-2{
     grid-column-end: span 2;
+  }
+
+  .items-span-columns-start-2 {
+    grid-column-start: span 2;
+  }
+
+  .items-span-columns-start-3 {
+    grid-column-start: span 3;
   }
 
   .items-span-columns-3 {

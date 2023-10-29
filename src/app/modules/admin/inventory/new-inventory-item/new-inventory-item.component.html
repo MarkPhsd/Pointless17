@@ -4,9 +4,10 @@
 
   <mat-card class="strain-card">
 
-    <mat-card-title>
+    <mat-card-title style="margin:5px;">
       <div><h3>Item: {{item.productName}} </h3></div>
-      <div><h3>Label:{{item.label}}       </h3></div>
+      <div><h3>Label: {{item.label}} </h3></div>
+      <div><h3>Type: {{itemTypeDescription}}       </h3></div>
     </mat-card-title>
 
     <mat-card-subtitle>
@@ -36,8 +37,6 @@
               Change Item
             </app-product-search-selector>
           </div>
-
-
         </div>
 
         <div>
@@ -52,7 +51,6 @@
 
           <div class="toggle-items" *ngIf="inputForm"
                [formGroup]="inputForm">
-
             <div>
               <mat-slide-toggle
                       class="price-values"
@@ -70,6 +68,7 @@
                       <mat-label>Requires Attention</mat-label>
               </mat-slide-toggle>
             </div>
+
             <div *ngIf="(locations$ | async) as locations">
               <mat-form-field appearance="outline">
                 <mat-label>Locations</mat-label>
@@ -82,7 +81,6 @@
                                 [value]="item.id">
                       {{ item.name }}
                     </mat-option>
-
                 </mat-select>
               </mat-form-field>
             </div>
@@ -90,33 +88,35 @@
         </div>
       </div>
 
-    <mat-divider></mat-divider>
+      <mat-divider></mat-divider>
 
     </mat-card-subtitle>
 
     <mat-card-content >
       <div class="grid-container">
 
-          <div class="subtitle grid-container">
-            <div >
-              <app-inventory-header-values
-                [item]="item">
-              </app-inventory-header-values>
-            </div>
-
-            <div class="grid-spanner">
-
-            </div>
+        <div class="subtitle grid-container">
+          <div>
+            <app-inventory-header-values
+              [item]="item">
+            </app-inventory-header-values>
           </div>
 
-          <div>
-          <div [formGroup]="inputForm">
-            <div  class="header-column">Price</div>
+          <div class="grid-spanner">
+          </div>
+        </div>
 
+        <div>
+
+          <div class="ps-flex-group-content-start" 
+                [formGroup]="inputForm">
+            
+            <div>
               <app-price-category-select
-                  [isInventory]     ="true"
-                  [priceCategoryID] ="item.priceCategoryID"
-                  [inputForm]       ="inputForm" >
+                    [isInventory]     ="true"
+                    [priceCategoryID] ="item.priceCategoryID"
+                    [inputForm]       ="inputForm" >
+                <div  class="header-column">Price</div>
               </app-price-category-select>
 
               <div>
@@ -128,56 +128,113 @@
                   >Change Sku
                 </app-value-fields>
               </div>
+            </div>
+            
+            <div *ngIf="isCannabis" >
+
+              <mat-tab-group>
+                <mat-tab label="Values">
+                  <app-facility-search-selector
+                      [item]="facility"
+                      [searchForm]="inputForm"
+                      (itemSelect)="getVendor($event)">
+                  </app-facility-search-selector>
+
+                  <mat-form-field appearance="outline" >
+                    <mat-label>Test Date</mat-label>
+                    <input  matInput
+                            type="text"
+                            formControlName="testDate"
+                            name="testDate"
+                            [matDatepicker]="picker">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+              
+                  <mat-form-field appearance="outline" >
+                    <mat-label>Expiration</mat-label>
+                    <input  matInput
+                            type="text"
+                            formControlName="expiration"
+                            name="expiration"
+                            [matDatepicker]="picker">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+
+                  <app-value-fields
+                        [inputForm]="inputForm"
+                        [fieldName]="'testedBy'">
+                    Tested By
+                  </app-value-fields>
+
+                  <app-value-fields
+                      [inputForm]="inputForm"
+                      [fieldName]="'testLotNumber'">
+                    Test Lot #
+                  </app-value-fields>
+
+                </mat-tab>
+
+                <mat-tab label="Chemicals">
+                  <app-chemical-values
+                    [inputForm]="inputForm"
+                    [inventoryItem]="true">
+                  </app-chemical-values> 
+                </mat-tab>
+              </mat-tab-group>
 
             </div>
 
-            <div *ngIf="menuItem && menuItem.itemType.type == 'cannabis' ||
-                        menuItem && menuItem.itemType.type == 'med-cannabis'"
-                  [formGroup]="inputForm">
-              <app-chemical-values
-                [inputForm]="inputForm"
-                [inventoryItem]="true">
-              </app-chemical-values>
+            <div *ngIf="!isCannabis"                      
+                      class="grid-container">
+
+                <mat-hint>
+                  Case Information - only for whole case / split case options
+                </mat-hint>
+
+                <div>
+                  <app-value-fields
+                    [inputForm]="inputForm"
+                    [fieldName]="'caseQuantity'">
+                    Case Quantity
+                  </app-value-fields>
+                </div>
+
+                <div >
+                  <app-value-fields
+                    [inputForm]="inputForm"
+                    [fieldName]="'casePrice'">
+                    Case Price
+                  </app-value-fields>
+                </div>
+
+                <div>
+                  <app-value-fields
+                    [inputForm]="inputForm"
+                    [fieldName]="'itemSku'">
+                    Item Sku
+                  </app-value-fields>
+                </div>
+
+                <div>
+                  <mat-form-field appearance="outline" >
+                    <mat-label>Expiration</mat-label>
+                    <input  matInput
+                            type="text"
+                            formControlName="expiration"
+                            name="expiration"
+                            [matDatepicker]="picker">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
             </div>
 
-          <div *ngIf="inputForm &&
-                      menuItem &&
-                      menuItem?.itemType?.useGroups?.name != 'cannabis'"
-                class="grid-container">
-
-            <mat-hint
-                  *ngIf="menuItem && menuItem?.itemType?.useGroups?.name != 'cannabis'">
-              Case Information - only for whole case / split case options
-            </mat-hint>
-
-            <div>
-              <app-value-fields
-                [inputForm]="inputForm"
-                [fieldName]="'caseQuantity'">
-                Case Quantity
-              </app-value-fields>
-            </div>
-
-            <div>
-              <app-value-fields
-                [inputForm]="inputForm"
-                [fieldName]="'casePrice'">
-                Case Price
-              </app-value-fields>
-            </div>
-
-            <div>
-              <app-value-fields
-                [inputForm]="inputForm"
-                [fieldName]="'itemSku'">
-                Item Sku
-              </app-value-fields>
-            </div>
           </div>
-
-          </div>
-
         </div>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

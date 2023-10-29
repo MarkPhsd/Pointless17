@@ -7,9 +7,10 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
-import { AuthenticationService, MenuService } from 'src/app/_services';
+import { MenuService } from 'src/app/_services';
 import { PollingService } from 'src/app/_services/system/polling.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'app-main-menu',
@@ -25,9 +26,7 @@ export class MainMenuComponent implements OnInit  {
   panelHeightSize : string;
   smallDevice =false;
   panels = 0;
-
   departmentViewOn: boolean;
-
   orderAction$ : Observable<IPOSOrder>;
   @ViewChild('brandView')      brandView: TemplateRef<any>;
   @ViewChild('categoryView')   categoryView: TemplateRef<any>;
@@ -70,22 +69,21 @@ export class MainMenuComponent implements OnInit  {
     private uiSettings: UISettingsService,
     private userAuthorizationService: UserAuthorizationService,
     private siteService: SitesService,
-
     private router: Router,
     private menuService: MenuService,
     private orderMethodsService: OrderMethodsService,
     private fb: UntypedFormBuilder,
+    private platFormService: PlatformService,
   ) {
   }
 
   setPanelHeight(item: UIHomePageSettings) {
     let value = 0
-    let height = (100 / value).toFixed(0);
 
+    let height = (100 / value).toFixed(0);
     this.panelHeightSize   = `calc(${height}vh - 65px)`
 
     if (!this.userAuthorizationService.isStaff) {
-      // if(item.menuEnabled  ) {value = value + 1}
       if(item.categoriesEnabled  ) {value = value + 1}
       if(item.departmentsEnabled  ) {value = value + 1}
       if(item.brandsEnabled ) {value = value + 1}
@@ -93,7 +91,6 @@ export class MainMenuComponent implements OnInit  {
 
     if (this.userAuthorizationService.isStaff) {
       if ( item.staffBrandsEnabled)      { value = value + 1 }
-      // if ( item.staffMenuEnabled)        {value = value + 1}
       if ( item.staffCategoriesEnabled)  {value = value + 1}
       if ( item.staffDepartmentsEnabled) {value = value + 1}
     }
@@ -110,43 +107,53 @@ export class MainMenuComponent implements OnInit  {
       this.panelHeightValue  =  +height;
       this.panelHeightSize   = `calc(${height}vh - 65px)`
     }
-    // console.log('panelHeightSize',this.panelHeightSize)
+
+    if (this.platFormService.isAppElectron) {
+      setTimeout(this.refreshView, 25)
+    }
+    //  console.log('set panel height', value, this.panelHeightSize, this.panelHeightValue)
+  }
+
+  refreshView() {
+    this.isCategoryViewOn
   }
 
   ngOnInit(): void {
-     this.updateItemsPerPage()
-      this.searchForm = this.fb.group( {
-        itemName: ''
-      })
-
+      this.updateItemsPerPage();
+      this.initSearchForm();
       this.initSiteSubscriber();
       this.isStaff = false;
       this.isUser = this.userAuthorizationService.isUser;
       this.isStaff = this.userAuthorizationService.isCurrentUserStaff()
 
       this.homePage$ = this.uiSettings.UIHomePageSettings.pipe(switchMap( data => {
-        // console.log('UIHomePageSettings', data )
         this.homePageSetings  = data as UIHomePageSettings;
         this.setPanelHeight( this.homePageSetings )
         if (!data) {
           this.homePageSetings = {} as UIHomePageSettings
           this.homePageSetings.departmentsEnabled = true;
-          this.homePageSetings.categoriesEnabled = true;
-          this.homePageSetings.brandsEnabled     = true;
-          this.homePageSetings.tierMenuEnabled   = true;
+          this.homePageSetings.categoriesEnabled  = true;
+          this.homePageSetings.brandsEnabled      = true;
+          this.homePageSetings.tierMenuEnabled    = true;
           this.setPanelHeight( this.homePageSetings )
         }
         return of(data)
       }));
 
-    // console.log('main menu user:', this.userAuthorizationService.user)
     if (this.userAuthorizationService.user) {
       this.orderAction$ = this.orderMethodsService.getLoginActions()
     }
+    this.updateItemsPerPage();
+    // console.log('ngOninit')
 
-    // this.initFilterOption()
+
   }
 
+  initSearchForm() {
+    this.searchForm = this.fb.group( {
+      itemName: ''
+    })
+  }
 
   @HostListener("window:resize", [])
   updateItemsPerPage() {
@@ -157,12 +164,12 @@ export class MainMenuComponent implements OnInit  {
   }
 
   reloadComponent() {
+    // console.log('reload')
     let currentUrl = this.router.url;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
     this.router.navigate([currentUrl]);
   }
-
 
   get isDisplayMenuOn() {
     if ((this.isStaff && this.homePageSetings.staffMenuEnabled) ||
@@ -191,9 +198,10 @@ export class MainMenuComponent implements OnInit  {
   get isCategoryViewOn() {
     if ((this.isStaff && this.homePageSetings.staffCategoriesEnabled) ||
         (!this.isStaff  &&  this.homePageSetings.categoriesEnabled)) {
+      // console.log('category view on')
       return this.categoryView
     }
-
+    // console.log('category view null')
     return null;
   }
 
@@ -218,9 +226,6 @@ export class MainMenuComponent implements OnInit  {
   }
 
   isviewOverlayOn() {
-    // if (this.smallDevice) {
-    //   return this.departmentView
-    // }
     return null;
   }
 
@@ -242,7 +247,6 @@ export class MainMenuComponent implements OnInit  {
 		productSearchModel.pageNumber = 1
 		this.menuService.updateSearchModel(productSearchModel)
 		return productSearchModel
-
   }
 
   //this is called from subject rxjs obversablve above constructor.

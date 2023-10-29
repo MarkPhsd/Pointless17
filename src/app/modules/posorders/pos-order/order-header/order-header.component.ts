@@ -1,4 +1,4 @@
-import { Component, Input , OnChanges, OnInit, TemplateRef, ViewChild, OnDestroy} from '@angular/core';
+import { Component, Input , OnChanges, OnInit, TemplateRef, ViewChild, OnDestroy, ElementRef} from '@angular/core';
 import { Router } from '@angular/router';
 import { of, switchMap, Observable, Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
@@ -12,6 +12,7 @@ import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 
 @Component({
   selector: 'app-order-header',
@@ -28,8 +29,15 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   @Input() order: IPOSOrder
   @Input() isUserStaff = false
 
+  @ViewChild('coachingSplit', {read: ElementRef}) coachingSplit: ElementRef;
+  @ViewChild('coachingFire', {read: ElementRef}) coachingFire: ElementRef;
+  @ViewChild('coachingLabel', {read: ElementRef}) coachingLabel: ElementRef;
+  @ViewChild('coachingRefresh', {read: ElementRef}) coachingRefresh: ElementRef;
+
   _posDevice: Subscription;
   _uiTransactionSettings: Subscription;
+  user          : any;
+  _user: Subscription;
 
   posDevice       :  ITerminalSettings;
   devicename = localStorage.getItem('devicename')
@@ -43,6 +51,11 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   site = this.siteService.getAssignedSite();
   locations$ = this.locationsService.getLocationsCached();
 
+  userSubscriber() {
+    this._user = this.authenticationService.user$.subscribe(data => {
+      this.user = data;
+    })
+  }
   transactionUISettingsSubscriber() {
     try {
       this._uiTransactionSettings = this.uiSettingsService.transactionUISettings$.subscribe( data => {
@@ -75,6 +88,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
              private locationsService: PrinterLocationsService,
              private uiSettingsService: UISettingsService,
              public  authenticationService: AuthenticationService,
+             private coachMarksService: CoachMarksService,
              public  prepPrintingService: PrepPrintingServiceService,
     ) {
 
@@ -82,6 +96,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
       this.isOrderClaimed = this.orderMethodsService.IsOrderClaimed
     })
     this.transactionUISettingsSubscriber();
+    this.userSubscriber()
 
   }
 
@@ -93,6 +108,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   ngOnDestroy() {
     if (this._uiTransactionSettings) { this._uiTransactionSettings.unsubscribe()}
     if (this._posDevice) { this._posDevice.unsubscribe()}
+    if (this._user) { this._user.unsubscribe()}
   }
 
   ngOnChanges() {
@@ -108,7 +124,8 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   }
 
   get isSale() {
-    if (this.order && this.order.service && (this.order.service.filterType == 1 || this.order.service.name.toLowerCase() === 'purchase order')) {
+    if (this.order && this.order.service && (this.order.service.filterType == 1 ||
+                                             (this.order.service.name && this.order.service.name.toLowerCase() === 'purchase order'))) {
       return false
     }
     return true
@@ -132,6 +149,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     // const expo$ = this.paymentsMethodsProcessService.sendToPrep
     let extiOnFire : boolean
     if (this.posDevice) {
+      // this.posDevice.
       if (this.posDevice.exitOrderOnFire) {
         extiOnFire = this.posDevice.exitOrderOnFire
       }
@@ -178,7 +196,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     const site = this.siteService.getAssignedSite()
     if (this.order) {
       this.order.priceColumn = value
-      console.log(this.order.id,value)
+      // console.log(this.order.id,value)
       this.action$ = this.ordersService.setOrderPriceColumn(this.order.id, value).pipe(
         switchMap(data => {
           // this.siteService.notify(`Price Column Set: ${value}`, 'Result', 2000)
@@ -190,5 +208,18 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     }
   }
 
+  initPopOver() {
+    if (this.user?.userPreferences?.enableCoachMarks ) {
+      this.coachMarksService.clear()
+      this.addCoachingList()
+      this.coachMarksService.showCurrentPopover();
+    }
+  }
 
+  addCoachingList() {
+    this.coachMarksService.add(new CoachMarksClass(this.coachingSplit.nativeElement, "Split Check: If you see the split button, then you may assign items to an individual group. This is good for dining when you need to assign items to a person or number of persons in a large group. Later when you want to close the order, the split will be ready to use for closing the sale."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingFire.nativeElement, "Fire: Sends the order to kitchen or prep area."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingLabel.nativeElement, "Label: Prints the items that should print to labels."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingRefresh.nativeElement, "Refresh: Sometimes a manager will void from another device, this will update your screen."));
+  }
 }

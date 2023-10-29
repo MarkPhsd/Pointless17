@@ -12,7 +12,8 @@ export class KeyboardComponent implements OnInit, AfterViewInit {
 
     @Input() disableClose: boolean;
     @Input()  value = "";
-
+    @Input() keyboardHeight = '500px'
+    @Input() keyboardWidth = '300px'
     constructor(
       public  trackerService: InputTrackerService,
       public cd: ChangeDetectorRef,

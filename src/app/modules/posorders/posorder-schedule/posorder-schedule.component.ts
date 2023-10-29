@@ -9,24 +9,43 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+
+import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { RequestMessageService } from 'src/app/_services/system/request-message.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 @Component({
   selector   : 'pos-order-schedule',
   templateUrl: './posorder-schedule.component.html',
   styleUrls  : ['./posorder-schedule.component.scss']
 })
 export class POSOrderScheduleComponent implements OnInit,OnDestroy {
-  @Input() serviceType          : IServiceType;
-  action$: Observable<any>;
-  inputFormNotes       : UntypedFormGroup;
-  inputForm            : UntypedFormGroup;
-  order                : IPOSOrder;
-  _order               : Subscription;
+
+  @Input() serviceType      : IServiceType;
+  action$                   : Observable<any>;
+  inputFormNotes            : UntypedFormGroup;
+  inputForm                 : UntypedFormGroup;
+  scheduleForm              : UntypedFormGroup;
+  order                     : IPOSOrder;
+  _order                    : Subscription;
   errorMessage: string;
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
   public       selectedIndex          = 0;
   showSaveButton = false;
   processingUpdate: boolean;
   scheduledDate: string;
+  messages = [];
+
+  saving: boolean;
+  messages$ = this.getScheduleMessages() //   Observable<IRequestMessage[]>;
+
+  isAuthorized  : boolean;
+  isUser        : boolean;
+  isStaff       : boolean;
+  instructions
+  shippingInstructions
+  scheduleInstructions;
 
   initSubscriptions() {
     this._order = this.orderMethodsService.currentOrder$.pipe(
@@ -41,17 +60,29 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
       return this.serviceTypeService.getTypeCached(site, +data.serviceTypeID)
     })).subscribe(data => {
       this.serviceType = data;
+
+      this.instructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType.instructions);
+      this.shippingInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType.shippingInstructions);
+      this.scheduleInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType.scheduleInstructions);
+
     })
   }
+
+
 
   constructor(
     private orderService      : OrdersService,
     public orderMethodsService: OrderMethodsService,
     private router            : Router,
-    private fb :                UntypedFormBuilder,
-    private siteService :      SitesService,
+    private fb                : UntypedFormBuilder,
+    private siteService       : SitesService,
     private matSnack          : MatSnackBar,
     private serviceTypeService: ServiceTypeService,
+    private dateHelperService : DateHelperService,
+    public platFormService    : PlatformService,
+    private requestMessageService: RequestMessageService,
+    private sanitizer: DomSanitizer,
+    private userAuthorization: UserAuthorizationService,
     // public datepipe: DatePipe
     )
   { }
@@ -60,6 +91,25 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     if (this.router.url == 'pos-payment'){ this.showSaveButton = true; }
     this.initSubscriptions();
     this.initNotesForm();
+    this.initAddressForm();
+    this.initScheduleDateForm() ;
+    this.initAuthorization();
+  }
+
+  initAuthorization() {
+    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
+    this.isStaff  = this.userAuthorization.isUserAuthorized('admin,manager,employee');
+    this.isUser  = this.userAuthorization.isUserAuthorized('user');
+    if (this.isUser) {
+
+    }
+  }
+
+  initScheduleDateForm() {
+    this.scheduleForm = this.fb.group( {
+      preferredScheduleDate : [this.order?.preferredScheduleDate],
+    })
+    // preferedScheduleTime  : [this.dateHelperService.format(this.order?.preferredScheduleDate, 'shortTime')]
   }
 
   ngOnDestroy(): void {
@@ -68,7 +118,90 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     }
   }
 
+  getScheduleMessages() {
+    const site = this.siteService.getAssignedSite();
+    return this.requestMessageService.getTemplateMessages(site).pipe(
+      switchMap(data => {
+        console.log('get schedule messages', data)
+        if (data) {
+          data = data.filter(item => {
+            return item.type.toLowerCase() == 'ps'
+          })
+        }
+        return of(data)
+      }
+      )
+    )
+  }
+
+  initAddressForm() {
+   if (this.order && this.order.clients_POSOrders && !this.order.shipAddress) {
+      const client = this.order.clients_POSOrders;
+      this.inputForm = this.fb.group({
+        address  :[client?.address, Validators.required],
+        city     :[client?.city, Validators.required],
+        address2 :[, Validators.required],
+        state    :[client?.state, Validators.required],
+        zip      :[client?.zip, Validators.required],
+      })
+      return
+    }
+
+    this.inputForm = this.fb.group({
+      address  :[this.order?.shipAddress, Validators.required],
+      address2 :[this.order?.shipAddress2],
+      city     :[this.order?.shipCity, Validators.required],
+      state    :[this.order?.shipState, Validators.required],
+      zip      :[this.order?.shipPostal, Validators.required],
+    })
+    this.errorMessage = ''
+  }
+
   selectChange() {
+
+  }
+
+  sendPrepRequest() {
+    const action$ = this.saveOrderMemo()
+    this.action$ =  action$.pipe(switchMap(data => {
+      if (data && data.id) {
+        this.processingUpdate = false;
+        console.log('data', data)
+        return this.orderMethodsService.sendNotificationObs(data,1)
+      }
+      return of(null)
+    }))
+  }
+
+  sendCheckRequest() {
+    const action$ = this.saveOrderMemo()
+    this.processingUpdate = true;
+    console.log('check prep')
+    this.action$ =  action$.pipe(
+      switchMap(data => {
+        console.log('data', data)
+        this.processingUpdate = false;
+        if (data && data.id) {
+          return this.orderMethodsService.sendNotificationObs(data,2)
+        }
+        return of(null)
+    }))
+  }
+
+  saveOrderMemo() {
+    const site = this.siteService.getAssignedSite();
+    const notes = this.inputFormNotes.controls['productOrderMemo'].value;
+    const order = {} as IPOSOrder
+    if (!notes) {return of(this.order)};
+
+    this.order.productOrderMemo = notes
+    this.processingUpdate = true;
+    return this.orderService.putOrder(site, this.order).pipe(
+      switchMap(data => {
+        this.processingUpdate = false;
+        this.orderMethodsService.updateOrderSubscription(data)
+        return of(data)
+    }))
 
   }
 
@@ -81,34 +214,11 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
       return
     }
     this.inputFormNotes =  this.fb.group({
-      productOrderMemo  :[''],
+      productOrderMemo  :[this.order?.productOrderMemo],
     })
-  }
-
-  initForm() {
-    if (this.order && this.order.clients_POSOrders) {
-      const client = this.order.clients_POSOrders;
-      this.inputForm = this.fb.group({
-        address  :[client.address],
-        city     :[],
-        address2 :[client.city],
-        state    :[client.state],
-        zip      :[client.zip],
-      })
-      return
-    }
-    this.inputForm = this.fb.group({
-      address  :['', Validators.required],
-      city     :['', Validators.required],
-      address2 :[''],
-      state    :['', Validators.required],
-      zip      :['', Validators.required],
-    })
-    this.errorMessage = ''
   }
 
   save() {
-
     if (!this.order) {
       this.errorMessage = 'The order is not initialized. Please go back a page.'
       this.matSnack.open(this.errorMessage, 'Alert')
@@ -124,38 +234,35 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
           const notes                      = this.inputFormNotes.controls['productOrderMemo'].value;
           this.order.productOrderMemo      = notes;
         } catch (error) {
-          this.siteService.notify('Error' + error, 'Close', 5000, 'yellow')
+          this.siteService.notify('Error' + error, 'Close', 5000, 'yellow');
+          return;
         }
 
-        this.order.preferredScheduleDate = this.scheduledDate;
-
-        if (this.serviceType) {
-          this.order.serviceType   = this.serviceType.name;
-          this.order.serviceTypeID = this.serviceType.id
+        if (!this.order.preferredScheduleDate && this.serviceType.promptScheduleTime) {
+          this.selectedIndex = 2;
+          return;
         }
 
         const site = this.siteService.getAssignedSite();
-        this.orderService.putOrder(site, this.order).subscribe(data => {
-          this.orderMethodsService.updateOrderSubscription(data)
-          if (this.selectedIndex == 2) { 
-            this.selectedIndex = 3;
+        this.processingUpdate = true;
+        this.action$ = this.orderService.putOrder(site, this.order).pipe(
+          switchMap(data => {
+            this.processingUpdate = false;
+            this.orderMethodsService.updateOrderSubscription(data)
+            if (this.selectedIndex == 2) {
+              this.selectedIndex = 3;
+            }
+            if (this.selectedIndex ==3 ) {
+
+            }
+            this.router.navigate(['pos-payment'])
+            return of(data)
           }
-          if (this.selectedIndex ==3 ) {
-            
-          }
-          this.router.navigate(['pos-payment'])
-        }
-      )
+      ));
     }
   }
 
-  saveOrderMemo() {
-    const site = this.siteService.getAssignedSite();
-    this.orderService.putOrder(site, this.order).subscribe(data => {
-      this.orderMethodsService.updateOrderSubscription(data)
-      this.router.navigate(['pos-payment'])
-    })
-  }
+
 
   selectedServiceType(serviceType: IServiceType) {
     if (!serviceType) { return }
@@ -163,21 +270,31 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     if (serviceType) {
 
       if (serviceType.deliveryService) {
-        this.updateSelectedIndex(0)
-        return
-      }
-      if (serviceType.promptScheduleTime) {
         this.updateSelectedIndex(1)
         return
       }
 
+      if (serviceType.promptScheduleTime) {
+        this.updateSelectedIndex(2)
+        return
+      }
+
       this.showSaveButton = true;
-      this.updateSelectedIndex(2)
+      this.updateSelectedIndex(2);
     }
   }
 
   updateSelectedIndex(index: number) {
     this.selectedIndex = index;
+    const site = this.siteService.getAssignedSite();
+    this.processingUpdate = true;
+    const action$ = this.orderService.changeOrderType(site, this.order.id, this.serviceType.id, true)
+    this.action$ =   action$ .pipe(
+      switchMap(data => {
+        this.processingUpdate = false;
+        this.orderMethodsService.updateOrderSubscription(data)
+        return of(data)
+    }))
   }
 
   saveShippingAddress(order: IPOSOrder) {
@@ -185,26 +302,27 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     this.errorMessage = ''
 
     const site = this.siteService.getAssignedSite();
-    this.orderService.putOrder(site, order).subscribe(
-      {next: data => {
-        this.orderMethodsService.updateOrderSubscription(data)
-        this.processingUpdate = false;
-        this.updateSelectedIndex(2)
-      }, error: err =>{
-        this.processingUpdate = false;
-        this.errorMessage = "Error occured. Please check your address and save again." + err
-      }}
-    )
+    this.action$ = this.orderService.putOrder(site, order).pipe(
+      switchMap (data => {
+          this.orderMethodsService.updateOrderSubscription(data)
+          this.processingUpdate = false;
+          this.updateSelectedIndex(2)
+          return of(data)
+    }))
   }
 
   saveShippingTime(event) {
     const site = this.siteService.getAssignedSite();
-    this.order.preferredScheduleDate = event;
-    this.action$ = this.orderService.putOrder(site, this.order).pipe(switchMap(data => {
-      this.orderMethodsService.updateOrderSubscription(data)
-      return of(data)
-    }))
-    this.updateSelectedIndex(3)
+    this.processingUpdate = true;
+    this.order.preferredScheduleDate =  this.dateHelperService.format(event, 'medium');
+    this.action$ = this.orderService.putOrder(site, this.order).pipe(
+      switchMap(data => {
+        this.orderMethodsService.updateOrderSubscription(data)
+        this.updateSelectedIndex(3)
+        this.processingUpdate = false;
+        return of(data)
+      })
+    )
   }
 
   // Action triggered when user swipes
@@ -223,6 +341,51 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
       const isFirst = selectedIndex === 0;
       selectedIndex = isFirst ? 1 :  selectedIndex - 1;
     }
+  }
+
+  get saveValid() {
+    this.messages  = []
+
+    if (!this.serviceType) {
+      this.messages.push('No Service Type Assigned')
+    }
+
+    if (this.serviceType && this.serviceType?.promptScheduleTime && !this.order.preferredScheduleDate) {
+      this.messages.push('Schedule Date Required');
+    }
+
+    if (this.serviceType && this.serviceType?.deliveryService) {
+      if (!this.inputForm.valid) {
+        this.messages.push('Shipping location required.');
+      }
+    }
+
+    if (this.messages && this.messages.length >0) {
+      // console.log('this.messageslength', this.messages.length)
+      return false
+    }
+
+    let finalIndex  = 1;
+
+    if (this.serviceType?.deliveryService && !this.order.preferredScheduleDate) {
+       finalIndex = 2
+    }
+
+    if (this.serviceType?.deliveryService && this.order.preferredScheduleDate) {
+       finalIndex = 2
+    }
+
+    if (this.serviceType?.deliveryService && this.order.preferredScheduleDate) {
+       finalIndex = 3
+    }
+
+    if (this.selectedIndex == finalIndex) {
+      return true;
+    }
+  }
+
+  sendMessage(item, order) {
+    this.action$ = this.orderMethodsService.sendOrderForMessageService(item, order)
   }
 
 }

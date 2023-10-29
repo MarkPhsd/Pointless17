@@ -1,4 +1,7 @@
-<div *ngIf="(floorPlanRefresh$ | async) as floorPlanRefresh"></div>
+<div *ngIf="(floorPlanRefresh$ | async) as floorPlanRefresh">
+  <div *ngIf="(orders$ | async) as oroders"></div>
+</div>
+
 <div *ngIf="(backupRestore$ | async)"></div>
 
 <div class="panel" *ngIf="(uiTransaction$ | async) as uiTransaction">
