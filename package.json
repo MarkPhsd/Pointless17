@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.94.1",
+  "version": "2.11.16",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -105,6 +105,7 @@
     "angular-typesafe-reactive-forms-helper": "^2.0.2",
     "angular-user-idle": "3.0",
     "angular2-uuid": "^1.1.1",
+    "angularx-qrcode": "^14.0.0",
     "assert": "^2.0.0",
     "bcryptjs": "^2.4.3",
     "blob.js": "^1.0.1",
@@ -149,6 +150,7 @@
     "ngx-csv-parser": "^1.1.1",
     "ngx-device-detector": "^2.1.1",
     "ngx-electron": "^2.2.0",
+    "ngx-google-analytics": "^14.0.1",
     "ngx-infinite-scroll": "^10.0.1",
     "ngx-json-viewer": "^3.1.0",
     "ngx-numeral": "0.0.1-beta.0",

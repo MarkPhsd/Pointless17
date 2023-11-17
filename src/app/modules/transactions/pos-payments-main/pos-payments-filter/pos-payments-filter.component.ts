@@ -16,6 +16,7 @@ import { Observable, fromEvent, Subscription } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 
 @Component({
   selector: 'app-pos-payments-filter',
@@ -96,6 +97,8 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       private matSnack             : MatSnackBar,
       private userAuthorization    : UserAuthorizationService,
       private fb:                    UntypedFormBuilder,
+      private dateHelper: DateHelperService,
+    
       )
     {
       this.initForm();
@@ -354,8 +357,15 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       this.dateFrom = this.dateRangeForm.get("start").value
       this.dateTo   = this.dateRangeForm.get("end").value
 
-      this.searchModel.completionDate_From = this.dateFrom.toISOString()
-      this.searchModel.completionDate_To = this.dateTo.toISOString()
+      const dateFrom = this.dateRangeForm.get("start").value;
+      const dateTo = this.dateRangeForm.get("end").value;
+      const start  = this.dateHelper.format(this.dateFrom, 'short')
+      const end = this.dateHelper.format(this.dateTo, 'short')
+
+      this.searchModel.completionDate_From = start
+      this.searchModel.completionDate_To   = end
+      // this.searchModel.completionDate_From =  this.dateFrom.toISOString()
+      // this.searchModel.completionDate_To = this.dateTo.toISOString()
       this.refreshSearch()
 
     }

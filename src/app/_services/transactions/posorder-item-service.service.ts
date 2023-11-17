@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subscription, } from 'rxjs';
-import { ISite, IUser }   from 'src/app/_interfaces';
+import { ISite, IUser, ProductPrice }   from 'src/app/_interfaces';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { Capacitor } from '@capacitor/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -62,6 +62,9 @@ export interface NewItem            {
   priceColumn: number;
   assignedPOSItems:  PosOrderItem[];
   unitTypeID: number;
+  price?: ProductPrice; // the real assingment
+  productPrice?: ProductPrice; // temporary assignment - used in customer menu.
+  wholesale: number;
 }
 export interface NewInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number, portionValue: string, packaging: string,  itemNote: string}
 export interface NewSerializedItem  { orderID: number, quantity: number, menuItem: Serial, barcode: string,  weight: number, portionValue: string, packaging:string,  itemNote: string}
@@ -192,13 +195,17 @@ export class POSOrderItemService {
   addItemToOrderWithBarcode(site: ISite, newItem: NewItem):  Observable<ItemPostResults> {
 
     if (!newItem ) {
-      console.log('no item for add item to order with barcode')
+      // console.log('no item for add item to order with barcode')
       return
     }
 
     if (newItem.quantity == 1) {
       newItem = this.getNewItemWeight(newItem);
     }
+
+    // console.log('newItem', newItem);
+    
+    if (newItem.productPrice) { newItem.price = newItem.productPrice}
 
     const controller = "/POSOrderItems/"
 
@@ -248,7 +255,11 @@ export class POSOrderItemService {
 
   postItem(site: ISite, newItem: any): Observable<ItemPostResults> {
 
+    if (newItem && newItem.productPrice) { newItem.price = newItem.productPrice}
+
     newItem = this.getNewItemWeight(newItem);
+
+    // console.log(newItem);
 
     const controller = "/POSOrderItems/";
 
@@ -389,7 +400,7 @@ export class POSOrderItemService {
     const parameters = `?id=${id}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
-    console.log(url)
+    // console.log(url)
     return this.http.get<PosOrderItem>(url);
 
   }
@@ -491,9 +502,9 @@ export class POSOrderItemService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    const payLoad = { posOrderItem: posOrderItem, menuItem: null}
+    // const payLoad = { posOrderItem: posOrderItem, menuItem: null}
 
-    return  this.http.post<IPOSOrder>(url, payLoad)
+    return  this.http.post<IPOSOrder>(url, posOrderItem)
 
   }
 
@@ -505,7 +516,7 @@ export class POSOrderItemService {
     //   return
     // }
 
-    console.log('posOrderItem wholeSaleCost', posOrderItem.wholeSaleCost)
+    // console.log('posOrderItem wholeSaleCost', posOrderItem.wholeSaleCost)
     const controller = "/POSOrderItems/";
 
     const endPoint = "changeTotalCost";

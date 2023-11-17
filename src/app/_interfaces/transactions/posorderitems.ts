@@ -67,7 +67,7 @@ export interface PosOrderMenuItem {
   name:                     string;
   displayName:              string;
   caseQty:                  number;
-  wholeSale:                number;
+  wholesale:                number;
   caseWholeSale:            number;
   retail:                   number;
   caseRetail:               number;

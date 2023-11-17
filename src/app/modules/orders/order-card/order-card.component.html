@@ -1,21 +1,22 @@
+
 <mat-card  [style]="serviceColor">
   <mat-card-content class="center">
     <div class="grid-orderproperties">
 
-      <div class="field-center font-weight-600 font-1-5em  row-span-2">
+      <div class="field-center font-weight-600 row-span-2">
 
-        <div *ngIf="order.history && order.orderID">
+        <div *ngIf="order.history && order.orderID" class="font-1-5em">
            {{order.orderID}}
         </div>
-        <div *ngIf="!order.history || !order.orderID">
+        <div *ngIf="!order.history || !order.orderID" class="font-1-5em">
           {{ order.id }}
         </div>
-
-        <div class='date-header '>
-          <div class="margin-top:3px" class="font-1-2em ">
-            {{order.orderDate |  date: 'HH:mm'}}
-          </div>
+        <ng-container [ngTemplateOutlet]="disableEditView" ></ng-container>
+     
+        <div class="margin-top:3px" class="font-1-3em">
+          {{order.orderDate |  date: timeFormat}}
         </div>
+    
       </div>
 
       <div class="field-height font-1-2em ">
@@ -35,8 +36,8 @@
           <div *ngIf="order?.completionDate">
             <mat-icon style="top:3px;font-size:medium">credit_card</mat-icon>
           </div>
-          <div *ngIf="order?.completionDate">
-            {{order?.completionDate |  date: 'HH:mm'}}  {{order?.completionDate |  date: 'shortDate'}}
+          <div *ngIf="order?.completionDate" class="font-1em">
+            {{order?.completionDate |  date: timeFormat}}  {{order?.completionDate |  date: dateFormat}}
           </div>
         </div>
       </div>
@@ -79,10 +80,10 @@
           </div>
           <div  *ngIf="order?.preferredScheduleDate">
             <div>
-              {{order?.preferredScheduleDate |  date: 'shortDate'}}
+              {{order?.preferredScheduleDate |  date: dateFormat}}
             </div>
             <div>
-              {{order?.preferredScheduleDate |  date:  'HH:mm'}}
+              {{order?.preferredScheduleDate |  date: timeFormat}}
             </div>
           </div>
         </div>
@@ -99,3 +100,9 @@
     </div>
   </mat-card-content>
 </mat-card>
+
+<ng-template #disableEditView>
+  <span *ngIf="disableEdit && !order?.completionDate">
+    <mat-icon color="warn" >lock</mat-icon>
+  </span>
+</ng-template>

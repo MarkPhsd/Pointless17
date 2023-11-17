@@ -327,7 +327,6 @@ export class SitesService {
       if (color === 'primary') { color = 'mat-primary'}
     }
     if (!color) { color = 'mat-primary'}
-    // console.log('color', color)
     if (!vPOS) { vPOS = 'bottom'}
 
     this.verticalPosition = vPOS as MatSnackBarVerticalPosition ;

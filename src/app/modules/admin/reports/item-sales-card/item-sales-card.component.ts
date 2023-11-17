@@ -17,15 +17,12 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
   @ViewChild('salesView')           salesView: TemplateRef<any>;
   @ViewChild('activeReportView')    activeReportView: TemplateRef<any>;
   @ViewChild('adjustmentView')      adjustmentView: TemplateRef<any>;
-
   @Input() viewType : string;
   @Input() site     : ISite;
   @Input() dateTo   : string;
   @Input() dateFrom : string;
-
   @Input() scheduleDateStart : string;
   @Input() scheduleDateEnd : string;
-
   @Input() completed : boolean;
   @Input() notifier : Subject<boolean>
   @Input() zrunID   : string;
@@ -95,8 +92,6 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     if (this.removeGiftCard) {
 
     }
-
-
 
     if (this.groupBy === 'void') {
       searchModel.groupByType = false;
@@ -169,26 +164,24 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
   }
 
   setItemGroupAsPrepped(id: number): Observable<IReportItemSaleSummary> {
-      const site = this.siteSerivce.getAssignedSite();
+    const site = this.siteSerivce.getAssignedSite();
 
-      if (id &&   this.scheduleDateStart && this.scheduleDateEnd) {
-        const action$ =  this.orderMethodsService.setItemGroupAsPrepped(site, id,
-                                                                   this.scheduleDateStart,
-                                                                   this.scheduleDateEnd,
-                                                                   this.sales)
+    if (id &&   this.scheduleDateStart && this.scheduleDateEnd) {
+      const action$ =  this.orderMethodsService.setItemGroupAsPrepped(site, id,
+                                                                  this.scheduleDateStart,
+                                                                  this.scheduleDateEnd,
+                                                                  this.sales)
+      return action$.pipe(switchMap(data => {
+        if (data) {
+          this.sales.results.filter(item => {
+            return !item.ID
+          })
+        }
+        return of(data)
+      }))
 
-       return action$.pipe(switchMap(data => {
-          if (data) {
-            this.sales.results.filter(item => {
-              return !item.ID
-            })
-          }
-          return of(data)
-        }))
-
-      }
-
-      return of(null)
+    }
+    return of(null)
   }
 
   sortName(list) {

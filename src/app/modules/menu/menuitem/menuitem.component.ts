@@ -1,13 +1,12 @@
 import { Component,  Input,  OnInit, OnDestroy, EventEmitter, Output} from '@angular/core';
-import {  MenuService, OrdersService } from 'src/app/_services';
+import { MenuService,  } from 'src/app/_services';
 import { IMenuItem,   }  from 'src/app/_interfaces/menu/menu-products';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, Subject, Subscription, of } from 'rxjs';
 import { DomSanitizer, Title } from '@angular/platform-browser';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Location} from '@angular/common';
-import { IClientTable, IPOSOrder, IUserProfile } from 'src/app/_interfaces';
+import { IClientTable, IPOSOrder, IUserProfile, ProductPrice } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -19,7 +18,6 @@ import { switchMap } from 'rxjs/operators';
 import { PriceTiers } from 'src/app/_interfaces/menu/price-categories';
 import { NewItem, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { AvalibleInventoryResults, IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
-import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 
 // https://www.npmjs.com/package/ngx-gallery
 // Possible additional info options
@@ -62,30 +60,35 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     @Input() user:          IUserProfile;
     @Input() showCloseButton  : boolean;
 
-    flowerMenu   : IFlowerMenu;
-    priceTiers   : PriceTiers
-    priceTiersShown: boolean;
+    flowerMenu     : IFlowerMenu;
+    priceTiers     : PriceTiers
+    priceTiersShown:  boolean;
+    productPrice    : ProductPrice;
 
-    childNotifier : Subject<boolean> = new Subject<boolean>();
+    childNotifier   : Subject<boolean> = new Subject<boolean>();
+
+    get menuPricesEnabled() {
+      const menuItem = this.menuItem;
+      if (menuItem?.priceCategories && menuItem?.priceCategories?.productPrices && menuItem?.priceCategories?.productPrices.length>0) {
+        return true;
+      }
+    }
 
     constructor(
           private menuService       : MenuService,
           private router            : Router,
           public route              : ActivatedRoute,
           private sanitizer         : DomSanitizer,
-          private orderService      : OrdersService,
           private _snackBar         : MatSnackBar,
           private fb                : UntypedFormBuilder,
           private siteService       : SitesService,
           private brandService      : ClientTableService,
-          private location          : Location,
           private userAuthorization : UserAuthorizationService,
           private orderMethodsService : OrderMethodsService,
           private appInitService    : AppInitService,
           private priceTierService  : PriceTierService,
           private titleService     : Title,
           private tierPriceService  : TvMenuPriceTierService,
-          private posorderitemMethodsService: PosOrderItemMethodsService,
           private posOrderItemService: POSOrderItemService,
           private inventoryAssignmentService: InventoryAssignmentService,
 
@@ -164,6 +167,8 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       this.tierPriceService.updateTier(null)
       this.priceTiers = null;
       this.flowerMenu = null //   : IFlowerMenu;
+      this.productPrice = null;
+
     }
 
     initSubscriptions() {
@@ -187,17 +192,36 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       return notes
     }
 
-   addItemToOrder() {
+
+    addItemWithPrice(event) {
+      if (event) {
+        this.productPrice = event;
+        this.addItemToOrder()
+      }
+    }
+
+    setItemPrice(event) {
+      if (event) {
+        this.productPrice = event;
+        // this.addItemToOrder()
+      }
+    }
+
+    addItemToOrder() {
+
       let quantity = this.productForm.controls['quantity'].value
       if (!quantity) {  quantity = 1  }
       const site = this.siteService.getAssignedSite()
-      this.addItem$ = this.orderMethodsService.addItemToOrderObs(this.order, this.menuItem, quantity, 0, null).pipe(switchMap(data => {
 
+      this.addItem$ = this.orderMethodsService.addItemToOrderObs(this.order, this.menuItem,
+                                                                  quantity, 0, null,  this.productPrice).pipe(switchMap(data => {
         const notes = this.getNotes();
+        if (!data) {
+          this.siteService.notify(`Error ${data.message}`,'close', 60000, 'red' )
+          return of(null)
+        }
 
         const item = { id: +data.posItem.id, modifierNote: notes};
-
-        // console.log('notes', notes)
 
         if (notes && notes != '' ) {
           const items =  data.order.posOrderItems
@@ -207,13 +231,14 @@ export class MenuitemComponent implements OnInit, OnDestroy {
           }
           return this.posOrderItemService.setModifierNote(site, item)
         }
-
         return of(data)
-      })).pipe(switchMap(data => {
-
+        }
+      )).pipe(switchMap(data => {
         return of(data)
       }))
     }
+
+
 
     getQuantity() {
       if (this.quantity == 0 || !this.quantity) { this.quantity = 1}
@@ -330,14 +355,15 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     }
 
     changeQuantity(event) {
-      console.log(event)
+
+      this.quantity = event // this.quantity + event;
+      return;
       this.quantity = this.quantity + event;
       if (this.quantity < 0) { this.quantity = 1}
       this.productForm = this.fb.group({
         quantity: this.quantity
       });
       this.quantity = this.productForm.controls['quantity'].value;
-      console.log('quantity', this.quantity)
     }
 
     getItem(id: any) {

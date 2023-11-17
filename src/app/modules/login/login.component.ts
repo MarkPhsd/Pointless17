@@ -18,7 +18,7 @@ import { SplashScreenStateService } from 'src/app/_services/system/splash-screen
 import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { ScaleService } from '../../_services/system/scale-service.service';
 import { ElectronService } from 'ngx-electron';
-import { UserIdleService } from 'angular-user-idle';
+import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 // import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY } from '@angular/cdk/overlay/overlay-directives';
 
 @Component({
@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginAction: any;
   rememberMe: boolean;
 
-  async initSubscriptions() {
+  initSubscriptions() {
     this._user = this.authenticationService.user$.subscribe( user => {
       if (user)  { this.loggedInUser = user }
       if (!user) { this.loggedInUser = null; }
@@ -121,22 +121,15 @@ export class LoginComponent implements OnInit, OnDestroy {
         private appInitService       : AppInitService,
         private uiSettingService     : UISettingsService,
         private awsBucketService     : AWSBucketService,
-        private splashScreenStateService: SplashScreenStateService,
         private orderMethodsService:   OrderMethodsService,
-
-        private scaleSettings        : ScaleService,
-        private electronService: ElectronService,
+        private electronService        : ElectronService,
+        private paymentMethodsService  : PaymentsMethodsProcessService,
         @Optional() private dialogRef  : MatDialogRef<LoginComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
     )
   {
-    if (data) {
-      this.dialogOpen = true
-    }
-
-    if (!data) {
-      this.redirects();
-    }
+    if (data) { this.dialogOpen = true  }
+    if (!data) {  this.redirects();  }
   }
 
   async ngOnInit() {
@@ -151,14 +144,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.initSubscriptions()
     if (!this.platformService.isApp())  { this.amI21 = true  }
     if ( this.platformService.isApp())  { this.amI21 = false }
-    this.refreshTheme()
+    this.refreshTheme();
     this.statusMessage = ''
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.refreshUIHomePageSettings();
   }
 
   async  openDrawerOne() {
-    // console.log('open cash drawer one')
     const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
     const response        = await emvTransactions.openCashDrawerOne()
   }
@@ -184,7 +176,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   get loginMethodView() {
-    // console.log(this.togglePIN)
     if (this.togglePIN) {
       return this.pinEntryView;
     }
@@ -208,16 +199,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   setAPIAlt() {
-    // if (this.platformService.isApp())  {
-      this.counter  = this.counter +1
-      if (this.counter > 5) {
-        this.counter = 0;
-        this.router.navigate(['/apisetting']);
-      }
-    // }
+    this.counter  = this.counter +1
+    if (this.counter > 5) {
+      this.counter = 0;
+      this.router.navigate(['/apisetting']);
+    }
   }
 
- initCompanyInfo() {
+  initCompanyInfo() {
     this.compName    = this.appInitService.company;
   }
 
@@ -227,7 +216,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.logo = `${this.bucket}${this.uiHomePageSetting.logoHomePage}`
       }
     }
-   }
+  }
 
   redirectUserLoggedIn() {
     const user = this.authenticationService.userValue;
@@ -264,25 +253,24 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   forgetMe() {
     this.initForm();
-    // localStorage.clear();
     this.clearUserSettings();
     this.notifyEvent("Your settings have been removed from this device.", "Bye!");
     this.statusMessage = ''
   }
 
-   browseMenu() {
+  browseMenu() {
     this.initForm();
     this.userSwitchingService.browseMenu();
     this.statusMessage = ''
   }
 
   loginToReturnUrl() {
-    // this.spinnerLoading = false;
     this.userSwitchingService.loginToReturnUrl();
     this.statusMessage = ''
   }
 
   clearUserSettings() {
+    this.spinnerLoading = false;
     this.authenticationService.clearUserSettings();
   }
 
@@ -399,9 +387,12 @@ export class LoginComponent implements OnInit, OnDestroy {
       switchMap(result =>
         {
 
+          this.paymentMethodsService.sendOrderAndLogOut( null, false)
+          this.paymentMethodsService.sendOrderOnExit(null)
           this.initForm();
-          if (result && result.errorMessage) {
-            this.notifyEvent(result.errorMessage, 'Failed Login');
+
+          if (!result || (result && result.errorMessage)) {
+            this.notifyEvent(result?.errorMessage, 'Failed Login');
             this.clearUserSettings()
             return of('failed')
           }
@@ -411,17 +402,12 @@ export class LoginComponent implements OnInit, OnDestroy {
           let user = result?.user ;
           let sheet = result?.sheet as IBalanceSheet;
 
-          if (user) {
-            console.log('user success')
-          }
+          if (user) {  console.log('user success')  }
           //if there is a sheet we login here with the user to prompt the sheet if needed.
-          if (sheet) {
-            if (this.loginApp(result)) {
-              return of('success')
-            }
-          }
+          if (sheet) {  if (this.loginApp(result)) {  return of('success') } }
 
-          if (result && result.username != undefined) {   user = result }
+          if (user) {  console.log('process 2')  }
+          if (result && result.username != undefined) { user = result }
 
           if (user) {
             this.spinnerLoading = false;
@@ -434,9 +420,9 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (user && user?.message && user?.message.toLowerCase() === 'success') {
               let pass = false
 
-              if (!this.loginAction) {
-                this.userSwitchingService.assignCurrentOrder(user)
-              }
+              if (!this.loginAction) {  this.userSwitchingService.assignCurrentOrder(user) }
+
+              if (user) {  console.log('process 3')  }
 
               if (this.loginAction) {
                 if (this.loginAction.name === 'setActiveOrder') {
@@ -445,11 +431,15 @@ export class LoginComponent implements OnInit, OnDestroy {
                 }
               }
 
-              if (!pass) {
-                this.userSwitchingService.processLogin(user, '')
-              }
+              if (user) {  console.log('process 4')  }
+
+              if (!pass) { this.userSwitchingService.processLogin(user, '')  }
+
+              if (user) {  console.log('process 6')  }
 
               this.closeDialog();
+
+              if (user) {  console.log('process 7')  }
               return of('success')
             }
           }

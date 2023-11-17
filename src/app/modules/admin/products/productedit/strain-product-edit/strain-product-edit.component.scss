@@ -16,7 +16,8 @@ mat-form-field {
   --gap: 10px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(185px, 1fr) );
+  overflow-x: auto;
 }
 
 .container {
@@ -53,7 +54,7 @@ mat-form-field {
 }
 
 .grid-container-medium {
-  --gap: 10px;
+  --gap: 4px;
   display: grid;
   gap: var(--gap);
   grid-template-columns: 150px auto;

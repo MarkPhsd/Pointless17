@@ -27,7 +27,7 @@ export class UnitTypeMethodsService {
          item = data.results[0]
       }
       return this.productEditButtonService.openUnitTypeEditor(item).afterClosed().pipe(switchMap(data => {
-        console.log('closing dialog')
+        // console.log('closing dialog')
         return of(true)
       }))
     }))

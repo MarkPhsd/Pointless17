@@ -10,11 +10,13 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { Router } from '@angular/router';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
+import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 @Component({
   selector: 'app-receipt-view',
   templateUrl: './receipt-view.component.html',
   styleUrls: ['./receipt-view.component.scss']
 })
+
 export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   @ViewChild('printsection')        printsection: ElementRef;
@@ -27,13 +29,11 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   @ViewChild('coachingPDF', {read: ElementRef}) coachingPDF: ElementRef;
   @ViewChild('coachingLink', {read: ElementRef}) coachingLink: ElementRef;
 
-
-  @Input() autoPrint : boolean;
-  @Input() hideExit = false;
+  @Input()  autoPrint : boolean;
+  @Input()  hideExit = false;
   @Output() outPutExit      = new EventEmitter();
-
-  @Input() printerName      : string;
-  @Input() options           : printOptions;
+  @Input()  printerName      : string;
+  @Input()  options          : printOptions;
 
   _printView: Subscription;
   // printView               = 1;
@@ -65,7 +65,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   orderTypes        : any;
   platForm          = '';
 
-  printOptions    : printOptions;
+  printOptions      : printOptions;
   result            : any;
   isElectronServiceInitiated = false;
 
@@ -90,12 +90,12 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   electronReceipt       : string;
   electronReceiptID     : number;
 
-  electronLabelPrinter: string;
+  electronLabelPrinter  : string;
   electronLabelPrinterSetting: ISetting;
-  electrongLabelID     : number;
-  electronLabel        : string;
+  electrongLabelID      : number;
+  electronLabel         : string;
 
-  autoPrinted       = false;
+  autoPrinted           = false;
   email$: Observable<any>;
   printAction$: Observable<any>;
   layout$: Observable<any>;
@@ -124,8 +124,13 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       if(!this.receiptStyles) { return }
       if (status && status.ready) {
           if ((this.options && this.options.silent) || this.autoPrint) {
-            if (this.autoPrinted) { return }
+            if (this.autoPrinted) {
+              this.exit()
+              return }
             if (this.print()) {
+              if (this.autoPrint) {
+                this.exit()
+              }
               this.autoPrinted = true;
             }
           }
@@ -145,6 +150,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   async printViewCompleted(event) {
     if (this.autoPrint) {
       await this.print();
+      console.log('about to exit')
       this.exit()
     }
   }
@@ -154,6 +160,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       this.user = data;
     })
   }
+
   constructor(
     public orderService           : OrdersService,
     public orderMethodsService    : OrderMethodsService,
@@ -164,7 +171,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     private orderMethodService    : OrderMethodsService,
     private coachMarksService     : CoachMarksService,
     private authenticationService : AuthenticationService,
-    private router: Router
+    private router                : Router,
+    private paymentsMethodsProcessService: PaymentsMethodsProcessService,
     )
   {}
 
@@ -173,6 +181,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     this.initPrintView() //done
     this.intSubscriptions();
     this.userSubscriber();
+    console.log('auto print', this.autoPrint)
   }
 
   ngOnDestroy(): void {
@@ -231,7 +240,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   getStylesForPrintOut() {
     let ob$ : Observable<any>
-    if (this.printingService.printView  == 2 || this.printingService.printView  == 3 || this.printingService.printView  == 4) {
+    if (this.printingService.printView  == 2 || this.printingService.printView  == 3 ||
+        this.printingService.printView  == 4) {
       ob$ = this.initBalanceSheetDefaultLayoutsObservable()
     }
     if (this.printingService.printView  == 1 || !this.printingService.printView) {
@@ -334,7 +344,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     return this.printingService.appyStylesCachedObservable(site).pipe(
         switchMap( data => {
           this.receiptStyles  =  data
-          console.log('receipts', this.receiptStyles.text)
+          // console.log('receipts', this.receiptStyles.text)
           this.applyStyle(data)
           return of(data)
         }
@@ -426,15 +436,29 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   async print() {
 
     if (this.platFormService.isAppElectron) {
-      return await this.printElectron();
+      await this.printElectron();
+      this.printPrep();
+      return
     }
 
     if (!this.printerName) {
       this.convertToPDF()
+      this.printPrep();
       return
     }
 
-    if (this.platFormService.webMode)    { this.convertToPDF() }
+    if (this.platFormService.webMode)    {
+      this.convertToPDF()
+      this.printPrep();
+      return;
+    }
+
+
+  }
+
+  printPrep() {
+    console.log('print prep')
+    this.paymentsMethodsProcessService.sendOrderProcessLockMethod(this.order)
   }
 
   async printElectron() {
@@ -482,6 +506,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
         return printResult
       }
 
+
+
     }
     return false
   }
@@ -495,10 +521,10 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   exit() {
-    if (this.autoPrint) {
-      this.outPutExit.emit('false');
-      return ;
-    }
+    // if (this.autoPrint) {
+    //   this.outPutExit.emit('false');
+    //   return ;
+    // }
     this.outPutExit.emit('true')
   }
 

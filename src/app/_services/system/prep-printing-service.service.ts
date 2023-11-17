@@ -95,13 +95,13 @@ export class PrepPrintingServiceService {
       const site = this.siteService.getAssignedSite()
       const styles$ = this.appyStylesCachedObservable(site)
       return styles$.pipe(switchMap(data => {
-        // console.log ('printing printElectronTemplateOrder', data)
         return this.dialog.open(PrintTemplatePopUpComponent,
           { width:        '450px',
             minWidth:     '450px',
             height:       '600px',
             minHeight:    '600px',
-            data : printOrderList
+            data : printOrderList, 
+
           },
           ).afterClosed()
       }))

@@ -1,6 +1,4 @@
 
-
-
 <div *ngIf="inputForm">
   <div [formGroup]="inputForm">
     <mat-form-field
@@ -12,6 +10,7 @@
           <ng-content></ng-content>
           {{itemHeader | titlecase}}
         </mat-label>
+
         <div *ngIf="type === 'input' && passwordMask">
           <input matInput
                 [disabled] ='!enabled'

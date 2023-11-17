@@ -14,7 +14,7 @@
         </div>
 
         <div      *ngIf="items && itemText && items.length>0">
-          <div    *ngFor="let item of items">
+          <div    *ngFor="let item of items" style="margin-bottom:8px">
             <div  [class]="gridReceiptClass"
                   [innerHTML]="getInterpolatedHTML(itemText, item)" >  </div>
           </div>
@@ -32,7 +32,7 @@
               <div [innerHTML]="getInterpolatedHTML(paymentsText, payment)" >  </div>
           </div>
         </div>
-
+        
         <div *ngIf="subFooterText && orderTypes && orderTypes.length>0">
           <div *ngFor="let orderType of orderTypes">
               <div [innerHTML]="getInterpolatedHTML(subFooterText, orderType)" >  </div>

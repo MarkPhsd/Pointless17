@@ -373,6 +373,7 @@ import { PartBuilderTreeComponent } from '../modules/admin/products/part-builder
 import { MessageEditorListComponent } from '../modules/admin/message-editor-list/message-editor-list.component';
 import { MessageEditorComponent } from '../modules/admin/message-editor-list/message-editor/message-editor.component';
 import { UserIdleModule, UserIdleService } from 'angular-user-idle';
+import { PosOrderItemCalcValuesComponent } from '../modules/posorders/pos-order/pos-order-item-calc-values/pos-order-item-calc-values.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -656,7 +657,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     POSOrderScheduleComponent,
     POSOrderServiceTypeComponent,
     POSOrderShippingAddressComponent,
-
+    PosOrderItemCalcValuesComponent,
     PosOrderNotesComponent,
     POSOrderScheduleFormComponent,
     PosOrderPriceScheduleInfoComponent,
@@ -703,6 +704,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PromptItemsSelectedComponent,
     PSMenuGroupListComponent,
     PSMenuGroupEditComponent,
+
+
 
     ReceiptLayoutComponent,
     RecieptPopUpComponent,
@@ -821,6 +824,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       NgxPayPalModule,
       NgxJsonViewerModule,
       NgxColorsModule,
+
     ],
 
   exports: [
@@ -831,9 +835,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     NgxPayPalModule,
     NgxJsonViewerModule,
     NgxColorsModule,
-    // ColorPickerModule,
-    // NumericDirective,
-    // RoomLayout,
   ],
 
   providers: [

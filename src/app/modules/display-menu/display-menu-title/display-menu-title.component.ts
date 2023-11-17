@@ -18,6 +18,7 @@ export class DisplayMenuTitleComponent implements OnInit {
 
   @Input() backgroundImage : string;
   @Input() hideLogo: boolean;
+  @Input() iconView: boolean;
   @Input() repeat = 'repeat'
   @Input() styleWidth = '100%';
   @Input() styleHeight ='calc(120% + 200px)';
@@ -36,27 +37,29 @@ export class DisplayMenuTitleComponent implements OnInit {
     return this.awsBucket.getPlaceHolderImage() // this.placeHolderImage
   }
 
-  constructor( private awsBucket         : AWSBucketService,) { }
+  constructor( private awsBucket : AWSBucketService) { }
 
   ngOnInit(): void {
     const i = 0
     this.loadStyles();
     this.applyBackground();
     if (this.menu) {
-      this.backGroundStyle  = `rgba(0, 0, 0, ${this.menu?.backcolorOpacity})`
+      // this.backGroundStyle  = `rgba(0, 0, 0, ${this.menu?.backcolorOpacity})`
     }
   }
 
   applyBackground() {
+    console.log('menu', this.menu, this.backgroundImage);
+
     if (this.backgroundImage) {
       const image =    this.awsBucket.getImageURLPathAlt(this.bucket, this.backgroundImage)
-      this.backgroundURL = `url(${image})`
+      // this.backgroundURL = `url(${image})`
       return;
     }
 
     if (this.menu?.backgroundImage) {
       const image =    this.awsBucket.getImageURLPathAlt(this.bucket, this.menu?.backgroundImage)
-      this.backgroundURL = `url(${image})`
+      // this.backgroundURL = `url(${image})`
     }
   }
 

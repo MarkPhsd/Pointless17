@@ -538,7 +538,7 @@ export class InventoryAssignmentService {
       item.productName = menuItem.name
       item.label       = menuItem.sku;
       item.productID   = menuItem.id;
-      item.cost        = menuItem.wholeSale;
+      item.cost        = menuItem.wholesale;
       item.price       = menuItem.retail;
       item.notAvalibleForSale =  false;
       if (menuItem.itemType) {

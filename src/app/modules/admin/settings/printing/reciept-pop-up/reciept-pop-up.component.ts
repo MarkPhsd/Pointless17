@@ -37,6 +37,7 @@ export class RecieptPopUpComponent implements OnInit {
   }
 
   ngOnInit() {
+
   }
 
   exit(event) {

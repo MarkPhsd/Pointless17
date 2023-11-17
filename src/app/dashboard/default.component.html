@@ -1,6 +1,9 @@
 <div *ngIf="(uiTransactions$ | async) as settings"></div>
-
+<div *ngIf="(printAction$ | async) as printAction"></div>
 <div *ngIf="(posDevice$ | async) as posDevice"></div>
+
+<!-- logout -->
+<div *ngIf="(action$ | async) as action"></div>
 
 <div *ngIf="!hideAppHeader">
   <app-header> </app-header>

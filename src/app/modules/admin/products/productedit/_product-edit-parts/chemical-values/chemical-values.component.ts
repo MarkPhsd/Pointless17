@@ -26,7 +26,7 @@ export class ChemicalValuesComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log('')
+    // console.log('')
   }
 
 }

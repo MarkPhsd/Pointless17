@@ -105,9 +105,13 @@ export interface IItemBasicB{
   image: string;
 }
 
+export interface IItemBasicValue extends IItemBasic { 
+  value: number;
+}
 @Injectable({
   providedIn: 'root'
 })
+
 export class MenuService {
 
 

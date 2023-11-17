@@ -3,7 +3,7 @@
   <mat-form-field class="formFieldClass"
                   appearance="outline" >
     <mat-label class="form-background">
-      <mat-icon>search</mat-icon>Unit Type Lookup {{index}}
+      <mat-icon>search</mat-icon><ng-content></ng-content>
     </mat-label>
     <input
             #input
@@ -18,10 +18,9 @@
                         (optionSelected)="onChange($event)">
       <mat-option *ngFor="let item of (results$ | async)?.results"
                   [value]="item">
-              {{item.name}}
+          {{item?.name}}
       </mat-option>
     </mat-autocomplete>
-
     <button   *ngIf="itemNameInput && itemNameInput.length>0"
           matSuffix
           mat-icon-button aria-label="Clear"
@@ -34,5 +33,5 @@
  <div hidden="true"
       *ngIf="inputForm"
       [formGroup]='inputForm'>
-  <input formControlName="unitTypeID">
+  <input [formControlName]="formControlName"> 
 </div>

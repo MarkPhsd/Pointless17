@@ -24,6 +24,7 @@
               <app-order-card
                 (click)="setActiveOrderObs(order)"
                 [order]="order"
+                [disableEdit]="userAuths?.disableEditOtherUsersOrders && order?.employeeID != user?.employeeID"
               ></app-order-card>
             </div>
             </ng-container>

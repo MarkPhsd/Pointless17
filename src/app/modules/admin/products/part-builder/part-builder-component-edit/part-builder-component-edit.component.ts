@@ -368,7 +368,7 @@ export class PartBuilderComponentEditComponent implements OnInit {
       this.menuService.getMenuItemByID(this.site, item.id).subscribe(data => {
           this.menuItem = data
           this.pb_Component.price = data.retail;
-          this.pb_Component.cost = data.wholeSale;
+          this.pb_Component.cost = data.wholesale;
           this.pb_Component.productID = data.id;
           this.pb_Component.unitTypeID = data.unitTypeID;
           this.pb_Component.name = data.name;

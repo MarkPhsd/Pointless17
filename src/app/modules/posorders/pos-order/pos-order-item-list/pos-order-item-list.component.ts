@@ -117,16 +117,18 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   currentOrderSusbcriber() {
     this._order = this.orderMethodsService.currentOrder$.subscribe(
       data => {
-      this.order = data
-
-      if (this.order.serviceType.toLowerCase() == 'purchase order' || this.order.serviceType.toLowerCase() === 'conversion') {
-        this.purchaseOrderEnabled = true;
-      }
-      this.refreshSearch()
-      if (data.posOrderItems) {
-        return of(data.posOrderItems)
-      }
-      return of([])
+        if (data) {
+          this.order = data;
+          if (this.order &&  this.order.serviceType &&
+            (this.order.serviceType.toLowerCase() == 'purchase order' || this.order.serviceType.toLowerCase() === 'conversion')) {
+              this.purchaseOrderEnabled = true;
+          }
+          this.refreshSearch()
+          if (data.posOrderItems) {
+            return of(data.posOrderItems)
+          }
+        }
+        return of([])
     })
 
   }
@@ -151,7 +153,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   ngOnInit() {
     this.initSubscriptions();
     this.initAgGrid(this.pageSize);
-    // this.urlPath            = await this.awsService.awsBucketURL();
     this.rowSelection       = 'single'
     this.initAuthorization();
     this.initClasses();
@@ -244,6 +245,17 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     columnDefs.push(nextColumn);
 
+    nextColumn =  {headerName: 'UOM',     field: 'unitName',
+          sortable: true,
+          width   : 100,
+          minWidth: 100,
+          maxWidth: 100,
+          flex    : 2,
+          editable: false,
+          singleClickEdit: true
+      }
+    columnDefs.push(nextColumn);
+
     let currencyColumn = {headerName: 'Price',     field: 'unitPrice', sortable: true,
                     cellRenderer: this.agGridService.currencyCellRendererUSD,
                     width   : 100,
@@ -325,7 +337,30 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     columnDefs.push(itemDelete);
 
+    nextColumn =  {headerName: 'Prior',     field: 'traceProductCount',
+          sortable: true,
+          width   : 100,
+          minWidth: 100,
+          maxWidth: 100,
+          flex    : 2,
+          editable: false,
+          singleClickEdit: false
+    }
+    columnDefs.push(nextColumn);
+
+     nextColumn =  {headerName: 'End',     field: 'traceProductCount+quantity',
+          sortable: true,
+          width   : 100,
+          minWidth: 100,
+          maxWidth: 100,
+          flex    : 2,
+          editable: false,
+          singleClickEdit: false
+    }
+    columnDefs.push(nextColumn);
+
     this.columnDefs = columnDefs;
+
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
 
@@ -368,7 +403,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
 
   editItemWithId(id:number) {
     if(!id) { return }
-    console.log(id)
+    // console.log(id)
     this.productEditButtonService.openProductDialogObs(id).subscribe(
         data => {
           this.openingProduct = false
@@ -376,9 +411,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       }
     )
   }
-
-
-
 
   refreshSearchAny(event) {
     this.refreshSearch();
@@ -410,17 +442,22 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   }
 
   //ag-grid standard method
-  async onGridReady(params: any) {
+  onGridReady(params: any) {
+
+    if (!this.order || !this.order.posOrderItems)   {
+      // console.log('exiting')
+      return
+    }
+    // console.log('onGridReady', this.order.posOrderItems)
+    // console.log('params', params)
 
     if (!params) { return };
     this.params = params;
     params.startRow = 1;
     params.endRow = 1000;
 
-    if (!this.order || !this.order.posOrderItems)   {
-      // console.log('exiting')
-      return
-    }
+
+
 
     let datasource =  {
       getRows: (params: IGetRowsParams) => {

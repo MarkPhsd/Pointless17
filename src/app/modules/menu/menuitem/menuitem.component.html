@@ -44,12 +44,12 @@
 
                   <ng-container [ngTemplateOutlet]="companyNameView"></ng-container>
                   <ng-container [ngTemplateOutlet]="shortdescriptionView"></ng-container>
+                  <ng-container [ngTemplateOutlet]="instructionsView"></ng-container>
                 </div>
 
                 <div class="features-span">
                   <ng-container [ngTemplateOutlet]="pricesView"></ng-container>
                   <ng-container [ngTemplateOutlet]="tierPriceView"></ng-container>
-
                   <ng-container [ngTemplateOutlet]="addButtonsView"></ng-container>
                 </div>
 
@@ -57,7 +57,6 @@
                   <ng-container [ngTemplateOutlet]="metaTagsView"></ng-container>
                 </div>
 
-                <ng-container [ngTemplateOutlet]="instructionsView"></ng-container>
                 <ng-container [ngTemplateOutlet]="packagingView"></ng-container>
                 <ng-container [ngTemplateOutlet]="prepNotesView"></ng-container>
               </div>
@@ -68,7 +67,7 @@
 
           <mat-tab-group mat-align-tabs="start"
                         class="mat-tab-group"
-                         md-stretch-tabs   >
+                         md-stretch-tabs >
 
             <mat-tab label="Description">
               <ng-container [ngTemplateOutlet]="descriptionView"></ng-container>
@@ -94,9 +93,7 @@
 
     <ng-template #nameView>
       <div class="title">
-        <h1>
-          {{ menuItem?.name.toUpperCase() }}
-        </h1>
+        <h1>   {{ menuItem?.name.toUpperCase() }}  </h1>
       </div>
     </ng-template>
 
@@ -108,12 +105,11 @@
       </div>
     </ng-template>
 
-    <ng-template #barcodeView>
-      <div style="margin-left:10px;margin-top:10px;" *ngIf="menuItem.barcode" >
+    <ng-template #barcodeView >
+      <div style="margin-left:10px;margin-top:10px;" *ngIf="menuItem.barcode && !menuItem?.itemType?.webStoreSimpleView" >
         <div>
           Barcode
         </div>
-
         <div>
           {{ menuItem?.barcode}}
         </div>
@@ -126,19 +122,20 @@
             && !menuItem.itemType.requireInStock
             && !priceTiers">
 
-          <div style="margin: 5px;">
+            <div style="margin: 5px;" *ngIf="!menuItem?.itemType?.webStoreSimpleView">
+              <app-quantiy-selector
+                [inputForm]  = "productForm"
+                (outPutValue)="changeQuantity($event)">
+            </app-quantiy-selector>
+          </div>
+
+          <div style="margin: 5px;"
+               *ngIf="!menuPricesEnabled || (productPrice || menuItem.retail>0)">
             <button   mat-raised-button
                       color="warn"
                       class="button"
                       (click)="addItemToOrder()">
               <mat-icon>add</mat-icon>Add</button>
-          </div>
-
-          <div style="margin: 5px;">
-              <app-quantiy-selector
-                [inputForm]  = "productForm"
-                (outPutValue)="changeQuantity($event)">
-            </app-quantiy-selector>
           </div>
       </div>
     </ng-template>
@@ -150,10 +147,12 @@
     </ng-template>
 
     <ng-template #pricesView>
-      <div class="prices"
-          *ngIf="isUserStaff">
+      <div class="prices"  >
         <menu-item-extended-prices
+          [quantity]="quantity"
           [isUserStaff]="isUserStaff"
+          (outPutSelectPrice)="setItemPrice($event)"
+          (outPutAddItem)="addItemWithPrice($event)"
           [menuItem]="menuItem">
         </menu-item-extended-prices>
       </div>
@@ -161,13 +160,12 @@
 
     <ng-template #productCountView>
       <div *ngIf="menuItem && menuItem.itemType
-                  && !menuItem.itemType.requireInStock">
-
+                  && !menuItem.itemType.requireInStock 
+                  && !menuItem?.itemType?.webStoreSimpleView">
         <menu-item-product-count
             [productCount]='menuItem.productCount'
             [isUserStaff] ='isUserStaff'>
         </menu-item-product-count>
-
       </div>
     </ng-template>
 
@@ -228,6 +226,7 @@
                   (click)="packaging=item">{{item}}</button>
         </div>
       </div>
+
       <div class="item-span mat-packaging"
             *ngIf="menuItem
                   && menuItem.itemType

@@ -32,7 +32,7 @@
 
       <div class="name-fields">
 
-        <div  style="width:175px">
+        <div >
           <app-value-fields
                         [inputForm]="inputForm"
                         [fieldName]="'phone'">
@@ -40,7 +40,7 @@
           </app-value-fields>
         </div>
 
-        <div style="width:175px"
+        <div
               *ngIf="isStaff" >
           <app-value-fields
                           [inputForm]="inputForm"
@@ -49,7 +49,7 @@
           </app-value-fields>
         </div>
 
-        <div  style="width:275px">
+        <div  >
           <app-value-fields
                     [enabled]="!isStaff"
                     [inputForm]="inputForm"

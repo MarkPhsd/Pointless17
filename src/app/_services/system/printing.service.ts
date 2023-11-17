@@ -27,6 +27,7 @@ import { PrintTemplatePopUpComponent } from 'src/app/modules/admin/settings/prin
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ClientTableService } from '../people/client-table.service';
 import { UUID } from 'angular2-uuid';
+import { PaymentsMethodsProcessService } from '../transactions/payments-methods-process.service';
 
 export interface printOptions {
   silent: boolean;
@@ -109,6 +110,7 @@ export class PrintingService {
                 private menuItemService   : MenuService,
                 private http              : HttpClient,
                 private posOrderItemService : POSOrderItemService,
+
                 private printingAndroidService   : PrintingAndroidService,
                 private renderingService  : RenderingService,
                 private settingService    : SettingsService,
@@ -126,6 +128,7 @@ export class PrintingService {
   }
 
   printReceipt(orderID: number, groupID: number)  {
+
     if (!groupID) { groupID = 0 }
     const site = this.siteService.getAssignedSite()
     return this.orderService.getPOSOrderGroupTotal(site, orderID, groupID).pipe(
@@ -710,7 +713,6 @@ export class PrintingService {
     }
 
 
-    // console.log('now printing label')
     const printer$ = this.settingService.getDeviceSettings(localStorage.getItem('devicename')).pipe(
       switchMap(data => {
         const item = JSON.parse(data.text) as ITerminalSettings;
@@ -890,7 +892,8 @@ export class PrintingService {
     try {
       this.saveContentsToFile(fileName, printString);
     } catch (error) {
-      this.siteService.notify(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Close', 3000, 'red')
+      this.siteService.notify(`File could not be written.
+                                Please make sure you have a writable folder ${fileName}`, 'Close', 3000, 'red')
     }
 
     const options = {
@@ -1016,14 +1019,16 @@ export class PrintingService {
 
   previewReceipt(autoPrint?: boolean, order?: IPOSOrder, ) {
 
-    if (this.uiSettingsService.posDeviceInfo) {
-      if (this.platFormService.androidApp) {
-        const device = this.uiSettingsService.posDeviceInfo;
-        this.printingAndroidService.printAndroidPOSReceipt( order,
-                                                            null, device.btPrinter );
-        return of(null)
-      }
-    }
+    // if (this.uiSettingsService.posDeviceInfo) {
+    //   if (this.platFormService.androidApp) {
+    //     const device = this.uiSettingsService.posDeviceInfo;
+    //     this.printingAndroidService.printAndroidPOSReceipt( order,
+    //                                                         null, device.btPrinter );
+    //     return of(null)
+    //   }
+    // }
+
+    console.log('previewReceipt', autoPrint, order);
 
     if (this.uiSettingsService.posDeviceInfo) {
       if (this.platFormService.androidApp) {
@@ -1037,7 +1042,9 @@ export class PrintingService {
     }
 
     this.printSub(null, autoPrint);
-    return of(null)
+
+    return of(null);
+
   };
 
   printSub(printerName: string, autoPrint?: boolean) {
@@ -1047,13 +1054,13 @@ export class PrintingService {
         data: {autoPrint: autoPrint, printerName: printerName}
       },
     )
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe( result => {
       if (this.router.url == 'pos-payment' ) {
         if (!this.platFormService.isApp()) {
           const user = this.userAuthService.currentUser()
           if (user && user.roles == 'user') {
             if (this.order.balanceRemaining == 0) {
-              // this.orderMethodsService.updateOrderSubscription(null)
+
             }
           }
         }

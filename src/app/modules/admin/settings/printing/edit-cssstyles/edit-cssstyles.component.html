@@ -1,31 +1,23 @@
-<div *ngIf="!setting">
-  Loading...
-</div>
+<div *ngIf="!setting">  Loading... </div>
 
 <div *ngIf="setting">
-  <div class="header-alignment">
-    <mat-icon>design_services</mat-icon>
- </div>
+  <div class="header-alignment">  <mat-icon>design_services</mat-icon>  </div>
 
-  <div class="header">
-    Designer
-  </div>
+  <div class="header">  Designer   </div>
 
-  <div  >
-    <div >
-        <div >
+  <div>
+    <div>
+      <div>
           <button mat-raised-button color="primary"  (click)="copy()"><mat-icon>file_copy</mat-icon>Copy</button>
           <button mat-raised-button color="primary"  (click)="resetDefault()"><mat-icon>upload</mat-icon>Reset</button>
           <button mat-raised-button color="primary"  (click)="update()"><mat-icon>save</mat-icon>Save</button>
           <button mat-raised-button color="primary"  (click)="delete()"><mat-icon>delete</mat-icon>Delete</button>
           <button mat-raised-button color="primary"  (click)="onCancel()"><mat-icon>close</mat-icon>Close</button>
-        </div>
       </div>
+    </div>
   </div>
 
-  <div class="margin">
-    <mat-divider></mat-divider>
-  </div>
+  <div class="margin">  <mat-divider></mat-divider>  </div>
 
   <div [formGroup]="inputForm"
         (ngSubmit)="update()"
@@ -40,9 +32,9 @@
       </div>
     </div>
 
-    <div>Type: {{setting.name}}</div>
+    <div>Type: {{setting.name}} </div>
 
-    <div  >
+    <div>
       <mat-form-field appearance="outline">
         <mat-label >Name</mat-label>
         <input matInput
@@ -53,7 +45,7 @@
       </mat-form-field>
     </div>
 
-    <div >
+    <div>
       <mat-form-field appearance="outline" class="description">
         <mat-label>Styles</mat-label>
         <textarea
@@ -61,8 +53,7 @@
                   type             ="text"
                   formControlName  ="text"
                   rows             ="50"
-                  cols             ="90"
-            >
+                  cols             ="90"   >
         </textarea>
       </mat-form-field>
     </div>

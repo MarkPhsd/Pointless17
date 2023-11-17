@@ -124,6 +124,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
     return null;
   }
+
   initStepSelectionSubscription() {
      this.saleProcess$ = this.orderMethodsService.posPaymentStepSelection$.pipe(
       switchMap( data => {
@@ -139,7 +140,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   initSubscriptions() {
-    // this.order.
     this._order = this.orderMethodsService.currentOrder$.pipe(
       switchMap( data => {
       if (data) {
@@ -148,7 +148,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       }
       if (data && data.serviceTypeID) {
         const site = this.sitesService.getAssignedSite();
-        return this.serviceTypeService.getTypeCached(site, data.serviceTypeID)
+        return this.serviceTypeService.getTypeCached(site, data?.serviceTypeID)
       }
       return of(null)
       }
@@ -175,7 +175,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     })
   }
 
-
   userSubscriber() {
     this._user = this.authenticationService.user$.subscribe(data => {
       this.user = data;
@@ -185,7 +184,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   constructor(private paymentService  : POSPaymentService,
               public orderMethodsService: OrderMethodsService,
               private sitesService    : SitesService,
-              private orderService    : OrdersService,
               private serviceTypeService: ServiceTypeService,
               private paymentMethodService: PaymentMethodsService,
               private matSnackBar     : MatSnackBar,
@@ -197,7 +195,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
               private userAuthorization : UserAuthorizationService,
               private authenticationService: AuthenticationService,
               private changeDetectorRef: ChangeDetectorRef,
-              private printingservice: PrintingService,
               private coachMarksService: CoachMarksService,
               private router          : Router,
               private fb              : UntypedFormBuilder) { }
@@ -513,6 +510,14 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this._paymentAmount = event.amount;
     this.groupPaymentAmount = event.amount;
     this.groupPaymentGroupID = event.groupID;
+    
+  }
+
+  clearGroupSelection() { 
+    this.splitByItem = false;
+    this._paymentAmount = 0;
+    this.groupPaymentAmount = 0;
+    this.groupPaymentGroupID = 0;
   }
 
   closeOrder() {

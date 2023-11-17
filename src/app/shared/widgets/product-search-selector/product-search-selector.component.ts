@@ -25,9 +25,7 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
   @Input()  productName:      string;
   @Input()  doNotPassName     :string;
   @Input()  formControlName = 'productName';
-
   @Input() filter: ProductSearchModel; //productsearchModel;
-
 
   searchPhrase:               Subject<any> = new Subject();
   searchModel                 =  {} as ProductSearchModel;

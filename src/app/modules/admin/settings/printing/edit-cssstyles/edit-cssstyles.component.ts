@@ -70,10 +70,8 @@ export class EditCSSStylesComponent implements OnInit {
   }
 
   initForm() {
-    this.inputForm = this.fbService.initForm(this.inputForm)
-    if (this.setting) {
-      this.inputForm.patchValue(this.setting)
-    }
+    this.inputForm    = this.fbService.initForm(this.inputForm)
+    if (this.setting) {  this.inputForm.patchValue(this.setting)  }
   }
 
   ngOnInit() {
@@ -83,7 +81,6 @@ export class EditCSSStylesComponent implements OnInit {
   async resetDefault() {
     const result = window.confirm('Rest to default styles?')
     if (result) {
-      // this.settingsService.getDefaultReceiptStyles()
       const site = this.siteService.getAssignedSite();
       const setting = await this.settingsService.setDefaultReceiptStyles(site)
       this.setting = setting;
@@ -91,24 +88,6 @@ export class EditCSSStylesComponent implements OnInit {
     }
   }
 
-  copy() {
-    const site = this.siteService.getAssignedSite();
-    this.settingsService.postSetting(site, this.inputForm.value).subscribe(data =>  {
-      this.notify('Saved', 'Success')
-    }, err => {
-      this.notify(err, 'Failed')
-    })
-  }
-
-  delete() {
-    const result = window.confirm('Are you sure you want to delete this style sheet?')
-    if (result) {
-      const site = this.siteService.getAssignedSite();
-      this.settingsService.deleteSetting(site, this.setting.id).subscribe(data =>  {
-        this.dialogRef.close();
-      })
-    }
-  }
 
   onCancel() {
     this.dialogRef.close(this.setting);
@@ -148,6 +127,25 @@ export class EditCSSStylesComponent implements OnInit {
 
   refreshSubFooter() {
     this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.setting.option8, this.orderTypes , 'footer')
+  }
+
+  copy() {
+    const site = this.siteService.getAssignedSite();
+    this.settingsService.postSetting(site, this.inputForm.value).subscribe(data =>  {
+      this.notify('Saved', 'Success')
+    }, err => {
+      this.notify(err, 'Failed')
+    })
+  }
+
+  delete() {
+    const result = window.confirm('Are you sure you want to delete this style sheet?')
+    if (result) {
+      const site = this.siteService.getAssignedSite();
+      this.settingsService.deleteSetting(site, this.setting.id).subscribe(data =>  {
+        this.dialogRef.close();
+      })
+    }
   }
 
 

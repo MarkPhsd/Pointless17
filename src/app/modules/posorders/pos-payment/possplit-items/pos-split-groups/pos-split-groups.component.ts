@@ -31,11 +31,13 @@ export class PosSplitGroupsComponent implements OnInit , OnDestroy{
 
   getListOf() {
     const site = this.siteService.getAssignedSite()
-    if (!this.orderGroupTotal$) { this.orderGroupTotal$ = [] as Observable<IPOSOrder>[] }
-    this.values.forEach(data => {
-      // console.log('loaded', data, this.order.id)
-      this.orderGroupTotal$.push(this.setGroupOrderTotal(site, this.order.id, data))
-    })
+    if (this.order) { 
+      if (!this.orderGroupTotal$) { this.orderGroupTotal$ = [] as Observable<IPOSOrder>[] }
+      this.values.forEach(data => {
+        // console.log('loaded', data, this.order.id)
+        this.orderGroupTotal$.push(this.setGroupOrderTotal(site, this.order.id, data))
+      })
+    }
   }
 
   ngOnDestroy() {

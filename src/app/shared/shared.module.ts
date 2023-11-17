@@ -230,6 +230,8 @@ import { SalesItemsComponent } from '../modules/admin/reports/item-sales-card/sa
 import { DerpPipe } from '../_pipes/derp.pipe';
 import { POSOrderScheduleCardComponent } from '../modules/posorders/posorder-schedule/posorder-schedule-card/posorder-schedule-card.component';
 import { AuditPaymentComponent } from '../modules/admin/reports/item-sales-card/audit-payment/audit-payment.component';
+import { QRCodeModule } from 'angularx-qrcode'
+import { UnitTypeSelectorComponent } from './widgets/unit-type-selector/unit-type-selector.component';
 
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
@@ -469,6 +471,7 @@ import { AuditPaymentComponent } from '../modules/admin/reports/item-sales-card/
     ZoomComponent,
     CoachMarksComponent,
     CoachMarksButtonComponent,
+    UnitTypeSelectorComponent,
   ],
 
   imports: [
@@ -485,6 +488,7 @@ import { AuditPaymentComponent } from '../modules/admin/reports/item-sales-card/
     FormsModule,
     GalleryModule,
     HammerModule,
+    QRCodeModule,
 
     ColorPickerModule,
     GridsterModule,
@@ -658,7 +662,8 @@ import { AuditPaymentComponent } from '../modules/admin/reports/item-sales-card/
     RequestMessageComponent,
     RequestMessagesComponent,
     QuantiySelectorComponent,
-
+    UnitTypeSelectorComponent,
+    
     SaveChangesButtonComponent,
     ScaleValueViewComponent,
     SplitEntrySelectorComponent,

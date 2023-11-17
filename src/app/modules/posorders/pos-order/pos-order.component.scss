@@ -29,6 +29,13 @@
     margin-top: 5px;
   }
 
+  .grid-items {
+    display: grid;
+    grid-template-columns: 75px 90px;
+    // gap: 5px;
+    // grid-auto-flow: dense; /* NEW */
+  }
+
 
 .grid-header-order-total {
   display: grid;
@@ -130,25 +137,24 @@
 .grid-po-helper {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }
 
 .po-info {
-  width: 325px;
-  height: 225px;
+  width: 275px;
+  height: v;
   overflow-y: auto;
   overflow-x: auto;
   margin:5px;
 }
 
 .po-info-sales {
-  width: 245px;
-  height: 225px;
+  width: 225px;
+  height: 265px;
   overflow-y: auto;
   overflow-x: hidden;
   margin:5px;
 }
-
 
 .grid-buttons {
   margin    : 5px;

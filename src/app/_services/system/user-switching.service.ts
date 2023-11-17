@@ -1,8 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
-import { switchMap,   } from 'rxjs/operators';
+import { catchError, switchMap,   } from 'rxjs/operators';
 import { clientType, IUser, IUserProfile, UserPreferences } from 'src/app/_interfaces';
 import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switch/fast-user-switch.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -147,10 +147,10 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   clearLoggedInUser() {
+    this._clearloginStatus.next(true)
     this.orderMethodService.updateOrderSubscriptionClearOrder(0)
     this.orderMethodService.updateOrderSearchModel(null);
     this.toolbarUIService.updateDepartmentMenu(0);
-    this._clearloginStatus.next(true)
     this.authenticationService.logout();
   }
 
@@ -206,8 +206,7 @@ export class UserSwitchingService implements  OnDestroy {
     const site = this.siteService.getAssignedSite()
     const userLogin = { userName, password } as userLogin;
     const timeOut   = 3 * 1000;
-    // console.log('login', userLogin)
-    return  this.authenticate(userLogin)
+    let auth$ =  this.authenticate(userLogin)
       .pipe(
         switchMap(
           user => {
@@ -222,7 +221,7 @@ export class UserSwitchingService implements  OnDestroy {
 
             if (user) {
               if (user?.message.toLowerCase() === 'failed') {
-                const user = {message: 'failed'}
+                const user = {message: 'failed', errorMessage: 'failed'}
                 return of(user)
               }
               user.message = 'success'
@@ -234,21 +233,39 @@ export class UserSwitchingService implements  OnDestroy {
               return of(user)
             }
 
-      })).pipe(switchMap(data => {
+      }), catchError(data => {
+        console.log('Error login authenticate')
+        return of(data)
+      }))
+
+      let userAuth$ =  auth$.pipe(switchMap(data => {
         // console.log('Sending user getting contact', data)
         if (data?.message === 'failed') { return of(data)}
         return this.contactsService.getContact(site, data?.id)
-      })).pipe(switchMap(data => {
-          if ( !data ) {
-              const user = {} as IUser
-              user.message = 'failed';
-              return of( user )
+      }), catchError(data => {
+        console.log('Error login userAuth')
+        return of(data)
+      }))
+
+
+      let updateAuth$ = userAuth$.pipe(switchMap(data => {
+
+          //  console.log('user auths data: ', data)
+
+            if ( !data || (data && (data?.message == 'failed'))) {
+                console.log( 'message failed')
+                const user = {} as IUser
+                user.message = 'failed';
+                user.errorMessage = 'failed'
+                return of( user )
             }
 
             const item = localStorage.getItem('user')
             const user = JSON.parse(item) as IUser;
 
             // console.log('Sending user getting contact - getting auths', user)
+            if (!data.auths)
+
             if (data.clientType && data.clientType.jsonObject) {
               this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
             } else
@@ -258,9 +275,17 @@ export class UserSwitchingService implements  OnDestroy {
 
             return of(user)
           }
+      ), catchError(data => {
+        console.log('Error login updateAuth')
+        return of(data)
+      }))
 
-      )).pipe(switchMap(user =>
+      let balanceSheet$ = updateAuth$.pipe(switchMap(user =>
          {
+            if (!user || (user && user.message == 'failed')) {
+              return of(user)
+            }
+
             if (user) {
               ///this is where we prompt the balance sheet
               if ( this.platformService.isApp()  )  {
@@ -274,9 +299,20 @@ export class UserSwitchingService implements  OnDestroy {
             }
             return of(null)
           }
-        )
-      )
+        ), catchError(data => {
+          console.log('Error login balanceSheet')
+          return of(data)
+       }))
 
+      let result$ = balanceSheet$.pipe(
+        switchMap(data => {
+            return of(data)
+        }), catchError(data => {
+            console.log('Error login')
+            return of(data)
+      }))
+
+      return result$
   }
 
   // getAuthorization()
@@ -352,6 +388,7 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   openPIN(request: any) {
+
     if (!this.platformService.isApp) {return}
     let dialogRef: any;
     dialogRef = this.dialog.open(FastUserSwitchComponent,

@@ -108,11 +108,9 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
     }));
   }
 
-
   initFormFields() {
     this.productForm  = this.fbProductsService.initForm(this.productForm)
   }
-
 
   getLastPrinterName(): string {
     return this.printingService.getLastLabelPrinter()
@@ -145,10 +143,7 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
         this.productForm.patchValue(this.product)
       }
 
-      // this.productForm.valueChanges.subscribe(data =>  {
-      //   this.saveProduct()
-      //   }
-      // )
+
       this.productForm.valueChanges
           .pipe(debounceTime(500)) // Adjust the debounce time as needed (in milliseconds)
           .subscribe(data => {

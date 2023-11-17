@@ -1,5 +1,7 @@
 <div *ngIf="( product$ | async) as product"></div>
 <div *ngIf="( action$ | async) as product"></div>
+<div *ngIf="( unitType$ | async) as unit"></div>
+<div *ngIf="( repOrderUnitType$ | async) as reOrderUnit"></div>
 
 <ng-container [ngTemplateOutlet]="editForm"></ng-container>
 
@@ -13,8 +15,12 @@
           <ng-container [ngTemplateOutlet]="addButtonView"></ng-container>
           <ng-container [ngTemplateOutlet]="productSelector"></ng-container>
           <ng-container [ngTemplateOutlet]="unitSelector"></ng-container>
+         
           <ng-container [ngTemplateOutlet]="quantity"></ng-container>
           <ng-container [ngTemplateOutlet]="deleteButton"></ng-container>
+        </div>
+        <div >
+          <ng-container [ngTemplateOutlet]="unitOptionsSelector"></ng-container>
         </div>
 
       </mat-card-content>
@@ -23,15 +29,40 @@
 </ng-template>
 
 <ng-template #deleteButton>
-  <div style="">
+  <div>
       <button mat-button (click)="clearInputs(null)">
         Reset
       </button>
   </div>
 </ng-template>
 
+<ng-template #unitOptionsSelector>
+  <div *ngIf="posOrderItem && menuItemSelected">
+    <div *ngIf="unitOptions">
+
+      <mat-form-field  style="width:300px" *ngIf="unitOptions" 
+                      appearance="fill">
+          <mat-label>Add on Items</mat-label>
+          <mat-chip-list 
+                  [(ngModel)]="unitSelected"
+                  selectable="true"
+                  multiple="false">
+            <span *ngFor="let item of unitOptions">
+              <mat-chip 
+                    [value]="item"
+                    (click)="toggleChip(item)"  >  
+                {{item?.name}}
+              </mat-chip>
+            </span>
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </div>
+</ng-template>
+
 <ng-template #productSelector>
-  <div   *ngIf="posOrderItem" style="width:125px">
+  <div   *ngIf="posOrderItem" 
+          style="width:125px">
     <product-selector
       [inputForm]     = 'inputForm'
       [posOrderItem]  = 'posOrderItem'
@@ -46,19 +77,20 @@
 </ng-template>
 
 <ng-template #unitSelector>
-  <div *ngIf="posOrderItem && menuItemSelected"    style="width:100px">
+  <div *ngIf="posOrderItem && menuItemSelected"    
+        style="width:100px">
     <unit-type-select
       [inputForm]     = 'inputForm'
       [posOrderItem]  = 'posOrderItem'
       [name]          = "posOrderItem.unitName"
       [id]            = 'posOrderItem?.unitType'
       [searchForm]    = 'unitSearchForm'
+      [setChange]     = 'setChange'
+      (undoSetChange) = 'updateSetChange($event)'
       (itemSelect)    = 'assignItem($event)'>
     </unit-type-select>
   </div>
 </ng-template>
-
-
 
 <ng-template #quantity>
   <div style="width:75px;">

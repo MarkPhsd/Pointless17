@@ -21,7 +21,11 @@
 
 <ng-template #displayMenu>
   <div>
-    <display-menu-main [gridItemWidth]="'275px'"></display-menu-main>
+    <display-menu-main
+        [hideLogo]="true"
+        [iconView]="true"
+        [gridItemWidth]="'275px'">
+    </display-menu-main>
   </div>
 </ng-template>
 

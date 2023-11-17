@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
 import { IUser }  from 'src/app/_interfaces';
-import { Observable} from 'rxjs'
+import { Observable, of, switchMap} from 'rxjs'
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 @Component({
   selector: 'app-resetpassword',
@@ -18,6 +18,7 @@ export class ResetpasswordComponent implements OnInit {
   returnUrl: string;
   error = '';
   statusMessage: any;
+  processing: boolean;
 
   request$ : Observable<any>;
 
@@ -49,12 +50,13 @@ export class ResetpasswordComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.request$ = null;
     this.initUIService()
     this.initForm();
       this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/changepassword';
   }
 
-  initForm() { 
+  initForm() {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
   });
@@ -72,14 +74,22 @@ export class ResetpasswordComponent implements OnInit {
 
       this.submitted = true;
       this.statusMessage = "Waiting"
- 
+
       if (this.loginForm.invalid) {
           this.statusMessage = "form fields invalid."
           return;
       }
+
       this.loading = true;
-      
-      this.request$ = this.authenticationService.requestPasswordResetToken(this.f.username.value)
+      this.processing = true;
+
+      this.request$ = this.authenticationService.requestPasswordResetToken(this.f.username.value).pipe(
+        switchMap(data => {
+          this.processing = false
+          return of(data)
+        }
+        )
+      )
       this.initForm();
 
     } catch (error) {
@@ -88,7 +98,7 @@ export class ResetpasswordComponent implements OnInit {
 
   }
 
-  changePassword() { 
+  changePassword() {
     this.router.navigate(['/changepassword']);
   }
 

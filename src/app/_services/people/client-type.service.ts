@@ -65,6 +65,9 @@ export interface IUserAuth_Properties {
   allowSuspendTransaction: boolean;
 
   defaultViewAllOrders: boolean;
+
+  disableVoidClosedItem: boolean;
+  disableEditOtherUsersOrders: boolean;
 }
 
 @Injectable({

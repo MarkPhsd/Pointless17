@@ -7,7 +7,7 @@
         <button *ngIf="smallDevice"  color="accent" mat-button (click)="filterBottomSheet()">
           <mat-icon>search</mat-icon>
         </button>
-  
+
         <span>
           <span #coachingSearch *ngIf="!smallDevice || (!smallDevice && hidePanel)">
             <button mat-button color="accent" (click)="searchBtn($event)">
@@ -15,20 +15,22 @@
             </button>
           </span>
         </span>
-  
+
         <ng-container [ngTemplateOutlet]="freshOrders"></ng-container>
         <ng-container [ngTemplateOutlet]="allOrders"></ng-container>
       </span>
- 
+
       <span>
         <button mat-button  (click)="newOrder()" *ngIf="isAuthorized || isStaff">
           <mat-icon>receipt</mat-icon><span>New Order</span>
         </button>
-  
-        <button #coachingOtherNew   mat-button (click)="newOrderOptions()" *ngIf="isAuthorized || isStaff">
+
+        <button #coachingOtherNew
+                mat-button (click)="newOrderOptions()"
+                *ngIf="isAuthorized || isStaff">
           <mat-icon>add</mat-icon><span>Other New</span>
         </button>
-  
+
         <ng-container [ngTemplateOutlet]="houseAccount"></ng-container>
 
       </span>
@@ -80,8 +82,8 @@
 </ng-template>
 
 <ng-template #freshOrders>
-    
-    <button class="button" 
+
+    <button class="button"
         mat-button
         *ngIf="filterIsSet"
         color="accent"
@@ -96,7 +98,7 @@
         <mat-icon style="top:5px;" color="warn">filter_alt</mat-icon>
         <mat-label  color="warn">Filter On</mat-label>
       </div>
-     
+
     </button>
 
 </ng-template>
@@ -248,11 +250,10 @@
   </div>
 </ng-template>
 
-
 <ng-template #filterMyOrdersView>
   <span *ngIf="!smallDevice && !isUser && userAuthorization.user
-               && userAuthorization.user.userPreferences && (uiTransactions && uiTransactions.toggleUserOrAllOrders)"
-              >
+               && userAuthorization.user.userPreferences &&
+               (uiTransactions && uiTransactions.toggleUserOrAllOrders)"  >
     <button mat-button (click)="toggleShowAllOrders()">
       <div *ngIf="userAuthorization.user.userPreferences.showAllOrders">
         <mat-icon>filter_alt_off</mat-icon>Show My Orders
@@ -262,12 +263,13 @@
       </div>
     </button>
   </span>
-
 </ng-template>
 
 <ng-template #mergeView>
   <span *ngIf="!smallDevice && !isUser">
-    <button  class="dark-theme-green " mat-button (click)="toggleMergeOrders()">
+    <button  class="dark-theme-green"
+             mat-button
+             (click)="toggleMergeOrders()">
       <div *ngIf="mergeOrders">
         Disable Merge
       </div>
@@ -292,9 +294,8 @@
 </ng-template>
 
 <ng-template #prepView>
-
   <span *ngIf="!smallDevice && !isUser && (!isApp ||
-                                           (isApp && 
+                                           (isApp &&
                                             (terminalSettings && terminalSettings.enablePrepView)
                                            )
                                           )
@@ -303,7 +304,7 @@
     <button  class="dark-theme-green " mat-button (click)="setViewType(3)">
       <mat-icon>countertops</mat-icon> View Prep
     </button>
-  
+
   </span>
 
 </ng-template>

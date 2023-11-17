@@ -51,6 +51,13 @@
     </div>
 
     <div *ngIf="printOption">
+      <button  mat-button class="button"  (click)="printPreview()">
+        <mat-icon>print_preview</mat-icon>
+        <span *ngIf="!smallDevice">Preview</span>
+      </button>
+    </div>
+
+    <div *ngIf="printOption">
       <button  mat-button class="button"  (click)="email()">
         <mat-icon>email</mat-icon>
         <span *ngIf="!smallDevice">Email</span>

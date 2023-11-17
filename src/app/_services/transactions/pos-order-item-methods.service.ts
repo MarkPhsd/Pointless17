@@ -10,6 +10,7 @@ import { OrderMethodsService } from './order-methods.service';
 })
 export class PosOrderItemMethodsService {
 
+
   constructor(private orderService: OrdersService,
               public orderMethodsService: OrderMethodsService,
               private siteService: SitesService,
@@ -25,7 +26,7 @@ export class PosOrderItemMethodsService {
       if (editField == 'quantity') {
         const site = this.siteService.getAssignedSite();
         obs$ = this.posOrderItemService.changeItemQuantity(site, item ).pipe(switchMap( data => {
-          console.log('udpdate order subscription')
+
           this.orderMethodsService.updateOrderSubscription(data)
           return of(data)
         }))
@@ -98,12 +99,20 @@ export class PosOrderItemMethodsService {
     return obs$;
   }
 
-  saveItem(item: PosOrderItem, editField: string) { 
+  saveItem(item: PosOrderItem, editField: string) {
     const site = this.siteService.getAssignedSite()
     if (editField == 'modifierNote') {
       return this.posOrderItemService.putItem(site, item )
     }
     return of(null)
+  }
+
+  calcPackageNumber(quantity: number, multiplier: number) {
+    // console.log('calcPackageNumber', quantity, multiplier)
+    if (!multiplier|| multiplier == 0)  { return quantity}
+    const packagesNeeded = Math.ceil(quantity / multiplier);
+    return packagesNeeded;
+
   }
 
 

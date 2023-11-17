@@ -1,39 +1,37 @@
   <div class="grid"
-       [formGroup]="searchForm">
-    <div [class]="formFieldClass">
+       [formGroup]="searchForm"  >
 
-      <mat-form-field [class]="formFieldClass"
-                      appearance="outline"
-                       >
-
+    <div>
+      <mat-form-field  style="max-width:165px" [class]="formFieldClass" appearance="outline"  >
         <mat-label class="form-background">
           <mat-icon>search</mat-icon><ng-content></ng-content>
         </mat-label>
 
-        <input
-                #input
+        <input  #input
                 matInput
                 type             ="text"
-                [class]          ="formFieldClass"
                 placeholder      ="Lookup"
                 formControlName  ="idLookup"
                 [matAutocomplete]="auto">
 
-            <mat-autocomplete panelWidth    = "auto"
+        <mat-autocomplete panelWidth    = "auto"
                               #auto         = "matAutocomplete"
                               (optionSelected)="onChange($event)">
-
           <mat-option *ngFor="let item of (results$ | async)?.results"
                         [value]="item">
               {{item.company}} -- {{item.account}}
           </mat-option>
-
         </mat-autocomplete>
 
       </mat-form-field>
     </div>
-    <div>
-      <button *ngIf="!disableDelete" mat-button color="warn" (click)="deleteValue()"><mat-icon>delete</mat-icon></button>
+
+    <div class="margin-5">
+      <button *ngIf="!disableDelete" 
+              mat-button color="warn" 
+              (click)="deleteValue()">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
 
   </div>

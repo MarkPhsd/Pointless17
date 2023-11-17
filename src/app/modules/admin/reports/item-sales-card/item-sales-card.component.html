@@ -41,7 +41,10 @@
                 *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
               <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
               <div class="totals">{{sale?.quantity }}               </div>
-              <div class="totals"><button mat-raised-button (click)="setItemGroupAsPrepped(sale.id)">Dismiss</button></div>
+              <div class="totals"><button mat-raised-button
+                                          (click)="setItemGroupAsPrepped(sale.id)">Dismiss
+                                  </button>
+              </div>
           </div>
         </mat-card-content>
       </mat-card>

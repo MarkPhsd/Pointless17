@@ -1,5 +1,21 @@
 
 <span *ngIf="order">
+
+  <div>
+    <ng-container [ngTemplateOutlet]="qrCodeDisplayView"></ng-container>
+
+  </div>
+
+  <ng-template #qrCodeToggle>
+    <div *ngIf="(qrCode$ | async) as qrCode">
+      <mat-card>
+        <qrcode [qrdata]="qrCode"
+                [width]="256"
+                [errorCorrectionLevel]="'M'"></qrcode>
+      </mat-card>
+    </div>
+  </ng-template>
+
   <div class="container">
     <div>
 
@@ -7,6 +23,11 @@
         <h4>
           <span  *ngIf="!isOrderClaimed && order.id" > <mat-icon color="warn">lock</mat-icon>
           </span> Order {{order?.id | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
+
+          <span #coachingRefresh *ngIf="isApp || isUserStaff">
+            <button mat-button (click)='refreshOrder()'><mat-icon>refresh</mat-icon></button>
+          </span>
+
           <div *ngIf="order.tableName">{{order.tableName}}</div>
         </h4>
       </div>
@@ -27,11 +48,16 @@
 
       <div *ngIf="(isApp) || (!isApp  && isUserStaff) && uiTransactionSettings ">
 
+        <span>
+          <button mat-button (click)="qrCodeDisplayToggle()"><mat-icon>qr_code</mat-icon>QR Link </button>
+        </span>
+
         <div class="button-row" *ngIf="(!qrOrder && !hideButtonOptions)">
 
           <div   class="button-margin" *ngIf="!mainPanel">
+
             <button  class="button" color="primary" mat-raised-button
-              (click)="printingService.previewReceipt(uiTransactionSettings.singlePrintReceipt)"><mat-icon>print</mat-icon>
+              (click)="printReceipt()"><mat-icon>print</mat-icon>
             </button>
           </div>
 
@@ -47,6 +73,8 @@
               </div>
             </div>
           </span>
+
+          <ng-content [ngTemplateOutlet]="qrCodeDisplayView"></ng-content>
 
           <span #coachingLabel >
             <div   class="button-margin" *ngIf="!mainPanel && isSale && isUserStaff && (posDevice && posDevice.labelPrinter && posDevice.enableExitLabel)">
@@ -69,9 +97,7 @@
 
         <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
 
-        <div #coachingRefresh *ngIf="isApp">
-          <button mat-button (click)='refreshOrder()'><mat-icon>refresh</mat-icon></button>
-        </div>
+
 
         <div >
           <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption && isSale && isUserStaff" >

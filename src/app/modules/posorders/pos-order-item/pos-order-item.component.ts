@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef,  HostListener,
+import { AfterViewInit,OnChanges, Component, ElementRef,  HostListener,
          Input, OnInit, Output, EventEmitter, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
@@ -14,7 +14,6 @@ import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
 import { AWSBucketService, AuthenticationService, MenuService, OrdersService } from 'src/app/_services';
-import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -26,9 +25,6 @@ import { MenuItemModalComponent } from '../../menu/menuitems/menu-item-card/menu
 import { PosOrderItemEditComponent } from './pos-order-item-edit/pos-order-item-edit.component';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
-import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
-import { FastUserSwitchComponent } from '../../profile/fast-user-switch/fast-user-switch.component';
-import { DialogRef } from '@angular/cdk/dialog';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 export interface payload{
@@ -41,7 +37,7 @@ export interface payload{
   styleUrls: ['./pos-order-item.component.scss'],
   providers: [ TruncateTextPipe ],
 })
-export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
+export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,OnDestroy {
 
   inputForm: UntypedFormGroup;
   itemEdit: boolean;
@@ -81,6 +77,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   @Input() prepScreen     : boolean;
   @Input() enableExitLabel : boolean;
 
+  packages: string;
   morebutton               = 'more-button';
   customcard               = 'custom-card'
   orderPromptGroup        : IPromptGroup;
@@ -93,6 +90,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   @Input() printLocation : number;
   @Input() prepStatus    : boolean;
 
+  flexGroup = 'ps-flex-group-start-no-margin'
   animationState          : string;
   color                   : ThemePalette = 'primary';
   mode                    : ProgressSpinnerMode = 'determinate';
@@ -139,10 +137,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
         item.itemOrderPercentageDiscount ) {
           return true;
     }
-
-
     return false;
-
   }
 
   //&&
@@ -157,7 +152,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   get showWeight() {
-    console.log('showWeight (1)', this.prepScreen , this.mainPanel , this.orderItem.isWeightedItem)
     if (this.order && this.order.balanceRemaining != 0 &&
                       this.orderItem.isWeightedItem &&
                       !this.prepScreen) {
@@ -175,16 +169,38 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
       if (item.scaleStatus) {
         // console.log(item.scaleStatus)
       }
-
-      // this.
-    //then update the quantity of the current item.
-    // console.log('itemw eight', item.value)
     if (+item.value>0) {
       this.orderItem.quantity = +item.value;
       this.orderItem.quantityView = item.value;
       this.action$ = this.saveSub(this.orderItem, 'quantity')
      }
     }
+  }
+
+  getEstPackages(orderItem: PosOrderItem ) {
+    if  (orderItem.unitMultiplier == 0) { return ''}
+    const value =  this.posOrderItemMethodsService.calcPackageNumber(orderItem.quantity, orderItem.unitMultiplier)
+    if (value != 0 && value != 1) {
+      return  `${value} of `
+    }
+    return ''
+  }
+
+  getUnitDescription(item: PosOrderItem ): string {
+
+    return ''
+    if (!item) { return ''}
+    if (item.baseUnitType) { 
+      console.log('item.baseUnitType', item?.baseUnitType)
+      return item?.unitName }
+    if (item.unitName) { 
+      console.log('item.unitName', item?.unitName)
+      return item?.unitName} 
+    return ''
+    // if (item) { 
+    //   item?.baseUnitType == '' ? ''  : orderItem?.unitName
+    // }
+
   }
 
   saveSub(item: PosOrderItem, editField: string): Observable<IPOSOrder> {
@@ -226,6 +242,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
           this.productnameClass = 'product-name-alt'
           return
         } else {
+          
+
           this.productnameClass = 'product-name'
           return
         }
@@ -302,10 +320,18 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     if (!this.mainPanel) {
       this.morebutton = 'more-button';
     }
+
+
     this.updateCardStyle(this.mainPanel)
     this.refreshSidePanel()
-    // this.orderItem.
+    this.packages = this.getEstPackages(this.orderItem).toString()
+
   }
+
+  ngOnChanges() {
+    this.packages = this.getEstPackages(this.orderItem).toString()
+  }
+
 
   requestPriceChange(item) {
     if (this.order && this.userAuthService.user) {
@@ -532,7 +558,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   authorizeEdit(item, request) {
     let dialogRef = this.checkAuthDialog(item, request)
     dialogRef.afterClosed().subscribe(result => {
-      console.log('recieving determined result is: ', result)
+      // console.log('recieving determined result is: ', result)
       if (result) {
         this.editDialog(item,'600px','600px')
       } else {
@@ -582,6 +608,9 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   refreshSidePanel() {
     this.gridItems = 'grid-items';
     this.morebutton = 'more-button'
+
+    this.updateFlexGroup();
+    
     if (this.mainPanel) {
       this.gridItems ='grid-items-main-panel'
       this.morebutton = 'more-button-main'
@@ -686,7 +715,19 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     }))
   }
 
+  updateFlexGroup() { 
+    if (this.mainPanel) { 
+      this.flexGroup = 'ps-flex-group-start-no-margin'
+    } else { 
+      this.flexGroup = 'ps-flex-group-start-no-margin-side'
+    }
+  }
+
   updateCardStyle(option: boolean)  {
+
+    this.updateFlexGroup();
+    // this.customcard ='custom-card';
+
     if (this.orderItem && this.orderItem.idRef && this.orderItem.id != this.orderItem.idRef) {
       this.customcard       = 'custom-card-modifier';
 
@@ -703,8 +744,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
       }
       return
     }
-
-    this.customcard ='custom-card';
 
     if (!option) {
       this.customcard ='custom-card-side';
@@ -791,7 +830,13 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   swipeOutItem(){
-    console.log('swipe out')
+    // console.log('swipe out')
+
+    if (this.order.completionDate && (this.userAuths && this.userAuths.disableVoidClosedItem)) {
+      this.siteService.notify('Item can not be voided or refunded. You must void the order from Adjustment in Cart View', 'close', 10000, 'red')
+      return
+    }
+
     if (this.disableActions) {return}
     this.cancelItem(this.index,  this.orderItem)
   }

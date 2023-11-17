@@ -1,96 +1,135 @@
 <div *ngIf="(action$ | async) as item"></div>
 <div *ngIf="(printLabel$ | async) as item"></div>
 
-<mat-card
+<mat-card *ngIf="orderItem"
           id="panel"
           (swipeleft)="swipeOutItem()"
           (click)="assignItem()"
-          [class]="customcard" >
-<mat-card-content >
+          [class]="customcard"
+          >
+          <!--   -->
+  <mat-card-content >
 
     <div  [class]="gridItems">
       <div *ngIf="orderItem">
-        <div>
+        <div [class]="flexGroup">
+    
+          <div [class]="productnameClass" >
+            
+            <span  class="index" *ngIf="!isModifier && !prepScreen">
+              {{ index +1 }}:
+            </span>  
 
-          <span class="index" *ngIf="!isModifier && !prepScreen">
-            {{index+1}}:
-          </span>
-
-          <span [class]="productnameClass" >
             {{ orderItem?.productName }}
-            <span *ngIf="orderItem?.splitGroupID  && orderItem?.splitGroupID != 0">
+
+            <span style="margin-right:7px" *ngIf="orderItem?.splitGroupID  && orderItem?.splitGroupID != 0">
               (  {{ orderItem?.splitGroupID }} )
             </span>
             <div *ngIf="orderItem?.prodSecondLanguage">
               {{ orderItem?.prodSecondLanguage  | truncateText: 30  }}
             </div>
-          </span>
 
-          <span class="product-name" *ngIf="orderItem?.itemType">
-            ( {{orderItem?.itemType?.name}} )
-          </span>
-
-          <span *ngIf="quantity && !prepScreen">
-            <div class="quantity"  *ngIf="subTotal >= 0">
-              {{ quantity }} {{orderItem?.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
-              <span *ngIf="uiConfig.displayItemPOSTTotal">
-                | Tax: {{ orderItem?.taxTotal | currency }}  | Total: {{orderItem?.total | currency}}
-             </span>
-            </div>
-            <div class="quantity"   *ngIf="subTotal < 0"  style="color:crimson">
-              {{ quantity }} {{orderItem?.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
-              <span *ngIf="uiConfig.displayItemPOSTTotal">
-                | Tax: {{ orderItem?.taxTotal | currency }}  | Total: {{orderItem?.total | currency}}
-             </span>
-            </div>
-          </span>
-
-          <span *ngIf="purchaseOrderEnabled">
-            Cost : {{ quantity }}  @  {{ wholeSale | currency }} = {{ wholeSale*quantity | currency}}
-          </span>
-
-          <span  *ngIf="( mainPanel || wideBar) && orderItem?.serialCode && !prepScreen && (orderItem?.serialCode != orderItem.id)">
-            SN#/({{ orderItem?.serialCode }})
-          </span>
-
-          <span class="notes"
-                        *ngIf="( mainPanel || wideBar )
-                                && orderItem
-                                && orderItem?.modifierNote">
-            | {{ orderItem?.modifierNote.replace(orderItem?.serialCode, '') }} |
-          </span>
-
-          <span class="discount-description" *ngIf="orderItem?.itemCashDiscount>0">
-            Cash Savings $ {{orderItem?.itemCashDiscount | currency}},
-          </span>
-         <span class="discount-description"  *ngIf="orderItem?.itemOrderCashDiscount>0">
-            Cash Savings $ {{orderItem?.itemOrderCashDiscount | currency}},
-          </span>
-          <span class="discount-description"  *ngIf="orderItem?.itemPercentageDiscountValue>0">
-            % Off Savings $ {{orderItem?.itemPercentageDiscountValue}},
-          </span>
-          <span class="discount-description"  *ngIf="orderItem?.itemOrderPercentageDiscount>0">
-            % Off Savings $ {{orderItem?.itemOrderPercentageDiscount}},
-          </span>
-
-          <span class='status-icon' *ngIf="orderItem?.printed && prepScreen && (!isModifier && orderItem?.id != orderItem?.idRef)">
-            <mat-icon  class="mat-icon-label" color="warn"  *ngIf="orderItem?.printed && !prepScreen" >print</mat-icon>
-            <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem?.printed | date: 'shortTime'}} </span>
-          </span>
-
-          <span  class='ready-icon' *ngIf="orderItem?.itemPrepped && prepScreen && !isModifier">
-            <mat-icon class="mat-icon-label" color="alert" *ngIf="prepScreen" >done</mat-icon>
-            <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem?.itemPrepped | date: 'shortTime'}} </span>
-          </span>
-
-          <div class="void-icon void-info" *ngIf="(orderItem?.voidReason ||
-                                                  (orderItem?.itemReturn != 1 && orderItem?.itemReturn != 0) ) &&
-                                                  prepScreen && !isModifier">
-            <span *ngIf="orderItem?.printed && !prepScreen">  <mat-icon class="mat-icon-label" color="warn">lock</mat-icon>  </span>
-
-            <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
-              <b  style="color:crimson">return {{ orderItem?.itemReturn }} Item voided:  {{ orderItem?.voidReason }}</b>
+            <span class="product-name" *ngIf="orderItem?.itemType">
+              ( {{orderItem?.itemType?.name}} )
             </span>
+
+          </div>
+        
+          <div *ngIf="quantity && !prepScreen">
+            <div   class="quantity"   *ngIf="subTotal >= 0">
+           
+              {{ quantity }} 
+
+              {{ orderItem?.baseUnitType == '' ? ''  : (orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName) }} 
+                          
+              @ {{ unitPrice | currency }}
+
+              <span *ngIf="orderItem.baseUnitType"> / {{ orderItem?.baseUnitType }} </span> = {{ subTotal | currency}}
+
+              <div *ngIf="(orderItem && orderItem.baseUnitType) && orderItem.unitType && 
+                          orderItem?.unitName != orderItem?.menuItem?.baseUnitType ">
+                {{packages}}  {{(orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName)}}
+              </div>
+
+              <span *ngIf="uiConfig.displayItemPOSTTotal">
+                | Tax: {{ orderItem?.taxTotal | currency }}  | Total: {{orderItem?.total | currency}}
+              </span>
+            </div>
+
+            <div  class="quantity"   *ngIf="subTotal < 0"  style="color:crimson">
+          
+              {{ quantity }} 
+
+              {{ orderItem?.baseUnitType == '' ? ''  : (orderItem?.unitName == 'False' ? '' : orderItem?.unitName) }} 
+                          
+              @ {{ unitPrice | currency }}
+
+              <span *ngIf="orderItem.baseUnitType">/ {{ orderItem?.baseUnitType }} </span>
+               = {{ subTotal | currency}}
+
+              <div *ngIf="(orderItem && orderItem.baseUnitType) && orderItem.unitType && orderItem?.unitName != orderItem?.menuItem?.baseUnitType">
+                {{packages}} {{(orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName)}}
+              </div>
+
+              <span *ngIf="uiConfig.displayItemPOSTTotal">
+                | Tax: {{ orderItem?.taxTotal | currency }}  | Total: {{orderItem?.total | currency}}
+             </span>
+
+            </div>
+          </div>
+
+          <div>
+            <span *ngIf="purchaseOrderEnabled">
+              Cost : {{ quantity }}  @  {{ wholeSale | currency }} = {{ wholeSale*quantity | currency}}
+            </span>
+
+            <span  *ngIf="( mainPanel || wideBar) && orderItem?.serialCode && !prepScreen && (orderItem?.serialCode != orderItem.id)">
+              SN#/({{ orderItem?.serialCode }})
+            </span>
+
+            <span class="notes"
+                          *ngIf="( mainPanel || wideBar )
+                                  && orderItem
+                                  && orderItem?.modifierNote">
+              | {{ orderItem?.modifierNote.replace(orderItem?.serialCode, '') }} |
+            </span>
+
+            <span class="discount-description" *ngIf="orderItem?.itemCashDiscount>0">
+              Cash Savings $ {{orderItem?.itemCashDiscount | currency}},
+            </span>
+            <span class="discount-description"  *ngIf="orderItem?.itemOrderCashDiscount>0">
+              Cash Savings $ {{orderItem?.itemOrderCashDiscount | currency}},
+            </span>
+            <span class="discount-description"  *ngIf="orderItem?.itemPercentageDiscountValue>0">
+              % Off Savings $ {{orderItem?.itemPercentageDiscountValue}},
+            </span>
+            <span class="discount-description"  *ngIf="orderItem?.itemOrderPercentageDiscount>0">
+              % Off Savings $ {{orderItem?.itemOrderPercentageDiscount}},
+            </span>
+
+            <span class='status-icon' *ngIf="orderItem?.printed && prepScreen && (!isModifier && orderItem?.id != orderItem?.idRef)">
+              <mat-icon  class="mat-icon-label" color="warn"  *ngIf="orderItem?.printed && !prepScreen" >print</mat-icon>
+              <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem?.printed | date: 'shortTime'}} </span>
+            </span>
+
+            <span  class='ready-icon' *ngIf="orderItem?.itemPrepped && prepScreen && !isModifier">
+              <mat-icon class="mat-icon-label" color="alert" *ngIf="prepScreen" >done</mat-icon>
+              <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem?.itemPrepped | date: 'shortTime'}} </span>
+            </span>
+
+            <div class="void-icon void-info" *ngIf="(orderItem?.voidReason ||
+                                                    (orderItem?.itemReturn != 1 && orderItem?.itemReturn != 0) ) &&
+                                                    prepScreen && !isModifier">
+              <span *ngIf="orderItem?.printed && !prepScreen">
+                <mat-icon class="mat-icon-label" color="warn">lock</mat-icon>
+              </span>
+
+              <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
+                <b  style="color:crimson">return {{ orderItem?.itemReturn }} Item voided:
+                                                  {{ orderItem?.voidReason }}</b>
+              </span>
+
+            </div>
 
           </div>
         </div>
@@ -160,7 +199,9 @@
         <ng-container [ngTemplateOutlet]="exitlabelButtonView"></ng-container>
       </div>
 
-      <div *ngIf="(menuItem && menuItem?.itemType?.weightedItem || orderItem.isWeightedItem) &&  (mainPanel && !bottomSheetOpen) && !prepScreen && platFormService.isAppElectron && posOrderItemService.scaleInfo">
+      <div *ngIf="(menuItem && menuItem?.itemType?.weightedItem || orderItem.isWeightedItem) &&
+                  (mainPanel && !bottomSheetOpen) &&
+                  !prepScreen && platFormService.isAppElectron && posOrderItemService.scaleInfo">
         <ng-container [ngTemplateOutlet]="getWeightView"></ng-container>
       </div>
 
@@ -266,7 +307,7 @@
 
                 <div *ngIf="(quantity && !orderItem?.voidReason)">
                   <button mat-raised-button  class="button" color="warn" (click)="swipeOutItem()" >
-                    <mat-icon  class="mat-icon-label">delete</mat-icon> <span *ngIf="!smallDevice">Remove </span>
+                    <mat-icon  class="mat-icon-label">delete</mat-icon> <span *ngIf="!smallDevice"> Remove </span>
                   </button>
                 </div>
 
@@ -308,8 +349,8 @@
           </span>
         </mat-menu>
       </div>
-
     </div>
+
   </mat-card-content>
 </mat-card>
 
@@ -341,7 +382,9 @@
 </ng-template>
 
 <ng-template #getWeightView>
-  <button  color="primary" style="margin:5px;margin-top:10px; width: 50px;" mat-raised-button (click)="getWeight()">
+  <button  color="primary" style="margin:5px;margin-top:10px; width: 50px;"
+            mat-raised-button
+            (click)="getWeight()">
     <mat-icon  >scale</mat-icon>
   </button>
 </ng-template>

@@ -419,7 +419,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     let search               = this.searchModel;
 
     if (this.toggleOpenClosedAll == "1") {
-      // this.completionDateForm
       this.initCompletionDateForm()
     }
 
@@ -635,6 +634,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     const dateTo   = this.completionDateForm.get("end").value
     const start  = this.dateHelper.format(dateFrom, 'short')
     const end = this.dateHelper.format(dateTo, 'short')
+    
     searchModel.completionDate_From = start
     searchModel.completionDate_To   = end
     return searchModel

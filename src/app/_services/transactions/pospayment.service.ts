@@ -14,6 +14,7 @@ import { IPaymentMethod } from './payment-methods.service';
 })
 export class POSPaymentService {
 
+
   private _searchModel          = new BehaviorSubject<IPaymentSearchModel>(null);
   public searchModel$           = this._searchModel.asObservable();
 
@@ -44,6 +45,22 @@ export class POSPaymentService {
     private _fb: UntypedFormBuilder,
             )
   {
+
+  }
+
+  getPaymentSummaryByGroups(site: ISite, id: number, history: boolean): Observable<IPOSPaymentsOptimzed> {
+
+    const devicename = localStorage.getItem('devicename')
+
+    const controller = '/POSPayments/'
+
+    const endPoint  = 'getPaymentSummaryByGroups'
+
+    const parameters = `?reportRunID=${id}&history=${history}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSPaymentsOptimzed>(url);
 
   }
 

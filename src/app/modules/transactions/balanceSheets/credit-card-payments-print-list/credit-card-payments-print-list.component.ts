@@ -12,6 +12,7 @@ export class CreditCardPaymentsPrintListComponent implements OnInit {
 
   @Input() list: IPOSPaymentsOptimzed;
   @Input() autoPrint: boolean;
+  @Input() groupType : boolean;
   @Output() renderComplete = new EventEmitter<any>()
   results:      Result[];
   paging:       Paging;
@@ -40,11 +41,6 @@ export class CreditCardPaymentsPrintListComponent implements OnInit {
 }
 
 
-
-
-function AfterViewInit() {
-  throw new Error('Function not implemented.');
-}
 // amountPaid:       number;
 // balanceRemaining: number;
 // tipAmount:        number;

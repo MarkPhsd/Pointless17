@@ -13,7 +13,7 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
   styleUrls: ['./order-card.component.scss']
 })
 export class OrderCardComponent implements OnInit {
-
+  @Input() disableEdit: boolean;
   serviceColor: string;
   serviceType$ : Observable<IServiceType>;
   phoneDevice: boolean;
@@ -21,7 +21,9 @@ export class OrderCardComponent implements OnInit {
   smallDevice : boolean;
   minutesOpen: number;
   orderNameLength: number = 10;
-
+  
+  dateFormat = 'shortDate'
+  timeFormat = 'shortTime'
   tableFont = 'font-dark-green font-1-4em font-weight-500';
 
   constructor(private serviceTypeService: ServiceTypeService,

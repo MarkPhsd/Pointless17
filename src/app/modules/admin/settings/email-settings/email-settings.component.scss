@@ -3,6 +3,14 @@
   flex-direction: row;
   gap: 10px;
 }
+
 button {
   margin: 5px;
+}
+
+
+.flex-grid {
+  display: flex;
+  flex-direction: column;
+
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input , EventEmitter, Output, ViewChild, ElementRef, AfterViewInit, } from '@angular/core';
+import { Component, OnInit, Input , EventEmitter, Output, ViewChild, ElementRef, AfterViewInit, OnChanges, } from '@angular/core';
 import {  IProduct, ISite, PosOrderItem, ProductPrice,  } from 'src/app/_interfaces';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, filter,tap } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import { PB_Components } from 'src/app/_services/partbuilder/part-builder-main.s
   templateUrl: './unit-type-select.component.html',
   styleUrls: ['./unit-type-select.component.scss']
 })
-export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
+export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Input() productPrice       : ProductPrice;
   @Input() product            : IProduct;
@@ -25,7 +25,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
   unitTypes                   : UnitType[]
   @Input()  index             : number;
   @Input()  outputType        = ''
-  formfieldValue: UntypedFormGroup;
+  // formfieldValue: UntypedFormGroup;
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
@@ -33,14 +33,15 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
   @Input() inputForm:         UntypedFormGroup;
   @Input() searchForm:        UntypedFormGroup;
   @Input() formGroupName: UntypedFormGroup
-  // @Input() formGroupName: string
+  @Input() formControlName = 'unitTypeID';
   @Input() searchField:       UntypedFormControl;
   @Input() id                 : number;
   @Input() name:              string;
   searchPhrase:               Subject<any> = new Subject();
   item:                       UnitType;
   site:                       ISite;
-
+  @Input()  setChange: boolean;
+  @Output() undoSetChange = new EventEmitter();
   get searchControl()   { return this.inputForm.get("searchField") as UntypedFormControl};
   @Input()  formFieldClass = 'mat-form-field form-background'
 
@@ -83,8 +84,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
                 private fb               : UntypedFormBuilder,
                 public  route            : ActivatedRoute,
                 private siteService      : SitesService,
-               ) {
-
+              ) {
     this.site = this.siteService.getAssignedSite();
     this.searchForm = this.fb.group({
       searchField: []
@@ -93,15 +93,24 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
   }
 
   initUnitForm() {
-    this.formfieldValue = this.fb.group({
-      unitTypeID: []
+    // console.log('formControlName', this.formControlName)
+    // if (this.formControlName == 'reOrderUnitTypeID') {
+    //   if (!this.searchForm) { 
+    //     this.searchForm = this.fb.group({
+    //       reOrderUnitTypeID: []
+    //     })
+    //   }
+    //   return;
+    // }
+
+    this.searchForm = this.fb.group({
+      searchField: []
     })
   }
 
   init() {
     if (this.inputForm) {
       const field = this.getField()
-
       if (this.inputForm.controls[field]?.value) {
         const value = this.inputForm.controls[field].value;
         this.id = value;
@@ -127,6 +136,15 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
     if (this.id) { this.getName(this.id)  }
   }
 
+  ngOnChanges() { 
+    if (this.setChange) { 
+      this.getName(this.id)
+      this.setChange = false
+      this.undoSetChange.emit(false)
+    }
+    
+  }
+
   refreshSearch(search: any){
     if (search) {this.searchPhrase.next( search ) }
   }
@@ -136,15 +154,21 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
   }
 
   onChange(selected: any) {
+    
     const item = selected.option.value;
+    console.log('selected item option', item)
     if (item) {
+
       this.selectItem(item)
       this.item = item
+      return item?.name
+
       if (!item || !item.name){
         return ''
       }  else {
         return item.name
       }
+
     }
   }
 
@@ -154,12 +178,14 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
     let unit = {} as any;
 
     if (this.product) {
-      unit = { unitTypeID : item.id }
+      if (this.formControlName == 'reOrderUnitTypeID') { 
+        unit = { reOrderUnitTypeID : item.id }
+      } else { 
+        unit = {  unitTypeID : item.id }
+      }
       this.inputForm.patchValue(  unit  )
-    }
-
-    if (!this.product) {
-
+      this.setValue(item);
+      return;
     }
 
     if (!this.product) {
@@ -195,19 +221,24 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
 
       return;
     }
+    this.setValue(item)
 
+  }
+
+  setValue(item) { 
     const value =  { searchField: item.name  }
     this.searchForm.patchValue( value )
   }
 
   getName(id: number) {
+    console.log('getName', id)
     if (!id)             {return null}
     const site  = this.siteService.getAssignedSite();
     if(site) {
       this.unitTypesService.get(site, id).subscribe(data => {
         this.item = data;
-        const price =  { searchField: data.name  }
-        this.searchForm.patchValue( price )
+        const item =  { searchField: data.name  }
+        this.searchForm.patchValue( item )
       })
     }
   }

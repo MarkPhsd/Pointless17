@@ -9,6 +9,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 export class EditButtonsStandardComponent  {
 
   @Output() outPutPrint           : EventEmitter<any> = new EventEmitter<any>();
+  @Output() outPutPrintPreview           : EventEmitter<any> = new EventEmitter<any>();
   @Output() outputeupdateItem     : EventEmitter<any> = new EventEmitter<any>();
   @Output() outputupdateItemExit  : EventEmitter<any> = new EventEmitter<any>();
   @Output() outputupdatedeleteItem: EventEmitter<any> = new EventEmitter<any>();
@@ -28,6 +29,7 @@ export class EditButtonsStandardComponent  {
   @Input() enableDelete: boolean;
   @Input() hideExit    : boolean;
   @Input() printOption : boolean;
+  @Input() printPreviewOption : boolean;
   @Input() viewOrder   : boolean;
   @Input() historyItem         : boolean;
   @Input() hideSave            : boolean;
@@ -67,7 +69,9 @@ export class EditButtonsStandardComponent  {
   print() {
     this.outPutPrint.emit('true')
   }
-
+  printPreview() {
+    this.outPutPrintPreview.emit('true')
+  }
   email() {
     this.outPutEmail.emit('demo')
   }

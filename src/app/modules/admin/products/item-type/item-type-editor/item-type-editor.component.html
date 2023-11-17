@@ -331,6 +331,34 @@
     </mat-card-content>
   </mat-card>
 
+  <div  *ngIf="inputForm" [formGroup]="inputForm" class="grid-fields">
+    <div class="instructions">
+      <mat-label><h4>Instructions for item type, can display on labels, and storefront.</h4></mat-label><br>
+      <mat-hint></mat-hint>
+      <simple-tinymce cols="50"
+                      rows="20"
+                      style="height: 200px;"
+                      name="description"
+                      formControlName="instructions"
+                      >
+      </simple-tinymce>
+    </div>
+  </div>
+
+  <!-- <div  *ngIf="inputForm" [formGroup]="inputForm" class="grid-fields">
+    <div class="instructions">
+      <mat-label><h4>Description for item type, can display on labels, and storefront.</h4></mat-label><br>
+      <mat-hint></mat-hint>
+      <simple-tinymce cols="50"
+                      rows="20"
+                      style="height: 200px;"
+                      name="description"
+                      formControlName="description"
+                      >
+      </simple-tinymce>
+    </div>
+  </div> -->
+
 </div>
 
 <ng-template #loading >

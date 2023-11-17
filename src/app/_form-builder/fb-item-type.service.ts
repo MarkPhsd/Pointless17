@@ -47,6 +47,9 @@ export class FbItemTypeService {
       disablePriceCategory: [''],
       disableSimplePrice: [''],
       promptQuantity: [''],
+      useDefaultPriceInApp: [],
+      description: [''],
+      webStoreSimpleView: [],
     })
     return inputForm
   }

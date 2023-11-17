@@ -15,7 +15,6 @@
 
 <div *ngIf="type === 'sales' || type =='refunds'">
   <div *ngIf="(refunds$ | async) as sales; else loadingRefunds">
-
     <app-payment-report-data
         [sales]="sales"
         [site]="site"

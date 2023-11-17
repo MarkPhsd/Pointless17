@@ -33,7 +33,9 @@
           <span #coachingLink></span>
           <span #coachingPDF></span>
           <div>
-            <button *ngIf="order" mat-button (click)="email()"><mat-icon>email</mat-icon>Email </button>
+            <button *ngIf="order" mat-button (click)="email()">
+              <mat-icon>email</mat-icon>Email
+            </button>
             <button mat-button
                     [disabled]="!order || !order?.orderCode"
                     *ngIf="!isElectronApp"
@@ -42,7 +44,10 @@
             </button>
           </div>
 
-          <button  mat-button (click)="convertToPDF()"><mat-icon>pdf</mat-icon> PDF </button>
+          <button  mat-button (click)="convertToPDF()">
+            <mat-icon>pdf</mat-icon> PDF
+          </button>
+
         </div>
 
         <div>

@@ -14,6 +14,7 @@ import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 
 @Component({
   selector: 'app-cart-button',
@@ -54,6 +55,9 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   deviceInfo : IDeviceInfo;
 
   initSubscriptions() {
+
+    this.orderMethodsService.updateOrderSubscription(this.order);
+
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       if (data && data.id) {
         this.order = data
@@ -77,7 +81,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     })
   }
 
-
   constructor(
     private siteService:            SitesService,
     public orderService:            OrdersService,
@@ -89,6 +92,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     public platFormService: PlatformService,
     private uiSettings: UISettingsService,
     public orderMethodsService: OrderMethodsService,
+    private paymentMethodsService: PaymentsMethodsProcessService,
     public paymentMethodsProcess: PaymentsMethodsProcessService,
     ) {
    }
@@ -101,8 +105,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     this.refreshOrderCheck();
     this.updateItemsPerPage();
     this.deviceInfo = this.authenticationService.deviceInfo
-    // this.device$ = this.
-    // this.actionOrder$ = null;
   }
 
   ngOnDestroy() {
@@ -127,11 +129,8 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
     this.smallDevice = false
     if (window.innerWidth >= 1200) {
-
     } else if (window.innerWidth >= 992) {
-
     } else if (window.innerWidth  >= 768) {
-
     } else if (window.innerWidth < 768) {
       this.smallDevice = true
     }
@@ -146,10 +145,10 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   addNewOrder() {
     const site = this.siteService.getAssignedSite();
+    this.paymentMethodsService.sendOrderProcessLockMethod(this.orderMethodsService.order)
+
     if (this.posDevice) {
       if (this.posDevice.defaultOrderTypeID  && this.posDevice.defaultOrderTypeID != 0) {
-
-
         const serviceType$ = this.serviceTypeService.getType(site, this.posDevice.defaultOrderTypeID)
         this.actionOrder$ = serviceType$.pipe(switchMap(data => {
             return of(data)
@@ -277,7 +276,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   toggleOpenOrderBar() {
 
-
     if (this.router.url.substring(0, 28 ) === '/currentorder;mainPanel=true') {
       console.log('order bar setting false')
       this.openOrderBar = false
@@ -285,7 +283,10 @@ export class CartButtonComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.openOrderBar == undefined) {   this.openOrderBar = false;  }
+
     if (this.userSwitchingService.swapMenuWithOrderBoolean) {
+      console.log('order bar setting swapMenuWithOrderBoolean true')
       this.openOrderBar = !this.openOrderBar
       const item = this.openOrderBar
       this.toolbarServiceUI.updateOrderBar(item)
@@ -294,6 +295,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     }
 
     if (!this.userSwitchingService.swapMenuWithOrderBoolean) {
+      console.log('order bar setting false, swapMenuWithOrderBoolean false')
       this.openOrderBar = !this.openOrderBar
       this.toolbarServiceUI.updateOrderBar(this.openOrderBar)
       return;

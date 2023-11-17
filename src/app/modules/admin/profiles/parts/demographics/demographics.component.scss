@@ -8,7 +8,7 @@
 .name-fields {
   display: grid;
   gap:  5px;
-  grid-template-columns:  repeat( auto-fit, minmax(95px, 1fr) );
+  grid-template-columns:  repeat( auto-fit, minmax(135px, 1fr) );
 
 }
 
@@ -30,7 +30,7 @@
   width: 100%;
 }
 
-.id-field { 
+.id-field {
   margin-top: 3px;
 }
 

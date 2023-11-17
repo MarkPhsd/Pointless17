@@ -2,7 +2,7 @@ import { Component,  Inject,  Input, OnInit} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntypedFormBuilder,  UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import {  UnitType,  } from 'src/app/_interfaces/menu/price-categories';
+import { UnitType,  } from 'src/app/_interfaces/menu/price-categories';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FbUnitTypeService } from 'src/app/_form-builder/fb-unit-type.service';
@@ -40,7 +40,7 @@ export class UnitTypeEditComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: UnitType
     )
   {
-    console.log(data)
+    // console.log(data)
     if (data) {
       this.refreshData_Sub(data)
       return

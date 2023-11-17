@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, Input , OnChanges, OnInit, TemplateRef, ViewChild, OnDestroy, ElementRef} from '@angular/core';
 import { Router } from '@angular/router';
 import { of, switchMap, Observable, Subscription } from 'rxjs';
@@ -5,6 +6,7 @@ import { IPOSOrder } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { IAppConfig } from 'src/app/_services/system/app-init.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -34,6 +36,9 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   @ViewChild('coachingLabel', {read: ElementRef}) coachingLabel: ElementRef;
   @ViewChild('coachingRefresh', {read: ElementRef}) coachingRefresh: ElementRef;
 
+  @ViewChild('qrCodeToggle') qrCodeToggle: TemplateRef<any>;
+  qrCode$ : Observable<any>;
+
   _posDevice: Subscription;
   _uiTransactionSettings: Subscription;
   user          : any;
@@ -41,7 +46,8 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   posDevice       :  ITerminalSettings;
   devicename = localStorage.getItem('devicename')
-
+  qrDisplayOn: boolean;
+  orderqrCode: string;
   isOrderClaimed: boolean;
   href: string;
   hidePrint = false;
@@ -90,6 +96,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
              public  authenticationService: AuthenticationService,
              private coachMarksService: CoachMarksService,
              public  prepPrintingService: PrepPrintingServiceService,
+             private httpClient : HttpClient,
     ) {
 
     this.orderMethodsService.currentOrder$.subscribe(data => {
@@ -115,12 +122,35 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     this.refreshPrintOption()
   }
 
+  printReceipt(){
+    const order = this.order;
+
+    console.log('preview')
+    this.printingService.previewReceipt(this.uiTransactionSettings?.singlePrintReceipt,order)
+  }
+
   refreshPrintOption() {
     this.hidePrint = false;
     if (this.router.url.substring(0, '/currentorder'.length ) === '/currentorder') {
       this.hidePrint = true;
       return;
     }
+  }
+
+  qrCodeDisplayToggle() {
+    this.qrDisplayOn = !this.qrDisplayOn;
+    const orderCode = this.order.orderCode;
+    const config$ =  this.httpClient.get('assets/app-config.json').pipe(switchMap(data => {
+      const config = data as unknown as IAppConfig;
+      const path = `${config.appUrl}qr-receipt;orderCode=${orderCode}`
+      return of(path)
+    }))
+    this.qrCode$ = config$;
+  }
+
+  get qrCodeDisplayView()   {
+    if (this.qrDisplayOn) { return this.qrCodeToggle}
+    return null;
   }
 
   get isSale() {

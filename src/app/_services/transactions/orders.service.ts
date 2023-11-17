@@ -161,6 +161,19 @@ export class OrdersService {
     return this.http.get<IPOSOrder[]>(url);
   }
 
+  getBalanceSheetGratuityTotal(site: ISite, reportRunID: number , history: boolean)  {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "getBalanceSheetGratuityTotal"
+
+    const parameters = `?reportRunID=${reportRunID}&history=${history}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder>(url);
+  }
+
+
   getActiveTableOrders(site: ISite, floorPlanID: number):  Observable<IPOSOrder[]> {
     const controller = "/POSOrders/"
 

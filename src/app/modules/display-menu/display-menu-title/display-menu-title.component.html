@@ -3,24 +3,20 @@
       [style.height]="styleHeight"
       [style.width]="styleWidth"
       [style.min-width]="styleMinWidth"
-      [style.background-color]="backGroundStyle"
-     >
+      [style.background-color]="backGroundStyle"  >
 
     <mat-card *ngIf="menu"
               class="image-class"
               (click)="navItem(menu)"
               [style.background]="backgroundURL"
-
               [style.background-repeat]="repeat"
               [style.height]="'100%'"
               [style.width]="'100%'"
               [style.object-fit]="objectfit"
-              [style.opacity]="menu?.backcolorOpacity"
-              >
+              [style.opacity]="menu?.backcolorOpacity"  >
 
-              <!--   -->
-       <div class="grid-items image-text-background"
-            *ngIf="menu?.enabled" [style.opacity]="1">
+      <div class="grid-items image-text-background"
+          *ngIf="menu?.enabled" [style.opacity]="1">
         <div class="info image-text ">
           <div>{{menu?.title}}</div>
           <div class="subTitle">
@@ -28,22 +24,27 @@
           </div>
           <div [innerHtml]="menu?.description"></div>
         </div>
-
-        <div class="logo" *ngIf="!hideLogo" [style.opacity]="1">
-          <button >
-            <img
-                loading   = "lazy"
-                draggable = "false"
-                [src]     = "getItemSrc(menu?.logo)"
-                err-SRC   = "getPlaceHolder()"
-                onerror   = "this.src='assets/images/placeholderimage.png'"
-                class     = "menu-item-image"
-                [alt]     = "menu?.description">
-          </button>
-        </div>
-
+        <ng-container [ngTemplateOutlet]="iconViewDisabled"></ng-container>
       </div>
 
-    </mat-card>
+  </mat-card>
 </div>
 
+<ng-template #iconViewEnabled>
+
+</ng-template>
+
+<ng-template #iconViewDisabled>
+  <div class="logo" *ngIf="!hideLogo && !iconView" [style.opacity]="1">
+    <button >
+      <img
+          loading   = "lazy"
+          draggable = "false"
+          [src]     = "getItemSrc(menu?.logo)"
+          err-SRC   = "getPlaceHolder()"
+          onerror   = "this.src='assets/images/placeholderimage.png'"
+          class     = "menu-item-image"
+          [alt]     = "menu?.description">
+    </button>
+  </div>
+</ng-template>

@@ -22,25 +22,46 @@
     </balance-sheet-calculations-view>
   </div>
 
+
   <div *ngIf="(auths$ | async) as auths">
-    <div *ngIf="printType === 'balanceSheetFinal'">
-      <div *ngIf="!auths?.blindBalanceSheet">
-        <h3>Payments:</h3>
-        <div *ngIf="(list$ | async) as list">
-          <credit-card-payments-print-list
-            [autoPrint]="autoPrint"
-            (renderComplete)="renderCompleted($event)"
-            [list]="list">
-          </credit-card-payments-print-list>
+    <div *ngIf="(zRun$ | async) as zRunData">
+      <div *ngIf="printType === 'balanceSheetFinal'">
+
+        <div *ngIf="(gratuitySummary$ | async) as serviceFee">
+          <div *ngIf="serviceFee && serviceFee.gratuity != 0">
+            <h5>Service Fee: {{ serviceFee?.gratuity | currency }}</h5>
+          </div>
         </div>
+
+        <div *ngIf="!auths?.blindBalanceSheet">
+          <h3>Payments:</h3>
+          <div *ngIf="(list$ | async) as list">
+            <credit-card-payments-print-list
+              [autoPrint]="autoPrint"
+              (renderComplete)="renderCompleted($event)"
+              [list]="list">
+            </credit-card-payments-print-list>
+          </div>
+        </div>
+
+        <div *ngIf="!auths?.blindBalanceSheet">
+          <h3>Payments Groups:</h3>
+          <div *ngIf="(paymentGroups$ | async) as list">
+            <credit-card-payments-print-list
+              [groupType]="true"
+              [autoPrint]="autoPrint"
+              (renderComplete)="renderCompleted($event)"
+              [list]="list">
+            </credit-card-payments-print-list>
+          </div>
+        </div>
+
+
       </div>
     </div>
   </div>
-
   <div *ngIf="printType === 'balanceSheetValues' || printType === 'balanceSheetFinal'">
     <h2>Remaining in Drawer</h2>
-
-    <!-- sheet {{sheet | json}} -->
 
     <div class="balance-grid-summary">
       <div>Dollars ({{sheet?.onesEnd }})</div>

@@ -34,21 +34,16 @@ export class POSOrderScheduleCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
     if (this._order) {
       this._order.unsubscribe()
     }
   }
 
   getOrderSchedule(order: IPOSOrder) {
-    return  this.dateService.format(order?.preferredScheduleDate, 'mm/dd/yyyy');
-    return null;
-    if (order && order.preferredScheduleDate ) {
-      return  this.dateService.format(order.preferredScheduleDate, 'mm/dd/yyyy');
+    if (!order ||  order.preferredScheduleDate) {
+      return null
     }
-    console.log('get order schedule', order.preferredScheduleDate)
-    return null
+    return  this.dateService.format(order?.preferredScheduleDate, 'mm/dd/yyyy');
   }
   schedule() {
     this.router.navigate(['pos-order-schedule'])

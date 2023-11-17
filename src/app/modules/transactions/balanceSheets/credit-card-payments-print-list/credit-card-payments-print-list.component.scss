@@ -15,6 +15,15 @@
   }
 }
 
+.flex-grid {
+  @media print {
+
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 100px 100px;
+  }
+}
+
 .item-value {
   justify-content: right;
   text-align: right;

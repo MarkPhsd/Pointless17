@@ -24,6 +24,8 @@ import { ITerminalSettings, SettingsService } from 'src/app/_services/system/set
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { CoachMarksService,CoachMarksClass } from '../../widgets/coach-marks/coach-marks.service';
+import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
+import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 
 interface IIsOnline {
   result: string;
@@ -49,6 +51,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   // @ViewChildren('coachingPosTerminalIcon', {read: ElementRef}) coaching: QueryList<ElementRef>;
 
+  action$: Observable<any>;
 
   @Output() outPutToggleSideBar:      EventEmitter<any> = new EventEmitter();
   @Output() outPutToggleSearchBar:    EventEmitter<any> = new EventEmitter();
@@ -231,6 +234,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
               private floorPlanSevice       : FloorPlanService,
               public  uiSettings             : UISettingsService,
               public  coachMarksService      : CoachMarksService,
+              private paymentMethodsService: PaymentsMethodsProcessService,
               private fb                    : UntypedFormBuilder ) {
   }
 
@@ -437,8 +441,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     return null
   }
 
-
-
   @HostListener("window:resize", [])
   updateScreenSize() {
     this.widthOfWindow = window.innerWidth;
@@ -639,7 +641,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
         this.user.userPreferences.enableCoachMarks = false;
       } else {
         this.user.userPreferences.enableCoachMarks = true;
-
       }
       this.userSave$ = this.userAuthService.setUserObs(this.user)
     }
@@ -667,16 +668,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   toggleOpenOrderBar() {
     if (this.router.url.substring(0, 28 ) === '/currentorder;mainPanel=true') {
-      ///
-      // console.log('toggleOpenOrderBar order bar update', this.openOrderBar)
       this.openOrderBar = false
       this.toolbarUIService.updateOrderBar(this.openOrderBar)
       return;
     }
     this.openOrderBar = !this.openOrderBar
     this.toolbarUIService.updateOrderBar(this.openOrderBar)
-
-    // console.log('toggleOpenOrderBar order bar update', this.openOrderBar)
   }
 
   toggleSearchMenu() {
@@ -690,6 +687,19 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   logout() {
+    if (this.uiTransactionSetting.prepOrderOnExit) {
+      const order = this.orderMethodsService.order
+      this.action$ = this.paymentMethodsService.sendOrderOnExit(order).pipe(switchMap(data => {
+        this.postLogout()
+        return of(data)
+      }))
+      return;
+    }
+
+    this.postLogout()
+  }
+
+  postLogout() {
     this.userSwitchingService.clearLoggedInUser();
     this.smallDeviceLimiter();
   }
@@ -724,7 +734,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   switchUser() {
-    this.userSwitchingService.openPIN({request: 'switchUser'})
+    this.paymentMethodsService.sendOrderAndLogOut( this.orderMethodsService.order, true )
   }
 
   assingBackGround(image: string) {
@@ -738,8 +748,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     if (user && user.roles && (user.roles == 'user' || user.roles == 'guest'))  {
       return true;
     }
-
-
   }
 
 

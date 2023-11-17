@@ -250,9 +250,10 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
       const site = this.sitesService.getAssignedSite();
       const saveAction$ =  this.setNotes();
 
-      let time = 500
+      let time = 10000
       let message = ''
-      const quantityMetValidation = this.promptWalkThroughService.validateAllPromptsQuantityMet(this.orderPromptGroup)
+      const quantityMetValidation = this.promptWalkThroughService.validateAllPromptsQuantityMet(this.orderPromptGroup);
+
       if (quantityMetValidation.length) {
         quantityMetValidation.forEach(data => {
            if (!data.quantityMet) {
@@ -262,7 +263,7 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
         })
 
         if (message != '') {
-          this.sitesService.notify(message, 'Close', time * quantityMetValidation.length, 'yellow', 'top');
+          this.sitesService.notify(message, 'Close', time * quantityMetValidation.length,  'yellow', 'top',);
           return;
         }
       }

@@ -49,6 +49,8 @@ export class ItemTypeEditorComponent implements OnInit  {
   instructions      : string;
   packageType: string;
   productName: string;
+
+  
   addOnItems = [] as IItemBasic[]
   typeName         : string;
   metrcCategories$ : Observable<METRCItemsCategories[]>;

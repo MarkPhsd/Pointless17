@@ -89,12 +89,14 @@
   <!-- <div *ngIf="product">
     <button mat-button color="primary" (click)="saveProduct()"><mat-icon>save</mat-icon>Save</button>
   </div> -->
-
-  <div *ngIf="product && (itemType$ | async) as itemType" class="info-panel">
-    <ng-container [ngTemplateOutlet]="productBasics"></ng-container>
-    <ng-container [ngTemplateOutlet]="priceCategorySelector"></ng-container>
-    <ng-container [ngTemplateOutlet]="cannabis"></ng-container>
-    <ng-container [ngTemplateOutlet]="liquor"></ng-container>
+  
+  <div *ngIf="product">
+    <div *ngIf="(itemType$ | async) as itemType" class="info-panel">
+      <ng-container [ngTemplateOutlet]="productBasics"></ng-container>
+      <ng-container [ngTemplateOutlet]="priceCategorySelector"></ng-container>
+      <ng-container [ngTemplateOutlet]="cannabis"></ng-container>
+      <ng-container [ngTemplateOutlet]="liquor"></ng-container> 
+    </div>
   </div>
 </ng-template>
 

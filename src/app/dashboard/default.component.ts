@@ -12,7 +12,7 @@ import { ToolBarUIService } from '../_services/system/tool-bar-ui.service';
 import { Capacitor } from '@capacitor/core';
 import { AppInitService } from '../_services/system/app-init.service';
 import { AuthenticationService, IDepartmentList } from '../_services';
-import { IUser } from '../_interfaces';
+import { IPOSOrder, IUser } from '../_interfaces';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from '../_services/system/settings/uisettings.service';
 import { isDevMode } from '@angular/core';
 import { SitesService } from '../_services/reporting/sites.service';
@@ -87,6 +87,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   _orderBar       : Subscription;
   orderBar        : boolean;
 
+
+  _sendAndLogOut: Subscription;
+
   _department : Subscription;
   department  : IDepartmentList;
 
@@ -97,12 +100,15 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   _user       : Subscription;
   user        : IUser;
 
+  _sendOrderFromOrderService: Subscription;
+
   style       = "width:195px"
   _ping       : Subscription;
   _uiSettings : Subscription;
   uiSettings  : UIHomePageSettings;
   homePageSetting$: Observable<UIHomePageSettings>;
   uiTransactions$: Observable<any>;
+  printAction$   : Observable<any>;
 
   devMode     : boolean;
   chatURL     : string;
@@ -112,6 +118,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   posDevice$ : Observable<ITerminalSettings>
 
   uiTransactions:TransactionUISettings
+
+  action$ : Observable<any>;
 
   initUITransactionSettings() {
     this.uiTransactions$ = this.uiSettingsService.getSetting('UITransactionSetting').pipe(
@@ -128,7 +136,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       if (!device) { return }
       this.uiSettingsService.homePageSetting$.pipe(switchMap(data => {
         this.uiSettings = data;
-
         return this.posDevice$
       })).pipe(switchMap(data => {
         if (!data) {
@@ -143,13 +150,13 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       }))
     }
   }
+
   homePageSubscriber(){
     try {
       this.matorderBar = 'mat-orderBar-wide'
       this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
         if (data) {
           this.uiSettings = data;
-
           this.initIdle();
           if (this.phoneDevice)  {
             this.matorderBar = 'mat-orderBar'
@@ -169,17 +176,13 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       if (data) {
         this.swapMenuWithOrder = data
       }
-      // console.log(this.swapMenuWithOrder)
     })
   }
 
   userSubscriber() {
     try {
       this._user =     this.authorizationService.user$.subscribe(data => {
-        this.user = data
-        // this.swapMenuWithOrder = this.user?.userPreferences?.swapMenuOrderPlacement
-        // this.swapMenuWithOrder = false;
-        // this.themeService.setDarkLight(this.user?.userPreferences?.darkMode)
+        this.user = data;
       })
     } catch (error) {
       console.log('userSubscriber', error)
@@ -224,8 +227,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!this.platFormService.isApp()) {
           this.barType =  "mat-drawer-searchbar-web"
         }
-        // console.log('barttype', this.barType)
-        // return this.barType
       })
     } catch (error) {
       console.log('toolbarSideBarSubscriber', error)
@@ -234,7 +235,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   searchSideBarSubscriber() {
     this._searchSideBar = this.toolBarUIService.searchSideBar$.subscribe( data => {
-      // console.log('data', data)
       if (!this.swapMenuWithOrder) {
         this.searchSideBar = data
         return;
@@ -287,9 +287,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       this.leftSideBarToggle = data;
     })
   }
-
-
-
 
   get appSiteFooterOn() {
     if ( !this.platFormService.isApp() ) {
@@ -373,7 +370,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     } catch (error) {
     }
 
-}
+  }
 
   constructor(
                public  toolBarUIService: ToolBarUIService,
@@ -391,10 +388,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private userSwitchingService    : UserSwitchingService,
                private settingService          : SettingsService,
                private userIdle               : UserIdleService,
-
                private orderMethodsSevice: OrderMethodsService,
+
                private paymentMethodsService: PaymentsMethodsProcessService
-               ) {
+    ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
     if (!this.platFormService.isApp()) {
       this.sidebarMode   =  'side'
@@ -412,20 +409,91 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.userIdle.resetTimer();
     this.initUITransactionSettings();
     this.initLoginStatus();
+    this.initSendOrderSubscriber();
+    this.initSendOrderLogOutSubscriber();
   }
 
   initLoginStatus() {
     this.userSwitchingService.clearloginStatus$.subscribe(data => {
       if (this.orderMethodsSevice.order) {
-        this.paymentMethodsService.sendOrderOnExit(this.orderMethodsSevice.order)
+        this.action$ = this.sendOrderOnExit(this.orderMethodsSevice.order);
+        return;
       }
     })
+    return of(null)
+  }
+
+  initOrderMethodsSevice() {
+    this._sendOrderFromOrderService = this.orderMethodsSevice.sendOrder$.subscribe(data => {
+      if (this.orderMethodsSevice.order) {
+        const order = this.orderMethodsSevice.order;
+        this.paymentMethodsService._sendOrder.next(order)
+      }
+    })
+  }
+
+  initSendOrderSubscriber() {
+    this.paymentMethodsService.sendOrder$.subscribe(order => {
+      if (order) {
+        this.printAction$ = this.sendOrderOnExit(order);
+        return;
+      }
+    })
+  }
+
+
+  initSendOrderLogOutSubscriber() {
+    // console.log('initSendOrderLogOutSubscriber  no order')
+    // console.trace('ProcessSendOrder')
+
+    this._sendAndLogOut = this.paymentMethodsService.sendOrderAndLogOut$.subscribe(send => {
+
+      if (this.platFormService.isApp()) {
+        if (send && send.order) {
+
+          this.printAction$ = this.sendOrderOnExit(send.order).pipe(switchMap(data => {
+
+          if (send && send.logOut) { this.processLogOut() }
+            return of(data)
+          })).pipe(switchMap(data => {
+              this.orderMethodsSevice.clearOrderSubscription()
+              return of(null)
+            })
+          );
+          return;
+        }
+      }
+
+      if (send && send.logOut) {
+        console.log('initSendOrderLogOutSubscriber  no order')
+        this.processLogOut();
+      }
+
+      if (!this.platFormService.isApp() && send && send.logOut) {
+        this.processLogOut();
+      }
+
+    })
+  }
+
+  processLogOut() {
+    this.userSwitchingService.clearLoggedInUser();
+    this.userSwitchingService.openPIN({request: 'switchUser'})
+  }
+
+  sendOrderOnExit(order: IPOSOrder) {
+    return this.paymentMethodsService.sendOrderOnExit(order).pipe(switchMap(data => {
+      if (this.uiTransactions?.exitOrderOnPrintReceipt) { 
+        this.orderMethodsSevice.clearOrder();
+      }
+      return of(data)
+    }))
   }
 
   initDevice() {
     const site = this.siteService.getAssignedSite();
     const devicename = localStorage.getItem('devicename');
-    // console.log('terminal data', devicename)
+
     if (!devicename) { return ;}
     if (this.platFormService.isApp()) {
       this.posDevice$ = this.settingService.getPOSDeviceBYName(site, devicename).pipe(switchMap(data => {
@@ -473,7 +541,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   get leftSideBar() {
     if (this.swapMenuWithOrder) {
-      // console.log('this order bar',this.toolBarUIService.orderBar, this.orderBar)
       if (this.toolBarUIService.orderBar) {
         return this.appOrderBar
       }
@@ -553,6 +620,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this._orderBar)      { this._orderBar.unsubscribe();   }
     if (this._barSize)       { this._barSize.unsubscribe();  }
     if(this._uiSettings)     { this._uiSettings.unsubscribe() }
+    if (this._sendOrderFromOrderService) { this._sendOrderFromOrderService.unsubscribe()}
+    if (this._sendAndLogOut) { this._sendAndLogOut.unsubscribe()}
     this.userIdle.stopTimer()
   }
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
@@ -6,7 +6,7 @@ import { UntypedFormGroup } from '@angular/forms';
   templateUrl: './quantiy-selector.component.html',
   styleUrls: ['./quantiy-selector.component.scss']
 })
-export class QuantiySelectorComponent {
+export class QuantiySelectorComponent implements OnInit{
 
   @Input() inputForm     : UntypedFormGroup;
   @Output() outPutValue  = new  EventEmitter();
@@ -14,13 +14,29 @@ export class QuantiySelectorComponent {
 
   constructor() { }
 
+  ngOnInit() {
+    if (this.inputForm){
+      this.inputForm.valueChanges.subscribe(data => {
+
+          const value = this.inputForm.controls['quantity'].value
+          console.log('value', value)
+          if (value > 0) {
+            this.outPutValue.emit(value)
+            return;
+          }
+
+      })
+    }
+  }
+
   changeQuantity(value: number) {
     if (!this.inputForm) { return}
 
     this.quantity = value + this.quantity
 
     if (this.quantity  == 0 || this.quantity < 0) { this.quantity = 1}
-    // this.outPutValue.emit(this.quantity)
     this.inputForm.patchValue({quantity: this.quantity})
+    this.outPutValue.emit(this.quantity)
+
   }
 }

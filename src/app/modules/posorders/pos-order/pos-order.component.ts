@@ -1,9 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input,
          OnInit, Output, OnDestroy,  ViewChild, HostListener, Renderer2, TemplateRef } from '@angular/core';
-import { AuthenticationService, AWSBucketService, OrdersService, TextMessagingService } from 'src/app/_services';
+import { AuthenticationService, AWSBucketService, MenuService, OrdersService, TextMessagingService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
 import { forkJoin, Observable, of, Subscription } from 'rxjs';
-import { delay,  repeatWhen, switchMap  } from 'rxjs/operators';
+import { debounceTime, delay,  repeatWhen, switchMap  } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -27,16 +27,16 @@ import { NewOrderTypeComponent } from '../components/new-order-type/new-order-ty
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
-import { IServiceType } from 'src/app/_interfaces';
+import { IProduct, IServiceType, ISite } from 'src/app/_interfaces';
 import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { Capacitor } from '@capacitor/core';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { eventNames } from 'process';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
-import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
 selector: 'app-pos-order',
@@ -77,6 +77,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @ViewChild('purchaseItemSales') purchaseItemSales: TemplateRef<any>;
   @ViewChild('importPurchaseOrder')   importPurchaseOrder: TemplateRef<any>;
   @ViewChild('purchaseItemHistory') purchaseItemHistory: TemplateRef<any>;
+  @ViewChild('poItemValues') poItemValues: TemplateRef<any>;
 
   @ViewChild('newItemEntry') newItemEntry: TemplateRef<any>;
 
@@ -92,6 +93,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @ViewChild('coachingListView', {read: ElementRef}) coachingListView: ElementRef;
 
   newItemEnabled: boolean;
+  product$: Observable<IProduct>;
 
   action$: Observable<any>;
   deleteOrder$: Observable<any>;
@@ -114,6 +116,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   id: any = '';
   order$: Observable<IPOSOrder>;
+  product: IProduct;
   serviceType$: Observable<IServiceType>;
   printAction$:  Observable<any>;
   isNotInSidePanel: boolean
@@ -162,6 +165,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   uiTransactionSetting  : TransactionUISettings;
   _uiTransactionSettings: Subscription;
   uiTransactionSettings : TransactionUISettings;
+  saveaction$ : Observable<IProduct>;
   uiTransactions
   devicename = localStorage.getItem('devicename')
 
@@ -176,7 +180,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   enableExitLabel : boolean;
   prepOrderOnClose: boolean;
   refundItemsAvalible;
-
+  _lastItem: Subscription;
   _quantitySubscriptions: Subscription;
   quantityEntryValue : number = 1;
 
@@ -285,6 +289,26 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     });
   }
 
+  initLastItemSelectedSubscriber() { 
+    this.product = {} as IProduct
+    this._lastItem = this.orderMethodsService.lastItemAdded$.subscribe(data => { 
+      const site = this.siteService.getAssignedSite();
+   
+      if (data) { 
+        console.log('menu item selected', data)
+        this.product$ = this.menuService.getProduct(site, data.id).pipe(switchMap(data => { 
+          // data.caseQty
+          this.product = {} as IProduct
+          if (data.caseQty>0 && data.caseRetail) { 
+            this.product = data;
+          }
+
+          return of(data)
+        }))
+      }
+    })
+  }
+
   initAssignedItemsSubscriber() {
     this._items = this.orderMethodsService.assignedPOSItems$.subscribe(data => {
       this.assignedItems = data;
@@ -310,7 +334,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       }
       return of(data)
     }))
-
   }
 
   homePageSettingSubscriber() {
@@ -350,7 +373,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   get isApp() {
-   return this.platFormService.isApp()
+    return this.platFormService.isApp()
   }
 
   userAuthSubscriber() {
@@ -407,12 +430,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   initPurchaseOrderOption(id: number) {
     if (!id) { return }
+    this.purchaseOrderEnabled = false
     if (this.userAuthorization.isManagement) {
       const site = this.siteService.getAssignedSite()
       this.serviceType$ = this.serviceTypeService.getType (site,id).pipe(
         switchMap(data => {
-          // console.log('initPurchaseOrderOption', data?.filterType)
-          // this.purchaseOrderEnabled = false
+          this.listView = false;
           if (data && data.filterType == null) {
             this.listView = false;
           }
@@ -444,6 +467,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.resizePanel();
     this.initAssignedItemsSubscriber();
     this.userAuthSubscriber();
+
 
     try {
       this._quantitySubscriptions =  this.orderMethodsService.quantityValue$.subscribe(data => {
@@ -481,6 +505,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   constructor(
               private paymentsMethodsService: PaymentsMethodsProcessService,
               private renderer          : Renderer2,
+              private fbProductsService: FbProductsService,
               public platFormService    : PlatformService,
               private navigationService : NavigationService,
               private orderService      : OrdersService,
@@ -506,6 +531,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private manifestService: ManifestInventoryService,
               private productEditButtonService: ProductEditButtonService,
               private prepPrintingService: PrepPrintingServiceService,
+              private menuService: MenuService,
               private el                : ElementRef) {
 
     const outPut = this.route.snapshot.paramMap.get('mainPanel');
@@ -577,6 +603,14 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (!this.smallDevice &&  !this.mainPanel) { return null }
     if (this.order && this.order.service && (this.order.service.filterType == 1 || this.order.service.name.toLowerCase() === 'purchase order')) {
       return this.importPurchaseOrder;
+    }
+    return null
+  }
+
+  get poItemvaluesView() {
+    if (!this.smallDevice &&  !this.mainPanel) { return null }
+    if (this.order && this.order.service && (this.order.service.filterType == 1 || this.order.service.name.toLowerCase() === 'purchase order')) {
+      return this.poItemValues;
     }
     return null
   }
@@ -704,6 +738,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   applyDiscount(event) {
 
   }
+
 
   makeManifest(event) {
     const site = this.siteService.getAssignedSite()

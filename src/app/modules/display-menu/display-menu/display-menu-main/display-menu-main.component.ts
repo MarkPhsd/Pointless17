@@ -17,6 +17,9 @@ export class DisplayMenuMainComponent implements OnInit {
   placeHolderImage   : String = this.awsBucket.getPlaceHolderImage()
   menus: IDisplayMenu[];
   @Input() gridItemWidth = '100%'
+  @Input() hideLogo: boolean;
+  @Input() iconView: boolean;
+
   style = ''
 
   constructor(
@@ -41,7 +44,6 @@ export class DisplayMenuMainComponent implements OnInit {
         }
       )
     )
-
   }
 
   getBucket() {

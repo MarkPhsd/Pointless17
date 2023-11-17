@@ -1,10 +1,14 @@
-<div *ngIf="sheets$ | async as sheets; else loading" class="container">
-  
+<div *ngIf="sheets$ | async as balancesheets; else loading" class="container">
   <mat-card>
     <mat-card-title>
-      <h4>Balance Sheets</h4>
+      <h4>Balance Sheets - {{site.name}}</h4>
     </mat-card-title>
+
     <mat-card-content>
+      <div  class="totals_label">
+        <ng-container [ngTemplateOutlet]="buttonsView"></ng-container>
+      </div>
+
       <div class="header">
         <div class="grid-item">Start</div>
         <div class="grid-item">ID</div>
@@ -16,17 +20,22 @@
         <div class="grid-item">Opened</div>
         <div class="grid-item">Closed</div>
       </div>
+
       <mat-divider></mat-divider>
       <br>
 
-      <div *ngFor="let item of sheets.results">
-        <ng-container
+      <!-- <div *ngFor="let item of sheets.results">
+       -->
+      <div *ngIf="sheets.results as sheets">
+        <div *ngFor="let item of (showAll ? sheets : sheets.slice(0,5) )" >
+          <ng-container
             [ngTemplateOutlet]="reportView"
             [ngTemplateOutletContext]="{$implicit: item}">
-        </ng-container>
+          </ng-container>
+        </div>
       </div>
 
-      <div *ngIf="sheets.summary as summary">
+      <div *ngIf="sheets.summary as summary ">
         <mat-divider></mat-divider>
         <br>
         <div class="header summary">
@@ -51,6 +60,7 @@
   </mat-card>
 </div>
 
+
 <ng-template #reportView let-item>
   <div class="header">
     <div class="grid-item text-format">{{ item?.startTime | date: 'M/d/yy' }}</div>
@@ -64,39 +74,21 @@
     <div class="grid-item col-span-2 ">{{item?.startTime | date : 'hh:mm ampm'}}</div>
     <div class="grid-item col-span-2">{{item?.endTime |  date : 'hh:mm ampm' }}</div>
   </div>
-
 </ng-template>
 
 <ng-template #loading>
   ...loading balance sheets
   <mat-spinner [diameter]="25"></mat-spinner>
 </ng-template>
-<!--
-type:              number;
-dateTime:          string;
-noSales:           number;
-startTime:         string;
-deviceName:        string;
-employeeID:        number;
-salesTotal:        number;
-overUnderTotal:    number;
-registerPosVoids:  number;
-registerNegVoids:  number;
-startedWith:       number;
-endedWith:         number;
-endTime:           string;
-cashIn:            number;
-creditIn:          number;
-cashDropCheck:     number;
-reportRunMasterID: number;
-creditTips:        number;
-paidOuts:          number;
-mileage:           number;
-storeID:           string;
-cashDeposit:       number;
-checkDeposit:      number;
-otherDeposit:      number;
-depositer:         string;
-cashDropAmount:    number;
-reportName:        string;
-balanceSheetEmployee  : BalanceSheetEmployee; -->
+
+<ng-template #buttonsView>
+  <span>
+    <button mat-raised (click)="togglesShowAll()">
+    <mat-icon>expand</mat-icon></button>
+    <button mat-raised (click)="downloadCSV()">
+      <mat-icon>download</mat-icon></button>
+    <button mat-raised (click)="dataGridView()">
+      <mat-icon>open_in_full</mat-icon></button>
+  </span>
+</ng-template>
+

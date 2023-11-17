@@ -1,14 +1,16 @@
 import {Component, HostListener, OnInit, OnDestroy,
   ViewChild, ElementRef, QueryList, ViewChildren, Input, Output,EventEmitter}  from '@angular/core';
 import { IPOSOrder,IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
-import { OrdersService, POSOrdersPaged } from 'src/app/_services';
+import { AuthenticationService, OrdersService, POSOrdersPaged } from 'src/app/_services';
 import { ActivatedRoute} from '@angular/router';
-import { Observable, Subscription, of, switchMap} from 'rxjs';
+import { Observable, Subscription, catchError, of, switchMap} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
-import { ISite } from 'src/app/_interfaces';
+import { ISite, IUser } from 'src/app/_interfaces';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 
 // import { share } from 'rxjs/operators';
 
@@ -95,9 +97,29 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   _printLocation  : Subscription;
   printLocation   : number;
 
+  _userAuths: Subscription;
+  userAuths: IUserAuth_Properties;
+
+  _user: Subscription;
+  user : IUser;
+
+
   initViewSubscriber() {
     this._viewType = this.orderMethodsService.viewOrderType$.subscribe(data => {
       this.viewType = data;
+    })
+  }
+
+  initUserAuth() {
+    this._user = this.authenticationService.user$.subscribe(data => {
+      this.user = data;
+    })
+
+    this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
+      this.userAuths = data;
+      if (!data) {
+        this.userAuths = {} as IUserAuth_Properties
+      }
     })
   }
 
@@ -106,6 +128,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     if (this._printLocation) { this._printLocation.unsubscribe()    }
     if (this._viewType) { this._viewType.unsubscribe()}
     if (this._searchBar) { this._searchBar.unsubscribe()}
+    if (this._userAuths) { this._userAuths.unsubscribe()}
   }
 
   constructor(
@@ -115,6 +138,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     public paymentMethodsProcess: PaymentsMethodsProcessService,
     private siteService: SitesService,
     private toolbarServiceUI : ToolBarUIService,
+    private authenticationService: AuthenticationService,
     )
   {
   }
@@ -123,6 +147,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
     this.stateValue = this.route.snapshot.paramMap.get('value');
     this.initOrderBarSubscription();
+    this.initUserAuth();
     this.updateItemsPerPage();
     this.site = this.siteService.getAssignedSite();
 
@@ -232,6 +257,10 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
   setActiveOrder(order) {
     const site  = this.siteService.getAssignedSite();
+
+    //sends order from this, to trigger defaultmodulecomponent, which then triggers another observable to send thourh payment methodsprocessservice.
+    this.orderMethodsService._sendOrder.next(true)
+
     const order$ =  this.orderService.getOrder(site, order.id, order.history )
     order$.subscribe(data =>
       {
@@ -246,8 +275,9 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   setActiveOrderObs(order) {
     const site  = this.siteService.getAssignedSite();
 
-
+    console.log('orderID', this.orderMethodsService?.order?.id)
     let sendOrder$ = this.paymentMethodsProcess.sendOrderOnExit(this.orderMethodsService.order)
+
     let order$  =   this.orderService.getOrder(site, order.id, order.history )
     let newOrder$ : Observable<any>;
 
@@ -265,7 +295,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
         return of(data)
       })
     )
-    // this.action$ =  order$.pipe(switchMap(data =>
+
     this.action$ = newOrder$
   }
 

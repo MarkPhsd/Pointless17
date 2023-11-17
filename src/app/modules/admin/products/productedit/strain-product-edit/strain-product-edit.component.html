@@ -84,12 +84,14 @@
                     [id] = "product?.brandID" [inputForm]="productForm">Department
               </app-department-select>
 
-              <div class="flex-container-medium">
+              <div class="grid-container-medium">
                 <product-type-select  [inputForm]="productForm">
                 </product-type-select>
-                <button mat-button color="accent" class="edit-button" (click)="editType()">
-                  <mat-icon>edit</mat-icon>
-                </button>
+                <div>
+                  <button mat-button color="accent" class="edit-button" (click)="editType()">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </div>
               </div>
 
               <app-brand-type-select
@@ -136,24 +138,6 @@
                     <ng-container [ngTemplateOutlet]="priceCategorySelector"></ng-container>
                   </div>
                </div>
-            </div>
-
-            <div>
-                <h4><mat-icon>design</mat-icon>Design / Layout</h4>
-                <ng-container [ngTemplateOutlet]="icon"></ng-container>
-                <ng-container [ngTemplateOutlet]="menuSort"></ng-container>
-                <div class="header">
-                  <h4><mat-icon>image</mat-icon>Images</h4>
-                </div>
-
-                <app-widget-uploader
-                    [(fileNames)]="urlImageMain"
-                    (messageOut) ="received_URLMainImage($event)"
-                    (imageUrl)   ="updateUrlImageMain($event)">
-                </app-widget-uploader>
-
-                <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
-
             </div>
 
           </div>
@@ -241,6 +225,25 @@
               <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
               <ng-container [ngTemplateOutlet]="partBuilderSelector"></ng-container>
             </div>
+          </div>
+
+          <div class="grid-item">
+          
+            <h4><mat-icon>design</mat-icon>Design / Layout</h4>
+            <ng-container [ngTemplateOutlet]="icon"></ng-container>
+            <ng-container [ngTemplateOutlet]="menuSort"></ng-container>
+            <div class="header">
+              <h4><mat-icon>image</mat-icon>Images</h4>
+            </div>
+
+            <app-widget-uploader
+                [(fileNames)]="urlImageMain"
+                (messageOut) ="received_URLMainImage($event)"
+                (imageUrl)   ="updateUrlImageMain($event)">
+            </app-widget-uploader>
+
+            <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
+
           </div>
       </div>
     </div>
@@ -401,16 +404,19 @@
 </ng-template>
 
 <ng-template #unitSelector>
-  <div class="grid-container-3Column">
+  <div  *ngIf="productForm && unitSearchForm" 
+        class="grid-container-3Column">
     <div>
       <unit-type-select
         [inputForm]     = 'productForm'
+        [searchForm]    = 'unitSearchForm'
         [product]       = 'productForm.value'
         [id]            = 'product.unitTypeID'
-        [searchForm]    = 'unitSearchForm'
         (itemSelect)    = 'assignItem($event)'>
+        Unit of Measure
       </unit-type-select>
     </div>
+    
     <div style="margin-top:5px;">
       <button mat-button (click)="openUnit()">
         <div *ngIf="productForm.controls['unitTypeID'].value !=0">
@@ -427,6 +433,43 @@
       </button>
     </div>
   </div>
+
+  <div class="grid-container-3Column" 
+       *ngIf="product && productForm && reOrderUnitSearchForm">
+    <div>
+      <unit-type-select
+        [inputForm]     = 'productForm'
+        [searchForm]    = 'reOrderUnitSearchForm'
+        [product]       = 'productForm.value'
+        [id]            = 'product?.reOrderUnitTypeID'
+        [formControlName]="'reOrderUnitTypeID'"
+        (itemSelect)    = 'reOrderUnitAssignItem($event)'>
+        Re - Order UOM 
+      </unit-type-select>
+    </div>
+    
+    <div  *ngIf="product" 
+          style="margin-top:5px;">
+      <button mat-button (click)="openUnit()">
+        <div *ngIf="product?.reOrderUnitTypeID != 0">
+          <mat-icon>expand</mat-icon>
+        </div>
+        <div *ngIf="product?.reOrderUnitTypeID == 0">
+          <mat-icon>add</mat-icon>
+        </div>
+      </button>
+    </div>
+
+    <div>
+      <button mat-button (click)="clearReOrderUnit()">
+        <mat-icon color="warn">delete</mat-icon>
+      </button>
+    </div> 
+
+  </div>
+
+  <ng-container [ngTemplateOutlet]="sizeSelectorAddOn"></ng-container>
+
 </ng-template>
 
 <ng-template #partBuilderSelector>
@@ -464,4 +507,25 @@
       [fieldName]="'pieceWeight'">
     Piece Weight
   </app-value-fields>
+</ng-template>
+
+<ng-template #sizeSelectorAddOn>
+
+  <div class="fields-width" *ngIf="unitSelectorSearchForm">
+    <mat-label>Additional Unit Types for Purchase Orders</mat-label>
+    <unit-type-selector
+        class         = "fields"
+        [fieldName]   = "unitTypeNameSelected"
+        [searchForm]  = "unitSelectorSearchForm"
+        (itemSelect)  = "getUnitSelectorItem($event)">
+    </unit-type-selector>
+  </div>
+
+  <div class="meta-tags"
+        *ngIf="unitTypeSelections && unitSelectorSearchForm">
+      <tag-chips-products (remove)="removeAddOnSize($event)"
+                          [addOnItems]="unitTypeSelections">
+      </tag-chips-products>
+  </div>
+
 </ng-template>

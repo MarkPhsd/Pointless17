@@ -58,7 +58,7 @@ import { OrderHeaderDemographicsBoardComponent } from './modules/posorders/pos-o
 import { LimitValuesCardComponent } from './modules/posorders/limit-values-card/limit-values-card.component';
 import { GridcomponentPropertiesDesignComponent } from './modules/admin/grid-menu-layout/grid-component-properties/gridcomponent-properties-design/gridcomponent-properties-design.component';
 // import { ClientTypeSelectionComponent } from './modules/admin/grid-menu-layout/client-type-selection/client-type-selection.component';
-
+import { NgxGoogleAnalyticsModule,NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
 import * as Sentry from "@sentry/angular";
 import { BrowserTracing } from "@sentry/tracing";
 import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-loading.component';
@@ -112,6 +112,10 @@ export  function init_app(appLoadService: AppInitService) {
   return () =>  appLoadService.init();
 }
 
+export  async function   getTrackingCode(appLoadService: AppInitService) : Promise<string>{
+  return  await appLoadService.getGoogleTrackingID();
+}
+
 @NgModule({
   declarations: [
     AgGridTestComponent,
@@ -148,10 +152,15 @@ export  function init_app(appLoadService: AppInitService) {
 
   imports: [
     IonicModule.forRoot(),
+    // G-6BNWKZ7VY8
+    // NgxGoogleAnalyticsModule.forRoot('traking-code'),
+    // NgxGoogleAnalyticsModule.forRoot(await getTrackingCode()) ,
+    // NgxGoogleAnalyticsRouterModule,
     UserIdleModule.forRoot({idle: 10, timeout: 100, ping: 120}),
     AppRoutingModule,
     AppMaterialModule,
     AgGridModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
     FormsModule,
@@ -161,7 +170,6 @@ export  function init_app(appLoadService: AppInitService) {
     DefaultModule,
     DynamicModule,
     EditorModule,
-    HttpClientModule,
     LayoutModule,
     NGXMaterialModule,
     NgxElectronModule,

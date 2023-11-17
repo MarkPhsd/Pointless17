@@ -231,9 +231,15 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   removeItemFromList(payload: any) {
-    const index = payload.index;
-    const orderItem = payload.item
-    this.orderMethodService.removeItemFromList(index, orderItem)
+
+      if (this.order.completionDate && (this.userAuths && this.userAuths.disableVoidClosedItem)) {
+        this.siteService.notify('Item can not be voided or refunded. You must void the order from Adjustment in Cart View', 'close', 10000, 'red')
+        return
+      }
+      const index = payload.index;
+      const orderItem = payload.item
+      this.orderMethodService.removeItemFromList(index, orderItem)
+    
   }
 
   setAsPrepped(index) {

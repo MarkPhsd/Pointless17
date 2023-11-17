@@ -17,7 +17,7 @@ export class FbProductsService {
     setProductValues(product: IProduct, inputForm: UntypedFormGroup): IProduct {
     if (inputForm.valid) {
       product                 = inputForm.value;
-      console.log(product.pB_MainID, inputForm.controls['pB_MainID'].value)
+      // console.log(product.pB_MainID, inputForm.controls['pB_MainID'].value)
       product.barCodeID       = product.barcode
       return product
     }
@@ -228,6 +228,7 @@ export class FbProductsService {
         childProof                 :   [''],
         mGCBD                      :   [''],
         mGTHC                      :   [''],
+        mGTCH                       :   [''],
         parLevel                   :   [''],
         slug                       :   [''],
         pB_MainID                   : [],
@@ -245,6 +246,9 @@ export class FbProductsService {
         return false;
     }
 
+
+
+
     isLiquor(itemType: IItemType) {
       if (itemType && itemType.name && (
         itemType.type?.toLowerCase() === 'retail liquor' ||
@@ -256,6 +260,8 @@ export class FbProductsService {
         return false;
     }
 
+
+
     isCannabis(itemType: IItemType) {
       if (itemType && itemType.type &&
                       (itemType.type?.toLowerCase() === 'cannabis' ||
@@ -266,6 +272,19 @@ export class FbProductsService {
 
         return false;
     }
+
+    isTobacco(itemType: IItemType) {
+      if (itemType && itemType.type &&
+                      (itemType.type?.toLowerCase() === 'tobacco'
+                      ))
+          {
+            return true;
+          }
+
+        return false;
+    }
+
+
 
     isProduct(itemType: IItemType) {
       if (itemType && itemType.useType &&  (
@@ -301,3 +320,7 @@ export class FbProductsService {
       }
     }
 }
+// itemType && itemType.useType && (itemType.type?.toLowerCase() === 'grocery' ||
+//                                                          itemType.type?.toLowerCase() === 'tobacco' ||
+//                                                          itemType.type?.toLowerCase() === 'restaurant' ||
+//                                                          itemType.type?.toLowerCase() === 'food')"

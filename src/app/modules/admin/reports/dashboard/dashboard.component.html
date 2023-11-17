@@ -14,7 +14,7 @@
 
 <ng-template #headerView>
   <div class="grid-buttons">
-    <div *ngIf="completionDateForm">
+    <div *ngIf="completionDateForm" style="margin-right:10px;width:255px">
       <mat-date-range
         [hideRefresh]="true"
         [inputForm] ="completionDateForm">
@@ -156,9 +156,6 @@
   </div>
 
   <div [hidden]="displayReports != 'audit' ">
-
-
-
     <div>
       <button mat-flat-button  style="width:150px;height:50px"color="warn"
               (click)="showView(8)">Payment Voids</button>
@@ -246,19 +243,23 @@
             <mat-icon>credit_card</mat-icon> Sale Type - {{site.name}}
           </payment-report>
 
+          <payment-report
+                  [groupBy]="'employee'"
+                  [site]    ="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]  ="dateTo"
+                  [notifier]="childNotifier">
+            <div header>
+              <mat-icon >people</mat-icon> Emplolyee - {{site.name}}
+            </div>
+            <mat-icon>people</mat-icon> Emplolyee - {{site.name}}
+          </payment-report>
+
           <ng-container *ngTemplateOutlet="balanceSheetView,
                                           context: {$implicit: {site: site}}">
           </ng-container>
 
-          <ng-template #balanceSheetView>
-            <balance-sheet-report
-                [site]="site"
-                [dateFrom]="dateFrom"
-                [dateTo]="dateTo"
-                [notifier]="childNotifier"
-                >
-            </balance-sheet-report>
-          </ng-template>
+
 
           <payment-report
                   [groupBy]="'deviceName'"
@@ -271,6 +272,7 @@
             </div>
             <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
           </payment-report>
+
         </ng-container>
       </div>
 
@@ -787,4 +789,13 @@
     [dateFrom]="dateFrom"
     [dateTo]="dateTo"
   ></app-audit-payment>
+</ng-template>
+
+<ng-template #balanceSheetView let-site>
+  <balance-sheet-report
+      [site]="site.site"
+      [dateFrom]="dateFrom"
+      [dateTo]="dateTo"
+      [notifier]="childNotifier">
+  </balance-sheet-report>
 </ng-template>

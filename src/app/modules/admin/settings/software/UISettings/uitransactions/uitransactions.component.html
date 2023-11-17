@@ -275,6 +275,15 @@
               </app-value-fields>
             </div>
 
+            <div>
+              <mat-label  class="mat-label-design">Preferred Margin of COSG.</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'preferredMargin'">
+                 Preferred Margin
+              </app-value-fields>
+            </div>
+
 
             <div>
               <mat-label class="mat-label-design">Prefix for Order Prep Labels.</mat-label>
@@ -469,7 +478,7 @@
             <mat-slide-toggle
                       formControlName="enableGiftCards"
                       >
-              <mat-label>Enable Gift Cards</mat-label>
+              <mat-label>Enable gift cards</mat-label>
             </mat-slide-toggle>
           </div>
 
@@ -490,7 +499,7 @@
             <app-value-fields
                 [inputForm]="inputForm"
                 [fieldName]="'storeCreditAPI'">
-              Store Credit API
+              Store credit API
             </app-value-fields>
           </div>
         </div>
@@ -498,26 +507,27 @@
 
       <div class="grid-views">
 
-        <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Order Options</h4>
+        <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>
+            Order Options</h4>
 
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="displayItemPOSTTotal" >
-            <mat-label>Display Tax + Total Per Item In Order</mat-label>
+            <mat-label>Display tax + total per-item in order</mat-label>
           </mat-slide-toggle>
         </div>
 
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="displayEditCardOnHeader" >
-            <mat-label>Display Edit Cart Buttons on Header</mat-label>
+            <mat-label>Display edit cart buttons on header</mat-label>
           </mat-slide-toggle>
         </div>
 
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="toggleUserOrAllOrders" >
-            <mat-label>Show Filter for All Orders Or 'Just Mine'</mat-label>
+            <mat-label>Enable Toggle filter all / current users orders</mat-label>
           </mat-slide-toggle>
         </div>
 
@@ -528,21 +538,21 @@
                     [matTooltip]="labelingService.transactionInfo[4].value">info</mat-icon>
           <mat-slide-toggle
                     formControlName="showNumberPad">
-            <mat-label>Show Number Pad In Order</mat-label>
+            <mat-label>Show number pad in-order</mat-label>
           </mat-slide-toggle>
         </div>
 
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="showOrderName">
-            <mat-label>Show Order Name Option</mat-label>
+            <mat-label>Show order name entry</mat-label>
           </mat-slide-toggle>
         </div>
 
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="showCustomerOption">
-            <mat-label>Show Customer Option</mat-label>
+            <mat-label>Show customer option</mat-label>
           </mat-slide-toggle>
         </div>
 
@@ -553,14 +563,14 @@
                 [matTooltip]="labelingService.transactionInfo[2].value">info</mat-icon>
           <mat-slide-toggle
                     formControlName="applyTableNameToOrderName">
-            <mat-label>Apply Table Name to Order Name</mat-label>
+            <mat-label>Apply table name to order name</mat-label>
           </mat-slide-toggle>
         </div>
 
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="scanIncreaseQuantity">
-            <mat-label>Increase Items Quantity on Duplicate Scan</mat-label>
+            <mat-label>Increase items quantity on duplicate scan</mat-label>
           </mat-slide-toggle>
         </div>
 
@@ -568,7 +578,7 @@
           <mat-slide-toggle
                     formControlName="enableLimitsView"
                     >
-            <mat-label>Enable Limits View</mat-label>
+            <mat-label>Enable limits view</mat-label>
           </mat-slide-toggle>
         </div>
 
@@ -584,7 +594,7 @@
           <mat-slide-toggle
                     formControlName="applyTaxChangesToDiscountedItems"
                     >
-            <mat-label>Update tax on Discounted Items</mat-label>
+            <mat-label>Update tax on discounted items</mat-label>
           </mat-slide-toggle>
         </div>
 
@@ -600,7 +610,7 @@
           <mat-slide-toggle
                     formControlName="startNewOrderOnCloseOrder"
                     >
-            <mat-label>Start New Order On Order Close</mat-label>
+            <mat-label>Start new order on order close</mat-label>
           </mat-slide-toggle>
         </div>
 
@@ -608,7 +618,7 @@
           <mat-slide-toggle
                     formControlName="printLabelsOnclose"
                     >
-            <mat-label>Print Un Printed Labels at Close of Order</mat-label>
+            <mat-label>Print un-printed labels at close of order</mat-label>
           </mat-slide-toggle>
         </div>
 
@@ -616,7 +626,7 @@
           <mat-slide-toggle
                     formControlName="singlePrintReceipt"
                     >
-            <mat-label>Print Receipt Without Preview</mat-label>
+            <mat-label>Print receipt without preview</mat-label>
           </mat-slide-toggle>
         </div>
 
@@ -624,7 +634,7 @@
           <mat-slide-toggle
                     formControlName="prepOrderOnClose"
                     >
-            <mat-label>Send Items for Prep at Order Close.</mat-label>
+            <mat-label>Send Items for prep at order close.</mat-label>
           </mat-slide-toggle>
         </div>
 
@@ -633,9 +643,17 @@
           <mat-slide-toggle
                     formControlName="prepOrderOnExit"
                     >
-            <mat-label>Send Items for Prep at when exiting order.</mat-label>
+            <mat-label>Send Items for prep at when exiting order.</mat-label>
           </mat-slide-toggle>
         </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="exitOrderOnPrintReceipt">
+            <mat-label>Exit order on print receipt.</mat-label>
+          </mat-slide-toggle>
+        </div>
+
       </div>
 
       <div class="grid-views">
@@ -648,7 +666,7 @@
             <mat-slide-toggle
                       formControlName="enableRounding"
                       >
-              <mat-label>Enable Rounding</mat-label>
+              <mat-label>Enable rounding</mat-label>
             </mat-slide-toggle>
           </div>
 
@@ -656,7 +674,7 @@
             <mat-slide-toggle
                       formControlName="enableExactChange"
                       >
-              <mat-label>Enable Exact Change</mat-label>
+              <mat-label>Enable exact change</mat-label>
             </mat-slide-toggle>
           </div>
 
@@ -664,7 +682,7 @@
           <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="splitEntry">
-              <mat-label>Split Entry</mat-label>
+              <mat-label>Split entry</mat-label>
             </mat-slide-toggle>
           </div>
 
@@ -672,7 +690,7 @@
             <mat-slide-toggle
                       formControlName="splitCheckByItem"
                       >
-              <mat-label>Enable Split Check By Item</mat-label>
+              <mat-label>Enable split check by item</mat-label>
             </mat-slide-toggle>
           </div>
 
@@ -680,7 +698,7 @@
             <mat-label>
               <mat-slide-toggle
                         formControlName="enableTransactionTypeChoice" >
-                <mat-label>Choose Order Type On Close</mat-label>
+                <mat-label>Choose order type On close</mat-label>
               </mat-slide-toggle>
             </mat-label>
           </div>
@@ -702,7 +720,7 @@
           <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="validateCustomerLicenseID">
-              <mat-label>Validate Customer License/ID</mat-label>
+              <mat-label>Validate customer License/ID</mat-label>
             </mat-slide-toggle>
           </div>
 
@@ -710,7 +728,7 @@
             <mat-slide-toggle
                       formControlName="enablMEDClients"
                       >
-              <mat-label>Enable MED Patients</mat-label>
+              <mat-label>Enable MED patients</mat-label>
             </mat-slide-toggle>
           </div>
 
@@ -728,7 +746,7 @@
                       [matTooltip]="labelingService.contactInfo[0].value">info</mat-icon>
             <mat-slide-toggle
                       formControlName="idParseOnlyAgeConfirmation" >
-              <mat-label>Only Validate ID</mat-label>
+              <mat-label>Only validate ID</mat-label>
             </mat-slide-toggle>
           </div>
 

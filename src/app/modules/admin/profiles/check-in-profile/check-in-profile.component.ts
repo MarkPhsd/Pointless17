@@ -116,14 +116,13 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     if (!this.user) {
        user = JSON.parse(localStorage.getItem('user')) as IUser;
        this.user = user;
+    }
 
-       this.enableStartOrder = true
-       if (user && user.roles) {
-         if (user.roles != 'user' && user.roles != 'guest') {
-           this.enableStartOrder = true
-         }
-       }
-
+    this.enableStartOrder = true
+    if (user && user.roles) {
+      if (user.roles != 'user' && user.roles != 'guest') {
+        this.enableStartOrder = true
+      }
     }
   }
 

@@ -62,7 +62,7 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
       if (data) {
         this.order = data;
         this.purchaseOrderEnabled = false;
-        if (this.order.serviceType.toLowerCase() == 'purchase order' || this.order.serviceType.toLowerCase() === 'conversion') {
+        if (this.order.serviceType && (this.order.serviceType.toLowerCase() == 'purchase order' || this.order.serviceType.toLowerCase() === 'conversion')) {
           this.purchaseOrderEnabled = true;
         }
       }

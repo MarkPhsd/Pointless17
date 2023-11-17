@@ -91,7 +91,6 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
     private matSnack: MatSnackBar,
     private manifestTypeService: ManifestTypesService,
     private manifestStatusService: ManifestStatusService,
-
     private manifestService: ManifestInventoryService,
     private dialogRef: MatDialogRef<MainfestEditorComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any

@@ -48,8 +48,8 @@ export class PriceOptionsComponent  {
 
   addItemPrice(price: ProductPrice) {
     const item$ = this.orderMethodService.addPriceToItem(this.newItem.order, this.newItem.item,
-                                                 price, this.newItem.posItem.quantity,
-                                                 this.newItem.posItem.id)
+                                                          price, this.newItem.posItem.quantity,
+                                                          this.newItem.posItem.id)
 
     this.action$ = item$.pipe(
       switchMap( data => {

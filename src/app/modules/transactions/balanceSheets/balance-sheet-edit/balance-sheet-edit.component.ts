@@ -92,6 +92,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   _showStart      : boolean;
   sheetType       : string;
 
+  autoPrint: boolean; //print previewenabled
   startingCashForm = 0;
   endingCashForm   = 0;
   startingCashSaved= 0;
@@ -432,6 +433,12 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   print(event){
+    this.autoPrint = false
+    this.balanceSheet$ = this._print(event)
+  }
+
+  printPreview(event){
+    this.autoPrint = false
     this.balanceSheet$ = this._print(event)
   }
 
@@ -455,7 +462,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
         }
 
         this.sheetMethodsService.updateBalanceSheet(result)
-        return this.printingService.previewReceipt(true)
+        return this.printingService.previewReceipt(this.autoPrint)
     }));
   }
 

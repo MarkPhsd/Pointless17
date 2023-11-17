@@ -31,18 +31,12 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   _initTransactionComplete = new BehaviorSubject<any>(null);
 
-  // initSubscriptions() {
 
-  //   this.dialogSubject = this.dialogRef.afterClosed().pipe(
-  //     switchMap( result => {
-  //       if (result) {
-  //         return this.processSendOrder(this.orderMethodsService.currentOrder)
-  //       }
-  //   })).subscribe(data => {
-  //     return of(data)
-  //   })
+  public _sendOrder     = new BehaviorSubject<IPOSOrder>(null);
+  public  sendOrder$      = this._sendOrder.asObservable();
 
-  // }
+  public _sendOrderAndLogOut     = new BehaviorSubject<any>(null);
+  public  sendOrderAndLogOut$      = this._sendOrderAndLogOut.asObservable();
 
   ngOnDestroy(): void {
       if (this.dialogSubject){ this.dialogSubject.unsubscribe()}
@@ -68,8 +62,12 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   get DSIEmvSettings(): DSIEMVSettings {
     const item = localStorage.getItem('DSIEMVSettings');
     if (!item) { return }
-    const EMVSettings = JSON.parse(item)
-    return EMVSettings
+  const EMVSettings = JSON.parse(item)
+  return EMVSettings
+  }
+
+  sendOrderAndLogOut(order: IPOSOrder, logOut: boolean) {
+    this._sendOrderAndLogOut.next({order: order, logOut: logOut})
   }
 
   enterPointCashValue(event, paymentMethod: IPaymentMethod, posPayment: IPOSPayment, order: IPOSOrder ): Observable<IPaymentResponse> {
@@ -87,23 +85,35 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }
   }
 
+  sendOrderProcess(order: IPOSOrder) {
+    this._sendOrder.next(order)
+  }
+
+  sendOrderProcessLockMethod(order: IPOSOrder) {
+    this._sendOrder.next(order)
+  }
+
+  sendOrderProcessAndLogOut(order: IPOSOrder) {
+    this._sendOrderAndLogOut.next(order)
+  }
+
   processPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder,
                  amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
-    let response: IPaymentResponse;
 
+    let response: IPaymentResponse;
     const balance$ =  this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet();
 
-    if (posPayment.tipAmount) {
-      amount = (amount - posPayment.tipAmount)
-    }
+    if (posPayment.tipAmount) {  amount = (amount - posPayment.tipAmount)  }
 
-    // console.log('process payment')
+    console.log('process payment')
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod);
 
     return balance$.pipe(
         switchMap(data => {
+    
           return payment$
       })).pipe(switchMap(data => {
+        console.log('process payment Data', data)
         if (!data) {
           return this.sitesService.notifyObs('Payment not succeeded.', 'close', 5000, 'red')
         }
@@ -111,12 +121,11 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         response = data;
 
         if (!data?.paymentSuccess ||
-            (data?.responseMessage && data?.responseMessage.toLowerCase() != 'success')) {
+            ( data?.responseMessage && data?.responseMessage.toLowerCase() != 'success')) {
           return  this.sitesService.notifyObs(`Payment failed because: ${data?.responseMessage}`, 'Close.', 15000)
         }
 
         return this.finalizeOrderProcesses(order);
-
       })).pipe(switchMap( data => {
         // console.log('udpdate order subscription')
         this.orderMethodsService.updateOrderSubscription( order );
@@ -135,21 +144,20 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   sendOrderOnExit(order: IPOSOrder) {
     let sendOrder$ : Observable<any>;
     if (!order) {  return of(null)  }
-
     if (this.isApp) {
-      sendOrder$ = this.uiSettingService.transactionUISettings$.pipe(switchMap(data => {
+      return  sendOrder$ = this.uiSettingService.transactionUISettings$.pipe(switchMap(data => {
         if (data) {
-          // console.log(data.prepOrderOnExit, data.prepOrderOnClose)
           if (data.prepOrderOnExit) {
             return this.sendToPrep (order, true, data  )
           }
         }
         return of(null)
+      }),catchError(data => {
+        console.log('Send order on exit error', data.toString())
+        return of(data)
       }))
     }
-
-    return sendOrder$;
-
+    return of(null)
   }
 
   get isApp() {
@@ -438,13 +446,19 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   isTriPOSApproved(trans: any) {
 
-    if (trans && trans.statusCode && (trans?.statusCode.toLowerCase() === 'approved'.toLowerCase() ||
+    console.log('isTriPOSApproved' , trans?.isApproved, trans?.statusCode)
+    if (trans && trans?.isApproved) { 
+      return true;
+    }
+
+    if ( trans && trans.statusCode && (trans?.statusCode.toLowerCase() === 'approved'.toLowerCase() ||
                   trans?.statusCode.toLowerCase() === 'approval'.toLowerCase() ||
                   trans?.statusCode.toLowerCase() === 'A'.toLowerCase()
                   ) ) {
       return true;
     }
 
+    console.log('not approved')
     this.notify(`Response not approved. Response given ${trans?.statusCode}. Reason: ${trans?._processor?.expressResponseMessage} ` , 'Failed', 3000)
     return false;
   }
@@ -508,9 +522,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   processTriPOSResponse(trans: any, payment: IPOSPayment, order: IPOSOrder, tipValue: number): Observable<any> {
 
     const site = this.sitesService.getAssignedSite();
-    if (!this.isTriPOSApproved(trans)) {
+
+    const approved = this.isTriPOSApproved(trans);
+
+    if (!approved) {
       return of(null)
     }
+
+    console.log('approved')
 
     payment   = this.applyTripPOSResponseToPayment(trans, payment, tipValue);
     payment   = this.applyAssociatedAuths(payment.tranType, payment, order);
@@ -519,6 +538,10 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     let paymentResponse: IPaymentResponse
 
     if (trans?.cardLogo) {   cardType = trans?.cardLogo;  }
+
+    console.log('trans', trans)
+    console.log('cardType', cardType)
+
     return this.getPaymentMethodByName(site, cardType).pipe(
       switchMap( data => {
         if (!data) {  return of(null)   }
@@ -674,62 +697,73 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     // console.log('type', response._type, )
     // console.table(response)
 
+    payment = this.applyPaymentAmount(response,payment,tipValue)
+
+
+    payment.account         = response?.accountNumber;
+    payment.accountNum      = response?.accountNum;
+    payment.approvalCode    = response?.approvalNumber;
+
+    payment.captureStatus   = response?.statusCode;
+    payment.entryMethod     = response?.entryMode;
+    payment.entrymode       = response?.paymentType;
+    payment.respproc        = response?.networkTransactionId;
+    payment.respcode        = response?.transactionId
+    payment.batchid         = response?.binValue;
+    payment.tranType        = response?._type;
+
+    if (response.expirationMonth && response.expirationYear) {
+      payment.expiry          = `${response?.expirationMonth}${response?.expirationYear}`
+    }
+
+
+    payment.refNumber       = response?.transactionId;
+    if (!payment.approvalCode) {
+      payment.approvalCode  = response?.transactionId;
+    }
+    payment.bintype         = response?.binValue;
+    payment.transactionIDRef = response?.transactionIDRef
+    payment.transactionData = JSON.stringify(response);
+
+    return payment;
+  }
+
+  applyPaymentAmount(response: any, payment: IPOSPayment, tipValue: number) {
     if (response._type != 'authorizationResponse') {
       payment.amountPaid      = response.approvedAmount;
       payment.amountReceived  = response.approvedAmount;
+      payment.tipAmount       = tipValue;
     }
-
-    if (response._type === 'authorizationCompletionResponse') {
-      payment.amountPaid      = response?.subTotalAmount;
-      payment.amountReceived  = response?.subTotalAmount;
-      if (+tipValue == (response.subTotalAmount - +tipValue)) {
-        payment.tipAmount       = tipValue;
-        payment.amountPaid      = response.subTotalAmount - +tipValue;;
-        payment.amountReceived  = response.subTotalAmount - +tipValue;;
-      }
-    }
-
+    
     if (response._type === 'saleResponse') {
-      payment.amountPaid      = response?.approvedAmount;
-      payment.amountReceived  = response?.approvedAmount;
-
       if (+tipValue == (response.approvedAmount - +tipValue)) {
         payment.tipAmount       = tipValue;
-        payment.amountPaid      = response.approvedAmount - +tipValue;;
-        payment.amountReceived  = response.approvedAmount - +tipValue;;
+        payment.amountPaid      = +response.approvedAmount - +tipValue;
+        payment.amountReceived  = +response.approvedAmount - +tipValue;
       }
     }
+    
+    if (response._type === 'authorizationCompletionResponse') {
+      ///always use the total amount approved amount will return 0.00 
+      payment.amountPaid      = +response?.totalAmount;
+      payment.amountReceived  = +response?.totalAmount;
 
-    payment.account         = response.accountNumber;
-    payment.accountNum      = response.accountNum;
-    payment.approvalCode    = response.approvalNumber;
-
-    payment.captureStatus   = response.statusCode;
-    payment.entryMethod     = response.entryMode;
-    payment.entrymode       = response.paymentType;
-    payment.respproc        = response.networkTransactionId;
-    payment.respcode        = response.transactionId
-    payment.batchid         = response.binValue;
-    payment.tranType        = response._type;
-
-    if (response.expirationMonth && response.expirationYear) {
-      payment.expiry          = `${response.expirationMonth}${response.expirationYear}`
+      if (+tipValue == (payment.amountPaid  - +tipValue)) {
+        payment.tipAmount       = tipValue;
+        payment.amountPaid      = payment.amountPaid  - +tipValue;;
+        payment.amountReceived  = payment.amountReceived - +tipValue;;
+      }
     }
+    
     if (response._type === 'refundResponse') {
       payment.amountPaid      = - response.totalAmount;
       payment.amountReceived  = - response.totalAmount;
       payment.approvalCode    = response.approvalNumber;
     }
 
-    payment.refNumber       = response.transactionId;
-    if (!payment.approvalCode) {
-      payment.approvalCode  = response.transactionId;
-    }
-    payment.bintype         = response.binValue;
-    payment.transactionIDRef = response.transactionIDRef
-    payment.transactionData = JSON.stringify(response);
-
+    console.log('process payment', payment)
     return payment;
+
   }
 
 

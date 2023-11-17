@@ -198,7 +198,7 @@
                   </div>
                 </div>
 
-                <div *ngIf="isAuthorized">
+                <div *ngIf="isAuthorized || isUser">
                    <app-orders-list
                       [height]="'47vh'"
                   ></app-orders-list>

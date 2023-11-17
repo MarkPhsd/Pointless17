@@ -30,6 +30,7 @@ export class PurchaseItemSalesComponent implements OnInit,OnChanges,OnDestroy {
         this.itemHistorySales$ = this.getAssignedItems(data)
       })
     }
+
     ngOnDestroy() {
       this.itemHistorySales$ = null;
       this.orderMethodsService.updateLastItemSelected(null)

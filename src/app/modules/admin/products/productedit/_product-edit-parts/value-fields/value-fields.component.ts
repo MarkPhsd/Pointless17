@@ -23,18 +23,6 @@ export class ValueFieldsComponent implements  AfterViewInit  {
   constructor( private renderer: Renderer2) {
 
   }
-  // ngAfterViewInit() {
-
-  //   if (!this.items.nativeElement) { return }
-  //   try {
-  //     const text = this.items.nativeElement
-  //     console.log(text)
-  //     console.log(text.text)
-  //     this.items.nativeElement.value = text.toLocaleUpperCase()
-  //   } catch (error) {
-
-  //   }
-  // }
 
   ngAfterViewInit() {
     try {

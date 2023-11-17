@@ -57,13 +57,19 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
         this.scheduledDate = data?.preferredScheduleDate;
       }
       const site = this.siteService.getAssignedSite()
-      return this.serviceTypeService.getTypeCached(site, +data.serviceTypeID)
+      if (data && data.serviceType) { 
+        return this.serviceTypeService.getTypeCached(site, +data.serviceTypeID)
+      }
+      const item = {} as IServiceType;
+      return of(item)
     })).subscribe(data => {
       this.serviceType = data;
 
-      this.instructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType.instructions);
-      this.shippingInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType.shippingInstructions);
-      this.scheduleInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType.scheduleInstructions);
+      if (data) { 
+        this.instructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.instructions);
+        this.shippingInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.shippingInstructions);
+        this.scheduleInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.scheduleInstructions);
+      }
 
     })
   }

@@ -99,6 +99,8 @@ export interface TransactionUISettings {
   autoNotifyOnItemCompletion: boolean;
   singlePrintReceipt: boolean;
   prepOrderOnExit: boolean;
+  exitOrderOnPrintReceipt: boolean;
+  preferredMargin: number;
 }
 
 export interface StripeAPISettings {
@@ -835,6 +837,8 @@ export class UISettingsService {
       autoNotifyOnItemCompletion: [],
       singlePrintReceipt: [],
       prepOrderOnExit: [],
+      preferredMargin: [], 
+      exitOrderOnPrintReceipt: [],
      })
   }
 

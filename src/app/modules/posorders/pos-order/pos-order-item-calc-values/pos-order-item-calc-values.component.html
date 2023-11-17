@@ -1,0 +1,90 @@
+<div *ngIf="(saveaction$ | async) as saveProduct"></div>
+
+<div  *ngIf="(product$ | async) as item">
+  <mat-card [formGroup]="productForm"
+            class=" margin-5"
+            style="height:475px; overflow-y:auto" >
+      <ng-container [ngTemplateOutlet]="productCalcValues"
+            [ngTemplateOutletContext]="{$implicit: item}">
+      </ng-container>
+      <ng-container [ngTemplateOutlet]="productCount">
+      </ng-container>
+  </mat-card>
+</div>
+
+<ng-template #productCalcValues let-item>
+  <div class="grid-items-po-calc-values">
+    <div> Margin</div>
+    <div class="totals"> %{{ ((( item?.retail - item.wholesale  ) / item?.retail) * 100).toFixed(2) }}</div>
+
+    <div>Profit</div>
+    <div class="totals">   ${{ (( item?.retail - item.wholesale  )).toFixed(2) }}</div>
+
+    <div>Preferred Price</div>
+    <div class="totals">{{ getPreferredMargin(item) | currency}} </div>
+
+    <div>Case QTY</div>
+    <div class="totals">   {{ item?.caseQty}} </div>
+
+    <div>Case Margin</div>
+    <div class="totals">   %{{ ((( item?.caseRetail - item.caseWholeSale  ) / item?.caseRetail) * 100).toFixed(2) }}</div>
+
+    <div>Case Profit</div>
+    <div class="totals">   ${{ (( item?.caseRetail - item.caseWholeSale  )).toFixed(2) }}</div>
+
+    <div>Preferred Case Price</div>
+    <div class="totals">{{ getPreferredCaseMargin(item) | currency}} </div>
+  </div>
+</ng-template>
+
+<ng-template #productCount>
+  <div class="grid-items-po-values">
+  <app-value-fields
+        style="width:75px"
+        [inputForm]="productForm"
+        [fieldsClass]="'fields-small'"
+        [fieldName]="'productCount'">
+    Count
+  </app-value-fields>
+
+  <app-value-fields
+      style="width:75px"
+      [inputForm]="productForm"
+      [fieldsClass]="'fields-small'"
+      [fieldName]="'wholesale'">
+    Cost
+  </app-value-fields>
+
+  <app-value-fields
+      style="width:75px"
+      [inputForm]="productForm"
+      [fieldsClass]="'fields-small'"
+      [fieldName]="'retail'">
+    Price
+  </app-value-fields>
+
+  <app-value-fields
+      style="width:75px"
+      [fieldsClass]="'fields-small'"
+      [inputForm]="productForm"
+      [fieldName]="'caseWholeSale'">
+    Case Cost
+  </app-value-fields>
+
+  <app-value-fields
+      style="width:75px"
+      [inputForm]="productForm"
+      [fieldsClass]="'fields-small'"
+      [fieldName]="'caseRetail'">
+    Case Price
+  </app-value-fields>
+
+  <app-value-fields
+    style="width:75px"
+    [inputForm]="productForm"
+    [fieldsClass]="'fields-small'"
+    [fieldName]="'caseQty'">
+    Case QTY
+  </app-value-fields>
+</div>
+</ng-template>

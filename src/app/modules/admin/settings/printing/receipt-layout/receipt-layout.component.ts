@@ -93,13 +93,15 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
           if (!this.payments) {
             this.payments   = this.order.posPayments
           }
+          if (this.payments) { 
+            this.payments = this.payments.filter(data => data.tranType != 'incrementalAuthorizationResponse' )
+          }
           this.orders     = []
           if (this.order) { this.orders.push(this.order)};
           const datepipe: DatePipe = new DatePipe('en-US');
           if (data.orderDate) { this.order.orderTime = datepipe.transform( data.orderDate, 'HH:mm')     }
           if (this.items)     { this.items           = this.items.filter( item => item.quantity != 0  );     }
-          // if ( this.payments) { this.payments        = this.payments.filter(item => (item.iscreditCard || (!item.iscreditCard && item.amountPaid != 0)) ); }
-           return this.serviceTypeService.getTypeCached(this.site, data.serviceTypeID)
+            return this.serviceTypeService.getTypeCached(this.site, data.serviceTypeID)
         }
       )
      ).pipe(
@@ -122,8 +124,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
       if (data && data.name) {
         this.order.service.menuItem1 = data;
       }
-
-      // this.printingService.updatePrintReady({ready: true, index: this.index});
       this.outputPrint();
       return of(data)
     }))

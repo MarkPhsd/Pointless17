@@ -1,5 +1,5 @@
 import { Component, Inject,  OnInit,} from '@angular/core';
-import { MenuService } from 'src/app/_services';
+import { IItemBasic, MenuService } from 'src/app/_services';
 import { FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IProduct } from 'src/app/_interfaces/raw/products';
@@ -27,9 +27,10 @@ import { LabelingService } from 'src/app/_labeling/labeling.service';
 export class StrainProductEditComponent implements OnInit {
 
   managerProtected: boolean;
-  productForm: UntypedFormGroup;
-  unitSearchForm: UntypedFormGroup;
-  pbSearchForm: UntypedFormGroup;
+  productForm          : UntypedFormGroup;
+  unitSearchForm       : UntypedFormGroup;
+  reOrderUnitSearchForm: UntypedFormGroup;
+  pbSearchForm         : UntypedFormGroup;
 
   jsonForm: FormGroup;
   get f() { return this.productForm;}
@@ -47,6 +48,12 @@ export class StrainProductEditComponent implements OnInit {
   get brandID()       { return this.productForm.get("brandID") as UntypedFormControl;}
   urlImageMain: string;
   productJSONObject: menuButtonJSON;
+ 
+
+  //size search selector add on
+  unitTypeNameSelected: string;
+  unitTypeSelections = []   as IItemBasic[];
+  unitSelectorSearchForm: FormGroup
 
   constructor(private menuService: MenuService,
               public  route: ActivatedRoute,
@@ -69,6 +76,7 @@ export class StrainProductEditComponent implements OnInit {
     //init all search forms that are not bound to data.
     this.initPbSearchForm();
     this.initUnitForm();
+    this.initReOrderUnitSearchForm();
 
     if (data) {
       if (data.product) {
@@ -93,17 +101,40 @@ export class StrainProductEditComponent implements OnInit {
     }
   }
 
+  initUnitSearchForm() {
+    this.unitSelectorSearchForm = this.fb.group( {
+      unitTypeSelections: ['']
+    });
+    this.unitSelectorSearchForm.patchValue({ unitTypeSelections: ''})
+    this.unitTypeNameSelected = '';
+  }
+
+  getUnitSelectorItem(event) { 
+      const item = {} as IItemBasic;
+      item.name = event?.name;
+      item.id = event?.id;
+      if (!this.unitTypeSelections) { this.unitTypeSelections= [] as IItemBasic[] }
+      this.unitTypeSelections.push(item);
+      this.initUnitSearchForm();
+  }
+
   initJSONForm(prodJSON: string) {
     this.jsonForm = this.fb.group({
        tareValue: [],
-       pieceWeight: []
+       pieceWeight: [],
+       unitTypeSelections: [],
     })
-    const item = JSON.parse(prodJSON)
-    this.jsonForm.patchValue(item);
+    
+    try {
+      const item = JSON.parse(prodJSON)
+      this.unitTypeSelections = JSON.parse(this.productJSONObject.unitTypeSelections)
+    } catch (error) {
+      
+    }
+    this.initUnitSearchForm()
   }
 
   initMenuButtonJson(product: IProduct) {
-    // console.log('init product', product)
     if (product && !product.json) {
       this.productJSONObject  = {}  as menuButtonJSON;
       this.productJSONObject.buttonColor = '';
@@ -111,11 +142,17 @@ export class StrainProductEditComponent implements OnInit {
       this.productJSONObject.managerProtected = false;
       this.productJSONObject.pieceWeight = 0;
       this.productJSONObject.tareValue = 0;
+      this.productJSONObject.unitTypeSelections = null;
       return
     }
+    // product.reOrderUnitTypeID
     if (product.json) {
-      this.productJSONObject = JSON.parse(product.json) as menuButtonJSON
-      this.managerProtected = this.productJSONObject.managerProtected;
+      try {
+        this.productJSONObject = JSON.parse(product.json) as menuButtonJSON
+        this.managerProtected = this.productJSONObject?.managerProtected;
+      } catch (error) {
+        
+      }
     }
   }
 
@@ -124,14 +161,19 @@ export class StrainProductEditComponent implements OnInit {
       if (this.jsonForm) {
         this.productJSONObject.tareValue = this.jsonForm.controls['tareValue'].value
         this.productJSONObject.pieceWeight =  this.jsonForm.controls['pieceWeight'].value
-
+        // this.productJSONObject.unitTypeSelections =  this.jsonForm.controls['unitTypeSelections'].value as IItemBasic[];
       }
 
-
-      this.productJSONObject.managerProtected = this.managerProtected;
-      return JSON.stringify(this.productJSONObject) ;
+      try {
+        this.productJSONObject.unitTypeSelections = JSON.stringify(this.unitTypeSelections);
+        this.productJSONObject.managerProtected = this.managerProtected;
+        return JSON.stringify(this.productJSONObject) ;
+      } catch (error) {
+        return ''
+      } 
+      return this.product.json
     }
-    return ''
+   
   }
 
   ngOnInit() {
@@ -148,6 +190,7 @@ export class StrainProductEditComponent implements OnInit {
 
         this.initializeForm();
         this.initJSONForm(this.product.json)
+
         return of(this.product)
     }))
   }
@@ -194,10 +237,17 @@ export class StrainProductEditComponent implements OnInit {
     this.action$ = this.updateItem(null)
   }
 
+  reOrderUnitAssignItem(event) {
+    if (!event) { return }
+    if (!event.unitTypeID) {return}
+    this.product.reOrderUnitTypeID = event.reOrderUnitTypeID
+    this.productForm.patchValue({reOrderUnitTypeID: event?.unitTypeID})
+    this.action$ = this.updateItem(null)
+  }
 
   setPartBuilder(event) {
     if (!event) { return }
-    console.log('event',event, event.value, event.pB_MainID)
+    // console.log('event',event, event.value, event.pB_MainID)
     this.product.pB_MainID = event.pB_MainID;
     this.productForm.patchValue(event)
     console.log(this.productForm.value);
@@ -227,7 +277,6 @@ export class StrainProductEditComponent implements OnInit {
   openUnit() {
     const site = this.siteService.getAssignedSite();
     const id = this.productForm.controls['unitTypeID'].value;
-    if (!id) { return }
     this.action$ = this.unitTypeMethodsService.openUnitEditorOBS(id).pipe(switchMap(data => {
       const search = {id: data.id} as SearchModel
       return  this.unitTypeService.getUnitTypesSearch(site, search);
@@ -248,8 +297,20 @@ export class StrainProductEditComponent implements OnInit {
     this.initUnitForm();
   }
 
+  clearReOrderUnit() {
+    this.productForm.patchValue({ reOrderUnitTypeID: 0})
+    this.product.reOrderUnitTypeID = 0;
+    this.initReOrderUnitSearchForm();
+  }
+
   initUnitForm() {
     this.unitSearchForm = this.fb.group({
+      searchField: []
+    })
+  }
+
+  initReOrderUnitSearchForm() {
+    this.reOrderUnitSearchForm = this.fb.group({
       searchField: []
     })
   }
@@ -371,5 +432,15 @@ export class StrainProductEditComponent implements OnInit {
   parentFunc(event){
     // console.log(event)
   }
+
+  removeAddOnSize(item: IItemBasic): void {
+    const index = this.unitTypeSelections.indexOf(item);
+
+    if (index >= 0) {
+      this.unitTypeSelections.splice(index, 1);
+    }
+  }
+
+
 
 }

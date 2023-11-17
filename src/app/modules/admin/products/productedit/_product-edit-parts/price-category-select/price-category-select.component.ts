@@ -5,6 +5,7 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { IItemType } from 'src/app/_services/menu/item-type.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { PriceCategories, IPriceCategoryPaged } from 'src/app/_interfaces/menu/price-categories';
+import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 
 @Component({
   selector: 'app-price-category-select',
@@ -26,9 +27,14 @@ export class PriceCategorySelectComponent implements OnInit {
   @Input()  isInventory : boolean;
   priceCategoriesPaged$ :   Observable<IPriceCategoryPaged>;
   searchForm: UntypedFormGroup;
+
+
+  showAdditionalCost: boolean;
+
   constructor(
                private sitesService: SitesService,
                private fb: UntypedFormBuilder,
+               public fbProductsService: FbProductsService,
                private priceCategoryService: PriceCategoriesService,
                private menuPricingService: PriceCategoriesService,) {
           }
@@ -39,6 +45,15 @@ export class PriceCategorySelectComponent implements OnInit {
     }
     const site = this.sitesService.getAssignedSite();
     this.priceCategoriesPaged$ = this.menuPricingService.getPriceCategoriesNoChildrenByPage(site);
+  }
+
+  get showAdditionalButton() {
+    if (this.fbProductsService.isTobacco(this.itemType) &&  this.fbProductsService.isRetail(this.itemType) &&
+        this.fbProductsService.isLiquor(this.itemType) &&  this.fbProductsService.isProduct(this.itemType)) {
+      return true;
+    }
+  return false
+
   }
 
   openPriceCategory() {

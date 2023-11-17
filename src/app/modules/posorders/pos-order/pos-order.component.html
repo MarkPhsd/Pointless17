@@ -175,6 +175,7 @@
         <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
 
         <div class="grid-po-helper" #coachingpurchaseOrderView>
+          <ng-container [ngTemplateOutlet]="poItemvaluesView"></ng-container>
           <ng-container [ngTemplateOutlet]="purchaseOrderItemView"></ng-container>
           <ng-container [ngTemplateOutlet]="purchaseItemHistoryView"></ng-container>
           <ng-container [ngTemplateOutlet]="importPurchaseOrderView"></ng-container>
@@ -209,6 +210,18 @@
     [userAuths]       ='userAuths'
     [order]           ="order">
   </pos-order-items>
+</ng-template>
+
+<ng-template #casePriceSelector>
+  <div *ngIf="isStaff && (product$ | async ) as product">
+    <div *ngIf="product && product.caseQty > 0 && product.caseRetail > 0">
+      <button style="margin-top:5px;" mat-raised-button color="warn"
+              class="buttons payment-buttons"
+              (click)="roundOrderComplete()">
+        Apply Case Price / QTY {{product.caseRetail}}
+      </button>
+    </div>
+  </div>
 </ng-template>
 
 <ng-template #editCartButtons>
@@ -511,6 +524,12 @@
   </mat-card>
 </ng-template>
 
+<ng-template #poItemValues>
+  <pos-order-item-calc-values
+    [uiTransactionSetting]="uiTransactionSetting"
+  ></pos-order-item-calc-values>
+</ng-template>
+
 <ng-template #importPurchaseOrder>
   <span style="width:225px;margin-top:5px">
     <app-csv-import [order]="order" [purchaseOrderImport]="true">
@@ -529,6 +548,13 @@
   <div style="margin:5px">
     <coach-marks-button
           (initPopOver)="initPopOver()"
-          [enabled]="user && user?.userPreferences &&  user?.userPreferences?.enableCoachMarks"></coach-marks-button>
+          [enabled]="user && user?.userPreferences &&
+                     user?.userPreferences?.enableCoachMarks">
+    </coach-marks-button>
   </div>
 </ng-template>
+
+
+<!-- margin  %. Add items by the case ( you don't have to open boxes or cases to scan the actual item or try to remember how many come in each box)
+Be able to see the actual inventory so I can check the inventory at the same time that I add items. -->
+

@@ -72,6 +72,9 @@ export class FbClientTypesService {
 
       editProduct: [],
       intakeInventory: [],
+
+      disableVoidClosedItem: [],
+      disableEditOtherUsersOrders: [],
     })
     return fb
 

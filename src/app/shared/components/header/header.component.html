@@ -1,7 +1,7 @@
 <span *ngIf="(uiTransactionSetting$ | async) as item"></span>
 <span *ngIf="(uiHomePageSetting$ | async) as item"></span>
 <span *ngIf="( userSave$  | async) as pref"></span>
-
+<span *ngIf="(action$ | async) as action"></span>
 <mat-toolbar [class]="mattoolbar"
              [color]="matToolbarColor">
   <mat-toolbar-row>
@@ -151,7 +151,7 @@
           aria-label="transfer_within_a_station"
           color="accent"
           (click)="switchUser()">
-    <mat-icon>transfer_within_a_station</mat-icon>
+    <mat-icon>lock</mat-icon>
   </button>
 </ng-template>
 

@@ -11,6 +11,7 @@ export interface IAppConfig {
   company: string;
   appUrl: string;
   appGateMessage: string;
+  googleTrackingKey: string;
 }
 
 declare var window: any;
@@ -50,6 +51,10 @@ export class AppInitService  {
   //and it can override this value.
   //this can be assigned in settings after an initial login.
 
+  async getGoogleTrackingID() { 
+    const config = await this.httpClient.get('assets/app-config.json').toPromise()  as IAppConfig
+    return config.googleTrackingKey    
+  }
   async init() {
 
     this.apiUrl      = this.getLocalApiUrl();
@@ -150,17 +155,11 @@ export class AppInitService  {
     const result = localStorage.getItem('storedApiUrl')
     const site = {} as ISite;
     site.url = result
-    // console.log('getlocal API Url', site, result)
-
     if (this.isApp() && !result ) {
       this.router.navigate(['/apisetting']);
       return ;
-      localStorage.setItem('storedApiUrl', 'https://pointlessposdemo.com/api')
-      return localStorage.getItem('storedApiUrl')
     }
-
     return site.url;
-
   }
 
   setAssignedSite(apiUrl) {
@@ -183,9 +182,7 @@ export class AppInitService  {
       return   this.apiUrl
     }
 
-    if (urlSaved) {
-      return urlSaved;
-    }
+    if (urlSaved) { return urlSaved; }
 
     if (!this.isApp() && this.appConfig && this.appConfig.apiUrl)  {
       return this.appConfig.apiUrl;
@@ -200,8 +197,6 @@ export class AppInitService  {
 
     return this.appConfig.apiUrl;
   }
-
-
 
   appGateEnabled() {
     if (this.apiUrl) {return false}

@@ -58,6 +58,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     if (!this.manifest) {
       this._paymentWithAction = this.pOSPaymentService.paymentWithAction$.subscribe(data=> {
         this.resultAction = data
+
       })
     }
   }
@@ -202,6 +203,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   voidPaymentFromSelection(setting) {
 
+
     if (setting) {
       const site = this.siteService.getAssignedSite();
       this.resultAction.voidReason = setting.name
@@ -209,17 +211,20 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       this.resultAction.action = 1;
       const method = this.resultAction.paymentMethod;
       let response$: Observable<OperationWithAction>;
-
+    
       //establish the amount to void for tripos
       //later we will use for other payment processors.
       if (this.voidAmount == 0) {
         this.setVoidAmount(this.resultAction.payment.amountPaid)
       }
-
+   
       if (this.resultAction) {
+
+        const paymentMethod = this.payment.paymentMethod;
+
         if (method) {
           // console.log('void / Reversal result 2');
-          if (method?.companyCredit) {
+          if (paymentMethod?.companyCredit) {
             this.voidPayment.voidReason = this.resultAction.voidReason
             const credit = {} as StoreCredit;
 
@@ -252,9 +257,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
           }
 
-          // console.log('void / Reversal result 3');
-
-          if (method.isCreditCard) {
+          if (paymentMethod.isCreditCard) {
             this.voidPayment.voidReason = this.resultAction.voidReason;
             this.voidPayment = this.resultAction.payment;
 
@@ -265,7 +268,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
               }
             }
 
-            // console.log('void / Reversal result 4');
             if (this.settings.triposEnabled) {
 
               // console.log('void / Reversal result 5');
@@ -275,6 +277,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
               }
 
               if (this.voidPayment.entrymode) {
+               
                 try {
                   let paymentType = this.voidPayment.entrymode ;
                   if ( !paymentType ) {
@@ -298,8 +301,10 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                   this.resultAction.voidAmount = this.voidAmount
                   item.transactionAmount = this.voidAmount.toString();
                   let process$ : Observable<TriposResult>;
+
                   if (this.toggleVoid) {
                     console.log('void  7');
+                    return;
                     process$ = this.triPOSMethodService.void(site, item)
                   }
                   if (!this.toggleVoid) {
@@ -312,16 +317,18 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                   this.action$ = process$.pipe(switchMap(data => {
                     console.log('void / Reversal result', data);
 
+                    if (!data || !this.validateTriPOSVoid(data)) {
+                        this.siteService.notify(`Reversal response failed. Run again as a void. Code: ${data?.statusCode}`, 'Close', 5000, 'red')
+                      return of(this.resultAction)
+                    }
+
                     if (this.validateTriPOSVoid(data)) {
                       this.resultAction = this.applyTriPOSResults(data, this.resultAction.voidReason)
                       return of(this.resultAction)
                     }
+                
+                    this.resultAction = null;
 
-                    if (!this.validateTriPOSVoid(data?.statusCode)) {
-                      this.siteService.notify("Reversal response failed. Run again as a void.", 'Close', 5000, 'red')
-                    }
-
-                    this.resultAction = null
                     return of(this.resultAction)
                   })).pipe(switchMap(resultAction => {
                     if (!resultAction) {
@@ -350,6 +357,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                 }
                 return;
               }
+
               this.siteService.notify('Void not Completed', 'Close', 5000, 'red')
               return
             }
@@ -421,8 +429,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
               }
             }
 
-            // console.log('No Card Processor Used.1');
-
             response$ = this.pOSPaymentService.voidPayment(site, this.resultAction)
             this.action$ = this.updateVoidPaymentResponse(response$)
 
@@ -459,7 +465,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     this.resultAction.payment.respcode = data.transactionId;
     this.resultAction.payment.tranType = data._type;
     this.resultAction.payment.voidReason = voidReason //this.resultAction.voidReason;
-    this.resultAction.payment.transactionData = JSON.stringify(data)
+    this.resultAction.payment.transactionData = JSON.stringify(data);
+    this.resultAction.payment.refNumber = data.transactionId;
     return this.resultAction
   }
 
@@ -508,6 +515,11 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   validateTriPOSVoid(data) {
     if (!data) {return false}
     console.log(data)
+
+    if (data && data.isApproved) { 
+      return true;
+    }
+
     if (data.statusCode.toLowerCase() === "approved".toLowerCase()) {
       return true;
     }

@@ -1,18 +1,59 @@
-<!-- <div *ngIf="menuItem.price" -->
+  <div class="pricing-box" *ngIf="menuItem?.retail" >
 
+    <div *ngIf="(prices$ | async) as list">
+      <ng-container [ngTemplateOutlet]="prices"
+                     [ngTemplateOutletContext]="{$implicit:  list}"></ng-container>
+    </div>
 
-    <div class="pricing-box" *ngIf="menuItem?.retail" >
-      <div id="price" color="warn">  {{ menuItem?.retail | currency }}
-        <span *ngIf="menuItem?.unitDescription" color="warn">
-          / {{menuItem?.unitDescription}}
-        </span>
+    
+    <div *ngIf="menuItem?.itemType?.webStoreSimpleView" id="price" color="warn"> 
+      {{ menuItem?.retail | currency }}
+      <span *ngIf="menuItem.baseUnitType">
+        @ {{menuItem.baseUnitType}}
+      </span>
+    </div>
+
+    <div *ngIf="!price && !menuItem?.itemType?.webStoreSimpleView" id="price" color="warn">     {{ menuItem?.retail | currency }} @ {{menuItem.baseUnitType}} X {{quantity}}
+      = {{ menuItem?.retail * quantity | currency }}
+    </div>
+
+    <div *ngIf="price && !menuItem?.itemType?.webStoreSimpleView" id="price" color="warn">     {{ price.retail *  (price.partMultiplyer  ?  price.partMultiplyer : 1) | currency }} @ {{menuItem.baseUnitType}} X {{quantity}}
+      = {{ price.retail * quantity * (price.partMultiplyer  ?  price.partMultiplyer : 1) | currency }}
+    </div>
+  </div>
+
+  <div  class="pricing-box" *ngIf="menuItem.msrp != 0" >
+    <div class="unitDescription"> {{ menuItem?.unitDescription }}</div>
+    <div id="price">MSRP {{ menuItem?.msrp | currency }}
+    <span *ngIf="menuItem?.unitDescription">
+      / {{menuItem?.unitDescription}}
+    </span></div>
+  </div>
+
+  <ng-template #prices let-list>
+
+    <div *ngIf="!menuItem?.itemType?.webStoreSimpleView">
+      <div class="unitDescription" style="font-size:1.4em" *ngIf="menuPricesEnabled">
+        Please select an option
+      </div>
+  
+      <div *ngIf="list" class="ps-flex-group-start">
+        <mat-card class="margin-10">
+          <div *ngIf="list">
+            <mat-radio-group [(ngModel)]="price"  (change)="selectPrice($event)">
+  
+              <div  *ngFor="let item of list" class="flex-start">
+                <mat-radio-button  class="margin-5"  [value]="item">
+                  {{item?.unitType?.name}} {{item?.retail * (item.partMultiplyer  ?  item.partMultiplyer : 1) | currency}}
+                </mat-radio-button>
+              </div>
+  
+            </mat-radio-group>
+          </div>
+        </mat-card>
+  
       </div>
     </div>
 
-    <div  class="pricing-box" *ngIf="menuItem.msrp != 0" >
-      <div id="unitDescription"> {{ menuItem?.unitDescription }}</div>
-      <div id="price">MSRP {{ menuItem?.msrp | currency }}
-      <span *ngIf="menuItem?.unitDescription">
-        / {{menuItem?.unitDescription}}
-      </span></div>
-    </div>
+  </ng-template>
+

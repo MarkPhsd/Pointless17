@@ -20,8 +20,8 @@
           Send Grid Options</button></div>
       <div *ngIf="showSendGridOptions">
         <h4>Send Grid Templates</h4>
-        <div class="grid-items" >
-          <div class="grid-view-sections">
+        <div class="flex-grid" >
+
             <div class="grid-item">
               <app-value-fields
                   [fieldType]     ="'text'"
@@ -72,7 +72,6 @@
             </div>
 
         </div>
-        </div>
       </div>
     </mat-card-content>
 
@@ -95,7 +94,7 @@
     <mat-card-content>
 
       <div class="grid-items" >
-        <div class="grid-view-sections">
+        <div class="">
           <mat-label>To receive emails to a manager, owner etc, add emails with commas separating them.</mat-label>
           <div class="grid-item">
             <app-value-fields

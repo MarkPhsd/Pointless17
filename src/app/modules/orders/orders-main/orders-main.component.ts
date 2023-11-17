@@ -144,11 +144,18 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this._UITransaction = this.uISettingsService.transactionUISettings$.subscribe( data => {
       if (data) {
         this.uiTransactions = data;
+        // console.log('initUITransactionsSubscriber', this.userAuthorization.user)
+        // if (!this.userAuthorization.user) {
+
+        // }
+        if (this.userAuthorization.user) {
+          this.displayAllOrFilter(this.userAuthorization.user)
+        }
       }
     })
 
-    this._terminalSettings = this.uISettingsService.posDevice$.subscribe(data => { 
-      if (data) { 
+    this._terminalSettings = this.uISettingsService.posDevice$.subscribe(data => {
+      if (data) {
         this.terminalSettings = data;
       }
     })
@@ -262,6 +269,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this.auths = this.authenticationService.userAuths;
     this.isApp = (this.platFormService.isAppElectron || this.platFormService.androidApp)
 
+
   }
 
   initCustomerView() {
@@ -362,70 +370,70 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   // scheduleDate_To: null
   // suspendedOrder: 0
 
-  get filterIsSet() { 
+  get filterIsSet() {
     let filterIsSetOption = false
 
-    if (this.searchModel) { 
+    if (this.searchModel) {
 
       const search =  this.searchModel
-      
-      if (search.closedOpenAllOrders && search.closedOpenAllOrders != 1) { 
+
+      if (search.closedOpenAllOrders && search.closedOpenAllOrders != 1) {
         filterIsSetOption = true
         // console.log('closedOpenAllOrders', search.closedOpenAllOrders)
         return true
       }
 
-      if (search.closedOpenAllOrders == 0) { 
+      if (search.closedOpenAllOrders == 0) {
         // console.log('closedOpenAllOrders', search.closedOpenAllOrders)
         return true
       }
 
-      if (search.completionDate_From || search.completionDate_To) { 
-        if (search.completionDate_From != '') { 
+      if (search.completionDate_From || search.completionDate_To) {
+        if (search.completionDate_From != '') {
           // console.log('completion', search.completionDate_From)
           return true
         }
       }
-      
-      if (search.serviceTypeID && search.serviceTypeID !=0  ) { 
+
+      if (search.serviceTypeID && search.serviceTypeID !=0  ) {
         // console.log('service')
         return true
       }
 
-      if (search.employeeID && search.employeeID !=0  ) { 
+      if (search.employeeID && search.employeeID !=0  ) {
         // console.log('employee')
         return true
       }
 
-      if (search.suspendedOrder == 1 ) { 
+      if (search.suspendedOrder == 1 ) {
         // console.log('suspended',search.suspendedOrder)
         return true
       }
 
-      if (search.scheduleDate_From  || search.scheduleDate_To) { 
+      if (search.scheduleDate_From  || search.scheduleDate_To) {
         // console.log('scheduleDate_From',search.scheduleDate_From)
         return true
       }
-      if (search.searchOrderHistory) { 
+      if (search.searchOrderHistory) {
         // console.log('searchOrderHistory',search.searchOrderHistory)
         return true
       }
 
-      if (search.prepStatus && search.prepStatus != 1) { 
+      if (search.prepStatus && search.prepStatus != 1) {
         // console.log(search)
         return true
       }
-      if (search.onlineOrders) { 
+      if (search.onlineOrders) {
         // console.log(search)
         return true
       }
 
-      if (search.orderID) { 
+      if (search.orderID) {
         // console.log(search)
         return true
       }
-      
-      if (search.greaterThanZero && search.greaterThanZero != 0) { 
+
+      if (search.greaterThanZero && search.greaterThanZero != 0) {
         // console.log(search)
         return true
       }
@@ -435,7 +443,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     return filterIsSetOption;
   }
 
-  showAllOpenOrders() { 
+  showAllOpenOrders() {
     this.searchModel.closedOpenAllOrders = 1
     this.searchModel.completionDate_From = null;
     this.searchModel.completionDate_To = null;
@@ -498,16 +506,16 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this.posOrdersSelectedList = []
   }
 
-  get houseAccount() { 
+  get houseAccount() {
     // this.auths.hou
-    if (this.auths && this.auths.houseAccountPayment) { 
+    if (this.auths && this.auths.houseAccountPayment) {
       return this.houseAccountView
     }
     return null;
   }
 
-  get mergeViewEnabled() { 
-    if (this.auths && this.auths.houseAccountPayment) { 
+  get mergeViewEnabled() {
+    if (this.auths && this.auths.houseAccountPayment) {
       return this.mergeView
     }
     return null;
@@ -655,6 +663,18 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
       this.showAllOrderInstructions[0] = ''
       this.hideInstruction(0)
       user.userPreferences.firstTime_notifyShowAllOrders = true;
+    }
+    this.displayAllOrFilter(user)
+  }
+
+  displayAllOrFilter(user) {
+    if (user?.userPreferences?.showAllOrders) {
+      if (user?.employeeID) {
+        if (this.orderMethodsService.posSearchModel) {
+          this.orderMethodsService.posSearchModel = {} as IPOSOrderSearchModel
+          this.orderMethodsService.posSearchModel.employeeID = user.employeeID
+        }
+      }
     }
     this.authenticationService.updateUser(user)
     this.userAuthorization.setUser(user)

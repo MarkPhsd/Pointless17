@@ -1,8 +1,10 @@
 import { Component, Input,  OnInit } from '@angular/core';
 import { Observable, Subject, of, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet, IBalanceSheetPagedResults } from 'src/app/_services/transactions/balance-sheet.service';
+import { BalanceSheetOptimized, BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet, IBalanceSheetPagedResults } from 'src/app/_services/transactions/balance-sheet.service';
 
 @Component({
   selector: 'balance-sheet-report',
@@ -19,9 +21,13 @@ export class BalanceSheetReportComponent implements OnInit {
   @Input() groupBy = "employee"
   @Input() zrunID  : string;
 
+  showAll : boolean;
   sheets$ : Observable<IBalanceSheetPagedResults>;
+  sheets : IBalanceSheetPagedResults;
 
   constructor(private balanceSheetService : BalanceSheetService,
+              private reportingItemsSalesService: ReportingItemsSalesService,
+              private popOutService: ProductEditButtonService,
               private siteSevice: SitesService) { }
 
   ngOnInit(): void {
@@ -35,20 +41,47 @@ export class BalanceSheetReportComponent implements OnInit {
   refreshData() {
     const i = 0;
     const search = {} as BalanceSheetSearchModel;
-    const site = this.siteSevice.getAssignedSite()
+    let site : ISite;
+    if (this.site) {
+      site = this.site
+    }
+
+    if (!site) {
+      site = this.siteSevice.getAssignedSite()
+    }
+
     if (this.zrunID){
       search.zRunID = +this.zrunID
     }
+
     if (this.dateFrom && this.dateTo) {
       search.completionDate_From = this.dateFrom;
       search.completionDate_To = this.dateTo;
+      search.zRunID = null;
     }
-    // console.log('search', search)
+
     this.sheets$ = this.balanceSheetService.searchBalanceSheets(site, search).pipe(
       switchMap(data => {
+          this.sheets = data;
          return  of(data)
       }
     ))
+  }
+
+  togglesShowAll() {
+    this.showAll = !this.showAll;
+  }
+
+  downloadCSV() {
+    if (this.sheets) {
+      this.reportingItemsSalesService.downloadFile(this.sheets.results, 'ItemReport')
+    }
+  }
+
+  dataGridView() {
+    this.popOutService.openDynamicGrid(
+      {data: this.sheets, name: 'BalanceSheetOptimized'}
+    )
   }
 
 }

@@ -43,7 +43,7 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
   searchList(searchPhrase):  Observable<ClientSearchResults> {
     const site  = this.siteService.getAssignedSite();
     const model = this.initSearchModel(searchPhrase)
-    console.log('fieldname', this.fieldName)
+    // console.log('fieldname', this.fieldName)
     if (this.fieldName != 'brandID') {
       return this.contactsService.getContactBySearchModel(site,model)
     }
@@ -102,9 +102,9 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
 
       let search$  = this.contactsService.getContactBySearch(site, this.id, 1, 10)
 
-      console.log(this.fieldName, this.id)
+      // console.log(this.fieldName, this.id)
       search$.subscribe( data => {
-        console.log('getName ' + this.fieldName,  data?.results[0]?.company)
+        // console.log('getName ' + this.fieldName,  data?.results[0]?.company)
         if (data && data.results && data?.results[0]?.company) {
           // this.setValues(this.searchForm, this.fieldName, data?.results[0]?.company );
           const item =  { idLookup: data?.results[0]?.company }
@@ -118,7 +118,6 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
     const item =  { idLookup: '' }
     this.searchForm.patchValue( item )
     this.setValues(this.inputForm, this.fieldName, '')
-
   }
 
   refreshSearch(search: any){
@@ -139,17 +138,14 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
     this.setValues(this.inputForm, this.fieldName, item.id  )
     // const lookup = { brandID : item.id }
     // this.inputForm.patchValue( lookup )
-
     const brand =  { idLookup: item.company }
     this.searchForm.patchValue( brand )
   }
 
   onChange(selected: any) {
     const item = selected.option.value as IUserProfile;
-
     if (item) {
       this.selectItem(item)
-
       this.item = item
       if (!item || !item.company){
         return ''
@@ -177,7 +173,6 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
     return model;
   }
 
-
   setValues(form: UntypedFormGroup, fieldName: string, data: any) {
     if (fieldName == 'yearsOld') {
       const  item =  { yearsOld: data  }
@@ -191,7 +186,7 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
       let item =  { brandIDLookup: data  }
       form.patchValue( item )
     }
-    console.log('form value', form.value)
+    // console.log('form value', form.value)
   }
 
 }

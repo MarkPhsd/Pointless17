@@ -1,8 +1,8 @@
-<!-- {{order?.service?.filterType}} -->
+
 <ng-content></ng-content>
 <span *ngIf="product">
   {{product?.productName}}
-  <!-- {{product | json}} -->
+
 </span>
 <div *ngIf="(itemHistorySales$ | async) as item; else loading">
   <div class="grid-items" >
@@ -21,8 +21,7 @@
 <div *ngIf="loadingMessage">
   <mat-spinner [diameter]="50"></mat-spinner>
 </div>
-<ng-template #loading>
-  <!-- {{loadingMessage}} -->
 
+<ng-template #loading>
 </ng-template>
 

@@ -12,6 +12,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { IUserProfile } from 'src/app/_interfaces';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 
 @Component({
   selector: 'app-fast-user-switch',
@@ -45,6 +46,7 @@ export class FastUserSwitchComponent implements OnInit {
     private router                 : Router,
     public  platformService        : PlatformService,
     private toolbarUIService       : ToolBarUIService,
+    private paymentProcessService: PaymentsMethodsProcessService,
     @Optional()  dialogRef         : MatDialogRef<FastUserSwitchComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
     ) {
@@ -211,6 +213,8 @@ export class FastUserSwitchComponent implements OnInit {
     this.loginAction$ = this.userSwitchingService.login(userName, password).pipe(
       switchMap(data =>
         {
+          this.paymentProcessService.sendOrderOnExit(null)
+          this.paymentProcessService.sendOrderAndLogOut( null, false)
           let user = {} as IUserProfile
           if (data.user) {  user = data.user } else {  user = data;   }
 
@@ -260,11 +264,11 @@ export class FastUserSwitchComponent implements OnInit {
               return of('success')
             }
 
-          }
+        }
           this.onCancel()
           return of('error')
-          }
-      ))
+        }
+    ))
   }
 
   loginApp(user) {
@@ -280,7 +284,5 @@ export class FastUserSwitchComponent implements OnInit {
       verticalPosition: 'top'
     });
   }
-
-
 
 }
