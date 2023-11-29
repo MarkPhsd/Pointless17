@@ -1,14 +1,14 @@
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(addItem$ | async) as action"></div>
 
-  <ng-template #loading><mat-spinner
-            [diameter]="75"></mat-spinner>
-  </ng-template>
+<ng-template #loading><mat-spinner
+          [diameter]="75"></mat-spinner>
+</ng-template>
 
 <div *ngIf="menuItem; else loading" >
     <mat-card>
       <mat-card-title>
-        <div >
+        <div>
           <button *ngIf="showCloseButton"
                   mat-raised-button
                   (click)="exit()">
@@ -31,13 +31,13 @@
                   <ng-container [ngTemplateOutlet]="speciesView"></ng-container>
 
                   <div class="flex-row">
-                    <div>
+                    <div class="margin-5">
                       <ng-container [ngTemplateOutlet]="barcodeView"></ng-container>
                     </div>
-                    <div>
+                    <div class="margin-5">
                       <ng-container [ngTemplateOutlet]="productCountView"></ng-container>
                     </div>
-                    <div>
+                    <div class="margin-5">
                       <ng-container [ngTemplateOutlet]="inStockView"></ng-container>
                     </div>
                   </div>
@@ -51,11 +51,12 @@
                   <ng-container [ngTemplateOutlet]="pricesView"></ng-container>
                   <ng-container [ngTemplateOutlet]="tierPriceView"></ng-container>
                   <ng-container [ngTemplateOutlet]="addButtonsView"></ng-container>
-                </div>
-
-                <div class="center gf-chips">
                   <ng-container [ngTemplateOutlet]="metaTagsView"></ng-container>
                 </div>
+
+                <!-- <div class="center gf-chips">
+              
+                </div> -->
 
                 <ng-container [ngTemplateOutlet]="packagingView"></ng-container>
                 <ng-container [ngTemplateOutlet]="prepNotesView"></ng-container>
@@ -70,18 +71,28 @@
                          md-stretch-tabs >
 
             <mat-tab label="Description">
+              <ng-container [ngTemplateOutlet]="inventoryList"></ng-container>
               <ng-container [ngTemplateOutlet]="descriptionView"></ng-container>
             </mat-tab>
             <mat-tab label="Special">
               <ng-container [ngTemplateOutlet]="specialDescriptionView"></ng-container>
             </mat-tab>
-            <mat-tab label="Ingredients">
+            <mat-tab *ngIf="fbProductsService.isCannabis(menuItem.itemType) ||
+                            fbProductsService.isFood(menuItem.itemType) ||
+                            fbProductsService.isAlcohol(menuItem.itemType) ||
+                            fbProductsService.isGrocery(menuItem.itemType) ||
+                            fbProductsService.isTobacco(menuItem.itemType)                             
+                            " label="Ingredients">
               <ng-container [ngTemplateOutlet]="chemicalSpinnerView"></ng-container>
             </mat-tab>
           </mat-tab-group>
 
       </mat-card-content>
     </mat-card>
+    
+    <ng-container [ngTemplateOutlet]="metaTagSearch"></ng-container>
+    <ng-container [ngTemplateOutlet]="enableRecentAssociatedItems"></ng-container>
+    <ng-container [ngTemplateOutlet]="enableAssociatedItems"></ng-container>
 
     <ng-template #speciesView>
       <span *ngIf="menuItem && menuItem.species">
@@ -147,7 +158,7 @@
     </ng-template>
 
     <ng-template #pricesView>
-      <div class="prices"  >
+      <div class="prices" *ngIf="(uiHomePage && !uiHomePage?.enableInventoryPerItem)"  >
         <menu-item-extended-prices
           [quantity]="quantity"
           [isUserStaff]="isUserStaff"
@@ -155,6 +166,10 @@
           (outPutAddItem)="addItemWithPrice($event)"
           [menuItem]="menuItem">
         </menu-item-extended-prices>
+      </div>
+
+      <div *ngIf="(uiHomePage && uiHomePage?.enableInventoryPerItem) && menuItem?.itemType?.requiresInventory">
+        Please select from options below.
       </div>
     </ng-template>
 
@@ -175,6 +190,7 @@
               && menuItem.itemType.requireInStock">
         <inventory-counts-view
             [showList]      ="false"
+            [allowAdd]    ="menuItem?.itemType?.requiresInventory && (uiHomePage && uiHomePage?.enableInventoryPerItem)"
             [showAddButton] ="!priceTiersShown"
             [productID]     ="menuItem.id"
             (outPutAddItem) ="addItemByCodeOBS($event)">
@@ -285,15 +301,21 @@
     </ng-template>
 
     <ng-template #metaTagsView>
-      <span *ngIf="menuItem.glutenFree || menuItem.metaTags">
+
+      {{fbProductsService.isFood(menuItem.itemType)}}
+      <span class="margin-5" *ngIf="fbProductsService.isFood(menuItem.itemType) && 
+                                    (menuItem.glutenFree)">
         <button mat-fab color="warn" aria-label="Gluten Free">
           GF
         </button>
       </span>
 
-      <app-chips-display
-        [items]="menuItem.metaTags">
-      </app-chips-display>
+      <div  class="margin-5">
+        <app-chips-display
+          [items]="menuItem.metaTags"
+          (onMetaTagSearch)="metaTagRefresh($event)">
+        </app-chips-display>
+      </div>
     </ng-template>
 
     <ng-template #galleryView>
@@ -302,7 +324,89 @@
       </div>
     </ng-template>
 
-
 </div>
 
+<ng-template #inventoryList>
+  <div *ngIf="uiHomePage && uiHomePage?.enableInventoryPerItem">
+    <inventory-menu-item 
+      [posDevice]="posDevice"
+      [productID]="menuItem?.id">
+    </inventory-menu-item>
+  </div>
+</ng-template>
 
+<ng-template #enableRecentAssociatedItems>
+  <div *ngIf="uiHomePage && uiHomePage?.enableRecentAssociatedItems">
+    <div *ngIf="(recentAssociations$ | async) as associations">
+   
+      <mat-card *ngIf="associations.length>0">
+        <mat-card-title>
+          <h3  *ngIf="associations.length>0">Items Purchased with this {{menuItem.name}} recently.</h3>
+        </mat-card-title>
+        <mat-card-content>
+          <div class="grid-flow">
+            <div *ngFor="let item of associations" >
+              <app-menu-item-card
+                [menuItem]="item"
+                [uiHomePage]="uiHomePage"
+                [bucketName]="bucketName"
+              ></app-menu-item-card>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #enableAssociatedItems>
+  <div *ngIf="uiHomePage && uiHomePage?.enableRecentAssociatedItems">
+
+    <div *ngIf="(associations$ | async) as associations" >
+
+      <mat-card *ngIf="associations.length>0">
+        <mat-card-title>
+          <h3 *ngIf="associations.length>0">Similiar Items.</h3>
+        </mat-card-title>
+        <mat-card-content>
+          <div class="grid-flow">
+            <div *ngFor="let item of associations" >
+              <app-menu-item-card
+                [menuItem]="item"
+                [uiHomePage]="uiHomePage"
+                [bucketName]="bucketName"
+              ></app-menu-item-card>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #metaTagSearch>
+  <div *ngIf="uiHomePage && uiHomePage?.enableRecentAssociatedItems">
+
+    <div *ngIf="(metaTagSearch$ | async) as associations" >
+
+      <mat-card *ngIf="associations.length>0">
+        <mat-card-title>
+          <h3 *ngIf="associations.length>0">Meta Tag Searches.</h3>
+        </mat-card-title>
+        <mat-card-content>
+          <div class="grid-flow">
+            <div *ngFor="let item of associations" >
+              <app-menu-item-card
+                [menuItem]="item"
+                [uiHomePage]="uiHomePage"
+                [bucketName]="bucketName"
+              ></app-menu-item-card>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</ng-template>

@@ -26,7 +26,7 @@ import { LabelingService } from 'src/app/_labeling/labeling.service';
 })
 export class StrainProductEditComponent implements OnInit {
 
-  managerProtected: boolean;
+  managerProtected     : boolean;
   productForm          : UntypedFormGroup;
   unitSearchForm       : UntypedFormGroup;
   reOrderUnitSearchForm: UntypedFormGroup;
@@ -49,7 +49,7 @@ export class StrainProductEditComponent implements OnInit {
   urlImageMain: string;
   productJSONObject: menuButtonJSON;
  
-
+  itemTags: string;
   //size search selector add on
   unitTypeNameSelected: string;
   unitTypeSelections = []   as IItemBasic[];
@@ -241,7 +241,7 @@ export class StrainProductEditComponent implements OnInit {
     if (!event) { return }
     if (!event.unitTypeID) {return}
     this.product.reOrderUnitTypeID = event.reOrderUnitTypeID
-    this.productForm.patchValue({reOrderUnitTypeID: event?.unitTypeID})
+    this.productForm.patchValue({reOrderUnitTypeID: event?.reOrderUnitTypeID})
     this.action$ = this.updateItem(null)
   }
 
@@ -285,6 +285,17 @@ export class StrainProductEditComponent implements OnInit {
     }))
   }
 
+  openReOrderUnit() {
+    const site = this.siteService.getAssignedSite();
+    const id = this.productForm.controls['reOrderUnitTypeID'].value;
+    this.action$ = this.unitTypeMethodsService.openUnitEditorOBS(id).pipe(switchMap(data => {
+      const search = {id: data.id} as SearchModel
+      return  this.unitTypeService.getUnitTypesSearch(site, search);
+    })).pipe(switchMap(data => {
+      return of(data)
+    }))
+  }
+
   initPbSearchForm(){
     this.pbSearchForm = this.fb.group({
       searchField: [],
@@ -301,6 +312,12 @@ export class StrainProductEditComponent implements OnInit {
     this.productForm.patchValue({ reOrderUnitTypeID: 0})
     this.product.reOrderUnitTypeID = 0;
     this.initReOrderUnitSearchForm();
+  }
+
+  
+  setItemTags(event) {
+    console.log(' edit item tags', event)
+    this.itemTags = event;
   }
 
   initUnitForm() {
@@ -329,7 +346,7 @@ export class StrainProductEditComponent implements OnInit {
       this.message = ""
       this.performingAction= true;
       this.product.json = this.JSONAsString ;
-
+      this.product.metaTags = this.itemTags;
       this.product = this.menuService.cleanProduct(this.product)
 
       const product$ = this.menuService.saveProduct(site, this.product);
@@ -440,7 +457,6 @@ export class StrainProductEditComponent implements OnInit {
       this.unitTypeSelections.splice(index, 1);
     }
   }
-
 
 
 }

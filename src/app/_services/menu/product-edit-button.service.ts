@@ -30,7 +30,6 @@ import { catchError, concatMap, map, switchMap } from 'rxjs/operators';
 import { Observable, of,  } from 'rxjs';
 import { UnitTypePromptComponent } from 'src/app/modules/admin/products/pricing/price-categories-edit/unit-type-prompt/unit-type-prompt.component';
 import { EmployeeMetrcKeyEntryComponent } from 'src/app/modules/admin/employees/employee-metrc-key-entry/employee-metrc-key-entry.component';
-import { StripeCheckOutComponent } from 'src/app/modules/admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
 export interface IBalanceDuePayload {
   order: IPOSOrder;
   paymentMethod: IPaymentMethod;
@@ -38,8 +37,6 @@ export interface IBalanceDuePayload {
 }
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { DSIEMVTransactionComponent } from 'src/app/modules/dsiEMV/transactions/dsiemvtransaction/dsiemvtransaction.component';
-import { StoreCreditEditorComponent } from 'src/app/modules/admin/store-credit/store-credit-editor/store-credit-editor.component';
-import { AppWizardProgressButtonComponent } from 'src/app/shared/widgets/app-wizard-progress-button/app-wizard-progress-button.component';
 import { AppWizardStatusComponent } from 'src/app/modules/admin/settings/software/app-wizard-status/app-wizard-status.component';
 import { CardpointeTransactionsComponent } from 'src/app/modules/payment-processing/cardPointe/cardpointe-transactions/cardpointe-transactions.component';
 import { DsiEMVAndroidComponent } from 'src/app/modules/payment-processing/dsiEMVAndroid/dsi-emvandroid/dsi-emvandroid.component';
@@ -53,6 +50,8 @@ import { TriPosTransactionsComponent } from 'src/app/modules/payment-processing/
 import { DynamicAgGridComponent } from 'src/app/shared/widgets/dynamic-ag-grid/dynamic-ag-grid.component';
 import { MessageEditorComponent } from 'src/app/modules/admin/message-editor-list/message-editor/message-editor.component';
 import { PosOrderItemEditComponent } from 'src/app/modules/posorders/pos-order-item/pos-order-item-edit/pos-order-item-edit.component';
+import { IInventoryAssignment, InventoryAssignmentService } from '../inventory/inventory-assignment.service';
+import { AddInventoryItemComponent } from 'src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +63,7 @@ export class ProductEditButtonService {
             private siteService         : SitesService,
             private menuService         : MenuService,
             private paymentMethodService:PaymentMethodsService,
+            private inventoryService    : InventoryAssignmentService,
             private itemTypeService     : ItemTypeService,
             ) { }
 
@@ -153,14 +153,14 @@ export class ProductEditButtonService {
 
   openProductDialogObs(id: number) {
     const site = this.siteService.getAssignedSite();
-    console.log(id)
+    // console.log(id)
     const item$ = this.menuService.getProduct(site, id).pipe(
       switchMap(product => {
         if (product && !product.prodModifierType) {
           product.prodModifierType = 1
           return this.menuService.putProduct(site, product.id, product)
         }
-        console.log('product', product)
+        // console.log('product', product)
         return of(product)
       }
     )).pipe(switchMap(product => {
@@ -171,6 +171,74 @@ export class ProductEditButtonService {
       return of(null)
     }))
     return item$
+  }
+
+  openBuyInventoryItemDialogObs(menuItem: IMenuItem, order: IPOSOrder) {
+    const site = this.siteService.getAssignedSite();
+    if (!order) { 
+      this.siteService.notify('Please first start an order before buying items. ', 'close', 5000)
+      return of(null)
+    }
+    let productValue: IProduct;
+    
+    const item$ =   this.menuService.getProduct(site, menuItem.id).pipe(
+      switchMap(product => {
+
+        if (product && !product.prodModifierType) {
+          product.prodModifierType = 1
+          return this.getProduct(site, product.id, product)
+        }
+        return of(product)
+
+      }
+    )).pipe(switchMap(product => {
+
+      console.log('product', product)
+      if (!product) {return of(null) } 
+      productValue = product
+      return this.postInventory(site, product, order);
+
+    }
+    )).pipe(switchMap(item => {
+
+      // console.log('item', item)
+      if (!item) { return of(null) }
+      return this.addInventoryDialog( {buyEnabled: true, id: item.id, menuItem: menuItem, inventory: item });
+
+    }) ,catchError(data => { 
+      console.log('error', data)
+      return of(data)
+    }));
+
+    return item$
+
+  }
+
+  postInventory(site, product:IProduct,order:IPOSOrder ) { 
+    let item = {} as IInventoryAssignment;
+    
+    item.product = product
+    item.productID = product.id;
+    item.baseQuantity = 1;
+    item.packageQuantity = 1;
+    item.requiresAttention = false;
+    item.invoiceCode = order.orderCode;
+    item.cost = product.wholesale;
+    item.price = product.retail;
+    item.testedBy = order.employeeName;
+    item.invoice = order.orderCode;
+
+    return  this.inventoryService.postInventoryAssignment(site, item)
+  }
+  
+  getProduct(id,site, product) { 
+    if (product) { 
+      let product$ = this.menuService.putProduct(site, product.id, product);
+      return  product$.pipe(switchMap(data => { 
+        return this.menuService.getProduct(site, id)
+      }))
+    }
+    return this.menuService.getProduct(site, id)
   }
 
   openClockEditor(id: any) {
@@ -344,8 +412,6 @@ export class ProductEditButtonService {
     if (id ) {
        product$ = this.menuService.getProduct(site, id ) }
     if (!id) {
-
-
       product.prodModifierType = productTypeID
        product$ = this.menuService.saveProduct(site, product )
     }
@@ -355,7 +421,6 @@ export class ProductEditButtonService {
   openProductEditorOBS(id: number,productTypeID: number ) {
     const site = this.siteService.getAssignedSite();
     const itemType$ =  this.itemTypeService.getItemType(site, productTypeID)
-    console.log('open product')
     return  this._openAddProductOpenEditorOBS(id, productTypeID, itemType$, site);
   }
 
@@ -370,17 +435,30 @@ export class ProductEditButtonService {
   _openProductEditorOBS(product$: Observable<IProduct>, itemType$: Observable<IItemType>): Observable<MatDialogRef<StrainProductEditComponent, any>> {
       let product = {} as IProduct;
       return product$.pipe(
-                switchMap( data => {
+          switchMap( data => {
                   product = data
-                  // console.log(product,data)
                   return itemType$
               }
-            )).pipe(switchMap( itemType => {
-            // console.log(product, itemType)
-            const data = { product, itemType}
-            return this.getFormEdit(data)
+          )).pipe(switchMap( itemType => {
+              const data = { product, itemType}
+              return this.getFormEdit(data)
           }
       ))
+  }
+
+  addInventoryDialog(data: any):  Observable<MatDialogRef<AddInventoryItemComponent>> {
+    const site = this.siteService.getAssignedSite();
+    console.log('opening with data', data)
+    return of(this.dialog.open(AddInventoryItemComponent,
+        {  width:     '850px',
+          minWidth:   '850px',
+          height:     '750px',
+          minHeight:  '750px',
+          data :      data
+        },
+      )
+    )
+ 
   }
 
   async openProductEditor(id: number,productTypeID: number ) {
@@ -415,12 +493,6 @@ export class ProductEditButtonService {
   }
 
   private _openProductEditor(product$: Observable<IProduct>, itemType$: Observable<IItemType>) {
-
-  //  return product$.pipe( concatMap( product => itemType$.pipe( map( itemType => {
-  //     this.openProductEditWindow(product, itemType)
-  //   } ))
-  //   ))
-
     product$.pipe( concatMap( product => itemType$.pipe( map( itemType => {
       return this.openProductEditWindow(product, itemType)
     } ))

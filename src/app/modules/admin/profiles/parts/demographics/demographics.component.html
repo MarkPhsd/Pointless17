@@ -193,7 +193,7 @@
           </mat-form-field>
     </div>
 
-    <div class="points" *ngIf="isAuthorized">
+    <div class="points" *ngIf="isStaff">
       <mat-button-toggle-group  name="type"
                                 [disabled]="!isAuthorized"
                                 aria-label="Font Style"
@@ -239,6 +239,24 @@
                       [fieldName]="'dba'">
           DBA
       </app-value-fields>
+    </div>
+
+    <div *ngIf="clientType?.name as item">
+      <div *ngIf="item.trim().length > 0 && ( item.toLowerCase() === 'supplier' || item.toLowerCase() === 'vendor' || item.toLowerCase() === 'manufacturer' ) ">
+        
+        <div *ngIf="isStaff && isStaff == true" >
+          <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'userName'">
+            ID
+          </app-value-fields>
+        </div>
+
+        <div *ngIf="!isStaff">
+          {{ client?.userName }}
+        </div>  
+
+      </div>
     </div>
   </div>
 </div>

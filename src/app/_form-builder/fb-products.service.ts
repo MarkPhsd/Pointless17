@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { IProduct } from '../_interfaces';
 import { IItemType } from 'src/app/_services/menu/item-type.service';
+import { ItemType } from '../_interfaces/menu/menu-products';
 @Injectable({
   providedIn: 'root'
 })
@@ -261,8 +262,7 @@ export class FbProductsService {
     }
 
 
-
-    isCannabis(itemType: IItemType) {
+    isCannabis(itemType: IItemType | ItemType) {
       if (itemType && itemType.type &&
                       (itemType.type?.toLowerCase() === 'cannabis' ||
                       itemType.type?.toLowerCase()  === 'med-cannabis'))
@@ -273,7 +273,7 @@ export class FbProductsService {
         return false;
     }
 
-    isTobacco(itemType: IItemType) {
+    isTobacco(itemType: IItemType | ItemType) {
       if (itemType && itemType.type &&
                       (itemType.type?.toLowerCase() === 'tobacco'
                       ))
@@ -284,9 +284,7 @@ export class FbProductsService {
         return false;
     }
 
-
-
-    isProduct(itemType: IItemType) {
+    isProduct(itemType: IItemType | ItemType) {
       if (itemType && itemType.useType &&  (
              itemType.useType?.toLowerCase() == 'product' ))
           {
@@ -296,25 +294,45 @@ export class FbProductsService {
         return false;
     }
 
-    isWeightedItem(itemType: IItemType) {
+    isWeightedItem(itemType: IItemType | ItemType) {
       if (itemType && itemType.weightedItem) {
         return true;
       }
     }
 
-    isRetail(itemType: IItemType) {
+    isFood(itemType: IItemType | ItemType) {
+      if (itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'food' )) {
+        return true;
+      }
+    }
+
+    isAlcohol(itemType: IItemType | ItemType) {
+      if (itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'alcohol' )) {
+        return true;
+      }
+    }
+
+    isGrocery(itemType: IItemType | ItemType) {
+      if (itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'grocery' )) {
+        return true;
+      }
+    }
+
+   
+    isRetail(itemType: IItemType | ItemType) {
       if (itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'retail' )) {
         return true;
       }
     }
 
-    isModifier(itemType: IItemType) {
+
+    isModifier(itemType: IItemType | ItemType) {
       if (itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'modifier' )) {
         return true;
       }
     }
 
-    isGrouping(itemType: IItemType) {
+    isGrouping(itemType: IItemType | ItemType) {
       if (itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'grouping' )) {
         return true;
       }

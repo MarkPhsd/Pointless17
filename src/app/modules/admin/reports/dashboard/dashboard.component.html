@@ -243,6 +243,22 @@
             <mat-icon>credit_card</mat-icon> Sale Type - {{site.name}}
           </payment-report>
 
+          <div *ngIf="uiHomePage && uiHomePage?.enableInventoryPerItem">
+            <item-sales-card
+                  [site]="site"
+                  [notifier]="count"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [viewType] = "'sales'"
+                  [groupBy]="'serviceType'">
+                <div class="header">
+                  <mat-icon>menu</mat-icon>  Item Sales Type
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
+          </div>
+
           <payment-report
                   [groupBy]="'employee'"
                   [site]    ="site"

@@ -84,6 +84,15 @@ mat-button mat-raised-button mat-icon {
     white-space: pre-wrap;
   }
 
+  mat-form-field-appearance-outline mat-form-field-wrapper .mat-form-field-appearance-outline .mat-form-field-wrapper{
+    padding: 0px  !important;
+
+  }
+
+  .mat-form-field-wrapper {
+    padding-bottom: .45em  !important;
+  }
+
   .toolbar {
     position: absolute;
     top: 0;
@@ -504,6 +513,20 @@ mat-dialog-container {
   background-color: #f3f399 !important;
 }
 
+
+.row-not-forsale {
+  background-color: #f3f399 !important;
+}
+
+.row-male {
+  background-color: #7575ac !important;
+}
+
+.row-female {
+  background-color: #e9aad4 !important;
+}
+
+
 .row-fail {
   background-color: #aa2e25 !important;
 }
@@ -548,21 +571,23 @@ mat-dialog-container {
   z-index: 100;
 }
 
-.button-margins, .button-margin {
+.button-margins .button-margin {
   margin: 5px;
-
 }
 
 .margin-left-5 {
   margin-left: 5px;
 }
 
-
 .margin-left-10 {
   margin-left: 10px;
 }
 
-.margin-5, .button-margin-5 {
+.margin-5 {
+  margin: 5px;
+}
+
+.button-margin-5 {
   margin: 5px;
 }
 
@@ -704,7 +729,6 @@ mat-dialog-container {
   color:#9b4741
 }
 
-
 .button {
   margin: 5px;
 }
@@ -730,7 +754,6 @@ mat-dialog-container {
 .font-1-5em {
   font-size: 1.5em;
 }
-
 
 .ps-button-contraints {
   width: 100px;
@@ -768,6 +791,14 @@ mat-dialog-container {
   gap: 10px;
 }
 
+.flex-grid-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content:flex-start;
+  gap: 20px;
+}
+
 .ps-flex-group-start {
   display: flex;
   flex-direction: row;
@@ -780,7 +811,6 @@ mat-dialog-container {
 .ps-flex-group-start-no-margin {
   display: flex;
   flex-direction: row;
-  // flex-wrap: nowrap;
   justify-content: start;
 }
 
@@ -792,7 +822,6 @@ mat-dialog-container {
   margin: 5px;
   gap: 10px;
 }
-
 
 .ps-flex-group-nowrap {
   display: flex;
@@ -810,6 +839,24 @@ mat-dialog-container {
   margin: 5px;
 }
 
+
+.ps-inventory-grid {
+  display: grid;
+  grid-template-columns: 200px calc( 80vw - 200px - 300px ) 300px; // repeat( auto-fit, minmax(150px, 1fr) );
+  gap:5px;
+  @media screen and (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  };
+
+  @media screen and (max-width: 500px) {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+}
+
 .edit-float-category-button {
   position: inherit;
   z-index : 108;
@@ -818,13 +865,21 @@ mat-dialog-container {
   top     : 10px;
 }
 
-
 .edit-float-button {
   position: absolute;
   z-index : 108;
   opacity : 0.5;
   width   : 25px;
   top     : 10px;
+}
+
+.buy-float-button {
+  position: absolute;
+  z-index: 108;
+  opacity: 0.5;
+  width: 25px;
+  bottom: 5px;
+  right: 16px;
 }
 
 .view-float-button {
@@ -838,7 +893,6 @@ mat-dialog-container {
 
 .header-close {
   float:right;
-
 }
 
 .loader {
@@ -846,11 +900,6 @@ mat-dialog-container {
   margin-bottom: 5px;
 }
 
-// .mat-label-info mat-tooltip .mat-tooltip .mat-tooltip.largerTooltip {
-//   // font-size: 1.2em !important;
-//   font-size: 14px !important;
-//   margin-left: 3px;
-// }
 .mat-tooltip {
   font-size: 14px !important;
   margin-left: 3px;
@@ -878,7 +927,6 @@ mat-dialog-container {
 /* In the component.css or app.css add Icon Color styles */
 .material-icons.color_green { color: #00FF00; }
 .material-icons.color_white { color: #FFFFFF; }
-
 
 .grid-view-container {
   display: grid;
@@ -913,8 +961,6 @@ mat-dialog-container {
 }
 
 .grid-view-sections {
-  // width: 425px;
-  // max-width: 425px;
   --gap: 5px;
   margin-top: 2px;
   margin-right: 2px;
@@ -924,8 +970,16 @@ mat-dialog-container {
   grid-template-columns: repeat( auto-fit, minmax(220px, 1fr) );
   overflow-y: visible;
 }
-
-
+.grid-view-sections-300 {
+  --gap: 5px;
+  margin-top: 2px;
+  margin-right: 2px;
+  margin-bottom: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(4vw, 1fr) );
+  overflow-y: visible;
+}
 .grid-image-button {
   display: grid;
   gap: 4px;
@@ -939,11 +993,11 @@ mat-dialog-container {
   margin: 5px;
   height: 45px;
 }
+
 .grid-list-container {
   display: grid;
   grid-template-columns: 1fr 200px;
   gap: 7px;
-  // overflow: hidden;
   height: 90vh;
 }
 
@@ -967,9 +1021,7 @@ mat-dialog-container {
   color: white;
 }
 
-
 // text features
-
 .totals {
   font-size     : 1em;
   float         : right;

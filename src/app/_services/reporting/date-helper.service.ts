@@ -208,6 +208,17 @@ export class DateHelperService {
 	}
 
 
+   getFormattedDate(): string {
+    const date = new Date();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // months are 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${month}/${day}/${year}`;
+ }
+
+
+
 	// I return a human-friendly, relative date-string for the given input. This is
 	// intended to mimic the .fromNow() method in Moment.js:
 	public fromNow( value: DateInput ) : string {

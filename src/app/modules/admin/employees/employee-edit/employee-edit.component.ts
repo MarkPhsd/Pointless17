@@ -1,27 +1,38 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EMPTY, Observable, of } from 'rxjs';
+import { EMPTY, Observable, Subscription, of } from 'rxjs';
 import { switchMap, } from 'rxjs/operators';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
-import { clientType, employee, IClientTable } from 'src/app/_interfaces';
-import { AWSBucketService} from 'src/app/_services';
+import { clientType, employee, IClientTable, IUser, UserPreferences } from 'src/app/_interfaces';
+import { AWSBucketService, AuthenticationService} from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
-import { ClientTypeService } from 'src/app/_services/people/client-type.service';
+import { ClientTypeService, IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { EmployeeService, IEmployeeClient } from 'src/app/_services/people/employee-service.service';
 import { JobTypesService } from 'src/app/_services/people/job-types.service';
 import { IStatuses } from 'src/app/_services/people/status-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { jobTypes } from 'src/app/_interfaces';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { LabelingService } from 'src/app/_labeling/labeling.service';
+import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 @Component({
   selector: 'employee-edit',
   templateUrl: './employee-edit.component.html',
   styleUrls: ['./employee-edit.component.scss']
 })
-export class EmployeeEditComponent implements OnInit {
+export class EmployeeEditComponent implements OnInit, OnDestroy {
+
+  // coachingPIN
+  @ViewChild('coachingPIN', {read: ElementRef}) coachingPIN: ElementRef;
+  @ViewChild('coachingPassword', {read: ElementRef}) coachingPassword: ElementRef;
+  @ViewChild('coachingUserName', {read: ElementRef}) coachingUserName: ElementRef;
+  @ViewChild('coachingUserAuthorized', {read: ElementRef}) coachingUserAuthorized: ElementRef;
+  @ViewChild('coachingUserType', {read: ElementRef}) coachingUserType: ElementRef;
+  @ViewChild('coachingTermination', {read: ElementRef}) coachingTermination: ElementRef;
+  
 
   inputForm   : UntypedFormGroup;
   clientForm  : UntypedFormGroup;
@@ -45,7 +56,11 @@ export class EmployeeEditComponent implements OnInit {
   isAuthorized        : boolean ;
   isStaff             : boolean ;
   passwordsMatch      = true;
-
+  
+  _user: Subscription;
+  user: IUser;
+  auths: IUserAuth_Properties
+  
   minumumAllowedDateForPurchases: Date
   clientTypes$: Observable<clientType[]>;
   jobTypes$: Observable<jobTypes[]>;
@@ -65,7 +80,11 @@ export class EmployeeEditComponent implements OnInit {
               private clientTableService      : ClientTableService,
               private fbContactsService       : FbContactsService,
               private clientTypeService       : ClientTypeService,
+              public  labelingService         : LabelingService,
               private userAuthorization       : UserAuthorizationService,
+              public authenticationService: AuthenticationService,
+              private changeDetectorRef: ChangeDetectorRef,
+              public coachMarksService : CoachMarksService,
             ) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.initForm()
@@ -78,6 +97,10 @@ export class EmployeeEditComponent implements OnInit {
     this.isStaff      =  this.userAuthorization.isStaff //('admin,manager, employee')
     this.initConfirmPassword()
 
+  }
+
+  ngOnDestroy(): void {
+    if (this._user) {this._user.unsubscribe()}
   }
 
   initializeClient() {
@@ -97,6 +120,7 @@ export class EmployeeEditComponent implements OnInit {
         client.email      = employee.email
         client.employeeID = employee.id;
         client.id         = employee.clientID;
+        client.payRate    = employee.payRate;
         this.client       = client;
         this.inputForm.patchValue(employee);
         return  this.clientTableService.postClientWithEmployee(site, employee)
@@ -145,12 +169,26 @@ export class EmployeeEditComponent implements OnInit {
     this.initializeClient();
     this.initConfirmPassword();
     this.clientTypes$ = this.clientTypeService.getClientTypes(site);
+    this.initUser()
+  }
+
+  initUser() {
+    let user = this.userAuthorization.user;
+    if (!user) {
+      user = this.authenticationService.userValue
+    }
+    this.user = user;
+    this._user = this.authenticationService.user$.subscribe(data => {
+      this.user = data;
+      // if (this.user && this.user.userPreferences) {
+      //   this.initInstructions(this.user.userPreferences as UserPreferences)
+      // }
+    })
   }
 
   fillForm(id: any) {
     this.initForm()
     const site     = this.siteService.getAssignedSite();
-
   }
 
   initConfirmPassword()  {
@@ -204,7 +242,6 @@ export class EmployeeEditComponent implements OnInit {
       console.log('error', error)
     }
   }
-
 
   getEmployeeClientObservable(): Observable<IEmployeeClient> {
     const site     = this.siteService.getAssignedSite();
@@ -302,7 +339,32 @@ export class EmployeeEditComponent implements OnInit {
         this.router.navigateByUrl('/employee-list')
       })
     }
+  }
 
+  initPopover() {
+    if (this.user?.userPreferences && this.user?.userPreferences?.enableCoachMarks ) {
+      this.coachMarksService.clear()
+      if (this.isStaff && this.coachingPIN) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingPIN.nativeElement, this.labelingService.employeeInfo[5].value));
+      }
+
+      if (this.isStaff && this.coachingPassword) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingPassword.nativeElement, this.labelingService.employeeInfo[0].value));
+      }
+      if (this.isStaff && this.coachingUserName) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingUserName.nativeElement, this.labelingService.employeeInfo[1].value));
+      }
+      if (this.isStaff && this.coachingUserType) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingUserType.nativeElement, this.labelingService.employeeInfo[2].value));
+      }
+      if (this.isStaff && this.coachingUserAuthorized) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingUserAuthorized.nativeElement,this.labelingService.employeeInfo[3].value));
+      }
+      if (this.isStaff && this.coachingTermination) {
+        this.coachMarksService.add(new CoachMarksClass(this.coachingTermination.nativeElement,this.labelingService.employeeInfo[4].value));
+      }
+      this.coachMarksService.showCurrentPopover();
+    }
   }
 
   sanitize(html) {

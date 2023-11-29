@@ -43,34 +43,19 @@ export class InventoryEditButtonService {
   }
 
   addInventoryDialog(id: number): any {
-
-    try {
-      const site = this.siteService.getAssignedSite();
-
-      const dialogRef = this.dialog.open(AddInventoryItemComponent,
-         {  width:      '850px',
-            minWidth:   '850px',
-            height:     '750px',
-            minHeight:  '750px',
-            data :      {id: id}
-          },
-        )
-      
-        // dialogRef.afterClosed().subscribe(result => {
-        //   return true
-        // });
-
-        return dialogRef;
-
-    } catch (error) {
-
-    }
-    return null
-
+    const site = this.siteService.getAssignedSite();
+    const dialogRef = this.dialog.open(AddInventoryItemComponent,
+        {  width:     '850px',
+          minWidth:   '850px',
+          height:     '750px',
+          minHeight:  '750px',
+          data :      {id: id}
+        },
+      )
+    return dialogRef;
   }
 
   addManifest(id: number): boolean {
-
     try {
       const site = this.siteService.getAssignedSite();
 

@@ -50,6 +50,7 @@ export class FbServiceTypeService {
             shippingInstructions  : [''],
             filterType            : [],
             allowRequestPrep        : [],
+            resaleType            : [],
           }
         )
         return fb

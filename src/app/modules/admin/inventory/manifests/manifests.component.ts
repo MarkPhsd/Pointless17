@@ -299,7 +299,7 @@ export class ManifestsComponent implements OnInit {
     if (this.inventoryActive) {
       this.searchModel.activeStatus = this.inventoryActive.id;
     }
-    console.log(this.searchModel)
+    // console.log(this.searchModel)
     this.id                      = 0
     return this.searchModel
   }
@@ -323,7 +323,7 @@ export class ManifestsComponent implements OnInit {
           searchModel.pageNumber  = 1;
           searchModel.pageSize    = 25;
           this.searchModel        = searchModel
-          console.log('data initSearchSubscription',  this.searchModel )
+          // console.log('data initSearchSubscription',  this.searchModel )
         }
 
         this.refreshSearch();
@@ -410,10 +410,10 @@ export class ManifestsComponent implements OnInit {
 
   getInventoryStatus(event) {
     if (event.value) {
-      console.log(event.value)
+      // console.log(event.value)
       const item = this.assignInventoryStatus(event.value);
-      console.log(item)
-      console.log( this.inventoryActive)
+      // console.log(item)
+      // console.log( this.inventoryActive)
       this.refreshSearch();
     } else {
       this.inventoryActive.id = 0
@@ -421,7 +421,7 @@ export class ManifestsComponent implements OnInit {
   }
 
   assignInventoryStatus(name: string): InventoryStatusList {
-    console.log(name)
+    // console.log(name)
     return  this.inventoryActive = this.inventoryActiveList.find(data =>
       {
         if ( data.name === name ) {

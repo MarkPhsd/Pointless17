@@ -16,34 +16,35 @@ import { PB_Components } from 'src/app/_services/partbuilder/part-builder-main.s
   styleUrls: ['./unit-type-select.component.scss']
 })
 export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges {
+  
+  @Output() undoSetChange     = new EventEmitter();
+  @Output() itemSelect        = new EventEmitter();
+  @ViewChild('input', {static: true}) input: ElementRef;
 
   @Input() productPrice       : ProductPrice;
   @Input() product            : IProduct;
   @Input() pb_Component       : PB_Components
   @Input() posOrderItem       : PosOrderItem;
+  @Input() outputType        = ''
+  @Input() setChange         : boolean;
+  // formfieldValue: UntypedFormGroup;
+  @Input() index             : number;
+  @Input() inputForm:           UntypedFormGroup;
+  @Input() searchForm:          UntypedFormGroup;
+  @Input() formGroupName      : UntypedFormGroup
+  @Input() formControlName    = 'unitTypeID';
+  @Input() searchField:         UntypedFormControl;
+  @Input() id                 : number;
+  @Input() name:                string;
+  @Input()  formFieldClass    = 'mat-form-field form-background'
   unitType$                   : Observable<UnitType[]>;
   unitTypes                   : UnitType[]
-  @Input()  index             : number;
-  @Input()  outputType        = ''
-  // formfieldValue: UntypedFormGroup;
+  itemNameInput               : string; //for clear button
+  searchPhrase                : Subject<any> = new Subject();
+  item:                         UnitType;
+  site:                         ISite;
 
-  @ViewChild('input', {static: true}) input: ElementRef;
-  @Output() itemSelect  = new EventEmitter();
-  itemNameInput: string; //for clear button
-  @Input() inputForm:         UntypedFormGroup;
-  @Input() searchForm:        UntypedFormGroup;
-  @Input() formGroupName: UntypedFormGroup
-  @Input() formControlName = 'unitTypeID';
-  @Input() searchField:       UntypedFormControl;
-  @Input() id                 : number;
-  @Input() name:              string;
-  searchPhrase:               Subject<any> = new Subject();
-  item:                       UnitType;
-  site:                       ISite;
-  @Input()  setChange: boolean;
-  @Output() undoSetChange = new EventEmitter();
-  get searchControl()   { return this.inputForm.get("searchField") as UntypedFormControl};
-  @Input()  formFieldClass = 'mat-form-field form-background'
+  get  searchControl() {   return this.inputForm.get("searchField") as UntypedFormControl };
 
   results$ = this.searchPhrase.pipe(
     debounceTime(225),
@@ -59,7 +60,25 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
     return this.unitTypesService.getUnitTypesSearch(site, model)
   }
 
+  getField() {
+    let field = ""
+    if (this.product)  { field ="searchField"  }
+    if (!this.product) { field ="searchField"  }
+    return field;
+  }
+
+  constructor(  private unitTypesService : UnitTypesService,
+                private fb               : UntypedFormBuilder,
+                public  route            : ActivatedRoute,
+                private siteService      : SitesService,
+              ) {
+
+    this.site = this.siteService.getAssignedSite();
+    this.initUnitForm();
+  }
+
   ngAfterViewInit() {
+    this.initUnitForm();
     fromEvent(this.input.nativeElement,'keyup')
       .pipe(
           filter(Boolean),
@@ -73,36 +92,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
     .subscribe();
   }
 
-  getField() {
-    let field = ""
-    if (this.product)  { field ="searchField"  }
-    if (!this.product) { field ="searchField"  }
-    return field;
-  }
-
-  constructor(  private unitTypesService : UnitTypesService,
-                private fb               : UntypedFormBuilder,
-                public  route            : ActivatedRoute,
-                private siteService      : SitesService,
-              ) {
-    this.site = this.siteService.getAssignedSite();
-    this.searchForm = this.fb.group({
-      searchField: []
-    })
-    this.initUnitForm();
-  }
-
   initUnitForm() {
-    // console.log('formControlName', this.formControlName)
-    // if (this.formControlName == 'reOrderUnitTypeID') {
-    //   if (!this.searchForm) { 
-    //     this.searchForm = this.fb.group({
-    //       reOrderUnitTypeID: []
-    //     })
-    //   }
-    //   return;
-    // }
-
     this.searchForm = this.fb.group({
       searchField: []
     })
@@ -110,7 +100,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
 
   init() {
     if (this.inputForm) {
-      const field = this.getField()
+      const field = this.formControlName// this.getField()
       if (this.inputForm.controls[field]?.value) {
         const value = this.inputForm.controls[field].value;
         this.id = value;

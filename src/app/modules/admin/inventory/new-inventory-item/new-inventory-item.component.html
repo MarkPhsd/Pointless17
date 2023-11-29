@@ -1,5 +1,7 @@
 <ng-template #loading><mat-spinner diameter="50"></mat-spinner></ng-template>
 
+<div *ngIf="(inventoryAssignment$ | async) as item"></div>
+
 <div class="body"  *ngIf="item ; else loading">
 
   <mat-card class="strain-card">
@@ -32,8 +34,7 @@
                 [productName] = "item.productName"
                 [itemType]    = 1
                 [searchForm]  = "inputForm"
-                (itemSelect)  = "getItem($event)">
-                >
+                (itemSelect)  = "getItem($event)">  
               Change Item
             </app-product-search-selector>
           </div>
@@ -101,6 +102,15 @@
               [item]="item">
             </app-inventory-header-values>
           </div>
+
+          <!-- <div *ngIf="menuItem && menuItem.itemType && menuItem.itemType.labelTypeID">
+            <app-label-view-selector
+                [labelID]="menuItem?.itemType?.labelTypeID"
+                (outputLabelSetting)="getLabelSetting($event)"
+                [setInventoryAssignment]="item"
+                [labelImageHeight]="250">
+            </app-label-view-selector>
+          </div> -->
 
           <div class="grid-spanner">
           </div>
@@ -232,6 +242,8 @@
 
             </div>
 
+            <ng-container [ngTemplateOutlet]="additionalFeatures"></ng-container> 
+
           </div>
         </div>
       </div>
@@ -239,3 +251,71 @@
   </mat-card>
 </div>
 
+<ng-template #additionalFeatures>
+  <div  class="grid-container"  *ngIf="menuItem && !fbProductsService.isCannabis(menuItem.itemType)">
+  
+    <div  class="mat-label"  [formGroup]="inputForm">
+      <mat-slide-toggle
+          class="mat-label"
+          name="used"
+          formControlName="used">
+        <mat-label class="mat-label">Pre-Owned</mat-label>
+      </mat-slide-toggle>
+    </div>
+  
+    <div>
+      <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'bay'">
+        Bay
+      </app-value-fields>
+    </div>
+
+    <div>
+      <app-value-fields
+        [inputForm]="inputForm"
+        [fieldType]="'number'"
+        [fieldName]="'quality'">
+        Quality
+      </app-value-fields>
+    </div>
+
+    <div>
+      <app-value-fields
+        [inputForm]="inputForm"
+        [fieldType]="'number'"
+        [fieldName]="'rareValue'">
+        Rarity
+      </app-value-fields>
+    </div>
+
+    <div class="grid-item">
+      <mat-card *ngIf="item" >
+        <app-widget-uploader
+            [(fileNames)]="images"
+            (messageOut) ="received_Image($event)"
+            >
+            Upload Image
+        </app-widget-uploader>
+      </mat-card>
+    </div>
+
+    <!-- <div *ngIf="inputForm">
+      form images {{inputForm.controls['images'].value}}
+      <br>
+      item.images {{item?.images}}
+    </div> -->
+  </div>
+
+  <div [formGroup]="inputForm" class="grid-fields">
+    <div class="instructions">
+      <mat-label><h4>Item description.</h4></mat-label><br>
+      <simple-tinymce cols="50"
+                      rows="20"
+                      style="height: 200px;"
+                      name="description"
+                      formControlName="description"  >
+      </simple-tinymce>
+    </div>
+  </div>
+</ng-template>

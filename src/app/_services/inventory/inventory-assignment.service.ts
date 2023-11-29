@@ -90,8 +90,9 @@ export interface IInventoryAssignment {
   product             : IProduct;
   serials:              Serial[];
 
+  used     : boolean;
   originID : number;
-  vendor : number
+  vendor   : number
   createdAtTime : string;
   lastAuditDate : string;
   itemForm : string;
@@ -104,7 +105,7 @@ export interface IInventoryAssignment {
   itemTypeID : number;
   brandID : number;
   itemSKU : string;
-
+  images  : string;
 }
 
 export interface Serial {
@@ -284,21 +285,21 @@ export class InventoryAssignmentService {
 
   }
 
-  getActiveInventory(site: ISite, inventoryFilter: InventoryFilter): Observable<InventorySearchResultsPaged> {
+    getActiveInventory(site: ISite, inventoryFilter: InventoryFilter): Observable<InventorySearchResultsPaged> {
 
-    inventoryFilter.noActiveCount = true
+      inventoryFilter.noActiveCount = true
 
-    const controller =  `/InventoryAssignments/`
+      const controller =  `/InventoryAssignments/`
 
-    const endPoint = `postInventory`
+      const endPoint = `postInventory`
 
-    const parameters = ``
+      const parameters = ``
 
-    const url = `${site.url}${controller}${endPoint}`
+      const url = `${site.url}${controller}${endPoint}`
 
-    return  this.http.post<InventorySearchResultsPaged>(url, inventoryFilter)
+      return  this.http.post<InventorySearchResultsPaged>(url, inventoryFilter)
 
-  }
+    }
 
 
     getInActiveInventory(site: ISite, pageNumber: number, pageSize: number): Observable<InventorySearchResultsPaged> {
@@ -434,6 +435,22 @@ export class InventoryAssignmentService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.http.post<IInventoryAssignment[]>(url, list)
+
+  }
+
+
+  postInventoryAssignment(site: ISite,item: IInventoryAssignment): Observable<IInventoryAssignment> {
+
+
+    const controller =  `/InventoryAssignments/`
+
+    const endPoint = `PostInventoryAssignment`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<IInventoryAssignment>(url, item)
 
   }
 

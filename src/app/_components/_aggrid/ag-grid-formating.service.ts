@@ -86,6 +86,16 @@ get rowClasses() {
 
     "row-manifest": (params) => {
       return params.api.getValue("manifestID", params.node) >= 1
+    },
+
+    "row-female": (params) => {
+      // console.log('gender female', params.api.getValue("id", params.node), params.api.getValue("gender", params.node))
+      return params.api.getValue("gender", params.node) == 1
+    },
+
+    "row-male": (params) => {
+      // console.log('gender male',  params.api.getValue("id", params.node),  params.api.getValue("gender", params.node))
+      return params.api.getValue("gender", params.node) == 0
     }
   }
 
@@ -93,11 +103,12 @@ get rowClasses() {
 
 initGridOptions(pageSize: number, columnDefs: any, enableSorting?: boolean)  {
 
-  let sorting: boolean 
+  let sorting: boolean;
+
   sorting = true;
-  if (enableSorting) { 
-    sorting = enableSorting;
-  }
+
+  if (enableSorting) {  sorting = enableSorting };
+
   return {
     pagination: true,
     paginationPageSize: pageSize,
@@ -133,7 +144,9 @@ initGridOptionsFormated(pageSize: number, columnDefs: any) {
       "row-fail": params => params.api.getValue("packageCountRemaining", params.node) < 10,
       "row-pass": params => params.api.getValue("packageCountRemaining", params.node) >= 10,
       "row-unassigned": params => params.api.getValue("manifestID", params.node) == 0,
-      "row-manifest": params => params.api.getValue("manifestID", params.node) >= 1
+      "row-manifest": params => params.api.getValue("manifestID", params.node) >= 1,
+      "row-female": params => params.api.getValue("gender", params.node) >= 0,
+      "row-male": params => params.api.getValue("gender", params.node) == 0,
     },
   }
   return grid
@@ -167,7 +180,5 @@ initGridOptionsFormated(pageSize: number, columnDefs: any) {
     productSearchModel.pageNumber = currentPage
     return productSearchModel
   }
-
-
 
 }

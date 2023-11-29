@@ -16,8 +16,7 @@
       <mat-select
                   type="'text'"
                   [formControlName]   = "formFieldName"
-                  (selectionChange)   = "updateResults($event)"
-        >
+                  (selectionChange)   = "updateResults($event)" >
 
         <mat-select-trigger *ngIf="inputField && inputField.value && showActiveInactive">
           <div class="item-results">

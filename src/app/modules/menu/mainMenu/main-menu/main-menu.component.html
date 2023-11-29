@@ -7,6 +7,7 @@
     <div *ngIf="(homePage$ | async) as homePageSettings; else loading">
       <ng-container [ngTemplateOutlet]="blogPostMainView"></ng-container>
       <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container>
+      <ng-container [ngTemplateOutlet]="isResaleMenuOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isDepartmentViewOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isCategoryViewOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isBrandListViewOn"></ng-container>
@@ -102,3 +103,6 @@
 <div *ngIf="(orderAction$ | async)"></div>
 
 
+<ng-template #resaleMenu>
+  <button style="margin:5px" class="payment-buttons" mat-raised-button color="primary" (click)="navResale()"><mat-icon style="margin:4px">label</mat-icon>ReSale</button>
+</ng-template>

@@ -101,6 +101,8 @@ export interface TransactionUISettings {
   prepOrderOnExit: boolean;
   exitOrderOnPrintReceipt: boolean;
   preferredMargin: number;
+  enableItemReOrder: boolean;
+  resaleCostRatio: number;
 }
 
 export interface StripeAPISettings {
@@ -192,7 +194,7 @@ export interface UIHomePageSettings {
   suppressMenuItems: boolean;
   scheduleSubMenu: boolean;
   staffscheduleSubMenu: boolean;
-
+  enableInventoryPerItem: boolean;
   sendGridOrderTemplate: string;
   sendGridSalesReportTemplate : string;
   sendGridBalanceSheetTemplate : string;
@@ -235,6 +237,10 @@ export interface UIHomePageSettings {
   staffAccordionMenuSideBar: boolean;
 
   minQuantityFilter: number;
+  enableRecentAssociatedItems: boolean;
+  enableSimliarItems: boolean;
+  enableShippingInfo: boolean;
+  resaleMenu: boolean;
 }
 
 @Injectable({
@@ -660,6 +666,11 @@ export class UISettingsService {
       accordionMenuSideBar: [],
       staffAccordionMenuSideBar: [],
       minQuantityFilter: [],
+      enableInventoryPerItem: [],
+      enableRecentAssociatedItems: [],
+      enableSimliarItems : [],
+      enableShippingInfo: [],
+      resaleMenu: [],
      })
     return fb
   }
@@ -837,8 +848,10 @@ export class UISettingsService {
       autoNotifyOnItemCompletion: [],
       singlePrintReceipt: [],
       prepOrderOnExit: [],
-      preferredMargin: [], 
+      preferredMargin: [],
       exitOrderOnPrintReceipt: [],
+      enableItemReOrder: [],
+      resaleCostRatio: [],
      })
   }
 

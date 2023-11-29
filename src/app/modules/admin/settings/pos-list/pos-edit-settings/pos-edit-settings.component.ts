@@ -61,7 +61,7 @@ export class PosEditSettingsComponent implements OnInit {
     private btPrinterService    : BtPrintingService,
     private triPOSService       : TriPOSMethodService,
     private printingService     : PrintingService,
-      private uiSettingService  : UISettingsService,
+    private uiSettingService    : UISettingsService,
     private fileSystemService   : FileSystemService,
     private serviceTypeService: ServiceTypeService,
     public labelingService: LabelingService,
@@ -186,8 +186,8 @@ export class PosEditSettingsComponent implements OnInit {
       ignoreTimer        : [],
       defaultOrderTypeID: [],
       triPOSMarketCode: [],
-      enablePrepView: [],
-
+      enablePrepView  : [],
+      defaultLabel    : [],
     })
 
     if (this.terminal) {

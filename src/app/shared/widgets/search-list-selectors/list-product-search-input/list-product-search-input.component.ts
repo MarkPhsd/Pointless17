@@ -76,7 +76,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
 
     this._posDevice = this.uiSettingService.posDevice$.subscribe(data => {
       this.posDevice = data;
-   })
+    })
 
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       if (!data) {

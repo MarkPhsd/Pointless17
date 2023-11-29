@@ -1,6 +1,6 @@
 import { Injectable, Input } from '@angular/core';
 import { AuthenticationService } from '../system/authentication.service';
-import { BehaviorSubject, EMPTY, Observable, Subject, of, throwError  } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, Subject, catchError, of, switchMap, throwError  } from 'rxjs';
 import { IProduct, IProductCategory, ISetting, ISite }  from 'src/app/_interfaces';
 import { IMenuItem } from '../../_interfaces/menu/menu-products';
 import { ProductSearchModel } from '../../_interfaces/search-models/product-search';
@@ -37,7 +37,7 @@ export interface IDepartmentList {
   slug                :   string;
   active              : boolean;
   webProduct          : boolean;
-  webEnabled: boolean;
+  webEnabled          : boolean;
 }
 export interface Category {
   menuItem:               any[];
@@ -105,7 +105,7 @@ export interface IItemBasicB{
   image: string;
 }
 
-export interface IItemBasicValue extends IItemBasic { 
+export interface IItemBasicValue extends IItemBasic {
   value: number;
 }
 @Injectable({
@@ -225,6 +225,33 @@ export class MenuService {
     return this.searchIsLoaded.asObservable();
   }
 
+  getItemByBrandClassProductList(site: ISite, departmentID: number, attribute: string, id: number, brandID: number, gender: number): Observable<any> {
+
+    const controller ="/MenuItems/"
+
+    const endPoint = `getItemByBrandClassProductList`
+
+    const parameters = `?departmentID=${departmentID}&attribute=${attribute}&brandID=${brandID}&gender=${gender}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.get<any>(url)
+
+  }
+  findItemForBuyBack(site: ISite, departmentID: number, attribute: string, id: number, brandID: number, gender: number): Observable<any> {
+
+    const controller ="/MenuItems/"
+
+    const endPoint = `findItemForBuyBack`
+
+    const parameters = `?departmentID=${departmentID}&attribute=${attribute}&brandID=${brandID}&gender=${gender}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.get<any>(url)
+
+  }
+
   setAllItemsActive(site: ISite): Observable<unknown> {
 
     const controller ="/MenuItems/"
@@ -331,6 +358,19 @@ export class MenuService {
     return  this.httpClient.get<IComponentUsageResults>(uri)
   }
 
+  recentAssociationsWithProduct(site: ISite, id: number, numberOfDaysBack: number): Observable<IMenuItem[]> {
+    const controller = "/MenuItems/"
+
+    const endPoint = "recentAssociationsWithProduct"
+
+    const parameters = `?id=${id}&numberOfDaysBack=${numberOfDaysBack}`
+
+    const uri = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.httpClient.get<IMenuItem[]>(uri)
+  }
+
+
   getProductList(site: ISite): Observable<IMenuItem[]> {
 
     const controller = "/MenuItems/"
@@ -363,6 +403,17 @@ export class MenuService {
 
   };
 
+  metaTagSearch(site: ISite, items: any[]): Observable<IMenuItem[]> {
+    const controller = '/MenuItems/'
+
+    const endPoint = 'metaTagSearch'
+
+    const parameters =``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.httpClient.post<any>(url, items);
+  }
 
   getMenuItemsByPage(site: ISite, pageNumber: number, pageSize: number): Observable<IMenuItem[]> {
 
@@ -943,7 +994,17 @@ export class MenuService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.httpClient.get<IProduct>(url)
+    return  this.httpClient.get<IProduct>(url).pipe(switchMap(data => {
+      if (data && data.errorMessage) {
+        this.sitesService.notify(`Error: ${data.toString()}`, 'Close', 60000, 'red' )
+      }
+
+      return of(data)
+    }),catchError(data => {
+      this.sitesService.notify(`Error: ${data.toString()}`, 'Close', 60000, 'red' )
+      const product ={} as IProduct
+      return of(product)
+    }))
 
   };
 

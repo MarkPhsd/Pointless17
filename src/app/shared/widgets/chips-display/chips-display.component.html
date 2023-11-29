@@ -1,13 +1,31 @@
 <mat-chip-list
     *ngIf="itemTags"
-    appearance="outline"
+    [multiple]="selectable" 
     #chipList
-    cdkDropListOrientation="horizontal" >
+    cdkDropListOrientation="horizontal" 
+  >
 
   <mat-chip
-    *ngFor="let item of (itemTags || [])"
-    >
-    {{item }}
+      *ngFor="let item of (itemsOptions || [])" 
+      [value]="item" 
+      [selected]="item.selected" 
+      (click)="updateItem(item)"
+      >
+    {{item.name }}
   </mat-chip>
 
 </mat-chip-list>
+
+
+<!-- <mat-chip-list #chipList multiple="true">
+	<mat-chip *ngFor="let fruit of fruits" [value]="fruit.name" 
+    [selected]="fruit.selected" 
+    (click)="fruit.selected=!fruit.selected"
+    >
+		{{fruit.name}}
+	</mat-chip>
+</mat-chip-list>
+<div class="hintLabel">Select Fruits</div>
+<br/>
+	<button (click)="getSelectedChips()">Get Selected Chips</button>
+<br/> -->

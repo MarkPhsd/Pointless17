@@ -10,6 +10,7 @@ import { IPurchaseOrderItem } from '../../_interfaces/raw/purchaseorderitems';
 import { IInventoryAssignment,Serial } from '../inventory/inventory-assignment.service';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { ScaleInfo, ScaleService } from '../system/scale-service.service';
+import { POSItemSearchModel } from '../reporting/reporting-items-sales.service';
 
 export interface ItemPostResults {
   order            : IPOSOrder;
@@ -178,6 +179,7 @@ export class POSOrderItemService {
   }
 
 
+
   setModifierNote(site: ISite, item: { id: number; modifierNote: string; }) :  Observable<any> {
 
       const controller = "/POSOrderItems/"
@@ -203,8 +205,6 @@ export class POSOrderItemService {
       newItem = this.getNewItemWeight(newItem);
     }
 
-    // console.log('newItem', newItem);
-    
     if (newItem.productPrice) { newItem.price = newItem.productPrice}
 
     const controller = "/POSOrderItems/"
@@ -215,6 +215,7 @@ export class POSOrderItemService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
+    console.log('url', url, newItem)
     return this.http.post<ItemPostResults>(url, newItem );
 
   }
@@ -272,6 +273,33 @@ export class POSOrderItemService {
     return  this.http.post<ItemPostResults>(url , newItem)
 
   }
+
+
+  buyItemUpdate(site: ISite, data: IPurchaseOrderItem) {
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "buyItemUpdate";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.put<IPurchaseOrderItem>(url , data)
+  }
+
+
+  getItemsHistoryBySearch(site: ISite, search: POSItemSearchModel): Observable<PosOrderItem[]> {
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "GetItemsHistoryBySearch";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<PosOrderItem[]>(url , search)
+  }
+
 
   putItem(site: ISite, newItem: any): Observable<ItemPostResults> {
 

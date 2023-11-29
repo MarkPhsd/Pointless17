@@ -42,7 +42,7 @@ mat-card:active {
   height: 100%;
   min-height: 125px;
   max-height: 125px;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 .header-container {
@@ -52,7 +52,6 @@ mat-card:active {
   height    : 65px;
   max-height: 65px;
   overflow  : hidden;
-
 }
 
 //  style="max-width:75px;max-height:2em;"
@@ -75,7 +74,7 @@ mat-card:active {
 }
 
 .footer {
-  margin-top: 10px;
+  // margin-top: 10px;
   // height: 45px;
   z-index: 99;
   height: 2em;
@@ -142,9 +141,7 @@ mat-card:active {
   width       : 100%;
   white-space : normal;
   overflow    : hidden;
-
   max-height: 85px;
-  // min-height: 85px;
 }
 
 .product-name {

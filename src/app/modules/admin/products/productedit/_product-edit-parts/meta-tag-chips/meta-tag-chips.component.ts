@@ -19,11 +19,12 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
 
   get f()   { return this.inputForm;}
-  get metaTags()  { return this.inputForm.get("metaTags") as UntypedFormControl;}
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @ViewChild('metaTag') metaTag: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete ;
+  get metaTags()  { return this.inputForm.get("metaTags") as UntypedFormControl;}
+
   // @Output() itemSelect  = new EventEmitter();
   @Input()  inputForm  :        UntypedFormGroup;
   @Input()  metaTagList:        string;
@@ -118,7 +119,6 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
 
   add(event: MatChipInputEvent): void {
     if (!event || event == null ) { return }
-
     const input = event.input;
     const value = event.value;
 
@@ -137,7 +137,6 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
 
   setTagValue(value: string, input: HTMLInputElement) {
     this.outPutItemTags.emit('output items meta tags')
-    console.log('set tag value', value)
 
     if (!this.itemTags) { this.itemTags = []}
     if ((value || '').trim()) { this.itemTags.push(value.trim()); }
@@ -145,11 +144,8 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
     let tags = ''
 
     this.itemTags.forEach( data =>
-    {
-      if (tags != '' && tags == 'undefined' )
-      {
-        tags = `${tags},${data}`
-      }
+    { if (tags != '' && tags == 'undefined' )
+      { tags = `${tags},${data}` }
     })
 
     this.outPutItemTags.emit(this.itemTags.toString())

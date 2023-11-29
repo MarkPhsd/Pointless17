@@ -50,7 +50,7 @@
       <div class='grid-container'>
 
         <div>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="outline">
             <mat-label >Name assinged in Pointless</mat-label>
             <mat-label >Name </mat-label>
             <input matInput type="text"
@@ -60,7 +60,7 @@
         </div>
 
         <div>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="outline">
             <mat-label >Physical Device Name</mat-label>
             <input matInput type="text"
                     formControlName="deviceName"
@@ -86,8 +86,6 @@
           </mat-form-field>
         </div>
 
-
-
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="enabled">
@@ -101,7 +99,7 @@
             <mat-label>Enable Scale</mat-label>
           </mat-slide-toggle>
         </div>
-
+        
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="enableExitLabel">
@@ -162,7 +160,7 @@
       <div class='grid-container'>
 
         <div>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="outline">
             <mat-label >Receipt Printer Name</mat-label>
             <input matInput type="text"
                     formControlName="receiptPrinter"
@@ -171,7 +169,7 @@
         </div>
 
         <div>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="outline">
             <mat-label >Label Printer</mat-label>
             <input matInput type="text"
                     formControlName="labelPrinter"
@@ -180,7 +178,7 @@
         </div>
 
         <div>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="outline">
             <mat-label >Label Printer 2</mat-label>
             <input matInput type="text"
                     formControlName="labelPrinter2"
@@ -194,7 +192,7 @@
       <div class='grid-container'>
 
         <div *ngIf="uiSettings.dsiEMVNeteEpayEnabled">
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="outline">
             <mat-label>Netepay Secure Device</mat-label>
             <input matInput type="text"
                     formControlName="dSISecureDevice"
@@ -203,7 +201,7 @@
         </div>
 
         <!-- <div *ngIf="uiSettings.cardPointBoltEnabled">
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="outline">
             <mat-label >Cardpointe HSN</mat-label>
             <input matInput type="text"
                     formControlName="cardPointeHSN"
@@ -237,7 +235,7 @@
         </div>
 
         <div *ngIf="uiSettings.triposEnabled">
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="outline">
             <mat-label>TriPOSLaneID</mat-label>
             <input matInput type="text"
                     formControlName="triposLaneID"

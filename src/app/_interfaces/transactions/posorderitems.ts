@@ -140,5 +140,8 @@ export interface PosOrderMenuItem {
   promptGroupID           : number;
   dateMade                : string;
   testDate                : string;
+  active: boolean;
+  webProduct: boolean;
+  
 }
 

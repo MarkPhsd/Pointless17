@@ -1,0 +1,65 @@
+<div *ngIf="(associations$ | async) as items"></div>
+<div *ngIf="(action$ | async) as action"></div>
+<div *ngIf="(deleteItem$ | async) as action"></div>
+
+<ng-container [ngTemplateOutlet]="productSearcher"></ng-container>
+<ng-container [ngTemplateOutlet]="matChipItemList"></ng-container>
+
+<ng-template #matChipItemList>
+  <div>
+    <mat-form-field appearance="outline">
+
+      <mat-label>Associations</mat-label>
+
+      <mat-chip-list  #chipList aria-label="selection">
+
+        <mat-chip
+              *ngFor="let item of (itemTags || [])"
+              [selectable]="selectable"
+              [removable]="removable"
+              (removed)="remove(item)">
+            {{item | json}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+
+        <input
+              #input
+              placeholder      ="New item..."
+              [(ngModel)]      ="list"
+              [formControl]    ="productNameSearch"
+              [matAutocomplete]="auto"
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="add($event)">
+
+      </mat-chip-list>
+
+      <!-- [displayWith]="displayFn.bind(this)" -->
+      <mat-autocomplete 
+                        panelWidth="auto"
+                        #auto="matAutocomplete"
+                        
+                        (optionSelected)="onChange($event)" 
+                        >
+
+                        <!-- *ngFor="let item of results$ | async"
+                    [value]="item" -->
+        <mat-option >
+            <!-- {{item?.name}} -->
+        </mat-option>
+      </mat-autocomplete>
+
+    </mat-form-field>
+
+  </div>
+</ng-template>
+
+<ng-template #productSearcher>
+  <app-product-search-selector
+        class         = "fields"
+        [productName] = "productName"
+        [searchForm]  = "searchForm"
+        (itemSelect)  = "getItem($event)">
+        Add Associated Item
+  </app-product-search-selector>
+</ng-template>

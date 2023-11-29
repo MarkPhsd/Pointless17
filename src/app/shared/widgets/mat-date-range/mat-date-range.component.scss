@@ -5,7 +5,7 @@
 
 .container {
   display: grid;
-  grid-template-columns: 50px 205px;
+  grid-template-columns: 35px 200px;
   width: 235px;
   gap: 5px;
 }
@@ -13,11 +13,11 @@
 button {
   margin: 0px;
   padding: 0px;
-  width: 45px;
-  min-width: 45px;
+  width: 35px;
+  min-width: 35px;
 }
 
 .dates-field {
-  min-width: 245px;
-  width: 245px;
+  min-width: 200px;
+  width: 200px;
 }

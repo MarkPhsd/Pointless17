@@ -3,15 +3,15 @@
 
   <mat-form-field *ngIf="addOnItems" 
                   class="example-chip-list"
-                  appearance="fill">
+                  appearance="outline">
     <mat-label>Add on Items</mat-label>
     <mat-chip-list>
-      <mat-chip *ngFor="let item of addOnItems"
-                 (removed)="removeItem(item)">  
-          {{item?.name}}
-          <mat-icon matChipRemove >cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
-    </mat-form-field>
+    <mat-chip *ngFor="let item of addOnItems"
+                (removed)="removeItem(item)">  
+        {{item?.name}}
+        <mat-icon matChipRemove >cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+  </mat-form-field>
 
 

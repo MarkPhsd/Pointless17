@@ -18,6 +18,8 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { POSItemSearchModel } from 'src/app/_services/reporting/reporting-items-sales.service';
 
 @Component({
   selector: 'app-orders-main',
@@ -30,6 +32,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('orderList')    orderList: TemplateRef<any>;
   @ViewChild('orderPanel')   orderPanel: TemplateRef<any>;
   @ViewChild('orderPrep')    orderPrep: TemplateRef<any>;
+  @ViewChild('orderItemPanel')   orderItemPanel: TemplateRef<any>;
   @ViewChild('houseAccountsList')    houseAccountsList: TemplateRef<any>;
   @ViewChild('houseAccountView') houseAccountView: TemplateRef<any>;
   @ViewChild('mergeView') mergeView: TemplateRef<any>;
@@ -49,6 +52,8 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   mergeOrders: boolean;
   posOrdersSelectedList: IPOSOrder[]
   action$: Observable<any>;
+
+  orderItemHistory$: Observable<any>;
 
   isApp: boolean;
   smallDevice  : boolean;
@@ -216,6 +221,23 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     })
   }
 
+  getOrderItemHistory() { 
+    //orderItemHistory$
+    this.viewType = 4;
+    if (this.user && this.user.roles == 'user') { 
+      // this.posor/
+      const site = this.siteService.getAssignedSite();
+      let search = {} as POSItemSearchModel
+      search.clientID = this.user.id;
+      search.includeMenuItem = true
+      const results$ =  this.posOrderItemService.getItemsHistoryBySearch(site,search);
+      this.orderItemHistory$ = results$.pipe(switchMap(data => { 
+        console.log('history items', data)
+        return of(data)
+      }))
+    }
+  }
+
   initViewTypeSubscriber() {
     this._viewType = this.orderMethodsService.viewOrderType$.subscribe(data => {
       this.viewType = data;
@@ -252,6 +274,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     public orderMethodsService: OrderMethodsService,
     public coachMarksService : CoachMarksService,
     private platFormService: PlatformService,
+    private posOrderItemService: POSOrderItemService,
     private orderService     : OrdersService)
   {
     this.initAuthorization();
@@ -269,7 +292,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this.auths = this.authenticationService.userAuths;
     this.isApp = (this.platFormService.isAppElectron || this.platFormService.androidApp)
 
-
+    if (this.isUser) { 
+      localStorage.setItem('OrderFilterPanelVisible', 'true')
+    }
   }
 
   initCustomerView() {
@@ -539,11 +564,11 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get orderView() {
-    if (this.viewType == 1) {
-      return  this.orderCard
-    }
     if (this.viewType == 0 ) {
       return  this.orderList
+    }
+    if (this.viewType == 1) {
+      return  this.orderCard
     }
     if (this.viewType == 2 ) {
       return this.orderPanel
@@ -551,16 +576,29 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.viewType == 3 ) {
       return this.orderPrep
     }
+    if (this.viewType == 4 ) {
+      return this.orderItemPanel
+    }
     return this.orderCard
   }
 
   searchBtn(event) {
+
     this.updateFilterInstruction();
     this.hideInstruction(0)
+
+    if (this.viewType === 4) { 
+      this.viewType = 2
+      this.displayPanel(event);
+      this.hideFilterPanel(true)
+      return;
+    }
+
     this.displayPanel(event)
   }
 
   displayPanel(event)  {
+    
     const show =  localStorage.getItem('OrderFilterPanelVisible')
     if (show === 'false') {
       this.hidePanel = true
@@ -578,7 +616,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     localStorage.setItem('OrderFilterPanelVisible', 'false')
   }
-
+  
   hideFilterPanel(event) {
     this.hidePanel = event
     if (event) {

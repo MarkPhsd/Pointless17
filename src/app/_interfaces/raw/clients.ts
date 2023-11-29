@@ -129,4 +129,5 @@ export interface IClientTable {
   preferences: string;
   insTertiaryNum: string;
   userName: string; //not used as username used for client oomp
+  payRate: number;
 }

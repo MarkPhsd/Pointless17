@@ -1,12 +1,12 @@
 <div  #scrollMe
       [style.width]  = "deviceWidthPercentage"
       [style.height] = "panelHeight"
-      *ngIf="order && order.posOrderItems && order.posOrderItems.length>0"
+      *ngIf="posOrderItems && posOrderItems.length>0"
       [class]="mainStyle" >
 
     <ion-item-sliding
               class="nopadd"
-              *ngFor="let item of order.posOrderItems;
+              *ngFor="let item of posOrderItems;
                       let i = index;trackBy: trackByFN"
               (ionSwipe)="swipeAction(i)" >
 
@@ -31,15 +31,17 @@
                       [cbd]         ="item?.posOrderMenuItem?.cbd"
                       [thc]         ="item?.posOrderMenuItem?.thc"
                       [menuItem]    ="item?.posOrderMenuItem"
-                      [productID]="item?.productID"
-                      [order]    ="order"
-                      [uiConfig] ="uiConfig"
-                      [mainPanel]="mainPanel"
-                      [userAuths] ='userAuths'
-                      [wideBar]  ="wideBar"
-                      [prepScreen]="prepScreen"
+                      [productID]   ="item?.productID"
+                      [order]       ="order"
+                      [uiConfig]    ="uiConfig"
+                      [mainPanel]   ="mainPanel"
+                      [userAuths]   ='userAuths'
+                      [wideBar]     ="wideBar"
+                      [prepScreen]  ="prepScreen"
                       [enableExitLabel]="enableExitLabel"
                       [disableActions]="disableActions"
+                      [displayHistoryInfo] = "displayHistoryInfo"
+                      [enableItemReOrder] = "enableItemReOrder"
                       [purchaseOrderEnabled]="purchaseOrderEnabled"
                       (outputDelete)="removeItemFromList($event)"
           ></pos-order-item>

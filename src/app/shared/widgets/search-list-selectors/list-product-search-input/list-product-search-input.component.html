@@ -1,7 +1,7 @@
   <div [formGroup]="searchForm">
     <mat-form-field
                     [style.width.px]="100"
-                    appearance="legacy">
+                    appearance="otline">
       <mat-label><mat-icon >qr_code</mat-icon> Scan </mat-label>
       <input
               #input
@@ -17,7 +17,7 @@
 
  <div *ngIf="(action$ | async) as item"></div>
 
- <div *ngFor="let observable of observablesArray$ | async">
+<div *ngFor="let observable of observablesArray$ | async">
   <ng-container *ngIf="observable | async as value">
   </ng-container>
 </div>

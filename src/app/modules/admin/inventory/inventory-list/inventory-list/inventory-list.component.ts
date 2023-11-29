@@ -258,11 +258,11 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     this.columnDefs = this.initAgGrid();
   }
 
-  agColumnApiRefresh() {
-    if (this.columnDefs) {
-      this.agGridFormatingService.initGridOptionsFormated(this.pageSize, this.columnDefs)
-    }
-  }
+  // agColumnApiRefresh() {
+  //   if (this.columnDefs) {
+  //     this.agGridFormatingService.initGridOptionsFormated(this.pageSize, this.columnDefs)
+  //   }
+  // }
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.

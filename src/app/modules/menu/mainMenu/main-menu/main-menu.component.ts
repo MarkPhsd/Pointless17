@@ -35,6 +35,8 @@ export class MainMenuComponent implements OnInit  {
   @ViewChild('searchSelector') searchSelector: TemplateRef<any>;
   @ViewChild('viewOverlay')    viewOverlay: TemplateRef<any>;
   @ViewChild('displayMenu')    displayMenu: TemplateRef<any>;
+  @ViewChild('resaleMenu')     resaleMenu: TemplateRef<any>;
+
 
   homePage$: Observable<UIHomePageSettings>;
   homePageSetings: UIHomePageSettings;
@@ -171,10 +173,22 @@ export class MainMenuComponent implements OnInit  {
     this.router.navigate([currentUrl]);
   }
 
+  navResale() {
+    this.router.navigate(['/buy-sell'])
+  }
+
   get isDisplayMenuOn() {
     if ((this.isStaff && this.homePageSetings.staffMenuEnabled) ||
         (this.isStaff == false &&  this.homePageSetings.menuEnabled)) {
       return this.displayMenu
+    }
+    return null;
+  }
+
+  get isResaleMenuOn() {
+     if ((this.isStaff && this.homePageSetings.resaleMenu) ||
+         (this.isStaff == false &&  this.homePageSetings.resaleMenu)){
+      return this.resaleMenu
     }
     return null;
   }

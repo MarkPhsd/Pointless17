@@ -58,6 +58,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   statuses$   : Observable<IStatuses[]>;
   client$     : Observable<IClientTable>;
   clientType$: Observable<clientType>;
+  clientType : clientType
   @Input() clientTable  : IClientTable;
   @Input() id           : string;
 
@@ -199,6 +200,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     const typeID =  client.clientTypeID;
     const site = this.siteService.getAssignedSite()
     this.clientType$   = this.clientTypeService.getClientTypeCached(site, typeID).pipe(switchMap(data => {
+      this.clientType = data;
       const result =  this.orderMethodsService.validateCustomerForOrder(client,  requiresLicenseValidation, data.name)
       this.accountDisabled = false
       this.validationMessage = '';
@@ -282,6 +284,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     this.searchModel = {} as IPOSOrderSearchModel;
     this.searchModel.completionDate_From = start.toISOString()
     this.searchModel.completionDate_To   = now.toISOString()
+    this.searchModel.searchOrderHistory = true;
     this.refreshDateSearch()
   }
 

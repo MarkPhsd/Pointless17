@@ -103,6 +103,7 @@
               <span *ngIf="transactionUISettings" >
 
                 <app-profile-demographics
+                  [clientType]  = 'clientType'
                   [client]      ="clientTable"
                   [inputForm]   ="inputForm"
                   [isAuthorized]="isAuthorized"
@@ -188,7 +189,7 @@
                     </app-mat-select>
                   </div>
 
-                  <div class="margin-5">
+                  <div class="margin-5" *ngIf="!isUser">
                     <button mat-raised-button
                             style="margin-top:5px"
                             [disabled]="closedOrdersEnabled"

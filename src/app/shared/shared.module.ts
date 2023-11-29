@@ -232,6 +232,7 @@ import { POSOrderScheduleCardComponent } from '../modules/posorders/posorder-sch
 import { AuditPaymentComponent } from '../modules/admin/reports/item-sales-card/audit-payment/audit-payment.component';
 import { QRCodeModule } from 'angularx-qrcode'
 import { UnitTypeSelectorComponent } from './widgets/unit-type-selector/unit-type-selector.component';
+import { ItemassociationsComponent } from '../modules/admin/products/productedit/_product-edit-parts/itemassociations/itemassociations.component';
 
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
@@ -336,6 +337,7 @@ import { UnitTypeSelectorComponent } from './widgets/unit-type-selector/unit-typ
     MatMenuBasicComponent,
     MatSelectNGModelComponent,
     MetaTagChipsComponent,
+    ItemassociationsComponent,
     MenuCompactComponent,
     MenuCompactComponent,
     MenuItemGalleryComponent,
@@ -601,6 +603,7 @@ import { UnitTypeSelectorComponent } from './widgets/unit-type-selector/unit-typ
     MatSelectNGModelComponent,
     MatSpinnerOverlayComponent,
     MetaTagChipsComponent,
+    ItemassociationsComponent,
     MenuCompactComponent,
     MenuItemGalleryComponent,
     MenuPriceSelectionComponent,

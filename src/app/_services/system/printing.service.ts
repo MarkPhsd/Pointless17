@@ -652,6 +652,25 @@ export class PrintingService {
     return posItem$
   }
 
+  printBuyLabel(item: IInventoryAssignment, menuItem: IMenuItem, order: IPOSOrder ) {
+    const site = this.siteService.getAssignedSite()
+   
+    const product$ = this.menuItemService.getProduct(site, menuItem.id)
+    return product$.pipe(switchMap(data => {
+        if (data.packager) {
+          return this.getContact(site, data.packager)
+        }
+        return of(null);
+      }
+    )).pipe(switchMap(data => {
+      if (data) {
+        menuItem.lab = data;
+      }
+      let labelPrint = {inventoryItem: item, menuItem: menuItem}
+      return this.printLabel(labelPrint,  order.history, false)
+    }))
+  }
+
   printItemLabel(item: any, menuItem$: Observable<IMenuItem>, order: IPOSOrder, joinLabels: boolean ) {
     const site = this.siteService.getAssignedSite()
     if (!menuItem$) {
@@ -711,7 +730,6 @@ export class PrintingService {
     } else {
       menuItem$ = of(item.menuItem)
     }
-
 
     const printer$ = this.settingService.getDeviceSettings(localStorage.getItem('devicename')).pipe(
       switchMap(data => {
@@ -790,6 +808,7 @@ export class PrintingService {
       })).pipe(
           switchMap( results => {
 
+        
             if (!results) {
               // console.log('no results for lab, producer, data')
               return of(null)
@@ -825,7 +844,12 @@ export class PrintingService {
               console.log('error printing label', error )
             }
 
+            if (item.inventoryItem) {
+              item = item.inventoryItem;
+            }
+
             const content = this.renderingService.interpolateText(item, data.text);
+
             if (printer.text) {
               const printerName = printer.text
               if (!joinLabels) {

@@ -21,6 +21,14 @@ export class LabelingService {
     {id:3, name: 'managerRequired', value: 'When this is enabled, the user must be a manager or admin or requires authorization in User types be enabled.'},
   ] as IToolTips[];
 
+  employeeInfo = [
+    {id:0, name: 'password', value: 'The password can be used for both Apps and WebBrowser Login. If you do not wish your staff to be able to access your system off premise, only provide them a PIN.'},
+    {id:1 , name: 'name', value: 'Username, this is the username for this user to login, with their password or pin code; it can be a name, email, phone. Regular staff should just have their own name as the username.'},
+    {id:2 , name: 'type', value: 'You may set features for the type by going back to the employee list, then Authorizations on the right side panel.'},
+    {id:3 , name: 'role', value: 'There are only four Roles. They are primary features for the servers APi. Employees should be Admin, Manager,or Employee, all customers will be user or guest.'},
+    {id:4 , name: 'termination', value: 'Termination, is the date the employee stopped working. However, you should remove their username, and pin code to disable their acess. You can also disable their account if you press View As User.'},
+    {id:5, name: 'pincode', value: 'PIN should be greater than 4 characters, and less than 10. The pin code is used in the Windows App and Android Apps only. This is not the primary password, and can be changed later.'},
+  ]
   contactInfo =  [
     {id:0,name:'scanning', value:' Enable to not save customer info on ID Scanning (driver license, id etc.).'},
   ]

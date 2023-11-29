@@ -2,7 +2,7 @@
 import { Observable, Subscription, } from 'rxjs';
 import {  Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild,EventEmitter, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -12,6 +12,7 @@ import { ISite } from 'src/app/_interfaces';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 
 @Component({
   selector: 'pos-order-items',
@@ -22,10 +23,11 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
   @Input()  order          : IPOSOrder;
+  @Input()  posOrderItems: PosOrderItem[]
   @Input()  mainPanel      : boolean;
   @Output() outputRemoveItem  = new EventEmitter();
-  @Input() purchaseOrderEnabled: boolean;
-
+  @Input()  purchaseOrderEnabled: boolean;
+ 
   @Input() printLocation  : number;
   @Input() prepStatus     : boolean;
   @Input() prepScreen     : boolean;
@@ -34,6 +36,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input() qrOrder        = false;
   @Input() enableExitLabel : boolean;
   @Input() userAuths       :   IUserAuth_Properties;
+  @Input() displayHistoryInfo: boolean;
+  @Input() enableItemReOrder  : boolean = false;
 
   qrCodeStyle = ''
   mainStyle   = ''
@@ -85,10 +89,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
           this._order = this.orderMethodService.currentOrder$.subscribe( order => {
             this.order = order
             if (this.order && this.order.posOrderItems)  {
-              this.order.posOrderItems = this.sortItems(this.order.posOrderItems)
-              setTimeout(() => {
-                this.scrollToBottom();
-              }, 200);
+              this.sortPOSItems(this.order.posOrderItems)
             }
           })
         }
@@ -100,6 +101,13 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       this.scrollToBottom();
     }, 200);
 
+  }
+
+  sortPOSItems(orderItems: PosOrderItem[]) { 
+    this.posOrderItems = this.sortItems(orderItems)
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 200);
   }
 
   sortItems(items:  PosOrderItem[]) {
@@ -119,7 +127,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-                private orderService: OrdersService,
                 private _snackBar:    MatSnackBar,
                 public el:            ElementRef,
                 public route:         ActivatedRoute,
@@ -128,6 +135,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
                 private orderMethodService: OrderMethodsService,
                 private uiSettingService   : UISettingsService,
                 private settingService: SettingsService,
+                private router: Router,
               )
   {
     this.orderItemsPanel = 'item-list';
@@ -169,9 +177,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     this.qrCodeStyle = ''
 
     if (!this.mainPanel && !this.qrOrder) {
-      //get the hieght of the components. this is got from the subscription to the
-      //UI Service.
-      // this.panelHeight = 'calc(100vh - 450px)'
       this.mainStyle = `main-panel orderItemsPanel`
       return;
     }
@@ -232,14 +237,14 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   removeItemFromList(payload: any) {
 
-      if (this.order.completionDate && (this.userAuths && this.userAuths.disableVoidClosedItem)) {
-        this.siteService.notify('Item can not be voided or refunded. You must void the order from Adjustment in Cart View', 'close', 10000, 'red')
-        return
-      }
-      const index = payload.index;
-      const orderItem = payload.item
-      this.orderMethodService.removeItemFromList(index, orderItem)
-    
+    if (this.order.completionDate && (this.userAuths && this.userAuths.disableVoidClosedItem)) {
+      this.siteService.notify('Item can not be voided or refunded. You must void the order from Adjustment in Cart View', 'close', 10000, 'red')
+      return
+    }
+    const index = payload.index;
+    const orderItem = payload.item
+    this.orderMethodService.removeItemFromList(index, orderItem)
+  
   }
 
   setAsPrepped(index) {

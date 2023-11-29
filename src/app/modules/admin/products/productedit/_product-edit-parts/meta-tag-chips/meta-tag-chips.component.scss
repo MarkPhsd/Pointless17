@@ -1,184 +1,184 @@
-// .example-chip-list {
-//   width: 100%;
+// // .example-chip-list {
+// //   width: 100%;
+// // }
+// // body{ overflow-x: hidden;}
+
+// :host {
+//   display: flex;
+//   flex-direction: column;
+//   height: 100%;
 // }
-// body{ overflow-x: hidden;}
-
-:host {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
 
 
-.flex-column  {
-  margin-top: 4px;
-}
+// .flex-column  {
+//   margin-top: 4px;
+// }
 
-.chemicalInput {
-  width: 50px;
-}
+// .chemicalInput {
+//   width: 50px;
+// }
 
-mat-raised-button {
-  margin: 5rem 5rem 2rem 2rem;
-  padding: 1rem 1rem 1rem 1rem;
-}
-
-
-mat-card{
-  padding: 5px 5px 5px 5px;
-  margin:  3px 3px 3px 3px;
-}
-
-.example-tab-icon {
-  margin-right: 8px;
-}
-
-simple-tinymce {
-  padding:5px;
-}
-
-h1 {
-  font-size: 1.5em;
-  text-decoration: underline;
-}
-
-.range-description {
-  margin-top: 1.5em;
-  margin-right: 1em;
-}
-
-.custom-card {
-  background-color: gray;
-  padding: 25px;
-  margin-bottom: 25px;
-}
+// mat-raised-button {
+//   margin: 5rem 5rem 2rem 2rem;
+//   padding: 1rem 1rem 1rem 1rem;
+// }
 
 
-#inventoryMoveInstructions {
-  font-weight: 600;
-}
+// mat-card{
+//   padding: 5px 5px 5px 5px;
+//   margin:  3px 3px 3px 3px;
+// }
 
-.inventoryLocationControls {
-  float: right;
-}
+// .example-tab-icon {
+//   margin-right: 8px;
+// }
 
-.inventoryControlLabels {
-  text-align:  left;
-}
+// simple-tinymce {
+//   padding:5px;
+// }
 
-#inventoryAssignLocationsButton {
-  float: right;
-}
+// h1 {
+//   font-size: 1.5em;
+//   text-decoration: underline;
+// }
 
-.cancel-assignment {
-  float: right;
-}
+// .range-description {
+//   margin-top: 1.5em;
+//   margin-right: 1em;
+// }
 
-::ng-deep .mat-form-field-wrapper{
-   margin-bottom: -1.5em;
-   margin-left: 4px;
-   margin-right: 4px;
-}
+// .custom-card {
+//   background-color: gray;
+//   padding: 25px;
+//   margin-bottom: 25px;
+// }
 
-::ng-deep .mat-datepicker-content .mat-calendar
-{
-  zoom: 0.85;
-}
 
-::ng-deep  .md-datepicker-input-container {
-  width: 50px;
-}
+// #inventoryMoveInstructions {
+//   font-weight: 600;
+// }
 
-mat-form-field {
-  font-size: .8em;
-  margin: 4px 4px 4px 4px;
-}
+// .inventoryLocationControls {
+//   float: right;
+// }
 
-.assignment-header {
-  font-size: 1.2;
-  font-weight: 400;
-  margin-left: 5px;
-}
+// .inventoryControlLabels {
+//   text-align:  left;
+// }
 
-.fields {
-  margin: 4px 4px 4px 4px;
-}
+// #inventoryAssignLocationsButton {
+//   float: right;
+// }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: .5fr 1fr 1fr ;
-  gap: 2px;
-}
+// .cancel-assignment {
+//   float: right;
+// }
 
-.item-input {
-  max-width: 75px;
-  width: 50px;
-}
+// ::ng-deep .mat-form-field-wrapper{
+//    margin-bottom: -1.5em;
+//    margin-left: 4px;
+//    margin-right: 4px;
+// }
 
-.range-description {
-  padding-top: 10px;
-  margin-top: 5px;
-  margin-right: 5px min;
-  float: left;
-}
+// ::ng-deep .mat-datepicker-content .mat-calendar
+// {
+//   zoom: 0.85;
+// }
 
-.grid-inventoryControls {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2px;
-}
+// ::ng-deep  .md-datepicker-input-container {
+//   width: 50px;
+// }
 
-.button-assign {
-  float: left;
-  margin: 2px 2px 2px 2px;
-}
+// mat-form-field {
+//   font-size: .8em;
+//   margin: 4px 4px 4px 4px;
+// }
 
-.btn-edit-pacakge {
-  float: left;
-  margin: 2px 2px 2px 2px;
-}
+// .assignment-header {
+//   font-size: 1.2;
+//   font-weight: 400;
+//   margin-left: 5px;
+// }
 
-.location-assignment {
-  float: left;
-  width: 100px !important;
-}
+// .fields {
+//   margin: 4px 4px 4px 4px;
+// }
 
-.select-conversion{
-  // float: left;
-  width: 100px !important;
-}
+// .grid-container {
+//   display: grid;
+//   grid-template-columns: .5fr 1fr 1fr ;
+//   gap: 2px;
+// }
 
-.input-quantity{
-  // float: left;
-  width: 100px !important;
-}
+// .item-input {
+//   max-width: 75px;
+//   width: 50px;
+// }
 
-.cost {
-  width: 100px !important;
-  // float: left;
-}
+// .range-description {
+//   padding-top: 10px;
+//   margin-top: 5px;
+//   margin-right: 5px min;
+//   float: left;
+// }
 
-.strain-card {
-  // height: 85vh;
-  overflow: hidden;
-  // min-width: 725px;
+// .grid-inventoryControls {
+//   display: grid;
+//   grid-template-columns: 1fr 1fr;
+//   gap: 2px;
+// }
 
-}
+// .button-assign {
+//   float: left;
+//   margin: 2px 2px 2px 2px;
+// }
 
-.inventory-card {
-  min-width: 250px;
-  // overflow: hidden;
-}
+// .btn-edit-pacakge {
+//   float: left;
+//   margin: 2px 2px 2px 2px;
+// }
 
-.inlineControls {
-  // float: left;
-  width: 50px
-}
+// .location-assignment {
+//   float: left;
+//   width: 100px !important;
+// }
 
-.package-list {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  margin: 2px 2px 2px 2px;
-  padding: 0;
-  max-height: 225px;
-}
+// .select-conversion{
+//   // float: left;
+//   width: 100px !important;
+// }
+
+// .input-quantity{
+//   // float: left;
+//   width: 100px !important;
+// }
+
+// .cost {
+//   width: 100px !important;
+//   // float: left;
+// }
+
+// .strain-card {
+//   // height: 85vh;
+//   overflow: hidden;
+//   // min-width: 725px;
+
+// }
+
+// .inventory-card {
+//   min-width: 250px;
+//   // overflow: hidden;
+// }
+
+// .inlineControls {
+//   // float: left;
+//   width: 50px
+// }
+
+// .package-list {
+//   overflow-y: scroll;
+//   overflow-x: hidden;
+//   margin: 2px 2px 2px 2px;
+//   padding: 0;
+//   max-height: 225px;
+// }

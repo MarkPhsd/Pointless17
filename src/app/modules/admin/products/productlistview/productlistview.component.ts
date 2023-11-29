@@ -176,13 +176,11 @@ _promptSubGroup : Subscription;
 promptSubGroup  : PromptSubGroups;
 webWorkRequired: boolean;
 
-
-
 initSubscriptions() {
   this._promptSubGroup = this.promptSubGroupService.promptSubGroup$.subscribe(data => {
      this.promptSubGroup = data;
   })
- }
+}
 
 constructor(  private _snackBar              : MatSnackBar,
               private promptSubGroupService  : PromptSubGroupsService,
@@ -202,11 +200,9 @@ constructor(  private _snackBar              : MatSnackBar,
    ngOnInit() {
 
     this.updateScreenSize();
-
     const clientSearchModel       = {} as ClientSearchModel;
     clientSearchModel.pageNumber  = 1
     clientSearchModel.pageSize    = 1000;
-
     this.urlPath$  =  this.awsService.awsBucketURLOBS().pipe(
       switchMap(data => {
         this.urlPath = data;
@@ -214,7 +210,7 @@ constructor(  private _snackBar              : MatSnackBar,
       }
     ))
 
-    const site          = this.siteService.getAssignedSite()
+    const site                = this.siteService.getAssignedSite()
     this.refreshSubCategories();
     this.refreshDepartments();
     this.refreshCategories();
@@ -301,6 +297,7 @@ constructor(  private _snackBar              : MatSnackBar,
       })
     )
   }
+
   setBrandID(event) {
     if (event && event.id) {
       this.brandID = event.id
@@ -543,7 +540,6 @@ constructor(  private _snackBar              : MatSnackBar,
       },
 
       {headerName: 'Retail',   field: 'retail',
-          // sortable: true,
           cellRenderer: this.agGridService.currencyCellRendererUSD,
           width: 100,
           minWidth: 100,
@@ -551,7 +547,6 @@ constructor(  private _snackBar              : MatSnackBar,
           editable: true,
           comparator: myComparator,
           singleClickEdit: true,
-          // flex: 2,
       },
 
       { headerName: 'Image',

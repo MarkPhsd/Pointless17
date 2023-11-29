@@ -5,7 +5,7 @@
 </ng-template>
 
 <mat-card *ngIf="!refresh || (productID && productID !=0 && results) ; else loading ">
-  <mat-card-content>
+  <mat-card-content >
     <div  *ngIf="results" >
       <div *ngIf="showList">
         <div class='grid-container'>
@@ -28,7 +28,6 @@
           <mat-divider></mat-divider>
         </div>
       </div>
-
 
       <div *ngIf="results.total > 0 && isStaff" class="instock-total">
         In Stock:  {{results.total}}
@@ -59,7 +58,7 @@
           </button>
       </div>
 
-      <div *ngIf="showAddButton">
+      <div *ngIf="showAddButton  && allowAdd">
         <button mat-raised-button (click)="addItem()">
           <mat-icon>add</mat-icon><ng-content #name></ng-content>
         </button>

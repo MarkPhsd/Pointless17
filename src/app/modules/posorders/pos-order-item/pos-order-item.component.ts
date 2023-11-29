@@ -76,6 +76,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   @Input() disableActions = false;
   @Input() prepScreen     : boolean;
   @Input() enableExitLabel : boolean;
+  @Input() displayHistoryInfo: boolean;
+  @Input() enableItemReOrder  : boolean = false;
 
   packages: string;
   morebutton               = 'more-button';
@@ -258,6 +260,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     this.orderMethodsService.clearAssignedItems();
     if (this._bottomSheetOpen) { this._bottomSheetOpen.unsubscribe()}
     if (this._assignedPOSItems) { this._assignedPOSItems.unsubscribe()}
+
+
   }
 
   constructor(
@@ -292,9 +296,9 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     const site = this.siteService.getAssignedSite();
     this.bucketName   =  await this.awsBucket.awsBucket();
     this.awsBucketURL =  await this.awsBucket.awsBucketURL();
-    if (this.orderItem) {
-      this.menuItem$  = this.menuService.getMenuItemByID(site, this.orderItem.productID)
-    }
+    // if (this.orderItem) {
+    //   this.menuItem$  = this.menuService.getMenuItemByID(site, this.orderItem.productID)
+    // }
     if (this.menuItem) {
       this.itemName   =  this.getItemName(this.menuItem.name)
       this.imagePath  =  this.getItemSrc(this.menuItem)
@@ -307,6 +311,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
         })
       )
     }
+
+    console.log('this.menuIte',this.orderItem)
     if (this.orderItem && this.orderItem.id != this.orderItem.idRef )  {
 
     }
@@ -819,6 +825,20 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
       duration: 3000,
       verticalPosition: 'bottom'
     });
+  }
+
+  
+  buyAgain(menuItem: any) { 
+    // if (menuItem && menuItem.active && menuItem.webEnabled) { 
+      this.listItemByID(menuItem.id);
+      // this.navigateToItem()
+    // } else { 
+    //   this.siteService.notify('Item not avalible for purchase right now.', 'Close', 5000, 'red')
+    // }
+  }
+
+  listItemByID(id:number) {
+    this.router.navigate(["/menuitem/", {id:id}]);
   }
 
   printLabel(item: PosOrderItem) {

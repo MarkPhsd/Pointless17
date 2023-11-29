@@ -19,6 +19,7 @@ export class InventoryCountsViewComponent implements OnInit, OnDestroy {
   @Input() active   = true;
   @Input() showAddButton: boolean;
   @Input() showList = true;
+  @Input() allowAdd = true;
 
   product: IProduct;
 
@@ -29,6 +30,7 @@ export class InventoryCountsViewComponent implements OnInit, OnDestroy {
 
   @Output() outPutAddItem :   EventEmitter<IInventoryAssignment> = new EventEmitter();
   @Output() outPutSetCount :   EventEmitter<number> = new EventEmitter();
+
 
   results$ : Observable<AvalibleInventoryResults>;
   results : AvalibleInventoryResults;

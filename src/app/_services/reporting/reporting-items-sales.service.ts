@@ -126,6 +126,7 @@ export interface POSItemSearchModel {
   showVoids: boolean;
   barcode: string;
   productName: string;
+  includeMenuItem: boolean;
 }
 
 export interface IReportingSearchModel {

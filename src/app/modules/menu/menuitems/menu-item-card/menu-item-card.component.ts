@@ -13,6 +13,7 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 // https://stackoverflow.com/questions/54687522/best-practice-in-angular-material-to-reuse-component-in-dialog
 export interface DialogData {
@@ -28,11 +29,13 @@ export interface DialogData {
 export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   @ViewChild('loadMoreButton')  loadMoreButton :  TemplateRef<any> | undefined;
-  @ViewChild('editItemView') editItemView :  TemplateRef<any>;
+  @ViewChild('editItemView') editItemView :  TemplateRef<any> | undefined;
+  @ViewChild('buyItemView') buyItemView :  TemplateRef<any> | undefined;
   @ViewChild('viewItemView') viewItemView: TemplateRef<any> | undefined;
 
   @Output() outPutLoadMore = new EventEmitter()
   @Output() outPutUpdateCategory = new EventEmitter();
+  @Input() allowBuy  : boolean;
   @Input() allowEdit : boolean;
   @Input() id        : number;
   @Input() retail    : number;
@@ -45,13 +48,16 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   @Input() uiHomePage        : UIHomePageSettings;
   @Input() categoryIDSelected: number;
   @Input() displayType      : string ='product';
+  @Input() buySell: boolean;
 
-  containerclass: string = 'container'
+  containerclass: string = 'container';
+
   @Output() outputRefresh = new EventEmitter()
   placeHolderImage   : String = "assets/images/placeholderimage.png"
   _order             : Subscription;
   order              : IPOSOrder;
   action$          : Observable<any>;
+  buyItem$ : Observable <any>;
   modelSearch: Observable<any>;
   menuButtonJSON   : menuButtonJSON;
   buttonColor = ''
@@ -70,11 +76,12 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     private orderService: OrdersService,
     private _snackBar: MatSnackBar,
     private orderMethodsService: OrderMethodsService,
-    public platFormService   : PlatformService,
+    public  platFormService   : PlatformService,
     private menuService: MenuService,
-    public authenticationService: AuthenticationService,
+    public  authenticationService: AuthenticationService,
     private productEditButtonService: ProductEditButtonService,
     private uiSettingsService: UISettingsService,
+    private siteService : SitesService,
     private router: Router,
     )
   {
@@ -138,11 +145,40 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     this.action$ = this.productEditButtonService.openProductDialogObs(this.menuItem.id);
   }
 
+  buyItem() {
+    if (!this.menuItem) {
+      return
+    }
+    const site = this.siteService.getAssignedSite()
+    const item$ = this.menuService.getMenuItemByID(site, this.menuItem.id)
+    this.buyItem$ = item$.pipe(switchMap(data => {
+        return   this.productEditButtonService.openBuyInventoryItemDialogObs(data,  this.orderMethodsService.order)
+
+      }
+    ))
+                                                                                ;
+  }
+
   get enableEditItem() {
     if (this.authenticationService.isAdmin || this.allowEdit) {
       if (this.menuItem.id > 0) {
         return this.editItemView
       }
+    }
+    return null;
+  }
+
+  get enableBuyItemView() {
+    try {
+      if (this.allowBuy ) {
+        if (this.menuItem && this.menuItem.itemType && this.menuItem.itemType.useType
+            && (this.menuItem.itemType.type.toLowerCase() != 'grouping')
+            ) {
+          return this.buyItemView
+        }
+      }
+    } catch (error) {
+      console.log('error', error)
     }
     return null;
   }

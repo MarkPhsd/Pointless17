@@ -1,14 +1,17 @@
 <div *ngIf="product && inputForm">
 
-  <mat-form-field >
+  <mat-form-field appearance="outline">
+
     <mat-label>Meta Tags</mat-label>
-    <mat-chip-list  appearance="outline"  #chipList aria-label="Fruit selection"  >
+
+    <mat-chip-list    #chipList aria-label=" selection"  >
+
       <mat-chip
-          *ngFor="let item of (itemTags || [])"
-          [selectable]="selectable"
-          [removable]="removable"
-          (removed)="remove(item)">
-        {{item | json}}
+            *ngFor="let item of (itemTags || [])"
+            [selectable]="selectable"
+            [removable]="removable"
+            (removed)="remove(item)">
+         {{item | json}}
         <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
       </mat-chip>
 
@@ -21,12 +24,15 @@
             [matChipInputFor]="chipList"
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             (matChipInputTokenEnd)="add($event)">
+
     </mat-chip-list>
 
-    <mat-autocomplete #auto="matAutocomplete"
+    <mat-autocomplete 
                       panelWidth="auto"
+                      #auto="matAutocomplete"
+                      [displayWith]="displayFn.bind(this)"
                       (optionSelected)="selected($event)"
-                      [displayWith]="displayFn.bind(this)">
+                      >
       <mat-option *ngFor="let item of results$ | async"
                   [value]="item">
         {{item.name}}

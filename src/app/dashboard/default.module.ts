@@ -374,6 +374,14 @@ import { MessageEditorListComponent } from '../modules/admin/message-editor-list
 import { MessageEditorComponent } from '../modules/admin/message-editor-list/message-editor/message-editor.component';
 import { UserIdleModule, UserIdleService } from 'angular-user-idle';
 import { PosOrderItemCalcValuesComponent } from '../modules/posorders/pos-order/pos-order-item-calc-values/pos-order-item-calc-values.component';
+import { InventoryMenuItemComponent } from '../modules/menu/menuitem/inventory-menu-item/inventory-menu-item.component';
+import { BrandEditorComponent } from '../modules/admin/resale_manager/brands/brandeditor/brandeditor.component';
+import { BrandFilterComponent } from '../modules/admin/resale_manager/brands/filter/filter.component';
+import { BrandEditorMainComponent } from '../modules/admin/resale_manager/brands/main/main.component';
+import { ResaleClassesEditorComponent } from '../modules/admin/resale_manager/classes/resale-classes-editor/resale-classes-editor.component';
+import { ResaleClassesFilterComponent } from '../modules/admin/resale_manager/classes/resale-classes-filter/resale-classes-filter.component';
+import { ResaleClassesMainComponent } from '../modules/admin/resale_manager/classes/resale-classes-main/resale-classes-main.component';
+import { BuySellMainComponent } from '../modules/buySell/buy-sell-main/buy-sell-main.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -383,6 +391,16 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
 @NgModule({
   declarations: [
+
+
+    BrandEditorComponent,
+    BrandFilterComponent,
+    BrandEditorMainComponent,
+
+    ResaleClassesEditorComponent,
+    ResaleClassesFilterComponent,
+    ResaleClassesMainComponent,
+    BuySellMainComponent,
 
     ItemTypeCategoryAssignmentComponent,
     ItemTypeDisplayAssignmentComponent,
@@ -448,7 +466,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DatabaseSchemaComponent,
     DevxReportDesignerComponent,
     ReportViewerComponent,
-
+    InventoryMenuItemComponent,
 
     MessageEditorListComponent,
     MessageEditorComponent,
@@ -594,6 +612,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     MenuItemExtendedPricesComponent,
     MenuItemProductCountComponent,
     MenuManagerComponent,
+    InventoryMenuItemComponent,
 
     MessagesToUserComponent,
     MetrcIndividualPackageComponent,

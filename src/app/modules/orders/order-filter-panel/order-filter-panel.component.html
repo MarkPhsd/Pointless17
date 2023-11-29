@@ -28,7 +28,7 @@
         </button>
       </div>
 
-      <div  *ngIf="!smallDevice">
+      <div  *ngIf="!smallDevice && !isUser">
         <button class="button"
                 mat-button
                 (click)="displayPanel()">
@@ -80,11 +80,9 @@
                 (click)="toggleDateRangeFilter()">
                 Completed Dates<mat-icon>date_range</mat-icon>
               </button>
-
           <mat-date-range
             [inputForm] ="completionDateForm">
           </mat-date-range>
-
       </div>
 
       <div class="toggle-fields">
@@ -96,7 +94,7 @@
       </div>
     </div>
 
-    <div class="toggle-fields">
+    <div class="toggle-fields" *ngIf="isStaff">
       <mat-label>Online Orders</mat-label>
       <mat-slide-toggle
                 (change)="updateOrderSearch(searchModel)"
@@ -142,8 +140,6 @@
           [(ngModel)] ="toggleSuspendedOrders"
           (change)    ="refreshSearch()"
         >
-        <!-- matTooltip="Orders suspended so they don't close at the end of the day."   -->
-        <!-- #tooltip="matTooltip" -->
       <mat-button-toggle value="0" >Active </mat-button-toggle>
       <mat-button-toggle value="1"
                           matTooltipPosition="above"
@@ -155,8 +151,7 @@
           name        ="toggleOrdersGreaterThanZero"
           class       ="toggle-view"
           [(ngModel)] ="toggleOrdersGreaterThanZero"
-          (change)    ="refreshSearch()"
-        >
+          (change)    ="refreshSearch()"   >
       <mat-button-toggle value="0" > Orders > {{0 | currency}} </mat-button-toggle>
       <mat-button-toggle value="1">  All</mat-button-toggle>
     </mat-button-toggle-group>
@@ -168,7 +163,6 @@
           [(ngModel)] ="toggleTypeEmployee"
           (change)    ="changeToggleTypeEmployee()" >
       <mat-button-toggle value="1"
-
                         matTooltipPosition="above"
                         matTooltipHideDelay="1000" > <mat-icon>badge</mat-icon> </mat-button-toggle>
       <mat-button-toggle value="0"

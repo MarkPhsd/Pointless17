@@ -68,9 +68,6 @@
                                           ((order?.balanceRemaining != 0 || isZeroPaymentAllowed) &&
                                           (order?.balanceRemaining < 0 || isNegativePaymentAllowed )) ||
                                           order?.balanceRemaining != order.total">
-
-
-   
         
           <div *ngIf="!splitByItem && !paymentsEqualTotal">
             <h4>Payment Amount: {{paymentAmount | currency}}</h4>

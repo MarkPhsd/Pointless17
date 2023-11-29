@@ -70,7 +70,7 @@ export class FbInventoryService {
       destinationSiteName : [],
       priceCategoryID     : [],
       rejected:             [],
-
+      used:                 [],
       caseQuantity: [],
       casePrice: [],
       itemSku: [],
@@ -88,7 +88,12 @@ export class FbInventoryService {
       itemTypeName : [],
       itemTypeID : [],
       brandID : [],
-      itemSKU : [],
+      itemSKU     : [],
+      bay: [],
+    
+      quality     : [], 
+      images      : [],
+      rareValue   : [],
     })
 
     return fb;

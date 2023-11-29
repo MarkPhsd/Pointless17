@@ -154,15 +154,13 @@
               <div class="toggle-fields">
                 <mat-slide-toggle
                           formControlName="departmentsEnabled">
-
                   <mat-label>Departments</mat-label>
                 </mat-slide-toggle>
               </div>
 
               <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="categoriesEnabled"
-                          >
+                          formControlName="categoriesEnabled"  >
                   <mat-label>Categories</mat-label>
                 </mat-slide-toggle>
               </div>
@@ -185,18 +183,45 @@
 
               <div class="toggle-fields">
                 <mat-slide-toggle
+                          formControlName="resaleMenu"
+                        >
+                  <mat-label>ReSale Menu</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="enableInventoryPerItem"  >
+                  <mat-label>Inventory Per Item In Menu Item Display</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
                           [matTooltip]="toolTips[0].value"
-                          formControlName="storeNavigation"
-                          >
+                          formControlName="storeNavigation"  >
                   <mat-label> Store Navigation</mat-label>
                 </mat-slide-toggle>
               </div>
 
               <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="suppressItemsInStoreNavigation"
-                          >
+                          formControlName="suppressItemsInStoreNavigation"   >
                   <mat-label>Suppress Items in Categories <br> For Store Navigation</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="enableShippingInfo" >
+                  <mat-label>enableSimliarItems</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="enableRecentAssociatedItems"   >
+                  <mat-label>View Simliarly Purchased Items</mat-label>
                 </mat-slide-toggle>
               </div>
 
@@ -204,67 +229,58 @@
 
             <div class="grid-views">
               <h4><mat-icon color="primary" style="margin-top:5px">home</mat-icon>Home Page Staff View</h4>
-
               <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="staffHideSearchBar"
-                        >
+                          formControlName="staffHideSearchBar"  >
                   <mat-label>Hide Search bar</mat-label>
                 </mat-slide-toggle>
               </div>
 
               <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="staffMenuEnabled"
-                        >
+                          formControlName="staffMenuEnabled"  >
                   <mat-label>Full Print/TV Menu</mat-label>
                 </mat-slide-toggle>
               </div>
 
               <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="staffscheduleSubMenu"
-                        >
+                          formControlName="staffscheduleSubMenu" >
                   <mat-label>Sub Menus On Side Bar</mat-label>
                 </mat-slide-toggle>
               </div>
 
               <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="staffBrandsEnabled"
-                          >
+                          formControlName="staffBrandsEnabled"  >
                   <mat-label>Brands</mat-label>
                 </mat-slide-toggle>
               </div>
 
               <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="staffDepartmentsEnabled"
-                          >
+                          formControlName="staffDepartmentsEnabled"  >
                   <mat-label>Departments</mat-label>
                 </mat-slide-toggle>
               </div>
 
               <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="staffCategoriesEnabled"
-                          >
+                          formControlName="staffCategoriesEnabled"  >
                   <mat-label>Categories</mat-label>
                 </mat-slide-toggle>
               </div>
 
               <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="staffTypesEnabled"
-                          >
+                          formControlName="staffTypesEnabled"   >
                   <mat-label>Types</mat-label>
                 </mat-slide-toggle>
               </div>
 
               <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="staffTierMenuEnabled"
-                          >
+                          formControlName="staffTierMenuEnabled"   >
                   <mat-label>Tier Menu</mat-label>
                 </mat-slide-toggle>
               </div>
@@ -440,7 +456,6 @@
             </app-value-fields>
           </div>
         </div>
-
 
       </div>
 

@@ -36,17 +36,15 @@ export interface IServiceType {
   listFontColor  : string;
   buttonColor    : string;
   // serviceFilterType   : number;
-  // ALTER TABLE tblServiceType ALTER COLUMN ServiceColor VARCHAR(15);
-  // ALTER TABLE tblServiceType ALTER COLUMN ListFontColor VARCHAR(15);
-  // ALTER TABLE tblServiceType ALTER COLUMN ButtonColor VARCHAR(15)
   assignOrderToCloser : boolean;
   assignCloserToOrder : boolean;
 
   onOrderClose: number;
   actionOne   : number;
   actionTwo   : number;
-  menuItem1:  IMenuItem;
-  menuItem2:  IMenuItem;
+  menuItem1   : IMenuItem;
+  menuItem2   : IMenuItem;
+  resaleType  : boolean;
 }
 
 

@@ -6,7 +6,7 @@
            class="category-margin grid-container">
 
         <div class="slidein" >
-          <mat-form-field  appearance="flat">
+          <mat-form-field  appearance="outline">
             <input matInput
                   type="text"
                   formControlName="name"
@@ -16,7 +16,7 @@
         </div>
 
         <div *ngIf="!isMenuList" class="slidein">
-          <mat-form-field  appearance="flat"  >
+          <mat-form-field  appearance="outline"  >
             <mat-label >Quantity</mat-label>
             <input class="mat-fields quantity"
                   matInput
@@ -27,7 +27,7 @@
 
         <div *ngIf="!isMenuList && (andOrOption == true)"
               class="slidein">
-          <mat-form-field appearance="flat" class="andor-listbox">
+          <mat-form-field appearance="outline" class="andor-listbox">
             <mat-label>Group</mat-label>
             <mat-select  class="grid-item-and-or"
                           type="text"

@@ -1,0 +1,124 @@
+
+<mat-card *ngIf="searchForm">
+  <div class="button-grid">
+
+      <span class="margin-10">
+        <button class="button"
+                mat-button
+                (click)="resetSearch()">
+                <mat-icon>refresh</mat-icon>
+          <span>Reset</span>
+        </button>
+      </span>
+
+      <span class="margin-10">
+        <button class="button"
+                mat-button
+                (click)="refreshSearch()">
+                <mat-icon>refresh</mat-icon>
+          <span>Refresh</span>
+        </button>
+      </span>
+
+  </div>
+  <div *ngIf="searchForm"  [formGroup]="searchForm">
+    <div *ngIf="!disableName">
+      <app-value-fields
+            *ngIf="searchForm"
+            [fieldsClass]="'fields-small'"
+            [inputForm]="searchForm"
+            [fieldName]="'name'">
+        Name
+      </app-value-fields>
+    </div>
+
+    <div   *ngIf="parent === 'class' && (attributes$ | async) as list">
+      <form-select-list   [searchForm]        = "searchForm"
+                          [formFieldName]     ="'name'"
+                          [list]              = "list"
+                          [showActiveInactive]="true"
+                          (selectionChange)   = "refreshAttributeChange($event)">
+        <div fieldSearchDescription>Attributes</div>
+        </form-select-list>
+    </div>
+
+    <div   *ngIf="parent === 'class' && (departments$ | async) as list">
+      <form-select-list   [searchForm]        = "searchForm"
+                          [formFieldName]     ="'departmentID'"
+                          [list]              = "list"
+                          [showActiveInactive]="true"
+                          (selectionChange)   = "refreshDepartmentChange($event)">
+        <div fieldSearchDescription>Department</div>
+        </form-select-list>
+    </div>
+
+    <div >
+      <mat-button-toggle-group name="type"
+              aria-label="Item Type"
+              formControlName="gender">
+        <mat-button-toggle class="discount-type-button"
+            [value]="item.id"
+            (tapClick)="refreshSearch()"
+            *ngFor="let item of genderList" >
+            {{item.name}}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+  </div>
+
+  <div  class="grid-container-selectors">
+    <div *ngIf="advanced && pagingForm">
+      <app-value-fields
+            [fieldsClass]="'fields-small'"
+            [inputForm]="pagingForm"
+            [fieldName]="'pageNumber'">
+        Page
+      </app-value-fields>
+    </div>
+
+    <!-- <div *ngIf="advanced && pagingForm">
+      <app-value-fields
+            [fieldsClass]="'fields-small'"
+            [inputForm]="pagingForm"
+            [fieldName]="'pageSize'">
+         Page Size
+      </app-value-fields>
+    </div> -->
+
+    <div *ngIf="advanced && pagingForm">
+      <div  *ngIf="sortList" [formGroup]="pagingForm">
+        <mat-form-field style="font-size:1em;" appearance="outline">
+          <mat-label>Sort By</mat-label>
+          <mat-select
+                      formControlName ="sort"  >
+              <mat-option
+                    *ngFor="let item of sortList"
+                    [value]="item">
+                {{item}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+ <!-- Brands
+
+  Attributes
+
+  Gender 0, 1, Any; -->
+
+  <!-- <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+    <mat-button-toggle value="1">Male</mat-button-toggle>
+    <mat-button-toggle value="0">Female</mat-button-toggle>
+  </mat-button-toggle-group> -->
+</mat-card>
+
+   <!-- <app-brand-type-select
+                      [fieldName]      ="'name'"
+                      [inputForm]      = "searchForm"
+                      [formFieldClass] = "'mat-form-field2'"
+                      [disableDelete]  = "true"
+                      (itemSelect)     = "setBrandID($event)">
+          Search Brands
+    </app-brand-type-select> -->

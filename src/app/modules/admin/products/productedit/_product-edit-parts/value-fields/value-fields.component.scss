@@ -5,10 +5,12 @@ mat-form-field {
 
 mat-form-field-appearance-outline .mat-form-field-wrapper {
   margin: 0em 0;
+  padding: 0;
 }
-mat-form-field-appearance-outline .mat-form-field-wrapper {
-  margin: .25em 0;
-}
+
+// mat-form-field-appearance-outline .mat-form-field-wrapper {
+//   margin: .25em 0;
+// }
 
 mat-form-field-wrapper {
   padding-bottom: 0; //1.34375em; */

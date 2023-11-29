@@ -99,7 +99,40 @@
                         [priceCategoryID] ="product.priceCategory"
                         [inputForm]       ="productForm" >
                   </app-price-category-select>
-                </div>
+                </div>  
+              </div>
+
+              <div class="grid-item">
+                <h2>Dimensions / Weight</h2>
+                <mat-label>Measurement types set by api, feet/meters, lbs/kg etc.</mat-label>
+                
+                <app-value-fields
+                      [fieldType]="'number'"
+                      [inputForm]="productForm"
+                      [fieldName]="'height'">
+                      Height
+                </app-value-fields>
+
+                <app-value-fields
+                      [fieldType]="'number'"
+                      [inputForm]="productForm"
+                      [fieldName]="'width'">
+                      Width
+                </app-value-fields>
+
+                <app-value-fields
+                      [fieldType]="'number'"
+                      [inputForm]="productForm"
+                      [fieldName]="'depth'">
+                      Depth
+                </app-value-fields>
+
+                <app-value-fields
+                      [fieldType]="'number'"
+                      [inputForm]="productForm"
+                      [fieldName]="'weight'">
+                      Weight 
+                </app-value-fields>
 
               </div>
 
@@ -108,9 +141,10 @@
                   <div class="meta-tags"
                       *ngIf="product && product.metaTags">
                     <app-meta-tag-chips
-                    (outPutItemTags) ="setItemTags($event)"
-                    [product]        ="product"
-                    [inputForm]      ="productForm"></app-meta-tag-chips>
+                        (outPutItemTags) ="setItemTags($event)"
+                        [product]        ="product"
+                        [inputForm]      ="productForm">
+                    </app-meta-tag-chips>
                   </div>
 
                   <div class="meta-tags"

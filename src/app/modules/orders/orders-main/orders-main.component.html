@@ -1,8 +1,7 @@
 <div *ngIf="(action$ | async) as action"></div>
 <div class="parent-container">
-  <div >
+  <div>
     <span>
-
       <span>
         <button *ngIf="smallDevice"  color="accent" mat-button (click)="filterBottomSheet()">
           <mat-icon>search</mat-icon>
@@ -21,8 +20,13 @@
       </span>
 
       <span>
+
         <button mat-button  (click)="newOrder()" *ngIf="isAuthorized || isStaff">
           <mat-icon>receipt</mat-icon><span>New Order</span>
+        </button>
+
+        <button mat-button color="accent" (click)="getOrderItemHistory()"  *ngIf="isUser">
+          <mat-icon>receipt</mat-icon><span>Items you have bought</span>
         </button>
 
         <button #coachingOtherNew
@@ -34,7 +38,6 @@
         <ng-container [ngTemplateOutlet]="houseAccount"></ng-container>
 
       </span>
-
     </span>
 
     <span #coachingListView>
@@ -104,7 +107,6 @@
 </ng-template>
 
 <ng-template #allOrders>
-
     <button class="button"
             mat-button
             color="accent"
@@ -112,7 +114,6 @@
       <mat-icon>refresh</mat-icon>
       <span>All Open</span>
     </button>
-
 </ng-template>
 
 <ng-template #houseAccountsList>
@@ -184,12 +185,12 @@
     <div class="flex-row" >
       <div>
         <button
-          *ngIf="posOrdersSelectedList && posOrdersSelectedList.length>0"
-          mat-raised-button
-          (click)="mergeOrdersComplete()"
+                *ngIf="posOrdersSelectedList && posOrdersSelectedList.length>0"
+                mat-raised-button
+                (click)="mergeOrdersComplete()"
           aria-label="merge">
           <mat-icon>join_full</mat-icon>
-          Merge
+            Merge
         </button>
       </div>
       <div><button mat-raised-button (click)="cancelMerge()" aria-label="trash">Cancel</button></div>
@@ -227,12 +228,32 @@
 </ng-template>
 
 <ng-template #orderPanel>
-  <app-order-cards
-      [cardStyle]="'panel'">
+  <app-order-cards  [cardStyle]="'panel'">
     <h2>
       Your order history
     </h2>
   </app-order-cards>
+</ng-template>
+
+<ng-template #orderItemPanel>
+  <div *ngIf="(orderItemHistory$ | async) as orderItems">
+    <mat-divider></mat-divider>
+    <!-- {{orderItems | json}} -->
+    <h2>Recently Purchased Items</h2>
+    <mat-label>For more items, press search to review your order history.</mat-label>
+    <!-- [panelHeight]         ="orderItemsHeightStyle" -->
+    <mat-divider style="margin:10px;"></mat-divider>
+    <pos-order-items
+      [purchaseOrderEnabled]="false"
+      [mainPanel]           ="true"
+      [enableExitLabel]     ="false"
+      [userAuths]           ='auths'
+      [disableActions]      = "true"
+      [displayHistoryInfo]  = "true"
+      [enableItemReOrder]      ="uiTransactions && uiTransactions.enableItemReOrder"
+      [posOrderItems]       ="orderItems">
+    </pos-order-items>
+  </div>
 </ng-template>
 
 <ng-template #scheduledItems>
@@ -304,9 +325,7 @@
     <button  class="dark-theme-green " mat-button (click)="setViewType(3)">
       <mat-icon>countertops</mat-icon> View Prep
     </button>
-
   </span>
-
 </ng-template>
 
 <ng-template #helpButton>

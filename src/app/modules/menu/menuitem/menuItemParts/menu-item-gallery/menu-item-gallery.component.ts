@@ -11,7 +11,12 @@ import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services'
 export class MenuItemGalleryComponent implements OnInit {
 
   @Input() menuItem    : IMenuItem;
-
+  @Input()  gallery = 'gallery'
+  @Input() zoomEnabled : boolean;
+  zoomStyle = ''
+  galleryZoomStyle =''
+  zoomValue = 100
+  galleryZoomValue = 200;
       //these are from the components as well.
   _imagesOther:           any[];
   urlImageOther:          string ;
@@ -20,7 +25,7 @@ export class MenuItemGalleryComponent implements OnInit {
   bucketName:             string;
   awsBucketURL:           string;
   items:                  GalleryItem[];
-
+  @Input() images: string;
   constructor(
     private awsBucket         : AWSBucketService,
   ) { }
@@ -29,6 +34,23 @@ export class MenuItemGalleryComponent implements OnInit {
     this.bucketName =   await this.awsBucket.awsBucket();
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
     this.getGallery();
+    if (this.zoomEnabled) { 
+      this.zoomStyle        = `height:100px`
+      // this.galleryZoomStyle = `height:200px`
+    }
+  }
+
+  zoom(value) {
+    this.zoomValue += value 
+    if (this.zoomValue == 600){ 
+      this.zoomValue = 600
+    }
+    if (this.zoomValue == 0){ 
+      this.zoomValue = 100
+    }
+    this.galleryZoomValue  = this.zoomValue + 100;
+    this.galleryZoomStyle  = `height:${this.galleryZoomValue}px`
+    this.zoomStyle         = `height:${this.zoomValue}px`
   }
 
   getGallery() {
@@ -50,6 +72,17 @@ export class MenuItemGalleryComponent implements OnInit {
         }
       } catch (error) {
 
+      }
+    }
+
+    // console.log('split images', this.images.split(','))
+    if (!this.menuItem) { 
+      if (!this.images) { 
+        this.images = 'placeHolder.png'
+      }
+      if (this.images) { 
+        this._imagesMain = this.awsBucket.convertToArrayWithUrl( this.images, this.awsBucketURL);
+        this.items =  this._imagesMain.map(image => new ImageItem({ src: image, thumb: image }));
       }
     }
 

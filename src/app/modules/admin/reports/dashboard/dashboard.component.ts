@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, OnChanges,  SimpleChange, Input, TemplateRef, ChangeDetectorRef } from '@angular/core';
-import { combineLatest, forkJoin, Observable, of, shareReplay, Subject, switchMap } from 'rxjs';
+import { Component, OnInit, ViewChild, OnChanges,  SimpleChange, Input, TemplateRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { combineLatest, forkJoin, Observable, of, shareReplay, Subject, Subscription, switchMap } from 'rxjs';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { ReportingService} from 'src/app/_services/reporting/reporting.service';
 import { ISite,Item,IUser }  from 'src/app/_interfaces';
@@ -7,7 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DatePipe } from '@angular/common'
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
-import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { IDeviceInfo, MenuService, OrdersService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { Router } from '@angular/router';
@@ -22,7 +22,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   styleUrls: ['./dashboard.component.scss'],
 })
 
-export class DashboardComponent implements OnChanges,OnInit  {
+export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
   averageHourlySales$: Observable<any[]>;
   topSalesByQuantity$: Observable<any[]>;
   topSalesByTotalPrice$ : Observable<any[]>;
@@ -35,6 +35,7 @@ export class DashboardComponent implements OnChanges,OnInit  {
   dynamicData$      : any;
   // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   loadDynamicData:  boolean = false;
+
 
   reportsListView = [
     {id: 1, visible: false, name: 's' },
@@ -137,6 +138,9 @@ export class DashboardComponent implements OnChanges,OnInit  {
   deviceInfo: IDeviceInfo;
 
   completionDateForm     : UntypedFormGroup;
+  
+  uiHomePage : UIHomePageSettings
+  _uiHomePage: Subscription;
 
   constructor(
               private authentication              : AuthenticationService,
@@ -181,9 +185,22 @@ export class DashboardComponent implements OnChanges,OnInit  {
     }
     this.initDateFilter();
     this.initSettings();
+    this.subscribeUIHomePage();
   };
 
 
+    subscribeUIHomePage() { 
+      try {
+        this._uiHomePage = this.uISettingsService.homePageSetting$.subscribe(data => { 
+          if (data) {
+            this.uiHomePage = data;
+          }
+        })
+      } catch (error) {
+          
+      }
+    
+  }
   setOrder(id: number, history) {
     if (id) {
       const site = this.siteService.getAssignedSite();
@@ -269,6 +286,10 @@ export class DashboardComponent implements OnChanges,OnInit  {
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     this.setReportingServiceDateRange();
+  }
+
+  ngOnDestroy() { 
+    if (this._uiHomePage) { this._uiHomePage.unsubscribe()}
   }
 
   notifyChild() {

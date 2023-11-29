@@ -4,6 +4,16 @@ h1 {
   font-size: 2em;
 }
 
+.grid-flow {
+  --gap: 5px;
+  margin-top: 2px;
+  margin-right: 2px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fill, minmax(125px, 1fr) );
+  overflow-y: visible;
+}
+
 .gallery-container {
   height: 86vh;
   overflow-y: hidden;
@@ -11,7 +21,6 @@ h1 {
 }
 
 mat-card {
-  height: 85vh;
   margin: 5px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -22,7 +31,7 @@ mat-label {
 }
 
 mat-tab-group {
-  min-height: 400px;
+  min-height: 100px;
 }
 
 .instructions {

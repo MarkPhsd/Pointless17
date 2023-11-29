@@ -1,4 +1,4 @@
-<div  class="mat-form-field"
+ <div  class="mat-form-field"
       [formGroup]="searchForm">
   <mat-form-field class="formFieldClass"
                   appearance="outline" >
@@ -28,10 +28,13 @@
         <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
-</div>
+</div> 
 
- <div hidden="true"
-      *ngIf="inputForm"
+<div hidden="true"
+      *ngIf="inputForm && product"
       [formGroup]='inputForm'>
-  <input [formControlName]="formControlName"> 
+  <input [formControlName]="'unitTypeID'"> 
+  <input [formControlName]="'reOrderUnitTypeID'"> 
+  <input [formControlName]="'name'"> 
+  <input [formControlName]="'id'"> 
 </div>

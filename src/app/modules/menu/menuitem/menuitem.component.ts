@@ -1,12 +1,12 @@
 import { Component,  Input,  OnInit, OnDestroy, EventEmitter, Output} from '@angular/core';
-import { MenuService,  } from 'src/app/_services';
+import { AWSBucketService, MenuService,  } from 'src/app/_services';
 import { IMenuItem,   }  from 'src/app/_interfaces/menu/menu-products';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, Subject, Subscription, of } from 'rxjs';
 import { DomSanitizer, Title } from '@angular/platform-browser';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IClientTable, IPOSOrder, IUserProfile, ProductPrice } from 'src/app/_interfaces';
+import { IClientTable, IPOSOrder, ISite, IUserProfile, ProductPrice } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -18,6 +18,10 @@ import { switchMap } from 'rxjs/operators';
 import { PriceTiers } from 'src/app/_interfaces/menu/price-categories';
 import { NewItem, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { AvalibleInventoryResults, IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
+import { MatricesService } from 'src/app/_services/menu/matrices.service';
 
 // https://www.npmjs.com/package/ngx-gallery
 // Possible additional info options
@@ -33,6 +37,10 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     @Input() fileName: string;
     @Output() outputExitForm = new EventEmitter<any>();
 
+
+    recentAssociations$ : Observable<IMenuItem[]>;
+    associations$ : Observable<IMenuItem[]>;
+
     get fQuantity() { return this.productForm.get("quantity") as UntypedFormControl;}
     get formProduct() { return this.productForm as UntypedFormGroup;}
     get f() { return this.productForm;}
@@ -41,9 +49,11 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     id:                     string;
     action$  : Observable<any>;
     addItem$ : Observable<any>;
-    menuItem :               IMenuItem;
-    menuItem$:              Observable<IMenuItem>;
-    brand$:                 Observable<IClientTable>;
+
+    metaTagSearch$   : Observable<any>;
+    menuItem :         IMenuItem;
+    menuItem$:         Observable<IMenuItem>;
+    brand$:            Observable<IClientTable>;
 
     _order           :   Subscription;
     order            :   IPOSOrder;
@@ -64,8 +74,15 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     priceTiers     : PriceTiers
     priceTiersShown:  boolean;
     productPrice    : ProductPrice;
+    bucketName      : string;
 
     childNotifier   : Subject<boolean> = new Subject<boolean>();
+
+    uiHomePage: UIHomePageSettings
+    _uiHomePage: Subscription;
+
+    _posDevice: Subscription;
+    posDevice: ITerminalSettings
 
     get menuPricesEnabled() {
       const menuItem = this.menuItem;
@@ -75,6 +92,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     }
 
     constructor(
+          private uISettingsService : UISettingsService,
           private menuService       : MenuService,
           private router            : Router,
           public route              : ActivatedRoute,
@@ -87,23 +105,44 @@ export class MenuitemComponent implements OnInit, OnDestroy {
           private orderMethodsService : OrderMethodsService,
           private appInitService    : AppInitService,
           private priceTierService  : PriceTierService,
-          private titleService     : Title,
+          private titleService      : Title,
+          public  fbProductsService : FbProductsService,
           private tierPriceService  : TvMenuPriceTierService,
           private posOrderItemService: POSOrderItemService,
           private inventoryAssignmentService: InventoryAssignmentService,
+          private awsBucket         : AWSBucketService,
+          private matricesService   : MatricesService,
 
          )
     {
       this.roles = localStorage.getItem(`roles`)
       this.isUserStaff = this.userAuthorization.isCurrentUserStaff()
       this.initMenuItemWindow();
+      this.subscribeUIHomePage();
+    }
+
+    subscribeUIHomePage() {
+      try {
+        this._uiHomePage = this.uISettingsService.homePageSetting$.subscribe(data => {
+          if (data) {
+            this.uiHomePage = data;
+          }
+        })
+      } catch (error) {
+
+      }
+
+      try {
+        this._posDevice = this.uISettingsService.posDevice$.subscribe(data => {
+          this.posDevice = data;
+        })
+      } catch (error) {
+
+      }
     }
 
     initMenuItemWindow() {
       const site = this.siteService.getAssignedSite();
-
-      console.log(this.id, this.menuItem)
-
       this.tierPriceService.tierFlowerMenu$.pipe(
         switchMap( data => {
           if (data) {
@@ -149,8 +188,8 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       this.quantity = 1
       this.initProductForm();
       this.initSubscriptions();
+      this.bucketName =   await this.awsBucket.awsBucket();
     };
-
 
     initProductForm() {
       this.productForm = this.fb.group({
@@ -161,6 +200,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
       if (this._order) {  this._order.unsubscribe(); }
+      if (this._uiHomePage) { this._uiHomePage.unsubscribe()}
       this.menuService.updateCurrentMenuItem(null);
       this.inventoryAssignmentService.updateAvalibleInventoryResults(null)
       this.tierPriceService.updateTierFlowerMenu(null);
@@ -168,7 +208,6 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       this.priceTiers = null;
       this.flowerMenu = null //   : IFlowerMenu;
       this.productPrice = null;
-
     }
 
     initSubscriptions() {
@@ -192,7 +231,6 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       return notes
     }
 
-
     addItemWithPrice(event) {
       if (event) {
         this.productPrice = event;
@@ -203,12 +241,10 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     setItemPrice(event) {
       if (event) {
         this.productPrice = event;
-        // this.addItemToOrder()
       }
     }
 
     addItemToOrder() {
-
       let quantity = this.productForm.controls['quantity'].value
       if (!quantity) {  quantity = 1  }
       const site = this.siteService.getAssignedSite()
@@ -222,7 +258,6 @@ export class MenuitemComponent implements OnInit, OnDestroy {
         }
 
         const item = { id: +data.posItem.id, modifierNote: notes};
-
         if (notes && notes != '' ) {
           const items =  data.order.posOrderItems
           if (items.length > 0) {
@@ -238,8 +273,6 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       }))
     }
 
-
-
     getQuantity() {
       if (this.quantity == 0 || !this.quantity) { this.quantity = 1}
       return this.quantity
@@ -252,7 +285,6 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     async addItemWithTierPrice(event) {
 
       let newItem = event as NewItem;
-
       const valid = this.validateUser();
       if (!valid) { return }
 
@@ -379,10 +411,45 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       }
     };
 
+    refreshRecentAssociations(site: ISite) {
+      if (this.menuItem) {
+        this.recentAssociations$ = this.menuService.recentAssociationsWithProduct(site, this.menuItem.id, 230)
+    }
+    }
+
+    metaTagRefresh(event) {
+      console.log('selected chips', event)
+      let items = []
+      if (event && event.length>0) {
+        event.forEach(data => {
+          items.push(data.name)
+        })
+
+        const site = this.siteService.getAssignedSite()
+        this.metaTagSearch$ = this.menuService.metaTagSearch(site, items).pipe(switchMap(data => {
+
+          return of(data)
+        }))
+      } else {
+        this.metaTagSearch$  = null;
+      }
+
+    }
+
+    refreshAssociations(site: ISite) {
+      if (this.menuItem) {
+        this.associations$ = this.matricesService.listAssociations(site, this.menuItem.id)
+      }
+    }
+
     setMenuItem(menuItem: IMenuItem) {
       if (menuItem) {
         this.menuItem = menuItem;
         const site     = this.siteService.getAssignedSite();
+
+        this.refreshRecentAssociations(site);
+        this.refreshAssociations(site);
+
         this.titleService.setTitle(`${this.menuItem.name} by ${this.appInitService.company}`)
         if (menuItem.brandID) {
           this.brand$ = this.brandService.getClient(site, menuItem.brandID)
@@ -393,7 +460,6 @@ export class MenuitemComponent implements OnInit, OnDestroy {
           const tier = menuItem.priceCategories.productPrices[0].priceTiers;
           this.priceTiers = tier
         }
-
       }
     }
 
@@ -404,10 +470,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     }
 
     addItemByCodeOBS(item) {
-
-      console.log('add item obs', item.quantity, item.weight)
       if (item) {
-
         this.action$ = this.orderMethodsService.scanBarcodeAddItemObservable(item.barcode, item.quantity,
               {packaging: this.packaging, portionValue: this.portionValue}, this.orderMethodsService.assignPOSItems )
       }
@@ -424,7 +487,6 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     exit() {
       console.log("clicked exit")
       this.outputExitForm.emit(true)
-      // this.location.back();
     }
 
     sanitize(html) {

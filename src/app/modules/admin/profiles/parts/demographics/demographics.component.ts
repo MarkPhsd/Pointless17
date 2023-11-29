@@ -17,6 +17,7 @@ export class ProfileDemographicsComponent implements OnInit, OnDestroy {
   _uiTransactionSettings: Subscription;
   uiTransactionSettings : TransactionUISettings;
 
+  @Input() clientType : ClientType;
   @Input() inputForm    : UntypedFormGroup;
   @Input() isAuthorized : boolean;
   @Input() isStaff      : boolean;

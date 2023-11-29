@@ -140,6 +140,9 @@ import { PartBuilderMainComponent } from './modules/admin/products/part-builder/
 import { PartBuilderEditComponent } from './modules/admin/products/part-builder/part-builder-edit/part-builder-edit.component';
 import { PartBuilderUsageListComponent } from './modules/admin/products/part-builder/part-builder-usage-list/part-builder-usage-list.component';
 import { MessageEditorListComponent } from './modules/admin/message-editor-list/message-editor-list.component';
+import { BrandEditorMainComponent } from './modules/admin/resale_manager/brands/main/main.component';
+import { ResaleClassesMainComponent } from './modules/admin/resale_manager/classes/resale-classes-main/resale-classes-main.component';
+import { BuySellMainComponent } from './modules/buySell/buy-sell-main/buy-sell-main.component';
 
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
@@ -161,6 +164,12 @@ const routes: Routes = [
 
     {path: '', component: DefaultComponent,
       children: [
+
+
+        { path: 'buy-sell', component: BuySellMainComponent, canActivate: [AuthGuard], data: {title: 'Resale Brand Classes', animation: 'isLeft'}},
+
+        { path: 'resale-brand-classes', component: BrandEditorMainComponent, canActivate: [AuthGuard], data: {title: 'Resale Brand Classes', animation: 'isLeft'}},
+        { path: 'resale-price-classes', component: ResaleClassesMainComponent, canActivate: [AuthGuard], data: {title: 'Resale Classes ', animation: 'isLeft'}},
 
         { path: 'message-list',  component: MessageEditorListComponent, data: { title: 'Message List', animation: 'isLeft'} },
 

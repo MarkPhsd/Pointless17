@@ -37,6 +37,7 @@ export interface ITerminalSettings {
   defaultOrderTypeID: number;
   exitOrderOnFire   : boolean;
   enablePrepView: boolean;
+  defaultLabel: string;
 }
 
 @Injectable({

@@ -49,10 +49,10 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   gridflow            = 'grid-flow';
   @Input() hideAddNewOrder     = false
-  posDevice       : ITerminalSettings
-  _posDevice      : Subscription;
-  href: string;
-  deviceInfo : IDeviceInfo;
+  posDevice           : ITerminalSettings
+  _posDevice          : Subscription;
+  href                : string;
+  deviceInfo          : IDeviceInfo;
 
   initSubscriptions() {
 

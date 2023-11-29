@@ -12,6 +12,9 @@ import { FbInventoryService } from 'src/app/_form-builder/fb-inventory.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { switchMap } from 'rxjs/operators';
+import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
+import { ISetting } from 'src/app/_interfaces';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 
 @Component({
   selector: 'app-new-inventory-item',
@@ -29,14 +32,15 @@ export class NewInventoryItemComponent implements OnInit {
   inventoryAssignment$:      Observable<IInventoryAssignment>;
   searchForm:                UntypedFormGroup;
   quantityMoving:            number;
-  locations$ :           Observable<IInventoryLocation[]>;
-  locations:             IInventoryLocation[];
+  locations$ :               Observable<IInventoryLocation[]>;
+  locations:                 IInventoryLocation[];
   inventoryLocation:         IInventoryLocation;
   inventoryLocationID:       number;
   menuItem                   :IMenuItem;
   facilityLicenseNumber:     string;
   facility:                  any;
-
+  images: string;
+  
   constructor(
     private _snackBar    : MatSnackBar,
     private siteService  : SitesService,
@@ -44,26 +48,34 @@ export class NewInventoryItemComponent implements OnInit {
     private fb           : UntypedFormBuilder,
     private fbInventory  : FbInventoryService,
     private inventoryAssignmentService: InventoryAssignmentService,
+    public fbProductsService    : FbProductsService,
+    public printingService: PrintingService,
     private menuService  : MenuService,
     private inventoryLocationsService: InventoryLocationsService,
     private dialogRef    : MatDialogRef<NewInventoryItemComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
   {
+    
     if (data) {
       this.id = data.id
     } else {
       this.id = this.route.snapshot.paramMap.get('id');
     }
+
+    if (data && data.inventory) { 
+      this.item = data.inventory;
+    }
+    if (data && data.menuItem) { 
+      this.menuItem = data.menuItem;
+    }
+
   }
 
   get itemTypeDescription() { 
-    
     if (!this.menuItem) { return } 
     if (!this.menuItem.itemType) { return } 
     if (!this.menuItem?.itemType?.useGroups) { return };
-
     return this.menuItem?.itemType?.useGroups?.name.toLowerCase();
-   
   }
 
   get isCannabis() { 
@@ -88,12 +100,18 @@ export class NewInventoryItemComponent implements OnInit {
       return of(data)
     }))
     this.site =  this.siteService.getAssignedSite();
+
+    if (this.item && this.menuItem) { 
+      this.setFormInventoryData(this.item)
+      return;
+    }
+
     this.inventoryAssignment$ = this.inventoryAssignmentService.getInventoryAssignment(this.site, this.id)
     this.inventoryAssignment$.pipe(
       switchMap( data => {
-        this.item      = data
-        this.inputForm = this.fbInventory.initForm(this.inputForm)
-        this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
+        this.item = data;
+       
+        this.setFormInventoryData(this.item)
         return  this.menuService.getMenuItemByID(this.site, data.productID)
       }
     )).subscribe(data => {
@@ -101,8 +119,15 @@ export class NewInventoryItemComponent implements OnInit {
     })
   }
 
+  setFormInventoryData(data) { 
+    this.item      = data
+    this.images    = data?.images;
+    this.inputForm = this.fbInventory.initForm(this.inputForm)
+    this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
+  }
+
   setLocation(selection) {
-    //locations.filter
+
     if (this.locations){
       const item = this.locations.filter( data => { return data.id === selection?.value } )
       console.log(item[0], item)
@@ -146,9 +171,10 @@ export class NewInventoryItemComponent implements OnInit {
 
   updateWithoutNotification(): Observable<IInventoryAssignment> {
     this.item   = this.fbInventory.setItemValues(this.item, this.inputForm)
+    console.log(this.item)
     if (!this.item) {
       this.notifyEvent('error no item', 'result')
-      return
+      return of(null)
     }
     return this.inventoryAssignmentService.editInventory(this.site,this.item.id, this.item)
   }
@@ -195,5 +221,19 @@ export class NewInventoryItemComponent implements OnInit {
     });
   }
 
+  received_Image(event) {
+    this.images = event
+    this.inputForm.patchValue({images: event})
+    this.inventoryAssignment$ = this.updateWithoutNotification()
+  };
 
+  getLabelSetting(labelSetting: ISetting)  {
+    // this.labelSetting = labelSetting;
+    const id = this.menuItem.itemType.labelTypeID
+    this.setLastlabelUsed(id)
+  }
+
+  setLastlabelUsed(id: number) {
+    this.printingService.setLastLabelUsed(id)
+  }
 }

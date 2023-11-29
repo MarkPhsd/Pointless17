@@ -128,6 +128,8 @@
             </mat-slide-toggle>
           </div>
 
+
+
           <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="requireEnterTabBarcodeLookup"
@@ -284,6 +286,14 @@
               </app-value-fields>
             </div>
 
+            <div>
+              <mat-label  class="mat-label-design">Resale Cost Ratio - What you buy as % of Sale</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'resaleCostRatio'">
+                 ReSale Cost Ratio
+              </app-value-fields>
+            </div>
 
             <div>
               <mat-label class="mat-label-design">Prefix for Order Prep Labels.</mat-label>
@@ -389,6 +399,8 @@
               </app-value-fields>
             </div>
           </div>
+
+
 
           <mat-card>
             <div class="toggle-fields">
@@ -524,6 +536,14 @@
           </mat-slide-toggle>
         </div>
 
+        <div class="toggle-fields"  style="margin-bottom: 5px">
+          <mat-slide-toggle
+                    formControlName="enableItemReOrder"
+                    >
+            <mat-label>Enable Re Order Item <br> In Order History</mat-label>
+          </mat-slide-toggle>
+        </div>
+
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="toggleUserOrAllOrders" >
@@ -567,12 +587,12 @@
           </mat-slide-toggle>
         </div>
 
-        <div class="toggle-fields">
+        <!-- <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="scanIncreaseQuantity">
             <mat-label>Increase items quantity on duplicate scan</mat-label>
           </mat-slide-toggle>
-        </div>
+        </div> -->
 
         <div class="toggle-fields">
           <mat-slide-toggle

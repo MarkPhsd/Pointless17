@@ -34,7 +34,7 @@
             ></app-edit-buttons-standard>
           </div>
 
-          <app-activity-toggles
+        <app-activity-toggles
               [inputForm]="productForm">
           </app-activity-toggles>
           <ng-container [ngTemplateOutlet]="managerProtectedToggle"></ng-container>
@@ -243,7 +243,9 @@
             </app-widget-uploader>
 
             <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
-
+            <ng-container [ngTemplateOutlet]="metaTags"></ng-container>
+            <ng-container [ngTemplateOutlet]="itemAssociations"></ng-container>
+            
           </div>
       </div>
     </div>
@@ -404,72 +406,41 @@
 </ng-template>
 
 <ng-template #unitSelector>
-  <div  *ngIf="productForm && unitSearchForm" 
-        class="grid-container-3Column">
-    <div>
-      <unit-type-select
-        [inputForm]     = 'productForm'
-        [searchForm]    = 'unitSearchForm'
-        [product]       = 'productForm.value'
-        [id]            = 'product.unitTypeID'
-        (itemSelect)    = 'assignItem($event)'>
-        Unit of Measure
-      </unit-type-select>
-    </div>
-    
-    <div style="margin-top:5px;">
-      <button mat-button (click)="openUnit()">
-        <div *ngIf="productForm.controls['unitTypeID'].value !=0">
-          <mat-icon>expand</mat-icon>
-        </div>
-        <div *ngIf="productForm.controls['unitTypeID'].value ==0">
-          <mat-icon>add</mat-icon>
-        </div>
-      </button>
-    </div>
-    <div>
-      <button mat-button (click)="clearUnit()">
-        <mat-icon color="warn">delete</mat-icon>
-      </button>
-    </div>
-  </div>
 
-  <div class="grid-container-3Column" 
-       *ngIf="product && productForm && reOrderUnitSearchForm">
-    <div>
-      <unit-type-select
-        [inputForm]     = 'productForm'
-        [searchForm]    = 'reOrderUnitSearchForm'
-        [product]       = 'productForm.value'
-        [id]            = 'product?.reOrderUnitTypeID'
-        [formControlName]="'reOrderUnitTypeID'"
-        (itemSelect)    = 'reOrderUnitAssignItem($event)'>
-        Re - Order UOM 
-      </unit-type-select>
-    </div>
-    
-    <div  *ngIf="product" 
-          style="margin-top:5px;">
-      <button mat-button (click)="openUnit()">
-        <div *ngIf="product?.reOrderUnitTypeID != 0">
-          <mat-icon>expand</mat-icon>
-        </div>
-        <div *ngIf="product?.reOrderUnitTypeID == 0">
-          <mat-icon>add</mat-icon>
-        </div>
-      </button>
-    </div>
+  <ng-container [ngTemplateOutlet]="unitTypeSelector"></ng-container>
 
-    <div>
-      <button mat-button (click)="clearReOrderUnit()">
-        <mat-icon color="warn">delete</mat-icon>
-      </button>
-    </div> 
-
-  </div>
+  <ng-container [ngTemplateOutlet]="reOrderUnit"></ng-container> 
 
   <ng-container [ngTemplateOutlet]="sizeSelectorAddOn"></ng-container>
 
+</ng-template>
+
+<ng-template #unitTypeSelector>
+  <div  *ngIf="productForm && unitSearchForm" 
+      class="grid-container-3Column">
+      <div>
+        <unit-type-select
+          [inputForm]     = 'productForm'
+          [searchForm]    = 'unitSearchForm'
+          [product]       = 'productForm.value'
+          [id]            = 'product.unitTypeID'
+          (itemSelect)    = 'assignItem($event)'>
+          Unit of Measure
+        </unit-type-select>
+      </div>
+
+      <div style="margin-top:5px;">
+        <button mat-button (click)="openUnit()">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+      </div>
+
+      <div>
+          <button mat-button (click)="clearUnit()">
+            <mat-icon color="warn">delete</mat-icon>
+          </button>
+      </div>
+  </div>
 </ng-template>
 
 <ng-template #partBuilderSelector>
@@ -495,18 +466,56 @@
   </div>
 </ng-template>
 
-<ng-template #tareValueView>
-  <app-value-fields
-      [inputForm]="jsonForm"
-      [fieldName]="'tareValue'">
-    Tare Value
-  </app-value-fields>
+<ng-template #reOrderUnit>
+ 
+  <div class="grid-container-3Column" 
+       *ngIf="product && productForm && reOrderUnitSearchForm">
+ 
+      <div>
+        <unit-type-select
+          [inputForm]      = 'productForm'
+          [searchForm]     = 'reOrderUnitSearchForm'
+          [product]        = 'productForm.value'
+          [id]             = 'product.reOrderUnitTypeID'
+          [formControlName]="'reOrderUnitTypeID'"
+          (itemSelect)     = 'reOrderUnitAssignItem($event)'>
+          Re - Order UOM 
+        </unit-type-select>
+      </div>
 
-  <app-value-fields
-      [inputForm]="jsonForm"
-      [fieldName]="'pieceWeight'">
-    Piece Weight
-  </app-value-fields>
+      <div  style="margin-top:5px;">
+        <button mat-button (click)="openReOrderUnit()">
+            <mat-icon>open_in_new</mat-icon>
+        </button> 
+      </div>
+      
+      <div>
+        <button mat-button (click)="clearReOrderUnit()">
+          <mat-icon color="warn">delete</mat-icon>
+        </button>
+      </div> 
+    
+  </div>
+</ng-template>
+
+<ng-template #metaTags>
+  <div class="meta-tags"
+        *ngIf="product">
+      <app-meta-tag-chips
+        (outPutItemTags) ="setItemTags($event)"
+        [product]        ="product"
+        [inputForm]      ="productForm">
+      </app-meta-tag-chips>
+  </div>
+</ng-template>
+
+<ng-template #itemAssociations>
+  <div  class="meta-tags"
+        *ngIf="product">
+      <app-item-Associations
+        [product] = "product">
+      </app-item-Associations>
+  </div>
 </ng-template>
 
 <ng-template #sizeSelectorAddOn>
@@ -528,4 +537,18 @@
       </tag-chips-products>
   </div>
 
+</ng-template>
+
+<ng-template #tareValueView>
+  <app-value-fields
+      [inputForm]="jsonForm"
+      [fieldName]="'tareValue'">
+    Tare Value
+  </app-value-fields>
+
+  <app-value-fields
+      [inputForm]="jsonForm"
+      [fieldName]="'pieceWeight'">
+    Piece Weight
+  </app-value-fields>
 </ng-template>

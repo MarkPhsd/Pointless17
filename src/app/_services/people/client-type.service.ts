@@ -68,6 +68,8 @@ export interface IUserAuth_Properties {
 
   disableVoidClosedItem: boolean;
   disableEditOtherUsersOrders: boolean;
+
+  allowBuy: boolean;
 }
 
 @Injectable({

@@ -1,0 +1,68 @@
+.grid-flow {
+  --gap: 5px;
+  margin-top: 2px;
+  margin-right: 2px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fill, minmax(125px, 1fr) );
+  overflow-y: visible;
+}
+
+.grid-flow-categories {
+
+  top: 0px;
+  position: inherit;
+  margin-top: 5px;
+  margin-right: 2px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fill, minmax(125px, 1fr) );
+  overflow-y: visible;
+  grid-auto-flow: row dense;
+}
+
+.product-image-icon  {
+  object-fit   : cover;
+  border-radius: 15px;
+  width        : 60%;
+  white-space  : normal;
+  overflow     : hidden;
+  height       : 65px;
+}
+
+.product-image  {
+  object-fit   : cover;
+  border-radius: 15px;
+  width        : 100%;
+  white-space  : normal;
+  overflow     : hidden;
+  height       : 65px;
+}
+
+.button-image  {
+  object-fit   : cover;
+  border-radius: 15px;
+  width        : 100%;
+  white-space  : normal;
+  overflow     : hidden;
+  line-height  : 1em;
+  width        : 125px;
+  height       : 125px;
+  left         : -5px;
+}
+
+.floating-info {
+  z-index: 100;
+  padding-right: 10px;
+  overflow-x: visible;
+  position: fixed;
+  right: 15px;
+  max-width: 350px;
+  width: 350px;
+}
+
+.item-info {
+  line-height: 1em;
+  font-weight: 450;
+  font-size: 1.1em;
+}

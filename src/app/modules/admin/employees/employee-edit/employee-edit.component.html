@@ -12,6 +12,7 @@
             (outputupdateonCancel)  ="navUserList($event)"
       ></app-edit-buttons-standard>
     </div>
+    <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
     <mat-divider></mat-divider>
   </mat-card-subtitle>
 
@@ -20,7 +21,6 @@
       <div>
         <div [formGroup]="inputForm"
               *ngIf="employee$; else loading;">
-              <!-- inputForm {{ inputForm.valid }} -->
           <div *ngIf="inputForm.controls['phone'].invalid && inputForm.controls['phone'].touched"
               class="alert alert-danger">
                 <div *ngIf="inputForm.controls['phone'].errors.required">
@@ -38,11 +38,12 @@
           <div *ngIf="inputForm.controls['password'].invalid && inputForm.controls['password'].touched"
               class="alert alert-danger">
                 <div *ngIf="inputForm.controls['password'].errors.required">
-                  PIN Code must be greater than 4 characters, and less than 10.
+                  PIN Code should be greater than 4 characters, and less than 10.
+                  The pin code is used in the Windows App and Android Apps only.
                   This is not the primary password, and can be changed later.
             </div>
           </div>
-
+          
           <div>
               <mat-form-field appearance="outline">
               <mat-label >First Name</mat-label>
@@ -60,7 +61,7 @@
                     type="text"
                     formControlName="lastName"
                     class="form-control" >
-                </mat-form-field>
+              </mat-form-field>
           </div>
 
           <div>
@@ -82,8 +83,11 @@
                       class="form-control" >
               </mat-form-field>
           </div>
-
-          <div>
+          
+          <div  #coachingPIN>
+            <!-- <mat-icon class="mat-label-info"
+                      color="accent"
+                      [matTooltip]="labelingService.employeeInfo[0].value">info</mat-icon> -->
             <mat-form-field appearance="outline">
             <mat-label >PIN</mat-label>
             <input matInput
@@ -93,6 +97,15 @@
             </mat-form-field>
           </div>
 
+          <div>
+              <mat-form-field appearance="outline">
+            <mat-label >Pay Rate (hourly)</mat-label>
+            <input matInput
+                    type="number"
+                    formControlName="payRate"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
 
           <div class="grid-item">
             <mat-form-field
@@ -113,14 +126,13 @@
             </mat-form-field>
           </div>
 
-          <div>
+          <div #coachingTermination>
             <mat-form-field appearance="outline">
               <mat-label>Termination</mat-label>
               <input matInput
                     [matDatepicker]="datepicker"
                     formControlName="terminationDate"
-                    name="terminationDate"
-                >
+                    name="terminationDate"  >
               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
               <mat-datepicker #datepicker>
                 <mat-datepicker-actions>
@@ -136,14 +148,17 @@
           <mat-spinner  diameter="100"></mat-spinner>
         </ng-template>
       </div>
-
+   
       <div>
         <div
               *ngIf="clientForm && client;
               else loadingclient;"
               [formGroup]="clientForm">
 
-          <div>
+          <div #coachingUserName >
+            <!-- <mat-icon class="mat-label-info"
+                      color="accent"
+                      [matTooltip]="labelingService.employeeInfo[2].value">info</mat-icon> -->
             <mat-form-field appearance="outline">
               <mat-label >User Name</mat-label>
               <input matInput
@@ -153,7 +168,7 @@
             </mat-form-field>
           </div>
 
-          <div>
+          <div #coachingPassword>
             <mat-form-field appearance="outline">
               <mat-label >Password</mat-label>
               <input matInput
@@ -177,15 +192,22 @@
             </div>
         </div>
 
+      
         <div *ngIf="clientForm">
-          <div class="grid-item" >
+          <div  #coachingUserAuthorized class="grid-item" >
+            <!-- <mat-icon class="mat-label-info"
+                      color="accent"
+                      [matTooltip]="labelingService.employeeInfo[2].value">info</mat-icon> -->
             <app-profile-roles
                   [isAuthorized]="isAuthorized"
                   [inputForm] ='clientForm'>
             </app-profile-roles>
           </div>
-
-          <div class="grid-item" [formGroup]="clientForm">
+      
+          <div #coachingUserType class="grid-item" [formGroup]="clientForm">
+            <!-- <mat-icon class="mat-label-info"
+                      color="accent"
+                      [matTooltip]="labelingService.employeeInfo[3].value">info</mat-icon> -->
             <mat-form-field
                 [style]="'font-size: 1.1em; width: 90%;'"
                 class="fields"
@@ -236,6 +258,10 @@
   </mat-card-content>
 </mat-card>
 
-
-
-
+<ng-template #helpButton>
+  <span *ngIf="user?.userPreferences?.enableCoachMarks">
+    <coach-marks-button
+            (initPopOver)="initPopover()"
+            [enabled]="true"></coach-marks-button>
+  </span>
+</ng-template>

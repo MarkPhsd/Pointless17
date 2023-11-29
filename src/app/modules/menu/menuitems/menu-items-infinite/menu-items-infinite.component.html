@@ -24,14 +24,6 @@
     </div>
 
     <div class="orders-container">
-      <!-- <div *ngIf="authService.isUser && !isApp" class="horizontal-view">
-        <div>
-          <h3><mat-icon color="primary">qr_code</mat-icon>Products & Services</h3>
-        </div>
-        <div *ngIf="!isApp" style="margin-top:25px;">
-          Items found: {{this.totalRecords}}
-        </div>
-      </div> -->
 
       <div  *ngIf="menuItems"
             infiniteScroll
@@ -127,7 +119,7 @@
   </div> -->
   <!-- <div style="margin-top:15px;" > -->
     <div class="grid-flow-categories"
-        style="margin-top:15px;"
+         style="margin-top:15px;"
          *ngIf="categories && categories.length>0">
       <div  *ngFor="let item of categories;trackBy: trackByFN">
           <ng-container
@@ -158,11 +150,11 @@
 </ng-template>
 
 <ng-template #menuItemCard let-item let-type="type">
-  <!-- <div style="height:250px;"> -->
     <app-menu-item-card
         *ngIf             ="item"
         [displayType]     ="type"
         [allowEdit]       ="userAuths?.editProduct"
+        [allowBuy]       ="userAuths?.allowBuy"
         [id]              ="item?.id"
         [retail]          ="item?.retail"
         [name]            ="item?.name"
