@@ -40,6 +40,20 @@ export interface Classes_Clothing_View {
   departmentID: number;
   thumbNail: string;
 }
+export interface Classes_Clothing_Sub {
+  departmentID: number;
+  classValue?: number | null;
+  gender?: number | null;
+  attributeDesc: string;
+  price?: number | null;
+  productID: number;
+  department: string;
+  id: number;
+  name: string;
+  errorMessage: string;
+  thumbNail: string;
+  productThumbNail: string;
+}
 
 
 export interface Classes_Clothing {
@@ -53,17 +67,13 @@ export interface Classes_Clothing {
   errorMessage: string;
   thumbNail: string;
   department: string;
-  // Public Property ClassValue As Nullable(Of Integer)
-  // Public Property Gender As Nullable(Of Integer)
-  // Public Property AttributeDesc As String
-  // Public Property Price As Nullable(Of Decimal)
-  // Public Property BrandTypeID As Nullable(Of Integer)
-  // Public Property BrandType As String
-  // Public Property ID As Integer
+  productThumbNail: string;
+  classThumbNail: string;
+
 }
 
 export interface ClassResaleSearchResults {
-  results: Classes_Clothing_View[]
+  results: any[]
   paging: IPagedList
   errorMessage: string;
 }
@@ -73,10 +83,8 @@ export interface ClassResaleSearchResults {
 })
 export class ClassesResaleService {
 
-
   private _Search       = new BehaviorSubject<ClassClothingSearch>(null);
   public search$        = this._Search.asObservable();
-
 
   constructor(
     private httpCache               : HttpClientCacheService,
@@ -92,6 +100,20 @@ export class ClassesResaleService {
     this._Search.next(search)
   }
 
+
+  postAttributeList(site: ISite, name: string, departmentID: number, gender: number, rowCount: number): Observable<Classes_Clothing[]> {
+    const controller = "/Classes_Clothing/"
+
+    const endPoint   = `postAttributeList`
+
+    const parameters = `?name=${name}&departmentID=${departmentID}&gender=${gender}&rowCount=${rowCount}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.get<Classes_Clothing[]>(url)
+  }
+
+
   getAttributeList(site: ISite): Observable<Classes_Clothing[]> {
 
     const controller = "/Classes_Clothing/"
@@ -105,13 +127,17 @@ export class ClassesResaleService {
     return this.httpClient.get<Classes_Clothing[]>(url)
   }
 
-  getAttributeListByDepartment(site: ISite, id: number) : Observable<Classes_Clothing[]> {
+  getAttributeListByDepartment(site: ISite, id: number, genderID: number, name?: string) : Observable<Classes_Clothing[]> {
+
+    if (!name || name === 'null') {
+      name = null
+    }
 
     const controller = "/Classes_Clothing/"
 
     const endPoint   = `GetAttributeListByDepartment`
 
-    const parameters = `?id=${id}`
+    const parameters = `?id=${id}&genderID=${genderID}&name=${name}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
@@ -147,17 +173,17 @@ export class ClassesResaleService {
   }
 
 
-  delete(site: ISite, id: number): Observable<Classes_Clothing> {
+  delete(site: ISite, list: number[]): Observable<Classes_Clothing> {
 
     const controller ="/Classes_Clothing/"
 
     const endPoint = `DeleteClasses_Clothing`
 
-    const parameters = `?id=${id}`
+    const parameters = ``
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.httpClient.delete<any>(url)
+    return this.httpClient.post<any>(url, list)
 
   }
 
@@ -172,6 +198,20 @@ export class ClassesResaleService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.httpClient.post<any>(url, matrix)
+
+  }
+
+  putClasses_ClothingThumbnail(site: ISite, matrix: Classes_Clothing): Observable<Classes_Clothing> {
+
+    const controller ="/Classes_Clothing/"
+
+    const endPoint = `PutClasses_ClothingThumbnail`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.put<any>(url, matrix)
 
   }
 

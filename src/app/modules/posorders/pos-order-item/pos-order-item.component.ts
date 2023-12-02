@@ -192,14 +192,14 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
     return ''
     if (!item) { return ''}
-    if (item.baseUnitType) { 
+    if (item.baseUnitType) {
       console.log('item.baseUnitType', item?.baseUnitType)
       return item?.unitName }
-    if (item.unitName) { 
+    if (item.unitName) {
       console.log('item.unitName', item?.unitName)
-      return item?.unitName} 
+      return item?.unitName}
     return ''
-    // if (item) { 
+    // if (item) {
     //   item?.baseUnitType == '' ? ''  : orderItem?.unitName
     // }
 
@@ -244,7 +244,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
           this.productnameClass = 'product-name-alt'
           return
         } else {
-          
+
 
           this.productnameClass = 'product-name'
           return
@@ -296,26 +296,26 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     const site = this.siteService.getAssignedSite();
     this.bucketName   =  await this.awsBucket.awsBucket();
     this.awsBucketURL =  await this.awsBucket.awsBucketURL();
-    // if (this.orderItem) {
-    //   this.menuItem$  = this.menuService.getMenuItemByID(site, this.orderItem.productID)
-    // }
+    console.log('bucketName', this.bucketName)
     if (this.menuItem) {
-      this.itemName   =  this.getItemName(this.menuItem.name)
-      this.imagePath  =  this.getItemSrc(this.menuItem)
+      this.itemName   =  this.getItemName(this.menuItem?.name)
+      this.imagePath  =  this.getImageUrl(this.menuItem?.urlImageMain)
+      console.log('image path ', this.menuItem.urlImageMain )
     }
+
     if (!this.menuItem) {
       this.basicItem$ = this.menuService.getItemBasicImage(site, this.orderItem?.productID).pipe(
         switchMap( data => {
-          this.imagePath  =  this.getItemSrcBasic(data?.image)
+          this.imagePath  =  this.getImageUrl(data?.image)
+             console.log('basicimage',this.imagePath, data?.image )
           return of(data)
         })
       )
     }
 
-    console.log('this.menuIte',this.orderItem)
-    if (this.orderItem && this.orderItem.id != this.orderItem.idRef )  {
+    // if (this.orderItem && this.orderItem.id != this.orderItem.idRef )  {
 
-    }
+    // }
     const item = this.orderItem;
     this.showEdit = !item.printed && (this.quantity && !item.voidReason) &&  item.promptGroupID != 0 && item.id != item.idRef
     this.showView = this.mainPanel && ( (  item.promptGroupID === 0) || ( item.promptGroupID != 0 && item.id != item.idRef ) )
@@ -327,11 +327,22 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
       this.morebutton = 'more-button';
     }
 
-
     this.updateCardStyle(this.mainPanel)
     this.refreshSidePanel()
     this.packages = this.getEstPackages(this.orderItem).toString()
+  }
 
+  //item.urlImageMain
+  //getImageURLPath
+  getImageUrl(imageUrl) {
+    if (!imageUrl) {
+      const image = this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.png")
+      return image
+    } else {
+      const imageName =  imageUrl.split(",")
+      const image = this.awsBucket.getImageURLPath(this.bucketName, imageName[0])
+      return image
+    }
   }
 
   ngOnChanges() {
@@ -616,7 +627,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     this.morebutton = 'more-button'
 
     this.updateFlexGroup();
-    
+
     if (this.mainPanel) {
       this.gridItems ='grid-items-main-panel'
       this.morebutton = 'more-button-main'
@@ -721,10 +732,10 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     }))
   }
 
-  updateFlexGroup() { 
-    if (this.mainPanel) { 
+  updateFlexGroup() {
+    if (this.mainPanel) {
       this.flexGroup = 'ps-flex-group-start-no-margin'
-    } else { 
+    } else {
       this.flexGroup = 'ps-flex-group-start-no-margin-side'
     }
   }
@@ -794,31 +805,6 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     return this.truncateTextPipe.transform(itemName.replace(/<[^>]+>/g, ''), 20)
   }
 
-  getItemSrc(item:IMenuItem) {
-    if (!item?.urlImageMain) {
-      return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.png")
-    } else {
-      return this.awsBucket.getImageURLPath(this.bucketName, item.urlImageMain)
-    }
-  }
-
-  getItemSrcBasic(image: string) {
-    if (!image) {
-      return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.png")
-    } else {
-      return this.awsBucket.getImageURLPath(this.bucketName, image)
-    }
-  }
-
-  getImageUrl(imageName: string): any {
-    let imageUrl: string
-    let ary: any[]
-    if ( imageName ) {
-      ary = this.awsBucket.convertToArrayWithUrl( imageName, this.awsBucketURL )
-      imageUrl = ary[0]
-    }
-    return imageUrl
-  }
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -827,12 +813,12 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     });
   }
 
-  
-  buyAgain(menuItem: any) { 
-    // if (menuItem && menuItem.active && menuItem.webEnabled) { 
+
+  buyAgain(menuItem: any) {
+    // if (menuItem && menuItem.active && menuItem.webEnabled) {
       this.listItemByID(menuItem.id);
       // this.navigateToItem()
-    // } else { 
+    // } else {
     //   this.siteService.notify('Item not avalible for purchase right now.', 'Close', 5000, 'red')
     // }
   }

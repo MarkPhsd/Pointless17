@@ -1,1 +1,73 @@
-<p>resale-classes-editor works!</p>
+<div *ngIf="action$ | async as item"></div>
+
+<mat-card *ngIf="classes_Clothing">
+  <mat-label>Thumbnail </mat-label>
+  {{thumbnail}}
+  <div>
+    <app-widget-uploader
+       [(fileNames)]="thumbnail"
+       (messageOut) ="setThumbnail($event)"  >
+     </app-widget-uploader>
+  </div>
+</mat-card>
+
+<mat-card *ngIf="inputForm">
+
+  <ng-content></ng-content>
+
+  <div >
+    <button mat-raised-button (click)="addAttribute()">
+      <mat-icon>add</mat-icon> Add
+    </button>
+
+    <button mat-raised-button (click)="reset()">
+      <mat-icon>refresh</mat-icon> Reset
+    </button>
+  </div>
+
+  <div>
+    <app-value-fields
+      [inputForm]="inputForm"
+      [fieldName]="'name'">
+      <div> Name </div>
+    </app-value-fields>
+  </div>
+
+  <div *ngIf="brandsList"  [formGroup]="inputForm">
+    <mat-form-field class="category-list"
+                    appearance="outline">
+      <mat-label> Department </mat-label>
+        <mat-select
+                    type="number"
+                    formControlName = "departmentID">
+            <mat-option *ngFor="let item of brandsList"
+                        [value]="item.id">
+              {{item?.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="inputForm && genderList" [formGroup]="inputForm">
+    <mat-button-toggle-group name="type"
+            aria-label="Item Type"
+            formControlName="gender">
+      <mat-button-toggle class="discount-type-button"
+            [value]="item.id"
+            (tapClick)="setGender(item)"
+            *ngFor="let item of genderList" >
+          {{item.name}}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <div >
+    <app-value-fields
+      [inputForm]="inputForm"
+      [fieldName]="'rowCount'">
+    <div> Row Count </div>
+    </app-value-fields>
+  </div>
+
+
+</mat-card>

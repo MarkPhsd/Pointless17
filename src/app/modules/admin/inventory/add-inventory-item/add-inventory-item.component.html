@@ -1,6 +1,7 @@
 <div *ngIf="(addItem$ | async) as action"></div>
 <div *ngIf="(printLabel$ | async) as print"></div>
 <div *ngIf="(action$ | async) as action"></div>
+<div *ngIf="(update$ | async) as saving"></div>
 
 <div class="body" >
   <mat-card class="strain-card">
@@ -92,7 +93,6 @@
               </mat-form-field>
             </div>
 
-
             <div *ngIf="fbProductsService.isCannabis(menuItem?.itemType)">
               <app-value-fields
                     [inputForm]="inputForm"
@@ -100,7 +100,6 @@
                   Tested By
               </app-value-fields>
             </div>
-
 
             <div *ngIf="fbProductsService.isCannabis(menuItem?.itemType)">
               <app-value-fields
@@ -250,6 +249,7 @@
 
           <mat-divider> </mat-divider>
 
+          <ng-container [ngTemplateOutlet]="metaTags"></ng-container>
           <ng-container [ngTemplateOutlet]="additionalFeatures"></ng-container>
           </div>
         </div>
@@ -269,9 +269,24 @@
 
 </div>
 
+<ng-template #metaTags>
+  <div class="meta-tags"
+        *ngIf="item && menuItem">
+        <!-- {{inputForm.controls['metaTags'].value}} -->
+      <app-meta-tag-chips
+        (outPutItemTags)   ="setItemTags($event)"
+        [inventory]        ="item"
+        [product]          = "menuItem"
+        [metaTagList]      ="item?.metaTags"
+        [inputForm]        ="inputForm">
+      </app-meta-tag-chips>
+  </div>
+</ng-template>
+
+
 <ng-template #additionalFeatures>
 
-  <div  class="grid-container-fields" *ngIf="menuItem  && !fbProductsService.isCannabis(menuItem?.itemType)">
+  <div  class="flex-grid-row" *ngIf="menuItem  && !fbProductsService.isCannabis(menuItem?.itemType)">
 
     <div  class="mat-label" *ngIf="inputForm" [formGroup]="inputForm">
       <mat-slide-toggle
@@ -282,7 +297,7 @@
       </mat-slide-toggle>
     </div>
 
-    <div>
+    <div style="width:125px">
       <app-value-fields
         [inputForm]="inputForm"
         [fieldName]="'bay'">
@@ -290,7 +305,7 @@
       </app-value-fields>
     </div>
 
-    <div>
+    <div style="width:125px">
       <app-value-fields
         [inputForm]="inputForm"
         [fieldType]="'number'"
@@ -299,7 +314,7 @@
       </app-value-fields>
     </div>
 
-    <div>
+    <div style="width:125px">
       <app-value-fields
         [inputForm]="inputForm"
         [fieldType]="'number'"
@@ -307,7 +322,9 @@
         Rarity
       </app-value-fields>
     </div>
+ </div>
 
+ <div  class="grid-container-fields" *ngIf="menuItem  && !fbProductsService.isCannabis(menuItem?.itemType)">
     <div class="grid-item">
       <mat-card >
         <app-widget-uploader
@@ -317,7 +334,6 @@
         </app-widget-uploader>
       </mat-card>
     </div>
-
   </div>
 
   <div [formGroup]="inputForm" class="grid-fields">

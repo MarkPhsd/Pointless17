@@ -1325,16 +1325,11 @@ export class OrderMethodsService implements OnDestroy {
           if (data.resultMessage) {
             return of(null)
           }
-          this.processOrderResult(order, site, serviceType?.retailType)
-
-          if (serviceType.resaleType) {
-            this.router.navigate(['/buy-sale'])
-            return of(data)
-          }
+          this.processOrderResult(order, site, serviceType?.retailType, null, serviceType?.resaleType )
           return this.navToDefaultCategory()
         })).pipe(switchMap( item => {
           if (item) {
-            this.processOrderResult(order, site, serviceType?.retailType, item?.id)
+            this.processOrderResult(order, site, serviceType?.retailType, item?.id, serviceType?.resaleType)
           }
           return of(order)
         }),
@@ -1352,21 +1347,14 @@ export class OrderMethodsService implements OnDestroy {
     return order$.pipe(
           switchMap( data => {
             order = data
-            this.processOrderResult(order, site, serviceType?.retailType)
-
-            if (serviceType.resaleType) {
-              this.router.navigate(['/buy-sale'])
-              return of(data)
-            }
+            this.processOrderResult(order, site, serviceType?.retailType, null, serviceType?.resaleType)
             return this.navToDefaultCategory()
 
           })).pipe(switchMap( item => {
-            this.processOrderResult(order, site, serviceType?.retailType, item?.id)
+            this.processOrderResult(order, site, serviceType?.retailType, item?.id, serviceType?.resaleType)
             return of(order)
           }),
         catchError(data => {
-          // console.log('newOrderWithPayloadObs', data?.resultMessage)
-
           this.siteService.notify(`Order not started. ${data.toString()}`, 'Alert', 2000, 'red')
           return of(data)
         }))
@@ -1392,7 +1380,7 @@ export class OrderMethodsService implements OnDestroy {
           if (!serviceType.retailType) {
             return  this.navToDefaultCategory()
           }
-          if (serviceType.resaleType) {
+          if (serviceType?.resaleType) {
              this.router.navigate(['/buy-sale'])
              return of(data)
           }
@@ -1403,7 +1391,7 @@ export class OrderMethodsService implements OnDestroy {
         if (data && data?.id) {
           id = data?.id;
         }
-        this.processOrderResult(order, site, serviceType?.retailType, id)
+        this.processOrderResult(order, site, serviceType?.retailType, id, serviceType?.resaleType)
         return of(data)
     }))
   }
@@ -1430,10 +1418,8 @@ export class OrderMethodsService implements OnDestroy {
     return  this.orderService.postOrderWithPayload(site, orderPayload)
   }
 
-  processOrderResult(order: IPOSOrder, site: ISite,  retailType: boolean, categoryID?: number, ) {
+  processOrderResult(order: IPOSOrder, site: ISite,  retailType: boolean, categoryID?: number, resaleType?: boolean) {
     if (order.resultMessage != undefined || order.resultMessage) {
-
-
       this.siteService.notify(`Error submitting Order ${order.resultMessage}`, "Close", 2000)
       return
     }
@@ -1447,8 +1433,11 @@ export class OrderMethodsService implements OnDestroy {
       }
     }
     if (retailType) {
-      //nav to pos order.
       this.router.navigate(["currentorder", {mainPanel:true}])
+    }
+    if (resaleType) {
+      this.toolbarServiceUI.hidetoolBars()
+      this.router.navigate(["/buy-sell"])
     }
   }
 
@@ -1476,7 +1465,13 @@ export class OrderMethodsService implements OnDestroy {
       if (!order.history && this.platFormService.isApp()) {
         if (!order.completionDate && !order.preferredScheduleDate) {
           if (!this.authenticationService?.deviceInfo?.phoneDevice) {
-            this.toolbarServiceUI.showSearchSideBar()
+            let showBar = true;
+            if (this.uiSettingService.homePageSetting && this.uiSettingService.homePageSetting.hideSearchBar) {
+              showBar = false;
+            }
+            if (showBar) {
+              this.toolbarServiceUI.showSearchSideBar()
+            }
           }
           return
         }

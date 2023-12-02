@@ -1,0 +1,31 @@
+<div *ngIf="action$ | async as item"></div>
+<mat-card *ngIf="inputForm ">
+
+  <ng-content></ng-content>
+
+  <div *ngIf=" (brand && brand.id == 0)">
+    <button mat-raised-button (click)="addBrand()"><mat-icon>add</mat-icon> Add </button>
+  </div>
+
+  <div>
+    <app-value-fields
+      [inputForm]="inputForm"
+      [fieldName]="'name'">
+    <div> Name </div>
+    </app-value-fields>
+  </div>
+
+  <app-widget-uploader
+    [(fileNames)]="thumbnail"
+    (messageOut) ="setThumbnail($event)"  >
+    {{thumbnail}}
+  </app-widget-uploader>
+
+  <app-widget-uploader
+    [(fileNames)]="images"
+    (messageOut) ="setImages($event)">
+    {{images}}
+  </app-widget-uploader>
+
+
+</mat-card>

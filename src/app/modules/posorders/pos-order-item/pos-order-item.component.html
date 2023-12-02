@@ -5,20 +5,19 @@
           id="panel"
           (swipeleft)="swipeOutItem()"
           (click)="assignItem()"
-          [class]="customcard"
-          >
-          <!--   -->
+          [class]="customcard" >
+
   <mat-card-content >
 
     <div  [class]="gridItems">
       <div *ngIf="orderItem">
         <div [class]="flexGroup">
-    
+
           <div [class]="productnameClass" >
-            
+
             <span  class="index" *ngIf="!isModifier && !prepScreen">
               {{ index +1 }}:
-            </span>  
+            </span>
 
             {{ orderItem?.productName }}
 
@@ -34,19 +33,19 @@
             </span>
 
           </div>
-        
+
           <div *ngIf="quantity && !prepScreen">
             <div   class="quantity"   *ngIf="subTotal >= 0">
-           
-              {{ quantity }} 
 
-              {{ orderItem?.baseUnitType == '' ? ''  : (orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName) }} 
-                          
+              {{ quantity }}
+
+              {{ orderItem?.baseUnitType == '' ? ''  : (orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName) }}
+
               @ {{ unitPrice | currency }}
 
               <span *ngIf="orderItem.baseUnitType"> / {{ orderItem?.baseUnitType }} </span> = {{ subTotal | currency}}
 
-              <div *ngIf="(orderItem && orderItem.baseUnitType) && orderItem.unitType && 
+              <div *ngIf="(orderItem && orderItem.baseUnitType) && orderItem.unitType &&
                           orderItem?.unitName != orderItem?.menuItem?.baseUnitType ">
                 {{packages}}  {{(orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName)}}
               </div>
@@ -57,11 +56,11 @@
             </div>
 
             <div  class="quantity"   *ngIf="subTotal < 0"  style="color:crimson">
-          
-              {{ quantity }} 
 
-              {{ orderItem?.baseUnitType == '' ? ''  : (orderItem?.unitName == 'False' ? '' : orderItem?.unitName) }} 
-                          
+              {{ quantity }}
+
+              {{ orderItem?.baseUnitType == '' ? ''  : (orderItem?.unitName == 'False' ? '' : orderItem?.unitName) }}
+
               @ {{ unitPrice | currency }}
 
               <span *ngIf="orderItem.baseUnitType">/ {{ orderItem?.baseUnitType }} </span>
@@ -128,9 +127,7 @@
                 <b  style="color:crimson">return {{ orderItem?.itemReturn }} Item voided:
                                                   {{ orderItem?.voidReason }}</b>
               </span>
-
             </div>
-
           </div>
         </div>
 
@@ -208,7 +205,6 @@
       <div class="label-image-grid"  *ngIf="(mainPanel && !bottomSheetOpen) && !prepScreen">
           <ng-container [ngTemplateOutlet]="isDisplayMenuItemOn"></ng-container>
       </div>
-
 
       <div *ngIf="disableActions && enableItemReOrder">
         <button aria-label="add "
@@ -368,13 +364,23 @@
 </mat-card>
 
 <ng-template #imageDisplay>
+
+
   <button mat-button (click)="openDialog()"
           class='displayimage'
           *ngIf="(basicItem$ | async) as item">
-    <img [class]="imageBaseCCS" *ngIf="imagePath" [src]="imagePath" />
+    <ng-container [ngTemplateOutlet]="productImage"
+                  [ngTemplateOutletContext]="{$implicit: item}"
+                  ></ng-container>
+    <!-- <img [class]="imageBaseCCS" *ngIf="imagePath" [src]="imagePath" /> -->
   </button>
 </ng-template>
 
+<ng-template #productImage let-item>
+  <img  [src]     ="imagePath"
+        onerror   = "this.src='assets/images/placeholderimage.png'"
+        class     ="product-image"/>
+</ng-template>
 
 <ng-template #labelButtonView>
   <div *ngIf="!userAuthService?.isUser && enableExitLabel && orderItem?.printLocation">

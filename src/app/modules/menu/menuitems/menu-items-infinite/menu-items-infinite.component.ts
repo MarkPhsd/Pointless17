@@ -376,12 +376,13 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   }
 
   get isSearchSelectorOn() {
-    if (this.uiHomePage && this.uiHomePage.disableSearchFeaturesInItemsList) {
+    if (this.uiHomePage && this.uiHomePage.disableSearchFeaturesInItemsList && this.isApp) {
       return null
     }
-    if (!this.isApp || this.smallDevice || this.uiHomePage.storeNavigation) {
+    if (this.smallDevice || this.uiHomePage.storeNavigation) {
       return this.searchSelector
     }
+
     return null;
   }
 
@@ -657,7 +658,9 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
           this.departmentID = this.productSearchModel.departmentID.toString()
         }
         if (!this.productSearchModel.departmentID) {
-          this.departmentID = this.departments[0].id;
+          if (this.departments[0]) {
+            this.departmentID = this.departments[0].id;
+          }
         }
       }
 

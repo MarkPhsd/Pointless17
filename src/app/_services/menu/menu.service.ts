@@ -225,6 +225,19 @@ export class MenuService {
     return this.searchIsLoaded.asObservable();
   }
 
+  updateBrandClassValue(site: ISite, value: any, brandID: number, gender: number, deptName: any) {
+    const controller ="/MenuItems/"
+
+    const endPoint = `updateBrandClassValue`
+
+    const parameters = `?ClassValue=${value}&BrandID=${brandID}&gender=${gender}&departmentName=${deptName}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.get<any>(url)
+  }
+
+
   getItemByBrandClassProductList(site: ISite, departmentID: number, attribute: string, id: number, brandID: number, gender: number): Observable<any> {
 
     const controller ="/MenuItems/"
@@ -414,6 +427,8 @@ export class MenuService {
 
     return  this.httpClient.post<any>(url, items);
   }
+
+
 
   getMenuItemsByPage(site: ISite, pageNumber: number, pageSize: number): Observable<IMenuItem[]> {
 

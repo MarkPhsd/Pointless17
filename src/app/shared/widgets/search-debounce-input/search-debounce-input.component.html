@@ -1,14 +1,16 @@
 <div  [formGroup] ="searchForm">
   <mat-form-field appearance="outline">
+
     <mat-label>
       <ng-content fieldDescription>
       </ng-content>
     </mat-label>
+
     <input
           #input
           matInput
           type             ="text"
-        id               ="name"
+          id               ="name"
 
           [formControlName]="itemNameControl"
           [(ngModel)]      ="itemNameInput"

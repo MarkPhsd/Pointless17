@@ -233,6 +233,7 @@ import { AuditPaymentComponent } from '../modules/admin/reports/item-sales-card/
 import { QRCodeModule } from 'angularx-qrcode'
 import { UnitTypeSelectorComponent } from './widgets/unit-type-selector/unit-type-selector.component';
 import { ItemassociationsComponent } from '../modules/admin/products/productedit/_product-edit-parts/itemassociations/itemassociations.component';
+import { SearchFieldsComponent } from './widgets/search-fields/search-fields.component';
 
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
@@ -474,6 +475,7 @@ import { ItemassociationsComponent } from '../modules/admin/products/productedit
     CoachMarksComponent,
     CoachMarksButtonComponent,
     UnitTypeSelectorComponent,
+    SearchFieldsComponent,
   ],
 
   imports: [
@@ -666,7 +668,8 @@ import { ItemassociationsComponent } from '../modules/admin/products/productedit
     RequestMessagesComponent,
     QuantiySelectorComponent,
     UnitTypeSelectorComponent,
-    
+
+    SearchFieldsComponent,
     SaveChangesButtonComponent,
     ScaleValueViewComponent,
     SplitEntrySelectorComponent,

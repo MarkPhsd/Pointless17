@@ -849,7 +849,7 @@ constructor(  private _snackBar              : MatSnackBar,
 
     this.selected = selected
     this.id = selectedRows[0].id;
-
+    console.log( this.id )
     this.getItem(this.id)
 
   }
@@ -875,10 +875,6 @@ constructor(  private _snackBar              : MatSnackBar,
       this.editItemWithId( this.id);
       return;
     }
-    // console.log('editSelectedItem', this.product.id)
-    // if (this.product) {
-    //   this.id = this.product.id
-    // }
   }
 
   getItemHistory(id: any) {

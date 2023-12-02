@@ -31,6 +31,7 @@ import { DateHelperService } from 'src/app/_services/reporting/date-helper.servi
 })
 export class AddInventoryItemComponent implements OnInit, OnDestroy    {
 
+  update$: Observable<any>;
   images: string;
   inputForm:                 UntypedFormGroup;
   id:                        any;
@@ -53,7 +54,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   displayWeight       : string;
   buyEnabled: boolean;
 
-
+  itemTags: string;
 
   action$: Observable<any>;
   inventoryAssignments  : IInventoryAssignment[];
@@ -120,17 +121,11 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     if (data && data.menuItem) {
       this.menuItem = data.menuItem;
     }
-
-    // console.log('data', data)
-
     if (data.buyEnabled) {
       this.buyEnabled = true;
     }
 
     if (this.item && this.menuItem) {
-      // console.log('item', this.item);
-      // console.log('menuItem', this.menuItem)
-
       return;
     }
 
@@ -148,7 +143,6 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
 
     this.inventoryLocations$ = locations$.pipe(switchMap(data => {
         this.inventoryLocations = data
-
         if (this.menuItem && this.item) {
           this.setFormInventoryData(site, this.item)
         }
@@ -165,7 +159,6 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
           this.setFormInventoryData(site, data);
           return this.menuService.getMenuItemByID(site, data.productID)
       })).pipe(switchMap(data => {
-        console.log('menuItem', data)
         this.menuItem = data;
         return locations$
       })).pipe(switchMap(data => {
@@ -205,13 +198,13 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     this.inputForm = this.fbInventory.initForm(this.inputForm)
     this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
 
+    this.itemTags = data?.metaTags
 
     this.productName = this.item.productName
     if (this.menuItem) {
       this.setMenuItem(this.menuItem, this.item)
     }
     this.findDefaultLocationAndSet(this.inventoryLocations)
-
   }
 
   ngOnDestroy(): void {
@@ -244,6 +237,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
         const packageQuantity = this.inputForm.controls['packageQuantity'].value
         const baseQuantity = { baseQuantity: packageQuantity}
         this.inputForm.patchValue(baseQuantity)
+        this.inputForm.patchValue({images: this.images})
 
         if (this.item && this.item.id) {
           this.id = this.item.id
@@ -270,9 +264,13 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
         const packageQuantity = this.inputForm.controls['packageQuantity'].value
         const baseQuantity = { baseQuantity: packageQuantity}
         this.inputForm.patchValue(baseQuantity)
+        this.inputForm.patchValue({images: this.images})
+
         let item = this.inventoryAssignmentService.setItemValues(this.inputForm, this.item)
+        item.images = this.images;
+
         if (this.id != 0) {
-          return this.inventoryAssignmentService.editInventory(this.site,this.item.id, item)
+          return this.inventoryAssignmentService.editInventory(this.site, this.item.id, item)
         }
         if (this.id == 0) {
           return  this.inventoryAssignmentService.addInventoryItem(this.site, item)
@@ -284,18 +282,41 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   }
 
   private updateInventory(item$: Observable<IInventoryAssignment>, exit: boolean) {
-    item$.subscribe(data => {
-      this.notifySave(data)
-      this.item = data;
+     const site = this.siteService.getAssignedSite();
+    this.update$ = item$.pipe(
+      switchMap(data => {
+          this.notifySave(data)
+          this.item = data;
 
-      const site = this.siteService.getAssignedSite();
-      this.setFormInventoryData(site, this.item)
+          this.setFormInventoryData(site, this.item)
+          console.log('menuItem', this.menuItem.urlImageMain, this.menuItem.urlImageOther, data.images, this.images)
+          if (this.menuItem && !this.menuItem.urlImageMain && data.images) {
+            this.menuItem.urlImageMain = data.images;
+            return  this.menuService.getProduct(site, this.menuItem.id)
+          }
+
+          return of(null)
+
+        }
+    )).pipe(
+      switchMap(data => {
 
       if (exit) {
         this.onCancel(true, true)
       }
-      return
-    })
+
+      if (!data) {
+        return of(null)
+      }
+
+      if (data && !data.urlImageMain) {
+        data.urlImageMain = this.images;
+        return this.menuService.saveProduct(site, data)
+      }
+
+      return of(data)
+    }))
+
   }
 
   notifySave(item) {
@@ -313,6 +334,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     delete$.subscribe(
       {next: data => {
           this.notifyEvent('Item Deleted. ', 'Success')
+          this.dialogRef.close()
           return
         }, error: error => {
           this.notifyEvent(`Item did not delete. ${error}` , 'Failed')
@@ -385,6 +407,13 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     });
   }
 
+
+  setItemTags(event) {
+    this.item.metaTags  = event;
+    this.inputForm.patchValue({metaTags: event})
+  }
+
+
    ///move to inventoryAssignemtnService
    openInventoryDialog(id: number) {
     const dialogRef = this.dialog.open(NewInventoryItemComponent,
@@ -399,6 +428,8 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
 
   received_Image(event) {
     this.images = event
+    if (this.item.images = event)
+    console.log(this.images)
     this.inputForm.patchValue({images: event})
   };
 

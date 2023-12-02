@@ -286,15 +286,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     if (devicename && this.isApp) {
       this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
         switchMap(data => {
-          // console.log('data', 'get pos device info.', data)
+           console.log('pos device 1', data)
           if (data.text) {
             try {
               const posDevice = JSON.parse(data.text) as ITerminalSettings;
-
-              // console.log('pos device', posDevice)
               this.uiSettings.updatePOSDevice(posDevice)
 
               this.terminalSetting = data;
+              console.log('pos device', posDevice)
               if (this.platformService.isAppElectron) {
                 if (posDevice && posDevice.electronZoom && posDevice.electronZoom != '0') {
                   this.uiSettings.electronZoom(posDevice.electronZoom)

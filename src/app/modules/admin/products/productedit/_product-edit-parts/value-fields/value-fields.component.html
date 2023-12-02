@@ -1,5 +1,4 @@
-
-<div *ngIf="inputForm">
+<div *ngIf="inputForm && !searchingEnabled">
   <div [formGroup]="inputForm">
     <mat-form-field
           *ngIf="enabled"
@@ -10,7 +9,6 @@
           <ng-content></ng-content>
           {{itemHeader | titlecase}}
         </mat-label>
-
         <div *ngIf="type === 'input' && passwordMask">
           <input matInput
                 [disabled] ='!enabled'
@@ -29,18 +27,16 @@
                 ngDefaultControl
                 [formControlName]="fieldName">
         </div>
-
     </mat-form-field>
   </div>
 
-  <div   *ngIf="!enabled">
+  <div   *ngIf="!enabled && !searchingEnabled">
     <h3>
-      <!-- <ng-content></ng-content>  -->
       {{itemHeader | titlecase}} : {{inputForm.controls[fieldName].value}}
     </h3>
   </div>
 
-  <div [formGroup]="inputForm"
+  <div [formGroup]="inputForm && !searchingEnabled"
        *ngIf="type === 'toggle'">
     <mat-slide-toggle
         [name]="fieldName"
@@ -52,3 +48,4 @@
   </div>
 
 </div>
+

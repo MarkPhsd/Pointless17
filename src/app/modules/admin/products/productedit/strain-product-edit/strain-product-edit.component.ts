@@ -48,7 +48,8 @@ export class StrainProductEditComponent implements OnInit {
   get brandID()       { return this.productForm.get("brandID") as UntypedFormControl;}
   urlImageMain: string;
   productJSONObject: menuButtonJSON;
- 
+  thumbnail : string;
+
   itemTags: string;
   //size search selector add on
   unitTypeNameSelected: string;
@@ -109,7 +110,7 @@ export class StrainProductEditComponent implements OnInit {
     this.unitTypeNameSelected = '';
   }
 
-  getUnitSelectorItem(event) { 
+  getUnitSelectorItem(event) {
       const item = {} as IItemBasic;
       item.name = event?.name;
       item.id = event?.id;
@@ -124,12 +125,12 @@ export class StrainProductEditComponent implements OnInit {
        pieceWeight: [],
        unitTypeSelections: [],
     })
-    
+
     try {
       const item = JSON.parse(prodJSON)
       this.unitTypeSelections = JSON.parse(this.productJSONObject.unitTypeSelections)
     } catch (error) {
-      
+
     }
     this.initUnitSearchForm()
   }
@@ -151,7 +152,7 @@ export class StrainProductEditComponent implements OnInit {
         this.productJSONObject = JSON.parse(product.json) as menuButtonJSON
         this.managerProtected = this.productJSONObject?.managerProtected;
       } catch (error) {
-        
+
       }
     }
   }
@@ -170,10 +171,10 @@ export class StrainProductEditComponent implements OnInit {
         return JSON.stringify(this.productJSONObject) ;
       } catch (error) {
         return ''
-      } 
+      }
       return this.product.json
     }
-   
+
   }
 
   ngOnInit() {
@@ -214,6 +215,7 @@ export class StrainProductEditComponent implements OnInit {
     if (this.productForm && this.product) {
       this.productForm.patchValue(this.product)
       this.urlImageMain = this.product.urlImageMain;
+      this.thumbnail = this.product.thumbnail;
     }
   };
 
@@ -224,7 +226,8 @@ export class StrainProductEditComponent implements OnInit {
   setValues(): boolean {
     this.product  = this.fbProductsService.setProductValues(this.product, this.productForm)
     if (this.product) {
-      this.product.urlImageMain  = this.urlImageMain
+      this.product.urlImageMain  = this.urlImageMain;
+      this.urlImageMain = this.product.urlImageMain;
       return true
     }
   }
@@ -314,9 +317,7 @@ export class StrainProductEditComponent implements OnInit {
     this.initReOrderUnitSearchForm();
   }
 
-  
   setItemTags(event) {
-    console.log(' edit item tags', event)
     this.itemTags = event;
   }
 
@@ -345,9 +346,9 @@ export class StrainProductEditComponent implements OnInit {
       if (!this.product.webProduct) {  this.product.webProduct = 0    }
       this.message = ""
       this.performingAction= true;
-      this.product.json = this.JSONAsString ;
+      this.product.json     = this.JSONAsString ;
       this.product.metaTags = this.itemTags;
-      this.product = this.menuService.cleanProduct(this.product)
+      this.product          = this.menuService.cleanProduct(this.product)
 
       const product$ = this.menuService.saveProduct(site, this.product);
       return product$.pipe(switchMap(
@@ -443,8 +444,14 @@ export class StrainProductEditComponent implements OnInit {
   updateUrlImageMain($event) {
     this.urlImageMain = $event
     this.product.urlImageMain = $event
-    // this.urlImageOther_ctl.setValue($event)
   }
+
+  setThumbNail(event) {
+    this.thumbnail = event;
+    this.product.thumbnail = event;
+    this.productForm.patchValue({thumbnail: event})
+  }
+
 
   parentFunc(event){
     // console.log(event)

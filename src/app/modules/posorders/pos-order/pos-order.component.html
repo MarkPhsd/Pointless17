@@ -193,7 +193,7 @@
 </div>
 
 <ng-template #receiveOrderView>
-  <div *ngIf=" (order?.service.filterType == -1 || order?.service.filterType == 1) ">
+  <div *ngIf=" (order?.service?.filterType == -1 || order?.service?.filterType == 1) ">
     <button mat-raised-button class="payment-buttons" color="accent" (click)="receiveOrder()">
       <mat-icon>download</mat-icon>
       <br>Receive Items

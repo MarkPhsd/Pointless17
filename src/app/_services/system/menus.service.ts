@@ -17,11 +17,8 @@ export interface ResultCheck {
 
 export class MenusService {
 
-
   private _accordionMenu    = new BehaviorSubject<AccordionMenu>(null);
   public  accordionMenu$    = this._accordionMenu.asObservable();
-
-
 
   submenu = {} as SubMenu[]
   accordionMenus: AccordionMenu[] = [
@@ -147,7 +144,9 @@ export class MenusService {
         { name: 'Flat Tax',       method: '' ,  minimized: true, routerLink: '/flat-rate-taxes',       routerLinkActive: 'flat-rate-taxes', onClick: '', icon: 'list', id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Print Locations',method: '' ,  minimized: true, routerLink: '/printer-locations',     routerLinkActive: 'printer-locations', onClick: '', icon: 'printer', id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Prompts & Kits', method: '' ,  minimized: false, routerLink: '/prompt-kits',          routerLinkActive: 'speaker-group', onClick: '', icon: 'chat', id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-      ]
+        { name: 'ReSale Brands',method: '' ,  minimized: true, routerLink: '/resale-brand-classes',     routerLinkActive: 'resale-brand-classes', onClick: '', icon: 'label', id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'ReSale Prices', method: '' ,  minimized: false, routerLink: '/resale-price-classes',          routerLinkActive: 'resale-price-classes', onClick: '', icon: 'label', id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+     ]
     },
     {
       id:             0,

@@ -418,16 +418,12 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     }
 
     metaTagRefresh(event) {
-      console.log('selected chips', event)
+
       let items = []
       if (event && event.length>0) {
-        event.forEach(data => {
-          items.push(data.name)
-        })
-
+        event.forEach(data => {   items.push(data.name)  })
         const site = this.siteService.getAssignedSite()
         this.metaTagSearch$ = this.menuService.metaTagSearch(site, items).pipe(switchMap(data => {
-
           return of(data)
         }))
       } else {

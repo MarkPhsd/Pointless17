@@ -25,6 +25,7 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
   @Input() products            : IProduct[];
   @Input() id                  : number;
   @Input() product             : IProduct;
+  thumbnail: string;
 
   @Input() set setProduct(product: IProduct) { this.product = product;  }
   @Input() printerName         : string;
@@ -87,12 +88,19 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
     this.iItemType = null
     this.initForm()
     if (this.product) {
+      this.thumbnail = this.product.thumbnail
       const site = this.siteService.getAssignedSite()
       this.itemType$ = this.itemTypeService.getItemType(site, this.product.prodModifierType).pipe(switchMap(data => {
         this.iItemType = data;
         return of(data)
       }))
     }
+  }
+
+  setThumbNail(event) {
+    this.thumbnail = event;
+    this.product.thumbnail = event;
+    this.productForm.patchValue({thumbnail: event})
   }
 
   _saveProduct(site: ISite) {
@@ -130,19 +138,19 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
       })
     }
 
-
     this.electronEnabled =  this.electronService.isElectronApp
     this.printerName = this.getLastPrinterName();
     this.labelID = this.printingService.getLastLabelUsed();
   }
 
   initForm() {
+    this.thumbnail = null;
     if (this.product) {
+      this.thumbnail = this.product.thumbnail;
       this.initFormFields();
       if (this.productForm && this.product) {
         this.productForm.patchValue(this.product)
       }
-
 
       this.productForm.valueChanges
           .pipe(debounceTime(500)) // Adjust the debounce time as needed (in milliseconds)

@@ -208,5 +208,6 @@ export interface IProduct {
   errorMessage: string;
   json: string;
   pB_MainID: number; number;
+  thumbnail: string;
 }
 

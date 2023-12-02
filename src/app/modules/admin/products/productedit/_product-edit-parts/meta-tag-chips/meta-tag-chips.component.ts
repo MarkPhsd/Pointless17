@@ -9,6 +9,7 @@ import { IProduct, ISite } from 'src/app/_interfaces';
 import { MenuService } from 'src/app/_services';
 import { IMetaTag, MetaTagsService } from 'src/app/_services/menu/meta-tags.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 
 @Component({
   selector: 'app-meta-tag-chips',
@@ -29,6 +30,7 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
   @Input()  inputForm  :        UntypedFormGroup;
   @Input()  metaTagList:        string;
   @Input()  product    :        IProduct;
+  @Input()  inventory   : IInventoryAssignment;
 
   // @Output() outPutItemTags = new EventEmitter()
   @Output() outPutItemTags = new EventEmitter<any>();
@@ -53,7 +55,6 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
   //
   // allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
   allMetaTags: Observable<IMetaTag[]>;
-
   searchPhrase:    Subject<any> = new Subject();
   site:            ISite;
 
@@ -111,8 +112,18 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
   }
 
   addtoDataList(value: string) {
-    const tag = {} as IMetaTag;
+    let tag = {} as IMetaTag;
     tag.name = value
+    if (this.inventory) {
+      tag.departmentID = this.inventory?.departmentID;
+      tag.brandID      = this.inventory?.brandID;
+      tag.attribute    = this.inventory?.attribute;
+    }
+    if (this.product) {
+      tag.departmentID = this.product?.departmentID;
+      tag.brandID      = this.product?.brandID;
+    }
+
     const tags$ = this.metaTagService.post(this.site, tag)
     tags$.subscribe()
   }

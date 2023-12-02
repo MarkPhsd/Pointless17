@@ -25,6 +25,7 @@ import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
 import { MatDialog } from '@angular/material/dialog';
 import { BrandClassSearch, BrandClassSearchResults, BrandsResaleService, Brands_Resale } from 'src/app/_services/resale/brands-resale.service';
 import { Router } from '@angular/router';
+import { C } from '@angular/cdk/keycodes';
 
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
@@ -103,7 +104,7 @@ export class BrandEditorMainComponent implements OnInit {
   _search$: Subscription;
   advanced : boolean = true;
   sortList: boolean  = false;
-
+  urlPath$: Observable<any>;
   // .pipe(
   //   debounceTime(250),
   //     distinctUntilChanged(),
@@ -114,6 +115,9 @@ export class BrandEditorMainComponent implements OnInit {
   initSubscriptions() {
     this._search$ = this.brandsResaleService.search$
       .subscribe(data => {
+
+        console.log('refresh search mode', data)
+
         if (!data) { return }
 
         if (data.pageNumber) {
@@ -123,13 +127,15 @@ export class BrandEditorMainComponent implements OnInit {
 
         this.searchModel = data;
 
-        console.log('brandSearch 2', data)
-
         if (data.pageNumber) {
           this.onGridReady(this.params)
         } else {
           this.currentPage += 1
           this.onGridReady(this.params)
+        }
+
+        if (!data.name) {
+          this.brand_Resale = null;
         }
       }
     )
@@ -143,19 +149,24 @@ export class BrandEditorMainComponent implements OnInit {
     private productEditButtonService: ProductEditButtonService,
     private agGridFormatingService : AgGridFormatingService,
     private awsService             : AWSBucketService,
-    private dialog: MatDialog,
-    private router: Router,
-    private brandsResaleService: BrandsResaleService,
+    private dialog                 : MatDialog,
+    private router                 : Router,
+    private brandsResaleService    : BrandsResaleService,
     private menuService            : MenuService,
   )
 {  }
 
   ngOnInit(): void {
-
-    this.refreshDepartments()
-    this.initSubscriptions();
-    this.initAgGrid(this.pageSize);
-    this.initPaging();
+    this.urlPath$  =  this.awsService.awsBucketURLOBS().pipe(
+      switchMap(data => {
+        this.urlPath = data;
+        this.refreshDepartments()
+        this.initSubscriptions();
+        this.initAgGrid(this.pageSize);
+        this.initPaging();
+        return of(data)
+      }
+    ))
   }
 
   initPaging() {
@@ -178,6 +189,7 @@ export class BrandEditorMainComponent implements OnInit {
           this.pageSize  = pageSize
           this.currentPage = page
           this.gridOptions = this.agGridFormatingService.initGridOptions(this.pageSize , this.columnDefs, false);
+          console.log('init paging refrsh')
           this.refreshGrid()
         }
       }
@@ -201,7 +213,7 @@ export class BrandEditorMainComponent implements OnInit {
   }
 
   refreshGrid() {
-    this.refreshDepartments()
+    // this.refreshDepartments();
     this.onGridReady(this.params)
   }
 
@@ -217,66 +229,64 @@ export class BrandEditorMainComponent implements OnInit {
 
    this.columnDefs =  []
 
-    let header = {headerName: 'ID',  field: 'id',
-          // cellRenderer: "btnCellRenderer",
-          // cellRendererParams: {
-          //   onClick: this.editProductFromGrid.bind(this),
-          //   label: this.buttonName,
-          //   getLabelFunction: this.getLabel.bind(this),
-          //   btnClass: 'btn btn-primary btn-sm'
-          // },
-          minWidth: 125,
-          maxWidth: 125,
-          visible: false,
-          flex: 2,
-    }
+      let header = {headerName: 'ID'
+            ,  field: 'id',
+            minWidth: 0,
+            maxWidth: 9,
+            hide: true,
+            flex: 1,
+      }
     this.columnDefs.push(header)
-    this.columnDefs.push(this.getValueField('name'));
-    this.columnDefs.push(this.getValueField('brandID_Barcode', 'Prefix', 150));
-    this.columnDefs.push(this.getValueField('gender'));
-    this.columnDefs.push(this.getValueField('jeans'));
-    this.columnDefs.push(this.getValueField('pants'));
-    this.columnDefs.push(this.getValueField('crops'));
-    this.columnDefs.push(this.getValueField('shorts'));
-    this.columnDefs.push(this.getValueField('skirts'));
-    this.columnDefs.push(this.getValueField('shirts'));
-    this.columnDefs.push(this.getValueField('tops'));
-    this.columnDefs.push(this.getValueField('polos'));
-    this.columnDefs.push(this.getValueField('tees'));
-    this.columnDefs.push(this.getValueField('tanks'));
-    this.columnDefs.push(this.getValueField('sweaters'));
-    this.columnDefs.push(this.getValueField('fleece'));
-    this.columnDefs.push(this.getValueField('outerwear'));
-    this.columnDefs.push(this.getValueField('seasonal'));
-    this.columnDefs.push(this.getValueField('dresses'));
-    this.columnDefs.push(this.getValueField('bags'));
-    this.columnDefs.push(this.getValueField('flips'));
-    this.columnDefs.push(this.getValueField('shoes'));
-    this.columnDefs.push(this.getValueField('belts'));
-    this.columnDefs.push(this.getValueField('jewelry'));
-    this.columnDefs.push(this.getValueField('watch'));
-    this.columnDefs.push(this.getValueField('sunglasses'));
-    this.columnDefs.push(this.getValueField('hats'));
-    this.columnDefs.push(this.getValueField('misc'));
-    // this.gridOptions = this.agGridFormatingService.initGridOptionsFormated(pageSize, this.columnDefs);
+
+      let image =   { headerName: '',
+            field: 'thumbnail',
+            width: 75,
+            minWidth: 75,
+            maxWidth: 75,
+            sortable: false,
+            autoHeight: true,
+            comparator: myComparator,
+            cellRenderer: AgGridImageFormatterComponent
+    }
+    this.columnDefs.push(image)
+
+    this.columnDefs.push(this.getValueField('name', 'Name', null, true,));
+    this.columnDefs.push(this.getValueField('brandID_Barcode', 'Prefix', 150, true,));
+    this.columnDefs.push(this.getValueField('gender', 'Gender', null, false,));
+
+    this.brandsResaleService.lClassFieldData.forEach(data => {
+      this.columnDefs.push(this.getValueField(data.name.toLowerCase()));
+    })
+
+    this.columnDefs.push(this.getValueField('images',null, null, null, true))
+    this.columnDefs.push(this.getValueField('thumbNail',null, null, null, true))
+
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs, false);
   }
 
-  getValueField(name: string, header? : string, width?: number) {
+  getValueField(name: string, header? : string, width?: number, disabled?: boolean, hide?: boolean) {
     if (!header) {
       header = name
     }
     if (!width) {
       width = 125
     }
+    let edit = true;
+    if (disabled) {
+      edit = false
+    }
+    let visible = true;
+    if (hide) {
+      visible = false
+    }
     return   {headerName: header.toUpperCase(),    field: name,
         sortable: true,
         width: 76,
         minWidth:width,
-        editable: true,
-        singleClickEdit: true,
+        hide: !visible,
+        editable: edit,
+        singleClickEdit: edit,
         comparator: myComparator,
-      // flex: 2,
     }
   }
 
@@ -305,6 +315,7 @@ export class BrandEditorMainComponent implements OnInit {
     this.initAgGrid(this.pageSize)
     if (page != 0) { this.currentPage  = page}
     const productSearchModel = this.getSearchModel();
+    console.log('refreshsearch')
     this.onGridReady(this.params)
   }
 
@@ -318,9 +329,6 @@ export class BrandEditorMainComponent implements OnInit {
     this.endRow        = endRow;
     if (tempStartRow > startRow) { return this.currentPage - 1 }
     if (tempStartRow < startRow) { return this.currentPage + 1 }
-    // this.searchModel.pageNumber = this.currentPage;
-    console.log('setCurrentPage', this.currentPage, startRow, endRow)
-
     return this.currentPage
   }
 
@@ -356,11 +364,12 @@ export class BrandEditorMainComponent implements OnInit {
             this.currentPage   = resp.currentPage
             this.numberOfPages = resp.pageCount
             this.recordCount   = resp.recordCount
-            console.log('onGridReady',this.currentPage)
+            // console.log('onGridReady',this.currentPage)
             if (this.numberOfPages !=0 && this.numberOfPages) {
               this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
             }
-            params.successCallback( data.results )
+            let results        =  this.refreshImages(data.results)
+            params.successCallback( results )
           }
         );
       }
@@ -373,39 +382,54 @@ export class BrandEditorMainComponent implements OnInit {
     params.api.resetRowHeights();
   }
 
-  cellValueChanged(event) {
+  refreshImages(data) {
+    const urlPath = this.urlPath
+    if (urlPath) {
+      data.forEach( item =>
+        {
+          if (item.thumbnail) {
+            const list = item.thumbnail.split(',')
+            if (list[0]) {
+              item.thumbnail = `${urlPath}${list[0]}`
+            }
+          }
+        }
+      )
+    }
 
-  }
 
-  onCellClicked(event) {
-    // console.log('event' , event)
-    // const colName = event?.column?.colId.toString() as string;
-    // if (colName === 'active') {
-    //   let item = event.data
     //   item.active = !event.value
     //   this.action$ = this.updateValues(event.data.id, !event.value, 'active');
     //   event.value = !event.value;
     //   this.refreshGrid()
-    //   // console.log(item)
-    // this.gridAPI.setRowData(item)
+    return data;
   }
 
-  // refreshImages(data) {
-  //   const urlPath = this.urlPath
-  //   if (urlPath) {
-  //     data.forEach( item =>
-  //       {
-  //         if (item.urlImageMain) {
-  //           const list = item.urlImageMain.split(',')
-  //           if (list[0]) {
-  //             item.imageName = `${urlPath}${list[0]}`
-  //           }
-  //         }
-  //       }
-  //     )
-  //   }
-  //   return data;
-  // }
+
+  cellValueChanged(event) {
+
+    let item = event?.data as Brands_Resale;
+    const site = this.siteService.getAssignedSite()
+    const action$ = this.brandsResaleService.put(site, item)
+    const deptName = event?.colDef?.field;
+
+    this.action$ =  this.brandsResaleService.get(site, item.id).pipe(switchMap(data => {
+      item.images    = data.images;
+      item.thumbnail = data.thumbnail;
+      return action$
+    })).pipe(
+        switchMap( data => {
+          const item$ = this.menuService.updateBrandClassValue( site, event.value, item.id, item.gender, deptName )
+          return item$
+        }
+      )
+    )
+  }
+
+  onCellClicked(event) {
+
+  }
+
 
   //mutli select method for selection change.
   onSelectionChanged(event) {
@@ -431,21 +455,35 @@ export class BrandEditorMainComponent implements OnInit {
 
     this.selected = selected
     this.id = selectedRows[0].id;
-
+    this.brand_Resale = selectedRows[0].data;
+    console.log(this.id)
     this.getItem(this.id)
-
   }
 
   getItem(id: number) {
     if (id) {
+      console.log('id',id)
+      this.brand_Resale = null;
       const site = this.siteService.getAssignedSite();
       this.brandResale$  = this.brandsResaleService.get(site, this.id).pipe(
         switchMap(data => {
-          this.brand_Resale =data
+          this.brand_Resale = data as Brands_Resale;
           return of(data)
         })
       )
     }
+  }
+
+  updateBrand() {
+    if (this.brand_Resale) {
+      //foreach item in the columns
+      //send the department name
+      // this.brandsResaleService.lClassFieldData.filter(data => return data.name === )
+    }
+  }
+
+  refresh(event){
+    this.brandsResaleService.updateSearchModel( this.searchModel )
   }
 
   editSelectedItem() {
@@ -500,17 +538,11 @@ export class BrandEditorMainComponent implements OnInit {
 
   editItemWithId(id:number) {
     if(!id) { return }
-    // this.openingProduct = true
-    // console.log('edit Item With Id',id)
-    // this.product$ =
     this.productEditButtonService.openProductDialogObs(id).subscribe(
-      // switchMap(
         data => {
-        // console.log('product', data)
-        // this.openingProduct = false
         return of(data)
-      })
-    // )
+    })
+
   }
 
   nav() {

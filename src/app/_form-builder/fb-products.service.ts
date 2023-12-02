@@ -233,6 +233,7 @@ export class FbProductsService {
         parLevel                   :   [''],
         slug                       :   [''],
         pB_MainID                   : [],
+        thumbnail                   :  [],
       })
       return fb;
     }
@@ -318,7 +319,7 @@ export class FbProductsService {
       }
     }
 
-   
+
     isRetail(itemType: IItemType | ItemType) {
       if (itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'retail' )) {
         return true;

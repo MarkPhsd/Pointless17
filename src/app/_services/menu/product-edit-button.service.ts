@@ -173,14 +173,14 @@ export class ProductEditButtonService {
     return item$
   }
 
-  openBuyInventoryItemDialogObs(menuItem: IMenuItem, order: IPOSOrder) {
+  openBuyInventoryItemDialogObs(menuItem: IMenuItem, order: IPOSOrder, openInventoryDialog?: boolean, buyFeatures?: any) {
     const site = this.siteService.getAssignedSite();
-    if (!order) { 
+    if (!order) {
       this.siteService.notify('Please first start an order before buying items. ', 'close', 5000)
       return of(null)
     }
     let productValue: IProduct;
-    
+
     const item$ =   this.menuService.getProduct(site, menuItem.id).pipe(
       switchMap(product => {
 
@@ -193,19 +193,27 @@ export class ProductEditButtonService {
       }
     )).pipe(switchMap(product => {
 
-      console.log('product', product)
-      if (!product) {return of(null) } 
+      if (!product) {return of(null) }
       productValue = product
       return this.postInventory(site, product, order);
 
     }
     )).pipe(switchMap(item => {
 
-      // console.log('item', item)
       if (!item) { return of(null) }
+      if (buyFeatures) {
+        item.attribute = buyFeatures?.attribute;
+        item.departmentID = buyFeatures?.departmentID;
+        item.brandID = buyFeatures?.brandID;
+      }
+
+      return this.inventoryService.putInventoryAssignment(site, item)
+
+    })).pipe(switchMap(item => {
+
       return this.addInventoryDialog( {buyEnabled: true, id: item.id, menuItem: menuItem, inventory: item });
 
-    }) ,catchError(data => { 
+    }) ,catchError(data => {
       console.log('error', data)
       return of(data)
     }));
@@ -214,9 +222,9 @@ export class ProductEditButtonService {
 
   }
 
-  postInventory(site, product:IProduct,order:IPOSOrder ) { 
+  postInventory(site, product:IProduct,order:IPOSOrder ) {
     let item = {} as IInventoryAssignment;
-    
+
     item.product = product
     item.productID = product.id;
     item.baseQuantity = 1;
@@ -230,11 +238,11 @@ export class ProductEditButtonService {
 
     return  this.inventoryService.postInventoryAssignment(site, item)
   }
-  
-  getProduct(id,site, product) { 
-    if (product) { 
+
+  getProduct(id,site, product) {
+    if (product) {
       let product$ = this.menuService.putProduct(site, product.id, product);
-      return  product$.pipe(switchMap(data => { 
+      return  product$.pipe(switchMap(data => {
         return this.menuService.getProduct(site, id)
       }))
     }
@@ -458,7 +466,7 @@ export class ProductEditButtonService {
         },
       )
     )
- 
+
   }
 
   async openProductEditor(id: number,productTypeID: number ) {
@@ -757,24 +765,21 @@ export class ProductEditButtonService {
     // this.menuService.getProduct(site, id).subscribe( data=> {
     //   const productTypeID = data.prodModifierType
     //   this.openProductEditor(id, productTypeID)
-      if (posOrderItem) {
-
-        let itemWithAction      = {}  as ItemWithAction;
-        itemWithAction.action   = 1;
-        itemWithAction.posItem  = posOrderItem;
-        itemWithAction.id       = posOrderItem.id
-        itemWithAction.typeOfAction = 'VoidItem'
-        const id = posOrderItem.id;
-        dialogRef = this.dialog.open(AdjustItemComponent,
-          { width:        '450px',
-            minWidth:     '450px',
-            height:       '600px',
-            minHeight:    '600px',
-            data : itemWithAction
-        })
-
-      }
-
+    if (posOrderItem) {
+      let itemWithAction      = {}  as ItemWithAction;
+      itemWithAction.action   = 1;
+      itemWithAction.posItem  = posOrderItem;
+      itemWithAction.id       = posOrderItem.id
+      itemWithAction.typeOfAction = 'VoidItem'
+      const id = posOrderItem.id;
+      dialogRef = this.dialog.open(AdjustItemComponent,
+        { width:        '450px',
+          minWidth:     '450px',
+          height:       '600px',
+          minHeight:    '600px',
+          data : itemWithAction
+      })
+    }
   }
 
   openVoidPaymentDialog(item ) {

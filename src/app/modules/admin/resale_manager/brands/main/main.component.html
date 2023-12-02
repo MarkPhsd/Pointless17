@@ -1,16 +1,23 @@
-<div *ngIf="action$ | async as item; else opening"></div>
-<!-- <div *ngIf="(product$ | async) as product"></div>
-<div *ngIf="(copy$ | async) as copy"></div>
-<div *ngIf="(urlPath$ | async) as urlPath"></div> -->
+<div *ngIf="(action$ | async) as item; else opening"></div>
+<div *ngIf="(brandResale$ | async) as brand"></div>
+<div *ngIf="(urlPath$  | async) as item"></div>
 <h1>Brands List </h1>
 <mat-label>Assign each column a value, these relate to your price classes.</mat-label>
 
-<button mat-button (click)="nav()"><mat-icon>open_in_new</mat-icon>Price Class</button>
+<div class="flex-grid-row">
+  <div style="margin:5px">
+    <button mat-button (click)="nav()"><mat-icon>open_in_new</mat-icon>Price Class</button>
+  </div>
+  <div style="margin:5px" *ngIf="brand_Resale">
+    <button mat-button (click)="updateBrand()"><mat-icon>update</mat-icon>Update Brand Prices</button>
+
+  </div>
+  <div></div>
+</div>
+
 
 <ng-template #opening>
-  <!-- <div *ngIf="openingProduct">
-    <mat-spinner [diameter]="40"></mat-spinner>
-  </div> -->
+
 </ng-template>
 <mat-divider></mat-divider>
 
@@ -20,7 +27,7 @@
     <div *ngIf="value" class="loader">
       <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
     </div>
-    
+
     <!-- [class]              ="agtheme" -->
     <ag-grid-angular
           #agGrid
@@ -40,12 +47,19 @@
 
   </div>
 
-  <div *ngIf="!hideAdd" >
-    <brand-class-filter   
+ <div>
+    <brand-class-filter
       [parent]="'brand'"
       [pagingForm]="pagingForm"
       class="grid-list-item" >
+      Search
     </brand-class-filter>
+
+    <brand-class-editor
+      [brand]="brand_Resale"
+      (outPutRefresh)="refresh($event)">
+      Item Info
+    </brand-class-editor>
   </div>
 </div>
 

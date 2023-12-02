@@ -1,5 +1,6 @@
-
 <mat-card *ngIf="searchForm">
+  <ng-content></ng-content>
+
   <div class="button-grid">
 
       <span class="margin-10">
@@ -21,6 +22,7 @@
       </span>
 
   </div>
+
   <div *ngIf="searchForm"  [formGroup]="searchForm">
     <div *ngIf="!disableName">
       <app-value-fields
@@ -32,27 +34,11 @@
       </app-value-fields>
     </div>
 
-    <div   *ngIf="parent === 'class' && (attributes$ | async) as list">
-      <form-select-list   [searchForm]        = "searchForm"
-                          [formFieldName]     ="'name'"
-                          [list]              = "list"
-                          [showActiveInactive]="true"
-                          (selectionChange)   = "refreshAttributeChange($event)">
-        <div fieldSearchDescription>Attributes</div>
-        </form-select-list>
-    </div>
+    <ng-container [ngTemplateOutlet]="departmentIDSelect"></ng-container>
 
-    <div   *ngIf="parent === 'class' && (departments$ | async) as list">
-      <form-select-list   [searchForm]        = "searchForm"
-                          [formFieldName]     ="'departmentID'"
-                          [list]              = "list"
-                          [showActiveInactive]="true"
-                          (selectionChange)   = "refreshDepartmentChange($event)">
-        <div fieldSearchDescription>Department</div>
-        </form-select-list>
-    </div>
+    <ng-container [ngTemplateOutlet]="attributeSelect"></ng-container>
 
-    <div >
+    <div>
       <mat-button-toggle-group name="type"
               aria-label="Item Type"
               formControlName="gender">
@@ -76,21 +62,11 @@
       </app-value-fields>
     </div>
 
-    <!-- <div *ngIf="advanced && pagingForm">
-      <app-value-fields
-            [fieldsClass]="'fields-small'"
-            [inputForm]="pagingForm"
-            [fieldName]="'pageSize'">
-         Page Size
-      </app-value-fields>
-    </div> -->
-
     <div *ngIf="advanced && pagingForm">
       <div  *ngIf="sortList" [formGroup]="pagingForm">
         <mat-form-field style="font-size:1em;" appearance="outline">
           <mat-label>Sort By</mat-label>
-          <mat-select
-                      formControlName ="sort"  >
+          <mat-select formControlName ="sort"  >
               <mat-option
                     *ngFor="let item of sortList"
                     [value]="item">
@@ -102,23 +78,46 @@
     </div>
   </div>
 
- <!-- Brands
-
-  Attributes
-
-  Gender 0, 1, Any; -->
-
-  <!-- <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-    <mat-button-toggle value="1">Male</mat-button-toggle>
-    <mat-button-toggle value="0">Female</mat-button-toggle>
-  </mat-button-toggle-group> -->
 </mat-card>
 
-   <!-- <app-brand-type-select
-                      [fieldName]      ="'name'"
-                      [inputForm]      = "searchForm"
-                      [formFieldClass] = "'mat-form-field2'"
-                      [disableDelete]  = "true"
-                      (itemSelect)     = "setBrandID($event)">
-          Search Brands
-    </app-brand-type-select> -->
+<ng-template #departmentIDSelect>
+  <div   *ngIf="parent === 'class' && (departments$ | async) as list">
+    <div *ngIf="searchForm" [formGroup]="searchForm">
+      <mat-form-field appearance="outline"   >
+          <mat-select
+                type="'number'"
+                [formControlName]   = "'departmentID'">
+              <mat-option [value]="0">
+                Clear
+             </mat-option>
+              <mat-option  *ngFor="let item of list"
+                  [value]="item.id">
+                  {{ item.name }}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #attributeSelect>
+  <div   *ngIf="parent === 'class' && (attributes$ | async) as list">
+    <div *ngIf="searchForm" [formGroup]="searchForm">
+      <mat-form-field appearance="outline"  >
+          <mat-select
+                type="'text'"
+                [formControlName]   = "'name'">
+              <mat-option [value]="">
+                Clear
+              </mat-option>
+
+              <mat-option  *ngFor="let item of list"
+                  [value]="item.name">
+                  {{ item.name }}
+              </mat-option>
+
+          </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</ng-template>

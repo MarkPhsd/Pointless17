@@ -189,14 +189,14 @@
                 </mat-slide-toggle>
               </div>
 
-              <div class="toggle-fields">
+              <div class="toggle-fields" style="margin-bottom:5px">
                 <mat-slide-toggle
                           formControlName="enableInventoryPerItem"  >
-                  <mat-label>Inventory Per Item In Menu Item Display</mat-label>
+                  <mat-label>Show Distint Inventory In  <br> Product Catalog</mat-label>
                 </mat-slide-toggle>
               </div>
 
-              <div class="toggle-fields">
+              <div class="toggle-fields" style="margin-bottom:5px">
                 <mat-slide-toggle
                           [matTooltip]="toolTips[0].value"
                           formControlName="storeNavigation"  >
@@ -204,9 +204,9 @@
                 </mat-slide-toggle>
               </div>
 
-              <div class="toggle-fields">
+              <div class="toggle-fields"  style="margin-bottom:5px">
                 <mat-slide-toggle
-                          formControlName="suppressItemsInStoreNavigation"   >
+                          formControlName="suppressItemsInStoreNavigation">
                   <mat-label>Suppress Items in Categories <br> For Store Navigation</mat-label>
                 </mat-slide-toggle>
               </div>
@@ -214,7 +214,7 @@
               <div class="toggle-fields">
                 <mat-slide-toggle
                           formControlName="enableShippingInfo" >
-                  <mat-label>enableSimliarItems</mat-label>
+                  <mat-label>Enable Shipping Info</mat-label>
                 </mat-slide-toggle>
               </div>
 
@@ -292,6 +292,7 @@
                   <mat-label>Hide search features <br> (in app)</mat-label>
                 </mat-slide-toggle>
               </div>
+
             </div>
 
             <div class="grid-views">

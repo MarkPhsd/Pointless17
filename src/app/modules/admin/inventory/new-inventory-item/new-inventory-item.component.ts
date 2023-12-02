@@ -39,8 +39,9 @@ export class NewInventoryItemComponent implements OnInit {
   menuItem                   :IMenuItem;
   facilityLicenseNumber:     string;
   facility:                  any;
-  images: string;
-  
+  images  : string;
+  itemTags: string;
+
   constructor(
     private _snackBar    : MatSnackBar,
     private siteService  : SitesService,
@@ -55,33 +56,33 @@ export class NewInventoryItemComponent implements OnInit {
     private dialogRef    : MatDialogRef<NewInventoryItemComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
   {
-    
+
     if (data) {
       this.id = data.id
     } else {
       this.id = this.route.snapshot.paramMap.get('id');
     }
 
-    if (data && data.inventory) { 
+    if (data && data.inventory) {
       this.item = data.inventory;
     }
-    if (data && data.menuItem) { 
+    if (data && data.menuItem) {
       this.menuItem = data.menuItem;
     }
 
   }
 
-  get itemTypeDescription() { 
-    if (!this.menuItem) { return } 
-    if (!this.menuItem.itemType) { return } 
+  get itemTypeDescription() {
+    if (!this.menuItem) { return }
+    if (!this.menuItem.itemType) { return }
     if (!this.menuItem?.itemType?.useGroups) { return };
     return this.menuItem?.itemType?.useGroups?.name.toLowerCase();
   }
 
-  get isCannabis() { 
+  get isCannabis() {
 
-    if (!this.menuItem) { return } 
-    if (!this.menuItem.itemType) { return } 
+    if (!this.menuItem) { return }
+    if (!this.menuItem.itemType) { return }
     if (!this.menuItem?.itemType?.useGroups) { return };
 
     if (this.menuItem?.itemType?.useGroups?.name.toLowerCase() === 'cannabis') {
@@ -90,7 +91,7 @@ export class NewInventoryItemComponent implements OnInit {
 
     if (this.menuItem?.itemType?.useGroups?.name.toLowerCase() === 'med-cannabis') {
       return true
-    }            
+    }
 
   }
 
@@ -101,7 +102,7 @@ export class NewInventoryItemComponent implements OnInit {
     }))
     this.site =  this.siteService.getAssignedSite();
 
-    if (this.item && this.menuItem) { 
+    if (this.item && this.menuItem) {
       this.setFormInventoryData(this.item)
       return;
     }
@@ -110,7 +111,7 @@ export class NewInventoryItemComponent implements OnInit {
     this.inventoryAssignment$.pipe(
       switchMap( data => {
         this.item = data;
-       
+
         this.setFormInventoryData(this.item)
         return  this.menuService.getMenuItemByID(this.site, data.productID)
       }
@@ -119,9 +120,10 @@ export class NewInventoryItemComponent implements OnInit {
     })
   }
 
-  setFormInventoryData(data) { 
+  setFormInventoryData(data) {
     this.item      = data
     this.images    = data?.images;
+    this.itemTags  = data.metaTags;
     this.inputForm = this.fbInventory.initForm(this.inputForm)
     this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
   }
@@ -187,6 +189,12 @@ export class NewInventoryItemComponent implements OnInit {
       }
     })
   }
+
+  setItemTags(event) {
+    this.item.metaTags  = event;
+    this.inputForm.patchValue({metaTags: event})
+  }
+
 
   deleteItem(event) {
     const site = this.siteService.getAssignedSite();

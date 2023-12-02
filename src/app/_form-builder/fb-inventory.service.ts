@@ -90,10 +90,14 @@ export class FbInventoryService {
       brandID : [],
       itemSKU     : [],
       bay: [],
-    
-      quality     : [], 
+
+      quality     : [],
       images      : [],
       rareValue   : [],
+      metaTags: [],
+      departmentID: [],
+      attribute: [],
+      json: []
     })
 
     return fb;

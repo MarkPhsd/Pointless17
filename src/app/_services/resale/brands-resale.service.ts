@@ -11,7 +11,6 @@ import { UserAuthorizationService } from '../system/user-authorization.service';
 import { IPagedList } from '../system/paging.service';
 import { error } from 'console';
 import { ItemBasic } from 'src/app/modules/admin/report-designer/interfaces/reports';
-
 export interface BrandClassSearch {
   name: string;
   gender?: number | null;
@@ -28,6 +27,7 @@ export interface BrandClassSearch {
 export  interface Brands_Resale {
   id: number;
   name: string;
+  brand: string;
   brandID_Barcode?: number | null;
   gender?: number | null;
   jeans?: number | null;
@@ -54,6 +54,9 @@ export  interface Brands_Resale {
   sunglasses?: number | null;
   hats?: number | null;
   misc?: number | null;
+  images: string;
+  thumbnail: string;
+  brandID: number;
 }
 
 export interface BrandClassSearchResults {
@@ -75,6 +78,34 @@ export interface ItemBasicResults {
 export class BrandsResaleService {
 
 
+
+  lClassFieldData = [
+    { id: 1, name: 'Jeans' },
+    { id: 2, name: 'Pants' },
+    { id: 3, name: 'Crops' },
+    { id: 4, name: 'Shorts' },
+    { id: 5, name: 'Skirts' },
+    { id: 6, name: 'Shirts' },
+    { id: 7, name: 'Tops' },
+    { id: 8, name: 'Polos' },
+    { id: 9, name: 'Tees' },
+    { id: 10, name: 'Tanks' },
+    { id: 11, name: 'Sweaters' },
+    { id: 12, name: 'Fleece' },
+    { id: 13, name: 'Outerwear' },
+    { id: 14, name: 'Seasonal' },
+    { id: 15, name: 'Dresses' },
+    { id: 16, name: 'Bags' },
+    { id: 17, name: 'Flips' },
+    { id: 18, name: 'Shoes' },
+    { id: 19, name: 'Belts' },
+    { id: 20, name: 'Jewelry' },
+    { id: 21, name: 'Watch' },
+    { id: 22, name: 'Sunglasses' },
+    { id: 23, name: 'Hats' },
+    { id: 24, name: 'Misc' },
+  ];
+
   private _Search       = new BehaviorSubject<BrandClassSearch>(null);
   public search$        = this._Search.asObservable();
 
@@ -90,6 +121,26 @@ export class BrandsResaleService {
 
   updateSearchModel(searc: BrandClassSearch) {
     this._Search.next(searc)
+  }
+
+
+  getBrands(site: ISite, search :BrandClassSearch): Observable<BrandClassSearchResults> {
+    const controller = "/Brands_Clothing/"
+
+    const endPoint   = `SearchBrands`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+    const item$ = this.httpClient.post<BrandClassSearchResults>(url, search)
+    return item$.pipe(
+      switchMap(data => {
+        if (data.errorMessage) {
+          this.sitesService.notify('Error Occured' + data.errorMessage, 'close', 50000, 'red')
+        }
+        return of(data)
+      })
+    );
   }
 
   searchView(site: ISite, search :BrandClassSearch): Observable<BrandClassSearchResults> {
@@ -127,13 +178,17 @@ export class BrandsResaleService {
 
   }
 
-  getBrandsByAttributeDepartment_sub(site: ISite, departmentID : number, attribute: string,gender: number): Observable<ItemBasicResults> {
+  getBrandsByAttributeDepartment_sub(site: ISite, departmentID : number, attribute: string, gender: number, brandName?:string): Observable<ItemBasicResults> {
 
+
+    if (!brandName) {
+      brandName = null;
+    }
     const controller = "/Brands_Clothing/"
 
     const endPoint   = `getBrandsByAttributeDepartment_sub`
 
-    const parameters = `?departmentID=${departmentID}&attribute=${attribute}&gender=${gender}`
+    const parameters = `?departmentID=${departmentID}&attribute=${attribute}&gender=${gender}&brandName=${brandName}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
@@ -185,7 +240,7 @@ export class BrandsResaleService {
 
     const controller ="/Brands_Clothing/"
 
-    const endPoint = `SaveClasses_Clothing`
+    const endPoint = `PutBrands_Clothing`
 
     const parameters = `?id=${item.id}`
 

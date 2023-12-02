@@ -2,7 +2,7 @@ import { Injectable,  } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { AuthenticationService } from '../system/authentication.service';
 import { Observable,  } from 'rxjs';
-import {  ISite,  }  from 'src/app/_interfaces';
+import {  ISite, Paging,  }  from 'src/app/_interfaces';
 import { SitesService } from '../reporting/sites.service';
 
 export interface IItemBasic{
@@ -10,12 +10,29 @@ export interface IItemBasic{
   id: number;
 }
 
+export interface MetaTagSearchModel {
+  paging: Paging;
+  metaTag: IMetaTag
+}
+
+
 export interface IMetaTag {
   id:          number;
   name:        string;
   description: string;
   productID:   number;
   icon:        string;
+  brandID      : number;
+  departmentID : number;
+  typeID       : number;
+  attribute    : string;
+  paging: Paging;
+}
+
+export interface MetaTagResults {
+  results: IMetaTag[];
+  paging: Paging;
+  errorMessage: string;
 }
 
 @Injectable({
@@ -34,7 +51,17 @@ export class MetaTagsService {
   // @Input() pageCount:   number;
   // @Input() pageSize:    number = 25;
   // @Input() pageNumber:  number = 1;
+  metaTagSearch(site: ISite, search: MetaTagSearchModel): Observable<MetaTagResults> {
+    const controller = '/metaTags/'
 
+    const endPoint = 'metaTagSearch'
+
+    const parameters =``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<MetaTagResults>(url, search);
+  }
 
   getBasicLists(site: ISite, type: string):  Observable<IItemBasic[]>  {
 

@@ -1,4 +1,5 @@
 <div *ngIf="action$ | async as item; else opening"></div>
+<div *ngIf="urlPath$ | async as item"></div>
 <!-- <div *ngIf="(product$ | async) as product"></div>
 <div *ngIf="(copy$ | async) as copy"></div>
 <div *ngIf="(urlPath$ | async) as urlPath"></div> -->
@@ -6,6 +7,8 @@
 <mat-label>Updating a price will update all items that are associated with it's class.</mat-label>
 
 <button mat-button (click)="nav()"><mat-icon>open_in_new</mat-icon>Brand List</button>
+
+<button *ngIf="selected" mat-button (click)="delete()"><mat-icon>delete</mat-icon>Delete Selected</button>
 
 <ng-template #opening>
   <!-- <div *ngIf="openingProduct">
@@ -46,7 +49,14 @@
       [disableName]="true"
       [pagingForm]="pagingForm"
       class="grid-list-item" >
+      Search Price Classes
     </brand-class-filter>
+
+    <resale-classes-editor
+      [classes_Clothing]="classes_Clothing">
+      Add New Price Class/Attribute Range.
+    </resale-classes-editor>
+
   </div>
 </div>
 

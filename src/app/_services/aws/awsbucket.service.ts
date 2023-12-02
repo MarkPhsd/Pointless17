@@ -88,7 +88,7 @@ export class AWSBucketService {
     this.apiUrl = this.siteService.getAssignedSite().url;
   }
 
-  convertToArrayWithUrl(imageString:string, url: string): any[] {
+  convertToArrayWithUrl(imageString: string, url: string): any[] {
     let imageArray: any[];
 
     if ( imageString != undefined  &&  imageString != '') {

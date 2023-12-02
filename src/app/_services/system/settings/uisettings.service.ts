@@ -482,6 +482,7 @@ export class UISettingsService {
   }
 
   getPOSDeviceSettings(deviceName: string) {
+    console.log('getPOSDeviceSettings',deviceName)
     return this.settingsService.getDeviceSettings(deviceName)
   }
 

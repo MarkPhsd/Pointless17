@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BrandeditorComponent } from './brandeditor.component';
+import { SearchFieldsComponent } from './search-fields.component';
 
-describe('BrandeditorComponent', () => {
-  let component: BrandeditorComponent;
-  let fixture: ComponentFixture<BrandeditorComponent>;
+describe('SearchFieldsComponent', () => {
+  let component: SearchFieldsComponent;
+  let fixture: ComponentFixture<SearchFieldsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BrandeditorComponent ]
+      declarations: [ SearchFieldsComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(BrandeditorComponent);
+    fixture = TestBed.createComponent(SearchFieldsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

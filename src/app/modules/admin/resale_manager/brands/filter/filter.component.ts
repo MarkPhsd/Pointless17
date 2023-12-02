@@ -23,9 +23,11 @@ export class BrandFilterComponent implements OnInit {
   @Input() pagingForm: FormGroup;
   @Input() parent: string;
   @Input() disableName: boolean;
+  department : string;// not for filters
 
   search = {} as any; // BrandClassSearch | ClassClothingSearch
   genderList = [{id:0, name:'Male'}, {id:1, name:'Female'}, {id: null, name: 'Any'}]
+
   departmentsList  : IMenuItem[]
   departments$     : Observable<IMenuItem[]>;
   attributes$: Observable<any[]>;
@@ -38,8 +40,15 @@ export class BrandFilterComponent implements OnInit {
     private brandsResaleService: BrandsResaleService) { }
 
   ngOnInit() {
-    this.initSearchForm()
+
+    if (this.parent != 'class') {
+      this.department = ''
+      this.initSearchForm()
+    }
+
     if (this.parent == 'class') {
+      console.log('nginit')
+      this.initSearchForm()
       this.refreshDepartments()
       this.refreshAttributes()
     }
@@ -62,22 +71,48 @@ export class BrandFilterComponent implements OnInit {
       departmentID: [],
      })
 
-     this.searchForm.valueChanges.subscribe(data => {
-      this.refreshSearch()
-     })
+    //  if (this.parent != 'class') {
+       this.searchForm.valueChanges.subscribe(data => {
+
+          if (!data) {return}
+          this.refreshSearch()
+       })
+    //  }
   }
 
   refreshDepartmentChange(event) {
-    this.search.pageNumber  =1;
-    this.currentPage = 1;
-    this.searchForm.controls['departmentID'].setValue(event)
+
+    if (this.parent === 'class') {
+      this.search.pageNumber  =1;
+      this.currentPage = 1;
+      this.searchForm.controls['departmentID'].setValue(event.id)
+      this.refreshSearch()
+      return;
+    }
+
+    if (this.parent === 'brand') {
+      this.search.pageNumber  =1;
+      this.currentPage = 1;
+
+      this.searchForm.controls['departmentID'].setValue(event.id)
+      this.refreshSearch()
+    }
+
   }
 
   refreshAttributeChange(event) {
-    this.search.pageNumber  = 1;
-    this.currentPage = 1;
-    this.searchForm.controls['name'].setValue(event)
-    this.refreshSearch()
+
+    if (this.parent === 'class') {
+      console.log(event)
+      return;
+    }
+
+    if (this.parent === 'brand') {
+      this.search.pageNumber  = 1;
+      this.currentPage = 1;
+      this.searchForm.controls['name'].setValue(event)
+      this.refreshSearch()
+    }
   }
 
   setBrandID(event) {
@@ -90,7 +125,13 @@ export class BrandFilterComponent implements OnInit {
   resetSearch() {
     this.brandID = 0;
     this.search.pageNumber  = 1
+    this.refreshAttributes();
+    this.refreshDepartments()
     this.initSearchModel();
+  }
+
+  subscriptionRefresh() {
+
   }
 
   initSearchModel(): BrandClassSearch {
@@ -99,12 +140,17 @@ export class BrandFilterComponent implements OnInit {
       this.search        = {} as BrandClassSearch;
     }
 
+    if (!this.search && this.parent === 'class') {
+      this.search        = {} as ClassClothingSearch;
+    }
+
     this.search.attributeDesc = null
     this.search.name = null;
     this.search.department = null;
     this.search.departmentID = null;
     this.search.classValue = 0;
     this.search.brandTypeID = 0;
+
     if (this.pageSize = 0) { this.pageSize = 25}
     if (this.pageSize = 0) { this.pageSize = 1}
     this.search.pageSize   = this.pageSize
@@ -119,19 +165,22 @@ export class BrandFilterComponent implements OnInit {
     return this.search;
   }
 
-
   refreshSearch() {
     if (!this.search) {
-      this.search        = {} as any;
+      this.search        = {} as BrandClassSearch;
+    }
+
+    if (!this.search && this.parent === 'class') {
+      this.search        = {} as ClassClothingSearch;
     }
 
     this.search.name = '';
     this.search.gender = null;
 
-    if (this.searchForm) {
+    if (this.searchForm ) {
       this.search.name = this.searchForm.controls['name'].value
       this.search.gender  = this.searchForm.controls['gender'].value
-      this.search.departmentID  = this.searchForm.controls['departmentID'].value
+      this.search.departmentID  = +this.searchForm.controls['departmentID'].value
     }
 
     if (!this.pageSize || this.pageSize == 0) { this.pageSize = 25};

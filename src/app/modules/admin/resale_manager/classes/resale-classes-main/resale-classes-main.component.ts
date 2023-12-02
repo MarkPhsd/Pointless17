@@ -11,9 +11,10 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { AWSBucketService, MenuService } from 'src/app/_services';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { ClassClothingSearch, Classes_Clothing, ClassesResaleService, ClassResaleSearchResults } from 'src/app/_services/resale/classes-resale.service';
+import { ClassClothingSearch, Classes_Clothing, Classes_Clothing_Sub, Classes_Clothing_View, ClassesResaleService, ClassResaleSearchResults } from 'src/app/_services/resale/classes-resale.service';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ButtonRendererComponent } from '../../../report-designer/widgets/button-renderer/button-renderer.component';
+import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
@@ -71,6 +72,7 @@ export class ResaleClassesMainComponent implements OnInit {
   agtheme         = 'ag-theme-material';
   gridDimensions  = "height: calc(82vh )"
   urlPath:        string;
+  urlPath$: Observable<any>;
   value           : any;
   id              : number;
   product         : IProduct;
@@ -79,8 +81,8 @@ export class ResaleClassesMainComponent implements OnInit {
 
   departments$: Observable<IMenuItem[]>;
   brandList$ : Observable<IUserProfile>;
-  classResale$: Observable<Classes_Clothing>;
-  class_Resale:  Classes_Clothing;
+  classClothing$: Observable<Classes_Clothing>;
+  classes_Clothing:  Classes_Clothing;
   class$: Observable<Classes_Clothing>;
   departmentID: number;
   brandID: number;
@@ -95,6 +97,7 @@ export class ResaleClassesMainComponent implements OnInit {
   department: string;
   parent = 'class'
 
+
   // .pipe(
   //   debounceTime(250),
   //     distinctUntilChanged(),
@@ -105,6 +108,10 @@ export class ResaleClassesMainComponent implements OnInit {
   initSubscriptions() {
     this._search$ = this.classResaleService.search$
       .subscribe(data => {
+
+        console.log(data);
+
+        this.classes_Clothing = null;
 
         if (!data) { return }
         if (data.pageNumber) {
@@ -138,10 +145,16 @@ export class ResaleClassesMainComponent implements OnInit {
 {  }
 
   ngOnInit(): void {
-    this.refreshDepartments()
-    this.initSubscriptions();
-    this.initAgGrid(this.pageSize);
-    this.initPaging();
+
+    this.urlPath$  =  this.awsService.awsBucketURLOBS().pipe(
+      switchMap(data => {
+        this.urlPath = data;
+        this.refreshDepartments()
+        this.initSubscriptions();
+        this.initAgGrid(this.pageSize);
+        this.initPaging();
+        return of(data)
+      }))
   }
 
   initPaging() {
@@ -177,20 +190,6 @@ export class ResaleClassesMainComponent implements OnInit {
     })
   }
 
-  // results$ = this.searchPhrase.pipe(
-  //   debounceTime(250),
-  //   distinctUntilChanged(),
-  //   switchMap(searchPhrase => {
-  //     this.searchModel = {} as SearchModel;
-  //     console.log('searchPhrase', searchPhrase, this.searchModel)
-  //     this.searchModel.name = searchPhrase;
-  //     return this.menuService.getUnitTypesSearch(this.site,  this.searchModel).pipe(switchMap(data => {
-  //       return of(data.results)
-  //     }))
-  //    }
-  //   )
-  // )
-
   refreshDepartments() {
     const site          = this.siteService.getAssignedSite()
     this.departments$   = this.menuService.getListOfDepartmentsAll(site).pipe(
@@ -224,23 +223,32 @@ export class ResaleClassesMainComponent implements OnInit {
 
    this.columnDefs =  []
 
-    let header = {headerName: 'ID',  field: 'id',
-          cellRenderer: "btnCellRenderer",
-          cellRendererParams: {
-            onClick: this.editProductFromGrid.bind(this),
-            label: this.buttonName,
-            getLabelFunction: this.getLabel.bind(this),
-            btnClass: 'btn btn-primary btn-sm'
-          },
-          minWidth: 125,
-          maxWidth: 125,
-          flex: 2,
+
+    let header = {headerName: 'ID'
+        ,  field: 'id',
+        minWidth: 0,
+        maxWidth: 9,
+        hide: true,
+        flex: 1,
     }
     this.columnDefs.push(header)
+
+    let image =   { headerName: '',
+            field: 'classThumbNail',
+            width: 75,
+            minWidth: 75,
+            maxWidth: 75,
+            sortable: false,
+            autoHeight: true,
+            comparator: myComparator,
+            cellRenderer: AgGridImageFormatterComponent
+    }
+    this.columnDefs.push(image)
+
     this.columnDefs.push(this.getValueField('attributeDesc','Attribute',   125, false));
     this.columnDefs.push(this.getValueField('department', 'Department',  125, false));
-    this.columnDefs.push(this.getValueField('classValue', 'Value' , 125, true));
-    this.columnDefs.push(this.getValueField('gender', 'Gender',  125, true),);
+    this.columnDefs.push(this.getValueField('classValue', 'Class' , 125, false));
+    this.columnDefs.push(this.getValueField('gender', 'Gender',  125, false),);
     // this.columnDefs.push(this.getValueField('price', 'Price'));
 
     let price = {headerName: 'Price',   field: 'price',
@@ -254,19 +262,7 @@ export class ResaleClassesMainComponent implements OnInit {
     }
     this.columnDefs.push(price)
 
-    this.columnDefs.push(this.getValueField('departmentID', 'Barcode Part'));
-    // this.columnDefs.push(this.getValueField('brandID_Barcode', 'Prefix', 150));
-
-    // id: number;
-    // brandType: string;
-    // classValue?: number | null;
-    // attributeDesc: string;
-    // gender?: number | null;
-    // name: string;
-    // price?: number | null;
-    // classID_Barcode?: number | null;
-    // brandTypeID: number;
-    // this.gridOptions = this.agGridFormatingService.initGridOptionsFormated(pageSize, this.columnDefs);
+    this.columnDefs.push(this.getValueField('departmentID', 'Barcode Part', null, false));
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs, false);
   }
 
@@ -277,14 +273,15 @@ export class ResaleClassesMainComponent implements OnInit {
     if (!width) {
       width = 125
     }
-    if (!editable) {
+
+    if (!editable ) {
       editable = false
     }
     return   {headerName: header.toUpperCase(),    field: name,
         sortable: true,
         width: 76,
         minWidth:width,
-        editable: true,
+        editable: editable,
         singleClickEdit: true,
         comparator: myComparator,
       // flex: 2,
@@ -292,7 +289,6 @@ export class ResaleClassesMainComponent implements OnInit {
   }
 
   initSearchModel(): ClassClothingSearch {
-    // console.log('initSearchModel')
     if (!this.searchModel) {
       this.searchModel        = {} as ClassClothingSearch;
     }
@@ -331,8 +327,6 @@ export class ResaleClassesMainComponent implements OnInit {
     this.endRow        = endRow;
     if (tempStartRow > startRow) { return this.currentPage - 1 }
     if (tempStartRow < startRow) { return this.currentPage + 1 }
-    // this.searchModel.pageNumber = this.currentPage;
-    console.log('set current Page', this.searchModel.pageNumber, this.currentPage)
     return this.currentPage
   }
 
@@ -343,14 +337,18 @@ export class ResaleClassesMainComponent implements OnInit {
       this.searchModel.pageNumber =  this.currentPage // this.gridApi.paginationGetCurrentPage() ;
     }
     const site           = this.siteService.getAssignedSite()
-    // console.log('get Row Data', this.searchModel.pageNumber, this.currentPage)
-    // console.log('api page', this.gridApi.paginationGetCurrentPage() )
-
     return this.classResaleService.searchView(site, this.searchModel)
   }
 
+  resetTempVariables(){
+    this.classes_Clothing = null
+    this.id = null
+  }
   //ag-grid standard method
   async onGridReady(params: any) {
+
+    this.resetTempVariables()
+
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
@@ -373,11 +371,12 @@ export class ResaleClassesMainComponent implements OnInit {
             this.currentPage   = resp.currentPage
             this.numberOfPages = resp.pageCount
             this.recordCount   = resp.recordCount
-            // console.log('onGridReady',this.currentPage)
             if (this.numberOfPages !=0 && this.numberOfPages) {
               this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
             }
-            params.successCallback( data.results )
+            let results        =  this.refreshImages(data.results)
+            // console.log('results', results)
+            params.successCallback( results )
           }
         );
       }
@@ -390,39 +389,49 @@ export class ResaleClassesMainComponent implements OnInit {
     params.api.resetRowHeights();
   }
 
+  refreshImages(data) {
+    const urlPath = this.urlPath
+    if (urlPath) {
+      data.forEach( item =>
+        {
+          if (item && item.classThumbNail) {
+            const list = item.classThumbNail.split(',')
+            if (list[0]) {
+              item.classThumbNail = `${urlPath}${list[0]}`
+            }
+          }
+        }
+      )
+    }
+    return data;
+  }
+
   cellValueChanged(event) {
 
+    this.id = event.data.id;
+    let item = event?.data as Classes_Clothing;
+    this.classes_Clothing = item;
+    const site = this.siteService.getAssignedSite();
+
+    if (item) {
+      const item$ = this.classResaleService.get(site, this.id ).pipe(switchMap(data => {
+        data.price = item.price;
+        return this.classResaleService.save(site, data, item.id)
+      }))
+
+      this.action$ =  item$.pipe(switchMap(data => {
+        return of(data)
+      }))
+    }
   }
 
   onCellClicked(event) {
-    // console.log('event' , event)
-    // const colName = event?.column?.colId.toString() as string;
-    // if (colName === 'active') {
-    //   let item = event.data
-    //   item.active = !event.value
-    //   this.action$ = this.updateValues(event.data.id, !event.value, 'active');
-    //   event.value = !event.value;
-    //   this.refreshGrid()
-    //   // console.log(item)
-    // this.gridAPI.setRowData(item)
+    this.id = event.data.id
+    this.classes_Clothing = event.data as Classes_Clothing;
+    if (this.classes_Clothing.classThumbNail) {
+      this.classes_Clothing.classThumbNail = this.classes_Clothing.classThumbNail.replace(this.urlPath, '')
+    }
   }
-
-  // refreshImages(data) {
-  //   const urlPath = this.urlPath
-  //   if (urlPath) {
-  //     data.forEach( item =>
-  //       {
-  //         if (item.urlImageMain) {
-  //           const list = item.urlImageMain.split(',')
-  //           if (list[0]) {
-  //             item.imageName = `${urlPath}${list[0]}`
-  //           }
-  //         }
-  //       }
-  //     )
-  //   }
-  //   return data;
-  // }
 
   //mutli select method for selection change.
   onSelectionChanged(event) {
@@ -433,6 +442,7 @@ export class ResaleClassesMainComponent implements OnInit {
     let selected           = []
 
     if (selectedRows.length == 0) { return }
+
     selectedRows.forEach(function (selectedRow, index) {
     if (index >= maxToShow) { return; }
     if (index > 0) {  selectedRowsString += ', ';  }
@@ -447,10 +457,25 @@ export class ResaleClassesMainComponent implements OnInit {
     }
 
     this.selected = selected
+    this.selectedRows = selectedRows
     this.id = selectedRows[0].id;
 
+    console.log(this.id)
     this.getItem(this.id)
+  }
 
+  delete() {
+    if (this.classes_Clothing) {
+      const site = this.siteService.getAssignedSite();
+      const confirm = window.confirm('Do you want to delete this item')
+      const item = []
+      this.selectedRows.forEach(data => {  item.push(data.id) })
+      if (!confirm) { return }
+      this.action$   = this.classResaleService.delete(site, item).pipe(switchMap(data => {
+        this.classResaleService.updateSearchModel(this.searchModel)
+        return of(data)
+      }))
+    }
   }
 
   getItem(id: number) {
@@ -458,7 +483,7 @@ export class ResaleClassesMainComponent implements OnInit {
       const site = this.siteService.getAssignedSite();
       this.class$  = this.classResaleService.get(site, this.id).pipe(
         switchMap(data => {
-          this.class_Resale = data
+          this.classes_Clothing = data
           return of(data)
         })
       )
@@ -466,7 +491,6 @@ export class ResaleClassesMainComponent implements OnInit {
   }
 
   editSelectedItem() {
-    // console.log('selected Items', this.selected)
     let id = 0;
     if (this.product) { id = this.product.id}
     if (this.selected){ id = this.selected[0]};

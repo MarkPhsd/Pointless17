@@ -106,6 +106,11 @@ export interface IInventoryAssignment {
   brandID : number;
   itemSKU : string;
   images  : string;
+
+  departmentID: number;
+  attribute: string;
+  metaTags: string;
+  json: string;
 }
 
 export interface Serial {
@@ -439,8 +444,21 @@ export class InventoryAssignmentService {
   }
 
 
-  postInventoryAssignment(site: ISite,item: IInventoryAssignment): Observable<IInventoryAssignment> {
+  putInventoryAssignment(site: ISite,item: IInventoryAssignment): Observable<IInventoryAssignment> {
 
+    const controller =  `/InventoryAssignments/`
+
+    const endPoint = `PutInventoryAssignment`
+
+    const parameters = `?id=${item.id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.put<IInventoryAssignment>(url, item)
+
+  }
+
+  postInventoryAssignment(site: ISite,item: IInventoryAssignment): Observable<IInventoryAssignment> {
 
     const controller =  `/InventoryAssignments/`
 
@@ -582,6 +600,7 @@ export class InventoryAssignmentService {
       item.packageQuantity       = item.packageCountRemaining;
       item.baseQuantity          = item.packageCountRemaining;
       item.jointWeight           = 1;
+      item.images                = controls['images'].value;
       item.notAvalibleForSale    = controls['notAvalibleForSale'].value;
       item.invoice               = controls['invoiceCode'].value;
       item.location              = controls['location'].value;
@@ -693,7 +712,10 @@ export class InventoryAssignmentService {
         active                             : [''],
         hasImported                        : [''],
         priceCategoryID                   :[0],
-
+        departmentID                     : [],
+        metaTags                         : [],
+        attribute                        : [],
+        json                             : [],
       }
     )
     return inputForm

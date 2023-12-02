@@ -1,16 +1,79 @@
 <div *ngIf="(buyItem$ | async) as buyItem"></div>
 
-<mat-button-toggle-group
-     style="margin:5px"
-     [(ngModel)]     = "gender" >
-  <mat-button-toggle
-      class="discount-type-button"
-      [value]="item"
-      *ngFor="let item of genders" >
+
+<div *ngIf="searchForm"  [formGroup]="searchForm" class="flex-grid-row">
+
+  <div>
+    <button mat-raised-button style="height:45px;margin-right:5px"
+            color="primary" (click)="reset()"><mat-icon>refresh</mat-icon>Reset</button>
+  </div>
+
+  <span *ngFor="let item of genders">
+    <div>
+      <button mat-raised-button
+              style="margin:5px;font-size:1em;font-weight:400"
+              class="payment-buttons"
+              color="accent"
+              (click)="setGender(item)">
           {{item.name}}
-  </mat-button-toggle>
-</mat-button-toggle-group>
-<span color="primary" class="margin-5">{{gender?.name}} </span>
+      </button>
+    </div>
+  </span>
+
+  <div style="width:155px;margin-left:2px;margin-right:2px">
+    <app-search-fields
+          *ngIf="searchForm"
+          [fieldsClass]="'fields-small'"
+          [inputForm]="searchForm"
+          [searchingEnabled]="true"
+          [enableCancel]="true"
+          (outPutCancel)="cancelSearchDept($event)"
+          [fieldName]="'department'">
+      <mat-icon>search</mat-icon> Department
+    </app-search-fields>
+  </div>
+
+  <div style="width:155px;margin-left:2px;margin-right:2px"
+       *ngIf="searchForm.controls['department'].value || this.department">
+    <app-search-fields
+          *ngIf="searchForm"
+          [fieldsClass]="'fields-small'"
+          [inputForm]="searchForm"
+          [searchingEnabled]="true"
+          (outPutCancel)="cancelSearchAttribute($event)"
+          [fieldName]="'attribute'">
+      <mat-icon>search</mat-icon>   Attribute
+    </app-search-fields>
+  </div>
+
+  <div style="width:155px;margin-left:2px;margin-right:5px"
+       *ngIf="searchForm.controls['department'].value &&
+              searchForm.controls['attribute'].value  ||
+              (this.department && this.attribute)" >
+    <app-search-fields
+        *ngIf="searchForm"
+        [fieldsClass]="'fields-small'"
+        [inputForm]="searchForm"
+        [searchingEnabled]="true"
+        [enableCancel]="true"
+        (outPutCancel)="cancelSearchBrands($event)"
+        [fieldName]="'brand'">
+      <mat-icon>search</mat-icon>  Brand
+    </app-search-fields>
+  </div>
+
+  <!-- <mat-divider [horizontal]="true"></mat-divider> -->
+  <span color="primary" class="margin-5" style="top:5px;font-weight:450;margin-right:10px;margin-left:10px">
+    <span><mat-icon>search</mat-icon> </span>
+    <mat-divider style="width:200px"></mat-divider>
+    <span *ngIf="gender?.name">  {{gender?.name}} <br> </span>
+    <span *ngIf="department"> Dept: {{department}}   <br></span>
+    <span *ngIf="attribute"> Attribute: {{attribute}}    <br></span>
+    <span *ngIf="brand"> Brand: {{brand}}  </span>
+   </span>
+
+</div>
+
 
 <button style="margin:5px" mat-button color="primary" (click)="reset()"><mat-icon>reset</mat-icon></button>
 
@@ -42,33 +105,27 @@
     <mat-card-content >
       <div style="height:75vh;padding-right:15px;overflow-y:auto;width:325px">
         <div   class="grid-flow-categories"  *ngIf="( itemFound$ | async) as item" >
-          <!-- <div *ngFor="let item of items"> -->
-            <mat-card class="max-height:175px;height:175px">
-              <button class ="button-image" mat-raised-button >
-                <!-- <ng-container [ngTemplateOutlet]="productImage"
-                              [ngTemplateOutletContext]="{$implicit: item}"
-                            ></ng-container> -->
-
-                  <div  *ngIf="item.name" style="margin-bottom:5px">
-                    {{item?.name}}
-                  </div>
-                  <div style="font-size:1.2em">
-                    {{item?.retail | currency}}
-                  </div>
-
-                  <div style="margin-bottom:5px">
-                    <ng-container [ngTemplateOutlet]="buyItemView"></ng-container>
-                  </div>
-                </button>
-            </mat-card>
-          <!-- </div> -->
+          <mat-card class="max-height:175px;height:175px">
+            <button class ="button-image" mat-raised-button >
+                <div  *ngIf="item.name" style="margin-bottom:5px">
+                  {{item?.name}}
+                </div>
+                <div style="font-size:1.2em">
+                  {{item?.retail | currency}}
+                </div>
+                <div style="margin-bottom:5px">
+                  <ng-container [ngTemplateOutlet]="buyItemView"></ng-container>
+                </div>
+              </button>
+          </mat-card>
+          <ng-container [ngTemplateOutlet]="inventoryListOn"
+                        [ngTemplateOutletContext]="{$implicit: item}"
+                        ></ng-container>
         </div>
         </div>
     </mat-card-content>
   </mat-card>
 </ng-template>
-
-
 
 <ng-template #brandsList>
   <mat-card style="width:495px;height:82vh;">
@@ -76,15 +133,21 @@
       <h3>Brands </h3>
     </mat-card-title>
     <mat-card-content >
-      <div *ngIf="( brands$ | async) as result"   style="height:75vh;padding-right:15px;overflow-y:auto;width:495px" class="grid-flow-categories" >
+      <div  *ngIf="( brands$ | async) as result"
+            style="height:75vh;padding-right:15px;overflow-y:auto;width:495px"
+            class="grid-flow-categories" >
         <mat-label *ngIf="result.errorMessage">{{result.errorMesssage}}</mat-label>
         <div *ngFor="let item of  result.results;let i = index" >
             <mat-card>
-              <button class ="button-image" mat-raised-button (click)="setBrandID(item.id)">
-                <ng-container [ngTemplateOutlet]="productImage"
-                            [ngTemplateOutletContext]="{$implicit: item}"
-                            ></ng-container>
+              <button class ="button-image" mat-raised-button (click)="setBrandID(item)">
+                <div>
+                  <ng-container [ngTemplateOutlet]="thumbnailImage"
+                                [ngTemplateOutletContext]="{$implicit: item}"
+                    ></ng-container>
+                </div>
+                <div>
                   {{item.name}}
+                </div>
               </button>
             </mat-card>
           </div>
@@ -105,10 +168,14 @@
           <div *ngFor="let item of items">
             <mat-card class="max-height:155px;height:155px">
               <button class ="button-image" mat-raised-button (click)="setAttribute(item?.name)">
-                <ng-container [ngTemplateOutlet]="productImage"
-                              [ngTemplateOutletContext]="{$implicit: item}"
-                            ></ng-container>
+                <div>
+                  <ng-container [ngTemplateOutlet]="thumbnailImage"
+                                [ngTemplateOutletContext]="{$implicit: item}"
+                              ></ng-container>
+                </div>
+                <div>
                   {{item.name}}
+                </div>
               </button>
             </mat-card>
 
@@ -128,13 +195,18 @@
     <mat-card-content  >
       <div  style="height:75vh;padding-right:15px;overflow-y:auto;width:495px">
         <div   class="grid-flow-categories" *ngIf="( departments$ | async) as items">
+          <!-- <div *ngIf="items.errorMessage">{{items.errorMessage}}</div> -->
           <div *ngFor="let item of items" >
             <mat-card>
-              <button class ="button-image" mat-raised-button (click)="setDepartmentID(item.id)">
-                <ng-container [ngTemplateOutlet]="productImage"
-                            [ngTemplateOutletContext]="{$implicit: item}"
-                            ></ng-container>
+              <button class ="button-image" mat-raised-button (click)="setDepartmentID(item)">
+                <div>
+                  <ng-container [ngTemplateOutlet]="thumbnailImage"
+                              [ngTemplateOutletContext]="{$implicit: item}"
+                              ></ng-container>
+                </div>
+                <div>
                   {{item.name}}
+                </div>
               </button>
             </mat-card>
           </div>
@@ -146,13 +218,13 @@
 
 
 <ng-template #productImage let-item>
-  <img  [src]     ="getUrl(item?.image)"
+  <img  [src]     ="getImageUrl(item?.image)"
         onerror   = "this.src='assets/images/placeholderimage.png'"
         class     ="product-image"/>
 </ng-template>
 
-<ng-template #productImage let-item>
-  <img  [src]     ="getUrl(item?.image)"
+<ng-template #thumbnailImage let-item>
+  <img  [src]     ="getImageUrl(item?.thumbnail)"
         onerror   = "this.src='assets/images/placeholderimage.png'"
         class     ="product-image-icon"/>
 </ng-template>
@@ -165,5 +237,60 @@
         (click)="buyItem()" >
       <mat-icon  color="primary">class</mat-icon>
     </button>
+  </div>
+</ng-template>
+
+<ng-template #inventoryList let-item>
+  <div *ngIf="uiHomePage && uiHomePage?.enableInventoryPerItem">
+    <inventory-menu-item
+      [posDevice]="posDevice"
+      [productID]="item?.id">
+    </inventory-menu-item>
+  </div>
+</ng-template>
+
+
+<ng-template #sales let-item>
+  <div *ngIf="userAuths.allowBuy">
+    <div *ngIf="itemSales$ | async as data">
+
+    </div>
+    <div *ngIf="itemDeptAttribSales$ | async as data">
+
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #salesResults let-data>
+  <div *ngIf="data.errorMessage">{{data.errorMessage}}</div>
+  <div *ngIf="!data.results || data.results.length === 0">
+    No Sales Recorded
+  </div>
+  <div class="grid" *ngFor="let item of data.results">
+    <data>{{item.period}} </data>
+    <data>{{item.quantity}} </data>
+    <data>{{item.quantity | currency}} </data>
+  </div>
+</ng-template>
+
+
+<ng-template #metaTagSearch>
+  <div *ngIf="(metaTagSearch$ | async) as associations" >
+    <mat-card *ngIf="associations.length>0">
+      <mat-card-title>
+        <h3 *ngIf="associations.length>0">Meta Tag Searches.</h3>
+      </mat-card-title>
+      <mat-card-content>
+        <div class="grid-flow">
+          <div *ngFor="let item of associations" >
+            <app-menu-item-card
+              [menuItem]="item"
+              [uiHomePage]="uiHomePage"
+              [bucketName]="bucketName"
+            ></app-menu-item-card>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </ng-template>

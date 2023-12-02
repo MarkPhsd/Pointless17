@@ -5,6 +5,8 @@ export interface ItemBasic {
   description: string;
   value: string;
   type: string;
+  image: string;
+  thumbnail:string;
 }
 
 export const viewBuilder_TypeLookup = [

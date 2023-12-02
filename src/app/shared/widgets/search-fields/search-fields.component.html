@@ -1,0 +1,71 @@
+<div *ngIf="inputForm && searchingEnabled">
+  <ng-container [ngTemplateOutlet]="inputField"></ng-container>
+</div>
+<ng-template #standardInputField >
+  <mat-form-field [formGroup]="inputForm" *ngIf="enabled" appearance="outline">
+    <mat-label>
+      <ng-content></ng-content>
+      {{itemHeader | titlecase}}
+    </mat-label>
+
+    <span *ngIf="searchingEnabled">
+      <input
+          #input
+          matInput
+          [type]      ="fieldType"
+          [disabled]  ='!enabled'
+          id          ="name"
+          [(ngModel)] ="itemNameInput"
+          [formControlName]="fieldName"
+        />
+    </span>
+
+    <span *ngIf="!searchingEnabled">
+      <input matInput
+      [disabled] ='!enabled'
+      appAppPasswordMask
+      ngDefaultControl
+      [type]="fieldType"
+      [formControlName]="fieldName">
+    </span>
+
+    <button   *ngIf="itemNameInput && itemNameInput.length>0"
+          matSuffix
+          mat-icon-button aria-label="Clear"
+          (click)="cancelButton()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</ng-template>
+
+<ng-template #passWordMaskField >
+  <mat-form-field [formGroup]="inputForm" *ngIf="enabled" appearance="outline">
+
+
+    <span *ngIf="!searchingEnabled">
+      <input matInput
+      [disabled] ='!enabled'
+      appAppPasswordMask
+      ngDefaultControl
+      [type]="fieldType"
+      [formControlName]="fieldName">
+    </span>
+
+    <span *ngIf="searchingEnabled">
+      <input matInput
+        [disabled] ='!enabled'
+        appAppPasswordMask
+        ngDefaultControl
+        [(ngModel)]      ="itemNameInput"
+        [type]="fieldType"
+        [formControlName]="fieldName" />
+    </span>
+
+    <button   *ngIf="itemNameInput && itemNameInput.length>0"
+          matSuffix
+          mat-icon-button aria-label="Clear"
+          (click)="cancelButton()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</ng-template>

@@ -55,7 +55,7 @@
                 </div>
 
                 <!-- <div class="center gf-chips">
-              
+
                 </div> -->
 
                 <ng-container [ngTemplateOutlet]="packagingView"></ng-container>
@@ -81,7 +81,7 @@
                             fbProductsService.isFood(menuItem.itemType) ||
                             fbProductsService.isAlcohol(menuItem.itemType) ||
                             fbProductsService.isGrocery(menuItem.itemType) ||
-                            fbProductsService.isTobacco(menuItem.itemType)                             
+                            fbProductsService.isTobacco(menuItem.itemType)
                             " label="Ingredients">
               <ng-container [ngTemplateOutlet]="chemicalSpinnerView"></ng-container>
             </mat-tab>
@@ -89,7 +89,7 @@
 
       </mat-card-content>
     </mat-card>
-    
+
     <ng-container [ngTemplateOutlet]="metaTagSearch"></ng-container>
     <ng-container [ngTemplateOutlet]="enableRecentAssociatedItems"></ng-container>
     <ng-container [ngTemplateOutlet]="enableAssociatedItems"></ng-container>
@@ -175,7 +175,7 @@
 
     <ng-template #productCountView>
       <div *ngIf="menuItem && menuItem.itemType
-                  && !menuItem.itemType.requireInStock 
+                  && !menuItem.itemType.requireInStock
                   && !menuItem?.itemType?.webStoreSimpleView">
         <menu-item-product-count
             [productCount]='menuItem.productCount'
@@ -303,7 +303,7 @@
     <ng-template #metaTagsView>
 
       {{fbProductsService.isFood(menuItem.itemType)}}
-      <span class="margin-5" *ngIf="fbProductsService.isFood(menuItem.itemType) && 
+      <span class="margin-5" *ngIf="fbProductsService.isFood(menuItem.itemType) &&
                                     (menuItem.glutenFree)">
         <button mat-fab color="warn" aria-label="Gluten Free">
           GF
@@ -328,7 +328,7 @@
 
 <ng-template #inventoryList>
   <div *ngIf="uiHomePage && uiHomePage?.enableInventoryPerItem">
-    <inventory-menu-item 
+    <inventory-menu-item
       [posDevice]="posDevice"
       [productID]="menuItem?.id">
     </inventory-menu-item>
@@ -338,7 +338,7 @@
 <ng-template #enableRecentAssociatedItems>
   <div *ngIf="uiHomePage && uiHomePage?.enableRecentAssociatedItems">
     <div *ngIf="(recentAssociations$ | async) as associations">
-   
+
       <mat-card *ngIf="associations.length>0">
         <mat-card-title>
           <h3  *ngIf="associations.length>0">Items Purchased with this {{menuItem.name}} recently.</h3>
@@ -410,3 +410,4 @@
     </div>
   </div>
 </ng-template>
+
