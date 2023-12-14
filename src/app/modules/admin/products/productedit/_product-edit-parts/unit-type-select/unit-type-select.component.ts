@@ -16,7 +16,7 @@ import { PB_Components } from 'src/app/_services/partbuilder/part-builder-main.s
   styleUrls: ['./unit-type-select.component.scss']
 })
 export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges {
-  
+
   @Output() undoSetChange     = new EventEmitter();
   @Output() itemSelect        = new EventEmitter();
   @ViewChild('input', {static: true}) input: ElementRef;
@@ -73,13 +73,21 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
                 private siteService      : SitesService,
               ) {
 
+
+  }
+
+
+  ngOnInit() {
+    this.initForm();
+    this.init();
     this.site = this.siteService.getAssignedSite();
-    this.initUnitForm();
+
+    if (this.id) { this.getName(this.id)  }
   }
 
   ngAfterViewInit() {
-    this.initUnitForm();
-    fromEvent(this.input.nativeElement,'keyup')
+
+      fromEvent(this.input.nativeElement,'keyup')
       .pipe(
           filter(Boolean),
           debounceTime(225),
@@ -88,14 +96,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
             const search  = this.input.nativeElement.value
             this.refreshSearch(search);
           })
-      )
-    .subscribe();
-  }
-
-  initUnitForm() {
-    this.searchForm = this.fb.group({
-      searchField: []
-    })
+      ).subscribe();
   }
 
   init() {
@@ -116,23 +117,17 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
 
   clearInput() {
     this.initForm();
-    this.initUnitForm();
     this.itemSelect.emit({})
   }
 
-  ngOnInit() {
-    this.initForm();
-    this.init();
-    if (this.id) { this.getName(this.id)  }
-  }
 
-  ngOnChanges() { 
-    if (this.setChange) { 
+  ngOnChanges() {
+    if (this.setChange) {
       this.getName(this.id)
       this.setChange = false
       this.undoSetChange.emit(false)
     }
-    
+
   }
 
   refreshSearch(search: any){
@@ -144,7 +139,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
   }
 
   onChange(selected: any) {
-    
+
     const item = selected.option.value;
     console.log('selected item option', item)
     if (item) {
@@ -168,9 +163,9 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
     let unit = {} as any;
 
     if (this.product) {
-      if (this.formControlName == 'reOrderUnitTypeID') { 
+      if (this.formControlName == 'reOrderUnitTypeID') {
         unit = { reOrderUnitTypeID : item.id }
-      } else { 
+      } else {
         unit = {  unitTypeID : item.id }
       }
       this.inputForm.patchValue(  unit  )
@@ -215,7 +210,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
 
   }
 
-  setValue(item) { 
+  setValue(item) {
     const value =  { searchField: item.name  }
     this.searchForm.patchValue( value )
   }

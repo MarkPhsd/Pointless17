@@ -89,7 +89,7 @@ export interface IInventoryAssignment {
   casePrice           : number;
   product             : IProduct;
   serials:              Serial[];
-
+  ebayPublished       : boolean;
   used     : boolean;
   originID : number;
   vendor   : number
@@ -110,9 +110,13 @@ export interface IInventoryAssignment {
   departmentID: number;
   attribute: string;
   metaTags: string;
-  json: string;
+  json: string; //stores info like ebay publishing.
+
 }
 
+export interface inventoryJson {
+  ebay: string;
+}
 export interface Serial {
   id:                    number;
   inventoryAssignmentID: number;
@@ -143,6 +147,9 @@ export interface InventoryFilter {
   inventoryStatus:      number;
   manifestID        :   number;
   manifestAssigned    : number;
+  attribute         : string;
+  departmentID      : number;
+  metaTagsList      : string[]
 }
 
 export interface InventoryStatusList {
@@ -237,6 +244,26 @@ export class InventoryAssignmentService {
 
   }
 
+  getAvalibleInventorySearch(site: ISite, search: InventoryFilter): Observable<AvalibleInventoryResults> {
+
+    const controller =  `/InventoryAssignments/`
+
+    let endPoint = `getAvalibleInventorySearch`
+
+    const user =  JSON.parse(localStorage.getItem('user')) as IUser
+
+    if (!user || !user.roles || user.roles == '') {
+      endPoint  = `getAvalibleInventorySearch`
+    }
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<AvalibleInventoryResults>(url, search)
+
+}
+
   getSummaryOfGramsUsed(site: ISite, inventoryAssigments: IInventoryAssignment[], packageQuantity: number): any {
     if (inventoryAssigments) {
       let total = 0; inventoryAssigments.forEach(item =>
@@ -306,7 +333,6 @@ export class InventoryAssignmentService {
 
     }
 
-
     getInActiveInventory(site: ISite, pageNumber: number, pageSize: number): Observable<InventorySearchResultsPaged> {
 
       const inventoryFilter = {}  as InventoryFilter;
@@ -360,7 +386,7 @@ export class InventoryAssignmentService {
     return  this.http.post<IInventoryAssignment[]>(url, iInventoryAssignment)
   }
     // https://localhost:44309/api/InventoryAssignments/PutInventoryAssignment?id=8
-  editInventory(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment): Observable<IInventoryAssignment> {
+  editInventory(site: ISite, id: number, item: IInventoryAssignment): Observable<IInventoryAssignment> {
 
     const controller =  `/InventoryAssignments/`
 
@@ -370,7 +396,7 @@ export class InventoryAssignmentService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.put<IInventoryAssignment>(url, iInventoryAssignment)
+    return  this.http.put<IInventoryAssignment>(url, item)
 
   }
 

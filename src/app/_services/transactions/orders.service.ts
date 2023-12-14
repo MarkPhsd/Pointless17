@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { Observable, of, switchMap } from 'rxjs';
 import { IProductPostOrderItem, IServiceType, ISite, IUserProfile }   from 'src/app/_interfaces';
-import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel, IPOSPayment, PosOrderItem,  } from 'src/app/_interfaces/transactions/posorder';
+import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
 import { IPagedList } from '../system/paging.service';
 import { IItemBasic } from '../menu/menu.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -97,6 +97,18 @@ export class OrdersService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<IPOSOrder>(url);
+  }
+
+  releaseTable(site: ISite, uuID: string) {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "releaseTable"
+
+    const parameters = `?UUID=${uuID}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
   }
 
 
@@ -376,7 +388,9 @@ export class OrdersService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.get<IPOSOrder>(url);
+    return this.http.get<IPOSOrder>(url).pipe(switchMap(data => {
+      return of(data)
+    }));
 
   }
 

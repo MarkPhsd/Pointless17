@@ -274,9 +274,6 @@
           <ng-container *ngTemplateOutlet="balanceSheetView,
                                           context: {$implicit: {site: site}}">
           </ng-container>
-
-
-
           <payment-report
                   [groupBy]="'deviceName'"
                   [site]    ="site"
@@ -305,8 +302,7 @@
                   [dateFrom]="dateFrom"
                   [dateTo]  ="dateTo"
                   [notifier]="childNotifier"
-                  [type]="'voids'"
-                  >
+                  [type]="'voids'">
             <div header>
               <mat-icon >summarize</mat-icon> Void Payments {{site.name}}
             </div>

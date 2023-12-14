@@ -1,6 +1,6 @@
-import { Component,  Inject,  OnInit, } from '@angular/core';
+import { Component,  Inject,  OnDestroy,  OnInit, } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { Observable, of } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 import { InventoryLocationsService, IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { InventoryAssignmentService, IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ISite } from 'src/app/_interfaces/site';
@@ -13,8 +13,11 @@ import { MenuService } from 'src/app/_services/menu/menu.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { switchMap } from 'rxjs/operators';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
-import { ISetting } from 'src/app/_interfaces';
+import { ISetting, IUser } from 'src/app/_interfaces';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { AuthenticationService } from 'src/app/_services';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
   selector: 'app-new-inventory-item',
@@ -22,7 +25,7 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
   styleUrls: ['./new-inventory-item.component.scss']
 })
 
-export class NewInventoryItemComponent implements OnInit {
+export class NewInventoryItemComponent implements OnInit , OnDestroy{
 
   inputForm:                 UntypedFormGroup;
   id:                        any;
@@ -42,12 +45,37 @@ export class NewInventoryItemComponent implements OnInit {
   images  : string;
   itemTags: string;
 
+  _userAuths: Subscription;
+  userAuths: IUserAuth_Properties;
+
+  action$: Observable<any>;
+
+  uiHome: UIHomePageSettings;
+  _uiHome: Subscription;
+  getUITransactionsSettings() {
+    this._uiHome = this.uiSettingsService.homePageSetting$.subscribe( data => {
+      if (data) {
+        this.uiHome = data;
+      }
+    });
+  }
+
+  userAuthSubscriber() {
+    this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
+      if (data) {
+        this.userAuths = data;
+        // this.
+      }
+    })
+  }
   constructor(
     private _snackBar    : MatSnackBar,
     private siteService  : SitesService,
     public  route        : ActivatedRoute,
     private fb           : UntypedFormBuilder,
+    private uiSettingsService: UISettingsService,
     private fbInventory  : FbInventoryService,
+    private authenticationService : AuthenticationService,
     private inventoryAssignmentService: InventoryAssignmentService,
     public fbProductsService    : FbProductsService,
     public printingService: PrintingService,
@@ -95,6 +123,10 @@ export class NewInventoryItemComponent implements OnInit {
 
   }
 
+  ngOnDestroy() {
+    if (this._uiHome) { this._uiHome.unsubscribe()}
+    if (this._userAuths) { this._userAuths.unsubscribe()}
+  }
   ngOnInit() {
     this.locations$ = this.inventoryLocationsService.getLocations().pipe(switchMap(data => {
       this.locations = data;
@@ -111,13 +143,16 @@ export class NewInventoryItemComponent implements OnInit {
     this.inventoryAssignment$.pipe(
       switchMap( data => {
         this.item = data;
-
         this.setFormInventoryData(this.item)
         return  this.menuService.getMenuItemByID(this.site, data.productID)
       }
     )).subscribe(data => {
       this.menuItem = data;
     })
+
+    this.userAuthSubscriber()
+    this.getUITransactionsSettings()
+
   }
 
   setFormInventoryData(data) {
@@ -173,12 +208,15 @@ export class NewInventoryItemComponent implements OnInit {
 
   updateWithoutNotification(): Observable<IInventoryAssignment> {
     this.item   = this.fbInventory.setItemValues(this.item, this.inputForm)
-    console.log(this.item)
-    if (!this.item) {
+    return this._updateWithoutNotification(this.item)
+  }
+
+  _updateWithoutNotification(item: IInventoryAssignment) {
+    if (!item) {
       this.notifyEvent('error no item', 'result')
       return of(null)
     }
-    return this.inventoryAssignmentService.editInventory(this.site,this.item.id, this.item)
+    return this.inventoryAssignmentService.editInventory(this.site, item.id, item)
   }
 
   updateItemExit(event) {
@@ -244,4 +282,17 @@ export class NewInventoryItemComponent implements OnInit {
   setLastlabelUsed(id: number) {
     this.printingService.setLastLabelUsed(id)
   }
+
+  publishItem(item: IInventoryAssignment) {
+    if (item) {
+      const site = this.siteService.getAssignedSite()
+      item.ebayPublished = true;
+      this.inputForm.patchValue({ebayPublished: true})
+      this.action$ = this.updateWithoutNotification().pipe(switchMap(data => {
+        this.siteService.notify('Item Published to Ebay', 'Close', 30000, 'green')
+        return of(data)
+      }))
+    }
+  }
+
 }

@@ -1,22 +1,22 @@
+@import "/src/mixins.scss";
 .grid-flow {
   --gap: 5px;
   margin-top: 2px;
   margin-right: 2px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat( auto-fill, minmax(125px, 1fr) );
+  grid-template-columns: repeat( auto-fill, minmax(7.5vw, 1fr) );
   overflow-y: visible;
 }
 
 .grid-flow-categories {
-
   top: 0px;
   position: inherit;
   margin-top: 5px;
   margin-right: 2px;
   display: grid;
   gap: 10px;
-  grid-template-columns: repeat( auto-fill, minmax(125px, 1fr) );
+  grid-template-columns: repeat( auto-fill, minmax(7.5vw, 1fr) );
   overflow-y: visible;
   grid-auto-flow: row dense;
 }
@@ -24,10 +24,10 @@
 .product-image-icon  {
   object-fit   : cover;
   border-radius: 15px;
-  width        : 60%;
+  width        : 100%;
   white-space  : normal;
   overflow     : hidden;
-  height       : 65px;
+  height       : clamp(3.5vw, 2.5vw, 65px);
 }
 
 .product-image  {
@@ -36,7 +36,7 @@
   width        : 100%;
   white-space  : normal;
   overflow     : hidden;
-  height       : 65px;
+  height       : clamp(5.5vw, 2.5vw, 65px);
 }
 
 .button-image  {
@@ -46,10 +46,38 @@
   white-space  : normal;
   overflow     : hidden;
   line-height  : 1em;
-  width        : 125px;
-  height       : 125px;
+  width        : clamp(6.5vw, 2.5vw, 125px);
+  height       : clamp(6.5vw, 2.5vw, 125px);
   left         : -5px;
 }
+
+.button-review {
+  object-fit   : cover;
+  border-radius: 15px;
+  width        : 100%;
+  white-space  : normal;
+  overflow     : hidden;
+  line-height  : 1em;
+  width        : 100%;
+  height       : clamp(6.5vw, 2.5vw, 125px);
+  left         : -5px;
+  margin-bottom:5px;
+}
+
+
+.button-buy {
+  object-fit   : cover;
+  border-radius: 15px;
+  width        : 100%;
+  white-space  : normal;
+  overflow     : hidden;
+  line-height  : 1em;
+  width        : 100%;
+  height       : clamp(6.5vw, 2.5vw, 125px);
+  left         : -5px;
+  margin-bottom:5px;
+}
+
 
 .floating-info {
   z-index: 100;
@@ -62,7 +90,80 @@
 }
 
 .item-info {
-  line-height: 1em;
+  line-height: 2vw;
   font-weight: 450;
-  font-size: 1.1em;
+  font-size: clamp(1rem, 2.5vw, 2rem);
+}
+
+.panel-one {
+  width:29vw;
+  height:76vh;
+  margin-left:5px;
+}
+
+.panel-one-content {
+  height:67vh;
+  padding-right:15px;
+  overflow-y:auto;
+  @include for-desktop-up {
+    height:65vh;
+  }
+
+}
+
+.panel-two {
+  width:21vw;
+  height:76vh;
+  //minwidth
+  //minwidth
+  @include horizontal-tablet-min   {
+    width: 15vw;
+  }
+  @include for-tablet-landscape-up   {
+    width: 21vw;
+  }
+  margin-left:5px;
+}
+
+.panel-two-content {
+  height:67vh;
+  padding-right:15px;
+  overflow-y:auto;
+  // @include for-desktop-up {
+  //   height:59vh;
+  // }
+  @include for-desktop-up {
+    height:65vh;
+  }
+}
+
+.panel-three {
+  width:17vw;
+  height:76vh;
+  @include horizontal-tablet-min   {
+    width: 17vw;
+  }
+  @include for-tablet-landscape-up   {
+    width: 17vw;
+  }
+  margin-left:5px;
+}
+
+.panel-three-content {
+  height:67vh;
+  padding-right:15px;
+  overflow-y:auto;
+  // @include for-desktop-up {
+  //   height:59vh;
+  // }
+  @include for-desktop-up {
+    height:65vh;
+  }
+}
+
+.inventory-list {
+  width:98vw;
+  height:80vh;
+  overflow-y:auto;
+  overflow-x:hidden
 }

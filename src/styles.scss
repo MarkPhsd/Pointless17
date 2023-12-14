@@ -126,6 +126,8 @@ mat-button mat-raised-button mat-icon {
      flex-direction: column;
   }
 
+
+
   svg.material-icons {
     height: 24px;
     width: auto;
@@ -652,6 +654,15 @@ mat-dialog-container {
   align-items: start;
 }
 
+.flex-end {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  // align-items: end;
+}
+
 .mat-snack-bar-container.pizza-party {
   color: hotpink;
 }
@@ -799,6 +810,15 @@ mat-dialog-container {
   gap: 20px;
 }
 
+
+.flex-grid-row-no-gap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content:flex-start;
+
+}
+
 .ps-flex-group-start {
   display: flex;
   flex-direction: row;
@@ -842,8 +862,9 @@ mat-dialog-container {
 
 .ps-inventory-grid {
   display: grid;
-  grid-template-columns: 200px calc( 80vw - 200px - 300px ) 300px; // repeat( auto-fit, minmax(150px, 1fr) );
-  gap:5px;
+  grid-template-columns: 200px calc( 80% - 200px - 300px ) auto; // repeat( auto-fit, minmax(150px, 1fr) );
+  gap:10px;
+
   @media screen and (max-width: 767px) {
     display: flex;
     flex-direction: column;
@@ -851,6 +872,12 @@ mat-dialog-container {
   };
 
   @media screen and (max-width: 500px) {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
+  @media screen and (max-width: 800px) {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -891,6 +918,23 @@ mat-dialog-container {
   right   : 5px; /* Adjust the right position as needed */
 }
 
+.view-float-button-50px {
+  position: absolute;
+  z-index : 2; //
+  opacity : 0.5;
+  width   : 50px;
+  top     : 10px; /* Adjust the top position as needed */
+  right   : 30px; /* Adjust the right position as needed */
+}
+
+.view-float-button-75px {
+  position: absolute;
+  z-index : 2; //
+  opacity : 0.5;
+  width   : 50px;
+  top     : 10px; /* Adjust the top position as needed */
+  right   : 55px; /* Adjust the right position as needed */
+}
 .header-close {
   float:right;
 }

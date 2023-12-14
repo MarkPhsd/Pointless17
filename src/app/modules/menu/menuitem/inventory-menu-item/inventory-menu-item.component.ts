@@ -1,8 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable, catchError, of, switchMap } from 'rxjs';
-import { IInventoryAssignment, InventoryAssignmentService, InventoryFilter, InventorySearchResultsPaged } from 'src/app/_services/inventory/inventory-assignment.service';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Observable, Subscription, catchError, of, switchMap } from 'rxjs';
+import { AWSBucketService } from 'src/app/_services';
+import { AvalibleInventoryResults, IInventoryAssignment, InventoryAssignmentService, InventoryFilter, InventorySearchResultsPaged } from 'src/app/_services/inventory/inventory-assignment.service';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
@@ -11,7 +14,7 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
   templateUrl: './inventory-menu-item.component.html',
   styleUrls: ['./inventory-menu-item.component.scss']
 })
-export class InventoryMenuItemComponent implements OnInit {
+export class InventoryMenuItemComponent implements OnInit, OnChanges {
 
   // @Input() productID: number;
   @Input() productID: number;
@@ -19,28 +22,87 @@ export class InventoryMenuItemComponent implements OnInit {
   inventoryItems$: Observable<InventorySearchResultsPaged>;
   inventoryList : IInventoryAssignment[];
   addItem$: Observable<any>;
+  @Output() outPutInventoryInfo = new EventEmitter();
+  @Input() inputInventory: AvalibleInventoryResults;
 
-   constructor(
+  @Input() enableSell: boolean;
+  @Input() userAuth: IUserAuth_Properties;
+  action$: Observable<any>;
+  uiHome: UIHomePageSettings;
+  _uiHome: Subscription;
+  imageList
+  awsBucketURL: string;
+
+  getUITransactionsSettings() {
+    // console.log('get Settings inventory Item')
+    this._uiHome = this.uiSettingsService.homePageSetting$.subscribe( data => {
+      if (data) {
+        this.uiHome = data;
+      }
+    });
+  }
+
+  constructor(
     private siteService        : SitesService,
     private serviceTypeService : ServiceTypeService,
     private orderMethodService : OrderMethodsService,
+    private uiSettingsService: UISettingsService,
+    private awsBucket: AWSBucketService,
     private inventoryService   : InventoryAssignmentService) { }
 
-  ngOnInit(): void {
-    
-    // this.addItem$ = this.addNewOrder();
+  async ngOnInit() {
 
-    if (this.productID) { 
+    this.awsBucketURL = await this.awsBucket.awsBucketURL()
+    // console.log('get ui transaction settings')
+    this.getUITransactionsSettings()
+
+    if (this.inputInventory) {
+      this.inventoryList = this.inputInventory.results
+      return;
+    }
+
+    this.getInventoryInfo(this.productID)
+  }
+
+  getImages(item) {
+    // item.images
+    item = item.replace('undefined', '')
+    // console.log('images inventory', item )
+    const imageLink = this.awsBucket.convertToArrayWithUrl(item, this.awsBucketURL);
+    return imageLink;
+  }
+
+  ngOnChanges() {
+    this.getInventoryInfo(this.productID)
+  }
+
+  ngOnDestroy() {
+    if (this._uiHome) {this._uiHome.unsubscribe()}
+  }
+
+  metaTagRefresh(event){
+    console.log('event', event)
+  }
+
+  getInventoryInfo(id: number) {
+    this.inventoryItems$ == this._getInventoryInfo(id)
+  }
+
+  _getInventoryInfo(id: number) {
+    if (id) {
       const site = this.siteService.getAssignedSite()
-      this.inventoryItems$ = this.inventoryService.getAvalibleInventory(site, this.productID, true).pipe(switchMap(data => {
-        console.log('daresults', data.results) 
+      return  this.inventoryService.getAvalibleInventory(site, id, true).pipe(switchMap(data => {
+        this.inputInventory = data;
+        this.productID = id
         this.inventoryList = data.results
+        this.outPutInventoryInfo.emit(data)
         return of(data)
-      }),catchError(data => { 
+      }),catchError(data => {
         this.siteService.notify(`Error: ${data.toString()}`, 'close', 6000, 'red')
         return of(data)
       }));
     }
+    return of(null)
   }
 
   addNewOrder() {
@@ -68,44 +130,35 @@ export class InventoryMenuItemComponent implements OnInit {
     }))
   }
 
-  // addItemToOrder(sku: string) {
-  //   const site = this.siteService.getAssignedSite();
-  //   const order$   = this.addNewOrder();
-
-  //   this.addItem$  =  order$.pipe(switchMap(order => {  
-  //       this.orderMethodService.order = order;
-  //       console.log('orderAdded')
-  //       return this.orderMethodService.scanBarcodedItem(site, order, sku, 1,   null, 
-  //                                                       null, null,  null,null,null)
-  //   })).pipe(switchMap(data => { 
-  //       console.log('newitem switchMap', data)
-  //       return of(data)
-  //   })),catchError(data => { 
-  //       console.log('error occured')
-  //       this.siteService.notify(`Error ${data.toString()}`, 'close', 69000, 'red')
-  //       return of(data)
-  //   })
-  // }
+  publishItem(item) {
+    if (item) {
+      const site = this.siteService.getAssignedSite()
+      item.publishItem = true;
+      this.inventoryItems$ = this.inventoryService.putInventoryAssignment(site, item).pipe(switchMap(data => {
+        this.siteService.notify('Item published', 'Close', 3000, 'green')
+        return of(data)
+      }
+      )).pipe(switchMap(data => {
+        return this._getInventoryInfo(this.productID)
+      }))
+    }
+  }
 
   addItemToOrder(sku: string) {
     const site = this.siteService.getAssignedSite();
-  
     this.addItem$ = this.addNewOrder().pipe(
       switchMap(order => {
         this.orderMethodService.order = order;
-        console.log('orderAdded');
         return this.orderMethodService.scanBarcodedItem(site, order, sku, 1, null, null, null, null, null, null);
       }),
       switchMap(data => {
-        console.log('newitem switchMap', data);
         return of(data);
       }),
       catchError(data => {
-        console.log('error occurred');
         this.siteService.notify(`Error ${data.toString()}`, 'close', 69000, 'red');
         return of(data);
       })
     );
   }
-  
+
 }

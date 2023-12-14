@@ -152,6 +152,7 @@ export interface IPriceSchedule {
   subTitle: string;
   showAddress: string;
   sort: number;
+  showShortDescription: boolean;
 }
 
 export interface DiscountInfo {

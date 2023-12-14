@@ -122,7 +122,15 @@
                 <mat-slide-toggle
                           formControlName="hideSearchBar"
                         >
-                  <mat-label>Disable Search Bar</mat-label>
+                  <mat-label>Disable Search Bar In Header</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="disableSearchFieldInMenu"
+                        >
+                  <mat-label>Hi Search Bar in Menu</mat-label>
                 </mat-slide-toggle>
               </div>
 
@@ -192,7 +200,7 @@
               <div class="toggle-fields" style="margin-bottom:5px">
                 <mat-slide-toggle
                           formControlName="enableInventoryPerItem"  >
-                  <mat-label>Show Distint Inventory In  <br> Product Catalog</mat-label>
+                  <mat-label>Show Inventory In  <br> Product Catalog</mat-label>
                 </mat-slide-toggle>
               </div>
 
@@ -222,6 +230,13 @@
                 <mat-slide-toggle
                           formControlName="enableRecentAssociatedItems"   >
                   <mat-label>View Simliarly Purchased Items</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="ebayEnabled"   >
+                  <mat-label>Enable Ebay Publishing</mat-label>
                 </mat-slide-toggle>
               </div>
 

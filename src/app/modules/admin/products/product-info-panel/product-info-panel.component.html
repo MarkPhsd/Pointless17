@@ -16,11 +16,19 @@
       >
       <mat-button-toggle value="events" (click)="onToggleLabelEvents('info')">Info</mat-button-toggle>
       <mat-button-toggle value="labels" (click)="onToggleLabelEvents('labels')">Labels</mat-button-toggle>
-      <mat-button-toggle value="events" (click)="onToggleLabelEvents('events')">Events</mat-button-toggle>
+      <mat-button-toggle value="events" (click)="onToggleLabelEvents('sales')">Sales</mat-button-toggle>
       <mat-button-toggle value="events" (click)="onToggleLabelEvents('inv')">INV</mat-button-toggle>
+      <mat-button-toggle value="events" (click)="onToggleLabelEvents('events')">Events</mat-button-toggle>
     </mat-button-toggle-group>
 
     <br>
+
+    <div *ngIf="toggleLabelEvents == 'sales' && product && product.id">
+      <div>
+        <ng-container [ngTemplateOutlet]="purchaseItemHistory"></ng-container>
+      </div>
+    </div>
+
 
     <div *ngIf="toggleLabelEvents == 'inv' && product && product.id">
       <div class="inventory-count">
@@ -85,6 +93,25 @@
   <mat-spinner></mat-spinner>
 </ng-template>
 
+<ng-template #purchaseItemHistory>
+
+    <mat-card  class="po-info-sales">
+      <div style="margin-bottom:10px">
+        <purchase-item-cost-history
+            [productID]="product?.id">
+          <h5>Sales History</h5>
+        </purchase-item-cost-history>
+      </div>
+      <div style="margin-bottom:10px">
+        <purchase-item-sales [productID]="product?.id">
+          <h5>Purchase History</h5>
+        </purchase-item-sales>
+      </div>
+    </mat-card>
+
+</ng-template>
+
+
 <ng-template #info>
 
   <div *ngIf="product">
@@ -97,7 +124,15 @@
       <app-widget-uploader
           [(fileNames)]="thumbnail"
           (messageOut) ="setThumbNail($event)">
+          Thumbnail
       </app-widget-uploader>
+
+      <app-widget-uploader
+          [(fileNames)]="urlImageMain"
+          (messageOut) ="seturlImageMain($event)">
+          Images
+      </app-widget-uploader>
+
     </div>
   </div>
 </ng-template>

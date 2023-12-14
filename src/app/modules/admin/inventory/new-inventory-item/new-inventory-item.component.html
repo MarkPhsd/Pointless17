@@ -1,5 +1,6 @@
 <ng-template #loading><mat-spinner diameter="50"></mat-spinner></ng-template>
 
+<div *ngIf="(action$ | async) as item"></div>
 <div *ngIf="(inventoryAssignment$ | async) as item"></div>
 
 <div class="body"  *ngIf="item ; else loading">
@@ -41,30 +42,44 @@
         </div>
 
         <div>
-          <div class="button-margins">
-            <app-edit-buttons-standard
-                (outputeupdateItem)     ="updateItem($event)"
-                (outputupdateItemExit)  ="updateItemExit($event)"
-                (outputupdatedeleteItem)="deleteItem($event)"
-                (outputupdateonCancel)  ="onCancel('false')"
-              ></app-edit-buttons-standard>
+
+          <div>
+            <div class="flex-end button-margins">
+              <div>
+                <app-edit-buttons-standard
+                    (outputeupdateItem)     ="updateItem($event)"
+                    (outputupdateItemExit)  ="updateItemExit($event)"
+                    (outputupdatedeleteItem)="deleteItem($event)"
+                    (outputupdateonCancel)  ="onCancel('false')"
+                  ></app-edit-buttons-standard>
+              </div>
+              <div class="margin-5" *ngIf="userAuths && userAuths.allowBuy && !item?.ebayPublished && uiHome && uiHome.ebayEnabled">
+                <button mat-button (click)="publishItem(item)">
+                  <mat-icon>publish</mat-icon>Publish to Ebay
+                </button>
+              </div>
+            </div>
           </div>
+
 
           <div class="toggle-items" *ngIf="inputForm"
                [formGroup]="inputForm">
-            <div>
+            <div >
               <mat-slide-toggle
-                      class="price-values"
-                      formGroupName  ="notAvalibleForSale"
                       formControlName="notAvalibleForSale">
                       <mat-label>Not For Sale</mat-label>
               </mat-slide-toggle>
             </div>
 
+            <div  *ngIf="userAuths && userAuths.allowBuy">
+              <mat-slide-toggle
+                      formControlName="ebayPublished">
+                      <mat-label>Published to Ebay</mat-label>
+              </mat-slide-toggle>
+            </div>
+
             <div>
               <mat-slide-toggle
-                      class="price-values"
-                      formGroupName  ="requiresAttention"
                       formControlName="requiresAttention">
                       <mat-label>Requires Attention</mat-label>
               </mat-slide-toggle>

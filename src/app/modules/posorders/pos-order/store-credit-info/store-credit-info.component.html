@@ -6,11 +6,12 @@
 <h2><ng-content></ng-content></h2>
 
 <mat-label *ngIf="searchResults"><mat-icon>alert</mat-icon>{{searchResults}}</mat-label>
+
 <div *ngIf="storeCreditValue && storeCreditValue.results">
   <div *ngFor="let item of storeCreditValue.results;trackby identify">
 
     <div *ngIf="item && item.cardNum">
-      <div class="grid-totals">
+      <div class="grid-totals" >
 
         <div *ngIf="!showCreditValueOnly && item && item.cardNum && item?.cardNum.trim() != ''">Card #</div>
         <div *ngIf="!showCreditValueOnly &&item && item.cardNum &&  item?.cardNum.trim() != ''">{{item?.cardNum}} </div>
@@ -50,18 +51,7 @@
     </div>
   </div>
 </div>
-<!--
-storeCreditValue {{storeCreditValue | json}}
-<br><br>
-searchResults {{searchResults | json}}
-<br><br>
-showCreditValueOnly {{showCreditValueOnly}}
-<br><br>
-showIssueMoney {{showIssueMoney}}
-<br><br>
-purchaseOrderItem.gcid {{purchaseOrderItem.gcid}} -->
 
-<!-- if not card is found then we have to make a new item. -->
 <div *ngIf="!storeCreditValue || !storeCreditValue.results || (storeCreditValue  && storeCreditValue.results.length == 1)">
   <div *ngIf="storeCreditValue  && (storeCreditValue.results.length == 0 || storeCreditValue.results[0].id == 0)">
     <div *ngIf="!showPayment &&
@@ -78,29 +68,6 @@ purchaseOrderItem.gcid {{purchaseOrderItem.gcid}} -->
 </div>
 
 <ng-container [ngTemplateOutlet]="closeButton"></ng-container>
-
-
-<!-- <div *ngIf="devMode"> -->
-
-<!-- </div> -->
-
-
-<!-- <div *ngIf="storeCreditValue &&
-            storeCreditValue.results &&
-            storeCreditValue.results[0] != null &&
-            storeCreditValue.results[0]?.id == 0 &&
-            showIssueMoney &&
-            search">
-  <ng-container [ngTemplateOutlet]="issueMoneyView"></ng-container>
-</div> -->
-
-<!--
-<div *ngIf="storeCreditValue && storeCreditValue.results &&
-           ( !storeCreditValue.results || storeCreditValue.results.length == 0 ) &&
-            showIssueMoney &&
-            search">
-  <ng-conntainer [ngTemplateOutlet]="issueMoneyView"></ng-conntainer>
-</div> -->
 
 
 <ng-template #closeButton>

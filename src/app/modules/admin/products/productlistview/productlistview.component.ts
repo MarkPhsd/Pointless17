@@ -560,7 +560,7 @@ constructor(  private _snackBar              : MatSnackBar,
           cellRenderer: AgGridImageFormatterComponent
       },
 
-      { headerName: 'Copy', field: "id",
+      {   headerName: 'Copy', field: "id",
           cellRenderer: "btnCellRenderer",
           cellRendererParams: {
             onClick: this.copyFromGrid.bind(this),
@@ -590,7 +590,7 @@ constructor(  private _snackBar              : MatSnackBar,
           }
       },
 
-      {       headerName: 'Delete', field: "id",
+     {      headerName: 'Delete', field: "id",
             cellRenderer: "btnCellRenderer",
             cellRendererParams: {
               onClick: this.deleteItem.bind(this),

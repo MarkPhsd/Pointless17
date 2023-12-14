@@ -383,6 +383,11 @@ import { ResaleClassesFilterComponent } from '../modules/admin/resale_manager/cl
 import { ResaleClassesMainComponent } from '../modules/admin/resale_manager/classes/resale-classes-main/resale-classes-main.component';
 import { BuySellMainComponent } from '../modules/buySell/buy-sell-main/buy-sell-main.component';
 import { BrandClassEditorComponent } from '../modules/admin/resale_manager/brands/brand-class-editor/brand-class-editor.component';
+import { EbayPublishProductComponent } from '../modules/admin/inventory/ebay/ebay-publish-product/ebay-publish-product.component';
+import { ItemsMainComponent } from '../modules/transactions/itemTransactions/items-main/items-main.component';
+import { ItemsFilterComponent } from '../modules/transactions/itemTransactions/items-filter/items-filter.component';
+
+
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -506,6 +511,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DSIEMVAndroidPayBtnComponent,
     CardPointeCardPayBtnComponent,
 
+    ItemsMainComponent,
+    ItemsFilterComponent,
+
     PointlessMETRCSalesComponent,
     MetrcSalesFilterComponent,
 
@@ -626,6 +634,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     MenuBoardComponent,
     MenuItemModalComponent,
     NewInventoryItemComponent,
+    EbayPublishProductComponent,
     // NumericDirective,
     OrderItemsListComponent,
     OrderItemListComponent,

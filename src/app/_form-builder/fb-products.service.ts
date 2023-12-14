@@ -248,8 +248,16 @@ export class FbProductsService {
         return false;
     }
 
+    isDepartment(itemType: IItemType) {
+      if (itemType && itemType.name && (
+        itemType.id == 6 ||
+        itemType.name == 'department'   ))
+          {
+            return true;
+          }
 
-
+        return false;
+    }
 
     isLiquor(itemType: IItemType) {
       if (itemType && itemType.name && (
@@ -287,7 +295,8 @@ export class FbProductsService {
 
     isProduct(itemType: IItemType | ItemType) {
       if (itemType && itemType.useType &&  (
-             itemType.useType?.toLowerCase() == 'product' ))
+             itemType.useType?.toLowerCase() == 'product' ||
+             itemType.useType?.toLowerCase() == 'modifier' ))
           {
             return true;
           }

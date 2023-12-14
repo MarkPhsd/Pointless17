@@ -14,7 +14,8 @@
         <div > Type  </div>
         <div *ngIf="order.clients_POSOrders && order.clients_POSOrders.client_Type">{{order?.clients_POSOrders?.client_Type.name}}</div>
         <div > Points </div>
-        <div> {{order?.clients_POSOrders?.loyaltyPoints}} | {{ order?.clients_POSOrders?.loyaltyPointValue | currency }} </div>
+
+        <div> {{order?.clients_POSOrders?.loyaltyPoints}} | {{ pointValue | currency }} </div>
         <div > Age </div>
         <div> {{order?.clients_POSOrders?.age}} | DOB ({{order?.clients_POSOrders?.dob | date : 'shortDate' }}) </div>
       </div>

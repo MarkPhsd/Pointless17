@@ -105,6 +105,15 @@ export interface IItemBasicB{
   image: string;
 }
 
+
+export interface IItemValue {
+  name: string;
+  id  : number;
+  value: number;
+  price: number;
+  cost: number;
+  quantity: number;
+}
 export interface IItemBasicValue extends IItemBasic {
   value: number;
 }
@@ -114,7 +123,7 @@ export interface IItemBasicValue extends IItemBasic {
 
 export class MenuService {
 
-
+  genders =  [{ id:0, name: 'Male'}, { id: 1, name: 'Female'}, {id: null,name: 'Any' } ]
   public searchModel         : ProductSearchModel
   public _searchModel       = new BehaviorSubject<ProductSearchModel>(null);
   public  searchModel$       = this._searchModel.asObservable();

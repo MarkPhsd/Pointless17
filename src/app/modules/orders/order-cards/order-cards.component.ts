@@ -261,10 +261,12 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     //sends order from this, to trigger defaultmodulecomponent, which then triggers another observable to send thourh payment methodsprocessservice.
     this.orderMethodsService._sendOrder.next(true)
 
+    console.log('set active order')
     const order$ =  this.orderService.getOrder(site, order.id, order.history )
     order$.subscribe(data =>
       {
         if (data) {
+
           this.orderOutPut.emit(data)
           this.orderMethodsService.setActiveOrder(site, data)
         }
@@ -288,6 +290,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
         switchMap(data => {
         {
           if (data) {
+
             this.orderOutPut.emit(data)
             this.orderMethodsService.setActiveOrder(site, data)
           }

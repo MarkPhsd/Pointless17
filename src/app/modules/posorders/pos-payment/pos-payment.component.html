@@ -4,7 +4,6 @@
 
 <div *ngIf="(paymentMethods$ | async) as methods">
   <div [class]="orderlayout" *ngIf="order  && uiTransactions">
-  
     <div class="transaction-data">
 
       <div #coachingPaymentsMade class="grid-header-item">
@@ -60,15 +59,13 @@
             <h4>Payment Amount: {{groupPaymentAmount | currency}}</h4>
           </div>
           <div class="margin-5"><button style="height: 50px;" mat-raised-button color="warn" (click)="clearGroupSelection()">Clear Selection</button></div>
-            <!-- this.groupPaymentAmount = event.amount;
-            this.groupPaymentGroupID = event.groupID; -->
         </div>
 
         <div class="action-center" *ngIf="!order.completionDate &&
                                           ((order?.balanceRemaining != 0 || isZeroPaymentAllowed) &&
                                           (order?.balanceRemaining < 0 || isNegativePaymentAllowed )) ||
                                           order?.balanceRemaining != order.total">
-        
+
           <div *ngIf="!splitByItem && !paymentsEqualTotal">
             <h4>Payment Amount: {{paymentAmount | currency}}</h4>
           </div>
@@ -82,8 +79,16 @@
             </button>
           </div>
 
+          <div style="margin-left: 5px" *ngIf="rewardsOption">
+            <button class="splitbutton"
+                    mat-raised-button
+                    color="primary"
+                    (click)="enterRewardsAmount(rewardsOption)">
+              Rewards <br>  {{ rewardsOption | currency}}
+            </button>
+          </div>
         </div>
-        
+
         <div  *ngIf="!paymentsEqualTotal && (uiTransactions && uiTransactions.splitEntry)">
           <button class="splitbutton"
                   mat-raised-button

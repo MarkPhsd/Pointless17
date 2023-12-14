@@ -19,9 +19,9 @@
 <mat-card *ngIf="terminalSettings && terminalSettings.triposLaneID">
 
   <mat-card-title>
-    Transaction Type:  {{transactionType}}
+    Transaction Type:  {{transactionType}} | Market {{ MarketCode }} | # {{posPayment.id}}
     <h3>
-      Total  {{posPayment?.amountPaid | currency}}
+    Total  {{posPayment?.amountPaid | currency}}
     </h3>
   </mat-card-title>
 

@@ -36,29 +36,21 @@ export class AWSBucketService {
   private httpClient: HttpClient;
 
   async  awsBucket(): Promise<string> {
-
     let bucket = localStorage.getItem('awsbucket')
-
     if (!bucket || bucket === '') {
       await this.getBucket();
     }
-
     bucket =  localStorage.getItem('awsbucket');
     return bucket
-
   }
 
   async  awsBucketOBS(): Promise<string> {
-
     let bucket = localStorage.getItem('awsbucket')
-
     if (!bucket || bucket === '') {
       await this.getBucket();
     }
-
     bucket =  localStorage.getItem('awsbucket');
     return bucket
-
   }
 
   async  awsBucketURL(): Promise<string> {
@@ -105,6 +97,24 @@ export class AWSBucketService {
     return imageArray;
   }
 
+  convertImageListToArray(imageString: string,): any[] {
+    let imageArray: any[];
+
+    if ( imageString != undefined  &&  imageString != '') {
+        imageArray = imageString.split(",")
+        imageArray.forEach((data, index)  => {
+          if (data != '') {
+            imageArray[index] = encodeURI(`${data}`)
+          } else {
+            imageArray.pop()
+          }
+        },
+      )
+    }
+    return imageArray;
+  }
+
+
   addImageArraytoArray(imageArray: any[], otherImageArray: any []): any[] {
     if (otherImageArray) {
       if (imageArray) {
@@ -123,14 +133,12 @@ export class AWSBucketService {
   }
 
   getImageURLPath(bucket: string, imageName: string ): string {
-    // console.log('bucket', bucket)
     let path = ''
     if (imageName) {
 
       if (bucket && `${bucket}`.substring(0, 16 ) ===  'https://https://') {
         const result =  bucket.split('https://')
         bucket = result[1];
-        console.log('fixed bucket ', bucket)
       }
 
       if (bucket) {
@@ -152,8 +160,6 @@ export class AWSBucketService {
       }
 
     }
-
-    // console.log('path', `${bucket}`.substring(0, 8 ), `${bucket}`, path)
 
     return path;
   }

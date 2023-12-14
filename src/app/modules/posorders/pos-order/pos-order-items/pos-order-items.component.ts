@@ -27,7 +27,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input()  mainPanel      : boolean;
   @Output() outputRemoveItem  = new EventEmitter();
   @Input()  purchaseOrderEnabled: boolean;
- 
+
   @Input() printLocation  : number;
   @Input() prepStatus     : boolean;
   @Input() prepScreen     : boolean;
@@ -103,7 +103,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   }
 
-  sortPOSItems(orderItems: PosOrderItem[]) { 
+  sortPOSItems(orderItems: PosOrderItem[]) {
     this.posOrderItems = this.sortItems(orderItems)
     setTimeout(() => {
       this.scrollToBottom();
@@ -111,13 +111,13 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   sortItems(items:  PosOrderItem[]) {
-    let list = items.sort((a, b) => (a.idRef > b.idRef) ? 1 : 1);
-    list = items.sort((a, b) => (a.productSortOrder > b.productSortOrder) ? 1 : -1);
-    list.forEach(data => {
-      // console.log(data.productName, data.productSortOrder)
-    })
+    // let list = items.sort((a, b) => (a.idRef > b.idRef) ? 1 : 1);
+    // list = items.sort((a, b) => (a.productSortOrder > b.productSortOrder) ? 1 : -1);
+    // list.forEach(data => {
+    //   // console.log(data.productName, data.productSortOrder)
+    // })
 
-    return list
+    return items
   }
 
   ngOnDestroy(): void {
@@ -244,7 +244,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     const index = payload.index;
     const orderItem = payload.item
     this.orderMethodService.removeItemFromList(index, orderItem)
-  
+
   }
 
   setAsPrepped(index) {

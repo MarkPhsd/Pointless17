@@ -29,8 +29,9 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
   // @Output() itemSelect  = new EventEmitter();
   @Input()  inputForm  :        UntypedFormGroup;
   @Input()  metaTagList:        string;
+  @Input()  itemTags          : string[]
   @Input()  product    :        IProduct;
-  @Input()  inventory   : IInventoryAssignment;
+  @Input()  inventory  : IInventoryAssignment;
 
   // @Output() outPutItemTags = new EventEmitter()
   @Output() outPutItemTags = new EventEmitter<any>();
@@ -46,7 +47,7 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
   @Output() callEmit = new EventEmitter();
   // Existing Tags from string, must convert to string array.
   // fruits: string[] = ['Lemon'];
-  itemTags          : string[]
+
 
   //need to init list of meta tags.
   //also need to be able to push to list of meta tags.
@@ -57,7 +58,7 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
   allMetaTags: Observable<IMetaTag[]>;
   searchPhrase:    Subject<any> = new Subject();
   site:            ISite;
-
+  @Input() isDisabled :boolean;
   results$ = this.searchPhrase.pipe(
             debounceTime(250),
             distinctUntilChanged(),
@@ -71,12 +72,13 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
             private metaTagService: MetaTagsService,
             private _fb: UntypedFormBuilder)
   {
+
     this.inputForm = this._fb.group({ metaTags: [''] })
-    const list = this.metaTagService
     this.site = this.sitesService.getAssignedSite()
   }
 
   async ngOnInit() {
+
     //the nput from the parent shouold work
     if (this.metaTags) {
       this.initMetaTags( this.metaTags.value)// this.metaTagsList

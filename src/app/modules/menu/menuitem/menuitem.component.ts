@@ -83,6 +83,8 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
     _posDevice: Subscription;
     posDevice: ITerminalSettings
+    awsBucketURL
+    imageList
 
     get menuPricesEnabled() {
       const menuItem = this.menuItem;
@@ -185,6 +187,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     // }
 
     async ngOnInit() {
+      this.awsBucketURL = await this.awsBucket.awsBucketURL();
       this.quantity = 1
       this.initProductForm();
       this.initSubscriptions();
@@ -442,6 +445,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       if (menuItem) {
         this.menuItem = menuItem;
         const site     = this.siteService.getAssignedSite();
+        this.imageList = this.awsBucket.convertToArrayWithUrl(menuItem.urlImageMain, this.awsBucketURL);
 
         this.refreshRecentAssociations(site);
         this.refreshAssociations(site);

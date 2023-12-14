@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Inject, Input, Output, } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MenuService, OrdersService } from 'src/app/_services';
+import { AuthenticationService, MenuService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
@@ -31,15 +31,27 @@ export class PosOrderItemEditComponent  {
   requireWholeNumber: boolean;
   inputTypeValue = 'decimal'
   action$: Observable<IPOSOrder>;
+  negativeOption: boolean;
 
   constructor(
-      public platFormService: PlatformService,
+      private authenticationService: AuthenticationService,
+      public platFormService      : PlatformService,
       private orderMethodsService : OrderMethodsService,
       private _fb                 : UntypedFormBuilder,
       private posOrderItemMethodsService: PosOrderItemMethodsService,
       private dialogRef           : MatDialogRef<PosOrderItemEditComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+
+    if (this.authenticationService.isAdmin || this.authenticationService.isAuthorized) {
+      this.negativeOption = true;
+    }
+
+    this.authenticationService.userAuths$.subscribe(data => {
+      if (data.allowBuy) {
+        this.negativeOption = true
+      }
+    })
 
     this.decimals = 2
     if (data) {

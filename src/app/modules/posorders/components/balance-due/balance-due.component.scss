@@ -6,13 +6,13 @@
 }
 
 .grid-items {
-  display: flex;
-  flex-direction: row;
-  height: calc(100vh - 45px);
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns:  auto clamp(550px, 50vw, 450px) auto;
+  height: 100vh;
+  @include for-phone-only  {
+    grid-template-columns:  0px clamp(550px, 50vw, 450px) 0px;
+  }
 }
-
-
 
 .h3 {
   font-size:  2.5em;

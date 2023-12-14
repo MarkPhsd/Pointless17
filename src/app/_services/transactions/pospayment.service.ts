@@ -150,6 +150,7 @@ export class POSPaymentService {
 
   savePOSPayment(site: ISite, payment: IPOSPayment) {
 
+    console.log('save pos payment', payment.id)
     if (payment.id == 0) {
       return this.postPOSPayment(site, payment)
     }

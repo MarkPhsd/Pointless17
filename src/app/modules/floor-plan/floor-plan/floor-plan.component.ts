@@ -10,7 +10,6 @@ import { FloorPlanMethodService } from '../floor-plan.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { tableProperties } from '../models/helpers';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { IpcSocketConnectOpts } from 'net';
 
 export interface uuidList {
   uuID: string;
@@ -26,6 +25,7 @@ export class FloorPlanComponent implements OnInit {
   floorPlanRefresh$ : Observable<any>;
   orders$ : Observable<any>;
   displayImage: boolean;
+  action$: Observable<any>;
 
   isUserStaff         =   false;
   isAdmin             =   false;
@@ -45,6 +45,7 @@ export class FloorPlanComponent implements OnInit {
   changeObjectColor: Subject<any> = new Subject();
   tableInfo: tableProperties;
   orderInfo: any;
+  uuID: string;
   _setTableInfo: Subject<any> = new Subject();
   _newOrder    : Subject<any> = new Subject();
   interval: any;
@@ -55,6 +56,7 @@ export class FloorPlanComponent implements OnInit {
   templateString: string;
 
   uiTransaction: TransactionUISettings;
+  tableName: string;
 
   uiTransaction$ = this.uiSettingService.transactionUISettings$.pipe(
     switchMap(data => {
@@ -92,7 +94,12 @@ export class FloorPlanComponent implements OnInit {
   }
 
   initPlansList(site) {
-    this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(site).pipe(
+    this.floorPlans$ = this._floorPlans()
+  }
+
+  _floorPlans() {
+    const site = this.siteService.getAssignedSite();
+    return   this.floorPlanSevice.listFloorPlansNames(site).pipe(
       switchMap(data => {
         //get the first plan since we are refreshing the whole list
         if (data.length>0) {
@@ -111,7 +118,7 @@ export class FloorPlanComponent implements OnInit {
 
   saveTableSettings() {
     this._setTableInfo.next(data => {
-      // console.log('saveTableSettings', data?.name)
+      console.log('saveTableSettings', data?.name)
     })
   }
 
@@ -181,6 +188,7 @@ export class FloorPlanComponent implements OnInit {
     ))
   }
 
+
   clearPlan() {
     const confirm = window.confirm("If you you confirm you will clear this layout of any items.")
     if (!confirm) { return }
@@ -189,6 +197,35 @@ export class FloorPlanComponent implements OnInit {
     this.saveFloorPlan(this.floorPlan);
   }
 
+  clearTable() {
+    if (!this.uuID) {
+      const confirm = window.confirm("No table was selected.")
+    }
+
+    const site   = this.siteService.getAssignedSite();
+    const order$ =  this.orderService.releaseTable(site, this.uuID )
+    this.action$ = order$.pipe(
+      switchMap(data => {
+      if (data && this.floorPlan && this.refresh) {
+        return this.orderService.getActiveTableOrders(site, this.floorPlan.id);
+      }
+      const orders = [] as IPOSOrder[]
+      return of(orders)
+    })).pipe(
+      switchMap( orders => {
+      if (this.refresh) {
+        if (orders && orders.length>0) {
+          try {
+          } catch (error) {
+          }
+          this.processActiveItems(orders);
+        }
+      }
+      return this._floorPlans()
+    }))
+
+
+  }
   initUserInfo() {
     this.isAdmin          = false;
     this.isUserStaff      = false;
@@ -250,12 +287,15 @@ export class FloorPlanComponent implements OnInit {
       if (item) {
         if (this.userMode) {
           this.orderInfo = item;
+          this.tableName = item?.name;
           this.tableInfo = event;
+          this.uuID = item?.uuid
           this.setActiveOrder(this.orderInfo.orderID, item.uuid, this.floorPlan.id, item.name )
         }
       }
     }
   }
+
 
   setActiveOrder(id: string, uuID: string, floorPlanID: number, name: string) {
     const site   = this.siteService.getAssignedSite();
@@ -265,11 +305,6 @@ export class FloorPlanComponent implements OnInit {
         this.refresh = false;
         if (!data || !data.id || data.id == 0) {
           this.refresh = true;
-          //
-          if (this.uiTransaction.applyTableNameToOrderName) {
-
-          }
-
           return this.orderMethodsService.newOrderFromTable(site, null, uuID, floorPlanID, name);
         }
         if (data) {return of(data)}

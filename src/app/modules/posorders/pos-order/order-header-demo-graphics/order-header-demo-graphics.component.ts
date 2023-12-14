@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription, debounce, of, switchMap } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
-import { ContactsService, OrdersService } from 'src/app/_services';
+import { ContactsService, OrdersService, ThemesService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -70,6 +70,11 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
     const i = 0
     this.uiSettingsService.transactionUISettings$.subscribe(data => {
       this.transactionSettings = data;
+
+      //        <!-- order?.clients_POSOrders?.loyaltyPointValue -->
+      // <!-- order.Clients_POSOrders.LoyaltyPoints * uiTrans.rewardPointValue -->
+
+
     })
     if (this.userAuthorization.isManagement) {
       this.canRemoveClient = true;
@@ -79,6 +84,17 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
     this.initAuthorization();
   }
 
+
+  get pointValue() {
+    // console.log('value', this.transactionSettings.rewardPointValue)
+    if (this.order && this.transactionSettings) {
+      if (this.order.clients_POSOrders) {
+        if (!this.order.clients_POSOrders.loyaltyPoints) { return }
+        return this.order.clients_POSOrders.loyaltyPoints * this.transactionSettings.rewardPointValue
+      }
+    }
+    return 0
+  }
   ngOnDestroy() {
     if (this._uiSettings) { this._uiSettings.unsubscribe()}
 

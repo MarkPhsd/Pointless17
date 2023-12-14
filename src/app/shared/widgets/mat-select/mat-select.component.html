@@ -5,7 +5,6 @@
       <mat-form-field
           [style]="style"
           [class]="class"
-         
           appearance="outline">
 
           <mat-label> <ng-content></ng-content> </mat-label>
@@ -29,18 +28,24 @@
               </div>
             </span>
 
-            <span *ngIf="list">
+            <span *ngIf="list && !useID">
               <mat-option
                     *ngFor="let item of list"
                     [value]="item">
                 {{item.name}}
               </mat-option>
             </span>
+
+            <span *ngIf="list && useID">
+              <mat-option
+                    *ngFor="let item of list"
+                    [value]="item.id">
+                {{item.name}}
+              </mat-option>
+            </span>
           </mat-select>
       </mat-form-field>
-
   </div>
-
 
  <ng-template #loading>
    ...loading <ng-content></ng-content>

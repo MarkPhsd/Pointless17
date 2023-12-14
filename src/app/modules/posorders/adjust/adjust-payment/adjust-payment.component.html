@@ -3,8 +3,7 @@
 <div *ngIf="resultAction && (voidPayment || manifest)">
   <mat-card>
     <mat-card-content>
-
-      <div *ngIf="settings.triposEnabled">
+      <div *ngIf="settings.triposEnabled && terminalSettings">
 
         <div class="ngcontent" *ngIf="voidAmount && voidAmount != 0">
           <h3>
@@ -22,9 +21,9 @@
           </h4>
         </div>
 
-        <button class="button" 
-                color="accent" 
-                mat-raised-button 
+        <button class="button"
+                color="accent"
+                mat-raised-button
                 (click)="toggleVoid = !toggleVoid">
           <div *ngIf="!toggleVoid">
               Run as Void
@@ -35,7 +34,6 @@
         </button>
       </div>
 
-        
       <div *ngIf="payment">
         <div  class="mat-label">
           <mat-slide-toggle
@@ -46,7 +44,7 @@
           </mat-slide-toggle>
         </div>
       </div>
-        
+
         <!-- {{ payment?.paymentMethod.isCreditCard }} </div>
          -->
       <div class="card-content">

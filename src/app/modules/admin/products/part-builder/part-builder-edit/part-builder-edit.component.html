@@ -7,10 +7,27 @@
       <div>
         <mat-icon>edit</mat-icon> {{pb_Main?.name}}
         <h4><mat-label>Last Edited: {{pb_Main?.dateUpdated | date: 'short'}}</mat-label></h4>
+        <div class="ps-flex-group-start">
+          <div>
+            Price: {{value?.price | currency}}
+          </div>
+          <div>
+            Cost: {{value?.cost | currency}}
+          </div>
+
+        </div>
         <mat-divider> </mat-divider>
       </div>
       <div class="ps-flex-group-start">
 
+
+        <div>
+          <div   class="margin-left-5 ">
+            <button mat-button
+                    (click)="childAddItem()">
+              <mat-icon>open_in_new</mat-icon>New Item</button>
+          </div>
+        </div>
         <app-edit-buttons-standard
           [enableCopy]            ="true"
           (outputeupdateItem)     ="updateSave($event)"
@@ -19,6 +36,7 @@
           (outputupdateonCancel)  ="onCancel($event)"
           (outputCopy)            ="copyItem($event)"
           (outPutRefresh)         ="refreshForm($event)"
+          [hideExit]="true"
           [refresh]="true"
         ></app-edit-buttons-standard>
       </div>

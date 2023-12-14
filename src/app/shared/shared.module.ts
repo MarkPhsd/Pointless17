@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FilterComponent } from './widgets/filter/filter.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppMaterialModule } from '../app-material.module';
 import { RouterModule } from '@angular/router';
 import { AreaComponent } from '../modules/admin/reports/area/area.component';
@@ -61,8 +60,6 @@ import { PriceCategorySearchComponent } from '../modules/admin/products/producte
 import { MenuSearchBarComponent } from './components/menu-search-bar/menu-search-bar.component';
 import { MatSpinnerOverlayComponent } from './widgets/mat-spinner-overlay/mat-spinner-overlay.component';
 import { ChemicalSpinnersComponent } from '../modules/menu/menuitem/menuItemParts/chemical-spinners/chemical-spinners.component';
-import { MenuItemGalleryComponent } from '../modules/menu/menuitem/menuItemParts/menu-item-gallery/menu-item-gallery.component';
-import { GalleryModule, GALLERY_CONFIG } from '@ngx-gallery/core';
 import { ValueSpinnerComponent } from './widgets/value-spinner/value-spinner.component';
 import { ChipsDisplayComponent } from './widgets/chips-display/chips-display.component';
 import { MatToggleSelectorComponent } from './widgets/mat-toggle-selector/mat-toggle-selector.component';
@@ -222,7 +219,6 @@ import { EmployeeClockListComponent } from '../modules/admin/employeeClockAdmin/
 import { EmployeeClockEditComponent } from '../modules/admin/employeeClockAdmin/employee-clock-edit/employee-clock-edit.component';
 import { EmployeeClockFilterComponent } from '../modules/admin/employeeClockAdmin/employee-clock-filter/employee-clock-filter.component';
 import { ZoomComponent } from './widgets/zoom/zoom.component';
-import { PartBuilderUsageListComponent } from '../modules/admin/products/part-builder/part-builder-usage-list/part-builder-usage-list.component';
 import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/part-usage-graph/part-usage-graph.component';
 import { CoachMarksComponent } from './widgets/coach-marks/coach-marks.component';
 import { CoachMarksButtonComponent } from './widgets/coach-marks-button/coach-marks-button.component';
@@ -234,7 +230,10 @@ import { QRCodeModule } from 'angularx-qrcode'
 import { UnitTypeSelectorComponent } from './widgets/unit-type-selector/unit-type-selector.component';
 import { ItemassociationsComponent } from '../modules/admin/products/productedit/_product-edit-parts/itemassociations/itemassociations.component';
 import { SearchFieldsComponent } from './widgets/search-fields/search-fields.component';
-
+import { Lightbox, LightboxModule } from 'ng-gallery/lightbox';
+import { ImageGalleryComponent } from './widgets/image-gallery/image-gallery.component';
+import { Gallery, GalleryModule } from 'ng-gallery';
+import { ImageLightHouseComponent } from './widgets/image-light-house/image-light-house.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -331,6 +330,7 @@ import { SearchFieldsComponent } from './widgets/search-fields/search-fields.com
     LiquorProductEditComponent,
     ListProductSearchInputComponent,
 
+
     MatDateRangeComponent,
     MatSelectComponent,
     MatSpinnerOverlayComponent,
@@ -341,7 +341,6 @@ import { SearchFieldsComponent } from './widgets/search-fields/search-fields.com
     ItemassociationsComponent,
     MenuCompactComponent,
     MenuCompactComponent,
-    MenuItemGalleryComponent,
     MenuMinimalComponent,
     MenuPriceSelectionComponent,
     MenuSearchBarComponent,
@@ -476,6 +475,9 @@ import { SearchFieldsComponent } from './widgets/search-fields/search-fields.com
     CoachMarksButtonComponent,
     UnitTypeSelectorComponent,
     SearchFieldsComponent,
+    ImageGalleryComponent,
+    ImageLightHouseComponent,
+
   ],
 
   imports: [
@@ -488,12 +490,11 @@ import { SearchFieldsComponent } from './widgets/search-fields/search-fields.com
     CommonModule,
     BrowserAnimationsModule,
     HighchartsChartModule,
-
     FormsModule,
-    GalleryModule,
     HammerModule,
     QRCodeModule,
-
+    GalleryModule,
+    LightboxModule ,
     ColorPickerModule,
     GridsterModule,
     RouterModule,
@@ -568,7 +569,7 @@ import { SearchFieldsComponent } from './widgets/search-fields/search-fields.com
     EmployeeClockListComponent,
     EmployeeClockEditComponent,
     EmployeeClockFilterComponent,
-
+    ImageGalleryComponent,
     FacilitySearchSelectorComponent,
     FastUserSwitchComponent,
     FilterComponent,
@@ -594,6 +595,7 @@ import { SearchFieldsComponent } from './widgets/search-fields/search-fields.com
     KeyboardButtonComponent,
     KeyboardViewComponent,
     LastImageDisplayComponent,
+
     LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
     LogoComponent,
@@ -607,7 +609,6 @@ import { SearchFieldsComponent } from './widgets/search-fields/search-fields.com
     MetaTagChipsComponent,
     ItemassociationsComponent,
     MenuCompactComponent,
-    MenuItemGalleryComponent,
     MenuPriceSelectionComponent,
     MenuMinimalComponent,
     MenuSearchBarComponent,
@@ -719,8 +720,9 @@ import { SearchFieldsComponent } from './widgets/search-fields/search-fields.com
   ],
 
   providers: [
-    { provide: GALLERY_CONFIG, useValue: { dots: true, imageSize: 'cover' } },
+    // { provide: GALLERY_CONFIG, useValue: { dots: true, imageSize: 'cover', previewFullscreen : true } },
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
+    // {provude: Gallery},
     KeyboardComponent,
   ]
 

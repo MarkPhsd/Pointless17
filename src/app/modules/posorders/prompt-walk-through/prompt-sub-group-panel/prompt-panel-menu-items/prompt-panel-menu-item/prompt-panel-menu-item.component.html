@@ -25,7 +25,10 @@
     </div>
 
     <div *ngIf ="imageURL" class="image" (click)="addItem()">
-      <img class="image" [src]="imageURL">
+      <!-- "getImageUrl(item?.image)" -->
+      <img  [src]     ="imageURL"
+            onerror   = "this.src='assets/images/placeholderimage.png'"
+            class="image"/>
     </div>
 
     <div  *ngIf="chosenCount || (chosenCount != '' && chosenCount != undefined)"

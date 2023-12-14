@@ -140,58 +140,77 @@
         *ngIf="iBalanceSheet && localSite && !auths.blindClose ">
 
     <span #printsection>
-      <div class="summary">
-        <mat-card  >
-          <mat-card-content>
-            <ng-container [ngTemplateOutlet]="pendingTransactions"></ng-container>
-            <ng-container [ngTemplateOutlet]="futureTransactions"></ng-container>
-            <ng-container [ngTemplateOutlet]="viewMetrcNetSales"></ng-container>
-          </mat-card-content>
-        </mat-card>
+      <div  class="grid-sales-cards">
+        <div>
+          <div class="summary">
+            <mat-card  >
+              <mat-card-content>
+                <ng-container [ngTemplateOutlet]="pendingTransactions"></ng-container>
+                <ng-container [ngTemplateOutlet]="futureTransactions"></ng-container>
+                <ng-container [ngTemplateOutlet]="viewMetrcNetSales"></ng-container>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <ng-container [ngTemplateOutlet]="taxReport"></ng-container>
+          <ng-container [ngTemplateOutlet]="balanceSheetView"></ng-container>
+        </div>
+
+        <div>
+          <ng-container [ngTemplateOutlet]="paymentReport"></ng-container>
+          <ng-container [ngTemplateOutlet]="salesType"></ng-container>
+
+
+          <ng-container [ngTemplateOutlet]="salesByDevice"></ng-container>
+          <ng-container [ngTemplateOutlet]="employeeReport"></ng-container>
+          <ng-container [ngTemplateOutlet]="giftCardReport"></ng-container>
+
+          <!-- <span *ngIf="!printing">
+            <ng-container [ngTemplateOutlet]="employeeOrdersByHourReport"></ng-container>
+          </span> -->
+        </div>
+
+        <div *ngIf="!printing">
+          <ng-container [ngTemplateOutlet]="itemSalesReport"></ng-container>
+          <ng-container [ngTemplateOutlet]="itemAdjustmentVoids"></ng-container>
+        </div>
       </div>
-
-       <ng-container [ngTemplateOutlet]="taxReport"></ng-container>
-
-      <ng-container [ngTemplateOutlet]="paymentReport"></ng-container>
-      <ng-container [ngTemplateOutlet]="balanceSheetView"></ng-container>
-
-      <div *ngIf="!printing">
-        <ng-container [ngTemplateOutlet]="employeeOrdersByHourReport"></ng-container>
-      </div>
-
-      <ng-container [ngTemplateOutlet]="salesByDevice"></ng-container>
-      <ng-container [ngTemplateOutlet]="employeeReport"></ng-container>
-      <ng-container [ngTemplateOutlet]="giftCardReport"></ng-container>
-
     </span>
-
-    <div>
-      <ng-container [ngTemplateOutlet]="itemSalesReport"></ng-container>
-      <ng-container [ngTemplateOutlet]="itemAdjustmentVoids"></ng-container>
-    </div>
   </div>
 
-    <mat-card *ngIf="iBalanceSheet && iBalanceSheet.startTime &&
-                      (auths && !auths.blindClose)">
+  <mat-card *ngIf="iBalanceSheet && iBalanceSheet.startTime &&
+                    (auths && !auths.blindClose)">
 
-        <app-widget-card   [dateFrom]  ="iBalanceSheet.startTime"
-                            [dateTo]   ="iBalanceSheet.startTime"
-                            [zrunID]   ="iBalanceSheet.id"
-                            groupBy    ="hour"
-                            chartName  ="Hourly"
-                            [site]     ='localSite'
-                            [notifier] ="childNotifier"
+      <app-widget-card   [dateFrom]  ="iBalanceSheet.startTime"
+                          [dateTo]   ="iBalanceSheet.startTime"
+                          [zrunID]   ="iBalanceSheet.id"
+                          groupBy    ="hour"
+                          chartName  ="Hourly"
+                          [site]     ='localSite'
+                          [notifier] ="childNotifier"
+      ></app-widget-card>
+
+      <app-widget-card [dateFrom]  ="iBalanceSheet.startTime"
+                        [dateTo]    ="iBalanceSheet.startTime"
+                        [zrunID]    ="iBalanceSheet.id"
+                        [site]      ='localSite'
+                        groupBy     ="orderemployeecount"
+                        chartName   ="Employee Order Count"
         ></app-widget-card>
-
-        <app-widget-card [dateFrom]  ="iBalanceSheet.startTime"
-                         [dateTo]    ="iBalanceSheet.startTime"
-                         [zrunID]    ="iBalanceSheet.id"
-                         [site]      ='localSite'
-                         groupBy     ="orderemployeecount"
-                         chartName   ="Employee Order Count"
-          ></app-widget-card>
-    </mat-card>
+  </mat-card>
 </div>
+
+<ng-template #salesType>
+  <payment-report
+      [groupBy]="'service'"
+      [site]    ="site"
+      [zrunID]    ="iBalanceSheet.id"
+      [notifier]="childNotifier">
+    <div header>
+    <mat-icon >summarize</mat-icon>  Sale Type - {{site.name}}
+    </div>
+    <mat-icon>credit_card</mat-icon> Sale Type - {{site.name}}
+  </payment-report>
+</ng-template>
 
 <ng-template #paymentDiscrepancy>
   <div *ngIf="iBalanceSheet">

@@ -18,8 +18,7 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
-import { POSItemSearchModel } from 'src/app/_services/reporting/reporting-items-sales.service';
+import { IOrderItemSearchModel, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 
 @Component({
   selector: 'app-orders-main',
@@ -221,17 +220,15 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     })
   }
 
-  getOrderItemHistory() { 
+  getOrderItemHistory() {
     //orderItemHistory$
     this.viewType = 4;
-    if (this.user && this.user.roles == 'user') { 
+    if (this.user && this.user.roles == 'user') {
       // this.posor/
       const site = this.siteService.getAssignedSite();
-      let search = {} as POSItemSearchModel
-      search.clientID = this.user.id;
-      search.includeMenuItem = true
-      const results$ =  this.posOrderItemService.getItemsHistoryBySearch(site,search);
-      this.orderItemHistory$ = results$.pipe(switchMap(data => { 
+      let search = {} as IOrderItemSearchModel
+      const results$ =  this.posOrderItemService.getItemsHistoryBySearch(site, search);
+      this.orderItemHistory$ = results$.pipe(switchMap(data => {
         console.log('history items', data)
         return of(data)
       }))
@@ -292,7 +289,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this.auths = this.authenticationService.userAuths;
     this.isApp = (this.platFormService.isAppElectron || this.platFormService.androidApp)
 
-    if (this.isUser) { 
+    if (this.isUser) {
       localStorage.setItem('OrderFilterPanelVisible', 'true')
     }
   }
@@ -334,7 +331,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
       this.showAllOrderInstructions[0] = ''
     }
     if (!auth.firstTime_FilterOrderInstruction) {
-      // console.log('show order filter instructions')
       this.showInstruction(1)
     } else {
       this.showAllOrderInstructions[1] = ''
@@ -587,7 +583,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this.updateFilterInstruction();
     this.hideInstruction(0)
 
-    if (this.viewType === 4) { 
+    if (this.viewType === 4) {
       this.viewType = 2
       this.displayPanel(event);
       this.hideFilterPanel(true)
@@ -598,7 +594,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   displayPanel(event)  {
-    
+
     const show =  localStorage.getItem('OrderFilterPanelVisible')
     if (show === 'false') {
       this.hidePanel = true
@@ -616,7 +612,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     localStorage.setItem('OrderFilterPanelVisible', 'false')
   }
-  
+
   hideFilterPanel(event) {
     this.hidePanel = event
     if (event) {

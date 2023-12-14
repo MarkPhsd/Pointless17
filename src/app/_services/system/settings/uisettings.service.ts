@@ -103,6 +103,7 @@ export interface TransactionUISettings {
   preferredMargin: number;
   enableItemReOrder: boolean;
   resaleCostRatio: number;
+  rewardPointValue: number;
 }
 
 export interface StripeAPISettings {
@@ -201,7 +202,7 @@ export interface UIHomePageSettings {
   sendGridPasswordResetTemplate : string;
   sendGridNotificationTemplate: string;
   sendGridOrderReadyNotificationTemplate: string;
-
+  ebayEnabled        : boolean;
   administratorEmail : string;
   outGoingCustomerSupportEmail: string;
   salesReportsEmail  : string;
@@ -241,6 +242,7 @@ export interface UIHomePageSettings {
   enableSimliarItems: boolean;
   enableShippingInfo: boolean;
   resaleMenu: boolean;
+  disableSearchFieldInMenu: boolean;
 }
 
 @Injectable({
@@ -622,7 +624,7 @@ export class UISettingsService {
       hideSearchBar         : [''],
       scheduleSubMenu       : [],
       staffscheduleSubMenu  : [],
-
+      ebayEnabled: [],
       displayCompanyName    : [''],
       tinyLogo              : [''],
       wideOrderBar          : [''],
@@ -651,7 +653,7 @@ export class UISettingsService {
       displaySendButton: [],
       suppressMenuItems: [],
       storeNavigation: [], //
-
+      disableSearchFieldInMenu: [], //
       suppressItemsInStoreNavigation: [], //
       disableSearchFeaturesInItemsList: [], //
       accordionMenu: [],
@@ -853,6 +855,7 @@ export class UISettingsService {
       exitOrderOnPrintReceipt: [],
       enableItemReOrder: [],
       resaleCostRatio: [],
+      rewardPointValue: [],
      })
   }
 

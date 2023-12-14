@@ -19,6 +19,10 @@
   @media (min-width: 1800px) { @content; }
 }
 
+@mixin horizontal-tablet-min {
+  @media (min-width: 815px) { @content; }
+}
+
 @mixin horizontal-tablet {
   @media (max-width: 815px) { @content; }
 }

@@ -75,7 +75,7 @@
 </ng-template>
 
 <ng-template #searchSelector>
-  <div *ngIf="searchForm">
+  <div *ngIf="searchForm && (uiHomePage && !uiHomePage.disableSearchFieldInMenu)">
     <search-debounce-input
        [searchForm]="searchForm"
        [itemNameControl]="'itemName'"
@@ -162,6 +162,7 @@
         [bucketName]      ="bucketName"
         [class]           ="infiniteItemClass"
         [uiHomePage]      ="uiHomePage"
+        [isStaff]         ="isStaff"
         (outPutUpdateCategory)="setCategoryID($event)"
         (outputRefresh)   ="refreshFromSelection($event)"
         (outPutLoadMore)  ='moveNext($event)' >

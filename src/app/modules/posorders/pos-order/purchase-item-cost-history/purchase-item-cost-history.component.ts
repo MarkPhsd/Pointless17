@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Observable, switchMap, of, Subscription } from 'rxjs';
 import { IPOSOrder, ISite, PosOrderItem } from 'src/app/_interfaces';
 import { HistoricalSalesPurchaseOrderMetrcs, ReportingService } from 'src/app/_services';
@@ -11,7 +11,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   templateUrl: './purchase-item-cost-history.component.html',
   styleUrls: ['./purchase-item-cost-history.component.scss']
 })
-export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy {
+export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() order: IPOSOrder
   @Input() site: ISite;
@@ -20,6 +20,8 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy {
   loadingMessage: boolean;
   _lastItem: Subscription;
 
+  @Input() barcode: string;
+  @Input() productID: number;
   constructor(
     private siteService: SitesService,
     public orderMethodsService: OrderMethodsService,
@@ -27,8 +29,28 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy {
 
   ngOnInit( ): void {
     this._lastItem = this.orderMethodsService.lastSelectedItem$.subscribe(data => {
-      this.itemHistorySales$ = this.getAssignedItems(data)
+      // this.itemHistorySales$ = this.getAssignedItems(data)
+      if (!this.productID) {
+        this.itemHistorySales$ = this.getAssignedItems(data)
+      }
     })
+  }
+
+  ngOnChanges() {
+    this.getItemByBarcode()
+  }
+
+  getItemByBarcode() {
+    if (this.productID) {
+      const site = this.siteService.getAssignedSite()
+      const search = {} as POSItemSearchModel;
+      search.productID = this.productID;
+      this.loadingMessage = false
+      search.showVoids = false
+      this.itemHistorySales$  =  this.reportingService.getMetrcsForPO(site, search).pipe(switchMap(data => {
+        return of(data)
+      }))
+    }
   }
 
   ngOnDestroy() {
@@ -42,7 +64,6 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy {
       this.loadingMessage = true
       this.product = item
       if (item && item.productName) {
-        console.log('PurchaseItemCostHistoryComponent', item)
         const search = {} as POSItemSearchModel;
         search.productName = item.productName;
         const site = this.siteService.getAssignedSite()
@@ -53,5 +74,7 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy {
     this.loadingMessage = false
     return of(null)
   }
+
+
 
 }

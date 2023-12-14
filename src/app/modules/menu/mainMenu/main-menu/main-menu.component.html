@@ -65,7 +65,8 @@
 </ng-template>
 
 <ng-template #categoryView>
-  <blog-post-list *ngIf="!isStaff" [group]="'category head'" [height] ="'100%'" [viewType]="'grid'" ></blog-post-list>
+  <blog-post-list *ngIf="!isStaff" [group]="'category head'"
+                  [height] ="'100%'" [viewType]="'grid'" ></blog-post-list>
   <div [style.height]="panelHeightSize">
     <app-categories
         [uiHomePage]="homePageSetings"
@@ -77,14 +78,18 @@
 </ng-template>
 
 <ng-template #brandView>
-  <blog-post-list *ngIf="!isStaff" [group]="'brand head'" [height] ="'100%'" [viewType]="'grid'"></blog-post-list>
+  <blog-post-list *ngIf="!isStaff" [group]="'brand head'"
+                  [height] ="'100%'" [viewType]="'grid'"></blog-post-list>
   <div [style.height]="panelHeightSize">
     <app-brandslist [panelHeightValue]="panelHeightValue"  ></app-brandslist>
   </div>
 </ng-template>
 
 <ng-template #tierMenuView>
-  <blog-post-list *ngIf="!isStaff" [group]="'tier head'" [height] ="'100%'" [viewType]="'grid'" ></blog-post-list>
+  <blog-post-list *ngIf="!isStaff"
+                  [group]="'tier head'"
+                  [height] ="'100%'"
+                  [viewType]="'grid'" ></blog-post-list>
   <div>
      <app-tier-menu></app-tier-menu>
   </div>
@@ -102,7 +107,7 @@
 
 <div *ngIf="(orderAction$ | async)"></div>
 
-
 <ng-template #resaleMenu>
-  <button style="margin:5px" class="payment-buttons" mat-raised-button color="primary" (click)="navResale()"><mat-icon style="margin:4px">label</mat-icon>Buy / Sell</button>
+  <!-- <button style="margin:5px" class="payment-buttons" mat-raised-button color="primary" (click)="navResale()"><mat-icon style="margin:4px">label</mat-icon>Buy / Sell</button> -->
+  <buy-sell-main></buy-sell-main>
 </ng-template>

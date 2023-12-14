@@ -1,34 +1,58 @@
 <div *ngIf="(floorPlanRefresh$ | async) as floorPlanRefresh">
   <div *ngIf="(orders$ | async) as oroders"></div>
 </div>
+<div *ngIf="(action$ | async) as action"></div>
 
 <div *ngIf="(backupRestore$ | async)"></div>
 
 <div class="panel" *ngIf="(uiTransaction$ | async) as uiTransaction">
 
   <ng-container [ngTemplateOutlet]="adminViewToolbar"></ng-container>
+
   <ng-template #adminViewToolbar>
-    <button class="button"  *ngIf="isAdmin" mat-raised-button (click)="toggleUserMode()">Admin</button>
-    <button class="button"  *ngIf="!userMode && floorPlan" mat-raised-button (click)="backup()"><mat-icon>backup</mat-icon>Backup</button>
-    <button class="button"  *ngIf="!userMode && floorPlan" mat-raised-button (click)="restore()"><mat-icon>restore</mat-icon>Restore</button>
-    <button class="button"  *ngIf="!userMode" mat-raised-button (click)="newFloorPlan()"><mat-icon>add</mat-icon></button>
-    <button class="button"  *ngIf="!userMode  && floorPlan"
-            mat-raised-button (click)="displayImage = !displayImage"><mat-icon>image</mat-icon>
-    </button>
-    <button class="button" *ngIf="!userMode && floorPlan" mat-raised-button (click)="deleteFloorPlan()">
-      <mat-icon>delete</mat-icon>
-    </button>
-    <button class="button" *ngIf="!userMode && isAdmin" mat-raised-button (click)="clearPlan()">Clear</button>
+    <div class="ps-flex-group-start">
+      <div class="info">
+        <div>
+          Table: {{tableName}}
+        </div>
+        <div>
+          Order: {{orderInfo?.id}}
+        </div>
+      </div>
+
+      <button class="button"  *ngIf="tableInfo && userMode" mat-raised-button (click)="clearTable()">Clear  Selected </button>
+      <button class="button"  *ngIf="isAdmin" mat-raised-button (click)="toggleUserMode()">Admin</button>
+
+      <button class="button"  *ngIf="!userMode && floorPlan" mat-raised-button (click)="backup()"><mat-icon>backup</mat-icon>Backup</button>
+
+      <button class="button"  *ngIf="!userMode && floorPlan" mat-raised-button (click)="restore()"><mat-icon>restore</mat-icon>Restore</button>
+
+      <button class="button"  *ngIf="!userMode" mat-raised-button (click)="newFloorPlan()"><mat-icon>add</mat-icon></button>
+
+      <button class="button"  *ngIf="!userMode  && floorPlan"
+              mat-raised-button (click)="displayImage = !displayImage"><mat-icon>image</mat-icon>
+      </button>
+
+      <button class="button" *ngIf="!userMode && floorPlan" mat-raised-button (click)="deleteFloorPlan()">
+        <mat-icon>delete</mat-icon>
+      </button>
+
+      <button class="button" *ngIf="!userMode && isAdmin" mat-raised-button (click)="clearPlan()">Clear</button>
+
+      <button class="button"  mat-raised-button (click)="refreshPlans()"><mat-icon>refresh</mat-icon></button>
+
+      <span *ngIf="saving">   <mat-icon>save</mat-icon> </span>
+
+      <span>
+        <zoom-floor-plan (zoomChange)="onZoom($event)" [zoom]="zoomDefault"></zoom-floor-plan>
+      </span>
+
+      <ng-container [ngTemplateOutlet]="floorPlanList"></ng-container>
+    </div>
   </ng-template>
 
-  <ng-container [ngTemplateOutlet]="floorPlanList"></ng-container>
-  <button class="button"  mat-raised-button (click)="refreshPlans()"><mat-icon>refresh</mat-icon></button>
 
-  <span *ngIf="saving">   <mat-icon>save</mat-icon> </span>
 
-  <span>
-    <zoom-floor-plan (zoomChange)="onZoom($event)" [zoom]="zoomDefault"></zoom-floor-plan>
-  </span>
 </div>
 
 <div *ngIf="isAdmin && displayImage && floorPlan">

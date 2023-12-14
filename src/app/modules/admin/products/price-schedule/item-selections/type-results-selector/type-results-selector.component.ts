@@ -7,12 +7,8 @@ import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { IProductSearchResults, IProductSearchResultsPaged, MenuService } from 'src/app/_services';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { DiscountInfo, IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
@@ -148,7 +144,6 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   }
 
   initGridOptions()  {
-    console.log('initGridOptions')
     this.frameworkComponents  = this.agGridService.initFrameworkComponents();
     this.defaultColDef        = this.agGridService.initDefaultColumnDef();
     this.rowSelection         = 'multiple';
@@ -164,7 +159,6 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   }
 
   initColumnDefs() {
-    console.log('initColumnDefs')
     return  [
       {headerName: 'Name', field: 'name', sortable: true, width: 300, minWidth: 300},
       {
@@ -172,7 +166,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
         cellRenderer: "btnCellRenderer",
         cellRendererParams: {
           onClick: this.selectItemFromGrid.bind(this),
-          label: `<span><i class="material-icons">edit</i></span> Select`,
+          label: `Select`,
           getLabelFunction: this.getLabel.bind(this),
           btnClass: 'btn btn-primary btn-sm'
         },
@@ -231,14 +225,14 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   getRowData(params, startRow: number, endRow: number):  Observable<IProductSearchResultsPaged>  {
     this.currentPage = this.setCurrentPage(startRow, endRow)
     const productSearchModel = this.initSearchModel( );
-    console.log('productSearchModel', productSearchModel)
+    // console.log('productSearchModel', productSearchModel)
     const site = this.siteService.getAssignedSite()
     return this.menuService.getProductsBySearchForLists(site, productSearchModel)
   }
 
   //ag-grid standard method
   onGridReady(params: any) {
-    console.log('on grid ready')
+    // console.log('on grid ready')
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
@@ -268,7 +262,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 
   //ag-grid standard method.
   getDataSource(params) {
-    console.log('getDataSource')
+    // console.log('getDataSource')
     return {
       getRows: (params: IGetRowsParams) => {
         const items$ = this.getRowData(params, params.startRow, params.endRow)
@@ -295,7 +289,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   }
 
   refreshSearch(searchPhrase: string): Observable<IProductSearchResults[]> {
-    console.log('refreshSearch')
+    // console.log('refreshSearch')
     if (!this.params) { return }
     this.currentPage         = 1
     const site               = this.siteService.getAssignedSite()
@@ -307,7 +301,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   }
 
   getData(site, productSearchModel): Observable<IProductSearchResults[]> {
-    console.log('productSearch get data')
+    // console.log('productSearch get data')
     const menu$  = this.menuService.getProductsBySearchForLists(site, productSearchModel)
     menu$.subscribe( data => {
       this.rowData = data.results
@@ -331,7 +325,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   initSearchModel(): ProductSearchModel {
     const categoryID = this.getCategoryID();
     const brandID  = this.getBrandID();
-    console.log('initSearchModel')
+    // console.log('initSearchModel')
     return this.agGridService.initProductSearchModel(
         categoryID,
         this.input.nativeElement.value,
@@ -370,7 +364,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 
   selectItem(item) {
     if (item) {
-      console.log(item)
+      // console.log(item)
     }
   }
 
@@ -391,7 +385,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 
     if (this.requiredItemsControl) {
       this.requiredItems = this.requiredItemsControl.value;
-      console.log('presss',  this.requiredItems)
+      // console.log('presss',  this.requiredItems)
 
       if (item.prodModifierType != 5 && item.prodModifierType != 4) {
         if (!this.requiredItems) {

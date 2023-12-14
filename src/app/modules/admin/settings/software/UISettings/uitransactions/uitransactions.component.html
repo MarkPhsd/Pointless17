@@ -39,6 +39,8 @@
           [formGroup]="inputForm"
           class="grid-view-sections" >
 
+
+
       <div class="grid-views">
         <div class="grid-views">
           <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Item Options</h4>
@@ -257,6 +259,19 @@
                   [inputForm]="inputForm"
                   [fieldName]="'weightGraceValue'">
                 Grace Value
+              </app-value-fields>
+            </div>
+
+            rewardPointValue
+
+            <div>
+              <mat-icon class="mat-label-info"
+                    color="accent"
+                    [matTooltip]="labelingService.transactionInfo[6].value">info</mat-icon>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'rewardPointValue'">
+                Reward Point Value
               </app-value-fields>
             </div>
 

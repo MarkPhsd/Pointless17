@@ -1,9 +1,10 @@
-<div *ngIf="(product || inventory) && inputForm">
+<div *ngIf=" inputForm">
   <mat-form-field appearance="outline">
     <mat-label>Meta Tags</mat-label>
 
     <mat-chip-list    #chipList aria-label=" selection"  >
       <mat-chip
+            [disabled]='isDisabled'
             *ngFor="let item of (itemTags || [])"
             [selectable]="selectable"
             [removable]="removable"
@@ -11,7 +12,9 @@
          {{item | json}}
         <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
       </mat-chip>
+
       <input
+            *ngIf="!isDisabled"
             placeholder="New item..."
             #input
             [(ngModel)]      ="metaTagList"
@@ -23,6 +26,7 @@
     </mat-chip-list>
 
     <mat-autocomplete
+
                       panelWidth="auto"
                       #auto="matAutocomplete"
                       [displayWith]="displayFn.bind(this)"

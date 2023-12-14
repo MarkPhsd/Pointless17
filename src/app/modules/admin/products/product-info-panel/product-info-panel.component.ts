@@ -26,7 +26,7 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
   @Input() id                  : number;
   @Input() product             : IProduct;
   thumbnail: string;
-
+  urlImageMain: string;
   @Input() set setProduct(product: IProduct) { this.product = product;  }
   @Input() printerName         : string;
 
@@ -89,6 +89,7 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
     this.initForm()
     if (this.product) {
       this.thumbnail = this.product.thumbnail
+      this.urlImageMain = this.product.urlImageMain;
       const site = this.siteService.getAssignedSite()
       this.itemType$ = this.itemTypeService.getItemType(site, this.product.prodModifierType).pipe(switchMap(data => {
         this.iItemType = data;
@@ -101,6 +102,12 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
     this.thumbnail = event;
     this.product.thumbnail = event;
     this.productForm.patchValue({thumbnail: event})
+  }
+
+  seturlImageMain(event) {
+    this.urlImageMain = event;
+    this.product.urlImageMain = event;
+    this.productForm.patchValue({urlImageMain: event})
   }
 
   _saveProduct(site: ISite) {

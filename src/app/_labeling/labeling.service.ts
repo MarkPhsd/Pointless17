@@ -39,7 +39,9 @@ export class LabelingService {
     {id:2, name:'appyToTable', value:'Not Recommended'},
     {id:3, name:'searchOrderHistory', value:'Searches on dates closed.'},
     {id:4, name:'numberPad', value:'Allows quantity entry prior to scan or button press.'},
-    {id:4, name:'splitEntry', value:'This makes split checks easier. Allows servers to select the customer / group they are entering the item to, prior to payment. '},
+    {id:5, name:'splitEntry', value:'This makes split checks easier. Allows servers to select the customer / group they are entering the item to, prior to payment. '},
+    {id:6, name:'reward', value:'This is the value of each loyalty point. .05 would be 5 cents, etc. '},
+    {id:6, name:'resaleCostRatio', value:'This will help determine the price based on cost you are buying an item for. '},
   ]
 
   terminalSettingsInfo =  [

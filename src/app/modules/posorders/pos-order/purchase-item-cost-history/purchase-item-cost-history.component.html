@@ -1,27 +1,42 @@
 
 <ng-content></ng-content>
+<mat-divider style="margin:5px"></mat-divider>
+
 <span *ngIf="product">
   {{product?.productName}}
-
 </span>
+
 <div *ngIf="(itemHistorySales$ | async) as item; else loading">
   <div class="grid-items" >
     <div>This Month</div>
     <div>{{item?.thisMonthsTotal}}</div>
-    <div>Last Week</div>
+    <div>This/Last Week</div>
     <div>{{item?.lastWeek }}</div>
     <div>Last Month</div>
     <div>{{item?.lastMonth }}</div>
+    <div>This Year</div>
+    <div>{{item?.thisYearTotal }}</div>
     <div>Last Year Same Week</div>
     <div>{{item?.lastYearSameWeekTotal}}</div>
     <div>Last Year-Month</div>
     <div>{{item?.lastYearMonth }}</div>
   </div>
+  <mat-divider style="margin:5px"></mat-divider>
+  <div class="grid-items" >
+    <div>Total Sales</div>
+    <div>{{item?.totalSales }}</div>
+  </div>
 </div>
+
+
+
+
+
 <div *ngIf="loadingMessage">
   <mat-spinner [diameter]="50"></mat-spinner>
 </div>
 
 <ng-template #loading>
+  ..getting info
 </ng-template>
 

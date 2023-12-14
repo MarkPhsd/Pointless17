@@ -56,4 +56,6 @@ export interface ProductSearchModel {
   minQuantityFilter  : number;
   webWorkRequired: boolean;
   sort: string;
+  gender: number;
+  genderAny: boolean;
 }

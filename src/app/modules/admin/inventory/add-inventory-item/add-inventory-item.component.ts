@@ -9,7 +9,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FbInventoryService } from 'src/app/_form-builder/fb-inventory.service';
-import { MenuService, OrdersService } from 'src/app/_services';
+import { AuthenticationService, MenuService, OrdersService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ScaleInfo, ScaleService, ScaleSetup } from 'src/app/_services/system/scale-service.service';
 import { NewInventoryItemComponent } from '../new-inventory-item/new-inventory-item.component';
@@ -17,12 +17,13 @@ import { ItemType } from 'src/app/_interfaces/menu/price-schedule';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { IPOSOrder, ISetting, PosOrderItem } from 'src/app/_interfaces';
+import { IPOSOrder, ISetting, IUser, PosOrderItem } from 'src/app/_interfaces';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
-import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 
 @Component({
   selector: 'app-add-inventory-item',
@@ -73,32 +74,56 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   posDevice       :  ITerminalSettings;
   printLabel$: Observable<any>;
 
+  _userAuths: Subscription;
+  userAuths: IUserAuth_Properties;
+
+  uiHome: UIHomePageSettings;
+  _uiHome: Subscription;
+
+  userAuthSubscriber() {
+    this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
+      if (data) {
+        this.userAuths = data;
+      }
+    })
+  }
+
+  getUITransactionsSettings() {
+    this._uiHome = this.uiSettings.homePageSetting$.subscribe( data => {
+      if (data) {
+        this.uiHome = data;
+      }
+    });
+  }
+
   initSubscriptions() {
+    this.userAuthSubscriber()
+    this.getUITransactionsSettings()
     this._scaleInfo = this.scaleService.scaleInfo$.subscribe( data => {
       this.scaleInfo = data
     })
     try {
       this._posDevice = this.uiSettingsService.posDevice$.subscribe(data => {
         this.posDevice = data;
-
       })
     } catch (error) {
-
     }
   }
 
   constructor(
+    private authenticationService: AuthenticationService,
     private _snackBar           : MatSnackBar,
     private uiSettingsService: UISettingsService,
     private siteService         : SitesService,
     public  route               : ActivatedRoute,
     private menuService         : MenuService,
     private fbInventory         : FbInventoryService,
-    public fbProductsService    : FbProductsService,
+    public  fbProductsService    : FbProductsService,
     private inventoryAssignmentService: InventoryAssignmentService,
     private inventoryLocationsService: InventoryLocationsService,
     private scaleService        : ScaleService,
     private dialog              : MatDialog,
+    public  uiSettings             : UISettingsService,
     private fb                  : UntypedFormBuilder,
     private itemtypeService     : ItemTypeService,
     private orderMethodsService : OrderMethodsService,
@@ -541,7 +566,6 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     if (!order) { return of(null) };
     return this.printingService.printBuyLabel(this.item, this.menuItem,
                                                           order).pipe(switchMap(data => {
-      console.log('printing')
       return of (null)
     }))
   }
@@ -555,6 +579,17 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   setLastlabelUsed(id: number) {
     this.printingService.setLastLabelUsed(id)
   }
+
+
+  publishItem(item) {
+    if (item) {
+      const site = this.siteService.getAssignedSite()
+      item.publishItem = true;
+      this.siteService.notify('Item Published to Ebay', 'Close', 30000, 'green')
+      this.updateItem(this.item, false);
+    }
+  }
+
 
 }
 

@@ -283,7 +283,7 @@ typesList = [
 // 12	Food
 // 13	Restaurant
 
-useType = ['product', 'adjustment', 'category',]
+useType = ['product', 'adjustment', 'category', 'modifier']
 
 site: ISite;
 constructor(private http: HttpClient,
@@ -883,7 +883,7 @@ constructor(private http: HttpClient,
             packagingMaterial: '',promptQuantity: false,description: '', webStoreSimpleView: false,
             useGroups          : useGroup, unitName: '', pricePrompt: false, disablePriceCategory: false, disableSimplePrice: false,
             printerLocations   : printerLocations, enableCustomNote: false, wicebt: 0,
-            requireWholeNumber : false, instructions       : '', 
+            requireWholeNumber : false, instructions       : '',
             metrcCategoryID : 0,   requireInStock: false, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Fish Weighted",        itemType_Categories: categories, imageName: '',       icon: 'fish'   , useType:'product', sortOrder: 43, ageRequirement: 0, enabled: true, type:  'grocery', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
       {id: 52,  portionValue       : '', autoAddJSONProductList: '', useDefaultPriceInApp: true,
             packagingMaterial: '',promptQuantity: false,description: '', webStoreSimpleView: false,

@@ -1,16 +1,21 @@
 <div *ngIf="(addItem$ | async) as  action"></div>
+<div *ngIf="(inventoryItems$ | async) as inventory"></div>
 
-<div *ngIf="(inventoryItems$ | async) as results">
+<div *ngIf="inputInventory as results">
   <div *ngIf="!results.errorMessage"  >
-    <div *ngFor="let item of inventoryList"   class="ps-flex-group-column ">
-      <mat-card style="max-width:94vw;margin:5px;max-height:600px;min-height:300px;overflow-x:hidden;overflow-y:visible">
-        
+    <div *ngFor="let item of inputInventory.results"   class="ps-flex-group-column ">
+
+      <mat-card style="max-width:100%;margin:5px;overflow-x:hidden;overflow-y:visible">
+        <mat-card-subtitle>
+          <h3>{{ item?.productName}}</h3>
+        </mat-card-subtitle>
+
         <div class="ps-inventory-grid">
-          
+
           <div>
-            <h4>{{ item?.sku}}</h4>
-            <h5>Count: {{item?.packagesRemaining}}</h5>
-            
+            <h4>{{ item?.sku}}  {{item?.label}}</h4>
+            <h5>Count: {{item?.packageCountRemaining}}</h5>
+
             <div  class="mat-label" >
               <mat-slide-toggle
                   class="mat-label"
@@ -20,39 +25,69 @@
                 </mat-slide-toggle>
                 <mat-label class="mat-label" style="margin-right:5px;margin-left:5px;font-weight:1.1em;font-weight:500;" color="primary">Pre-Owned</mat-label>
             </div>
-        
-            <div style="width:200px" 
+
+            <div  class="mat-label" *ngIf="uiHome && uiHome.ebayEnabled" >
+              <mat-slide-toggle
+                  class="mat-label"
+                  name="enabled"
+                  [disabled]="true"
+                  [(ngModel)]="item.published">
+                </mat-slide-toggle>
+                <mat-label class="mat-label" style="margin-right:5px;margin-left:5px;font-weight:1.1em;font-weight:500;" color="primary">Ebay Published</mat-label>
+            </div>
+
+            <div style="width:200px"
                   class="ps-grid-items-75-col-fixed">
               <div class="font-1-1em font-weight-500">Price</div>
               <div class="font-1-1em font-weight-500">{{item?.price | currency}}    </div>
               <div class="font-1-1em font-weight-500">Bay</div>
               <div class="font-1-1em font-weight-500">  {{item?.bay}} </div>
             </div>
-          </div>
-          
-          <div [innerHtml]="item?.description"></div>
-          
-          <div>
-            <app-menu-item-gallery 
-                    [zoomEnabled]="true"
-                    [gallery]="'gallery-mini'"
-                    [images]="item?.images">
-            </app-menu-item-gallery>
+
+            <mat-divider></mat-divider>
+            <div  class="margin-5">
+              <app-chips-display
+                [items]="item?.metaTags"
+                (onMetaTagSearch)="metaTagRefresh($event)">
+              </app-chips-display>
+            </div>
           </div>
 
-       
-          <div class="view-float-button">
+          <div [innerHtml]="item?.description"></div>
+
+          <div *ngIf="item.images">
+
+            <app-image-gallery
+                *ngIf="awsBucketURL"
+                [imagesIncludeUrl]="true"
+                [imageData]="getImages(item.images)"
+            ></app-image-gallery>
+          </div>
+
+          <div class="view-float-button-50px" *ngIf="enableSell">
             <button
+                style="width:75px;height:75px"
                 mat-mini-fab
                 class="add-button"
                 color="accent"
-                (click)="addItemToOrder(item?.sku)" >
+                (click)="addItemToOrder(item)" >
               <mat-icon>plus_one</mat-icon>
             </button>
-        </div>
+           </div>
 
-      </div>
+           <div style="right:75px" class="view-float-button-50px" *ngIf="enableSell">
+            <button *ngIf="userAuth && userAuth.allowBuy && !item?.ebayPublished"
+                style="width:75px;height:75px"
+                mat-mini-fab
+                class="add-button"
+                color="accent"
+                (click)="publishItem(item?.sku)" >
+                Ebay : <mat-icon>publish</mat-icon>
+            </button>
+        </div>
+        </div>
       </mat-card>
+
     </div>
   </div>
-               
+

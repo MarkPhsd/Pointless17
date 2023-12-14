@@ -3,6 +3,7 @@ import { Component, Input, OnInit, Output,EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { GridApi } from 'ag-grid-community';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
+import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { IProduct, UnitType } from 'src/app/_interfaces';
@@ -13,6 +14,7 @@ import { PartBuilderComponentService } from 'src/app/_services/partbuilder/part-
 import { PartBuilderMainMethodsService } from 'src/app/_services/partbuilder/part-builder-main-methods.service';
 import { PB_Components, PB_Main, PartBuilderMainService } from 'src/app/_services/partbuilder/part-builder-main.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 
 @Component({
   selector: 'part-builder-component-edit',
@@ -80,10 +82,12 @@ export class PartBuilderComponentEditComponent implements OnInit {
               private fb: FormBuilder,
               private productEditButtonService: ProductEditButtonService,
               private partBuilderMainService: PartBuilderMainService,
+              private agGridService          : AgGridService,
               private partBuilderComponentService: PartBuilderComponentService,
               private partBuilderMainMethodsService: PartBuilderMainMethodsService,
               private partBuilderComponent: PartBuilderComponentService,
               private menuService: MenuService,
+              private agGridFormatingService: AgGridFormatingService,
               ) {
   }
   ngOnInit(): void {
@@ -191,16 +195,71 @@ export class PartBuilderComponentEditComponent implements OnInit {
 
       {headerName: 'Name',     field: 'name', sortable: true, minWidth: 150},
       {headerName: 'Unit',     field: 'item.unitName',  sortable: true, },
-      {headerName: 'Quantity', field: 'quantity', sortable: true},
-      {headerName: 'Cost',     field: 'cost', sortable: true},
-      {headerName: 'Price',    field: 'price', sortable: true},
+      {headerName: 'Quantity', field: 'quantity', sortable: true,
+                    editable: true,
+                    singleClickEdit: true,},
+      {headerName: 'Cost',     field: 'cost', sortable: true,
+                    cellRenderer: this.agGridService.currencyCellRendererUSD,
+                    editable: true,
+                    singleClickEdit: true, },
+      {headerName: 'Price',    field: 'price', sortable: true,
+                    cellRenderer: this.agGridService.currencyCellRendererUSD,
+                    editable: true,
+                    singleClickEdit: true,},
       {headerName: 'Current Count',    field: 'product.productCount', sortable: true},
     ]
 
     this.rowSelection = 'multiple';
-    this.initGridOptions()
-    // this.pb_Component.product.productCount
+    // this.initGridOptions()
+    this.gridOptions = this.agGridFormatingService.initGridOptions(this.pageSize, this.columnDefs, false);
+
+
   }
+
+  cellValueChanged(event) {
+    console.log('event', event?.value)
+    const colName = event?.column?.colId.toString() as string;
+    const item = event.data as PB_Components
+    console.log('item', item)
+    // return;
+    item.product = null;
+    this.edit(item)
+  }
+
+  onCellClicked(event) {
+
+    const colName = event?.column?.colId.toString() as string;
+  }
+
+
+    //mutli select method for selection change.
+    onSelectionChanged(event) {
+
+      let selectedRows       = this.gridApi.getSelectedRows();
+      let selectedRowsString = '';
+      let maxToShow          = this.pageSize;
+      let selected           = []
+
+      if (selectedRows.length == 0) { return }
+      selectedRows.forEach(function (selectedRow, index) {
+      if (index >= maxToShow) { return; }
+      if (index > 0) {  selectedRowsString += ', ';  }
+        selected.push(selectedRow.id)
+        selectedRowsString += selectedRow.name;
+      });
+
+      if (selectedRows.length > maxToShow) {
+      let othersCount = selectedRows.length - maxToShow;
+      selectedRowsString +=
+        ' and ' + othersCount + ' other' + (othersCount !== 1 ? 's' : '');
+      }
+
+      this.selected = selected
+      this.id = selectedRows[0].id;
+      console.log( this.id )
+      this.getItem(this.id)
+
+    }
 
   initGridOptions()  {
     this.gridOptions = {
@@ -216,7 +275,6 @@ export class PartBuilderComponentEditComponent implements OnInit {
 
   refreshData(item) {
     const site = this.siteService.getAssignedSite()
-
     this.action$ =  this.partBuilderMainService.getItem(site, item.id).pipe(switchMap( data => {
       this.partBuilderMainMethodsService.updatePBMain(item)
       this.initSubscription()
@@ -293,8 +351,13 @@ export class PartBuilderComponentEditComponent implements OnInit {
     })
   }
 
-  edit(item) {
-    this.action$ =  this.partBuilderComponent.save(this.site, item.id).pipe(switchMap(data => {
+  edit(item: PB_Components) {
+    console.log(item)
+    this.action$ =  this.partBuilderComponent.saveItemValues(this.site, item).pipe(switchMap(data => {
+      if (data && data.errorMessage ) {
+        this.siteService.notify(`Error ${data.errorMessage}`, 'Close', 10000, 'red' )
+        return of(null)
+      }
       if (!data || data.toString().toLowerCase() === 'not found') {
         this.siteService.notify(' Item not found or updated', 'close', 2000, 'red')
       }
@@ -344,20 +407,11 @@ export class PartBuilderComponentEditComponent implements OnInit {
     }
   }
 
-  // [searchForm]    = 'productSearchForm'
-  // (itemSelect)    = 'assignProduct($event)'>
-
   assignItem(event) {
     if (this.pb_Component) {
       this.pb_Component.unitType = event
       this.pb_Component.unitTypeID = event.id;
       this.pb_Component.unitName = event?.name
-
-      // if (this.menuService.getPricesFromProductPrices)
-      //if this menuItemSelected exists, then we can set the
-      //to a matching product unit price if it exists.
-
-
       this.componentForm.patchValue(this.pb_Component);
     }
   }

@@ -37,6 +37,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   @Input() formatted      : any;
   @Input() fieldName      : string;
   @Input() disableFocus: boolean;
+  @Input() negativeOption :  boolean;
   formattedValue          : any;
   inputType               = 'text';
   showPassword            : boolean;
@@ -225,6 +226,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   returnEnter(value) {
+    console.log('return enter value', value)
     if (value){
       this.value = value
       this.refreshDisplay()
@@ -251,7 +253,25 @@ export class KeyPadComponent implements OnInit, OnChanges {
     }
   }
 
+  negativePositive() {
+    let value = this.inputForm.controls['itemName'].value
+    if (+value >0) {
+      this.cashValue = value * -1;
+      this.value = (+this.value * -1).toString()
+      this.inputForm.patchValue({itemName: value * -1})
+      return
+    }
+    if (+value <0) {
+      this.cashValue = value * -1;
+      (+this.value * -1).toString()
+      this.inputForm.patchValue({itemName: value * -1})
+      return
+    }
+
+  }
+
   refreshDisplay() {
+
     if (!this.value)  {
       this.setDefault();
       return
@@ -335,12 +355,17 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   returnEnterPress(){
+
+    // this.value = this.cashValue
+
     if (!this.value && this.cashValue) {
+      console.log('1cashvalue', this.cashValue)
       this.outPutReturnEnter.emit(this.cashValue);
       return;
     }
 
     if (!this.formatted) {
+      console.log('2cashvalue', this.cashValue)
       this.outPutReturnEnter.emit(this.value)
       return
     }

@@ -143,6 +143,8 @@ import { MessageEditorListComponent } from './modules/admin/message-editor-list/
 import { BrandEditorMainComponent } from './modules/admin/resale_manager/brands/main/main.component';
 import { ResaleClassesMainComponent } from './modules/admin/resale_manager/classes/resale-classes-main/resale-classes-main.component';
 import { BuySellMainComponent } from './modules/buySell/buy-sell-main/buy-sell-main.component';
+import { EbayPublishProductComponent } from './modules/admin/inventory/ebay/ebay-publish-product/ebay-publish-product.component';
+import { ItemsMainComponent } from './modules/transactions/itemTransactions/items-main/items-main.component';
 
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
@@ -165,6 +167,8 @@ const routes: Routes = [
     {path: '', component: DefaultComponent,
       children: [
 
+        //ebay-publish-product
+        { path: 'ebay-publish-product', component: EbayPublishProductComponent, canActivate: [AuthGuard], data: {title: 'Resale Brand Classes', animation: 'isLeft'}},
 
         { path: 'buy-sell', component: BuySellMainComponent, canActivate: [AuthGuard], data: {title: 'Resale Brand Classes', animation: 'isLeft'}},
 
@@ -223,6 +227,8 @@ const routes: Routes = [
 
         { path: 'pos-payments', component: POSPaymentsComponent, canActivate: [AuthGuard], data: {title: 'Payments Listing', animation: 'isLeft'} },
         { path: 'pos-payment-edit', component: PosPaymentEditComponent, canActivate: [AuthGuard], data: { title: 'Edit Payment', animation: 'isLeft'} },
+
+        { path: 'item-sales', component: ItemsMainComponent, canActivate: [AuthGuard], data: {title: 'Item Sales', animation: 'isLeft'} },
 
         { path: 'balance-sheets', component: BalanceSheetsComponent, canActivate: [AuthGuard], data: {title: 'Balance Sheet', animation: 'isLeft'} },
         { path: 'balance-sheet-edit', component: BalanceSheetEditComponent, canActivate: [AuthGuard], data: { title: 'Balance Sheet Edit',animation: 'isLeft'} },

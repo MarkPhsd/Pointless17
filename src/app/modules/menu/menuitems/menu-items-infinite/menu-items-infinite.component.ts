@@ -52,8 +52,6 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   currentPage       = 1 //paging component
   pageSize          = 25;
   itemsPerPage      = 35
-
-
   modalOpen        = false;
   endOfRecords     = false;
   pagingInfo        : any;
@@ -71,11 +69,9 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   categories$: Observable<IMenuItem[]>;
   departments$: Observable<any>;
 
-
   uiHomePage  : UIHomePageSettings;
   _uiHomePage: Subscription
   enableFilter: boolean;
-
 
   @Input() departmentID :   string;
   @Input() categoryID:      string;
@@ -376,10 +372,10 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   }
 
   get isSearchSelectorOn() {
-    if (this.uiHomePage && this.uiHomePage.disableSearchFeaturesInItemsList && this.isApp) {
+    if (this.uiHomePage && this.uiHomePage.disableSearchFieldInMenu && this.isApp) {
       return null
     }
-    if (this.smallDevice || this.uiHomePage.storeNavigation) {
+    if (this.smallDevice || !this.uiHomePage.disableSearchFieldInMenu) {
       return this.searchSelector
     }
 

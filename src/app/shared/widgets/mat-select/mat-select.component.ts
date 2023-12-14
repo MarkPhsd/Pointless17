@@ -19,7 +19,8 @@ export class MatSelectComponent {
   @Input()  list       : any[]
   @Output() outputItem = new EventEmitter<any>();
   @Input()  hideClear  : boolean;
-  @Input() placeHolder: string;
+  @Input()  placeHolder: string;
+  @Input()  useID: boolean;
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {

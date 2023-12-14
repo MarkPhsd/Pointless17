@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "2.11.18",
+  "version": "2.11.43",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -11,7 +11,7 @@
     "fs": false,
     "winreg": false
   },
-  "scripts": {
+"scripts": {
     "ng": "ng",
     "start with IP": "ng serve --configuration dev --public-host --host=192.168.0.2 --port=4200 ",
     "startLocal": "ng serve --configuration dev --host=localhost --port=4200",
@@ -66,6 +66,7 @@
     "@capacitor/keyboard": "^1.2.0",
     "@capacitor/splash-screen": "^5.0.2",
     "@devexpress/analytics-core": "^22.2.3",
+    "@hallysonh/ngx-imageviewer": "^2.0.4",
     "@ionic-native/bluetooth-serial": "^5.36.0",
     "@ionic-native/camera": "^5.36.0",
     "@ionic-native/core": "^5.36.0",
@@ -78,8 +79,6 @@
     "@material/density": "^13.0.0",
     "@mdi/font": "^6.5.95",
     "@ng-matero/extensions": "^13.0.1",
-    "@ngx-gallery/core": "^5.0.0-beta.0",
-    "@ngx-gallery/gallerize": "^5.0.0-beta.0",
     "@ngx-gallery/lightbox": "^5.0.0-beta.0",
     "@npmcli/arborist": "^4.0.2",
     "@sentry/angular": "^7.8.0",
@@ -121,6 +120,7 @@
     "css-what": "^5.0.1",
     "dom-to-image": "^2.6.0",
     "dsiemvandroidplugin": "file:../temp/plugins/dsiemvandroidplugin",
+    "ebay-api": "^8.6.0",
     "esc-pos-encoder-ionic": "^1.1.3",
     "eslint-config-airbnb": "^19.0.4",
     "fabric": "^5.3.0",
@@ -144,13 +144,15 @@
     "material-design-icons-iconfont": "^6.1.1",
     "material-icons": "^1.10.2",
     "ng-dynamic-component": "^10.1.0",
-    "ng-gallery": "^5.0.0",
+    "ng-gallery": "^5.1.1",
     "ngx-color-picker": "^12.0.1",
     "ngx-colors": "^3.5.2",
     "ngx-csv-parser": "^1.1.1",
     "ngx-device-detector": "^2.1.1",
     "ngx-electron": "^2.2.0",
+    "ngx-gallery": "^5.10.0",
     "ngx-google-analytics": "^14.0.1",
+    "ngx-image-viewer": "^1.0.13",
     "ngx-infinite-scroll": "^10.0.1",
     "ngx-json-viewer": "^3.1.0",
     "ngx-numeral": "0.0.1-beta.0",

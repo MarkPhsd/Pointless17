@@ -44,7 +44,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   @Input() menuItem  : IMenuItem;
   @Input() bucketName: string;
   @Input() class     = 'grid-item'
-
+  @Input() isStaff: boolean;
   @Input() uiHomePage        : UIHomePageSettings;
   @Input() categoryIDSelected: number;
   @Input() displayType      : string ='product';
@@ -189,9 +189,33 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
         return this.viewItemView
       }
     }
+
+    const admin = this.authenticationService.isAdmin || this.allowEdit
+    if (!this.isApp &&  admin ) {
+      if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
+        return this.viewItemView
+      }
+    }
     return null;
   }
 
+  get enableAddItemView() {
+
+    if (!this.isStaff) {
+      if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
+        return this.buyItemView
+      }
+    }
+
+    const admin = this.authenticationService.isAdmin || this.allowEdit
+    if (!this.isApp &&  admin ) {
+      if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
+        return this.viewItemView
+      }
+    }
+
+    return null;
+  }
 
   getIsNonProduct(menuItem: IMenuItem): boolean {
     if (!menuItem) { return false}
@@ -261,12 +285,16 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   altMethod(action){
-    // action = true;
-    if (this.displayType === 'header-category') {
 
+    if (this.displayType === 'header-category') {
       this.menuItemActionObs(true, false, this.menuItem);
       return
     }
+
+    if (this.isStaff &&  !this.isApp) {
+      action = true;
+    }
+
     this.menuItemActionObs(action)
   }
 
@@ -297,9 +325,9 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     }
 
     if (plusOne) { add = true; }
-
-    this.action$ = this.orderMethodsService.menuItemActionObs(this.order,this.menuItem, add,
-                                                            this.orderMethodsService.assignPOSItems).pipe(switchMap(data => {
+    const action$ = this.orderMethodsService.menuItemActionObs(this.order,this.menuItem, add,
+                                              this.orderMethodsService.assignPOSItems);
+    this.action$ = action$.pipe(switchMap(data => {
       return of(data)
     }))
   }

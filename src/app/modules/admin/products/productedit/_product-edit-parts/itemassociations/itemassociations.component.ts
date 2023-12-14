@@ -18,18 +18,16 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 export class ItemassociationsComponent implements OnInit,OnDestroy,AfterViewInit {
 
   @Input() product : IProduct;
+ inputForm: FormGroup;
 
-  
   @ViewChild('input', {static: true}) input: ElementRef;
   @ViewChild('metaTag') metaTag: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete ;
   get productNameControl()  { return this.inputForm.get("productName") as UntypedFormControl};
- 
+
   // @ViewChild('productName') productNameTags: ElementRef<HTMLInputElement>;
   // @ViewChild('auto') matAutocomplete: MatAutocomplete;
   @Input() filter: ProductSearchModel; //productsearchModel;
-
-  
   @Input()  list:        string;
 
   productName: string;
@@ -43,8 +41,8 @@ export class ItemassociationsComponent implements OnInit,OnDestroy,AfterViewInit
   allMetaTags       : Observable<IMatrix[]>;
   action$: Observable<any>;
 
-  inputForm : FormGroup;
   searchForm: FormGroup;
+  chipForm: FormGroup;
 
   searchPhrase:    Subject<any> = new Subject();
   site:            ISite;
@@ -52,9 +50,9 @@ export class ItemassociationsComponent implements OnInit,OnDestroy,AfterViewInit
   associations$: Observable<any>;
   itemList          : IMatrix[];
   itemTags          : string[];
-  itemStringList 
+  itemStringList
   searchModel                 =  {} as ProductSearchModel;
-  
+
   results$ = this.searchPhrase.pipe(
     debounceTime(250),
     distinctUntilChanged(),
@@ -71,19 +69,19 @@ export class ItemassociationsComponent implements OnInit,OnDestroy,AfterViewInit
               private matricesService: MatricesService,
               private menuService: MenuService,
               private fb: FormBuilder
-              ) { 
+              ) {
     this.site = this.siteService.getAssignedSite()
   }
 
   ngOnInit(): void {
+    this.intForm();
     const site = this.siteService.getAssignedSite();
-    if (this.product.id != 0) { 
+    if (this.product.id != 0) {
       this.initMatrices(this.product.id)
     }
- 
   }
-  
-  ngOnDestroy() { 
+
+  ngOnDestroy() {
 
   }
   ngAfterViewInit() {
@@ -101,17 +99,17 @@ export class ItemassociationsComponent implements OnInit,OnDestroy,AfterViewInit
     }
   }
 
-  initMatrices(productID: number) { 
-    //then we get the matrices by list. 
+  initMatrices(productID: number) {
+    //then we get the matrices by list.
     const site = this.siteService.getAssignedSite()
     const item$  = this.matricesService.listAssociationsForTaging(site, this.product.id)
-    this.associations$ = item$.pipe(switchMap(data => { 
+    this.associations$ = item$.pipe(switchMap(data => {
       this.refreshData(data)
       return of(data);
     }))
   }
 
-  intForm() { 
+  intForm() {
     this.inputForm = this.fb.group({
       id: [],
       name: [],
@@ -126,18 +124,18 @@ export class ItemassociationsComponent implements OnInit,OnDestroy,AfterViewInit
 
   publishData(list: IMatrix[]) {
     this.itemTags = [];
-    list.forEach( data => { 
+    list.forEach( data => {
       data.productID = this.product.id ;
-      if (data.fieldID1 == this.product.id) { 
+      if (data.fieldID1 == this.product.id) {
         this.itemTags.push(data.matrixField2)
       }
-      if (data.fieldID2 == this.product.id) { 
+      if (data.fieldID2 == this.product.id) {
         this.itemTags.push(data.matrixField1)
       }
     })
   }
 
-  refreshData(data) { 
+  refreshData(data) {
     this.itemList = data;
     this.intForm();
     this.publishData(data);
@@ -145,7 +143,7 @@ export class ItemassociationsComponent implements OnInit,OnDestroy,AfterViewInit
 
   remove(item: string): void {
     let items = [] as IMatrix[]
-    this.itemList.forEach(data => { 
+    this.itemList.forEach(data => {
       let addItem : boolean;
       addItem = true
       if (data.matrixField1 == item) {
@@ -160,11 +158,11 @@ export class ItemassociationsComponent implements OnInit,OnDestroy,AfterViewInit
         addItem = false
        }
 
-       if (addItem) { 
+       if (addItem) {
         items.push(data)
        }
     })
- 
+
     this.refreshData(items)
   }
 
@@ -179,7 +177,7 @@ export class ItemassociationsComponent implements OnInit,OnDestroy,AfterViewInit
   selectItem(item: string){
     console.log('select item', item);
   }
-  
+
   getItem(event) {
     const item = {} as IItemBasic;
     item.name = event?.name;
@@ -204,27 +202,27 @@ export class ItemassociationsComponent implements OnInit,OnDestroy,AfterViewInit
     this.saveMatrixItem(matrix)
   }
 
-  add(event) { 
+  add(event) {
     console.log('add', event)
   }
 
-  saveItemList() { 
-    this.action$ =  this.matricesService.saveMatrixList(this.site, this.itemList,this.product.id).pipe(switchMap(data => { 
+  saveItemList() {
+    this.action$ =  this.matricesService.saveMatrixList(this.site, this.itemList,this.product.id).pipe(switchMap(data => {
       console.log('data', data)
       return of(data)
     }))
   }
 
-  saveMatrixItem(item:IMatrix) { 
+  saveMatrixItem(item:IMatrix) {
 
     let associationID = 0;
-    if (item.fieldID1 == this.product.id) { 
+    if (item.fieldID1 == this.product.id) {
       associationID = item.fieldID2
-    } else { 
+    } else {
       associationID = item.fieldID1
     }
 
-    this.action$ =  this.matricesService.saveMatrix(this.site, item ,this.product.id, associationID).pipe(switchMap(data => { 
+    this.action$ =  this.matricesService.saveMatrix(this.site, item ,this.product.id, associationID).pipe(switchMap(data => {
       console.log('data', data)
       return of(data)
     }))

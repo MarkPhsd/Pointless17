@@ -183,7 +183,7 @@
 
     <div class="points" *ngIf="isAuthorized">
       <mat-form-field appearance="outline">
-      <mat-label >Reward Points</mat-label>
+      <mat-label >Rewards Points</mat-label>
           <input
                   matInput
                   type="text"
@@ -219,6 +219,27 @@
           <mat-button-toggle [value]="3">Level 3</mat-button-toggle>
         </mat-button-toggle-group>
       </div>
+
+
+      <!-- <div>
+        <app-value-fields
+
+              [inputForm]="inputForm"
+              [fieldName]="'defaultDiscount'">
+            Default % Discount
+        </app-value-fields>
+      </div> -->
+      <div class="points" *ngIf="isAuthorized">
+        <mat-form-field appearance="outline">
+        <mat-label >Default % Discount</mat-label>
+            <input
+                    matInput
+                    type="number"
+                    id="title"
+                    formControlName="defaultDiscount"
+                    class="form-control">
+            </mat-form-field>
+      </div>
     </div>
 
     <div>
@@ -243,7 +264,7 @@
 
     <div *ngIf="clientType?.name as item">
       <div *ngIf="item.trim().length > 0 && ( item.toLowerCase() === 'supplier' || item.toLowerCase() === 'vendor' || item.toLowerCase() === 'manufacturer' ) ">
-        
+
         <div *ngIf="isStaff && isStaff == true" >
           <app-value-fields
                   [inputForm]="inputForm"
@@ -254,7 +275,7 @@
 
         <div *ngIf="!isStaff">
           {{ client?.userName }}
-        </div>  
+        </div>
 
       </div>
     </div>

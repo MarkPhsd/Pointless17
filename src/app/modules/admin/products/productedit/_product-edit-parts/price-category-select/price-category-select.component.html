@@ -5,7 +5,7 @@
      class="grid-container" >
 
   <div class="grid-container-3col" *ngIf="itemType && !itemType.disablePriceCategory" >
-    <div *ngIf="!isInventory ">
+    <div *ngIf="!isInventory" style="width:250px">
       <app-price-category-search
           [isInventory]="isInventory"
           [id]         ="priceCategoryID"
@@ -26,7 +26,7 @@
       </button>
     </div>
 
-    <div style="margin-top:5px;"  
+    <div style="margin-top:5px;"
          *ngIf="!isInventory && (priceCategoryID  && priceCategoryID != 0)">
       <button mat-button
               color="warn"

@@ -201,8 +201,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     });
   }
 
-
-
   initSubscriptions() {
     this.initOrderSubscriber()
     this.initOrderBarSubscriber();
@@ -686,7 +684,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   logout() {
-    if (this.uiTransactionSetting.prepOrderOnExit) {
+    if (this.uiTransactionSetting && this.uiTransactionSetting.prepOrderOnExit) {
       const order = this.orderMethodsService.order
       this.action$ = this.paymentMethodsService.sendOrderOnExit(order).pipe(switchMap(data => {
         this.postLogout()

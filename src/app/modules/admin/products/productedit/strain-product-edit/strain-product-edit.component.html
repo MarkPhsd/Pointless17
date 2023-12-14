@@ -3,6 +3,7 @@
 </ng-template>
 
 <div *ngIf="(product$ | async) as product"></div>
+
 <div class="container"
      [formGroup]="productForm"
      *ngIf="product && productForm ; else loading">
@@ -129,11 +130,16 @@
           </div>
 
           <div class="grid-item" >
-            <div *ngIf="itemType &&  (itemType.useType && itemType.useType?.toLowerCase() === 'product')">
+            <div *ngIf="itemType &&  (itemType.useType &&
+                                        (
+                                           itemType.useType?.toLowerCase() === 'product' ||
+                                           itemType.useType?.toLowerCase() === 'modifier'
+                                        )
+                                      )">
                 <div class="header">
                   <h4><mat-icon>price_change</mat-icon>Prices</h4>
                 </div>
-                <div  class="grid-container-small">
+                <div  class="grid-container-small"  style="max-width: 200px">
                   <div >
                     <ng-container [ngTemplateOutlet]="priceCategorySelector"></ng-container>
                   </div>
@@ -190,17 +196,8 @@
              </div>
 
             <div *ngIf="fbProductsService.isRetail(itemType)">
-
-              <retail-product-edit
-                [inputForm]="productForm">
-              </retail-product-edit>
-
+              <retail-product-edit  [inputForm]="productForm"> </retail-product-edit>
               <ng-container [ngTemplateOutlet]="countryOfOrigin"></ng-container>
-
-            </div>
-
-            <div *ngIf="itemType && itemType.type">
-              <ng-container [ngTemplateOutlet]="promptGroupSelector"></ng-container>
             </div>
 
             <div *ngIf="fbProductsService.isGrouping(itemType)">
@@ -220,10 +217,10 @@
             <div *ngIf="fbProductsService.isProduct(itemType)">
               <ng-container [ngTemplateOutlet]="unitSelector"></ng-container>
               <ng-container [ngTemplateOutlet]="gramCount"></ng-container>
+              <ng-container [ngTemplateOutlet]="partBuilderSelector"></ng-container>
               <ng-container [ngTemplateOutlet]="productCount"></ng-container>
               <ng-container [ngTemplateOutlet]="reOrderAmount"></ng-container>
               <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
-              <ng-container [ngTemplateOutlet]="partBuilderSelector"></ng-container>
             </div>
           </div>
 
@@ -232,11 +229,13 @@
             <h4><mat-icon>design</mat-icon>Design / Layout</h4>
             <ng-container [ngTemplateOutlet]="icon"></ng-container>
             <ng-container [ngTemplateOutlet]="menuSort"></ng-container>
+            <ng-containder [ngTemplateOutlet]="genderOption"></ng-containder>
+
             <div class="header">
               <h4><mat-icon>image</mat-icon>Images</h4>
             </div>
-
             <mat-label>Images</mat-label>
+
             <app-widget-uploader
                 [(fileNames)]="urlImageMain"
                 (messageOut) ="received_URLMainImage($event)"
@@ -247,7 +246,7 @@
             <app-widget-uploader
               [(fileNames)]="thumbnail"
               (messageOut) ="setThumbNail($event)">
-          </app-widget-uploader>
+            </app-widget-uploader>
 
             <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
             <ng-container [ngTemplateOutlet]="metaTags"></ng-container>
@@ -320,6 +319,18 @@
         </app-value-fields>
     </div>
   </div>
+</ng-template>
+
+<ng-template #genderOption>
+  <mat-label>Gender - Used for some search features.</mat-label>
+  <app-mat-select
+    [hideClear]="true"
+    [inputForm]="productForm"
+    [list]="genders"
+    [useID]="true"
+    [fieldName]="'gender'">
+    Gender
+  </app-mat-select>
 </ng-template>
 
 <ng-template #menuSort>
@@ -422,33 +433,7 @@
 
 </ng-template>
 
-<ng-template #unitTypeSelector>
-  <div  *ngIf="productForm && unitSearchForm"
-      class="grid-container-3Column">
-      <div>
-        <unit-type-select
-          [inputForm]     = 'productForm'
-          [searchForm]    = 'unitSearchForm'
-          [product]       = 'productForm.value'
-          [id]            = 'product.unitTypeID'
-          (itemSelect)    = 'assignItem($event)'>
-          Unit of Measure
-        </unit-type-select>
-      </div>
 
-      <div style="margin-top:5px;">
-        <button mat-button (click)="openUnit()">
-          <mat-icon>open_in_new</mat-icon>
-        </button>
-      </div>
-
-      <div>
-          <button mat-button (click)="clearUnit()">
-            <mat-icon color="warn">delete</mat-icon>
-          </button>
-      </div>
-  </div>
-</ng-template>
 
 <ng-template #partBuilderSelector>
   <div class="grid-container-3Column">
@@ -473,18 +458,47 @@
   </div>
 </ng-template>
 
+<ng-template #unitTypeSelector>
+  <div  *ngIf="productForm && unitSearchForm"
+      class="grid-container-3Column">
+      <div>
+        <unit-type-select
+          [inputForm]     = 'productForm'
+          [searchForm]    = 'unitSearchForm'
+          [product]       = 'productForm.value'
+          [id]            = 'product.unitTypeID'
+          (itemSelect)    = 'assignItem($event)'>
+          Unit of Measure
+        </unit-type-select>
+      </div>
+
+      <div style="margin-right:2px;margin-top:5px;">
+        <button mat-button (click)="openUnit()">
+          <mat-icon style="font-size:1.5em">open_in_new</mat-icon>
+        </button>
+      </div>
+
+      <div>
+        <button mat-button (click)="clearUnit()">
+          <mat-icon  style="font-size:1.5em" color="warn">delete</mat-icon>
+        </button>
+      </div>
+  </div>
+</ng-template>
+
 <ng-template #reOrderUnit>
 
-  <div class="grid-container-3Column"
+  <div class="grid-container-3Column" style="max-width: 200px"
        *ngIf="product && productForm && reOrderUnitSearchForm">
+
 
       <div>
         <unit-type-select
           [inputForm]      = 'productForm'
           [searchForm]     = 'reOrderUnitSearchForm'
           [product]        = 'productForm.value'
-          [id]             = 'product.reOrderUnitTypeID'
           [formControlName]="'reOrderUnitTypeID'"
+          [id]             = 'product?.reOrderUnitTypeID'
           (itemSelect)     = 'reOrderUnitAssignItem($event)'>
           Re - Order UOM
         </unit-type-select>
@@ -492,13 +506,13 @@
 
       <div  style="margin-top:5px;">
         <button mat-button (click)="openReOrderUnit()">
-            <mat-icon>open_in_new</mat-icon>
+          <mat-icon style="font-size:1.5em">open_in_new</mat-icon>
         </button>
       </div>
 
       <div>
         <button mat-button (click)="clearReOrderUnit()">
-          <mat-icon color="warn">delete</mat-icon>
+          <mat-icon  style="font-size:1.5em" color="warn">delete</mat-icon>
         </button>
       </div>
 
@@ -507,7 +521,7 @@
 
 <ng-template #metaTags>
   <div class="meta-tags"
-        *ngIf="product">
+        *ngIf="product && productForm">
       <app-meta-tag-chips
         (outPutItemTags) ="setItemTags($event)"
         [product]        ="product"

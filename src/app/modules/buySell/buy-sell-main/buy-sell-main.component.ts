@@ -1,11 +1,11 @@
-import { P } from '@angular/cdk/keycodes';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable, Subscription, of, switchMap } from 'rxjs';
+import { Observable, Subscription, catchError, of, switchMap } from 'rxjs';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { AWSBucketService, AuthenticationService, MenuService } from 'src/app/_services';
-import { IMetaTag, MetaTagSearchModel, MetaTagsService } from 'src/app/_services/menu/meta-tags.service';
+import { AvalibleInventoryResults, InventoryAssignmentService, InventoryFilter, InventorySearchResultsPaged } from 'src/app/_services/inventory/inventory-assignment.service';
+import { IMetaTag,  MetaTagSearchModel, MetaTagsService } from 'src/app/_services/menu/meta-tags.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -23,26 +23,39 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class BuySellMainComponent implements OnInit {
 
+  @ViewChild('purchaseItemSales') purchaseOrderView : TemplateRef<any>;
+  @ViewChild('purchaseItemHistory') salesHistoryView : TemplateRef<any>;
   @ViewChild('inventoryList') inventoryList : TemplateRef<any>;
   buyItem$: Observable<any>;
   isApp     = false;
   itemFound$: Observable<any>;
 
+  tagsList  = [] as string[]
+  searchTagNames = [] as string[]
+  metaTagSearch : string;
+  metaTagListing$: Observable<any>;
+
   attributes$: Observable<any>;
   departments$: Observable<any>;
+  departments: any;
+
+
   brands$: Observable<any>;
   genderID: number;
 
+  inventoryItemsDeptAttribute$: Observable<AvalibleInventoryResults>;
   lastDepartment: string;
   department: string;
   departmentID: number;
 
   attribute: string;
   lastAttribute: string;
-  genders =  [{ id:0, name: 'Male'}, { id: 1, name: 'Female'}]
+  genders =  [{ id:0, name: 'Male'}, { id: 1, name: 'Female'} ]
 
   brandID: number;
   brand: string;
+  metaTagSearch$   : Observable<any>;
+  mainAttributeList: any[];
 
   gender = {id: 1, name:'Female'}
   uiHomePage: UIHomePageSettings
@@ -53,15 +66,19 @@ export class BuySellMainComponent implements OnInit {
   posDevice: ITerminalSettings
   bucketName: string;
 
-  searchForm: FormGroup;
+  /////inventory features.
+  totalInvQuantity: number;
+  totalAttributeDepartmentInventory: number = 0
+  inventoryReview: boolean;
+  inventoryItems$ : Observable<AvalibleInventoryResults>;
+  inventoryInfo: AvalibleInventoryResults;
 
-  mainAttributeList: any[];
+  searchForm: FormGroup;
 
   itemSales$
   itemDeptAttribSales$
   _userAuths: Subscription;
   userAuths:IUserAuth_Properties;
-  metaTagSearch$   : Observable<any>;
 
   subscribeUIHomePage() {
     try {
@@ -97,10 +114,57 @@ export class BuySellMainComponent implements OnInit {
     return null
   }
 
+  get purchaseOrderViewOn() {
+    if (this.userAuths && this.userAuths.allowBuy && this.menuItem && this.menuItem.barcode){
+      return this.purchaseOrderView;
+    }
+    return null
+  }
+
+  get salesHistoryViewOn() {
+    if (this.userAuths && this.userAuths.allowBuy && this.menuItem && this.menuItem.barcode){
+      return this.salesHistoryView;
+    }
+    return null
+  }
+
+  setMetaTagSearch(event) {
+    this.searchTagNames = []
+    if (event) {
+      if (event.length>0)
+        event.forEach(data => {
+        if (data && data.name) {
+          this.searchTagNames.push(data.name)
+        }
+      });
+    }
+
+    if (!this.departmentID && !this.attribute) {return}
+
+      const site     = this.siteService.getAssignedSite()
+      let search = {} as InventoryFilter
+      search.departmentID = this.departmentID;
+      search.attribute = this.attribute;
+      search.metaTagsList = this.searchTagNames;
+      this.inventoryReview = true;
+
+      this.inventoryItems$ = this.inventoryService.getAvalibleInventorySearch(site, search).pipe(switchMap(data => {
+        this.totalAttributeDepartmentInventory = this.getInventoryCount(data);
+        this.inventoryInfo = data;
+        return of(data)
+      }))
+    // }
+  }
+
+  resetMetaTagSearch() {
+    this.searchTagNames = [];
+  }
+
   constructor(
     private uISettingsService : UISettingsService,
     private classesResaleService: ClassesResaleService,
     private menuService: MenuService,
+    private inventoryService   : InventoryAssignmentService,
     private metaTagsService : MetaTagsService,
     private fb: FormBuilder,
     private siteService: SitesService,
@@ -165,6 +229,14 @@ export class BuySellMainComponent implements OnInit {
     })
   }
 
+  toggleInventoryReview() {
+    this.inventoryReview = !this.inventoryReview;
+  }
+
+  setInventoryInfo(event) {
+    this.inventoryInfo = event
+  }
+
   reset(overRide?: boolean) {
     if (overRide) {
     } else {
@@ -174,9 +246,13 @@ export class BuySellMainComponent implements OnInit {
 
     this.lastAttribute = null;
     this.lastDepartment = null;
+    this.departments = null;
 
     const site = this.siteService.getAssignedSite()
-    this.departments$ = this.menuService.getListOfDepartmentsAll(site);
+    this.refreshDepartmentsByName(null)
+
+    this.metaTagListing$ = null;
+    this.tagsList = []
     this.brand = null;
     this.department = null;
     this.departmentID = 0
@@ -256,14 +332,52 @@ export class BuySellMainComponent implements OnInit {
 
   findItem() {
     const site  = this.siteService.getAssignedSite()
+    this.totalInvQuantity  = 0
+    if (!this.attribute || !this.departmentID || !this.gender || !this.brandID) { return }
     const item$ = this.menuService.findItemForBuyBack(site, this.departmentID, this.attribute, this.gender.id, this.brandID, this.gender.id)
     this.itemFound$ = item$.pipe(switchMap(data => {
       if (data && data.errorMessage) {
         this.siteService.notify(`Error ${data.errorMessage}`, 'Close', 5000, 'red')
       }
       this.menuItem = data;
+      this.getInventoryInfo(data.id)
       return of(data)
     }))
+  }
+
+  findItemsByTags() {
+    if (this.tagsList) {
+      //inventoryReview
+    }
+  }
+
+  getInventoryInfo(id: number) {
+    if (id) {
+      const site = this.siteService.getAssignedSite()
+      this.inventoryItems$ = this.inventoryService.getAvalibleInventory(site, id, true).pipe(switchMap(data => {
+        this.inventoryInfo = data;
+        // console.log(' getInventoryInfo', data)
+        this.totalInvQuantity = this.getInventoryCount(data);
+        return of(data)
+      }),catchError(data => {
+        this.siteService.notify(`Error: ${data.toString()}`, 'close', 6000, 'red')
+        return of(data)
+      }));
+    }
+  }
+
+  getInventoryCount(data) {
+    //then summarize the inventory
+    //getTotalQuantity
+    let totalCount : number = 0 ;
+    if (data && data.results) {
+      data.results.forEach(item => {
+        // console.log('Counts', item.packageCountRemaining, totalCount)
+        totalCount += +item.packageCountRemaining
+      })
+      return totalCount
+    }
+    return 0
   }
 
   setDepartmentID(item) {
@@ -300,25 +414,28 @@ export class BuySellMainComponent implements OnInit {
 
     // this.departments$ = this.menuService.getListOfDepartmentsAll(site);
     search.itemTypeID = 6;
+    search.gender = this.gender.id;
+    search.genderAny = true;
     this.departments$ = this.menuService.getProductsBySearchForLists(site, search).pipe(switchMap(data => {
 
-      if (data.results.length>1) {
+      if (data && data.results.length>1) {
         this.department = null;
         this.departmentID = null;
-        this.refreshAttributes()
+        this.refreshAttributes();
       }
-      if (data.results.length == 1) {
+      if (data && data.results.length == 1) {
         this.department = data.results[0].name
         this.departmentID = data.results[0].id;
-        this.refreshAttributes()
+        this.refreshAttributes();
       }
+
+      this.departments = data.results;
       return of(data.results)
     }));
 
     this.attributes$ = null;
     this.brands$ = null;
   }
-
 
   refreshBrands() {
     const site  = this.siteService.getAssignedSite()
@@ -327,7 +444,38 @@ export class BuySellMainComponent implements OnInit {
 
   refreshAttributes()  {
     const site  = this.siteService.getAssignedSite()
+    if (!this.departmentID) {return}
     this.attributes$ = this.classesResaleService.getAttributeListByDepartment(site,  this.departmentID, this.gender?.id)
+    this.searchMetaTags()
+  }
+
+  searchMetaTags() {
+
+    if (!this.departmentID || !this.attribute) { return}
+    const site     = this.siteService.getAssignedSite()
+    let search = {} as MetaTagSearchModel;
+    let meta = {} as IMetaTag
+    meta.departmentID = this.departmentID
+    meta.attribute = this.attribute
+    search.metaTag = meta;
+    this.searchTagNames = [];
+    this.metaTagListing$ = this.metaTagsService.metaTagSearch(site, search).pipe(switchMap(data => {
+      if (data) {
+        let list = ''
+        if (data.results && data.results.length > 0){
+          data.results.forEach(item => {
+            if (item && (item.name && item.name!= '')) {
+              list = list.concat(`${item.name},`)
+            }
+          })
+          if (list.endsWith(',')) {
+            list = list.substring(0, list.length - 1);
+          }
+        }
+        return of(list)
+      }
+      return of('')
+    }))
   }
 
   setAttribute(event) {
@@ -338,9 +486,12 @@ export class BuySellMainComponent implements OnInit {
     this.attribute = event;
     this.itemFound$ = null;
     this.menuItem   = null;
-    // this.attributes$ = this.classesResaleService.getAttributeListByDepartment(site,  this.departmentID, this.gender?.id)
+    if (!this.departmentID ) {return}
+    this.setInventoryByAttributeDepartment(this.departmentID, this.attribute)
     this.refreshBrands()
   }
+
+
 
   setAttributeByName(event) {
     const site     = this.siteService.getAssignedSite()
@@ -350,11 +501,14 @@ export class BuySellMainComponent implements OnInit {
     this.attribute = event;
     this.itemFound$ = null;
     this.menuItem   = null;
-    console.log('event', event)
+
     this.attributes$ = this.classesResaleService.getAttributeListByDepartment(site,  this.departmentID, this.gender?.id, this.attribute).pipe(switchMap(data => {
       if (data && data.length == 1) {
         this.attribute = data[0].name;
-        this.refreshBrands()
+
+        this.setInventoryByAttributeDepartment(this.departmentID, this.attribute)
+        this.refreshBrands();
+        this.searchMetaTags()
       }
       if (data && data.length > 1) {
         this.attribute = null;
@@ -363,6 +517,20 @@ export class BuySellMainComponent implements OnInit {
       return of (data)
     }))
 
+  }
+
+  setInventoryByAttributeDepartment(departmentID: number, attribute: string) {
+    const site     = this.siteService.getAssignedSite()
+    let search = {} as InventoryFilter
+    search.departmentID = this.departmentID;
+    search.attribute = this.attribute
+    this.inventoryItemsDeptAttribute$ = this.inventoryService.getAvalibleInventorySearch(site, search).pipe(switchMap(data => {
+      this.totalAttributeDepartmentInventory = this.getInventoryCount(data);
+      console.log('inventoryItemsDeptAttribute', data)
+      this.inventoryInfo = data;
+      return of(data)
+    }))
+    this.searchMetaTags()
   }
 
   buyItem() {
@@ -393,7 +561,7 @@ export class BuySellMainComponent implements OnInit {
       search.metaTag = {} as IMetaTag;
       if (this.departmentID) {search.metaTag.departmentID = this.departmentID}
       if (this.attribute) {search.metaTag.attribute = this.attribute}
-      this.metaTagSearch$ = this.metaTagsService.metaTagSearchByModel(site, search).pipe(switchMap(data => {
+      this.metaTagSearch$ = this.metaTagsService.metaTagSearch(site, search).pipe(switchMap(data => {
         return of(data)
       }))
     } else {

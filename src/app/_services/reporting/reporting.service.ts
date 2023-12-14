@@ -30,6 +30,8 @@ export interface HistoricalSalesPurchaseOrderMetrcs {
   lastYearMonth : number;
   lastYearSameWeekTotal : number;
   thisMonthsTotal: number;
+  thisYearTotal: number;
+  totalSales: number;
  }
 export interface rowValue {
   date: string;

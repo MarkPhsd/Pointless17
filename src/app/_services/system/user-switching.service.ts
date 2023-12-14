@@ -213,6 +213,7 @@ export class UserSwitchingService implements  OnDestroy {
 
             // console.log('authenticate', user)
             if (user && user.errorMessage) {
+
               const message = user?.errorMessage;
               this.snackBar.open(message, 'Failed Login', {duration: 1500})
               const item = {message: 'failed'}
@@ -239,7 +240,8 @@ export class UserSwitchingService implements  OnDestroy {
       }))
 
       let userAuth$ =  auth$.pipe(switchMap(data => {
-        // console.log('Sending user getting contact', data)
+        console.log('Sending user getting contact', data)
+
         if (data?.message === 'failed') { return of(data)}
         return this.contactsService.getContact(site, data?.id)
       }), catchError(data => {
@@ -250,7 +252,7 @@ export class UserSwitchingService implements  OnDestroy {
 
       let updateAuth$ = userAuth$.pipe(switchMap(data => {
 
-          //  console.log('user auths data: ', data)
+           console.log('user auths data: ', data)
 
             if ( !data || (data && (data?.message == 'failed'))) {
                 console.log( 'message failed')

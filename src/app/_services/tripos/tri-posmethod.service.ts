@@ -397,12 +397,13 @@ export class TriPOSMethodService {
       {
         data.amountPaid = amount;
         paymentProcess.posPayment = data;
+
         this.dialogRef = this.dialogOptions.openTriPOSTransaction(
-        paymentProcess
-      );
-        this._dialog.next(this.dialogRef)
-        return of(data)
-    }
+          paymentProcess
+        );
+          this._dialog.next(this.dialogRef)
+          return of(data)
+       }
   ))
 
 }

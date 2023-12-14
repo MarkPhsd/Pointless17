@@ -81,6 +81,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   _viewType        : Subscription;
   viewType         : number;
+  searchOrderHistory: boolean;
 
   printLocation       = 0;
   prepStatus          = 1;
@@ -168,20 +169,24 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     try {
       this._searchModel = this.orderMethodsService.posSearchModel$.subscribe( data => {
         this.searchModel = data
-        if (data) { 
-          if (!data.suspendedOrder || data.suspendedOrder == 0) { 
+        this.searchOrderHistory = false;
+        if (data && data.searchOrderHistory) {
+          this.searchOrderHistory = true;
+        }
+        if (data) {
+          if (!data.suspendedOrder || data.suspendedOrder == 0) {
             this.toggleSuspendedOrders = '0'
-          } else { 
+          } else {
             this.toggleSuspendedOrders = '1'
           }
-  
-          if (!data.greaterThanZero || data.greaterThanZero == 0) { 
+
+          if (!data.greaterThanZero || data.greaterThanZero == 0) {
             this.toggleOrdersGreaterThanZero = '0'
-          } else { 
+          } else {
             this.toggleOrdersGreaterThanZero = '1'
           }
         }
-        
+
         this.initFilter(data)
       })
     } catch (error) {
@@ -370,7 +375,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   updateOrderSearch(searchModel: IPOSOrderSearchModel) {
-
+    console.log(searchModel)
+    searchModel.searchOrderHistory = this.searchOrderHistory;
     this.orderMethodsService.updateOrderSearchModel( searchModel )
   }
 
@@ -491,10 +497,10 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   toggleDateRangeFilter() {
     this.showDateFilter = !this.showDateFilter;
-    if (this.isUser) { 
-      if (this.showDateFilter) { 
+    if (this.isUser) {
+      if (this.showDateFilter) {
         this.searchModel.searchOrderHistory = true;
-      } else { 
+      } else {
         this.searchModel.searchOrderHistory = false;
       }
     }
@@ -564,11 +570,11 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       if (form.get("start").value &&
           form.get("end").value) {
 
-            
-            if (this.isUser) { 
-              if (this.showDateFilter) { 
+
+            if (this.isUser) {
+              if (this.showDateFilter) {
                 this.searchModel.searchOrderHistory = true;
-              } else { 
+              } else {
                 this.searchModel.searchOrderHistory = false;
               }
             }
@@ -653,7 +659,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     const dateTo   = this.completionDateForm.get("end").value
     const start  = this.dateHelper.format(dateFrom, 'short')
     const end = this.dateHelper.format(dateTo, 'short')
-    
+
     searchModel.completionDate_From = start
     searchModel.completionDate_To   = end
     return searchModel

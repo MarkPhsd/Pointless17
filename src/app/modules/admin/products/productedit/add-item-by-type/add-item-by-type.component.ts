@@ -41,7 +41,7 @@ export class AddItemByTypeComponent implements OnInit {
     const itemTypes$   =  this.itemTypeService.getItemTypes(site);
 
     itemTypes$.subscribe(data => {
-      this.itemTypeProducts    = data.filter(items  => items.useType === 'product')
+      this.itemTypeProducts    = data.filter(items  => items.useType === 'product' || items.useType.toLowerCase() === 'modifier')
       this.itemTypeCategories  = data.filter(items  => items.useType === 'category')
       this.itemTypeAdjustments = data.filter(items  => items.useType === 'adjustment')
     })

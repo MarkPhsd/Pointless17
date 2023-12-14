@@ -1,17 +1,18 @@
 <div *ngIf="(buyItem$ | async) as buyItem"></div>
+<div *ngIf="inventoryItems$ | async as item"></div>
+<div *ngIf="inventoryItemsDeptAttribute$ | async as item"></div>
+<div *ngIf="(departments$ | async) as list"></div>
+<!-- {{departmentID}}| {{department}}| {{attribute}} {{gender | json}} -->
 
-
-<div *ngIf="searchForm"  [formGroup]="searchForm" class="flex-grid-row">
-
+<div *ngIf="searchForm"  [formGroup]="searchForm" class="flex-grid-row-no-gap">
   <div>
-    <button mat-raised-button style="height:45px;margin-right:5px"
+    <button mat-raised-button style="height:45px;margin-top:4px;margin-right:5px"
             color="primary" (click)="reset()"><mat-icon>refresh</mat-icon>Reset</button>
   </div>
-
   <span *ngFor="let item of genders">
     <div>
       <button mat-raised-button
-              style="margin:5px;font-size:1em;font-weight:400"
+              style="margin-top:4px;margin-left:5px;font-size:1em;font-weight:400"
               class="payment-buttons"
               color="accent"
               (click)="setGender(item)">
@@ -20,7 +21,7 @@
     </div>
   </span>
 
-  <div style="width:155px;margin-left:2px;margin-right:2px">
+  <div style="width:155px;margin-top:4px;margin-left:2px;margin-right:2px">
     <app-search-fields
           *ngIf="searchForm"
           [fieldsClass]="'fields-small'"
@@ -33,7 +34,7 @@
     </app-search-fields>
   </div>
 
-  <div style="width:155px;margin-left:2px;margin-right:2px"
+  <div style="width:155px;margin-top:4px;margin-left:2px;margin-right:2px"
        *ngIf="searchForm.controls['department'].value || this.department">
     <app-search-fields
           *ngIf="searchForm"
@@ -46,7 +47,7 @@
     </app-search-fields>
   </div>
 
-  <div style="width:155px;margin-left:2px;margin-right:5px"
+  <div style="width:155px;margin-top:4px;margin-left:2px;margin-right:5px"
        *ngIf="searchForm.controls['department'].value &&
               searchForm.controls['attribute'].value  ||
               (this.department && this.attribute)" >
@@ -62,65 +63,83 @@
     </app-search-fields>
   </div>
 
-  <!-- <mat-divider [horizontal]="true"></mat-divider> -->
-  <span color="primary" class="margin-5" style="top:5px;font-weight:450;margin-right:10px;margin-left:10px">
-    <span><mat-icon>search</mat-icon> </span>
-    <mat-divider style="width:200px"></mat-divider>
-    <span *ngIf="gender?.name">  {{gender?.name}} <br> </span>
-    <span *ngIf="department"> Dept: {{department}}   <br></span>
-    <span *ngIf="attribute"> Attribute: {{attribute}}    <br></span>
-    <span *ngIf="brand"> Brand: {{brand}}  </span>
-   </span>
+  <div style="margin-bottom:3px">
+    <span color="primary" class="margin-5" style="top:5px;font-weight:450;margin-right:10px;margin-left:10px">
+      <span><mat-icon>search</mat-icon> </span>
+      <span *ngIf="gender?.name">  {{gender?.name}} </span>
+      <span *ngIf="department"> Dept: {{department}} </span>
+      <span *ngIf="attribute"> Attribute: {{attribute}}  ({{totalAttributeDepartmentInventory | number}})  </span>
+      <span *ngIf="brand"> Brand: {{brand}}  {{totalInvQuantity}}   </span>
+      <mat-divider style="width:100%"></mat-divider>
+    </span>
+    <div class="flex-grid-row-no-gap">
+      <span  *ngIf="metaTagListing$ | async as tagsList">
+        <app-chips-display
+          [items]="tagsList"
+          (onMetaTagSearch)="setMetaTagSearch($event)">
+        </app-chips-display>
+      </span>
 
+      <span style="margin-left:2px" *ngIf="totalAttributeDepartmentInventory >  0">
+        <button mat-raised-button color="primary" (click)="inventoryReview = !inventoryReview">
+          <mat-icon>search</mat-icon>Show Items
+        </button>
+      </span>
+    </div>
+  </div>
 </div>
 
-
-<button style="margin:5px" mat-button color="primary" (click)="reset()"><mat-icon>reset</mat-icon></button>
-
-<div class="flex-grid-row">
-  <div class="margin-left:10px">
+<div class="flex-grid-row-no-gap" *ngIf="!inventoryReview">
+  <div>
     <ng-container [ngTemplateOutlet]="departmentsList"></ng-container>
   </div>
 
-  <div class="margin-left:10px">
+  <div>
     <ng-container [ngTemplateOutlet]="attributesList"></ng-container>
   </div>
 
-  <div class="margin-left:10px">
+  <div>
     <ng-container [ngTemplateOutlet]="brandsList"></ng-container>
   </div>
 
-  <div class="margin-left:10px">
+  <div >
     <ng-container [ngTemplateOutlet]="itemsFound"></ng-container>
   </div>
+</div>
 
+<div class="flex-grid-row" *ngIf="inventoryReview" >
+  <mat-card class="inventory-list">
+    <ng-container [ngTemplateOutlet]="inventoryListOn"></ng-container>
+  </mat-card>
 </div>
 
 <ng-template #itemsFound>
-  <mat-card style="width:275px;height:82vh;">
+  <mat-card class="panel-three">
     <mat-card-title>
       <h3>Items</h3>
     </mat-card-title>
 
     <mat-card-content >
-      <div style="height:75vh;padding-right:15px;overflow-y:auto;width:325px">
-        <div   class="grid-flow-categories"  *ngIf="( itemFound$ | async) as item" >
-          <mat-card class="max-height:175px;height:175px">
-            <button class ="button-image" mat-raised-button >
-                <div  *ngIf="item.name" style="margin-bottom:5px">
-                  {{item?.name}}
-                </div>
-                <div style="font-size:1.2em">
-                  {{item?.retail | currency}}
-                </div>
-                <div style="margin-bottom:5px">
-                  <ng-container [ngTemplateOutlet]="buyItemView"></ng-container>
-                </div>
-              </button>
-          </mat-card>
-          <ng-container [ngTemplateOutlet]="inventoryListOn"
-                        [ngTemplateOutletContext]="{$implicit: item}"
-                        ></ng-container>
+      <div class="panel-two-content">
+        <div   *ngIf="( itemFound$ | async) as item"
+              >
+          <div>
+            <ng-container [ngTemplateOutlet]="buyButton"
+                      [ngTemplateOutletContext]="{$implicit: item}"
+            ></ng-container>
+          </div>
+          <div>
+            <ng-container [ngTemplateOutlet]="reviewButton"></ng-container>
+          </div>
+
+          <div>
+            <ng-container [ngTemplateOutlet]="salesHistoryViewOn"></ng-container>
+          </div>
+          <div>
+            <ng-container [ngTemplateOutlet]="purchaseOrderViewOn"></ng-container>
+          </div>
+
+
         </div>
         </div>
     </mat-card-content>
@@ -128,57 +147,52 @@
 </ng-template>
 
 <ng-template #brandsList>
-  <mat-card style="width:495px;height:82vh;">
+  <mat-card class="panel-one">
     <mat-card-title>
       <h3>Brands </h3>
     </mat-card-title>
     <mat-card-content >
       <div  *ngIf="( brands$ | async) as result"
-            style="height:75vh;padding-right:15px;overflow-y:auto;width:495px"
-            class="grid-flow-categories" >
+            class="grid-flow-categories panel-one-content" >
         <mat-label *ngIf="result.errorMessage">{{result.errorMesssage}}</mat-label>
         <div *ngFor="let item of  result.results;let i = index" >
-            <mat-card>
-              <button class ="button-image" mat-raised-button (click)="setBrandID(item)">
-                <div>
-                  <ng-container [ngTemplateOutlet]="thumbnailImage"
-                                [ngTemplateOutletContext]="{$implicit: item}"
-                    ></ng-container>
-                </div>
-                <div>
-                  {{item.name}}
-                </div>
-              </button>
-            </mat-card>
+
+            <button class ="button-image" mat-raised-button (click)="setBrandID(item)">
+              <div>
+                <ng-container [ngTemplateOutlet]="thumbnailImage"
+                              [ngTemplateOutletContext]="{$implicit: item}"
+                  ></ng-container>
+              </div>
+              <div>
+                {{item.name}}
+              </div>
+            </button>
+
           </div>
-        </div>
+      </div>
     </mat-card-content >
   </mat-card>
 </ng-template>
 
 <ng-template #attributesList>
-  <mat-card style="width:325px;height:82vh;">
+  <mat-card class="panel-two">
     <mat-card-title>
       <h3>Attributes</h3>
     </mat-card-title>
-
     <mat-card-content >
-      <div style="height:75vh;padding-right:15px;overflow-y:auto;width:325px">
+      <div class="panel-two-content">
         <div   class="grid-flow-categories"  *ngIf="( attributes$ | async) as items" >
           <div *ngFor="let item of items">
-            <mat-card class="max-height:155px;height:155px">
-              <button class ="button-image" mat-raised-button (click)="setAttribute(item?.name)">
-                <div>
-                  <ng-container [ngTemplateOutlet]="thumbnailImage"
-                                [ngTemplateOutletContext]="{$implicit: item}"
-                              ></ng-container>
-                </div>
-                <div>
-                  {{item.name}}
-                </div>
-              </button>
-            </mat-card>
-
+            <button class ="button-image" mat-raised-button (click)="setAttribute(item?.name)">
+              <div>
+                <ng-container [ngTemplateOutlet]="thumbnailImage"
+                              [ngTemplateOutletContext]="{$implicit: item}"
+                            ></ng-container>
+              </div>
+              <div>
+                {{item.name}}
+              </div>
+            </button>
           </div>
         </div>
         </div>
@@ -187,17 +201,17 @@
 </ng-template>
 
 <ng-template #departmentsList>
-  <mat-card style="width:495px;height:82vh;">
+  <mat-card class="panel-one">
     <mat-card-title>
       <h3>Departments</h3>
     </mat-card-title>
 
     <mat-card-content  >
-      <div  style="height:75vh;padding-right:15px;overflow-y:auto;width:495px">
-        <div   class="grid-flow-categories" *ngIf="( departments$ | async) as items">
-          <!-- <div *ngIf="items.errorMessage">{{items.errorMessage}}</div> -->
+      <div  class="panel-one-content">
+        <div   class="grid-flow-categories" *ngIf="departments as items">
+
           <div *ngFor="let item of items" >
-            <mat-card>
+
               <button class ="button-image" mat-raised-button (click)="setDepartmentID(item)">
                 <div>
                   <ng-container [ngTemplateOutlet]="thumbnailImage"
@@ -208,7 +222,7 @@
                   {{item.name}}
                 </div>
               </button>
-            </mat-card>
+
           </div>
         </div>
       </div>
@@ -216,6 +230,35 @@
   </mat-card>
 </ng-template>
 
+<ng-template #buyButton let-item>
+
+  <button class ="button-buy"
+          mat-raised-button >
+      <div  *ngIf="item.name" style="margin-bottom:5px">
+        {{item?.name}}
+      </div>
+      <div style="font-size:1.2em">
+        {{item?.retail | currency}}
+      </div>
+      <div style="margin-bottom:5px">
+        <ng-container [ngTemplateOutlet]="buyItemView"></ng-container>
+      </div>
+    </button>
+
+</ng-template>
+
+<ng-template #reviewButton>
+  <!-- <mat-card style="max-height:175px;height:175px"> -->
+    <button class ="button-review"
+            mat-raised-button
+            (click)="toggleInventoryReview()" >
+     <div>
+       <mat-icon>inventory</mat-icon>
+     </div>
+     Review Inventory
+   </button>
+  <!-- </mat-card> -->
+</ng-template>
 
 <ng-template #productImage let-item>
   <img  [src]     ="getImageUrl(item?.image)"
@@ -241,14 +284,23 @@
 </ng-template>
 
 <ng-template #inventoryList let-item>
-  <div *ngIf="uiHomePage && uiHomePage?.enableInventoryPerItem">
+  <div>
+    <button mat-raised-button color="accent" (click)="toggleInventoryReview()">
+      <mat-icon>search</mat-icon>Continue Search</button>
+  </div>
+  <div *ngIf="inventoryReview">
+    <div *ngIf="!inventoryInfo">
+      <mat-card>No Items Found</mat-card>
+    </div>
     <inventory-menu-item
+      [enableSell]="true"
       [posDevice]="posDevice"
+      [inputInventory]="inventoryInfo"
+      (outPutInventoryInfo)="setInventoryInfo($event)"
       [productID]="item?.id">
     </inventory-menu-item>
   </div>
 </ng-template>
-
 
 <ng-template #sales let-item>
   <div *ngIf="userAuths.allowBuy">
@@ -273,7 +325,6 @@
   </div>
 </ng-template>
 
-
 <ng-template #metaTagSearch>
   <div *ngIf="(metaTagSearch$ | async) as associations" >
     <mat-card *ngIf="associations.length>0">
@@ -288,9 +339,29 @@
               [uiHomePage]="uiHomePage"
               [bucketName]="bucketName"
             ></app-menu-item-card>
-          </div>
+          </div>s
         </div>
       </mat-card-content>
     </mat-card>
   </div>
+</ng-template>
+
+<ng-template #purchaseItemSales>
+  <mat-card class="po-info">
+    <purchase-item-sales
+          [serviceType]="'buy'"
+          [productID]="menuItem?.id"
+          [barcode]="menuItem?.barcode">
+      Purchase History
+    </purchase-item-sales>
+  </mat-card>
+</ng-template>
+
+<ng-template #purchaseItemHistory>
+  <mat-card class="po-info-sales">
+    <purchase-item-cost-history
+            [productID]="menuItem?.id">
+      Sales History
+    </purchase-item-cost-history>
+  </mat-card>
 </ng-template>

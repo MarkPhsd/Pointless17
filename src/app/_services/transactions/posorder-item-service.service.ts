@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ComponentFactoryResolver, Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subscription, } from 'rxjs';
 import { ISite, IUser, ProductPrice }   from 'src/app/_interfaces';
@@ -11,6 +11,132 @@ import { IInventoryAssignment,Serial } from '../inventory/inventory-assignment.s
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { ScaleInfo, ScaleService } from '../system/scale-service.service';
 import { POSItemSearchModel } from '../reporting/reporting-items-sales.service';
+import { IPagedList } from '../system/paging.service';
+
+export interface OrderItemHistory {
+    id: number;
+    productId?: number | null;
+    orderId?: number | null;
+    sku: string;
+    productName: string;
+    quantity?: number | null;
+    discount?: number | null;
+    unitPrice?: number | null;
+    wholeSale?: number | null;
+    modifierNote: string;
+    unitType?: number | null;
+    tax1?: number | null;
+    serviceTypeId?: number | null;
+    employeeId?: number | null;
+    zrun: string;
+    clientId?: number | null;
+    reportRunId?: number | null;
+    itemReturn?: number | null;
+    originalPrice?: number | null;
+    serverName: string;
+    serviceType: string;
+    tax2?: number | null;
+    tax3?: number | null;
+    wicebt?: number | null;
+    caseQty?: number | null;
+    stdRetail?: number | null;
+    itemCashDiscount?: number | null;
+    itemOrderCashDiscount?: number | null;
+    itemOrderPercentageDiscount?: number | null;
+    itemLoyaltyPointCount?: number | null;
+    itemLoyaltyPointDiscount?: number | null;
+    itemPercentageDiscountValue?: number | null;
+    itemOrderPercentageDiscountId?: number | null;
+    itemOrderCashDiscountId?: number | null;
+    itemCashDiscountId?: number | null;
+    itemPercentageDiscountValueId?: number | null;
+    itemLoyaltyPointDiscountId?: number | null;
+    unitName: string;
+    serialCode: string;
+    prodModifierType?: number | null;
+    printed?: Date | null;
+    isWeightedItem?: number | null;
+    quantityView: string;
+    positiveNegative?: number | null;
+    orderDate?: Date | null;
+    completionDate?: Date | null;
+    voidReason: string;
+    idRef?: number | null;
+    promptGroupId?: number | null;
+    traceProductCount?: number | null;
+    subTotal?: number | null;
+    total?: number | null;
+    taxTotal?: number | null;
+    seedCount?: number | null;
+    plantCount?: number | null;
+    liquidCount?: number | null;
+    solidCount?: number | null;
+    concentrateCount?: number | null;
+    extractCount?: number | null;
+    combinedCategory?: number | null;
+    gramCount?: number | null;
+    portionValue: string;
+    packagingMaterial: string;
+    scheduleId?: number | null;
+    scheduleDiscount_GroupValue?: number | null;
+    isSchedule_DiscountMember?: number | null;
+    isSchedule_DiscountedItem?: number | null;
+    discountScheduleId?: number | null;
+    itemPrepped?: Date | null;
+    printLocation?: number | null;
+    splitGroupId?: number | null;
+    gratuity?: number | null;
+    prodSecondLanguage: string;
+    productSortOrder?: number | null;
+    pizzaMultiplier?: number | null;
+    pizzaGroup?: number | null;
+    priceTierId?: number | null;
+    pg_PromptSubGroupsId?: number | null;
+    rewardGroupApplied?: number | null;
+    unitMultiplier?: number | null;
+    baseUnitType: string;
+    baseUnitTypeId?: number | null;
+    category: string;
+    department: string;
+    productCount?: number | null;
+    historyItem: number;
+    name: string;
+    useType: string;
+    categoryId?: number | null;
+    departmentId?: number | null;
+    itemTypeId?: number | null;
+}
+
+export interface OrderItemHistorySearch  {
+  results: OrderItemHistory[]
+  paging: IPagedList;
+  errorMessage: string;
+}
+
+export interface IOrderItemSearchModel {
+  completionDate_From:         string;
+  completionDate_To:           string;
+  orderDate_From:              string;
+  orderDate_To:                string;
+  serviceTypes:                string[];
+  serviceType:                 string;
+  serviceTypeID:               number;
+  employeeID:                  number;
+  pageSize:                    number;
+  pageNumber:                  number;
+  pageCount:                   number;
+  currentPage:                 number;
+  lastPage:                    number;
+  useNameInAllFieldsForSearch: boolean;
+  clientID:                    number;
+  orderID                      :number;
+  id:                          number;
+  zrun                         : number;
+  reportRunID                  : number;
+  name                         : string;
+  itemTypeID                   : number;
+  historyItem                  : boolean;
+}
 
 export interface ItemPostResults {
   order            : IPOSOrder;
@@ -67,6 +193,8 @@ export interface NewItem            {
   productPrice?: ProductPrice; // temporary assignment - used in customer menu.
   wholesale: number;
 }
+
+
 export interface NewInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number, portionValue: string, packaging: string,  itemNote: string}
 export interface NewSerializedItem  { orderID: number, quantity: number, menuItem: Serial, barcode: string,  weight: number, portionValue: string, packaging:string,  itemNote: string}
 
@@ -134,6 +262,16 @@ export class POSOrderItemService {
 
   _scaleInfo: Subscription;
   scaleInfo : ScaleInfo;
+
+  private _searchModel          = new BehaviorSubject<IOrderItemSearchModel>(null);
+  public searchModel$           = this._searchModel.asObservable();
+
+
+  updateSearchModel(searchModel: IOrderItemSearchModel) {
+    console.log('searchmode', searchModel)
+    this._searchModel.next(searchModel);
+  }
+
 
   updateItemWithAction(item: ItemWithAction ) {
     this._itemWithActions.next(item);
@@ -288,7 +426,7 @@ export class POSOrderItemService {
   }
 
 
-  getItemsHistoryBySearch(site: ISite, search: POSItemSearchModel): Observable<PosOrderItem[]> {
+  getItemsHistoryBySearch(site: ISite, search: IOrderItemSearchModel): Observable<OrderItemHistorySearch> {
     const controller = "/POSOrderItems/";
 
     const endPoint = "GetItemsHistoryBySearch";
@@ -297,7 +435,20 @@ export class POSOrderItemService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.post<PosOrderItem[]>(url , search)
+    return  this.http.post<OrderItemHistorySearch>(url , search)
+  }
+
+
+  getItemHistoryBySearch(site: ISite, search: IOrderItemSearchModel): Observable<OrderItemHistorySearch> {
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "GetItemHistoryBySearch";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<OrderItemHistorySearch>(url , search)
   }
 
 
@@ -426,6 +577,20 @@ export class POSOrderItemService {
     const endPoint  = "getPOSOrderItem"
 
     const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+    // console.log(url)
+    return this.http.get<PosOrderItem>(url);
+
+  }
+
+  getPOSOrderItembyHistory(site: ISite, id: number, history: boolean):  Observable<PosOrderItem> {
+
+    const controller = "/POSOrderItems/"
+
+    const endPoint  = "getPOSOrderItembyHistory"
+
+    const parameters = `?id=${id}&history${history}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
     // console.log(url)

@@ -294,15 +294,13 @@
     </ng-template>
 
     <ng-template #shortdescriptionView>
-      <div  *ngIf="menuItem.onlineShortDescription || menuItem.metaTags"
+      <div  *ngIf="menuItem.onlineShortDescription"
             class="onlineShortDescription"
             [innerHTML]="menuItem?.onlineShortDescription">
       </div>
     </ng-template>
 
     <ng-template #metaTagsView>
-
-      {{fbProductsService.isFood(menuItem.itemType)}}
       <span class="margin-5" *ngIf="fbProductsService.isFood(menuItem.itemType) &&
                                     (menuItem.glutenFree)">
         <button mat-fab color="warn" aria-label="Gluten Free">
@@ -320,10 +318,11 @@
 
     <ng-template #galleryView>
       <div class="gallery"  *ngIf="menuItem.urlImageMain || menuItem.urlImageOther">
-        <app-menu-item-gallery [menuItem]="menuItem"></app-menu-item-gallery>
+       <!-- {{menuItem?.urlImageMain}} -->
+        <!-- <app-menu-item-gallery [menuItem]="menuItem"></app-menu-item-gallery> -->
+        <app-image-gallery  [imageData]="imageList" ></app-image-gallery>
       </div>
     </ng-template>
-
 </div>
 
 <ng-template #inventoryList>
@@ -338,7 +337,6 @@
 <ng-template #enableRecentAssociatedItems>
   <div *ngIf="uiHomePage && uiHomePage?.enableRecentAssociatedItems">
     <div *ngIf="(recentAssociations$ | async) as associations">
-
       <mat-card *ngIf="associations.length>0">
         <mat-card-title>
           <h3  *ngIf="associations.length>0">Items Purchased with this {{menuItem.name}} recently.</h3>
@@ -362,9 +360,7 @@
 
 <ng-template #enableAssociatedItems>
   <div *ngIf="uiHomePage && uiHomePage?.enableRecentAssociatedItems">
-
     <div *ngIf="(associations$ | async) as associations" >
-
       <mat-card *ngIf="associations.length>0">
         <mat-card-title>
           <h3 *ngIf="associations.length>0">Similiar Items.</h3>
@@ -388,9 +384,7 @@
 
 <ng-template #metaTagSearch>
   <div *ngIf="uiHomePage && uiHomePage?.enableRecentAssociatedItems">
-
     <div *ngIf="(metaTagSearch$ | async) as associations" >
-
       <mat-card *ngIf="associations.length>0">
         <mat-card-title>
           <h3 *ngIf="associations.length>0">Meta Tag Searches.</h3>

@@ -3,6 +3,11 @@
     <ng-content select="[info]"> </ng-content>
   </div>
 
+  <div *ngIf="inputForm">
+    <!-- {{cashValue}} |
+    {{inputForm.value | json}} -->
+  </div>
+
   <div class="item-container"
        *ngIf="inputForm">
     <div class="header-info"
@@ -16,27 +21,28 @@
         <mat-form-field  appearance="outline">
             <div *ngIf="disableFocus">
               <input  matInput
-              #input
-
-              [placeholder]="placeHolder"
-              aria-label="Number"
-              [(ngModel)]        ="cashValue"
-              [type]             ="inputType"
-              [formControlName]  ="fieldName"
-              class="form-control" >
+                      #input
+                      [placeholder]="placeHolder"
+                      aria-label="Number"
+                      [(ngModel)]        ="cashValue"
+                      [type]             ="inputType"
+                      [formControlName]  ="fieldName"
+                      (keyup.enter)      = "returnEnterPress()"
+                      class="form-control" >
             </div>
+
             <div *ngIf="!disableFocus">
               <input  matInput
-              #input
-              appAutoFocusInput
-              [placeholder]="placeHolder"
-              aria-label="Number"
-              [(ngModel)]        ="cashValue"
-              [type]             ="inputType"
-              [formControlName]  ="fieldName"
-              class="form-control" >
-            </div>
-
+                  #input
+                  appAutoFocusInput
+                  [placeholder]="placeHolder"
+                  aria-label="Number"
+                  [(ngModel)]        ="cashValue"
+                  [type]             ="inputType"
+                  [formControlName]  ="fieldName"
+                  (keyup.enter)      = "returnEnterPress()"
+                  class="form-control" >
+                </div>
 
             <button *ngIf="cashValue"
                       matSuffix
@@ -48,11 +54,23 @@
     </div>
 
     <div>
-      <button class= "keyboard-button"
-              mat-button
-              (click)="initShowInput()">
-        <mat-icon>keyboard_alt</mat-icon>
-      </button>
+
+
+      <span class="margin-5">
+        <button class= "keyboard-button"
+                mat-button
+                (click)="initShowInput()">
+          <mat-icon>keyboard_alt</mat-icon>
+        </button>
+      </span>
+
+      <span class="margin-5" *ngIf="negativeOption">
+        <button class= "keyboard-button"
+               mat-button
+               (click)="negativePositive()">
+         +/-
+       </button>
+      </span>
     </div>
   </div>
 

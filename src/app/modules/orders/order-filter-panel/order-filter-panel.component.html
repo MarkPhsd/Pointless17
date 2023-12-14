@@ -75,23 +75,27 @@
 
     <div *ngIf="(isAuthorized || isUser) && toggleOpenClosedAll == '2'" class="grid-fields fields">
       <div>
-        <button mat-raised-button
+        <div>
+          <button mat-raised-button
                 class="date-filter-buttton"
                 (click)="toggleDateRangeFilter()">
                 Completed Dates<mat-icon>date_range</mat-icon>
-              </button>
+          </button>
+          <mat-label>History</mat-label>
+          <mat-slide-toggle
+                    (change)="updateOrderSearch(searchModel)"
+                    [(ngModel)]="searchOrderHistory"  >
+          </mat-slide-toggle>
+        </div>
+
           <mat-date-range
             [inputForm] ="completionDateForm">
           </mat-date-range>
       </div>
 
-      <div class="toggle-fields">
-        <mat-label>History</mat-label>
-        <mat-slide-toggle
-                  (change)="updateOrderSearch(searchModel)"
-                  [(ngModel)]="searchModel.searchOrderHistory"  >
-        </mat-slide-toggle>
-      </div>
+      <!-- <div class="toggle-fields">
+
+      </div> -->
     </div>
 
     <div class="toggle-fields" *ngIf="isStaff">

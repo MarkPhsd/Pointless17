@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, catchError, of, switchMap } from 'rxjs';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { PartBuilderMainMethodsService } from 'src/app/_services/partbuilder/part-builder-main-methods.service';
 import { PB_Main, PartBuilderMainService } from 'src/app/_services/partbuilder/part-builder-main.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -14,6 +15,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class PartBuilderEditComponent implements OnInit {
 
+  value = {price: 0, cost: 0};
   itemChanged: boolean;
   action$   : Observable<PB_Main>;
   pb_Main  : PB_Main;
@@ -36,6 +38,7 @@ export class PartBuilderEditComponent implements OnInit {
               private router: Router,
               private partBuilderMainMethods: PartBuilderMainMethodsService,
               private partBuilderMainService: PartBuilderMainService,
+              private productEditButtonService: ProductEditButtonService,
               private dialogRef: MatDialogRef<PartBuilderEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
 
@@ -58,12 +61,17 @@ export class PartBuilderEditComponent implements OnInit {
     this.pb_Main$ = this._refreshForm()
   }
 
+  childAddItem(){
+    this.productEditButtonService.openNewItemSelector()
+  }
+
   _refreshForm() {
     const site = this.siteService.getAssignedSite()
     let pb_main = {} as PB_Main;
     return this.partBuilderMainService.getItem(this.site, +this.id).pipe(switchMap(data => {
       this.setData(data)
         pb_main = data;
+        this.value = this.calcPriceCost(data)
         return this.partBuilderMainService.detectInfiniteLoop(site, data);
       }
     )).pipe(switchMap(data => {
@@ -71,6 +79,46 @@ export class PartBuilderEditComponent implements OnInit {
       return of(pb_main)
     }))
   }
+
+  calcPriceCost(item: PB_Main) {
+
+    let value = {price: 0, cost: 0};
+
+    item.pB_Components.forEach(data => {
+      value = this.getCostPrice(data, value)
+
+      console.log(value)
+      if (data.pb_MainID_Associations && data.pb_MainID_Associations.length > 0) {
+
+        data.pb_MainID_Associations.forEach(data => {
+          if (data.pB_Components && data.pB_Components.length>0) {
+
+            data.pB_Components.forEach(itemValue => {
+
+              value = this.getCostPrice(itemValue, value)
+              console.log(value)
+
+            })
+          }
+        })
+      }
+    })
+
+    return value;
+  }
+
+  getCostPrice(data,item) {
+    if (data.quantity) {
+      if (data.price) {
+        item.price += (data.price * data.quantity);
+      }
+      if (data.cost) {
+        item.price += (data.cost * data.quantity);
+      }
+    }
+    return item;
+  }
+
 
   setData(data) {
     this.pb_Main = data;
@@ -114,7 +162,6 @@ export class PartBuilderEditComponent implements OnInit {
     const site = this.siteService.getAssignedSite()
     if (!this.pb_Main) { return }
     if (this.pb_Main) {
-      // console.log(this.pb_Main.pB_Components)
       this.pb_Main.name = this.inputForm.controls['name'].value;
       if (this.id) {
         this.pb_Main.id = this.id;

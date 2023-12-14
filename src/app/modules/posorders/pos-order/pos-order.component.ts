@@ -2,8 +2,8 @@ import { Component, ElementRef, EventEmitter, Input,
          OnInit, Output, OnDestroy,  ViewChild, HostListener, Renderer2, TemplateRef } from '@angular/core';
 import { AuthenticationService, AWSBucketService, MenuService, OrdersService, TextMessagingService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
-import { forkJoin, Observable, of, Subscription } from 'rxjs';
-import { debounceTime, delay,  repeatWhen, switchMap  } from 'rxjs/operators';
+import { Observable, of, Subscription } from 'rxjs';
+import { delay,  repeatWhen, switchMap  } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -36,8 +36,6 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
-import { FormGroup } from '@angular/forms';
-
 @Component({
 selector: 'app-pos-order',
 templateUrl: './pos-order.component.html',
@@ -289,17 +287,17 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     });
   }
 
-  initLastItemSelectedSubscriber() { 
+  initLastItemSelectedSubscriber() {
     this.product = {} as IProduct
-    this._lastItem = this.orderMethodsService.lastItemAdded$.subscribe(data => { 
+    this._lastItem = this.orderMethodsService.lastItemAdded$.subscribe(data => {
       const site = this.siteService.getAssignedSite();
-   
-      if (data) { 
+
+      if (data) {
         console.log('menu item selected', data)
-        this.product$ = this.menuService.getProduct(site, data.id).pipe(switchMap(data => { 
+        this.product$ = this.menuService.getProduct(site, data.id).pipe(switchMap(data => {
           // data.caseQty
           this.product = {} as IProduct
-          if (data.caseQty>0 && data.caseRetail) { 
+          if (data.caseQty>0 && data.caseRetail) {
             this.product = data;
           }
 

@@ -1,5 +1,6 @@
-<!-- {{order?.service?.filterType}} -->
+
 <ng-content></ng-content>
+<mat-divider style="margin:5px"></mat-divider>
 <div *ngIf="(itemHistorySales$ | async) as items; else loading">
   <div class="grid-items">
     <div>Vendor</div>
@@ -19,7 +20,13 @@
       <div>{{item?.quantity }}</div>
       <div>{{item?.orderDate | date: 'MM/dd/yy' }}</div>
     </div>
+
   </div>
+</div>
+<mat-divider style="margin:5px"></mat-divider>
+<div class="grid-items">
+  <div style="font-weight:400">QTY Ordered</div>
+  <div style="font-weight:400">{{totalPurchases}}</div>
 </div>
 <div *ngIf="loadingMessage">
   <mat-spinner [diameter]="50"></mat-spinner>
@@ -27,6 +34,6 @@
 
 <ng-template #loading>
 
-
+  ..getting info.
 </ng-template>
 

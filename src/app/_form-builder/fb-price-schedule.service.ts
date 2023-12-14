@@ -93,6 +93,7 @@ export class FbPriceScheduleService {
       showGlueten : [],
       showImage   : [],
       showDescription : [],
+      showShortDecription: [],
       showInfo    : [],
       title       : [],
       subTitle    : [],

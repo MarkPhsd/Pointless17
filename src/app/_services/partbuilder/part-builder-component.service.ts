@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
-import { AuthenticationService } from '..';
+import { AuthenticationService, IItemBasic, IItemBasicB, IItemValue } from '..';
 import { SitesService } from '../reporting/sites.service';
 import { PB_Components, PB_Main } from './part-builder-main.service';
 
@@ -10,6 +10,7 @@ import { PB_Components, PB_Main } from './part-builder-main.service';
   providedIn: 'root'
 })
 export class PartBuilderComponentService {
+
 
   controller = '/PB_Components/'
 
@@ -94,9 +95,28 @@ export class PartBuilderComponentService {
 
   }
 
+  saveItemValues(site: ISite, item: PB_Components) {
+
+    const value = { } as IItemValue;
+    value.id = item.id
+    value.cost = item.cost;
+    value.quantity  = item.quantity
+    value.price = item.price ;
+
+    const controller = `/PB_Builder/`
+
+    const endPoint = `SaveItemValues`
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<PB_Components>(url, value)
+  }
+
   save(site: ISite,  item: PB_Components): Observable<PB_Components> {
     if (item.id) {
-      return  this.put(site, item.id, item);
+      return  this.put(site, item);
     }
     if (!item.id) {
       return this.post(site, item);
@@ -117,15 +137,15 @@ export class PartBuilderComponentService {
 
   }
 
- put(site: ISite, id: number, item: PB_Components): Observable<PB_Components> {
+ put(site: ISite, item: PB_Components): Observable<PB_Components> {
 
-    if (id && item) {
+    if (item) {
 
       const controller = this.controller
 
       const endPoint = 'putItem'
 
-      const parameters = `?id=${id}`
+      const parameters = ``
 
       const url = `${site.url}${controller}${endPoint}${parameters}`
 

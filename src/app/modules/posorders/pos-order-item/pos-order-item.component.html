@@ -39,13 +39,11 @@
 
               {{ quantity }}
 
-              {{ orderItem?.baseUnitType == '' ? ''  : (orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName) }}
-
-              @ {{ unitPrice | currency }}
+              {{ orderItem?.baseUnitType == '' ? ''  : (orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName) }} @ {{ unitPrice | currency }}
 
               <span *ngIf="orderItem.baseUnitType"> / {{ orderItem?.baseUnitType }} </span> = {{ subTotal | currency}}
 
-              <div *ngIf="(orderItem && orderItem.baseUnitType) && orderItem.unitType &&
+              <div *ngIf="(orderItem && orderItem.menuItem && orderItem.baseUnitType) && orderItem.unitType &&
                           orderItem?.unitName != orderItem?.menuItem?.baseUnitType ">
                 {{packages}}  {{(orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName)}}
               </div>

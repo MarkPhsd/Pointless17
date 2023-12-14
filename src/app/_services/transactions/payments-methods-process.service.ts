@@ -70,19 +70,10 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     this._sendOrderAndLogOut.next({order: order, logOut: logOut})
   }
 
-  enterPointCashValue(event, paymentMethod: IPaymentMethod, posPayment: IPOSPayment, order: IPOSOrder ): Observable<IPaymentResponse> {
+  enterPointCashValue(amount, paymentMethod: IPaymentMethod, posPayment: IPOSPayment, order: IPOSOrder ): Observable<IPaymentResponse> {
     const site = this.sitesService.getAssignedSite();
-    //apply payment as cash value
-    if (posPayment && event && paymentMethod && order) {
-      const amountPaid = event;
-      if (order.balanceRemaining >= amountPaid)  {
-        return  this.processRewardPoints(site, posPayment, order, amountPaid, paymentMethod)
-      }
-      if (amountPaid > order.balanceRemaining )  {
-        this.notify('Amount entered is greater than the total. Please try again.', 'Oops!', 1500)
-        return
-      }
-    }
+    return this.processPayment(site, posPayment, order, amount, paymentMethod)
+    // return  this.processRewardPoints(site, posPayment, order, amount, paymentMethod)
   }
 
   sendOrderProcess(order: IPOSOrder) {
@@ -105,21 +96,19 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     if (posPayment.tipAmount) {  amount = (amount - posPayment.tipAmount)  }
 
-    console.log('process payment')
+    // console.log('process payment')
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod);
 
     return balance$.pipe(
         switchMap(data => {
-    
           return payment$
       })).pipe(switchMap(data => {
-        console.log('process payment Data', data)
+        // console.log('process payment Data', data)
         if (!data) {
           return this.sitesService.notifyObs('Payment not succeeded.', 'close', 5000, 'red')
         }
         order = data?.order;
         response = data;
-
         if (!data?.paymentSuccess ||
             ( data?.responseMessage && data?.responseMessage.toLowerCase() != 'success')) {
           return  this.sitesService.notifyObs(`Payment failed because: ${data?.responseMessage}`, 'Close.', 15000)
@@ -447,7 +436,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   isTriPOSApproved(trans: any) {
 
     console.log('isTriPOSApproved' , trans?.isApproved, trans?.statusCode)
-    if (trans && trans?.isApproved) { 
+    if (trans && trans?.isApproved) {
       return true;
     }
 
@@ -522,7 +511,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   processTriPOSResponse(trans: any, payment: IPOSPayment, order: IPOSOrder, tipValue: number): Observable<any> {
 
     const site = this.sitesService.getAssignedSite();
-
     const approved = this.isTriPOSApproved(trans);
 
     if (!approved) {
@@ -530,6 +518,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }
 
     console.log('approved')
+
+    //transactionIDRef
+    const idRef = payment.id.toString();
 
     payment   = this.applyTripPOSResponseToPayment(trans, payment, tipValue);
     payment   = this.applyAssociatedAuths(payment.tranType, payment, order);
@@ -539,14 +530,15 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     if (trans?.cardLogo) {   cardType = trans?.cardLogo;  }
 
-    console.log('trans', trans)
-    console.log('cardType', cardType)
+    // console.log('trans', trans)
+    // console.log('cardType', cardType)
 
     return this.getPaymentMethodByName(site, cardType).pipe(
       switchMap( data => {
         if (!data) {  return of(null)   }
         payment.paymentMethodID = data.id;
         paymentMethod = data;
+        payment.transactionIDRef = idRef;
         return this.processPayment(site, payment, order, payment.amountPaid, data)
       }
     )).pipe(
@@ -734,7 +726,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       payment.amountReceived  = response.approvedAmount;
       payment.tipAmount       = tipValue;
     }
-    
+
     if (response._type === 'saleResponse') {
       if (+tipValue == (response.approvedAmount - +tipValue)) {
         payment.tipAmount       = tipValue;
@@ -742,9 +734,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         payment.amountReceived  = +response.approvedAmount - +tipValue;
       }
     }
-    
+
     if (response._type === 'authorizationCompletionResponse') {
-      ///always use the total amount approved amount will return 0.00 
+      ///always use the total amount approved amount will return 0.00
       payment.amountPaid      = +response?.totalAmount;
       payment.amountReceived  = +response?.totalAmount;
 
@@ -754,7 +746,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         payment.amountReceived  = payment.amountReceived - +tipValue;;
       }
     }
-    
+
     if (response._type === 'refundResponse') {
       payment.amountPaid      = - response.totalAmount;
       payment.amountReceived  = - response.totalAmount;
@@ -825,18 +817,15 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return payment;
   }
 
-  processRewardPoints(site: ISite, posPayment: IPOSPayment, order: IPOSOrder,
-                      amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
-    if (order.clients_POSOrders) {
-      if (order.clients_POSOrders.loyaltyPointValue >= amount) {
-        const payment$ = this.processPayment(site, posPayment, order, amount, paymentMethod)
-        return payment$
-      } else  {
-        this.notify(`There are not enough points to pay this amount. The client has $${order.clients_POSOrders.loyaltyPointValue} in total.`, 'Try Again',3000)
-        return null
-      }
-    }
-  }
+  // processRewardPoints(site: ISite, posPayment: IPOSPayment, order: IPOSOrder,
+  //                     amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
+  //   if (order.clients_POSOrders) {
+  //     if (amount) {
+  //       const payment$ = this.processPayment(site, posPayment, order, amount, paymentMethod)
+  //       return payment$
+  //     }
+  //   }
+  // }
 
   getPointsRequiredToPayBalance(balanceRemaining: number, loyaltyPointValue: number) {
     if (!loyaltyPointValue || loyaltyPointValue == 0) { return 0}

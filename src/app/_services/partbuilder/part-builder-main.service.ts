@@ -33,6 +33,7 @@ export interface PB_Components {
   product: IMenuItem | Product;
   unitType: UnitType;
 	pb_MainID_Associations: PB_Main[];
+  errorMessage: string;
 }
 
 export interface PB_Main_Associations {

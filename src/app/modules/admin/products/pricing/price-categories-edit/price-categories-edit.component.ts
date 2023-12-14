@@ -177,7 +177,23 @@ export class PriceCategoriesEditComponent implements OnInit {
 
 
   addPrice() {
-    if (!this.priceCategory) {return }
+
+    if(!this.inputForm.valid || !this.priceCategory) {
+      this.siteService.notify("Price Category not valid.", 'Close', 50000, 'red')
+    }
+
+    if (this.priceCategory.id != 0) {
+      this._addPrice()
+      return;
+    }
+    this.action$ = this._updatePriceCategory().pipe(switchMap(data => {
+      this._addPrice()
+      return of(data)
+    }))
+
+  }
+
+  _addPrice() {
 
     let pricing          = this.productPrices
     const item           = {} as ProductPrice;
@@ -193,7 +209,6 @@ export class PriceCategoriesEditComponent implements OnInit {
       if (!this.priceCategory.productPrices) { this.priceCategory.productPrices = [] as ProductPrice[] }
       this.priceCategory.productPrices.push(item)
     }
-
   }
 
   get productPrice(): UntypedFormArray {
@@ -269,9 +284,13 @@ export class PriceCategoriesEditComponent implements OnInit {
       this.siteService.notify('Update failed, form data invalid.', 'Close',  3000, 'yellow')
       return
     }
-    const priceCategory = this.inputForm.value;
-    this.itemAction$ = this.updatePriceCategory(priceCategory)
+    this.itemAction$ = this._updatePriceCategory()
   };
+
+  _updatePriceCategory() {
+    const priceCategory = this.inputForm.value;
+    return this.updatePriceCategory(priceCategory)
+  }
 
   updateCategoryFromObject(category: PriceCategories) {
     this.itemAction$ = this.updatePriceCategory(category)
@@ -300,7 +319,6 @@ export class PriceCategoriesEditComponent implements OnInit {
       switchMap( data => {
         priceCategory.id = data.id;
         this.priceCategory.id = data.id;
-        console.log('priceCategory about to save', priceCategory)
         return this.saveAllItems(priceCategory.productPrices)
       })).pipe(
         switchMap(data => {

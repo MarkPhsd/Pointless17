@@ -1,0 +1,21 @@
+<div [style]="styleValue">
+
+  <div  class="margin-5" >
+    <div>
+      <button mat-raised-button color="accent" (click)="openLightBoxView()">
+        <mat-icon>open_in_new</mat-icon>Large View
+      </button>
+    </div>
+  </div>
+
+  <gallery  [id]="galleryID"  imageSize="cover" thumbPosition="left" [items]="items"></gallery>
+
+  <div *ngIf="galleryView">
+    <div class="gallerize-example">
+      <p class="container" gallerize>
+        <img *ngFor="let img of imageData" [src]="img.srcUrl">
+      </p>
+    </div>
+  </div>
+
+</div>

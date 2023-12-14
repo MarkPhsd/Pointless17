@@ -6,7 +6,6 @@ import { Observable, of, Subject, Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Gallery, GalleryItem, ImageItem } from '@ngx-gallery/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog'
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IClientTable, IPOSOrder, IUserProfile } from 'src/app/_interfaces';
@@ -54,7 +53,6 @@ export class MenuItemModalComponent implements OnInit, OnDestroy {
         private orderService      : OrdersService,
         private _snackBar         : MatSnackBar,
         private fb                : UntypedFormBuilder,
-        public gallery            : Gallery,
         private siteService       : SitesService,
         private brandService      : ClientTableService,
         private platFormService   : PlatformService,

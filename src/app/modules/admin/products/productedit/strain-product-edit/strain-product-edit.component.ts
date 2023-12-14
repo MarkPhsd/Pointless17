@@ -10,7 +10,7 @@ import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
-import { switchMap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods.service';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
@@ -50,11 +50,13 @@ export class StrainProductEditComponent implements OnInit {
   productJSONObject: menuButtonJSON;
   thumbnail : string;
 
+   genders = this.menuService.genders;
   itemTags: string;
   //size search selector add on
   unitTypeNameSelected: string;
   unitTypeSelections = []   as IItemBasic[];
   unitSelectorSearchForm: FormGroup
+  dialogData: any;
 
   constructor(private menuService: MenuService,
               public  route: ActivatedRoute,
@@ -63,7 +65,7 @@ export class StrainProductEditComponent implements OnInit {
               private itemTypeService  : ItemTypeService,
               private priceCategoryService: PriceCategoriesService,
               private siteService: SitesService,
-              public fbProductsService: FbProductsService,
+              public  fbProductsService: FbProductsService,
               private productEditButtonService: ProductEditButtonService,
               private itemTypeMethodsService: ItemTypeMethodsService,
               private unitTypeMethodsService: UnitTypeMethodsService,
@@ -74,32 +76,76 @@ export class StrainProductEditComponent implements OnInit {
     )
   {
 
-    //init all search forms that are not bound to data.
-    this.initPbSearchForm();
-    this.initUnitForm();
-    this.initReOrderUnitSearchForm();
-
     if (data) {
-      if (data.product) {
-        this.product = data.product as IProduct
-        if (this.product.id) {
-          this.initMenuButtonJson(this.product);
-          this.initJSONForm(this.product.json)
-          this.id = this.product.id.toString();
-          if (this.product && data.itemType && data.itemType.id) {
-            if (!this.product.prodModifierType ) {
-              this.product.prodModifierType = parseInt(data.itemType.id);
-            }
-          }
-        }
-        if (data.itemType) {
-          this.itemType = data.itemType
-        }
-      }
+      this.dialogData = data;
+    }
 
-    } else {
+    if (!data) {
       this.id = this.route.snapshot.paramMap.get('id');
     }
+
+  }
+
+  setInit(data) {
+    //init all search forms that are not bound to data.
+
+    try {
+      this.initPbSearchForm();
+      this.initUnitForm();
+      this.initReOrderUnitSearchForm();
+
+      if (data) {
+        if (data.product) {
+          this.product = data.product as IProduct
+          if (this.product.id) {
+            this.initializeForm();
+            this.initMenuButtonJson(this.product);
+            this.initJSONForm(this.product.json)
+            this.id = this.product.id.toString();
+            if (this.product && data.itemType && data.itemType.id) {
+              if (!this.product.prodModifierType ) {
+                this.product.prodModifierType = parseInt(data.itemType.id);
+              }
+            }
+          }
+          if (data.itemType) {
+            this.itemType = data.itemType
+          }
+
+        }
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
+
+  }
+
+  ngOnInit() {
+    console.log('ngOninit data', this.dialogData)
+    this.setInit(this.dialogData)
+    if (!this.dialogData) {
+      this.initializeDataAndForm()
+    }
+  };
+
+
+  initializeDataAndForm() {
+    const site = this.siteService.getAssignedSite();
+    this.product$ = this.menuService.getProduct(site, this.id).pipe(switchMap(data => {
+      this.product = data;
+      return  this.itemTypeService.getItemType(site, this.product.prodModifierType)
+      })).pipe(switchMap(data => {
+        this.itemType = data
+        this.initializeForm();
+        this.initJSONForm(this.product.json)
+        return of(this.product)
+    }))
+  }
+
+
+  setGender(event) {
+    this.productForm.patchValue({gender: event.id})
+    this.product.gender = event.id;
   }
 
   initUnitSearchForm() {
@@ -152,7 +198,7 @@ export class StrainProductEditComponent implements OnInit {
         this.productJSONObject = JSON.parse(product.json) as menuButtonJSON
         this.managerProtected = this.productJSONObject?.managerProtected;
       } catch (error) {
-
+        console.log('json error menu button')
       }
     }
   }
@@ -177,24 +223,7 @@ export class StrainProductEditComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-    this.initializeDataAndForm()
-  };
 
-  initializeDataAndForm() {
-    const site = this.siteService.getAssignedSite();
-    this.product$ = this.menuService.getProduct(site, this.id).pipe(switchMap(data => {
-      this.product = data;
-      return  this.itemTypeService.getItemType(site, this.product.prodModifierType)
-      })).pipe(switchMap(data => {
-        this.itemType = data
-
-        this.initializeForm();
-        this.initJSONForm(this.product.json)
-
-        return of(this.product)
-    }))
-  }
 
   editType() {
     if (this.product.prodModifierType) {
@@ -374,11 +403,16 @@ export class StrainProductEditComponent implements OnInit {
   }
 
   updateItemExit(event) {
+    this.message = "Saving"
     this.action$ = this.updateItem(event).pipe(switchMap ( data => {
       this.performingAction = false;
+      this.message = "''"
       this.onCancel(event);
       return of(data);
-    }));
+    })),catchError(data => {
+      this.message = data.toString()
+      return of(data)
+    });
   };
 
   openPriceCategory() {

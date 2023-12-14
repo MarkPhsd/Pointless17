@@ -1,0 +1,226 @@
+<div *ngIf="(product$ | async) as product"></div>
+<div *ngIf="(action$ | async) as item"></div>
+<mat-card>
+  <mat-card-subtitle *ngIf="product">
+    <div>
+      {{product.name}}
+    </div>
+    <button mat-raised-button (click)="save()"><mat-icon>save</mat-icon>Save</button>
+  </mat-card-subtitle>
+
+  <form [formGroup]="inputForm" *ngIf="product && inputForm">
+
+    <mat-form-field class="category-list"
+                    appearance="outline">
+        <mat-label>Condition</mat-label>
+        <mat-select
+            type="number"
+            formControlName = "condition">
+          <mat-option *ngFor="let item of conditions"
+                      [value]="item.id">
+                      {{item?.name}}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div class="instructions">
+      <mat-label><h4>Condition Description.</h4></mat-label><br>
+      <simple-tinymce cols="50"
+                      rows="20"
+                      style="height: 200px;"
+                      name="conditionDescription"
+                      formControlName="conditionDescription"
+                    >
+      </simple-tinymce>
+    </div>
+
+
+    <!-- Pickup At Location Availability -->
+    <div [hidden]="true" formArrayName="pickupAtLocationAvailability">
+      <div *ngFor="let availability of pickupAtLocationFormArray.controls; let i = index" [formGroupName]="i">
+        <!-- <input formControlName="availabilityType">
+        <input formControlName="merchantLocationKey">
+        <input formControlName="quantity" type="number"> -->
+
+        <mat-form-field appearance="outline" >
+          <mat-label>availabilityType</mat-label>
+          <input  matInput
+                  type="text"
+                  name="availabilityType"
+                  formControlName="availabilityType"  >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" >
+          <mat-label>Merchant Location Key</mat-label>
+          <input  matInput
+                  type="text"
+                  name="merchantLocationKey"
+                  formControlName="merchantLocationKey"  >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" >
+          <mat-label>quantity</mat-label>
+          <input  matInput
+                  type="number"
+                  name="quantity"
+                  formControlName="quantity"  >
+        </mat-form-field>
+
+      </div>
+    </div>
+
+    <!-- Ship To Location Availability -->
+    <div [hidden]="true"  formGroupName="shipToLocationAvailability">
+
+      <mat-form-field appearance="outline" >
+        <mat-label>quantity</mat-label>
+        <input  matInput
+                type="number"
+                name="quantity"
+                formControlName="quantity"  >
+      </mat-form-field>
+
+      <div formArrayName="availabilityDistributions">
+        <!-- <div *ngFor="let distribution of inputForm.get('shipToLocationAvailability.availabilityDistributions').controls; let i = index" [formGroupName]="i"> -->
+        <div *ngFor="let distribution of availabilityDistributions.controls; let i = index" [formGroupName]="i">
+
+          <div formGroupName="fulfillmentTime">
+
+            <mat-form-field class="category-list"
+                            appearance="outline">
+              <mat-label>Condition</mat-label>
+              <mat-select
+                type="text"
+                formControlName = "unit">
+              <mat-option *ngFor="let item of uom"
+                          [value]="item.name">
+                          {{item?.name}}
+              </mat-option>
+              </mat-select>
+          </mat-form-field>
+
+            <mat-form-field appearance="outline" >
+              <mat-label>Merchant Location Key</mat-label>
+              <input  matInput
+                      type="text"
+                      name="merchantLocationKey"
+                      formControlName="merchantLocationKey"  >
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" >
+            <mat-label>quantity</mat-label>
+            <input  matInput
+                    type="number"
+                    name="quantity"
+                    formControlName="quantity"  >
+          </mat-form-field>
+
+        </div>
+      </div>
+    </div>
+
+    <mat-card>
+      <mat-card-subtitle>Dimensions</mat-card-subtitle>
+      <div formGroupName="packageWeightAndSize">
+        <div formGroupName="dimensions">
+
+          <mat-form-field appearance="outline" >
+            <mat-label>height</mat-label>
+            <input  matInput
+                    type="number"
+                    name="height"
+                    formControlName="height"  >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" >
+            <mat-label>length</mat-label>
+            <input  matInput
+                    type="number"
+                    name="length"
+                    formControlName="length"  >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" >
+            <mat-label>width</mat-label>
+            <input  matInput
+                    type="number"
+                    name="width"
+                    formControlName="width"  >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" >
+            <mat-label>Dimensions UOM</mat-label>
+              <mat-select
+                  type="text"
+                  formControlName = "unit">
+                  <mat-option *ngFor="let item of dimensions"
+                        [value]="item.id">
+                        {{item?.name}}
+                  </mat-option>
+              </mat-select>
+          </mat-form-field>
+
+        </div>
+
+        <!-- <input formControlName="packageType"> -->
+
+        <div formGroupName="weight">
+
+          <mat-form-field appearance="outline" >
+            <mat-label>unit</mat-label>
+            <input  matInput
+                    type="number"
+                    name="value"
+                    formControlName="value"  >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" >
+            <mat-label>Unit</mat-label>
+            <mat-select
+                type="text"
+                formControlName = "unit">
+                <mat-option *ngFor="let item of uom"
+                      [value]="item.id">
+                      {{item?.name}}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- <input formControlName="unit">
+          <input formControlName="value" type="number"> -->
+        </div>
+      </div>
+
+      <div>
+        <ng-container [ngTemplateOutlet]="metaTags"></ng-container>
+      </div>
+
+    </mat-card>
+  </form>
+</mat-card>
+
+<mat-card>
+  <div *ngIf="ebayProduct && ebayProduct.imageUrls">
+    <div *ngFor="let item of ebayProduct.imageUrls">
+      <!-- {{item}} -->
+    </div>
+  </div>
+
+  <div *ngIf="ebayProduct && ebayProduct.imageUrls">
+    <app-image-gallery  [imageData] = "ebayProduct.imageUrls"></app-image-gallery>
+  </div>
+</mat-card>
+
+<ng-template #metaTags>
+  <div class="meta-tags"
+        *ngIf="metaTagForm && metaTagsList">
+      <app-meta-tag-chips
+        (outPutItemTags)  ="setItemTags($event)"
+        [itemTags]        ="metaTagsList"
+        [isDisabled] = 'true'
+        [inputForm]       ="metaTagForm">
+      </app-meta-tag-chips>
+  </div>
+</ng-template>
+
+{{ebayOutPut | json}}

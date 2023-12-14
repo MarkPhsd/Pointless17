@@ -138,7 +138,7 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
   deviceInfo: IDeviceInfo;
 
   completionDateForm     : UntypedFormGroup;
-  
+
   uiHomePage : UIHomePageSettings
   _uiHomePage: Subscription;
 
@@ -189,17 +189,17 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
   };
 
 
-    subscribeUIHomePage() { 
+    subscribeUIHomePage() {
       try {
-        this._uiHomePage = this.uISettingsService.homePageSetting$.subscribe(data => { 
+        this._uiHomePage = this.uISettingsService.homePageSetting$.subscribe(data => {
           if (data) {
             this.uiHomePage = data;
           }
         })
       } catch (error) {
-          
+
       }
-    
+
   }
   setOrder(id: number, history) {
     if (id) {
@@ -288,7 +288,7 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     this.setReportingServiceDateRange();
   }
 
-  ngOnDestroy() { 
+  ngOnDestroy() {
     if (this._uiHomePage) { this._uiHomePage.unsubscribe()}
   }
 
@@ -309,9 +309,6 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     this.count = +this.count+1
     this.getUser()
     this.notifyChild();
-    // this.refreshCompletionDateSearch();
-    // this.refreshCompletionDateSearch();
-
   }
 
   refreshReportsSub() {

@@ -19,6 +19,10 @@ export class PurchaseItemSalesComponent implements OnInit,OnChanges,OnDestroy {
   itemHistorySales$ : Observable<IReportItemSales[]>;
   loadingMessage: boolean;
   _lastItem: Subscription;
+  totalPurchases: number = 0;
+  @Input() serviceType : string;
+  @Input() barcode: string;
+  @Input() productID: number;
 
   constructor(
     private siteService: SitesService,
@@ -27,8 +31,43 @@ export class PurchaseItemSalesComponent implements OnInit,OnChanges,OnDestroy {
 
     ngOnInit( ): void {
       this._lastItem = this.orderMethodsService.lastSelectedItem$.subscribe(data => {
-        this.itemHistorySales$ = this.getAssignedItems(data)
+        if (!this.productID) {
+          this.itemHistorySales$ = this.getAssignedItems(data)
+        }
       })
+    }
+
+    ngOnChanges() {
+      // console.log('on changes', this.productID)
+      this.getItemByBarcode()
+    }
+
+    getItemByBarcode() {
+      if (this.productID) {
+        const site = this.siteService.getAssignedSite()
+        const search = {} as POSItemSearchModel;
+        search.productID   = this.productID;
+        this.loadingMessage = false
+
+        if (this.serviceType) {
+          // search.serviceType = 'buy'
+        }
+
+        search.showVoids = false
+        search.lessThanZero = true
+        // console.log('get item by barcode')
+        this.itemHistorySales$  = this.reportingService.getPurchaseOrderHelper(site, search).pipe(switchMap(data => {
+          let  totalPurchases : number;
+          totalPurchases = 0
+          data.forEach(data => {
+            if (data && data.quantity) {
+              totalPurchases = +data.quantity + totalPurchases
+            }
+          })
+          this.totalPurchases = totalPurchases;
+          return of(data)
+        }))
+      }
     }
 
     ngOnDestroy() {
@@ -54,15 +93,6 @@ export class PurchaseItemSalesComponent implements OnInit,OnChanges,OnDestroy {
       return of(null)
     }
 
-  ngOnChanges() {
-    // const item = this.orderMethodsService.assignPOSItems[0]
-    // console.log('item changed', item.productName)
 
-    // if (site && item) {
-    //   const search = {} as POSItemSearchModel;
-    //   search.productName = this.item.productName;
-    //   this.itemHistorySales$ = this.reportingService.getPurchaseOrderHelper(site, search)
-    // }
-  }
 
 }

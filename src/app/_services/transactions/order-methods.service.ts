@@ -38,6 +38,7 @@ import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switc
 import * as uuid from 'uuid';
 import { RequestMessagesComponent } from 'src/app/modules/admin/profiles/request-messages/request-messages.component';
 import { IRequestMessage } from '../system/request-message.service';
+import { error } from 'console';
 export interface ProcessItem {
   order   : IPOSOrder;
   item    : IMenuItem;
@@ -102,6 +103,7 @@ export class OrderMethodsService implements OnDestroy {
   public  posIssueItem$ = this._posIssueItem.asObservable();
   public splitEntryValue  = 0;
 
+  overrideClear: boolean;
   public get assignedPOSItem() {return this.assignPOSItems }
 
   priceCategoryID: number;
@@ -365,7 +367,13 @@ export class OrderMethodsService implements OnDestroy {
   initSubscriptions() {
     this._order = this.currentOrder$.subscribe(order => {
       this.order = order;
+
+      // console.log('initSubscriptions clear/items', this.overrideClear, this.assignPOSItems);
+
+
+      if (this.overrideClear) { return }
       this.clearAssignedItems();
+
     })
   }
 
@@ -390,6 +398,10 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   clearAssignedItems() {
+
+    if ( this.overrideClear ) { return }
+
+    // console.log('clear assigned items', this.overrideClear )
     this.assignPOSItems = null;
     this._assingedPOSItems.next(null)
   }
@@ -405,12 +417,18 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   addAssignedItem(item: PosOrderItem) {
-    if (!this.assignPOSItems) { this.assignPOSItems= [] }
+    if (!this.assignPOSItems) {
+      // if (!this.overrideClear) {
+        this.assignPOSItems= [] }
+      // }
     this.assignPOSItems.push(item);
+    // console.log('addAssignedItem', this.overrideClear, this.assignPOSItems )
     this._assingedPOSItems.next(this.assignPOSItems)
   }
 
   removeAssignedItem(item: PosOrderItem) {
+    // console.log('removeAssignedItem', SItems )
+    // console.log('remove assigned item')this.overrideClear, this.assignPO
     if (!this.assignPOSItems) {
       this._assingedPOSItems.next(null)
     }
@@ -882,7 +900,6 @@ export class OrderMethodsService implements OnDestroy {
                       clientID: order.clientID , priceColumn : order.priceColumn, assignedPOSItems: assignedPOSItems,
                       unitTypeID: unitTypeID, productPrice: productPrice, wholesale: cost } as NewItem;
 
-    console.log('adding this item', newItem)
     return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
   }
 
@@ -908,6 +925,9 @@ export class OrderMethodsService implements OnDestroy {
     const item$ = this.menuService.getMenuItemByBarcode(site, barcode, this.order?.clientID);
     let quantity = 1;
     if (inputQuantity) {  quantity = inputQuantity }
+
+    // console.log('addItemToOrderFromBarcode assignPOSItems',  this.assignPOSItems)
+
     return   item$.pipe(switchMap( data => {
       if ( !data ) {
 
@@ -920,7 +940,7 @@ export class OrderMethodsService implements OnDestroy {
           if (data.length == 1 || data.length == 0) {
             return this.processItemPOSObservable(this.order, barcode, data[0], quantity,
                                                   input, 0, 0, assignedItem,
-                                                  this.assignPOSItems, unitTypeID,null,
+                                                  this.assignPOSItems, unitTypeID, null,
                                                   cost);
           } else {
             this.listBarcodeItems(data, this.order)
@@ -1000,9 +1020,7 @@ export class OrderMethodsService implements OnDestroy {
     if (!valid) { return };
     this.initItemProcess();
 
-
     quantity = this.setQuantityValue(quantity)
-
 
     if (!this.validateItem(item, barcode)) { return }
     let passAlongItem;
@@ -1085,9 +1103,6 @@ export class OrderMethodsService implements OnDestroy {
                             productPrice?: ProductPrice,
                             cost?: number) : Observable<ItemPostResults> {
 
-    // console.log('processItemPOSObservable productPrice', productPrice);
-
-    // console.log('processItemPOSObservable cost', cost)
     const valid = this.validateUser();
     if (!valid) {
       this.notifyEvent(`Invalid user.`, 'Alert ')
@@ -1099,11 +1114,19 @@ export class OrderMethodsService implements OnDestroy {
     if (this.assignedPOSItem && !passAlongItem) { passAlongItem  = this.assignedPOSItem[0]; };
     order = this.validateOrder();
 
+    this.overrideClear = false;
+    if (item?.itemType?.useType.toLowerCase() === 'modifier') {
+      this.assignPOSItems = passAlongItems
+      this.overrideClear = true
+    }
+
+    // console.log('useType passAlong', this.assignPOSItems,  passAlongItems )
+
     if (order) {
       const site       = this.siteService.getAssignedSite();
       if (barcode)  {
         return this.scanBarcodedItem(site, order, barcode,quantity, input?.packageing,
-                                      input?.portionValue,passAlongItems,unitTypeID,productPrice,cost)
+                                      input?.portionValue, passAlongItems, unitTypeID,productPrice,cost)
       }
 
       try {
@@ -1115,7 +1138,7 @@ export class OrderMethodsService implements OnDestroy {
           portionValue     = input?.portionValue;
           itemNote         = input?.itemNote;
         }
-
+        // console.log('useType passAlong 2', passAlongItems )
         if (item) {
           const deviceName  = localStorage.getItem('devicename')
           const splitGroupID = this.splitEntryValue;
@@ -1142,25 +1165,20 @@ export class OrderMethodsService implements OnDestroy {
             return this.orderService.postOrderWithPayload(site, orderPayload).pipe(
               switchMap(data => {
                 if (!data) {
-                  // this.updateOrderSubscription(data)
                   this.order = data;
                   this.siteService.notify('No order started. There might be something wrong.', 'Close', 2000)
                   return of(null)
                 }
                 newItem.orderID = data.id;
-                // console.log('post item method', newItem)
                 return this.posOrderItemService.postItem(site, newItem)
               })).pipe(
                 switchMap(data => {
-                  // if (this.order.service.filterType || this.order.service.filterType == 0) {
-                    this.processItemPostResultsPipe(data)
-                  // }
+                  this.processItemPostResultsPipe(data)
                   return of(data);
               })
             )
           }
 
-          // console.log('begin processing 2' )
           return  this.posOrderItemService.postItem(site, newItem).pipe(switchMap(
             data=> {
               this.processItemPostResultsPipe(data)
@@ -1199,7 +1217,12 @@ export class OrderMethodsService implements OnDestroy {
 
   processItemPostResultsPipe(data) {
 
-      this.assignPOSItems = [];
+      // console.log('assigned items', this.assignPOSItems)
+      if (!this.overrideClear) {
+        this.assignPOSItems = [];
+      }
+      // console.log('processItemPostResultsPipe clear?', this.assignPOSItems, this.overrideClear)
+
       if (data?.message) {  this.notifyEvent(`Process Result: ${data?.message}`, 'Alert ')};
 
       if (data && data.resultErrorDescription && data.resultErrorDescription != null) {
@@ -1221,9 +1244,7 @@ export class OrderMethodsService implements OnDestroy {
           // }
         }
 
-
         this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem, data.priceCategoryID);
-
 
         if (this.siteService.phoneDevice) {
           this.notifyItemAdded(data);
@@ -1322,13 +1343,13 @@ export class OrderMethodsService implements OnDestroy {
 
       return order$.pipe(switchMap( data => {
           order = data
-          if (data.resultMessage) {
-            return of(null)
-          }
+          if (data.resultMessage) {return of(null)}
+          if (!serviceType) {   serviceType = order.service  }
           this.processOrderResult(order, site, serviceType?.retailType, null, serviceType?.resaleType )
           return this.navToDefaultCategory()
         })).pipe(switchMap( item => {
           if (item) {
+            // console.log('serviceType', serviceType)
             this.processOrderResult(order, site, serviceType?.retailType, item?.id, serviceType?.resaleType)
           }
           return of(order)
@@ -1347,10 +1368,12 @@ export class OrderMethodsService implements OnDestroy {
     return order$.pipe(
           switchMap( data => {
             order = data
+            if (!serviceType) {   serviceType = order.service  }
             this.processOrderResult(order, site, serviceType?.retailType, null, serviceType?.resaleType)
             return this.navToDefaultCategory()
 
           })).pipe(switchMap( item => {
+            // console.log('serviceType', serviceType)
             this.processOrderResult(order, site, serviceType?.retailType, item?.id, serviceType?.resaleType)
             return of(order)
           }),
@@ -1377,6 +1400,8 @@ export class OrderMethodsService implements OnDestroy {
       switchMap(data =>
         {
           order = data;
+          if (!serviceType) {   serviceType = order.service  }
+
           if (!serviceType.retailType) {
             return  this.navToDefaultCategory()
           }
@@ -1391,6 +1416,7 @@ export class OrderMethodsService implements OnDestroy {
         if (data && data?.id) {
           id = data?.id;
         }
+        console.log('serviceType', serviceType)
         this.processOrderResult(order, site, serviceType?.retailType, id, serviceType?.resaleType)
         return of(data)
     }))
@@ -1424,9 +1450,18 @@ export class OrderMethodsService implements OnDestroy {
       return
     }
     this.setActiveOrder(site, order)
+
+    // console.log('resaleType', resaleType)
+    if (resaleType) {
+      this.toolbarServiceUI.hidetoolBars()
+      this.router.navigate(["/buy-sell"])
+      return;
+    }
+
     if (categoryID && categoryID != 0) {
       this.navToCategory(categoryID)
     }
+
     if (!retailType) {
       if (!categoryID) {
         this.navToMenu();
@@ -1435,10 +1470,7 @@ export class OrderMethodsService implements OnDestroy {
     if (retailType) {
       this.router.navigate(["currentorder", {mainPanel:true}])
     }
-    if (resaleType) {
-      this.toolbarServiceUI.hidetoolBars()
-      this.router.navigate(["/buy-sell"])
-    }
+
   }
 
   setLastOrder(order?) {
@@ -2087,13 +2119,20 @@ export class OrderMethodsService implements OnDestroy {
 
       if (orderItem.id) {
         const orderID = orderItem.orderID
-        this.posOrderItemService.deletePOSOrderItem(site, orderItem.id).subscribe( item=> {
+        this.posOrderItemService.deletePOSOrderItem(site, orderItem.id).subscribe(
+         { next:  item => {
           if (item) {
             this.order.posOrderItems.splice(index, 1)
             this.updateOrderSubscription(item.order)
             this.updateLastItemAdded(null)
+            return;
           }
-        })
+        },
+         error:  data => {
+          console.log('error', data.toString)
+          }
+        }
+        )
       }
 
       this.updateLastItemAdded(null)
