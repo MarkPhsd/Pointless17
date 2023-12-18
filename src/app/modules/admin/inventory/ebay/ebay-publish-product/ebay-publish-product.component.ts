@@ -1,18 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, catchError, of, switchMap } from 'rxjs';
 import { IClientTable, IProduct } from 'src/app/_interfaces';
 import { AWSBucketService, MenuService } from 'src/app/_services';
 import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { AvailabilityTypeEnum, ConditionEnum, Dimensions, EbayAPIService, FulfillmentTime, PackageTypeEnum, PackageWeightAndSize, PickupAtLocationAvailability, ProductData, TimeDurationUnitEnum, Weight, WeightUnitOfMeasureEnum, Product, ConditionDescriptor } from 'src/app/_services/resale/ebay-api.service';
+import { AvailabilityTypeEnum, ConditionEnum, Dimensions, EbayAPIService, FulfillmentTime, PackageTypeEnum, PackageWeightAndSize, PickupAtLocationAvailability, ProductData, TimeDurationUnitEnum, Weight, WeightUnitOfMeasureEnum, Product, ConditionDescriptor, EbayOfferRequest, EbayOfferresponse, EbayInventoryJson } from 'src/app/_services/resale/ebay-api.service';
 
-
-export interface inventoryJson {
-  ebayInterface: any;
-  ebayRepsonse : any;
-}
 @Component({
   selector: 'ebay-publish-product',
   templateUrl: './ebay-publish-product.component.html',
@@ -27,13 +23,14 @@ export class EbayPublishProductComponent implements OnInit {
   conditions = [{name: 'New', id: 0}, {name: 'Like New', id: 1}]
 
   //[NEW,LIKE_NEW,NEW_OTHER,NEW_WITH_DEFECTS,MANUFACTURER_REFURBISHED,CERTIFIED_REFURBISHED,EXCELLENT_REFURBISHED,VERY_GOOD_REFURBISHED,GOOD_REFURBISHED,SELLER_REFURBISHED,USED_EXCELLENT,USED_VERY_GOOD,USED_GOOD,USED_ACCEPTABLE,FOR_PARTS_OR_NOT_WORKING]
-
+  itemJSON : EbayInventoryJson;
   merchantLocationKey: string;
   inventoryItem: IInventoryAssignment;
   product: IProduct;
   inputForm: FormGroup;
   brand : IClientTable;
 
+  ebayOfferForm: FormGroup;
   metaTagForm: FormGroup;
   ebayProduct: Product;
   ebayOutPut
@@ -41,6 +38,7 @@ export class EbayPublishProductComponent implements OnInit {
   brand$: Observable<IClientTable>;
   inv$: IInventoryAssignment
   awsBucketURL: string;
+  id: number;
 
   metaTagsList : string[]
 
@@ -49,15 +47,28 @@ export class EbayPublishProductComponent implements OnInit {
     private clientService: ClientTableService,
     private menuService: MenuService,
     private siteSerivce: SitesService,
-    private ebayAPIService: EbayAPIService,
     private inventoryService: InventoryAssignmentService,
     private awsBucket: AWSBucketService,
-    ) { }
+    private ebayService: EbayAPIService,
+    private router    : Router,
+    public route      : ActivatedRoute,
+    ) {
+
+      if ( this.route.snapshot.paramMap.get('id') ) {
+        this.id = +this.route.snapshot.paramMap.get('id');
+      }
+      // this.id = router.get
+      // ebay-publish-product
+  }
 
  async ngOnInit() {
+    if (!this.id) {
+      this.siteSerivce.notify('No inventory item assigned', 'Close', 5000, 'red')
+      return
+    }
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
     const site = this.siteSerivce.getAssignedSite()
-    const inv$ = this.inventoryService.getInventoryAssignment(site, 103)
+    const inv$ = this.inventoryService.getInventoryAssignment(site, this.id)
     this.product$ = inv$.pipe(switchMap(data => {
       this.inventoryItem = data;
       return this.menuService.getProduct(site, this.inventoryItem.productID)
@@ -72,6 +83,9 @@ export class EbayPublishProductComponent implements OnInit {
       if (data) {
         this.brand = data;
       }
+      if (this.inventoryItem.json) {
+        this.itemJSON = JSON.parse(this.inventoryItem.json)
+      }
       this.initForm();
       this.initFormData()
       return of(null)
@@ -80,15 +94,11 @@ export class EbayPublishProductComponent implements OnInit {
     this.metaTagForm = this.formBuilder.group({
       metaTags: []
     })
-
   }
-
 
   save() {
     let  productValue = this.inputForm.value  as ProductData;
     productValue.conditionDescriptors = this.conditionDescriptors;
-
-    console.log(productValue)
     // we have to get the title
     // the description
     // the weight, width, depth, weight
@@ -105,19 +115,59 @@ export class EbayPublishProductComponent implements OnInit {
     // then save to the inventory item
     // productValue
     const site = this.siteSerivce.getAssignedSite();
-    const itemJSON = {} as inventoryJson;
+    this.itemJSON = {} as EbayInventoryJson;
 
-    itemJSON.ebayInterface = productValue // JSON.stringify(productValue)
+    this.itemJSON.inventory = productValue // JSON.stringify(productValue)
     this.ebayOutPut = productValue
-    this.inventoryItem.json= JSON.stringify(itemJSON)
+    this.itemJSON.offerRequest = this.ebayOfferRequest;
+
+    this.inventoryItem.json= JSON.stringify(this.itemJSON)
+
     this.action$ =  this.inventoryService.putInventoryAssignment(site, this.inventoryItem).pipe(switchMap(data => {
-
-
-      this.siteSerivce.notify('Saved', 'close', 2000, 'green')
+    this.siteSerivce.notify('Saved', 'close', 2000, 'green')
       return of(data)
     }))
 
   }
+
+  get ebayOfferRequest() {
+    const ebayOfferForm = this.ebayOfferForm.value;
+    let ebayOffer = {} as EbayOfferRequest;
+    ebayOffer.availableQuantity = ebayOfferForm.availableQuantity;
+    ebayOffer.quantityLimitPerBuyer = ebayOfferForm.quantityLimitPerBuyer;
+    ebayOffer.listingDescription = ebayOfferForm.listingDescription;
+    ebayOffer.pricingSummary = {} as any;
+    ebayOffer.pricingSummary.price = {} as any;
+
+    ebayOffer.pricingSummary.price = ebayOfferForm.price;
+    return ebayOffer
+  }
+
+  publishInventory() {
+    if (this.itemJSON.inventory) {
+      // this.action$ = this.ebayService.
+    }
+  }
+
+  getInventory() {
+    if (this.itemJSON.inventory) {
+      // this.action$ = this.ebayService.
+    }
+  }
+
+  publishOffer() {
+    if (this.itemJSON.inventory) {
+      // this.action$ = this.ebayService.
+    }
+  }
+
+  getOffer() {
+    if (this.itemJSON.inventory) {
+      // this.action$ = this.ebayService.
+    }
+  }
+
+
 
   getClient(site, id: number) {
     return this.clientService.getClient(site, this.product.brandID).pipe(switchMap(data => {
@@ -135,28 +185,23 @@ export class EbayPublishProductComponent implements OnInit {
 
     let item = {} as ProductData;
 
-    if (this.inventoryItem.used) {
-      item.condition = ConditionEnum.LIKE_NEW
-    }
-    if (!this.inventoryItem.used) {
-      item.condition = ConditionEnum.NEW
-    }
-
+    if (this.inventoryItem.used) {  item.condition = ConditionEnum.LIKE_NEW  }
+    if (!this.inventoryItem.used) {  item.condition = ConditionEnum.NEW   }
     item.conditionDescription = this.inventoryItem?.description;
 
-    let dimensions = {} as Dimensions;
+    let dimensions    = {} as Dimensions;
     dimensions.height = +this.product?.height;
     dimensions.length = +this.product.depth;
-    dimensions.width = +this.product.width;
+    dimensions.width  = +this.product.width;
 
-    let weight = {}  as Weight
+    let weight  = {}  as Weight
     weight.unit = WeightUnitOfMeasureEnum.POUND;
     weight.unit = +this.product.weight;
 
-    let pckWeightSize = {} as PackageWeightAndSize;
-    pckWeightSize.dimensions = dimensions;
+    let pckWeightSize         = {} as PackageWeightAndSize;
+    pckWeightSize.dimensions  = dimensions;
     pckWeightSize.packageType = PackageTypeEnum.BULKY_GOODS
-    pckWeightSize.weight = weight
+    pckWeightSize.weight      = weight
 
     item.product = this.getProduct();
     this.setTagsAsDescriptors(this.inventoryItem, this.product)
@@ -175,15 +220,6 @@ export class EbayPublishProductComponent implements OnInit {
     this.setItemTags(this.metaTagsList)
   }
 
-  // "conditionDescriptors" : [
-  //   { /* ConditionDescriptor */
-  //   "additionalInfo" : "string",
-  //   "name" : "string",
-  //   "values" : [
-  //   "string"
-  //   ]}
-  //   ],
-
   setItemTags(event) {
     let conditionDescriptors = [] as ConditionDescriptor[];
     event.forEach(data => {
@@ -193,7 +229,6 @@ export class EbayPublishProductComponent implements OnInit {
     })
     this.conditionDescriptors = conditionDescriptors
   }
-
 
   getProduct() {
 
@@ -218,6 +253,21 @@ export class EbayPublishProductComponent implements OnInit {
   initForm() {
     const prod = this.product;
     const inv = this.inventoryItem;
+
+    this.ebayOfferForm = this.formBuilder.group({
+      sku: [],
+      listingDescription: [this.product.name],
+      availableQuantity: [1],
+      quantityLimitPerBuyer: [1],
+      price: [this.product.retail],
+    })
+
+    if (this.itemJSON) {
+      if (this.itemJSON.ebayPublishResponse) {
+
+      }
+    }
+
 
     this.inputForm =  this.formBuilder.group({
       condition: [''],

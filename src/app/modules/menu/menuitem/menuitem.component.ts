@@ -36,8 +36,6 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
     @Input() fileName: string;
     @Output() outputExitForm = new EventEmitter<any>();
-
-
     recentAssociations$ : Observable<IMenuItem[]>;
     associations$ : Observable<IMenuItem[]>;
 

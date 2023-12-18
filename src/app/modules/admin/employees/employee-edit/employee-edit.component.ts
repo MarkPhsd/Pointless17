@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, Subscription, of } from 'rxjs';
-import { switchMap, } from 'rxjs/operators';
+import { catchError, switchMap, } from 'rxjs/operators';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
 import { clientType, employee, IClientTable, IUser, UserPreferences } from 'src/app/_interfaces';
 import { AWSBucketService, AuthenticationService} from 'src/app/_services';
@@ -18,6 +18,7 @@ import { jobTypes } from 'src/app/_interfaces';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
+import { T } from '@angular/cdk/keycodes';
 @Component({
   selector: 'employee-edit',
   templateUrl: './employee-edit.component.html',
@@ -32,7 +33,6 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
   @ViewChild('coachingUserAuthorized', {read: ElementRef}) coachingUserAuthorized: ElementRef;
   @ViewChild('coachingUserType', {read: ElementRef}) coachingUserType: ElementRef;
   @ViewChild('coachingTermination', {read: ElementRef}) coachingTermination: ElementRef;
-  
 
   inputForm   : UntypedFormGroup;
   clientForm  : UntypedFormGroup;
@@ -56,11 +56,11 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
   isAuthorized        : boolean ;
   isStaff             : boolean ;
   passwordsMatch      = true;
-  
+
   _user: Subscription;
   user: IUser;
   auths: IUserAuth_Properties
-  
+
   minumumAllowedDateForPurchases: Date
   clientTypes$: Observable<clientType[]>;
   jobTypes$: Observable<jobTypes[]>;
@@ -111,23 +111,25 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
     const employee$ = this.employeeService.getEmployee(site, this.id)
     this.jobTypes$  = this.jobTypeService.getTypes(site);
 
-    this.action$ = employee$.pipe(
+    return employee$.pipe(
       switchMap( employee => {
         const client      = {} as IClientTable
-        client.firstName  = employee.firstName;
-        client.lastName   = employee.lastName;
-        client.phone      = employee.phone;
-        client.email      = employee.email
-        client.employeeID = employee.id;
-        client.id         = employee.clientID;
-        client.payRate    = employee.payRate;
+        client.firstName  = employee?.firstName;
+        client.lastName   = employee?.lastName;
+        client.phone      = employee?.phone;
+        client.email      = employee?.email
+        client.employeeID = employee?.id;
+        client.id         = employee?.clientID;
+        client.payRate    = employee?.payRate;
         this.client       = client;
         this.inputForm.patchValue(employee);
+        if (!employee) { return of(null)}
         return  this.clientTableService.postClientWithEmployee(site, employee)
       }
 
     )).pipe(
       switchMap(employeeClient => {
+        if (!employeeClient) { return of(null)}
         if (!employeeClient.client) {
           if (employeeClient.message) {
             this._snackBar.open(employeeClient.message, 'Error', {verticalPosition: 'bottom', duration:2000})
@@ -162,14 +164,22 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    const site     = this.siteService.getAssignedSite();
+
     this.bucketName =   await this.awsBucket.awsBucket();
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
     this.selectedIndex = 0
-    this.initializeClient();
-    this.initConfirmPassword();
-    this.clientTypes$ = this.clientTypeService.getClientTypes(site);
-    this.initUser()
+    this.initInformation()
+  }
+
+  initInformation() {
+    const site     = this.siteService.getAssignedSite();
+    this.action$ = this.initializeClient().pipe(
+        switchMap(data => {
+        this.initConfirmPassword();
+        this.clientTypes$ = this.clientTypeService.getClientTypes(site);
+        this.initUser()
+        return of(data)
+    }));
   }
 
   initUser() {
@@ -205,7 +215,11 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
   };
 
   viewContact() {
-    if (this.client) {  this.router.navigate(["/profileEditor/", {id:this.client.id}]); }
+
+    if (this.client && this.client.id) {
+      this.router.navigate(["/profileEditor/", {id:this.client.id}]);
+      return
+    }
   }
 
   validateMatchingPasswords() {
@@ -247,12 +261,13 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
     const site     = this.siteService.getAssignedSite();
     let client     = {} as IClientTable
     let employee   = {} as employee
+    let empeloyeeClient$: Observable<IEmployeeClient>
 
     if (this.clientForm) { client  = this.clientForm.value as IClientTable; }
 
     if (!this.inputForm || !this.inputForm.valid) {
       this.notifyEvent('Error in form', "Failed to Save");
-      return EMPTY;
+      return of(null);
     }
 
     if (!this.passwordsMatch && (this.password1 != '' && this.password2 !='')) {
@@ -261,36 +276,49 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
 
     if (this.inputForm)  { employee = this.inputForm.value as employee; }
 
+
     if (client && employee) {
       if (employee.id == 0) {
-        const newEmployee$ = this.employeeService.postEmployee(site, employee)
-        return  newEmployee$.pipe(
-            switchMap(data => {
-              return  this.employeeService.saveEmployeeClient(site, { message: '', employee:  data, client: client })
-        }))
+        let newEmployee$ = this.employeeService.postEmployee(site, employee)
+        empeloyeeClient$ =  newEmployee$.pipe(switchMap(
+          data => {
+            return  this.employeeService.saveEmployeeClient(site, { message: '', employee:  data, client: client })
+          }
+        ))
       }
+
       if (employee.id != 0) {
-        return  this.employeeService.saveEmployeeClient(site, { message: '',  employee:  employee, client: client })
+         empeloyeeClient$ =   this.employeeService.saveEmployeeClient(site, { message: '',  employee:  employee, client: client })
       }
+
+      return empeloyeeClient$.pipe(
+        switchMap( data => {
+          console.log('client', this.client)
+          this.client = data.client;
+          this.initClientForm(this.client)
+          return of(data)
+      }))
     }
-    return EMPTY
+
+    return of(null);
+
   }
 
   update(event): void {
     const empClient$ = this.getEmployeeClientObservable();
     if (empClient$) {
-        empClient$.subscribe(
-          {
-            next: data => {
+        this.action$ = empClient$.pipe(
+          switchMap(data  => {
             this.notifyEvent('Saved', "Saved")
-          },
-            error: err => {
+            return of(data)
+          }),catchError ( err => {
             const message = 'Adding employee failed, please input a unique PIN Code. It may need to be a be a long number';
             this.notifyEvent(message, "Failure")
+            return of(err)
           }
-        }
-      )
+        ))
     }
+
   };
 
   saveClient() {
@@ -330,7 +358,6 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
 
   delete(event) {
     // const result =  window.confirm('Are you sure you want to delete this profile?')
-
     if (this.employee) {
       const site = this.siteService.getAssignedSite();
       const employe$ = this.employeeService.delete(site, this.employee.id)

@@ -43,7 +43,7 @@
                   This is not the primary password, and can be changed later.
             </div>
           </div>
-          
+
           <div>
               <mat-form-field appearance="outline">
               <mat-label >First Name</mat-label>
@@ -83,7 +83,7 @@
                       class="form-control" >
               </mat-form-field>
           </div>
-          
+
           <div  #coachingPIN>
             <!-- <mat-icon class="mat-label-info"
                       color="accent"
@@ -148,11 +148,11 @@
           <mat-spinner  diameter="100"></mat-spinner>
         </ng-template>
       </div>
-   
+
       <div>
         <div
               *ngIf="clientForm && client;
-              else loadingclient;"
+                       else loadingclient;"
               [formGroup]="clientForm">
 
           <div #coachingUserName >
@@ -192,7 +192,7 @@
             </div>
         </div>
 
-      
+
         <div *ngIf="clientForm">
           <div  #coachingUserAuthorized class="grid-item" >
             <!-- <mat-icon class="mat-label-info"
@@ -203,7 +203,7 @@
                   [inputForm] ='clientForm'>
             </app-profile-roles>
           </div>
-      
+
           <div #coachingUserType class="grid-item" [formGroup]="clientForm">
             <!-- <mat-icon class="mat-label-info"
                       color="accent"
@@ -242,7 +242,7 @@
               Passwords match.
         </mat-label>
 
-        <div>
+        <div *ngIf="client && client.id && client.id != 0">
             <button mat-raised-button
                     (click)="viewContact()">
                 <mat-icon>expand</mat-icon>View As User

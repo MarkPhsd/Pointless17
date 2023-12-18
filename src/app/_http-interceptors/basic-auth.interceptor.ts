@@ -29,21 +29,30 @@ export class BasicAuthInterceptor implements HttpInterceptor {
 
       const user = this.authenticationService.userValue;
 
+      const ebay = this.authenticationService.ebayHeader
+
+      if (ebay) {
+        // console.log('Intercept', ebay, request.headers.has(InterceptorSkipHeader) )
+      }
+      if (ebay) {
+        try {
+          let headers = request.headers.delete(InterceptorSkipHeader);
+          headers = request.headers.delete('Content-Type')
+          request =  this.setEbayOAuthHeaders(ebay, request)
+          console.log('headers', headers)
+          return next.handle(request);
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
       if (request.headers.has(InterceptorSkipHeader)) {
         const headers = request.headers.delete(InterceptorSkipHeader);
         return next.handle(request.clone({ headers }));
       }
 
       if (user) {
-        user.authdata = window.btoa(user.username + ':' + user.token);
-        if (  user.authdata) {
-          request = request.clone({
-            setHeaders: {
-              Authorization: `Basic ${user.authdata}`
-            }
-          });
-
-        }
+        request = this.setUserAuthHeaders(user, request)
         return next.handle(request);
       }
 
@@ -74,6 +83,34 @@ export class BasicAuthInterceptor implements HttpInterceptor {
         this.authenticationService.externalAPI = false
         return next.handle(request);
       }
+    }
 
+    setEbayOAuthHeaders(item: any, request: HttpRequest<any>) {
+      // user.authdata = window.btoa(user.username + ':' + user.token);
+      const auth = window.btoa(item.clientID + ':' + item.client_secret);
+
+      if ( auth ) {
+        request = request.clone({
+          setHeaders: {
+            'Authorization' : `Basic ${auth}`,
+            'Content-Type'  : 'application/x-www-form-urlencoded'
+          }
+        });
+        return request
+      }
+      return null;
+    }
+
+    setUserAuthHeaders(user: IUser, request: HttpRequest<any>) {
+      user.authdata = window.btoa(user.username + ':' + user.token);
+      if (  user.authdata ) {
+        request = request.clone({
+          setHeaders: {
+            Authorization: `Basic ${user.authdata}`
+          }
+        });
+        return request
+      }
+      return null;
     }
 }

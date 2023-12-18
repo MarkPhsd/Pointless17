@@ -60,6 +60,8 @@ export class SitesService {
     }
   }
 
+
+
   getSites():  Observable<ISite[]> {
     this.apiUrl   = this.appInitService.apiBaseUrl()
     const endPoint = `/CCSSites/getsites`

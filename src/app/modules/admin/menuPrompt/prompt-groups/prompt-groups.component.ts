@@ -166,19 +166,20 @@ initAgGrid(pageSize: number) {
   // cellRenderer: this.agGridService.currencyCellRendererUSD,
 
   this.columnDefs =  [
-    {
-    field: 'id',
-    cellRenderer: "btnCellRenderer",
-                   cellRendererParams: {
-                      cellRenderer: this.buttoncellrender,
-                      onClick: this.editProductFromGrid.bind(this),
-                      getLabelFunction: this.getLabel.bind(this),
-                      btnClass: 'btn btn-primary btn-sm'
-                    },
-                    minWidth: 125,
-                    maxWidth: 125,
-                    flex: 2,
+
+    {headerName: 'Edit',  field: 'id',
+        cellRenderer: "btnCellRenderer",
+        cellRendererParams: {
+          onClick: this.editProductFromGrid.bind(this),
+          label: 'Edit',
+          getLabelFunction: this.getLabel.bind(this),
+          btnClass: 'btn btn-primary btn-sm'
+        },
+        minWidth: 125,
+        maxWidth: 125,
+        flex: 2,
     },
+
     {headerName: 'Name',     field: 'name',         sortable: true,
                   width   : 275,
                   minWidth: 175,
@@ -186,6 +187,7 @@ initAgGrid(pageSize: number) {
                   flex    : 1,
     },
   ]
+
   this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
 }
 

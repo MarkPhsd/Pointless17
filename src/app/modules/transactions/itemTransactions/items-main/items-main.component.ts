@@ -204,8 +204,20 @@ export class ItemsMainComponent implements OnInit {
       flex: 2,
       // minWidth: 100,
     };
-    this.columnDefs =  [
-      {
+    // this.columnDefs =  [
+    //   {
+
+    //   },
+
+      // {headerName: 'Order',     field: 'orderID', sortable: true,
+      //   width   : 100,
+      //   minWidth: 100,
+      //   maxWidth: 100,
+      //   flex    : 2,
+      // },
+
+
+    let button = {
       field: 'id',
       cellRenderer: "btnCellRenderer",
                     cellRendererParams: {
@@ -216,26 +228,44 @@ export class ItemsMainComponent implements OnInit {
                       minWidth: 125,
                       maxWidth: 125,
                       flex: 2,
-      },
+    }
+    this.columnDefs.push(button);
+    let item =   {headerName: 'Name',  field: 'productName',
+            // sortable: true,
+        width: 75,
+        minWidth: 125,
+        maxWidth: 150,
+        editable: true,
+        singleClickEdit: true,
+        cellRenderer: 'showMultiline',
+        wrapText: true,
+        cellStyle: {'white-space': 'normal', 'line-height': '1em'},
+        autoHeight: true,
+    }
+    this.columnDefs.push(item);
 
-      {headerName: 'Order',     field: 'orderID', sortable: true,
-        width   : 100,
-        minWidth: 100,
-        maxWidth: 100,
-        flex    : 2,
-      },
+     item =   {headerName: 'Sku/BARCODE',  field: 'barCode',
+          // sortable: true,
+      width: 75,
+      minWidth: 125,
+      maxWidth: 150,
+      editable: true,
+      singleClickEdit: true,
+      cellRenderer: 'showMultiline',
+      wrapText: true,
+      cellStyle: {'white-space': 'normal', 'line-height': '1em'},
+      autoHeight: true,
+      }
+      this.columnDefs.push(item);
 
-    ]
-
-    this.columnDefs.push(this.getValueField('productName', 'Name',  125, false, false, false),);
     this.columnDefs.push(this.getValueField('quantity','Quantity',  125, false, false, false),);
     this.columnDefs.push(this.getValueField('unitPrice', 'Price',  125, false, false, true),);
     this.columnDefs.push(this.getValueField('originalPrice','OG Price',   125, false, false, true),);
     this.columnDefs.push(this.getValueField('wholeSale', 'Cost',   125, false, false, true),);
 
     this.columnDefs.push(this.getValueField('category', 'Category',  125, false, false, false),);
-    this.columnDefs.push(this.getValueField( 'department','Department',  125, false, false, false),);
-    this.columnDefs.push(this.getValueField( 'name','Type',  125, false, false, false),);
+    this.columnDefs.push(this.getValueField('department','Department',  125, false, false, false),);
+    this.columnDefs.push(this.getValueField('name','Type',  125, false, false, false),);
     this.columnDefs.push(this.getValueField('useType','UseType',   125, false, false, false),);
 
     this.columnDefs.push(this.getValueField('serverName','Employee',   125, false, false, false),);

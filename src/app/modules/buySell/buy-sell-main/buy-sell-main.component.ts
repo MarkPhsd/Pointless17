@@ -243,7 +243,7 @@ export class BuySellMainComponent implements OnInit {
       this.genderID = 0;
       this.gender = {id: 1, name:'Female'}
     }
-
+    this.inventoryReview = false;
     this.lastAttribute = null;
     this.lastDepartment = null;
     this.departments = null;

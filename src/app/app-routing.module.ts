@@ -145,6 +145,7 @@ import { ResaleClassesMainComponent } from './modules/admin/resale_manager/class
 import { BuySellMainComponent } from './modules/buySell/buy-sell-main/buy-sell-main.component';
 import { EbayPublishProductComponent } from './modules/admin/inventory/ebay/ebay-publish-product/ebay-publish-product.component';
 import { ItemsMainComponent } from './modules/transactions/itemTransactions/items-main/items-main.component';
+import { EbayAuthRedirectComponent } from './modules/admin/settings/software/ebay-settings/ebay-auth-redirect/ebay-auth-redirect.component';
 
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
@@ -168,7 +169,10 @@ const routes: Routes = [
       children: [
 
         //ebay-publish-product
-        { path: 'ebay-publish-product', component: EbayPublishProductComponent, canActivate: [AuthGuard], data: {title: 'Resale Brand Classes', animation: 'isLeft'}},
+        { path: 'ebay-publish-product', component: EbayPublishProductComponent, canActivate: [AuthGuard], data: {title: 'Ebay Publisher', animation: 'isLeft'}},
+
+        { path: 'ebay-auth-redirect', component: EbayAuthRedirectComponent, canActivate: [AuthGuard], data: {title: 'Ebay Auth Redirect', animation: 'isLeft'}},
+        //
 
         { path: 'buy-sell', component: BuySellMainComponent, canActivate: [AuthGuard], data: {title: 'Resale Brand Classes', animation: 'isLeft'}},
 

@@ -11,6 +11,13 @@
     <div *ngIf="inputForm.controls?.lastName.errors?.required && inputForm.controls?.lastName.touched" class="error">
       <mat-icon color="warn">warning</mat-icon> Name required in basic tab.
     </div>
+
+    <div *ngIf="errorMessages">
+      <div *ngFor="let item of errorMessages">
+        <mat-icon color="warn">warning</mat-icon> {{item}}
+      </div>
+    </div>
+    <!-- <div *ngIf="!inputForm.controls?.firstName" -->
   </div>
 
   <mat-card>

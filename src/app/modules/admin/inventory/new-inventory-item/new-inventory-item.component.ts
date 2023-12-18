@@ -4,14 +4,14 @@ import { Observable, Subscription, of } from 'rxjs';
 import { InventoryLocationsService, IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { InventoryAssignmentService, IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ISite } from 'src/app/_interfaces/site';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FbInventoryService } from 'src/app/_form-builder/fb-inventory.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
-import { switchMap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { ISetting, IUser } from 'src/app/_interfaces';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -80,6 +80,7 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
     public fbProductsService    : FbProductsService,
     public printingService: PrintingService,
     private menuService  : MenuService,
+    private router: Router,
     private inventoryLocationsService: InventoryLocationsService,
     private dialogRef    : MatDialogRef<NewInventoryItemComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
@@ -284,14 +285,22 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
   }
 
   publishItem(item: IInventoryAssignment) {
-    if (item) {
-      const site = this.siteService.getAssignedSite()
-      item.ebayPublished = true;
-      this.inputForm.patchValue({ebayPublished: true})
-      this.action$ = this.updateWithoutNotification().pipe(switchMap(data => {
-        this.siteService.notify('Item Published to Ebay', 'Close', 30000, 'green')
-        return of(data)
-      }))
+    // if (item) {
+    //   const site = this.siteService.getAssignedSite()
+    //   item.ebayPublished = true;
+    //   this.inputForm.patchValue({ebayPublished: true})
+    //   this.action$ = this.updateWithoutNotification().pipe(switchMap(data => {
+    //     this.siteService.notify('Item Published to Ebay', 'Close', 30000, 'green')
+    //     return of(data)
+    //   }))
+    // }
+    if (this.item.id) {
+      this.router.navigate(['ebay-publish-product', {id:this.item.id}])
+      try {
+        this.dialogRef.close()
+      } catch (error) {
+
+      }
     }
   }
 

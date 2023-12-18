@@ -4,7 +4,6 @@
   <div class="name-fields">
     <div *ngIf="inputForm" [formGroup]="inputForm">
       <mat-slide-toggle
-
               name="medTempLicense"
               formControlName="patientRecOption">
         <mat-label >Med Patient / Caregiver</mat-label>
@@ -51,8 +50,7 @@
               <mat-label>Expiration</mat-label>
               <input matInput
                     [matDatepicker]="picker"
-                    formControlName="medPrescriptionExpiration"
-                  >
+                    formControlName="medPrescriptionExpiration">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker  #picker></mat-datepicker>
             </mat-form-field>

@@ -1,0 +1,121 @@
+
+<div class="ps-flex-group-start">
+  <div   style="margin:5px"  *ngIf="authDisabled">
+    <button mat-raised-button (click)="getEbayAuth()">Get Ebay Auth</button>
+  </div>
+
+  <div>
+    <button   style="margin:5px"  mat-raised-button (click)="refresh()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <div>
+    <button *ngIf="actionResult" mat-raised-button style="margin:5px" (click)="clearResults()">Clear Results</button>
+  </div>
+
+  <div>
+    <button *ngIf="ebaySettings && ebaySettings.brandedoAuthLink && !authDisabled"
+            mat-raised-button style="margin:5px" (click)="openEbayAuthAgreement()">
+            <mat-icon>link</mat-icon>Open Ebay Auth Agreement</button>
+  </div>
+
+  <div  style="margin:5px" *ngIf="(action$ | async)  as item">
+    <!-- {{actionResult | json}} -->
+  </div>
+
+  <div  style="margin:5px" *ngIf="authCodeApproval">
+    <!-- <div>{{authCodeApproval}}</div> -->
+    <!-- <div> -->
+      <button mat-raised-button color="primary" (click)="applyAuthCode()">
+        <mat-icon>security</mat-icon>Apply Auth
+      </button>
+    <!-- </div> -->
+  </div>
+
+  <div *ngIf="ebaySettings && ebaySettings.refresh_token && ebaySettings.access_token">
+    <div><mat-icon>security</mat-icon>Ebay Settings Authorized</div>
+  </div>
+</div>
+
+<div  style="margin:5px" *ngIf="ebayForm" [formGroup]="ebayForm">
+
+    <!-- <app-value-fields
+      [inputForm]="ebayForm"
+      [fieldName]="'brandedoAuthLink'">
+      Branded OAUTH Link
+    </app-value-fields> -->
+
+    <!-- <app-value-fields
+      [inputForm]="ebayForm"
+      [fieldName]="'appName'">
+      App Name
+    </app-value-fields> -->
+
+    <!-- <app-value-fields
+      [inputForm]="ebayForm"
+      [fieldName]="'access_token'">
+      Access Token
+    </app-value-fields> -->
+
+    <!-- <app-value-fields
+      [inputForm]="ebayForm"
+      [fieldName]="'refresh_token'">
+      Refresh Token
+    </app-value-fields> -->
+
+    <app-value-fields
+      [inputForm]="ebayForm"
+      [fieldName]="'clientID'">
+      ClientID
+    </app-value-fields>
+
+    <app-value-fields
+      [passwordMask]="true"
+      [type] = "'input'"
+      [inputForm]="ebayForm"
+      [fieldName]="'client_secret'">
+      client_secret
+    </app-value-fields>
+
+    <app-value-fields
+      [inputForm]="ebayForm"
+      [fieldName]="'rUName'">
+      rUName
+    </app-value-fields>
+
+    <div  class="mat-label"   style="margin:5px">
+      <mat-slide-toggle
+            name="sandBox"
+            class="mat-label"
+            formControlName="sandBox">
+        <mat-label class="mat-label">Sandbox</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <button   style="margin:5px" class="margin-10" color="primary"  mat-raised-button (click)="saveEbaySettings()"><mat-icon>save</mat-icon>Save</button>
+
+    <button   style="margin:5px" class="margin-10" color="primary"  mat-raised-button (click)="getEbayTime()"><mat-icon>save</mat-icon>Test Ebay Time</button>
+
+    <button   style="margin:5px" class="margin-10" color="primary"  mat-raised-button (click)="clearAuthorization()"><mat-icon>delete</mat-icon>Clear Auth</button>
+
+
+ </div>
+
+
+<!-- <mat-card   style="margin:5px">
+  <app-value-fields
+    [inputForm]="decoder"
+    [fieldName]="'code'">
+    Decoder
+  </app-value-fields>
+  {{decodedValue | json}}
+</mat-card>
+
+<div   style="margin:5px" *ngIf="(ebayPostResults$ | async) as ebayPostResults">
+  {{ebayPostResults | json}}
+</div> -->
+
+
+
+

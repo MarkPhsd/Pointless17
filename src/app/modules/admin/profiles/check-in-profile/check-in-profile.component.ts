@@ -31,7 +31,7 @@ import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach
 })
 
 export class CheckInProfileComponent implements OnInit, OnDestroy {
-
+  errorMessages = []
   @ViewChild('coachingAlertMessages', {read: ElementRef}) coachingAlertMessages: ElementRef;
   @ViewChild('coachingDisabledMessage', {read: ElementRef}) coachingDisabledMessage: ElementRef;
   @ViewChild('coachingMedical', {read: ElementRef}) coachingMedical: ElementRef;
@@ -175,6 +175,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
       this.initDateRangeForm();
       this.initConfirmPassword();
       this.initSelectForm();
+
     })
 
   }
@@ -200,24 +201,112 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     const typeID =  client.clientTypeID;
     const site = this.siteService.getAssignedSite()
     this.clientType$   = this.clientTypeService.getClientTypeCached(site, typeID).pipe(switchMap(data => {
-      this.clientType = data;
-      const result =  this.orderMethodsService.validateCustomerForOrder(client,  requiresLicenseValidation, data.name)
-      this.accountDisabled = false
-      this.validationMessage = '';
-      if (!result.valid)  {
-        this.accountDisabled = true
-        this.validationMessage = result.resultMessage;
-      }
+      this.refreshClientValidatiy(client, requiresLicenseValidation, data)
       return of(data)
     }))
+
   }
 
+  refreshClientValidatiy(client, requiresLicenseValidation, data: clientType) {
+    this.clientType = data;
+    const result =  this.orderMethodsService.validateCustomerForOrder(client,  requiresLicenseValidation, data.name)
+    this.accountDisabled = false
+    this.validationMessage = '';
+    if (!result.valid)  {
+      this.accountDisabled = true
+      this.validationMessage = result.resultMessage;
+    }
+    this.validatePatientType()
+  }
 
   initConfirmPassword()  {
 		this.confirmPassword = this.fb.group( {
 		  confirmPassword: ['']
 		})
     this.validateMatchingPasswords();
+  }
+
+
+  validatePatientType() {
+    this.errorMessages = []
+    const patient = this.clientTable && this.clientTable.patientRecOption;
+    console.log('patient', patient)
+    if (this.inputForm.controls['patientRecOption'].value || patient) {
+      const client = this.inputForm.value as IClientTable;
+
+      if (!this.clientType) {
+        this.errorMessages.push('No Contact Type')
+        return false;
+      }
+
+      const patCare = this.clientType?.name.toLowerCase() === 'caregiver' ||
+                      this.clientType?.name.toLowerCase() === 'patient'
+
+      if (patCare) {
+
+        const type = this.clientType?.name.toLowerCase();
+
+        if (!client.medLicenseNumber) {
+          this.errorMessages.push('No OOMP value - Patient')
+          return false;
+        }
+        if (type === 'patient') {
+          if (!client.medLicenseNumber) {
+            this.errorMessages.push('No OOMP value - Patient')
+            return false;
+          }
+          if (client.medLicenseNumber) {
+            if (+client.medLicenseNumber.length != 7) {
+              this.errorMessages.push(`OOMP wrong length ${client.medLicenseNumber}` )
+              return false;
+            }
+          }
+        }
+
+        if (type === 'caregiver') {
+          if (!client.medLicenseNumber) {
+            this.errorMessages.push('No OOMPB value')
+            return false;
+          }
+          if (client.medLicenseNumber) {
+            if (+client.medLicenseNumber.length != 7) {
+              this.errorMessages.push(`OOMP wrong length ${client.medLicenseNumber}` )
+              return false;
+            }
+          }
+
+          //insTertiaryNum
+          if (!client.insTertiaryNum) {
+            this.errorMessages.push('No OOMPB value')
+            return false;
+          }
+          if (client.insTertiaryNum) {
+            if (+client.insTertiaryNum.length != 7) {
+              this.errorMessages.push(`OOMPB wrong length ${client.insTertiaryNum}` )
+              return false;
+            }
+          }
+        }
+        if (type === 'patient') {
+          // if (!client.medLicenseNumber) {
+          //   this.errorMessages.push('No OOMP value')
+          //   return false;
+          // }
+        }
+        if (this.clientType) {
+          if (type === 'caregiver') {
+
+           return false;
+          }
+
+       }
+      }
+
+            // insTertiaryNum OOMP
+
+            //clientType?.name.toLowerCase() === 'patient'
+            // medLicenseNumber OOMPB
+    }
   }
 
   validateMatchingPasswords() {
@@ -479,10 +568,17 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     this.initForm()
     const site   = this.siteService.getAssignedSite();
     const client$ =this.clientTableService.getClient(site, id)
-    client$.subscribe(data => {
+    client$.pipe(
+      switchMap(data => {
       this.inputForm.patchValue(data)
-      this.checkValidity(data, this.transactionUISettings.validateCustomerLicenseID)
-      return
+      this.clientTable = data;
+      if (!data.clientTypeID) {
+        this.errorMessages.push('No Client Type Assigned')
+      }
+      return this.clientTypeService.getClientTypeCached(site, data.clientTypeID)
+    })).subscribe(data => {
+      if (!data) { return }
+      this.checkValidity(   this.clientTable, this.transactionUISettings.validateCustomerLicenseID)
     })
   }
 

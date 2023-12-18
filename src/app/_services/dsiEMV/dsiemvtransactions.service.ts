@@ -193,7 +193,7 @@ export class DSIEMVTransactionsService implements OnDestroy {
   }
 
   constructor
-      (private electronService: ElectronService,
+      ( private electronService: ElectronService,
         private matSnack        : MatSnackBar,
         private uiSettingService : UISettingsService,
       ) {

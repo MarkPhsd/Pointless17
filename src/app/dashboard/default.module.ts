@@ -386,8 +386,8 @@ import { BrandClassEditorComponent } from '../modules/admin/resale_manager/brand
 import { EbayPublishProductComponent } from '../modules/admin/inventory/ebay/ebay-publish-product/ebay-publish-product.component';
 import { ItemsMainComponent } from '../modules/transactions/itemTransactions/items-main/items-main.component';
 import { ItemsFilterComponent } from '../modules/transactions/itemTransactions/items-filter/items-filter.component';
-
-
+import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-settings/ebay-settings.component';
+import { EbayAuthRedirectComponent } from '../modules/admin/settings/software/ebay-settings/ebay-auth-redirect/ebay-auth-redirect.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -782,6 +782,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     StripeSettingsComponent,
     StripeCheckOutComponent,
     UITransactionsComponent,
+    EbaySettingsComponent,
+    EbayAuthRedirectComponent,
     TaxEditComponent,
     TaxListComponent,
     TaxRateListComponent,

@@ -606,7 +606,18 @@ export class OrderMethodsService implements OnDestroy {
 
     const searchResults = this.updateMenuSearchModel(item);
     if (add) {
-      if (item && (item.itemType.requireInStock == true))  {
+      if (item && !item.itemType) {
+        const site = this.siteService.getAssignedSite()
+        return this.menuService.getMenuItemByID(site, item.id).pipe(switchMap(data => {
+          item = data;
+          if (item && (item.itemType && item.itemType.requireInStock == true))  {
+            this.listItem(item.id);
+            return of(null)
+          }
+          return this.addItemToOrderObs(order, item, 1, 0, passAlongItem)
+        }))
+      }
+      if (item && (item.itemType && item.itemType.requireInStock == true))  {
         this.listItem(item.id);
         return of(null)
       }
@@ -2289,7 +2300,8 @@ export class OrderMethodsService implements OnDestroy {
     }
 
     if (client.patientRecOption) {
-
+      console.log('client.recoptions', client.patientRecOption)
+      // if (clientType === )
       if (!client.medPrescriptionExpiration || this.isDateExpired(client.medPrescriptionExpiration)) {
         resultMessage = resultMessage +  'Problem with MED expiration.'
         return {valid: false, resultMessage: resultMessage}

@@ -38,9 +38,14 @@
                   (outputupdatedeleteItem)="deleteItem($event)"
                   (outputupdateonCancel)  ="onCancel($event, false)"
               ></app-edit-buttons-standard>
-              <div class="margin-5"  *ngIf="userAuths && userAuths.allowBuy && !item?.ebayPublished && uiHome && uiHome.ebayEnabled">
-                <button mat-button (click)="publishItem(item)"><mat-icon>publish</mat-icon>Publish to Ebay</button>
-            </div>
+
+              <div class="margin-5"  *ngIf="userAuths &&
+                                            userAuths.allowBuy &&
+                                            !item?.ebayPublished &&
+                                            uiHome &&
+                                            uiHome.ebayEnabled">
+                <button mat-button color="primary" (click)="publishItem(item)"><mat-icon>publish</mat-icon>Publish to Ebay</button>
+              </div>
             </div>
 
           </div>

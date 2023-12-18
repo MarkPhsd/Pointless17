@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { SitesService } from '../reporting/sites.service';
 import { DiscountInfo, IPriceSchedule, IPriceSearchModel, PriceAdjustScheduleTypes, PS_SearchResultsPaged } from 'src/app/_interfaces/menu/price-schedule';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 
 @Injectable({
   providedIn: 'root'
@@ -91,7 +92,7 @@ export class PriceScheduleService {
 
   };
 
-  getScheduleMenuItems(site: ISite, id: number): Observable<DiscountInfo[]> {
+  getScheduleMenuItems(site: ISite, id: number): Observable<IMenuItem[]> {
 
     const controller = "/PriceSchedules/"
 
@@ -101,11 +102,11 @@ export class PriceScheduleService {
 
     const uri = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.httpClient.get<DiscountInfo[]>(uri)
+    return  this.httpClient.get<IMenuItem[]>(uri)
 
     const url = { url: uri, cacheMins: 60}
 
-    return  this.httpCache.get<DiscountInfo[]>(url)
+    return  this.httpCache.get<IMenuItem[]>(url)
 
   };
 

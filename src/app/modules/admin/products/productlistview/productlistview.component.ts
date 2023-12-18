@@ -453,7 +453,7 @@ constructor(  private _snackBar              : MatSnackBar,
 
     this.columnDefs =  [
 
-      {headerName: 'ID',  field: 'id',
+      {headerName: 'Edit',  field: 'id',
             cellRenderer: "btnCellRenderer",
             cellRendererParams: {
               onClick: this.editProductFromGrid.bind(this),

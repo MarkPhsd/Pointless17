@@ -281,7 +281,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
       this.outPutLoadMore.emit('true')
       return ;
     }
-   this.orderMethodsService.menuItemAction(this.order,this.menuItem, add)
+    this.orderMethodsService.menuItemAction(this.order,this.menuItem, add)
   }
 
   altMethod(action){

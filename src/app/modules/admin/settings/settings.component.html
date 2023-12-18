@@ -86,6 +86,21 @@
 
     </mat-expansion-panel>
 
+    <mat-expansion-panel [expanded]="accordionStep ==5">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Ebay Settings
+        </mat-panel-title>
+        <mat-panel-description>
+            Ebay testing and setup.
+          <mat-icon>permissions</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <app-ebay-settings></app-ebay-settings>
+
+    </mat-expansion-panel>
+
     <mat-expansion-panel [expanded]="accordionStep == 2"
                          (opened)="setStep(2)"
                          hideToggle>

@@ -46,6 +46,7 @@ export interface ITerminalSettings {
 
 export class SettingsService {
 
+
   private _TerminalSettings     = new BehaviorSubject<ITerminalSettings>(null);
   public  terminalSettings$      = this._TerminalSettings.asObservable();
   terminalSettings : ITerminalSettings;
@@ -68,6 +69,19 @@ export class SettingsService {
                private userAuthorizationService     : UserAuthorizationService,
                ) {
      this.apiUrl =  this.appInitService.apiBaseUrl()
+  }
+
+
+  clearEbayAuth(site, setting: ISetting) {
+    const controller = '/settings/'
+
+    const endPoint = 'clearEbayAuth'
+
+    const parameters = `?id=${setting.id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<ISetting[]>(url);
   }
 
   getDeviceSettings(deviceName: string): Observable<ISetting> {
@@ -483,6 +497,22 @@ export class SettingsService {
     const controller = "/settings/"
 
     const endPoint = 'putSetting';
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.put<ISetting>(url, setting);
+
+  }
+
+  putEbaySetting(site: ISite, id: number, setting : ISetting):  Observable<ISetting> {
+
+    if (!id) { return null}
+
+    const controller = "/settings/"
+
+    const endPoint = 'putEbaySetting';
 
     const parameters = `?id=${id}`
 

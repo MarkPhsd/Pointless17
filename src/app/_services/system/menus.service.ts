@@ -51,12 +51,13 @@ export class MenusService {
       method:           '',
       submenus: [
         { name: 'Orders',  minimized: false, method: '',  routerLink: '/pos-orders', routerLinkActive: 'pos-orders', icon: 'list', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
-        { name: 'Payments',  minimized: false, method: '',  routerLink: '/pos-payments', routerLinkActive: 'pos-payments', icon: 'credit_card', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: 'Balance Sheets',  minimized: true, method: '',  routerLink: '/balance-sheets', routerLinkActive: 'balance-sheets', icon: 'list', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: 'Balance Sheet',  minimized: false, method: '',  routerLink: '/balance-sheet-edit', routerLinkActive: 'balance-sheet-edit', icon: 'point_of_sale', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
-        { name: 'Daily Report',    minimized: false,  method: '' ,routerLink: '/operations', routerLinkActive: 'operations',   icon: 'article',   onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
-        { name: 'Tables' ,   minimized: true,  method: '' ,  routerLink: '/table-layout',     routerLinkActive: 'pos-orders',   icon: 'flatware',   onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
-        { name: 'Gift/Credit',  minimized: false, method: '',  routerLink: '/store-credit', routerLinkActive: 'store-credit', icon: 'list', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: 'Payments',  minimized: false, method: '',  routerLink: '/pos-payments', routerLinkActive: 'pos-payments', icon: 'credit_card', onClick: '', id: 2, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Item Sales',  minimized: false, method: '',  routerLink: '/item-sales', routerLinkActive: 'item-sales', icon: 'list', onClick: '', id: 0, sortOrder: 3, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: 'Balance Sheets',  minimized: true, method: '',  routerLink: '/balance-sheets', routerLinkActive: 'balance-sheets', icon: 'list', onClick: '', id: 0, sortOrder: 4, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Balance Sheet',  minimized: false, method: '',  routerLink: '/balance-sheet-edit', routerLinkActive: 'balance-sheet-edit', icon: 'point_of_sale', onClick: '', id: 0, sortOrder: 5, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: 'Daily Report',    minimized: false,  method: '' ,routerLink: '/operations', routerLinkActive: 'operations',   icon: 'article',   onClick: '', id: 0, sortOrder:6, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: 'Tables' ,   minimized: true,  method: '' ,  routerLink: '/table-layout',     routerLinkActive: 'pos-orders',   icon: 'flatware',   onClick: '', id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
+        { name: 'Gift/Credit',  minimized: false, method: '',  routerLink: '/store-credit', routerLinkActive: 'store-credit', icon: 'list', onClick: '', id: 0, sortOrder: 8, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
       ]
     },
     {

@@ -8,7 +8,7 @@
           <span *ngIf="accordionStep != index">
             <mat-icon>unfold_more</mat-icon>
           </span>
-          {{subGroup.name}}
+            {{subGroup.name}}
           <br>
         </h4>
 
@@ -29,7 +29,21 @@
               (click)="nextStep('true')">Next</button>
     </mat-action-row>
 
-    <div [innerHTML]="subGroup.instructions"></div>
+    <div class="flex-grid-column">
+      <div class="margin-left-20px" [innerHTML]="subGroup?.instructions"></div>
+      <div class="margin-left-20px" *ngIf="subGroup.minQuantity && subGroup.minQuantity> 0">
+        You must select at least this many: {{subGroup?.minQuantity}}
+      </div>
+      <div class="margin-left-20px" *ngIf="subGroup.maxQuantity && subGroup.maxQuantity> 0">
+        Maximum allowed:  {{subGroup?.maxQuantity}}
+     </div>
+    </div>
+
+    <!--
+    minQuantity:       number;
+    maxQuantity:       number;
+    moveOnQuantity:    number; -->
+
     <div class='grid'>
       <div>
         <mat-button-toggle-group

@@ -42,6 +42,8 @@ export interface IDeviceInfo {
 @Injectable({ providedIn: 'root' })
 
 export class AuthenticationService {
+    //used for ebay oAuth.
+    ebayHeader: any;
 
     apiUrl                      : any;
     public  externalAPI         : boolean;
@@ -148,6 +150,14 @@ export class AuthenticationService {
 
     public overRideUser(user) {
       this._userTemp.next(user);
+    }
+
+    decodeAuth(data) {
+      if (!data) { return }
+      console.log('data', data)
+      const encodedUriComponent = data.code
+      const decodedUriComponent = decodeURIComponent(encodedUriComponent);
+      return decodedUriComponent;
     }
 
     public get userValue(): IUser {

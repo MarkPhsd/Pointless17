@@ -2,12 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders,  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { Observable, } from 'rxjs';
-import { ISalesPayments, ISalesReportingOrdersSummary, IUser, ISite, IRouteDispatchingFilter }   from 'src/app/_interfaces';
-import { environment } from 'src/environments/environment';
-import { InterceptorSkipHeader } from '../../_http-interceptors/basic-auth.interceptor';
-import { formatDate } from '@angular/common';
+import { ISite, IRouteDispatchingFilter }   from 'src/app/_interfaces';
 import { IRouteDispatch, RouteDetail } from '../../_interfaces/route-dispatching-filter/route-dispatch';
-
 
 @Injectable({
   providedIn: 'root'

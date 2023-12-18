@@ -116,6 +116,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     private uiSettingsService: UISettingsService,
     private siteService         : SitesService,
     public  route               : ActivatedRoute,
+    private router              : Router,
     private menuService         : MenuService,
     private fbInventory         : FbInventoryService,
     public  fbProductsService    : FbProductsService,
@@ -581,15 +582,34 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   }
 
 
-  publishItem(item) {
-    if (item) {
-      const site = this.siteService.getAssignedSite()
-      item.publishItem = true;
-      this.siteService.notify('Item Published to Ebay', 'Close', 30000, 'green')
-      this.updateItem(this.item, false);
+  // publishItem(item) {
+  //   if (item) {
+  //     const site = this.siteService.getAssignedSite()
+  //     item.publishItem = true;
+  //     this.siteService.notify('Item Published to Ebay', 'Close', 30000, 'green')
+  //     this.updateItem(this.item, false);
+  //   }
+  // }
+
+  publishItem(item: IInventoryAssignment) {
+    // if (item) {
+    //   const site = this.siteService.getAssignedSite()
+    //   item.ebayPublished = true;
+    //   this.inputForm.patchValue({ebayPublished: true})
+    //   this.action$ = this.updateWithoutNotification().pipe(switchMap(data => {
+    //     this.siteService.notify('Item Published to Ebay', 'Close', 30000, 'green')
+    //     return of(data)
+    //   }))
+    // }
+    if (this.item.id) {
+      this.router.navigate(['ebay-publish-product', {id:this.item.id}])
+      try {
+        this.dialogRef.close()
+      } catch (error) {
+
+      }
     }
   }
-
 
 }
 

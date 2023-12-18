@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, FormGroupDirective,UntypedFormControl ,NgForm, UntypedFormBuilder} from '@angular/forms';
+import { UntypedFormGroup, FormGroupDirective,UntypedFormControl ,NgForm, UntypedFormBuilder, FormGroup} from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Observable, switchMap, of } from 'rxjs';
 import { clientType, IProductCategory, IServiceType, ISetting } from 'src/app/_interfaces';
@@ -8,6 +8,7 @@ import { AuthenticationService, IItemBasic, MenuService } from 'src/app/_service
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { ebayHeaders } from 'src/app/_services/resale/ebay-api.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
@@ -36,7 +37,7 @@ export class UITransactionsComponent implements OnInit {
 
   receiptList$    :  Observable<IItemBasic[]>;
   receiptList     : IItemBasic[];
-
+  isAdmin: boolean
   constructor(
       private uISettingsService: UISettingsService,
       private settingService   : SettingsService,
@@ -54,9 +55,9 @@ export class UITransactionsComponent implements OnInit {
 
   ngOnInit() {
 
+    this.isAdmin = this.authenticationService.isAdmin;
     const site           = this.sitesService.getAssignedSite();
 
-    console.log('userValue', this.authenticationService.userValue)
     if (this.authenticationService.userValue) {
       this.clientTypes$    = this.clientTypeService.getClientTypes(site);
     }
@@ -73,8 +74,10 @@ export class UITransactionsComponent implements OnInit {
     this.testForm.valueChanges.subscribe(data => {
        localStorage.setItem('testVariable' ,  this.testForm.controls['testVariable'].value)
     })
-    this.receiptList$ = this.getReceiptList()
+    this.receiptList$ = this.getReceiptList();
+
   }
+
 
   initUITransactionSettings() {
     this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
@@ -93,6 +96,7 @@ export class UITransactionsComponent implements OnInit {
       return of(data)
     }))
   }
+
 
 
   initFormData(data: TransactionUISettings) {
