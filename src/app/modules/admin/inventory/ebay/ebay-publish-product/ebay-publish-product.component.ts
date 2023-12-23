@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, catchError, of, switchMap } from 'rxjs';
@@ -15,6 +15,7 @@ import { AvailabilityTypeEnum, ConditionEnum, Dimensions, EbayAPIService, Fulfil
   styleUrls: ['./ebay-publish-product.component.scss']
 })
 export class EbayPublishProductComponent implements OnInit {
+  @ViewChild('menuButtonContainer') menuButtonContainer: TemplateRef<any>;
 
   action$: Observable<any>;
   uom = [{name: 'POUND', id:0}, {name: 'KILOGRAM', id:1}, {name: 'OUNCE', id:3}, {name: 'GRAM', id:4}];
@@ -220,7 +221,7 @@ export class EbayPublishProductComponent implements OnInit {
           return this.refresh(this.id)
         })).pipe(switchMap(data => {
           ////then get refresh
-          return of(null)
+          return this.refresh(this.id)
         }))
         return;
       }
@@ -235,7 +236,7 @@ export class EbayPublishProductComponent implements OnInit {
         this.action$ = this.ebayService.checkInventory(site, sku).pipe(switchMap(data => {
           this.inventoryCheck = data;
           // this.siteSerivce.notify(`Data : ${data}`, 'Close', 6000, 'green')
-          return of(data)
+          return this.refresh(this.id)
         }))
         return;
       }
@@ -257,7 +258,7 @@ export class EbayPublishProductComponent implements OnInit {
       if (sku) {
         this.action$ = this.ebayService.publishOffer(site, this.id).pipe(switchMap(data => {
           this.inventoryCheck = data;
-          return of(data)
+          return this.refresh(this.id)
         }))
         return;
       }

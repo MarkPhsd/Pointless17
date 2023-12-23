@@ -27,6 +27,11 @@
     <h2>Ebay Publisher</h2>
     <h4> {{product?.name}} </h4>
     <mat-divider></mat-divider>
+
+    <div class="flex-grid-row-end">
+      <ng-container [ngTemplateOutlet]="menuButtonContainer">  </ng-container>
+    </div>
+
   </mat-card-title>
 
   <mat-card-subtitle >
@@ -49,53 +54,7 @@
       </div>
     </div>
 
-    <div class="flex-grid-row-end">
-      <div>
-        <button class="margin-10" color="primary" mat-raised-button (click)="save()"><mat-icon>save</mat-icon>Save</button>
-      </div>
-      <div>
-        <button *ngIf="itemJSON" class="margin-10" mat-raised-button color="primary" (click)="publishInventory()">
-          <mat-icon>inventory</mat-icon>Publish Inventory</button>
-      </div>
-      <div>
-        <button class="margin-10"
-                *ngIf="itemJSON"
-                color="primary"
-                mat-raised-button
-                (click)="checkInventory()">
-          <mat-icon>check</mat-icon>Check Inventory</button>
-      </div>
 
-      <div *ngIf="inventoryItem && inventoryItem?.ebayPublished">
-        <button class="margin-10"
-                [disabled]="!inventoryItem || !inventoryItem?.ebayPublished"
-                color="primary"  mat-raised-button (click)="deleteInventory()">
-          <mat-icon>delete</mat-icon>Delete Inventory</button>
-      </div>
-
-      <div>
-        <button class="margin-10"
-                *ngIf="inventoryItem && !inventoryItem?.ebayPublished"
-                [disabled]="inventoryItem?.ebayPublished"
-                color="primary"
-                mat-raised-button (click)="publishOffer()">
-          <mat-icon>publish</mat-icon>Publish Offer</button>
-      </div>
-      <div>
-        <button class="margin-10"
-                *ngIf="itemJSON && itemJSON?.offerResponse?.offerId "
-                color="primary"  mat-raised-button (click)="publishOffer()">
-          <mat-icon>publish</mat-icon>Check Offer Status</button>
-      </div>
-
-      <div>
-        <button class="margin-10"
-                *ngIf="itemJSON && itemJSON?.offerResponse?.offerId "
-                color="primary"  mat-raised-button (click)="deleteOffer()">
-          <mat-icon>delete</mat-icon>Delete Offer</button>
-      </div>
-
-    </div>
   </mat-card-subtitle>
 
   <mat-card-content>
@@ -290,3 +249,75 @@
 </ng-template>
 
 <!-- {{ebayOutPut | json}} -->
+<ng-template #menuButtonContainer>
+  <ng-content></ng-content>
+  <button aria-label="user menu"
+          mat-raised-button
+          [matMenuTriggerFor]="menu"
+          #menuTrigger="matMenuTrigger"
+          (click)="menuTrigger.openMenu()" >
+    <mat-icon>menu</mat-icon>Menu
+  </button>
+
+  <mat-menu class="mat-menu-panel"
+            [overlapTrigger]="false"
+            #menu="matMenu">
+
+    <span (mouseleave)="menuTrigger.closeMenu()">
+      <div  class="ps-flex-group-column">
+
+        <div>
+          <button  class="menu-button margin-10" color="primary" mat-raised-button (click)="save()"><mat-icon>save</mat-icon>Save</button>
+        </div>
+
+        <div>
+          <button
+                  class="menu-button margin-10"
+                  mat-raised-button
+                  [disabled]="!itemJSON"
+                  color="primary"
+                  (click)="publishInventory()">
+            <mat-icon>inventory</mat-icon>Publish Inventory</button>
+        </div>
+
+        <div>
+          <button class="menu-button margin-10"
+                  [disabled]="!itemJSON"
+                  color="primary"
+                  mat-raised-button
+                  (click)="checkInventory()">
+            <mat-icon>check</mat-icon>Check Inventory</button>
+        </div>
+
+        <div>
+          <button class="menu-button margin-10"
+                  [disabled]="!inventoryItem?.ebayPublished"
+                  color="primary"  mat-raised-button (click)="deleteInventory()">
+            <mat-icon>delete</mat-icon>Delete Inventory</button>
+        </div>
+
+        <div>
+          <button class="menu-button margin-10"
+                  [disabled]="inventoryItem?.ebayPublished"
+                  color="primary"
+                  mat-raised-button (click)="publishOffer()">
+            <mat-icon>publish</mat-icon>Publish Offer</button>
+        </div>
+        <div>
+          <button class="menu-button margin-10"
+                  [disabled]="!itemJSON?.offerResponse?.offerId "
+                  color="primary"  mat-raised-button (click)="publishOffer()">
+            <mat-icon>publish</mat-icon>Check Offer Status</button>
+        </div>
+
+        <div>
+          <button class="menu-button margin-10"
+                  [disabled]="!itemJSON?.offerResponse?.offerId"
+                  color="primary"  mat-raised-button (click)="deleteOffer()">
+            <mat-icon>delete</mat-icon>Delete Offer</button>
+        </div>
+
+      </div>
+    </span>
+  </mat-menu>
+</ng-template>
