@@ -7,7 +7,7 @@ import { AWSBucketService, MenuService } from 'src/app/_services';
 import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { AvailabilityTypeEnum, ConditionEnum, Dimensions, EbayAPIService, FulfillmentTime, PackageTypeEnum, PackageWeightAndSize, PickupAtLocationAvailability, ProductData, TimeDurationUnitEnum, Weight, WeightUnitOfMeasureEnum, Product, ConditionDescriptor, EbayOfferRequest, EbayOfferresponse, EbayInventoryJson } from 'src/app/_services/resale/ebay-api.service';
+import { AvailabilityTypeEnum, ConditionEnum, Dimensions, EbayAPIService, FulfillmentTime, PackageTypeEnum, PackageWeightAndSize, PickupAtLocationAvailability, ProductData, TimeDurationUnitEnum, Weight, WeightUnitOfMeasureEnum, Product, ConditionDescriptor, EbayOfferRequest, EbayOfferresponse, EbayInventoryJson, ShipToLocationAvailability } from 'src/app/_services/resale/ebay-api.service';
 
 @Component({
   selector: 'ebay-publish-product',
@@ -17,10 +17,10 @@ import { AvailabilityTypeEnum, ConditionEnum, Dimensions, EbayAPIService, Fulfil
 export class EbayPublishProductComponent implements OnInit {
 
   action$: Observable<any>;
-  uom = [{name: 'POUND', id:0}, {name: 'KILOGRAM', id:1}, {name: 'Ounce', id:3}, {name: 'Gram', id:4}];
-  dimensions = [{name: 'Inch', id:0}]
+  uom = [{name: 'POUND', id:0}, {name: 'KILOGRAM', id:1}, {name: 'OUNCE', id:3}, {name: 'GRAM', id:4}];
+  dimensions = [{name: 'INCH', id:0}]
   conditionDescriptors = [] as ConditionDescriptor[];
-  conditions = [{name: 'New', id: 0}, {name: 'Like New', id: 1}]
+  conditions = [{name: 'NEW', id: 0}, {name: 'LIKE NEW', id: 1}]
 
   //[NEW,LIKE_NEW,NEW_OTHER,NEW_WITH_DEFECTS,MANUFACTURER_REFURBISHED,CERTIFIED_REFURBISHED,EXCELLENT_REFURBISHED,VERY_GOOD_REFURBISHED,GOOD_REFURBISHED,SELLER_REFURBISHED,USED_EXCELLENT,USED_VERY_GOOD,USED_GOOD,USED_ACCEPTABLE,FOR_PARTS_OR_NOT_WORKING]
   itemJSON : EbayInventoryJson;
@@ -28,17 +28,24 @@ export class EbayPublishProductComponent implements OnInit {
   inventoryItem: IInventoryAssignment;
   product: IProduct;
   inputForm: FormGroup;
+  productForm: FormGroup;
   brand : IClientTable;
 
   ebayOfferForm: FormGroup;
   metaTagForm: FormGroup;
   ebayProduct: Product;
+
+  dimensionsForm: FormGroup;
+  packageWeightAndSizeForm: FormGroup;
+
   ebayOutPut
   product$ : Observable<IProduct>;
   brand$: Observable<IClientTable>;
   inv$: IInventoryAssignment
   awsBucketURL: string;
   id: number;
+
+  inventoryCheck: string;
 
   metaTagsList : string[]
 
@@ -50,7 +57,6 @@ export class EbayPublishProductComponent implements OnInit {
     private inventoryService: InventoryAssignmentService,
     private awsBucket: AWSBucketService,
     private ebayService: EbayAPIService,
-    private router    : Router,
     public route      : ActivatedRoute,
     ) {
 
@@ -61,15 +67,21 @@ export class EbayPublishProductComponent implements OnInit {
       // ebay-publish-product
   }
 
- async ngOnInit() {
-    if (!this.id) {
-      this.siteSerivce.notify('No inventory item assigned', 'Close', 5000, 'red')
-      return
-    }
+  async ngOnInit() {
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
+    this.product$ =  this.refresh(this.id)
+  }
+
+   refresh(id: number) {
+    if (!id || id == 0) {
+      this.siteSerivce.notify('No inventory item assigned', 'Close', 5000, 'red')
+      return of(null)
+    }
+
     const site = this.siteSerivce.getAssignedSite()
-    const inv$ = this.inventoryService.getInventoryAssignment(site, this.id)
-    this.product$ = inv$.pipe(switchMap(data => {
+    const inv$ = this.inventoryService.getInventoryAssignment(site,id);
+
+    return inv$.pipe(switchMap(data => {
       this.inventoryItem = data;
       return this.menuService.getProduct(site, this.inventoryItem.productID)
     })) .pipe(
@@ -91,42 +103,56 @@ export class EbayPublishProductComponent implements OnInit {
       return of(null)
     }))
 
-    this.metaTagForm = this.formBuilder.group({
-      metaTags: []
-    })
-  }
 
+  }
   save() {
     let  productValue = this.inputForm.value  as ProductData;
-    productValue.conditionDescriptors = this.conditionDescriptors;
-    // we have to get the title
-    // the description
-    // the weight, width, depth, weight
-    // the images
-    // the descriptors.
+    let product =  this.productForm.value as Product;
+    if (this.ebayProduct.imageUrls) {
+      product.imageUrls = this.ebayProduct.imageUrls;
+    }
+    //then get the values of dimensions and weight
+    let weight = this.packageWeightAndSizeForm.value;
+    let dimensions = this.dimensionsForm.value;
 
-    // then convert to a variable as string
-    // save that string to the inventorItem.
-    // results.ebayPublishedItem
-    // results.ebayPublishResponse
-    //
-    // then publish the original json to ebay.
-    // then
-    // then save to the inventory item
-    // productValue
+    if (!productValue.packageWeightAndSize) {
+      productValue.packageWeightAndSize = {} as PackageWeightAndSize
+    }
+    if (!productValue.packageWeightAndSize) {
+      productValue.packageWeightAndSize.dimensions = {} as Dimensions
+    }
+    if (!productValue.packageWeightAndSize) {
+      productValue.packageWeightAndSize.weight = {} as Weight
+    }
+
+    productValue.packageWeightAndSize.dimensions = dimensions;
+    productValue.packageWeightAndSize.weight = weight;
+
     const site = this.siteSerivce.getAssignedSite();
     this.itemJSON = {} as EbayInventoryJson;
+    this.itemJSON.inventory = productValue // JSON.stringify(productValue)
+
+    productValue.product = product;
 
     this.itemJSON.inventory = productValue // JSON.stringify(productValue)
+
     this.ebayOutPut = productValue
-    this.itemJSON.offerRequest = this.ebayOfferRequest;
+    this.itemJSON.offerRequest =  this.ebayOfferRequest  // this.ebayOfferForm.value;
 
     this.inventoryItem.json= JSON.stringify(this.itemJSON)
 
     this.action$ =  this.inventoryService.putInventoryAssignment(site, this.inventoryItem).pipe(switchMap(data => {
-    this.siteSerivce.notify('Saved', 'close', 2000, 'green')
+      this.siteSerivce.notify('Saved', 'close', 2000, 'green')
       return of(data)
     }))
+
+    // this.ebayOfferForm = this.formBuilder.group({
+    //   sku: [this.inventoryItem.sku],
+    //   listingDescription: [this.product.name],
+    //   availableQuantity: [1],
+    //   quantityLimitPerBuyer: [1],
+    //   price: [this.product.retail],
+    // })
 
   }
 
@@ -136,16 +162,84 @@ export class EbayPublishProductComponent implements OnInit {
     ebayOffer.availableQuantity = ebayOfferForm.availableQuantity;
     ebayOffer.quantityLimitPerBuyer = ebayOfferForm.quantityLimitPerBuyer;
     ebayOffer.listingDescription = ebayOfferForm.listingDescription;
+    ebayOffer.sku = this.inventoryItem.sku;
     ebayOffer.pricingSummary = {} as any;
     ebayOffer.pricingSummary.price = {} as any;
-
-    ebayOffer.pricingSummary.price = ebayOfferForm.price;
+    ebayOffer.pricingSummary.price.value = ebayOfferForm.price;
+    ebayOffer.pricingSummary.price.currency = 'USD'// = ebayOfferForm.offerPrice;
     return ebayOffer
   }
 
   publishInventory() {
     if (this.itemJSON.inventory) {
-      // this.action$ = this.ebayService.
+      const sku = this.inventoryItem.sku
+      if (sku) {
+        const site = this.siteSerivce.getAssignedSite()
+        this.action$ = this.ebayService.createOrReplaceInventoryItem(site, sku , this.itemJSON.inventory).pipe(switchMap(data => {
+          this.siteSerivce.notify(`Data :  ${data.success} ${data?.errorMessage}`, 'Close', 600000, 'green')
+          if (data === 'Success') {
+          }
+          return this.refresh(this.id)
+        })).pipe(switchMap(data => {
+          return of(null)
+        }))
+        return;
+      }
+    }
+  }
+
+
+  deleteOffer() {
+    if (this.itemJSON.inventory) {
+      const sku = this.inventoryItem.sku
+      if (sku) {
+        const site = this.siteSerivce.getAssignedSite()
+        this.action$ = this.ebayService.deleteOfferByID(site, this.inventoryItem.id).pipe(switchMap(data => {
+          this.siteSerivce.notify(`Result : ${data.success} ${data?.errorMessage}`, 'Close', 600000, 'green')
+          if (data === 'Success') {
+          }
+          return this.refresh(this.id)
+        })).pipe(switchMap(data => {
+          ////then get refresh
+          return of(null)
+        }))
+        return;
+      }
+    }
+  }
+
+  deleteInventory() {
+    if (this.itemJSON.inventory) {
+      const sku = this.inventoryItem.sku
+      if (sku) {
+        const site = this.siteSerivce.getAssignedSite()
+        this.action$ = this.ebayService.deleteInventoryItem(site, this.inventoryItem.id).pipe(switchMap(data => {
+          this.siteSerivce.notify(`Result : ${data?.success} ${data?.errorMessage}`, 'Close', 600000, 'green')
+          if (data === 'Success') {
+          }
+          return this.refresh(this.id)
+        })).pipe(switchMap(data => {
+          ////then get refresh
+          return of(null)
+        }))
+        return;
+      }
+    }
+  }
+
+  checkInventory() {
+    if (this.itemJSON.inventory) {
+      const site = this.siteSerivce.getAssignedSite()
+      const sku = this.inventoryItem.sku
+      if (sku) {
+        this.action$ = this.ebayService.checkInventory(site, sku).pipe(switchMap(data => {
+          this.inventoryCheck = data;
+          // this.siteSerivce.notify(`Data : ${data}`, 'Close', 6000, 'green')
+          return of(data)
+        }))
+        return;
+      }
+      this.siteSerivce.notify("No Sku assigned", 'Close', 3000, 'red')
     }
   }
 
@@ -156,9 +250,20 @@ export class EbayPublishProductComponent implements OnInit {
   }
 
   publishOffer() {
+
     if (this.itemJSON.inventory) {
-      // this.action$ = this.ebayService.
+      const site = this.siteSerivce.getAssignedSite()
+      const sku = this.inventoryItem.sku
+      if (sku) {
+        this.action$ = this.ebayService.publishOffer(site, this.id).pipe(switchMap(data => {
+          this.inventoryCheck = data;
+          return of(data)
+        }))
+        return;
+      }
+      this.siteSerivce.notify("No Sku assigned", 'Close', 3000, 'red')
     }
+
   }
 
   getOffer() {
@@ -166,8 +271,6 @@ export class EbayPublishProductComponent implements OnInit {
       // this.action$ = this.ebayService.
     }
   }
-
-
 
   getClient(site, id: number) {
     return this.clientService.getClient(site, this.product.brandID).pipe(switchMap(data => {
@@ -185,28 +288,76 @@ export class EbayPublishProductComponent implements OnInit {
 
     let item = {} as ProductData;
 
-    if (this.inventoryItem.used) {  item.condition = ConditionEnum.LIKE_NEW  }
-    if (!this.inventoryItem.used) {  item.condition = ConditionEnum.NEW   }
-    item.conditionDescription = this.inventoryItem?.description;
+    if (this.inventoryItem.used) {   item.condition = "Like New"  }
+    if (!this.inventoryItem.used) {  item.condition = "New"   }
 
-    let dimensions    = {} as Dimensions;
-    dimensions.height = +this.product?.height;
-    dimensions.length = +this.product.depth;
-    dimensions.width  = +this.product.width;
-
-    let weight  = {}  as Weight
-    weight.unit = WeightUnitOfMeasureEnum.POUND;
-    weight.unit = +this.product.weight;
-
+    let dimensions = {} as Dimensions;
+    let weight     = {}  as Weight
     let pckWeightSize         = {} as PackageWeightAndSize;
-    pckWeightSize.dimensions  = dimensions;
-    pckWeightSize.packageType = PackageTypeEnum.BULKY_GOODS
-    pckWeightSize.weight      = weight
+    if (this.itemJSON) {
 
+      if (!this.itemJSON.inventory.product) {  this.itemJSON.inventory.product = {} as Product;  }
+      dimensions.height = +this.itemJSON?.inventory?.packageWeightAndSize?.dimensions?.height;
+      dimensions.length = +this.itemJSON?.inventory?.packageWeightAndSize?.dimensions?.length;
+      dimensions.width  = +this.itemJSON?.inventory?.packageWeightAndSize?.dimensions?.width;
+      weight.unit =  this.itemJSON?.inventory?.packageWeightAndSize?.weight.unit
+      weight.value = +this.itemJSON?.inventory?.packageWeightAndSize?.weight.value
+
+      if (!this.itemJSON.inventory.product.description) {
+        this.itemJSON.inventory.product.description = this.inventoryItem?.description;
+      }
+      if (!this.itemJSON.inventory.product.title) {
+        this.itemJSON.inventory.product.description = this.inventoryItem?.product?.name;
+      }
+
+      // console.log('initForm, itemjson', this.itemJSON)
+      if (this.itemJSON  && this.inputForm) {
+
+        this.productForm.patchValue(this.itemJSON?.inventory?.product)
+      }
+
+
+      item.condition = this.itemJSON.inventory.condition;
+
+      if (!item.packageWeightAndSize) {
+        item.packageWeightAndSize = pckWeightSize;
+      }
+
+      if (!this.itemJSON?.inventory?.packageWeightAndSize?.packageType) {
+        this.itemJSON.inventory.packageWeightAndSize.packageType = 'MAILING_BOX'
+      }
+
+      item.packageWeightAndSize.weight = weight;
+      item.packageWeightAndSize.dimensions = dimensions
+
+    } else {
+      dimensions.height = +this.product?.height;
+      dimensions.length = +this.product.depth;
+      dimensions.width  = +this.product.width;
+      weight.unit = 'POUND';
+      weight.unit =  this.product.weight;
+      item.condition = "New";
+      if (this.inventoryItem.used) {
+        item.condition = "Like New"
+      }
+
+      item.product.description = this.inventoryItem?.description;
+      pckWeightSize.dimensions  = dimensions;
+      pckWeightSize.packageType = 'BULKY_GOODS'
+      pckWeightSize.weight      = weight
+      item.packageWeightAndSize.packageType = pckWeightSize.packageType
+      item.packageWeightAndSize.weight = weight;
+      item.packageWeightAndSize.dimensions = dimensions
+    }
+
+    this.dimensionsForm.patchValue(item.packageWeightAndSize.dimensions)
+    this.packageWeightAndSizeForm.patchValue(item.packageWeightAndSize.weight)
     item.product = this.getProduct();
     this.setTagsAsDescriptors(this.inventoryItem, this.product)
-    this.inputForm.patchValue(item);
+    this.inputForm.patchValue(item)
   }
+
+
 
   setTagsAsDescriptors(inv: IInventoryAssignment, product: IProduct ) {
     let tags  = []
@@ -234,9 +385,6 @@ export class EbayPublishProductComponent implements OnInit {
 
     let product = {} as Product;
 
-    if (this.brand) {
-      product.brand = this.brand?.companyName;
-    }
     product.description = this.product.description;
     product.title = this.product.name;
 
@@ -254,8 +402,19 @@ export class EbayPublishProductComponent implements OnInit {
     const prod = this.product;
     const inv = this.inventoryItem;
 
+    this.productForm = this.formBuilder.group({
+      description: [],
+      title: [],
+      imageUrls: [],
+    })
+
+    this.metaTagForm = this.formBuilder.group({
+      metaTags: []
+    })
+
+
     this.ebayOfferForm = this.formBuilder.group({
-      sku: [],
+      sku: [this.inventoryItem.sku],
       listingDescription: [this.product.name],
       availableQuantity: [1],
       quantityLimitPerBuyer: [1],
@@ -268,56 +427,34 @@ export class EbayPublishProductComponent implements OnInit {
       }
     }
 
+    if (this.itemJSON?.offerRequest?.pricingSummary?.price?.value > 0) {
+      this.ebayOfferForm.patchValue({price: this.itemJSON?.offerRequest?.pricingSummary?.price?.value })
+    }
+
+    // this.itemJSON.inventory.packageWeightAndSize
+    // this.itemJSON.inventory.product
+    // this.itemJSON.inventory.packageWeightAndSize.dimensions;
+    // this.itemJSON.inventory.packageWeightAndSize.packageType;
+    // this.itemJSON.inventory.packageWeightAndSize.weight
+
+    this.dimensionsForm = this.formBuilder.group({
+        height: [prod?.height],
+        length: [prod?.depth],
+        width:  [prod?.width],
+        unit: [0],
+    })
+
+    this.packageWeightAndSizeForm = this.formBuilder.group( {
+      unit:  [0],
+      value: [prod?.weight]
+    })
 
     this.inputForm =  this.formBuilder.group({
       condition: [''],
-      conditionDescription: [''],
-      pickupAtLocationAvailability: this.formBuilder.array([]),
-      shipToLocationAvailability: this.formBuilder.group({
-        quantity: [0],
-        availabilityDistributions: this.formBuilder.array([])
-      }),
-      conditionDescriptors: this.conditionDescriptors,
-      packageWeightAndSize: this.formBuilder.group({
-        dimensions: this.formBuilder.group({
-          height: [prod.height],
-          length: [prod.depth],
-          width:  [prod.width],
-          unit: [0],
-        }),
-        packageType: [''],
-        weight: this.formBuilder.group({
-          unit:  [0],
-          value: [prod.weight]
-        })
-      }),
-      product: this.formBuilder.group({
-        aspects: [''],
-        brand: [''],
-        description: [inv.description],
-        ean: this.formBuilder.array([]),
-        epid: [''],
-        imageUrls: this.formBuilder.array([]),
-        isbn: this.formBuilder.array([]),
-        mpn: [''],
-        subtitle: [''],
-        title: [prod.name],
-        upc: this.formBuilder.array([]),
-        videoIds: this.formBuilder.array([])
-      })
-      // ... other form controls
     });
 
     // Populate the form (adjust based on actual data)
     this.populateForm();
-  }
-
-  get availabilityDistributions(): FormArray {
-    return this.inputForm.get('shipToLocationAvailability.availabilityDistributions') as FormArray;
-  }
-
-  get pickupAtLocationFormArray() {
-    return this.inputForm.get('pickupAtLocationAvailability') as FormArray;
   }
 
   private addPickupAtLocation(availability?: PickupAtLocationAvailability) {
@@ -331,7 +468,7 @@ export class EbayPublishProductComponent implements OnInit {
       quantity: [availability?.quantity || 0]
     });
 
-    this.pickupAtLocationFormArray.push(availabilityGroup);
+    // this.pickupAtLocationFormArray.push(availabilityGroup);
   }
 
   private addShipToLocationAvailabilityDistribution(distribution?: any) {

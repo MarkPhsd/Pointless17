@@ -141,9 +141,9 @@
       (uiTransactions && uiTransactions.triposEnabled)
     ) && item.tranType === 'authorizationResponse')  " >
 
-    <div>
+    <div *ngIf="order.creditBalanceRemaining !=  0 && totalAuthTriPOSPayments > 0">
       <button class="payment-buttons-sm" mat-raised-button color='primary' (click)="captureTriPOS(item)">
-          <mat-label>Complete <br> {{ totalAuthTriPOSPayments | currency }}</mat-label>
+          <mat-label>Complete Auth <br> {{ totalAuthTriPOSPayments | currency }}</mat-label>
       </button>
     </div>
 

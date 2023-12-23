@@ -48,16 +48,11 @@ mat-card {
 
 }
 
-.mat-card {
+.prompt-mat-card {
   height: 100%;
 }
 
-
 .grid-list {
-  // display: grid;
-  // grid-template-columns: repeat(4, 1fr);
-  // gap: 10px;
-
   display: flex;
   justify-content: space-between;
   flex-direction: row;

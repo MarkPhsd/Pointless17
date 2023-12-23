@@ -21,6 +21,8 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 })
 export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
+  action$: Observable<any>;
+
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
   @Input()  order          : IPOSOrder;
   @Input()  posOrderItems: PosOrderItem[]
@@ -237,6 +239,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   removeItemFromList(payload: any) {
 
+    console.log('payload remove', payload)
     if (this.order.completionDate && (this.userAuths && this.userAuths.disableVoidClosedItem)) {
       this.siteService.notify('Item can not be voided or refunded. You must void the order from Adjustment in Cart View', 'close', 10000, 'red')
       return
@@ -263,10 +266,13 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   swipeItemFromList(index) {
+
     if (this.disableActions) {return}
     const item =  this.order.posOrderItems[index]
     if (!item)  { return }
-    this.orderMethodService.removeItemFromList(index, item)
+
+    this.action$ = this.orderMethodService.removeItemFromListOBS(index, item);
+
   }
 
   startAnimation(state) {

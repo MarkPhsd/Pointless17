@@ -7,7 +7,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSPayment, PosPayment } from 'src/app/_interfaces';
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
@@ -142,8 +142,10 @@ export class TriPosTransactionsComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     let item = this.setTransactionInfo()
     item.paymentType = 'credit'
+
+
     this.processing$ =  this.methodsService.reversal(site, item ).pipe(switchMap(data => {
-      console.log('reverse authorisation response', data)
+
       this.errorMessage = ''
       if ((data && data.statusCode  && data?.statusCode  === 'Approved') || data.isApproved) {
 
@@ -186,7 +188,13 @@ export class TriPosTransactionsComponent implements OnInit {
       item.tipAmount = this._tipValue;
       item.ticketNumber = this.posPayment.id.toString()
       item.referenceNumber = this.posPayment.id.toString()
+      if (item.referenceNumber) {
+        item.ticketNumber    = this.posPayment.refNumber;
+        item.referenceNumber = this.posPayment.refNumber;
+      }
+
       console.log('item to process', item)
+
 
       const authorizationCompletion$ = this.methodsService.authorizationCompletion(site, item );
       this.processing$ =  authorizationCompletion$.pipe(
@@ -206,6 +214,8 @@ export class TriPosTransactionsComponent implements OnInit {
           return this.paymentMethodsService.processTriPOSResponse(data ,this.posPayment, this.order, +this.tipValue);
       }
       )).pipe(switchMap(data => {
+
+        console.log('data result of completion', data)
         if (!data) { return of(null)};
         this.initMessaging();
         this.dialogRef.close(true);
@@ -243,6 +253,18 @@ export class TriPosTransactionsComponent implements OnInit {
     return authorizationPOST;
   }
 
+  getRef(item:authorizationPOST, posPayment: IPOSPayment ) {
+    if (this.posPayment.transactionIDRef ) {
+      item.ticketNumber    = posPayment.transactionIDRef;
+      item.referenceNumber = posPayment.transactionIDRef;
+    }
+    if (!this.posPayment.transactionIDRef && posPayment.id !=0 ) {
+      item.ticketNumber    = posPayment.id.toString();
+      item.referenceNumber = posPayment.id.toString();
+    }
+    return item
+  }
+
   authorizeAmount() {
     if (!this.validateTransaction()) { return }
     if (this.posPayment && this.terminalSettings.triposLaneID) {
@@ -255,6 +277,8 @@ export class TriPosTransactionsComponent implements OnInit {
       console.log('Refernce Number', item.ticketNumber)
       console.log('Ticket Number', item.referenceNumber)
 
+      item = this.getRef(item, this.posPayment)
+
       this.processing$ =  this.methodsService.authorizeAmount( site, item ).pipe(switchMap(data => {
         console.log('Complete Auth', data.transactionId )
         console.log('Auth Data', data)
@@ -264,7 +288,12 @@ export class TriPosTransactionsComponent implements OnInit {
           this.displayErrors(data)
           return of (null)
         }
-        this.posPayment.transactionIDRef = item.ticketNumber;
+        if (!this.posPayment.transactionIDRef) {
+          this.posPayment.transactionIDRef = item.ticketNumber;
+        }
+
+
+
         return this.paymentMethodsService.processAuthTriPOSResponse(data ,this.posPayment, this.order, +this.tipValue)
       })).pipe(switchMap(data => {
         this.reset()

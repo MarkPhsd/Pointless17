@@ -197,6 +197,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     this._transactionUI = this.uiSettings.transactionUISettings$.subscribe( data => {
       if (data) {
         this.uiTransactionSetting = data;
+
       }
     });
   }
@@ -284,14 +285,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     if (devicename && this.isApp) {
       this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
         switchMap(data => {
-           console.log('pos device 1', data)
+          //  console.log('pos device 1', data)
           if (data.text) {
             try {
               const posDevice = JSON.parse(data.text) as ITerminalSettings;
               this.uiSettings.updatePOSDevice(posDevice)
 
               this.terminalSetting = data;
-              console.log('pos device', posDevice)
+              // console.log('pos device', posDevice)
               if (this.platformService.isAppElectron) {
                 if (posDevice && posDevice.electronZoom && posDevice.electronZoom != '0') {
                   this.uiSettings.electronZoom(posDevice.electronZoom)

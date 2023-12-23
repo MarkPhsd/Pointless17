@@ -24,8 +24,11 @@
     </mat-card>
   </div>
 
-  <div  *ngIf="orderMethodsService.lastItemAddedExists" class="image-display" image [style]="orderPanelHeight">
-    <mat-card style="margin:5px;overflow:hidden">
+  <!-- image -->
+  <div  *ngIf="mainPanel && orderMethodsService.lastItemAddedExists"
+        class="image-display"
+        [style]="orderPanelHeight">
+    <mat-card style="min-height:200px;margin:5px;overflow:hidden">
       <ng-content [select]="image"></ng-content>
     </mat-card>
 

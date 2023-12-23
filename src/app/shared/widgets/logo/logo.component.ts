@@ -72,11 +72,7 @@ export class LogoComponent implements OnInit, OnDestroy {
   }
 
   initLogoImage() {
-    console.log(this.bucket, this.logo, this.logoSize)
-    console.log('bucket', this.bucket)
-
     if (!this.logoSize ) { this.logoSize  = 'large'}
-
     if (this.bucket) {
         if (this.logoSize === 'large') {
           this.logo = this.uiHomePageSetting?.logoHomePage

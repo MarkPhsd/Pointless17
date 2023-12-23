@@ -345,6 +345,7 @@ export class POSOrderItemService {
 
     if (newItem.productPrice) { newItem.price = newItem.productPrice}
 
+    console.log('new Item', newItem )
     const controller = "/POSOrderItems/"
 
     const endPoint  = "PostUniqueBarcodeItem"

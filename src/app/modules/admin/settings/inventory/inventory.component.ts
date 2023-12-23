@@ -6,6 +6,8 @@ import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods
 import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-reasons.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { SettingsService } from 'src/app/_services/system/settings.service';
 
 @Component({
   selector: 'app-inventory-settings',
@@ -15,6 +17,7 @@ import { NavigationService } from 'src/app/_services/system/navigation.service';
 
 export class InventoryComponent  {
 
+  action$: Observable<any>;
   @Input() role: string;
   showInitializer: boolean;
   itemTypes : IItemType[];
@@ -26,7 +29,9 @@ export class InventoryComponent  {
     private navigationService      : NavigationService,
     private itemTypeMethodsService : ItemTypeMethodsService,
     private adustmentReasonsService: AdjustmentReasonsService,
-    public productButtonsService   : ProductEditButtonService,
+    public  productButtonsService   : ProductEditButtonService,
+    private siteService: SitesService,
+    private settingsService: SettingsService,
   ) { }
 
   openAdjustmentReasonsDialog() {
@@ -53,6 +58,11 @@ export class InventoryComponent  {
         }
       })
     }
+  }
+
+  cleanData(){
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.settingsService.cleanData(site)
   }
 
   routerNavigation(url: string) {

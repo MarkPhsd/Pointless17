@@ -27,7 +27,7 @@ export enum TimeDurationUnitEnum {
 
 
 export enum ConditionEnum {
-  NEW,
+  New,
   LIKE_NEW,
   // ... other conditions
 }
@@ -85,45 +85,32 @@ export interface ConditionDescriptor {
 export interface Dimensions {
   height: number;
   length: number;
-  unit: LengthUnitOfMeasureEnum;
+  unit:   string;
   width: number;
 }
 
 export interface Weight {
-  unit: WeightUnitOfMeasureEnum;
+  unit: string;
   value: number;
 }
 
 export interface PackageWeightAndSize {
   dimensions: Dimensions;
-  packageType: PackageTypeEnum;
+  packageType: string;
   weight: Weight;
 }
 
 export interface Product {
-  aspects: string;
-  brand: string;
   description: string;
-  ean: string[];
-  epid: string;
   imageUrls: string[];
-  isbn: string[];
-  mpn: string;
-  subtitle: string;
   title: string;
-  upc: string[];
-  videoIds: string[];
 }
-
 
 export interface ProductData {
   availability: {
-    pickupAtLocationAvailability: PickupAtLocationAvailability[];
     shipToLocationAvailability: ShipToLocationAvailability;
   };
-  condition: ConditionEnum;
-  conditionDescription: string;
-  conditionDescriptors: ConditionDescriptor[];
+  condition: string;
   packageWeightAndSize: PackageWeightAndSize;
   product: Product;
 }
@@ -199,22 +186,24 @@ export interface ebayoAuthorization {
 })
 export class EbayAPIService {
 
-    navEbayAuth(link) {
-      // throw new Error('Method not implemented.');
-      this.router.navigateByUrl(link)
-    }
-    get scope() {return 'https://api.ebay.com/oauth/api_scope https://api.ebay.com/oauth/api_scope/buy.order.readonly https://api.ebay.com/oauth/api_scope/buy.guest.order https://api.ebay.com/oauth/api_scope/sell.marketing.readonly https://api.ebay.com/oauth/api_scope/sell.marketing https://api.ebay.com/oauth/api_scope/sell.inventory.readonly https://api.ebay.com/oauth/api_scope/sell.inventory https://api.ebay.com/oauth/api_scope/sell.account.readonly https://api.ebay.com/oauth/api_scope/sell.account https://api.ebay.com/oauth/api_scope/sell.fulfillment.readonly https://api.ebay.com/oauth/api_scope/sell.fulfillment https://api.ebay.com/oauth/api_scope/sell.analytics.readonly https://api.ebay.com/oauth/api_scope/sell.marketplace.insights.readonly https://api.ebay.com/oauth/api_scope/commerce.catalog.readonly https://api.ebay.com/oauth/api_scope/buy.shopping.cart https://api.ebay.com/oauth/api_scope/buy.offer.auction https://api.ebay.com/oauth/api_scope/commerce.identity.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.email.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.phone.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.address.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.name.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.status.readonly https://api.ebay.com/oauth/api_scope/sell.finances https://api.ebay.com/oauth/api_scope/sell.item.draft https://api.ebay.com/oauth/api_scope/sell.payment.dispute https://api.ebay.com/oauth/api_scope/sell.item https://api.ebay.com/oauth/api_scope/sell.reputation https://api.ebay.com/oauth/api_scope/sell.reputation.readonly https://api.ebay.com/oauth/api_scope/commerce.notification.subscription https://api.ebay.com/oauth/api_scope/commerce.notification.subscription.readonly'}
+
+  navEbayAuth(link) {
+    // throw new Error('Method not implemented.');
+    this.router.navigateByUrl(link)
+  }
+
+  get scope() {return 'https://api.ebay.com/oauth/api_scope https://api.ebay.com/oauth/api_scope/buy.order.readonly https://api.ebay.com/oauth/api_scope/buy.guest.order https://api.ebay.com/oauth/api_scope/sell.marketing.readonly https://api.ebay.com/oauth/api_scope/sell.marketing https://api.ebay.com/oauth/api_scope/sell.inventory.readonly https://api.ebay.com/oauth/api_scope/sell.inventory https://api.ebay.com/oauth/api_scope/sell.account.readonly https://api.ebay.com/oauth/api_scope/sell.account https://api.ebay.com/oauth/api_scope/sell.fulfillment.readonly https://api.ebay.com/oauth/api_scope/sell.fulfillment https://api.ebay.com/oauth/api_scope/sell.analytics.readonly https://api.ebay.com/oauth/api_scope/sell.marketplace.insights.readonly https://api.ebay.com/oauth/api_scope/commerce.catalog.readonly https://api.ebay.com/oauth/api_scope/buy.shopping.cart https://api.ebay.com/oauth/api_scope/buy.offer.auction https://api.ebay.com/oauth/api_scope/commerce.identity.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.email.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.phone.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.address.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.name.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.status.readonly https://api.ebay.com/oauth/api_scope/sell.finances https://api.ebay.com/oauth/api_scope/sell.item.draft https://api.ebay.com/oauth/api_scope/sell.payment.dispute https://api.ebay.com/oauth/api_scope/sell.item https://api.ebay.com/oauth/api_scope/sell.reputation https://api.ebay.com/oauth/api_scope/sell.reputation.readonly https://api.ebay.com/oauth/api_scope/commerce.notification.subscription https://api.ebay.com/oauth/api_scope/commerce.notification.subscription.readonly'}
 
 
-    private get apiBase() {return 'https://api.ebay.com/ws/api.dll'}
-    private get apiSandBox()  {return 'https://api.sandbox.ebay.com/ws/api.dll'}
+  private get apiBase() {return 'https://api.ebay.com/ws/api.dll'}
+  private get apiSandBox()  {return 'https://api.sandbox.ebay.com/ws/api.dll'}
 
-    get oAuthSandbox()	{ return 'https://api.sandbox.ebay.com/identity/v1/oauth2/token'}
-    get oAuthProduction()  {return 'https://api.ebay.com/identity/v1/oauth2/token'}
+  get oAuthSandbox()	{ return 'https://api.sandbox.ebay.com/identity/v1/oauth2/token'}
+  get oAuthProduction()  {return 'https://api.ebay.com/identity/v1/oauth2/token'}
 
-    constructor(private http: HttpClient,
-                private router: Router,
-                private authenticationService: AuthenticationService) { }
+  constructor(private http: HttpClient,
+              private router: Router,
+              private authenticationService: AuthenticationService) { }
 
 
 
@@ -230,34 +219,99 @@ export class EbayAPIService {
       // return this.http.put<any>( url, file )
     }
 
-    // public getOAuthToken(item: ebayoAuthorization) {
+//    const parameters = `?departmentID=${departmentID}&attribute=${attribute}&gender=${gender}`
+    checkInventory(site: ISite, sku: string): Observable<any> {
+      const controller = "/Ebay/"
 
-    //   let url = this.oAuthProduction
-    //   if (item.sandBox) {     url = this.oAuthSandbox  }
-    //     let request = {} as HttpRequest<any>
+      const endPoint = `checkInventory`
 
-    //     const authCodeValue = '<authorization-code-value>'
-    //     this.authenticationService.ebayHeader = item;
-    //     const headers = new HttpHeaders().set(InterceptorSkipHeader, '');
-    //     const body = {
-    //       grant_type  : 'authorization_code',
-    //       // code        : authCodeValue,
-    //       scope: this.scope,
-    //       response_type: 'code',
-    //       redirect_uri: item.rUName
-    //     }
+      const parameters = `?sku=${sku}`
 
-    //     return this.http.post<any>( url, body, {headers : headers} )
+      const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    // }
+      console.log(url)
+      return this.http.get<any>(url)
 
-    public getRefreshToken(site: ISite, token: string) {
+    }
+
+    deleteOfferByID(site: ISite, id: number): Observable<any> {
+      const controller = "/Ebay/"
+
+      const endPoint = `deleteOfferByID`
+
+      const parameters = `?id=${id}`
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      console.log(url)
+      return this.http.get<any>(url)
+
+    }
+
+    deleteInventoryItem(site: ISite, id: number): Observable<any> {
+      const controller = "/Ebay/"
+
+      const endPoint = `deleteInventoryItem`
+
+      const parameters = `?id=${id}`
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return this.http.get<any>(url)
+
+    }
+
+    createInventoryLocation(site: ISite): Observable<any> {
+      const controller = "/Ebay/"
+
+      const endPoint = `createInventoryLocation`
+
+      const parameters = ``
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      console.log(url)
+      return this.http.get<any>(url)
+
+    }
+
+
+    public testPublish(site: ISite) {
+
+      const controller = "/Ebay/"
+
+      const endPoint = `testPostItem`
+
+      const parameters = ``
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return this.http.get<any>(url)
+
+    }
+
+    public getRefreshToken(site: ISite) {
 
       const controller = "/Ebay/"
 
       const endPoint = `getRefreshToken`
 
-      const parameters = `?token=${token}`
+      const parameters = ``
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return this.http.get<any>(url)
+
+    }
+
+
+    public applyAuthResponse(site: ISite, token: string) {
+
+      const controller = "/Ebay/"
+
+      const endPoint = `applyAuthResponse`
+
+      const parameters = ``
 
       let item = {} as IItemBasic;
       item.name = token;
@@ -268,25 +322,19 @@ export class EbayAPIService {
 
     }
 
-    public getOAuthToken(site: ISite) {
-
-      const controller = "/Ebay/"
-
-      const endPoint = `getOAuthToken`
-
-      const parameters = ``
-
-      const url = `${site.url}${controller}${endPoint}${parameters}`
-
-      return this.http.get<any>(url)
-
-    }
-
     //publishs to inventory. then does a check to see that the item exists
     //https://api.sandbox.ebay.com/sell/inventory/v1/inventory_item/{SKU}
     //put
-    public createOrReplaceInventoryItem(item: ProductData): Observable<any> {
+    public createOrReplaceInventoryItem(site: ISite, sku, item: ProductData): Observable<any> {
+      const controller = "/Ebay/"
 
+      const endPoint = `createOrReplaceInventoryItem`
+
+      const parameters = `?sku=${sku}`
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return this.http.post<any>(url, item)
       return of(null)
     }
 
@@ -313,8 +361,16 @@ export class EbayAPIService {
 
     // https://api.sandbox.ebay.com/sell/inventory/v1/offer/{offerId}/publish
     //post
-    public publishOffer(offerId: string) {
+    public publishOffer(site:ISite, id: number) {
+      const controller = "/Ebay/"
 
+      const endPoint = `publishOffer`
+
+      const parameters = `?id=${id}`
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return this.http.get<any>(url)
     }
 
 }

@@ -45,6 +45,9 @@ export interface ITerminalSettings {
 })
 
 export class SettingsService {
+  deleteDuplicates(): any {
+    throw new Error('Method not implemented.');
+  }
 
 
   private _TerminalSettings     = new BehaviorSubject<ITerminalSettings>(null);
@@ -77,7 +80,7 @@ export class SettingsService {
 
     const endPoint = 'clearEbayAuth'
 
-    const parameters = `?id=${setting.id}`
+    const parameters = ``
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
@@ -476,19 +479,19 @@ export class SettingsService {
   }
 
 
-  getSettingBySetting(site: ISite, setting: ISetting):  Observable<ISetting> {
+  // getSettingBySetting(site: ISite, setting: ISetting):  Observable<ISetting> {
 
-    const controller = "/settings/"
+  //   const controller = "/settings/"
 
-    const endPoint = 'getSettingBySetting';
+  //   const endPoint = 'getSettingBySetting';
 
-    const parameters = ``
+  //   const parameters = ``
 
-    const url = `${site.url}${controller}${endPoint}${parameters}`
+  //   const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.post<ISetting>(url, setting);
+  //   return this.http.post<ISetting>(url, setting);
 
-  }
+  // }
 
   putSetting(site: ISite, id: number, setting : ISetting):  Observable<ISetting> {
 
@@ -564,7 +567,7 @@ export class SettingsService {
 
   //default values
   async setText(site: ISite, setting: ISetting): Promise<ISetting>  {
-    let setting$ = this.getSettingBySetting(site, setting)
+    let setting$ = this.getSettingByName(site, setting.name)
     let _setting = await setting$.pipe().toPromise()
     if (!_setting || _setting.id === 0) {
       _setting     = await this.saveSetting(site, _setting)
@@ -574,6 +577,7 @@ export class SettingsService {
       return _setting
     }
   }
+
 
   //this returns the setting and adds if if it wasn't int he datbase.
   // including a default value will assign if if the setting hasn't beeen created.
@@ -761,6 +765,20 @@ export class SettingsService {
     }
 
   }
+
+  cleanData(site: ISite) {
+
+    const controller = "/settings/"
+
+    const endPoint = 'DeleteDuplicates';
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<ISetting>(url);
+  }
+
 
   getSettingByNameCached(site: ISite, name: String):  Observable<ISetting> {
 

@@ -57,6 +57,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
           this.order = order;
         }
         if (data) {
+
           this.itemWithAction = data;
           this.posItems = data.items;
           this.itemService.updateItemWithAction(data);
@@ -145,6 +146,13 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
       this.itemWithAction.returnToInventory  = this.inventoryReturnDiscard
       this.itemWithAction.voidReason = setting.name
       this.itemWithAction.voidReasonID = setting.id
+
+      if (this.order) {
+        if (!this.itemWithAction.order) { this.itemWithAction.order  = {} as IPOSOrder}
+        this.itemWithAction.order.history = this.order.history;
+        this.itemWithAction.order.id = this.order.id;
+      }
+
       let response$
 
       if (this.itemWithAction) {
@@ -164,6 +172,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
         }
         return response$.pipe(
           switchMap(data => {
+            console.log('void order data', data)
             if (data === 'success') {
               this.notifyEvent('Voided', 'Success')
               this.updateOrderSubscription()
@@ -285,7 +294,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
 
   notifyEvent(message: string, title: string) {
     this.matSnackBar.open(message, title,{
-      duration: 2000,
+      duration: 6000,
       verticalPosition: 'top'
     })
   }

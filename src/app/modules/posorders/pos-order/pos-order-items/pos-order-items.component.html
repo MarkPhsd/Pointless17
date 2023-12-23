@@ -1,3 +1,5 @@
+<div *ngIf="(action$ | async) as action"></div>
+
 <div  #scrollMe
       [style.width]  = "deviceWidthPercentage"
       [style.height] = "panelHeight"
@@ -38,12 +40,12 @@
                       [userAuths]   ='userAuths'
                       [wideBar]     ="wideBar"
                       [prepScreen]  ="prepScreen"
-                      [enableExitLabel]="enableExitLabel"
-                      [disableActions]="disableActions"
-                      [displayHistoryInfo] = "displayHistoryInfo"
-                      [enableItemReOrder] = "enableItemReOrder"
-                      [purchaseOrderEnabled]="purchaseOrderEnabled"
-                      (outputDelete)="removeItemFromList($event)"
+                      [enableExitLabel]     = "enableExitLabel"
+                      [disableActions]      = "disableActions"
+                      [displayHistoryInfo]  = "displayHistoryInfo"
+                      [enableItemReOrder]   = "enableItemReOrder"
+                      [purchaseOrderEnabled]= "purchaseOrderEnabled"
+                      (outputDelete)        = "removeItemFromList($event)"
           ></pos-order-item>
         </ion-item>
 

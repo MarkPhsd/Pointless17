@@ -25,7 +25,6 @@
     </div>
 
     <div *ngIf ="imageURL" class="image" (click)="addItem()">
-      <!-- "getImageUrl(item?.image)" -->
       <img  [src]     ="imageURL"
             onerror   = "this.src='assets/images/placeholderimage.png'"
             class="image"/>

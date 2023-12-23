@@ -19,7 +19,7 @@
               {{ index +1 }}:
             </span>
 
-            {{ orderItem?.productName }}
+            {{ orderItem?.productName | truncateText: 30  }}
 
             <span style="margin-right:7px" *ngIf="orderItem?.splitGroupID  && orderItem?.splitGroupID != 0">
               (  {{ orderItem?.splitGroupID }} )
@@ -28,7 +28,7 @@
               {{ orderItem?.prodSecondLanguage  | truncateText: 30  }}
             </div>
 
-            <span class="product-name" *ngIf="orderItem?.itemType">
+            <span [class]="productNameClass" *ngIf="orderItem?.itemType">
               ( {{orderItem?.itemType?.name}} )
             </span>
 
@@ -377,7 +377,7 @@
 <ng-template #productImage let-item>
   <img  [src]     ="imagePath"
         onerror   = "this.src='assets/images/placeholderimage.png'"
-        class     ="product-image"/>
+        class     ="item-img"/>
 </ng-template>
 
 <ng-template #labelButtonView>

@@ -8,7 +8,8 @@
     overflow-x: hidden;
     // overflow-y: hidden;
     height: calc(100vh - 75px);
-    overflow-y: auto;
+    overflow-y: hidden;
+
     @include for-phone-only  {
       overflow-y: auto;
     }
@@ -241,7 +242,7 @@
   display: grid;
   grid-template-columns: auto;
   gap: 5px;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .order-layout {

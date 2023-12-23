@@ -402,11 +402,11 @@ export class LoginComponent implements OnInit, OnDestroy {
           let user = result?.user ;
           let sheet = result?.sheet as IBalanceSheet;
 
-          if (user) {  console.log('user success')  }
+          // if (user) {  console.log('user success')  }
           //if there is a sheet we login here with the user to prompt the sheet if needed.
           if (sheet) {  if (this.loginApp(result)) {  return of('success') } }
 
-          if (user) {  console.log('process 2')  }
+          // if (user) {  console.log('process 2')  }
           if (result && result.username != undefined) { user = result }
 
           if (user) {
@@ -422,7 +422,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
               if (!this.loginAction) {  this.userSwitchingService.assignCurrentOrder(user) }
 
-              if (user) {  console.log('process 3')  }
+              // if (user) {  console.log('process 3')  }
 
               if (this.loginAction) {
                 if (this.loginAction.name === 'setActiveOrder') {
@@ -431,15 +431,15 @@ export class LoginComponent implements OnInit, OnDestroy {
                 }
               }
 
-              if (user) {  console.log('process 4')  }
+              // if (user) {  console.log('process 4')  }
 
               if (!pass) { this.userSwitchingService.processLogin(user, '')  }
 
-              if (user) {  console.log('process 6')  }
+              // if (user) {  console.log('process 6')  }/
 
               this.closeDialog();
 
-              if (user) {  console.log('process 7')  }
+              // if (user) {  console.log('process 7')  }
               return of('success')
             }
           }

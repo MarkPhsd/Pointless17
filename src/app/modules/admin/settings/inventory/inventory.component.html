@@ -1,9 +1,10 @@
+<div *ngIf="(action$ | async) as action"></div>
 
 <div class="features" *ngIf="role == 'admin'">
 
   <div class="grid-buttons">
 
-    <div >
+    <div>
       <button mat-raised-button
               color  = "primary"
               class ="grid-image-button-group "
@@ -142,6 +143,15 @@
             <mat-spinner [diameter]="50"></mat-spinner>
           </div>
         </button>
+
+        <button mat-raised-button
+            color  = "primary"
+            class ="grid-image-button-group "
+            (click)="cleanData()">
+            <mat-icon>clean</mat-icon>
+            Clean Data
+        </button>
+
       </div>
   </div>
 

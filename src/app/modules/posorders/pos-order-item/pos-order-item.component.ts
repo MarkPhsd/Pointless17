@@ -39,6 +39,7 @@ export interface payload{
 })
 export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,OnDestroy {
 
+  productNameClass='product-name'
   inputForm: UntypedFormGroup;
   itemEdit: boolean;
   interface = {}
@@ -193,10 +194,10 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     return ''
     if (!item) { return ''}
     if (item.baseUnitType) {
-      console.log('item.baseUnitType', item?.baseUnitType)
+      // console.log('item.baseUnitType', item?.baseUnitType)
       return item?.unitName }
     if (item.unitName) {
-      console.log('item.unitName', item?.unitName)
+      // console.log('item.unitName', item?.unitName)
       return item?.unitName}
     return ''
     // if (item) {
@@ -296,18 +297,18 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     const site = this.siteService.getAssignedSite();
     this.bucketName   =  await this.awsBucket.awsBucket();
     this.awsBucketURL =  await this.awsBucket.awsBucketURL();
-    console.log('bucketName', this.bucketName)
+    // console.log('bucketName', this.bucketName)
     if (this.menuItem) {
       this.itemName   =  this.getItemName(this.menuItem?.name)
       this.imagePath  =  this.getImageUrl(this.menuItem?.urlImageMain)
-      console.log('image path ', this.menuItem.urlImageMain )
+      // console.log('image path ', this.menuItem.urlImageMain )
     }
 
     if (!this.menuItem) {
       this.basicItem$ = this.menuService.getItemBasicImage(site, this.orderItem?.productID).pipe(
         switchMap( data => {
           this.imagePath  =  this.getImageUrl(data?.image)
-             console.log('basicimage',this.imagePath, data?.image )
+            //  console.log('basicimage',this.imagePath, data?.image )
           return of(data)
         })
       )
@@ -633,6 +634,13 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
       this.morebutton = 'more-button-main'
     }
 
+    if (this.mainPanel) {
+      // productNameClass
+      this.productNameClass = 'product-name  product-name-narrow'
+      return;
+    } else {
+      this.productnameClass = 'product-name product-name-narrow'
+    }
     if (this.sidePanelWidth == undefined) { return }
       if (this.sidePanelWidth < 200 || this.mainPanel ) {
         this.isNotInSidePanel = false
@@ -745,7 +753,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     this.updateFlexGroup();
     // this.customcard ='custom-card';
 
-    if (this.orderItem && this.orderItem.idRef && this.orderItem.id != this.orderItem.idRef) {
+    if (this.orderItem && this.orderItem.idRef && this.orderItem.id != this.orderItem.idRef && !this.order.history) {
       this.customcard       = 'custom-card-modifier';
 
       if (this.prepScreen) {
@@ -836,13 +844,10 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   }
 
   swipeOutItem(){
-    // console.log('swipe out')
-
     if (this.order.completionDate && (this.userAuths && this.userAuths.disableVoidClosedItem)) {
       this.siteService.notify('Item can not be voided or refunded. You must void the order from Adjustment in Cart View', 'close', 10000, 'red')
       return
     }
-
     if (this.disableActions) {return}
     this.cancelItem(this.index,  this.orderItem)
   }

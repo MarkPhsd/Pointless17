@@ -13,12 +13,14 @@
   margin-left: 0px;
   top: -10px;
 }
-mat-form-field {
+
+.mat-form-date-field {
   width: 200px;
+  font-size: .9em;
 }
 
 .dates-field {
-  width: 300px;
+  // width: 300px;
   max-width: 300px;
   margin-left: 0px;
 }

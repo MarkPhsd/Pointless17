@@ -906,11 +906,13 @@ export class OrderMethodsService implements OnDestroy {
 
     const deviceName = localStorage.getItem('devicename');
 
+
     const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging,
                       portionValue: portionValue, deviceName: deviceName, passAlongItem: passAlongItem,
                       clientID: order.clientID , priceColumn : order.priceColumn, assignedPOSItems: assignedPOSItems,
                       unitTypeID: unitTypeID, productPrice: productPrice, wholesale: cost } as NewItem;
-
+    // console.log(barcode)
+    // console.log('new item', newItem)
     return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
   }
 
@@ -1097,7 +1099,7 @@ export class OrderMethodsService implements OnDestroy {
         data => {
         this.processItemPostResultsPipe(data)
         return of(data);
-        }
+      }
     ))
   }
 
@@ -2116,6 +2118,38 @@ export class OrderMethodsService implements OnDestroy {
       }))
     }
     this.updateOrderSubscription(null)
+    return of(null)
+  }
+
+  removeItemFromListOBS(index: number, orderItem: PosOrderItem) {
+    console.log('removeItemFromListOBS')
+    if (orderItem) {
+      const site = this.siteService.getAssignedSite()
+      if (orderItem.printed || this.order.completionDate ) {
+        this.getVoidAuth(orderItem)
+        return
+      }
+
+      if (orderItem.id) {
+        const orderID = orderItem.orderID
+        return  this.posOrderItemService.deletePOSOrderItem(site, orderItem.id).pipe(
+          switchMap( data => {
+          if (data) {
+            this.order.posOrderItems.splice(index, 1)
+            this.updateOrderSubscription(data.order)
+            this.updateLastItemAdded(null)
+            return of(data)
+          }
+        }), catchError(data => {
+              // this.siteService.notify('Error ' + data.toString(), 'Close', 5000, 'red')
+              return of(data)
+            }
+          )
+        )
+      }
+
+      // this.updateLastItemAdded(null)
+    }
     return of(null)
   }
 

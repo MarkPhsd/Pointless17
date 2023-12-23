@@ -526,7 +526,7 @@ export class BuySellMainComponent implements OnInit {
     search.attribute = this.attribute
     this.inventoryItemsDeptAttribute$ = this.inventoryService.getAvalibleInventorySearch(site, search).pipe(switchMap(data => {
       this.totalAttributeDepartmentInventory = this.getInventoryCount(data);
-      console.log('inventoryItemsDeptAttribute', data)
+      // console.log('inventoryItemsDeptAttribute', data)
       this.inventoryInfo = data;
       return of(data)
     }))

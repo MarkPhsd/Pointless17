@@ -2,8 +2,9 @@
 <div *ngIf="(orderAction$ | async)"></div>
 <div *ngIf="(process$ | async) as process"></div>
 
+
 <div *ngIf="(paymentMethods$ | async) as methods">
-  <div [class]="orderlayout" *ngIf="order  && uiTransactions">
+  <div [class]="orderLayout" *ngIf="order  && uiTransactions">
     <div class="transaction-data">
 
       <div #coachingPaymentsMade class="grid-header-item">
@@ -61,26 +62,45 @@
           <div class="margin-5"><button style="height: 50px;" mat-raised-button color="warn" (click)="clearGroupSelection()">Clear Selection</button></div>
         </div>
 
-        <div class="action-center" *ngIf="!order.completionDate &&
-                                          ((order?.balanceRemaining != 0 || isZeroPaymentAllowed) &&
-                                          (order?.balanceRemaining < 0 || isNegativePaymentAllowed )) ||
-                                          order?.balanceRemaining != order.total">
+        <div class="action-center">
 
-          <div *ngIf="!splitByItem && !paymentsEqualTotal">
-            <h4>Payment Amount: {{paymentAmount | currency}}</h4>
+          <div class="action-center" *ngIf="!order.completionDate &&
+                                            ((order?.balanceRemaining != 0 || isZeroPaymentAllowed) &&
+                                            ( order?.balanceRemaining < 0 || isNegativePaymentAllowed )) ||
+                                              order?.balanceRemaining != order.total">
+
+            <div *ngIf="!splitByItem && !paymentsEqualTotal">
+              <h4>Payment Amount: {{paymentAmount | currency}}</h4>
+            </div>
+
+            <div style="margin-left: 5px" *ngIf="!splitByItem  && !paymentsEqualTotal">
+              <button class="splitbutton"
+                      mat-raised-button
+                      color="primary"
+                      (click)="changeAmount()">
+                <mat-icon>edit</mat-icon>Change <br>Amount
+              </button>
+            </div>
+
+
           </div>
 
-          <div style="margin-left: 5px" *ngIf="!splitByItem  && !paymentsEqualTotal">
+          <div  *ngIf="!paymentsEqualTotal && (uiTransactions && uiTransactions.splitEntry)">
             <button class="splitbutton"
                     mat-raised-button
                     color="primary"
-                    (click)="changeAmount()">
-              <mat-icon>edit</mat-icon>Change <br>Amount
+                    (click)="splitByItem = !splitByItem">
+              <span *ngIf="splitByItem">
+                <mat-icon>credit_card</mat-icon> Payment <br> Methods
+              </span>
+              <span *ngIf="!splitByItem">
+                <mat-icon>call_split</mat-icon>  Split By <br>  Items
+              </span>
             </button>
           </div>
-
-          <div style="margin-left: 5px" *ngIf="rewardsOption">
-            <button class="splitbutton"
+          <div style="margin-left: 5px" *ngIf="rewardsOption > 0 && (order?.balanceRemaining > 0 ||
+                                                                    (userAuths && userAuths.allowBuy))">
+            <button class="splitbutton" style="margin-top:5px"
                     mat-raised-button
                     color="primary"
                     (click)="enterRewardsAmount(rewardsOption)">
@@ -88,21 +108,6 @@
             </button>
           </div>
         </div>
-
-        <div  *ngIf="!paymentsEqualTotal && (uiTransactions && uiTransactions.splitEntry)">
-          <button class="splitbutton"
-                  mat-raised-button
-                  color="primary"
-                  (click)="splitByItem = !splitByItem">
-            <span *ngIf="splitByItem">
-              <mat-icon>credit_card</mat-icon> Payment <br> Methods
-            </span>
-            <span *ngIf="!splitByItem">
-              <mat-icon>call_split</mat-icon>  Split By <br>  Items
-            </span>
-          </button>
-        </div>
-
       </mat-card>
 
       <span #coachingPaymentFull></span>

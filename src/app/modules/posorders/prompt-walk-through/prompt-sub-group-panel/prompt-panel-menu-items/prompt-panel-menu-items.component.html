@@ -4,20 +4,33 @@
                         hideToggle>
     <mat-expansion-panel-header (click)="setAccordionStep(index)">
       <mat-panel-title>
-        <h4>
           <span *ngIf="accordionStep != index">
             <mat-icon>unfold_more</mat-icon>
           </span>
-            {{subGroup.name}}
-          <br>
-        </h4>
+          <h4>
+            <div class="margin-left-20px" style="font-size: 1.4em;font-weight:400">{{subGroup?.name}}</div>
+          </h4>
 
-        <div *ngIf ="imageURL" class="image">
-          <img class="image" [src]="imageURL">
-        </div>
       </mat-panel-title>
+
       <mat-panel-description>
-    </mat-panel-description>
+
+        <div class="flex-grid-column">
+          <div  style="font-size: 1.2em;font-weight:400" class="margin-left-20px" [innerHTML]="subGroup?.instructions"></div>
+          <div  style="font-size: 1.2em;font-weight:400" class="margin-left-20px" class="margin-left-20px" *ngIf="subGroup.minQuantity && subGroup.minQuantity> 0">
+            You must select at least this many: {{subGroup?.minQuantity}}
+          </div>
+          <div style="font-size: 1.2em;font-weight:400" class="margin-left-20px" class="margin-left-20px" *ngIf="subGroup.maxQuantity && subGroup.maxQuantity> 0">
+            You can chose up to  {{subGroup?.maxQuantity}} item{{subGroup?.maxQuantity > 1 ? 's' : ''}} for this section.
+          </div>
+
+          <div *ngIf ="imageURL" class="image">
+            <img class="image" [src]="imageURL">
+          </div>
+        </div>
+
+      </mat-panel-description>
+
     </mat-expansion-panel-header>
 
     <mat-action-row>
@@ -29,15 +42,7 @@
               (click)="nextStep('true')">Next</button>
     </mat-action-row>
 
-    <div class="flex-grid-column">
-      <div class="margin-left-20px" [innerHTML]="subGroup?.instructions"></div>
-      <div class="margin-left-20px" *ngIf="subGroup.minQuantity && subGroup.minQuantity> 0">
-        You must select at least this many: {{subGroup?.minQuantity}}
-      </div>
-      <div class="margin-left-20px" *ngIf="subGroup.maxQuantity && subGroup.maxQuantity> 0">
-        Maximum allowed:  {{subGroup?.maxQuantity}}
-     </div>
-    </div>
+
 
     <!--
     minQuantity:       number;

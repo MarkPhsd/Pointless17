@@ -2,7 +2,7 @@
 <div *ngIf="( saveNotes$ | async) as item"></div>
 <div *ngIf="promptGroup && posItem">
 
-  <mat-card class="mat-card">
+  <mat-card class="prompt-mat-card ">
     <mat-card-subtitle>
       <div class="grid-menu">
         <div>
@@ -18,9 +18,7 @@
       </div>
     </mat-card-subtitle>
     <mat-card-content>
-      <div
-          [innerHTML]="promptGroup?.instructions">
-      </div>
+      <div   [innerHTML]="promptGroup?.instructions"> </div>
     </mat-card-content>
   </mat-card>
   <mat-divider></mat-divider>

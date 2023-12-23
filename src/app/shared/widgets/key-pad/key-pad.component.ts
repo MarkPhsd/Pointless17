@@ -226,7 +226,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   returnEnter(value) {
-    console.log('return enter value', value)
+    // console.log('return enter value', value)
     if (value){
       this.value = value
       this.refreshDisplay()
@@ -359,13 +359,13 @@ export class KeyPadComponent implements OnInit, OnChanges {
     // this.value = this.cashValue
 
     if (!this.value && this.cashValue) {
-      console.log('1cashvalue', this.cashValue)
+      // console.log('1cashvalue', this.cashValue)
       this.outPutReturnEnter.emit(this.cashValue);
       return;
     }
 
     if (!this.formatted) {
-      console.log('2cashvalue', this.cashValue)
+      // console.log('2cashvalue', this.cashValue)
       this.outPutReturnEnter.emit(this.value)
       return
     }

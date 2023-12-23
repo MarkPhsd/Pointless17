@@ -147,6 +147,19 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     this.userAuthSubscriber()
   }
 
+  creditCardPaymentsMade() {
+    if (this.order && this.order.posPayments) {
+      const items =  this.order.posPayments.filter(data => {
+          return data.paymentMethod.isCreditCard
+        } )
+      if (items) {
+        return true
+      }
+      return false
+    }
+  }
+
+
   toggleListView() {
     this.listView = !this.listView;
     this.outPutListView.emit(this.listView)

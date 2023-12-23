@@ -99,7 +99,7 @@ export class PosListComponent implements OnInit, OnDestroy {
     //   this.notifyEvent(`${this.posName} has not been assigned!: Is App: ${this.platForm.isApp()}`, "Failure")
     // }
 
-    console.log(event)
+    // console.log(event)
     // return;
     if (this.orderMethodsService.setPOSName(event?.name)) {
       this.posName = event?.name;

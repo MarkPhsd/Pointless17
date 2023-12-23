@@ -3,6 +3,8 @@
   <mat-spinner diameter="50"></mat-spinner>
 </div>
 
+Ref {{[posPayment?.transactionIDRef]}}
+
 <div *ngIf="(!terminalSettings || (!terminalSettings?.triposLaneID || terminalSettings?.triposLaneID === '')) || !posPayment">
 
   <div *ngIf="!posPayment">

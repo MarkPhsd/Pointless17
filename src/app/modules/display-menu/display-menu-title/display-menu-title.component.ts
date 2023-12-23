@@ -49,7 +49,7 @@ export class DisplayMenuTitleComponent implements OnInit {
   }
 
   applyBackground() {
-    console.log('menu', this.menu, this.backgroundImage);
+    // console.log('menu', this.menu, this.backgroundImage);
 
     if (this.backgroundImage) {
       const image =    this.awsBucket.getImageURLPathAlt(this.bucket, this.backgroundImage)

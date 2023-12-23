@@ -292,6 +292,7 @@ export class TriPOSMethodService {
   }
 
   getAuthTotal(posPayments: PosPayment[]) : any {
+
     if (!posPayments ) {return }
     let amount = 0;
     posPayments.forEach(data => {
@@ -301,15 +302,10 @@ export class TriPOSMethodService {
   }
 
   getTriPOSTotalAuthorizations(data: PosPayment) {
-    // if (data.tran)
-    let amount = 0
-    if (data.tranType === 'authorizationResponse') {
-      amount = data.amountPaid
+    if (data.tranType === 'authorizationResponse' || data.tranType === 'incrementalAuthorizationResponse') {
+      return  data.amountPaid
     }
-    if (data.tranType === 'incrementalAuthorizationResponse') {
-      amount = data.amountPaid
-    }
-    return amount
+    return 0
   }
     // /Observable<import("../system/settings.service").ITerminalSettings>,
   processIncrementalReversal( auth: authorizationPOST, item: IPOSPayment): Observable<IPOSPayment> {
@@ -416,11 +412,13 @@ export class TriPOSMethodService {
 
   }
 
-  processIncrement(site: ISite, transactionId: string, amount: string, laneID: string) : Observable<TriposResult> {
+  processIncrement(site: ISite, transactionId: string, amount: string, laneID: string,ticketNumber: string) : Observable<TriposResult> {
     //processes through tripos
     const auth = {} as authorizationPOST
     auth.transactionId = transactionId;
     // auth.terminalId = terminalID;
+    auth.ticketNumber = ticketNumber;
+    auth.referenceNumber = transactionId;
     auth.laneId = laneID
     auth.transactionAmount = amount;
     //creates new payment

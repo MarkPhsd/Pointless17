@@ -201,20 +201,24 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
   incrementTriPOS(item: IPOSPayment) {
-    const amount = this.order.creditBalanceRemaining - item.amountPaid;
+    const amount =   this.order.creditBalanceRemaining - this.totalAuthTriPOSPayments;
     const site = this.siteService.getAssignedSite()
     let transactionId
     let tranData
     const payment$ = this.paymentService.getPOSPayment(site, item.id, item.history)
     const terminal$ = this.settingsService.terminalSettings$;
 
+    let payment:IPOSPayment;
     this.action$ =   payment$.pipe(switchMap(data => {
+
+        // console.log('og payment?',  item)
         item = data;
+        payment = data;
         try {
           tranData = JSON.parse(item.transactionData);
         } catch (error) {
           this.siteService.notify('Error no transaction data found.', 'close', 5000, 'red')
-          console.log(item.transactionData, error)
+          // console.log(item.transactionData, error)
           return  of(null)
         }
         return of(data)
@@ -224,19 +228,35 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
         return  terminal$
       }
     )).pipe(switchMap(data => {
-      console.log('terminal', data)
+
 
       if (!data) {return of(null)}
 
-      console.log(tranData.transactionId)
+      // console.log('tran data', tranData,  tranData?.ticketNumber);
+
+      // return of(null)
       if (tranData && tranData.transactionId) {
         transactionId = tranData.transactionId
 
+        let refNumber = ''
+        let ticketNumber = ''
+        if (item)
         if (! data.triposLaneID) {
           this.siteService.notify(`No Lane ID, will not process.`, 'close', 3000, 'red')
         }
 
-        return this.triposMethodService.processIncrement( site, tranData.transactionId, amount.toString(), data.triposLaneID)
+        if (payment) {
+          if (payment.transactionIDRef) {
+            ticketNumber = payment.transactionIDRef
+          }
+          if (!payment.transactionIDRef) {
+            refNumber = payment.refNumber;
+          }
+          ticketNumber = refNumber
+        }
+        let increment =  this.order.creditBalanceRemaining - this.totalAuthTriPOSPayments;
+
+        return this.triposMethodService.processIncrement( site, tranData.transactionId, amount.toString(), data.triposLaneID, ticketNumber)
       }
 
     })).pipe(switchMap(data => {
@@ -245,7 +265,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       console.log(data)
       if (data && !data._hasErrors && data.isApproved) {
         item.amountPaid = amount;
-        item.amountReceived = amount;
+        item.amountReceived = 0;
         item.orderDate = null;
         try {
           item.transactionData = JSON.stringify(data)
@@ -270,12 +290,17 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
 
   gettriPOSTotalPayments() {
     let amount = 0
+    this.totalAuthTriPOSPayments = 0;
+    console.log('totalAuthTriPOSPayments', this.totalAuthTriPOSPayments)
+
     if (!this.order || !this.order.posPayments) {return}
 
     if (this.uiTransactions && this.uiTransactions?.triposEnabled) {
       amount = this.triposMethodService.getAuthTotal(this.order.posPayments)
     }
 
+
+    console.log('amount', amount, this.order.posPayments)
     this.totalAuthTriPOSPayments = amount;
     return amount;
   }

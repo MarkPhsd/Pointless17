@@ -86,7 +86,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   paymentSummary     : IPOSPaymentsOptimzed;
   paymentsEqualTotal : boolean;
 
-  orderlayout         = 'order-layout'
+
   smallDevice         = false;
   phoneDevice:        boolean;
   orderItemsPanel     = ''
@@ -118,11 +118,20 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   user          : any;
   _user: Subscription;
 
+  _orderLayout = 'order-receiptLayouts'
+
   get isProcessingPayment() {
     if (this.processing) {
       return this.processingPayment;
     }
     return null;
+  }
+
+  get orderLayout() {
+    if (!this._orderLayout) {
+        return 'order-layout'
+    }
+    return this._orderLayout;
   }
 
   initStepSelectionSubscription() {
@@ -171,6 +180,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
       if (data) {
         this.userAuths = data;
+        // data.allowBuy
       }
     })
   }
@@ -257,7 +267,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (this.order && this.order.clients_POSOrders) {
       if (this.order.clients_POSOrders.loyaltyPoints > 0) {
         if (this.uiTransactions.rewardPointValue > 0) {
-          const value = this.uiTransactions.rewardPointValue * this.order.clients_POSOrders.loyaltyPoints;
+          const value = +this.uiTransactions.rewardPointValue * +this.order.clients_POSOrders.loyaltyPoints;
           if (value > 0) {
             return value
           }
@@ -349,7 +359,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       this.smallDevice = true
     }
     if (!this.smallDevice) {
-      this.orderlayout = 'order-layout'
+      this._orderLayout = 'order-layout'
       this.orderItemsPanel = 'item-list'
     }
     if (window.innerWidth < 599) {

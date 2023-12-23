@@ -194,6 +194,7 @@
 
 <ng-template #keyboardButton>
   <app-keyboard-button
+    *ngIf="uiTransactionSetting && uiTransactionSetting.enableOnScreenKeyboard"
     [smallDevice]="smallDevice"
     [isApp]="platFormService.isApp()"
     [isUserStaff]="isUserStaff"

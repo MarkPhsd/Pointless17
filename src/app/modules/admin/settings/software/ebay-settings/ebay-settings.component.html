@@ -1,4 +1,18 @@
 
+<div *ngIf="(action$ | async)  as item"></div>
+  <mat-card *ngIf="actionResult">
+    <mat-card-title>
+       <h4>Inventory Check Results</h4>
+    </mat-card-title>
+    <mat-card-content>
+      <ngx-json-viewer [json]="actionResult"></ngx-json-viewer>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="actionResult = null">Clear</button>
+    </mat-card-actions>
+  </mat-card>
+
+
 <div class="ps-flex-group-start">
   <div   style="margin:5px"  *ngIf="authDisabled">
     <button mat-raised-button (click)="getEbayAuth()">Get Ebay Auth</button>
@@ -14,28 +28,35 @@
     <button *ngIf="actionResult" mat-raised-button style="margin:5px" (click)="clearResults()">Clear Results</button>
   </div>
 
-  <div>
-    <button *ngIf="ebaySettings && ebaySettings.brandedoAuthLink && !authDisabled"
-            mat-raised-button style="margin:5px" (click)="openEbayAuthAgreement()">
-            <mat-icon>link</mat-icon>Open Ebay Auth Agreement</button>
-  </div>
-
-  <div  style="margin:5px" *ngIf="(action$ | async)  as item">
-    <!-- {{actionResult | json}} -->
-  </div>
-
   <div  style="margin:5px" *ngIf="authCodeApproval">
-    <!-- <div>{{authCodeApproval}}</div> -->
-    <!-- <div> -->
       <button mat-raised-button color="primary" (click)="applyAuthCode()">
         <mat-icon>security</mat-icon>Apply Auth
       </button>
-    <!-- </div> -->
+  </div>
+
+  <div  style="margin:5px" *ngIf="authCodeApproval">
+    <button mat-raised-button color="primary" (click)="getRefreshToken()">
+      <mat-icon>security</mat-icon>Get Refresh Token
+    </button>
+  </div>
+
+  <div style="margin:5px" *ngIf="ebaySettings && ebaySettings.refresh_token && ebaySettings.access_token">
+    <button mat-raised-button color="primary" (click)="createInventoryLocation()">
+      <mat-icon>store</mat-icon>Create Inventory Location
+    </button>
+  </div>
+
+  <div  style="margin:5px" *ngIf="ebaySettings && ebaySettings.refresh_token && ebaySettings.access_token">
+    <button mat-raised-button color="primary" (click)="testPublish()">
+      <mat-icon>publish</mat-icon>Test Publish
+    </button>
   </div>
 
   <div *ngIf="ebaySettings && ebaySettings.refresh_token && ebaySettings.access_token">
     <div><mat-icon>security</mat-icon>Ebay Settings Authorized</div>
   </div>
+
+
 </div>
 
 <div  style="margin:5px" *ngIf="ebayForm" [formGroup]="ebayForm">
@@ -81,7 +102,7 @@
     <app-value-fields
       [inputForm]="ebayForm"
       [fieldName]="'rUName'">
-      rUName
+      RU_Name
     </app-value-fields>
 
     <div  class="mat-label"   style="margin:5px">

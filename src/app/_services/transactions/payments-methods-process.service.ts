@@ -270,7 +270,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
                        paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
 
     if (this.platFormService.isAppElectron) {
-      if (this.DSIEmvSettings.enabled) {
+      if (this.DSIEmvSettings && this.DSIEmvSettings?.enabled) {
         this.processSubDSIEMVCreditPayment(order, amount, true)
         return
       }
@@ -435,7 +435,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   isTriPOSApproved(trans: any) {
 
-    console.log('isTriPOSApproved' , trans?.isApproved, trans?.statusCode)
+    // console.log('isTriPOSApproved' , trans?.isApproved, trans?.statusCode)
     if (trans && trans?.isApproved) {
       return true;
     }
@@ -447,7 +447,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       return true;
     }
 
-    console.log('not approved')
+    // console.log('not approved')
     this.notify(`Response not approved. Response given ${trans?.statusCode}. Reason: ${trans?._processor?.expressResponseMessage} ` , 'Failed', 3000)
     return false;
   }
@@ -517,7 +517,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       return of(null)
     }
 
-    console.log('approved')
+    // console.log('approved')
 
     //transactionIDRef
     const idRef = payment.id.toString();
@@ -557,9 +557,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       return of(order)
     }
 
-    if (!this.isTriPOSApproved(trans)) {
-      return of(order)
-    }
+    if (!this.isTriPOSApproved(trans)) { return of(order) }
 
     payment   = this.applyTripPOSResponseToPayment(trans, payment, tipValue)
     let paymentMethod    = {} as IPaymentMethod;
@@ -691,6 +689,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     payment = this.applyPaymentAmount(response,payment,tipValue)
 
+    // console.log('payment response saved', payment.amountPaid)
 
     payment.account         = response?.accountNumber;
     payment.accountNum      = response?.accountNum;
@@ -708,7 +707,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       payment.expiry          = `${response?.expirationMonth}${response?.expirationYear}`
     }
 
-
     payment.refNumber       = response?.transactionId;
     if (!payment.approvalCode) {
       payment.approvalCode  = response?.transactionId;
@@ -721,10 +719,12 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   applyPaymentAmount(response: any, payment: IPOSPayment, tipValue: number) {
-    if (response._type != 'authorizationResponse') {
+    // console.log('applyPaymentAmount', response._type, response.approvedAmount, response.totalAmount)
+    if (response._type === 'authorizationResponse') {
       payment.amountPaid      = response.approvedAmount;
-      payment.amountReceived  = response.approvedAmount;
+      payment.amountReceived  = 0
       payment.tipAmount       = tipValue;
+      return payment;
     }
 
     if (response._type === 'saleResponse') {
@@ -732,11 +732,15 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         payment.tipAmount       = tipValue;
         payment.amountPaid      = +response.approvedAmount - +tipValue;
         payment.amountReceived  = +response.approvedAmount - +tipValue;
+      } else  {
+        payment.amountPaid      = +response.approvedAmount ;
+        payment.amountReceived  = +response.approvedAmount ;
       }
+      return payment;
     }
 
     if (response._type === 'authorizationCompletionResponse') {
-      ///always use the total amount approved amount will return 0.00
+      ///for authorizationCompletionResponse always use the total amount approved amount will return 0.00
       payment.amountPaid      = +response?.totalAmount;
       payment.amountReceived  = +response?.totalAmount;
 
@@ -745,6 +749,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         payment.amountPaid      = payment.amountPaid  - +tipValue;;
         payment.amountReceived  = payment.amountReceived - +tipValue;;
       }
+      return payment;
     }
 
     if (response._type === 'refundResponse') {
@@ -753,7 +758,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       payment.approvalCode    = response.approvalNumber;
     }
 
-    console.log('process payment', payment)
+
     return payment;
 
   }

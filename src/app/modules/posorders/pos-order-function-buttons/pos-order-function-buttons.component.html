@@ -1,5 +1,6 @@
 <div *ngIf="(action$ | async) as action"></div>
 
+creditCardPaymentsMade {{creditCardPaymentsMade }}
 <div  *ngIf="order && mainPanel && uiTransactionSetting"
       class="buttons-container">
 
@@ -251,7 +252,7 @@
 <ng-template #voidOrderButton>
   <div  *ngIf="!isUser && (userAuths && userAuths.voidOrder)">
     <button mat-raised-button class="button"
-            [disabled]="  ((order.history) && (itemsPrinted || paymentsMade)) == true"
+            [disabled]="  (itemsPrinted || creditCardPaymentsMade) == true"
             color="warn"
             (click)="voidOrder()">
       <mat-icon>delete</mat-icon>

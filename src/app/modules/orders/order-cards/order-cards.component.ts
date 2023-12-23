@@ -261,7 +261,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     //sends order from this, to trigger defaultmodulecomponent, which then triggers another observable to send thourh payment methodsprocessservice.
     this.orderMethodsService._sendOrder.next(true)
 
-    console.log('set active order')
+    // console.log('set active order')
     const order$ =  this.orderService.getOrder(site, order.id, order.history )
     order$.subscribe(data =>
       {
@@ -277,7 +277,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   setActiveOrderObs(order) {
     const site  = this.siteService.getAssignedSite();
 
-    console.log('orderID', this.orderMethodsService?.order?.id)
+    // console.log('orderID', this.orderMethodsService?.order?.id)
     let sendOrder$ = this.paymentMethodsProcess.sendOrderOnExit(this.orderMethodsService.order)
 
     let order$  =   this.orderService.getOrder(site, order.id, order.history )

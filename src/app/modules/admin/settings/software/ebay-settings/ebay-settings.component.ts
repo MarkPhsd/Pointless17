@@ -58,16 +58,49 @@ export class EbaySettingsComponent implements OnInit {
     })
   }
 
+  // getOAuthToken() {
+  //   if (this.ebayForm) {
+  //     let item = this.ebayForm.value as ebayoAuthorization
+  //     if (item) {
+  //       item.sandBox = true;
+  //       const site = this.sitesService.getAssignedSite()
+  //       this.action$ = this.ebayService.getOAuthToken(site, item.token).pipe(switchMap(data => {
+  //         this.actionResult = data;
+  //         return of(data)})
+  //         )
+  //     }
+  //   }
+  // }
+
   applyAuthCode() {
     const site = this.sitesService.getAssignedSite()
-    this.action$ = this.ebayService.getRefreshToken(site, this.authCodeApproval).pipe(
+    this.action$ = this.ebayService.applyAuthResponse(site, this.authCodeApproval).pipe(
       switchMap(data => {
-
+        this.actionResult = data
         return of(data)
       })
     )
-}
+  }
 
+  getRefreshToken() {
+    const site = this.sitesService.getAssignedSite()
+    this.action$ = this.ebayService.getRefreshToken(site).pipe(
+      switchMap(data => {
+        this.actionResult = data
+        return of(data)
+      })
+    )
+  }
+
+  createInventoryLocation() {
+    const site = this.sitesService.getAssignedSite()
+    this.action$ = this.ebayService.createInventoryLocation(site).pipe(
+      switchMap(data => {
+        this.actionResult = data
+        return of(data)
+      })
+    )
+  }
 
   decodeAuth(data) {
     this.decodedValue = this.authenticationService.decodeAuth(data)
@@ -128,6 +161,14 @@ export class EbaySettingsComponent implements OnInit {
     }
   }
 
+  testPublish() {
+    const site = this.sitesService.getAssignedSite()
+    this.action$ =  this.ebayService.testPublish(site).pipe(switchMap(data => {
+      console.log(data)
+      return of(data)
+    }))
+  }
+
   saveEbaySettings() {
     const site = this.sitesService.getAssignedSite()
     this.setting.text = JSON.stringify(this.ebayForm.value);
@@ -164,6 +205,7 @@ export class EbaySettingsComponent implements OnInit {
   getEbayTime() {
     this.ebayPostResults$
   }
+
   initEbayForm() {
     this.ebayForm = this.fb.group({
       brandedoAuthLink: [],
@@ -181,33 +223,6 @@ export class EbaySettingsComponent implements OnInit {
     })
   }
 
-  getOAuthToken() {
-    if (this.ebayForm) {
-      let item = this.ebayForm.value as ebayoAuthorization
-      if (item) {
-        item.sandBox = true;
-        const site = this.sitesService.getAssignedSite()
-        this.action$ = this.ebayService.getOAuthToken(site).pipe(switchMap(data => {
-          this.actionResult = data;
-          return of(data)})
-          )
-      }
-    }
-  }
-
-  // getRefreshToken() {
-  //   if (this.ebayForm) {
-  //     let item = this.ebayForm.value as ebayoAuthorization
-  //     if (item) {
-  //       item.sandBox = true;
-  //       const site = this.sitesService.getAssignedSite()
-  //       this.action$ = this.ebayService.getRefreshToken(site).pipe(switchMap(data => {
-  //         this.actionResult = data;
-  //         return of(data)})
-  //         )
-  //     }
-  //   }
-  // }
 
   clearResults() {
     this.actionResult = null

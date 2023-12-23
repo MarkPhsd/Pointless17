@@ -1,6 +1,6 @@
 import {Component, OnDestroy, Output,
         OnInit, AfterViewInit,
-         ViewChild, ElementRef, EventEmitter}  from '@angular/core';
+         ViewChild, ElementRef, EventEmitter, Inject, LOCALE_ID}  from '@angular/core';
 import { IServiceType, IUser } from 'src/app/_interfaces';
 import {  IPOSPayment, IPaymentSearchModel} from 'src/app/_interfaces/transactions/posorder';
 import { IItemBasic,  } from 'src/app/_services';
@@ -17,6 +17,7 @@ import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-pos-payments-filter',
@@ -97,8 +98,10 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       private matSnack             : MatSnackBar,
       private userAuthorization    : UserAuthorizationService,
       private fb:                    UntypedFormBuilder,
+      private datePipe: DatePipe,
       private dateHelper: DateHelperService,
-    
+      @Inject(LOCALE_ID) private locale: string
+
       )
     {
       this.initForm();
@@ -200,7 +203,7 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
         this.employees$      = this.orderService.getActiveEmployees(site)
      }
 
-   
+
 
     refreshPaymentSearch(id: string) {
       if (! this.searchModel) {  this.searchModel = {} as IPaymentSearchModel }
@@ -284,6 +287,47 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
           this.posPaymentService.updatePaymentSubscription(data)
         }
       )
+    }
+
+    changeDates(value) {
+
+      let frm = this.dateRangeForm;
+      let start = new  Date();
+      let end = this.dateHelper.add('d', 1, start)
+
+      console.log('DateForm values', frm.value, {start: start, end: end})
+
+      console.log('value', value)
+      console.log('starting date', this.datePipe.transform(start, 'yyyy-dd-MM',this.locale),  frm.controls['start'].value)
+      if (frm.controls['start'].value) {
+        start = frm.controls['start'].value;
+      }
+
+      if (value === 0){
+        //set dateRangeForm start value to be the current date, and
+        //sets the ending value to be +1 of the startDate
+        start = new  Date();
+        end = this.dateHelper.add('d', 1, start );
+        console.log('end ', end)
+
+      }
+      //otherwise we use the 'starting date value of the dateRangeForm
+      //then we set the date + / - the date of the Start value of that form.
+      //and we set the end value to + 1 the value of the start value.
+      if (value == 1){
+        end = this.dateHelper.add('d', 1, start)
+      }
+      if (value == -1) {
+        end = this.dateHelper.add('d', 1, start)
+      }
+
+
+      this.dateRangeForm = this.fb.group({
+        start:  [this.datePipe.transform(start, 'yyyy/dd/MM',this.locale)],
+        end: [this.datePipe.transform(end, 'yyyy/dd/MM',this.locale)]
+      });
+
+      this.subscribeToDatePicker();
     }
 
     async initDateForm() {

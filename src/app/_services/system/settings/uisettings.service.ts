@@ -104,6 +104,7 @@ export interface TransactionUISettings {
   enableItemReOrder: boolean;
   resaleCostRatio: number;
   rewardPointValue: number;
+  enableOnScreenKeyboard: boolean;
 }
 
 export interface StripeAPISettings {
@@ -484,7 +485,7 @@ export class UISettingsService {
   }
 
   getPOSDeviceSettings(deviceName: string) {
-    console.log('getPOSDeviceSettings',deviceName)
+    // console.log('getPOSDeviceSettings',deviceName)
     return this.settingsService.getDeviceSettings(deviceName)
   }
 
@@ -856,6 +857,7 @@ export class UISettingsService {
       enableItemReOrder: [],
       resaleCostRatio: [],
       rewardPointValue: [],
+      enableOnScreenKeyboard:[],
      })
   }
 

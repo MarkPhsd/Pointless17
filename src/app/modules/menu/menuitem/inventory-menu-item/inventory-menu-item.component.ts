@@ -144,12 +144,14 @@ export class InventoryMenuItemComponent implements OnInit, OnChanges {
     }
   }
 
-  addItemToOrder(sku: string) {
+  addItemToOrder(item: any) {
     const site = this.siteService.getAssignedSite();
     this.addItem$ = this.addNewOrder().pipe(
       switchMap(order => {
         this.orderMethodService.order = order;
-        return this.orderMethodService.scanBarcodedItem(site, order, sku, 1, null, null, null, null, null, null);
+        const inv = item as IInventoryAssignment;
+        console.log('barcode',item.sku)
+        return this.orderMethodService.scanBarcodedItem(site, order, inv.sku, 1, null, null, null, null, null, null);
       }),
       switchMap(data => {
         return of(data);

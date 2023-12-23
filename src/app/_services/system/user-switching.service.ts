@@ -240,7 +240,7 @@ export class UserSwitchingService implements  OnDestroy {
       }))
 
       let userAuth$ =  auth$.pipe(switchMap(data => {
-        console.log('Sending user getting contact', data)
+        // console.log('Sending user getting contact', data)
 
         if (data?.message === 'failed') { return of(data)}
         return this.contactsService.getContact(site, data?.id)

@@ -375,7 +375,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   updateOrderSearch(searchModel: IPOSOrderSearchModel) {
-    console.log(searchModel)
+  // console.log(searchModel)
     searchModel.searchOrderHistory = this.searchOrderHistory;
     this.orderMethodsService.updateOrderSearchModel( searchModel )
   }
@@ -504,7 +504,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
         this.searchModel.searchOrderHistory = false;
       }
     }
-    console.log(this.isUser, this.showDateFilter,this.searchModel.searchOrderHistory)
+    // console.log(this.isUser, this.showDateFilter,this.searchModel.searchOrderHistory)
     this.initCompletionDateForm()
   }
 
