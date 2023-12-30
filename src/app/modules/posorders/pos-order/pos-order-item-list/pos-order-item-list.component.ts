@@ -105,6 +105,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   purchaseOrderEnabled: boolean;
   showCost : boolean;
   showRetail: boolean;
+  @Input() filteredList : PosOrderItem[]
 
   initSubscriptions() {
     let clientID: number;
@@ -131,6 +132,14 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         return of([])
     })
 
+  }
+
+  ngOnChanges() {
+    if (this.filteredList) {
+      this.refreshSearch()
+    } else {
+
+    }
   }
 
   constructor(  private _snackBar               : MatSnackBar,
@@ -205,6 +214,11 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       // minWidth: 100,
     };
 
+    let reconcilePass = false
+    if (this.order.service && this.order?.service?.filterType == 2) {
+      reconcilePass = true;
+    }
+
     let  columnDefs =  [];
 
     let column = {
@@ -218,21 +232,25 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     columnDefs.push(column);
 
-    let textColumn = {headerName: 'Name',   field: 'productName',
+    let nameCol = {headerName: 'Name',   field: 'productName',
               sortable: true,
               width   : 205,
               minWidth: 205,
               flex    : 2,
+              cellRenderer: 'showMultiline',
+              wrapText: true,
+              cellStyle: {'white-space': 'normal', 'line-height': '1em'},
+              autoHeight: true,
     }
-    columnDefs.push(textColumn);
+    columnDefs.push(nameCol);
 
-    textColumn = {headerName: 'UOM',   field: 'unitName',
-        sortable: true,
-        width   : 100,
-        minWidth: 100,
-        flex    : 2,
-    }
-    columnDefs.push(textColumn);
+    // let textColumn = {headerName: 'UOM',   field: 'unitName',
+    //     sortable: true,
+    //     width   : 100,
+    //     minWidth: 100,
+    //     flex    : 2,
+    // }
+    // columnDefs.push(textColumn);
 
     let nextColumn =  {headerName: 'Quantity',     field: 'quantity',
           sortable: true,
@@ -243,6 +261,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
           editable: true,
           singleClickEdit: true
     }
+
     columnDefs.push(nextColumn);
 
     nextColumn =  {headerName: 'UOM',     field: 'unitName',
@@ -253,7 +272,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
           flex    : 2,
           editable: false,
           singleClickEdit: true
-      }
+    }
     columnDefs.push(nextColumn);
 
     let currencyColumn = {headerName: 'Price',     field: 'unitPrice', sortable: true,
@@ -264,9 +283,12 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                     flex    : 1,
                     editable: true,
                     singleClickEdit: true
-                  }
-    if (!this.purchaseOrderEnabled || this.showRetail) {
-      columnDefs.push(currencyColumn);
+    }
+
+    if (!reconcilePass) {
+      if (!this.purchaseOrderEnabled || this.showRetail) {
+        columnDefs.push(currencyColumn);
+      }
     }
 
     currencyColumn = {headerName: 'Cost',     field: 'wholeSale', sortable: true,
@@ -278,10 +300,11 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         editable: true,
         singleClickEdit: true
     }
-    if (this.purchaseOrderEnabled || this.showCost) {
-      columnDefs.push(currencyColumn);
+    if (!reconcilePass) {
+      if ((this.purchaseOrderEnabled || this.showCost) || reconcilePass) {
+        columnDefs.push(currencyColumn);
+      }
     }
-
     let wholeSaleCostTotal = {headerName: 'Cost Total',    field: 'wholeSaleCost', sortable: true,
         cellRenderer: this.agGridService.currencyCellRendererUSD,
         width   : 100,
@@ -291,8 +314,10 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         editable: true,
         singleClickEdit: true
     }
-    if (this.purchaseOrderEnabled || this.showCost) {
-      columnDefs.push(wholeSaleCostTotal);
+    if (!reconcilePass) {
+      if ((this.purchaseOrderEnabled || this.showCost) || reconcilePass) {
+        columnDefs.push(wholeSaleCostTotal);
+      }
     }
 
     let currencyTotalColumn = {headerName: 'Total',    field: 'total', sortable: true,
@@ -302,8 +327,10 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                 maxWidth: 100,
                 flex: 2,
     }
-    if (!this.purchaseOrderEnabled || this.showRetail) {
-      columnDefs.push(currencyTotalColumn);
+    if (!reconcilePass) {
+      if (!this.purchaseOrderEnabled || this.showRetail) {
+        columnDefs.push(currencyTotalColumn);
+      }
     }
 
     let editButtonColumn = {headerName: 'Edit',  field: 'productID',
@@ -323,11 +350,11 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       columnDefs.push(editButtonColumn);
     }
 
-    let itemDelete =  { headerName: '', field: "id",
+    let itemDelete =  { headerName: 'Delete', field: "id",
         cellRenderer: "btnCellRenderer",
         cellRendererParams: {
           onClick: this.deleteItem.bind(this),
-          label: 'delete',
+          label: 'Del.',
           getLabelFunction: this.getLabel.bind(this),
           btnClass: 'btn btn-primary btn-sm'
       },
@@ -348,7 +375,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     columnDefs.push(nextColumn);
 
-     nextColumn =  {headerName: 'End',     field: 'traceProductCount+quantity',
+     nextColumn =  {headerName: 'Balance',     field: 'traceProductCalc',
           sortable: true,
           width   : 100,
           minWidth: 100,
@@ -357,10 +384,24 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
           editable: false,
           singleClickEdit: false
     }
-    columnDefs.push(nextColumn);
+    if (this.purchaseOrderEnabled || reconcilePass) {
+      columnDefs.push(nextColumn);
+    }
+
+    nextColumn =  {headerName: 'Scanned',     field: 'traceOrderDate',
+                    sortable: true,
+                    width   : 100,
+                    minWidth: 100,
+                    maxWidth: 100,
+                    flex    : 2,
+                    editable: false,
+                    singleClickEdit: false
+                    }
+    if (reconcilePass) {
+      columnDefs.push(nextColumn);
+    }
 
     this.columnDefs = columnDefs;
-
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
 
@@ -456,12 +497,14 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     params.startRow = 1;
     params.endRow = 1000;
 
-
-
+    let list = this.order.posOrderItems;
+    if (this.filteredList) {
+      list = this.filteredList
+    }
 
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
-        params.successCallback(this.order.posOrderItems)
+        params.successCallback(list)
       }
     }
 
@@ -486,6 +529,15 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
   }
 
+  setReconcilevalue(item) {
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.posOrderItemService.changeItemQuantityReconcile(site, item).pipe(switchMap(data => {
+      this.orderMethodsService.updateOrderSubscription(data)
+      return of(data)
+    }))
+    return;
+  }
+
   cellValueChanged(event) {
     const colName = event?.column?.colId
 
@@ -496,7 +548,13 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     if (colName === 'quantity') {
       item.quantity = event.value;
+
+      if (this.order.service && this.order?.service?.filterType == 2) {
+        this.setReconcilevalue(item)
+        return;
+      }
     }
+
     if (colName === 'wholeSale') {
       item.wholeSale = event.value
     }
@@ -570,7 +628,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       this.id = item.id;
       const history = item.history
     }
-    // console.log('item selected', event)
   }
 
   getItem(id: number, history: boolean) {

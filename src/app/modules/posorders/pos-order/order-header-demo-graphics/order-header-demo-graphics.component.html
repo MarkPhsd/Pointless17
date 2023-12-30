@@ -41,17 +41,19 @@
 </mat-card>
 
 <mat-card *ngIf="!disableActions && !order.clients_POSOrders">
-  <div class="grid-demo" *ngIf="transactionSettings?.showCustomerOption || mainPanel">
-    <div >
-      <app-client-search-selector
-        (itemSelect)="assignCustomer($event)">
-      </app-client-search-selector>
-    </div>
-    <div>
-      <button mat-button
-              (click)="addClient()">
-              <mat-icon>add</mat-icon>New
-      </button>
+  <div  *ngIf="(order?.service?.filterType != 1 && order?.service?.filterType != 2)">
+    <div class="grid-demo" *ngIf="transactionSettings?.showCustomerOption || mainPanel">
+      <div>
+        <app-client-search-selector
+          (itemSelect)="assignCustomer($event)">
+        </app-client-search-selector>
+      </div>
+      <div>
+        <button mat-button
+                (click)="addClient()">
+                <mat-icon>add</mat-icon>New
+        </button>
+      </div>
     </div>
   </div>
 

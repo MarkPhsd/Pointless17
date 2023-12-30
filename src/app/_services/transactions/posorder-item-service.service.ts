@@ -739,6 +739,20 @@ export class POSOrderItemService {
 
   }
 
+  changeItemQuantityReconcile(site: ISite, item: PosOrderItem): Observable<IPOSOrder> {
+
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "changeItemQuantityReconcile";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<IPOSOrder>(url, item)
+
+  }
+
   changeItemQuantity(site: ISite, posOrderItem: PosOrderItem): Observable<IPOSOrder> {
 
     // const result = this.validateItemchange(posOrderItem)
@@ -760,6 +774,7 @@ export class POSOrderItemService {
     return  this.http.post<IPOSOrder>(url, payLoad)
 
   }
+
 
   removeOrderDiscount(site: ISite, id: number): Observable<IPOSOrder> {
 

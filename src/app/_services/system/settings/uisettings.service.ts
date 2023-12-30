@@ -169,6 +169,8 @@ export interface CmdResponse{
 }
 
 export interface UIHomePageSettings {
+
+  lockTerminalToBalanceSheet: boolean;
   id                : number;
   menuEnabled       : boolean;
   brandsEnabled     : boolean;
@@ -549,6 +551,8 @@ export class UISettingsService {
     return this.settingsService.getSettingByNameNoRoles(site, name);
   }
 
+
+
   getDSIEMVSettings(name: string): Observable<DSIEMVSettings> {
     if (!this.userAuthorizationService.user) {
       this._DSIEMVSettings.next(null)
@@ -607,6 +611,7 @@ export class UISettingsService {
   initHomePageForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
       id                    : [''],
+      lockTerminalToBalanceSheet: [],
       brandsEnabled         : [''],
       typesEnabled          : [''],
       categoriesEnabled     : [''],

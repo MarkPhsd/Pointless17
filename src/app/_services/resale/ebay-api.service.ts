@@ -7,6 +7,10 @@ import { AuthenticationService, IItemBasic } from '..';
 import { ISite } from 'src/app/_interfaces';
 import { Router } from '@angular/router';
 export const InterceptorSkipHeader = 'X-Skip-Interceptor';
+
+
+
+
 export enum AvailabilityTypeEnum {
   IN_STOCK,
   OUT_OF_STOCK,
@@ -96,7 +100,7 @@ export interface Weight {
 
 export interface PackageWeightAndSize {
   dimensions: Dimensions;
-  packageType: string;
+
   weight: Weight;
 }
 
@@ -112,19 +116,32 @@ export interface ProductData {
   };
   condition: string;
   packageWeightAndSize: PackageWeightAndSize;
+  packageType: string;
   product: Product;
 }
 
+export interface condition {
+  condtion: string;
+}
+
+
+// tax: {
+//   vatPercentage: number;
+//   applyTax: boolean;
+//   thirdPartyTaxCategory: string;
+// };
+//  merchantLocationKey: string;
 export interface EbayOfferRequest {
   sku: string;
   marketplaceId: string;
   format: string;
   listingDescription: string;
+  categoryId: string;
   availableQuantity: number; // Assuming availableQuantity is a number
   quantityLimitPerBuyer: number; // Assuming quantityLimitPerBuyer is a number
   pricingSummary: {
       price: {
-          value: number;
+          value: string;
           currency: string;
       };
   };
@@ -132,13 +149,6 @@ export interface EbayOfferRequest {
       fulfillmentPolicyId: string;
       paymentPolicyId: string;
       returnPolicyId: string;
-  };
-  categoryId: string;
-  merchantLocationKey: string;
-  tax: {
-      vatPercentage: number;
-      applyTax: boolean;
-      thirdPartyTaxCategory: string;
   };
 }
 
@@ -162,6 +172,8 @@ export interface EbayInventoryJson {
   offerRequest        : EbayOfferRequest;
   offerResponse       : EbayOfferresponse;
   ebayPublishResponse : any;
+  offerPublishStatus  : boolean;
+  listingid: string;
 }
 
 export interface ebayoAuthorization {
@@ -187,12 +199,62 @@ export interface ebayoAuthorization {
 export class EbayAPIService {
 
 
+  ebayMarketplaceIds: string[] = [
+    "EBAY_AT", "EBAY_AU", "EBAY_BE", "EBAY_CA", "EBAY_CH", "EBAY_CN", "EBAY_CZ",
+    "EBAY_DE", "EBAY_DK", "EBAY_ES", "EBAY_FI", "EBAY_FR", "EBAY_GB", "EBAY_GR",
+    "EBAY_HK", "EBAY_HU", "EBAY_ID", "EBAY_IE", "EBAY_IL", "EBAY_IN", "EBAY_IT",
+    "EBAY_JP", "EBAY_MY", "EBAY_NL", "EBAY_NO", "EBAY_NZ", "EBAY_PE", "EBAY_PH",
+    "EBAY_PL", "EBAY_PR", "EBAY_PT", "EBAY_RU", "EBAY_SE", "EBAY_SG", "EBAY_TH",
+    "EBAY_TW", "EBAY_US", "EBAY_VN", "EBAY_ZA", "EBAY_HALF_US", "EBAY_MOTORS_US"
+  ];
+  shippingTypes: string[] = [
+    "BulkyGoods",
+    "Caravan",
+    "Cars",
+    "CustomCode",
+    "Europallet",
+    "ExpandableToughBags",
+    "ExtraLargePack",
+    "Furniture",
+    "IndustryVehicles",
+    "LargeCanadaPostBox",
+    "LargeCanadaPostBubbleMailer",
+    "LargeEnvelope",
+    "Letter",
+    "MailingBoxes",
+    "MediumCanadaPostBox",
+    "MediumCanadaPostBubbleMailer",
+    "Motorbikes",
+    "None",
+    "OneWayPallet",
+    "PackageThickEnvelope",
+    "PaddedBags",
+    "ParcelOrPaddedEnvelope",
+    "Roll",
+    "SmallCanadaPostBox",
+    "SmallCanadaPostBubbleMailer",
+    "ToughBags",
+    "UPSLetter",
+    "USPSFlatRateEnvelope",
+    "USPSLargePack",
+    "VeryLargePack",
+    "Winepak"
+  ];
+
+  //return policy
+  categoryTypeEnum : string[] = ['MOTORS_VEHICLES','ALL_EXCLUDING_MOTORS_VEHICLES']
+  returnMethodEnum: string[] = ['EXCHANGE','REPLACEMENT'];
+  timeDurationUnitEnum : string[] = ['YEAR','MONTH','DAY','HOUR','CALENDAR_DAY','BUSINESS_DAY','MINUTE','SECOND','MILLISECOND'];
+  returnShippingCostPayerEnum =  ['BUYER','SELLER'];
+  CurrencyCodeEnum : string[] = ["AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BRL", "BSD", "BTN", "BWP", "BYR", "BZD", "CAD", "CDF", "CHF", "CLP", "CNY", "COP", "CRC", "CUP", "CVE", "CZK", "DJF", "DKK", "DOP", "DZD", "EGP", "ERN", "ETB", "EUR", "FJD", "FKP", "GBP", "GEL", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD", "HKD", "HNL", "HRK", "HTG", "HUF", "IDR", "ILS", "INR", "IQD", "IRR", "ISK", "JMD", "JOD", "JPY", "KES", "KGS", "KHR", "KMF", "KPW", "KRW", "KWD", "KYD", "KZT", "LAK", "LBP", "LKR", "LRD", "LSL", "LTL", "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT", "MOP", "MRO", "MUR", "MVR", "MWK", "MXN", "MYR", "MZN", "NAD", "NGN", "NIO", "NOK", "NPR", "NZD", "OMR", "PAB", "PEN", "PGK", "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RUB", "RWF", "SAR", "SBD", "SCR", "SDG", "SEK", "SGD", "SHP", "SLL", "SOS", "SRD", "STD", "SYP", "SZL", "THB", "TJS", "TMT", "TND", "TOP", "TRY", "TTD", "TWD", "TZS", "UAH", "UGX", "USD", "UYU", "UZS", "VEF", "VND", "VUV", "WST", "XAF", "XCD", "XOF", "XPF", "YER", "ZAR", "ZMW", "ZWL"];
+
   navEbayAuth(link) {
     // throw new Error('Method not implemented.');
     this.router.navigateByUrl(link)
   }
 
   get scope() {return 'https://api.ebay.com/oauth/api_scope https://api.ebay.com/oauth/api_scope/buy.order.readonly https://api.ebay.com/oauth/api_scope/buy.guest.order https://api.ebay.com/oauth/api_scope/sell.marketing.readonly https://api.ebay.com/oauth/api_scope/sell.marketing https://api.ebay.com/oauth/api_scope/sell.inventory.readonly https://api.ebay.com/oauth/api_scope/sell.inventory https://api.ebay.com/oauth/api_scope/sell.account.readonly https://api.ebay.com/oauth/api_scope/sell.account https://api.ebay.com/oauth/api_scope/sell.fulfillment.readonly https://api.ebay.com/oauth/api_scope/sell.fulfillment https://api.ebay.com/oauth/api_scope/sell.analytics.readonly https://api.ebay.com/oauth/api_scope/sell.marketplace.insights.readonly https://api.ebay.com/oauth/api_scope/commerce.catalog.readonly https://api.ebay.com/oauth/api_scope/buy.shopping.cart https://api.ebay.com/oauth/api_scope/buy.offer.auction https://api.ebay.com/oauth/api_scope/commerce.identity.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.email.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.phone.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.address.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.name.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.status.readonly https://api.ebay.com/oauth/api_scope/sell.finances https://api.ebay.com/oauth/api_scope/sell.item.draft https://api.ebay.com/oauth/api_scope/sell.payment.dispute https://api.ebay.com/oauth/api_scope/sell.item https://api.ebay.com/oauth/api_scope/sell.reputation https://api.ebay.com/oauth/api_scope/sell.reputation.readonly https://api.ebay.com/oauth/api_scope/commerce.notification.subscription https://api.ebay.com/oauth/api_scope/commerce.notification.subscription.readonly'}
+
 
 
   private get apiBase() {return 'https://api.ebay.com/ws/api.dll'}
@@ -206,7 +268,18 @@ export class EbayAPIService {
               private authenticationService: AuthenticationService) { }
 
 
+    publishPolicy(site: ISite, policy: string) {
+      const controller = "/Ebay/"
 
+      const endPoint = `checkInventory`
+
+      const parameters = `?policyName=${policy}`
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return this.http.get<any>(url)
+    }
+  
 
     // const headers = new HttpHeaders().set(InterceptorSkipHeader, '');
     // const req = new HttpRequest(
@@ -275,7 +348,6 @@ export class EbayAPIService {
 
     }
 
-
     public testPublish(site: ISite) {
 
       const controller = "/Ebay/"
@@ -303,7 +375,6 @@ export class EbayAPIService {
       return this.http.get<any>(url)
 
     }
-
 
     public applyAuthResponse(site: ISite, token: string) {
 
@@ -335,7 +406,21 @@ export class EbayAPIService {
       const url = `${site.url}${controller}${endPoint}${parameters}`
 
       return this.http.post<any>(url, item)
-      return of(null)
+    }
+
+    //checks status of existing offer.
+    //https://api.sandbox.ebay.com/sell/inventory/v1/inventory_item/{SKU}
+    //put
+    public checkOfferStatus(site: ISite, id: number, offerID : string): Observable<any> {
+      const controller = "/Ebay/"
+
+      const endPoint = `checkOfferStatus`
+
+      const parameters = `?id=${id}&offerID=${offerID}`
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return this.http.get<any>(url)
     }
 
     //https://api.sandbox.ebay.com/sell/inventory/v1/inventory_item/{SKU}
@@ -347,10 +432,7 @@ export class EbayAPIService {
 
     // https://api.sandbox.ebay.com/sell/inventory/v1/offer
     //post
-    public  createOffer(item: EbayOfferRequest): Observable<any> {
 
-      return of(null)
-    }
 
     //https://api.sandbox.ebay.com/sell/inventory/v1/offer/{offerId}
     //get
@@ -361,10 +443,22 @@ export class EbayAPIService {
 
     // https://api.sandbox.ebay.com/sell/inventory/v1/offer/{offerId}/publish
     //post
-    public publishOffer(site:ISite, id: number) {
+    public publishOfferBy(site:ISite, offerID: string, id: number) {
       const controller = "/Ebay/"
 
-      const endPoint = `publishOffer`
+      const endPoint = `publishOfferBy`
+
+      const parameters = `?offerID=${offerID}&id=${id}`
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return this.http.get<any>(url)
+    }
+
+    public  createOffer(site:ISite, id: number) {
+      const controller = "/Ebay/"
+
+      const endPoint = `createOffer`
 
       const parameters = `?id=${id}`
 

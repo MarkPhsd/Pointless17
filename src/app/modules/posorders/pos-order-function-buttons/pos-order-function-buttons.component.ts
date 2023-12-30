@@ -22,7 +22,6 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   posDevice$: Observable<ITerminalSettings>;
   posDevice : ITerminalSettings;
   _posDevice: Subscription;
-
   uiTransactionSetting$: Observable<TransactionUISettings>;
   uiTransactionSetting : TransactionUISettings;
   _transactionUI: Subscription;
@@ -159,7 +158,6 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     }
   }
 
-
   toggleListView() {
     this.listView = !this.listView;
     this.outPutListView.emit(this.listView)
@@ -186,7 +184,6 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
      this.windowSize = 'Normal'
 
     //  this.spacer1 = this.payButton;
-
     //  this.spacer1 = null;
      this.spacer2 = null;
      this.spacer3 = null;
@@ -293,6 +290,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
    }
 
    get isrefundOrderButton() {
+    if (this.order?.service?.filterType != 0 ) { return null }
     if ((this.userAuthorizationService.isManagement || !this.isUser )&& !this.smallDevice) {
      return this.refundOrderButton
     }
@@ -313,6 +311,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
    }
 
    get isbalanceSheetMenuView() {
+     if (this.order?.service?.filterType != 0 ) { return null }
      if (this.isStaff && this.isApp) {
       return this.balanceSheetMenuView
      }
@@ -320,17 +319,21 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
    }
 
    get adjustmentOptions() {
+    if (this.order?.service?.filterType == 2) { return null }
     return this.adjustmentOptionsView
    }
 
    get isManifestView() {
-    if ( this.purchasOrderEnabled && this.userAuthorizationService.isManagement  && !this.smallDevice) {
+    if ( this.purchasOrderEnabled && this.userAuthorizationService.isManagement  && !this.smallDevice &&
+        (this.order?.service?.filterType != 2)) {
       return this.inventoryManifestView
     }
     return null
   }
 
   get isemailOptionView() {
+    if (this.order?.service?.filterType == 2 ) { return null }
+    // if (this.order?.service?.filterType != 0 ) { return null }
     if (this.emailOption) {
       return this.isemailOptionView
     }
@@ -338,6 +341,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   }
 
   get isSSMOptionView() {
+    if (this.order?.service?.filterType == 2 ) { return null }
     if (this.ssmsOption && !this.isUser) {
       return this.ssmsOptionView
     }
@@ -359,6 +363,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   }
 
    get payOptionView() {
+    if (this.order?.service?.filterType != 0 ) { return null }
     if (this.smallDevice) {
       return this.payOption;
     }

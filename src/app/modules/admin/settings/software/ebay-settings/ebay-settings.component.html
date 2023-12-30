@@ -34,9 +34,9 @@
       </button>
   </div>
 
-  <div  style="margin:5px" *ngIf="authCodeApproval">
+  <div  style="margin:5px">
     <button mat-raised-button color="primary" (click)="getRefreshToken()">
-      <mat-icon>security</mat-icon>Get Refresh Token
+      <mat-icon>security</mat-icon>Refresh Auth
     </button>
   </div>
 
@@ -120,6 +120,9 @@
 
     <button   style="margin:5px" class="margin-10" color="primary"  mat-raised-button (click)="clearAuthorization()"><mat-icon>delete</mat-icon>Clear Auth</button>
 
+    <button   style="margin:5px" class="margin-10" color="primary"  mat-raised-button (click)="nav('1')"><mat-icon>policy</mat-icon>Fufillment</button>
+
+    <button   style="margin:5px" class="margin-10" color="primary"  mat-raised-button (click)="nav('2')"><mat-icon>policy</mat-icon>Return Policy</button>
 
  </div>
 

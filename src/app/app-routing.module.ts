@@ -146,6 +146,8 @@ import { BuySellMainComponent } from './modules/buySell/buy-sell-main/buy-sell-m
 import { EbayPublishProductComponent } from './modules/admin/inventory/ebay/ebay-publish-product/ebay-publish-product.component';
 import { ItemsMainComponent } from './modules/transactions/itemTransactions/items-main/items-main.component';
 import { EbayAuthRedirectComponent } from './modules/admin/settings/software/ebay-settings/ebay-auth-redirect/ebay-auth-redirect.component';
+import { EbayFulfillmentPolicyComponent } from './modules/admin/inventory/ebay/ebay-fulfillment-policy/ebay-fulfillment-policy.component';
+import { EbayReturnPolicyComponent } from './modules/admin/inventory/ebay/ebay-return-policy/ebay-return-policy.component';
 
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
@@ -170,7 +172,8 @@ const routes: Routes = [
 
         //ebay-publish-product
         { path: 'ebay-publish-product', component: EbayPublishProductComponent, canActivate: [AuthGuard], data: {title: 'Ebay Publisher', animation: 'isLeft'}},
-
+        { path: 'ebay-fufillment-policy', component: EbayFulfillmentPolicyComponent, canActivate: [AuthGuard], data: {title: 'Ebay Fufililment Policy', animation: 'isLeft'}},
+        { path: 'ebay-return-policy', component: EbayReturnPolicyComponent, canActivate: [AuthGuard], data: {title: 'Ebay Return Policy', animation: 'isLeft'}},
         { path: 'ebay-auth-redirect', component: EbayAuthRedirectComponent, canActivate: [AuthGuard], data: {title: 'Ebay Auth Redirect', animation: 'isLeft'}},
         //
 

@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "2.11.59",
+  "version": "2.11.61",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -11,7 +11,7 @@
     "fs": false,
     "winreg": false
   },
-"scripts": {
+  "scripts": {
     "ng": "ng",
     "start with IP": "ng serve --configuration dev --public-host --host=192.168.0.2 --port=4200 ",
     "startLocal": "ng serve --configuration dev --host=localhost --port=4200",
@@ -76,9 +76,13 @@
     "@ionic-native/status-bar": "^5.36.0",
     "@ionic/angular": "^6.0.7",
     "@ionic/pwa-elements": "^3.1.1",
+    "@jsonforms/angular": "^3.0.0-alpha.0",
+    "@jsonforms/angular-material": "^3.0.0",
+    "@jsonforms/core": "^3.1.0",
     "@material/density": "^13.0.0",
     "@mdi/font": "^6.5.95",
     "@ng-matero/extensions": "^13.0.1",
+    "@ngx-formly/bootstrap": "^6.0.0",
     "@ngx-gallery/lightbox": "^5.0.0-beta.0",
     "@npmcli/arborist": "^4.0.2",
     "@sentry/angular": "^7.8.0",
@@ -97,6 +101,7 @@
     "ag-grid-angular": "^29.3.5",
     "ag-grid-community": "^29.3.5",
     "ag-grid-enterprise": "^29.3.5",
+    "and": "^0.0.3",
     "angular-draggable-droppable": "^6.0.1",
     "angular-gridster2": "^13.1.1",
     "angular-resize-event": "^3.1.1",

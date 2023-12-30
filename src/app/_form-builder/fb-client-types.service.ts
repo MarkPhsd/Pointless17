@@ -75,6 +75,9 @@ export class FbClientTypesService {
 
       disableVoidClosedItem: [],
       disableEditOtherUsersOrders: [],
+      allowReconciliation: [],
+      allowSeeItemCost: [],
+
     })
     return fb
 

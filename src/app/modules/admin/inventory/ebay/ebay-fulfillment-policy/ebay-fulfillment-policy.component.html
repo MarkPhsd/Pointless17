@@ -1,0 +1,129 @@
+<mat-card *ngIf="inputForm">
+  <mat-card-header >
+    <mat-card-title  >{{ inputForm.value.description || 'Ebay Fulfillment Policy' }}</mat-card-title>
+    <mat-card-subtitle>
+      <!-- Error Notifications -->
+      <div *ngIf="inputForm.errors" >
+        <mat-label color="warn">
+          <mat-icon color="warn">error</mat-icon>
+          {{ inputForm.errors | json }}
+        </mat-label>
+      </div>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-actions>
+    <!-- Submit Button -->
+    <button mat-raised-button color="primary" (click)="save()">Submit</button>
+
+    <!-- Button to Add Example Data -->
+    <button mat-button (click)="loadExampleData()">Add Example Data</button>
+  </mat-card-actions>
+  <mat-card-content *ngIf="inputForm">
+    <form [formGroup]="inputForm" (ngSubmit)="onSubmit()">
+
+      <mat-card>
+           <!-- Other Fields -->
+        <mat-form-field  appearance="outline"class="margin-5">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description">
+        </mat-form-field>
+        <mat-slide-toggle formControlName="freightShipping">Freight Shipping</mat-slide-toggle>
+        <mat-slide-toggle formControlName="globalShipping">Global Shipping</mat-slide-toggle>
+        <mat-slide-toggle formControlName="localPickup">Local Pickup</mat-slide-toggle>
+        <mat-slide-toggle formControlName="pickupDropOff">Pickup Drop Off</mat-slide-toggle>
+
+        <!-- Handling Time -->
+        <div formGroupName="handlingTime">
+
+          <mat-form-field  appearance="outline"class="margin-5">
+            <mat-label>Handling Time Unit</mat-label>
+            <input matInput formControlName="unit">
+          </mat-form-field>
+          <mat-form-field  appearance="outline"class="margin-5">
+            <mat-label>Handling Time Value</mat-label>
+            <input matInput type="number" formControlName="value">
+          </mat-form-field>
+
+        </div>
+
+        <mat-form-field  appearance="outline"class="margin-5">
+          <mat-label>Marketplace ID</mat-label>
+          <input matInput formControlName="marketplaceId">
+        </mat-form-field>
+
+        <mat-form-field  appearance="outline"class="margin-5">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+      </mat-card>
+
+      <!-- Category Types -->
+      <h4> Category Types </h4>
+      <button mat-button  color="primary" (click)="addCategoryType()">Add Category Type</button>
+      <div formArrayName="categoryTypes">
+        <div *ngFor="let categoryType of categoryTypes.controls; let i=index">
+          <div  [formGroup]="categoryType" *ngIf="i"> 
+              <mat-form-field  appearance="outline"class="margin-5">
+                <mat-label>Category Type Name</mat-label>
+                <input matInput formControlName="name">
+              </mat-form-field>
+              <mat-slide-toggle formControlName="default">Default</mat-slide-toggle>
+              <button mat-button  color="warn" (click)="removeCategoryType(i)">Remove</button>
+          </div>
+         
+        </div>
+      </div>
+
+      <!-- Shipping Options -->
+      <h4> Shipping Options  </h4>
+      <button mat-button  color="primary" (click)="addShippingOption()">Add Shipping Option Type</button>
+      <div formArrayName="shippingOptions">
+        <div *ngFor="let shippingOption of shippingOptions.controls; let j=index" >
+          <!-- {{shippingOption.value | json }} -->
+          <div [formGroup]="shippingOption" *ngIf="j">
+
+              <!-- section 2 -->
+              <mat-form-field  appearance="outline"class="margin-5">
+                <mat-label>Cost Type</mat-label>
+                <input matInput formControlName="costType">
+              </mat-form-field>
+              
+              <mat-slide-toggle formControlName="insuranceOffered">Insurance Offered</mat-slide-toggle>
+              <mat-slide-toggle formControlName="shippingPromotionOffered">Shipping Promotion Offered</mat-slide-toggle> 
+
+              <!-- section 2 -->
+              <h4>Package & Handling</h4>
+              <button mat-button (click)="addpackageHandlingCost(j)">Add Packaging</button>
+              <div formGroupName="packageHandlingCost">
+
+                <mat-form-field  appearance="outline"class="margin-5">
+                  <mat-label>Currency</mat-label>
+                  <input matInput formControlName="currency">
+                </mat-form-field>
+                
+                <mat-form-field  appearance="outline"class="margin-5">
+                  <mat-label>value</mat-label>
+                  <input matInput formControlName="value" type="number">
+                </mat-form-field>
+               
+              </div>
+              <button mat-button  color="warn" (click)="removeShippingOption(j)">Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ship To Locations -->
+      <div formGroupName="shipToLocations">
+        <!-- Region Excluded -->
+        <div formArrayName="regionExcluded">
+          <!-- ... similar structure for region fields ... -->
+        </div>
+        <!-- Region Included -->
+        <div formArrayName="regionIncluded">
+          <!-- ... similar structure for region fields ... -->
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

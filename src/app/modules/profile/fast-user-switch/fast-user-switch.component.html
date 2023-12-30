@@ -6,20 +6,46 @@
   <div style="margin:5px">
     <button class="payment-buttons" mat-button (click)="logout()"><mat-icon>lock</mat-icon>Lock</button>
   </div>
+
+  <div>
+    <ng-container [ngTemplateOutlet]="checkUserStatus"></ng-container>
+  </div>
 </div>
 
-<div class="item-container">
-  <app-key-pad
-    [inputForm]        ="inputForm"
-    [inputTypeValue]   ="'password'"
-    [showInput]        ="true"
-    [placeHolder]      = "'pin'"
-    [alternateClass]   ="'grid-keypad-alternate'"
-    [numberbuttons]    ="'number-buttons button-sized-2'"
-    (outPutReturnEnter)="enterPIN($event)">
-    Enter PIN
-  </app-key-pad>
+
+<!-- IS APP {{ platformService.isApp() }} -->
+<div *ngIf="(uiHome$ | async) as home">
+
+  <div >
+    <div class="item-container">
+      <app-key-pad
+        [inputForm]        ="inputForm"
+        [inputTypeValue]   ="'password'"
+        [showInput]        ="true"
+        [placeHolder]      = "'pin'"
+        [alternateClass]   ="'grid-keypad-alternate'"
+        [numberbuttons]    ="'number-buttons button-sized-2'"
+        (outPutReturnEnter)="enterPIN($event)">
+        Enter PIN
+      </app-key-pad>
+    </div>
+  </div>
 </div>
+
 
 <div *ngIf="(loginAction$ | async) as loginAction"></div>
 <div *ngIf="(action$ | async) as loginAction"></div>
+
+<ng-template #checkUserStatus>
+  <!-- this contains a message for cashiers -->
+  <div *ngIf="balanceSheet$ | async as sheet" style="margin-bottom:10px">
+
+    <div *ngIf="(sheet && (sheet.name && sheet.name)) != 'open' && isLocked">
+     <h4>Current User:  <mat-icon>lock</mat-icon>    {{ sheet?.name}}</h4>
+    </div>
+    <div *ngIf="(!sheet || sheet.id == 0 || sheet.name === 'open') || !isLocked">
+      <h4> Drawer Status:  Open</h4>
+    </div>
+  </div>
+
+</ng-template>

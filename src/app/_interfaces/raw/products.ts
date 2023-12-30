@@ -209,5 +209,7 @@ export interface IProduct {
   json: string;
   pB_MainID: number; number;
   thumbnail: string;
+  bayName: string;
+  baySection: string;
 }
 

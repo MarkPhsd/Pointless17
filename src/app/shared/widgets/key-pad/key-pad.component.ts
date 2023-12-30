@@ -28,7 +28,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   //returns on enter press
   @Output() outPutReturnEnter = new EventEmitter();
   @Output() outPutFocus   = new EventEmitter();
-  @Input() _value        : Subscription;
+  @Input() _value         : Subscription;
   @Input() value          = '';
   @Input() instruction    = 'Enter Value';
   @Input() inputTypeValue = '';
@@ -132,10 +132,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   _initForm() {
-    // // this.inputForm = this.fb.group({})
-    // this.inputForm = this.fb.group({
-    //   itemName: [],
-    // })
     const group = new FormGroup({})
     group.addControl(this.fieldName ,new FormControl())
     this.inputForm = group;
@@ -267,7 +263,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
       this.inputForm.patchValue({itemName: value * -1})
       return
     }
-
   }
 
   refreshDisplay() {
@@ -342,7 +337,11 @@ export class KeyPadComponent implements OnInit, OnChanges {
       this.formatted = this.value;
     }
 
+    if (this.formatted === '') {
+       this.value = this.formatted;
+    }
 
+    console.log(this.fieldName, this.formatted)
     if (this.formatted != undefined) {
       const fieldName = this.fieldName
       const value     = this.formatted

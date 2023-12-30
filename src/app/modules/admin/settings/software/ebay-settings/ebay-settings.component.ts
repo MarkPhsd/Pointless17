@@ -121,28 +121,29 @@ export class EbaySettingsComponent implements OnInit {
 
   _getSettings() {
     const site = this.sitesService.getAssignedSite()
-    return  this.uISettingsService.getSetting('ebaySettings').pipe(
+    return  this.settingService.getPublicEbay(site).pipe(
       switchMap( data => {
-
-        this.setting = data;
-        if (!data) {
-          const setting = this.getSettingState();
-          return  this.settingService.postSetting(site, setting)
-        }
-
-        if (data.text) {
-          if (!data.text) {
-            this.ebaySettings = {} as ebayoAuthorization;
-          } else {
-            this.ebaySettings = JSON.parse(data.text) as ebayoAuthorization;
-          }
+        if (data) {
+          this.ebaySettings = data;
           this.ebaySettings.id = data.id;
+          // }
 
-          // this.
+          // this.auth = window.btoa(`${this.ebaySettings?.clientID}:${this.ebaySettings?.client_secret}`);
+         this.ebayForm.patchValue( this.ebaySettings )
         }
+        // this.setting = data;
+        // if (!data) {
+        //   const setting = this.getSettingState();
+        //   return  this.settingService.postSetting(site, setting)
+        // }
 
-        this.auth = window.btoa(`${this.ebaySettings?.clientID}:${this.ebaySettings?.client_secret}`);
-        this.ebayForm.patchValue( this.ebaySettings )
+        // if (data.text) {
+        //   if (!data.text) {
+        //     this.ebaySettings = {} as ebayoAuthorization;
+        //   } else {
+        //     this.ebaySettings = JSON.parse(data.text) as ebayoAuthorization;
+        //   }
+
         return of(this.ebaySettings);
     }));
   }
@@ -171,10 +172,14 @@ export class EbaySettingsComponent implements OnInit {
 
   saveEbaySettings() {
     const site = this.sitesService.getAssignedSite()
-    this.setting.text = JSON.stringify(this.ebayForm.value);
-    let setting = this.setting;
+    const ebayValue = this.ebayForm.value
+    const ebayText = JSON.stringify(this.ebayForm.value);
+    let setting = {} as ISetting;
+    setting.id = ebayValue.id;
+    setting.text = ebayText ;
+    setting.name = 'EbaySettings';
+
     if (!setting) {
-      // console.log('settting', setting)
       return ;
     }
 
@@ -182,7 +187,7 @@ export class EbaySettingsComponent implements OnInit {
 
     if (!confirm) {return}
 
-    this.action$ =  this.settingService.putSetting(site, setting.id, setting).pipe(switchMap(data => {
+    this.action$ =  this.settingService.putEbaySetting(site, setting.id, setting).pipe(switchMap(data => {
       this.sitesService.notify('Saved', 'Close', 3000, 'green')
       return of(data)
     }))
@@ -235,5 +240,12 @@ export class EbaySettingsComponent implements OnInit {
     }
   }
 
-
+  nav(value){
+    if (value == '1'){
+      this.router.navigate(['ebay-fufillment-policy'])
+    }
+    if (value == '2'){
+      this.router.navigate(['ebay-return-policy'])
+    }
+  }
 }

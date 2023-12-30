@@ -221,6 +221,7 @@
               <ng-container [ngTemplateOutlet]="productCount"></ng-container>
               <ng-container [ngTemplateOutlet]="reOrderAmount"></ng-container>
               <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
+              <ng-container [ngTemplateOutlet]="bayInfo"></ng-container>
             </div>
           </div>
 
@@ -420,6 +421,20 @@
       [inputForm]="productForm"
       [fieldName]="'reOrderLevel'">
       Re Order Level
+  </app-value-fields>
+</ng-template>
+
+
+<ng-template #bayInfo>
+  <app-value-fields
+      [inputForm]="productForm"
+      [fieldName]="'bayName'">
+      Bay Name
+  </app-value-fields>
+  <app-value-fields
+    [inputForm]="productForm"
+    [fieldName]="'baySection'">
+    Bay Numebr
   </app-value-fields>
 </ng-template>
 

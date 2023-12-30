@@ -4,15 +4,15 @@
   </div>
 
   <div *ngIf="inputForm">
-    <!-- {{cashValue}} |
-    {{inputForm.value | json}} -->
+    <!-- {{fieldName}}<br>
+    {{inputForm?.value | json}} -->
   </div>
 
   <div class="item-container"
        *ngIf="inputForm">
     <div class="header-info"
          [formGroup]="inputForm">
-         <div>
+      <div>
         <div class="ngcontent">
             <mat-label>
               <ng-content></ng-content>
@@ -22,8 +22,8 @@
             <div *ngIf="disableFocus">
               <input  matInput
                       #input
-                      [placeholder]="placeHolder"
-                      aria-label="Number"
+                      [placeholder]      ="placeHolder"
+                      aria-label         ="Number"
                       [(ngModel)]        ="cashValue"
                       [type]             ="inputType"
                       [formControlName]  ="fieldName"
@@ -42,7 +42,7 @@
                   [formControlName]  ="fieldName"
                   (keyup.enter)      = "returnEnterPress()"
                   class="form-control" >
-                </div>
+            </div>
 
             <button *ngIf="cashValue"
                       matSuffix

@@ -1,6 +1,6 @@
 <div *ngIf="(action$ | async) as action"></div>
 
-creditCardPaymentsMade {{creditCardPaymentsMade }}
+<!-- creditCardPaymentsMade {{creditCardPaymentsMade }} -->
 <div  *ngIf="order && mainPanel && uiTransactionSetting"
       class="buttons-container">
 
@@ -10,13 +10,13 @@ creditCardPaymentsMade {{creditCardPaymentsMade }}
 
   <ng-container [ngTemplateOutlet]="listItemsView"> </ng-container>
 
-  <ng-container [ngTemplateOutlet]="emailOptionView"></ng-container>
+  <ng-container [ngTemplateOutlet]="isemailOptionView"></ng-container>
 
   <ng-container [ngTemplateOutlet]="isSSMOptionView"></ng-container>
 
   <ng-container [ngTemplateOutlet]="istextOptionView"></ng-container>
 
-  <ng-container [ngTemplateOutlet]="sendOptionView"></ng-container>
+  <ng-container [ngTemplateOutlet]="isSSMOptionView"></ng-container>
 
   <div *ngIf="isApp">
     <ng-container [ngTemplateOutlet]="spacer5"></ng-container>
@@ -131,7 +131,7 @@ creditCardPaymentsMade {{creditCardPaymentsMade }}
 </ng-template>
 
 <ng-template #textOptionView>
-  <div *ngIf="ssmsOption && !isUser">
+  <div *ngIf="ssmsOption && !isUser ">
     <button  [disabled]="!(order && order.clients_POSOrders && order.clients_POSOrders.phone) "
             mat-raised-button
             class="button"
@@ -158,6 +158,7 @@ creditCardPaymentsMade {{creditCardPaymentsMade }}
 </ng-template>
 
 <ng-template #emailOptionView>
+
   <button  [disabled]="!(order && order.clients_POSOrders && order.clients_POSOrders.email) "
     mat-raised-button
     class="button"

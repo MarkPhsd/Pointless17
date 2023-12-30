@@ -70,6 +70,9 @@ export interface IUserAuth_Properties {
   disableEditOtherUsersOrders: boolean;
 
   allowBuy: boolean;
+
+  allowReconciliation: boolean;
+  allowSeeItemCost: boolean;
 }
 
 @Injectable({

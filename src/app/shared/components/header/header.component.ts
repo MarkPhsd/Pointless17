@@ -88,9 +88,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   sitePickerWidth = 50;
   searchForm          : UntypedFormGroup;
 
-  phoneDevice         : boolean;
-  smallDevice         :   boolean;
-  scannerEnabled      : boolean;
+  phoneDevice         :  boolean;
+  smallDevice         :  boolean;
+  scannerEnabled      :  boolean;
   private toolBar     :  boolean;
 
   showPOSFunctions    =   false;
@@ -98,7 +98,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   scaleValue          :   any;
 
   isUserStaff         =   false;
-  isManager           :     boolean;
+  isManager           :   boolean;
   isAdmin             =   false;
   isUser              =   false;
 
@@ -197,7 +197,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     this._transactionUI = this.uiSettings.transactionUISettings$.subscribe( data => {
       if (data) {
         this.uiTransactionSetting = data;
-
       }
     });
   }
@@ -292,7 +291,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
               this.uiSettings.updatePOSDevice(posDevice)
 
               this.terminalSetting = data;
-              // console.log('pos device', posDevice)
               if (this.platformService.isAppElectron) {
                 if (posDevice && posDevice.electronZoom && posDevice.electronZoom != '0') {
                   this.uiSettings.electronZoom(posDevice.electronZoom)

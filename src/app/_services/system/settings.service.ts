@@ -10,6 +10,7 @@ import { IItemBasic } from '..';
 import { DSIEMVSettings, StripeAPISettings, TransactionUISettings, UIHomePageSettings } from './settings/uisettings.service';
 import { EmailModel } from '../twilio/send-grid.service';
 import { UserAuthorizationService } from './user-authorization.service';
+import { ebayoAuthorization } from '../resale/ebay-api.service';
 
 interface IIsOnline {
   result: string;
@@ -102,6 +103,20 @@ export class SettingsService {
     const url = `${this.apiUrl}${controller}${endPoint}`
 
     return this.http.get<any>(url, { observe: 'response'}  )
+
+  }
+
+  getPublicEbay(site:ISite):  Observable<ebayoAuthorization> {
+
+    const controller = '/settings/'
+
+    const endPoint = 'getPublicEbay'
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
 
   }
 
@@ -548,7 +563,7 @@ export class SettingsService {
   }
 
   saveSettingObservable(site: ISite, setting: ISetting): Observable<ISetting>  {
-    if (setting.id  == 0 || setting.id == undefined)  {
+    if (setting.id  == 0 || setting.id == undefined || !setting.id)  {
       return  this.postSetting(site, setting)
     }
     if (setting.id) {

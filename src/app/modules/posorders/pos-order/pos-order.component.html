@@ -33,11 +33,11 @@
             <div *ngIf="orderMethodsService.quantityValue$ | async as value">
               <div *ngIf="quantityEntryValue as value">
                 <app-key-pad [requireWholeNumber]= "false"
-                            (outPutValue)="setKeyPadValue($event)"
-                            [value]  ="value"
-                            [placeHolder]="'Quantity'"
-                            (outPutFocus)="setScannerFocus($event)"
-                            [disableFocus] = "true"
+                             (outPutValue)="setKeyPadValue($event)"
+                             [value]  ="value"
+                             [placeHolder]="'Quantity'"
+                             (outPutFocus)="setScannerFocus($event)"
+                             [disableFocus] = "true"
                             [_value] = "orderMethodsService._quantityValue">
                 </app-key-pad>
               </div>
@@ -147,7 +147,6 @@
               <ng-container [ngTemplateOutlet]="cardPointButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="giftCardButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="houseAccountButtonView"></ng-container>
-              <!-- <ng-container [ngTemplateOutlet]="storeCreditPaybuttonView"></ng-container> -->
               <ng-container [ngTemplateOutlet]="wicEBTButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="triPOSPaymentButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="payButton"></ng-container>
@@ -180,6 +179,9 @@
           <ng-container [ngTemplateOutlet]="purchaseItemHistoryView"></ng-container>
           <ng-container [ngTemplateOutlet]="importPurchaseOrderView"></ng-container>
         </div>
+        <div class="grid-po-helper" >
+          <ng-container [ngTemplateOutlet]="reconcileView"> </ng-container>
+        </div>
       </div>
 
     </div>
@@ -201,6 +203,7 @@
   </div>
 </ng-template>
 
+
 <ng-template #itemViewType>
   <pos-order-items
     [purchaseOrderEnabled]="purchaseOrderEnabled"
@@ -211,6 +214,15 @@
     [order]               ="order">
   </pos-order-items>
 </ng-template>
+
+<ng-template #listViewType>
+  <ng-container [ngTemplateOutlet]="newItemEntryView"></ng-container>
+  <pos-order-item-list
+    [filteredList]="filteredList"
+    [userAuths] ='userAuths'
+  ></pos-order-item-list>
+</ng-template>
+
 
 <ng-template #casePriceSelector>
   <div *ngIf="isStaff && (product$ | async ) as product">
@@ -236,12 +248,6 @@
   </pos-check-out-buttons>
 </ng-template>
 
-<ng-template #listViewType>
-  <ng-container [ngTemplateOutlet]="newItemEntryView"></ng-container>
-  <pos-order-item-list
-         [userAuths] ='userAuths'
-  ></pos-order-item-list>
-</ng-template>
 
 <ng-template #roundOrder>
   <button style="margin-top:5px;" mat-raised-button color="warn"
@@ -252,7 +258,8 @@
 </ng-template>
 
 <ng-template #closeOrderButton>
-  <div  *ngIf="(!isUser && paymentsEqualTotal) || order?.service?.filterType == 1">
+  <div  *ngIf="(!isUser && paymentsEqualTotal) ||
+             ( order?.service?.filterType == 1 ) &&  order?.service?.filterType != 2">
     <button mat-raised-button color="warn"  (click)="closeOrder()">
       <mat-icon >close</mat-icon>Close</button>
   </div>
@@ -490,21 +497,22 @@
 </ng-template>
 
 <ng-template #payButton>
-
-  <span #coachingpayOptions>
-    <button
-        mat-raised-button
-        class="buttons "
-        color="primary"
-        aria-label="Check Out"
-        (click)="makePayment()">
-      <mat-icon>credit_card</mat-icon>
-        Pay
-      <div>
-        Options
-      </div>
-    </button>
-  </span>
+  <div *ngIf="!isUser && order && (order?.service?.filterType != 1 && order?.service?.filterType != 2)">
+    <span #coachingpayOptions>
+      <button
+          mat-raised-button
+          class="buttons "
+          color="primary"
+          aria-label="Check Out"
+          (click)="makePayment()">
+        <mat-icon>credit_card</mat-icon>
+          Pay
+        <div>
+          Options
+        </div>
+      </button>
+    </span>
+  </div>
 
 </ng-template>
 
@@ -554,7 +562,127 @@
   </div>
 </ng-template>
 
+<ng-template #reconcile>
+  <mat-card *ngIf="order">
+    <mat-card-title>
+    </mat-card-title>
+
+    <mat-card-content>
+      <div class="flex-group-row-start">
+
+        <app-key-pad
+            [fieldName]="'itemName'"
+            [inputForm]="reconcileValueForm"
+            [value]  ="reconcileEntryValue"
+            [inputTypeValue]="'decimal'"
+            [placeHolder]="'Quantity'"
+            (outPutReturnEnter)="setReconcileEntry($event)">
+        </app-key-pad>
+
+        <div>
+          <button mat-raised-button
+               color="primary"
+               (click)="updateRemaingCount()">
+            <mat-icon>refresh</mat-icon>Get current Values
+          </button>
+
+          <button mat-raised-button
+                color="warn"
+               (click)="deleteReconciliation()">
+            <mat-icon>delete</mat-icon>Delete
+          </button>
+
+          <button mat-raised-button
+                color="primary"
+                (click)="applyReconciliation()">
+            <mat-icon>refresh</mat-icon>Apply Counts & Close
+          </button>
+
+
+
+          <div *ngIf="searchForm" >
+            <div class="grid-container-selectors">
+              <div >
+                <search-debounce-input
+                                      [itemNameControl] = "'itemName'"
+                                      [searchForm]      = "searchForm"
+                                      (outPutMethod)    = "refreshSearch($event)">
+                  <div fieldDescription>
+                      <mat-icon>search</mat-icon>
+                      Search
+                  </div>
+                </search-debounce-input>
+              </div>
+
+              <div
+                    *ngIf="(departments$ | async) as list">
+                <form-select-list [searchForm]          = "searchForm"
+                                    [formFieldName]     ="'departmentID'"
+                                    [list]              = "list"
+                                    [showActiveInactive]="true"
+                                    (selectionChange)   = "refreshSearch($event)">
+                  <div fieldSearchDescription>Department</div>
+                  </form-select-list>
+              </div>
+
+              <div *ngIf="(categories$ | async) as lists">
+                <form-select-list [searchForm]      = "searchForm"
+                                  [formFieldName]   = "'categoryID'"
+                                  [list]            = "lists"
+                                  [showActiveInactive]="true"
+                                  (selectionChange) = "refreshSearch($event)">
+                <div fieldSearchDescription>Category</div>
+                </form-select-list>
+              </div>
+
+              <div
+                  *ngIf="productTypes$ | async as list">
+                <form-select-list [formFieldName]   = "'itemTypeID'"
+                                  [searchForm]      = "searchForm"
+                                  [list]            = "list"
+                                  (selectionChange) = "refreshSearch($event)"   >
+                <div fieldSearchDescription>Type</div>
+                </form-select-list>
+              </div>
+<!--
+              name="Scanned"
+              class="mat-label"
+              (onChange) = "refreshSearch($event)" -->
+
+              <div  class="mat-label" [formGroup]="searchForm">
+                <mat-slide-toggle
+                    name="Scanned"
+                    class="mat-label"
+                    (change) = "refreshSearch($event)"
+                    formControlName="scanned">
+                  <mat-label class="mat-label">Scanned</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <button mat-raised-button
+                      (click)="resetReconciliationSearch()">
+                <mat-icon>refresh</mat-icon>Reset Search
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</ng-template>
 
 <!-- margin  %. Add items by the case ( you don't have to open boxes or cases to scan the actual item or try to remember how many come in each box)
 Be able to see the actual inventory so I can check the inventory at the same time that I add items. -->
-
+<!--
+itemName          : [''],
+itemTypeID        : [],
+brandID           : [],
+categoryID        : [],
+departmentID      : [],
+subCategoryID     : [],
+viewAll           : [1],
+bayName           : [],
+scanned           : [],
+}); -->

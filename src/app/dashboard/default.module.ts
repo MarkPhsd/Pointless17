@@ -388,6 +388,8 @@ import { ItemsMainComponent } from '../modules/transactions/itemTransactions/ite
 import { ItemsFilterComponent } from '../modules/transactions/itemTransactions/items-filter/items-filter.component';
 import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-settings/ebay-settings.component';
 import { EbayAuthRedirectComponent } from '../modules/admin/settings/software/ebay-settings/ebay-auth-redirect/ebay-auth-redirect.component';
+import { EbayReturnPolicyComponent } from '../modules/admin/inventory/ebay/ebay-return-policy/ebay-return-policy.component';
+import { EbayFulfillmentPolicyComponent } from '../modules/admin/inventory/ebay/ebay-fulfillment-policy/ebay-fulfillment-policy.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -635,6 +637,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     MenuItemModalComponent,
     NewInventoryItemComponent,
     EbayPublishProductComponent,
+    EbayReturnPolicyComponent,
+    EbayFulfillmentPolicyComponent,
     // NumericDirective,
     OrderItemsListComponent,
     OrderItemListComponent,
@@ -854,6 +858,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       NgxPayPalModule,
       NgxJsonViewerModule,
       NgxColorsModule,
+      FormsModule,
 
     ],
 

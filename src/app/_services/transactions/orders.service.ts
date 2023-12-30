@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { Observable, of, switchMap } from 'rxjs';
 import { IProductPostOrderItem, IServiceType, ISite, IUserProfile }   from 'src/app/_interfaces';
-import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
+import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel, IReconcilePayload } from 'src/app/_interfaces/transactions/posorder';
 import { IPagedList } from '../system/paging.service';
 import { IItemBasic } from '../menu/menu.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -63,6 +63,19 @@ export class OrdersService {
   {
 
   }
+
+  applyReconciliation(site: ISite,id: number) :  Observable<any>  {
+    const controller = "/POSOrderItems/"
+
+    const endPoint  = "ApplyReconciliation"
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
+  }
+
   applyItemsToGroup(site: ISite, groupID: number, selectedItems: any) :  Observable<any>  {
     const controller = "/POSOrders/"
 
@@ -209,6 +222,7 @@ export class OrdersService {
 
     return this.http.get<IPOSOrder>(url);
   }
+
   completeOrder(site: ISite , id: number): Observable<IPOSOrder> {
     const controller = "/POSOrders/"
 
@@ -233,6 +247,34 @@ export class OrdersService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<IItemBasic[]>(url);
+  }
+
+  pOSTReconciliationOrder(site: ISite) :  Observable<IPOSOrder> {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "pOSTReconciliationOrder"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder>(url);
+  }
+
+
+  addReconciliationSection(site: ISite, item: IReconcilePayload): Observable<IPOSOrder> {
+
+    const controller = "/POSOrders/";
+
+    const endPoint = "AddReconciliationSection";
+
+    const parameters = ``
+
+    console.log(item)
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<any>( url, item )
+
   }
 
   setOrderName(id: number, orderName: string):  Observable<any>  {
@@ -758,6 +800,8 @@ export class OrdersService {
     return  this.http.get<any>( url )
 
   }
+
+
 
   notificationEvent(description, title){
     this._SnackBar.open ( description, title , {

@@ -24,6 +24,7 @@ export interface IUser {
   sortMenu: string;
   preferences: string;
   userPreferences: UserPreferences;
+
 }
 
 export interface UserPreferences {
@@ -37,5 +38,6 @@ export interface UserPreferences {
   enableCoachMarks: boolean;
   contactPreference: number;
   orderID: number;
+  ebayItemJSONHidden: boolean;
 }
 

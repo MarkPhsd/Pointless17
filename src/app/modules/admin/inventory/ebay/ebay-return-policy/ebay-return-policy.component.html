@@ -1,0 +1,174 @@
+<div *ngIf="action$ | async"></div>
+
+<div *ngIf="inventoryCheck">
+  <mat-card>
+    <mat-card-title>
+       <h4>Pulish Results</h4>
+    </mat-card-title>
+    <mat-card-content>
+      <ngx-json-viewer [json]="inventoryCheck"></ngx-json-viewer>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="inventoryCheck = null">Clear</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<mat-card *ngIf="inputForm">
+  <mat-card-title>
+     <h4>Check Form JSON</h4>
+  </mat-card-title>
+  <mat-card-content>
+    <ngx-json-viewer [json]="formValue"></ngx-json-viewer>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="formValue = inputForm.value">Set</button>
+    <button mat-raised-button color="primary" (click)="formValue = 'null'">Clear</button>
+  </mat-card-actions>
+</mat-card>
+
+<mat-card>
+  <mat-card-title>{{ inputForm.get('description').value || 'Ebay Return Policy' }}</mat-card-title>
+  <mat-card-subtitle>
+    <div *ngFor="let error of formErrors">
+      <mat-label color="warn">
+        <mat-icon color="warn">error</mat-icon>
+        {{ error }}
+      </mat-label>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="flex-grid-row">
+      <button mat-button (click)="loadExampleData()">Load Example Data</button>
+      <button mat-button (click)="save()"><mat-icon>save</mat-icon>Save</button>
+      <button mat-button (click)="loadPolicy()"><mat-icon>refresh</mat-icon></button>
+      <button mat-button (click)="publish()"><mat-icon>upload</mat-icon>Publish</button>
+    </div>
+
+  </mat-card-subtitle>
+
+  <mat-card-content>
+
+    <form [formGroup]="inputForm">
+
+      <app-value-fields [inputForm]="inputForm" [fieldName]="'name'">Name</app-value-fields>
+      <app-value-fields [inputForm]="inputForm" [fieldName]="'description'">Description</app-value-fields>
+
+      <div formArrayName="categoryTypes">
+        <div *ngFor="let categoryCtrl of getCategoryTypesControls(); let i = index" [formGroupName]="i">
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label>Category Type {{i + 1}}</mat-label>
+              <mat-select formControlName="name">
+                <mat-option *ngFor="let item of ebayService.categoryTypeEnum" [value]="item">
+                  {{ item }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-slide-toggle formControlName="default">Default</mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <mat-slide-toggle formControlName="extendedHolidayReturnsOffered">Extended Holiday Returns Offered</mat-slide-toggle>
+      </div>
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>Marketplace ID</mat-label>
+          <mat-select formControlName="marketplaceId">
+            <mat-option *ngFor="let id of ebayService.ebayMarketplaceIds" [value]="id">
+              {{ id }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div style="width:350px">
+        <app-value-fields style="width:350px" [inputForm]="inputForm" [fieldName]="'restockingFeePercentage'">Restocking Fee Percentage</app-value-fields>
+      </div>
+      <div>
+        <app-value-fields  [inputForm]="inputForm" [fieldName]="'returnInstructions'">Return Instructions</app-value-fields>
+      </div>
+
+      <div formGroupName="internationalOverride">
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Return Method</mat-label>
+            <mat-select formControlName="returnMethod">
+              <mat-option *ngFor="let method of ebayService.returnMethodEnum" [value]="method">
+                {{ method }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      
+        <div formGroupName="returnPeriod">
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label>Return Period Value</mat-label>
+              <input matInput formControlName="value" type="number">
+            </mat-form-field>
+          </div>
+          
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label>Return Period Unit</mat-label>
+              <mat-select formControlName="unit">
+                <mat-option *ngFor="let unit of ebayService.timeDurationUnitEnum" [value]="unit">
+                  {{ unit }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        
+        <div>
+          <mat-slide-toggle formControlName="returnsAccepted">Returns Accepted</mat-slide-toggle>
+        </div>
+        
+        <div style="width:350px"> 
+          <mat-form-field  style="width:250px"  appearance="outline">
+            <mat-label>Return Shipping Cost Payer</mat-label>
+            <mat-select formControlName="returnShippingCostPayer">
+              <mat-option *ngFor="let payer of ebayService.returnShippingCostPayerEnum" [value]="payer">
+                {{ payer }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div formGroupName="returnPeriod" >
+
+        <div style="width:250px">
+          <mat-form-field  style="width:250px" appearance="outline">
+              <mat-label>
+                Restocking Fee Percentage
+              </mat-label>
+              <input matInput
+                    type="number"
+                    formControlName="value">
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field style="width:350px" appearance="outline">
+            <mat-label>Return Period Unit</mat-label>
+            <mat-select formControlName="unit">
+              <mat-option *ngFor="let unit of ebayService.timeDurationUnitEnum" [value]="unit">
+                {{ unit }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+      </div>
+
+    </form>
+
+  </mat-card-content>
+</mat-card>

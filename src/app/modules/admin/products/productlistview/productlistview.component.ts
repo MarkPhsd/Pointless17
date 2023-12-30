@@ -3,7 +3,7 @@ import { Component,   Input, Output, OnInit,
   HostListener,
   OnDestroy} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AWSBucketService, ContactsService, MenuService } from 'src/app/_services';
+import { AWSBucketService, ContactsService, MenuService, OrdersService } from 'src/app/_services';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IItemBasicB, IProductSearchResultsPaged } from 'src/app/_services/menu/menu.service';
@@ -19,7 +19,7 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 
-import { ClientSearchModel, IProduct, IUserProfile } from 'src/app/_interfaces';
+import { ClientSearchModel, IProduct, IReconcilePayload, IUserProfile } from 'src/app/_interfaces';
 
 import { Capacitor,  } from '@capacitor/core';
 import { Subscription } from 'rxjs';
@@ -27,6 +27,8 @@ import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-
 import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
 import { EditSelectedItemsComponent } from '../productedit/edit-selected-items/edit-selected-items.component';
 import { MatDialog } from '@angular/material/dialog';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { A } from '@angular/cdk/keycodes';
 
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
@@ -193,7 +195,9 @@ constructor(  private _snackBar              : MatSnackBar,
               private productEditButtonService: ProductEditButtonService,
               private agGridFormatingService : AgGridFormatingService,
               private awsService             : AWSBucketService,
-              private dialog: MatDialog,
+              private dialog                 : MatDialog,
+              private orderService           : OrdersService,
+              private orderMethodsService: OrderMethodsService,
             )
   {  }
 
@@ -253,6 +257,15 @@ constructor(  private _snackBar              : MatSnackBar,
     })
   }
 
+
+  refreshGroupingDataOnly() {
+    const site          = this.siteService.getAssignedSite()
+    this.refreshDepartments();
+    this.categories$    = this.menuService.getListOfCategoriesAll(site);
+    this.subCategories$    = this.menuService.getListOfSubCategories(site)
+  }
+
+
   refreshSubCategories() {
     const site          = this.siteService.getAssignedSite()
     this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(
@@ -287,6 +300,7 @@ constructor(  private _snackBar              : MatSnackBar,
       })
     )
   }
+
 
   refreshDepartments() {
     const site          = this.siteService.getAssignedSite()
@@ -375,6 +389,7 @@ constructor(  private _snackBar              : MatSnackBar,
       departmentID      : [this.departmentID],
       subCategoryID:      [this.subCategoryID],
       viewAll           : [1],
+      bayName           : [],
       minQuantityFilter : [],
       webWorkRequired   : [false],
     });
@@ -386,7 +401,9 @@ constructor(  private _snackBar              : MatSnackBar,
       // console.log(value)
       this.refreshSearch(1)
     });
-
+    this.searchForm.controls['bayName'].valueChanges.subscribe(value => {
+      this.refreshSearch(1)
+    });
     this.searchForm.valueChanges.subscribe(data => {
       // console.log(data)
     })
@@ -560,6 +577,15 @@ constructor(  private _snackBar              : MatSnackBar,
           cellRenderer: AgGridImageFormatterComponent
       },
 
+      {headerName: 'Bay',   field: 'bayName',
+          width: 100,
+          minWidth: 100,
+          maxWidth: 125,
+          editable: true,
+          comparator: myComparator,
+          singleClickEdit: true,
+      },
+
       {   headerName: 'Copy', field: "id",
           cellRenderer: "btnCellRenderer",
           cellRendererParams: {
@@ -620,9 +646,7 @@ constructor(  private _snackBar              : MatSnackBar,
       this.action$ = this.updateValues(event.data.id, !event.value, 'active');
       event.value = !event.value;
       this.refreshGrid()
-      // console.log(item)
     }
-    // this.gridAPI.setRowData(item)
   }
 
   updateValues(id: number, itemValue: any, fieldName: string) {
@@ -631,27 +655,9 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   cellValueChanged(event) {
-    // console.log('event',event?.value)
     const colName = event?.column?.colId.toString() as string;
-
     const item = event.data as IProduct
-
-    // if (colName === 'retail') {
-    //   item.retail = event.value;
-    // }
-    // if (colName === 'count') {
-    //   item.productCount = event.value;
-    // }
-    // if (colName === 'barcode') {
-    //   item.barcode = event.value;
-    // }f
-    // if (colName === 'name') {
-    //   item.name = event.value;
-    // }
-    // if (colName === 'active') {
-    //   item.active = event.value;
-    // }
-
+    console.log(item)
     this.action$ = this.updateValues(event.data?.id , event.value, colName)
   }
 
@@ -669,13 +675,18 @@ constructor(  private _snackBar              : MatSnackBar,
     if (this.productTypeSearch)         { searchModel.itemTypeID  = +this.productTypeSearch.toString(); }
     if (this.brandID)                   { searchModel.brandID     = +this.brandID.toString(); }
     if (this.departmentID)              { searchModel.departmentID= +this.departmentID.toString()}
+
+    const searchForm = this.searchForm.value;
+
     searchModel.viewAll    = this.viewAll;
     searchModel.active     = this.active;
     searchModel.barcode    = searchModel.name
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
     searchModel.hideSubCategoryItems = false;
+
     searchModel.webWorkRequired = this.webWorkRequired
+    searchModel.bayName    = searchForm?.bayName;
     if (this.searchForm.controls['minQuantityFilter'].value) {
       searchModel.minQuantityFilter = this.minQuantityFilterValue;
     }
@@ -742,9 +753,15 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   refreshGrid() {
-    this.refreshDepartments()
+    this.refreshDepartments();
     this.refreshCategories();
-    this.refreshSubCategories()
+    this.refreshSubCategories();
+
+    this.onGridReady(this.params)
+  }
+
+  refreshOnlyData() {
+    this.refreshGroupingDataOnly()
     this.onGridReady(this.params)
   }
 
@@ -885,6 +902,20 @@ constructor(  private _snackBar              : MatSnackBar,
     this.gridApi.exportDataAsCsv();
   }
 
+  publishReconciliation() {
+    let item = {} as IReconcilePayload;
+
+    const value = this.searchForm.value ;
+    item.categoryID = value?.categoryID?.id
+    //we have to get the id because departmentiD is an object in the form
+    item.departmentID = value?.departmentID?.id
+    item.itemTypeID = value?.productTypeSearch?.id
+    item.bayName = value?.bayName
+
+
+    this.action$ = this.orderMethodsService.publishReconciliation(item)
+  }
+
   getLabel(rowData)
   {
     if(rowData && rowData.hasIndicator) {
@@ -918,17 +949,12 @@ constructor(  private _snackBar              : MatSnackBar,
 
   editItemWithId(id:number) {
     if(!id) { return }
-    // this.openingProduct = true
-    // console.log('edit Item With Id',id)
-    // this.product$ =
     this.productEditButtonService.openProductDialogObs(id).subscribe(
-      // switchMap(
-        data => {
-        // console.log('product', data)
-        this.openingProduct = false
-        return of(data)
-      })
-    // )
+      data => {
+      this.openingProduct = false
+      return of(data)
+    })
+
   }
 
   assignItem(e){

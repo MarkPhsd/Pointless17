@@ -1,5 +1,6 @@
 <div *ngIf="(product$ | async) as product;else loading"></div>
 <div *ngIf="(action$ | async) as item"></div>
+<span *ngIf="( userSave$  | async) as pref"></span>
 
 <ng-template #loading>
   <div *ngIf="!product || !inputForm || !ebayOfferForm">
@@ -10,13 +11,27 @@
 <div *ngIf="inventoryCheck">
   <mat-card>
     <mat-card-title>
-       <h4>Inventory Check Results</h4>
+       <h4>Ebay API Results</h4>
     </mat-card-title>
     <mat-card-content>
       <ngx-json-viewer [json]="inventoryCheck"></ngx-json-viewer>
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary" (click)="inventoryCheck = null">Clear</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+
+<div *ngIf="itemJSON && !user?.userPreferences?.ebayItemJSONHidden">
+  <mat-card>
+    <mat-card-title>
+       <h4>Ebay Publish Info</h4>
+    </mat-card-title>
+    <mat-card-content>
+      <ngx-json-viewer [json]="itemJSON"></ngx-json-viewer>
+    </mat-card-content>
+    <mat-card-actions>
     </mat-card-actions>
   </mat-card>
 </div>
@@ -30,6 +45,9 @@
 
     <div class="flex-grid-row-end">
       <ng-container [ngTemplateOutlet]="menuButtonContainer">  </ng-container>
+      <div>
+        <button  mat-raised-button (click)="refresh(id)"><mat-icon>refresh</mat-icon></button>
+      </div>
     </div>
 
   </mat-card-title>
@@ -49,7 +67,7 @@
         OfferID {{itemJSON?.offerResponse?.offerId}}
       </div>
 
-      <div *ngIf="itemJSON && !itemJSON?.offerResponse?.offerId">
+      <div *ngIf="itemJSON && !itemJSON?.offerPublishStatus">
         <mat-icon>alert</mat-icon>  No Offer Published
       </div>
     </div>
@@ -217,6 +235,21 @@
             </mat-form-field>
         </div>
 
+      <div *ngIf="packageForm && shippingPackages" [formGroup]="packageForm">
+        <mat-form-field class="category-list"
+              appearance="outline"  class="margin-5">
+            <mat-label>Packacge Type  </mat-label>
+              <mat-select
+                          type="number"
+                          formControlName = "packageType">
+              <mat-option *ngFor="let item of shippingPackages"
+                  [value]="item">
+                  {{item}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+      </div>
+
       </mat-card>
 
       <div>  <ng-container [ngTemplateOutlet]="metaTags"></ng-container>  </div>
@@ -291,31 +324,56 @@
 
         <div>
           <button class="menu-button margin-10"
-                  [disabled]="!inventoryItem?.ebayPublished"
-                  color="primary"  mat-raised-button (click)="deleteInventory()">
+                  [disabled]="!isInventoryCreated"
+                  color="primary"
+                  mat-raised-button
+                  (click)="deleteInventory()">
             <mat-icon>delete</mat-icon>Delete Inventory</button>
         </div>
 
         <div>
           <button class="menu-button margin-10"
-                  [disabled]="inventoryItem?.ebayPublished"
+                  [disabled]="isOfferCreated"
                   color="primary"
-                  mat-raised-button (click)="publishOffer()">
-            <mat-icon>publish</mat-icon>Publish Offer</button>
+                  mat-raised-button
+                  (click)="createOffer()">
+            <mat-icon>publish</mat-icon>Create Offer</button>
         </div>
+
         <div>
           <button class="menu-button margin-10"
-                  [disabled]="!itemJSON?.offerResponse?.offerId "
-                  color="primary"  mat-raised-button (click)="publishOffer()">
+                  [disabled]="publishOfferDisabled"
+                  color="primary"
+                  mat-raised-button
+                  (click)="publishOffer()">
+            <mat-icon>publish</mat-icon>Publish Offer</button>
+        </div>
+
+        <div>
+          <button class="menu-button margin-10"
+                  [disabled]="!isOfferCreated"
+                  color="primary"
+                  mat-raised-button
+                  (click)="checkOfferStatus()">
             <mat-icon>publish</mat-icon>Check Offer Status</button>
         </div>
 
         <div>
           <button class="menu-button margin-10"
-                  [disabled]="!itemJSON?.offerResponse?.offerId"
+                  [disabled]="!isOfferCreated && !itemJSON?.offerRequest"
                   color="primary"  mat-raised-button (click)="deleteOffer()">
             <mat-icon>delete</mat-icon>Delete Offer</button>
         </div>
+
+        <button mat-raised-button color="primary"
+                 (click)="toggleEbayItemJSON()">
+            <div *ngIf="user?.userPreferences?.ebayItemJSONHidden">
+              Show JSON Header
+            </div>
+            <div *ngIf="!user?.userPreferences?.ebayItemJSONHidden">
+              Hide JSON Header
+            </div>
+        </button>
 
       </div>
     </span>

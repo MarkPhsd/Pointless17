@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BehaviorSubject, catchError,Observable, of, Subscription, switchMap } from 'rxjs';
-import { IClientTable,  IPOSOrder, IPOSOrderSearchModel, IPOSPayment, IPurchaseOrderItem, IServiceType, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
+import { IClientTable,  IPOSOrder, IPOSOrderSearchModel, IPOSPayment, IPurchaseOrderItem, IReconcilePayload, IServiceType, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
@@ -93,7 +93,7 @@ export class OrderMethodsService implements OnDestroy {
   public  assignedPOSItems$ = this._assingedPOSItems.asObservable();
   public  assignPOSItems       : PosOrderItem[];
 
-  private _lastSelectedItem = new BehaviorSubject<PosOrderItem>(null);
+  public _lastSelectedItem = new BehaviorSubject<PosOrderItem>(null);
   public  lastSelectedItem$ = this._lastSelectedItem.asObservable();
 
   private _posIssuePurchaseItem   = new BehaviorSubject<IPurchaseOrderItem>(null);
@@ -261,6 +261,38 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   updateOrderSubscription(order: IPOSOrder) {
+    if (order && order.posOrderItems) {
+      order.posOrderItems.forEach(data => {
+        data.traceProductCalc = +data.quantity -  +data.traceProductCount   ;
+      })
+      order.wholeSaleTraceCalcSum = 0
+      let currentValue : number = 0
+      let newValue: number = 0
+
+      // console.log('new val 1',newValue)
+      // console.log('currentValue 2',currentValue)
+
+      order.posOrderItems.forEach(data => {
+        if (data.wholeSale) {
+          if (+data.quantity) {
+            newValue += +(+data.quantity * +data.wholeSale);
+          }
+          if (data.traceProductCount) {
+            currentValue += +(data.traceProductCount + +data.wholeSale)
+          }
+        }
+      })
+
+      order.wholeSaleTraceCalcSum = newValue
+      order.wholeSaleCostTotal    = currentValue;
+
+      // console.log('new val',newValue)
+      // console.log('currentValue',currentValue)
+    }
+
+
+    this.storeCreditMethodService.updateSearchModel(null);
+
     this.updateOrder(order);
     if (order == null) {
       order = this.getStateOrder();
@@ -273,8 +305,10 @@ export class OrderMethodsService implements OnDestroy {
       }
     }
 
-    this.storeCreditMethodService.updateSearchModel(null);
-    this.setScanner()
+    if (order && order.service && (order?.service?.filterType != 3 && order?.service?.filterType != 2)) {
+      this.setScanner()
+    }
+
     const site = this.siteService.getAssignedSite();
     const devicename = localStorage.getItem('devicename');
 
@@ -361,16 +395,13 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   updateLastItemSelected(item: PosOrderItem) {
+    // console.log('item', item.id)
     this._lastSelectedItem.next(item)
   }
 
   initSubscriptions() {
     this._order = this.currentOrder$.subscribe(order => {
       this.order = order;
-
-      // console.log('initSubscriptions clear/items', this.overrideClear, this.assignPOSItems);
-
-
       if (this.overrideClear) { return }
       this.clearAssignedItems();
 
@@ -459,6 +490,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   constructor(public route                    : ActivatedRoute,
+
               private dialog                  : MatDialog,
               public  authenticationService    : AuthenticationService,
               private siteService             : SitesService,
@@ -1814,6 +1846,7 @@ export class OrderMethodsService implements OnDestroy {
 
     // localStorage.setItem('orderSubscription', null);
     localStorage.removeItem('orderSubscription')
+    console.log('clear order')
     this.updateOrderSubscription(null);
     this.splitEntryValue = 0;
     if (this.userAuthorization.user.roles = 'user') {
@@ -2409,6 +2442,22 @@ export class OrderMethodsService implements OnDestroy {
       this.notifyEvent(message, title)
     }
   }
+
+  publishReconciliation(item: IReconcilePayload) {
+
+    const site = this.siteService.getAssignedSite()
+    const order$ = this.orderService.pOSTReconciliationOrder(site)
+    return order$.pipe(switchMap(data => {
+      item.id = data.id;
+      return this.orderService.addReconciliationSection(site, item)
+    })).pipe(switchMap(order => {
+     this.setActiveOrder(site, order)
+     return of(order)
+    }))
+
+  }
+
+
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

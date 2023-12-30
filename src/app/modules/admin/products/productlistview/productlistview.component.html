@@ -86,7 +86,7 @@
         </app-mat-select>
     </div>
 
-    <div >
+    <div>
         <app-value-fields
           [inputForm]="searchForm"
           [fieldsClass]="'font-smaller'"
@@ -95,37 +95,36 @@
         </app-value-fields>
     </div>
 
+    <div>
+      <app-value-fields
+        [inputForm]="searchForm"
+        [fieldsClass]="'font-smaller'"
+        [fieldName]="'bayName'">
+        Bay Name
+      </app-value-fields>
+    </div>
+
     <div  class="margin-left-5 ">
       <button mat-button
               class="assign-button"
               (click)="listAll()">
-        <mat-icon>list</mat-icon>
-        List All
+        <mat-icon>list</mat-icon>List All
       </button>
     </div>
 
     <div  class="margin-left-5 ">
       <button mat-button
               class="assign-button"
-              (click)="refreshGrid()">
-        <mat-icon>refresh</mat-icon>
-        Refresh
-      </button>
-    </div>
-
-    <div *ngIf="!hideAdd" class="margin-left-5 ">
-      <button mat-button
-              class="assign-button"
-              (click)="onExportToCsv()">
-        <mat-icon>download</mat-icon>
-        Download
+              (click)="refreshOnlyData()">
+        <mat-icon>refresh</mat-icon>Refresh
       </button>
     </div>
 
     <div   class="margin-left-5 ">
       <button mat-button
               (click)="childAddItem()">
-        <mat-icon>add_box</mat-icon>Add</button>
+        <mat-icon>add_box</mat-icon>Add
+      </button>
     </div>
 
     <div *ngIf="editOff"  class="margin-left-5 ">
@@ -137,8 +136,7 @@
     <div *ngIf="!hideEditSelected" class="margin-left-5 ">
       <button mat-button
               (click)="editSelectedItems()">
-        <mat-icon>edit</mat-icon>
-        Edit Selected
+        <mat-icon>edit</mat-icon>Edit Selected
       </button>
     </div>
 
@@ -147,6 +145,8 @@
         <mat-icon>settings</mat-icon>
       </button>
     </div>
+
+    <ng-container [ngTemplateOutlet]="menuButtonContainer"></ng-container>
 
     <div  class="grid-container-selectors">
       <div *ngIf="advanced && pagingForm">
@@ -183,6 +183,7 @@
           </mat-form-field>
         </div>
       </div>
+
     </div>
 
   </div>
@@ -234,3 +235,41 @@
   <span id="selectedRows"> </span>
 </div>
 
+<ng-template #menuButtonContainer>
+  <button style="height:45px;"
+          mat-button
+          [matMenuTriggerFor]="menu"
+          #menuTrigger="matMenuTrigger"
+          (click)="menuTrigger.openMenu()" >
+    <mat-icon>menu</mat-icon>More
+  </button>
+
+  <mat-menu class="mat-menu-panel"
+            [overlapTrigger]="false"
+            #menu="matMenu">
+
+    <span (mouseleave)="menuTrigger.closeMenu()">
+      <div  class="ps-flex-group-column">
+
+        <div class="margin-left-5 ">
+          <button mat-button
+                  class="assign-button"
+                  (click)="publishReconciliation()">
+            <mat-icon>list</mat-icon>
+            Reconcilie
+          </button>
+        </div>
+
+        <div  class="margin-left-5 ">
+          <button mat-button
+                  class="assign-button"
+                  (click)="onExportToCsv()">
+            <mat-icon>download</mat-icon>
+            Download
+          </button>
+        </div>
+
+      </div>
+    </span>
+  </mat-menu>
+</ng-template>

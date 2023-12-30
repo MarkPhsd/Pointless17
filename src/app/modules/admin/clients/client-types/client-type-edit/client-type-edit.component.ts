@@ -178,6 +178,8 @@ export class ClientTypeEditComponent implements OnInit {
     if (!item.deleteEmployee) { item.deleteEmployee = false}
     if (!item.deleteInventory) { item.deleteInventory = false}
     if (!item.deleteProduct) { item.deleteProduct = false}
+    if (!item.allowReconciliation) { item.allowReconciliation = false}
+    if (!item.allowSeeItemCost) { item.allowSeeItemCost = false}
     return item;
   }
 

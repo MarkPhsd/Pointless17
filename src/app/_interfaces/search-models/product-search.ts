@@ -57,5 +57,6 @@ export interface ProductSearchModel {
   webWorkRequired: boolean;
   sort: string;
   gender: number;
+  bayName: string;
   genderAny: boolean;
 }

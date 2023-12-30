@@ -13,6 +13,10 @@ import { ClientTableService } from 'src/app/_services/people/client-table.servic
 import { IUserProfile } from 'src/app/_interfaces';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
+import { IBalanceDuePayload } from 'src/app/_services/menu/product-edit-button.service';
+import { SettingsService } from 'src/app/_services/system/settings.service';
 
 @Component({
   selector: 'app-fast-user-switch',
@@ -34,6 +38,15 @@ export class FastUserSwitchComponent implements OnInit {
   dialogRefOption: any;
   @Output() outPutLogin = new EventEmitter();
 
+
+  uiHomePage: UIHomePageSettings;
+  uiHome$: Observable<UIHomePageSettings>;
+  balanceSheet$:  Observable<any>;
+  isLocked = false;
+  UIisLocked: boolean
+  employeeAllowed: number;
+  sheet: IBalanceSheet;
+
   constructor(
     private dialog                 : MatDialog,
     private userSwitchingService   : UserSwitchingService,
@@ -41,9 +54,12 @@ export class FastUserSwitchComponent implements OnInit {
     private clientTypeService      : ClientTypeService,
     private clientTableService     : ClientTableService,
     private siteService            : SitesService,
+    private uiSettings             : UISettingsService,
+    private settingsService        : SettingsService,
     private fb                     : UntypedFormBuilder,
     private _snackBar              : MatSnackBar,
     private router                 : Router,
+    private balanceSheetService   : BalanceSheetService,
     public  platformService        : PlatformService,
     private toolbarUIService       : ToolBarUIService,
     private paymentProcessService: PaymentsMethodsProcessService,
@@ -58,10 +74,13 @@ export class FastUserSwitchComponent implements OnInit {
       }
       const item = localStorage.getItem('loginAction')
       this.loginAction = JSON.parse(item)
+
   }
 
   ngOnInit(): void {
-    this.smallDevice = false
+    this.isLocked = false;
+    this.UIisLocked = false
+    this.smallDevice = false;
     this.phoneDevice = false;
     if (811 >= window.innerWidth ) {
       this.smallDevice = true
@@ -70,7 +89,47 @@ export class FastUserSwitchComponent implements OnInit {
       this.smallDevice = false;
       this.phoneDevice = true
     }
+    this.getBalanceSheet();
+    this.getUIHome( !this.request || this.request != 'checkAuth');
   }
+
+  //this feature determins if we shouldset the locked feature
+  getUIHome(checkForLock: boolean) {
+    if (this.platformService.isApp()) {
+      this.uiHome$ = this.settingsService.getUIHomePageSettings().pipe(switchMap(data => {
+          this.uiHomePage = data;
+            if (checkForLock) {
+                this.UIisLocked = data.lockTerminalToBalanceSheet;
+            }
+            return of(data)
+          }
+        )
+      )
+    } else {
+      this.uiHome$ = of(null)
+    }
+  }
+
+  getBalanceSheet() {
+    if (this.platformService.isApp()) {
+      const site = this.siteService.getAssignedSite()
+      const device = localStorage.getItem('devicename')
+      this.balanceSheet$ = this.balanceSheetService.isDeviceInUse(site, device).pipe(switchMap(data => {
+        this.isLocked = false;
+        this.employeeAllowed = 0
+        if (data && data.name != 'open') {
+          this.isLocked = true;
+          this.employeeAllowed = data.id
+        }
+
+        return of(data)
+      }))
+      return ;
+    }
+    this.balanceSheet$ = of(null)
+  }
+
+
 
   enterPIN(event) {
     const userName = localStorage.getItem('pinToken')
@@ -83,7 +142,7 @@ export class FastUserSwitchComponent implements OnInit {
     }
 
     if (userName && login) {
-      this.submitLogin(userName, event)
+      this.submitLogin(userName, event, this.employeeAllowed)
       return;
     }
 
@@ -208,7 +267,7 @@ export class FastUserSwitchComponent implements OnInit {
     }
   }
 
-  submitLogin(userName: string, password: string) {
+  submitLogin(userName: string, password: string, employeeIDAllowed?: number) {
 
     this.loginAction$ = this.userSwitchingService.login(userName, password).pipe(
       switchMap(data =>
@@ -223,6 +282,16 @@ export class FastUserSwitchComponent implements OnInit {
           if (user && user.errorMessage) {
             this.notifyEvent(user.errorMessage, 'Failed Login');
             return of('failed')
+          }
+
+          if (user.roles.toLowerCase() != 'admin' || user.roles.toLowerCase() != 'manager') {
+            if (employeeIDAllowed) {
+              console.log('user.id', user.id, employeeIDAllowed)
+              if (user.id != employeeIDAllowed) {
+                  this.siteService.notify(`${user.errorMessage}, You are not allowed to use this terminal until the shift is closed.`, "close", 6000 , 'red'  );
+                return of('failed')
+              }
+            }
           }
 
           if (user) {

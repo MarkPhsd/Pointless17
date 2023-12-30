@@ -7,6 +7,7 @@ import { UntypedFormBuilder, FormGroup } from '@angular/forms';
 import { ElectronService } from 'ngx-electron';
 import { SitesService } from '../reporting/sites.service';
 import { PlatformService } from '../system/platform.service';
+import { ItemBasic } from 'src/app/modules/admin/report-designer/interfaces/reports';
 
 
 export interface  IBalanceEmployeeSummary {
@@ -250,6 +251,19 @@ export class BalanceSheetService {
     return this.http.post<IBalanceSheetPagedResults>(url, searchModel);
 
   }
+
+  isDeviceInUse(site: ISite, device: string): Observable<any> {
+    const controller = '/BalanceSheets/'
+
+    const endPoint  = "isDeviceInUse"
+
+    const parameters = `?deviceName=${device}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
+  }
+
 
   closeAllSheets(site: ISite)  : Observable<IBalanceSheet[]> {
 

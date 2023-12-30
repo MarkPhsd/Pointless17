@@ -10,6 +10,14 @@ import { TransactionUISettings } from "src/app/_services/system/settings/uisetti
 
 // export wicEBTList  id: number       = [{id: 0, name: 'NONE'},{id: 1, name: 'WIC'},{id: 2, name: 'EBT'},{id: 2, name: 'WIC and EBT'}]
 
+export interface IReconcilePayload {
+  categoryID: number;
+  departmentID: number;
+  itemTypeID: number;
+  bayName: string;
+  id: number;
+}
+
 export interface IPOSOrderSearchModel {
   completionDate_From:         string;
   completionDate_To:           string;
@@ -128,6 +136,9 @@ export interface IPOSOrder {
   priceColumn           : number;
   serviceArea           : string;
   defaultPercentageDiscount  : number;
+  wholeSaleTraceCalcSum:number;
+  wholeSaleCostTotal: number;
+
 }
 
 export interface ClientsPOSOrders {
@@ -203,6 +214,7 @@ export interface ClientType {
 
 
 export interface PosOrderItem {
+  bayName                      : string;
   id:                            number;
   productID:                     number;
   orderID:                       number;
@@ -282,7 +294,14 @@ export interface PosOrderItem {
   rewardGroupApplied: number;
   baseUnitTypeID: number;
   baseUnitType: string;
-  unitMultiplier: number
+  unitMultiplier: number;
+  traceProductCalc: number;
+  traceProductCount: number;
+  wholeSaleTraceCalc: number;
+  categoryID: number;
+  departmentID: number;
+  itemTypeID: number;
+  traceOrderDate: string;
 }
 //ItemPrepped,PrintLocation,Splitter as SplitGroupID,Gratuity,ProdSecondLanguage,productSortOrder,PizzaMultiplier, PizzaGroup, PriceTierID
 

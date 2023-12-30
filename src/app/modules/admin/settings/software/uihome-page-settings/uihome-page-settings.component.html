@@ -457,11 +457,21 @@
 
           <div>
             <mat-slide-toggle
+                      formControlName="lockTerminalToBalanceSheet"  >
+              <mat-label>Balance Sheet Lock</mat-label>
+              <mat-hint>Lock terminal to user who started balance sheet.</mat-hint>
+            </mat-slide-toggle>
+          </div>
+
+          <div>
+            <mat-slide-toggle
                       formControlName="timeOut"  >
               <mat-label>Time Out (3 Minutes)</mat-label>
               <mat-hint>App Only - Will log out after 3 minutes no use.</mat-hint>
             </mat-slide-toggle>
           </div>
+
+
 
           <div class="toggle-fields" style="width:200px">
             <app-value-fields

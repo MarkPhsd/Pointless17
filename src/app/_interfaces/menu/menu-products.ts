@@ -120,6 +120,8 @@ export interface IMenuItem {
   menuButtonJSON : menuButtonJSON;
   baseUnitType   : string;
   baseUniTypeID  : number;
+  bayName: string;
+  baySection: string;
 }
 
 export interface menuButtonJSON {

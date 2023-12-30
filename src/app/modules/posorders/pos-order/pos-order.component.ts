@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input,
          OnInit, Output, OnDestroy,  ViewChild, HostListener, Renderer2, TemplateRef } from '@angular/core';
-import { AuthenticationService, AWSBucketService, MenuService, OrdersService, TextMessagingService } from 'src/app/_services';
+import { AuthenticationService, AWSBucketService, IItemBasicB, MenuService, OrdersService, TextMessagingService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
 import { Observable, of, Subscription } from 'rxjs';
 import { delay,  repeatWhen, switchMap  } from 'rxjs/operators';
@@ -36,6 +36,10 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
+import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
+
 @Component({
 selector: 'app-pos-order',
 templateUrl: './pos-order.component.html',
@@ -70,6 +74,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @ViewChild('payButton')   payButton: TemplateRef<any>;
   @ViewChild('stripePayButton')   stripePayButton: TemplateRef<any>;
   @ViewChild('roundOrder') roundOrder : TemplateRef<any>;
+
+  @ViewChild('reconcile') reconcile : TemplateRef<any>;
+
 
   //purchaseItemSales
   @ViewChild('purchaseItemSales') purchaseItemSales: TemplateRef<any>;
@@ -145,7 +152,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   posOrderItem  :   PosOrderItem;
   gramCountProgress: any;
   canRemoveClient = false;
-
+  filteredList: PosOrderItem[]
   orderlayout     = 'order-layout';
   orderItemsPanel = 'item-list';
   infobuttonpanel = 'info-button-panel';
@@ -172,6 +179,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   purchaseOrderEnabled: boolean;
   private _items : Subscription
   assignedItems:  PosOrderItem[];
+
   bottomSheet$: Observable<any>;
   posDevice$      : Observable<ITerminalSettings>;
   posDevice       :  ITerminalSettings;
@@ -181,7 +189,25 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   _lastItem: Subscription;
   _quantitySubscriptions: Subscription;
   quantityEntryValue : number = 1;
+  reconcileValueForm: FormGroup;
+  reconcileEntryValue : number = 1;
 
+  selectedItem: PosOrderItem;
+  lastSelectedItem$: Subscription;
+  searchForm: FormGroup;
+  bayName: string;
+  bayNames = [];
+
+   categories$      : Observable<IMenuItem[]>;
+   departments$     : Observable<IMenuItem[]>;
+   productTypes$    : Observable<IItemType[]>;
+  // _assignedItems: Subscription;
+  // assignedItems: PosOrderItem[]
+  // initItemSubscription() {
+  //   this._assignedItems = this.orderMethodsService.assignedPOSItems$.subscribe(data =>{
+
+  //   })
+  // }
   get stripePayButtonView() {
     if ( this.order && this.order.balanceRemaining != 0 && !this.platFormService.isApp() ) {
       return this.stripePayButton
@@ -203,6 +229,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
+  get reconcileView() {
+    if (this.order && this.order.service.filterType == 2) {
+      return this.reconcile
+    }
+    return null;
+  }
   get wicEBTButtonView() {
     if ( (!this.paymentsEqualTotal &&
           !this.order.completionDate &&
@@ -317,6 +349,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     })
   }
 
+
+
   gettransactionUISettingsSubscriber() {
     this.uiTransactionSetting$ =  this.uiSettingsService.transactionUISettings$.pipe(switchMap(data => {
       // console.log('enableRounding', data?.enableRounding)
@@ -348,6 +382,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
           this.wideBar = true;
         }
       }
+    })
+  }
+
+  lastSelectedItemSubscriber(){
+    this.lastSelectedItem$ = this.orderMethodsService.lastSelectedItem$.subscribe(data => {
+      this.selectedItem = data;
     })
   }
 
@@ -434,11 +474,13 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.serviceType$ = this.serviceTypeService.getType (site,id).pipe(
         switchMap(data => {
           this.listView = false;
+
           if (data && data.filterType == null) {
             this.listView = false;
           }
+
           if (data) {
-            if ( data?.filterType == 1  ||  data.filterType == -1 ) {
+            if ( data?.filterType == 1  ||  data.filterType == -1 || data?.filterType == 2 || data?.filterType == 3 ) {
               this.purchaseOrderEnabled = true
               this.listView = true;
             }
@@ -466,7 +508,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.initAssignedItemsSubscriber();
     this.userAuthSubscriber();
 
-
+    this.initReconcilePanel()
     try {
       this._quantitySubscriptions =  this.orderMethodsService.quantityValue$.subscribe(data => {
         this.quantityEntryValue = data;
@@ -474,6 +516,28 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     } catch (error) {
 
     }
+  }
+
+  initReconcilePanel() {
+    const site          = this.siteService.getAssignedSite()
+    this.refreshDepartments();
+    this.refreshCategories();
+    this.productTypes$        = this.itemTypeService.getItemTypesByUseType(site, 'product')
+  }
+
+  refreshDepartments() {
+    const site          = this.siteService.getAssignedSite()
+    this.departments$   = this.menuService.getListOfDepartmentsAll(site).pipe(
+      switchMap(data => {
+        return of(data)
+      })
+    )
+  }
+
+
+  refreshCategories() {
+    const site          = this.siteService.getAssignedSite()
+    this.categories$    = this.menuService.getListOfCategoriesAll(site)
   }
 
   initBarSubscription() {
@@ -515,28 +579,58 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private router            : Router,
               public  route             : ActivatedRoute,
               private siteService       : SitesService,
-              private toolbarUIService  : ToolBarUIService,
-              private bottomSheet       : MatBottomSheet,
-              public  userAuthorization : UserAuthorizationService,
-              private authenticationService: AuthenticationService,
-              public  uiSettingsService  : UISettingsService,
-              private serviceTypeService: ServiceTypeService,
-              private settingService    : SettingsService,
-              private _bottomSheet     : MatBottomSheet,
+              private toolbarUIService       : ToolBarUIService,
+              private bottomSheet            : MatBottomSheet,
+              public  userAuthorization      : UserAuthorizationService,
+              private authenticationService  : AuthenticationService,
+              public  uiSettingsService      : UISettingsService,
+              private serviceTypeService     : ServiceTypeService,
+              private settingService         : SettingsService,
+              private _bottomSheet           : MatBottomSheet,
               private inventoryAssignmentService: InventoryAssignmentService,
-              private posOrderItemService: POSOrderItemService,
-              private coachMarksService: CoachMarksService,
-              private manifestService: ManifestInventoryService,
+              private posOrderItemService    : POSOrderItemService,
+              private coachMarksService      : CoachMarksService,
+              private manifestService        : ManifestInventoryService,
               private productEditButtonService: ProductEditButtonService,
-              private prepPrintingService: PrepPrintingServiceService,
-              private menuService: MenuService,
-              private el                : ElementRef) {
+              private prepPrintingService    : PrepPrintingServiceService,
+              private menuService            : MenuService,
+              private posOrderItemMethodsService: PosOrderItemMethodsService,
+              private fb                     : FormBuilder,
+              private itemTypeService        : ItemTypeService,
+              private el                     : ElementRef) {
+
 
     const outPut = this.route.snapshot.paramMap.get('mainPanel');
+    const id = this.route.snapshot.paramMap.get('id');
     if (outPut) {
       this.mainPanel = true
     }
-    this.refreshOrder();
+    this.refreshOrder(+id);
+  }
+
+  async ngOnInit() {
+    this.getDeviceInfo();
+    this.initAuthorization();
+    this.gettransactionUISettingsSubscriber();
+    this.updateItemsPerPage();
+    this.bucketName     = await this.awsBucket.awsBucket();
+    this.awsBucketURL   = await this.awsBucket.awsBucketURL();
+    this.sidePanelWidth = this.el.nativeElement.offsetWidth;
+    this.initSubscriptions();
+    this.lastSelectedItemSubscriber();
+    this.initReconcileSearchForm();
+
+    if (this.sidePanelWidth < 210) {
+      this.isNotInSidePanel = false
+      this.sidePanelPercentAdjust = 80
+    } else {
+      this.isNotInSidePanel = true
+      this.sidePanelPercentAdjust = 60
+    }
+
+    if (!this.toolbarUIService.swapMenuWithOrderBoolean) {
+      this.toolbarUIService.hidetoolBars();
+    }
   }
 
   @HostListener("window:resize", [])
@@ -582,7 +676,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   get purchaseOrderItemView() {
     if (!this.smallDevice && !this.mainPanel) { return null }
-    if (this.order && this.order.service && (this.order.service.filterType == 1 || this.order.service.name.toLowerCase() === 'purchase order')) {
+    if (this.order && this.order.service && (this.order.service?.filterType == 1 || this.order.service?.name.toLowerCase() === 'purchase order')) {
       return this.purchaseItemSales;
     }
     return null
@@ -591,7 +685,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   //purchaseItemHistory
   get purchaseItemHistoryView() {
     if (!this.smallDevice &&  !this.mainPanel) { return null }
-    if (this.order && this.order.service && (this.order.service.filterType == 1 || this.order.service.name.toLowerCase() === 'purchase order')) {
+    if (this.order && this.order.service &&
+      (this.order.service?.filterType == 1 || this.order.service?.name.toLowerCase() === 'purchase order')) {
       return this.purchaseItemHistory;
     }
     return null
@@ -599,7 +694,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   get importPurchaseOrderView() {
     if (!this.smallDevice &&  !this.mainPanel) { return null }
-    if (this.order && this.order.service && (this.order.service.filterType == 1 || this.order.service.name.toLowerCase() === 'purchase order')) {
+    if (this.order && this.order.service &&
+      (this.order.service.filterType == 1 || this.order.service.name.toLowerCase() === 'purchase order')) {
       return this.importPurchaseOrder;
     }
     return null
@@ -665,28 +761,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
-  async ngOnInit() {
-    this.getDeviceInfo();
-    this.initAuthorization();
-    this.gettransactionUISettingsSubscriber();
-    this.updateItemsPerPage();
-    this.bucketName     = await this.awsBucket.awsBucket();
-    this.awsBucketURL   = await this.awsBucket.awsBucketURL();
-    this.sidePanelWidth = this.el.nativeElement.offsetWidth;
-    this.initSubscriptions();
-
-    if (this.sidePanelWidth < 210) {
-      this.isNotInSidePanel = false
-      this.sidePanelPercentAdjust = 80
-    } else {
-      this.isNotInSidePanel = true
-      this.sidePanelPercentAdjust = 60
-    }
-
-    if (!this.toolbarUIService.swapMenuWithOrderBoolean) {
-      this.toolbarUIService.hidetoolBars();
-    }
-  }
 
   initAuthorization() {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
@@ -703,10 +777,13 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   //check order status:
-  refreshOrder() {
-    if (this.order) {
-      this.orderMethodsService.refreshOrder(this.order.id)
+  refreshOrder(id?: number) {
+
+    if (!this.order) { return }
+    if (this.order?.service?.filterType == 2) {
+      this.refreshSearch(this.order)
     }
+
   }
 
   changeTransactionType(event) {
@@ -861,6 +938,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (this.bottomSheet$) {
       this.bottomSheet$ = null;
     }
+    if (this.lastSelectedItem$) { this.lastSelectedItem$.unsubscribe()}
   }
 
   suspendOrder() {
@@ -1085,5 +1163,124 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.coachMarksService.add(new CoachMarksClass(this.coachingAdjustment.nativeElement, "Adjustment: Void, and Refunds"));
     this.coachMarksService.add(new CoachMarksClass(this.coachingListView.nativeElement, "Item View Toggle: Changes the layout of how you see the items on the order."));
   }
+
+
+  updateValues(item: PosOrderItem) {
+    const  colName = 'quantity'
+    const order$ = this.posOrderItemMethodsService.saveSub(item, colName).pipe(
+      switchMap(data => {
+        return of(data)
+      }
+    ))
+    return order$
+  }
+
+
+  initReconcileSearchForm() {
+    this.searchForm   = this.fb.group( {
+      itemName          : [''],
+      itemTypeID        : [],
+      brandID           : [],
+      categoryID        : [],
+      departmentID      : [],
+      subCategoryID     : [],
+      viewAll           : [1],
+      bayName           : [],
+      scanned           : [],
+    });
+
+    this.reconcileValueForm = this.fb.group({
+      itemName: []
+    })
+  }
+
+  resetReconciliationSearch(){
+    this.initReconcileSearchForm();
+    // this.refreshSearch(null)
+    this.filteredList =  JSON.parse(JSON.stringify(this.order.posOrderItems))
+    console.log('filteredllist', this.filteredList)
+  }
+  updateRemaingCount() {
+
+  }
+
+  setReconcileEntry(event) {
+    //sets the quantity of the current item seected.
+    //updates and refreshes the order.
+    //we can use the editfield property.
+
+    const item = this.orderMethodsService._lastSelectedItem.value //.subscribe(item => {
+    let posItem = item as unknown as PosOrderItem;
+    const site = this.siteService.getAssignedSite()
+    if (posItem) {
+
+      let item = {id: posItem.id, quantity: event} as PosOrderItem
+      console.log('item', item)
+      this.action$ = this.posOrderItemService.changeItemQuantityReconcile(site, item).pipe(switchMap(data => {
+        this.orderMethodsService.updateOrderSubscription(data)
+        this.reconcileValueForm = this.fb.group({
+          itemName: []
+        })
+        return of(data)
+      }))
+    }
+  }
+
+  filterRreconciliationView() {
+    this.order.posOrderItems.filter(data => {
+      return this.refreshSearch(data)
+    })
+  }
+
+  refreshSearch(data) {
+
+    const search = this.searchForm.value;
+    const department = search.departmentID?.id
+
+    const departmentID  = search.departmentID?.id;
+    const itemTypeID    = search.itemTypeID?.id ;
+    const categoryID    = search.categoryID?.id;
+    const name          = search.itemName;
+    const scanned       = search?.scanned;
+    const bayName       = this.bayName as string;
+
+    this.filteredList =  this.order.posOrderItems.filter(item => {
+      const isDepartmentMatch = departmentID ? item.departmentID === departmentID : true;
+      const isItemTypeMatch = itemTypeID ? item.itemTypeID === itemTypeID : true;
+      const isCategoryMatch = categoryID ? item.categoryID === categoryID : true;
+      const isNameMatch = name ? (item.productName.toLowerCase().includes(name.toLowerCase())) : true;
+      const isBayName = bayName ? item.bayName === bayName : true;
+      const isScannedMatch = scanned !== undefined ? (scanned ? item.traceOrderDate !== null : item.traceOrderDate === null) : true;
+      return isDepartmentMatch && isItemTypeMatch && isCategoryMatch && isNameMatch &&  isScannedMatch && isBayName ;
+    })
+  }
+
+  getBayNameList() {
+    if (!this.order) { return }
+    if (!this.order.posOrderItems) { return }
+
+    const list = this.order.posOrderItems;
+    if (!list) { return }
+    const uniqueBayNames: string[] = [... this.order.posOrderItems.reduce((uniqueNames, obj) => {
+        uniqueNames.add(obj.bayName);
+        return uniqueNames;
+    }, new Set<string>())];
+
+    this.bayNames = uniqueBayNames;
+  }
+
+  applyReconciliation() {
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.orderService.applyReconciliation(site, this.order.id).pipe(switchMap(data => {
+      this.siteService.notify('Reconciliation complete.', 'Close', 3000, 'green')
+      return of(data)
+    }))
+  }
+
+  deleteReconciliation() {
+    const warn = window.confirm('Are you sure you want to delete your work?')
+    if (!warn) { return }
+  }
+
 
 }

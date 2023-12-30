@@ -70,9 +70,14 @@ export class PosCheckOutButtonsComponent implements OnInit, OnDestroy {
     this.openOrderBar= false
     // this.navigationService.toggleOpenOrderBar(this.isStaff)
 
+    let id : string = null;
+    if (this.order) {
+      id = this.order?.id.toString();
+    }
+
     this.toolbarUIService.updateOrderBar(false)
     this.toolbarUIService.resetOrderBar(true)
-    this.router.navigate(["/currentorder/", {mainPanel:true}]);
+    this.router.navigate(["/currentorder/", {mainPanel:true, id: id}]);
     this.orderMethodsService.setScanner()
   }
 

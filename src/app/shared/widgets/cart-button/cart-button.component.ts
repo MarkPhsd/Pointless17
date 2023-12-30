@@ -14,7 +14,6 @@ import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
-import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 
 @Component({
   selector: 'app-cart-button',
