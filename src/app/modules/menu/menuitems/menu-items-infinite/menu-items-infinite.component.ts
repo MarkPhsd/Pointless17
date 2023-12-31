@@ -15,6 +15,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { ISite } from 'src/app/_interfaces';
+import { T } from '@angular/cdk/keycodes';
 @Component({
   selector: 'menu-items-infinite',
   templateUrl: './menu-items-infinite.component.html',
@@ -24,6 +25,8 @@ import { ISite } from 'src/app/_interfaces';
 )
 
 export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
+  @ViewChild('menuItemsDiv') menuItemsDiv: ElementRef;
+  menuDivHeight: number;
 
   nextPage$: Observable<IMenuItem[] | IMenuItemsResultsPaged>
   action$ : Observable<any>;
@@ -92,7 +95,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   totalRecords      :   number;
   someValue         : any;
   searchDescription : string //for description of results
-
+  infiniteStyle = 'overflow-y:auto;max-height(80vh)'
   grid              = "grid"
   _orderBar         : Subscription;
   orderBar          : boolean;
@@ -107,6 +110,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   subCategories$: Observable<any[]>;
   categoriesList
   subCategoriesList: any[];
+  scrollStyle = this.platformService.scrollStyleWide;
 
   userAuths$   = this.authService.userAuths$.pipe(
     switchMap(data =>
@@ -116,8 +120,8 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
     )
   )
 
-  ordersListClass   = 'grid-flow scroller'
-  infiniteClassList = 'grid-flow scroller'
+  ordersListClass   = 'grid-flow scroller '
+  infiniteClassList = 'grid-flow scroller '
   infiniteItemClass = 'grid-item';
   isStaff= this.userAuthorizationService.isStaff;
 
@@ -131,6 +135,32 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
       if (this.orderBar) {this.grid = "grid-smaller"  }
       if (!this.orderBar) { this.grid = "grid" }
     })
+  }
+
+  @HostListener("window:resize", [])
+  updateItemsPerPage() {
+    this.smallDevice = false
+    if (this.menuDivHeight < 100) {this.menuDivHeight = 400}
+    if (this.menuDivHeight > 600) {this.menuDivHeight = 400}
+    this.menuDivHeight = 400
+    this.infiniteStyle = `overflow-y:auto;max-height(${this.menuDivHeight-25}px)`
+    this.getItemHeight()
+    if ( window.innerWidth < 811 ) {
+      this.smallDevice = true
+      this.infiniteStyle = `overflow-y:auto;max-height(${this.menuDivHeight-25}px)`
+    }
+  }
+
+
+  getItemHeight() { 
+    if (!this.menuItemsDiv) { 
+      return
+    }
+    const divTop = this.menuItemsDiv.nativeElement.getBoundingClientRect().top;
+    const viewportBottom = window.innerHeight;
+    const remainingHeight = viewportBottom - divTop;
+    this.menuItemsDiv.nativeElement.style.maxHeight  = `${remainingHeight + 10}px`;
+    // this.menuItemsDiv.nativeElement.style.height  = `${remainingHeight}px`;
   }
 
   get departmentsFilter(){
@@ -154,6 +184,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
     return undefined;
   }
 
+
   constructor(private menuService        : MenuService,
               private awsBucketService : AWSBucketService,
               private router           : Router,
@@ -166,6 +197,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
               public  authService: AuthenticationService,
               private userAuthorizationService: UserAuthorizationService,
               private fb: UntypedFormBuilder,
+              private platformService: PlatformService,
               private cd: ChangeDetectorRef,
       )
   {
@@ -176,16 +208,16 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   initStyles() {
     this.mobileView;
     if (!this.isApp) { return };
-    this.ordersListClass = 'grid-flow scroller';
+    this.ordersListClass = 'grid-flow scroller ';
   }
 
   toggleListView() {
     if (this.infiniteClassList === 'grid-flow scroller') {
       this.infiniteClassList = 'grid-flow-single';
-      this.ordersListClass = 'grid-flow-single';
+      this.ordersListClass = 'grid-flow-single ';
     } else {
       this.infiniteClassList  = 'grid-flow scroller';
-      this.ordersListClass = 'grid-flow scroller';
+      this.ordersListClass = 'grid-flow scroller ';
     }
   }
 
@@ -285,6 +317,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
       this.initComponent()
       return of(data)
     });
+
   }
 
   initSearchFeatures(doNotInitSearchModel?: boolean) {
@@ -729,6 +762,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   changeDetect() {
     this.loading      = false
     this.cd.detectChanges()
+    this.updateItemsPerPage()
   }
 
   setModel(model: ProductSearchModel, pageNumber: number) {
@@ -987,7 +1021,6 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   }
 
   nextPage() {
-    // console.log('next page',  this.currentPage)
     this.addToListOBS(this.pageSize, this.currentPage ).subscribe()
   }
 

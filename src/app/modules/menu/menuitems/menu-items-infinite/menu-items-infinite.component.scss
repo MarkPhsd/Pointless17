@@ -19,6 +19,13 @@
   gap: var(--gap);
   grid-template-columns:  repeat( auto-fill, minmax(400px, 1fr) );;
   overflow-y: visible;
+  grid-auto-flow: dense;
+  grid-auto-flow: column;
+  max-height: calc(70vh - 125px);
+}
+
+.grid-max-height { 
+
 }
 
 .horizontal-view {
@@ -89,7 +96,8 @@ div.mat-chip-list-wrapper {
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fill, minmax(75px, 1fr) );
-  overflow-y: visible;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .grid-flow {
@@ -99,7 +107,8 @@ div.mat-chip-list-wrapper {
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fill, minmax(125px, 1fr) );
-  overflow-y: visible;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .grid-flow-app-margins {
@@ -111,12 +120,9 @@ div.mat-chip-list-wrapper {
 }
 
 .grid-item {
-  // max-height: 150px;
-  // min-height: 150px;
   padding-top     : 2px;
   padding-bottom  : 2px;
   height          : 165px;
-  // overflow-x: scroll;
 }
 
 .orders-container {
@@ -126,12 +132,7 @@ div.mat-chip-list-wrapper {
   margin       : 5px;
 }
 
-.orders-list-single {
-
-}
-
 .orders-list {
-
   overflow-x: hidden;
   overflow-y: auto;
   height: 85vh;
@@ -160,22 +161,31 @@ div.mat-chip-list-wrapper {
     overflow-y: auto;
     height: 75vh;
   }
-
 }
 
-.c1::-webkit-scrollbar {
-  width: 45px;
-  overflow-y: scroll;
-  background: rgb(91, 93, 94);
-  box-shadow: inset 0 0 4px #221c1c;
+#scrollstyle_1::-webkit-scrollbar {
+	width: 25px;
+	background-color: #F5F5F5;
+  margin-left: 5px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-.c1::-webkit-scrollbar-thumb {
-  background: rgb(165, 165, 168);
+/** STYLE 7 */
+#scrollstyle_1::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+	border-radius: 10px;
 }
 
-.c1::-webkit-scrollbar-track {
-  background-color: #262c36;
+#scrollstyle_1::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background-image: -webkit-gradient(linear,
+									   left bottom,
+									   left top,
+									   color-stop(0.44, rgb(122,153,217)),
+									   color-stop(0.72, rgb(73,125,189)),
+									   color-stop(0.86, rgb(28,58,148)));
 }
 
 .mat-dialog-actions {

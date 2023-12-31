@@ -258,8 +258,8 @@
 </ng-template>
 
 <ng-template #closeOrderButton>
-  <div  *ngIf="(!isUser && paymentsEqualTotal) ||
-             ( order?.service?.filterType == 1 ) &&  order?.service?.filterType != 2">
+  <div  *ngIf="(!isUser && paymentsEqualTotal && !order.completionDate) ||
+               (order?.service?.filterType == 1  &&  order?.service?.filterType == 2)">
     <button mat-raised-button color="warn"  (click)="closeOrder()">
       <mat-icon >close</mat-icon>Close</button>
   </div>
@@ -597,8 +597,6 @@
                 (click)="applyReconciliation()">
             <mat-icon>refresh</mat-icon>Apply Counts & Close
           </button>
-
-
 
           <div *ngIf="searchForm" >
             <div class="grid-container-selectors">

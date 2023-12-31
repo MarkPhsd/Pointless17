@@ -15,6 +15,16 @@ export interface platFormInfo {
 
 export class PlatformService {
 
+
+  get scrollStyleWide() { 
+    if (this.isApp) { 
+      if (this.isAppElectron)  {
+        return 'scrollstyle_1'
+      }
+    }
+    return ''
+  }
+  
   platFormInfo    = {}  as platFormInfo;
   private _apiUrl       : any;
 

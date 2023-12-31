@@ -95,10 +95,12 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   matorderBar = 'mat-orderBar-wide';
   barType     = 'mat-drawer-toolbar';
+  overFlow    = 'overflow-y:auto'
   apiUrl      : any;
 
   _user       : Subscription;
   user        : IUser;
+  scrollStyle = this.platformService.scrollStyleWide;
 
   _sendOrderFromOrderService: Subscription;
 
@@ -159,7 +161,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
           this.uiSettings = data;
           this.initIdle();
           if (this.phoneDevice)  {
-            this.matorderBar = 'mat-orderBar'
+            this.matorderBar = 'mat-orderBar-wide'
             return
           }
           this.matorderBar = 'mat-orderBar-wide'
@@ -373,6 +375,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   constructor(
+               private platformService: PlatformService,
                public  toolBarUIService: ToolBarUIService,
                private _renderer       : Renderer2,
                private cd              : ChangeDetectorRef,
@@ -411,6 +414,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initLoginStatus();
     this.initSendOrderSubscriber();
     this.initSendOrderLogOutSubscriber();
+    this.subscribeAddress();
   }
 
   initLoginStatus() {
@@ -517,7 +521,16 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
-      // console.log(event.url);
+      
+      this.overFlow = 'overflow-y: auto'
+      if (event.url === '/pos-orders'){
+        this.overFlow = 'overflow-y: hidden'
+        return ;
+      }
+      if (event.url === '/menuitems-infinite'){
+        this.overFlow = 'overflow-y: hidden'
+        return ;
+      }
       if (event.url === '/menu-manager'){
         this.menuManager = true;
       }

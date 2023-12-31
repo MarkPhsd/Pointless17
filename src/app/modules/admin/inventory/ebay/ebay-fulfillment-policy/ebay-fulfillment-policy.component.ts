@@ -15,8 +15,8 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 export class EbayFulfillmentPolicyComponent implements OnInit {
 
   inventoryCheck: any;
-
-  CurrencyCodeEnum = this.ebayService.CurrencyCodeEnum;
+  formValue: any;
+  currencyCodeEnum = this.ebayService.currencyCodeEnum;
   exampleFufillmentPolicy  = {
     categoryTypes: [
       { default: true, name: 'ALL_EXCLUDING_MOTORS_VEHICLES' }
@@ -124,52 +124,12 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
   }
 
   addpackageHandlingCost(j) {
-
     if (!this.inputForm.get('shippingOptions')) { 
       this.createShippingOption()
     }
-
-    // const option = this.formBuilder.group({
-    //   currency: [false],
-    //   value: ['', Validators.required]
-    // });
-
-    // const item = this.inputForm.get('shippingOptions') as FormArray
-    // item.push(option)
-   
   }
  
-  addShippingOption() {
-    this.shippingOptions.push(this.createShippingOption());
-  }
-
-  createShippingOption(): FormGroup {
-    if (!this.inputForm) { return }
-    return this.formBuilder.group({
-      // section 1
-      costType: ['', Validators.required],
-      insuranceOffered: [false],
-      optionType: ['', Validators.required],
-
-      insuranceFee: this.formBuilder.group({
-        currency: ['USD', Validators.required],
-        value: ['1', Validators.required]
-      }),
-
-      // section2
-      packageHandlingCost: this.formBuilder.group({
-        currency: ['USD', Validators.required],
-        value: ['1', Validators.required]
-      }),
-
-      rateTableId: [''],
-      shippingDiscountProfileId: [''],
-      shippingPromotionOffered: [false],
-
-      shippingServices: this.formBuilder.array([this.createShippingService()])
-    });
-  }
-
+ 
   createForm() {
     this.inputForm = this.formBuilder.group({
       categoryTypes: this.formBuilder.array([this.createCategoryType()]),
@@ -192,8 +152,24 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
     });
   }
 
-  get shippingServicesControls() {
-    return (this.inputForm.get('shippingServices') as FormArray).controls;
+  // get shippingServicesControls() {
+  //   return (this.inputForm.get('shippingServices') as FormArray).controls;
+  // }
+
+  getShippingServicesControls(shippingOptionIndex: number): FormArray {
+    if (!this.inputForm) { return }
+    if (!(this.inputForm.get('shippingOptions') as FormArray)) { return}
+    const shippingOption = (this.inputForm.get('shippingOptions') as FormArray).at(shippingOptionIndex) as FormGroup;
+    // console.log(shippingOption.value)
+    return shippingOption.get('shippingServices') as FormArray;
+  }
+
+  getShippingServicesFormGroup(shippingOptionIndex: number, index: number): FormGroup {
+    if (!this.inputForm) { return }
+    if (!(this.inputForm.get('shippingOptions') as FormArray)) { return}
+    const shippingOption = (this.inputForm.get('shippingOptions') as FormArray).at(shippingOptionIndex) as FormGroup;
+    
+    return (shippingOption.get('shippingServices') as FormArray).at(index) as FormGroup;
   }
 
   get categoryTypes(): FormArray {
@@ -202,6 +178,44 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
   
   get shippingOptions(): FormArray {
     return this.inputForm.get('shippingOptions') as FormArray;
+  }
+
+  addShippingOption() {
+    this.shippingOptions.push(this.createShippingOption());
+  }
+
+  createShippingOption(): FormGroup {
+    if (!this.inputForm) { return }
+    return this.formBuilder.group({
+      // section 1
+      costType: ['', Validators.required],
+      insuranceOffered: [false],
+      optionType: ['', Validators.required],
+
+      // section2
+      rateTableId: [''],
+      shippingDiscountProfileId: [''],
+      shippingPromotionOffered: [false],
+    
+      // section2
+      packageHandlingCost: this.formBuilder.group({
+        currency: ['USD', Validators.required],
+        value: ['1', Validators.required]
+      }),
+
+      insuranceFee: this.formBuilder.group({
+        currency: ['USD', Validators.required],
+        value: ['1', Validators.required]
+      }),
+
+      shippingServices: this.formBuilder.array([this.createShippingService()])
+    });
+  }
+
+  addShippingService(shippingOptionIndex: number) {
+    const shippingOption = this.shippingOptions.at(shippingOptionIndex) as FormGroup;
+    const shippingServices = shippingOption.get('shippingServices') as FormArray;
+    shippingServices.push(this.createShippingService());
   }
 
   addShippingServices(k) {
@@ -216,7 +230,6 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
     const item = this.inputForm.get('shippingServices') as FormArray
     item.removeAt(j)
   }
-
 
   createShippingService(): FormGroup {
     return this.formBuilder.group({

@@ -11,6 +11,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 // import { share } from 'rxjs/operators';
 
@@ -96,10 +97,10 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
   _printLocation  : Subscription;
   printLocation   : number;
-
+  infiniteStyle = 'overflow-x:hidden;overflow-y:auto;max-height(80vh)'
   _userAuths: Subscription;
   userAuths: IUserAuth_Properties;
-
+  scrollStyle = this.platformService.scrollStyleWide;
   _user: Subscription;
   user : IUser;
 
@@ -139,6 +140,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     private siteService: SitesService,
     private toolbarServiceUI : ToolBarUIService,
     private authenticationService: AuthenticationService,
+    private platformService: PlatformService,
     )
   {
   }
@@ -185,8 +187,10 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   @HostListener("window:resize", [])
   updateItemsPerPage() {
     this.smallDevice = false
-    if (window.innerWidth < 768) {
+    this.infiniteStyle = 'overflow-x:hidden;overflow-y:auto;max-height(80vh)'
+    if ( window.innerWidth < 811 ) {
       this.smallDevice = true
+      this.infiniteStyle = 'overflow-x:hidden;overflow-y:auto;max-height(80vh - 155px)'
     }
   }
 

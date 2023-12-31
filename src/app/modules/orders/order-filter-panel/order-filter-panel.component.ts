@@ -24,6 +24,7 @@ import { DateHelperService } from 'src/app/_services/reporting/date-helper.servi
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 const { Keyboard } = Plugins;
 
 @Component({
@@ -32,12 +33,15 @@ const { Keyboard } = Plugins;
   styleUrls: ['./order-filter-panel.component.scss']
 })
 export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewInit {
-
+  @ViewChild('selectorDiv') selectorDiv: ElementRef;
+  @ViewChild('selectorEmpDiv') selectorEmpDiv: ElementRef;
+  @ViewChild('toggleGroup') toggleGroup: ElementRef
+  selectorDivHeight
   terminalSetting : ITerminalSettings;
   //auth - suspended orders, employee selection
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
-
+  scrollStyle = `${this.platformService.scrollStyleWide}`
   printingEnabled    : boolean;
   electronEnabled    : boolean;
   printerName        : string;
@@ -229,6 +233,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       private _bottomSheet    : MatBottomSheet,
       private uISettingsService: UISettingsService,
       public orderMethodsService: OrderMethodsService,
+      private platformService: PlatformService,
   )
   {
 
@@ -248,7 +253,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.initCompletionDateForm();
     this.initScheduledDateForm();
     this.initForm();
-
+    this.getSelectorDiv();
     if (!this.isAuthorized) {
       this.serviceTypes$   = this.serviceTypes.getSaleTypes(site).pipe(switchMap(data => {
         this.serviceTypes.list = data;
@@ -265,7 +270,28 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
     this.refreshSearch();
     this.updateItemsPerPage();
-    this.subscribeToScheduledDatePicker()
+    this.subscribeToScheduledDatePicker();
+
+    if (this.selectorEmpDiv) { 
+      this.selectorEmpDiv.nativeElement.style.maxHeight  = '275px';
+    }
+    if (this.selectorDiv) { 
+      this.selectorDiv.nativeElement.style.maxHeight = '275px';
+    }
+  }
+  changeToggleTypeEmployee() {
+    this.getSelectorDiv()
+  }
+  getSelectorDiv() { 
+    if (!this.toggleGroup) { 
+      return
+    }
+    const divTop = this.toggleGroup.nativeElement.getBoundingClientRect().top + 60 ;
+    const viewportBottom = window.innerHeight;
+    const remainingHeight = viewportBottom - divTop;
+    this.selectorEmpDiv.nativeElement.style.maxHeight  = `${ remainingHeight }px`;
+    this.selectorDiv.nativeElement.style.maxHeight  = `${ remainingHeight }px`;
+    this.selectorDivHeight =   remainingHeight
   }
 
   displayPanel()  {
@@ -405,8 +431,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     }
   }
 
-  changeToggleTypeEmployee() {
-  }
+
 
   orderSearch(searchPhrase) {
     if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel }

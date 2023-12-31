@@ -4,7 +4,7 @@
   display: block;
   flex-direction: column;
   height: 100%;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 router-outlet {
@@ -19,6 +19,9 @@ app-header {
 .app-menu-tiny {
   height: calc(100vh - 165px);
 }
+.mat-content {
+  overflow: hidden;
+}
 
 app-sticky-header {
   z-index: 1000;
@@ -26,52 +29,29 @@ app-sticky-header {
   display: flex;
 }
 
-.mat-content {
-  overflow: hidden;
-}
-
 mat-drawer-content {
   padding-top: -5px;
   overflow: hidden;
 
-  @media (max-width: 815px) {
-    height: calc(100% - 215px );
-  }
+  height      : 100%;
+  padding     : 5px;
+  margin-left : 5px;
+  margin-right: 5px;
+  overflow    : hidden;
+  overflow-y  : hidden;
 
-  @media (max-width: 768px) {
-    height: calc(100% - 215px );
-  }
-
-  @include for-phone-only  {
-    height: calc(100% - 215px );
-  }
+  @media (max-width: 815px) {   height: calc(100vh - 135px );   }
+  @media (max-width: 768px) {   height: calc(100vh - 135px );  }
+  @include for-phone-only  {   height: calc(100vh - 135px ); }
 }
 
 mat-drawer-container {
   padding-top: -5px;
   overflow: hidden;
   height: calc(100vh - 65px );
-
-  @media (max-width: 815px) {
-    height: calc(100% - 115px );
-  }
-
-  @media (max-width: 768px) {
-    height: calc(100% - 115px );
-  }
-
-  @include for-phone-only  {
-    height: calc(100% - 115px );
-  }
-}
-
-mat-drawer-content {
-  height      : 100%;
-  padding     : 5px;
-  margin-left : 5px;
-  margin-right: 5px;
-  overflow    : hidden;
-  overflow-y  : auto;
+  @media (max-width: 815px) {  height: calc(100% - 115px );  }
+  @media (max-width: 768px) {   height: calc(100% - 115px );  }
+  @include for-phone-only  {   height: calc(100% - 115px );  }
 }
 
 mat-drawer-inner-container {
@@ -81,7 +61,6 @@ mat-drawer-inner-container {
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 }
-
 
 .mat-orderBar {
   min-width: 200px !important;

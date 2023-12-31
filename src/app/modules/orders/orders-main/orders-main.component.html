@@ -1,4 +1,5 @@
 <div *ngIf="(action$ | async) as action"></div>
+
 <div class="parent-container">
   <div>
     <span>
@@ -68,7 +69,7 @@
     </div>
 
     <div *ngIf="!smallDevice && !hidePanel"
-         class="filter-container">
+         class="filter-container" filterDiv>
       <app-order-filter-panel
           (outPutHidePanel)="hideFilterPanel($event)">
       </app-order-filter-panel>

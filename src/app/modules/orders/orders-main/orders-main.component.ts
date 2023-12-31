@@ -27,6 +27,8 @@ import { IOrderItemSearchModel, POSOrderItemService } from 'src/app/_services/tr
 })
 
 export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
+  filterDivHeight 
+  @ViewChild('filterDiv') filterDiv: ElementRef;
   @ViewChild('orderCard')    orderCard: TemplateRef<any>;
   @ViewChild('orderList')    orderList: TemplateRef<any>;
   @ViewChild('orderPanel')   orderPanel: TemplateRef<any>;
@@ -102,7 +104,23 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 
+  getFilterHeight() { 
 
+    if (!this.filterDiv) { 
+      return
+    }
+    const divTop = this.filterDiv.nativeElement.getBoundingClientRect().top;
+    const viewportBottom = window.innerHeight;
+    const remainingHeight = viewportBottom - divTop;
+
+    // console.log('Remaining height in pixels:', remainingHeight);
+    // console.log(remainingHeight)
+    // Optionally, set the height of the div
+    this.filterDiv.nativeElement.style.maxHeight  = `${remainingHeight - 10}px`;
+    this.filterDivHeight = remainingHeight
+    // this.menuDivHeight =    this.menuItemsDiv.nativeElement.style.height
+
+  }
   initPopover() {
     if (this.user?.userPreferences && this.user?.userPreferences?.enableCoachMarks ) {
       this.coachMarksService.clear()
@@ -288,7 +306,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this.printerLocations$ = this.printerService.getLocations()
     this.auths = this.authenticationService.userAuths;
     this.isApp = (this.platFormService.isAppElectron || this.platFormService.androidApp)
-
+    this.getFilterHeight()
     if (this.isUser) {
       localStorage.setItem('OrderFilterPanelVisible', 'true')
     }
@@ -640,6 +658,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @HostListener("window:resize", [])
   adjustWindow(){
+    this.getFilterHeight()
     this.smallDevice = false
     this.listHeight = '84vh'
     if (window.innerWidth < 768) {

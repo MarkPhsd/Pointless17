@@ -7,8 +7,6 @@ import { RouteReuseStrategy, RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { SitesComponent } from 'src/app/modules/sites/sites.component';
 import { ProfileComponent } from 'src/app/modules/profile/profile.component';
-import { AnimationCountService, AWSBucketService, DevService } from 'src/app/_services/';
-
 import { LoggingInterceptor } from 'src/app/_http-interceptors/loggin.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DefaultComponent } from './default.component';

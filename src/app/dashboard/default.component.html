@@ -37,7 +37,7 @@
 
   </mat-drawer>
 
-  <mat-drawer-content>
+  <mat-drawer-content [style]='overFlow' [class]="scrollStyle">
 
     <div *ngIf="departmentID && departmentID !=0"
         class="overlay">

@@ -52,12 +52,8 @@ toggle-button {
   --gap: 10px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: auto 300px;
+  grid-template-columns:  auto 335px;
   overflow: hidden;
-
-  // @include for-tablet-portrait-up   {
-  //   grid-template-columns: auto;
-  // }
 
   @media (max-width: 815px) {
     grid-template-columns: auto;
@@ -137,19 +133,17 @@ toggle-button {
 
 .filter-container {
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
 
-  height: calc(85vh - 50px);
-  width: 350px;
-  max-width:  350px;
+  // height: calc(85vh - 100px);
+  width    : 325px;
+  max-width: 325px;
   margin: 5px;
 
   @include for-phone-only  {
     overflow-x: hidden;
     overflow-y: auto;
-    height: 80vh;
-    width: 350px;
-    max-width:  350px;
+    // height: 80vh;
     margin: 5px;
   }
 }

@@ -1,16 +1,17 @@
 <div *ngIf="(action$ | async) as action"></div>
-
+      
 <div  #scrollMe
+      *ngIf="posOrderItems && posOrderItems.length>0"
+      [id]="scrollStyle"
       [style.width]  = "deviceWidthPercentage"
       [style.height] = "panelHeight"
-      *ngIf="posOrderItems && posOrderItems.length>0"
-      [class]="mainStyle" >
+      [class]="mainStyle">
 
-    <ion-item-sliding
-              class="nopadd"
-              *ngFor="let item of posOrderItems;
-                      let i = index;trackBy: trackByFN"
-              (ionSwipe)="swipeAction(i)" >
+  <ion-item-sliding 
+            [class]="nopadd"
+            *ngFor="let item of posOrderItems;
+                    let i = index;trackBy: trackByFN"
+            (ionSwipe)="swipeAction(i)" >
 
       <div *ngIf="uiConfig">
 

@@ -13,6 +13,7 @@ import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'pos-order-items',
@@ -42,7 +43,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input() enableItemReOrder  : boolean = false;
 
   qrCodeStyle = ''
-  mainStyle   = ''
+  mainStyle   =  ``
   deviceWidthPercentage = '100%'
   _uiConfig      : Subscription;
   uiConfig       = {} as TransactionUISettings;
@@ -60,8 +61,11 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   wideBar         : boolean;
   posName: string;
 
-  initSubscriptions() {
+  nopadd = `nopadd`
 
+  scrollStyle = this.platformService.scrollStyleWide;
+
+  initSubscriptions() {
     try {
       this._uiConfig = this.uiSettingsService.transactionUISettings$.subscribe(data => {
           if (data) {
@@ -128,10 +132,10 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       if (this._uiConfig) { this._uiConfig.unsubscribe()}
   }
 
-  constructor(
+  constructor(  private platformService: PlatformService,
                 private _snackBar:    MatSnackBar,
-                public el:            ElementRef,
-                public route:         ActivatedRoute,
+                public  el:            ElementRef,
+                public  route:         ActivatedRoute,
                 private siteService:  SitesService,
                 private uiSettingsService: UISettingsService,
                 private orderMethodService: OrderMethodsService,
@@ -177,6 +181,10 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   initStyles() {
     this.qrCodeStyle = ''
+    this.deviceWidthPercentage = '100%'
+    if (!this.mainPanel) { 
+      this.deviceWidthPercentage = '345px'
+    }
 
     if (!this.mainPanel && !this.qrOrder) {
       this.mainStyle = `main-panel orderItemsPanel`
@@ -296,6 +304,16 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     });
   }
 
+  getItemHeight() { 
+    if (!this.myScrollContainer) { 
+      return
+    }
+    const divTop = this.myScrollContainer.nativeElement.getBoundingClientRect().top;
+    const viewportBottom = window.innerHeight;
+    const remainingHeight = viewportBottom - divTop;
+    this.myScrollContainer.nativeElement.style.height  = `${remainingHeight-10}px`;
+  }
+
   scrollToBottom(): void {
     setTimeout(() => {
       try {
@@ -303,6 +321,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
           this.myScrollContainer.nativeElement.scrollTop =
             this.myScrollContainer.nativeElement.scrollHeight;
         }
+        this.getItemHeight()
       } catch(err) {
         console.log(err)
       }

@@ -6,9 +6,10 @@
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(results$ | async) as results"></div>
 
-<div>
-  <div class="orders-container">
+<div >
+  <div class="orders-container" >
     <div  *ngIf="orders"
+          [id]="scrollStyle"
           class                   ="orders-list"
           infiniteScroll
           [infiniteScrollDistance]="2"
@@ -18,9 +19,10 @@
           [scrollWindow]          ="false">
 
         <div  [class]="grid"
-              *ngIf="cardStyle === 'block' && orders">
+              [style]="infiniteStyle"
+              *ngIf="cardStyle === 'block' && orders" >
           <ng-container *ngFor="let order of orders; let i = index">
-            <div *ngIf="order.id && order.id != 0">
+            <div *ngIf="order.id && order.id != 0"  >
               <app-order-card
                 (click)="setActiveOrderObs(order)"
                 [order]="order"

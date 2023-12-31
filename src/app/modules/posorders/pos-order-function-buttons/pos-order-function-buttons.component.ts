@@ -334,11 +334,15 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   get isemailOptionView() {
     if (this.order?.service?.filterType == 2 ) { return null }
     // if (this.order?.service?.filterType != 0 ) { return null }
-    if (this.emailOption) {
-      return this.isemailOptionView
+    if (this.emailOption  && !this.isUser) {
+      return this.emailOptionView
     }
     return null;
   }
+
+  // @ViewChild('ssmsOptionView')  ssmsOptionView: TemplateRef<any>;
+  // @ViewChild('textOptionView')  textOptionView: TemplateRef<any>;
+  // @ViewChild('emailOptionView')  emailOptionView: TemplateRef<any>;
 
   get isSSMOptionView() {
     if (this.order?.service?.filterType == 2 ) { return null }
