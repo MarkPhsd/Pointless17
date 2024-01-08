@@ -169,7 +169,7 @@ export interface CmdResponse{
 }
 
 export interface UIHomePageSettings {
-
+  pinPadDefaultOnApp: boolean;
   lockTerminalToBalanceSheet: boolean;
   id                : number;
   menuEnabled       : boolean;
@@ -456,7 +456,7 @@ export class UISettingsService {
     if (!this.userAuthorizationService.user) {
       return;
     }
-    if (this.userAuthorizationService.user.username === 'Temp') {
+    if (this.userAuthorizationService?.user?.username === 'Temp') {
       return;
     }
     const item = this.userAuthorizationService.currentUser()
@@ -529,7 +529,7 @@ export class UISettingsService {
     if (!this.userAuthorizationService.user) {
       return;
     }
-    if (this.userAuthorizationService.user.username === 'Temp') {
+    if (this.userAuthorizationService?.user?.username === 'Temp') {
       return;
     }
 
@@ -611,6 +611,7 @@ export class UISettingsService {
   initHomePageForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
       id                    : [''],
+      pinPadDefaultOnApp    : [],
       lockTerminalToBalanceSheet: [],
       brandsEnabled         : [''],
       typesEnabled          : [''],

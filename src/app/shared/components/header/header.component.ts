@@ -11,7 +11,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SiteSelectorComponent } from '../../widgets/site-selector/site-selector.component';
 import { Location} from '@angular/common';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
-import { ScaleInfo, ScaleService, ScaleSetup } from 'src/app/_services/system/scale-service.service';
+import { ScaleInfo, ScaleSetup } from 'src/app/_services/system/scale-service.service';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { PlatformService } from 'src/app/_services/system/platform.service';
@@ -20,11 +20,10 @@ import { Router } from '@angular/router';
 // import { IFloorPlan } from 'pointless-room-layout/src/app/app.component';
 import { FloorPlanService, IFloorPlan } from 'src/app/_services/floor-plan.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
+import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { CoachMarksService,CoachMarksClass } from '../../widgets/coach-marks/coach-marks.service';
-import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 
 interface IIsOnline {
@@ -405,12 +404,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     if (this.smallDevice) { this.toolbarUIService.updateOrderBar(false) }
   }
 
-  // get istableLayout() {
-  //   if (this.isUserStaff) {
-  //     this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(site);
-  //   }
-  // }
-
   get isfloorPlan() {
     if (this.isUserStaff || this.isAdmin) {
       return this.floorPlanTemplate
@@ -422,10 +415,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     // console.log('user info screen', this.smallDevice, this.phoneDevice)
     if (this.phoneDevice || this.smallDevice)  {return  null}
     return this.userActions
-    // if (!this.smallDevice && !this.phoneDevice) {
-    //   return this.userActions
-    // }
-    // return null
   }
 
 
@@ -686,6 +675,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     if (this.uiTransactionSetting && this.uiTransactionSetting.prepOrderOnExit) {
       const order = this.orderMethodsService.order
       this.action$ = this.paymentMethodsService.sendOrderOnExit(order).pipe(switchMap(data => {
+        console.log('header send order on exit and log out')
         this.postLogout()
         return of(data)
       }))
@@ -730,7 +720,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   switchUser() {
-    this.paymentMethodsService.sendOrderAndLogOut( this.orderMethodsService.order, true )
+    const order = this.orderMethodsService.order;
+    this.paymentMethodsService.sendOrderAndLogOut( order , true )
   }
 
   assingBackGround(image: string) {

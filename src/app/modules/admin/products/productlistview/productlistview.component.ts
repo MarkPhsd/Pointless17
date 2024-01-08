@@ -913,7 +913,12 @@ constructor(  private _snackBar              : MatSnackBar,
     item.bayName = value?.bayName
 
 
-    this.action$ = this.orderMethodsService.publishReconciliation(item)
+    this.action$ = this.orderMethodsService.publishReconciliation('Reconcile', item)
+  }
+
+  inventoryMonitor() {
+    let item = {} as IReconcilePayload;
+    this.action$ = this.orderMethodsService.publishReconciliation('Inventory Monitor', item)
   }
 
   getLabel(rowData)

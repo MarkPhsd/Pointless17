@@ -27,7 +27,7 @@ import { IOrderItemSearchModel, POSOrderItemService } from 'src/app/_services/tr
 })
 
 export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
-  filterDivHeight 
+  filterDivHeight
   @ViewChild('filterDiv') filterDiv: ElementRef;
   @ViewChild('orderCard')    orderCard: TemplateRef<any>;
   @ViewChild('orderList')    orderList: TemplateRef<any>;
@@ -104,9 +104,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 
-  getFilterHeight() { 
+  getFilterHeight() {
 
-    if (!this.filterDiv) { 
+    if (!this.filterDiv) {
       return
     }
     const divTop = this.filterDiv.nativeElement.getBoundingClientRect().top;
@@ -187,6 +187,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.viewHouseAccountListOn = true;
     this.setViewType(0)
+
     return;
     this.viewHouseAccountListOn = !this.viewHouseAccountListOn;
     // if (!this.viewHouseAccountListOn) {

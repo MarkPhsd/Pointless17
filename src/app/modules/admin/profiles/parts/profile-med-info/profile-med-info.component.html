@@ -14,7 +14,7 @@
   <mat-card *ngIf="isMedPatient">
     <mat-card-subtitle>MED Info</mat-card-subtitle>
 
-    <div class="ps-flex-group-column" *ngIf="isStaff">
+    <div class="med-grid " *ngIf="isStaff">
 
       <div *ngIf="inputForm"
            [formGroup]="inputForm">
@@ -30,7 +30,7 @@
               </app-value-fields>
             </div>
 
-            <div >
+            <div>
               <app-value-fields
                 [inputForm]="inputForm"
                 [fieldName]="'medLicenseNumber'">

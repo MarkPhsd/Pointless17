@@ -1,20 +1,32 @@
 <div *ngIf="(action$ | async) as action"></div>
-      
-<div  #scrollMe
-      *ngIf="posOrderItems && posOrderItems.length>0"
-      [id]="scrollStyle"
-      [style.width]  = "deviceWidthPercentage"
-      [style.height] = "panelHeight"
-      [class]="mainStyle">
 
-  <ion-item-sliding 
-            [class]="nopadd"
-            *ngFor="let item of posOrderItems;
-                    let i = index;trackBy: trackByFN"
-            (ionSwipe)="swipeAction(i)" >
+<ng-container [ngTemplateOutlet]="posItemsView"></ng-container>
+
+<ng-template #posOrderItemsPrepView>
+  <div  *ngIf   = "posOrderItems && posOrderItems.length>0"
+        [id]    = "scrollStyle"
+        [style] = "'height:calc(75vh - 300px);padding-bottom:2px;overflow-y:auto;overflow-x:hidden;'" >
+     <ng-container [ngTemplateOutlet]="posItemsListView"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #posOrderItemsView>
+    <div  #scrollMe
+          *ngIf="posOrderItems && posOrderItems.length>0"
+          [style.width]  = "deviceWidthPercentage"
+          [class]="mainStyle">
+      <ng-container [ngTemplateOutlet]="posItemsListView"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #posItemsListView>
+    <ion-item-sliding
+        [class]="nopadd"
+        *ngFor="let item of posOrderItems;
+                let i = index;trackBy: trackByFN"
+        (ionSwipe)="swipeAction(i)"  >
 
       <div *ngIf="uiConfig">
-
         <ion-item *ngIf="item" >
           <pos-order-item
                       [class]      ="gridScroller"
@@ -49,7 +61,6 @@
                       (outputDelete)        = "removeItemFromList($event)"
           ></pos-order-item>
         </ion-item>
-
       </div>
 
       <ion-item-options *ngIf="prepScreen">
@@ -70,15 +81,11 @@
             </span>
             <span *ngIf="item?.printed && !prepScreen">
               <mat-icon>remove_shopping_cart</mat-icon>
-                Void
+              Void
             </span>
           </button>
         </ion-item-option>
       </ion-item-options>
-
-
     </ion-item-sliding>
 
-</div>
-
-
+</ng-template>

@@ -189,6 +189,17 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     return ''
   }
 
+  get allowedVoidClosedItem() {
+    if (this.orderItem) {
+      if (!this.orderItem.completionDate) {
+        return true;
+      }
+      if (this.userAuths?.disableVoidClosedItem) {
+        return false
+      }
+    }
+  }
+
   getUnitDescription(item: PosOrderItem ): string {
 
     return ''
@@ -305,10 +316,11 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     }
 
     if (!this.menuItem) {
+      // if (this.menuItem.i)
+      if (this.order?.service?.filterType != 0 ) { return of(null) }
       this.basicItem$ = this.menuService.getItemBasicImage(site, this.orderItem?.productID).pipe(
         switchMap( data => {
           this.imagePath  =  this.getImageUrl(data?.image)
-            //  console.log('basicimage',this.imagePath, data?.image )
           return of(data)
         })
       )

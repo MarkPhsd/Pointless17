@@ -1,0 +1,18 @@
+@import "/src/mixins.scss";
+.grid-headerfooter {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 55px 75px 85px 85px 85px  ;
+  margin-left: 15px;
+  white-space   : nowrap;
+  overflow      : hidden;
+  text-overflow : ellipsis;
+  text-transform: capitalize;
+  font-size: 1.3em;
+  font-weight: 400;
+  @include for-phone-only {
+    grid-template-columns:  55px 75px 85px 85px 85px  ;
+  }
+
+}

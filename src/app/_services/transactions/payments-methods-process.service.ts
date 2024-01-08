@@ -16,6 +16,7 @@ import { PrepPrintingServiceService } from '../system/prep-printing-service.serv
 import { BalanceSheetMethodsService } from './balance-sheet-methods.service';
 import { PlatformService } from '../system/platform.service';
 import { POSOrderItemService } from './posorder-item-service.service';
+import { UserAuthorizationService } from '../system/user-authorization.service';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +56,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     private prepPrintingService : PrepPrintingServiceService,
     private dialogOptions       : ProductEditButtonService,
     private balanceSheetMethodsSevice: BalanceSheetMethodsService,
+    private userAuthorizationService: UserAuthorizationService,
     private editDialog              : ProductEditButtonService,
     private matSnackBar         : MatSnackBar) {
   }
@@ -67,7 +69,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   sendOrderAndLogOut(order: IPOSOrder, logOut: boolean) {
-    this._sendOrderAndLogOut.next({order: order, logOut: logOut})
+    const item = {order: order, logOut: logOut};
+    // console.log(item)
+    this._sendOrderAndLogOut.next(item)
   }
 
   enterPointCashValue(amount, paymentMethod: IPaymentMethod, posPayment: IPOSPayment, order: IPOSOrder ): Observable<IPaymentResponse> {
@@ -218,7 +222,10 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 }
 
  sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean, uiTransactions: TransactionUISettings): Observable<any> {
-    // console.log(uiTransactions)
+    if (!this.userAuthorizationService?.user) { 
+      return of(null)
+    }
+    
     if (order) {
       const site = this.sitesService.getAssignedSite()
       const expoPrinter = uiTransactions?.expoPrinter
@@ -242,6 +249,10 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   prepPrintUnPrintedItems(id: number) {
+
+    if (!this.userAuthorizationService?.user) { 
+      return of(null)
+    }
     if (id) {
       const site = this.sitesService.getAssignedSite()
       return  this.posOrderItemService.setUnPrintedItemsAsPrinted(site, id).pipe(

@@ -5,7 +5,7 @@ import { Observable, of, switchMap } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { IPOSOrder, IPOSPayment,IServiceType } from 'src/app/_interfaces';
-import { OrdersService } from 'src/app/_services';
+import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ChangeDueComponent } from '../balance-due/balance-due.component';
@@ -25,29 +25,41 @@ export class NewOrderTypeComponent  {
   @Input() order: IPOSOrder;
   @Input() payment: IPOSPayment;
   @Input() showCancel = true;
+
   updateItems = false;
   serviceType  : IServiceType;
   serviceTypes$: Observable<IServiceType[]>;
   action$: Observable<any>;
 
-  constructor(private siteService       : SitesService,
-              private serviceTypeService: ServiceTypeService,
-              public  orderMethodsService      :  OrderMethodsService,
+  constructor(private siteService               : SitesService,
+              private serviceTypeService        : ServiceTypeService,
+              public  orderMethodsService       :  OrderMethodsService,
               public  orderService: OrdersService,
-              private snackBar          : MatSnackBar,
-              private _bottomSheet      : MatBottomSheet,
-              private userAuthorizationService: UserAuthorizationService,
-              @Optional() private dialogRef  : MatDialogRef<ChangeDueComponent>,
+              private snackBar                  : MatSnackBar,
+              private _bottomSheet              : MatBottomSheet,
+              private userAuthorizationService  : UserAuthorizationService,
+              private authService: AuthenticationService,
+              @Optional() private dialogRef     : MatDialogRef<ChangeDueComponent>,
               )
   {
     const site = this.siteService.getAssignedSite();
 
-    if (this.userAuthorizationService.isManagement) {
-      this.serviceTypes$ = this.serviceTypeService.getAllServiceTypes(site)
+    if (authService._userAuths.value) { 
+      const auth = authService._userAuths.value;
+      if (auth.allowReconciliation && auth.adjustInventoryCount) { 
+        this.serviceTypes$ = this.serviceTypeService.getAllServiceTypes(site)
+        return
+      }
     }
-    if (!this.userAuthorizationService.isManagement) {
-      this.serviceTypes$ = this.serviceTypeService.getSaleTypesCached(site)
+
+    // if (userAuthorizationService.user)
+    if (this.userAuthorizationService?.isAdmin) {
+      this.serviceTypes$ = this.serviceTypeService.getAllServiceTypes(site);
+      return;
     }
+   
+    this.serviceTypes$ = this.serviceTypeService.getSaleTypesCached(site)
+
 
   }
 

@@ -1,10 +1,11 @@
 import { Injectable, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../system/authentication.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ISetting, ISite}  from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
+import { UserAuthorizationService } from '../system/user-authorization.service';
 
 export interface IPrinterLocation {
   id: number;
@@ -37,6 +38,7 @@ export class PrinterLocationsService {
       private http: HttpClient,
       private httpCache: HttpClientCacheService,
       private auth: AuthenticationService,
+      private userAuthorizationService: UserAuthorizationService,
       private siteService: SitesService)
     {
     }
@@ -69,7 +71,10 @@ export class PrinterLocationsService {
 }
 
   getLocations(): Observable<IPrinterLocation[]> {
-
+      if (!this.userAuthorizationService?.user) { 
+        return of(null)
+      }
+    
       const site = this.siteService.getAssignedSite()
 
       const controller =  `/PrinterLocations/`

@@ -29,12 +29,18 @@ mat-button-toggle-group {
 
 .grid-items {
   max-height: 400px;
-
   display: grid;
   grid-auto-flow: row;
-  grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
   gap: 10px;
-  overflow-y: auto
+  overflow-y: auto;
+  grid-template-columns: repeat( auto-fit, minmax(105px, 1fr) );
+  padding:3px;
+
+  @include for-phone-only {
+    display: grid;
+    grid-auto-flow: row;
+  }
+
 }
 
 .grid-item {

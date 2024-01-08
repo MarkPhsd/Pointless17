@@ -15,6 +15,8 @@ import { MenuService } from 'src/app/_services/menu/menu.service';
 import { Observable } from 'rxjs';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 interface itemOption {
   name: string;
   quantity: number;
@@ -56,6 +58,13 @@ export class PromptPanelMenuItemComponent implements OnInit {
   menuItem$: Observable<MenuItemsSelected>;
   newItem$ : Observable<MenuItemsSelected>;
   removeItem$: Observable<MenuItemsSelected>;
+  isStaff= this.userAuthorizationService.isStaff;
+  uiHomePage: UIHomePageSettings;
+
+  uiHomePage$ = this.uiSettingService.UIHomePageSettings.pipe(switchMap(data => {
+    this.uiHomePage = data;
+    return of(data)
+  }));
 
   intSubscriptions() {
     this._order = this.orderMethodsService.currentOrder$.subscribe(data => {
@@ -92,6 +101,8 @@ export class PromptPanelMenuItemComponent implements OnInit {
      private menuService              : MenuService,
      private awsBucket                : AWSBucketService,
      private platformService          : PlatformService,
+     private userAuthorizationService: UserAuthorizationService,
+     private uiSettingService: UISettingsService,
      ) { }
 
    ngOnInit() {
@@ -150,12 +161,11 @@ export class PromptPanelMenuItemComponent implements OnInit {
     ))
   }
 
-  addItem() {
+  addItem(event) {
     this.newItem$ = this.addItemSub()
-
   }
 
-  addItemSub():Observable<MenuItemsSelected> {
+  addItemSub(): Observable<MenuItemsSelected> {
 
     if (!this.index) {
       // this.siteService.notify('No index is assigned', 'Close', 3000, 'yellow')
@@ -177,7 +187,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
     const currentSubPrompt = orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups
     if (!currentSubPrompt) {
-      this.siteService.notify('Select page to chose items from.', 'Close', 3000, 'yellow')
+      // this.siteService.notify('Select page to chose items from.', 'Close', 3000, 'yellow')
       return of(null)
     }
 

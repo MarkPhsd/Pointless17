@@ -3,7 +3,6 @@ import { IPOSOrder, ISite } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { catchError, delay, Observable, repeatWhen, throwError } from 'rxjs';
-import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-order-total-board',

@@ -211,5 +211,6 @@ export interface IProduct {
   thumbnail: string;
   bayName: string;
   baySection: string;
+  pieceWeight: number; 
 }
 

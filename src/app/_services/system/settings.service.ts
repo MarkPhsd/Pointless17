@@ -257,6 +257,8 @@ export class SettingsService {
 
   getPOSDeviceBYName(site: ISite, name: String):  Observable<ISetting> {
 
+    const user =  JSON.parse(localStorage.getItem('user')) as IUser
+    if (!user) { return of(null)}
     if (!name) { return of(null)};
 
     const controller = "/settings/"

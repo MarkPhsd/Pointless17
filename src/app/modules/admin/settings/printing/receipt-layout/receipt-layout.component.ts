@@ -93,7 +93,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
           if (!this.payments) {
             this.payments   = this.order.posPayments
           }
-          if (this.payments) { 
+          if (this.payments) {
             this.payments = this.payments.filter(data => data.tranType != 'incrementalAuthorizationResponse' )
           }
           this.orders     = []

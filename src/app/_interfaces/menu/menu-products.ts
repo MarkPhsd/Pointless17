@@ -122,6 +122,8 @@ export interface IMenuItem {
   baseUniTypeID  : number;
   bayName: string;
   baySection: string;
+  thumbNail: string;
+  pieceWeight: number;
 }
 
 export interface menuButtonJSON {

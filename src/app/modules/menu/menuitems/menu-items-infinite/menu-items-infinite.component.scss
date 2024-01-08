@@ -98,6 +98,7 @@ div.mat-chip-list-wrapper {
   grid-template-columns: repeat( auto-fill, minmax(75px, 1fr) );
   overflow-y: auto;
   overflow-x: hidden;
+  padding: 5px;
 }
 
 .grid-flow {
@@ -109,6 +110,7 @@ div.mat-chip-list-wrapper {
   grid-template-columns: repeat( auto-fill, minmax(125px, 1fr) );
   overflow-y: auto;
   overflow-x: hidden;
+  padding: 5px;
 }
 
 .grid-flow-app-margins {

@@ -5,7 +5,7 @@ import {Component, OnDestroy,
   }  from '@angular/core';
 import { IServiceType, ISetting, IUser,  } from 'src/app/_interfaces';
 import { IPOSOrder, IPOSOrderSearchModel,  } from 'src/app/_interfaces/transactions/posorder';
-import { IItemBasic,} from 'src/app/_services';
+import { AuthenticationService, IItemBasic,} from 'src/app/_services';
 import { OrdersService } from 'src/app/_services';
 import { ActivatedRoute, Router} from '@angular/router';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -25,6 +25,7 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 const { Keyboard } = Plugins;
 
 @Component({
@@ -92,7 +93,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   _prepStatus         : Subscription;
   _printLocation      : Subscription;
   printerLocations$   : Observable<IPrinterLocation[]>;
-
+  _auth: Subscription;
+  auth: IUserAuth_Properties
   @Output() outPutHidePanel = new EventEmitter();
 
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
@@ -107,8 +109,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     )
 
   )
-
-
 
   uiTransactions  = {} as TransactionUISettings;
   uiTransactions$  : Observable<ISetting>;
@@ -126,6 +126,14 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       }
     )
   )
+
+  initAuthSubscriber() { 
+    this._auth = this.authService.userAuths$.subscribe(data => { 
+      this.auth = data;
+      this.resetSearch()
+      
+    })
+  }
 
   initUITransactionsSubscriber() {
     this._UITransaction = this.uISettingsService.transactionUISettings$.subscribe( data => {
@@ -216,7 +224,11 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     if (this._printLocation) { this._printLocation.unsubscribe()}
     if (this._prepStatus) { this._prepStatus.unsubscribe()}
     if (this._viewType) { this._viewType.unsubscribe(); }
+    if (this._auth) { this._auth.unsubscribe()}
   }
+
+
+
 
   constructor(
       private orderService    : OrdersService,
@@ -229,6 +241,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       private matSnack        : MatSnackBar,
       private fb              : UntypedFormBuilder,
       private userAuthorization  : UserAuthorizationService,
+      private authService: AuthenticationService,
       private dateHelper: DateHelperService,
       private _bottomSheet    : MatBottomSheet,
       private uISettingsService: UISettingsService,
@@ -248,7 +261,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   ngOnInit() {
     const site           = this.siteService.getAssignedSite();
     this.employees$      = this.orderService.getActiveEmployees(site);
-
+    this.initAuthSubscriber();
     this.initAuthorization();
     this.initCompletionDateForm();
     this.initScheduledDateForm();
@@ -376,9 +389,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.toggleTypeEmployee          = "0"
 
     this.value = ''
-    if (this.user.roles==='user'){
-      this.value = '1';
-    }
+    if (this.user.roles==='user'){  this.value = '1';  }
     if (this.searchModel) {  this.searchModel.orderID = 0}
     this.initForm();
     this.refreshSearch();

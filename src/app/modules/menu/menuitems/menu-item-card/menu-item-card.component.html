@@ -21,6 +21,7 @@
                     class="image-button"
                     (click)="altMethod(false)">
 
+
               <div *ngIf="!menuItem.urlImageMain">
                 <ng-container [ngTemplateOutlet]="menuItemName" ></ng-container>
               </div>
@@ -88,7 +89,6 @@
 
     </div>
 </mat-card>
-
 
 <ng-template #menuItemName>
   <div class="item-name-center"  >

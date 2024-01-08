@@ -4,6 +4,7 @@
 <div *ngIf="clientTable && inputForm && transactionUISettings; else loading" >
 
   <span #coachingAlertMessages></span>
+  
   <div *ngIf="inputForm">
     <div *ngIf="inputForm.controls?.firstName.errors?.required && inputForm.controls?.firstName.touched" class="error">
       <mat-icon color="warn">warning</mat-icon> Full Name required in basic tab.

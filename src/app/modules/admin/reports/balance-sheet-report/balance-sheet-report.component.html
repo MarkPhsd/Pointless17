@@ -65,7 +65,7 @@
   <div class="header">
     <div class="grid-item text-format">{{ item?.startTime | date: 'M/d/yy' }}</div>
     <div class="grid-item number-format">{{item?.id}}</div>
-    <div class="grid-item text-format">{{item?.balanceSheetEmployee?.lastName | truncateText : 5}}, {{item?.balanceSheetEmployee?.lastName.slice(0)}}</div>
+    <div class="grid-item text-format">{{item?.balanceSheetEmployee?.firstName | truncateText : 5}}  {{item?.balanceSheetEmployee?.lastName.slice(1)}}.</div>
     <div class="grid-item number-format">{{item?.salesTotal | currency}}</div>
     <div class="grid-item number-format">{{item?.overUnderTotal | currency }}</div>
 

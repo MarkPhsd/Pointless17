@@ -309,9 +309,9 @@ export class TriPOSMethodService {
   }
     // /Observable<import("../system/settings.service").ITerminalSettings>,
   processIncrementalReversal( auth: authorizationPOST, item: IPOSPayment): Observable<IPOSPayment> {
-    const site = this.siteService.getAssignedSite()
+      const site = this.siteService.getAssignedSite()
 
-    const item$ = this.reversal(site, auth).pipe(switchMap(data => {
+      const item$ = this.reversal(site, auth).pipe(switchMap(data => {
 
       console.log('reversal', data);
 

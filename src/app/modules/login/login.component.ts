@@ -11,7 +11,7 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
 import { Subscription, switchMap , of, Observable} from 'rxjs';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { SplashScreenStateService } from 'src/app/_services/system/splash-screen-state.service';
@@ -34,6 +34,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   @ViewChild('userEntryView')   userEntryView: TemplateRef<any>;
   @Input() statusMessage: string;
   initApp    = true
+
+  setPinPad$ = this.authenticationService.setPinPad$.pipe(switchMap(data => {
+    // console.log('pin pad', data)
+    if (data) {
+      this.togglePIN = true;
+    }
+    return of(data)
+  }))
 
   terminalSettings$: Observable<ITerminalSettings>;
   terminalSettings: ITerminalSettings;
@@ -69,6 +77,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginStatusvalue: number;
   loginAction: any;
   rememberMe: boolean;
+  uiHome$: Observable<UIHomePageSettings>;
 
   initSubscriptions() {
     this._user = this.authenticationService.user$.subscribe( user => {
@@ -94,6 +103,13 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.uiHomePageSetting = data;
           if (data.logoHomePage) {
             this.logo = `${this.bucket}${data.logoHomePage}`;
+          }
+
+          if (this.isApp) {
+            if (this.uiHomePageSetting.pinPadDefaultOnApp) {
+              this.togglePIN = true;
+              this.authenticationService.updatePinPad(this.uiHomePageSetting.pinPadDefaultOnApp)
+            }
           }
         }
       }
@@ -123,7 +139,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private awsBucketService     : AWSBucketService,
         private orderMethodsService:   OrderMethodsService,
         private electronService        : ElectronService,
-        private paymentMethodsService  : PaymentsMethodsProcessService,
+        private settingService: SettingsService,
         @Optional() private dialogRef  : MatDialogRef<LoginComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
     )
@@ -133,6 +149,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.isApp = this.platformService.isApp()
     const item = localStorage.getItem('loginAction')
     this.loginAction = JSON.parse(item)
     this.bucket = await this.awsBucketService.awsBucketURL()
@@ -156,11 +173,22 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   refreshUIHomePageSettings() {
-    this.uiSettingService.getSetting('UIHomePageSettings').subscribe(data =>  {
-      this.uiHomePageSetting = JSON.parse(data.text) as UIHomePageSettings
+    const item$ = this.settingService.getUIHomePageSettings()
+    this.uiHome$ = item$.pipe(switchMap(data => {
+      this.uiHomePageSetting = data as UIHomePageSettings
       this.initCompanyInfo();
       this.initLogo();
-    })
+      // console.log(
+      //   'pin', this.isApp, this.uiHomePageSetting.pinPadDefaultOnApp
+      // )
+      if (this.isApp) {
+        if (this.uiHomePageSetting.pinPadDefaultOnApp) {
+          this.togglePIN = true;
+          this.authenticationService.updatePinPad(this.uiHomePageSetting.pinPadDefaultOnApp)
+        }
+      }
+      return of(data)
+    }));
   }
 
   ngOnDestroy(): void {
@@ -387,8 +415,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       switchMap(result =>
         {
 
-          this.paymentMethodsService.sendOrderAndLogOut( null, false)
-          this.paymentMethodsService.sendOrderOnExit(null)
+          //if you assign these two lines, detail here why you have done that.
+          //for some reason they were here, but they prevented a login,
+          //after login it would log out. but reviewing these two lines does not
+          //reveal why.
           this.initForm();
 
           if (!result || (result && result.errorMessage)) {
@@ -406,7 +436,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           //if there is a sheet we login here with the user to prompt the sheet if needed.
           if (sheet) {  if (this.loginApp(result)) {  return of('success') } }
 
-          // if (user) {  console.log('process 2')  }
           if (result && result.username != undefined) { user = result }
 
           if (user) {
@@ -422,24 +451,14 @@ export class LoginComponent implements OnInit, OnDestroy {
 
               if (!this.loginAction) {  this.userSwitchingService.assignCurrentOrder(user) }
 
-              // if (user) {  console.log('process 3')  }
-
-              if (this.loginAction) {
-                if (this.loginAction.name === 'setActiveOrder') {
-                  this.userSwitchingService.processLogin(user, '/pos-payment')
-                  pass = true
-                }
+              if (this.loginAction?.name === 'setActiveOrder') {
+                this.userSwitchingService.processLogin(user, '/pos-payment')
+                pass = true
               }
-
-              // if (user) {  console.log('process 4')  }
 
               if (!pass) { this.userSwitchingService.processLogin(user, '')  }
 
-              // if (user) {  console.log('process 6')  }/
-
               this.closeDialog();
-
-              // if (user) {  console.log('process 7')  }
               return of('success')
             }
           }

@@ -1,9 +1,9 @@
 import {Component, HostListener, OnInit, OnDestroy,
-  ViewChild, ElementRef, QueryList, ViewChildren, Input, Output,EventEmitter}  from '@angular/core';
+  ViewChild, ElementRef, QueryList, ViewChildren, Input, Output,EventEmitter, TemplateRef, OnChanges, SimpleChanges}  from '@angular/core';
 import { IPOSOrder,IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
 import { AuthenticationService, OrdersService, POSOrdersPaged } from 'src/app/_services';
 import { ActivatedRoute} from '@angular/router';
-import { Observable, Subscription, catchError, of, switchMap} from 'rxjs';
+import { Observable, Subscription, catchError, delay, of, repeatWhen, switchMap, tap, throwError} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ISite, IUser } from 'src/app/_interfaces';
@@ -20,9 +20,13 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
   templateUrl: './order-cards.component.html',
   styleUrls: ['./order-cards.component.scss']
 })
-export class OrderCardsComponent implements OnInit,OnDestroy {
+export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
 
   action$: Observable<any>;
+
+
+  @ViewChild('orderPrepRefresh') orderPrepRefresh : TemplateRef<any>;
+  @ViewChild('ordersRefresh')    ordersRefresh : TemplateRef<any>;
   @ViewChild('nextPage', {read: ElementRef, static:false}) elementView: ElementRef;
   @ViewChildren('item') itemElements: QueryList<any>;
   @Output() orderOutPut = new EventEmitter()
@@ -62,6 +66,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   currentPage       = 1 //paging component
   pageSize          = 50;
   itemsPerPage      = 45
+  pageNumber: number;
 
   scrollingInfo  :   string;
   endofItems     :   boolean;
@@ -100,10 +105,42 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   infiniteStyle = 'overflow-x:hidden;overflow-y:auto;max-height(80vh)'
   _userAuths: Subscription;
   userAuths: IUserAuth_Properties;
-  scrollStyle = this.platformService.scrollStyleWide;
+  _scrollStyle = this.platformService.scrollStyleWide;
   _user: Subscription;
   user : IUser;
 
+  seconds = 30000;
+  orderResults$ = of([]) as  Observable<IPOSOrder[]>
+  // orderSubscription$: Observable<IPOSOrder[]>;
+  orderPrepRefresh$: Observable<any[]>;
+
+  get scrollStyle() {
+    if (this.viewType == 3) {
+      return 'scrollstyle_1'
+    }
+    return this._scrollStyle
+  }
+
+  orderSubscription$ = this._addToListOBS(this.pageSize, 1, false).pipe(
+    repeatWhen(notifications =>
+      notifications.pipe(
+        tap(() => 
+        console.log('')
+        ),
+        delay(this.seconds))
+    ),
+    catchError((err: any) => {
+      return throwError(err);
+    })
+  )
+
+
+  get orderPrepRefreshView() {
+    if (this.viewType == 3) {
+      return this.orderPrepRefresh;
+    }
+    return this.ordersRefresh;
+  }
 
   initViewSubscriber() {
     this._viewType = this.orderMethodsService.viewOrderType$.subscribe(data => {
@@ -165,6 +202,17 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
     this.value = 1;
     this.initSubscriptions();
+
+    // if (this.isPrepViewEnabled) {
+    //   this.getPrepOrders()
+    // }
+
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // if (this.isPrepViewEnabled) {
+    //   this.getPrepOrders()
+    // }
   }
 
   ngOnDestroy() {
@@ -261,16 +309,12 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
   setActiveOrder(order) {
     const site  = this.siteService.getAssignedSite();
-
     //sends order from this, to trigger defaultmodulecomponent, which then triggers another observable to send thourh payment methodsprocessservice.
     this.orderMethodsService._sendOrder.next(true)
-
-    // console.log('set active order')
     const order$ =  this.orderService.getOrder(site, order.id, order.history )
     order$.subscribe(data =>
       {
         if (data) {
-
           this.orderOutPut.emit(data)
           this.orderMethodsService.setActiveOrder(site, data)
         }
@@ -280,9 +324,12 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
   setActiveOrderObs(order) {
     const site  = this.siteService.getAssignedSite();
-
-    // console.log('orderID', this.orderMethodsService?.order?.id)
-    let sendOrder$ = this.paymentMethodsProcess.sendOrderOnExit(this.orderMethodsService.order)
+    let sendOrder$ = of(null)
+    if (this.orderMethodsService?.order) {
+      if (!this.orderMethodsService.order.history) {
+        let sendOrder$ = this.paymentMethodsProcess.sendOrderOnExit(this.orderMethodsService.order)
+      }
+    }
 
     let order$  =   this.orderService.getOrder(site, order.id, order.history )
     let newOrder$ : Observable<any>;
@@ -294,7 +341,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
         switchMap(data => {
         {
           if (data) {
-
             this.orderOutPut.emit(data)
             this.orderMethodsService.setActiveOrder(site, data)
           }
@@ -306,9 +352,33 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     this.action$ = newOrder$
   }
 
-  addToList(pageSize: number, pageNumber: number, reset : boolean)  {
+
+  getPrepOrders() {
+    const seconds = 1000 * 5;
+    const site = this.siteService.getAssignedSite()
     let model         = {} as IPOSOrderSearchModel
     if (this.searchModel)  {  model = this.searchModel}
+    model.pageNumber = 1;
+    model.pageSize = 25;
+    return this.orderService.getOrdersPrepBySearchPaged(site,model).pipe(switchMap(data => {
+      // console.log('refresh items')
+      const newLocal = this;
+      newLocal.orders = data.results;
+      return of (data.results)
+    }))
+  }
+
+
+  addToList(pageSize: number, pageNumber: number, reset : boolean)  {
+    this.results$ = this._addToListOBS(pageSize,pageNumber, reset)
+  };
+
+
+  _addToListOBS(pageSize: number, pageNumber: number, reset : boolean)  {
+    let model         = {} as IPOSOrderSearchModel
+    if (this.searchModel)  {  model = this.searchModel}
+
+    if (pageNumber <= 0) { this.pageNumber = 1;  }
     model.pageNumber  = pageNumber
     model.pageSize    = pageSize
     const site        = this.siteService.getAssignedSite();
@@ -319,6 +389,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
       model.pageNumber    = pageNumber
       model.pageSize      = pageSize
       results$            = this.orderService.getOrdersPrepBySearchPaged(site,model) //.pipe(share());
+      // console.log('refreshing prep')
     }
 
     if (this.viewType != 3) {
@@ -327,42 +398,39 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
       this.loading      = true
       this.endOfRecords = false;
-      this.results$ = results$.pipe(switchMap(data => {
-        // console.log('processing', data)
 
+    return results$.pipe(switchMap(data => {
         if (!this.orders)  {
           this.loading = false
           this.endOfRecords = true
           this.orders = [] as IPOSOrder[]
         }
-          this.currentPage += 1;
 
+        this.currentPage += 1;
         if (!data || !data.results) {
           this.loading = false;
           this.endOfRecords = true
           return
         }
-
-        // console.log('processing', data, data.results.length)
-
         if (data.results.length == 0 || data == null) {
           this.value = 100;
           this.loading = false;
           this.endOfRecords = true
           return
         }
-
         this.itemsPerPage = this.itemsPerPage + data.results.length;
-
         if (reset) {
           this.orders  = [] as IPOSOrder[]
         }
-
         if (data.results) {
           this.loading      = false
           this.orders = this.orders.concat(data.results)
           this.orders.sort
           this.orders = this.getUniqueItems(this.orders)
+
+
+          // console.log('refreshing prep', this.orders.length)
+
 
           this.totalRecords = data.paging.totalRecordCount;
           if ( this.orders.length == this.totalRecords ) {
@@ -384,9 +452,19 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
         }
         return of(data)
       }
-    ))
-  };
+    ),catchError(data => {
+      const item = {} as POSOrdersPaged;
+      item.results = null;
+      return of(item)
+    }))
+  }
 
+  get isPrepViewEnabled() {
+    if (this.viewType != 3) {
+      return true
+    }
+    return false;
+  }
 
   setThisCardInVisible(event) {
     const i = event.index;
@@ -394,7 +472,12 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     this.invisibleOrders.push(i)
   }
 
-  isOrderVisible(i) {
+  isOrderVisible(i, order: IPOSOrder) {
+
+
+    if (order && order.posOrderItems && order.posOrderItems.length === 0) {
+      return false
+    }
 
     if (!i) {
       return true

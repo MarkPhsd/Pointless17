@@ -65,6 +65,7 @@ export class DateValidators {
 })
 export class OrderMethodsService implements OnDestroy {
 
+
   emailSubjects = [
     {name: 'Please Complete', subject: 'Please review this order for prep. I would like it completed. I agree to pay when it the order is completed.', id: 1},
     {name: 'Please Review for Prep', subject: 'Please review this order for prep. I would like it confirmed and then please contact me.', id: 2},
@@ -197,7 +198,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   updateOrderSubscriptionClearOrder(id: number) {
-    if (id) {
+    if (id && id != 0) {
       const site = this.siteService.getAssignedSite();
       this.orderService.releaseOrder(site, id).subscribe()
     }
@@ -244,6 +245,8 @@ export class OrderMethodsService implements OnDestroy {
     try {
       this.currentOrder = order;
       this._currentOrder.next(order);
+      if (order?.service?.filterType == 0  ) { 
+      }
       this.setStateOrder(order);
       this._scanner.next(true)
     } catch (error) {
@@ -258,6 +261,15 @@ export class OrderMethodsService implements OnDestroy {
   updateOrderSubscriptionOnly(order: IPOSOrder) {
     this.currentOrder = order;
     this._currentOrder.next(order);
+  }
+
+  getInventoryMonitor(site: ISite, id: number): Observable<IPOSOrder> {
+    return this.orderService.inventoryMonitor(site, this.order.id).pipe(switchMap(data => 
+      {
+        this.updateOrder(data);
+        return of(data)
+      }
+    ))
   }
 
   updateOrderSubscription(order: IPOSOrder) {
@@ -286,8 +298,6 @@ export class OrderMethodsService implements OnDestroy {
       order.wholeSaleTraceCalcSum = newValue
       order.wholeSaleCostTotal    = currentValue;
 
-      // console.log('new val',newValue)
-      // console.log('currentValue',currentValue)
     }
 
 
@@ -2436,17 +2446,15 @@ export class OrderMethodsService implements OnDestroy {
     return null
   }
 
-
   notifyWithOption(message: string, title: string, notifyEnabled: boolean) {
     if (notifyEnabled) {
       this.notifyEvent(message, title)
     }
   }
 
-  publishReconciliation(item: IReconcilePayload) {
-
+  publishReconciliation(name : string, item: IReconcilePayload) {
     const site = this.siteService.getAssignedSite()
-    const order$ = this.orderService.pOSTReconciliationOrder(site)
+    const order$ = this.orderService.pOSTReconciliationOrder(site, name)
     return order$.pipe(switchMap(data => {
       item.id = data.id;
       return this.orderService.addReconciliationSection(site, item)
@@ -2454,9 +2462,7 @@ export class OrderMethodsService implements OnDestroy {
      this.setActiveOrder(site, order)
      return of(order)
     }))
-
   }
-
 
 
   notifyEvent(message: string, action: string) {

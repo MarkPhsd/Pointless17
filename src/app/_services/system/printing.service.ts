@@ -527,6 +527,7 @@ export class PrintingService {
         )
         }).catch( err => {
           console.log('Print window Load URL error:', err, options)
+          console.trace('Trace of Printing Error')
           this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
           printWindow.close();
           printWindow = null;
@@ -696,7 +697,7 @@ export class PrintingService {
       item.menuItem = menuItem;
       return this.menuItemService.getProduct(site, item.menuItem.id)
     })).pipe(switchMap(data => {
-        console.log('packager', data.packager, data)
+        // console.log('packager', data.packager, data)
         if (data.packager) {
           return this.getContact(site, data.packager)
         }

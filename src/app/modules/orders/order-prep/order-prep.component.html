@@ -7,26 +7,26 @@
     <mat-card-content class="center">
       <div *ngIf="!smallDevice" class="grid-orderproperties">
         <div class='date-header' *ngIf="order.orderDate">
-          {{order.orderDate |  date: 'shortTime'}}  |  {{minutesOpen}} . <br>
-          {{order.orderDate |  date: 'shortDate'}}
+          {{order?.orderDate |  date: 'shortTime'}}  |  {{minutesOpen}} . <br>
+          {{order?.orderDate |  date: 'shortDate'}}
         </div>
 
         <div class="orderType">
-            {{order.serviceType | truncateText : 15}}
-            <span style="margin-left: 5px;" *ngIf="order.tableName">{{order.tableName}}</span>
+            {{order?.serviceType | truncateText : 15}}
+            <span style="margin-left: 5px;" *ngIf="order.tableName">{{order?.tableName}}</span>
         </div>
 
         <div class="employee-name">
-          {{order.employeeName | truncateText : 12 }}
+          {{order?.employeeName | truncateText : 12 }}
         </div>
 
         <div *ngIf="order.completionDate">
-          {{order.completionDate |  date: 'shortDate'}}
+          {{order?.completionDate |  date: 'shortDate'}}
         </div>
 
         <div *ngIf="!order.completionDate"
               class="time">
-          {{order.completionDate |  date: 'shortTime'}}
+          {{order?.completionDate |  date: 'shortTime'}}
         </div>
       </div>
 
@@ -35,7 +35,7 @@
         <div class="grid-totals">
           <div class="field-center">
             <div class="orderID grid-orderproperties">
-              {{order.id}}
+              {{order?.id}}
               <span *ngIf="prepScreen && (prepStatus == 1)">
                 <button
                         mat-raised-button color='primary'
@@ -51,11 +51,11 @@
                 </button>
               </span>
 
-              <span *ngIf="prepScreen ">
+              <span *ngIf="prepScreen">
                 <button
-                      mat-raised-button color='primary'
-                      (click)="openOrder()">
-                      <mat-icon>open_in_new</mat-icon>
+                        mat-raised-button color='primary'
+                        (click)="openOrder()">
+                        <mat-icon>open_in_new</mat-icon>
                 </button>
               </span>
 
@@ -65,16 +65,16 @@
           <div class="field-center">
             <div class="order-name" >
               <div *ngIf="smallDevice">
-                {{ order.customerName | truncateText : 15}}
+                {{ order?.customerName | truncateText : 15}}
               </div>
               <div *ngIf="!smallDevice">
-                {{ order.customerName | truncateText : 12}}
+                {{ order?.customerName | truncateText : 12}}
               </div>
             </div>
           </div>
 
           <div *ngIf="!prepScreen" class="items">Items</div>
-          <div *ngIf="!prepScreen" class="itemcount">{{order.itemCount}} </div>
+          <div *ngIf="!prepScreen" class="itemcount">{{order?.itemCount}} </div>
 
           <div *ngIf="prepScreen" class="items">Prep  </div>
           <div *ngIf="prepScreen" class="itemcount">{{itemCount}} </div>
@@ -88,11 +88,12 @@
   <div class="order-items"
        *ngIf="orderItems">
         <pos-order-items
-          [mainPanel]    ="false"
-          [printLocation]="printLocation"
-          [prepStatus]   ='prepStatus'
-          [prepScreen]   ='true'
-          [order]        ="orderItems">
+          [mainPanel]      ="false"
+          [printLocation]  ="printLocation"
+          [prepStatus]     ='prepStatus'
+          [prepScreen]     ='true'
+          [order]          ="order"
+          [posOrderItems]  ="order.posOrderItems"  >
         </pos-order-items>
   </div>
 </div>

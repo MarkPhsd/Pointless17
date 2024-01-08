@@ -1,13 +1,26 @@
+<ng-container [ngTemplateOutlet]="orderPrepRefreshView" ></ng-container>
+
 <div *ngIf="value" class="loader">
   <ng-content></ng-content>
   <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
 </div>
 
-<div *ngIf="(action$ | async) as action"></div>
-<div *ngIf="(results$ | async) as results"></div>
+<ng-template #orderPrepRefresh>
+  <div *ngIf="(orderSubscription$ | async) as orders">
+    <!-- Count {{orders.length}} -->
+  </div>
+</ng-template>
 
-<div >
+<ng-template #ordersRefresh>
+  <div *ngIf="(results$ | async) as results"></div>
+</ng-template>
+
+<div *ngIf="(action$ | async) as action"></div>
+
+
+<div>
   <div class="orders-container" >
+
     <div  *ngIf="orders"
           [id]="scrollStyle"
           class                   ="orders-list"
@@ -32,18 +45,13 @@
             </ng-container>
         </div>
 
-        <div  [class]="grid"
+        <div  [class]="'grid-flow-prep'"
               *ngIf="cardStyle === 'prep' && orders && site">
           <ng-container *ngFor="let order of orders; let i = index">
-            <app-order-prep
-                (outPutSetVisibility)="setThisCardInVisible($event)"
-                (ouPutSetActive)="setActiveOrderObs($event)"
-                *ngIf="isOrderVisible(i)"
-                [order]="order"
-                [site] ="site"
-                [index]="i"
-            ></app-order-prep>
-          </ng-container>
+            <ng-container [ngTemplateOutlet]="orderPrepCard"
+                          [ngTemplateOutletContext]="{$implicit: order, i: i}">
+                          </ng-container>
+            </ng-container>
         </div>
 
         <div  class='grid-flow-panel'  *ngIf="cardStyle === 'panel' && orders">
@@ -65,3 +73,14 @@
     *ngIf="loading && !endOfRecords" >
   <mat-spinner></mat-spinner>
 </div>
+
+<ng-template #orderPrepCard let-order let-i>
+  <app-order-prep
+      (outPutSetVisibility)="setThisCardInVisible($event)"
+      (ouPutSetActive)="setActiveOrderObs($event)"
+      *ngIf="isOrderVisible(i, order)"
+      [order]="order"
+      [site] ="site"
+      [index]="i"
+  ></app-order-prep>
+</ng-template>

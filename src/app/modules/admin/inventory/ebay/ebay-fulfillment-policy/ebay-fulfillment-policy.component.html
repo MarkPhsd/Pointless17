@@ -55,13 +55,13 @@
       <mat-card>
            <!-- Other Fields -->
         <div>
-          <mat-form-field  appearance="outline"class="margin-5">
+          <mat-form-field  appearance="outline" class="margin-5">
             <mat-label>Name</mat-label>
             <input matInput formControlName="name">
           </mat-form-field>
         </div>
-        <div>
-          <mat-form-field  appearance="outline"class="margin-5">
+        <div >
+          <mat-form-field  appearance="outline" class="margin-5">
             <mat-label>Description</mat-label>
             <input matInput formControlName="description">
           </mat-form-field>
@@ -74,7 +74,6 @@
 
         <!-- Handling Time -->
         <div formGroupName="handlingTime">
-
           
           <mat-form-field appearance="outline">
             <mat-label>Handling Time Unit</mat-label>
@@ -110,11 +109,18 @@
       <div formArrayName="categoryTypes">
         <div *ngFor="let categoryType of categoryTypes.controls; let i=index">
           <div  [formGroup]="categoryType" *ngIf="i"> 
-              <mat-form-field  appearance="outline"class="margin-5">
+
+              <mat-form-field appearance="outline">
                 <mat-label>Category Type Name</mat-label>
-                <input matInput formControlName="name">
+                <mat-select formControlName="name">
+                  <mat-option *ngFor="let method of ebayService.categoryTypeEnum" [value]="method">
+                    {{ method }}
+                  </mat-option>
+                </mat-select>
               </mat-form-field>
+
               <mat-slide-toggle formControlName="default">Default</mat-slide-toggle>
+
               <button mat-button  color="warn" (click)="removeCategoryType(i)">Remove</button>
           </div>
          
@@ -132,31 +138,43 @@
           <div [formGroup]="shippingOption" *ngIf="j">
 
               <!-- section 2 -->
-              <mat-form-field  appearance="outline"class="margin-5">
-                <mat-label>Cost Type</mat-label>
-                <input matInput formControlName="costType">
-              </mat-form-field>
-              
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label>Cost Type</mat-label>
+                  <mat-select formControlName="name">
+                    <mat-option *ngFor="let method of ebayService.shippingCostTypeEnum" [value]="method">
+                      {{ method }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            
               <mat-slide-toggle formControlName="insuranceOffered">Insurance Offered</mat-slide-toggle>
               <mat-slide-toggle formControlName="shippingPromotionOffered">Shipping Promotion Offered</mat-slide-toggle> 
               <!-- section 2 -->
-              <mat-form-field  appearance="outline"class="margin-5">
-                <mat-label>Cost Type</mat-label>
-                <input matInput formControlName="costType">
-              </mat-form-field>
-
-              <mat-form-field  appearance="outline"class="margin-5">
-                <mat-label>rateTableId</mat-label>
-                <input matInput formControlName="rateTableId">
-              </mat-form-field>
-              <mat-form-field  appearance="outline"class="margin-5">
-                <mat-label>Shipping Discount Profile ID</mat-label>
-                <input matInput formControlName="shippingDiscountProfileId">
-              </mat-form-field>
-              <mat-form-field  appearance="outline"class="margin-5">
-                <mat-label>Option Type</mat-label>
-                <input matInput formControlName="optionType">
-              </mat-form-field>
+              <div>
+                <mat-form-field  appearance="outline"class="margin-5">
+                  <mat-label>rateTableId</mat-label>
+                  <input matInput formControlName="rateTableId">
+                </mat-form-field>
+              </div>
+              <div>
+               <mat-form-field  appearance="outline"class="margin-5">
+                  <mat-label>Shipping Discount Profile ID</mat-label>
+                  <input matInput formControlName="shippingDiscountProfileId">
+                </mat-form-field>
+              </div>
+              
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label>Option International/Domestic</mat-label>
+                  <mat-select formControlName="optionType">
+                    <mat-option *ngFor="let method of ebayService.shippingOptionTypeEnum" [value]="method">
+                      {{ method }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
 
               <!-- section 2 -->
               <h4>Package & Handling</h4>
@@ -183,10 +201,14 @@
               <!-- <button mat-button (click)="addpackageHandlingCost(j)">Add Packaging</button> -->
               <div formGroupName="insuranceFee">
 
-                <mat-form-field  appearance="outline"class="margin-5">
-                  <mat-label>Currency</mat-label>
-                  <input matInput formControlName="currency">
-                </mat-form-field>
+                 <mat-form-field appearance="outline">
+                    <mat-label>Currency</mat-label>
+                    <mat-select formControlName="currency">
+                      <mat-option *ngFor="let method of currencyCodeEnum" [value]="method">
+                        {{ method }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 
                 <mat-form-field  appearance="outline"class="margin-5">
                   <mat-label>value</mat-label>
@@ -197,21 +219,31 @@
 
               <mat-card>
                 <h4>Shipping Services</h4>
-                <button mat-button (click)="addShippingService(j)">Add Shipping Servivces</button>
+                <!-- <button mat-button (click)="addShippingService(j)">Add Shipping Servivces</button> -->
                 
                 <mat-card-content>
                   <!-- {{getShippingServicesControls(j).value | json}} -->
                   <div formArrayName="shippingServices">
                     <div *ngFor="let shippingService of getShippingServicesControls(j).controls; let k=index" >
                  
+
                       <div [formGroup]="shippingService">
-                          <mat-label>Buyer responsible for pickup</mat-label>
-                          <mat-slide-toggle formControlName="buyerResponsibleForPickup"></mat-slide-toggle>
+                        <mat-label>Buyer responsible for pickup</mat-label>
+                        <mat-slide-toggle formControlName="buyerResponsibleForPickup"></mat-slide-toggle>
+                        <mat-label>Buyer responsible for shipping</mat-label>
+                        <mat-slide-toggle formControlName="buyerResponsibleForShipping"></mat-slide-toggle>
+                        <mat-label>Free Shipping</mat-label>
+                        <mat-slide-toggle formControlName="freeShipping"></mat-slide-toggle>
 
+                        <div>
+                          <mat-form-field  appearance="outline"class="margin-5">
+                            <mat-label>Shipping Service Code</mat-label>
+                            <input matInput formControlName="shippingServiceCode" >
+                          </mat-form-field>
+                        </div>
 
-
+                        <h4>Shipping Cost</h4>
                         <div formGroupName="additionalShippingCost">
-
                           <mat-form-field appearance="outline">
                             <mat-label>Currency</mat-label>
                             <mat-select formControlName="currency">
@@ -220,14 +252,86 @@
                               </mat-option>
                             </mat-select>
                           </mat-form-field>
-                          
                           <mat-form-field  appearance="outline"class="margin-5">
                             <mat-label>value</mat-label>
                             <input matInput formControlName="value" type="number">
                           </mat-form-field>
-                        
                         </div>
 
+                        <h4>Added Shipping Cost</h4>
+                        <div formGroupName="additionalShippingCost">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Currency</mat-label>
+                            <mat-select formControlName="currency">
+                              <mat-option *ngFor="let method of currencyCodeEnum" [value]="method">
+                                {{ method }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <mat-form-field  appearance="outline"class="margin-5">
+                            <mat-label>value</mat-label>
+                            <input matInput formControlName="value" type="number">
+                          </mat-form-field>
+                        </div>
+
+                        <h4>Cash On Delivery Fee</h4>
+                        <div formGroupName="cashOnDeliveryFee">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Currency</mat-label>
+                            <mat-select formControlName="currency">
+                              <mat-option *ngFor="let method of currencyCodeEnum" [value]="method">
+                                {{ method }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <mat-form-field  appearance="outline"class="margin-5">
+                            <mat-label>value</mat-label>
+                            <input matInput formControlName="value" type="number">
+                          </mat-form-field>
+                        </div>
+
+                        <h4>Surcharge</h4>
+                        <div formGroupName="surcharge">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Currency</mat-label>
+                            <mat-select formControlName="currency">
+                              <mat-option *ngFor="let method of currencyCodeEnum" [value]="method">
+                                {{ method }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <mat-form-field  appearance="outline"class="margin-5">
+                            <mat-label>value</mat-label>
+                            <input matInput formControlName="value" type="number">
+                          </mat-form-field>
+                        </div>
+
+                        <!-- <h4>Ship Locations Constraints</h4> -->
+                        <!-- <button mat-button (click)="addShippingService(j)">Add Shipping Location</button> -->
+                        <!-- <div formArrayName="shipToLocations">
+                          <div *ngFor="let locations of getregionIncluded(j,k).controls; let i=index" >
+                            <div [formGroup]="locations">
+                              <mat-form-field  appearance="outline"class="margin-5">
+                                <mat-label>Region Name</mat-label>
+                                <input matInput formControlName="regionName" >
+                              </mat-form-field>
+                        
+                              <mat-form-field appearance="outline">
+                                <mat-label>Region Type</mat-label>
+                                <mat-select formControlName="regionType">
+                                  <mat-option *ngFor="let method of ebayService.regionTypeEnum" [value]="method">
+                                    {{ method }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </div> -->
+                          <!-- <div *ngFor="let locations of getregionIncluded(j,k).controls; let i=index" >
+                            <div [formGroup]="locations">
+
+                            </div>
+                          </div>
+                        </div> -->
                       </div>
 
                     </div>
@@ -244,21 +348,53 @@
 
       <!-- Ship To Locations -->
       <div formGroupName="shipToLocations">
-        <!-- Region Excluded -->
-        <div formArrayName="regionExcluded">
-          <!-- ... similar structure for region fields ... -->
+        <h4> Shipping Regions  </h4>
+        <button button mat-button  color="primary" (click)="addRegions()">Add Regions</button>
+      
+        <h4>Excluded  Regions  </h4>
+        <div *ngFor="let options of getShipToLocationsRegionExcluded; let j=index" >
+          <div formArrayName="options">
+            <mat-form-field  appearance="outline"class="margin-5">
+              <mat-label>Region Name</mat-label>
+              <input matInput formControlName="regionName" >
+            </mat-form-field>
+      
+            <mat-form-field appearance="outline">
+              <mat-label>Region Type</mat-label>
+              <mat-select formControlName="regionType">
+                <mat-option *ngFor="let method of ebayService.regionTypeEnum" [value]="method">
+                  {{ method }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </div>
-        <!-- Region Included -->
-        <div formArrayName="regionIncluded">
-          <!-- ... similar structure for region fields ... -->
-        </div>
+
+        <!-- <h4> Included Regions  </h4>
+        <div *ngFor="let options of regionIncluded.controls; let j=index" >
+          <div formArrayName="options">
+            <mat-form-field  appearance="outline"class="margin-5">
+              <mat-label>Region Name</mat-label>
+              <input matInput formControlName="regionName" >
+            </mat-form-field>
+      
+            <mat-form-field appearance="outline">
+              <mat-label>Region Type</mat-label>
+              <mat-select formControlName="regionType">
+                <mat-option *ngFor="let method of ebayService.regionTypeEnum" [value]="method">
+                  {{ method }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div> -->
+
       </div>
     </form>
   </mat-card-content>
 </mat-card>
 
 <ng-template #shippingServices let-inputForm>
-
 
   <mat-form-field  appearance="outline"class="margin-5">
     <mat-label>Cost Type</mat-label>

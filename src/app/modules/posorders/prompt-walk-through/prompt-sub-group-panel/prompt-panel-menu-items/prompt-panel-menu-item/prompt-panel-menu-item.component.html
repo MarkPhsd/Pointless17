@@ -2,6 +2,7 @@
 <div *ngIf="(menuItem$ | async) as item"></div>
 <div *ngIf="(newItem$ | async) as item"></div>
 <div *ngIf="(removeItem$| async) as item"></div>
+<div *ngIf="(uiHomePage$ | async) as uiHome"></div>
 
 <ng-container
   [ngTemplateOutlet]="promptItemView"
@@ -10,25 +11,11 @@
 
 <ng-template #promptMenuItemView let-promptMenuItem>
   <div class="grid-items">
-    <div>
-      <button mat-raised-button
-          class="buttons"
-          color="primary"
-          (click)="addItem()">
-        <h5>
-          <mat-label>{{promptMenuItem?.prompt_Products?.name}}</mat-label>
-          <div *ngIf="promptMenuItem?.prompt_Products?.prodSecondLanguage">
-            <mat-label>{{promptMenuItem?.prompt_Products?.prodSecondLanguage}}</mat-label>
-          </div>
-        </h5>
-      </button>
-    </div>
 
-    <div *ngIf ="imageURL" class="image" (click)="addItem()">
-      <img  [src]     ="imageURL"
-            onerror   = "this.src='assets/images/placeholderimage.png'"
-            class="image"/>
-    </div>
+    <ng-container
+      [ngTemplateOutlet]="menuItemCard"
+      [ngTemplateOutletContext]="{$implicit: promptMenuItem}">
+    </ng-container>
 
     <div  *ngIf="chosenCount || (chosenCount != '' && chosenCount != undefined)"
           class="button-item">
@@ -47,4 +34,21 @@
     </div>
   </div>
 
+</ng-template>
+
+<ng-template #menuItemCard let-item let-type="type">
+  <app-menu-item-card
+      *ngIf             ="item"
+      [displayType]     ="type"
+      [id]              ="item?.id"
+      [name]            ="item?.name"
+      [menuItem]        ="item.prompt_Products"
+      [class]           ="'grid-item'"
+      [uiHomePage]      ="uiHomePage"
+      [isStaff]         ="isStaff"
+      [promptModifier]  ="true"
+      [bucketName]      ="bucketName"
+      (addItem)         ="addItem($event)" >
+  </app-menu-item-card>
+<!-- </div> -->
 </ng-template>

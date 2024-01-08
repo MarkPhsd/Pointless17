@@ -20,11 +20,9 @@
                 [purchaseOrderEnabled]="purchaseOrderEnabled"
                 [mainPanel]="mainPanel"
                 [order]="order">
-
               <div image>
                 <ng-container *ngTemplateOutlet="isLastImageDisplayOn"></ng-container>
               </div>
-
             </pos-order-transaction-data>
           </div>
 
@@ -66,7 +64,8 @@
           </limit-values-progress-bars>
         </div>
 
-        <div    #coachingCustomerInfo (resized)="onResizedorderCustomerPanel($event)"
+        <div    #coachingCustomerInfo
+                (resized)="onResizedorderCustomerPanel($event)"
                 [class]="gridheaderitem"
                 *ngIf="((wideBar || mainPanel) || (phoneDevice && !isUser)) &&
                     !isUser">
@@ -179,7 +178,9 @@
           <ng-container [ngTemplateOutlet]="purchaseItemHistoryView"></ng-container>
           <ng-container [ngTemplateOutlet]="importPurchaseOrderView"></ng-container>
         </div>
+
         <div class="grid-po-helper" >
+          <!-- View filter: {{order?.service?.filterType}} -->
           <ng-container [ngTemplateOutlet]="reconcileView"> </ng-container>
         </div>
       </div>
@@ -203,7 +204,6 @@
   </div>
 </ng-template>
 
-
 <ng-template #itemViewType>
   <pos-order-items
     [purchaseOrderEnabled]="purchaseOrderEnabled"
@@ -222,7 +222,6 @@
     [userAuths] ='userAuths'
   ></pos-order-item-list>
 </ng-template>
-
 
 <ng-template #casePriceSelector>
   <div *ngIf="isStaff && (product$ | async ) as product">
@@ -258,8 +257,8 @@
 </ng-template>
 
 <ng-template #closeOrderButton>
-  <div  *ngIf="(!isUser && paymentsEqualTotal && !order.completionDate) ||
-               (order?.service?.filterType == 1  &&  order?.service?.filterType == 2)">
+  <div  *ngIf="mainPanel && ((!isUser && (paymentsEqualTotal || order.completionDate)) ||
+               (order?.service?.filterType != 0))">
     <button mat-raised-button color="warn"  (click)="closeOrder()">
       <mat-icon >close</mat-icon>Close</button>
   </div>
@@ -580,19 +579,37 @@
         </app-key-pad>
 
         <div>
+
           <button mat-raised-button
+                *ngIf="isInventoryMonitor"
+                color="primary"
+                (click)="inventoryMonitorDiscrepencies()">
+            <mat-icon>view</mat-icon>Show Discrepencies
+          </button>
+
+          <div *ngIf="processing">
+            Please wait. This may take a while on large lists.
+            <div class="margin5">
+              <mat-spinner [diameter]="50"></mat-spinner>
+            </div>
+          </div>
+
+          <button mat-raised-button
+               *ngIf="!isInventoryMonitor"
                color="primary"
                (click)="updateRemaingCount()">
             <mat-icon>refresh</mat-icon>Get current Values
           </button>
 
           <button mat-raised-button
+                *ngIf="!isInventoryMonitor"
                 color="warn"
                (click)="deleteReconciliation()">
             <mat-icon>delete</mat-icon>Delete
           </button>
 
           <button mat-raised-button
+                *ngIf="!isInventoryMonitor"
                 color="primary"
                 (click)="applyReconciliation()">
             <mat-icon>refresh</mat-icon>Apply Counts & Close

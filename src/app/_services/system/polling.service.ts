@@ -65,6 +65,12 @@ export class PollingService   {
     return of(site);
   }
 
+
+  clearPoll() {
+    this._poll.next(false)
+    this.timer$.next(POLLING_INTERVAL);
+  }
+
   poll() {
     this.sub = this.timer$
       .asObservable()
@@ -73,10 +79,10 @@ export class PollingService   {
           timer(time, POLLING_INTERVAL).pipe(
             // <-- start immediately, then each 10s
             concatMap(() =>{
+              // console.log(time, POLLING_INTERVAL)
               //make sure we always have the current url;
               this.getCurrentUrl()
-              // console.log('this.apiUrl', this.getCurrentUrl())
-              return this.http.get(`${this.apiUrl}/system/PingServer`)
+                       return this.http.get(`${this.apiUrl}/system/PingServer`)
             }
             ),
             catchError(() => {

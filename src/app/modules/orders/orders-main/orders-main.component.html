@@ -123,6 +123,8 @@
   ></house-accounts-list>
 </ng-template>
 
+
+
 <ng-template #orderPrep>
   <span *ngIf="viewType == 3 && (printerLocations$ | async) as printLocations">
       <span class="toggle-sections">
@@ -150,8 +152,9 @@
               <span *ngIf="item && item.name && item.name.toLowerCase()  == 'barista'"><mat-icon>local_cafe</mat-icon></span>
               {{item.name}}
             </mat-button-toggle>
-
           </mat-button-toggle-group>
+
+          <ng-content [ngTemplateOutlet]="orderPrepRefresh"></ng-content>
       </span>
 
       <span class="toggle-sections">
@@ -239,11 +242,10 @@
 <ng-template #orderItemPanel>
   <div *ngIf="(orderItemHistory$ | async) as orderItems">
     <mat-divider></mat-divider>
-    <!-- {{orderItems | json}} -->
+
     <h2>Recently Purchased Items</h2>
     <mat-label>For more items, press search to review your order history.</mat-label>
-    <!-- [panelHeight]         ="orderItemsHeightStyle" -->
-    <mat-divider style="margin:10px;"></mat-divider>
+     <mat-divider style="margin:10px;"></mat-divider>
     <pos-order-items
       [purchaseOrderEnabled]="false"
       [mainPanel]           ="true"

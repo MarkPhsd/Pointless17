@@ -4,8 +4,8 @@
   <div class="total-headers foreground-color" *ngIf="!purchaseOrderEnabled">Sub   </div>
   <div class="totals foreground-color" *ngIf="!purchaseOrderEnabled"> {{ order.subTotal | currency }}</div>
 
-  <div class="total-headers foreground-color" *ngIf="purchaseOrderEnabled  && order?.service.filterType != 2">Cost</div>
-  <div class="totals foreground-color"        *ngIf="purchaseOrderEnabled  && order?.service.filterType != 2"> {{ order.cost | currency }}</div>
+  <div class="total-headers foreground-color" *ngIf="purchaseOrderEnabled  && order?.service?.filterType != 2">Cost</div>
+  <div class="totals foreground-color"        *ngIf="purchaseOrderEnabled  && order?.service?.filterType != 2"> {{ order.cost | currency }}</div>
 
   <div class="total-headers foreground-color"  *ngIf="!purchaseOrderEnabled">Tax  </div>
   <div class="totals foreground-color"  *ngIf="!purchaseOrderEnabled"> {{ order.taxTotal | currency }}</div>
@@ -26,12 +26,16 @@
   <div class="totals foreground-color">{{ order.itemCount }}</div>
 
   <!-- <div *ngIf="isAdmin || isManager"> add auth -->
-    <div *ngIf="order?.service.filterType == 2" class="total-headers foreground-color">Initial Value: </div>
-    <div *ngIf="order?.service.filterType == 2" class="totals foreground-color"> {{order?.wholeSaleTraceCalcSum | currency}} </div>
-    <div *ngIf="order?.service.filterType == 2" class="total-headers foreground-color">New Value: </div>
-    <div  *ngIf="order?.service.filterType == 2" class="totals foreground-color"> {{order?.wholeSaleCostTotal | currency}}</div>
-    <div  *ngIf="order?.service.filterType == 2" class="total-headers foreground-color">Difference:</div>
-    <div  *ngIf="order?.service.filterType == 2" class="totals foreground-color">  {{order?.wholeSaleCostTotal - order?.wholeSaleTraceCalcSum | currency}}</div>
+  <ng-container [ngTemplateOutlet]="isInventoryView"></ng-container>
   <!-- </div> -->
 
 </div>
+
+<ng-template #inventory>
+  <div  class="total-headers foreground-color">Initial Value: </div>
+  <div  class="totals foreground-color"> {{order?.wholeSaleTraceCalcSum | currency}} </div>
+  <div  class="total-headers foreground-color">New Value: </div>
+  <div  class="totals foreground-color"> {{order?.wholeSaleCostTotal | currency}}</div>
+  <div  class="total-headers foreground-color">Difference:</div>
+  <div  class="totals foreground-color">  {{order?.wholeSaleCostTotal - order?.wholeSaleTraceCalcSum | currency}}</div>
+</ng-template>

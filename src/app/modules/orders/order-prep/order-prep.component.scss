@@ -4,7 +4,7 @@
 .container {
   max-height: 800px;
   max-width:  225px;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
 }
 
@@ -53,10 +53,10 @@ mat-card-subtitle {
   }
 }
 
+
 .order-items {
-  height: 600px;
-  // overflow-y: hidden;
-  // overflow-x: hidden;
+  // height: calc(90vh - 400px);
+  // overflow-y: auto;
 }
 
 .grid-totals {

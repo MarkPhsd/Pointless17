@@ -46,6 +46,10 @@
             ></textarea>
         </mat-form-field>
       </div>
+
+      <div class="margin5">
+        <button mat-button (click)="setToggleKeyboard()"><mat-icon class="margin5">keyboard</mat-icon>Keyboard</button>
+      </div>
       <ng-container [ngTemplateOutlet]="keyboardDisplay"></ng-container>
     </mat-card-actions>
 
@@ -69,7 +73,7 @@
 </ng-template>
 
 <ng-template #keyboardDisplay>
-  <div *ngIf="platformService.isApp()">
+  <div *ngIf="toggleKeyboard">
     <app-keyboard [disableClose]= "true"> </app-keyboard>
   </div>
 </ng-template>

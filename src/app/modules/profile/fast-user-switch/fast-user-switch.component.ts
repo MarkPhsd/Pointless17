@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { ClientTypeService, IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
-import { IUserProfile } from 'src/app/_interfaces';
+import { ISite, IUserProfile } from 'src/app/_interfaces';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -24,6 +24,7 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
   styleUrls: ['./fast-user-switch.component.scss']
 })
 export class FastUserSwitchComponent implements OnInit {
+
   phoneDevice         : boolean;
   smallDevice         :   boolean;
   public _pinCode            = new BehaviorSubject<string>(null);
@@ -67,14 +68,13 @@ export class FastUserSwitchComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
     ) {
 
-      this.dialogRefOption = dialogRef
-      if (data) {
-        this.request = data.request
-        this.requestData = data
-      }
-      const item = localStorage.getItem('loginAction')
-      this.loginAction = JSON.parse(item)
-
+    this.dialogRefOption = dialogRef
+    if (data) {
+      this.request = data.request
+      this.requestData = data
+    }
+    const item = localStorage.getItem('loginAction')
+    this.loginAction = JSON.parse(item)
   }
 
   ngOnInit(): void {
@@ -121,15 +121,12 @@ export class FastUserSwitchComponent implements OnInit {
           this.isLocked = true;
           this.employeeAllowed = data.id
         }
-
         return of(data)
       }))
       return ;
     }
     this.balanceSheet$ = of(null)
   }
-
-
 
   enterPIN(event) {
     const userName = localStorage.getItem('pinToken')
@@ -154,6 +151,7 @@ export class FastUserSwitchComponent implements OnInit {
 
   performTempUserAction(event)  {
     if (this.requestData.action) {
+      console.log('perform user action')
       this.action$ = this.getAuthUserByPIN(event).pipe(switchMap(data => {
         if (data) {
             let result = false;
@@ -207,36 +205,7 @@ export class FastUserSwitchComponent implements OnInit {
     const userName    = localStorage.getItem('pinToken')
     const userLogin   = { userName: userName, password: pin };
     const currentUser = this.userSwitchingService.user;
-    let client = {} as any;
-
-    return this.userSwitchingService.authenticate(userLogin).pipe(
-      switchMap(data => {
-        // console.log('authentication result', data)
-        if (data && data.errorMessage) {
-          this.siteService.notify('Error: ' + data.errorMessage, 'close', 2000, 'red' )
-          return of(null)
-        }
-        this.authenticationService.overRideUser(data)
-        return this.clientTableService.getClient(site, data.id)
-      })).pipe(switchMap(data => {
-        // console.log('client data', data)
-        client = data
-        if (!data) {
-          this.siteService.notify('Client not found', 'close', 2000, 'red')
-          return of(null)
-        }
-        return this.clientTypeService.getClientType(site, client.clientTypeID)
-      })).pipe(switchMap(data => {
-        if (!data) {
-          this.siteService.notify('User auths not determined', 'close', 2000, 'red')
-          return of(null)
-        }
-        const item = {} as IUserAuth_Properties
-        if (!data || !data.jsonObject) { return of(item) }
-        const auths = JSON.parse(data.jsonObject) as IUserAuth_Properties;
-        return of(auths)
-      }))
-
+    return this.userSwitchingService.authenticateLogin(userLogin)
   }
 
   logout() {
@@ -249,7 +218,6 @@ export class FastUserSwitchComponent implements OnInit {
   }
 
   onCancel() {
-
     this.initForm();
     try {
       this.dialog.closeAll();
@@ -272,68 +240,54 @@ export class FastUserSwitchComponent implements OnInit {
     this.loginAction$ = this.userSwitchingService.login(userName, password).pipe(
       switchMap(data =>
         {
-          this.paymentProcessService.sendOrderOnExit(null)
-          this.paymentProcessService.sendOrderAndLogOut( null, false)
           let user = {} as IUserProfile
           if (data.user) {  user = data.user } else {  user = data;   }
-
           this._pinCode.next('');
-
           if (user && user.errorMessage) {
             this.notifyEvent(user.errorMessage, 'Failed Login');
             return of('failed')
           }
-
           if (user.roles.toLowerCase() != 'admin' || user.roles.toLowerCase() != 'manager') {
             if (employeeIDAllowed) {
-              console.log('user.id', user.id, employeeIDAllowed)
               if (user.id != employeeIDAllowed) {
                   this.siteService.notify(`${user.errorMessage}, You are not allowed to use this terminal until the shift is closed.`, "close", 6000 , 'red'  );
                 return of('failed')
               }
             }
           }
-
           if (user) {
             this.spinnerLoading = false;
             if (user.message && user.message === 'failed' ||
                 (user.errorMessage )) {
               this.authenticationService.updateUser(null);
-              this.onCancel()
+              this.onCancel();
               return of('failed')
             }
-
             if (this.platformService.isApp()) {
               if (this.loginApp(user)) {
               } else {
                 this.router.navigate(['/app-main-menu']);
               }
-              this.onCancel()
+              this.onCancel();
               return of('success')
             }
-
-          if (user.message && user.message.toLowerCase() === 'success') {
+            if (user.message && user.message.toLowerCase() === 'success') {
               if (!this.loginAction) {
                 this.userSwitchingService.assignCurrentOrder(user)
               }
-
               let pass = false
-
               if (this.loginAction) {
                 if (this.loginAction.name === 'setActiveOrder') {
                   this.userSwitchingService.processLogin(user, '/pos-payment')
                   pass = true
                 }
               }
-
               if (!pass) {
                 this.userSwitchingService.processLogin(user, '')
               }
-
               return of('success')
             }
-
-        }
+          }
           this.onCancel()
           return of('error')
         }

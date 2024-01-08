@@ -35,6 +35,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   @Output() outPutLoadMore = new EventEmitter()
   @Output() outPutUpdateCategory = new EventEmitter();
+  @Output() addItem = new EventEmitter();
   @Input() allowBuy  : boolean;
   @Input() allowEdit : boolean;
   @Input() id        : number;
@@ -49,7 +50,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   @Input() categoryIDSelected: number;
   @Input() displayType      : string ='product';
   @Input() buySell: boolean;
-
+  @Input() promptModifier: boolean;
   containerclass: string = 'container';
 
   @Output() outputRefresh = new EventEmitter()
@@ -67,6 +68,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   uiSettings$: Observable<any>;
   uiSettings: TransactionUISettings;
   noImage: boolean;
+
 
   getPlatForm() {  return Capacitor.getPlatform(); }
 
@@ -286,6 +288,9 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   altMethod(action){
 
+    if (this.promptModifier) {
+      this.menuItemActionObs(action)
+    }
     if (this.displayType === 'header-category') {
       this.menuItemActionObs(true, false, this.menuItem);
       return
@@ -310,6 +315,11 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     if (this.displayType == 'header-category') {
       if (!menuItem || !menuItem?.id) { return }
       this.outPutUpdateCategory.emit(menuItem.id);
+      return;
+    }
+
+    if (this.promptModifier) {
+      this.addItem.emit(this.menuItem.id);
       return;
     }
 

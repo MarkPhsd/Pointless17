@@ -253,7 +253,7 @@
 <ng-template #voidOrderButton>
   <div  *ngIf="!isUser && (userAuths && userAuths.voidOrder)">
     <button mat-raised-button class="button"
-            [disabled]="  (itemsPrinted || creditCardPaymentsMade) == true"
+            [disabled]="creditCardPaymentsMade"
             color="warn"
             (click)="voidOrder()">
       <mat-icon>delete</mat-icon>
@@ -269,7 +269,7 @@
           class="primary"
           color="warn"
           aria-label="delete"
-          [disabled]="order.posOrderItems.length != 0"
+          [disabled]="itemsPrinted || isPaymentsMade "
           (click)="deleteOrder()">
     <mat-icon>delete</mat-icon>
     <span>

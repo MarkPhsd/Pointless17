@@ -1,4 +1,4 @@
-import { Component, OnInit,Input, HostListener, OnDestroy } from '@angular/core';
+import { Component, OnInit,Input, HostListener, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
@@ -13,6 +13,8 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class OrderTotalComponent implements OnInit, OnDestroy {
   smallDevice = false;
+
+  @ViewChild('inventoryView') inventoryView : TemplateRef<any>;
   cost: number;
   @Input() qrOrder: boolean
   @Input() order: IPOSOrder
@@ -54,6 +56,13 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
       })
     } catch (error) {
     }
+  }
+
+  get isInventoryView() { 
+    if (this.order && this.order.service && this.order.service.filterType == 2) { 
+      return this.inventoryView
+    }
+    return null;
   }
 
   orderSubscriber() {

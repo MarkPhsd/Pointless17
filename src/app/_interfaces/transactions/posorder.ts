@@ -302,6 +302,9 @@ export interface PosOrderItem {
   departmentID: number;
   itemTypeID: number;
   traceOrderDate: string;
+  expectedInventoryCount: number;
+  salesCount: number;
+  currentProductCount: number;
 }
 //ItemPrepped,PrintLocation,Splitter as SplitGroupID,Gratuity,ProdSecondLanguage,productSortOrder,PizzaMultiplier, PizzaGroup, PriceTierID
 

@@ -62,8 +62,10 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
 
   navigateToLogin(){ 
     localStorage.removeItem('user')
-    this.authenticationService.logout()
-    this.setLoginActions()
+    this.uiHomePageSetting$.subscribe(data => { 
+      this.authenticationService.logout(data.pinPadDefaultOnApp)
+      this.setLoginActions()
+    })
   }
 
   setLoginActions() { 

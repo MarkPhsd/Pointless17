@@ -25,6 +25,7 @@
 
         <div >
           <div>
+            <span><button mat-button color="primary" (click)="openWebEditor()"><mat-icon>web</mat-icon>Web Editor</button> </span>
             <app-edit-buttons-standard
                   [enableCopy]            ="true"
                   (outputeupdateItem)     ="updateSave($event)"
@@ -178,22 +179,7 @@
                           itemType.type?.toLowerCase() === 'restaurant')">
               <ng-container [ngTemplateOutlet]="gluetenFree"></ng-container>
             </div>
-            <div *ngIf="itemType && itemType.name && ( itemType.type?.toLowerCase() === 'store credit' )">
-              <ng-container [ngTemplateOutlet]="style"></ng-container>
-              <ng-container [ngTemplateOutlet]="productCount"></ng-container>
-            </div>
 
-            <div *ngIf="itemType && itemType.name && ( itemType.type?.toLowerCase() === 'discounts' ||
-                                                       itemType.type?.toLowerCase() === 'service fee' )">
-              <div class="header">
-                <mat-icon>coupon</mat-icon>
-              </div>
-
-              <ng-container [ngTemplateOutlet]="style"></ng-container>
-              <ng-container [ngTemplateOutlet]="productCount"></ng-container>
-              <ng-container [ngTemplateOutlet]="reOrderAmount"></ng-container>
-              <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
-             </div>
 
             <div *ngIf="fbProductsService.isRetail(itemType)">
               <retail-product-edit  [inputForm]="productForm"> </retail-product-edit>
@@ -214,15 +200,7 @@
               <ng-container [ngTemplateOutlet]="tareValueView"></ng-container>
             </div>
 
-            <div *ngIf="fbProductsService.isProduct(itemType)">
-              <ng-container [ngTemplateOutlet]="unitSelector"></ng-container>
-              <ng-container [ngTemplateOutlet]="gramCount"></ng-container>
-              <ng-container [ngTemplateOutlet]="partBuilderSelector"></ng-container>
-              <ng-container [ngTemplateOutlet]="productCount"></ng-container>
-              <ng-container [ngTemplateOutlet]="reOrderAmount"></ng-container>
-              <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
-              <ng-container [ngTemplateOutlet]="bayInfo"></ng-container>
-            </div>
+
           </div>
 
           <div class="grid-item">
@@ -253,6 +231,37 @@
             <ng-container [ngTemplateOutlet]="metaTags"></ng-container>
             <ng-container [ngTemplateOutlet]="itemAssociations"></ng-container>
 
+          </div>
+
+          <div class="grid-item">
+
+            <h4><mat-icon>design</mat-icon>Inventory</h4>
+            <div *ngIf="fbProductsService.isStoreCredit(itemType)">
+              <ng-container [ngTemplateOutlet]="style"></ng-container>
+              <ng-container [ngTemplateOutlet]="productCount"></ng-container>
+            </div>
+
+            <div *ngIf="fbProductsService.isDiscount(itemType)">
+              <div class="header">
+                <mat-icon>coupon</mat-icon>
+              </div>
+
+              <ng-container [ngTemplateOutlet]="style"></ng-container>
+              <ng-container [ngTemplateOutlet]="productCount"></ng-container>
+              <ng-container [ngTemplateOutlet]="reOrderAmount"></ng-container>
+              <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
+
+             </div>
+
+            <div *ngIf="fbProductsService.isProduct(itemType)">
+              <ng-container [ngTemplateOutlet]="unitSelector"></ng-container>
+              <ng-container [ngTemplateOutlet]="gramCount"></ng-container>
+              <ng-container [ngTemplateOutlet]="partBuilderSelector"></ng-container>
+              <ng-container [ngTemplateOutlet]="productCount"></ng-container>
+              <ng-container [ngTemplateOutlet]="reOrderAmount"></ng-container>
+              <ng-container [ngTemplateOutlet]="reOrderLevel"></ng-container>
+              <ng-container [ngTemplateOutlet]="bayInfo"></ng-container>
+            </div>
           </div>
       </div>
     </div>

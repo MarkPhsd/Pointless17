@@ -121,13 +121,17 @@ export class MainMenuComponent implements OnInit  {
   }
 
   ngOnInit(): void {
+    
+
       this.updateItemsPerPage();
       this.initSearchForm();
       this.initSiteSubscriber();
+
       this.isStaff = false;
       this.isUser = this.userAuthorizationService.isUser;
       this.isStaff = this.userAuthorizationService.isCurrentUserStaff()
 
+     
       this.homePage$ = this.uiSettings.UIHomePageSettings.pipe(switchMap( data => {
         this.homePageSetings  = data as UIHomePageSettings;
         this.setPanelHeight( this.homePageSetings )

@@ -312,7 +312,7 @@
                   </button>
                 </div>
 
-                <div *ngIf="(quantity && !orderItem?.voidReason)">
+                <div *ngIf="(quantity && !orderItem?.voidReason) && allowedVoidClosedItem">
                   <button mat-raised-button  class="button" color="warn" (click)="swipeOutItem()" >
                     <mat-icon  class="mat-icon-label">delete</mat-icon> <span *ngIf="!smallDevice"> Remove </span>
                   </button>
@@ -320,7 +320,7 @@
 
                 <mat-divider></mat-divider>
 
-                <div *ngIf="userAuthService && !userAuthService?.isManagement && userAuthService.isStaff">
+                <div *ngIf="userAuthService && !userAuthService?.isManagement && userAuthService?.isStaff">
                   <button mat-raised-button  color="accent"  (click)="requestVoidItem(orderItem)">
                     Void Request
                   </button>
@@ -334,7 +334,7 @@
                   </button>
                 </div>
 
-                <div *ngIf="userAuthService && !userAuthService?.isManagement && userAuthService.isStaff">
+                <div *ngIf="userAuthService && !userAuthService?.isManagement && userAuthService?.isStaff">
                   <button mat-raised-button  color="accent"  (click)="requestPriceChange(orderItem)">
                     Request<br>
                     Change Price

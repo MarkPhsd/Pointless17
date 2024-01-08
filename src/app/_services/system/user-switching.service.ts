@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { catchError, switchMap,   } from 'rxjs/operators';
-import { clientType, IUser, IUserProfile, UserPreferences } from 'src/app/_interfaces';
+import { clientType, ISite, IUser, IUserProfile, UserPreferences } from 'src/app/_interfaces';
 import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switch/fast-user-switch.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SitesService } from '../reporting/sites.service';
@@ -20,6 +20,7 @@ import { UISettingsService } from './settings/uisettings.service';
 import { ClientTypeService, IUserAuth_Properties } from '../people/client-type.service';
 import { OrderMethodsService } from '../transactions/order-methods.service';
 import { UserIdleService } from 'angular-user-idle';
+import { ClientTableService } from '../people/client-table.service';
 
 export interface ElectronDimensions {
   height: string;
@@ -88,6 +89,7 @@ export class UserSwitchingService implements  OnDestroy {
     private uiSettingService: UISettingsService,
     private electronService  : ElectronService,
     private clientTypeService: ClientTypeService,
+    private clientTableService: ClientTableService,
     private userIdle: UserIdleService,
   ) {
     this.initSubscriptions();
@@ -147,11 +149,13 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   clearLoggedInUser() {
+    // console.trace('clear user event')
+    // console.log('clear logged in user')
     this._clearloginStatus.next(true)
     this.orderMethodService.updateOrderSubscriptionClearOrder(0)
     this.orderMethodService.updateOrderSearchModel(null);
     this.toolbarUIService.updateDepartmentMenu(0);
-    this.authenticationService.logout();
+    this.authenticationService.logout(this.uiSettingService.homePageSetting?.pinPadDefaultOnApp);
   }
 
   pinEntryResults(pin: any) {
@@ -159,38 +163,7 @@ export class UserSwitchingService implements  OnDestroy {
     const token =  localStorage.getItem('posToken')
     const site = this.siteService.getAssignedSite()
     return this.login(token, pin)
-    //secret user
-    // if (!this.user && !this.platformService.webMode) {
-    //   this.setAppUser();
-    // }
 
-    // this.employeeService.getEmployeeByPIN(site, pin).subscribe
-    //   (data =>
-    //   {
-    //     if (data) {
-    //       if (data.employee && data.client) {
-
-    //         let currentUser       = {} as IUser;
-    //         const emp             = data.employee
-    //         const client          = data.client;
-
-    //         currentUser.password  = pin;
-    //         currentUser.roles     = client.roles.toLowerCase()
-    //         currentUser.id        = client.id
-    //         currentUser.employeeID= client.employeeID
-    //         currentUser.username  = client.userName;
-    //         currentUser.phone     = client.phone;
-    //         currentUser.email     = client.email;
-
-    //         const user = this.setUserInfo(currentUser, pin)
-    //         this.authenticationService.updateUser(user)
-    //         this.clearSubscriptions();
-    //         return true;
-
-    //       }
-    //     }
-    //   }
-    // )
   }
 
   authenticate(userLogin: userLogin): Observable<any> {
@@ -252,14 +225,12 @@ export class UserSwitchingService implements  OnDestroy {
 
       let updateAuth$ = userAuth$.pipe(switchMap(data => {
 
-           console.log('user auths data: ', data)
-
             if ( !data || (data && (data?.message == 'failed'))) {
-                console.log( 'message failed')
-                const user = {} as IUser
-                user.message = 'failed';
-                user.errorMessage = 'failed'
-                return of( user )
+              // console.log( ' failed')
+              const user = {} as IUser
+              user.message = 'failed';
+              user.errorMessage = 'failed'
+              return of( user )
             }
 
             const item = localStorage.getItem('user')
@@ -370,7 +341,6 @@ export class UserSwitchingService implements  OnDestroy {
     return currentUser
   }
 
-
   setUserAuth(userAuth: string) {
     localStorage.setItem('userAuth', userAuth)
   }
@@ -445,7 +415,7 @@ export class UserSwitchingService implements  OnDestroy {
       this.loginToReturnUrl();
       return 'success'
     }
-    // console.log('processlogin5')
+
     this.setAppUser()
     this.userIdle.resetTimer()
   }
@@ -464,17 +434,66 @@ export class UserSwitchingService implements  OnDestroy {
     this.loginToReturnUrl()
   }
 
+
+  authenticateLogin(userLogin) {
+
+    //logs in
+    //sets preferences
+    //sets uers auths.
+    //set current order (for regular customers)
+    const site = this.siteService.getAssignedSite()
+    return this.authenticate(userLogin).pipe(switchMap(data => {
+      if (data && data.errorMessage) {
+        this.siteService.notify('Error: ' + data.errorMessage, 'close', 2000, 'red' )
+        return of(null)
+      }
+      this.authenticationService.overRideUser(data)
+      return this.getClientForLogin(site, data.id)
+    })).pipe(switchMap(data => {
+      return this.setAuthAndClientTypeForLogin(site, data.id)
+     }
+    ))
+
+  }
+
+  getClientForLogin(site: ISite, id:number) {
+    return this.clientTableService.getClient(site, id).pipe(switchMap(data => {
+        if (!data || data?.clientTypeID) {
+          this.siteService.notify('Client not or type found - no authorizations will be assigned.', 'close', 2000, 'red')
+          return of(null)
+        }
+        //set prferences
+        const item = JSON.parse(data?.preferences) as UserPreferences;
+        this.authenticationService.updatePreferences(item)
+        return of(data);
+    }))
+  }
+
+  setAuthAndClientTypeForLogin(site: ISite, id: number) {
+    return this.clientTypeService.getClientType(site, id).pipe(switchMap(data => {
+      if (!data) {
+        this.siteService.notify('User auths not determined', 'close', 2000, 'red')
+        return of(null)
+      }
+      const item = {} as IUserAuth_Properties
+      if (!data || !data.jsonObject) { return of(item) }
+      //set user auths.
+      const auths = JSON.parse(data.jsonObject) as IUserAuth_Properties;
+      this.setUserAuth(data.jsonObject)
+      this.authenticationService.updateUserAuths(auths);
+      return of(auths)
+    }))
+  }
+
   assignCurrentOrder(user: IUserProfile)  {
     const site = this.siteService.getAssignedSite()
     if (user && user.roles == 'user' && user.id) {
-
       const order$ = this.orderService.getUserCurrentOrder(site, user.id)
       order$.subscribe(data => {
         if (!data) {return of(null)}
         if (data.toString().toLowerCase() === 'no order') {return of(null)}
         this.orderMethodService.updateOrderSubscription(data)
       })
-
     }
   }
 
@@ -492,7 +511,6 @@ export class UserSwitchingService implements  OnDestroy {
       }
 
       //router
-
       if (!sheet.shiftStarted || sheet.shiftStarted == 0 ||  (sheet.shiftStarted == 1 && sheet.endTime)) {
         this.router.navigate(['/balance-sheet-edit', {id:sheet.id}]);
         return true

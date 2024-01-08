@@ -1,4 +1,4 @@
-
+<div *ngIf="(action$ | async) as action"></div>
 <ng-template #loading>
   <mat-spinner [diameter]="70"></mat-spinner>
 </ng-template>
@@ -24,6 +24,7 @@
         </div>
 
         <div>
+          <span><button mat-button color="primary" (click)="openProductEditor()"><mat-icon>catalog</mat-icon>Item Editor</button> </span>
           <app-edit-buttons-standard
                 (outputeupdateItem)     ="updateItem($event)"
                 (outputupdateItemExit)  ="updateItemExit($event)"
@@ -99,13 +100,13 @@
                         [priceCategoryID] ="product.priceCategory"
                         [inputForm]       ="productForm" >
                   </app-price-category-select>
-                </div>  
+                </div>
               </div>
 
               <div class="grid-item">
                 <h2>Dimensions / Weight</h2>
                 <mat-label>Measurement types set by api, feet/meters, lbs/kg etc.</mat-label>
-                
+
                 <app-value-fields
                       [fieldType]="'number'"
                       [inputForm]="productForm"
@@ -131,7 +132,7 @@
                       [fieldType]="'number'"
                       [inputForm]="productForm"
                       [fieldName]="'weight'">
-                      Weight 
+                      Weight
                 </app-value-fields>
 
               </div>

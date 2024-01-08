@@ -56,7 +56,7 @@ export class CacheSettingsComponent implements OnInit {
 
   deleteLocalStorage() {
     localStorage.clear();
-    this.authenticationService.logout();
+    this.authenticationService.logout(false);
   }
 
   updateCacheTime() {

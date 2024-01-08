@@ -1,4 +1,7 @@
 
+<div *ngIf="(loginAction$ | async) as loginAction"></div>
+<div *ngIf="(action$ | async) as loginAction"></div>
+
 <div class="item-container header">
   <div>
     <h3>Enter PIN Code to Change User</h3>
@@ -11,7 +14,6 @@
     <ng-container [ngTemplateOutlet]="checkUserStatus"></ng-container>
   </div>
 </div>
-
 
 <!-- IS APP {{ platformService.isApp() }} -->
 <div *ngIf="(uiHome$ | async) as home">
@@ -31,10 +33,6 @@
     </div>
   </div>
 </div>
-
-
-<div *ngIf="(loginAction$ | async) as loginAction"></div>
-<div *ngIf="(action$ | async) as loginAction"></div>
 
 <ng-template #checkUserStatus>
   <!-- this contains a message for cashiers -->

@@ -16,6 +16,7 @@ import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.
 import { PriceCategories } from 'src/app/_interfaces/menu/price-categories';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { employee } from 'src/app/_interfaces';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
 // http://jsfiddle.net/0ftj7w1q/
 
@@ -30,6 +31,7 @@ export class ProducteditComponent implements  OnInit  {
 
   productForm: UntypedFormGroup;
   itemTags   : string;
+  action$    : Observable<any>;
 
   get f()             { return this.productForm;}
   get fullProductName(){return this.productForm.get("fullProductName") as UntypedFormControl;}
@@ -91,6 +93,7 @@ export class ProducteditComponent implements  OnInit  {
               private siteService: SitesService,
               private fbProductsService: FbProductsService,
               private itemTypeService  : ItemTypeService,
+              private productEditButtonService: ProductEditButtonService,
               private dialogRef: MatDialogRef<ProducteditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any
             )
@@ -107,6 +110,13 @@ export class ProducteditComponent implements  OnInit  {
     this.bucketName   =    await this.awsBucket.awsBucket();
     this.awsBucketURL =    await this.awsBucket.awsBucketURL();
   };
+
+
+  openProductEditor() {
+    // this.inventoryEditButon.openProductDialog(this.product.id,)
+    this.action$ =  this.productEditButtonService.openProductEditorOBS(this.product.id, this.product.prodModifierType)
+    this.dialogRef.close()
+  }
 
   refreshDisplayContent() {
     this.displayContent = !this.displayContent;

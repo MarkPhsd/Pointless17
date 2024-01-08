@@ -45,7 +45,12 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
   phoneDevice       : boolean;
   noteForm         : FormGroup;
   saveNotes$: Observable<any>;
+  toggleKeyboard: boolean;
 
+
+  setToggleKeyboard() {
+    this.toggleKeyboard  = !this.toggleKeyboard;
+  }
   intSubscriptions() {
     this.initPOSItemSubscription();
     this.initPromptGroupSubscription();
@@ -263,7 +268,6 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
         })
 
         if (message != '') {
-          this.sitesService.notify(message, 'Close', time * quantityMetValidation.length,  'yellow', 'top',);
           return;
         }
       }
@@ -278,6 +282,7 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
         return;
       }
 
+      console.log(' this.orderPromptGroup',  this.orderPromptGroup)
       const prompt$ = this.posOrderItemService.postPromptItems(site, this.orderPromptGroup);
       this.processing = true;
 
@@ -313,7 +318,6 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
     if (modifierNote && this.orderPromptGroup.posOrderItem) {
          this.orderPromptGroup.posOrderItem.modifierNote =  modifierNote;
         const site = this.sitesService.getAssignedSite()
-        console.log('modifiernote',  this.orderPromptGroup.posOrderItem.modifierNote )
         return  this.posOrderItemService.putItem(site, this.orderPromptGroup.posOrderItem)
     }
 

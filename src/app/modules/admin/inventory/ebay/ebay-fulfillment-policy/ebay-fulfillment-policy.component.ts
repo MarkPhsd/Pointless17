@@ -115,6 +115,17 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
   addCategoryType() {
     this.categoryTypes.push(this.createCategoryType());
   }
+
+  addShippingLocaitons() {
+    const locations =    this.inputForm.controls['shipToLocations']
+    
+    const item = this.formBuilder.group({
+      regionExcluded: this.formBuilder.array([this.createRegion()]),
+      regionIncluded: this.formBuilder.array([this.createRegion()])
+    })
+    // locations.push ()
+  }
+
   createCategoryType(): FormGroup {
     if (!this.inputForm) { return }
     return this.formBuilder.group({
@@ -147,28 +158,35 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
       shippingOptions: this.formBuilder.array([this.createShippingOption()]),
       shipToLocations: this.formBuilder.group({
         regionExcluded: this.formBuilder.array([this.createRegion()]),
-        regionIncluded: this.formBuilder.array([this.createRegion()])
+        regionIncluded: this.formBuilder.array([this.createRegionIncluded()])
       })
     });
   }
-
-  // get shippingServicesControls() {
-  //   return (this.inputForm.get('shippingServices') as FormArray).controls;
-  // }
 
   getShippingServicesControls(shippingOptionIndex: number): FormArray {
     if (!this.inputForm) { return }
     if (!(this.inputForm.get('shippingOptions') as FormArray)) { return}
     const shippingOption = (this.inputForm.get('shippingOptions') as FormArray).at(shippingOptionIndex) as FormGroup;
-    // console.log(shippingOption.value)
     return shippingOption.get('shippingServices') as FormArray;
+  }
+
+  getregionExcluded(shippingOptionIndex: number): FormArray {
+    if (!this.inputForm) { return }
+    if (!(this.inputForm.get('shippingOptions') as FormArray)) { return}
+    const shippingOption = (this.inputForm.get('shippingOptions') as FormArray).at(shippingOptionIndex) as FormGroup;
+    return shippingOption.get('shippingServices') as FormArray;
+  }
+
+  getregionIncluded(shippingOptionIndex: number, locationID: number ): FormArray {
+    const item = this.getShippingServicesControls(shippingOptionIndex)
+    const array = item.at(locationID) as FormArray
+    return array
   }
 
   getShippingServicesFormGroup(shippingOptionIndex: number, index: number): FormGroup {
     if (!this.inputForm) { return }
     if (!(this.inputForm.get('shippingOptions') as FormArray)) { return}
     const shippingOption = (this.inputForm.get('shippingOptions') as FormArray).at(shippingOptionIndex) as FormGroup;
-    
     return (shippingOption.get('shippingServices') as FormArray).at(index) as FormGroup;
   }
 
@@ -180,6 +198,8 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
     return this.inputForm.get('shippingOptions') as FormArray;
   }
 
+
+
   addShippingOption() {
     this.shippingOptions.push(this.createShippingOption());
   }
@@ -190,7 +210,7 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
       // section 1
       costType: ['', Validators.required],
       insuranceOffered: [false],
-      optionType: ['', Validators.required],
+      optionType: ['DOMESTIC', Validators.required],
 
       // section2
       rateTableId: [''],
@@ -200,16 +220,23 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
       // section2
       packageHandlingCost: this.formBuilder.group({
         currency: ['USD', Validators.required],
-        value: ['1', Validators.required]
+        value: ['0', Validators.required]
       }),
 
       insuranceFee: this.formBuilder.group({
         currency: ['USD', Validators.required],
-        value: ['1', Validators.required]
+        value: ['0', Validators.required]
       }),
 
       shippingServices: this.formBuilder.array([this.createShippingService()])
     });
+  }
+
+  getShipToLocationsRegionExcluded(i: number) { 
+    if (!this.inputForm) { return }
+    if (!(this.inputForm.get('shipToLocations') as FormGroup)) { return}
+    const shippingOption = (this.inputForm.get('shipToLocations.regionExcluded') as FormArray).at(i) as FormGroup;
+    return shippingOption.get('shipToLocations.regionExcluded') as FormArray;
   }
 
   addShippingService(shippingOptionIndex: number) {
@@ -234,37 +261,43 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
   createShippingService(): FormGroup {
     return this.formBuilder.group({
 
-      additionalShippingCost: this.formBuilder.group({
-        currency: ['', Validators.required],
-        value: ['', Validators.required]
-      }),
-
       buyerResponsibleForPickup: [false],
       buyerResponsibleForShipping: [false],
+      shippingServiceCode: ['', Validators.required],
+      freeShipping: [false],
+
       cashOnDeliveryFee: this.formBuilder.group({
-        currency: ['', Validators.required],
-        value: ['', Validators.required]
+        currency: ['USD', Validators.required],
+        value: ['0', Validators.required]
       }),
 
-      freeShipping: [false],
+
       shippingCarrierCode: ['', Validators.required],
       shippingCost: this.formBuilder.group({
-        currency: ['', Validators.required],
-        value: ['', Validators.required]
+        currency: ['USD', Validators.required],
+        value: ['0', Validators.required]
       }),
 
-      shippingServiceCode: ['', Validators.required],
+      additionalShippingCost: this.formBuilder.group({
+        currency: ['USD', Validators.required],
+        value: ['0', Validators.required]
+      }),
+
+      sortOrder: ['1', Validators.required],
+      surcharge: this.formBuilder.group({
+        currency: ['USD', Validators.required],
+        value: ['0', Validators.required]
+      }),
+
       shipToLocations: this.formBuilder.group({
         regionExcluded: this.formBuilder.array([this.createRegion()]),
-        regionIncluded: this.formBuilder.array([this.createRegion()])
+        regionIncluded: this.formBuilder.array([this.createRegionIncluded()])
       }),
-
-      sortOrder: ['', Validators.required],
-      surcharge: this.formBuilder.group({
-        currency: ['', Validators.required],
-        value: ['', Validators.required]
-      })
     });
+  }
+
+  addRegions() {
+
   }
 
   createRegion(): FormGroup {
@@ -274,10 +307,17 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
     });
   }
 
+  createRegionIncluded(): FormGroup {
+    return this.formBuilder.group({
+      regionName: ['US', Validators.required],
+      regionType: ['COUNTRY', Validators.required]
+    });
+  }
+
+
   removeCategoryType(index: number) {
     this.categoryTypes.removeAt(index);
   }
-
 
   removeShippingOption(index: number) {
     this.shippingOptions.removeAt(index);
@@ -286,7 +326,6 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
   onSubmit() {
     if (this.inputForm.valid) {
       console.log('Form Submission', this.inputForm.value);
-      // Handle form submission logic
     }
   }
 

@@ -264,12 +264,21 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         valueFormatter: ({ value }) => this.datePipe.transform(value, 'short')
       },
 
+      {headerName: 'ID', field: 'orderID', sortable: true,
+        width:    155,
+        minWidth: 155,
+        maxWidth: 225,
+        flex: 2,
+      },
+
       {headerName: 'Client Type', field: 'clientType', sortable: true,
         width:    155,
         minWidth: 155,
         maxWidth: 225,
         flex: 2,
       },
+
+
       {headerName: 'OOMP', field: 'oomp', sortable: true, cellClass: 'number-cell',
         width:    155,
         minWidth: 155,
@@ -696,13 +705,17 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         return;
       }
       if (!this.searchModel.currentDay) {
-        const fields = ['completeDate','clientType', 'oomp',  'oompb', 'value', 'packageLabel','quantityTotal','unitType','value', 'value', 'value', 'value', 'value', 'netTotal','orderID',
-                        , 'value', 'value', 'value', , 'value', 'value' , 'value', 'value', 'value' ]
+        const fields = ['completeDate', 'orderID', 'clientType', 'oomp',  'oompb', 'value', 'packageLabel','quantityTotal',
+                         'unitType','value', 'value', 'value', 'value', 'value', 'netTotal','orderID',
+                        ,'value', 'value', 'value', , 'value', 'value' , 'value', 'value', 'value' ]
 
         const options = {} as UnparseConfig;
         options.quotes = false;
         options.header = false;
         options.skipEmptyLines = true;
+
+        // this.exportDailySales();
+        console.log('metrc' + this.dateFrom)
         this.gridApi.exportDataAsCsv({ columnKeys: fields, allColumns: false,
                                         fileName: 'metrc' + this.dateFrom, skipColumnHeaders: true, suppressQuotes: true});
         return;
@@ -723,22 +736,20 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         }
 
         const clientType = data?.clientType.toString() as string;
-        if (clientType.toLowerCase() === 'caregiver') {
-        }
+        if (clientType.toUpperCase() === 'CAREGIVER') { }
 
         const dateFormat = data?.completeDate.slice(0, 10);
         const mediumTime =  this.datePipe.transform( data?.completeDate, 'mediumTime');
         item.completeDate = `${dateFormat} ${mediumTime}`;
-        item.clientType=  this.capitalizeFirstLetter(clientType);
-        item.oomp= data?.oomp;
-        item.oompb= data?.oompb;
+        item.orderID = data.orderID;
+        item.clientType =  this.capitalizeFirstLetter(clientType).toUpperCase();
+        item.oomp = data?.oomp;
+        item.oompb = data?.oompb;
         item.idMethod = '';
         item.packageLabel = data?.packageLabel;
 
         item.quantityTotal = '0'
-        if ( data?.quantityTotal) {
-          item.quantityTotal= data?.quantityTotal.toFixed(2);
-        }
+        if ( data?.quantityTotal) {   item.quantityTotal= data?.quantityTotal.toFixed(2);   }
         item.uom = data?.unitType;
         item.UTHC = '';
         item.UTHCC = '';
@@ -746,26 +757,26 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         item.UnitWeight = '';
         item.UWUOM = '';
 
-        item.netTotal = '0';
+        item.netTotal = '';
         if (data.netTotal) {
           item.netTotal = data?.netTotal.toFixed(2);
         }
-        if (!data.netTotal) {
-          console.log('no net total', data.id )
-        }
+        if (!data.netTotal) {  console.log('no net total', data.id )  }
 
         item.orderID  = data?.orderID;
-        item.Price= '0';
-        item.ExciseTax = '0';
-        item.CityTax = '0';
-        item.CountyTax = '0';
-        item.MunicipalTax = '0';
-        item.DiscountAmount = '0';
-        item.SubTotal = '0';
-        item.SalesTax = '0';
-        list.push(item)
+        item.Price= '';
+        item.ExciseTax = '';
+        item.CityTax = '';
+        item.CountyTax = '';
+        item.MunicipalTax = '';
+        item.DiscountAmount = '';
+        item.SubTotal = '';
+        item.SalesTax = '';
+        if (item?.packageLabel) {
+          list.push(item)
+        }
       })
-      // const data = JSON.stringify(list)
+
       const options = {} as UnparseConfig;
       options.quotes = false;
       options.header = false;

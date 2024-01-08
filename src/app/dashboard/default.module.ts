@@ -370,7 +370,6 @@ import { PartBuilderUsageListComponent } from '../modules/admin/products/part-bu
 import { PartBuilderTreeComponent } from '../modules/admin/products/part-builder/part-builder-tree/part-builder-tree.component';
 import { MessageEditorListComponent } from '../modules/admin/message-editor-list/message-editor-list.component';
 import { MessageEditorComponent } from '../modules/admin/message-editor-list/message-editor/message-editor.component';
-import { UserIdleModule, UserIdleService } from 'angular-user-idle';
 import { PosOrderItemCalcValuesComponent } from '../modules/posorders/pos-order/pos-order-item-calc-values/pos-order-item-calc-values.component';
 import { InventoryMenuItemComponent } from '../modules/menu/menuitem/inventory-menu-item/inventory-menu-item.component';
 
@@ -388,6 +387,7 @@ import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-s
 import { EbayAuthRedirectComponent } from '../modules/admin/settings/software/ebay-settings/ebay-auth-redirect/ebay-auth-redirect.component';
 import { EbayReturnPolicyComponent } from '../modules/admin/inventory/ebay/ebay-return-policy/ebay-return-policy.component';
 import { EbayFulfillmentPolicyComponent } from '../modules/admin/inventory/ebay/ebay-fulfillment-policy/ebay-fulfillment-policy.component';
+import { EbayAspectsComponent } from '../modules/admin/inventory/ebay/ebay-publish-product/ebay-aspects/ebay-aspects.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -637,6 +637,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     EbayPublishProductComponent,
     EbayReturnPolicyComponent,
     EbayFulfillmentPolicyComponent,
+    EbayAspectsComponent,
     // NumericDirective,
     OrderItemsListComponent,
     OrderItemListComponent,

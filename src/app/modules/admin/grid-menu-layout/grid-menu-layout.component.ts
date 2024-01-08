@@ -79,13 +79,9 @@ export class GridMenuLayoutComponent implements OnInit {
   {}
 
   ngOnInit() {
-    // this.initSubscription();
     const id = this.route.snapshot.paramMap.get('id');
-    // const value = this.layoutService._dashboardModel.value;
-    // console.log('grid menu layout - ngOnInit', id)
     if (id) {
       const site = this.sitesService.getAssignedSite();
-      console.log('using default site')
       this.action$ = this.initGrid(+id)
       return;
     }
@@ -93,7 +89,6 @@ export class GridMenuLayoutComponent implements OnInit {
   }
 
   initSites(id) {
-    console.log('initSites')
     this.action$ =  this.sitesService.getSites().pipe(
       switchMap( data => {
         this.sites  = data;
@@ -108,15 +103,12 @@ export class GridMenuLayoutComponent implements OnInit {
   //if we don't have to do sites.
   initGrid(id: number) {
     this.initGridsterSettings()
-    console.log('initGrid', id)
     if ( id ) {
-      console.log('initGrid')
       return  this.layoutService.getDataOBS(+id)
     }
   }
 
   initGridsterSettings() {
-    console.log('initGridsterSettings',)
     this.initDesigerMode()
     this.updateGridsterUserMode(this.designerMode);
     this.initSubscription();
@@ -133,7 +125,7 @@ export class GridMenuLayoutComponent implements OnInit {
       this.layoutService.dashboardModel = data;
 
       if (!data) {
-        console.log('no layout service subscription')
+        // console.log('no layout service subscription')
         return;
       }
 

@@ -26,13 +26,14 @@
           </div>
         </div>
 
-
         <div *ngIf="paymentsText && payments && payments.length>0">
           <div *ngFor="let payment of payments">
-              <div [innerHTML]="getInterpolatedHTML(paymentsText, payment)" >  </div>
+            <ng-container [ngTemplateOutlet]="paymentsView"
+                  [ngTemplateOutletContext]="{$implicit: payment}">
+            </ng-container>
           </div>
         </div>
-        
+
         <div *ngIf="subFooterText && orderTypes && orderTypes.length>0">
           <div *ngFor="let orderType of orderTypes">
               <div [innerHTML]="getInterpolatedHTML(subFooterText, orderType)" >  </div>
@@ -66,12 +67,12 @@
         <div   *ngIf="interpolatedPaymentsTexts && interpolatedPaymentsTexts.length>0"   class="section-item">
             <div *ngFor="let payment of payments">
               <div *ngIf=" payment.paymentMethod">
-                <div *ngIf="payment.paymentMethod.isCreditCard">
-                  <div [innerHTML]="getInterpolatedHTML(paymentsCreditText, payment)" >  </div>
-                </div>
-                <div *ngIf=" !payment.paymentMethod.isCreditCard ">
-                  <div [innerHTML]="getInterpolatedHTML(paymentsText, payment)" >  </div>
-                </div>
+
+                <!-- If it's a swipped card then we process different than if it's a EMV Card -->
+                <ng-container [ngTemplateOutlet]="paymentsView"
+                              [ngTemplateOutletContext]="{$implicit: payment}">
+                </ng-container>
+
               </div>
             </div>
         </div>
@@ -87,18 +88,14 @@
 
     </div>
   </div>
-
 </div>
-<!-- receiptLayoutSetting {{printerWidth}}
-<br>
-headerText {{headerText  | json }} <br>
-itemsText {{ itemText  | json }}<br>
- orderType {{ orderType | json }}<br>
-items {{items | json}}<br>
-payments {{payments | json}}<br>
-payments {{ paymentsText }}<br> -->
-<!-- subFooterText {{ subFooterText | json }}
-interpolatedHeaderTexts.length {{interpolatedHeaderTexts.length}} -->
-<!-- interpolatedItemTexts.length {{interpolatedItemTexts | json}} -->
 
-<!-- interpolatedFooterTexts.length {{ interpolatedFooterTexts.length }} -->
+<ng-template #paymentsView let-payment>
+  <div *ngIf="payment.paymentMethod.isCreditCard">
+    <div [innerHTML]="getInterpolatedHTML(paymentsCreditText, payment)" >  </div>
+  </div>
+
+  <div *ngIf=" !payment.paymentMethod.isCreditCard ">
+    <div [innerHTML]="getInterpolatedHTML(paymentsText, payment)" >  </div>
+  </div>
+</ng-template>

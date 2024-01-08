@@ -5,6 +5,11 @@
 }
 
 
+.med-grid { 
+  display: flex;
+  flex-direction: column;
+}
+
 mat-form-field  {
   font-size: .9em;
   margin: 3px ;

@@ -230,7 +230,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   validatePatientType() {
     this.errorMessages = []
     const patient = this.clientTable && this.clientTable.patientRecOption;
-    console.log('patient', patient)
+    // console.log('patient', patient)
     if (this.inputForm.controls['patientRecOption'].value || patient) {
       const client = this.inputForm.value as IClientTable;
 
@@ -250,13 +250,15 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
           this.errorMessages.push('No OOMP value - Patient')
           return false;
         }
+
+
         if (type === 'patient') {
-          if (!client.medLicenseNumber) {
+          if (!client.insTertiaryNum) {
             this.errorMessages.push('No OOMP value - Patient')
             return false;
           }
-          if (client.medLicenseNumber) {
-            if (+client.medLicenseNumber.length != 7) {
+          if (client.insTertiaryNum) {
+            if (+client?.insTertiaryNum.length != 7) {
               this.errorMessages.push(`OOMP wrong length ${client.medLicenseNumber}` )
               return false;
             }

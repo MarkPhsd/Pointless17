@@ -465,13 +465,21 @@
 
           <div>
             <mat-slide-toggle
+                      formControlName="pinPadDefaultOnApp"  >
+              <mat-label>PIN Pad Default</mat-label>
+              <mat-hint>Login Shows PIN Pad Entry Default.</mat-hint>
+            </mat-slide-toggle>
+          </div>
+          
+          <div>
+            <mat-slide-toggle
                       formControlName="timeOut"  >
               <mat-label>Time Out (3 Minutes)</mat-label>
               <mat-hint>App Only - Will log out after 3 minutes no use.</mat-hint>
             </mat-slide-toggle>
           </div>
 
-
+          
 
           <div class="toggle-fields" style="width:200px">
             <app-value-fields

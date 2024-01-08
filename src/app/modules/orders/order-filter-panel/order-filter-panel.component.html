@@ -74,7 +74,7 @@
         </app-key-pad>
       </div>
 
-      <div *ngIf="(isAuthorized || isUser) && toggleOpenClosedAll == '2'" class="grid-fields fields">
+      <div *ngIf="(auth?.accessHistoryReports || isUser) && toggleOpenClosedAll == '2'" class="grid-fields fields">
         <div>
           <div>
             <button mat-raised-button
@@ -88,15 +88,10 @@
                       [(ngModel)]="searchOrderHistory"  >
             </mat-slide-toggle>
           </div>
-
             <mat-date-range
               [inputForm] ="completionDateForm">
             </mat-date-range>
         </div>
-
-        <!-- <div class="toggle-fields">
-
-        </div> -->
       </div>
 
       <div class="toggle-fields" *ngIf="isStaff">
@@ -107,8 +102,7 @@
         </mat-slide-toggle>
       </div>
 
-
-      <div class="date-filter-buttton" *ngIf="isAuthorized || isUser" class="fields">
+      <div class="date-filter-buttton" *ngIf="auth?.accessHistoryReports || isUser" class="fields">
         <button mat-raised-button
                 class="date-filter-buttton"
                 (click)="toggleScheduleDateRangeFilter()">
@@ -117,15 +111,14 @@
         </button>
       </div>
 
-      <div *ngIf="showScheduleFilter && scheduleDateForm">
+      <div *ngIf="auth?.accessHistoryReports && showScheduleFilter && scheduleDateForm">
         <div  style="width:185px">
           <mat-date-range
-              [inputForm]      ="scheduleDateForm" >
+              [inputForm] = "scheduleDateForm" >
               Schedule Dates
           </mat-date-range>
         </div>
       </div>
-      <!-- (outputDateRange)="emitScheduledDatePickerData($event)" -->
 
       <mat-button-toggle-group
             *ngIf       ="searchModel"
@@ -143,11 +136,10 @@
             name        ="toggleSuspendedOrders"
             class       ="toggle-view"
             [(ngModel)] ="toggleSuspendedOrders"
-            (change)    ="refreshSearch()"
-          >
-        <mat-button-toggle value="0" >Active </mat-button-toggle>
-        <mat-button-toggle value="1"
-                            matTooltipPosition="above"
+            (change)    ="refreshSearch()" >
+        <mat-button-toggle  value="0" >Active </mat-button-toggle>
+        <mat-button-toggle  value="1"
+                            *ngIf="auth.allowSuspendTransaction"
                             matTooltipHideDelay="1000">Suspended</mat-button-toggle>
       </mat-button-toggle-group>
 
@@ -164,7 +156,7 @@
       <div #toggleGroup>
         <mat-button-toggle-group
               #toggleGroup
-              *ngIf="isStaff"
+              *ngIf       ="isStaff"
               name        = "toggleTypeEmployee"
               class       ="toggle-view"
               [(ngModel)] ="toggleTypeEmployee"
@@ -173,7 +165,6 @@
                             matTooltipPosition="above"
                             matTooltipHideDelay="1000" > <mat-icon>badge</mat-icon> </mat-button-toggle>
           <mat-button-toggle value="0"
-
                             matTooltipPosition="above"
                             matTooltipHideDelay="1000">
               <mat-icon>receipt</mat-icon> </mat-button-toggle>
@@ -197,11 +188,11 @@
           class="toggle-selector"
           #selectorDiv>
         <app-mat-toggle-selector
-              *ngIf     ="searchModel"
-              [id]      ="searchModel.serviceTypeID"
-              [list$]   ="serviceTypes$"
-              [toggleDimensions]="''"
-              [toggleStyleHeight]="''"
+              *ngIf              ="searchModel"
+              [id]               ="searchModel.serviceTypeID"
+              [list$]            ="serviceTypes$"
+              [toggleDimensions] ="''"
+              [toggleStyleHeight] ="''"
               (outPutID)="setServiceType($event)">
               Sale Type
         </app-mat-toggle-selector>

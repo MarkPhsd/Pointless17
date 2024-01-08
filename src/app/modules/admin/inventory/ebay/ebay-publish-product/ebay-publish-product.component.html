@@ -8,6 +8,18 @@
   </div>
 </ng-template>
 
+<div style="margin:5px">
+  <ng-container [ngTemplateOutlet]="saveView"></ng-container>
+</div>
+<ng-container [ngTemplateOutlet]="status"></ng-container>
+
+<!-- <div *ngIf="ebayOfferForm">
+  {{ebayOfferForm.value | json}}
+</div>
+<div *ngIf="ebayOfferForm">
+  {{ebayCategoryForm.value | json}}
+</div> -->
+
 <div *ngIf="inventoryCheck">
   <mat-card>
     <mat-card-title>
@@ -22,7 +34,6 @@
   </mat-card>
 </div>
 
-
 <div *ngIf="itemJSON && !user?.userPreferences?.ebayItemJSONHidden">
   <mat-card>
     <mat-card-title>
@@ -36,260 +47,256 @@
   </mat-card>
 </div>
 
+<mat-tab-group mat-align-tabs="start"
+                md-stretch-tabs
+                [(selectedIndex)]="accordionStep"
+                (selectedIndexChange)="setStep(0)">
 
-<mat-card  *ngIf="product">
-  <mat-card-title>
-    <h2>Ebay Publisher</h2>
-    <h4> {{product?.name}} </h4>
+  <mat-tab label="Shipping & Packaging">
+      <ng-container [ngTemplateOutlet]="shippingInfoView"></ng-container>
+  </mat-tab>
+
+  <mat-tab label="Create Offer">
+      <ng-container [ngTemplateOutlet]="offerView"></ng-container>
+  </mat-tab>
+
+  <mat-tab label="Publish Offer">
+      <ng-container [ngTemplateOutlet]="publishOfferView"></ng-container>
+  </mat-tab>
+  
+  <mat-tab label="Images">
+      <ng-container [ngTemplateOutlet]="images"></ng-container>
+  </mat-tab>
+
+
+</mat-tab-group>
+
+<div [formGroup]="productForm" *ngIf="product && productForm">
+  <div class="instructions" class="margin-5">
+    <mat-label><h4>Description.</h4></mat-label><br>
+    <simple-tinymce cols="50"
+                    rows="20"
+                    style="height: 200px;"
+                    formControlName="description"    >
+    </simple-tinymce>
+  </div>
+</div>
+
+<ng-template #offerView>
+  <mat-card  *ngIf="product">
+    <mat-card-title>
+      <h2>Ebay Publisher</h2>
+      <h4> {{product?.name}} </h4>
+      <mat-divider></mat-divider>
+    </mat-card-title>
+  
+    <mat-card-content>
+        <mat-card *ngIf="itemJSON && itemJSON.inventory">
+          <mat-card-subtitle>
+     
+            <mat-divider></mat-divider>
+          </mat-card-subtitle>
+  
+          <div *ngIf="ebayOfferForm" class="ps-inventory-grid">
+              <app-value-fields
+                    style="width:150px"
+                    [inputForm]="ebayOfferForm"
+                    [fieldName]="'sku'">
+                Sku
+              </app-value-fields>
+  
+              <app-value-fields
+                    [inputForm]="ebayOfferForm"
+                    [fieldName]="'listingDescription'">
+                Listing Description / Title
+              </app-value-fields>
+  
+              <app-value-fields
+                    style="width:100px"
+                    [inputForm]="ebayOfferForm"
+                    [fieldName]="'availableQuantity'">
+                Avaible Quantity
+              </app-value-fields>
+  
+              <app-value-fields
+                  style="width:100px"
+                  [fieldType]="'number'"
+                  [inputForm]="ebayOfferForm"
+                  [fieldName]="'quantityLimitPerBuyer'">
+                Quantity Limit Per Buyer
+              </app-value-fields>
+  
+              <app-value-fields
+                  style="width:100px"
+                  [fieldType]="'number'"
+                  [inputForm]="ebayOfferForm"
+                  [fieldName]="'price'">
+                Price
+              </app-value-fields>
+              
+          </div>
+  
+          <!-- <div *ngIf="ebayCategoryForm">{{ebayCategoryForm.value | json}}</div> -->
+          <div [formGroup]="ebayCategoryForm"  *ngIf="ebayCategoryForm">
+          
+              <div *ngIf="(ebayCategories$  | async) as items" ></div>
+              <div *ngIf="flattenedCategories">
+                <h4>Category Choice.  <span *ngIf="ebayCategoryForm">{{ebayCategoryForm.value.categoryName || ebayCategoryForm?.value?.categoryId }}</span> </h4>
+                <mat-label *ngIf="!ebayCategoryForm.value.categoryName && ebayCategoryForm?.value?.categoryId">
+                  When category ID is visible above, and not category name, your category has been assigned. You can press 'Get Category Options to confirm, but it is unecessary.'
+                </mat-label>
+                <div>
+                  <button mat-raised-button color="accent" (click)="getCategories()" style="margin:5px">Get Category Options</button>
+                </div>
+                <span style="width:205px">
+                  <mat-form-field class="category-list"
+                        appearance="outline"  class="margin-5">
+                      <mat-label>Description</mat-label>
+                        <mat-select
+                                    type="text"
+                                    formControlName = "categoryId"
+                                    (selectionChange)="setCategoryName($event)">
+                        <mat-option *ngFor="let item of flattenedCategories"
+                            [value]="item.categoryId">
+                            {{item?.categoryName}}
+                        </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+                </span>
+              </div>
+          </div>
+  
+          <div class="flex-grid-row">
+            <div>
+              <h4>Ebay Aspects</h4>
+            </div>
+            <div *ngIf="ebayOfferForm?.controls['categoryId']?.value" style="margin:5px">
+              <button mat-raised-button (click)="getItemAspects()" >Get Required Aspects</button>
+            </div>
+          </div>
+          <div *ngIf="(ebayAspects$ | async) as data"></div>
+          <app-ebay-aspects (outPutAspects)="setAspects($event)" 
+                            [aspectForm]="aspectForm" 
+                            [aspectData]="ebayAspectArray"
+                            [aspectSelected]="aspectValues"
+                            ></app-ebay-aspects>
+        </mat-card>
+  
+   
+  
+    </mat-card-content>
+  
+  </mat-card>
+</ng-template>
+
+<ng-template #shippingInfoView>
+  <div *ngIf="!itemJSON || !itemJSON?.inventoryPublished" style="margin:5px">
+    Please set Packaging features, and dimensions for this item. 
+  </div>
+  <div style="margin:5px">
     <mat-divider></mat-divider>
+  </div>
+  
+  <div *ngIf="packageForm" [formGroup]="packageForm" style="margin:5px">
+    <mat-form-field   appearance="outline" >
+        <mat-label>Package Type  </mat-label>
+        <mat-select  formControlName = "packageType">
+          <mat-option *ngFor="let item of shippingPackages"
+              [value]="item">
+              {{item}}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+  </div>
 
-    <div class="flex-grid-row-end">
-      <ng-container [ngTemplateOutlet]="menuButtonContainer">  </ng-container>
-      <div>
-        <button  mat-raised-button (click)="refresh(id)"><mat-icon>refresh</mat-icon></button>
-      </div>
+  <mat-card>
+    <h4>Dimensions</h4>
+    <div *ngIf="dimensionsForm" [formGroup]="dimensionsForm">
+      <mat-form-field appearance="outline"   class="margin5">
+        <mat-label>Height</mat-label>
+        <input  matInput
+                type="number"
+                name="height"
+                formControlName="height"  >
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"  class="margin5">
+        <mat-label>Length</mat-label>
+        <input  matInput
+                type="number"
+                name="length"
+                formControlName="length"  >
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"  class="margin5">
+        <mat-label>Width</mat-label>
+        <input  matInput
+                type="number"
+                name="width"
+                formControlName="width"   >
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"  class="margin5">
+        <mat-label>Dimensions UOM</mat-label>
+          <mat-select
+              type="text"
+              formControlName = "unit">
+              <mat-option *ngFor="let item of dimensions"
+                    [value]="item.name">
+                    {{item?.name}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
     </div>
-
-  </mat-card-title>
-
-  <mat-card-subtitle >
-    <div  class="margin-5">
-
-      <div *ngIf="itemJSON && itemJSON?.inventoryPublished">
-        <mat-icon>alert</mat-icon>Inventory Published
-      </div>
-
-      <div *ngIf="itemJSON && !itemJSON?.inventoryPublished">
-        <mat-icon>alert</mat-icon> No Inventory Published
-      </div>
-
-      <div *ngIf="itemJSON && itemJSON?.offerResponse?.offerId ">
-        OfferID {{itemJSON?.offerResponse?.offerId}}
-      </div>
-
-      <div *ngIf="itemJSON && !itemJSON?.offerPublishStatus">
-        <mat-icon>alert</mat-icon>  No Offer Published
-      </div>
-    </div>
-
-
-  </mat-card-subtitle>
-
-  <mat-card-content>
-
-      <mat-card *ngIf="itemJSON && itemJSON.inventory">
-        <mat-card-subtitle>
-          <ul>
-            <li>
-              Once an item is published to inventory, you may then create an offer for that item.
-            </li>
-            <li>
-              The quantity you publish to offer can be less than your total inventory.
-            </li>
-            <li>
-              We support one offer per inventory. If you want to provide multiple offers of the same inventory item, you may duplicate the inventory item and offer it from another form.
-            </li>
-          </ul>
-          <mat-divider></mat-divider>
-        </mat-card-subtitle>
-
-        <div *ngIf="ebayOfferForm" class="ps-inventory-grid">
-          <app-value-fields
-                style="width:150px"
-                [inputForm]="ebayOfferForm"
-                [fieldName]="'sku'">
-            Sku
-          </app-value-fields>
-
-          <app-value-fields
-                [inputForm]="ebayOfferForm"
-                [fieldName]="'listingDescription'">
-            Listing Description / Title
-          </app-value-fields>
-
-          <app-value-fields
-                style="width:100px"
-                [inputForm]="ebayOfferForm"
-                [fieldName]="'availableQuantity'">
-            Avaible Quantity
-          </app-value-fields>
-
-          <app-value-fields
-              style="width:100px"
-              [fieldType]="'number'"
-              [inputForm]="ebayOfferForm"
-              [fieldName]="'quantityLimitPerBuyer'">
-            Quantity Limit Per Buyer
-          </app-value-fields>
-
-          <app-value-fields
-          style="width:100px"
-              [fieldType]="'number'"
-              [inputForm]="ebayOfferForm"
-              [fieldName]="'price'">
-            Price
-          </app-value-fields>
-        </div>
-        <mat-divider></mat-divider>
-      </mat-card>
-
-      <div [formGroup]="productForm" *ngIf="product && productForm">
-
-        <mat-form-field appearance="outline" class="margin-5" style="width:100%;">
-          <mat-label>Title</mat-label>
+    <mat-card-subtitle>Dimensions</mat-card-subtitle>
+    <div *ngIf="packageWeightAndSizeForm" [formGroup]="packageWeightAndSizeForm">
+        <mat-form-field appearance="outline" class="margin5">
+            <mat-label>Value</mat-label>
           <input  matInput
-                  type="text"
+                  type="number"
                   name="value"
-                  formControlName="title">
+                  formControlName="value">
         </mat-form-field>
 
-        <div class="instructions" class="margin-5">
-          <mat-label><h4>Condition Description.</h4></mat-label><br>
-          <simple-tinymce cols="50"
-                          rows="20"
-                          style="height: 200px;"
-                          formControlName="description"    >
-          </simple-tinymce>
-        </div>
-      </div>
-
-      <div [formGroup]="inputForm" *ngIf="product && inputForm">
-        <div *ngIf="!itemJSON || !itemJSON?.inventoryPublished">
-          Once you have filled out these values, you will press 'publish inventory'. You can then offer the item on a new listing, using the offer fields that appear.
-        </div>
-        <mat-divider></mat-divider>
-
-        <mat-form-field class="category-list"
-              appearance="outline"  class="margin-5">
-            <mat-label>Description</mat-label>
-              <mat-select
-                          type="number"
-                          formControlName = "condition">
-              <mat-option *ngFor="let item of conditions"
-                  [value]="item.name">
-                  {{item?.name}}
+        <mat-form-field appearance="outline" class="margin5">
+          <mat-label>Unit</mat-label>
+          <mat-select
+              type="text"
+              formControlName = "unit">
+              <mat-option *ngFor="let item of uom"
+                    [value]="item.name">
+                    {{item?.name}}
               </mat-option>
-            </mat-select>
+          </mat-select>
         </mat-form-field>
-      </div>
-
-      <mat-card>
-        <div *ngIf="dimensionsForm" [formGroup]="dimensionsForm">
-          <mat-form-field appearance="outline"   class="margin-5">
-            <mat-label>Height</mat-label>
-            <input  matInput
-                    type="number"
-                    name="height"
-                    formControlName="height"  >
-          </mat-form-field>
-
-          <mat-form-field appearance="outline"  class="margin-5">
-            <mat-label>Length</mat-label>
-            <input  matInput
-                    type="number"
-                    name="length"
-                    formControlName="length"  >
-          </mat-form-field>
-
-          <mat-form-field appearance="outline"  class="margin-5">
-            <mat-label>Width</mat-label>
-            <input  matInput
-                    type="number"
-                    name="width"
-                    formControlName="width"   >
-          </mat-form-field>
-
-          <mat-form-field appearance="outline"  class="margin-5">
-            <mat-label>Dimensions UOM</mat-label>
-              <mat-select
-                  type="text"
-                  formControlName = "unit">
-                  <mat-option *ngFor="let item of dimensions"
-                        [value]="item.name">
-                        {{item?.name}}
-                  </mat-option>
-              </mat-select>
-          </mat-form-field>
-
-        </div>
-        <mat-card-subtitle>Dimensions</mat-card-subtitle>
-        <div *ngIf="packageWeightAndSizeForm" [formGroup]="packageWeightAndSizeForm">
-            <mat-form-field appearance="outline" class="margin-5">
-                <mat-label>Value</mat-label>
-              <input  matInput
-                      type="number"
-                      name="value"
-                      formControlName="value">
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="margin-5">
-              <mat-label>Unit</mat-label>
-              <mat-select
-                  type="text"
-                  formControlName = "unit">
-                  <mat-option *ngFor="let item of uom"
-                        [value]="item.name">
-                        {{item?.name}}
-                  </mat-option>
-              </mat-select>
-            </mat-form-field>
-        </div>
-
-      <div *ngIf="packageForm && shippingPackages" [formGroup]="packageForm">
-        <mat-form-field class="category-list"
-              appearance="outline"  class="margin-5">
-            <mat-label>Packacge Type  </mat-label>
-              <mat-select
-                          type="number"
-                          formControlName = "packageType">
-              <mat-option *ngFor="let item of shippingPackages"
-                  [value]="item">
-                  {{item}}
-              </mat-option>
-            </mat-select>
-        </mat-form-field>
-      </div>
-
-      </mat-card>
-
-      <div>  <ng-container [ngTemplateOutlet]="metaTags"></ng-container>  </div>
-  </mat-card-content>
-
-</mat-card>
-
-<mat-card>
-  <div *ngIf="ebayProduct && ebayProduct.imageUrls">
-    <div *ngFor="let item of ebayProduct.imageUrls">
-      <!-- {{item}} -->
     </div>
-  </div>
+  </mat-card>
+</ng-template>
 
-  <div *ngIf="ebayProduct && ebayProduct.imageUrls">
-    <app-image-gallery  [imageData] = "ebayProduct.imageUrls"></app-image-gallery>
-  </div>
-</mat-card>
-
-<ng-template #metaTags>
-  <div class="meta-tags"
-        *ngIf="metaTagForm && metaTagsList">
-      <app-meta-tag-chips
-        (outPutItemTags)  ="setItemTags($event)"
-        [itemTags]        ="metaTagsList"
-        [isDisabled] = 'true'
-        [inputForm]       ="metaTagForm">
-      </app-meta-tag-chips>
-  </div>
+<ng-template #images>
+  <mat-card>
+    <div *ngIf="ebayProduct && ebayProduct.imageUrls">
+      <div *ngFor="let item of ebayProduct.imageUrls">
+      </div>
+    </div>
+    <div *ngIf="ebayProduct && ebayProduct.imageUrls">
+      <app-image-gallery  [imageData] = "ebayProduct.imageUrls"></app-image-gallery>
+    </div>
+  </mat-card>
 </ng-template>
 
 <!-- {{ebayOutPut | json}} -->
 <ng-template #menuButtonContainer>
-  <ng-content></ng-content>
-  <button aria-label="user menu"
+
+  <button 
+          aria-label="user menu"
+          color ="accent"
           mat-raised-button
           [matMenuTriggerFor]="menu"
           #menuTrigger="matMenuTrigger"
           (click)="menuTrigger.openMenu()" >
-    <mat-icon>menu</mat-icon>Menu
+    <mat-icon>menu</mat-icon>Ebay Actions
   </button>
 
   <mat-menu class="mat-menu-panel"
@@ -298,10 +305,6 @@
 
     <span (mouseleave)="menuTrigger.closeMenu()">
       <div  class="ps-flex-group-column">
-
-        <div>
-          <button  class="menu-button margin-10" color="primary" mat-raised-button (click)="save()"><mat-icon>save</mat-icon>Save</button>
-        </div>
 
         <div>
           <button
@@ -333,22 +336,12 @@
 
         <div>
           <button class="menu-button margin-10"
-                  [disabled]="isOfferCreated"
+                  [disabled]="isOfferCreated || !itemJSON?.inventoryPublished"
                   color="primary"
                   mat-raised-button
                   (click)="createOffer()">
             <mat-icon>publish</mat-icon>Create Offer</button>
         </div>
-
-        <div>
-          <button class="menu-button margin-10"
-                  [disabled]="publishOfferDisabled"
-                  color="primary"
-                  mat-raised-button
-                  (click)="publishOffer()">
-            <mat-icon>publish</mat-icon>Publish Offer</button>
-        </div>
-
         <div>
           <button class="menu-button margin-10"
                   [disabled]="!isOfferCreated"
@@ -378,4 +371,122 @@
       </div>
     </span>
   </mat-menu>
+</ng-template>
+
+<ng-template #publishOfferView>
+  <mat-card>
+
+    <div [formGroup]="productForm" *ngIf="product && productForm">
+      <mat-form-field appearance="outline" class="margin-5" style="width:100%;">
+        <mat-label>Title</mat-label>
+        <input  matInput
+                type="text"
+                name="value"
+                formControlName="title">
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="ebayCategoryForm && !ebayCategoryForm.controls['categoryId'].value">
+      <mat-icon color="warn">alert</mat-icon> 
+      Category not yet assigned. Once you do that, you may select condition and publish offer.
+    </div>
+
+    <div *ngIf="ebayCategoryForm && ebayCategoryForm.controls['categoryId'].value">
+      <h3 *ngIf="ebayCategoryForm">Condition  </h3>
+      <div *ngIf="(conditions$ | async) as conditions"></div>
+      <mat-label>Press this once you have created the offer. It will list condition options you can use to publish the offer</mat-label>
+      <div class="margin5">
+        <button mat-raised-button color="primary" (click)="getConditions()">Get conditions</button>
+      </div>
+
+      <div [formGroup]="inputForm" *ngIf="product && inputForm">
+        <div *ngIf="conditionDescriptors.length>0">Loaded</div>
+        <mat-form-field class="category-list"
+                        appearance="outline"  class="margin-5">
+          <mat-label>Description</mat-label>
+            <mat-select  #conditionSelector
+                        type="number"
+                        formControlName = "condition">
+            <mat-option *ngFor="let item of conditionDescriptors"
+                [value]="item.conditionDescription">
+                {{item.conditionDescription}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div *ngIf="inputForm.controls['condition'].value">
+          <div>
+            <button class="menu-button margin-10"
+                    [disabled]="publishOfferDisabled"
+                    color="primary"
+                    mat-raised-button
+                    (click)="publishOffer()">
+              <mat-icon>publish</mat-icon>Publish Offer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+  </mat-card>
+</ng-template>
+
+<ng-template #instructions>
+  <h3>Basic instructions</h3>
+  <ul>
+    <li>
+      Once an item is published to inventory, you may then create an offer for that item.
+    </li>
+    <li>
+      The quantity you publish to offer can be less than your total inventory.
+    </li>
+    <li>
+      We support one offer per inventory. If you want to provide multiple offers of the same inventory item, you may duplicate the inventory item and offer it from another form.
+    </li>
+    <li>Please refer to our documentation guide for more detailed instructions.</li>
+  </ul>
+</ng-template>
+
+<ng-template #status>
+  <mat-card>
+    <mat-card-subtitle >
+      <h3>Ebay Listing Status</h3>
+      <div class="margin5">
+        <mat-divider></mat-divider>
+      </div>
+      <div  class="margin-5">
+  
+        <div *ngIf="itemJSON && itemJSON?.inventoryPublished" class="ebay-status">
+          Inventory Published
+        </div>
+
+        <div *ngIf="!itemJSON?.inventoryPublished" class="ebay-status">
+          No Inventory Published  <mat-icon color="warn">warning</mat-icon>
+        </div>
+  
+        <div *ngIf="itemJSON && itemJSON?.offerResponse?.offerId" class="ebay-status">
+          OfferID {{itemJSON?.offerResponse?.offerId}}
+        </div>
+  
+        <div *ngIf="itemJSON && !itemJSON?.ebayPublishResponse" class="ebay-status">
+          No Offer Published <mat-icon>alert</mat-icon>  
+        </div>
+
+        <div *ngIf="itemJSON" class="ebay-status">
+          OfferStatus: {{itemJSON?.ebayPublishResponse?.status}}
+        </div>
+      </div>
+    </mat-card-subtitle>
+  </mat-card>
+</ng-template>
+
+<ng-template #saveView>
+  <div class="flex-grid-row-end">
+    <ng-container [ngTemplateOutlet]="menuButtonContainer">  </ng-container>
+    <div>
+      <button  class="margin-10" color="primary" mat-raised-button (click)="save()"><mat-icon>save</mat-icon>Save</button>
+    </div>
+    <div>
+      <button class="margin-10" color="primary" mat-raised-button (click)="refresh(id)"><mat-icon>refresh</mat-icon>Refresh</button>
+    </div>
+  </div>
 </ng-template>

@@ -142,7 +142,8 @@ export class TriPosTransactionsComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     let item = this.setTransactionInfo()
     item.paymentType = 'credit'
-
+    item.ticketNumber = this.posPayment?.id.toString();
+    item.referenceNumber = this.posPayment?.refNumber.toString();
 
     this.processing$ =  this.methodsService.reversal(site, item ).pipe(switchMap(data => {
 

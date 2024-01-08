@@ -1,0 +1,53 @@
+
+
+
+<form [formGroup]="aspectForm" style="margin:5px" *ngIf="!aspectSelected">
+  <h4>Item Aspects (required)</h4>
+  <div style="margin:5px">
+    <button mat-raised-button  color="accent"  (click)="loadData()" style="margin:5px">Toggle Options</button>
+    <button mat-raised-button  color="accent"  (click)="saveData()" style="margin:5px">Save Aspects</button>
+    <!-- <button mat-raised-button  color="accent"  (click)="loadData()" style="margin:5px">Load Saved Aspects</button> -->
+    <button mat-raised-button  color="accent"  (click)="initializeForm()" style="margin:5px">Refresh</button>
+  </div>
+
+  <div formArrayName="aspects" class="flex-grid-row">
+    <h4>Required</h4>
+    <div *ngFor="let aspectGroup of aspectsControls.controls; let i = index" [formGroupName]="i" >
+      <mat-form-field  style="width:150px" appearance="outline"  class="margin-5">
+        <mat-label>{{ aspectGroup.get('localizedAspectName').value }}  </mat-label>
+        <mat-select formControlName="selectedValue">
+          <mat-option *ngFor="let value of aspectGroup.get('aspectValues').controls" [value]="value.value">
+            {{ value.value }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <button mat-raised-button  color="accent"  *ngIf="aspectForm.valid" (click)="onSubmit()" style="margin:5px">Set Choices</button>
+  </div>
+</form>
+
+<div *ngIf="aspectSelected" >
+  <h4>Item Aspects (assigned)</h4>
+  <div  class="margin5" style="font-size:1.2em;font-weight:400">{{aspectSelected | json }}</div>
+  <div class="margin5">
+    <button mat-raised-button color="warn" (click)="clearSelectedValues()">Clear Selection</button>
+  </div>
+</div>
+
+<div *ngIf="aspectData && formVisible">
+  <div *ngIf="aspectForm">
+    {{aspectForm.value | json}}
+  </div>
+  <mat-card>
+    <mat-card-title>
+       <h4>Ebay API Results</h4>
+    </mat-card-title>
+    <mat-card-content>
+      <ngx-json-viewer [json]="aspectData"></ngx-json-viewer>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="formVisible = !formVisible">Toggle View</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

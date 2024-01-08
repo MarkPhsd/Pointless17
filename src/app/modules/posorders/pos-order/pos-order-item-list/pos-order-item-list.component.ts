@@ -59,7 +59,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   rowDataClicked1      = {};
   rowDataClicked2      = {};
   rowData:             any[];
-  pageSize                = 20
+  pageSize                = 10000
   currentRow              = 1;
   currentPage             = 1
   numberOfPages           = 1
@@ -95,7 +95,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   _searchBar     : Subscription;
   searchBar      : boolean;
 
-  itemsPerPage      = 20
+  itemsPerPage      = 1000
   smallDevice : boolean;
   //list height
   openingProduct: boolean;
@@ -125,20 +125,15 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
               this.purchaseOrderEnabled = true;
           }
           this.refreshSearch()
-          if (data.posOrderItems) {
-            return of(data.posOrderItems)
-          }
+          if (data.posOrderItems) { return of(data.posOrderItems)  }
         }
         return of([])
     })
-
   }
 
   ngOnChanges() {
     if (this.filteredList) {
       this.refreshSearch()
-    } else {
-
     }
   }
 
@@ -211,7 +206,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     };
     this.defaultColDef = {
       flex: 2,
-      // minWidth: 100,
     };
 
     let reconcilePass = false
@@ -244,14 +238,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     columnDefs.push(nameCol);
 
-    // let textColumn = {headerName: 'UOM',   field: 'unitName',
-    //     sortable: true,
-    //     width   : 100,
-    //     minWidth: 100,
-    //     flex    : 2,
-    // }
-    // columnDefs.push(textColumn);
-
     let nextColumn =  {headerName: 'Quantity',     field: 'quantity',
           sortable: true,
           width   : 100,
@@ -261,7 +247,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
           editable: true,
           singleClickEdit: true
     }
-
     columnDefs.push(nextColumn);
 
     nextColumn =  {headerName: 'UOM',     field: 'unitName',
@@ -273,7 +258,9 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
           editable: false,
           singleClickEdit: true
     }
+    if (this.order.customerName != 'Inventory Monitor') { 
     columnDefs.push(nextColumn);
+    }
 
     let currencyColumn = {headerName: 'Price',     field: 'unitPrice', sortable: true,
                     cellRenderer: this.agGridService.currencyCellRendererUSD,
@@ -284,10 +271,11 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                     editable: true,
                     singleClickEdit: true
     }
-
-    if (!reconcilePass) {
-      if (!this.purchaseOrderEnabled || this.showRetail) {
-        columnDefs.push(currencyColumn);
+    if (this.order.customerName != 'Inventory Monitor') { 
+      if (!reconcilePass) {
+        if (!this.purchaseOrderEnabled || this.showRetail) {
+          columnDefs.push(currencyColumn);
+        }
       }
     }
 
@@ -300,9 +288,11 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         editable: true,
         singleClickEdit: true
     }
-    if (!reconcilePass) {
-      if ((this.purchaseOrderEnabled || this.showCost) || reconcilePass) {
-        columnDefs.push(currencyColumn);
+    if (this.order.customerName != 'Inventory Monitor') { 
+      if (!reconcilePass) {
+        if ((this.purchaseOrderEnabled || this.showCost) || reconcilePass) {
+          columnDefs.push(currencyColumn);
+        }
       }
     }
     let wholeSaleCostTotal = {headerName: 'Cost Total',    field: 'wholeSaleCost', sortable: true,
@@ -314,9 +304,11 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         editable: true,
         singleClickEdit: true
     }
-    if (!reconcilePass) {
-      if ((this.purchaseOrderEnabled || this.showCost) || reconcilePass) {
-        columnDefs.push(wholeSaleCostTotal);
+    if (this.order.customerName != 'Inventory Monitor') {     
+      if (!reconcilePass) {
+        if ((this.purchaseOrderEnabled || this.showCost) || reconcilePass) {
+          columnDefs.push(wholeSaleCostTotal);
+        }
       }
     }
 
@@ -327,10 +319,12 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                 maxWidth: 100,
                 flex: 2,
     }
-    if (!reconcilePass) {
-      if (!this.purchaseOrderEnabled || this.showRetail) {
-        columnDefs.push(currencyTotalColumn);
-      }
+    if (this.order?.customerName != 'Inventory Monitor') {      
+        if (!reconcilePass) {
+          if (!this.purchaseOrderEnabled || this.showRetail) {
+            columnDefs.push(currencyTotalColumn);
+          }
+        }
     }
 
     let editButtonColumn = {headerName: 'Edit',  field: 'productID',
@@ -362,7 +356,11 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         width: 100,
         flex: 2,
     }
-    columnDefs.push(itemDelete);
+
+    if (this.order?.customerName != 'Inventory Monitor') {                    
+      columnDefs.push(itemDelete);
+    }
+
 
     nextColumn =  {headerName: 'Prior',     field: 'traceProductCount',
           sortable: true,
@@ -384,8 +382,11 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
           editable: false,
           singleClickEdit: false
     }
-    if (this.purchaseOrderEnabled || reconcilePass) {
-      columnDefs.push(nextColumn);
+
+    if (this.order?.customerName != 'Inventory Monitor') {                  
+      if (this.purchaseOrderEnabled || reconcilePass) {
+        columnDefs.push(nextColumn);
+      }
     }
 
     nextColumn =  {headerName: 'Scanned',     field: 'traceOrderDate',
@@ -396,9 +397,60 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                     flex    : 2,
                     editable: false,
                     singleClickEdit: false
-                    }
-    if (reconcilePass) {
+                  }
+
+    if (this.order?.customerName != 'Inventory Monitor') {                    
+      if (reconcilePass) {
+        columnDefs.push(nextColumn);
+      }
+    }
+
+    if (this.order?.customerName === 'Inventory Monitor') {  
+      nextColumn =  {headerName: 'Sales',     field: 'salesCount',
+                  sortable: true,
+                  width   : 100,
+                  minWidth: 100,
+                  maxWidth: 100,
+                  flex    : 2,
+                  editable: false,
+                  singleClickEdit: false
+      }
       columnDefs.push(nextColumn);
+
+      nextColumn =  {headerName: 'Expected',     field: 'expectedInventoryCount',
+                  sortable: true,
+                  width   : 100,
+                  minWidth: 100,
+                  maxWidth: 100,
+                  flex    : 2,
+                  editable: false,
+                  singleClickEdit: false
+      }
+      columnDefs.push(nextColumn);
+
+      nextColumn =  {headerName: 'Current',     field: 'currentProductCount',
+                  sortable: true,
+                  width   : 100,
+                  minWidth: 100,
+                  maxWidth: 100,
+                  flex    : 2,
+                  editable: false,
+                  singleClickEdit: false
+      }
+      columnDefs.push(nextColumn);
+
+      nextColumn =  {headerName: 'Diff',     field: 'monitorDescrepency',
+            sortable: true,
+            width   : 100,
+            minWidth: 100,
+            maxWidth: 100,
+            flex    : 2,
+            editable: false,
+            singleClickEdit: false
+      }
+      columnDefs.push(nextColumn);
+
+
     }
 
     this.columnDefs = columnDefs;
@@ -460,7 +512,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   refreshSearch() {
     if (this.params) {
       this.params.startRow     = 1;
-      this.params.endRow       = 500;
+      this.params.endRow       = 1000;
     }
     this.onGridReady(this.params)
   }
@@ -485,12 +537,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   //ag-grid standard method
   onGridReady(params: any) {
 
-    if (!this.order || !this.order.posOrderItems)   {
-      // console.log('exiting')
-      return
-    }
-    // console.log('onGridReady', this.order.posOrderItems)
-    // console.log('params', params)
+    if (!this.order || !this.order.posOrderItems) { return  }
 
     if (!params) { return };
     this.params = params;
@@ -525,7 +572,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   selectItem(search){
     if (search) {
       this.currentPage = 1
-      // this.searchPhrase.next(search)
     }
   }
 

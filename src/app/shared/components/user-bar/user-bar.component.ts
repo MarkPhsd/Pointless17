@@ -50,10 +50,10 @@ export class UserBarComponent implements OnInit {
   navProfile() {
     this.navigationService.navProfile()
   }
+
   logOut() {
     this.userSwitchingService.clearLoggedInUser();
   }
-
 
   emailMailCount(event) {
     this.mailCount = event

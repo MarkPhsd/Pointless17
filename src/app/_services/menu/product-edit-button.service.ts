@@ -494,7 +494,7 @@ export class ProductEditButtonService {
     return of(this.dialog.open(StrainProductEditComponent,
       { width:        '95%',
         height:       '775px',
-        minHeight:    '775px',
+        minHeight:    '90vh',
         data : data
       },
     ))

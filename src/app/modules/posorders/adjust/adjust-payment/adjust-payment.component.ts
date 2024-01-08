@@ -316,9 +316,11 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                   item.transactionId = this.payment.refNumber;
                   item = this.setConfig(item)
                   //the original transaction nuber is used if partial void.
-                  if (this.voidAmount != this.resultAction.payment.amountPaid + this.resultAction.payment.voidAmount) {
+                  if (this.voidAmount != this.resultAction?.payment?.amountPaid + this.resultAction?.payment?.voidAmount) {
                     item.transactionId = this.payment.refNumber;
                   }
+
+
 
                   if (!this.voidAmount) {
                     this.voidAmount = this.resultAction.payment.amountPaid
@@ -335,6 +337,10 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                   }
                   if (!this.toggleVoid) {
                     // console.log('reversal  7');
+                    //need to assign ticketNumber & referenceNumber
+                    //should be the same as the sale
+                    item.ticketNumber = this.resultAction.payment?.transactionIDRef.toString();
+                    item.referenceNumber = this.resultAction.payment?.transactionIDRef.toString();
                     process$ = this.triPOSMethodService.reversal(site, item)
                   }
 

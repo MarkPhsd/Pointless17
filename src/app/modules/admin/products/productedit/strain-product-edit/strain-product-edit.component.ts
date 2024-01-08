@@ -18,6 +18,7 @@ import { UnitTypeMethodsService } from 'src/app/_services/menu/unit-type-methods
 import { SearchModel } from 'src/app/_services/system/paging.service';
 import { IMenuItem, menuButtonJSON } from 'src/app/_interfaces/menu/menu-products';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
+import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
 
 @Component({
   selector: 'app-strain-product-edit',
@@ -66,6 +67,7 @@ export class StrainProductEditComponent implements OnInit {
               private priceCategoryService: PriceCategoriesService,
               private siteService: SitesService,
               public  fbProductsService: FbProductsService,
+              private inventoryEditButon: InventoryEditButtonService,
               private productEditButtonService: ProductEditButtonService,
               private itemTypeMethodsService: ItemTypeMethodsService,
               private unitTypeMethodsService: UnitTypeMethodsService,
@@ -154,6 +156,12 @@ export class StrainProductEditComponent implements OnInit {
     });
     this.unitSelectorSearchForm.patchValue({ unitTypeSelections: ''})
     this.unitTypeNameSelected = '';
+  }
+
+  openWebEditor() {
+    this.inventoryEditButon.openProductDialog(this.product.id,)
+    this.dialogRef.close()
+    // this.action$ =  this.productEditButtonService.openProductEditorOBS(this.product.id, this.product.prodModifierType)
   }
 
   getUnitSelectorItem(event) {

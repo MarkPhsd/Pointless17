@@ -1,6 +1,6 @@
 // import { Route } from '@angular/router';
 import { Observable, Subscription, } from 'rxjs';
-import {  Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild,EventEmitter, OnDestroy } from '@angular/core';
+import {  Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild,EventEmitter, OnDestroy, TemplateRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
@@ -23,10 +23,11 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   action$: Observable<any>;
-
+  @ViewChild('posOrderItemsPrepView') posOrderItemsPrepView: TemplateRef<any>;
+  @ViewChild('posOrderItemsView') posOrderItemsView: TemplateRef<any>;
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
   @Input()  order          : IPOSOrder;
-  @Input()  posOrderItems: PosOrderItem[]
+  @Input()  posOrderItems  : PosOrderItem[]
   @Input()  mainPanel      : boolean;
   @Output() outputRemoveItem  = new EventEmitter();
   @Input()  purchaseOrderEnabled: boolean;
@@ -44,10 +45,11 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   qrCodeStyle = ''
   mainStyle   =  ``
-  deviceWidthPercentage = '100%'
+  @Input() deviceWidthPercentage = '100%'
+  @Input() panelHeight = '100%';
+  orderPrepStyle: string;
   _uiConfig      : Subscription;
   uiConfig       = {} as TransactionUISettings;
-  @Input() panelHeight = '100%';
   @Input() orderItemsPanel: string;
   smallDevice    : boolean;
   animationState : string;
@@ -64,6 +66,13 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   nopadd = `nopadd`
 
   scrollStyle = this.platformService.scrollStyleWide;
+
+  get posItemsView() {
+    if (this.prepScreen) {
+      return this.posOrderItemsPrepView
+    }
+    return this.posOrderItemsView
+  }
 
   initSubscriptions() {
     try {
@@ -148,7 +157,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     let uiHomePage = this.uiSettingService.homePageSetting;
     this.wideBar   = true;
 
@@ -158,36 +166,38 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       })
     }
 
-    if (uiHomePage) {
-      this.wideBar = uiHomePage.wideOrderBar
-    }
+    if (uiHomePage) {  this.wideBar = uiHomePage.wideOrderBar  }
 
     this._uiConfig = this.uiSettingsService.transactionUISettings$.subscribe(data => {
       this.uiConfig = data;
-      if (!data) {
-        this.getTransactionUI()
-      }
+      if (!data) {   this.getTransactionUI()   }
     })
 
-    if (this.prepScreen) {
-      this.orderItemsPanel = 'item-list-prep';
-    }
-    if (!this.prepScreen) {
-      this.orderItemsPanel = 'item-list';
-    }
     this.initSubscriptions();
     this.initStyles()
   }
 
   initStyles() {
+
+    if (this.prepScreen)  {  this.orderItemsPanel = 'item-list-prep';  }
+    if (!this.prepScreen) {  this.orderItemsPanel = 'item-list';  }
+
+    if (this.prepScreen) {
+      this.deviceWidthPercentage = '265px'
+      this.panelHeight = ''
+      this.orderPrepStyle = ''
+      return;
+    }
+
     this.qrCodeStyle = ''
     this.deviceWidthPercentage = '100%'
-    if (!this.mainPanel) { 
+
+    if (!this.mainPanel) {
       this.deviceWidthPercentage = '345px'
     }
 
     if (!this.mainPanel && !this.qrOrder) {
-      this.mainStyle = `main-panel orderItemsPanel`
+      this.mainStyle = `main-panel ${this.orderItemsPanel}`
       return;
     }
 
@@ -205,6 +215,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
         this.panelHeight = 'calc(100vh - 200px)'
       }
     }
+
 
   }
 
@@ -304,8 +315,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     });
   }
 
-  getItemHeight() { 
-    if (!this.myScrollContainer) { 
+  getItemHeight() {
+    if (!this.myScrollContainer) {
       return
     }
     const divTop = this.myScrollContainer.nativeElement.getBoundingClientRect().top;

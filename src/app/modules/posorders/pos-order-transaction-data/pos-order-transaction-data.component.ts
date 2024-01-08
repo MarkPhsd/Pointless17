@@ -24,9 +24,8 @@ export class PosOrderTransactionDataComponent{
   orderPanelHeight  = 'height:200px'
 
   onResizedOrderPanel(event: ResizedEvent) {
-    // this.uiSettingsService.updateLimitOrderHeight(event.newRect.height, this.windowHeight) //(this.orderLimitsPanel.nativeElement.offsetHeight)
     this.orderPanelHeight = `height:${event.newRect.height}px`
-    // this.resizePanel()
+    console.log(this.orderPanelHeight)
   }
 
   constructor(

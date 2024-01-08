@@ -59,6 +59,7 @@ styleUrls: ['./pos-order.component.scss'],
 })
 
 export class PosOrderComponent implements OnInit ,OnDestroy {
+  processing: boolean;
   get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('lastImageDisplayView') lastImageDisplayView: TemplateRef<any>;
   @ViewChild('listViewType')   listViewType: TemplateRef<any>;
@@ -230,11 +231,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   get reconcileView() {
-    if (this.order && this.order.service.filterType == 2) {
+    if (this.order && this.order?.service?.filterType == 2) {
       return this.reconcile
     }
     return null;
   }
+
   get wicEBTButtonView() {
     if ( (!this.paymentsEqualTotal &&
           !this.order.completionDate &&
@@ -325,7 +327,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       const site = this.siteService.getAssignedSite();
 
       if (data) {
-        console.log('menu item selected', data)
+        // console.log('menu item selected', data)
         this.product$ = this.menuService.getProduct(site, data.id).pipe(switchMap(data => {
           // data.caseQty
           this.product = {} as IProduct
@@ -391,11 +393,29 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     })
   }
 
+  get isInventoryMonitor() { 
+    if (this.order?.customerName == 'Inventory Monitor') { 
+      return true
+    }
+    return false
+  }
+
+  inventoryMonitorDiscrepencies() { 
+    const site = this.siteService.getAssignedSite()
+    this.processing = true;
+    this.action$ = this.orderMethodsService.getInventoryMonitor(site, this.order.id).pipe(switchMap(data => {
+      this.processing = false;
+      return of(data)
+    }))
+  }
+
   currentOrderSusbcriber() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
-      this.canRemoveClient = true
+      this.canRemoveClient = true;
+      
       if (this.order) {
+        // console.log(this.order.id, this.order?.serviceTypeID, this.order?.service?.id);
         this.initPurchaseOrderOption(this.order?.serviceTypeID);
       }
       if (this.order && this.order.posOrderItems && this.order.posOrderItems.length > 0) {
@@ -410,15 +430,11 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     })
   }
 
-  get isApp() {
-    return this.platFormService.isApp()
-  }
+  get isApp() {  return this.platFormService.isApp()  }
 
   userAuthSubscriber() {
     this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
-      if (data) {
-        this.userAuths = data;
-      }
+      if (data) { this.userAuths = data; }
     })
   }
 
@@ -442,7 +458,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.resizePanel()
   }
 
-
   resizePanel() {
     this.uiSettingsService.remainingHeight$.subscribe(data => {
       if (this.mainPanel) {
@@ -462,24 +477,30 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
         if (this.smallDevice) {
           this.orderItemsHeightStyle = `${value - cartHeight - 30}px`
         }
+        // console.log(this.orderItemsHeightStyle)
       }
     })
   }
 
   initPurchaseOrderOption(id: number) {
+    console.log('data.filterType', id)
     if (!id) { return }
     this.purchaseOrderEnabled = false
-    if (this.userAuthorization.isManagement) {
+    if (this.userAuthorization.isManagement || this.userAuthorization.isAdmin) {
       const site = this.siteService.getAssignedSite()
+
+
       this.serviceType$ = this.serviceTypeService.getType (site,id).pipe(
         switchMap(data => {
+          // console.log(id, data)
+          // console.log('data.filterType', data.filterType)
           this.listView = false;
 
           if (data && data.filterType == null) {
             this.listView = false;
           }
 
-          if (data) {
+          if (data  && data.filterType) {
             if ( data?.filterType == 1  ||  data.filterType == -1 || data?.filterType == 2 || data?.filterType == 3 ) {
               this.purchaseOrderEnabled = true
               this.listView = true;
@@ -571,7 +592,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               public platFormService    : PlatformService,
               private navigationService : NavigationService,
               private orderService      : OrdersService,
-              public orderMethodsService: OrderMethodsService,
+              public  orderMethodsService: OrderMethodsService,
               private paymentService    : POSPaymentService,
               private awsBucket         : AWSBucketService,
               private printingService   : PrintingService,

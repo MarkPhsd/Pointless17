@@ -84,7 +84,8 @@ button {
   gap: var(--gap);
   grid-auto-flow: row;
   grid-template-columns: repeat( auto-fit, minmax(105px, 1fr) );
-
+  padding:3px;
+  
   @include for-phone-only {
     --gap: 10px;
     display: grid;
@@ -105,4 +106,14 @@ button {
   @include for-phone-only {
     height: 5px;
   }
+}
+
+
+.product-image  {
+  object-fit: cover;
+  border-radius: 15px;
+  width       : 100%;
+  white-space : normal;
+  overflow    : hidden;
+  max-height: 85px;
 }

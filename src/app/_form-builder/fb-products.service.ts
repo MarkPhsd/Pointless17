@@ -310,6 +310,18 @@ export class FbProductsService {
       }
     }
 
+
+    isDiscount(itemType: IItemType | ItemType) {
+
+      if (itemType && itemType.name && ( itemType.type?.toLowerCase() === 'discounts' ||
+          itemType.type?.toLowerCase() === 'service fee' )) {
+        return true;
+      }
+      // if (itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'food' )) {
+
+      // }
+    }
+
     isFood(itemType: IItemType | ItemType) {
       if (itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'food' )) {
         return true;
@@ -335,7 +347,6 @@ export class FbProductsService {
       }
     }
 
-
     isModifier(itemType: IItemType | ItemType) {
       if (itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'modifier' )) {
         return true;
@@ -344,6 +355,12 @@ export class FbProductsService {
 
     isGrouping(itemType: IItemType | ItemType) {
       if (itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'grouping' )) {
+        return true;
+      }
+    }
+
+    isStoreCredit(itemType: IItemType | ItemType) {
+      if (itemType && itemType.name && ( itemType.type?.toLowerCase() === 'store credit' )) {
         return true;
       }
     }

@@ -17,7 +17,9 @@ import { UISettingsService } from 'src/app/_services/system/settings/uisettings.
 export class EbaySettingsComponent implements OnInit {
 
   @Input() authCodeApproval : string;
-
+  fufillment$: Observable<any>;
+  return$ : Observable<any>;
+  locations$ : Observable<any>;
   auth: string;
   actionResult: any;
   ebaySettings$: Observable<any>;
@@ -247,5 +249,58 @@ export class EbaySettingsComponent implements OnInit {
     if (value == '2'){
       this.router.navigate(['ebay-return-policy'])
     }
+  }
+
+  listReturn() {
+    const site = this.sitesService.getAssignedSite()
+    this.action$ = this.ebayService.listPolicies(site,'POSReturnPolicy').pipe(switchMap(data => 
+      {
+        this.actionResult = data
+        return of(data)
+      }
+    ))
+  }
+  
+  listFufillment() {
+    const site = this.sitesService.getAssignedSite()
+    this.action$ = this.ebayService.listPolicies(site, 'POSFufillmentPolicy').pipe(switchMap(data => 
+      {
+        this.actionResult = data
+        return of(data)
+      }
+    ))
+  }
+
+  listPayment() {
+    const site = this.sitesService.getAssignedSite()
+    this.action$ = this.ebayService.listPolicies(site, 'POSPaymentPolicy').pipe(switchMap(data => 
+      {
+        this.actionResult = data
+        return of(data)
+      }
+    ))
+  }
+
+  getLocations() { 
+    const site = this.sitesService.getAssignedSite()
+    this.action$ = this.ebayService.getAsync(site, '/sell/inventory/v1/location/').pipe(switchMap(data => 
+      {
+        this.actionResult = data
+        return this.ebayService.getPOSLocation(site) //, '/sell/inventory/v1/location/')
+      }
+    )).pipe(switchMap(data => { 
+
+      return of(data)
+    }))
+  }
+
+  createLocation() { 
+    const site = this.sitesService.getAssignedSite()
+    this.action$ = this.ebayService.createInventoryLocation(site).pipe(switchMap(data => 
+      {
+        this.actionResult = data
+        return of(data)
+      }
+    ))
   }
 }

@@ -18,11 +18,27 @@
   }
 }
 
+.grid-flow-prep {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  overflow: hidden;
+  padding: 2px;
+  grid-template-columns: repeat( auto-fill, minmax(205px, 1fr) );
+  @include for-phone-only  {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fill, minmax(195px, 1fr) );
+  }
+}
+
 .grid-flow {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
   overflow-x: hidden;
+  padding: 2px;
   grid-template-columns: repeat( auto-fill, minmax(205px, 1fr) );
   @include for-phone-only  {
     --gap: 10px;
@@ -36,6 +52,7 @@
   --gap: 5px;
   display: grid;
   gap: var(--gap);
+  padding: 2px;
   grid-template-columns: repeat( auto-fill, minmax(595px, 1fr) );
   @include for-phone-only  {
     --gap: 10px;
@@ -47,7 +64,8 @@
 
 mat-progress-bar {
   margin: 5px;
-}
+};
+
 .item {
   padding: 1.35rem;
   background: #90bcbc;
@@ -68,12 +86,10 @@ mat-progress-bar {
 .filter-container {
   overflow-x: hidden;
   overflow-y: auto;
-  // height: 70vh;
   height: 84vh;
   max-height: 84vh;
   max-width:  275px;
   margin: 5px;
-
   @include for-phone-only  {
     overflow-x: hidden;
     overflow-y: auto;
@@ -94,12 +110,6 @@ mat-progress-bar {
   overflow-x: hidden;
   overflow-y: scroll;
   height: 80vh;
-  // @include for-tablet-portrait-up   {
-  //   height: calc(85vh - 135px);
-  // }
-  // @include for-phone-only  {
-  //   height: calc(85vh - 135px);
-  // }
 }
 
 .grid-item {
@@ -113,14 +123,6 @@ mat-progress-bar {
 .grid-item :active :hover {
   box-shadow: 1px 1px 2px rgb(138, 88, 88), 0 0 25px rgb(55, 108, 168), 0 0 5px rgb(84, 116, 90);
 }
-
-// .grid-item:active {
-//   // align-items: flex-end;
-//   // max-height: 200px;
-//   // min-height: 200px;
-//   // height:     200px;
-//   // overflow-x: scroll;
-// }
 
 .mat-dialog-actions {
   justify-content: center;

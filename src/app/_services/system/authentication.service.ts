@@ -11,6 +11,7 @@ import { SitesService} from 'src/app/_services/reporting/sites.service';
 import { MatDialog } from '@angular/material/dialog';
 import { IUserAuth_Properties } from '../people/client-type.service';
 import { ThemesService } from './themes.service';
+import { UIHomePageSettings } from './settings/uisettings.service';
 
 export interface IUserExists {
   id:           number;
@@ -48,6 +49,9 @@ export class AuthenticationService {
     apiUrl                      : any;
     public  externalAPI         : boolean;
 
+    private _setPinPad        = new BehaviorSubject<boolean>(null);
+    public  setPinPad$        = this._setPinPad.asObservable();
+
     private _userTemp               = new BehaviorSubject<IUser>(null);
     public  userTemp$               = this._userTemp.asObservable();
 
@@ -64,6 +68,9 @@ export class AuthenticationService {
     _deviceInfo: IDeviceInfo;
 
 
+    updatePinPad(value: boolean) { 
+      this._setPinPad.next(value)
+    }
     get userAuths() {
 
       if (this._userAuths.value) {
@@ -271,7 +278,7 @@ export class AuthenticationService {
       this.updateUser(user);
     }
 
-    logout() {
+    logout(pinPadDefaultOnApp: boolean) {
       this.clearUserSettings();
       this.toolbarUIService.updateOrderBar(false)
       this.toolbarUIService.updateToolBarSideBar(false)
@@ -279,19 +286,25 @@ export class AuthenticationService {
         if (this.appInitService.useAppGate) {
           try {
             this.router.navigate(['/appgate']);
+            if (pinPadDefaultOnApp) { 
+              this._setPinPad.next(true)
+            }
           } catch (error) {
             console.log('log out error', error)
           }
           return
         }
       }
-
+  
       try {
         this.router.navigate(['/login']);
+        if (pinPadDefaultOnApp) { 
+          this._setPinPad.next(true)
+        }
       } catch (error) {
         console.log('log out error', error)
       }
-
+  
       this.clearSubscriptions()
     }
 

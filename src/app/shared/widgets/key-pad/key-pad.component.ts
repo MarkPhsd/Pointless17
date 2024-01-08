@@ -203,7 +203,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this.value     = this.formatted
     this.outPutValue.emit(this.formatted)
     this.outPutCheckEntry.emit(this.formatted);
-
   }
 
   enterValue(event) {
@@ -341,7 +340,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
        this.value = this.formatted;
     }
 
-    console.log(this.fieldName, this.formatted)
+    // console.log(this.fieldName, this.formatted)
     if (this.formatted != undefined) {
       const fieldName = this.fieldName
       const value     = this.formatted
@@ -354,8 +353,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   returnEnterPress(){
-
-    // this.value = this.cashValue
 
     if (!this.value && this.cashValue) {
       // console.log('1cashvalue', this.cashValue)
@@ -380,7 +377,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
       this.outPutValue.emit(this.formatted)
     }
     this.outPutCheckEntry.emit(this.formatted)
-
   }
 
 }

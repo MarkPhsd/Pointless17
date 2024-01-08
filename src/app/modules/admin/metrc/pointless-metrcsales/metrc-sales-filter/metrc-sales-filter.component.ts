@@ -244,7 +244,6 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
     this.refreshSearch()
   }
 
-
   initSearchForm() {
     this.searchForm = this.fb.group({
       itemName : ['']

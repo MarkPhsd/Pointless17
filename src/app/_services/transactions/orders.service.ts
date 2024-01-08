@@ -125,6 +125,18 @@ export class OrdersService {
   }
 
 
+  inventoryMonitor(site: ISite, id: number) :  Observable<IPOSOrder> { 
+    const controller = "/POSOrders/"
+
+    const endPoint  = "InventoryMonitor"
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
+  }
+
   getPOSOrderGroupTotal(site: ISite, id: number, groupID: number) :  Observable<IPOSOrder>  {
     const controller = "/POSOrders/"
 
@@ -249,12 +261,12 @@ export class OrdersService {
     return this.http.get<IItemBasic[]>(url);
   }
 
-  pOSTReconciliationOrder(site: ISite) :  Observable<IPOSOrder> {
+  pOSTReconciliationOrder( site: ISite, name: string) :  Observable<IPOSOrder> {
     const controller = "/POSOrders/"
 
     const endPoint  = "pOSTReconciliationOrder"
 
-    const parameters = ``
+    const parameters = `?name=${name}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
@@ -365,11 +377,14 @@ export class OrdersService {
     return  this.http.post<IPOSOrder>(url, itemsImport );
 
   }
-
+// this.userAuthorizationService.user.username
 
   claimOrder(site: ISite, id: string, history: boolean):  Observable<any>  {
 
-    if (this.userAuthorizationService.user.username === 'Temp') {
+    if (!this.userAuthorizationService?.user) {
+      return of(null)
+    }
+    if (this.userAuthorizationService?.user?.username === 'Temp') {
       return of('')
     }
     if (history === undefined) {history = false};
@@ -377,6 +392,8 @@ export class OrdersService {
       return of('')
       return
     }
+
+    // console.log('user', this.userAuthorizationService?.user)
 
     const posName = localStorage.getItem('devicename')
 
@@ -419,7 +436,12 @@ export class OrdersService {
 
   getOrder(site: ISite, id: string, history: boolean):  Observable<IPOSOrder>  {
 
+    const user = this.userAuthorizationService.user;
+
+    // console.log('user', user)
+    if (!user) { return of(null) }
     if (history === undefined) {history = false};
+
     const deviceName = localStorage.getItem('devicename')
 
     const controller = "/POSOrders/"
