@@ -1,15 +1,17 @@
-<div *ngIf="(sales$ | async) as sales; else loading">
-  <div *ngIf="type != 'refunds' && type != 'voids' ">
-  <app-payment-report-data
-      [sales]="sales"
-      [site]="site"
-      [dateTo]="dateTo"
-      [dateFrom]="dateFrom"
-      [notifier]="notifier"
-      [groupBy]="groupBy"
-      [type]="'sales'"
-      [zrunID]="zrunID"
-    >{{groupBy}}</app-payment-report-data>
+<div *ngIf="styles$">
+  <div *ngIf="(sales$ | async) as sales; else loading">
+    <div *ngIf="type != 'refunds' && type != 'voids' ">
+    <app-payment-report-data
+        [sales]="sales"
+        [site]="site"
+        [dateTo]="dateTo"
+        [dateFrom]="dateFrom"
+        [notifier]="notifier"
+        [groupBy]="groupBy"
+        [type]="'sales'"
+        [zrunID]="zrunID"
+      >{{groupBy}}</app-payment-report-data>
+    </div>
   </div>
 </div>
 

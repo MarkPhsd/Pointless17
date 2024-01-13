@@ -1,6 +1,6 @@
 import { ComponentFactoryResolver, Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subscription, } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, catchError, of, switchMap, } from 'rxjs';
 import { ISite, IUser, ProductPrice }   from 'src/app/_interfaces';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { Capacitor } from '@capacitor/core';
@@ -105,6 +105,7 @@ export interface OrderItemHistory {
     categoryId?: number | null;
     departmentId?: number | null;
     itemTypeId?: number | null;
+    traceOrderDate: string | null;
 }
 
 export interface OrderItemHistorySearch  {
@@ -155,7 +156,7 @@ export interface ItemPostResults {
   menuItemWithPrice: IMenuItem
   message:           string;
   priceCategoryID   : number;
-
+  quantity: number
  }
 
  export interface  InventoryResults {
@@ -215,7 +216,8 @@ export interface NewSerializedItem  { orderID: number, quantity: number, menuIte
 enum actions {
   void = 1,
   priceAdjust = 2,
-  note = 3
+  note = 3,
+  SaleAuth = 4
 }
 export interface ItemWithAction {
   posItem           : PosOrderItem;
@@ -229,6 +231,9 @@ export interface ItemWithAction {
   typeOfAction      : string;
   items             : PosOrderItem[];
   order             : IPOSOrder;
+  menuItem          : IMenuItem;
+  orderId           : number;
+  quantity: number;
 }
 
 // firstPOSTCallToAPI('url', data).pipe(
@@ -846,7 +851,12 @@ export class POSOrderItemService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.delete<ItemPostResults>(url)
+    return  this.http.delete<ItemPostResults>(url).pipe(switchMap(data => { 
+      return of(data)
+    }),catchError(data => { 
+      console.log('error')
+      return of(null)
+    }))
 
   }
 

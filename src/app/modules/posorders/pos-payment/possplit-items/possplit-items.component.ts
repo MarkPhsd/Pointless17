@@ -39,7 +39,7 @@ export class POSSplitItemsComponent implements OnInit {
     assignedStatic   : any;
     allAssigned      : any;
     itemID           : number;
-    currentGroupID   = 1;
+    currentGroupID   =  1;
     currentGroup     = '1';
     selectedItems$   : Observable<any>
     allitems$        : Observable<any>
@@ -49,7 +49,6 @@ export class POSSplitItemsComponent implements OnInit {
 
     values  =
       [
-        {id:0,name: 0},
         {id:1,name: 1},
         {id:2,name: 2},
         {id:3,name: 3},
@@ -127,9 +126,7 @@ export class POSSplitItemsComponent implements OnInit {
     @HostListener("window:resize", [])
     updateItemsPerPage() {
       this.smallDevice = false
-      if (window.innerWidth < 768) {
-        this.smallDevice = true
-      }
+      if (window.innerWidth < 768) { this.smallDevice = true  }
       if (!this.smallDevice) {
       }
     }
@@ -138,9 +135,8 @@ export class POSSplitItemsComponent implements OnInit {
       this.updateItemsPerPage()
       const site = this.siteService.getAssignedSite()
       this.initGroupList();
-      this.applyGroupID(0);
-      this.setGroupOrderTotal(site, this.order.id, 0)
-
+      this._applyGroupID(1);
+      this.setGroupOrderTotal(site, this.order.id, 1)
       this.refreshOrder();
     }
 
@@ -149,17 +145,20 @@ export class POSSplitItemsComponent implements OnInit {
         const result = this.order.posOrderItems.filter(data => {
           return data.idRef == data.id;
         })
-        return this.removeSelectedFromAvailable(result, 0)
+        return this.removeSelectedFromAvailable(result, 1)
       }
     }
 
     applyGroupID(event) {
       if (event) {
-        this.currentGroupID = event.id;
-        this.currentGroup   = event.id.toString()
-        this.changesOcurred = false;
-        this.refreshAssignedItems();
+        this._applyGroupID(event.id)
       }
+    }
+    _applyGroupID(id:number) { 
+      this.currentGroupID = id;
+      this.currentGroup   = id.toString()
+      this.changesOcurred = false;
+      this.refreshAssignedItems();
     }
 
     removeSelectedFromAvailable( orderItems: PosOrderItem[], groupID: number): IListBoxItem[]   {
@@ -171,14 +170,14 @@ export class POSSplitItemsComponent implements OnInit {
       );
 
       this.availableItems = allItems.filter( x => {
-          if ( x.groupID == 0 || x.groupID == undefined  || x.groupID == null ) {
+          if ( x.groupID == 1|| x.groupID == undefined  || x.groupID == null ) {
             return x;
           }
         }
       )
 
       const assignedItems = allItems.filter( x => {
-        if ( x.groupID != 0 && x.groupID != undefined && x.groupID != null ) {
+        if ( x.groupID != 1 && x.groupID != undefined && x.groupID != null ) {
           return x;
         }
       })
@@ -207,10 +206,9 @@ export class POSSplitItemsComponent implements OnInit {
     saveAssignedCategories(selected: IListBoxItem[]) {
       // if (selected) {
         // if (selected.length     == 0)  { return   }
-
         const site           = this.siteService.getAssignedSite();
         const items$         = this.orderService.applyItemsToGroup(site, this.currentGroupID, selected);
-        const assignedItems$ = this.orderService.applyItemsToGroup(site, 0, this.availableItems)
+        const assignedItems$ = this.orderService.applyItemsToGroup(site, 1, this.availableItems)
 
         this.saveAssignedItems$ = items$.pipe(
           switchMap(data => {
@@ -229,14 +227,12 @@ export class POSSplitItemsComponent implements OnInit {
           return of(data)
         }));
 
-      console.log('selected', selected)
+      // console.log('selected', selected)
     }
 
     setGroupOrderTotal(site, orderID, groupID) {
       this.orderGroupTotal$ = this.orderService.getPOSOrderGroupTotal(site, orderID, groupID).pipe(
-        switchMap(data => {
-          return of(data)
-        })
+        switchMap(data => { return of(data)  })
       )
     }
 
@@ -263,7 +259,7 @@ export class POSSplitItemsComponent implements OnInit {
     refreshAssignedItems() {
 
       if (!this.order) return;
-      if (!this.currentGroupID) { this.currentGroupID = 0 };
+      if (!this.currentGroupID) { this.currentGroupID = 1 };
       const site = this.siteService.getAssignedSite();
 
       const selectedItems$  = this.orderService.getSplitItemsList(site, this.order?.id, this.currentGroupID);
@@ -284,7 +280,7 @@ export class POSSplitItemsComponent implements OnInit {
 
     refreshUnassignedItems() {
       const site = this.siteService.getAssignedSite()
-      this.allitems$ = this.orderService.getSplitItemsList(site, this.order.id, 0).pipe(switchMap(data => {
+      this.allitems$ = this.orderService.getSplitItemsList(site, this.order.id, 1).pipe(switchMap(data => {
         this.availableItems = data
         return of(data)
       }))
@@ -300,10 +296,10 @@ export class POSSplitItemsComponent implements OnInit {
 
     drop(event: CdkDragDrop<IListBoxItem[]>) {
       if (event.previousContainer === event.container) {
-        console.log('moveItemInArray')
+        // console.log('moveItemInArray')
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
       } else {
-        console.log('transferArrayItem')
+        // console.log('transferArrayItem')
         transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
       }
 
@@ -316,7 +312,7 @@ export class POSSplitItemsComponent implements OnInit {
         to: 'selected',
       });
 
-      this.availableItems.forEach(data => {  data.groupID = 0; })
+      this.availableItems.forEach(data => {  data.groupID = 1; })
 
       this.selectedItems.forEach(data => { data.groupID = this.currentGroupID; });
       this.changesOcurred = true;
@@ -338,14 +334,14 @@ export class POSSplitItemsComponent implements OnInit {
         to: 'selected',
       });
 
-      this.availableItems.forEach(data => {  data.groupID = 0; })
-      this.selectedItems.forEach(data => { data.groupID = this.currentGroupID; });
+      this.availableItems.forEach(data => {  data.groupID = 1; })
+      this.selectedItems.forEach(data =>  { data.groupID = this.currentGroupID; });
       this.changesOcurred = true;
     }
 
     saveChanges() {
       if (!this.order) return;
-      const paymentsMade  = this.order.balanceRemaining.toFixed(2 )== this.order.total.toFixed(2);
+      const paymentsMade  = this.order.balanceRemaining.toFixed(2)== this.order.total.toFixed(2);
       if (!paymentsMade) {
         this.matSnack.open(`Unable to save, payments have been applied. Apply payments based on normal procedures.
                             Balance is: ${this.order?.balanceRemaining} and total is ${this.order?.total}`, 'Alert');

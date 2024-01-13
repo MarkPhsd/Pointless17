@@ -785,6 +785,8 @@ constructor(  private _snackBar              : MatSnackBar,
 
   //ag-grid standard method
   async onGridReady(params: any) {
+    if (params == undefined) { return }
+    
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
@@ -792,8 +794,6 @@ constructor(  private _snackBar              : MatSnackBar,
       params.api.sizeColumnsToFit();
       params.api.resetRowHeights();
     }
-
-    if (params == undefined) { return }
 
     let datasource =  {
       getRows: (params: IGetRowsParams) => {

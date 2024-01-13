@@ -20,6 +20,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { IOrderItemSearchModel, OrderItemHistorySearch, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { IPagedList } from 'src/app/_services/system/paging.service';
 
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
@@ -41,12 +42,14 @@ function myComparator(value1, value2) {
 })
 export class ItemsMainComponent implements OnInit {
 
+  action$: Observable<any>;
   toggleListGrid = true // displays list of payments or grid
   //search with debounce: also requires AfterViewInit()
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
   @Input()  height = "90vh"
   searchPhrase:         Subject<any> = new Subject();
+  processing: boolean;
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
@@ -55,7 +58,7 @@ export class ItemsMainComponent implements OnInit {
   _searchItems$ = this.searchPhrase.pipe(
     debounceTime(250),
       distinctUntilChanged(),
-      switchMap(searchPhrase =>
+      switchMap(searchPhrase => 
         this.refreshSearch()
     )
   )
@@ -162,7 +165,8 @@ export class ItemsMainComponent implements OnInit {
 
   async initForm() {
     this.searchForm = this.fb.group({
-      itemName : ['']
+      itemName : [''],
+      reportRunID: [''],
     })
   }
 
@@ -171,7 +175,7 @@ export class ItemsMainComponent implements OnInit {
     try {
       this._searchModel = this.pOSOrderItemService.searchModel$.subscribe( data => {
         this.searchModel            = data
-        console.log('data')
+          console.log('data')
           if (!this.searchModel) {
             const searchModel       = {} as IOrderItemSearchModel;
             this.currentPage        = 1
@@ -244,7 +248,7 @@ export class ItemsMainComponent implements OnInit {
     }
     this.columnDefs.push(item);
 
-     item =   {headerName: 'Sku/BARCODE',  field: 'barCode',
+     item =   {headerName: 'Sku/BARCODE',  field: 'sku',
           // sortable: true,
       width: 75,
       minWidth: 125,
@@ -257,6 +261,7 @@ export class ItemsMainComponent implements OnInit {
       autoHeight: true,
       }
       this.columnDefs.push(item);
+    this.columnDefs.push(this.getValueField('serialCode','serial',  125, false, false, false),);
 
     this.columnDefs.push(this.getValueField('quantity','Quantity',  125, false, false, false),);
     this.columnDefs.push(this.getValueField('unitPrice', 'Price',  125, false, false, true),);
@@ -307,6 +312,8 @@ export class ItemsMainComponent implements OnInit {
         editable: editable,
         visible: visible,
         singleClickEdit: true,
+        cellStyle: {'white-space': 'normal', 'line-height': '1em'},
+        autoHeight: true,
         comparator: myComparator,
       // flex: 2,
     }
@@ -318,6 +325,12 @@ export class ItemsMainComponent implements OnInit {
         editable: editable,
         visible: visible,
         singleClickEdit: true,
+        cellRenderer: 'showMultiline',
+        wrapText: true,
+        cellStyle: {'white-space': 'normal', 'line-height': '1em',
+                    'text-overflow': 'ellipsis',
+                    'max-width':'200px'},
+        autoHeight: true,
         comparator: myComparator,
       // flex: 2,
     }
@@ -335,6 +348,7 @@ export class ItemsMainComponent implements OnInit {
       allColumnIds.push(column.colId);
     });
     this.gridOptions.columnApi.autoSizeColumns(allColumnIds, skipHeader);
+
   }
 
   //initialize filter each time before getting data.
@@ -351,6 +365,7 @@ export class ItemsMainComponent implements OnInit {
   }
 
   refreshSearchAny(event) {
+    // console.log('refresh', this.searchModel)
     this.refreshSearch();
   }
 
@@ -358,7 +373,7 @@ export class ItemsMainComponent implements OnInit {
   refreshSearch(): Observable<IOrderItemSearchModel[]> {
     this.currentPage         = 1
     const searchModel = this.initSearchModel();
-    return this.refreshSearch_sub()
+    return  this.refreshSearch_sub()
   }
 
   refreshSearch_sub(): Observable<IOrderItemSearchModel[]> {
@@ -386,64 +401,64 @@ export class ItemsMainComponent implements OnInit {
     const searchModel         = this.initSearchModel();
     const site                = this.siteService.getAssignedSite()
     return this.pOSOrderItemService.getItemHistoryBySearch(site, searchModel).pipe(switchMap(data => {
-      // console.log('get row data', data)
-
       return of(data)
     }))
   }
 
   //ag-grid standard method
-  async onGridReady(params: any) {
+  onGridReady(params: any) {
     if (params == undefined) { return }
 
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
-      // this.gridColumnApi = params.columnApi;
       params.api.sizeColumnsToFit();
     }
+    this.processing = true
+    const dataSource = this.getDataSource(params)
+ 
+    this.setDataSource(dataSource)
+  }
 
-    if (!params.startRow ||  !params.endRow) {
-      params.startRow = 1
-      params.endRow = this.pageSize;
-    }
-
-    console.log('read grid')
-
-    let datasource =  {
+  getDataSource(params) { 
+    return  {
       getRows: (params: IGetRowsParams) => {
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
       items$.subscribe(data =>
-        {
-            console.log('data')
-            const resp         =  data.paging
-            if (resp) {
-              this.isfirstpage   = resp.isFirstPage
-              this.islastpage    = resp.isFirstPage
-              this.currentPage   = resp.currentPage
-              this.numberOfPages = resp.pageCount
-              this.recordCount   = resp.recordCount
-              if (this.numberOfPages !=0 && this.numberOfPages) {
-                this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-              }
-            }
-
+        { 
+            this.processing  = false;
+            const paging         =  data.paging
+            this.setPaging(paging)
             if (data.results) {
-              //not applicable to all lists, but leave for ease of use.
-              let results  =  this.refreshImages(data.results)
-              params.successCallback(results)
-              this.rowData = results
+              params.successCallback(data.results)
+              this.rowData = data.results
             }
-
           }
         );
       }
     };
 
-    if (!datasource)   { return }
+  }
+
+  setDataSource(dataSource) { 
+    if (!dataSource)   { return }
     if (!this.gridApi) { return }
-    this.gridApi.setDatasource(datasource);
+    this.gridApi.setDatasource(dataSource);
     this.autoSizeAll(true)
+  }
+
+  setPaging(paging: IPagedList) { 
+    if (paging) {
+      this.isfirstpage   = paging.isFirstPage
+      this.islastpage    = paging.isFirstPage
+      this.currentPage   = paging.currentPage
+      this.numberOfPages = paging.pageCount
+      this.recordCount   = paging.recordCount
+     
+      if (this.numberOfPages !=0 && this.numberOfPages) {
+        this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
+      }
+    }
   }
 
   //not called on all lists, but leave for functional use.
@@ -529,7 +544,6 @@ export class ItemsMainComponent implements OnInit {
     // this.pOSPaymentService.updatePaymentSubscription(payment)
     // // this._bottomSheet.open(PosPaymentEditComponent);
   }
-
 
   setActiveOrder(order) {
     if (!order) {return }

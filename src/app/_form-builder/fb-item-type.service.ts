@@ -34,7 +34,7 @@ export class FbItemTypeService {
       requiresSerial      : [''],
       packageType         : [''],
       requireInStock      : [''],
-      requiresStock       : [''],
+     
       metrcCategoryID     : [''],
       preptTicketID       : [''],
       instructions:         [''],
@@ -50,6 +50,7 @@ export class FbItemTypeService {
       useDefaultPriceInApp: [],
       description: [''],
       webStoreSimpleView: [],
+      requireProductCount: [],
     })
     return inputForm
   }

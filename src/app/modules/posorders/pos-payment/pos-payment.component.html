@@ -23,6 +23,9 @@
       <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
 
       <div #coachingSplitGroups class="grid-header-item">
+        <mat-card>
+          <ng-container [ngTemplateOutlet]="referencedOrders"></ng-container>
+        </mat-card>
         <mat-card *ngIf="splitByItem">
           <ng-container [ngTemplateOutlet]="splitItemorders"></ng-container>
         </mat-card>
@@ -137,7 +140,7 @@
                       <ng-container [ngTemplateOutlet]="cardPointeButton"></ng-container>
                       <ng-container [ngTemplateOutlet]="stripePayButton"></ng-container>
                       <ng-container [ngTemplateOutlet]="triposPayButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="giftCardPayButton"></ng-container>
+                      <ng-container [ngTemplateOutlet]="giftCardPayButtonView"></ng-container>
                       <ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
                       <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
                       <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
@@ -302,6 +305,7 @@
 
       <div  class="order-completed">
         <ng-container [ngTemplateOutlet]="splitItemsTemplate"></ng-container>
+   
       </div>
 
       <div *ngIf="!splitByItem && !paymentsEqualTotal &&
@@ -462,6 +466,12 @@
     (outPutPaymentAmount)="applyGroupPayment($event)"
     [order]="order">
   </app-possplit-items>
+</ng-template>
+
+<ng-template #referencedOrders>
+  <pos-split-orders
+    [order]="order">
+  </pos-split-orders>
 </ng-template>
 
 <ng-template #houseAccountButton>

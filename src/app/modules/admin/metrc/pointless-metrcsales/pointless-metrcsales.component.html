@@ -1,3 +1,5 @@
+
+<div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(order$ | async) as order"></div>
 <div class="header-row">
   <div>
@@ -5,7 +7,11 @@
       CSV Export
       <mat-icon>download</mat-icon>
     </button>
+    <span class="margin5">
+      <ng-container [ngTemplateOutlet]="menuButtonContainer"></ng-container>
+    </span>
   </div>
+  
 
  <div *ngIf="processing">
     <mat-spinner [diameter]="50"></mat-spinner>
@@ -115,3 +121,38 @@
   </div>
 
 </div>
+
+
+
+
+<ng-template #menuButtonContainer>
+  <button style="height:45px;"
+          mat-button
+          color="primary"
+          [matMenuTriggerFor]="menu"
+          #menuTrigger="matMenuTrigger"
+          (click)="menuTrigger.openMenu()" >
+    <mat-icon>menu</mat-icon>Advanced
+  </button>
+
+  <mat-menu class="mat-menu-panel"
+            [overlapTrigger]="false"
+            #menu="matMenu">
+
+    <span (mouseleave)="menuTrigger.closeMenu()">
+      <div  class="ps-flex-group-column">
+
+        <div class="margin-left-5 ">
+          <button mat-button
+                  color="primary"
+                  class="assign-button"
+                  (click)="assignSerials()">
+            <mat-icon>list</mat-icon>
+            Assign Unsigned Serial (fix)
+          </button>
+        </div>
+
+      </div>
+    </span>
+  </mat-menu>
+</ng-template>

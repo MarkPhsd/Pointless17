@@ -1,0 +1,23 @@
+
+<div *ngIf="(posRefOrders$ | async) as items">
+
+  <div *ngIf="items.length>0">
+    <h4>Orders</h4>
+  </div>
+  <div class="grid-split-groups">
+  <div *ngFor="let item of items.results" >
+    
+      <div style="width:200px" *ngIf="item?.total &&  item?.total != 0">
+        <button color="primary" 
+                style="width:200px" 
+                class="payment-buttons" 
+                mat-raised-button 
+                (click)="setActiveOrder(item)">
+          <mat-icon>open_in_new</mat-icon> {{item?.statusName}} Total {{ item?.total | currency}} <br>
+          # {{item.id}} 
+        </button>
+      </div>
+    </div> 
+  </div>
+</div>
+<div *ngIf="action$ | async"></div>

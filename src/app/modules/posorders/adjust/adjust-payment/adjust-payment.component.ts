@@ -1,10 +1,8 @@
 import { I } from '@angular/cdk/keycodes';
 import { Component, Inject, OnInit,OnDestroy } from '@angular/core';
-import { DateAdapter } from '@angular/material/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { isNull } from 'lodash';
 import { Subscription,Observable, switchMap, EMPTY, of, catchError } from 'rxjs';
 import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
 import { IPOSOrder, IPOSPayment, OperationWithAction } from 'src/app/_interfaces';
@@ -20,7 +18,7 @@ import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-re
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
+import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';

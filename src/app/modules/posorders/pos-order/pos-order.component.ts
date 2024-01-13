@@ -483,7 +483,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   initPurchaseOrderOption(id: number) {
-    console.log('data.filterType', id)
+    // console.log('data.filterType', id)
     if (!id) { return }
     this.purchaseOrderEnabled = false
     if (this.userAuthorization.isManagement || this.userAuthorization.isAdmin) {

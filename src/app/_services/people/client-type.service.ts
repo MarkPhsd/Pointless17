@@ -6,8 +6,11 @@ import {clientType, ISite }   from 'src/app/_interfaces';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 
 export interface IUserAuth_Properties {
+
+
   // 'pos section
   voidOrder            : boolean;
+  splitItemOverRide    : boolean;
   voidItem             : boolean;
   voidPayment          : boolean;
 
@@ -16,8 +19,9 @@ export interface IUserAuth_Properties {
   changeItemPrice      : boolean;
   changeInventoryValue : boolean;
   blindBalanceSheet    : boolean;
+  balanceSheetDetails  : boolean;
   blindClose           : boolean;
-
+  
   // 'admin section
   closeDay             : boolean;
   sendTextBlast        : boolean;

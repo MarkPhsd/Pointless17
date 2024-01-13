@@ -12,14 +12,18 @@ export class SplitEntrySelectorComponent implements OnInit {
   currentValue: any;
   @Input() isUserStaff = false;
   @Input() order : IPOSOrder ;
-  values = [0,1,2,3,5,6,7,8,9]
+  values = [1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
   constructor(public orderMethodsService: OrderMethodsService) { }
 
   ngOnInit(): void {
-    const i = 0
+    if (this.orderMethodsService.splitEntryValue == 0){ 
+      this.orderMethodsService.splitEntryValue  = 1;
+    }
+    const i = 1
   }
 
   assignVaue(value) {
+    if (value == 0) { value = 1 }
     this.orderMethodsService.splitEntryValue = value;
   }
 

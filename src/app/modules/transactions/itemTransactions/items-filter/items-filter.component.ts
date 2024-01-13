@@ -48,7 +48,7 @@ export class ItemsFilterComponent implements OnInit {
     toggleSuspendedOrders          = "0";
     toggleOrdersGreaterThanZero    = "0";
     togglePreAuth                  = "0";
-    toggleTypeEmployee             = "0"
+    toggleTypeEmployee             =  0
     toggleIsCashCredit             =  0
     printForm          : UntypedFormGroup;
     user               = {} as IUser;
@@ -93,18 +93,19 @@ export class ItemsFilterComponent implements OnInit {
 
       )
     {
-      this.initForm();
-      this.initSubscriptions();
-      this.resetSearch()
+
     }
 
     ngOnInit() {
       //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
       //Add 'implements OnInit' to the class.
       // this.initEmployeeList()
+      this.initSubscriptions();
+      this.resetSearch()
       this.initDateForm();
       this.initPlatForm();
       this.initAuthorization();
+      this.initForm()
       return
     }
 
@@ -121,12 +122,31 @@ export class ItemsFilterComponent implements OnInit {
     initForm() {
       this.searchForm   = this.fb.group( {
         itemName          : [''],
+        name              : [],
+        reportRunID: [],
       })
     }
 
     ngAfterViewInit() {
-      this.initSearchOption();
+      if (this.searchForm) { 
+        this.initSearchOption();
+      }
     }
+
+    refreshSearchPhrase(event) {
+      const item = { itemName: event }
+      this.searchForm.patchValue(item)
+      this.searchModel.name = item.itemName;
+      this.refreshSearch();
+    }
+
+    refreshSearchReportRunID(event) {
+      const item = { reportRunID: event }
+      this.searchForm.patchValue(item)
+      this.searchModel.reportRunID = +item
+      this.refreshSearch();
+    }
+
 
     initSearchOption() {
 
@@ -156,7 +176,7 @@ export class ItemsFilterComponent implements OnInit {
       this.toggleSuspendedOrders       = "0";
       this.toggleOrdersGreaterThanZero = "0";
       this.toggleOpenClosedAll         = "0"
-      this.toggleTypeEmployee          = "0"
+      this.toggleTypeEmployee          = 0
       this.toggleIsCashCredit          = 0
 
       if (!this.searchModel) { this.searchModel = {} as IOrderItemSearchModel}
@@ -196,6 +216,7 @@ export class ItemsFilterComponent implements OnInit {
       this.pOSOrderItemService.updateSearchModel( searchModel )
       this.outputRefreshSearch.emit('true');
     }
+
 
     refreshSearch() {
       if (! this.searchModel) {  this.searchModel = {} as IOrderItemSearchModel }

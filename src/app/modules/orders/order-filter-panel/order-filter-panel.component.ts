@@ -42,7 +42,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   //auth - suspended orders, employee selection
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
-  scrollStyle = `${this.platformService.scrollStyleWide}`
+
   printingEnabled    : boolean;
   electronEnabled    : boolean;
   printerName        : string;
@@ -96,6 +96,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   _auth: Subscription;
   auth: IUserAuth_Properties
   @Output() outPutHidePanel = new EventEmitter();
+  employeeID: number;
+  serviceTypeID: any;
 
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
@@ -114,8 +116,17 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   uiTransactions$  : Observable<ISetting>;
   _UITransaction: Subscription;
 
+  _scrollStyle = this.platformService.scrollStyleWide;
   searchDates:      Subject<any> = new Subject();
   searchDate$  : Subject<IPOSOrderSearchModel[]> = new Subject();
+
+  get scrollStyle() {
+    if (this.viewType == 3) {
+      return 'scrollstyle_1'
+    }
+    return this._scrollStyle
+  }
+
   _searchDate$ = this.searchDates.pipe(
     debounceTime(250),
       distinctUntilChanged(),
@@ -388,6 +399,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.toggleOpenClosedAll         = "1"
     this.toggleTypeEmployee          = "0"
 
+    this.employeeID = 0;
+    this.serviceTypeID = 0;
     this.value = ''
     if (this.user.roles==='user'){  this.value = '1';  }
     if (this.searchModel) {  this.searchModel.orderID = 0}
@@ -412,7 +425,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   updateOrderSearch(searchModel: IPOSOrderSearchModel) {
-  // console.log(searchModel)
     searchModel.searchOrderHistory = this.searchOrderHistory;
     this.orderMethodsService.updateOrderSearchModel( searchModel )
   }
@@ -427,6 +439,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       this.searchModel = search;
     }
 
+    this.employeeID = 0;
+    this.serviceTypeID = 0;
     if (this.uiTransactions && !this.uiTransactions.toggleUserOrAllOrders) {
       this.searchModel.employeeID = 0;
     }
@@ -442,8 +456,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     }
   }
 
-
-
   orderSearch(searchPhrase) {
     if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel }
     this.searchModel.orderID = parseInt( searchPhrase)
@@ -453,33 +465,30 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   refreshSearch() {
-    if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel
-      this.searchModel.serviceTypeID = 0
-      this.searchModel.employeeID    = 0
-    }
+    if (! this.searchModel) {   this.searchModel = {} as IPOSOrderSearchModel  }
 
-    let search               = this.searchModel;
+    let search                 = this.searchModel;
+    
+    let item =  JSON.parse(JSON.stringify(search));
 
-    if (this.toggleOpenClosedAll == "1") {
-      this.initCompletionDateForm()
+    if (this.toggleOpenClosedAll == "1") {  this.initCompletionDateForm()  }
+    item.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
+    item.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
+    item.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
+    item.pageNumber          = 1;
+    if (this.toggleScheduleDateRangeFilter) {  item = this.getScheduleDateSearch(item)  }
+    item = this.getCompletionDateSearch(item);
+    item.printLocation       = 0;
+    item.prepStatus          = 1;
+    if (this.viewType == 3) {
+      item.printLocation      = this.printLocation;
+      item.prepStatus         = 1;
     }
-
-    search.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
-    search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
-    search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
-    search.pageNumber          = 1;
-    if (this.toggleScheduleDateRangeFilter) {
-      search = this.getScheduleDateSearch(search)
-    }
-
-    search = this.getCompletionDateSearch(search);
-    search.printLocation       = 0;
-    search.prepStatus          = 1;
-    if (this.viewType ==3) {
-      search.printLocation      = this.printLocation;
-      search.prepStatus         = 1;
-    }
-    this.updateOrderSearch(search);
+    this.orderMethodsService.orderSearchEmployeeID = this.employeeID
+    item.employeeID = this.employeeID;
+    item.employeeID = this.serviceTypeID;
+   
+    this.updateOrderSearch( JSON.parse(JSON.stringify(item)));
     return of('')
   }
 
@@ -501,13 +510,16 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   setServiceType(event) {
     if (!event) { return }
+    this.serviceTypeID = event.id;
     this.searchModel.serviceTypeID = event.id
     this.refreshSearch()
   }
 
   setEmployee(event) {
-  if (!event) { return }
+    if (!event) { return }
+    this.employeeID = event.id;
     this.searchModel.employeeID = event.id
+    console.log('employeeID', this.employeeID)
     this.refreshSearch()
   }
 

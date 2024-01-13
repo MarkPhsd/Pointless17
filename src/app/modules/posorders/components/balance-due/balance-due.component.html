@@ -1,5 +1,5 @@
 <div *ngIf="(action$ | async) as newOrder"></div>
-
+step: {{step}}
 <div  class="grid-items"
       *ngIf=" (uiTransactions$ | async) as uiTransactions" >
   <div>
@@ -39,9 +39,6 @@
 
     <mat-card *ngIf="step == 2">
       <div class="action-center">
-        <!-- <h2>
-          Change Due: {{changeDue | currency}}
-        </h2> -->
         <div class="action-center">
           <mat-label class="h3" *ngIf="!payment.completionDate && payment">Payment: {{ payment.amountPaid }} </mat-label>
         </div>
@@ -49,11 +46,6 @@
           <mat-label class="h3"  color ="accent" *ngIf="payment.completionDate"> Change Due: <br> {{ changeDue | currency }}</mat-label>
         </div>
       </div>
-
-      <!-- <div class="action-center">
-        <mat-label>Scan to Start New Order</mat-label>
-        <list-product-search-input></list-product-search-input>
-      </div> -->
 
       <mat-card-actions>
         <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>

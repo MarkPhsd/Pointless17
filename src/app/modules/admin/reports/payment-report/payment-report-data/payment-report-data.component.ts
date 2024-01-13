@@ -20,7 +20,8 @@ export class PaymentReportDataComponent implements OnInit {
   @Input() type    : string;
   @Input() zrunID  : string;
   @Input() sales   : IPaymentSalesSummary;
-
+  @Input() reportRunID: number;
+  
   constructor(
     private popOutService: ProductEditButtonService,
     private reportingItemsSalesService: ReportingItemsSalesService)

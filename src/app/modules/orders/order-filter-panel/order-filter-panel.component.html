@@ -1,6 +1,10 @@
 <div [id]="scrollStyle">
   <mat-card *ngIf="uiTransactions"  class="panel" >
-    <mat-card-content>
+    <mat-card-content 
+              [id]="scrollStyle"
+              style="overflow-y: auto;
+                    width: 300px;
+                    max-height: calc(100vh - 165px)">
       <div class="button-grid">
 
         <div>

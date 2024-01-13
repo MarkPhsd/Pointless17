@@ -1,5 +1,7 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { supportsReferrerPolicy } from '@sentry/utils';
+import { Observable, Subject, of, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { IPaymentSalesSearchModel, IPaymentSalesSummary, PaymentSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 
@@ -17,44 +19,82 @@ export class PaymentReportComponent implements OnInit, OnChanges {
   @Input() notifier: Subject<boolean>
   @Input() groupBy = "paymentMethod"
   @Input() zrunID  : string;
-
+  @Input() reportRunID: number;
+  @Output() renderComplete = new EventEmitter<any>()
+  refreshList = []
+  @Input() autoPrint: boolean; 
   refunds$           : Observable<IPaymentSalesSummary>;
   sales$             : Observable<IPaymentSalesSummary>;
   voids$             : Observable<IPaymentSalesSummary>;
   sales              : PaymentSummary[];
   paymentSalesSummary: IPaymentSalesSummary;
   message            : string;
+  styles$: Observable<any>;
+  
+  constructor(
+    private httpClient: HttpClient,
+    private salesPaymentService: SalesPaymentsService) { }
 
-  constructor(private salesPaymentService: SalesPaymentsService) { }
-
-  ngOnInit(): void {
-    const i = 0;
+  ngOnInit() {
+    this.initStyle()
+    this.refreshReports()
   }
 
-  ngOnChanges() {
+  initStyle() { 
     this.voids$ = null;
     this.refunds$ = null;
     this.sales$ = null;
 
+    this.styles$ =  this.httpClient.get('assets/htmlTemplates/balancesheetStyles.txt', {responseType: 'text'}).pipe(switchMap(data => {
+      const style = document.createElement('style');
+      style.innerHTML = data;
+      document.head.appendChild(style);
+      return of(data)
+    })).pipe(switchMap(data => {
+      return of(data)
+    }))
+  }
+
+  ngOnChanges() {
+    this.refreshReports()
+  }
+
+  refreshReports() { 
+    this.voids$ = null;
+    this.refunds$ = null;
+    this.sales$ = null;
+
+    // console.log('sales')
     if (this.type === 'service') {
       this.refreshSales();
     }
 
-    if (this.type != 'refunds' && this.type != 'voids' ) {
+    if (this.type == 'sales') {
       this.refreshSales();
-    }
-
-    if (this.type === 'sales') {
       this.refreshRefunds();
       this.refreshVoids();
+      return;
+    }
+
+    if (this.type != 'refunds' && this.type != 'voids' ) {
+      this.refreshSales();
+      return;
     }
 
     if (this.type == 'refunds') {
       this.refreshRefunds();
+      return;
     }
 
     if (this.type == 'voids') {
       this.refreshVoids();
+      return;
+    }
+  }
+  checkList(value) { 
+    this.refreshList.push(1)
+    if (this.refreshList.length > 2 ) { 
+      this.renderComplete.emit(true)
     }
   }
 
@@ -64,7 +104,11 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     searchModel.endDate   = this.dateTo;
     searchModel.groupBy   = this.groupBy;
     searchModel.zrunID    = this.zrunID;
-    this.sales$  = this.salesPaymentService.getPaymentSales(this.site, searchModel);
+    searchModel.reportRunID = this.reportRunID;
+    this.sales$  = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => { 
+      this.checkList(1)
+      return of(data)
+    }))
   }
 
   refreshRefunds() {
@@ -73,8 +117,12 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     searchModel.endDate   = this.dateTo;
     searchModel.groupBy   = this.groupBy;
     searchModel.zrunID    = this.zrunID;
+    searchModel.reportRunID = this.reportRunID;
     searchModel.refunds   = true;
-    this.refunds$          = this.salesPaymentService.getPaymentSales(this.site, searchModel);
+    this.refunds$          = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => { 
+      this.checkList(1)
+      return of(data)
+    }))
   }
 
   refreshVoids() {
@@ -83,8 +131,12 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     searchModel.endDate   = this.dateTo;
     searchModel.groupBy   = this.groupBy;
     searchModel.zrunID    = this.zrunID;
+    searchModel.reportRunID = this.reportRunID;
     searchModel.voids     = true
-    this.voids$         = this.salesPaymentService.getPaymentSales(this.site, searchModel);
+    this.voids$         = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => { 
+      this.checkList(1)
+      return of(data)
+    }))
   }
 
   refreshService() {
@@ -93,7 +145,11 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     searchModel.endDate   = this.dateTo;
     searchModel.groupBy   = this.groupBy;
     searchModel.zrunID    = this.zrunID;
+    searchModel.reportRunID = this.reportRunID;
     searchModel.voids     = true
-    this.voids$         = this.salesPaymentService.getPaymentSales(this.site, searchModel);
+    this.voids$         = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => { 
+      this.checkList(1)
+      return of(data)
+    }))
   }
 }

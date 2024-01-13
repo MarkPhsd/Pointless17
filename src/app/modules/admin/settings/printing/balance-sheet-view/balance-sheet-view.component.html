@@ -32,19 +32,30 @@
             <h5>Service Fee: {{ serviceFee?.gratuity | currency }}</h5>
           </div>
         </div>
-
+    
         <div *ngIf="!auths?.blindBalanceSheet">
+          <payment-report 
+            [type]        ="'sales'"
+            [groupBy]     ="'paymentMethod'"
+            [site]        ="site"
+            [reportRunID] ="sheet.id"
+            [autoPrint]   ="autoPrint"
+            (renderComplete)="renderCompleted($event)">
+          </payment-report>
+        </div>
+
+        <div *ngIf="auths?.balanceSheetDetails">
           <h3>Payments:</h3>
           <div *ngIf="(list$ | async) as list">
             <credit-card-payments-print-list
-              [autoPrint]="autoPrint"
+              [autoPrint]     ="autoPrint"
               (renderComplete)="renderCompleted($event)"
-              [list]="list">
+              [list]          ="list">
             </credit-card-payments-print-list>
           </div>
         </div>
 
-        <div *ngIf="!auths?.blindBalanceSheet">
+        <div *ngIf="auths?.balanceSheetDetails">
           <h3>Payments Groups:</h3>
           <div *ngIf="(paymentGroups$ | async) as list">
             <credit-card-payments-print-list
@@ -55,8 +66,6 @@
             </credit-card-payments-print-list>
           </div>
         </div>
-
-
       </div>
     </div>
   </div>

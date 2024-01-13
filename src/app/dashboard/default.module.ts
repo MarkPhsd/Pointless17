@@ -388,6 +388,7 @@ import { EbayAuthRedirectComponent } from '../modules/admin/settings/software/eb
 import { EbayReturnPolicyComponent } from '../modules/admin/inventory/ebay/ebay-return-policy/ebay-return-policy.component';
 import { EbayFulfillmentPolicyComponent } from '../modules/admin/inventory/ebay/ebay-fulfillment-policy/ebay-fulfillment-policy.component';
 import { EbayAspectsComponent } from '../modules/admin/inventory/ebay/ebay-publish-product/ebay-aspects/ebay-aspects.component';
+import { PosSplitOrdersComponent } from '../modules/posorders/pos-payment/possplit-items/pos-split-orders/pos-split-orders.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -663,6 +664,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
     PriceCategoryMultiplePricesComponent,
     POSSplitItemsComponent,
+    PosSplitOrdersComponent,
     PosSplitGroupsComponent,
     PrintGroupReceiptComponent,
     PrepOrderComponent,

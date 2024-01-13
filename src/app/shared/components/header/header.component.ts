@@ -675,7 +675,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     if (this.uiTransactionSetting && this.uiTransactionSetting.prepOrderOnExit) {
       const order = this.orderMethodsService.order
       this.action$ = this.paymentMethodsService.sendOrderOnExit(order).pipe(switchMap(data => {
-        console.log('header send order on exit and log out')
         this.postLogout()
         return of(data)
       }))

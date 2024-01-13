@@ -333,6 +333,9 @@ export class SitesService {
 
     this.verticalPosition = vPOS as MatSnackBarVerticalPosition ;
 
+    if (!time) { 
+      time = 10000
+    }
     this.snackBar.open(
       message,
       title, {

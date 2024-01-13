@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit,Output , EventEmitter } from '@angular/core';
+import { Component, OnDestroy, OnInit,Output , EventEmitter, Input } from '@angular/core';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
@@ -12,11 +12,12 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class PosSplitGroupsComponent implements OnInit , OnDestroy{
   @Output() outPutPaymentAmount = new EventEmitter();
-  order: IPOSOrder;
+  @Input() order: IPOSOrder;
   _order: Subscription;
   orderGroupTotal$: Observable<IPOSOrder>[];
 
-  values = [0,1,2,3,4,5,6,7,8,9]
+  values = []
+
   constructor(public orderMethodsService: OrderMethodsService,
               private orderService: OrdersService,
               private siteService: SitesService  ) { }
@@ -25,6 +26,7 @@ export class PosSplitGroupsComponent implements OnInit , OnDestroy{
     const i = 0;
     this._order = this.orderMethodsService.currentOrder$.subscribe(data => {
       this.order = data;
+      this.values = this.getUniqueSplitGroupIDs(this.order)
       this.getListOf();
     })
   }
@@ -33,14 +35,30 @@ export class PosSplitGroupsComponent implements OnInit , OnDestroy{
     const site = this.siteService.getAssignedSite()
     if (this.order) { 
       if (!this.orderGroupTotal$) { this.orderGroupTotal$ = [] as Observable<IPOSOrder>[] }
-      this.values.forEach(data => {
-        // console.log('loaded', data, this.order.id)
-        this.orderGroupTotal$.push(this.setGroupOrderTotal(site, this.order.id, data))
+      // if (this.isSplit) { return }
+      this.values.forEach(groupID => {
+        this.orderGroupTotal$.push(this.setGroupOrderTotal(site, this.order.id,  +groupID));
       })
     }
   }
 
+  get isSplit() { 
+    if (this.order.productOrderRef == this.order.id || this.order.productOrderRef == 0) { 
+      return false
+    }
+    return true
+  }
+
+  getUniqueSplitGroupIDs(order: IPOSOrder): number[] {
+    const uniqueIDs = new Set<number>();
+    for (const item of order.posOrderItems) {
+        uniqueIDs.add(+item.splitGroupID);
+    }
+    return Array.from(uniqueIDs);
+  }
+
   ngOnDestroy() {
+  
     if (this._order) {
       this._order.unsubscribe()
     }
@@ -59,14 +77,13 @@ export class PosSplitGroupsComponent implements OnInit , OnDestroy{
   }
 
   makePayment(event) {
-    console.log('event in split group from receipt', event)
     this.outPutPaymentAmount.emit(event)
   }
 
-  setGroupOrderTotal(site, orderID, groupID) {
-    return this.orderService.getPOSOrderGroupTotal(site, orderID, groupID).pipe(
+  setGroupOrderTotal(site, orderID: number, groupID: number) {
+     return this.orderService.getPOSOrderGroupTotal(site, orderID, groupID).pipe(
       switchMap(data => {
-        // this.groupTotal = data.total;
+        // console.log('group total', data)
         return of(data)
       })
     )

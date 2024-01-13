@@ -295,6 +295,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         }
       }
     }
+    
     let wholeSaleCostTotal = {headerName: 'Cost Total',    field: 'wholeSaleCost', sortable: true,
         cellRenderer: this.agGridService.currencyCellRendererUSD,
         width   : 100,

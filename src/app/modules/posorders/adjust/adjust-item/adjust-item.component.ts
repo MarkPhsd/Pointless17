@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription,Observable, switchMap, of } from 'rxjs';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IItemBasic, OrderActionResult, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
@@ -79,6 +80,17 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   getVoidReasons() {
     const site = this.siteService.getAssignedSite();
     if (!this.itemWithAction) { return }
+
+
+    // itemWithAction.action   = 4// actions.SaleAuth;
+    // itemWithAction.menuItem = item;
+    // itemWithAction.orderId  = orderID;
+    // itemWithAction.typeOfAction = 'SaleAuth'
+    if (this.itemWithAction?.typeOfAction.toLowerCase()  === 'SaleAuth'.toLowerCase() ) {
+      this.list$  = this.settingsService.getVoidReasons(site, 3);
+      return
+    }
+
     if (this.itemWithAction?.typeOfAction.toLowerCase()  === 'VoidOrder'.toLowerCase() ) {
       this.list$  = this.settingsService.getVoidReasons(site, 3);
       return
@@ -114,6 +126,24 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     }
 
     this.list$  = this.settingsService.getVoidReasons(site, this.itemWithAction.action );
+  }
+
+
+  saleAuth(order: number, item: IMenuItem, quantity) { 
+    // itemWithAction.action   = 4// actions.SaleAuth;
+    // itemWithAction.menuItem = item;
+    // itemWithAction.orderId  = orderID;
+    // itemWithAction.typeOfAction = 'SaleAuth';
+    return this.orderMethodService.addItemSimpleOverRide(this.order, item, quantity).pipe(switchMap(data => { 
+      if (!data) { 
+        this.siteService.notify(`No data!`, 'Close', 20000, 'red')
+      }
+      if (data.resultErrorDescription) { 
+        this.siteService.notify(`Error: ${data.resultErrorDescription}`, 'Close', 20000, 'red')
+      }
+      this.updateOrderSub(data.order)
+      return of(data)
+    }))
   }
 
   closeDialog() {

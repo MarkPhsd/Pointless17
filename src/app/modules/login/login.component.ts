@@ -178,17 +178,20 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.uiHomePageSetting = data as UIHomePageSettings
       this.initCompanyInfo();
       this.initLogo();
-      // console.log(
-      //   'pin', this.isApp, this.uiHomePageSetting.pinPadDefaultOnApp
-      // )
-      if (this.isApp) {
-        if (this.uiHomePageSetting.pinPadDefaultOnApp) {
-          this.togglePIN = true;
-          this.authenticationService.updatePinPad(this.uiHomePageSetting.pinPadDefaultOnApp)
-        }
-      }
+      this.setPinPadDefault(this.uiHomePageSetting)
       return of(data)
     }));
+  }
+
+  setPinPadDefault(uiHome) { 
+    if (this.platformService.isApp()) {
+      if (uiHome.pinPadDefaultOnApp) {
+        this.togglePIN = true;
+        this.authenticationService.updatePinPad(uiHome.pinPadDefaultOnApp)
+      }
+    } else { 
+      
+    }
   }
 
   ngOnDestroy(): void {

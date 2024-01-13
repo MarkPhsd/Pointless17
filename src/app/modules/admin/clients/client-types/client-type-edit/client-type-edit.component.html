@@ -262,6 +262,13 @@
                 </mat-slide-toggle>
               </div>
 
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="splitItemOverRide" >
+                  <mat-label>Allow Move Split Items</mat-label>
+                </mat-slide-toggle>
+              </div>
+              
                 <div class="toggle-fields">
                 <mat-slide-toggle
                           formControlName="voidOrder" >
@@ -361,10 +368,16 @@
               <div class="toggle-fields">
                 <mat-slide-toggle
                           formControlName="blindBalanceSheet" >
-                  <mat-label>Blind Balance Sheet</mat-label>
+                  <mat-label>Blind (hide sales summary)</mat-label>
                 </mat-slide-toggle>
               </div>
 
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="balanceSheetDetails" >
+                  <mat-label>Show all Payments</mat-label>
+                </mat-slide-toggle>
+              </div>
             </div>
 
             <div>
@@ -373,7 +386,7 @@
               <div class="toggle-fields">
                 <mat-slide-toggle
                           formControlName="blindClose" >
-                  <mat-label>Blind Close</mat-label>
+                  <mat-label>Blind Close (hide sales totals)</mat-label>
                 </mat-slide-toggle>
               </div>
 

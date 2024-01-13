@@ -21,7 +21,7 @@
 
             {{ orderItem?.productName | truncateText: 30  }}
 
-            <span style="margin-right:7px" *ngIf="orderItem?.splitGroupID  && orderItem?.splitGroupID != 0">
+            <span style="margin-right:7px" *ngIf="orderItem?.splitGroupID  && (orderItem?.splitGroupID != 0 && orderItem?.splitGroupID != 1)">
               (  {{ orderItem?.splitGroupID }} )
             </span>
             <div *ngIf="orderItem?.prodSecondLanguage">
@@ -307,8 +307,8 @@
                 </div>
 
                 <div *ngIf="!showEdit && (uiConfig?.displayAdd) && (userAuths && userAuths?.refundItem)">
-                  <button mat-raised-button    class="button"  color="warn" (click)="refundItem(orderItem)">
-                    <mat-icon  class="warn" >delete</mat-icon>  <span *ngIf="!smallDevice">Refund Item </span>
+                  <button mat-raised-button  class="button" color="warn" (click)="refundItem(orderItem)">
+                    <mat-icon  class="warn">delete</mat-icon><span *ngIf="!smallDevice">Refund Item </span>
                   </button>
                 </div>
 
@@ -321,13 +321,13 @@
                 <mat-divider></mat-divider>
 
                 <div *ngIf="userAuthService && !userAuthService?.isManagement && userAuthService?.isStaff">
-                  <button mat-raised-button  color="accent"  (click)="requestVoidItem(orderItem)">
+                  <button mat-raised-button  color="accent" (click)="requestVoidItem(orderItem)">
                     Void Request
                   </button>
                 </div>
 
                 <div *ngIf="!showEdit && (uiConfig?.displayAdd) && (userAuths && !userAuths?.refundItem)">
-                  <button mat-raised-button    class="button"  color="warn" (click)="requestRefundItem(orderItem)">
+                  <button mat-raised-button  class="button" color="warn" (click)="requestRefundItem(orderItem)">
                     <mat-icon  class="warn" >delete</mat-icon>
                       Refund <br>
                       Request
@@ -335,7 +335,7 @@
                 </div>
 
                 <div *ngIf="userAuthService && !userAuthService?.isManagement && userAuthService?.isStaff">
-                  <button mat-raised-button  color="accent"  (click)="requestPriceChange(orderItem)">
+                  <button mat-raised-button  color="accent" (click)="requestPriceChange(orderItem)">
                     Request<br>
                     Change Price
                   </button>
@@ -346,7 +346,7 @@
               </div>
 
               <div *ngIf="itemHasDiscount">
-                <button mat-button  color="accent"  (click)="removeDiscount()">
+                <button mat-button color="accent" (click)="removeDiscount()">
                   <mat-icon>edit</mat-icon>
                   Clear Discount
                 </button>

@@ -124,6 +124,18 @@ export class OrdersService {
     return this.http.get<any>(url);
   }
 
+  splitOrderFromGroup(site: ISite, id: number, groupID: number) {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "splitOrderFromGroup"
+
+    const parameters = `?currentOrderID=${id}&splitGroupID=${groupID}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
+  }
+
 
   inventoryMonitor(site: ISite, id: number) :  Observable<IPOSOrder> { 
     const controller = "/POSOrders/"
@@ -160,6 +172,19 @@ export class OrdersService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<IListBoxItem[]>(url);
+  }
+
+  
+  getRelatedSplitOrders(site: ISite, refID: number) :  Observable<IPOSOrder[]>  {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "GetRelatedSplitOrders"
+
+    const parameters = `?refID=${refID}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder[]>(url);
   }
 
   getHouseAccountPendingOrders(site: ISite):  Observable<any[]> {

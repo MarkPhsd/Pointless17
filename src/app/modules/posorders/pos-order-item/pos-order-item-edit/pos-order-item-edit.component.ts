@@ -12,6 +12,7 @@ import { Observable, of, switchMap } from 'rxjs';
 import { InputTrackerService } from 'src/app/_services/system/input-tracker.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-pos-order-item-edit',
@@ -34,9 +35,10 @@ export class PosOrderItemEditComponent  {
   negativeOption: boolean;
 
   constructor(
-      private authenticationService: AuthenticationService,
+      public authenticationService: AuthenticationService,
       public platFormService      : PlatformService,
       private orderMethodsService : OrderMethodsService,
+      private userAuthorizations  : UserAuthorizationService,
       private _fb                 : UntypedFormBuilder,
       private posOrderItemMethodsService: PosOrderItemMethodsService,
       private dialogRef           : MatDialogRef<PosOrderItemEditComponent>,
@@ -188,6 +190,8 @@ export class PosOrderItemEditComponent  {
   saveSub(item: PosOrderItem, editField: string): Observable<IPOSOrder> {
     const order$ = this.posOrderItemMethodsService.saveSub(item, editField).pipe(
       switchMap(data => {
+        //this sets it back. we need to set back and then get preferences and clienttype.
+        this.authenticationService.overRideUser(null)
         if (!data) {
           this.onCancel();
           return of(null)
@@ -251,15 +255,12 @@ export class PosOrderItemEditComponent  {
 
     if (this.editField === 'wholeSaleCost') {
       const value = this.inputForm.controls['wholeSaleCost'].value;
-      // item.subTotal = value;s
       item.wholeSaleCost = value;
       this.posOrderItem.wholeSaleCost = value;
-      console.log('change item value', value)
     }
 
     if (this.editField === 'wholeSale') {
       const value = this.inputForm.controls['wholeSale'].value;
-      // item.subTotal = value;s
       item.wholeSaleCost = value;
     }
 
@@ -267,12 +268,14 @@ export class PosOrderItemEditComponent  {
   }
 
   onCancel() {
+    this.authenticationService.updateUserAuthstemp(null);
     this.orderMethodsService._scanner.next(true)
     this.dialogRef.close();
     this.closeOnEnterPress.emit('true')
   }
 
-  onClose(event) {
+  onClose(event) {//   
+    this.authenticationService.updateUserAuthstemp(null);
     this.dialogRef.close();
     this.closeOnEnterPress.emit('true')
   }

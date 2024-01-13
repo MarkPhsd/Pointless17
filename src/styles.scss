@@ -822,6 +822,24 @@ mat-dialog-container {
   margin-left: 20px;
 }
 
+.grid-split-groups {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(225px, 1fr) );
+  font-size: 1rem;
+  overflow-y: hidden;
+}
+
+.split-group {
+  margin: 1px;
+  border-style: dashed;
+  overflow: hidden;
+  padding: 1px;
+  border-width: 1px;
+  height: 100%;
+  width : 225px;
+}
+
 .flex-grid-row-end {
   display: flex;
   flex-direction: row;
@@ -877,6 +895,11 @@ mat-dialog-container {
   margin: 5px;
 }
 
+.filter-panel-content { 
+  overflow-y: auto;
+  width: 320px;
+  max-height: calc(100vh - 165px)
+}
 
 .ps-inventory-grid {
   display: grid;

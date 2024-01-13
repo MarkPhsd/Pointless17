@@ -11,7 +11,8 @@
 </ng-template>
 
 <ng-template #posOrderItemsView>
-    <div  #scrollMe
+    <div  #scrollMe 
+          [id]="scrollStyle"
           *ngIf="posOrderItems && posOrderItems.length>0"
           [style.width]  = "deviceWidthPercentage"
           [class]="mainStyle">

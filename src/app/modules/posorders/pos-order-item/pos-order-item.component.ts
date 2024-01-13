@@ -597,7 +597,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     });
   }
 
-  editDialog(item, width,height) {
+  editDialog(item, width, height) {
     let dialogRef: any;
 
     if (!this.platFormService.isApp()){

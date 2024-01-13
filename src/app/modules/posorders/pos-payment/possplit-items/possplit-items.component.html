@@ -19,15 +19,15 @@
       <mat-card>
         <mat-card-subtitle>
           <div class="span-column">
-            <mat-label>Group: {{currentGroupID}}. Apply all splits before making payments. </mat-label>
+            <mat-label style="font-size:1.3em;font-weight:500">Group: {{currentGroupID}}. Apply all splits before making payments. </mat-label>
             <mat-label>Once payments are made more splits can not be done.</mat-label>
              <mat-card *ngIf="(orderGroupTotal$ | async) as groupOrder; else calculating">
               <mat-card-content>
                 <br>
-                <h5>Balance: {{groupOrder.balanceRemaining |currency}}</h5>
+                <h5>Balance: {{groupOrder.balanceRemaining +  groupOrder?.gratuity | currency}}</h5>
                 <br>
                 <h5>
-                  Total:   {{groupOrder.total | currency}}
+                  Total:   {{groupOrder.total  | currency}}
                 </h5>
               </mat-card-content>
 
@@ -79,23 +79,21 @@
               <div class="col-md-6 col-lg-6 col-sm-12 dualListLeft">
 
                 <div class="primary-container drag-drop-container">
-                  Avalible Items
+                  Group 1
                   <div
                     cdkDropList
                     #availables="cdkDropList"
                     [cdkDropListData]="availableItems"
                     [cdkDropListConnectedTo]="[selects]"
                     (cdkDropListDropped)="drop($event)"
-                    class="drag-drop-list"
-                  >
+                    class="drag-drop-list">
                     <div
                       nbButton
                       outline
                       status="primary"
                       class="drag-drop-box"
                       *ngFor="let item of availableItems"
-                      cdkDrag
-                    >
+                      cdkDrag>
                       {{ item.text }}
                     </div>
                   </div>
@@ -103,7 +101,7 @@
               </div>
 
               <div class="col-md-6 col-lg-6 col-sm-12 dualListRight">
-                <div class="primary-container drag-drop-container">
+                <div class="primary-container drag-drop-container" *ngIf="currentGroup != '1'">
                   Items in group {{currentGroup}}
                   <div
                     cdkDropList

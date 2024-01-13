@@ -7,7 +7,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class ValueFromListSelectorComponent  {
   @Input()  value
-  @Input()  values = [0,1,2,3,5,6,7,8,9]
+  @Input()  values = [0,1,2,3,5,6,7,8,9];
   @Output() assignValue = new EventEmitter();
 
   constructor() { }

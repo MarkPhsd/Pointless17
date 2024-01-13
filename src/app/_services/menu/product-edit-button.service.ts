@@ -758,6 +758,31 @@ export class ProductEditButtonService {
       })
     }
   }
+  
+  openSaleAuthDialog(order: IPOSOrder, item: IMenuItem, quantity: number ) {
+    let dialogRef: any;
+    // const site = this.siteService.getAssignedSite();
+    // this.menuService.getProduct(site, id).subscribe( data=> {
+    //   const productTypeID = data.prodModifierType
+    //   this.openProductEditor(id, productTypeID)
+    if (item) {
+      let itemWithAction      = {}  as ItemWithAction;
+      itemWithAction.action   = 4// actions.SaleAuth;
+      itemWithAction.menuItem = item;
+      itemWithAction.order    = order;
+      itemWithAction.typeOfAction = 'SaleAuth'
+      itemWithAction.quantity = quantity;
+
+      dialogRef = this.dialog.open(AdjustItemComponent,
+        { width:        '450px',
+          minWidth:     '450px',
+          height:       '600px',
+          minHeight:    '600px',
+          data : itemWithAction
+      })
+    }
+  }
+
 
   openVoidItemDialog(posOrderItem: PosOrderItem ) {
     let dialogRef: any;

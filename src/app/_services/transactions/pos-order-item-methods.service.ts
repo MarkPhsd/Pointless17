@@ -26,7 +26,6 @@ export class PosOrderItemMethodsService {
       if (editField == 'quantity') {
         const site = this.siteService.getAssignedSite();
         obs$ = this.posOrderItemService.changeItemQuantity(site, item ).pipe(switchMap( data => {
-
           this.orderMethodsService.updateOrderSubscription(data)
           return of(data)
         }))
@@ -74,7 +73,7 @@ export class PosOrderItemMethodsService {
         }
       }
 
-      if (editField == 'wholeSaleCost') {
+      if (editField == 'wholeSaleCost' || editField === 'wholeSaleTotal') {
         if (item) {
           obs$ =  this.posOrderItemService.changeItemTotalCost(site, item).pipe(switchMap( data => {
             if (data) {

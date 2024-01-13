@@ -295,10 +295,6 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       let start = new  Date();
       let end = this.dateHelper.add('d', 1, start)
 
-      console.log('DateForm values', frm.value, {start: start, end: end})
-
-      console.log('value', value)
-      console.log('starting date', this.datePipe.transform(start, 'yyyy-dd-MM',this.locale),  frm.controls['start'].value)
       if (frm.controls['start'].value) {
         start = frm.controls['start'].value;
       }
@@ -308,8 +304,6 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
         //sets the ending value to be +1 of the startDate
         start = new  Date();
         end = this.dateHelper.add('d', 1, start );
-        console.log('end ', end)
-
       }
       //otherwise we use the 'starting date value of the dateRangeForm
       //then we set the date + / - the date of the Start value of that form.
@@ -321,11 +315,21 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
         end = this.dateHelper.add('d', 1, start)
       }
 
+      // let today = new Date();
+      // const month = today.getMonth();
+      // const year = today.getFullYear();
+      // // today = new Date(today.getTime() + (1000 * 60 * 60 * 24));
+      // const tmr =  this.dateHelper.add('d', 1, today)
 
-      this.dateRangeForm = this.fb.group({
-        start:  [this.datePipe.transform(start, 'yyyy/dd/MM',this.locale)],
-        end: [this.datePipe.transform(end, 'yyyy/dd/MM',this.locale)]
-      });
+      this.dateRangeForm =  this.fb.group({
+        start:  start, //new Date(year, month, 1),
+        end: end // new Date()
+      })
+
+      // this.dateRangeForm = this.fb.group({
+      //   start:  [this.datePipe.transform(start, 'yyyy/dd/MM',this.locale)],
+      //   end: [this.datePipe.transform(end, 'yyyy/dd/MM',this.locale)]
+      // });
 
       this.subscribeToDatePicker();
     }
@@ -339,11 +343,12 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       let today = new Date();
       const month = today.getMonth();
       const year = today.getFullYear();
-      today = new Date(today.getTime() + (1000 * 60 * 60 * 24));
+      // today = new Date(today.getTime() + (1000 * 60 * 60 * 24));
+      const tmr =  this.dateHelper.add('d', 1, today)
 
       this.dateRangeForm =  this.fb.group({
-        start: new Date(year, month, 1),
-        end: today // new Date()
+        start:  today, //new Date(year, month, 1),
+        end: tmr // new Date()
       })
 
       this.searchModel.completionDate_From = this.dateRangeForm.get("start").value;
@@ -408,8 +413,6 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
 
       this.searchModel.completionDate_From = start
       this.searchModel.completionDate_To   = end
-      // this.searchModel.completionDate_From =  this.dateFrom.toISOString()
-      // this.searchModel.completionDate_To = this.dateTo.toISOString()
       this.refreshSearch()
 
     }

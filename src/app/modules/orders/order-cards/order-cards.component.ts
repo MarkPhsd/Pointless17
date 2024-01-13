@@ -105,7 +105,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   infiniteStyle = 'overflow-x:hidden;overflow-y:auto;max-height(80vh)'
   _userAuths: Subscription;
   userAuths: IUserAuth_Properties;
-  _scrollStyle = this.platformService.scrollStyleWide;
+
   _user: Subscription;
   user : IUser;
 
@@ -113,7 +113,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   orderResults$ = of([]) as  Observable<IPOSOrder[]>
   // orderSubscription$: Observable<IPOSOrder[]>;
   orderPrepRefresh$: Observable<any[]>;
-
+  _scrollStyle = this.platformService.scrollStyleWide;
   get scrollStyle() {
     if (this.viewType == 3) {
       return 'scrollstyle_1'
@@ -134,11 +134,8 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     })
   )
 
-
   get orderPrepRefreshView() {
-    if (this.viewType == 3) {
-      return this.orderPrepRefresh;
-    }
+    if (this.viewType == 3) {  return this.orderPrepRefresh; }
     return this.ordersRefresh;
   }
 
@@ -149,10 +146,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   }
 
   initUserAuth() {
-    this._user = this.authenticationService.user$.subscribe(data => {
-      this.user = data;
-    })
-
+    this._user = this.authenticationService.user$.subscribe(data => {  this.user = data; })
     this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
       this.userAuths = data;
       if (!data) {
@@ -171,9 +165,9 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
 
   constructor(
     private orderService: OrdersService,
-    public orderMethodsService: OrderMethodsService,
-    public route: ActivatedRoute,
-    public paymentMethodsProcess: PaymentsMethodsProcessService,
+    public  orderMethodsService: OrderMethodsService,
+    public  route: ActivatedRoute,
+    public  paymentMethodsProcess: PaymentsMethodsProcessService,
     private siteService: SitesService,
     private toolbarServiceUI : ToolBarUIService,
     private authenticationService: AuthenticationService,
@@ -203,10 +197,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     this.value = 1;
     this.initSubscriptions();
 
-    // if (this.isPrepViewEnabled) {
-    //   this.getPrepOrders()
-    // }
-
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -223,7 +213,13 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     this.initViewSubscriber()
     try {
       this._searchModel = this.orderMethodsService.posSearchModel$.subscribe( data => {
+        if (data) { 
+          const item = JSON.parse(JSON.stringify(data))
+          data = item;
+          data.employeeID = this.orderMethodsService.orderSearchEmployeeID;
+        }
         this.searchModel = data
+      
         this.orders = [] as  IPOSOrder[];
         this.currentPage = 1
         this.nextPage(true)
@@ -388,10 +384,10 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     if (this.viewType == 3) {
       model.pageNumber    = pageNumber
       model.pageSize      = pageSize
-      results$            = this.orderService.getOrdersPrepBySearchPaged(site,model) //.pipe(share());
-      // console.log('refreshing prep')
+      results$            = this.orderService.getOrdersPrepBySearchPaged(site, model) //.pipe(share());
     }
 
+    // console.log('search add to list', model.employeeID)
     if (this.viewType != 3) {
       results$    = this.orderService.getOrderBySearchPaged(site, model) //.pipe(share());
     }

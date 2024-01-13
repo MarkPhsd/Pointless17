@@ -1,6 +1,11 @@
+<div *ngIf="(action$ | async)"></div>
+
 <div class="container" *ngIf="toggleListGrid">
   <div class="grid-list">
     <div>
+      <div *ngIf="processing">
+        ... loading.
+      </div>
       <div *ngIf="value" class="loader">
         <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
       </div>

@@ -52,10 +52,10 @@ export class AuthenticationService {
     private _setPinPad        = new BehaviorSubject<boolean>(null);
     public  setPinPad$        = this._setPinPad.asObservable();
 
-    private _userTemp               = new BehaviorSubject<IUser>(null);
+    public _userTemp               = new BehaviorSubject<IUser>(null);
     public  userTemp$               = this._userTemp.asObservable();
 
-    private _user               = new BehaviorSubject<IUser>(null);
+    public _user               = new BehaviorSubject<IUser>(null);
     public  user$               = this._user.asObservable();
 
     private _userx              = new BehaviorSubject<IUser>(null);
@@ -64,6 +64,9 @@ export class AuthenticationService {
     // userAuths            : IUserAuth_Properties;
     _userAuths           = new BehaviorSubject<IUserAuth_Properties>(null);
     public  userAuths$   = this._userAuths.asObservable();
+
+    _userAuthstemp           = new BehaviorSubject<IUserAuth_Properties>(null);
+    public  _userAuthstemp$   = this._userAuthstemp.asObservable();
 
     _deviceInfo: IDeviceInfo;
 
@@ -87,8 +90,18 @@ export class AuthenticationService {
     updateUserAuths(userAuths : IUserAuth_Properties ) {
       this._userAuths.next(userAuths)
       if (userAuths) {
-        // this.userAuths = userAuths;
-        localStorage.setItem('userAuth', JSON.stringify(userAuths));
+        this.setUserAuth(JSON.stringify(userAuths));
+      }
+    }
+
+    setUserAuth(userAuth: string) {
+      localStorage.setItem('userAuth', userAuth)
+    }
+
+    updateUserAuthstemp(userAuths : IUserAuth_Properties ) {
+      this._userAuthstemp.next(userAuths)
+      if (userAuths) {
+        localStorage.setItem('userAuthstemp', JSON.stringify(userAuths));
       }
     }
 
@@ -157,11 +170,11 @@ export class AuthenticationService {
 
     public overRideUser(user) {
       this._userTemp.next(user);
+      // if (!user) { this.userValue } 
     }
 
     decodeAuth(data) {
       if (!data) { return }
-      console.log('data', data)
       const encodedUriComponent = data.code
       const decodedUriComponent = decodeURIComponent(encodedUriComponent);
       return decodedUriComponent;
@@ -192,6 +205,7 @@ export class AuthenticationService {
     setUserValue(user) {
       this._user.next(user)
     }
+
     setUserNoSubscription(user) {
 
     }
@@ -286,9 +300,7 @@ export class AuthenticationService {
         if (this.appInitService.useAppGate) {
           try {
             this.router.navigate(['/appgate']);
-            if (pinPadDefaultOnApp) { 
-              this._setPinPad.next(true)
-            }
+            this.setPinPadLogIn(pinPadDefaultOnApp)
           } catch (error) {
             console.log('log out error', error)
           }
@@ -298,14 +310,20 @@ export class AuthenticationService {
   
       try {
         this.router.navigate(['/login']);
-        if (pinPadDefaultOnApp) { 
-          this._setPinPad.next(true)
-        }
+        this.setPinPadLogIn(pinPadDefaultOnApp)
       } catch (error) {
         console.log('log out error', error)
       }
   
       this.clearSubscriptions()
+    }
+
+    setPinPadLogIn(pinPadDefaultOnApp: boolean) {
+      if (this.platFormservice.isApp()) {
+        if (pinPadDefaultOnApp) { 
+          this._setPinPad.next(true)
+        }
+      }
     }
 
     openLoginDialog() {

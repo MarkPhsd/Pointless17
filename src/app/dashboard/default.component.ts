@@ -216,6 +216,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   userSubscriber() {
     try {
       this._user =     this.authorizationService.user$.subscribe(data => {
+        // console.log('user', data)
         this.user = data;
       })
     } catch (error) {
@@ -492,8 +493,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   processLogOut() {
-    console.trace('process log out')
-    console.log('processLogOut')
+    // console.trace('process log out')
+    // console.log('processLogOut')
     this.userIdle.resetTimer();
     this.orderMethodsSevice.clearOrderSubscription()
     this.userSwitchingService.clearLoggedInUser();

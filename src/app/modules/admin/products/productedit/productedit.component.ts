@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, Input,  OnInit,} from '@ang
 import { AWSBucketService, MenuService } from 'src/app/_services';
 import { UntypedFormBuilder, UntypedFormGroup, UntypedFormControl,  } from '@angular/forms';
 import { ActivatedRoute,  } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatSnackBar} from '@angular/material/snack-bar';
 import { IProduct } from 'src/app/_interfaces/raw/products';
@@ -111,16 +111,15 @@ export class ProducteditComponent implements  OnInit  {
     this.awsBucketURL =    await this.awsBucket.awsBucketURL();
   };
 
-
   openProductEditor() {
     // this.inventoryEditButon.openProductDialog(this.product.id,)
-    this.action$ =  this.productEditButtonService.openProductEditorOBS(this.product.id, this.product.prodModifierType)
-    this.dialogRef.close()
+    this.action$ =  this.productEditButtonService.openProductEditorOBS(this.product.id, this.product.prodModifierType).pipe(switchMap(data => { 
+      this.dialogRef.close()
+      return of(data)
+    }))
   }
 
-  refreshDisplayContent() {
-    this.displayContent = !this.displayContent;
-  }
+  refreshDisplayContent() {  this.displayContent = !this.displayContent; }
 
   async initializeForm()  {
 

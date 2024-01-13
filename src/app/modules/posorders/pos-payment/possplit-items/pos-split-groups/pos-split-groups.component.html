@@ -1,31 +1,37 @@
+
 <div  *ngIf="order">
   <div class="grid-split-groups"
-       *ngIf="order.posOrderItems.length>0">
-
-    <div *ngFor="let value of values" >
-      <div class="group" *ngIf="isGreaterThanZero(order.posOrderItems,value)">
-          <div *ngIf="orderGroupTotal$ && (orderGroupTotal$[value] | async) as order; else loading">
+       *ngIf="order.posOrderItems.length > 0">
+    <div *ngFor="let value of values; let i = index;" >
+ 
+      <div class="group" *ngIf="isGreaterThanZero(order.posOrderItems, value)">
+          <div *ngIf="(orderGroupTotal$[i] | async) as order; else loading">
             <print-group-receipt
-                (outPutPaymentAmount)="makePayment($event)"
-                [orderID]="order.id"
-                [order]="order"
-                [groupID]="value">
+                    (outPutPaymentAmount)="makePayment($event)"
+                    [orderID]="order.id"
+                    [order]="order"
+                    [groupID]="value">
                 <div>
-                  <h5>Group {{value}} Total: {{order.total | currency }} </h5>
+                  <h5>Group {{value}} 
+                      Total: {{order.total + order?.gratuity  | currency }} 
+                  </h5>
                 </div>
             </print-group-receipt>
           </div>
 
+        <ng-template #loading>  ...  </ng-template>
+
         <ng-container [ngTemplateOutlet]="header"></ng-container>
+
         <div *ngFor="let item of order.posOrderItems; index as i">
           <ng-container
-            [ngTemplateOutlet]="optionTemplate"
-            [ngTemplateOutletContext]="{ $implicit: item, idx: i, splitGroup: value }"
+            [ngTemplateOutlet]        ="optionTemplate"
+            [ngTemplateOutletContext] ="{ $implicit: item, idx: i, splitGroup: value }"
           ></ng-container>
         </div>
       </div>
+  </div>
 
-    </div>
 </div>
 
 <ng-template #header>
@@ -48,6 +54,4 @@
   </div>
 </ng-template>
 
-<ng-template #loading>
-  ...
-</ng-template>
+<ng-template #loading>  ... </ng-template>

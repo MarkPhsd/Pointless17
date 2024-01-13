@@ -137,8 +137,9 @@ export interface IPOSOrder {
   serviceArea           : string;
   defaultPercentageDiscount  : number;
   wholeSaleTraceCalcSum:number;
-  wholeSaleCostTotal: number;
-
+  wholeSaleCostTotal    : number;
+  productOrderRef       : number;
+  statusName: string;
 }
 
 export interface ClientsPOSOrders {
@@ -287,10 +288,10 @@ export interface PosOrderItem {
   inventoryAssignmentID       :  number;
   prodSecondLanguage          : string;
   productSortOrder            : number;
-  priceTierID  : number;
-  pizzaGroup   : number;
-  pizzaMultiplier: number;
-  wholeSaleCost: number;
+  priceTierID             : number;
+  pizzaGroup              : number;
+  pizzaMultiplier         : number;
+  wholeSaleCost           : number;
   rewardGroupApplied: number;
   baseUnitTypeID: number;
   baseUnitType: string;

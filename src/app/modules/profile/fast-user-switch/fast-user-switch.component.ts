@@ -15,7 +15,6 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
-import { IBalanceDuePayload } from 'src/app/_services/menu/product-edit-button.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 
 @Component({
@@ -52,10 +51,7 @@ export class FastUserSwitchComponent implements OnInit {
     private dialog                 : MatDialog,
     private userSwitchingService   : UserSwitchingService,
     private authenticationService  : AuthenticationService,
-    private clientTypeService      : ClientTypeService,
-    private clientTableService     : ClientTableService,
     private siteService            : SitesService,
-    private uiSettings             : UISettingsService,
     private settingsService        : SettingsService,
     private fb                     : UntypedFormBuilder,
     private _snackBar              : MatSnackBar,
@@ -63,7 +59,6 @@ export class FastUserSwitchComponent implements OnInit {
     private balanceSheetService   : BalanceSheetService,
     public  platformService        : PlatformService,
     private toolbarUIService       : ToolBarUIService,
-    private paymentProcessService: PaymentsMethodsProcessService,
     @Optional()  dialogRef         : MatDialogRef<FastUserSwitchComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
     ) {
@@ -150,12 +145,16 @@ export class FastUserSwitchComponent implements OnInit {
   }
 
   performTempUserAction(event)  {
-    if (this.requestData.action) {
-      console.log('perform user action')
+    const action = this.requestData?.requestData?.action;
+    if (this.requestData.action || action) {
       this.action$ = this.getAuthUserByPIN(event).pipe(switchMap(data => {
         if (data) {
             let result = false;
             if (this.requestData.action === 'price' || this.requestData.action === 'subTotal') {
+              if (data.changeItemPrice) {  result = true }
+            }
+
+            if (action && action === 'saleAuth') { 
               if (data.changeItemPrice) {  result = true }
             }
 

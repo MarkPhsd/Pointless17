@@ -32,6 +32,7 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { DateAdapter } from '@angular/material/core';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
+import { IPositionElements } from 'ngx-infinite-scroll';
 
 @Component({
   selector: 'app-pos-payment',
@@ -43,8 +44,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   @ViewChild('receiptView') receiptView: TemplateRef<any>;
   @ViewChild('splitItemsView') splitItemsView: TemplateRef<any>;
   @ViewChild('processingPayment') processingPayment: TemplateRef<any>;
-
-
+  @ViewChild('giftCardPayButton') giftCardPayButton: TemplateRef<any>;
+  @ViewChild('splitItemorders') splitItemorders: TemplateRef<any>;
+  
   //coaching
   @ViewChild('coachingPaymentsMade', {read: ElementRef}) coachingPaymentsMade: ElementRef;
   @ViewChild('coachingAuthorization', {read: ElementRef}) coachingAuthorization: ElementRef;
@@ -86,7 +88,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   paymentSummary     : IPOSPaymentsOptimzed;
   paymentsEqualTotal : boolean;
 
-
+  posRefOrders$       : Observable<IPOSOrder[]>;
   smallDevice         = false;
   phoneDevice:        boolean;
   orderItemsPanel     = ''
@@ -153,6 +155,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       switchMap( data => {
       if (data) {
         this.order = data
+        
         this.refreshIsOrderPaid();
       }
       if (data && data.serviceTypeID) {
@@ -207,6 +210,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
               private changeDetectorRef: ChangeDetectorRef,
               private coachMarksService: CoachMarksService,
               private router          : Router,
+              private orderService    : OrdersService,
               private fb              : UntypedFormBuilder) { }
 
   ngOnInit(): void {
@@ -219,6 +223,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.initSubscriptions();
     this.getPaymentMethods(site)
     this.userSubscriber();
+
 
     try {
       this.dsiEMVEnabled = this.paymentsMethodsService.DSIEmvSettings?.enabled;
@@ -245,10 +250,28 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       this.orderAction$ = this.orderMethodsService.getLoginActions()
     }
 
-    // this.changetDd
-
     this.initStepSelectionSubscription();
 
+  }
+
+  get giftCardPayButtonView() { 
+    let pass = false;
+    this.paymentMethods.forEach(data => { 
+        if (data.name.toLowerCase() === 'gift card') { 
+          pass = true
+        }
+      }
+    )
+    if (pass) { 
+      return this.giftCardPayButton
+    }
+    return null
+  }
+
+  setGroupID(event) { 
+    console.log('setgroupd', event);
+    //then apply it to the split section, so it updates and shows the appropriate group for this current split
+    
   }
 
   enterRewardsAmount(amount) {
@@ -284,6 +307,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   exitOrder() {
     this.orderMethodsService.exitOrder();
   }
+
   initAuthorization() {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
     this.isStaff  = this.userAuthorization.isUserAuthorized('admin,manager,employee');
@@ -291,6 +315,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (this.isUser) {
 
     }
+   
   }
 
   houseAccountPayment() {
@@ -382,9 +407,20 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  get splitItemordersView() { 
+    if (this.splitByItem) {
+      return this.splitItemorders
+    }
+    return null;
+  }
+
   get splitItemsTemplate() {
     if (this.splitByItem) {
-      return this.splitItemsView
+      const limiter = this.order && (this.order?.productOrderRef == this.order?.id || this.order?.productOrderRef == 0 || !this.order?.productOrderRef)
+      
+      if (limiter || this.userAuths.splitItemOverRide){ 
+        return this.splitItemsView
+      }
     }
     return null;
   }
@@ -392,7 +428,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   initForms() {
     this.initCheckForm();
     this.initPaymentForm();
-
   }
 
   initCheckForm() {
@@ -545,10 +580,15 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   applyGroupPayment(event) {
     if (!event || event.amount == 0) { return }
     this.splitByItem = false;
-    this._paymentAmount = event.amount;
-    this.groupPaymentAmount = event.amount;
-    this.groupPaymentGroupID = event.groupID;
+    // this._paymentAmount = event.amount;
+    // this.groupPaymentAmount = event.amount;
+    // this.groupPaymentGroupID = event.groupID as number;
 
+    this.action$ = this.orderMethodsService.splitOrderFromGroup(this.order.id, event.groupID, this.order).pipe(switchMap(data => { 
+      //set tj
+      // then we want to refresh the screen, but it might just happen automatically when the order is refreshed.
+      return of(data)
+    }))
   }
 
   clearGroupSelection() {

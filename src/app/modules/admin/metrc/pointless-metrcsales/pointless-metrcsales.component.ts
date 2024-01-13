@@ -68,6 +68,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
   get PaginationPageSize(): number {return this.pageSize;  }
   get gridAPI(): GridApi {  return this.gridApi;  }
 
+  action$ : Observable<any>;
   dateFrom: string;
   dateTo: string;
   selectedSiteID:        number;
@@ -173,7 +174,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     private siteService: SitesService,
     private agGridFormatingService  : AgGridFormatingService,
     private reportingServices: ReportingService,
-    public orderMethodsService: OrderMethodsService,
+    public  orderMethodsService: OrderMethodsService,
     private orderService: OrdersService,
     private dateHelperService: DateHelperService,
     private pointlessMetrcSalesReport: PointlessMETRCSalesService,
@@ -263,6 +264,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         flex: 2,
         valueFormatter: ({ value }) => this.datePipe.transform(value, 'short')
       },
+
 
       {headerName: 'ID', field: 'orderID', sortable: true,
         width:    155,
@@ -701,10 +703,13 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
     onExportToCsv() {
       if (this.searchModel.currentDay) {
-        this.exportDailySales()
-        return;
+        // this.exportDailySales()
+        // return;
+        const date  = new Date()
+        const dateString = this.dateHelperService.format(date.toString(), "MM/dd/yyyy");
+        this.dateFrom= dateString;
       }
-      if (!this.searchModel.currentDay) {
+      // if (!this.searchModel.currentDay) {
         const fields = ['completeDate', 'orderID', 'clientType', 'oomp',  'oompb', 'value', 'packageLabel','quantityTotal',
                          'unitType','value', 'value', 'value', 'value', 'value', 'netTotal','orderID',
                         ,'value', 'value', 'value', , 'value', 'value' , 'value', 'value', 'value' ]
@@ -713,13 +718,10 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         options.quotes = false;
         options.header = false;
         options.skipEmptyLines = true;
-
-        // this.exportDailySales();
-        console.log('metrc' + this.dateFrom)
         this.gridApi.exportDataAsCsv({ columnKeys: fields, allColumns: false,
                                         fileName: 'metrc' + this.dateFrom, skipColumnHeaders: true, suppressQuotes: true});
-        return;
-      }
+      //   return;
+      // }
     }
 
     capitalizeFirstLetter(string) {
@@ -794,6 +796,14 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
           return of(data)
         })
       )
+    }
+
+    assignSerials() {
+      const site = this.siteService.getAssignedSite()
+      this.action$ = this.pointlessMetrcSalesReport.assignSerialNumbersWhereSerialISNull(site).pipe(switchMap(data => { 
+        this.siteService.notify('Serials Assigned to null values', 'Close', 4000, 'green')
+        return of(null)
+      }))
     }
 
 }

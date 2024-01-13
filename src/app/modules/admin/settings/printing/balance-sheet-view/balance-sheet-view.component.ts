@@ -27,6 +27,7 @@ export class BalanceSheetViewComponent implements OnInit {
   zRun$ : Observable<IBalanceSheet>;
   balance   : any;
   auths$ : Observable<IUserAuth_Properties>;
+  auths  : IUserAuth_Properties;
   list$  : Observable<IPOSPaymentsOptimzed>;
   paymentGroups$  : Observable<IPOSPaymentsOptimzed>;
   @Output() renderComplete = new EventEmitter<any>();
@@ -35,7 +36,7 @@ export class BalanceSheetViewComponent implements OnInit {
   printReadList = []
   sheet$: Observable<any>;
   serviceFeeProcessed: boolean;
-
+  site = this.siteService.getAssignedSite()
   initSubscriptions() {
     this._sheet = this.sheetMethodsService.balanceSheet$.subscribe(
        data => {
@@ -109,6 +110,7 @@ export class BalanceSheetViewComponent implements OnInit {
     this.initSubscriptions()
     this.cashDrop = this.sheetMethodsService.cashDrop;
     this.auths$ =  this.userAuth.userAuths$.pipe(switchMap(data => {
+      this.auths = data;
       return of(data)
     }))
   }
@@ -123,7 +125,17 @@ export class BalanceSheetViewComponent implements OnInit {
     if (this.printReadList.length>0) {
     }
 
-    if (this.printReadList.length == 5) {
+    let maxCount = 5
+    if (this.auths) { 
+      if (this.auths.blindBalanceSheet) { 
+        maxCount = maxCount - 1
+      }
+      if (!this.auths.balanceSheetDetails) { 
+        maxCount = maxCount - 2
+      }
+    }
+
+    if (this.printReadList.length == maxCount) {
       this.renderComplete.emit(event)
     }
   }

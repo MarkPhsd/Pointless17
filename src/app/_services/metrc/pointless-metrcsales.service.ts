@@ -69,6 +69,18 @@ export class PointlessMETRCSalesService {
     this._searchModel.next(searchModel);
   }
 
+  assignSerialNumbersWhereSerialISNull(site: ISite): Observable<any> {
+    const controller = '/METRCSalesReport/'
+
+    const endPoint = 'AssignSerialNumbersWhereSerialISNull'
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
+  }
+
   getSalesReport(site: ISite, searchModel:PointlessMetrcSearchModel): Observable<METRCSalesReportPaged> {
 
     const controller = '/METRCSalesReport/'

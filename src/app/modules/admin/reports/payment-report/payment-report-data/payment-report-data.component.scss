@@ -15,6 +15,25 @@ button {
   margin: 4px;
 }
 
+.buttons_label {
+  font-size     : .9em;
+  margin        : 0px 5px 5px 5px;
+  padding       : 0px 5px 5px 5px;
+  white-space   : nowrap;
+  overflow      : hidden;
+  text-overflow : ellipsis;
+  text-transform: capitalize;
+  align-items   : baseline;
+  line-height   : 1em;
+  float         : left;
+  align-items   : flex-end;
+  text-align    : left;
+
+  @media print { 
+    visibility: hidden;
+  }
+}
+
 .totals_label {
   font-size     : .9em;
   margin        : 0px 5px 5px 5px;
@@ -50,7 +69,6 @@ button {
   // text-align     : right;
   text-overflow  : ellipsis;
   text-transform : capitalize;
-
   float         : right;
   align-items   : flex-end;
   text-align    : right;
@@ -85,7 +103,10 @@ button {
   @include for-phone-only {
     grid-template-columns:  55px 75px 85px 85px 85px  ;
   }
-
+  @media print {
+    gap: var(--gap);
+    grid-template-columns:  55px 75px 85px 85px 85px  ;
+  }
 }
 
 .grid-voids {
@@ -98,6 +119,10 @@ button {
   overflow      : hidden;
   text-overflow : ellipsis;
   text-transform: capitalize;
+  @media print {
+    gap: var(--gap);
+    grid-template-columns: 55px 65px 65px 65px 65px;
+  }
 }
 
 .grid-order-employeecount {
@@ -114,7 +139,10 @@ button {
   @include for-phone-only {
     grid-template-columns: 100px 50px 50px 65px 65px;
   }
-
+  @media print {
+    gap: var(--gap);
+    grid-template-columns: 55px 85px 55px 65px 55px;
+  }
 }
 
 .grid-items {
@@ -123,6 +151,11 @@ button {
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(60px, 1fr) );
   margin-left: -15px;
+
+  @media print {
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(60px, 1fr) );
+  }
 }
 
 .grid-footer-payments {
@@ -134,6 +167,11 @@ button {
   font-size: .9em;
   margin-top: 5px;
   margin-bottom: 5px;
+
+  @media print {
+    gap: var(--gap);
+    grid-template-columns: 55px 75px 85px 85px 85px;
+  }
 }
 
 .headers {

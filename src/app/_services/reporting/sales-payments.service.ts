@@ -19,6 +19,7 @@ export interface IPaymentSalesSearchModel {
   driverId:     number;
   pageSize:     number;
   pageNumber:   number;
+  reportRunID:  number;
   groupBy:      string;
   siteID:       number;
   zrunID       :string;

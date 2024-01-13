@@ -2,8 +2,14 @@
 <ng-content></ng-content>
 
 <div *ngIf="order" class="row-data">
-  <div> <button color="primary" mat-raised-button (click)="printReceipt()"><mat-icon>print</mat-icon></button></div>
-  <div *ngIf="order.total>0"><button color="primary" mat-raised-button (click)="submitPaymentAmount()"><mat-icon>credit_card</mat-icon></button></div>
+  <div> <button color="primary" mat-raised-button (click)="printReceipt()">
+    <mat-icon>print</mat-icon></button>
+  </div>
+  <div *ngIf="order.total>0"><button color="primary"
+       mat-raised-button (click)="submitPaymentAmount()">
+       <mat-icon>credit_card</mat-icon>
+      </button>
+  </div>
 </div>
 
 <div *ngIf="(printReceipt$ | async) as printView"></div>

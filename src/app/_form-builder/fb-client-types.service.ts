@@ -27,7 +27,7 @@ export class FbClientTypesService {
       changeInventoryValue : [],
       blindBalanceSheet    : [],
       blindClose           : [],
-
+      balanceSheetDetails  : [],
       // 'admin section
       closeDay             : [],
       sendTextBlast        : [],
@@ -77,7 +77,7 @@ export class FbClientTypesService {
       disableEditOtherUsersOrders: [],
       allowReconciliation: [],
       allowSeeItemCost: [],
-
+ 
     })
     return fb
 

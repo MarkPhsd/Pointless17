@@ -149,8 +149,6 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   clearLoggedInUser() {
-    // console.trace('clear user event')
-    // console.log('clear logged in user')
     this._clearloginStatus.next(true)
     this.orderMethodService.updateOrderSubscriptionClearOrder(0)
     this.orderMethodService.updateOrderSearchModel(null);
@@ -163,7 +161,6 @@ export class UserSwitchingService implements  OnDestroy {
     const token =  localStorage.getItem('posToken')
     const site = this.siteService.getAssignedSite()
     return this.login(token, pin)
-
   }
 
   authenticate(userLogin: userLogin): Observable<any> {
@@ -183,10 +180,7 @@ export class UserSwitchingService implements  OnDestroy {
       .pipe(
         switchMap(
           user => {
-
-            // console.log('authenticate', user)
             if (user && user.errorMessage) {
-
               const message = user?.errorMessage;
               this.snackBar.open(message, 'Failed Login', {duration: 1500})
               const item = {message: 'failed'}
@@ -341,9 +335,7 @@ export class UserSwitchingService implements  OnDestroy {
     return currentUser
   }
 
-  setUserAuth(userAuth: string) {
-    localStorage.setItem('userAuth', userAuth)
-  }
+
 
   clearSubscriptions() {
     this.orderMethodService.updateOrderSubscription(null);
@@ -366,8 +358,8 @@ export class UserSwitchingService implements  OnDestroy {
     dialogRef = this.dialog.open(FastUserSwitchComponent,
       { width:        '550px',
         minWidth:     '550px',
-        height:       '600px',
-        minHeight:    '600px',
+        height:       '700px',
+        minHeight:    '700px',
         data: request
       },
     )
@@ -378,8 +370,8 @@ export class UserSwitchingService implements  OnDestroy {
     dialogRef = this.dialog.open(FastUserSwitchComponent,
       { width:        '550px',
         minWidth:     '550px',
-        height:       '600px',
-        minHeight:    '600px',
+        height:       '700px',
+        minHeight:    '700px',
         data: request
       },
     )
@@ -443,45 +435,58 @@ export class UserSwitchingService implements  OnDestroy {
     //set current order (for regular customers)
     const site = this.siteService.getAssignedSite()
     return this.authenticate(userLogin).pipe(switchMap(data => {
+ 
       if (data && data.errorMessage) {
-        this.siteService.notify('Error: ' + data.errorMessage, 'close', 2000, 'red' )
+        this.siteService.notify('Message: Error: ' + data.errorMessage, 'close', 2000, 'red' )
         return of(null)
       }
+
+      if (!data) {
+        this.siteService.notify('Error: ' + 'No user identified.', 'close', 2000, 'red' )
+        return of(null)
+      }
+  
+      if (data && !data.id) {
+        this.siteService.notify('Message: Error: No ID for user found.', 'close', 2000, 'red' )
+        return of(null)
+      }
+
       this.authenticationService.overRideUser(data)
-      return this.getClientForLogin(site, data.id)
+      return this.getClientForAuthOverRide(site, data?.id, true)
     })).pipe(switchMap(data => {
-      return this.setAuthAndClientTypeForLogin(site, data.id)
+      return this.setAuthAndClientTypeForAuthOverRide(site, data.clientTypeID)
      }
     ))
-
   }
 
-  getClientForLogin(site: ISite, id:number) {
+  getClientForAuthOverRide(site: ISite, id:number, overRidePreferences?: boolean) {
     return this.clientTableService.getClient(site, id).pipe(switchMap(data => {
-        if (!data || data?.clientTypeID) {
+        if (!data || (data.clientTypeID == 0 ||  !data.clientTypeID)) {
           this.siteService.notify('Client not or type found - no authorizations will be assigned.', 'close', 2000, 'red')
           return of(null)
         }
-        //set prferences
-        const item = JSON.parse(data?.preferences) as UserPreferences;
-        this.authenticationService.updatePreferences(item)
+        if (!overRidePreferences) { 
+          const item = JSON.parse(data?.preferences) as UserPreferences;
+          this.authenticationService.updatePreferences(item)
+        }
         return of(data);
     }))
   }
 
-  setAuthAndClientTypeForLogin(site: ISite, id: number) {
+  setAuthAndClientTypeForAuthOverRide(site: ISite, id: number) {
     return this.clientTypeService.getClientType(site, id).pipe(switchMap(data => {
       if (!data) {
         this.siteService.notify('User auths not determined', 'close', 2000, 'red')
         return of(null)
       }
+
       const item = {} as IUserAuth_Properties
       if (!data || !data.jsonObject) { return of(item) }
-      //set user auths.
       const auths = JSON.parse(data.jsonObject) as IUserAuth_Properties;
-      this.setUserAuth(data.jsonObject)
-      this.authenticationService.updateUserAuths(auths);
+      this.authenticationService.updateUserAuthstemp(auths);
+
       return of(auths)
+
     }))
   }
 

@@ -238,6 +238,7 @@
 <ng-template #menuButtonContainer>
   <button style="height:45px;"
           mat-button
+          color="primary"
           [matMenuTriggerFor]="menu"
           #menuTrigger="matMenuTrigger"
           (click)="menuTrigger.openMenu()" >
@@ -253,6 +254,7 @@
 
         <div class="margin-left-5 ">
           <button mat-button
+                  color="primary"
                   class="assign-button"
                   (click)="publishReconciliation()">
             <mat-icon>list</mat-icon>
@@ -262,6 +264,7 @@
 
         <div class="margin-left-5 ">
           <button mat-button
+                  color="primary"
                   class="assign-button"
                   (click)="inventoryMonitor()">
             <mat-icon>list</mat-icon>
@@ -271,6 +274,7 @@
 
         <div  class="margin-left-5 ">
           <button mat-button
+                  color="primary"
                   class="assign-button"
                   (click)="onExportToCsv()">
             <mat-icon>download</mat-icon>

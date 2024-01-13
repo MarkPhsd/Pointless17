@@ -11,17 +11,25 @@
       </div>
     </div>
 
-    <app-value-fields
-        [inputForm]="searchForm"
-        [fieldName]="'name'">
+    <search-debounce-input
+          [itemNameControl] = "'name'"
+          [searchForm]      = "searchForm"
+          (outPutMethod)    = "refreshSearchPhrase($event)">
+      <div fieldDescription>
+      <mat-icon>search</mat-icon>
       Name / Sku / Serial
-    </app-value-fields>
+      </div>
+    </search-debounce-input>
 
-    <app-value-fields
-        [inputForm]="searchForm"
-        [fieldName]="'reportRunID'">
-      Zrun / ReportRunID
-    </app-value-fields>
+    <search-debounce-input
+          [itemNameControl] = "'reportRunID'"
+          [searchForm]      = "searchForm"
+          (outPutMethod)    = "refreshSearchReportRunID($event)">
+      <div fieldDescription>
+        <mat-icon>search</mat-icon>
+        Zrun / ReportRunID
+      </div>
+    </search-debounce-input>
 
     <mat-label>History</mat-label>
     <mat-slide-toggle
@@ -38,10 +46,10 @@
                                 >
             <input matStartDate
                     formControlName="start"
-                    placeholder="Start date"
+                
                     (click)='emitDatePickerData()'>
             <input matEndDate formControlName="end"
-                    placeholder="End date"
+           
                     (click)='emitDatePickerData()'>
 
                 </mat-date-range-input >
@@ -60,26 +68,16 @@
     <mat-button-toggle-group
           name="toggleTypeEmployee"
           class="toggle-view"
-          [(ngModel)]="toggleTypeEmployee"
-        >
+          [(ngModel)]="toggleTypeEmployee" >
     <mat-button-toggle value="0"
-          #tooltip="matTooltip"
-          matTooltip="Filter ItemType Type"
-          matTooltipPosition="above"
         matTooltipHideDelay="1000" > Item Type </mat-button-toggle>
     <mat-button-toggle value="1"
-          #tooltip="matTooltip"
-          matTooltip="Filter Service Type"
-          matTooltipPosition="above"
         matTooltipHideDelay="1000" > Sale Type </mat-button-toggle>
     <mat-button-toggle value="2"
-          #tooltip="matTooltip"
-          matTooltip="Filter By User"
-          matTooltipPosition="above"
         matTooltipHideDelay="1000" > Employee </mat-button-toggle>
     </mat-button-toggle-group>
 
-    <div [hidden]="toggleTypeEmployee  != '2' "
+    <div [hidden]="toggleTypeEmployee  == 2 "
          class="toggle-selector-employee">
       <app-mat-toggle-selector
               [id]="searchModel.employeeID"
@@ -89,7 +87,7 @@
       </app-mat-toggle-selector>
     </div>
 
-    <div [hidden]="toggleTypeEmployee != '1'"
+    <div [hidden]="toggleTypeEmployee == 2"
          class="toggle-selector">
       <app-mat-toggle-selector
             *ngIf="searchModel"
@@ -101,7 +99,8 @@
       </app-mat-toggle-selector>
     </div>
 
-    <div   class="toggle-selector">
+    <div [hidden]="toggleTypeEmployee == 0"
+         class="toggle-selector">
       <app-mat-toggle-selector
             *ngIf="searchModel"
             [styleHeight]="'calc(65vh - 150px)'"

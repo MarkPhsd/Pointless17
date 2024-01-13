@@ -55,15 +55,18 @@ export class AppInitService  {
     const config = await this.httpClient.get('assets/app-config.json').toPromise()  as IAppConfig
     return config.googleTrackingKey    
   }
+
   async init() {
 
+    const rememberMe =  localStorage.getItem('rememberMe');
     this.apiUrl      = this.getLocalApiUrl();
-    const rememberMe = localStorage.getItem('rememberMe')
     const isApp      = this.platFormService.isApp();
 
-    if (!rememberMe) {
+    if (!rememberMe || rememberMe != 'true') {
+      this.clearUserSettings();
+    }
+    if (!rememberMe || rememberMe != 'true') {
       if (!this.initialized && isApp ) {
-        this.clearUserSettings();
         this.initialized = true;
         this.router.navigate(['/login']);
         return;
@@ -83,7 +86,6 @@ export class AppInitService  {
       }
 
       if (!config.apiUrl) {
-        console.log('config setting to pointless', config)
         this.apiUrl     = "https://pointlessposdemo.com/api"
         config.apiUrl     = "https://pointlessposdemo.com/api"
         this.setAPIUrl(this.apiUrl)
@@ -189,7 +191,6 @@ export class AppInitService  {
     }
 
     if ((!this.appConfig || !this.apiUrl) && this.isApp()) {
-      console.log('navigating to app setting from APIBaseURL')
       this.useAppGate = false
       this.router.navigate(['/apisetting']);
       return ''

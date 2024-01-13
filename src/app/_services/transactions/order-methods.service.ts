@@ -39,6 +39,8 @@ import * as uuid from 'uuid';
 import { RequestMessagesComponent } from 'src/app/modules/admin/profiles/request-messages/request-messages.component';
 import { IRequestMessage } from '../system/request-message.service';
 import { error } from 'console';
+import { IPositionElements } from 'ngx-infinite-scroll';
+import { MenuItem } from 'electron';
 export interface ProcessItem {
   order   : IPOSOrder;
   item    : IMenuItem;
@@ -64,6 +66,7 @@ export class DateValidators {
   providedIn: 'root'
 })
 export class OrderMethodsService implements OnDestroy {
+
 
 
   emailSubjects = [
@@ -105,6 +108,7 @@ export class OrderMethodsService implements OnDestroy {
   public splitEntryValue  = 0;
 
   overrideClear: boolean;
+  orderSearchEmployeeID: number;
   public get assignedPOSItem() {return this.assignPOSItems }
 
   priceCategoryID: number;
@@ -241,8 +245,19 @@ export class OrderMethodsService implements OnDestroy {
     return order
   }
 
+  preSwitchOrder(order: IPOSOrder) { 
+    if (!this.currentOrder?.id || this.currentOrder?.id == 0) { 
+      this.splitEntryValue = 1;
+    }
+    if (this.currentOrder?.id != order?.id) { 
+      this.splitEntryValue = 1;
+    }
+  }
+
   updateOrder(order: IPOSOrder) {
     try {
+
+      this.preSwitchOrder(order)
       this.currentOrder = order;
       this._currentOrder.next(order);
       if (order?.service?.filterType == 0  ) { 
@@ -356,6 +371,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   updateOrderSearchModelDirect(searchModel: IPOSOrderSearchModel) {
+    this.posSearchModel = searchModel;
     this._posSearchModel.next(searchModel);
   }
 
@@ -364,28 +380,61 @@ export class OrderMethodsService implements OnDestroy {
       this._posSearchModel.next(searchModel);
       return ;
     }
+    
+    // let model = JSON.parse(JSON.stringify(searchModel)) as IPOSOrderSearchModel
+    if (!searchModel.onlineOrders) {  searchModel.onlineOrders = false }
+
+    // let employeeID = searchModel.employeeID
+    // employeeID = this.setEmployeeID(employeeID )
+    // model.employeeID = this.setEmployeeID(employeeID )
+    searchModel.clientID = this.setUserID()
+    // model.clientID = this.setUserID()
+    
+    this.updateOrderSearchModelDirect(JSON.parse(JSON.stringify(searchModel)))
+  }
+
+  setUserID()  {
     const user = this.userAuthorization.currentUser()
+    if (this.userAuthorization.isUser) {
+      if (user && user.id && user.id != null) {
+        return user.id
+      }
+    }
+    return 0;
+  }
+
+  setEmployeeID(employeeID : number) {
+    const user = this.userAuthorization.currentUser()
+    const employee = (!this.userAuthorization.isAdmin || !this.userAuthorization.isManagement) && this.userAuthorization.isStaff
+    const manager = this.userAuthorization.isManagement
+   
+    if (!this.showAllOrders && manager) {
+      const id = employeeID;
+      return id;
+    }
+
+    if (!this.showAllOrders && employee) {
+
+      return  user.employeeID;
+    }
+
+    const auth = this.authenticationService._userAuths.value
     if (this.showAllOrders) {
       if (user && user.employeeID && user.employeeID != null) {
-        searchModel.employeeID = 0
+        console.log('process' , this.userAuthorization.isStaff)
+        return 0;
       }
     }
-    if (!this.showAllOrders && this.userAuthorization.isStaff ) {
+
+    if (this.showAllOrders && this.userAuthorization.isStaff ) {
       if (user && user.employeeID  && user.employeeID != null) {
-        searchModel.employeeID = user.employeeID
+        console.log('process')
+        return 0
       }
     }
-    if (!this.showAllOrders && this.userAuthorization.isUser) {
-      if (user && user.id && user.id != null) {
-        searchModel.clientID = user.id
-      }
-    }
-    if (!searchModel.onlineOrders) {
-      searchModel.onlineOrders = false;
-    }
-    this.posSearchModel = searchModel
-    // console.log('searchModel ',searchModel, searchModel.onlineOrders)
-    this._posSearchModel.next(searchModel);
+
+    const id = employeeID;
+    return id;
   }
 
   updateSplitGroup(data: IPOSOrder) {
@@ -962,6 +1011,10 @@ export class OrderMethodsService implements OnDestroy {
     await this.processAddItem(order, null, item, quantity, null);
   }
 
+  addItemSimpleOverRide(order: IPOSOrder, item: IMenuItem, quantity: number) {
+    return this.addItemToOrderObs(order, item, quantity, 0, null, null)
+  }
+
   addItemToOrderObs(order: IPOSOrder, item: IMenuItem, quantity: number, rewardAvailableID: number, passAlongItem: PosOrderItem[],
                     selectedProductPrice?: ProductPrice) {
     this.selectedProductPrice = selectedProductPrice;
@@ -1132,6 +1185,22 @@ export class OrderMethodsService implements OnDestroy {
     return quantity
   }
 
+  splitOrderFromGroup(id: number, groupID: number, order: IPOSOrder) {
+    const site = this.siteService.getAssignedSite()
+    return this.orderService.splitOrderFromGroup(site, id, groupID).pipe(switchMap(data => { 
+      this.setLastOrderByFilter(groupID, order)
+      this.updateOrder(data);
+      return of(data)
+    }))
+  }
+
+  setLastOrderByFilter(groupID: number, order:IPOSOrder) { 
+    order.posOrderItems = order.posOrderItems.filter(data => { 
+      return data.splitGroupID != groupID;
+    })
+    this.setLastOrder(order)
+  }
+
   scanBarcodedItem(site, order, barcode,quantity,packaging, portionValue, passAlongItems, unitTypeID,productPrice, cost){
     return this.scanItemForOrder(site, order, barcode, quantity, packaging,
               portionValue,
@@ -1174,8 +1243,6 @@ export class OrderMethodsService implements OnDestroy {
       this.assignPOSItems = passAlongItems
       this.overrideClear = true
     }
-
-    // console.log('useType passAlong', this.assignPOSItems,  passAlongItems )
 
     if (order) {
       const site       = this.siteService.getAssignedSite();
@@ -1270,15 +1337,41 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
+  isProductLowCount(data: ItemPostResults) { 
+    if (data?.message === 'Manager OverRide' && data?.resultErrorDescription === 'Low Product Count') {
+      //we have data. 
+      console.log('isProductCount', data)
+      const item = {menuItem: data.menuItem, quantity: data.quantity, order: data.order}
+    
+      const  requestData = {action:'saleAuth', postData: item}
+      const request = { request: 'checkAuth', requestData: requestData}
+      let dialogRef = this.checkAuthDialog(request,  request);
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          // this.editDialog.openSaleAuthDialog(order, item, quantity)
+          this.addItemSimpleOverRide(data.order, data.menuItemWithPrice, data.quantity).subscribe(data => { 
+            // this.siteService.notify(`Item count low. Authorized`, 'close', 10000, 'green');
+            this.authenticationService.overRideUser(null)
+            this.authenticationService.updateUserAuthstemp(null);
+            this._scanner.next(true)
+          })
+          
+        } else {
+          this.siteService.notify('Not authorized', 'close', 1000, 'red')
+        }
+      });
+      return true
+    }
+    return false;
+  }
+
   processItemPostResultsPipe(data) {
 
-      // console.log('assigned items', this.assignPOSItems)
-      if (!this.overrideClear) {
-        this.assignPOSItems = [];
-      }
-      // console.log('processItemPostResultsPipe clear?', this.assignPOSItems, this.overrideClear)
-
+      if (!this.overrideClear) {  this.assignPOSItems = [];  }
       if (data?.message) {  this.notifyEvent(`Process Result: ${data?.message}`, 'Alert ')};
+
+     if (this.isProductLowCount(data)) { return }
 
       if (data && data.resultErrorDescription && data.resultErrorDescription != null) {
         if (data && data.order) {   this.updateOrderSubscription(data.order);  }
@@ -2232,12 +2325,31 @@ export class OrderMethodsService implements OnDestroy {
     dialogRef =  this.dialog.open(FastUserSwitchComponent,
       { width     : '600px',
         minWidth  : '600px',
-        height    : '600px',
+        height    : '750px',
         data      : request
       },
     )
     return dialogRef;
   }
+  
+  getSaleItemAuthAuth(order: IPOSOrder,item: IMenuItem, quantity: number) {
+    if (this.authenticationService.userAuths.voidItem) {
+      this.editDialog.openSaleAuthDialog(order, item, quantity)
+      return
+    }
+
+    let  request = {action: 'price', request: 'checkAuth'}
+    let dialogRef = this.checkAuthDialog(item,  request)
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.editDialog.openSaleAuthDialog(order, item, quantity)
+      } else {
+        this.siteService.notify('Not authorized', 'close', 1000, 'red')
+      }
+    });
+  }
+
 
   getVoidAuth(item) {
     // console.log('getVoidAuth')
