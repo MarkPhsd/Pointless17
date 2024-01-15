@@ -1,14 +1,15 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable, Subscription, switchMap,of } from 'rxjs';
-import { IPaymentSearchModel, IPOSOrder, IPOSPaymentsOptimzed } from 'src/app/_interfaces';
+import { IPaymentSearchModel, IPOSOrder, IPOSPaymentsOptimzed, ISetting } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { PrintingService } from 'src/app/_services/system/printing.service';
+import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { BalanceSheetService, CashDrop, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
-
 //printType balanceSheetValues balanceSheetFinal cashDrop
 @Component({
   selector: 'balance-sheet-view',
@@ -37,6 +38,11 @@ export class BalanceSheetViewComponent implements OnInit {
   sheet$: Observable<any>;
   serviceFeeProcessed: boolean;
   site = this.siteService.getAssignedSite()
+  setPrinterWidthClass = "receipt-width-80"
+  //max possible items to render. each necessary feature is removed from check below.
+  maxCount = 6
+  @Input() styles: ISetting;
+
   initSubscriptions() {
     this._sheet = this.sheetMethodsService.balanceSheet$.subscribe(
        data => {
@@ -54,6 +60,16 @@ export class BalanceSheetViewComponent implements OnInit {
 
   }
 
+  setStyles() {
+    return;
+    if (this.styles) { 
+      const styles    = this.renderingService.interporlateFromDB(this.styles?.text)
+      const style     = document.createElement('style');
+      style.innerHTML = styles;
+      document.head.appendChild(style);
+      console.log('set styles', this.styles.text)
+    }
+  }
 
   getBalanceCalculations(sheetID : number) {
     const site  = this.siteService.getAssignedSite();
@@ -103,40 +119,54 @@ export class BalanceSheetViewComponent implements OnInit {
                 private ordersService : OrdersService,
                 private sheetMethodsService: BalanceSheetMethodsService,
                 private balanceSheetService : BalanceSheetService,
+                private printingService: PrintingService,
+                private renderingService: RenderingService,
               )
   {   }
 
   ngOnInit() {
-    this.initSubscriptions()
+    this.initSubscriptions();
+    this.setStyles()
     this.cashDrop = this.sheetMethodsService.cashDrop;
     this.auths$ =  this.userAuth.userAuths$.pipe(switchMap(data => {
       this.auths = data;
+      this.initMaxCount()
       return of(data)
     }))
   }
 
-  renderCompleted(event) {
-    if (!this.printReadList)  {
-      this.printReadList = []
+  //determines the number of components to render before sending to print.
+  initMaxCount() { 
+    if (this.auths) { 
+      if (!this.auths.blindBalanceSheet) { 
+        this.maxCount = this.maxCount - 1
+      }
+      if (!this.auths.balanceSheetDetails) { 
+        this.maxCount = this.maxCount - 1
+      }
+      if (!this.auths.balanceSheetViewTypeSales) { 
+        this.maxCount = this.maxCount - 1
+      }
     }
+  }
+
+  renderCompleted(event) {
+    // console.log('renderCompleted', event)
+    if (!this.printReadList)  {  this.printReadList = []  }
 
     this.printReadList.push(event)
 
     if (this.printReadList.length>0) {
     }
 
-    let maxCount = 5
-    if (this.auths) { 
-      if (this.auths.blindBalanceSheet) { 
-        maxCount = maxCount - 1
+    if (this.printReadList.length == this.maxCount) {
+      // console.log('max count reached emiting view render complete for print.')
+      this.renderComplete.emit('true')
+      const item = {read: true, balanceSheet: true}
+      if (this.autoPrint) { 
+        // console.log('Attempt auto print')
+        this.printingService.updatePrintReady(item)
       }
-      if (!this.auths.balanceSheetDetails) { 
-        maxCount = maxCount - 2
-      }
-    }
-
-    if (this.printReadList.length == maxCount) {
-      this.renderComplete.emit(event)
     }
   }
 

@@ -16,7 +16,7 @@
 
 <ng-template #loading>
   <ng-container [ngTemplateOutlet]="headerView"></ng-container>
-  <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
+  <mat-spinner  [diameter]="25" class="spinner"></mat-spinner>
 </ng-template>
 
 <ng-template #activeReportView let-summary>
@@ -53,54 +53,64 @@
 </ng-template>
 
 <ng-template #salesView let-summary>
+
   <div *ngIf="sales.results as sales">
-      <mat-card >
-        <mat-card-title class="mat-card-title">
-          <div    class="grid">
-            <div>
-              <ng-container [ngTemplateOutlet]="headerView"></ng-container>
-            </div>
-            <div  class="totals_label">
-              <ng-container [ngTemplateOutlet]="buttonsView"></ng-container>
-              <div *ngIf="summary.resultMessage">
-                <mat-icon>alert</mat-icon>
-                {{summary.resultMessage}}
-              </div>
-            </div>
+    <ng-template #headerTemplate>
+      <div class="header-grid info-width">
+        <div>
+          <ng-container [ngTemplateOutlet]="headerView"></ng-container>
+        </div>
+        <div  class="totals_label">
+          <ng-container [ngTemplateOutlet]="buttonsView"></ng-container>
+          <div *ngIf="summary.resultMessage">
+            <mat-icon>alert</mat-icon>
+            {{summary.resultMessage}}
           </div>
-        </mat-card-title>
+        </div>
+      </div>
+    </ng-template>
+     
+    <ng-template #subTitleView>
+      <div class="grid-body-action width">
+        <div >PreTax Total   </div>
+        <div class="span-col">{{summary?.summary?.itemTotal ?? 0 | currency }}  </div>
+        <div *ngIf="!autoPrint"  > Profit</div>
+        <div *ngIf="!autoPrint"  class="span-col">{{(summary?.summary?.itemTotal - summary?.summary?.cost) ?? 0 | currency }}   </div>
+        <div >QTY</div>
+        <div class="span-col">{{ summary?.summary?.quantity }} </div>
+        <div *ngIf="!autoPrint" >Cost :</div>
+        <div *ngIf="!autoPrint" class="span-col">{{summary?.summary?.cost  ?? 0 | currency }}   </div>
+      </div>
+    </ng-template>
 
-        <mat-card-subtitle *ngIf="!includeDepartments">
-          <div class="grid-body-header">
-            <div class="totalslabel">PreTax Total   </div>
-             <div class="totals">{{summary?.summary?.itemTotal | currency }}  </div>
-          </div>
-          <div *ngIf="summary.summary" class="grid-body-header">
-            <div class="totalslabel"> Profit                           </div>
-            <div class="totals">{{summary?.summary?.itemTotal - summary?.summary?.cost  | currency }}   </div>
-          </div>
+    <ng-template #contentView>
+      <app-sales-items
+        [adjustments]="adjustments"
+        [sales]="sales"
+        [autoPrint]="autoPrint"
+        [showSort]="true"
+        [includeDepartments]="includeDepartments"
+        [showAll]="showAll">
+      </app-sales-items>
+    </ng-template>
 
-          <div class="grid-subbody-header">
-            <div class="totals">     QTY         </div>
-            <div class="totals">     Cost :</div>
-          </div>
-          <div *ngIf="summary.summary" class="grid-subbody-header">
-            <div class="totals">{{summary?.summary?.quantity }}              </div>
-            <div class="totals">{{summary?.summary?.cost | currency }}   </div>
-          </div>
-        </mat-card-subtitle>
+    <div *ngIf="autoPrint">
+      <ng-container [ngTemplateOutlet]="headerTemplate"></ng-container>
+      <ng-container [ngTemplateOutlet]="subTitleView"></ng-container>
+      <ng-container [ngTemplateOutlet]="contentView"></ng-container>
+    </div>
 
-        <mat-card-content >
-          <app-sales-items
-            [adjustments]="adjustments"
-            [sales]="sales"
-            [showSort]="true"
-            [includeDepartments]="includeDepartments"
-            [showAll]="showAll">
-          </app-sales-items>
-        </mat-card-content>
-
-      </mat-card>
+    <mat-card *ngIf="!autoPrint">
+      <mat-card-title class="mat-card-title">
+        <ng-container [ngTemplateOutlet]="headerTemplate"></ng-container>
+      </mat-card-title>
+      <mat-card-subtitle *ngIf="!includeDepartments">
+        <ng-container [ngTemplateOutlet]="subTitleView"></ng-container>
+      </mat-card-subtitle>
+      <mat-card-content >
+        <ng-container [ngTemplateOutlet]="contentView"></ng-container>
+      </mat-card-content>
+    </mat-card>
   </div>
 </ng-template>
 
@@ -124,17 +134,20 @@
         </mat-card-title>
 
         <mat-card-subtitle>
-          <div class="grid-body-header">
+          <div class="grid-body-header info-width">
             <div class="totalslabel">PreTax Totals   </div>
             <div class="totals">{{summary?.summary?.originalPrice | currency }}  </div>
           </div>
         </mat-card-subtitle>
 
         <mat-card-content *ngIf="summary.results as sales">
-          <button mat-raised-button color="accent" (click)="sortSales(sales)">Sort By Value</button>
-          <button mat-raised-button color="accent" (click)="sortName(sales)">Sort By User</button>
+         
+          <span *ngIf="!autoPrint">
+            <button mat-raised-button color="accent" (click)="sortSales(sales)">Sort By Value</button>
+            <button mat-raised-button color="accent" (click)="sortName(sales)">Sort By User</button>
+          </span>
 
-          <div class="grid-adjustment">
+          <div class="grid-adjustment info-width">
             <div class="totalslabel">Item :    </div>
             <div class="totals">     Order         </div>
             <div class="totals">     Value         </div>
@@ -145,13 +158,13 @@
             <mat-divider></mat-divider>
           </div>
 
-          <div  class="grid-adjustment"
+          <div  class="grid-adjustment info-width"
                 *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
-              <div class="product-name">{{ sale?.productName | truncateText : 20   }}      </div>
-              <div class="totals">      {{ sale?.orderID }}               </div>
-              <div class="totals">      {{ sale?.originalPrice | currency }}   </div>
-              <div class="product-name">{{ sale?.employee | truncateText: 8 }}   </div>
-              <div class="item-span product-name">{{ sale?.voidReason }}   </div>
+              <div class="sales-product-name product-name">{{ sale?.productName | truncateText : 20   }}      </div>
+              <div class="sales-totals totals">      {{ sale?.orderID }}               </div>
+              <div class="sales-totals">      {{ sale?.originalPrice | currency }}   </div>
+              <div class="sales-product-name product-name">{{ sale?.employee | truncateText: 8 }}   </div>
+              <div class="item-span product-name sales-product-name">{{ sale?.voidReason }}   </div>
             </div>
         </mat-card-content>
 
@@ -160,7 +173,7 @@
 </ng-template>
 
 <ng-template #buttonsView>
-  <span>
+  <span *ngIf="!autoPrint">
     <button mat-raised (click)="togglesShowAll()">
     <mat-icon>expand</mat-icon></button>
     <button mat-raised (click)="downloadCSV()">

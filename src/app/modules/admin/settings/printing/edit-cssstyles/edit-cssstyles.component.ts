@@ -3,7 +3,7 @@ import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -52,10 +52,16 @@ export class EditCSSStylesComponent implements OnInit {
   interpolatedPaymentsTexts = [] as string[];
   interpolatedSubFooterTexts = [] as string[];
 
+  receiptStyle$       = this.settingsService.getSettingByNameCached(this.siteService.getAssignedSite(), 'ReceiptStyles').pipe(switchMap(data => { 
+    console.log(data.text)
+    return of(data)
+  })) 
+  
   constructor(
     private settingsService  : SettingsService,
     private siteService      : SitesService,
     private _snackBar        : MatSnackBar,
+
     private fbService        : FbSettingsService,
     private dialogRef        : MatDialogRef<EditCSSStylesComponent>,
     public  route            : ActivatedRoute,
@@ -76,6 +82,7 @@ export class EditCSSStylesComponent implements OnInit {
 
   ngOnInit() {
     console.log('')
+    localStorage.removeItem('https://localhost:44309/api/settings/getSettingByName?name=ReceiptStyles')
   }
 
   async resetDefault() {
@@ -104,6 +111,10 @@ export class EditCSSStylesComponent implements OnInit {
         }
       }
     )
+  }
+
+  deleteCachedStyles() { 
+
   }
 
   notify(message, title) {

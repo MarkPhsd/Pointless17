@@ -98,11 +98,15 @@
 
   @include for-phone-only {
     grid-template-columns:  75px 65px 65px 55px 45px;
+
   }
 
   @media print {
     font-size: 14pt;
     font-weight: bold;
+    grid-template-columns:  75px 65px 65px 55px 45px;
+    gap: var(--gap);
+    display: grid;
   }
 
 }
@@ -127,6 +131,9 @@
   @media print {
     font-size: 14pt;
     font-weight: bold;
+    grid-template-columns:  75px 65px 65px 55px 45px;
+    gap: var(--gap);
+    display: grid;
   }
 }
 
@@ -147,5 +154,8 @@
   @media print {
     font-size: 14pt;
     font-weight: bold;
+    grid-template-columns:  75px 65px 65px 55px 45px;
+    gap: var(--gap);
+    display: grid;
   }
 }

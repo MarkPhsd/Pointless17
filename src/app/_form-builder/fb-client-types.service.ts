@@ -28,6 +28,8 @@ export class FbClientTypesService {
       blindBalanceSheet    : [],
       blindClose           : [],
       balanceSheetDetails  : [],
+      balanceSheetViewTypeSales: [],
+
       // 'admin section
       closeDay             : [],
       sendTextBlast        : [],

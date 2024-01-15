@@ -8,56 +8,54 @@
     <div *ngIf="(printAction$ | async) as printAction"></div>
 
     <div *ngIf="(refreshView$ | async) as layout">
+      <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
+      <div #coachingReceiptView class="buttons-grid">
 
-        <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
-
-        <div #coachingReceiptView class="buttons-grid">
-
-          <div *ngIf="platFormService.isApp()">
-            <button  mat-button (click)="print()">
-              <span *ngIf="printerName">
-                <mat-icon>print</mat-icon>{{printerName}}
-              </span>
-            </button>
-          </div>
-
-          <div *ngIf="!hideExit">
-            <button mat-button (click)="exit()">
-              <mat-icon>close</mat-icon> Exit
-            </button>
-          </div>
-
-        </div>
-
-        <div class="buttons-grid">
-          <span #coachingLink></span>
-          <span #coachingPDF></span>
-          <div>
-            <button *ngIf="order" mat-button (click)="email()">
-              <mat-icon>email</mat-icon>Email
-            </button>
-            <button mat-button
-                    [disabled]="!order || !order?.orderCode"
-                    *ngIf="!isElectronApp"
-                    (click)="openLink()">
-                <mat-icon>link</mat-icon>Link
-            </button>
-          </div>
-
-          <button  mat-button (click)="convertToPDF()">
-            <mat-icon>pdf</mat-icon> PDF
+        <div *ngIf="platFormService.isApp()">
+          <button  mat-button (click)="print()">
+            <span *ngIf="printerName">
+              <mat-icon>print</mat-icon>{{printerName}}
+            </span>
           </button>
-
         </div>
 
+        <div *ngIf="!hideExit">
+          <button mat-button (click)="exit()">
+            <mat-icon>close</mat-icon> Exit
+          </button>
+        </div>
+
+      </div>
+
+      <div class="buttons-grid">
+        <span #coachingLink></span>
+        <span #coachingPDF></span>
         <div>
+          <button *ngIf="order" mat-button (click)="email()">
+            <mat-icon>email</mat-icon>Email
+          </button>
+          <button mat-button
+                  [disabled]="!order || !order?.orderCode"
+                  *ngIf="!isElectronApp"
+                  (click)="openLink()">
+              <mat-icon>link</mat-icon>Link
+          </button>
         </div>
 
-        <div class="mat-card-white">
-          <ng-container>
-            <ng-container [ngTemplateOutlet]="currentView"></ng-container>
-          </ng-container>
-        </div>
+        <button  mat-button (click)="convertToPDF()">
+          <mat-icon>pdf</mat-icon> PDF
+        </button>
+
+      </div>
+
+      <div>
+      </div>
+
+      <div class="mat-card-white">
+        <ng-container>
+          <ng-container [ngTemplateOutlet]="currentView"></ng-container>
+        </ng-container>
+      </div>
     </div>
   </div>
 
@@ -72,43 +70,47 @@
 </ng-template>
 
 <ng-template #receiptTemplate>
-<div *ngIf="(order$ | async) as order">
-  <div *ngIf="receiptStyles && receiptLayoutSetting && ((headerText &&  itemsText) || order)"
-       class="border-section">
-    <app-receipt-layout id="printsection"
-                        [headerText]  ="headerText"
-                        [footerText]  ="footerText"
-                        [itemText]    ="itemsText"
-                        [printerWidth]="receiptLayoutSetting.option9"
-                        [paymentsText]="paymentsText"
-                        [paymentsWICEBTText]="paymentsCreditText"
-                        [paymentsCreditText]="paymentsWICEBTText"
-                        [subFooterText]="subFooterText"
-                        [items]       ="items"
-                        [order]       ="orders"
-                        [payments]    ="payments"
-                        [orderType]   ="orderTypes"
-                        [testdata]    ="false"
-                        [liveEdit]    ="false"
-                        [styles]      ="receiptStyles"
-                        (printReady)  ="setPrintReady($event)"
-                        >
-    </app-receipt-layout>
+  <div *ngIf="(order$ | async) as order">
+    <div *ngIf="receiptStyles && receiptLayoutSetting && ((headerText &&  itemsText) || order)"
+        class="border-section">
+      <app-receipt-layout id="printsection"
+                          [headerText]  ="headerText"
+                          [footerText]  ="footerText"
+                          [itemText]    ="itemsText"
+                          [printerWidth]="receiptLayoutSetting.option9"
+                          [paymentsText]="paymentsText"
+                          [paymentsWICEBTText]="paymentsCreditText"
+                          [paymentsCreditText]="paymentsWICEBTText"
+                          [subFooterText]="subFooterText"
+                          [items]       ="items"
+                          [order]       ="orders"
+                          [payments]    ="payments"
+                          [orderType]   ="orderTypes"
+                          [testdata]    ="false"
+                          [liveEdit]    ="false"
+                          [styles]      ="receiptStyles"
+                          (printReady)  ="setPrintReady($event)"
+                          >
+      </app-receipt-layout>
+    </div>
   </div>
-</div>
 </ng-template>
 
 <ng-template #balanceSheetValues>
-  <balance-sheet-view
-      id="printsection"
-      [printType]="'balanceSheetValues'"
-      [disableAuditButton]="true">
-  </balance-sheet-view>
+  <div *ngIf="receiptStyles">
+    <balance-sheet-view
+        id="printsection"
+        [printType]   ="'balanceSheetValues'"
+        [disableAuditButton]="true"
+        [autoPrint]="autoPrint"
+        [disableAuditButton]="true">
+    </balance-sheet-view>
+  </div>
 </ng-template>
 
 <ng-template #cashDropView>
   <balance-sheet-view
-       id="printsection"
+      id="printsection"
       [printType]="'cashDrop'"
       [disableAuditButton]="true">
   </balance-sheet-view>

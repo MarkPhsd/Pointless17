@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { IReportItemSaleSummary, IReportItemSales } from 'src/app/_services/reporting/reporting-items-sales.service';
 import * as _ from "lodash";
 @Component({
@@ -14,18 +13,15 @@ export class SalesItemsComponent implements OnInit {
   @Input() showSort = true;
   @Input() adjustments: IReportItemSaleSummary;
   @Input() showAll : boolean;
+  @Input() autoPrint : boolean;
   groupedReport: any;
   constructor() { }
 
   ngOnInit(): void {
-
     //then we group by
     if (this.includeDepartments) {
-      // console.log(_.groupBy(data, 'foo.name'));
       this.groupedReport =  _.groupBy(this.sales, 'department');
-      // console.log('groupedreport', this.groupedReport)
     }
-
   }
 
   sortName(list) {

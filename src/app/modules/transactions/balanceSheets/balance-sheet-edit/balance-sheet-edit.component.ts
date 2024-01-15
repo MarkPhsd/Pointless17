@@ -434,15 +434,15 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
   print(event){
     this.autoPrint = false
-    this.balanceSheet$ = this._print(event)
+    this.balanceSheet$ = this._print(true)
   }
 
   printPreview(event){
     this.autoPrint = false
-    this.balanceSheet$ = this._print(event)
+    this.balanceSheet$ = this._print(false)
   }
 
-  _print(event): Observable<any> {
+  _print(autoPrint: boolean): Observable<any> {
     this.printingService.updatePrintView(2);
     const sheet = this.inputForm.value as IBalanceSheet
     sheet.overUnderTotal = this.getCurrentBalance()
@@ -460,9 +460,8 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
           this.siteService.notify('Balance Sheet not assigned for print out.', 'close', 2000, 'red')
           return of(null)
         }
-
         this.sheetMethodsService.updateBalanceSheet(result)
-        return this.printingService.previewReceipt(this.autoPrint)
+        return this.printingService.previewReceipt(autoPrint)
     }));
   }
 

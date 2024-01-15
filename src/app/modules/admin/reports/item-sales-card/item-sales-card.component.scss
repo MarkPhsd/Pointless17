@@ -1,4 +1,9 @@
-@import "/src/mixins.scss";
+mat-card {
+  padding: 2px;
+}
+mat-card-title {
+  margin-bottom: 10px;
+}
 
 .mat-card-container {
   max-width: 375px;
@@ -7,18 +12,36 @@
   padding: 2px;
 }
 
-.mat-divider {
-  margin-top: 15px;
-  margin-bottom: 5px;
-}
-
-mat-card {
-  padding: 2px;
-}
-
 .mat-card-title {
   padding-bottom: 10px;
   font-size: 1.2em;
+}
+
+.info-width {
+  width: 350px;
+}
+
+.header-grid {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(105px, 1fr) );
+  margin: 3px;
+  width: 305px;
+
+  @media print {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+    font-size: 12pt;
+    font-weight: bold;
+  }
+}
+
+.mat-divider {
+  margin-top: 15px;
+  margin-bottom: 5px;
 }
 
 button {
@@ -56,10 +79,18 @@ button {
   display: grid;
   gap: var(--gap);
   grid-template-columns: 160px auto auto;
-}
 
-mat-card-title {
-  margin-bottom: 10px;
+  @media print {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 160px auto auto;
+    font-size: 12pt;
+    font-weight: bold !important;
+    justify-content: right;
+    text-align: right;
+    width:  100%;
+  }
 }
 
 .margin-divider {
@@ -69,7 +100,7 @@ mat-card-title {
 
 .grid-body-action {
   display              : grid;
-  grid-template-columns: 125px 90px 75px 75px; ; //90px;
+  grid-template-columns: 125px 90px 75px 75px; ;
   grid-template-rows   : auto;
   grid-gap             : 10px;
   justify-content      : space-between;
@@ -77,11 +108,19 @@ mat-card-title {
   max-width            : 350px;
   font-size            : 1em;
 
-  @include for-phone-only {
-    grid-template-columns: 125px 90px 50px 75px; //90px;
+  @media print {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 125px 90px 75px 75px; ; 
+    font-size: 12pt;
+    font-weight: bold !important;
+    justify-content: right;
+    text-align: right;
+    width:  100%;
   }
-
 }
+
 
 .grid-adjustment {
   display: grid;
@@ -92,14 +131,23 @@ mat-card-title {
   margin-left: 0px;
   max-width: 360px;
   font-size: 1em;
-  @include for-phone-only {
-    grid-template-columns: 115px 60px 60px auto ;
+
+  @media print {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 115px 60px 60px auto;
+    font-size: 12pt;
+    font-weight: bold !important;
+    justify-content: right;
+    text-align: right;
+    width:  100%;
   }
 }
 
 .grid-body-header {
   display              : grid;
-  grid-template-columns: 125px auto ; //90px;
+  grid-template-columns: 125px auto ;
   grid-template-rows   : auto;
   grid-gap             : 2px;
   justify-content      : space-between;
@@ -108,10 +156,17 @@ mat-card-title {
   font-size            : 1.4em;
   font-weight: 700;
 
-  @include for-phone-only {
-    grid-template-columns: 125px 90px 50px 75px; //90px;
+  @media print {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 125px 90px 50px 75px; 
+    font-size: 12pt;
+    font-weight: bold !important;
+    justify-content: right;
+    text-align: right;
+    width:  100%;
   }
-
 }
 
 .item-span {
@@ -120,7 +175,7 @@ mat-card-title {
 
 .grid-subbody-header {
   display              : grid;
-  grid-template-columns: 125px 125px ; //90px;
+  grid-template-columns: 125px 125px ; 
   grid-template-rows   : auto;
   grid-gap             : 2px;
   justify-content      : space-between;
@@ -129,10 +184,17 @@ mat-card-title {
   font-size            : 1.2em;
   font-weight: 600;
 
-  @include for-phone-only {
-    grid-template-columns: 125px 90px 50px 75px; //90px;
+  @media print {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 125px 125px ; 
+    font-size: 12pt;
+    font-weight: bold !important;
+    justify-content: right;
+    text-align: right;
+    width:  100%;
   }
-
 }
 
 .header-margin {
@@ -142,7 +204,7 @@ mat-card-title {
 
 .grid-body {
   display              : grid;
-  grid-template-columns: 135px 90px 60px 85px; //90px;
+  grid-template-columns: 135px 90px 60px 85px;
   grid-template-rows   : auto;
   grid-gap             : 2px;
   justify-content      : space-between;
@@ -150,15 +212,19 @@ mat-card-title {
   max-width            : 350px;
   font-size            : 1em;
 
-  @include for-phone-only {
-    grid-template-columns: 125px 90px 60px 85px; //90px;
+  @media print {
+    --gap: 5px;
+    display: grid!important;
+    gap: var(--gap)!important;
+    grid-template-columns: 135px 90px 60px 85px!important;
+    font-size: 12pt;
+    font-weight: bold !important;
   }
-
 }
 
 .grid-footer {
   display              : grid;
-  grid-template-columns: 125px 90px 50px 75px; //90px;
+  grid-template-columns: 125px 90px 50px 75px;
   grid-template-rows   : auto;
   grid-gap             : 2px;
   justify-content      : space-between;
@@ -166,8 +232,17 @@ mat-card-title {
   max-width            : 350px;
   font-size            : 1.1em;
   font-weight          : 600;
-  @include for-phone-only {
-    grid-template-columns: 125px 90px 50px 75px; //90px;
+
+  @media print {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 125px 90px 50px 75px; 
+    font-size: 12pt;
+    font-weight: bold !important;
+    justify-content: right;
+    text-align: right;
+    width:  100%;
   }
 }
 

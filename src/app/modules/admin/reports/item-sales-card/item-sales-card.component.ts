@@ -1,11 +1,10 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Observable, of, Subject, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSalesService, IReportItemSaleSummary, POSItemSearchModel } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-
 // https://stackoverflow.com/questions/51487689/angular-5-how-to-export-data-to-csv-file
 
 @Component({
@@ -32,7 +31,10 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
   @Input() removeGiftCard= true;
   @Input() taxFilter = 0;
   @Input() includeDepartments: boolean;
-
+  @Input() autoPrint : boolean;
+  printReadyList = []
+  @Output() renderComplete = new EventEmitter<any>();
+ 
   adjustments$:  Observable<unknown>;
   adjustments: IReportItemSaleSummary;
   action$ :  Observable<unknown>;
@@ -104,10 +106,11 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     searchModel.scheduleDateStart = this.scheduleDateStart
     searchModel.scheduleDateEnd   = this.scheduleDateEnd;
     searchModel.taxFilter         = this.taxFilter;
-
+    searchModel.reportRunID       = this.reportRunID;
     if (this.site) {
       this.sales$ = this.reportingItemsSalesService.groupItemSales(this.site, searchModel).pipe(switchMap(data => {
         this.sales = data;
+        this.renderComplete.emit(true)
         return of(data)
       }))
     }
@@ -140,6 +143,7 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
 
     this.sales$ = this.reportingItemsSalesService.listAdjustedItems(this.site, searchModel).pipe(switchMap(data => {
        this.adjustments = data as IReportItemSaleSummary;
+       this.renderComplete.emit(true)
       return of(data)
     }))
     return;
@@ -173,6 +177,7 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
                                                                   this.sales)
       return action$.pipe(switchMap(data => {
         if (data) {
+          this.renderComplete.emit(true)
           this.sales.results.filter(item => {
             return !item.ID
           })
@@ -205,6 +210,9 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     }
   }
 
+  setPrintReady() { 
+    
+  }
 
 }
 

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransferDataService } from 'src/app/_services/transactions/transfer-data.service';
 import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
@@ -79,6 +79,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   auditPayment  : IPaymentSalesSummary;
   scheduleDateStart  = new Date
   scheduleDateEnd = new Date;
+  autoPrint: boolean;
 
   userSubscriber() {
     this._user = this.authenticationService.user$.subscribe(data => {
@@ -106,6 +107,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     private coachMarksService: CoachMarksService,
     private authenticationService: AuthenticationService,
     private paymentReportService: SalesPaymentsService,
+    private cdr: ChangeDetectorRef
   ) {
     if (!this.site) {
       this.site = this.siteService.getAssignedSite();
@@ -388,16 +390,20 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   }
 
   print(styles) {
+    // this.autoPrint = true
+    // this.cdr.detectChanges()
     if (!this.printerName) {
       this.siteService.notify('Please select a printer', 'Alert', 1000)
       return
     }
     if (this.platFormService.isAppElectron) {
       this.printElectron(styles)
+ 
       return
     }
     if (this.platFormService.androidApp) { this.printAndroid();}
     if (this.platFormService.webMode)    { this.convertToPDF();}
+
   }
 
   closeAllSheets() {
@@ -448,6 +454,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   }
 
   printElectron(styles) {
+
     const contents = this.getReceiptContents(styles)
     const options = {
       silent: true,
@@ -467,6 +474,8 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
       console.log('no printerName in print electron')
       return
     }
+
+    
     if (contents && this.printerName, options) {
       this.printing = true;
       this.printingService.printElectron( contents, this.printerName, options)

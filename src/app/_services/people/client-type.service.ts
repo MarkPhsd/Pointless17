@@ -21,6 +21,7 @@ export interface IUserAuth_Properties {
   blindBalanceSheet    : boolean;
   balanceSheetDetails  : boolean;
   blindClose           : boolean;
+  balanceSheetViewTypeSales: boolean;
   
   // 'admin section
   closeDay             : boolean;

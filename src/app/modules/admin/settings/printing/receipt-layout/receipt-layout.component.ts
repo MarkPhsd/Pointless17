@@ -142,9 +142,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   }
 
   initTemplateData(order) {
-    if (!order) {
-      return null
-    }
+    if (!order) {  return null   }
 
     this.items      = order.posOrderItems;
     if (!this.payments) {
@@ -194,7 +192,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
       // this.enabledPrintReady = true;
       this.printingService.updatePrintReady({ready: true, index: this.index});
       this.outPutPrintReady.emit({ready: true, index: this.index})
-
     }, 500)
   }
 
@@ -218,14 +215,10 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
 
     this.getReceiptWidth();
     this.action$ = this.initSubscriptions().pipe(
-        switchMap(data => {
-            return of(data)
-          }
+        switchMap(data => {  return of(data)  }
         )
       ).pipe(
-        switchMap( data => {
-           return this.getStyles()
-          }
+        switchMap( data => {  return this.getStyles()  }
         )
       ).pipe(
         switchMap(data => {

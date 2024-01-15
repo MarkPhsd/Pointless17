@@ -135,6 +135,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   sendOrderOnExit(order: IPOSOrder) {
+    console.log('exit', order)
     let sendOrder$ : Observable<any>;
     if (!order) {  return of(null)  }
     if (this.isApp) {

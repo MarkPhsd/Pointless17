@@ -121,7 +121,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     )
 
     this._printReady = this.printingService.printReady$.subscribe(status => {
-      if(!this.receiptStyles) { return }
+      if(!this.receiptStyles || status?.balanceSheet) { return }
       if (status && status.ready) {
           if ((this.options && this.options.silent) || this.autoPrint) {
             if (this.autoPrinted) {
@@ -148,9 +148,10 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   async printViewCompleted(event) {
+    // console.log('auto Print after preview', this.autoPrint)
     if (this.autoPrint) {
       await this.print();
-      console.log('about to exit')
+      // console.log('about to exit')
       this.exit()
     }
   }
@@ -181,7 +182,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     this.initPrintView() //done
     this.intSubscriptions();
     this.userSubscriber();
-    console.log('auto print', this.autoPrint)
   }
 
   ngOnDestroy(): void {
@@ -434,7 +434,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   async print() {
-
     if (this.platFormService.isAppElectron) {
       await this.printElectron();
       this.printPrep();
@@ -452,18 +451,15 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       this.printPrep();
       return;
     }
-
-
   }
 
   printPrep() {
-    console.log('print prep')
     this.paymentsMethodsProcessService.sendOrderProcessLockMethod(this.order)
   }
 
   async printElectron() {
     let styles
-
+    console.log('styles', this.receiptStyles)
     if (!this.receiptStyles) {
       this.siteService.notify('No Print Styles, please contact admin', 'close', 3000, 'red' )
     }
@@ -471,27 +467,20 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     if (this.receiptStyles) {
       styles = this.receiptStyles.text;
 
-      // console.log('styles', styles)
       const contents = this.getReceiptContents(styles)
-
       if (!contents) { return false}
-
       const options  = {
         silent: true,
         printBackground: false,
         deviceName: this.printerName
       } as printOptions;
 
-      // console.log('printElectron()', options);
-
       if (!contents) {
         this.siteService.notify('No content determined for receipt.', 'close', 3000, 'red' )
-        // console.log('no contents in print electron');
         return;
       }
 
       if (!options) {
-        //  console.log('no options in print electron')
          return;
       }
 
@@ -506,8 +495,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
         return printResult
       }
 
-
-
     }
     return false
   }
@@ -521,10 +508,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   exit() {
-    // if (this.autoPrint) {
-    //   this.outPutExit.emit('false');
-    //   return ;
-    // }
     this.outPutExit.emit('true')
   }
 
@@ -619,12 +602,11 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     }
   }
 
-
-    addCoachingList() {
-      this.coachMarksService.add(new CoachMarksClass(this.coachingReceiptView.nativeElement, "Receipt View: The Receipt View gives you an option to print."));
-      this.coachMarksService.add(new CoachMarksClass(this.coachingPDF.nativeElement, "PDF: Save as PDF"));
-      this.coachMarksService.add(new CoachMarksClass(this.coachingLink.nativeElement, "Link: If you are in a browser, a link button will appear. This will allow customers to pay for the order using Stripe or PayPal."));
-    }
+  addCoachingList() {
+    this.coachMarksService.add(new CoachMarksClass(this.coachingReceiptView.nativeElement, "Receipt View: The Receipt View gives you an option to print."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingPDF.nativeElement, "PDF: Save as PDF"));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingLink.nativeElement, "Link: If you are in a browser, a link button will appear. This will allow customers to pay for the order using Stripe or PayPal."));
+  }
 
 }
 

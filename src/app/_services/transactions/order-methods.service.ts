@@ -256,7 +256,6 @@ export class OrderMethodsService implements OnDestroy {
 
   updateOrder(order: IPOSOrder) {
     try {
-
       this.preSwitchOrder(order)
       this.currentOrder = order;
       this._currentOrder.next(order);

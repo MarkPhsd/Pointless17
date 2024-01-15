@@ -1,10 +1,18 @@
-@import "/src/mixins.scss";
-
 .grid-container {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+
+  @media print {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+    font-size: 12pt;
+    font-weight: bold;
+  }
+
 }
 
 .title {
@@ -39,10 +47,14 @@
   gap: var(--gap);
   grid-template-columns: repeat( 145px, minmax(145px, 1fr) );
   margin: 3px;
-  @include for-phone-only  {
+  
+  @media print {
+    --gap: 5px;
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 3px;
+    gap: var(--gap);
+    grid-template-columns: repeat( 145px, minmax(145px, 1fr) );
+    font-size: 12pt;
+    font-weight: bold;
   }
 }
 
@@ -52,11 +64,7 @@
 }
 
 .info-width {
-  max-width: 275px;
-  width:  100%;
-  @include for-phone-only  {
-    max-width: 275px;
-  }
+  width: 350px;
 }
 
 .cashdrop-border {
@@ -68,14 +76,9 @@
   padding: 2px;
 }
 
-// .calculation {
-//   display:inline-block;
-// }
-
 .calculation {
   grid-column: 2/3;
   text-align: end;
   justify-content: end;
   align-items: end; 
-
 }

@@ -10,7 +10,9 @@
         [groupBy]="groupBy"
         [type]="'sales'"
         [zrunID]="zrunID"
-      >{{groupBy}}</app-payment-report-data>
+        [autoPrint]="autoPrint"  >
+      <ng-content></ng-content>
+    </app-payment-report-data>
     </div>
   </div>
 </div>
@@ -26,6 +28,7 @@
         [groupBy]="groupBy"
         [type]="'refunds'"
         [zrunID]="zrunID"
+        [autoPrint]="autoPrint"
       >Refunds </app-payment-report-data>
   </div>
 </div>
@@ -40,6 +43,7 @@
         [notifier]="notifier"
         [type]="'voids'"
         [zrunID]="zrunID"
+        [autoPrint]="autoPrint"
       >Voids </app-payment-report-data>
   </div>
 </div>

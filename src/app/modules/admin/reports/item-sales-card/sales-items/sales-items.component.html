@@ -1,20 +1,20 @@
-<button *ngIf="!includeDepartments" mat-raised-button color="accent" (click)="sortSales(sales)">Sort By Value</button>
-<button *ngIf="!includeDepartments" mat-raised-button color="accent" (click)="sortName(sales)">Sort By Name</button>
+<button *ngIf="!autoPrint && !includeDepartments" 
+        mat-raised-button color="accent" (click)="sortSales(sales)">Sort By Value</button>
+<button *ngIf="!autoPrint && !includeDepartments" 
+        mat-raised-button color="accent" (click)="sortName(sales)">Sort By Name</button>
 
 <div *ngIf="includeDepartments">
   <div  *ngFor="let item of groupedReport | keyvalue">
-
     <h4 *ngIf="item?.key != 'null'">{{item?.key }}</h4>
     <h4 *ngIf="!item?.key || item?.key == 'null'">Department not Assigned</h4>
 
-    <br>
     <ng-container [ngTemplateOutlet]="headers"></ng-container>
     <div  *ngFor="let sale of item | keyvalue">
-      <div class="grid-body" *ngFor="let sale of sale.value | derp">
+      <div class="item-sales-grid-body" *ngFor="let sale of sale.value | derp">
         <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
-        <div class="totals">{{sale?.itemTotal | currency }}   </div>
-        <div class="totals">{{sale?.quantity | number: '1.0-0' }}               </div>
-        <div class="totals">{{sale?.cost | currency }}   </div>
+        <div class="totalslabel">{{sale?.itemTotal | currency }}   </div>
+        <div class="totalslabel">{{sale?.quantity | number: '1.0-0' }}               </div>
+        <div  *ngIf="!autoPrint" class="totalslabel">{{sale?.cost | currency }}   </div>
       </div>
     </div>
   </div>
@@ -23,22 +23,23 @@
 
 <div *ngIf="!includeDepartments">
   <ng-container [ngTemplateOutlet]="headers"></ng-container>
-  <div  class="grid-body"  *ngFor="let sale of (showAll ? sales : sales?.slice(0,10))" >
+  <div  class="item-sales-grid-body"  *ngFor="let sale of (showAll ? sales : sales?.slice(0,10))" >
     <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
     <div class="totals">{{sale?.itemTotal | currency }}   </div>
     <div class="totals">{{sale?.quantity }}               </div>
-    <div class="totals">{{sale?.cost | currency }}   </div>
+    <div *ngIf="!autoPrint" class="totals">{{sale?.cost | currency }}   </div>
   </div>
 </div>
 
-<div class="margin-divider">  <mat-divider></mat-divider>  </div>
+<div   *ngIf="!autoPrint" class="margin-divider">  <mat-divider></mat-divider>  </div>
 
 <ng-template #headers>
-  <div class="grid-body">
+ <div class="item-sales-grid-body">
     <div class="totalslabel">Item :    </div>
     <div class="totals">     Pre Tax :</div>
     <div class="totals">     #         </div>
-    <div class="totals">     Cost :</div>
+    <div *ngIf="!autoPrint" class="totals">     Cost :</div> 
   </div>
-  <div class="margin-divider">  <mat-divider></mat-divider> </div>
+  <div  *ngIf="!autoPrint" class="margin-divider">  <mat-divider></mat-divider> </div>
 </ng-template>
+

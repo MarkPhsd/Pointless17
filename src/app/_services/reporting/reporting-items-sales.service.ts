@@ -133,6 +133,7 @@ export interface POSItemSearchModel {
 }
 
 export interface IReportingSearchModel {
+  reportRunID: number;
   startDate:                    string;
   endDate:                      string;
   serviceTypeID:                number;

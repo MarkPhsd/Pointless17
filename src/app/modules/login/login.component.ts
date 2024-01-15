@@ -19,6 +19,7 @@ import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.serv
 import { ScaleService } from '../../_services/system/scale-service.service';
 import { ElectronService } from 'ngx-electron';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 // import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY } from '@angular/cdk/overlay/overlay-directives';
 
 @Component({
@@ -140,6 +141,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private orderMethodsService:   OrderMethodsService,
         private electronService        : ElectronService,
         private settingService: SettingsService,
+        private paymentMethodsservice: PaymentsMethodsProcessService,
         @Optional() private dialogRef  : MatDialogRef<LoginComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
     )
@@ -422,6 +424,9 @@ export class LoginComponent implements OnInit, OnDestroy {
           //for some reason they were here, but they prevented a login,
           //after login it would log out. but reviewing these two lines does not
           //reveal why.
+
+          this.orderMethodsService.updateOrder(null)
+          this.paymentMethodsservice._sendOrderAndLogOut.next(null)
           this.initForm();
 
           if (!result || (result && result.errorMessage)) {

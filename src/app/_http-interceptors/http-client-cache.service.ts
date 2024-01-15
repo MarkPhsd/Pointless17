@@ -71,6 +71,7 @@ export class HttpClientCacheService {
     options.cacheMins = options.cacheMins || 0
     const  key = this.getKey(verb, options)
 
+    // console.log('key', key)
     if (options.cacheMins > 0) {
       const data = this._cacheService.load(key)
       if (data !== null) {

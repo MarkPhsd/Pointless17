@@ -125,6 +125,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   sendAndLogOut$ = this.paymentMethodsService.sendOrderAndLogOut$.pipe(switchMap(
       send => {
         if (!send || send == null) {  return of(null)  }
+        console.log('sendandlogout', send)
         const noOrder = (!send.order || send.order == undefined)
         const justLogOut = (noOrder && send.logOut)
         const browserLogout = (!this.platFormService.isApp() && send.logOut)
@@ -137,6 +138,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
               return of(true)
             }
             const send$ = this.printAction$ = this.sendOrderOnExit(send.order).pipe(switchMap(data => {
+              this.orderMethodsSevice.updateOrder(null)
+              this.paymentMethodsProcessService._sendOrderAndLogOut.next(null)
               if (send && send.logOut) {
                   return  of(true)
                 }
@@ -426,6 +429,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private userIdle                : UserIdleService,
                private orderMethodsSevice      : OrderMethodsService,
                private paymentMethodsService   : PaymentsMethodsProcessService,
+               private paymentMethodsProcessService: PaymentsMethodsProcessService,
                private dialog                  : MatDialog,
     ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()

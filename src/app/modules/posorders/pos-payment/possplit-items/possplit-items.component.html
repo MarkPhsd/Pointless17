@@ -81,10 +81,11 @@
                 <div class="primary-container drag-drop-container">
                   Group 1
                   <div
+                    id="availableItemsList"
                     cdkDropList
                     #availables="cdkDropList"
                     [cdkDropListData]="availableItems"
-                    [cdkDropListConnectedTo]="[selects]"
+                    [cdkDropListConnectedTo]="['selects']"
                     (cdkDropListDropped)="drop($event)"
                     class="drag-drop-list">
                     <div
@@ -101,13 +102,15 @@
               </div>
 
               <div class="col-md-6 col-lg-6 col-sm-12 dualListRight">
-                <div class="primary-container drag-drop-container" *ngIf="currentGroup != '1'">
+                <div class="primary-container drag-drop-container" 
+                     *ngIf="currentGroup != '1'">
                   Items in group {{currentGroup}}
                   <div
+                    id="selectedItemsList"
                     cdkDropList
                     #selects="cdkDropList"
                     [cdkDropListData]="selectedItems"
-                    [cdkDropListConnectedTo]="[availables]"
+                    [cdkDropListConnectedTo]="['availables']"
                     (cdkDropListDropped)="drop($event)"
                     class="drag-drop-list" >
                     <div

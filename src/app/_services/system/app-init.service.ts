@@ -65,6 +65,7 @@ export class AppInitService  {
     if (!rememberMe || rememberMe != 'true') {
       this.clearUserSettings();
     }
+
     if (!rememberMe || rememberMe != 'true') {
       if (!this.initialized && isApp ) {
         this.initialized = true;
@@ -76,11 +77,9 @@ export class AppInitService  {
     const config = await this.httpClient.get('assets/app-config.json').toPromise()  as IAppConfig
 
     if ( !isApp && config) {
-      // this.apiUrl     = config.apiUrl
       //we can use this for the online free site so anyone can use a site for their own store.
       if (  config.apiUrl === undefined ||  config.apiUrl === 'domain'){
         this.useAppGate = false
-        // console.log('navigating to app setting from init: APIURL Defined', this.apiUrl, config)
         this.router.navigate(['/apisetting']);
         return
       }

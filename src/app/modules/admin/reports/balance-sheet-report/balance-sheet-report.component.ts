@@ -20,7 +20,7 @@ export class BalanceSheetReportComponent implements OnInit {
   @Input() notifier: Subject<boolean>
   @Input() groupBy = "employee"
   @Input() zrunID  : string;
-
+  @Input() autoPrint: boolean = false;
   showAll : boolean;
   sheets$ : Observable<IBalanceSheetPagedResults>;
   sheets : IBalanceSheetPagedResults;

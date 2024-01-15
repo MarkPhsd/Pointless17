@@ -148,6 +148,7 @@ export interface IBalanceSheet {
   cashDrops            : CashDrop[];
   message              : string;
   errorMessage         : string;
+  netSales: number;
 }
 
 export interface CashDrop {

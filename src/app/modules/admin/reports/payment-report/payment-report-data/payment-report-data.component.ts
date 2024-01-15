@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -21,7 +21,8 @@ export class PaymentReportDataComponent implements OnInit {
   @Input() zrunID  : string;
   @Input() sales   : IPaymentSalesSummary;
   @Input() reportRunID: number;
-  
+  @Input() autoPrint: boolean;
+
   constructor(
     private popOutService: ProductEditButtonService,
     private reportingItemsSalesService: ReportingItemsSalesService)
@@ -29,6 +30,7 @@ export class PaymentReportDataComponent implements OnInit {
 
   ngOnInit(): void {
     const i = 0
+    this.type = this.type.toUpperCase()
   }
 
   downloadCSV() {

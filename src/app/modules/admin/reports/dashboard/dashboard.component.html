@@ -1,3 +1,6 @@
+<!-- Styles
+assets/htmlTemplates/salesreportStyles.html' -->
+
 <div  class="container" *ngIf="(uiTransactions$ | async) as value">
   <ng-container *ngTemplateOutlet="headerView"></ng-container>
 
@@ -302,6 +305,7 @@
                   [dateFrom]="dateFrom"
                   [dateTo]  ="dateTo"
                   [notifier]="childNotifier"
+                  [autoPrint]="autoPrint"
                   [type]="'voids'">
             <div header>
               <mat-icon >summarize</mat-icon> Void Payments {{site.name}}
@@ -321,6 +325,7 @@
                   [dateTo]  ="dateTo"
                   [notifier]="childNotifier"
                   [type]="'refunds'"
+                  [autoPrint]="autoPrint"
                   >
             <div header>
               <mat-icon >summarize</mat-icon> Refund Payments {{site.name}}
@@ -340,6 +345,7 @@
                   [removeGiftCard]="true"
                   [groupBy]  = "'void'"
                   [viewType] = "'adjustment'"
+                  [autoPrint]="autoPrint"
                   >
                 <div class="header">
                   <mat-icon>menu</mat-icon>  Item Voids

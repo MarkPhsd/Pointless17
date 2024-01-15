@@ -2,20 +2,19 @@
   <mat-card>
     <mat-card-title>
       <h4>Balance Sheets - {{site.name}}</h4>
-    </mat-card-title>
-
-    <mat-card-content>
       <div  class="totals_label">
         <ng-container [ngTemplateOutlet]="buttonsView"></ng-container>
       </div>
+    </mat-card-title>
 
-      <div class="header">
+    <mat-card-content>
+      <br>
+      <div class="header balance-sheet-grid">
         <div class="grid-item">Start</div>
         <div class="grid-item">ID</div>
         <div class="grid-item">User</div>
         <div class="grid-item">Total</div>
         <div class="grid-item">+/-</div>
-
         <div class="grid-item">Device</div>
         <div class="grid-item">Opened</div>
         <div class="grid-item">Closed</div>
@@ -24,8 +23,6 @@
       <mat-divider></mat-divider>
       <br>
 
-      <!-- <div *ngFor="let item of sheets.results">
-       -->
       <div *ngIf="sheets.results as sheets">
         <div *ngFor="let item of (showAll ? sheets : sheets.slice(0,5) )" >
           <ng-container
@@ -62,16 +59,15 @@
 
 
 <ng-template #reportView let-item>
-  <div class="header">
+  <div class="header balance-sheet-grid">
     <div class="grid-item text-format">{{ item?.startTime | date: 'M/d/yy' }}</div>
     <div class="grid-item number-format">{{item?.id}}</div>
-    <div class="grid-item text-format">{{item?.balanceSheetEmployee?.firstName | truncateText : 5}}  {{item?.balanceSheetEmployee?.lastName.slice(1)}}.</div>
+    <div class="grid-item text-format">{{item?.balanceSheetEmployee?.firstName | truncateText : 5}}  {{ item?.balanceSheetEmployee?.lastName | truncateText : 1 }}.</div>
     <div class="grid-item number-format">{{item?.salesTotal | currency}}</div>
     <div class="grid-item number-format">{{item?.overUnderTotal | currency }}</div>
-
     <div class="grid-item text-format">{{item?.deviceName  }}</div>
     <div></div>
-    <div class="grid-item col-span-2 ">{{item?.startTime | date : 'hh:mm ampm'}}</div>
+    <div class="grid-item col-span-2 ">{{item?.startTime | date : 'hh:mm ampm' }}</div> 
     <div class="grid-item col-span-2">{{item?.endTime |  date : 'hh:mm ampm' }}</div>
   </div>
 </ng-template>
@@ -82,13 +78,13 @@
 </ng-template>
 
 <ng-template #buttonsView>
-  <span>
+  <div class="media-hidden">
     <button mat-raised (click)="togglesShowAll()">
     <mat-icon>expand</mat-icon></button>
     <button mat-raised (click)="downloadCSV()">
       <mat-icon>download</mat-icon></button>
     <button mat-raised (click)="dataGridView()">
       <mat-icon>open_in_full</mat-icon></button>
-  </span>
+  </div>
 </ng-template>
 

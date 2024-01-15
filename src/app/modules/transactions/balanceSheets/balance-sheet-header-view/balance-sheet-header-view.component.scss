@@ -11,9 +11,7 @@
     gap: var(--gap);
     grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
     font-size: 12pt;
-    font-weight: bold !important;
-    justify-content: right;
-    text-align: right;
+    font-weight: bold;
   }
 }
 
@@ -35,15 +33,12 @@
     gap: var(--gap);
     grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
     font-size: 12pt;
-    font-weight: bold !important;
-    justify-content: right;
-    text-align: right;
+    font-weight: bold;
   }
 }
 
 .info-width {
   width: 350px;
-
 }
 
 .cashdrop-border {
@@ -60,8 +55,6 @@
     gap: var(--gap);
     grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
     font-size: 12pt;
-    font-weight: bold !important;
-    justify-content: right;
-    text-align: right;
+    font-weight: bold;
   }
 }

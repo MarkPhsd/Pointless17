@@ -2,14 +2,13 @@ import { Component, OnInit, EventEmitter, Input, Output, HostListener } from '@a
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
-import { map, Observable, of, switchMap} from 'rxjs';
+import { Observable, of, switchMap} from 'rxjs';
 import { IItemBasic, IItemBasicB } from 'src/app/_services/menu/menu.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrdersService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PrintingService } from 'src/app/_services/system/printing.service';
-import { group } from 'console';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 export interface   ISelectedItems{
@@ -126,7 +125,9 @@ export class POSSplitItemsComponent implements OnInit {
     @HostListener("window:resize", [])
     updateItemsPerPage() {
       this.smallDevice = false
-      if (window.innerWidth < 768) { this.smallDevice = true  }
+      if (window.innerWidth < 768) {
+        this.smallDevice = true
+      }
       if (!this.smallDevice) {
       }
     }
@@ -154,6 +155,7 @@ export class POSSplitItemsComponent implements OnInit {
         this._applyGroupID(event.id)
       }
     }
+
     _applyGroupID(id:number) { 
       this.currentGroupID = id;
       this.currentGroup   = id.toString()
@@ -170,7 +172,7 @@ export class POSSplitItemsComponent implements OnInit {
       );
 
       this.availableItems = allItems.filter( x => {
-          if ( x.groupID == 1|| x.groupID == undefined  || x.groupID == null ) {
+          if ( x.groupID == 0 || x.groupID == 1 || x.groupID == undefined  || x.groupID == null ) {
             return x;
           }
         }
@@ -205,34 +207,36 @@ export class POSSplitItemsComponent implements OnInit {
     //and keep a reference to the selecteditems, then push the whole list.
     saveAssignedCategories(selected: IListBoxItem[]) {
       // if (selected) {
-        // if (selected.length     == 0)  { return   }
-        const site           = this.siteService.getAssignedSite();
-        const items$         = this.orderService.applyItemsToGroup(site, this.currentGroupID, selected);
-        const assignedItems$ = this.orderService.applyItemsToGroup(site, 1, this.availableItems)
+      // if (selected.length     == 0)  { return   }
 
-        this.saveAssignedItems$ = items$.pipe(
-          switchMap(data => {
-            return assignedItems$
-          })).pipe(
-            switchMap(data => {
-            if (data) {
-              this.setGroupOrderTotal(site, this.order.id, this.currentGroupID)
-              this.changesOcurred = false;
-              this.savingChanges = false
-            }
-            return  this.orderService.getOrder(site, this.order.id.toString() , false)
+      const site           = this.siteService.getAssignedSite();
+      const items$         = this.orderService.applyItemsToGroup(site, this.currentGroupID, selected);
+      const assignedItems$ = this.orderService.applyItemsToGroup(site, 1, this.availableItems)
+
+      this.saveAssignedItems$ = items$.pipe(
+        switchMap(data => {
+          return assignedItems$
         })).pipe(
           switchMap(data => {
-          this.orderMethodsService.updateOrder(data);
-          return of(data)
-        }));
-
+          if (data) {
+            this.setGroupOrderTotal(site, this.order.id, this.currentGroupID)
+            this.changesOcurred = false;
+            this.savingChanges = false
+          }
+          return  this.orderService.getOrder(site, this.order.id.toString() , false)
+      })).pipe(
+        switchMap(data => {
+        this.orderMethodsService.updateOrder(data);
+        return of(data)
+      }));
       // console.log('selected', selected)
     }
 
     setGroupOrderTotal(site, orderID, groupID) {
       this.orderGroupTotal$ = this.orderService.getPOSOrderGroupTotal(site, orderID, groupID).pipe(
-        switchMap(data => { return of(data)  })
+        switchMap(data => {
+          return of(data)
+        })
       )
     }
 
@@ -257,11 +261,9 @@ export class POSSplitItemsComponent implements OnInit {
     }
 
     refreshAssignedItems() {
-
       if (!this.order) return;
       if (!this.currentGroupID) { this.currentGroupID = 1 };
       const site = this.siteService.getAssignedSite();
-
       const selectedItems$  = this.orderService.getSplitItemsList(site, this.order?.id, this.currentGroupID);
 
       this.orderGroupTotal$ = selectedItems$.pipe(switchMap(data => {
@@ -295,11 +297,58 @@ export class POSSplitItemsComponent implements OnInit {
     }
 
     drop(event: CdkDragDrop<IListBoxItem[]>) {
+
+      console.log('previous', event.previousIndex, event.previousContainer);
+      console.log('container', event.currentIndex, event.container);
+
+      console.log('selectedItems', this.selectedItems);
+      console.log('availableItems', this.availableItems);
+
+      console.log('event.previousContainer.id', event.previousContainer.id)
+      console.log('event.container.id', event.container.id)
+      
+       // Additional logic based on the IDs
+      if (event.previousContainer.id === 'availableItemsList' && 
+          event.container.id === 'selectedItemsList') {
+          // Item moved from available to selected
+          console.log('Item moved from available to selected')
+      } else if (event.previousContainer.id === 'selectedItemsList' && 
+                event.container.id === 'availableItemsList') {
+          // Item moved from selected to available
+          console.log('Item moved from selected to available')
+      }
+
       if (event.previousContainer === event.container) {
-        // console.log('moveItemInArray')
+        console.log('moveItemInArray')
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
       } else {
-        // console.log('transferArrayItem')
+        console.log('transferArrayItem')
+        transferArrayItem(event.previousContainer.data, event.container.data, 
+                          event.previousIndex, event.currentIndex);
+      }
+
+      // clear marked available items and emit event
+      this.itemsMoved.emit({
+        available: this.availableItems,
+        selected: this.selectedItems,
+        movedItems: event.container.data.filter((v, i) => i === event.currentIndex),
+        from: 'available',
+        to: 'selected',
+      });
+
+      // this.availableItems.forEach(data => { data.groupID = 1; })
+      // this.selectedItems.forEach(data =>  { data.groupID = this.currentGroupID; });
+      this.changesOcurred = true;
+    }
+
+
+    dropToList(event: CdkDragDrop<IListBoxItem[]>) {
+      console.log('previous', event.previousIndex, event.previousContainer)
+      console.log('container', event.currentIndex, event.container)
+
+      if (event.previousContainer === event.container) {
+        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      } else {
         transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
       }
 
@@ -312,36 +361,15 @@ export class POSSplitItemsComponent implements OnInit {
         to: 'selected',
       });
 
-      this.availableItems.forEach(data => {  data.groupID = 1; })
-
-      this.selectedItems.forEach(data => { data.groupID = this.currentGroupID; });
+      // this.availableItems.forEach(data => {  data.groupID = 1; })
+      // this.selectedItems.forEach(data =>  {  data.groupID = this.currentGroupID; });
       this.changesOcurred = true;
     }
 
-    dropToList(event: CdkDragDrop<IListBoxItem[]>, index: number) {
-      if (event.previousContainer === event.container) {
-        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-      } else {
-        transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
-      }
-
-      // clear marked available items and emit event
-      this.itemsMoved.emit({
-        available: this.availableItems,
-        selected: this.selectedItems,
-        movedItems: event.container.data.filter((v, i) => i === event.currentIndex),
-        from: 'available',
-        to: 'selected',
-      });
-
-      this.availableItems.forEach(data => {  data.groupID = 1; })
-      this.selectedItems.forEach(data =>  { data.groupID = this.currentGroupID; });
-      this.changesOcurred = true;
-    }
 
     saveChanges() {
       if (!this.order) return;
-      const paymentsMade  = this.order.balanceRemaining.toFixed(2)== this.order.total.toFixed(2);
+      const paymentsMade  = this.order.balanceRemaining.toFixed(2 )== this.order.total.toFixed(2);
       if (!paymentsMade) {
         this.matSnack.open(`Unable to save, payments have been applied. Apply payments based on normal procedures.
                             Balance is: ${this.order?.balanceRemaining} and total is ${this.order?.total}`, 'Alert');
@@ -354,5 +382,6 @@ export class POSSplitItemsComponent implements OnInit {
     }
 
 }
+
 
 

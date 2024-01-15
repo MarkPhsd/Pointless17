@@ -21,9 +21,27 @@
 @import '~@ionic/angular/css/structure.css';
 @import '~@ionic/angular/css/typography.css';
 
-mat-button mat-raised-button mat-icon {
+mat-button mat-raised-button {
   @media print {
     display: none;
+  }
+}
+
+mat-icon { 
+  @media print { 
+    visibility: hidden;
+  }
+}
+
+mat-button { 
+  @media print { 
+    visibility: hidden;
+  }
+}
+
+button { 
+  @media print { 
+    visibility: hidden;
   }
 }
 
@@ -86,7 +104,6 @@ mat-button mat-raised-button mat-icon {
 
   mat-form-field-appearance-outline mat-form-field-wrapper .mat-form-field-appearance-outline .mat-form-field-wrapper{
     padding: 0px  !important;
-
   }
 
   .mat-form-field-wrapper {
@@ -679,10 +696,20 @@ mat-dialog-container {
   background: #5a6801;
 }
 
-
+.grid-4-col-span-1 {
+  grid-column: 4 / span 1;
+}
+.grid-3-col-span-1 {
+  grid-column: 3 / span 1;
+}
+.grid-2-col-span-1 {
+  grid-column: 2 / span 1;
+}
+.grid-1-col-span-1 {
+  grid-column: 1 / span 1;
+}
 .span-col {
   grid-column: 2 / span 3;
-
 }
 
 .item-span {
@@ -1181,3 +1208,4 @@ mat-dialog-container {
 									   color-stop(0.72, rgb(150, 190, 240)),
 									   color-stop(0.86, rgb(122,153,217)));
 }
+

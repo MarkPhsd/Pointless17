@@ -141,7 +141,8 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
 
   uiHomePage : UIHomePageSettings
   _uiHomePage: Subscription;
-
+  autoPrint: boolean = false;
+  
   constructor(
               private authentication              : AuthenticationService,
               private reportingService            : ReportingService,

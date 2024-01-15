@@ -1,40 +1,40 @@
   <ng-content></ng-content>
 
-  <div  *ngIf="sheet && sheet != undefined"  class="header-grid info-width">
-    <div>Type</div>
-    <div class="span-col"> {{ sheetType }} ({{sheet.id}})</div>
+  <div  *ngIf="sheet && sheet != undefined"  class="header-grid info-width printFont-14">
+    <div class="printFont-14">Type</div>
+    <div class="printFont-14 span-col"> {{ sheetType }} ({{sheet.id}})</div>
 
-    <div>Employee</div>
-    <div class="span-col" *ngIf="sheet?.balanceSheetEmployee" > {{sheet?.balanceSheetEmployee?.lastName}} </div>
+    <div  class="printFont-14">Employee</div>
+    <div class="span-col printFont-14" *ngIf="sheet?.balanceSheetEmployee" > {{sheet?.balanceSheetEmployee?.lastName}} </div>
 
-    <div *ngIf="sheet.deviceName">Device </div>
-    <div class="span-col" *ngIf="sheet?.deviceName"> {{sheet?.deviceName}} </div>
+    <div  class="printFont-14" *ngIf="sheet.deviceName">Device </div>
+    <div class="span-col printFont-14" *ngIf="sheet?.deviceName"> {{sheet?.deviceName}} </div>
 
-    <div>Started</div>
-    <div class="span-col"> {{sheet?.startTime | date: 'shortDate'}} {{sheet?.startTime | date: 'shortTime'}} </div>
+    <div  class="printFont-14">Started</div>
+    <div class="span-col printFont-14"> {{sheet?.startTime | date: 'shortDate'}} {{sheet?.startTime | date: 'shortTime'}} </div>
 
-    <div *ngIf="sheet.endTime">Closed </div>
-    <div class="span-col" *ngIf="sheet.endTime">
+    <div  class="printFont-14" *ngIf="sheet.endTime">Closed </div>
+    <div class="span-col printFont-14" *ngIf="sheet.endTime">
       {{sheet?.endTime | date: 'shortDate'}} {{sheet?.endTime  | date: 'shortTime'}}
     </div>
 
-    <div  *ngIf="!sheet.endTime">Sheet Open</div>
+    <div   class="printFont-14" *ngIf="!sheet.endTime">Sheet Open</div>
     <div  class="span-col" *ngIf="!sheet.endTime"> ----- </div>
 
-    <div>Drawer Opens</div>
-    <div class="span-col font-1-1em" > {{sheet?.noSales | number }} </div>
+    <div  class="printFont-14">Drawer Opens</div>
+    <div class="span-col font-1-1em printFont-14" > {{sheet?.noSales | number }} </div>
 
-    <div>Orders Open</div>
-    <div class="span-col font-1-1em"
+    <div  class="printFont-14">Orders Open</div>
+    <div class="span-col font-1-1em printFont-14"
          [ngStyle]="{'color':ordersOpen > 0 ? 'red' : '' }">  {{ ordersOpen }} </div>
 
-    <div>Orders Closed</div>
-      <div class="span-col font-1-1em"
+    <div  class="printFont-14">Orders Closed</div>
+      <div class="span-col font-1-1em printFont-14"
           class="calculation">
       {{ ordersCount }}
     </div>
 
-    <div class="item-span" *ngIf="!disableAuditButton">
+    <div class="item-span printFont-14" *ngIf="!disableAuditButton">
       <button mat-raised-button color="warn"
               (click)="auditPayments()">Audit Payments<mat-icon>credit_card</mat-icon></button>
     </div>
