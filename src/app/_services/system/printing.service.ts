@@ -655,7 +655,7 @@ export class PrintingService {
 
   printBuyLabel(item: IInventoryAssignment, menuItem: IMenuItem, order: IPOSOrder ) {
     const site = this.siteService.getAssignedSite()
-   
+
     const product$ = this.menuItemService.getProduct(site, menuItem.id)
     return product$.pipe(switchMap(data => {
         if (data.packager) {
@@ -809,7 +809,7 @@ export class PrintingService {
       })).pipe(
           switchMap( results => {
 
-        
+
             if (!results) {
               // console.log('no results for lab, producer, data')
               return of(null)
@@ -1042,32 +1042,19 @@ export class PrintingService {
     this.previewReceipt()
   }
 
-  previewReceipt(autoPrint?: boolean, order?: IPOSOrder, ) {
-
-    // if (this.uiSettingsService.posDeviceInfo) {
-    //   if (this.platFormService.androidApp) {
-    //     const device = this.uiSettingsService.posDeviceInfo;
-    //     this.printingAndroidService.printAndroidPOSReceipt( order,
-    //                                                         null, device.btPrinter );
-    //     return of(null)
-    //   }
-    // }
-
-    // console.log('previewReceipt', autoPrint, order);
+  previewReceipt(singlePrintReceipt?: boolean, order?: IPOSOrder, ) {
 
     if (this.uiSettingsService.posDeviceInfo) {
       if (this.platFormService.androidApp) {
         const device = this.uiSettingsService.posDeviceInfo;
-        if (autoPrint) {
-          return this.printAuto(device.receiptPrinter, autoPrint)
+        if (singlePrintReceipt) {
+          return this.printAuto(device.receiptPrinter, singlePrintReceipt)
         }
-        this.printSub(device.receiptPrinter, autoPrint);
+        this.printSub(device.receiptPrinter, singlePrintReceipt);
         return of(null)
       }
     }
-
-    this.printSub(null, autoPrint);
-
+    this.printSub(null, singlePrintReceipt);
     return of(null);
 
   };
@@ -1104,9 +1091,8 @@ export class PrintingService {
   }
 }
 
-
-  // async applyStyles(site: ISite): Promise<ISetting> {
-  //   const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
-  //   const receiptStyle = await receiptStyle$.pipe().toPromise()
-  //   return this.setHTMLReceiptStyle(receiptStyle)
-  // }
+// async applyStyles(site: ISite): Promise<ISetting> {
+//   const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
+//   const receiptStyle = await receiptStyle$.pipe().toPromise()
+//   return this.setHTMLReceiptStyle(receiptStyle)
+// }

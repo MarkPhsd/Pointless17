@@ -130,9 +130,15 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     if (this.uiTransactionSettings.prepOrderOnExit) {
       // this.paymentsMethodsProcessService.updateSendOrderOnExit(order)
       this.printAction$ = this.paymentMethodsService.sendOrderOnExit(order).pipe(switchMap(data => {
-        console.log('print out action from receipt')
-        this.printingService.previewReceipt(this.uiTransactionSettings?.singlePrintReceipt, order)
-        return of(order)
+        // console.log('print out action from receipt')
+        const site = this.siteService.getAssignedSite()
+        return this.ordersService.getOrder(site, order.id.toString(), order.history)
+
+      })).pipe(switchMap(data => {
+        // console.log('print receipt singlePrintReceipt', data.posOrderItems)
+        this.orderMethodsService.updateOrder(data)
+        this.printingService.previewReceipt(this.uiTransactionSettings?.singlePrintReceipt, data);
+        return of(data)
       }))
       return
     }

@@ -153,7 +153,7 @@ export class UserSwitchingService implements  OnDestroy {
     this.orderMethodService.updateOrderSearchModel(null);
     this.toolbarUIService.updateDepartmentMenu(0);
     this._clearloginStatus.next(true)
-    console.log(' Log out ')
+    // console.log(' Log out ')
     this.authenticationService.logout(this.uiSettingService.homePageSetting?.pinPadDefaultOnApp);
   }
 

@@ -459,7 +459,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   async printElectron() {
     let styles
-    console.log('styles', this.receiptStyles)
+    // console.log('styles', this.receiptStyles)
     if (!this.receiptStyles) {
       this.siteService.notify('No Print Styles, please contact admin', 'close', 3000, 'red' )
     }

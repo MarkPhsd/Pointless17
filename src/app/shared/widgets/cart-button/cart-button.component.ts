@@ -261,7 +261,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
         .pipe(repeatWhen(notifications => notifications.pipe(
            delay(1500)),
         ),finalize(() => {
-          console.log('finalized')
+          // console.log('finalized')
         }),catchError(err => {
           console.log(err);
           return throwError(err);
@@ -288,7 +288,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   toggleOpenOrderBar() {
 
     if (this.router.url.substring(0, 28 ) === '/currentorder;mainPanel=true') {
-      console.log('order bar setting false')
+      // console.log('order bar setting false')
       this.openOrderBar = false
       this.toolbarServiceUI.updateOrderBar(this.openOrderBar)
       return;
@@ -297,7 +297,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     if (this.openOrderBar == undefined) {   this.openOrderBar = false;  }
 
     if (this.userSwitchingService.swapMenuWithOrderBoolean) {
-      console.log('order bar setting swapMenuWithOrderBoolean true')
+      // console.log('order bar setting swapMenuWithOrderBoolean true')
       this.openOrderBar = !this.openOrderBar
       const item = this.openOrderBar
       this.toolbarServiceUI.updateOrderBar(item)
@@ -306,7 +306,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     }
 
     if (!this.userSwitchingService.swapMenuWithOrderBoolean) {
-      console.log('order bar setting false, swapMenuWithOrderBoolean false')
+      // console.log('order bar setting false, swapMenuWithOrderBoolean false')
       this.openOrderBar = !this.openOrderBar
       this.toolbarServiceUI.updateOrderBar(this.openOrderBar)
       return;

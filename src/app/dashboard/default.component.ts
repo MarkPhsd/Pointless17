@@ -129,7 +129,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       //don't send orders here that's done in the sendorder subscriber method
       return of(data)
     })).subscribe(data => {
-      console.log('order sent on exit')
+      // console.log('order sent on exit')
     })
     return of(null)
   }
@@ -148,7 +148,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   processLogOut() {
-    console.log('processLogOut')
+    // console.log('processLogOut')
     this.userIdle.resetTimer();
     this.orderMethodsSevice.clearOrderSubscription()
     this.userSwitchingService.clearLoggedInUser();
@@ -170,7 +170,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
       }
     )).subscribe(data => {
-      console.log('send prep')
+      // console.log('send prep')
     })
 
     this._sendAndLogOut  = this.paymentMethodsService.sendOrderAndLogOut$.pipe(switchMap(
@@ -497,7 +497,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    console.log('init Default Component')
+    // console.log('init Default Component')
     this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     this.renderTheme();
     this.initSettings();
@@ -760,7 +760,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.userIdle.onTimeout().subscribe(() => {
         this.siteService.notify('Time out will occur in a few seconds.', 'Close', 4, 'yellow')
         if (this.platFormService.isApp()){
-          console.log('sign out')
+          // console.log('sign out')
           //
           this.dialog.closeAll()
           this.signOutUser()

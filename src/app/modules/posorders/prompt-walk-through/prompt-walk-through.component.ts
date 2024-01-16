@@ -216,7 +216,7 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
         return of(null)
       }
 
-      console.log(item?.orderID, item);
+      // console.log(item?.orderID, item);
       if (item) {
         this.action$ = this.posOrderItemService.deletePOSOrderItem(site, item.id).pipe(
           switchMap(data => {
@@ -282,7 +282,7 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
         return;
       }
 
-      console.log(' this.orderPromptGroup',  this.orderPromptGroup)
+      // console.log(' this.orderPromptGroup',  this.orderPromptGroup)
       const prompt$ = this.posOrderItemService.postPromptItems(site, this.orderPromptGroup);
       this.processing = true;
 

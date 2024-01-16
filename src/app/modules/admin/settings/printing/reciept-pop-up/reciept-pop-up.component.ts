@@ -41,6 +41,7 @@ export class RecieptPopUpComponent implements OnInit {
   }
 
   exit(event) {
+    console.log('exit print: auto', this.autoPrint, event)
     if (this.autoPrint) {
       this.dialogRef.close('true');
       return;
