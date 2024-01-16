@@ -85,7 +85,7 @@
                     cdkDropList
                     #availables="cdkDropList"
                     [cdkDropListData]="availableItems"
-                    [cdkDropListConnectedTo]="['selects']"
+                    [cdkDropListConnectedTo]="[selects]"
                     (cdkDropListDropped)="drop($event)"
                     class="drag-drop-list">
                     <div
@@ -110,7 +110,7 @@
                     cdkDropList
                     #selects="cdkDropList"
                     [cdkDropListData]="selectedItems"
-                    [cdkDropListConnectedTo]="['availables']"
+                    [cdkDropListConnectedTo]="[availables]"
                     (cdkDropListDropped)="drop($event)"
                     class="drag-drop-list" >
                     <div
